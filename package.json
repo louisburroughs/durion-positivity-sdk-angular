@@ -10,7 +10,7 @@
     "build": "tsc --project tsconfig.json",
     "test": "jest",
     "lint": "eslint . --ext .ts,.tsx",
-    "generate": "bash scripts/generate.sh"
+    "generate": "bash scripts/generate-openapi.sh"
   },
   "devDependencies": {
     "@angular/common": "^21.1.0",

@@ -308,7 +308,8 @@
           "apiPackage": "src/apis",
           "gitUserId": "louisburroughs",
           "gitRepoId": "durion-positivity-sdk-angular"
-        },
+        }
+      },
       "sdk-documents": {
         "generatorName": "typescript-angular",
         "output": "packages/sdk-documents",
@@ -362,7 +363,6 @@
           "gitUserId": "louisburroughs",
           "gitRepoId": "durion-positivity-sdk-angular"
         }
-      }
       }
     }
   }

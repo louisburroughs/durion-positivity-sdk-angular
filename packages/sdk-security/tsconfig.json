@@ -1,11 +1,28 @@
 {
-  "extends": "../../tsconfig.json",
-  "compilerOptions": {
-    "ignoreDeprecations": "6.0",
-    "outDir": "dist",
-    "rootDir": "src"
-  },
-  "include": [
-    "src/**/*"
-  ]
+    "compilerOptions": {
+        "emitDecoratorMetadata": true,
+        "experimentalDecorators": true,
+        "noImplicitAny": false,
+        "suppressImplicitAnyIndexErrors": true,
+        "target": "es6",
+        "module": "es6",
+        "moduleResolution": "node16",
+        "removeComments": true,
+        "sourceMap": true,
+        "outDir": "./dist",
+        "noLib": false,
+        "declaration": true,
+        "lib": [ "es6", "dom" ],
+        "typeRoots": [
+            "node_modules/@types"
+        ]
+    },
+    "exclude": [
+        "node_modules",
+        "dist"
+    ],
+    "filesGlob": [
+        "./model/*.ts",
+        "./api/*.ts"
+    ]
 }

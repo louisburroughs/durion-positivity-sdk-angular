@@ -1,0 +1,11 @@
+export * from './vehicleAPI.service';
+import { VehicleAPIService } from './vehicleAPI.service';
+export * from './vehicleBulkIngestAPI.service';
+import { VehicleBulkIngestAPIService } from './vehicleBulkIngestAPI.service';
+export * from './vehiclePreferences.service';
+import { VehiclePreferencesService } from './vehiclePreferences.service';
+export * from './vehicleRegistryAPI.service';
+import { VehicleRegistryAPIService } from './vehicleRegistryAPI.service';
+export * from './vehicleSearch.service';
+import { VehicleSearchService } from './vehicleSearch.service';
+export const APIS = [VehicleAPIService, VehicleBulkIngestAPIService, VehiclePreferencesService, VehicleRegistryAPIService, VehicleSearchService];

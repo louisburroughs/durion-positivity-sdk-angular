@@ -1,21 +1,28 @@
 {
-  "extends": "../../tsconfig.json",
-  "compilerOptions": {
-    "declaration": true,
-    "target": "es6",
-    "module": "commonjs",
-    "moduleResolution": "node",
-    "outDir": "dist",
-    "rootDir": "src",
-    "typeRoots": [
-      "node_modules/@types"
+    "compilerOptions": {
+        "emitDecoratorMetadata": true,
+        "experimentalDecorators": true,
+        "noImplicitAny": false,
+        "suppressImplicitAnyIndexErrors": true,
+        "target": "es6",
+        "module": "es6",
+        "moduleResolution": "node16",
+        "removeComments": true,
+        "sourceMap": true,
+        "outDir": "./dist",
+        "noLib": false,
+        "declaration": true,
+        "lib": [ "es6", "dom" ],
+        "typeRoots": [
+            "node_modules/@types"
+        ]
+    },
+    "exclude": [
+        "node_modules",
+        "dist"
+    ],
+    "filesGlob": [
+        "./model/*.ts",
+        "./api/*.ts"
     ]
-  },
-  "include": [
-    "src/**/*"
-  ],
-  "exclude": [
-    "dist",
-    "node_modules"
-  ]
 }

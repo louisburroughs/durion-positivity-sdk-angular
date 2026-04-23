@@ -6,10 +6,10 @@ set -euo pipefail
 # Generated services are @Injectable({ providedIn: 'root' }) and return Observable<T>.
 #
 # Usage:
-#   ./scripts/generate.sh                    # Generate all SDK modules
-#   ./scripts/generate.sh --module security  # Generate only the specified module
+#   ./scripts/generate-openapi.sh                    # Generate all SDK modules
+#   ./scripts/generate-openapi.sh --module security  # Generate only the specified module
 #
-# Valid module names: security, order, inventory, workorder, accounting, catalog, customer, invoice, location, people, price, shop-manager, image, event-receiver, vehicle-fitment, vehicle-inventory, internal
+# Valid module names: security, order, inventory, workorder, accounting, catalog, customer, invoice, location, people, price, shop-manager, image, event-receiver, vehicle-fitment, vehicle-inventory, internal, documents, inquiry, bulk-loader
 
 module=""
 
@@ -26,7 +26,31 @@ while [[ $# -gt 0 ]]; do
 	esac
 done
 
-MODULES=(security order inventory workorder accounting catalog customer invoice location people price shop-manager image event-receiver vehicle-fitment vehicle-inventory internal)
+MODULES=(security order inventory workorder accounting catalog customer invoice location people price shop-manager image event-receiver vehicle-fitment vehicle-inventory internal documents inquiry bulk-loader)
+
+patch_package_tsconfig() {
+	local pkg="$1"
+	local tsconfig="packages/sdk-${pkg}/tsconfig.json"
+	if [[ -f "$tsconfig" ]]; then
+		sed -i 's/"moduleResolution": "node"/"moduleResolution": "node16"/' "$tsconfig"
+		if ! grep -q '"rootDir"' "$tsconfig"; then
+			sed -i 's/"outDir": "dist"/"outDir": "dist",\n    "rootDir": "src"/' "$tsconfig"
+		fi
+	fi
+}
+
+cleanup_vehicle_inventory_duplicate_exports() {
+	# Post-generation cleanup: VehicleAPIApi defines request-parameter interfaces named
+	# CreateVehicleRequest and UpdateVehicleRequest that clash with same-named model DTOs
+	# (TS2308 ambiguity). Drop `export` from the API-level interfaces so models win.
+	echo "[generate] Applying sdk-vehicle-inventory duplicate-export cleanup..."
+	VEHICLE_API_FILE="packages/sdk-vehicle-inventory/src/apis/VehicleAPIApi.ts"
+
+	if [[ -f "$VEHICLE_API_FILE" ]]; then
+		sed -i 's/^export interface CreateVehicleRequest {/interface CreateVehicleRequest {/;s/^export interface UpdateVehicleRequest {/interface UpdateVehicleRequest {/' "$VEHICLE_API_FILE"
+		echo "[generate] Patched VehicleAPIApi.ts to un-export CreateVehicleRequest and UpdateVehicleRequest"
+	fi
+}
 
 cleanup_inventory_duplicate_exports() {
 	# Post-generation cleanup: fix sdk-inventory duplicate exports caused by multi-tag ops
@@ -63,8 +87,12 @@ if [[ -n "$module" ]]; then
 	echo "Generating sdk-${module}..."
 	npx @openapitools/openapi-generator-cli generate --generator-key "sdk-${module}"
 
+	patch_package_tsconfig "$module"
 	if [[ "$module" == "inventory" ]]; then
 		cleanup_inventory_duplicate_exports
+	fi
+	if [[ "$module" == "vehicle-inventory" ]]; then
+		cleanup_vehicle_inventory_duplicate_exports
 	fi
 else
 	# Generate all SDK modules in deterministic order
@@ -72,8 +100,12 @@ else
 		echo "Generating sdk-${m}..."
 		npx @openapitools/openapi-generator-cli generate --generator-key "sdk-${m}"
 
+		patch_package_tsconfig "$m"
 		if [[ "$m" == "inventory" ]]; then
 			cleanup_inventory_duplicate_exports
+		fi
+		if [[ "$m" == "vehicle-inventory" ]]; then
+			cleanup_vehicle_inventory_duplicate_exports
 		fi
 	done
 fi
