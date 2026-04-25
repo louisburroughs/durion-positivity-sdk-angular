@@ -2,7 +2,7 @@
   "$schema": "node_modules/@openapitools/openapi-generator-cli/config.schema.json",
   "spaces": 2,
   "generator-cli": {
-    "version": "7.5.0",
+    "version": "7.21.0",
     "generators": {
       "sdk-security": {
         "generatorName": "typescript-angular",
@@ -20,7 +20,8 @@
           "apiPackage": "src/apis",
           "gitUserId": "louisburroughs",
           "gitRepoId": "durion-positivity-sdk-angular"
-        }
+        },
+        "templateDir": "templates/typescript-angular"
       },
       "sdk-order": {
         "generatorName": "typescript-angular",
@@ -38,7 +39,8 @@
           "apiPackage": "src/apis",
           "gitUserId": "louisburroughs",
           "gitRepoId": "durion-positivity-sdk-angular"
-        }
+        },
+        "templateDir": "templates/typescript-angular"
       },
       "sdk-inventory": {
         "generatorName": "typescript-angular",
@@ -56,7 +58,8 @@
           "apiPackage": "src/apis",
           "gitUserId": "louisburroughs",
           "gitRepoId": "durion-positivity-sdk-angular"
-        }
+        },
+        "templateDir": "templates/typescript-angular"
       },
       "sdk-workorder": {
         "generatorName": "typescript-angular",
@@ -74,7 +77,8 @@
           "apiPackage": "src/apis",
           "gitUserId": "louisburroughs",
           "gitRepoId": "durion-positivity-sdk-angular"
-        }
+        },
+        "templateDir": "templates/typescript-angular"
       },
       "sdk-accounting": {
         "generatorName": "typescript-angular",
@@ -92,7 +96,8 @@
           "apiPackage": "src/apis",
           "gitUserId": "louisburroughs",
           "gitRepoId": "durion-positivity-sdk-angular"
-        }
+        },
+        "templateDir": "templates/typescript-angular"
       },
       "sdk-catalog": {
         "generatorName": "typescript-angular",
@@ -110,7 +115,8 @@
           "apiPackage": "src/apis",
           "gitUserId": "louisburroughs",
           "gitRepoId": "durion-positivity-sdk-angular"
-        }
+        },
+        "templateDir": "templates/typescript-angular"
       },
       "sdk-customer": {
         "generatorName": "typescript-angular",
@@ -128,7 +134,8 @@
           "apiPackage": "src/apis",
           "gitUserId": "louisburroughs",
           "gitRepoId": "durion-positivity-sdk-angular"
-        }
+        },
+        "templateDir": "templates/typescript-angular"
       },
       "sdk-invoice": {
         "generatorName": "typescript-angular",
@@ -146,7 +153,8 @@
           "apiPackage": "src/apis",
           "gitUserId": "louisburroughs",
           "gitRepoId": "durion-positivity-sdk-angular"
-        }
+        },
+        "templateDir": "templates/typescript-angular"
       },
       "sdk-location": {
         "generatorName": "typescript-angular",
@@ -164,7 +172,8 @@
           "apiPackage": "src/apis",
           "gitUserId": "louisburroughs",
           "gitRepoId": "durion-positivity-sdk-angular"
-        }
+        },
+        "templateDir": "templates/typescript-angular"
       },
       "sdk-people": {
         "generatorName": "typescript-angular",
@@ -182,7 +191,8 @@
           "apiPackage": "src/apis",
           "gitUserId": "louisburroughs",
           "gitRepoId": "durion-positivity-sdk-angular"
-        }
+        },
+        "templateDir": "templates/typescript-angular"
       },
       "sdk-price": {
         "generatorName": "typescript-angular",
@@ -200,7 +210,8 @@
           "apiPackage": "src/apis",
           "gitUserId": "louisburroughs",
           "gitRepoId": "durion-positivity-sdk-angular"
-        }
+        },
+        "templateDir": "templates/typescript-angular"
       },
       "sdk-shop-manager": {
         "generatorName": "typescript-angular",
@@ -218,7 +229,8 @@
           "apiPackage": "src/apis",
           "gitUserId": "louisburroughs",
           "gitRepoId": "durion-positivity-sdk-angular"
-        }
+        },
+        "templateDir": "templates/typescript-angular"
       },
       "sdk-image": {
         "generatorName": "typescript-angular",
@@ -236,7 +248,8 @@
           "apiPackage": "src/apis",
           "gitUserId": "louisburroughs",
           "gitRepoId": "durion-positivity-sdk-angular"
-        }
+        },
+        "templateDir": "templates/typescript-angular"
       },
       "sdk-event-receiver": {
         "generatorName": "typescript-angular",
@@ -254,7 +267,8 @@
           "apiPackage": "src/apis",
           "gitUserId": "louisburroughs",
           "gitRepoId": "durion-positivity-sdk-angular"
-        }
+        },
+        "templateDir": "templates/typescript-angular"
       },
       "sdk-vehicle-fitment": {
         "generatorName": "typescript-angular",
@@ -272,7 +286,8 @@
           "apiPackage": "src/apis",
           "gitUserId": "louisburroughs",
           "gitRepoId": "durion-positivity-sdk-angular"
-        }
+        },
+        "templateDir": "templates/typescript-angular"
       },
       "sdk-vehicle-inventory": {
         "generatorName": "typescript-angular",
@@ -290,7 +305,8 @@
           "apiPackage": "src/apis",
           "gitUserId": "louisburroughs",
           "gitRepoId": "durion-positivity-sdk-angular"
-        }
+        },
+        "templateDir": "templates/typescript-angular"
       },
       "sdk-internal": {
         "generatorName": "typescript-angular",
@@ -308,7 +324,8 @@
           "apiPackage": "src/apis",
           "gitUserId": "louisburroughs",
           "gitRepoId": "durion-positivity-sdk-angular"
-        }
+        },
+        "templateDir": "templates/typescript-angular"
       },
       "sdk-documents": {
         "generatorName": "typescript-angular",
@@ -317,7 +334,7 @@
         "additionalProperties": {
           "npmName": "@durion-sdk/documents",
           "npmVersion": "0.1.0-alpha",
-           "ngVersion": "21",
+          "ngVersion": "21",
           "providedIn": "root",
           "supportsES6": true,
           "stringEnums": true,
@@ -326,7 +343,8 @@
           "apiPackage": "src/apis",
           "gitUserId": "louisburroughs",
           "gitRepoId": "durion-positivity-sdk-angular"
-        }
+        },
+        "templateDir": "templates/typescript-angular"
       },
       "sdk-inquiry": {
         "generatorName": "typescript-angular",
@@ -335,7 +353,7 @@
         "additionalProperties": {
           "npmName": "@durion-sdk/inquiry",
           "npmVersion": "0.1.0-alpha",
-           "ngVersion": "21",
+          "ngVersion": "21",
           "providedIn": "root",
           "supportsES6": true,
           "stringEnums": true,
@@ -344,7 +362,8 @@
           "apiPackage": "src/apis",
           "gitUserId": "louisburroughs",
           "gitRepoId": "durion-positivity-sdk-angular"
-        }
+        },
+        "templateDir": "templates/typescript-angular"
       },
       "sdk-bulk-loader": {
         "generatorName": "typescript-angular",
@@ -353,7 +372,7 @@
         "additionalProperties": {
           "npmName": "@durion-sdk/bulk-loader",
           "npmVersion": "0.1.0-alpha",
-           "ngVersion": "21",
+          "ngVersion": "21",
           "providedIn": "root",
           "supportsES6": true,
           "stringEnums": true,
@@ -362,7 +381,8 @@
           "apiPackage": "src/apis",
           "gitUserId": "louisburroughs",
           "gitRepoId": "durion-positivity-sdk-angular"
-        }
+        },
+        "templateDir": "templates/typescript-angular"
       }
     }
   }

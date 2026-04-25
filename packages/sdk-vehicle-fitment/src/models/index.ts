@@ -1,12 +1,14 @@
-/* tslint:disable */
-/* eslint-disable */
-export * from './CreateHintRequest';
-export * from './FilterProductsRequest';
-export * from './FilterProductsResponse';
-export * from './FitmentTagDto';
-export * from './HintResponse';
-export * from './MakeResponse';
-export * from './ManufacturerResponse';
-export * from './ModelResponse';
-export * from './UpdateHintRequest';
-export * from './VehicleTypeResponse';
+export * from './bulkIngestRequestFitmentBulkIngestRecord';
+export * from './bulkIngestResponse';
+export * from './bulkIngestResult';
+export * from './createHintRequest';
+export * from './filterProductsRequest';
+export * from './filterProductsResponse';
+export * from './fitmentBulkIngestRecord';
+export * from './fitmentTagDto';
+export * from './hintResponse';
+export * from './makeResponse';
+export * from './manufacturerResponse';
+export * from './modelResponse';
+export * from './updateHintRequest';
+export * from './vehicleTypeResponse';

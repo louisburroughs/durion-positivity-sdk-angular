@@ -1,9 +1,7 @@
-/* tslint:disable */
-/* eslint-disable */
-export * from './LineItemTax';
-export * from './ModeResponse';
-export * from './TaxAddress';
-export * from './TaxCalculationRequest';
-export * from './TaxCalculationResponse';
-export * from './TaxJurisdiction';
-export * from './TaxLineItem';
+export * from './lineItemTax';
+export * from './modeResponse';
+export * from './taxAddress';
+export * from './taxCalculationRequest';
+export * from './taxCalculationResponse';
+export * from './taxJurisdiction';
+export * from './taxLineItem';
