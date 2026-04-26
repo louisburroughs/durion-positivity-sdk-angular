@@ -14,19 +14,27 @@ import { HttpClient, HttpHeaders, HttpParams,
          HttpResponse, HttpEvent, HttpContext 
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
-import { OpenApiHttpParams, QueryParamStyle } from '../../query.params';
+import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
-import { ApiError } from '../models/apiError';
-import { CatalogVersionResponse } from '../models/catalogVersionResponse';
-import { PermissionDecodeRequest } from '../models/permissionDecodeRequest';
-import { PermissionDecodeResponse } from '../models/permissionDecodeResponse';
-import { PermissionDto } from '../models/permissionDto';
-import { PermissionRegistrationRequest } from '../models/permissionRegistrationRequest';
-import { PermissionRegistrationResponse } from '../models/permissionRegistrationResponse';
+// @ts-ignore
+import { ApiError } from '../src/models/apiError';
+// @ts-ignore
+import { CatalogVersionResponse } from '../src/models/catalogVersionResponse';
+// @ts-ignore
+import { PermissionDecodeRequest } from '../src/models/permissionDecodeRequest';
+// @ts-ignore
+import { PermissionDecodeResponse } from '../src/models/permissionDecodeResponse';
+// @ts-ignore
+import { PermissionDto } from '../src/models/permissionDto';
+// @ts-ignore
+import { PermissionRegistrationRequest } from '../src/models/permissionRegistrationRequest';
+// @ts-ignore
+import { PermissionRegistrationResponse } from '../src/models/permissionRegistrationResponse';
 
-import { BASE_PATH, COLLECTION_FORMATS }                     from '../../variables';
-import { Configuration }                                     from '../../configuration';
-import { BaseService } from '../../api.base.service';
+// @ts-ignore
+import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
+import { Configuration }                                     from '../configuration';
+import { BaseService } from '../api.base.service';
 
 
 

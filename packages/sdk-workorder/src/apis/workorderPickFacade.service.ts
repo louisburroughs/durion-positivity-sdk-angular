@@ -14,19 +14,27 @@ import { HttpClient, HttpHeaders, HttpParams,
          HttpResponse, HttpEvent, HttpContext 
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
-import { OpenApiHttpParams, QueryParamStyle } from '../../query.params';
+import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
-import { ApiError } from '../models/apiError';
-import { CompletePickTaskRequest } from '../models/completePickTaskRequest';
-import { ConfirmPickLineRequest } from '../models/confirmPickLineRequest';
-import { ResolveScanRequest } from '../models/resolveScanRequest';
-import { ResolveScanResponse } from '../models/resolveScanResponse';
-import { WorkorderPickListResponse } from '../models/workorderPickListResponse';
-import { WorkorderPickTaskResponse } from '../models/workorderPickTaskResponse';
+// @ts-ignore
+import { ApiError } from '../src/models/apiError';
+// @ts-ignore
+import { CompletePickTaskRequest } from '../src/models/completePickTaskRequest';
+// @ts-ignore
+import { ConfirmPickLineRequest } from '../src/models/confirmPickLineRequest';
+// @ts-ignore
+import { ResolveScanRequest } from '../src/models/resolveScanRequest';
+// @ts-ignore
+import { ResolveScanResponse } from '../src/models/resolveScanResponse';
+// @ts-ignore
+import { WorkorderPickListResponse } from '../src/models/workorderPickListResponse';
+// @ts-ignore
+import { WorkorderPickTaskResponse } from '../src/models/workorderPickTaskResponse';
 
-import { BASE_PATH, COLLECTION_FORMATS }                     from '../../variables';
-import { Configuration }                                     from '../../configuration';
-import { BaseService } from '../../api.base.service';
+// @ts-ignore
+import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
+import { Configuration }                                     from '../configuration';
+import { BaseService } from '../api.base.service';
 
 
 
@@ -97,7 +105,7 @@ export class WorkorderPickFacadeService extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/workorders/${this.configuration.encodeParam({name: "workorderId", value: workorderId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/pick-tasks/${this.configuration.encodeParam({name: "pickTaskId", value: pickTaskId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}:complete`;
+        let localVarPath = `/v1/workorders/${this.configuration.encodeParam({name: "workorderId", value: workorderId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/pick-tasks/${this.configuration.encodeParam({name: "pickTaskId", value: pickTaskId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}:complete`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<WorkorderPickTaskResponse>('post', `${basePath}${localVarPath}`,
             {
@@ -178,7 +186,7 @@ export class WorkorderPickFacadeService extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/workorders/${this.configuration.encodeParam({name: "workorderId", value: workorderId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/pick-tasks/${this.configuration.encodeParam({name: "pickTaskId", value: pickTaskId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/lines/${this.configuration.encodeParam({name: "pickLineId", value: pickLineId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}:confirm`;
+        let localVarPath = `/v1/workorders/${this.configuration.encodeParam({name: "workorderId", value: workorderId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/pick-tasks/${this.configuration.encodeParam({name: "pickTaskId", value: pickTaskId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/lines/${this.configuration.encodeParam({name: "pickLineId", value: pickLineId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}:confirm`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<WorkorderPickTaskResponse>('post', `${basePath}${localVarPath}`,
             {
@@ -238,7 +246,7 @@ export class WorkorderPickFacadeService extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/workorders/${this.configuration.encodeParam({name: "workorderId", value: workorderId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/pick-list`;
+        let localVarPath = `/v1/workorders/${this.configuration.encodeParam({name: "workorderId", value: workorderId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/pick-list`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<WorkorderPickListResponse>('get', `${basePath}${localVarPath}`,
             {
@@ -297,7 +305,7 @@ export class WorkorderPickFacadeService extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/workorders/${this.configuration.encodeParam({name: "workorderId", value: workorderId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/pick-list/tasks`;
+        let localVarPath = `/v1/workorders/${this.configuration.encodeParam({name: "workorderId", value: workorderId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/pick-list/tasks`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<Array<WorkorderPickTaskResponse>>('get', `${basePath}${localVarPath}`,
             {
@@ -373,7 +381,7 @@ export class WorkorderPickFacadeService extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/workorders/${this.configuration.encodeParam({name: "workorderId", value: workorderId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/pick-tasks/${this.configuration.encodeParam({name: "pickTaskId", value: pickTaskId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}:resolve-scan`;
+        let localVarPath = `/v1/workorders/${this.configuration.encodeParam({name: "workorderId", value: workorderId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/pick-tasks/${this.configuration.encodeParam({name: "pickTaskId", value: pickTaskId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}:resolve-scan`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<ResolveScanResponse>('post', `${basePath}${localVarPath}`,
             {

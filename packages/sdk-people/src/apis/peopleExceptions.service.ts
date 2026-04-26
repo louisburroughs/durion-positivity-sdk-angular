@@ -14,17 +14,23 @@ import { HttpClient, HttpHeaders, HttpParams,
          HttpResponse, HttpEvent, HttpContext 
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
-import { OpenApiHttpParams, QueryParamStyle } from '../../query.params';
+import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
-import { TimeEntryException } from '../models/timeEntryException';
-import { TimeEntryExceptionRequest } from '../models/timeEntryExceptionRequest';
-import { TimeEntryExceptionResolveRequest } from '../models/timeEntryExceptionResolveRequest';
-import { TimeEntryExceptionResponse } from '../models/timeEntryExceptionResponse';
-import { TimeEntryExceptionWaiveRequest } from '../models/timeEntryExceptionWaiveRequest';
+// @ts-ignore
+import { TimeEntryException } from '../src/models/timeEntryException';
+// @ts-ignore
+import { TimeEntryExceptionRequest } from '../src/models/timeEntryExceptionRequest';
+// @ts-ignore
+import { TimeEntryExceptionResolveRequest } from '../src/models/timeEntryExceptionResolveRequest';
+// @ts-ignore
+import { TimeEntryExceptionResponse } from '../src/models/timeEntryExceptionResponse';
+// @ts-ignore
+import { TimeEntryExceptionWaiveRequest } from '../src/models/timeEntryExceptionWaiveRequest';
 
-import { BASE_PATH, COLLECTION_FORMATS }                     from '../../variables';
-import { Configuration }                                     from '../../configuration';
-import { BaseService } from '../../api.base.service';
+// @ts-ignore
+import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
+import { Configuration }                                     from '../configuration';
+import { BaseService } from '../api.base.service';
 
 
 

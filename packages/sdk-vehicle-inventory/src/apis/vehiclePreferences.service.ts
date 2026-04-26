@@ -14,15 +14,19 @@ import { HttpClient, HttpHeaders, HttpParams,
          HttpResponse, HttpEvent, HttpContext 
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
-import { OpenApiHttpParams, QueryParamStyle } from '../../query.params';
+import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
-import { PreferencesMergeDto } from '../models/preferencesMergeDto';
-import { PreferencesUpsertDto } from '../models/preferencesUpsertDto';
-import { VehicleCarePreferenceResponse } from '../models/vehicleCarePreferenceResponse';
+// @ts-ignore
+import { PreferencesMergeDto } from '../src/models/preferencesMergeDto';
+// @ts-ignore
+import { PreferencesUpsertDto } from '../src/models/preferencesUpsertDto';
+// @ts-ignore
+import { VehicleCarePreferenceResponse } from '../src/models/vehicleCarePreferenceResponse';
 
-import { BASE_PATH, COLLECTION_FORMATS }                     from '../../variables';
-import { Configuration }                                     from '../../configuration';
-import { BaseService } from '../../api.base.service';
+// @ts-ignore
+import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
+import { Configuration }                                     from '../configuration';
+import { BaseService } from '../api.base.service';
 
 
 

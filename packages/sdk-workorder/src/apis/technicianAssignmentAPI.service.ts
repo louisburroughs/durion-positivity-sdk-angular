@@ -14,15 +14,19 @@ import { HttpClient, HttpHeaders, HttpParams,
          HttpResponse, HttpEvent, HttpContext 
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
-import { OpenApiHttpParams, QueryParamStyle } from '../../query.params';
+import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
-import { AssignTechnicianRequest } from '../models/assignTechnicianRequest';
-import { ReassignTechnicianRequest } from '../models/reassignTechnicianRequest';
-import { TechnicianAssignmentResponse } from '../models/technicianAssignmentResponse';
+// @ts-ignore
+import { AssignTechnicianRequest } from '../src/models/assignTechnicianRequest';
+// @ts-ignore
+import { ReassignTechnicianRequest } from '../src/models/reassignTechnicianRequest';
+// @ts-ignore
+import { TechnicianAssignmentResponse } from '../src/models/technicianAssignmentResponse';
 
-import { BASE_PATH, COLLECTION_FORMATS }                     from '../../variables';
-import { Configuration }                                     from '../../configuration';
-import { BaseService } from '../../api.base.service';
+// @ts-ignore
+import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
+import { Configuration }                                     from '../configuration';
+import { BaseService } from '../api.base.service';
 
 
 
@@ -97,7 +101,7 @@ export class TechnicianAssignmentAPIService extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/workorders/${this.configuration.encodeParam({name: "workorderId", value: workorderId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/technician`;
+        let localVarPath = `/v1/workorders/${this.configuration.encodeParam({name: "workorderId", value: workorderId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/technician`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<TechnicianAssignmentResponse>('post', `${basePath}${localVarPath}`,
             {
@@ -158,7 +162,7 @@ export class TechnicianAssignmentAPIService extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/workorders/${this.configuration.encodeParam({name: "workorderId", value: workorderId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/technician`;
+        let localVarPath = `/v1/workorders/${this.configuration.encodeParam({name: "workorderId", value: workorderId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/technician`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<TechnicianAssignmentResponse>('get', `${basePath}${localVarPath}`,
             {
@@ -235,7 +239,7 @@ export class TechnicianAssignmentAPIService extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/workorders/${this.configuration.encodeParam({name: "workorderId", value: workorderId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/technician`;
+        let localVarPath = `/v1/workorders/${this.configuration.encodeParam({name: "workorderId", value: workorderId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/technician`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<TechnicianAssignmentResponse>('put', `${basePath}${localVarPath}`,
             {

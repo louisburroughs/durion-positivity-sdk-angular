@@ -14,15 +14,19 @@ import { HttpClient, HttpHeaders, HttpParams,
          HttpResponse, HttpEvent, HttpContext 
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
-import { OpenApiHttpParams, QueryParamStyle } from '../../query.params';
+import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
-import { Person } from '../models/person';
-import { ResolvePersonRequest } from '../models/resolvePersonRequest';
-import { ResolvePersonResponse } from '../models/resolvePersonResponse';
+// @ts-ignore
+import { Person } from '../src/models/person';
+// @ts-ignore
+import { ResolvePersonRequest } from '../src/models/resolvePersonRequest';
+// @ts-ignore
+import { ResolvePersonResponse } from '../src/models/resolvePersonResponse';
 
-import { BASE_PATH, COLLECTION_FORMATS }                     from '../../variables';
-import { Configuration }                                     from '../../configuration';
-import { BaseService } from '../../api.base.service';
+// @ts-ignore
+import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
+import { Configuration }                                     from '../configuration';
+import { BaseService } from '../api.base.service';
 
 
 

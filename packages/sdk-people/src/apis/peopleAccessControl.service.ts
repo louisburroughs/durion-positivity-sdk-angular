@@ -14,16 +14,21 @@ import { HttpClient, HttpHeaders, HttpParams,
          HttpResponse, HttpEvent, HttpContext 
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
-import { OpenApiHttpParams, QueryParamStyle } from '../../query.params';
+import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
-import { PersonRoleAssignmentRequest } from '../models/personRoleAssignmentRequest';
-import { ProblemDetail } from '../models/problemDetail';
-import { RoleDto } from '../models/roleDto';
-import { UserRoleDto } from '../models/userRoleDto';
+// @ts-ignore
+import { PersonRoleAssignmentRequest } from '../src/models/personRoleAssignmentRequest';
+// @ts-ignore
+import { ProblemDetail } from '../src/models/problemDetail';
+// @ts-ignore
+import { RoleDto } from '../src/models/roleDto';
+// @ts-ignore
+import { UserRoleDto } from '../src/models/userRoleDto';
 
-import { BASE_PATH, COLLECTION_FORMATS }                     from '../../variables';
-import { Configuration }                                     from '../../configuration';
-import { BaseService } from '../../api.base.service';
+// @ts-ignore
+import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
+import { Configuration }                                     from '../configuration';
+import { BaseService } from '../api.base.service';
 
 
 

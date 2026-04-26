@@ -14,21 +14,31 @@ import { HttpClient, HttpHeaders, HttpParams,
          HttpResponse, HttpEvent, HttpContext 
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
-import { OpenApiHttpParams, QueryParamStyle } from '../../query.params';
+import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
-import { AddEstimateItemRequest } from '../models/addEstimateItemRequest';
-import { ApproveEstimateRequest } from '../models/approveEstimateRequest';
-import { CreateEstimateRequest } from '../models/createEstimateRequest';
-import { EstimateItemResponse } from '../models/estimateItemResponse';
-import { EstimateResponse } from '../models/estimateResponse';
-import { EstimateSnapshotResponse } from '../models/estimateSnapshotResponse';
-import { EstimateSummaryResponse } from '../models/estimateSummaryResponse';
-import { UpdateEstimateItemRequest } from '../models/updateEstimateItemRequest';
-import { WorkorderResponse } from '../models/workorderResponse';
+// @ts-ignore
+import { AddEstimateItemRequest } from '../src/models/addEstimateItemRequest';
+// @ts-ignore
+import { ApproveEstimateRequest } from '../src/models/approveEstimateRequest';
+// @ts-ignore
+import { CreateEstimateRequest } from '../src/models/createEstimateRequest';
+// @ts-ignore
+import { EstimateItemResponse } from '../src/models/estimateItemResponse';
+// @ts-ignore
+import { EstimateResponse } from '../src/models/estimateResponse';
+// @ts-ignore
+import { EstimateSnapshotResponse } from '../src/models/estimateSnapshotResponse';
+// @ts-ignore
+import { EstimateSummaryResponse } from '../src/models/estimateSummaryResponse';
+// @ts-ignore
+import { UpdateEstimateItemRequest } from '../src/models/updateEstimateItemRequest';
+// @ts-ignore
+import { WorkorderResponse } from '../src/models/workorderResponse';
 
-import { BASE_PATH, COLLECTION_FORMATS }                     from '../../variables';
-import { Configuration }                                     from '../../configuration';
-import { BaseService } from '../../api.base.service';
+// @ts-ignore
+import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
+import { Configuration }                                     from '../configuration';
+import { BaseService } from '../api.base.service';
 
 
 
@@ -99,7 +109,7 @@ export class EstimateAPIService extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/workorders/estimates/${this.configuration.encodeParam({name: "estimateId", value: estimateId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/items`;
+        let localVarPath = `/v1/workorders/estimates/${this.configuration.encodeParam({name: "estimateId", value: estimateId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/items`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<EstimateItemResponse>('post', `${basePath}${localVarPath}`,
             {
@@ -173,7 +183,7 @@ export class EstimateAPIService extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/workorders/estimates/${this.configuration.encodeParam({name: "estimateId", value: estimateId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/approval`;
+        let localVarPath = `/v1/workorders/estimates/${this.configuration.encodeParam({name: "estimateId", value: estimateId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/approval`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<EstimateResponse>('post', `${basePath}${localVarPath}`,
             {
@@ -234,7 +244,7 @@ export class EstimateAPIService extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/workorders/estimates/${this.configuration.encodeParam({name: "estimateId", value: estimateId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/calculate`;
+        let localVarPath = `/v1/workorders/estimates/${this.configuration.encodeParam({name: "estimateId", value: estimateId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/calculate`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<{ [key: string]: any; }>('post', `${basePath}${localVarPath}`,
             {
@@ -380,7 +390,7 @@ export class EstimateAPIService extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/workorders/estimates/${this.configuration.encodeParam({name: "estimateId", value: estimateId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/snapshots`;
+        let localVarPath = `/v1/workorders/estimates/${this.configuration.encodeParam({name: "estimateId", value: estimateId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/snapshots`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<EstimateSnapshotResponse>('post', `${basePath}${localVarPath}`,
             {
@@ -453,7 +463,7 @@ export class EstimateAPIService extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/workorders/estimates/${this.configuration.encodeParam({name: "estimateId", value: estimateId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/decline`;
+        let localVarPath = `/v1/workorders/estimates/${this.configuration.encodeParam({name: "estimateId", value: estimateId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/decline`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<EstimateResponse>('post', `${basePath}${localVarPath}`,
             {
@@ -513,7 +523,7 @@ export class EstimateAPIService extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/workorders/estimates/${this.configuration.encodeParam({name: "estimateId", value: estimateId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+        let localVarPath = `/v1/workorders/estimates/${this.configuration.encodeParam({name: "estimateId", value: estimateId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<any>('delete', `${basePath}${localVarPath}`,
             {
@@ -576,7 +586,7 @@ export class EstimateAPIService extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/workorders/estimates/${this.configuration.encodeParam({name: "estimateId", value: estimateId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/items/${this.configuration.encodeParam({name: "itemId", value: itemId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+        let localVarPath = `/v1/workorders/estimates/${this.configuration.encodeParam({name: "estimateId", value: estimateId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/items/${this.configuration.encodeParam({name: "itemId", value: itemId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<any>('delete', `${basePath}${localVarPath}`,
             {
@@ -600,9 +610,9 @@ export class EstimateAPIService extends BaseService {
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public generateEstimatePdf(estimateId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/pdf', context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public generateEstimatePdf(estimateId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/pdf', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public generateEstimatePdf(estimateId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/pdf', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
+    public generateEstimatePdf(estimateId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/pdf', context?: HttpContext, transferCache?: boolean}): Observable<{ [key: string]: any; }>;
+    public generateEstimatePdf(estimateId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/pdf', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<{ [key: string]: any; }>>;
+    public generateEstimatePdf(estimateId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/pdf', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<{ [key: string]: any; }>>;
     public generateEstimatePdf(estimateId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/pdf', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (estimateId === null || estimateId === undefined) {
             throw new Error('Required parameter estimateId was null or undefined when calling generateEstimatePdf.');
@@ -636,9 +646,9 @@ export class EstimateAPIService extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/workorders/estimates/${this.configuration.encodeParam({name: "estimateId", value: estimateId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/pdf`;
+        let localVarPath = `/v1/workorders/estimates/${this.configuration.encodeParam({name: "estimateId", value: estimateId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/pdf`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<any>('get', `${basePath}${localVarPath}`,
+        return this.httpClient.request<{ [key: string]: any; }>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,
@@ -752,7 +762,7 @@ export class EstimateAPIService extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/workorders/estimates/${this.configuration.encodeParam({name: "estimateId", value: estimateId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+        let localVarPath = `/v1/workorders/estimates/${this.configuration.encodeParam({name: "estimateId", value: estimateId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<EstimateResponse>('get', `${basePath}${localVarPath}`,
             {
@@ -812,7 +822,7 @@ export class EstimateAPIService extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/workorders/estimates/${this.configuration.encodeParam({name: "estimateId", value: estimateId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/summary`;
+        let localVarPath = `/v1/workorders/estimates/${this.configuration.encodeParam({name: "estimateId", value: estimateId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/summary`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<EstimateSummaryResponse>('get', `${basePath}${localVarPath}`,
             {
@@ -872,7 +882,7 @@ export class EstimateAPIService extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/workorders/estimates/customer/${this.configuration.encodeParam({name: "customerId", value: customerId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+        let localVarPath = `/v1/workorders/estimates/customer/${this.configuration.encodeParam({name: "customerId", value: customerId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<Array<EstimateResponse>>('get', `${basePath}${localVarPath}`,
             {
@@ -932,7 +942,7 @@ export class EstimateAPIService extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/workorders/estimates/location/${this.configuration.encodeParam({name: "locationId", value: locationId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+        let localVarPath = `/v1/workorders/estimates/location/${this.configuration.encodeParam({name: "locationId", value: locationId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<Array<EstimateResponse>>('get', `${basePath}${localVarPath}`,
             {
@@ -992,7 +1002,7 @@ export class EstimateAPIService extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/workorders/estimates/shop/${this.configuration.encodeParam({name: "locationId", value: locationId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+        let localVarPath = `/v1/workorders/estimates/shop/${this.configuration.encodeParam({name: "locationId", value: locationId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<Array<EstimateResponse>>('get', `${basePath}${localVarPath}`,
             {
@@ -1128,7 +1138,7 @@ export class EstimateAPIService extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/workorders/estimates/${this.configuration.encodeParam({name: "estimateId", value: estimateId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/promote`;
+        let localVarPath = `/v1/workorders/estimates/${this.configuration.encodeParam({name: "estimateId", value: estimateId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/promote`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<WorkorderResponse>('post', `${basePath}${localVarPath}`,
             {
@@ -1188,7 +1198,7 @@ export class EstimateAPIService extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/workorders/estimates/${this.configuration.encodeParam({name: "estimateId", value: estimateId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/reopen`;
+        let localVarPath = `/v1/workorders/estimates/${this.configuration.encodeParam({name: "estimateId", value: estimateId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/reopen`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<EstimateResponse>('post', `${basePath}${localVarPath}`,
             {
@@ -1248,7 +1258,7 @@ export class EstimateAPIService extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/workorders/estimates/${this.configuration.encodeParam({name: "estimateId", value: estimateId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/submit-for-approval`;
+        let localVarPath = `/v1/workorders/estimates/${this.configuration.encodeParam({name: "estimateId", value: estimateId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/submit-for-approval`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<EstimateResponse>('post', `${basePath}${localVarPath}`,
             {
@@ -1325,7 +1335,7 @@ export class EstimateAPIService extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/workorders/estimates/${this.configuration.encodeParam({name: "estimateId", value: estimateId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/items/${this.configuration.encodeParam({name: "itemId", value: itemId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+        let localVarPath = `/v1/workorders/estimates/${this.configuration.encodeParam({name: "estimateId", value: estimateId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/items/${this.configuration.encodeParam({name: "itemId", value: itemId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<EstimateItemResponse>('patch', `${basePath}${localVarPath}`,
             {

@@ -14,17 +14,23 @@ import { HttpClient, HttpHeaders, HttpParams,
          HttpResponse, HttpEvent, HttpContext 
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
-import { OpenApiHttpParams, QueryParamStyle } from '../../query.params';
+import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
-import { PageStorageLocationResponse } from '../models/pageStorageLocationResponse';
-import { Pageable } from '../models/pageable';
-import { StorageLocationPatchRequest } from '../models/storageLocationPatchRequest';
-import { StorageLocationRequest } from '../models/storageLocationRequest';
-import { StorageLocationResponse } from '../models/storageLocationResponse';
+// @ts-ignore
+import { PageStorageLocationResponse } from '../src/models/pageStorageLocationResponse';
+// @ts-ignore
+import { Pageable } from '../src/models/pageable';
+// @ts-ignore
+import { StorageLocationPatchRequest } from '../src/models/storageLocationPatchRequest';
+// @ts-ignore
+import { StorageLocationRequest } from '../src/models/storageLocationRequest';
+// @ts-ignore
+import { StorageLocationResponse } from '../src/models/storageLocationResponse';
 
-import { BASE_PATH, COLLECTION_FORMATS }                     from '../../variables';
-import { Configuration }                                     from '../../configuration';
-import { BaseService } from '../../api.base.service';
+// @ts-ignore
+import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
+import { Configuration }                                     from '../configuration';
+import { BaseService } from '../api.base.service';
 
 
 

@@ -14,30 +14,51 @@ import { HttpClient, HttpHeaders, HttpParams,
          HttpResponse, HttpEvent, HttpContext 
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
-import { OpenApiHttpParams, QueryParamStyle } from '../../query.params';
+import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
-import { CreateCommercialAccountRequest } from '../models/createCommercialAccountRequest';
-import { CreateCommercialAccountResponse } from '../models/createCommercialAccountResponse';
-import { CreateVehicleForPartyRequest } from '../models/createVehicleForPartyRequest';
-import { CreateVehicleForPartyResponse } from '../models/createVehicleForPartyResponse';
-import { GetAccountTierResponse } from '../models/getAccountTierResponse';
-import { GetCommunicationPreferencesResponse } from '../models/getCommunicationPreferencesResponse';
-import { GetContactsWithRolesResponse } from '../models/getContactsWithRolesResponse';
-import { GetPartyResponse } from '../models/getPartyResponse';
-import { MergePartiesRequest } from '../models/mergePartiesRequest';
-import { MergePartiesResponse } from '../models/mergePartiesResponse';
-import { ResolveAccountTierRequest } from '../models/resolveAccountTierRequest';
-import { ResolveAccountTierResponse } from '../models/resolveAccountTierResponse';
-import { SearchPartiesRequest } from '../models/searchPartiesRequest';
-import { SearchPartiesResponse } from '../models/searchPartiesResponse';
-import { UpdateContactRolesRequest } from '../models/updateContactRolesRequest';
-import { UpdateContactRolesResponse } from '../models/updateContactRolesResponse';
-import { UpsertCommunicationPreferencesRequest } from '../models/upsertCommunicationPreferencesRequest';
-import { UpsertCommunicationPreferencesResponse } from '../models/upsertCommunicationPreferencesResponse';
+// @ts-ignore
+import { BillingTermsRef } from '../src/models/billingTermsRef';
+// @ts-ignore
+import { CreateCommercialAccountRequest } from '../src/models/createCommercialAccountRequest';
+// @ts-ignore
+import { CreateCommercialAccountResponse } from '../src/models/createCommercialAccountResponse';
+// @ts-ignore
+import { CreateVehicleForPartyRequest } from '../src/models/createVehicleForPartyRequest';
+// @ts-ignore
+import { CreateVehicleForPartyResponse } from '../src/models/createVehicleForPartyResponse';
+// @ts-ignore
+import { GetAccountTierResponse } from '../src/models/getAccountTierResponse';
+// @ts-ignore
+import { GetCommunicationPreferencesResponse } from '../src/models/getCommunicationPreferencesResponse';
+// @ts-ignore
+import { GetContactsWithRolesResponse } from '../src/models/getContactsWithRolesResponse';
+// @ts-ignore
+import { GetPartyResponse } from '../src/models/getPartyResponse';
+// @ts-ignore
+import { MergePartiesRequest } from '../src/models/mergePartiesRequest';
+// @ts-ignore
+import { MergePartiesResponse } from '../src/models/mergePartiesResponse';
+// @ts-ignore
+import { ResolveAccountTierRequest } from '../src/models/resolveAccountTierRequest';
+// @ts-ignore
+import { ResolveAccountTierResponse } from '../src/models/resolveAccountTierResponse';
+// @ts-ignore
+import { SearchPartiesRequest } from '../src/models/searchPartiesRequest';
+// @ts-ignore
+import { SearchPartiesResponse } from '../src/models/searchPartiesResponse';
+// @ts-ignore
+import { UpdateContactRolesRequest } from '../src/models/updateContactRolesRequest';
+// @ts-ignore
+import { UpdateContactRolesResponse } from '../src/models/updateContactRolesResponse';
+// @ts-ignore
+import { UpsertCommunicationPreferencesRequest } from '../src/models/upsertCommunicationPreferencesRequest';
+// @ts-ignore
+import { UpsertCommunicationPreferencesResponse } from '../src/models/upsertCommunicationPreferencesResponse';
 
-import { BASE_PATH, COLLECTION_FORMATS }                     from '../../variables';
-import { Configuration }                                     from '../../configuration';
-import { BaseService } from '../../api.base.service';
+// @ts-ignore
+import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
+import { Configuration }                                     from '../configuration';
+import { BaseService } from '../api.base.service';
 
 
 
@@ -416,6 +437,62 @@ export class CRMAccountsService extends BaseService {
         let localVarPath = `/v1/crm/accounts/parties/${this.configuration.encodeParam({name: "partyId", value: partyId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<GetPartyResponse>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * List billing terms
+     * Returns the reference list of all available billing terms. This is a static reference endpoint; it does not vary per party or account.
+     * @endpoint get /v1/crm/billing-terms
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public listBillingTerms(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<BillingTermsRef>>;
+    public listBillingTerms(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<BillingTermsRef>>>;
+    public listBillingTerms(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<BillingTermsRef>>>;
+    public listBillingTerms(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/crm/billing-terms`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<Array<BillingTermsRef>>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,

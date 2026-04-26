@@ -10,7 +10,7 @@
 
 
 /**
- * Estimate creation request with customer and vehicle IDs
+ * Request payload for creating an estimate
  */
 export interface CreateEstimateRequest { 
     /**

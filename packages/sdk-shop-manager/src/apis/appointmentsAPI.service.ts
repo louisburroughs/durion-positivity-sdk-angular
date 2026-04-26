@@ -14,16 +14,21 @@ import { HttpClient, HttpHeaders, HttpParams,
          HttpResponse, HttpEvent, HttpContext 
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
-import { OpenApiHttpParams, QueryParamStyle } from '../../query.params';
+import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
-import { AppointmentCreateRequest } from '../models/appointmentCreateRequest';
-import { AppointmentResponse } from '../models/appointmentResponse';
-import { CancelAppointmentRequest } from '../models/cancelAppointmentRequest';
-import { RescheduleAppointmentRequest } from '../models/rescheduleAppointmentRequest';
+// @ts-ignore
+import { AppointmentCreateRequest } from '../src/models/appointmentCreateRequest';
+// @ts-ignore
+import { AppointmentResponse } from '../src/models/appointmentResponse';
+// @ts-ignore
+import { CancelAppointmentRequest } from '../src/models/cancelAppointmentRequest';
+// @ts-ignore
+import { RescheduleAppointmentRequest } from '../src/models/rescheduleAppointmentRequest';
 
-import { BASE_PATH, COLLECTION_FORMATS }                     from '../../variables';
-import { Configuration }                                     from '../../configuration';
-import { BaseService } from '../../api.base.service';
+// @ts-ignore
+import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
+import { Configuration }                                     from '../configuration';
+import { BaseService } from '../api.base.service';
 
 
 

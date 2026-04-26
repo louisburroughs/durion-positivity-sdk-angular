@@ -14,16 +14,21 @@ import { HttpClient, HttpHeaders, HttpParams,
          HttpResponse, HttpEvent, HttpContext 
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
-import { OpenApiHttpParams, QueryParamStyle } from '../../query.params';
+import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
-import { CoverageRuleResponse } from '../models/coverageRuleResponse';
-import { MobileUnitRequest } from '../models/mobileUnitRequest';
-import { MobileUnitResponse } from '../models/mobileUnitResponse';
-import { PageMobileUnitResponse } from '../models/pageMobileUnitResponse';
+// @ts-ignore
+import { CoverageRuleResponse } from '../src/models/coverageRuleResponse';
+// @ts-ignore
+import { MobileUnitRequest } from '../src/models/mobileUnitRequest';
+// @ts-ignore
+import { MobileUnitResponse } from '../src/models/mobileUnitResponse';
+// @ts-ignore
+import { PageMobileUnitResponse } from '../src/models/pageMobileUnitResponse';
 
-import { BASE_PATH, COLLECTION_FORMATS }                     from '../../variables';
-import { Configuration }                                     from '../../configuration';
-import { BaseService } from '../../api.base.service';
+// @ts-ignore
+import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
+import { Configuration }                                     from '../configuration';
+import { BaseService } from '../api.base.service';
 
 
 

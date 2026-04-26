@@ -14,15 +14,19 @@ import { HttpClient, HttpHeaders, HttpParams,
          HttpResponse, HttpEvent, HttpContext 
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
-import { OpenApiHttpParams, QueryParamStyle } from '../../query.params';
+import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
-import { SupplierItemCostCreateRequestDto } from '../models/supplierItemCostCreateRequestDto';
-import { SupplierItemCostDto } from '../models/supplierItemCostDto';
-import { SupplierItemCostUpdateRequestDto } from '../models/supplierItemCostUpdateRequestDto';
+// @ts-ignore
+import { SupplierItemCostCreateRequestDto } from '../src/models/supplierItemCostCreateRequestDto';
+// @ts-ignore
+import { SupplierItemCostDto } from '../src/models/supplierItemCostDto';
+// @ts-ignore
+import { SupplierItemCostUpdateRequestDto } from '../src/models/supplierItemCostUpdateRequestDto';
 
-import { BASE_PATH, COLLECTION_FORMATS }                     from '../../variables';
-import { Configuration }                                     from '../../configuration';
-import { BaseService } from '../../api.base.service';
+// @ts-ignore
+import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
+import { Configuration }                                     from '../configuration';
+import { BaseService } from '../api.base.service';
 
 
 
@@ -147,7 +151,7 @@ export class SupplierItemCostAPIService extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/products/supplier-costs/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+        let localVarPath = `/v1/products/supplier-costs/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<any>('delete', `${basePath}${localVarPath}`,
             {
@@ -206,7 +210,7 @@ export class SupplierItemCostAPIService extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/products/supplier-costs/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+        let localVarPath = `/v1/products/supplier-costs/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<SupplierItemCostDto>('get', `${basePath}${localVarPath}`,
             {
@@ -278,7 +282,7 @@ export class SupplierItemCostAPIService extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/products/supplier-costs/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+        let localVarPath = `/v1/products/supplier-costs/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<SupplierItemCostDto>('put', `${basePath}${localVarPath}`,
             {

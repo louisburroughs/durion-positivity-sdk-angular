@@ -14,16 +14,21 @@ import { HttpClient, HttpHeaders, HttpParams,
          HttpResponse, HttpEvent, HttpContext 
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
-import { OpenApiHttpParams, QueryParamStyle } from '../../query.params';
+import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
-import { OperationalContextOverrideRequest } from '../models/operationalContextOverrideRequest';
-import { OperationalContextResponse } from '../models/operationalContextResponse';
-import { StartWorkorderRequest } from '../models/startWorkorderRequest';
-import { WorkorderStartResponse } from '../models/workorderStartResponse';
+// @ts-ignore
+import { OperationalContextOverrideRequest } from '../src/models/operationalContextOverrideRequest';
+// @ts-ignore
+import { OperationalContextResponse } from '../src/models/operationalContextResponse';
+// @ts-ignore
+import { StartWorkorderRequest } from '../src/models/startWorkorderRequest';
+// @ts-ignore
+import { WorkorderStartResponse } from '../src/models/workorderStartResponse';
 
-import { BASE_PATH, COLLECTION_FORMATS }                     from '../../variables';
-import { Configuration }                                     from '../../configuration';
-import { BaseService } from '../../api.base.service';
+// @ts-ignore
+import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
+import { Configuration }                                     from '../configuration';
+import { BaseService } from '../api.base.service';
 
 
 

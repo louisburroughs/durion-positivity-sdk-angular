@@ -14,15 +14,19 @@ import { HttpClient, HttpHeaders, HttpParams,
          HttpResponse, HttpEvent, HttpContext 
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
-import { OpenApiHttpParams, QueryParamStyle } from '../../query.params';
+import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
-import { PageWorkorderStatusView } from '../models/pageWorkorderStatusView';
-import { Pageable } from '../models/pageable';
-import { WorkorderStatusDetail } from '../models/workorderStatusDetail';
+// @ts-ignore
+import { PageWorkorderStatusView } from '../src/models/pageWorkorderStatusView';
+// @ts-ignore
+import { Pageable } from '../src/models/pageable';
+// @ts-ignore
+import { WorkorderStatusDetail } from '../src/models/workorderStatusDetail';
 
-import { BASE_PATH, COLLECTION_FORMATS }                     from '../../variables';
-import { Configuration }                                     from '../../configuration';
-import { BaseService } from '../../api.base.service';
+// @ts-ignore
+import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
+import { Configuration }                                     from '../configuration';
+import { BaseService } from '../api.base.service';
 
 
 
@@ -80,7 +84,7 @@ export class WIPDashboardService extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/workexec/wip/${this.configuration.encodeParam({name: "workorderId", value: workorderId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+        let localVarPath = `/v1/workexec/wip/${this.configuration.encodeParam({name: "workorderId", value: workorderId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<WorkorderStatusDetail>('get', `${basePath}${localVarPath}`,
             {
@@ -106,10 +110,10 @@ export class WIPDashboardService extends BaseService {
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public listWip(locationId: string, pageable: Pageable, multiLocation?: boolean, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PageWorkorderStatusView>;
-    public listWip(locationId: string, pageable: Pageable, multiLocation?: boolean, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PageWorkorderStatusView>>;
-    public listWip(locationId: string, pageable: Pageable, multiLocation?: boolean, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PageWorkorderStatusView>>;
-    public listWip(locationId: string, pageable: Pageable, multiLocation?: boolean, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public listWip(locationId: string, pageable: Pageable, multiLocation?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PageWorkorderStatusView>;
+    public listWip(locationId: string, pageable: Pageable, multiLocation?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PageWorkorderStatusView>>;
+    public listWip(locationId: string, pageable: Pageable, multiLocation?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PageWorkorderStatusView>>;
+    public listWip(locationId: string, pageable: Pageable, multiLocation?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (locationId === null || locationId === undefined) {
             throw new Error('Required parameter locationId was null or undefined when calling listWip.');
         }

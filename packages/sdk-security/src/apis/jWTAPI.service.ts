@@ -14,19 +14,27 @@ import { HttpClient, HttpHeaders, HttpParams,
          HttpResponse, HttpEvent, HttpContext 
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
-import { OpenApiHttpParams, QueryParamStyle } from '../../query.params';
+import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
-import { ApiError } from '../models/apiError';
-import { InternalTokenRequest } from '../models/internalTokenRequest';
-import { RefreshTokenRequest } from '../models/refreshTokenRequest';
-import { TokenPairRequest } from '../models/tokenPairRequest';
-import { TokenPairResponse } from '../models/tokenPairResponse';
-import { TokenResponse } from '../models/tokenResponse';
-import { ValidateResponse } from '../models/validateResponse';
+// @ts-ignore
+import { ApiError } from '../src/models/apiError';
+// @ts-ignore
+import { InternalTokenRequest } from '../src/models/internalTokenRequest';
+// @ts-ignore
+import { RefreshTokenRequest } from '../src/models/refreshTokenRequest';
+// @ts-ignore
+import { TokenPairRequest } from '../src/models/tokenPairRequest';
+// @ts-ignore
+import { TokenPairResponse } from '../src/models/tokenPairResponse';
+// @ts-ignore
+import { TokenResponse } from '../src/models/tokenResponse';
+// @ts-ignore
+import { ValidateResponse } from '../src/models/validateResponse';
 
-import { BASE_PATH, COLLECTION_FORMATS }                     from '../../variables';
-import { Configuration }                                     from '../../configuration';
-import { BaseService } from '../../api.base.service';
+// @ts-ignore
+import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
+import { Configuration }                                     from '../configuration';
+import { BaseService } from '../api.base.service';
 
 
 

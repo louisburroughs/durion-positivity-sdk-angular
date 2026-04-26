@@ -14,14 +14,17 @@ import { HttpClient, HttpHeaders, HttpParams,
          HttpResponse, HttpEvent, HttpContext 
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
-import { OpenApiHttpParams, QueryParamStyle } from '../../query.params';
+import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
-import { CreateCycleCountPlanRequest } from '../models/createCycleCountPlanRequest';
-import { CycleCountPlanResponse } from '../models/cycleCountPlanResponse';
+// @ts-ignore
+import { CreateCycleCountPlanRequest } from '../src/models/createCycleCountPlanRequest';
+// @ts-ignore
+import { CycleCountPlanResponse } from '../src/models/cycleCountPlanResponse';
 
-import { BASE_PATH, COLLECTION_FORMATS }                     from '../../variables';
-import { Configuration }                                     from '../../configuration';
-import { BaseService } from '../../api.base.service';
+// @ts-ignore
+import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
+import { Configuration }                                     from '../configuration';
+import { BaseService } from '../api.base.service';
 
 
 

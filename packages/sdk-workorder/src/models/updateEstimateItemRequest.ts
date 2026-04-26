@@ -10,7 +10,7 @@
 
 
 /**
- * Updated item fields
+ * Request payload for partial update of an estimate line item
  */
 export interface UpdateEstimateItemRequest { 
     /**

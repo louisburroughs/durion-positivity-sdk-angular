@@ -18,10 +18,10 @@ export interface PagePurchaseOrderResponse {
     size?: number;
     content?: Array<PurchaseOrderResponse>;
     number?: number;
-    first?: boolean;
-    last?: boolean;
     pageable?: PageableObject;
     sort?: SortObject;
+    first?: boolean;
+    last?: boolean;
     numberOfElements?: number;
     empty?: boolean;
 }

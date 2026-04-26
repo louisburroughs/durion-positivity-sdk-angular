@@ -14,16 +14,21 @@ import { HttpClient, HttpHeaders, HttpParams,
          HttpResponse, HttpEvent, HttpContext 
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
-import { OpenApiHttpParams, QueryParamStyle } from '../../query.params';
+import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
-import { PostingRuleSetCreateRequest } from '../models/postingRuleSetCreateRequest';
-import { PostingRuleSetListResponse } from '../models/postingRuleSetListResponse';
-import { PostingRuleSetResponse } from '../models/postingRuleSetResponse';
-import { PostingRuleVersionResponse } from '../models/postingRuleVersionResponse';
+// @ts-ignore
+import { PostingRuleSetCreateRequest } from '../src/models/postingRuleSetCreateRequest';
+// @ts-ignore
+import { PostingRuleSetListResponse } from '../src/models/postingRuleSetListResponse';
+// @ts-ignore
+import { PostingRuleSetResponse } from '../src/models/postingRuleSetResponse';
+// @ts-ignore
+import { PostingRuleVersionResponse } from '../src/models/postingRuleVersionResponse';
 
-import { BASE_PATH, COLLECTION_FORMATS }                     from '../../variables';
-import { Configuration }                                     from '../../configuration';
-import { BaseService } from '../../api.base.service';
+// @ts-ignore
+import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
+import { Configuration }                                     from '../configuration';
+import { BaseService } from '../api.base.service';
 
 
 

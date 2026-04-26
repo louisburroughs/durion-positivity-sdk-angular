@@ -7,10 +7,13 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { Null } from './null';
+
+
 /**
  * A single pricing adjustment applied to an estimate
  */
-export interface PricingAdjustment {
+export interface PricingAdjustment { 
     /**
      * Adjustment type
      */
@@ -30,6 +33,6 @@ export interface PricingAdjustment {
     /**
      * Optional adjustment metadata bag
      */
-    metadata?: object;
+    metadata?: Null;
 }
 

@@ -14,15 +14,19 @@ import { HttpClient, HttpHeaders, HttpParams,
          HttpResponse, HttpEvent, HttpContext 
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
-import { OpenApiHttpParams, QueryParamStyle } from '../../query.params';
+import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
-import { CaptureAmountRequest } from '../models/captureAmountRequest';
-import { InitiatePaymentRequest } from '../models/initiatePaymentRequest';
-import { InitiatePaymentResponse } from '../models/initiatePaymentResponse';
+// @ts-ignore
+import { CaptureAmountRequest } from '../src/models/captureAmountRequest';
+// @ts-ignore
+import { InitiatePaymentRequest } from '../src/models/initiatePaymentRequest';
+// @ts-ignore
+import { InitiatePaymentResponse } from '../src/models/initiatePaymentResponse';
 
-import { BASE_PATH, COLLECTION_FORMATS }                     from '../../variables';
-import { Configuration }                                     from '../../configuration';
-import { BaseService } from '../../api.base.service';
+// @ts-ignore
+import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
+import { Configuration }                                     from '../configuration';
+import { BaseService } from '../api.base.service';
 
 
 

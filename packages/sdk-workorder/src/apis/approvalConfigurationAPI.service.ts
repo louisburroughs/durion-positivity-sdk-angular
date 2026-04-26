@@ -14,14 +14,17 @@ import { HttpClient, HttpHeaders, HttpParams,
          HttpResponse, HttpEvent, HttpContext 
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
-import { OpenApiHttpParams, QueryParamStyle } from '../../query.params';
+import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
-import { ApprovalConfigurationRequest } from '../models/approvalConfigurationRequest';
-import { ApprovalConfigurationResponse } from '../models/approvalConfigurationResponse';
+// @ts-ignore
+import { ApprovalConfigurationRequest } from '../src/models/approvalConfigurationRequest';
+// @ts-ignore
+import { ApprovalConfigurationResponse } from '../src/models/approvalConfigurationResponse';
 
-import { BASE_PATH, COLLECTION_FORMATS }                     from '../../variables';
-import { Configuration }                                     from '../../configuration';
-import { BaseService } from '../../api.base.service';
+// @ts-ignore
+import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
+import { Configuration }                                     from '../configuration';
+import { BaseService } from '../api.base.service';
 
 
 
@@ -148,7 +151,7 @@ export class ApprovalConfigurationAPIService extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/workexec/approvalConfigurations/${this.configuration.encodeParam({name: "approvalId", value: approvalId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+        let localVarPath = `/v1/workexec/approvalConfigurations/${this.configuration.encodeParam({name: "approvalId", value: approvalId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<any>('delete', `${basePath}${localVarPath}`,
             {
@@ -343,7 +346,7 @@ export class ApprovalConfigurationAPIService extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/workexec/approvalConfigurations/${this.configuration.encodeParam({name: "approvalId", value: approvalId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+        let localVarPath = `/v1/workexec/approvalConfigurations/${this.configuration.encodeParam({name: "approvalId", value: approvalId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<ApprovalConfigurationResponse>('get', `${basePath}${localVarPath}`,
             {
@@ -416,7 +419,7 @@ export class ApprovalConfigurationAPIService extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/workexec/approvalConfigurations/${this.configuration.encodeParam({name: "approvalId", value: approvalId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+        let localVarPath = `/v1/workexec/approvalConfigurations/${this.configuration.encodeParam({name: "approvalId", value: approvalId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<ApprovalConfigurationResponse>('put', `${basePath}${localVarPath}`,
             {

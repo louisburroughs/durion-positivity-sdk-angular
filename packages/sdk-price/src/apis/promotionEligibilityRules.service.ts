@@ -14,16 +14,21 @@ import { HttpClient, HttpHeaders, HttpParams,
          HttpResponse, HttpEvent, HttpContext 
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
-import { OpenApiHttpParams, QueryParamStyle } from '../../query.params';
+import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
-import { AddEligibilityRuleRequest } from '../models/addEligibilityRuleRequest';
-import { EligibilityContext } from '../models/eligibilityContext';
-import { EligibilityDecisionResponse } from '../models/eligibilityDecisionResponse';
-import { EligibilityRuleResponse } from '../models/eligibilityRuleResponse';
+// @ts-ignore
+import { AddEligibilityRuleRequest } from '../src/models/addEligibilityRuleRequest';
+// @ts-ignore
+import { EligibilityContext } from '../src/models/eligibilityContext';
+// @ts-ignore
+import { EligibilityDecisionResponse } from '../src/models/eligibilityDecisionResponse';
+// @ts-ignore
+import { EligibilityRuleResponse } from '../src/models/eligibilityRuleResponse';
 
-import { BASE_PATH, COLLECTION_FORMATS }                     from '../../variables';
-import { Configuration }                                     from '../../configuration';
-import { BaseService } from '../../api.base.service';
+// @ts-ignore
+import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
+import { Configuration }                                     from '../configuration';
+import { BaseService } from '../api.base.service';
 
 
 

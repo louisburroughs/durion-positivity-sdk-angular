@@ -14,15 +14,19 @@ import { HttpClient, HttpHeaders, HttpParams,
          HttpResponse, HttpEvent, HttpContext 
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
-import { OpenApiHttpParams, QueryParamStyle } from '../../query.params';
+import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
-import { GetContactsWithRolesResponse } from '../models/getContactsWithRolesResponse';
-import { UpdateContactRolesRequest } from '../models/updateContactRolesRequest';
-import { UpdateContactRolesResponse } from '../models/updateContactRolesResponse';
+// @ts-ignore
+import { GetContactsWithRolesResponse } from '../src/models/getContactsWithRolesResponse';
+// @ts-ignore
+import { UpdateContactRolesRequest } from '../src/models/updateContactRolesRequest';
+// @ts-ignore
+import { UpdateContactRolesResponse } from '../src/models/updateContactRolesResponse';
 
-import { BASE_PATH, COLLECTION_FORMATS }                     from '../../variables';
-import { Configuration }                                     from '../../configuration';
-import { BaseService } from '../../api.base.service';
+// @ts-ignore
+import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
+import { Configuration }                                     from '../configuration';
+import { BaseService } from '../api.base.service';
 
 
 

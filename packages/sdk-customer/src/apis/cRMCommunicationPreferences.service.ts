@@ -14,15 +14,19 @@ import { HttpClient, HttpHeaders, HttpParams,
          HttpResponse, HttpEvent, HttpContext 
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
-import { OpenApiHttpParams, QueryParamStyle } from '../../query.params';
+import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
-import { GetCommunicationPreferencesResponse } from '../models/getCommunicationPreferencesResponse';
-import { UpsertCommunicationPreferencesRequest } from '../models/upsertCommunicationPreferencesRequest';
-import { UpsertCommunicationPreferencesResponse } from '../models/upsertCommunicationPreferencesResponse';
+// @ts-ignore
+import { GetCommunicationPreferencesResponse } from '../src/models/getCommunicationPreferencesResponse';
+// @ts-ignore
+import { UpsertCommunicationPreferencesRequest } from '../src/models/upsertCommunicationPreferencesRequest';
+// @ts-ignore
+import { UpsertCommunicationPreferencesResponse } from '../src/models/upsertCommunicationPreferencesResponse';
 
-import { BASE_PATH, COLLECTION_FORMATS }                     from '../../variables';
-import { Configuration }                                     from '../../configuration';
-import { BaseService } from '../../api.base.service';
+// @ts-ignore
+import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
+import { Configuration }                                     from '../configuration';
+import { BaseService } from '../api.base.service';
 
 
 

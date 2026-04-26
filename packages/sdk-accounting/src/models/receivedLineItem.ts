@@ -13,6 +13,7 @@
  * Line item received from vendor
  */
 export interface ReceivedLineItem { 
+    inventoryItem?: boolean;
     /**
      * Product/SKU UUID
      */

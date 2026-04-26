@@ -14,14 +14,17 @@ import { HttpClient, HttpHeaders, HttpParams,
          HttpResponse, HttpEvent, HttpContext 
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
-import { OpenApiHttpParams, QueryParamStyle } from '../../query.params';
+import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
-import { RejectTimeEntryRequest } from '../models/rejectTimeEntryRequest';
-import { TimeEntryResponse } from '../models/timeEntryResponse';
+// @ts-ignore
+import { RejectTimeEntryRequest } from '../src/models/rejectTimeEntryRequest';
+// @ts-ignore
+import { TimeEntryResponse } from '../src/models/timeEntryResponse';
 
-import { BASE_PATH, COLLECTION_FORMATS }                     from '../../variables';
-import { Configuration }                                     from '../../configuration';
-import { BaseService } from '../../api.base.service';
+// @ts-ignore
+import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
+import { Configuration }                                     from '../configuration';
+import { BaseService } from '../api.base.service';
 
 
 

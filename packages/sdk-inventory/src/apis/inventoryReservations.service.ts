@@ -14,16 +14,21 @@ import { HttpClient, HttpHeaders, HttpParams,
          HttpResponse, HttpEvent, HttpContext 
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
-import { OpenApiHttpParams, QueryParamStyle } from '../../query.params';
+import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
-import { ApiError } from '../models/apiError';
-import { CreateReservationRequest } from '../models/createReservationRequest';
-import { PromoteAllocationRequest } from '../models/promoteAllocationRequest';
-import { ReservationResponse } from '../models/reservationResponse';
+// @ts-ignore
+import { ApiError } from '../src/models/apiError';
+// @ts-ignore
+import { CreateReservationRequest } from '../src/models/createReservationRequest';
+// @ts-ignore
+import { PromoteAllocationRequest } from '../src/models/promoteAllocationRequest';
+// @ts-ignore
+import { ReservationResponse } from '../src/models/reservationResponse';
 
-import { BASE_PATH, COLLECTION_FORMATS }                     from '../../variables';
-import { Configuration }                                     from '../../configuration';
-import { BaseService } from '../../api.base.service';
+// @ts-ignore
+import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
+import { Configuration }                                     from '../configuration';
+import { BaseService } from '../api.base.service';
 
 
 

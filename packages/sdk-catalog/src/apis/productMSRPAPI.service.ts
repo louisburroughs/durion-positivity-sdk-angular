@@ -14,15 +14,19 @@ import { HttpClient, HttpHeaders, HttpParams,
          HttpResponse, HttpEvent, HttpContext 
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
-import { OpenApiHttpParams, QueryParamStyle } from '../../query.params';
+import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
-import { CreateMsrpRequestDto } from '../models/createMsrpRequestDto';
-import { ProductMsrpDto } from '../models/productMsrpDto';
-import { UpdateMsrpRequestDto } from '../models/updateMsrpRequestDto';
+// @ts-ignore
+import { CreateMsrpRequestDto } from '../src/models/createMsrpRequestDto';
+// @ts-ignore
+import { ProductMsrpDto } from '../src/models/productMsrpDto';
+// @ts-ignore
+import { UpdateMsrpRequestDto } from '../src/models/updateMsrpRequestDto';
 
-import { BASE_PATH, COLLECTION_FORMATS }                     from '../../variables';
-import { Configuration }                                     from '../../configuration';
-import { BaseService } from '../../api.base.service';
+// @ts-ignore
+import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
+import { Configuration }                                     from '../configuration';
+import { BaseService } from '../api.base.service';
 
 
 
@@ -93,7 +97,7 @@ export class ProductMSRPAPIService extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/products/${this.configuration.encodeParam({name: "productId", value: productId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/msrp`;
+        let localVarPath = `/v1/products/${this.configuration.encodeParam({name: "productId", value: productId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/msrp`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<ProductMsrpDto>('post', `${basePath}${localVarPath}`,
             {
@@ -166,7 +170,7 @@ export class ProductMSRPAPIService extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/products/${this.configuration.encodeParam({name: "productId", value: productId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/msrp/active`;
+        let localVarPath = `/v1/products/${this.configuration.encodeParam({name: "productId", value: productId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/msrp/active`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<ProductMsrpDto>('get', `${basePath}${localVarPath}`,
             {
@@ -227,7 +231,7 @@ export class ProductMSRPAPIService extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/products/${this.configuration.encodeParam({name: "productId", value: productId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/msrp`;
+        let localVarPath = `/v1/products/${this.configuration.encodeParam({name: "productId", value: productId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/msrp`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<ProductMsrpDto>('get', `${basePath}${localVarPath}`,
             {
@@ -304,7 +308,7 @@ export class ProductMSRPAPIService extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/products/${this.configuration.encodeParam({name: "productId", value: productId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/msrp/${this.configuration.encodeParam({name: "msrpId", value: msrpId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+        let localVarPath = `/v1/products/${this.configuration.encodeParam({name: "productId", value: productId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/msrp/${this.configuration.encodeParam({name: "msrpId", value: msrpId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<ProductMsrpDto>('put', `${basePath}${localVarPath}`,
             {

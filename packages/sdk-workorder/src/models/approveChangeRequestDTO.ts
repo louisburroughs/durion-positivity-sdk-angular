@@ -10,7 +10,7 @@
 
 
 /**
- * Approval details including user ID and note
+ * Request payload for approving a change request
  */
 export interface ApproveChangeRequestDTO { 
     /**

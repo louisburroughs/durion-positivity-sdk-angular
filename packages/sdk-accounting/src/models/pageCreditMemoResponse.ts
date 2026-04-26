@@ -18,10 +18,10 @@ export interface PageCreditMemoResponse {
     size?: number;
     content?: Array<CreditMemoResponse>;
     number?: number;
-    first?: boolean;
-    last?: boolean;
     pageable?: PageableObject;
     sort?: SortObject;
+    first?: boolean;
+    last?: boolean;
     numberOfElements?: number;
     empty?: boolean;
 }

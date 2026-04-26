@@ -14,15 +14,19 @@ import { HttpClient, HttpHeaders, HttpParams,
          HttpResponse, HttpEvent, HttpContext 
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
-import { OpenApiHttpParams, QueryParamStyle } from '../../query.params';
+import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
-import { UomConversionCreateRequestDto } from '../models/uomConversionCreateRequestDto';
-import { UomConversionDto } from '../models/uomConversionDto';
-import { UomConversionUpdateRequestDto } from '../models/uomConversionUpdateRequestDto';
+// @ts-ignore
+import { UomConversionCreateRequestDto } from '../src/models/uomConversionCreateRequestDto';
+// @ts-ignore
+import { UomConversionDto } from '../src/models/uomConversionDto';
+// @ts-ignore
+import { UomConversionUpdateRequestDto } from '../src/models/uomConversionUpdateRequestDto';
 
-import { BASE_PATH, COLLECTION_FORMATS }                     from '../../variables';
-import { Configuration }                                     from '../../configuration';
-import { BaseService } from '../../api.base.service';
+// @ts-ignore
+import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
+import { Configuration }                                     from '../configuration';
+import { BaseService } from '../api.base.service';
 
 
 
@@ -149,7 +153,7 @@ export class UOMConversionAPIService extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/products/uom-conversions/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+        let localVarPath = `/v1/products/uom-conversions/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<any>('delete', `${basePath}${localVarPath}`,
             {
@@ -209,7 +213,7 @@ export class UOMConversionAPIService extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/products/uom-conversions/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+        let localVarPath = `/v1/products/uom-conversions/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<UomConversionDto>('get', `${basePath}${localVarPath}`,
             {
@@ -338,7 +342,7 @@ export class UOMConversionAPIService extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/products/uom-conversions/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+        let localVarPath = `/v1/products/uom-conversions/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<UomConversionDto>('put', `${basePath}${localVarPath}`,
             {

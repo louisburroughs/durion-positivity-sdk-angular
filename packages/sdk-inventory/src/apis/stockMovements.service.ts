@@ -14,16 +14,21 @@ import { HttpClient, HttpHeaders, HttpParams,
          HttpResponse, HttpEvent, HttpContext 
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
-import { OpenApiHttpParams, QueryParamStyle } from '../../query.params';
+import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
-import { AdjustmentRequestResponse } from '../models/adjustmentRequestResponse';
-import { ApiError } from '../models/apiError';
-import { CreateAdjustmentRequestDto } from '../models/createAdjustmentRequestDto';
-import { RecordMovementRequest } from '../models/recordMovementRequest';
+// @ts-ignore
+import { AdjustmentRequestResponse } from '../src/models/adjustmentRequestResponse';
+// @ts-ignore
+import { ApiError } from '../src/models/apiError';
+// @ts-ignore
+import { CreateAdjustmentRequestDto } from '../src/models/createAdjustmentRequestDto';
+// @ts-ignore
+import { RecordMovementRequest } from '../src/models/recordMovementRequest';
 
-import { BASE_PATH, COLLECTION_FORMATS }                     from '../../variables';
-import { Configuration }                                     from '../../configuration';
-import { BaseService } from '../../api.base.service';
+// @ts-ignore
+import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
+import { Configuration }                                     from '../configuration';
+import { BaseService } from '../api.base.service';
 
 
 

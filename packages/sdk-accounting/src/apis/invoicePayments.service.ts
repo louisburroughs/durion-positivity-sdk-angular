@@ -14,16 +14,21 @@ import { HttpClient, HttpHeaders, HttpParams,
          HttpResponse, HttpEvent, HttpContext 
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
-import { OpenApiHttpParams, QueryParamStyle } from '../../query.params';
+import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
-import { BillingRuleRefResponse } from '../models/billingRuleRefResponse';
-import { InvoiceGenerationResponse } from '../models/invoiceGenerationResponse';
-import { InvoiceStatusResponse } from '../models/invoiceStatusResponse';
-import { RegenerateInvoiceFromWorkorderRequest } from '../models/regenerateInvoiceFromWorkorderRequest';
+// @ts-ignore
+import { BillingRuleRefResponse } from '../src/models/billingRuleRefResponse';
+// @ts-ignore
+import { InvoiceGenerationResponse } from '../src/models/invoiceGenerationResponse';
+// @ts-ignore
+import { InvoiceStatusResponse } from '../src/models/invoiceStatusResponse';
+// @ts-ignore
+import { RegenerateInvoiceFromWorkorderRequest } from '../src/models/regenerateInvoiceFromWorkorderRequest';
 
-import { BASE_PATH, COLLECTION_FORMATS }                     from '../../variables';
-import { Configuration }                                     from '../../configuration';
-import { BaseService } from '../../api.base.service';
+// @ts-ignore
+import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
+import { Configuration }                                     from '../configuration';
+import { BaseService } from '../api.base.service';
 
 
 

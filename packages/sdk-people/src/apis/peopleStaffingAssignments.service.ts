@@ -14,15 +14,19 @@ import { HttpClient, HttpHeaders, HttpParams,
          HttpResponse, HttpEvent, HttpContext 
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
-import { OpenApiHttpParams, QueryParamStyle } from '../../query.params';
+import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
-import { CreateStaffingAssignmentRequest } from '../models/createStaffingAssignmentRequest';
-import { StaffingAssignmentResponse } from '../models/staffingAssignmentResponse';
-import { UpdateStaffingAssignmentRequest } from '../models/updateStaffingAssignmentRequest';
+// @ts-ignore
+import { CreateStaffingAssignmentRequest } from '../src/models/createStaffingAssignmentRequest';
+// @ts-ignore
+import { StaffingAssignmentResponse } from '../src/models/staffingAssignmentResponse';
+// @ts-ignore
+import { UpdateStaffingAssignmentRequest } from '../src/models/updateStaffingAssignmentRequest';
 
-import { BASE_PATH, COLLECTION_FORMATS }                     from '../../variables';
-import { Configuration }                                     from '../../configuration';
-import { BaseService } from '../../api.base.service';
+// @ts-ignore
+import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
+import { Configuration }                                     from '../configuration';
+import { BaseService } from '../api.base.service';
 
 
 

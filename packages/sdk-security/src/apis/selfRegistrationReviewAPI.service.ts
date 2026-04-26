@@ -14,15 +14,19 @@ import { HttpClient, HttpHeaders, HttpParams,
          HttpResponse, HttpEvent, HttpContext 
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
-import { OpenApiHttpParams, QueryParamStyle } from '../../query.params';
+import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
-import { ApiError } from '../models/apiError';
-import { ResolveSelfRegistrationReviewCaseRequest } from '../models/resolveSelfRegistrationReviewCaseRequest';
-import { SelfRegistrationReviewCaseResponse } from '../models/selfRegistrationReviewCaseResponse';
+// @ts-ignore
+import { ApiError } from '../src/models/apiError';
+// @ts-ignore
+import { ResolveSelfRegistrationReviewCaseRequest } from '../src/models/resolveSelfRegistrationReviewCaseRequest';
+// @ts-ignore
+import { SelfRegistrationReviewCaseResponse } from '../src/models/selfRegistrationReviewCaseResponse';
 
-import { BASE_PATH, COLLECTION_FORMATS }                     from '../../variables';
-import { Configuration }                                     from '../../configuration';
-import { BaseService } from '../../api.base.service';
+// @ts-ignore
+import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
+import { Configuration }                                     from '../configuration';
+import { BaseService } from '../api.base.service';
 
 
 

@@ -14,16 +14,21 @@ import { HttpClient, HttpHeaders, HttpParams,
          HttpResponse, HttpEvent, HttpContext 
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
-import { OpenApiHttpParams, QueryParamStyle } from '../../query.params';
+import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
-import { ApiError } from '../models/apiError';
-import { ConsumePickedItemsRequest } from '../models/consumePickedItemsRequest';
-import { ConsumePickedItemsResponse } from '../models/consumePickedItemsResponse';
-import { WorkorderPickedItemResponse } from '../models/workorderPickedItemResponse';
+// @ts-ignore
+import { ApiError } from '../src/models/apiError';
+// @ts-ignore
+import { ConsumePickedItemsRequest } from '../src/models/consumePickedItemsRequest';
+// @ts-ignore
+import { ConsumePickedItemsResponse } from '../src/models/consumePickedItemsResponse';
+// @ts-ignore
+import { WorkorderPickedItemResponse } from '../src/models/workorderPickedItemResponse';
 
-import { BASE_PATH, COLLECTION_FORMATS }                     from '../../variables';
-import { Configuration }                                     from '../../configuration';
-import { BaseService } from '../../api.base.service';
+// @ts-ignore
+import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
+import { Configuration }                                     from '../configuration';
+import { BaseService } from '../api.base.service';
 
 
 
@@ -93,7 +98,7 @@ export class WorkorderPickedItemsService extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/workorders/${this.configuration.encodeParam({name: "workorderId", value: workorderId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/picked-items:consume`;
+        let localVarPath = `/v1/workorders/${this.configuration.encodeParam({name: "workorderId", value: workorderId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/picked-items:consume`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<ConsumePickedItemsResponse>('post', `${basePath}${localVarPath}`,
             {
@@ -153,7 +158,7 @@ export class WorkorderPickedItemsService extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/workorders/${this.configuration.encodeParam({name: "workorderId", value: workorderId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/picked-items`;
+        let localVarPath = `/v1/workorders/${this.configuration.encodeParam({name: "workorderId", value: workorderId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/picked-items`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<Array<WorkorderPickedItemResponse>>('get', `${basePath}${localVarPath}`,
             {

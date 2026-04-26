@@ -14,16 +14,21 @@ import { HttpClient, HttpHeaders, HttpParams,
          HttpResponse, HttpEvent, HttpContext 
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
-import { OpenApiHttpParams, QueryParamStyle } from '../../query.params';
+import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
-import { CreateCreditMemoRequest } from '../models/createCreditMemoRequest';
-import { CreditMemoResponse } from '../models/creditMemoResponse';
-import { PageCreditMemoResponse } from '../models/pageCreditMemoResponse';
-import { Pageable } from '../models/pageable';
+// @ts-ignore
+import { CreateCreditMemoRequest } from '../src/models/createCreditMemoRequest';
+// @ts-ignore
+import { CreditMemoResponse } from '../src/models/creditMemoResponse';
+// @ts-ignore
+import { PageCreditMemoResponse } from '../src/models/pageCreditMemoResponse';
+// @ts-ignore
+import { Pageable } from '../src/models/pageable';
 
-import { BASE_PATH, COLLECTION_FORMATS }                     from '../../variables';
-import { Configuration }                                     from '../../configuration';
-import { BaseService } from '../../api.base.service';
+// @ts-ignore
+import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
+import { Configuration }                                     from '../configuration';
+import { BaseService } from '../api.base.service';
 
 
 

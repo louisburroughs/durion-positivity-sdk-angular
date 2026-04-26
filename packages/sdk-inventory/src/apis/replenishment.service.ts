@@ -14,15 +14,19 @@ import { HttpClient, HttpHeaders, HttpParams,
          HttpResponse, HttpEvent, HttpContext 
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
-import { OpenApiHttpParams, QueryParamStyle } from '../../query.params';
+import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
-import { CreateReplenishmentPolicyRequest } from '../models/createReplenishmentPolicyRequest';
-import { ReplenishmentPolicyResponse } from '../models/replenishmentPolicyResponse';
-import { ReplenishmentTaskResponse } from '../models/replenishmentTaskResponse';
+// @ts-ignore
+import { CreateReplenishmentPolicyRequest } from '../src/models/createReplenishmentPolicyRequest';
+// @ts-ignore
+import { ReplenishmentPolicyResponse } from '../src/models/replenishmentPolicyResponse';
+// @ts-ignore
+import { ReplenishmentTaskResponse } from '../src/models/replenishmentTaskResponse';
 
-import { BASE_PATH, COLLECTION_FORMATS }                     from '../../variables';
-import { Configuration }                                     from '../../configuration';
-import { BaseService } from '../../api.base.service';
+// @ts-ignore
+import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
+import { Configuration }                                     from '../configuration';
+import { BaseService } from '../api.base.service';
 
 
 

@@ -14,15 +14,19 @@ import { HttpClient, HttpHeaders, HttpParams,
          HttpResponse, HttpEvent, HttpContext 
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
-import { OpenApiHttpParams, QueryParamStyle } from '../../query.params';
+import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
-import { ModeResponse } from '../models/modeResponse';
-import { TaxCalculationRequest } from '../models/taxCalculationRequest';
-import { TaxCalculationResponse } from '../models/taxCalculationResponse';
+// @ts-ignore
+import { ModeResponse } from '../src/models/modeResponse';
+// @ts-ignore
+import { TaxCalculationRequest } from '../src/models/taxCalculationRequest';
+// @ts-ignore
+import { TaxCalculationResponse } from '../src/models/taxCalculationResponse';
 
-import { BASE_PATH, COLLECTION_FORMATS }                     from '../../variables';
-import { Configuration }                                     from '../../configuration';
-import { BaseService } from '../../api.base.service';
+// @ts-ignore
+import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
+import { Configuration }                                     from '../configuration';
+import { BaseService } from '../api.base.service';
 
 
 

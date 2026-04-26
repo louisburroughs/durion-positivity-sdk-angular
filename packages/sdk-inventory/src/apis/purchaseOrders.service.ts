@@ -14,22 +14,33 @@ import { HttpClient, HttpHeaders, HttpParams,
          HttpResponse, HttpEvent, HttpContext 
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
-import { OpenApiHttpParams, QueryParamStyle } from '../../query.params';
+import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
-import { ApiError } from '../models/apiError';
-import { ApprovePurchaseOrderRequest } from '../models/approvePurchaseOrderRequest';
-import { CreatePurchaseOrderRequest } from '../models/createPurchaseOrderRequest';
-import { ListPurchaseOrdersRequest } from '../models/listPurchaseOrdersRequest';
-import { PagePurchaseOrderResponse } from '../models/pagePurchaseOrderResponse';
-import { Pageable } from '../models/pageable';
-import { PurchaseOrderResponse } from '../models/purchaseOrderResponse';
-import { ReceivePurchaseOrderRequest } from '../models/receivePurchaseOrderRequest';
-import { ReceivePurchaseOrderResponse } from '../models/receivePurchaseOrderResponse';
-import { RevisePurchaseOrderRequest } from '../models/revisePurchaseOrderRequest';
+// @ts-ignore
+import { ApiError } from '../src/models/apiError';
+// @ts-ignore
+import { ApprovePurchaseOrderRequest } from '../src/models/approvePurchaseOrderRequest';
+// @ts-ignore
+import { CreatePurchaseOrderRequest } from '../src/models/createPurchaseOrderRequest';
+// @ts-ignore
+import { ListPurchaseOrdersRequest } from '../src/models/listPurchaseOrdersRequest';
+// @ts-ignore
+import { PagePurchaseOrderResponse } from '../src/models/pagePurchaseOrderResponse';
+// @ts-ignore
+import { Pageable } from '../src/models/pageable';
+// @ts-ignore
+import { PurchaseOrderResponse } from '../src/models/purchaseOrderResponse';
+// @ts-ignore
+import { ReceivePurchaseOrderRequest } from '../src/models/receivePurchaseOrderRequest';
+// @ts-ignore
+import { ReceivePurchaseOrderResponse } from '../src/models/receivePurchaseOrderResponse';
+// @ts-ignore
+import { RevisePurchaseOrderRequest } from '../src/models/revisePurchaseOrderRequest';
 
-import { BASE_PATH, COLLECTION_FORMATS }                     from '../../variables';
-import { Configuration }                                     from '../../configuration';
-import { BaseService } from '../../api.base.service';
+// @ts-ignore
+import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
+import { Configuration }                                     from '../configuration';
+import { BaseService } from '../api.base.service';
 
 
 

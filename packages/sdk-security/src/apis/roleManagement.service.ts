@@ -14,19 +14,27 @@ import { HttpClient, HttpHeaders, HttpParams,
          HttpResponse, HttpEvent, HttpContext 
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
-import { OpenApiHttpParams, QueryParamStyle } from '../../query.params';
+import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
-import { ApiError } from '../models/apiError';
-import { PermissionDto } from '../models/permissionDto';
-import { RoleAssignmentDto } from '../models/roleAssignmentDto';
-import { RoleAssignmentRequest } from '../models/roleAssignmentRequest';
-import { RoleDto } from '../models/roleDto';
-import { RolePermissionGrantRequest } from '../models/rolePermissionGrantRequest';
-import { RolePermissionsRequest } from '../models/rolePermissionsRequest';
+// @ts-ignore
+import { ApiError } from '../src/models/apiError';
+// @ts-ignore
+import { PermissionDto } from '../src/models/permissionDto';
+// @ts-ignore
+import { RoleAssignmentDto } from '../src/models/roleAssignmentDto';
+// @ts-ignore
+import { RoleAssignmentRequest } from '../src/models/roleAssignmentRequest';
+// @ts-ignore
+import { RoleDto } from '../src/models/roleDto';
+// @ts-ignore
+import { RolePermissionGrantRequest } from '../src/models/rolePermissionGrantRequest';
+// @ts-ignore
+import { RolePermissionsRequest } from '../src/models/rolePermissionsRequest';
 
-import { BASE_PATH, COLLECTION_FORMATS }                     from '../../variables';
-import { Configuration }                                     from '../../configuration';
-import { BaseService } from '../../api.base.service';
+// @ts-ignore
+import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
+import { Configuration }                                     from '../configuration';
+import { BaseService } from '../api.base.service';
 
 
 

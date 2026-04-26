@@ -14,18 +14,25 @@ import { HttpClient, HttpHeaders, HttpParams,
          HttpResponse, HttpEvent, HttpContext 
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
-import { OpenApiHttpParams, QueryParamStyle } from '../../query.params';
+import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
-import { AddItemRequest } from '../models/addItemRequest';
-import { CreateCartRequest } from '../models/createCartRequest';
-import { LinkSourceRequest } from '../models/linkSourceRequest';
-import { SalesOrderLineResponse } from '../models/salesOrderLineResponse';
-import { SalesOrderResponse } from '../models/salesOrderResponse';
-import { UpdateItemRequest } from '../models/updateItemRequest';
+// @ts-ignore
+import { AddItemRequest } from '../src/models/addItemRequest';
+// @ts-ignore
+import { CreateCartRequest } from '../src/models/createCartRequest';
+// @ts-ignore
+import { LinkSourceRequest } from '../src/models/linkSourceRequest';
+// @ts-ignore
+import { SalesOrderLineResponse } from '../src/models/salesOrderLineResponse';
+// @ts-ignore
+import { SalesOrderResponse } from '../src/models/salesOrderResponse';
+// @ts-ignore
+import { UpdateItemRequest } from '../src/models/updateItemRequest';
 
-import { BASE_PATH, COLLECTION_FORMATS }                     from '../../variables';
-import { Configuration }                                     from '../../configuration';
-import { BaseService } from '../../api.base.service';
+// @ts-ignore
+import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
+import { Configuration }                                     from '../configuration';
+import { BaseService } from '../api.base.service';
 
 
 

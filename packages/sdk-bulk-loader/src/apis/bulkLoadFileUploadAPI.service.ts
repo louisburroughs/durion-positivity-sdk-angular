@@ -14,15 +14,19 @@ import { HttpClient, HttpHeaders, HttpParams,
          HttpResponse, HttpEvent, HttpContext 
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
-import { OpenApiHttpParams, QueryParamStyle } from '../../query.params';
+import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
-import { BulkLoadJobResponse } from '../models/bulkLoadJobResponse';
-import { FileUploadResponse } from '../models/fileUploadResponse';
-import { UploadFileRequest } from '../models/uploadFileRequest';
+// @ts-ignore
+import { BulkLoadJobResponse } from '../src/models/bulkLoadJobResponse';
+// @ts-ignore
+import { FileUploadResponse } from '../src/models/fileUploadResponse';
+// @ts-ignore
+import { UploadFileRequest } from '../src/models/uploadFileRequest';
 
-import { BASE_PATH, COLLECTION_FORMATS }                     from '../../variables';
-import { Configuration }                                     from '../../configuration';
-import { BaseService } from '../../api.base.service';
+// @ts-ignore
+import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
+import { Configuration }                                     from '../configuration';
+import { BaseService } from '../api.base.service';
 
 
 

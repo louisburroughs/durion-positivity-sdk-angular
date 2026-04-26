@@ -14,16 +14,21 @@ import { HttpClient, HttpHeaders, HttpParams,
          HttpResponse, HttpEvent, HttpContext 
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
-import { OpenApiHttpParams, QueryParamStyle } from '../../query.params';
+import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
-import { MappingKeyCreateRequest } from '../models/mappingKeyCreateRequest';
-import { MappingKeyListResponse } from '../models/mappingKeyListResponse';
-import { MappingKeyResponse } from '../models/mappingKeyResponse';
-import { MappingKeyUpdateRequest } from '../models/mappingKeyUpdateRequest';
+// @ts-ignore
+import { MappingKeyCreateRequest } from '../src/models/mappingKeyCreateRequest';
+// @ts-ignore
+import { MappingKeyListResponse } from '../src/models/mappingKeyListResponse';
+// @ts-ignore
+import { MappingKeyResponse } from '../src/models/mappingKeyResponse';
+// @ts-ignore
+import { MappingKeyUpdateRequest } from '../src/models/mappingKeyUpdateRequest';
 
-import { BASE_PATH, COLLECTION_FORMATS }                     from '../../variables';
-import { Configuration }                                     from '../../configuration';
-import { BaseService } from '../../api.base.service';
+// @ts-ignore
+import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
+import { Configuration }                                     from '../configuration';
+import { BaseService } from '../api.base.service';
 
 
 

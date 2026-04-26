@@ -14,16 +14,21 @@ import { HttpClient, HttpHeaders, HttpParams,
          HttpResponse, HttpEvent, HttpContext 
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
-import { OpenApiHttpParams, QueryParamStyle } from '../../query.params';
+import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
-import { ApplyPromotionRequest } from '../models/applyPromotionRequest';
-import { ApplyPromotionResponse } from '../models/applyPromotionResponse';
-import { CreatePromotionOfferRequest } from '../models/createPromotionOfferRequest';
-import { PromotionOfferResponse } from '../models/promotionOfferResponse';
+// @ts-ignore
+import { ApplyPromotionRequest } from '../src/models/applyPromotionRequest';
+// @ts-ignore
+import { ApplyPromotionResponse } from '../src/models/applyPromotionResponse';
+// @ts-ignore
+import { CreatePromotionOfferRequest } from '../src/models/createPromotionOfferRequest';
+// @ts-ignore
+import { PromotionOfferResponse } from '../src/models/promotionOfferResponse';
 
-import { BASE_PATH, COLLECTION_FORMATS }                     from '../../variables';
-import { Configuration }                                     from '../../configuration';
-import { BaseService } from '../../api.base.service';
+// @ts-ignore
+import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
+import { Configuration }                                     from '../configuration';
+import { BaseService } from '../api.base.service';
 
 
 

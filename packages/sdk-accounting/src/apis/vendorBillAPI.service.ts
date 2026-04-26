@@ -14,18 +14,25 @@ import { HttpClient, HttpHeaders, HttpParams,
          HttpResponse, HttpEvent, HttpContext 
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
-import { OpenApiHttpParams, QueryParamStyle } from '../../query.params';
+import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
-import { CandidateSelectionRequest } from '../models/candidateSelectionRequest';
-import { ExceptionResolutionRequest } from '../models/exceptionResolutionRequest';
-import { GoodsReceivedEvent } from '../models/goodsReceivedEvent';
-import { VendorBillMatchCandidateResponse } from '../models/vendorBillMatchCandidateResponse';
-import { VendorBillResponse } from '../models/vendorBillResponse';
-import { VendorInvoiceReceivedEvent } from '../models/vendorInvoiceReceivedEvent';
+// @ts-ignore
+import { CandidateSelectionRequest } from '../src/models/candidateSelectionRequest';
+// @ts-ignore
+import { ExceptionResolutionRequest } from '../src/models/exceptionResolutionRequest';
+// @ts-ignore
+import { GoodsReceivedEvent } from '../src/models/goodsReceivedEvent';
+// @ts-ignore
+import { VendorBillMatchCandidateResponse } from '../src/models/vendorBillMatchCandidateResponse';
+// @ts-ignore
+import { VendorBillResponse } from '../src/models/vendorBillResponse';
+// @ts-ignore
+import { VendorInvoiceReceivedEvent } from '../src/models/vendorInvoiceReceivedEvent';
 
-import { BASE_PATH, COLLECTION_FORMATS }                     from '../../variables';
-import { Configuration }                                     from '../../configuration';
-import { BaseService } from '../../api.base.service';
+// @ts-ignore
+import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
+import { Configuration }                                     from '../configuration';
+import { BaseService } from '../api.base.service';
 
 
 

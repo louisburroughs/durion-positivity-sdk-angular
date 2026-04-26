@@ -14,17 +14,23 @@ import { HttpClient, HttpHeaders, HttpParams,
          HttpResponse, HttpEvent, HttpContext 
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
-import { OpenApiHttpParams, QueryParamStyle } from '../../query.params';
+import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
-import { JournalEntryCreateRequest } from '../models/journalEntryCreateRequest';
-import { JournalEntryResponse } from '../models/journalEntryResponse';
-import { JournalEntryReversalRequest } from '../models/journalEntryReversalRequest';
-import { JournalEntryTraceabilityResponse } from '../models/journalEntryTraceabilityResponse';
-import { PagedResponseJournalEntryResponse } from '../models/pagedResponseJournalEntryResponse';
+// @ts-ignore
+import { JournalEntryCreateRequest } from '../src/models/journalEntryCreateRequest';
+// @ts-ignore
+import { JournalEntryResponse } from '../src/models/journalEntryResponse';
+// @ts-ignore
+import { JournalEntryReversalRequest } from '../src/models/journalEntryReversalRequest';
+// @ts-ignore
+import { JournalEntryTraceabilityResponse } from '../src/models/journalEntryTraceabilityResponse';
+// @ts-ignore
+import { PagedResponseJournalEntryResponse } from '../src/models/pagedResponseJournalEntryResponse';
 
-import { BASE_PATH, COLLECTION_FORMATS }                     from '../../variables';
-import { Configuration }                                     from '../../configuration';
-import { BaseService } from '../../api.base.service';
+// @ts-ignore
+import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
+import { Configuration }                                     from '../configuration';
+import { BaseService } from '../api.base.service';
 
 
 

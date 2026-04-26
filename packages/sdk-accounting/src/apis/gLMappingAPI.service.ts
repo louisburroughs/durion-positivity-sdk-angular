@@ -14,16 +14,21 @@ import { HttpClient, HttpHeaders, HttpParams,
          HttpResponse, HttpEvent, HttpContext 
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
-import { OpenApiHttpParams, QueryParamStyle } from '../../query.params';
+import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
-import { GLMappingCreateRequest } from '../models/gLMappingCreateRequest';
-import { GLMappingCreateResponse } from '../models/gLMappingCreateResponse';
-import { GLMappingResolveRequest } from '../models/gLMappingResolveRequest';
-import { GLMappingResolveResponse } from '../models/gLMappingResolveResponse';
+// @ts-ignore
+import { GLMappingCreateRequest } from '../src/models/gLMappingCreateRequest';
+// @ts-ignore
+import { GLMappingCreateResponse } from '../src/models/gLMappingCreateResponse';
+// @ts-ignore
+import { GLMappingResolveRequest } from '../src/models/gLMappingResolveRequest';
+// @ts-ignore
+import { GLMappingResolveResponse } from '../src/models/gLMappingResolveResponse';
 
-import { BASE_PATH, COLLECTION_FORMATS }                     from '../../variables';
-import { Configuration }                                     from '../../configuration';
-import { BaseService } from '../../api.base.service';
+// @ts-ignore
+import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
+import { Configuration }                                     from '../configuration';
+import { BaseService } from '../api.base.service';
 
 
 

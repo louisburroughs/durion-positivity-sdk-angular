@@ -14,15 +14,19 @@ import { HttpClient, HttpHeaders, HttpParams,
          HttpResponse, HttpEvent, HttpContext 
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
-import { OpenApiHttpParams, QueryParamStyle } from '../../query.params';
+import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
-import { TimeEntryAdjustment } from '../models/timeEntryAdjustment';
-import { TimeEntryAdjustmentRequest } from '../models/timeEntryAdjustmentRequest';
-import { TimeEntryAdjustmentResponse } from '../models/timeEntryAdjustmentResponse';
+// @ts-ignore
+import { TimeEntryAdjustment } from '../src/models/timeEntryAdjustment';
+// @ts-ignore
+import { TimeEntryAdjustmentRequest } from '../src/models/timeEntryAdjustmentRequest';
+// @ts-ignore
+import { TimeEntryAdjustmentResponse } from '../src/models/timeEntryAdjustmentResponse';
 
-import { BASE_PATH, COLLECTION_FORMATS }                     from '../../variables';
-import { Configuration }                                     from '../../configuration';
-import { BaseService } from '../../api.base.service';
+// @ts-ignore
+import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
+import { Configuration }                                     from '../configuration';
+import { BaseService } from '../api.base.service';
 
 
 

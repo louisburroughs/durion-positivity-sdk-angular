@@ -14,23 +14,35 @@ import { HttpClient, HttpHeaders, HttpParams,
          HttpResponse, HttpEvent, HttpContext 
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
-import { OpenApiHttpParams, QueryParamStyle } from '../../query.params';
+import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
-import { ApproveWorkorderRequest } from '../models/approveWorkorderRequest';
-import { CompleteWorkorderRequest } from '../models/completeWorkorderRequest';
-import { CompleteWorkorderResponse } from '../models/completeWorkorderResponse';
-import { CompletionPreconditionsResponse } from '../models/completionPreconditionsResponse';
-import { CreateWorkorderRequest } from '../models/createWorkorderRequest';
-import { InvoiceGenerationResponse } from '../models/invoiceGenerationResponse';
-import { ReopenWorkorderRequest } from '../models/reopenWorkorderRequest';
-import { ReopenWorkorderResponse } from '../models/reopenWorkorderResponse';
-import { WorkorderResponse } from '../models/workorderResponse';
-import { WorkorderSnapshotResponse } from '../models/workorderSnapshotResponse';
-import { WorkorderStateTransitionResponse } from '../models/workorderStateTransitionResponse';
+// @ts-ignore
+import { ApproveWorkorderRequest } from '../src/models/approveWorkorderRequest';
+// @ts-ignore
+import { CompleteWorkorderRequest } from '../src/models/completeWorkorderRequest';
+// @ts-ignore
+import { CompleteWorkorderResponse } from '../src/models/completeWorkorderResponse';
+// @ts-ignore
+import { CompletionPreconditionsResponse } from '../src/models/completionPreconditionsResponse';
+// @ts-ignore
+import { CreateWorkorderRequest } from '../src/models/createWorkorderRequest';
+// @ts-ignore
+import { InvoiceGenerationResponse } from '../src/models/invoiceGenerationResponse';
+// @ts-ignore
+import { ReopenWorkorderRequest } from '../src/models/reopenWorkorderRequest';
+// @ts-ignore
+import { ReopenWorkorderResponse } from '../src/models/reopenWorkorderResponse';
+// @ts-ignore
+import { WorkorderResponse } from '../src/models/workorderResponse';
+// @ts-ignore
+import { WorkorderSnapshotResponse } from '../src/models/workorderSnapshotResponse';
+// @ts-ignore
+import { WorkorderStateTransitionResponse } from '../src/models/workorderStateTransitionResponse';
 
-import { BASE_PATH, COLLECTION_FORMATS }                     from '../../variables';
-import { Configuration }                                     from '../../configuration';
-import { BaseService } from '../../api.base.service';
+// @ts-ignore
+import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
+import { Configuration }                                     from '../configuration';
+import { BaseService } from '../api.base.service';
 
 
 
@@ -101,7 +113,7 @@ export class WorkOrderAPIService extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/workorders/${this.configuration.encodeParam({name: "workorderId", value: workorderId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/approval`;
+        let localVarPath = `/v1/workorders/${this.configuration.encodeParam({name: "workorderId", value: workorderId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/approval`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<WorkorderResponse>('post', `${basePath}${localVarPath}`,
             {
@@ -175,7 +187,7 @@ export class WorkOrderAPIService extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/workorders/${this.configuration.encodeParam({name: "workorderId", value: workorderId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/complete`;
+        let localVarPath = `/v1/workorders/${this.configuration.encodeParam({name: "workorderId", value: workorderId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/complete`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<CompleteWorkorderResponse>('post', `${basePath}${localVarPath}`,
             {
@@ -309,7 +321,7 @@ export class WorkOrderAPIService extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/workorders/${this.configuration.encodeParam({name: "workorderId", value: workorderId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+        let localVarPath = `/v1/workorders/${this.configuration.encodeParam({name: "workorderId", value: workorderId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<any>('delete', `${basePath}${localVarPath}`,
             {
@@ -373,7 +385,7 @@ export class WorkOrderAPIService extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/workorders/${this.configuration.encodeParam({name: "workorderId", value: workorderId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/generate-invoice`;
+        let localVarPath = `/v1/workorders/${this.configuration.encodeParam({name: "workorderId", value: workorderId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/generate-invoice`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<InvoiceGenerationResponse>('post', `${basePath}${localVarPath}`,
             {
@@ -489,7 +501,7 @@ export class WorkOrderAPIService extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/workorders/${this.configuration.encodeParam({name: "workorderId", value: workorderId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/completion-preconditions`;
+        let localVarPath = `/v1/workorders/${this.configuration.encodeParam({name: "workorderId", value: workorderId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/completion-preconditions`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<CompletionPreconditionsResponse>('get', `${basePath}${localVarPath}`,
             {
@@ -549,7 +561,7 @@ export class WorkOrderAPIService extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/workorders/${this.configuration.encodeParam({name: "workorderId", value: workorderId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/snapshots`;
+        let localVarPath = `/v1/workorders/${this.configuration.encodeParam({name: "workorderId", value: workorderId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/snapshots`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<Array<WorkorderSnapshotResponse>>('get', `${basePath}${localVarPath}`,
             {
@@ -609,7 +621,7 @@ export class WorkOrderAPIService extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/workorders/${this.configuration.encodeParam({name: "workorderId", value: workorderId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/transitions`;
+        let localVarPath = `/v1/workorders/${this.configuration.encodeParam({name: "workorderId", value: workorderId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/transitions`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<Array<WorkorderStateTransitionResponse>>('get', `${basePath}${localVarPath}`,
             {
@@ -669,7 +681,7 @@ export class WorkOrderAPIService extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/workorders/${this.configuration.encodeParam({name: "workorderId", value: workorderId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+        let localVarPath = `/v1/workorders/${this.configuration.encodeParam({name: "workorderId", value: workorderId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<WorkorderResponse>('get', `${basePath}${localVarPath}`,
             {
@@ -742,7 +754,7 @@ export class WorkOrderAPIService extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/workorders/${this.configuration.encodeParam({name: "workorderId", value: workorderId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/reopen`;
+        let localVarPath = `/v1/workorders/${this.configuration.encodeParam({name: "workorderId", value: workorderId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/reopen`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<ReopenWorkorderResponse>('post', `${basePath}${localVarPath}`,
             {

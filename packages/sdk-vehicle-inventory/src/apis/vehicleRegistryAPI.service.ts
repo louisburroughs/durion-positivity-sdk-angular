@@ -14,15 +14,19 @@ import { HttpClient, HttpHeaders, HttpParams,
          HttpResponse, HttpEvent, HttpContext 
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
-import { OpenApiHttpParams, QueryParamStyle } from '../../query.params';
+import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
-import { CreateVehicleRequest } from '../models/createVehicleRequest';
-import { UpdateVehicleRequest } from '../models/updateVehicleRequest';
-import { VehicleResponse } from '../models/vehicleResponse';
+// @ts-ignore
+import { CreateVehicleRequest } from '../src/models/createVehicleRequest';
+// @ts-ignore
+import { UpdateVehicleRequest } from '../src/models/updateVehicleRequest';
+// @ts-ignore
+import { VehicleResponse } from '../src/models/vehicleResponse';
 
-import { BASE_PATH, COLLECTION_FORMATS }                     from '../../variables';
-import { Configuration }                                     from '../../configuration';
-import { BaseService } from '../../api.base.service';
+// @ts-ignore
+import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
+import { Configuration }                                     from '../configuration';
+import { BaseService } from '../api.base.service';
 
 
 

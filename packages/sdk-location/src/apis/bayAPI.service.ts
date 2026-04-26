@@ -14,16 +14,21 @@ import { HttpClient, HttpHeaders, HttpParams,
          HttpResponse, HttpEvent, HttpContext 
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
-import { OpenApiHttpParams, QueryParamStyle } from '../../query.params';
+import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
-import { BayPatchRequest } from '../models/bayPatchRequest';
-import { BayRequest } from '../models/bayRequest';
-import { BayResponse } from '../models/bayResponse';
-import { PageBayResponse } from '../models/pageBayResponse';
+// @ts-ignore
+import { BayPatchRequest } from '../src/models/bayPatchRequest';
+// @ts-ignore
+import { BayRequest } from '../src/models/bayRequest';
+// @ts-ignore
+import { BayResponse } from '../src/models/bayResponse';
+// @ts-ignore
+import { PageBayResponse } from '../src/models/pageBayResponse';
 
-import { BASE_PATH, COLLECTION_FORMATS }                     from '../../variables';
-import { Configuration }                                     from '../../configuration';
-import { BaseService } from '../../api.base.service';
+// @ts-ignore
+import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
+import { Configuration }                                     from '../configuration';
+import { BaseService } from '../api.base.service';
 
 
 

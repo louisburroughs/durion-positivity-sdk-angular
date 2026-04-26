@@ -14,15 +14,19 @@ import { HttpClient, HttpHeaders, HttpParams,
          HttpResponse, HttpEvent, HttpContext 
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
-import { OpenApiHttpParams, QueryParamStyle } from '../../query.params';
+import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
-import { CreatePartyRelationshipRequest } from '../models/createPartyRelationshipRequest';
-import { CreatePartyRelationshipResponse } from '../models/createPartyRelationshipResponse';
-import { GetCommercialAccountContactsResponse } from '../models/getCommercialAccountContactsResponse';
+// @ts-ignore
+import { CreatePartyRelationshipRequest } from '../src/models/createPartyRelationshipRequest';
+// @ts-ignore
+import { CreatePartyRelationshipResponse } from '../src/models/createPartyRelationshipResponse';
+// @ts-ignore
+import { GetCommercialAccountContactsResponse } from '../src/models/getCommercialAccountContactsResponse';
 
-import { BASE_PATH, COLLECTION_FORMATS }                     from '../../variables';
-import { Configuration }                                     from '../../configuration';
-import { BaseService } from '../../api.base.service';
+// @ts-ignore
+import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
+import { Configuration }                                     from '../configuration';
+import { BaseService } from '../api.base.service';
 
 
 

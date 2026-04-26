@@ -14,17 +14,23 @@ import { HttpClient, HttpHeaders, HttpParams,
          HttpResponse, HttpEvent, HttpContext 
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
-import { OpenApiHttpParams, QueryParamStyle } from '../../query.params';
+import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
-import { CreateHintRequest } from '../models/createHintRequest';
-import { FilterProductsRequest } from '../models/filterProductsRequest';
-import { FilterProductsResponse } from '../models/filterProductsResponse';
-import { HintResponse } from '../models/hintResponse';
-import { UpdateHintRequest } from '../models/updateHintRequest';
+// @ts-ignore
+import { CreateHintRequest } from '../src/models/createHintRequest';
+// @ts-ignore
+import { FilterProductsRequest } from '../src/models/filterProductsRequest';
+// @ts-ignore
+import { FilterProductsResponse } from '../src/models/filterProductsResponse';
+// @ts-ignore
+import { HintResponse } from '../src/models/hintResponse';
+// @ts-ignore
+import { UpdateHintRequest } from '../src/models/updateHintRequest';
 
-import { BASE_PATH, COLLECTION_FORMATS }                     from '../../variables';
-import { Configuration }                                     from '../../configuration';
-import { BaseService } from '../../api.base.service';
+// @ts-ignore
+import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
+import { Configuration }                                     from '../configuration';
+import { BaseService } from '../api.base.service';
 
 
 

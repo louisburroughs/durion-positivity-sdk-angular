@@ -14,18 +14,25 @@ import { HttpClient, HttpHeaders, HttpParams,
          HttpResponse, HttpEvent, HttpContext 
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
-import { OpenApiHttpParams, QueryParamStyle } from '../../query.params';
+import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
-import { GLAccountActivateRequest } from '../models/gLAccountActivateRequest';
-import { GLAccountBalanceResponse } from '../models/gLAccountBalanceResponse';
-import { GLAccountCreateRequest } from '../models/gLAccountCreateRequest';
-import { GLAccountListResponse } from '../models/gLAccountListResponse';
-import { GLAccountResponse } from '../models/gLAccountResponse';
-import { GLAccountUpdateRequest } from '../models/gLAccountUpdateRequest';
+// @ts-ignore
+import { GLAccountActivateRequest } from '../src/models/gLAccountActivateRequest';
+// @ts-ignore
+import { GLAccountBalanceResponse } from '../src/models/gLAccountBalanceResponse';
+// @ts-ignore
+import { GLAccountCreateRequest } from '../src/models/gLAccountCreateRequest';
+// @ts-ignore
+import { GLAccountListResponse } from '../src/models/gLAccountListResponse';
+// @ts-ignore
+import { GLAccountResponse } from '../src/models/gLAccountResponse';
+// @ts-ignore
+import { GLAccountUpdateRequest } from '../src/models/gLAccountUpdateRequest';
 
-import { BASE_PATH, COLLECTION_FORMATS }                     from '../../variables';
-import { Configuration }                                     from '../../configuration';
-import { BaseService } from '../../api.base.service';
+// @ts-ignore
+import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
+import { Configuration }                                     from '../configuration';
+import { BaseService } from '../api.base.service';
 
 
 

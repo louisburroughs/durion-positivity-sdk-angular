@@ -14,18 +14,25 @@ import { HttpClient, HttpHeaders, HttpParams,
          HttpResponse, HttpEvent, HttpContext 
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
-import { OpenApiHttpParams, QueryParamStyle } from '../../query.params';
+import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
-import { ApiError } from '../models/apiError';
-import { ConfirmPickTaskRequest } from '../models/confirmPickTaskRequest';
-import { CreatePickListRequest } from '../models/createPickListRequest';
-import { PickListResponse } from '../models/pickListResponse';
-import { PickTaskResponse } from '../models/pickTaskResponse';
-import { UpdatePickListStatusRequest } from '../models/updatePickListStatusRequest';
+// @ts-ignore
+import { ApiError } from '../src/models/apiError';
+// @ts-ignore
+import { ConfirmPickTaskRequest } from '../src/models/confirmPickTaskRequest';
+// @ts-ignore
+import { CreatePickListRequest } from '../src/models/createPickListRequest';
+// @ts-ignore
+import { PickListResponse } from '../src/models/pickListResponse';
+// @ts-ignore
+import { PickTaskResponse } from '../src/models/pickTaskResponse';
+// @ts-ignore
+import { UpdatePickListStatusRequest } from '../src/models/updatePickListStatusRequest';
 
-import { BASE_PATH, COLLECTION_FORMATS }                     from '../../variables';
-import { Configuration }                                     from '../../configuration';
-import { BaseService } from '../../api.base.service';
+// @ts-ignore
+import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
+import { Configuration }                                     from '../configuration';
+import { BaseService } from '../api.base.service';
 
 
 

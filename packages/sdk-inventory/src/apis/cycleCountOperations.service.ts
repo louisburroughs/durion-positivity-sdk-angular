@@ -14,15 +14,19 @@ import { HttpClient, HttpHeaders, HttpParams,
          HttpResponse, HttpEvent, HttpContext 
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
-import { OpenApiHttpParams, QueryParamStyle } from '../../query.params';
+import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
-import { CountResponse } from '../models/countResponse';
-import { SubmitCountRequest } from '../models/submitCountRequest';
-import { SubmitRecountRequest } from '../models/submitRecountRequest';
+// @ts-ignore
+import { CountResponse } from '../src/models/countResponse';
+// @ts-ignore
+import { SubmitCountRequest } from '../src/models/submitCountRequest';
+// @ts-ignore
+import { SubmitRecountRequest } from '../src/models/submitRecountRequest';
 
-import { BASE_PATH, COLLECTION_FORMATS }                     from '../../variables';
-import { Configuration }                                     from '../../configuration';
-import { BaseService } from '../../api.base.service';
+// @ts-ignore
+import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
+import { Configuration }                                     from '../configuration';
+import { BaseService } from '../api.base.service';
 
 
 

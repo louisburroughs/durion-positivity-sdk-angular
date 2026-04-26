@@ -14,14 +14,17 @@ import { HttpClient, HttpHeaders, HttpParams,
          HttpResponse, HttpEvent, HttpContext 
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
-import { OpenApiHttpParams, QueryParamStyle } from '../../query.params';
+import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
-import { ConflictOverrideRequest } from '../models/conflictOverrideRequest';
-import { ConflictOverrideResponse } from '../models/conflictOverrideResponse';
+// @ts-ignore
+import { ConflictOverrideRequest } from '../src/models/conflictOverrideRequest';
+// @ts-ignore
+import { ConflictOverrideResponse } from '../src/models/conflictOverrideResponse';
 
-import { BASE_PATH, COLLECTION_FORMATS }                     from '../../variables';
-import { Configuration }                                     from '../../configuration';
-import { BaseService } from '../../api.base.service';
+// @ts-ignore
+import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
+import { Configuration }                                     from '../configuration';
+import { BaseService } from '../api.base.service';
 
 
 

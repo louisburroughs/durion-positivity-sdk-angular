@@ -14,17 +14,23 @@ import { HttpClient, HttpHeaders, HttpParams,
          HttpResponse, HttpEvent, HttpContext 
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
-import { OpenApiHttpParams, QueryParamStyle } from '../../query.params';
+import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
-import { EmailDeliveryRequest } from '../models/emailDeliveryRequest';
-import { GenerateReceiptRequest } from '../models/generateReceiptRequest';
-import { PrintDeliveryRequest } from '../models/printDeliveryRequest';
-import { ReceiptResponse } from '../models/receiptResponse';
-import { ReprintReceiptRequest } from '../models/reprintReceiptRequest';
+// @ts-ignore
+import { EmailDeliveryRequest } from '../src/models/emailDeliveryRequest';
+// @ts-ignore
+import { GenerateReceiptRequest } from '../src/models/generateReceiptRequest';
+// @ts-ignore
+import { PrintDeliveryRequest } from '../src/models/printDeliveryRequest';
+// @ts-ignore
+import { ReceiptResponse } from '../src/models/receiptResponse';
+// @ts-ignore
+import { ReprintReceiptRequest } from '../src/models/reprintReceiptRequest';
 
-import { BASE_PATH, COLLECTION_FORMATS }                     from '../../variables';
-import { Configuration }                                     from '../../configuration';
-import { BaseService } from '../../api.base.service';
+// @ts-ignore
+import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
+import { Configuration }                                     from '../configuration';
+import { BaseService } from '../api.base.service';
 
 
 

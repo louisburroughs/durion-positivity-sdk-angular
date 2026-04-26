@@ -2,6 +2,7 @@ export * from './accountSummary';
 export * from './assignedRole';
 export * from './billingPreferences';
 export * from './billingRuleRef';
+export * from './billingTermsRef';
 export * from './bulkIngestRequestCustomerBulkIngestRecord';
 export * from './bulkIngestResponse';
 export * from './bulkIngestResult';

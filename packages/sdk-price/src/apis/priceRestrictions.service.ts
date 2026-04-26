@@ -14,16 +14,21 @@ import { HttpClient, HttpHeaders, HttpParams,
          HttpResponse, HttpEvent, HttpContext 
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
-import { OpenApiHttpParams, QueryParamStyle } from '../../query.params';
+import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
-import { RestrictionEvaluationRequest } from '../models/restrictionEvaluationRequest';
-import { RestrictionEvaluationResponse } from '../models/restrictionEvaluationResponse';
-import { RestrictionOverrideRequest } from '../models/restrictionOverrideRequest';
-import { RestrictionOverrideResponse } from '../models/restrictionOverrideResponse';
+// @ts-ignore
+import { RestrictionEvaluationRequest } from '../src/models/restrictionEvaluationRequest';
+// @ts-ignore
+import { RestrictionEvaluationResponse } from '../src/models/restrictionEvaluationResponse';
+// @ts-ignore
+import { RestrictionOverrideRequest } from '../src/models/restrictionOverrideRequest';
+// @ts-ignore
+import { RestrictionOverrideResponse } from '../src/models/restrictionOverrideResponse';
 
-import { BASE_PATH, COLLECTION_FORMATS }                     from '../../variables';
-import { Configuration }                                     from '../../configuration';
-import { BaseService } from '../../api.base.service';
+// @ts-ignore
+import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
+import { Configuration }                                     from '../configuration';
+import { BaseService } from '../api.base.service';
 
 
 

@@ -14,17 +14,23 @@ import { HttpClient, HttpHeaders, HttpParams,
          HttpResponse, HttpEvent, HttpContext 
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
-import { OpenApiHttpParams, QueryParamStyle } from '../../query.params';
+import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
-import { ApiError } from '../models/apiError';
-import { AsnResponse } from '../models/asnResponse';
-import { CreateAsnRequest } from '../models/createAsnRequest';
-import { CreateGoodsReceiptRequest } from '../models/createGoodsReceiptRequest';
-import { GoodsReceiptResponse } from '../models/goodsReceiptResponse';
+// @ts-ignore
+import { ApiError } from '../src/models/apiError';
+// @ts-ignore
+import { AsnResponse } from '../src/models/asnResponse';
+// @ts-ignore
+import { CreateAsnRequest } from '../src/models/createAsnRequest';
+// @ts-ignore
+import { CreateGoodsReceiptRequest } from '../src/models/createGoodsReceiptRequest';
+// @ts-ignore
+import { GoodsReceiptResponse } from '../src/models/goodsReceiptResponse';
 
-import { BASE_PATH, COLLECTION_FORMATS }                     from '../../variables';
-import { Configuration }                                     from '../../configuration';
-import { BaseService } from '../../api.base.service';
+// @ts-ignore
+import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
+import { Configuration }                                     from '../configuration';
+import { BaseService } from '../api.base.service';
 
 
 

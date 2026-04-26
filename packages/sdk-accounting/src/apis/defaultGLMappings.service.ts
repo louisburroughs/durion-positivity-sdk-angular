@@ -14,15 +14,19 @@ import { HttpClient, HttpHeaders, HttpParams,
          HttpResponse, HttpEvent, HttpContext 
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
-import { OpenApiHttpParams, QueryParamStyle } from '../../query.params';
+import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
-import { DefaultGLMappingListResponse } from '../models/defaultGLMappingListResponse';
-import { DefaultGLMappingRequest } from '../models/defaultGLMappingRequest';
-import { DefaultGLMappingResponse } from '../models/defaultGLMappingResponse';
+// @ts-ignore
+import { DefaultGLMappingListResponse } from '../src/models/defaultGLMappingListResponse';
+// @ts-ignore
+import { DefaultGLMappingRequest } from '../src/models/defaultGLMappingRequest';
+// @ts-ignore
+import { DefaultGLMappingResponse } from '../src/models/defaultGLMappingResponse';
 
-import { BASE_PATH, COLLECTION_FORMATS }                     from '../../variables';
-import { Configuration }                                     from '../../configuration';
-import { BaseService } from '../../api.base.service';
+// @ts-ignore
+import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
+import { Configuration }                                     from '../configuration';
+import { BaseService } from '../api.base.service';
 
 
 

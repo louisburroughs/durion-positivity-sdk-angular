@@ -14,15 +14,19 @@ import { HttpClient, HttpHeaders, HttpParams,
          HttpResponse, HttpEvent, HttpContext 
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
-import { OpenApiHttpParams, QueryParamStyle } from '../../query.params';
+import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
-import { AdjustLaborRequest } from '../models/adjustLaborRequest';
-import { StartLaborRequest } from '../models/startLaborRequest';
-import { WorkorderLaborEntryResponse } from '../models/workorderLaborEntryResponse';
+// @ts-ignore
+import { AdjustLaborRequest } from '../src/models/adjustLaborRequest';
+// @ts-ignore
+import { StartLaborRequest } from '../src/models/startLaborRequest';
+// @ts-ignore
+import { WorkorderLaborEntryResponse } from '../src/models/workorderLaborEntryResponse';
 
-import { BASE_PATH, COLLECTION_FORMATS }                     from '../../variables';
-import { Configuration }                                     from '../../configuration';
-import { BaseService } from '../../api.base.service';
+// @ts-ignore
+import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
+import { Configuration }                                     from '../configuration';
+import { BaseService } from '../api.base.service';
 
 
 
@@ -101,7 +105,7 @@ export class WorkorderLaborAPIService extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/workorders/${this.configuration.encodeParam({name: "workorderId", value: workorderId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/labor/${this.configuration.encodeParam({name: "entryId", value: entryId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/adjust`;
+        let localVarPath = `/v1/workorders/${this.configuration.encodeParam({name: "workorderId", value: workorderId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/labor/${this.configuration.encodeParam({name: "entryId", value: entryId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/adjust`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<WorkorderLaborEntryResponse>('put', `${basePath}${localVarPath}`,
             {
@@ -162,7 +166,7 @@ export class WorkorderLaborAPIService extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/workorders/${this.configuration.encodeParam({name: "workorderId", value: workorderId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/labor`;
+        let localVarPath = `/v1/workorders/${this.configuration.encodeParam({name: "workorderId", value: workorderId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/labor`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<Array<WorkorderLaborEntryResponse>>('get', `${basePath}${localVarPath}`,
             {
@@ -243,7 +247,7 @@ export class WorkorderLaborAPIService extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/workorders/${this.configuration.encodeParam({name: "workorderId", value: workorderId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/services/${this.configuration.encodeParam({name: "serviceId", value: serviceId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/labor/start`;
+        let localVarPath = `/v1/workorders/${this.configuration.encodeParam({name: "workorderId", value: workorderId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/services/${this.configuration.encodeParam({name: "serviceId", value: serviceId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/labor/start`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<WorkorderLaborEntryResponse>('post', `${basePath}${localVarPath}`,
             {
@@ -312,7 +316,7 @@ export class WorkorderLaborAPIService extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/workorders/${this.configuration.encodeParam({name: "workorderId", value: workorderId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/labor/${this.configuration.encodeParam({name: "entryId", value: entryId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/stop`;
+        let localVarPath = `/v1/workorders/${this.configuration.encodeParam({name: "workorderId", value: workorderId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/labor/${this.configuration.encodeParam({name: "entryId", value: entryId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/stop`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<WorkorderLaborEntryResponse>('post', `${basePath}${localVarPath}`,
             {

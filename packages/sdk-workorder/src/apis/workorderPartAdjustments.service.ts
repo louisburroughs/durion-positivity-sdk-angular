@@ -14,16 +14,21 @@ import { HttpClient, HttpHeaders, HttpParams,
          HttpResponse, HttpEvent, HttpContext 
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
-import { OpenApiHttpParams, QueryParamStyle } from '../../query.params';
+import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
-import { CorrectPartQuantityRequest } from '../models/correctPartQuantityRequest';
-import { ReturnPartQuantityRequest } from '../models/returnPartQuantityRequest';
-import { SubstitutePartRequest } from '../models/substitutePartRequest';
-import { WorkorderPartAdjustmentEventResponse } from '../models/workorderPartAdjustmentEventResponse';
+// @ts-ignore
+import { CorrectPartQuantityRequest } from '../src/models/correctPartQuantityRequest';
+// @ts-ignore
+import { ReturnPartQuantityRequest } from '../src/models/returnPartQuantityRequest';
+// @ts-ignore
+import { SubstitutePartRequest } from '../src/models/substitutePartRequest';
+// @ts-ignore
+import { WorkorderPartAdjustmentEventResponse } from '../src/models/workorderPartAdjustmentEventResponse';
 
-import { BASE_PATH, COLLECTION_FORMATS }                     from '../../variables';
-import { Configuration }                                     from '../../configuration';
-import { BaseService } from '../../api.base.service';
+// @ts-ignore
+import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
+import { Configuration }                                     from '../configuration';
+import { BaseService } from '../api.base.service';
 
 
 

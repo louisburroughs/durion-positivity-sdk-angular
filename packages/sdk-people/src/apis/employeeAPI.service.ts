@@ -14,16 +14,21 @@ import { HttpClient, HttpHeaders, HttpParams,
          HttpResponse, HttpEvent, HttpContext 
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
-import { OpenApiHttpParams, QueryParamStyle } from '../../query.params';
+import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
-import { CreateEmployeeRequest } from '../models/createEmployeeRequest';
-import { DisableEmployeeRequestDto } from '../models/disableEmployeeRequestDto';
-import { EmployeeProfileDto } from '../models/employeeProfileDto';
-import { UpdateEmployeeRequest } from '../models/updateEmployeeRequest';
+// @ts-ignore
+import { CreateEmployeeRequest } from '../src/models/createEmployeeRequest';
+// @ts-ignore
+import { DisableEmployeeRequestDto } from '../src/models/disableEmployeeRequestDto';
+// @ts-ignore
+import { EmployeeProfileDto } from '../src/models/employeeProfileDto';
+// @ts-ignore
+import { UpdateEmployeeRequest } from '../src/models/updateEmployeeRequest';
 
-import { BASE_PATH, COLLECTION_FORMATS }                     from '../../variables';
-import { Configuration }                                     from '../../configuration';
-import { BaseService } from '../../api.base.service';
+// @ts-ignore
+import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
+import { Configuration }                                     from '../configuration';
+import { BaseService } from '../api.base.service';
 
 
 

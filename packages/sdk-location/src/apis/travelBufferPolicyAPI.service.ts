@@ -14,14 +14,17 @@ import { HttpClient, HttpHeaders, HttpParams,
          HttpResponse, HttpEvent, HttpContext 
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
-import { OpenApiHttpParams, QueryParamStyle } from '../../query.params';
+import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
-import { TravelBufferPolicyRequest } from '../models/travelBufferPolicyRequest';
-import { TravelBufferPolicyResponse } from '../models/travelBufferPolicyResponse';
+// @ts-ignore
+import { TravelBufferPolicyRequest } from '../src/models/travelBufferPolicyRequest';
+// @ts-ignore
+import { TravelBufferPolicyResponse } from '../src/models/travelBufferPolicyResponse';
 
-import { BASE_PATH, COLLECTION_FORMATS }                     from '../../variables';
-import { Configuration }                                     from '../../configuration';
-import { BaseService } from '../../api.base.service';
+// @ts-ignore
+import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
+import { Configuration }                                     from '../configuration';
+import { BaseService } from '../api.base.service';
 
 
 

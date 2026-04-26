@@ -14,14 +14,17 @@ import { HttpClient, HttpHeaders, HttpParams,
          HttpResponse, HttpEvent, HttpContext 
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
-import { OpenApiHttpParams, QueryParamStyle } from '../../query.params';
+import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
-import { PutawayExecutionRequest } from '../models/putawayExecutionRequest';
-import { PutawayExecutionResponse } from '../models/putawayExecutionResponse';
+// @ts-ignore
+import { PutawayExecutionRequest } from '../src/models/putawayExecutionRequest';
+// @ts-ignore
+import { PutawayExecutionResponse } from '../src/models/putawayExecutionResponse';
 
-import { BASE_PATH, COLLECTION_FORMATS }                     from '../../variables';
-import { Configuration }                                     from '../../configuration';
-import { BaseService } from '../../api.base.service';
+// @ts-ignore
+import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
+import { Configuration }                                     from '../configuration';
+import { BaseService } from '../api.base.service';
 
 
 

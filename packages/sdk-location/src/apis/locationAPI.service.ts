@@ -14,20 +14,29 @@ import { HttpClient, HttpHeaders, HttpParams,
          HttpResponse, HttpEvent, HttpContext 
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
-import { OpenApiHttpParams, QueryParamStyle } from '../../query.params';
+import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
-import { LocationParentResponseDTO } from '../models/locationParentResponseDTO';
-import { LocationPatchRequest } from '../models/locationPatchRequest';
-import { LocationRequestDTO } from '../models/locationRequestDTO';
-import { LocationResponseDTO } from '../models/locationResponseDTO';
-import { LocationValidationResponseDTO } from '../models/locationValidationResponseDTO';
-import { PageLocationRef } from '../models/pageLocationRef';
-import { Pageable } from '../models/pageable';
-import { PersonDTO } from '../models/personDTO';
+// @ts-ignore
+import { LocationParentResponseDTO } from '../src/models/locationParentResponseDTO';
+// @ts-ignore
+import { LocationPatchRequest } from '../src/models/locationPatchRequest';
+// @ts-ignore
+import { LocationRequestDTO } from '../src/models/locationRequestDTO';
+// @ts-ignore
+import { LocationResponseDTO } from '../src/models/locationResponseDTO';
+// @ts-ignore
+import { LocationValidationResponseDTO } from '../src/models/locationValidationResponseDTO';
+// @ts-ignore
+import { PageLocationRef } from '../src/models/pageLocationRef';
+// @ts-ignore
+import { Pageable } from '../src/models/pageable';
+// @ts-ignore
+import { PersonDTO } from '../src/models/personDTO';
 
-import { BASE_PATH, COLLECTION_FORMATS }                     from '../../variables';
-import { Configuration }                                     from '../../configuration';
-import { BaseService } from '../../api.base.service';
+// @ts-ignore
+import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
+import { Configuration }                                     from '../configuration';
+import { BaseService } from '../api.base.service';
 
 
 

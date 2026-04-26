@@ -14,18 +14,25 @@ import { HttpClient, HttpHeaders, HttpParams,
          HttpResponse, HttpEvent, HttpContext 
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
-import { OpenApiHttpParams, QueryParamStyle } from '../../query.params';
+import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
-import { CreateTravelSegmentAdjustmentRequest } from '../models/createTravelSegmentAdjustmentRequest';
-import { StartTravelSegmentRequest } from '../models/startTravelSegmentRequest';
-import { StopTravelSegmentRequest } from '../models/stopTravelSegmentRequest';
-import { SubmitTravelSegmentsRequest } from '../models/submitTravelSegmentsRequest';
-import { TravelSegmentAdjustmentResponse } from '../models/travelSegmentAdjustmentResponse';
-import { TravelSegmentResponse } from '../models/travelSegmentResponse';
+// @ts-ignore
+import { CreateTravelSegmentAdjustmentRequest } from '../src/models/createTravelSegmentAdjustmentRequest';
+// @ts-ignore
+import { StartTravelSegmentRequest } from '../src/models/startTravelSegmentRequest';
+// @ts-ignore
+import { StopTravelSegmentRequest } from '../src/models/stopTravelSegmentRequest';
+// @ts-ignore
+import { SubmitTravelSegmentsRequest } from '../src/models/submitTravelSegmentsRequest';
+// @ts-ignore
+import { TravelSegmentAdjustmentResponse } from '../src/models/travelSegmentAdjustmentResponse';
+// @ts-ignore
+import { TravelSegmentResponse } from '../src/models/travelSegmentResponse';
 
-import { BASE_PATH, COLLECTION_FORMATS }                     from '../../variables';
-import { Configuration }                                     from '../../configuration';
-import { BaseService } from '../../api.base.service';
+// @ts-ignore
+import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
+import { Configuration }                                     from '../configuration';
+import { BaseService } from '../api.base.service';
 
 
 

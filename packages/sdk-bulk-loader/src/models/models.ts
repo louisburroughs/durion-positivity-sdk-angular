@@ -1,4 +1,7 @@
 export * from './auditRecordResponse';
+export * from './bulkCorrectionItem';
+export * from './bulkCorrectionRequest';
+export * from './bulkCorrectionResponse';
 export * from './bulkLoadJobCreateRequest';
 export * from './bulkLoadJobResponse';
 export * from './columnMappingApproveRequest';

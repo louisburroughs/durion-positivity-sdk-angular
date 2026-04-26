@@ -14,19 +14,27 @@ import { HttpClient, HttpHeaders, HttpParams,
          HttpResponse, HttpEvent, HttpContext 
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
-import { OpenApiHttpParams, QueryParamStyle } from '../../query.params';
+import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
-import { ApiError } from '../models/apiError';
-import { AuditEventCreatedResponse } from '../models/auditEventCreatedResponse';
-import { AuditLogEventDto } from '../models/auditLogEventDto';
-import { AuditLogEventRequest } from '../models/auditLogEventRequest';
-import { PricingSnapshotCreatedResponse } from '../models/pricingSnapshotCreatedResponse';
-import { PricingSnapshotDto } from '../models/pricingSnapshotDto';
-import { PricingSnapshotRequest } from '../models/pricingSnapshotRequest';
+// @ts-ignore
+import { ApiError } from '../src/models/apiError';
+// @ts-ignore
+import { AuditEventCreatedResponse } from '../src/models/auditEventCreatedResponse';
+// @ts-ignore
+import { AuditLogEventDto } from '../src/models/auditLogEventDto';
+// @ts-ignore
+import { AuditLogEventRequest } from '../src/models/auditLogEventRequest';
+// @ts-ignore
+import { PricingSnapshotCreatedResponse } from '../src/models/pricingSnapshotCreatedResponse';
+// @ts-ignore
+import { PricingSnapshotDto } from '../src/models/pricingSnapshotDto';
+// @ts-ignore
+import { PricingSnapshotRequest } from '../src/models/pricingSnapshotRequest';
 
-import { BASE_PATH, COLLECTION_FORMATS }                     from '../../variables';
-import { Configuration }                                     from '../../configuration';
-import { BaseService } from '../../api.base.service';
+// @ts-ignore
+import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
+import { Configuration }                                     from '../configuration';
+import { BaseService } from '../api.base.service';
 
 
 

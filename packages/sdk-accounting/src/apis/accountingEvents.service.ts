@@ -14,17 +14,23 @@ import { HttpClient, HttpHeaders, HttpParams,
          HttpResponse, HttpEvent, HttpContext 
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
-import { OpenApiHttpParams, QueryParamStyle } from '../../query.params';
+import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
-import { AccountingEventResponse } from '../models/accountingEventResponse';
-import { AccountingEventSubmitRequest } from '../models/accountingEventSubmitRequest';
-import { PagedResponseAccountingEventResponse } from '../models/pagedResponseAccountingEventResponse';
-import { ReprocessEventRequest } from '../models/reprocessEventRequest';
-import { ReprocessingAttemptHistoryResponse } from '../models/reprocessingAttemptHistoryResponse';
+// @ts-ignore
+import { AccountingEventResponse } from '../src/models/accountingEventResponse';
+// @ts-ignore
+import { AccountingEventSubmitRequest } from '../src/models/accountingEventSubmitRequest';
+// @ts-ignore
+import { PagedResponseAccountingEventResponse } from '../src/models/pagedResponseAccountingEventResponse';
+// @ts-ignore
+import { ReprocessEventRequest } from '../src/models/reprocessEventRequest';
+// @ts-ignore
+import { ReprocessingAttemptHistoryResponse } from '../src/models/reprocessingAttemptHistoryResponse';
 
-import { BASE_PATH, COLLECTION_FORMATS }                     from '../../variables';
-import { Configuration }                                     from '../../configuration';
-import { BaseService } from '../../api.base.service';
+// @ts-ignore
+import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
+import { Configuration }                                     from '../configuration';
+import { BaseService } from '../api.base.service';
 
 
 

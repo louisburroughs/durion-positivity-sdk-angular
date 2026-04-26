@@ -14,17 +14,23 @@ import { HttpClient, HttpHeaders, HttpParams,
          HttpResponse, HttpEvent, HttpContext 
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
-import { OpenApiHttpParams, QueryParamStyle } from '../../query.params';
+import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
-import { ApiError } from '../models/apiError';
-import { AvailabilityView } from '../models/availabilityView';
-import { InventoryAvailabilityResponse } from '../models/inventoryAvailabilityResponse';
-import { LeadTimeView } from '../models/leadTimeView';
-import { LocationAvailabilityDto } from '../models/locationAvailabilityDto';
+// @ts-ignore
+import { ApiError } from '../src/models/apiError';
+// @ts-ignore
+import { AvailabilityView } from '../src/models/availabilityView';
+// @ts-ignore
+import { InventoryAvailabilityResponse } from '../src/models/inventoryAvailabilityResponse';
+// @ts-ignore
+import { LeadTimeView } from '../src/models/leadTimeView';
+// @ts-ignore
+import { LocationAvailabilityDto } from '../src/models/locationAvailabilityDto';
 
-import { BASE_PATH, COLLECTION_FORMATS }                     from '../../variables';
-import { Configuration }                                     from '../../configuration';
-import { BaseService } from '../../api.base.service';
+// @ts-ignore
+import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
+import { Configuration }                                     from '../configuration';
+import { BaseService } from '../api.base.service';
 
 
 

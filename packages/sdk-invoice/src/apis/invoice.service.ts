@@ -14,18 +14,25 @@ import { HttpClient, HttpHeaders, HttpParams,
          HttpResponse, HttpEvent, HttpContext 
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
-import { OpenApiHttpParams, QueryParamStyle } from '../../query.params';
+import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
-import { AdjustmentRequest } from '../models/adjustmentRequest';
-import { FinalizationRequest } from '../models/finalizationRequest';
-import { InvoiceCreationRequest } from '../models/invoiceCreationRequest';
-import { InvoiceDetailsResponse } from '../models/invoiceDetailsResponse';
-import { InvoiceGenerationResponse } from '../models/invoiceGenerationResponse';
-import { RevertRequest } from '../models/revertRequest';
+// @ts-ignore
+import { AdjustmentRequest } from '../src/models/adjustmentRequest';
+// @ts-ignore
+import { FinalizationRequest } from '../src/models/finalizationRequest';
+// @ts-ignore
+import { InvoiceCreationRequest } from '../src/models/invoiceCreationRequest';
+// @ts-ignore
+import { InvoiceDetailsResponse } from '../src/models/invoiceDetailsResponse';
+// @ts-ignore
+import { InvoiceGenerationResponse } from '../src/models/invoiceGenerationResponse';
+// @ts-ignore
+import { RevertRequest } from '../src/models/revertRequest';
 
-import { BASE_PATH, COLLECTION_FORMATS }                     from '../../variables';
-import { Configuration }                                     from '../../configuration';
-import { BaseService } from '../../api.base.service';
+// @ts-ignore
+import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
+import { Configuration }                                     from '../configuration';
+import { BaseService } from '../api.base.service';
 
 
 

@@ -14,13 +14,15 @@ import { HttpClient, HttpHeaders, HttpParams,
          HttpResponse, HttpEvent, HttpContext 
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
-import { OpenApiHttpParams, QueryParamStyle } from '../../query.params';
+import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
-import { CatalogDto } from '../models/catalogDto';
+// @ts-ignore
+import { CatalogDto } from '../src/models/catalogDto';
 
-import { BASE_PATH, COLLECTION_FORMATS }                     from '../../variables';
-import { Configuration }                                     from '../../configuration';
-import { BaseService } from '../../api.base.service';
+// @ts-ignore
+import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
+import { Configuration }                                     from '../configuration';
+import { BaseService } from '../api.base.service';
 
 
 
@@ -147,7 +149,7 @@ export class CatalogAPIService extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/catalogs/${this.configuration.encodeParam({name: "catalogId", value: catalogId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+        let localVarPath = `/v1/catalogs/${this.configuration.encodeParam({name: "catalogId", value: catalogId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<any>('delete', `${basePath}${localVarPath}`,
             {
@@ -207,7 +209,7 @@ export class CatalogAPIService extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/catalogs/${this.configuration.encodeParam({name: "catalogId", value: catalogId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+        let localVarPath = `/v1/catalogs/${this.configuration.encodeParam({name: "catalogId", value: catalogId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<CatalogDto>('get', `${basePath}${localVarPath}`,
             {
@@ -340,7 +342,7 @@ export class CatalogAPIService extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/catalogs/${this.configuration.encodeParam({name: "catalogId", value: catalogId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+        let localVarPath = `/v1/catalogs/${this.configuration.encodeParam({name: "catalogId", value: catalogId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<CatalogDto>('put', `${basePath}${localVarPath}`,
             {

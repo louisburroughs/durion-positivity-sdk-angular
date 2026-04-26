@@ -14,17 +14,23 @@ import { HttpClient, HttpHeaders, HttpParams,
          HttpResponse, HttpEvent, HttpContext 
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
-import { OpenApiHttpParams, QueryParamStyle } from '../../query.params';
+import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
-import { AddBreakSegmentRequest } from '../models/addBreakSegmentRequest';
-import { BreakSegmentResponse } from '../models/breakSegmentResponse';
-import { StartWorkSessionRequest } from '../models/startWorkSessionRequest';
-import { StopWorkSessionRequest } from '../models/stopWorkSessionRequest';
-import { WorkSessionResponse } from '../models/workSessionResponse';
+// @ts-ignore
+import { AddBreakSegmentRequest } from '../src/models/addBreakSegmentRequest';
+// @ts-ignore
+import { BreakSegmentResponse } from '../src/models/breakSegmentResponse';
+// @ts-ignore
+import { StartWorkSessionRequest } from '../src/models/startWorkSessionRequest';
+// @ts-ignore
+import { StopWorkSessionRequest } from '../src/models/stopWorkSessionRequest';
+// @ts-ignore
+import { WorkSessionResponse } from '../src/models/workSessionResponse';
 
-import { BASE_PATH, COLLECTION_FORMATS }                     from '../../variables';
-import { Configuration }                                     from '../../configuration';
-import { BaseService } from '../../api.base.service';
+// @ts-ignore
+import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
+import { Configuration }                                     from '../configuration';
+import { BaseService } from '../api.base.service';
 
 
 
@@ -95,7 +101,7 @@ export class WorkSessionAPIService extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/workorders/workSessions/${this.configuration.encodeParam({name: "workSessionId", value: workSessionId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/breaks`;
+        let localVarPath = `/v1/workorders/workSessions/${this.configuration.encodeParam({name: "workSessionId", value: workSessionId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/breaks`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<BreakSegmentResponse>('post', `${basePath}${localVarPath}`,
             {
@@ -230,7 +236,7 @@ export class WorkSessionAPIService extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/workorders/workSessions/${this.configuration.encodeParam({name: "workSessionId", value: workSessionId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/breaks/${this.configuration.encodeParam({name: "breakSegmentId", value: breakSegmentId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/stop`;
+        let localVarPath = `/v1/workorders/workSessions/${this.configuration.encodeParam({name: "workSessionId", value: workSessionId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/breaks/${this.configuration.encodeParam({name: "breakSegmentId", value: breakSegmentId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/stop`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<BreakSegmentResponse>('post', `${basePath}${localVarPath}`,
             {
@@ -303,7 +309,7 @@ export class WorkSessionAPIService extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/workorders/workSessions/${this.configuration.encodeParam({name: "workSessionId", value: workSessionId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/stop`;
+        let localVarPath = `/v1/workorders/workSessions/${this.configuration.encodeParam({name: "workSessionId", value: workSessionId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/stop`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<WorkSessionResponse>('post', `${basePath}${localVarPath}`,
             {

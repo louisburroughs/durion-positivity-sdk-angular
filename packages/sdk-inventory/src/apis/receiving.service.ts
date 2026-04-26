@@ -14,19 +14,27 @@ import { HttpClient, HttpHeaders, HttpParams,
          HttpResponse, HttpEvent, HttpContext 
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
-import { OpenApiHttpParams, QueryParamStyle } from '../../query.params';
+import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
-import { ApiError } from '../models/apiError';
-import { CreateReceivingSessionRequest } from '../models/createReceivingSessionRequest';
-import { CrossDockRequest } from '../models/crossDockRequest';
-import { CrossDockResponse } from '../models/crossDockResponse';
-import { ReceiveItemsRequest } from '../models/receiveItemsRequest';
-import { ReceiveItemsResponse } from '../models/receiveItemsResponse';
-import { ReceivingSessionResponse } from '../models/receivingSessionResponse';
+// @ts-ignore
+import { ApiError } from '../src/models/apiError';
+// @ts-ignore
+import { CreateReceivingSessionRequest } from '../src/models/createReceivingSessionRequest';
+// @ts-ignore
+import { CrossDockRequest } from '../src/models/crossDockRequest';
+// @ts-ignore
+import { CrossDockResponse } from '../src/models/crossDockResponse';
+// @ts-ignore
+import { ReceiveItemsRequest } from '../src/models/receiveItemsRequest';
+// @ts-ignore
+import { ReceiveItemsResponse } from '../src/models/receiveItemsResponse';
+// @ts-ignore
+import { ReceivingSessionResponse } from '../src/models/receivingSessionResponse';
 
-import { BASE_PATH, COLLECTION_FORMATS }                     from '../../variables';
-import { Configuration }                                     from '../../configuration';
-import { BaseService } from '../../api.base.service';
+// @ts-ignore
+import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
+import { Configuration }                                     from '../configuration';
+import { BaseService } from '../api.base.service';
 
 
 

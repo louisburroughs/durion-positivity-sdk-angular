@@ -10,7 +10,7 @@
 
 
 /**
- * Decline details including note
+ * Request payload for declining a change request
  */
 export interface DeclineChangeRequestDTO { 
     /**

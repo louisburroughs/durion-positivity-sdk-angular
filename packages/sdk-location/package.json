@@ -31,17 +31,4 @@
     "rxjs": "^7.4.0",
     "typescript": ">=5.9.0 <6.0.0",
     "zone.js": "^0.15.0"
-  },
-  "main": "dist/fesm2022/durion-sdk-location.mjs",
-  "module": "dist/fesm2022/durion-sdk-location.mjs",
-  "typings": "dist/types/durion-sdk-location.d.ts",
-  "exports": {
-    ".": {
-      "types": "./dist/types/durion-sdk-location.d.ts",
-      "default": "./dist/fesm2022/durion-sdk-location.mjs"
-    },
-    "./package.json": {
-      "default": "./package.json"
-    }
-  }
-}
+  }}

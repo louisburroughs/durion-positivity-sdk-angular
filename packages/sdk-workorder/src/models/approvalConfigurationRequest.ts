@@ -10,7 +10,7 @@
 
 
 /**
- * Configuration object to be created
+ * Request DTO for approval configuration creation and updates
  */
 export interface ApprovalConfigurationRequest { 
     /**

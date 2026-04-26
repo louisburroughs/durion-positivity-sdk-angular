@@ -14,17 +14,23 @@ import { HttpClient, HttpHeaders, HttpParams,
          HttpResponse, HttpEvent, HttpContext 
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
-import { OpenApiHttpParams, QueryParamStyle } from '../../query.params';
+import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
-import { ApproveChangeRequestDTO } from '../models/approveChangeRequestDTO';
-import { ChangeRequestResponse } from '../models/changeRequestResponse';
-import { CreateChangeRequestDTO } from '../models/createChangeRequestDTO';
-import { DeclineChangeRequestDTO } from '../models/declineChangeRequestDTO';
-import { EmergencyOverrideDTO } from '../models/emergencyOverrideDTO';
+// @ts-ignore
+import { ApproveChangeRequestDTO } from '../src/models/approveChangeRequestDTO';
+// @ts-ignore
+import { ChangeRequestResponse } from '../src/models/changeRequestResponse';
+// @ts-ignore
+import { CreateChangeRequestDTO } from '../src/models/createChangeRequestDTO';
+// @ts-ignore
+import { DeclineChangeRequestDTO } from '../src/models/declineChangeRequestDTO';
+// @ts-ignore
+import { EmergencyOverrideDTO } from '../src/models/emergencyOverrideDTO';
 
-import { BASE_PATH, COLLECTION_FORMATS }                     from '../../variables';
-import { Configuration }                                     from '../../configuration';
-import { BaseService } from '../../api.base.service';
+// @ts-ignore
+import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
+import { Configuration }                                     from '../configuration';
+import { BaseService } from '../api.base.service';
 
 
 
@@ -95,7 +101,7 @@ export class ChangeRequestAPIService extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/workorders/changeRequests/${this.configuration.encodeParam({name: "changeId", value: changeId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/emergency-override`;
+        let localVarPath = `/v1/workorders/changeRequests/${this.configuration.encodeParam({name: "changeId", value: changeId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/emergency-override`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<ChangeRequestResponse>('post', `${basePath}${localVarPath}`,
             {
@@ -169,7 +175,7 @@ export class ChangeRequestAPIService extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/workorders/changeRequests/${this.configuration.encodeParam({name: "changeId", value: changeId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/approve`;
+        let localVarPath = `/v1/workorders/changeRequests/${this.configuration.encodeParam({name: "changeId", value: changeId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/approve`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<ChangeRequestResponse>('post', `${basePath}${localVarPath}`,
             {
@@ -230,7 +236,7 @@ export class ChangeRequestAPIService extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/workorders/${this.configuration.encodeParam({name: "workorderId", value: workorderId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/canClose`;
+        let localVarPath = `/v1/workorders/${this.configuration.encodeParam({name: "workorderId", value: workorderId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/canClose`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<boolean>('get', `${basePath}${localVarPath}`,
             {
@@ -307,7 +313,7 @@ export class ChangeRequestAPIService extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/workorders/${this.configuration.encodeParam({name: "workorderId", value: workorderId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/changeRequests`;
+        let localVarPath = `/v1/workorders/${this.configuration.encodeParam({name: "workorderId", value: workorderId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/changeRequests`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<ChangeRequestResponse>('post', `${basePath}${localVarPath}`,
             {
@@ -381,7 +387,7 @@ export class ChangeRequestAPIService extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/workorders/changeRequests/${this.configuration.encodeParam({name: "changeId", value: changeId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/decline`;
+        let localVarPath = `/v1/workorders/changeRequests/${this.configuration.encodeParam({name: "changeId", value: changeId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/decline`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<ChangeRequestResponse>('post', `${basePath}${localVarPath}`,
             {
@@ -442,7 +448,7 @@ export class ChangeRequestAPIService extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/workorders/changeRequests/${this.configuration.encodeParam({name: "changeId", value: changeId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+        let localVarPath = `/v1/workorders/changeRequests/${this.configuration.encodeParam({name: "changeId", value: changeId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<ChangeRequestResponse>('get', `${basePath}${localVarPath}`,
             {
@@ -502,7 +508,7 @@ export class ChangeRequestAPIService extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/workorders/${this.configuration.encodeParam({name: "workorderId", value: workorderId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/changeRequests`;
+        let localVarPath = `/v1/workorders/${this.configuration.encodeParam({name: "workorderId", value: workorderId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/changeRequests`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<Array<ChangeRequestResponse>>('get', `${basePath}${localVarPath}`,
             {
@@ -561,7 +567,7 @@ export class ChangeRequestAPIService extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/workorders/changeRequests/${this.configuration.encodeParam({name: "changeId", value: changeId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/acknowledgeDenial`;
+        let localVarPath = `/v1/workorders/changeRequests/${this.configuration.encodeParam({name: "changeId", value: changeId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/acknowledgeDenial`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<any>('post', `${basePath}${localVarPath}`,
             {

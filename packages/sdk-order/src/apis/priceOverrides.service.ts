@@ -14,17 +14,23 @@ import { HttpClient, HttpHeaders, HttpParams,
          HttpResponse, HttpEvent, HttpContext 
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
-import { OpenApiHttpParams, QueryParamStyle } from '../../query.params';
+import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
-import { ApplyPriceOverrideRequest } from '../models/applyPriceOverrideRequest';
-import { ApprovePriceOverrideRequest } from '../models/approvePriceOverrideRequest';
-import { PriceOverrideDetail } from '../models/priceOverrideDetail';
-import { PriceOverrideResult } from '../models/priceOverrideResult';
-import { RejectPriceOverrideRequest } from '../models/rejectPriceOverrideRequest';
+// @ts-ignore
+import { ApplyPriceOverrideRequest } from '../src/models/applyPriceOverrideRequest';
+// @ts-ignore
+import { ApprovePriceOverrideRequest } from '../src/models/approvePriceOverrideRequest';
+// @ts-ignore
+import { PriceOverrideDetail } from '../src/models/priceOverrideDetail';
+// @ts-ignore
+import { PriceOverrideResult } from '../src/models/priceOverrideResult';
+// @ts-ignore
+import { RejectPriceOverrideRequest } from '../src/models/rejectPriceOverrideRequest';
 
-import { BASE_PATH, COLLECTION_FORMATS }                     from '../../variables';
-import { Configuration }                                     from '../../configuration';
-import { BaseService } from '../../api.base.service';
+// @ts-ignore
+import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
+import { Configuration }                                     from '../configuration';
+import { BaseService } from '../api.base.service';
 
 
 
@@ -165,7 +171,7 @@ export class PriceOverridesService extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/orders/price-overrides/${this.configuration.encodeParam({name: "overrideId", value: overrideId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/approve`;
+        let localVarPath = `/v1/orders/price-overrides/${this.configuration.encodeParam({name: "overrideId", value: overrideId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/approve`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<PriceOverrideDetail>('post', `${basePath}${localVarPath}`,
             {
@@ -226,7 +232,7 @@ export class PriceOverridesService extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/orders/price-overrides/${this.configuration.encodeParam({name: "overrideId", value: overrideId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+        let localVarPath = `/v1/orders/price-overrides/${this.configuration.encodeParam({name: "overrideId", value: overrideId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<PriceOverrideDetail>('get', `${basePath}${localVarPath}`,
             {
@@ -454,7 +460,7 @@ export class PriceOverridesService extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/orders/price-overrides/${this.configuration.encodeParam({name: "overrideId", value: overrideId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/reject`;
+        let localVarPath = `/v1/orders/price-overrides/${this.configuration.encodeParam({name: "overrideId", value: overrideId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/reject`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<PriceOverrideDetail>('post', `${basePath}${localVarPath}`,
             {

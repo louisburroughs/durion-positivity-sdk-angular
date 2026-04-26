@@ -14,17 +14,23 @@ import { HttpClient, HttpHeaders, HttpParams,
          HttpResponse, HttpEvent, HttpContext 
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
-import { OpenApiHttpParams, QueryParamStyle } from '../../query.params';
+import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
-import { WorkexecLaborPerformedRequest } from '../models/workexecLaborPerformedRequest';
-import { WorkexecLaborPerformedResponse } from '../models/workexecLaborPerformedResponse';
-import { WorkexecTimerEntryResponse } from '../models/workexecTimerEntryResponse';
-import { WorkexecTimerStartRequest } from '../models/workexecTimerStartRequest';
-import { WorkexecTimerStopResponse } from '../models/workexecTimerStopResponse';
+// @ts-ignore
+import { WorkexecLaborPerformedRequest } from '../src/models/workexecLaborPerformedRequest';
+// @ts-ignore
+import { WorkexecLaborPerformedResponse } from '../src/models/workexecLaborPerformedResponse';
+// @ts-ignore
+import { WorkexecTimerEntryResponse } from '../src/models/workexecTimerEntryResponse';
+// @ts-ignore
+import { WorkexecTimerStartRequest } from '../src/models/workexecTimerStartRequest';
+// @ts-ignore
+import { WorkexecTimerStopResponse } from '../src/models/workexecTimerStopResponse';
 
-import { BASE_PATH, COLLECTION_FORMATS }                     from '../../variables';
-import { Configuration }                                     from '../../configuration';
-import { BaseService } from '../../api.base.service';
+// @ts-ignore
+import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
+import { Configuration }                                     from '../configuration';
+import { BaseService } from '../api.base.service';
 
 
 
@@ -187,10 +193,10 @@ export class WorkexecTimeTrackingAPIService extends BaseService {
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public getJobTimeTotals(startDate: string, endDate: string, timezone: string, locationId?: string, technicianIds?: Array<string>, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<object>;
-    public getJobTimeTotals(startDate: string, endDate: string, timezone: string, locationId?: string, technicianIds?: Array<string>, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<object>>;
-    public getJobTimeTotals(startDate: string, endDate: string, timezone: string, locationId?: string, technicianIds?: Array<string>, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<object>>;
-    public getJobTimeTotals(startDate: string, endDate: string, timezone: string, locationId?: string, technicianIds?: Array<string>, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getJobTimeTotals(startDate: string, endDate: string, timezone: string, locationId?: string, technicianIds?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<object>;
+    public getJobTimeTotals(startDate: string, endDate: string, timezone: string, locationId?: string, technicianIds?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<object>>;
+    public getJobTimeTotals(startDate: string, endDate: string, timezone: string, locationId?: string, technicianIds?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<object>>;
+    public getJobTimeTotals(startDate: string, endDate: string, timezone: string, locationId?: string, technicianIds?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (startDate === null || startDate === undefined) {
             throw new Error('Required parameter startDate was null or undefined when calling getJobTimeTotals.');
         }

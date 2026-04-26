@@ -14,15 +14,19 @@ import { HttpClient, HttpHeaders, HttpParams,
          HttpResponse, HttpEvent, HttpContext 
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
-import { OpenApiHttpParams, QueryParamStyle } from '../../query.params';
+import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
-import { BreakDto } from '../models/breakDto';
-import { WorkSessionDto } from '../models/workSessionDto';
-import { WorkSessionRequest } from '../models/workSessionRequest';
+// @ts-ignore
+import { BreakDto } from '../src/models/breakDto';
+// @ts-ignore
+import { WorkSessionDto } from '../src/models/workSessionDto';
+// @ts-ignore
+import { WorkSessionRequest } from '../src/models/workSessionRequest';
 
-import { BASE_PATH, COLLECTION_FORMATS }                     from '../../variables';
-import { Configuration }                                     from '../../configuration';
-import { BaseService } from '../../api.base.service';
+// @ts-ignore
+import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
+import { Configuration }                                     from '../configuration';
+import { BaseService } from '../api.base.service';
 
 
 

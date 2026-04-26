@@ -14,15 +14,19 @@ import { HttpClient, HttpHeaders, HttpParams,
          HttpResponse, HttpEvent, HttpContext 
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
-import { OpenApiHttpParams, QueryParamStyle } from '../../query.params';
+import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
-import { ItemCostAuditDto } from '../models/itemCostAuditDto';
-import { ItemCostsDto } from '../models/itemCostsDto';
-import { UpdateStandardCostRequestDto } from '../models/updateStandardCostRequestDto';
+// @ts-ignore
+import { ItemCostAuditDto } from '../src/models/itemCostAuditDto';
+// @ts-ignore
+import { ItemCostsDto } from '../src/models/itemCostsDto';
+// @ts-ignore
+import { UpdateStandardCostRequestDto } from '../src/models/updateStandardCostRequestDto';
 
-import { BASE_PATH, COLLECTION_FORMATS }                     from '../../variables';
-import { Configuration }                                     from '../../configuration';
-import { BaseService } from '../../api.base.service';
+// @ts-ignore
+import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
+import { Configuration }                                     from '../configuration';
+import { BaseService } from '../api.base.service';
 
 
 
@@ -79,7 +83,7 @@ export class ItemCostAPIService extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/products/items/${this.configuration.encodeParam({name: "itemId", value: itemId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/costs/audit`;
+        let localVarPath = `/v1/products/items/${this.configuration.encodeParam({name: "itemId", value: itemId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/costs/audit`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<ItemCostAuditDto>('get', `${basePath}${localVarPath}`,
             {
@@ -138,7 +142,7 @@ export class ItemCostAPIService extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/products/items/${this.configuration.encodeParam({name: "itemId", value: itemId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/costs`;
+        let localVarPath = `/v1/products/items/${this.configuration.encodeParam({name: "itemId", value: itemId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/costs`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<ItemCostsDto>('get', `${basePath}${localVarPath}`,
             {
@@ -210,7 +214,7 @@ export class ItemCostAPIService extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/products/items/${this.configuration.encodeParam({name: "itemId", value: itemId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/standard-cost`;
+        let localVarPath = `/v1/products/items/${this.configuration.encodeParam({name: "itemId", value: itemId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/standard-cost`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<ItemCostsDto>('put', `${basePath}${localVarPath}`,
             {

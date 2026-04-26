@@ -14,14 +14,17 @@ import { HttpClient, HttpHeaders, HttpParams,
          HttpResponse, HttpEvent, HttpContext 
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
-import { OpenApiHttpParams, QueryParamStyle } from '../../query.params';
+import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
-import { ColumnMappingApproveRequest } from '../models/columnMappingApproveRequest';
-import { ColumnMappingResponse } from '../models/columnMappingResponse';
+// @ts-ignore
+import { ColumnMappingApproveRequest } from '../src/models/columnMappingApproveRequest';
+// @ts-ignore
+import { ColumnMappingResponse } from '../src/models/columnMappingResponse';
 
-import { BASE_PATH, COLLECTION_FORMATS }                     from '../../variables';
-import { Configuration }                                     from '../../configuration';
-import { BaseService } from '../../api.base.service';
+// @ts-ignore
+import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
+import { Configuration }                                     from '../configuration';
+import { BaseService } from '../api.base.service';
 
 
 

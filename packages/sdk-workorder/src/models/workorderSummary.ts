@@ -9,10 +9,10 @@
  */
 
 
-export interface WorkorderSummary {
+export interface WorkorderSummary { 
     workorderId?: string;
     workorderNumber?: string;
-    status: string;
+    status?: string;
     customerName?: string;
     vehicleDescription?: string;
     scheduledDate?: string;

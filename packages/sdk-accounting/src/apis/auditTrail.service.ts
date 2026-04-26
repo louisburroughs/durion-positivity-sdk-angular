@@ -14,16 +14,21 @@ import { HttpClient, HttpHeaders, HttpParams,
          HttpResponse, HttpEvent, HttpContext 
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
-import { OpenApiHttpParams, QueryParamStyle } from '../../query.params';
+import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
-import { AuditTrailResponse } from '../models/auditTrailResponse';
-import { CancellationRequest } from '../models/cancellationRequest';
-import { PriceOverrideRequest } from '../models/priceOverrideRequest';
-import { RefundRequest } from '../models/refundRequest';
+// @ts-ignore
+import { AuditTrailResponse } from '../src/models/auditTrailResponse';
+// @ts-ignore
+import { CancellationRequest } from '../src/models/cancellationRequest';
+// @ts-ignore
+import { PriceOverrideRequest } from '../src/models/priceOverrideRequest';
+// @ts-ignore
+import { RefundRequest } from '../src/models/refundRequest';
 
-import { BASE_PATH, COLLECTION_FORMATS }                     from '../../variables';
-import { Configuration }                                     from '../../configuration';
-import { BaseService } from '../../api.base.service';
+// @ts-ignore
+import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
+import { Configuration }                                     from '../configuration';
+import { BaseService } from '../api.base.service';
 
 
 

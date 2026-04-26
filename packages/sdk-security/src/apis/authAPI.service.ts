@@ -14,17 +14,23 @@ import { HttpClient, HttpHeaders, HttpParams,
          HttpResponse, HttpEvent, HttpContext 
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
-import { OpenApiHttpParams, QueryParamStyle } from '../../query.params';
+import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
-import { ApiError } from '../models/apiError';
-import { LoginRequest } from '../models/loginRequest';
-import { SelfRegistrationRequest } from '../models/selfRegistrationRequest';
-import { SelfRegistrationResponse } from '../models/selfRegistrationResponse';
-import { TokenPairResponse } from '../models/tokenPairResponse';
+// @ts-ignore
+import { ApiError } from '../src/models/apiError';
+// @ts-ignore
+import { LoginRequest } from '../src/models/loginRequest';
+// @ts-ignore
+import { SelfRegistrationRequest } from '../src/models/selfRegistrationRequest';
+// @ts-ignore
+import { SelfRegistrationResponse } from '../src/models/selfRegistrationResponse';
+// @ts-ignore
+import { TokenPairResponse } from '../src/models/tokenPairResponse';
 
-import { BASE_PATH, COLLECTION_FORMATS }                     from '../../variables';
-import { Configuration }                                     from '../../configuration';
-import { BaseService } from '../../api.base.service';
+// @ts-ignore
+import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
+import { Configuration }                                     from '../configuration';
+import { BaseService } from '../api.base.service';
 
 
 

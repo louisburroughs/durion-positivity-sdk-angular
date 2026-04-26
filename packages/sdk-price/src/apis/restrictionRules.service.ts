@@ -14,14 +14,17 @@ import { HttpClient, HttpHeaders, HttpParams,
          HttpResponse, HttpEvent, HttpContext 
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
-import { OpenApiHttpParams, QueryParamStyle } from '../../query.params';
+import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
-import { CreateRestrictionRuleRequest } from '../models/createRestrictionRuleRequest';
-import { RestrictionRuleResponse } from '../models/restrictionRuleResponse';
+// @ts-ignore
+import { CreateRestrictionRuleRequest } from '../src/models/createRestrictionRuleRequest';
+// @ts-ignore
+import { RestrictionRuleResponse } from '../src/models/restrictionRuleResponse';
 
-import { BASE_PATH, COLLECTION_FORMATS }                     from '../../variables';
-import { Configuration }                                     from '../../configuration';
-import { BaseService } from '../../api.base.service';
+// @ts-ignore
+import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
+import { Configuration }                                     from '../configuration';
+import { BaseService } from '../api.base.service';
 
 
 
