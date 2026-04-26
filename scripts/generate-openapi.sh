@@ -36,6 +36,40 @@ patch_package_tsconfig() {
 	:
 }
 
+write_src_support_shims() {
+	local module_name="$1"
+	local package_dir="packages/sdk-${module_name}"
+	local src_dir="${package_dir}/src"
+
+	mkdir -p "${src_dir}"
+
+	for support_file in configuration api.base.service query.params encoder param variables; do
+		cat > "${src_dir}/${support_file}.ts" <<EOF
+export * from '../${support_file}';
+EOF
+	done
+}
+
+write_nested_model_shims() {
+	local module_name="$1"
+	local package_dir="packages/sdk-${module_name}"
+	local nested_models_dir="${package_dir}/src/src/models"
+	local model_file
+
+	mkdir -p "${nested_models_dir}"
+
+	shopt -s nullglob
+	for model_file in "${package_dir}/src/models/"*.ts; do
+		local model_basename
+		model_basename="$(basename "${model_file}")"
+
+		cat > "${nested_models_dir}/${model_basename}" <<EOF
+export * from '../../models/${model_basename%.ts}';
+EOF
+	done
+	shopt -u nullglob
+}
+
 cleanup_vehicle_inventory_duplicate_exports() {
 	# Post-generation cleanup: VehicleAPIApi defines request-parameter interfaces named
 	# CreateVehicleRequest and UpdateVehicleRequest that clash with same-named model DTOs
@@ -85,6 +119,8 @@ if [[ -n "$module" ]]; then
 	npx @openapitools/openapi-generator-cli generate --generator-key "sdk-${module}"
 
 	patch_package_tsconfig "$module"
+	write_src_support_shims "$module"
+	write_nested_model_shims "$module"
 	if [[ "$module" == "inventory" ]]; then
 		cleanup_inventory_duplicate_exports
 	fi
@@ -98,6 +134,8 @@ else
 		npx @openapitools/openapi-generator-cli generate --generator-key "sdk-${m}"
 
 		patch_package_tsconfig "$m"
+		write_src_support_shims "$m"
+		write_nested_model_shims "$m"
 		if [[ "$m" == "inventory" ]]; then
 			cleanup_inventory_duplicate_exports
 		fi
