@@ -1,4 +1,4 @@
-export * from './api/api';
+export * from './src/apis/api';
 export * from './variables';
 export * from './configuration';
 export * from './api.module';

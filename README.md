@@ -122,7 +122,7 @@ All packages are versioned together at `0.1.0-alpha` and scoped under `@durion-s
 
 ## Architecture
 
-```
+```text
 Consumer Angular application
         │
         ▼
@@ -504,7 +504,7 @@ Valid module names: `security`, `order`, `inventory`, `workorder`, `accounting`,
 
 The generation script reads backend specs from the sibling `durion-positivity-backend/` repository:
 
-```
+```text
 ../durion-positivity-backend/pos-security-service/openapi.yaml
 ../durion-positivity-backend/pos-order/openapi.yaml
 # ... one spec per domain service
@@ -607,7 +607,7 @@ npx jest src/sdk-003-transport.test.ts
 
 ## Project Structure
 
-```
+```ascii
 durion-positivity-sdk-angular/
 ├── packages/
 │   ├── sdk-transport/            # @durion-sdk/transport — shared HTTP client & error types
@@ -693,7 +693,7 @@ All packages are versioned together at `0.1.0-alpha` and scoped under `@durion-s
 
 ## Architecture
 
-```
+```ascii
 Consumer application
         │
         ▼
@@ -998,7 +998,7 @@ npm run generate
 
 The generation script (`scripts/generate-openapi.sh`) reads backend specs from the sibling `durion-positivity-backend/` repository:
 
-```
+```ascii
 ../durion-positivity-backend/pos-security-service/openapi.yaml
 ../durion-positivity-backend/pos-order/openapi.yaml
 ../durion-positivity-backend/pos-inventory/openapi.yaml
@@ -1095,7 +1095,7 @@ npx jest src/sdk-003-transport.test.ts
 
 ## Project Structure
 
-```
+```ascii
 durion-positivity-sdk/
 ├── packages/
 │   ├── sdk-transport/            # @durion-sdk/transport — shared HTTP client & error types

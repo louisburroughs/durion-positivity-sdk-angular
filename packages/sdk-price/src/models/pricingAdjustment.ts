@@ -7,7 +7,6 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { Null } from './null';
 
 
 /**
@@ -30,9 +29,6 @@ export interface PricingAdjustment {
      * Adjustment amount; negative values reduce total
      */
     amount?: number;
-    /**
-     * Optional adjustment metadata bag
-     */
-    metadata?: Null;
+    metadata?: any | null;
 }
 
