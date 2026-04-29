@@ -6,7 +6,7 @@
   "types": "src/index.ts",
   "private": false,
   "scripts": {
-    "build": "tsc",
+    "build": "tsc && node -e \"const p=require('./package.json'),fs=require('fs');fs.writeFileSync('dist/package.json',JSON.stringify({name:p.name,version:p.version,description:p.description,main:'index.js',types:'index.d.ts',peerDependencies:p.peerDependencies},null,2)+'\\n')\"",
     "prepare": "npm run build"
   },
   "peerDependencies": {
