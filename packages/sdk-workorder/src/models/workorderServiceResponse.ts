@@ -61,18 +61,52 @@ export enum WorkorderServiceResponseStatusEnum {
 
 
 
+function isOptionalWorkorderServiceResponsePropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type WorkorderServiceResponseOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createWorkorderServiceResponsePropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createWorkorderServiceResponseOptionalProperties(
+    ...properties: WorkorderServiceResponseOptionalProperty[]
+): ReadonlyArray<WorkorderServiceResponseOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfWorkorderServiceResponse(value: object): value is WorkorderServiceResponse {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('id' in _v && typeof _v['id'] !== 'string') return false;
-    if ('serviceEntityId' in _v && typeof _v['serviceEntityId'] !== 'string') return false;
-    if ('description' in _v && typeof _v['description'] !== 'string') return false;
-    if ('status' in _v && typeof _v['status'] !== 'string') return false;
-    if ('quantity' in _v && typeof _v['quantity'] !== 'number') return false;
-    if ('unitPrice' in _v && typeof _v['unitPrice'] !== 'number') return false;
-    if ('totalLaborHours' in _v && typeof _v['totalLaborHours'] !== 'number') return false;
-    if ('laborCost' in _v && typeof _v['laborCost'] !== 'number') return false;
-    if ('lineTotal' in _v && typeof _v['lineTotal'] !== 'number') return false;
-    return true;
+
+    const requiredProperties = createWorkorderServiceResponsePropertyNames();
+    const optionalStringProperties = createWorkorderServiceResponseOptionalProperties({ name: 'id', nullable: false }, { name: 'serviceEntityId', nullable: false }, { name: 'description', nullable: false }, { name: 'status', nullable: false }, );
+    const optionalNumberProperties = createWorkorderServiceResponseOptionalProperties({ name: 'quantity', nullable: false }, { name: 'unitPrice', nullable: false }, { name: 'totalLaborHours', nullable: false }, { name: 'laborCost', nullable: false }, { name: 'lineTotal', nullable: false }, );
+    const optionalBooleanProperties = createWorkorderServiceResponseOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalWorkorderServiceResponsePropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalWorkorderServiceResponsePropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalWorkorderServiceResponsePropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

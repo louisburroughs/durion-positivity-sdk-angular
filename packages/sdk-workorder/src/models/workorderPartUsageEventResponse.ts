@@ -51,17 +51,52 @@ export interface WorkorderPartUsageEventResponse {
     partDescription?: string;
 }
 
+function isOptionalWorkorderPartUsageEventResponsePropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type WorkorderPartUsageEventResponseOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createWorkorderPartUsageEventResponsePropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createWorkorderPartUsageEventResponseOptionalProperties(
+    ...properties: WorkorderPartUsageEventResponseOptionalProperty[]
+): ReadonlyArray<WorkorderPartUsageEventResponseOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfWorkorderPartUsageEventResponse(value: object): value is WorkorderPartUsageEventResponse {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('id' in _v && typeof _v['id'] !== 'string') return false;
-    if ('workorderPartId' in _v && typeof _v['workorderPartId'] !== 'string') return false;
-    if ('workorderId' in _v && typeof _v['workorderId'] !== 'string') return false;
-    if ('eventType' in _v && typeof _v['eventType'] !== 'string') return false;
-    if ('quantity' in _v && typeof _v['quantity'] !== 'number') return false;
-    if ('performedBy' in _v && typeof _v['performedBy'] !== 'string') return false;
-    if ('notes' in _v && typeof _v['notes'] !== 'string') return false;
-    if ('partDescription' in _v && typeof _v['partDescription'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createWorkorderPartUsageEventResponsePropertyNames();
+    const optionalStringProperties = createWorkorderPartUsageEventResponseOptionalProperties({ name: 'id', nullable: false }, { name: 'workorderPartId', nullable: false }, { name: 'workorderId', nullable: false }, { name: 'eventType', nullable: false }, { name: 'performedBy', nullable: false }, { name: 'notes', nullable: false }, { name: 'partDescription', nullable: false }, );
+    const optionalNumberProperties = createWorkorderPartUsageEventResponseOptionalProperties({ name: 'quantity', nullable: false }, );
+    const optionalBooleanProperties = createWorkorderPartUsageEventResponseOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalWorkorderPartUsageEventResponsePropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalWorkorderPartUsageEventResponsePropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalWorkorderPartUsageEventResponsePropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

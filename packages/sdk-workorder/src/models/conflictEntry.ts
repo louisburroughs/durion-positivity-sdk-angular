@@ -17,14 +17,52 @@ export interface ConflictEntry {
     affectedWorkorderId?: string;
 }
 
+function isOptionalConflictEntryPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type ConflictEntryOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createConflictEntryPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createConflictEntryOptionalProperties(
+    ...properties: ConflictEntryOptionalProperty[]
+): ReadonlyArray<ConflictEntryOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfConflictEntry(value: object): value is ConflictEntry {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('conflictType' in _v && typeof _v['conflictType'] !== 'string') return false;
-    if ('severity' in _v && typeof _v['severity'] !== 'string') return false;
-    if ('message' in _v && typeof _v['message'] !== 'string') return false;
-    if ('affectedResourceId' in _v && typeof _v['affectedResourceId'] !== 'string') return false;
-    if ('affectedWorkorderId' in _v && typeof _v['affectedWorkorderId'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createConflictEntryPropertyNames();
+    const optionalStringProperties = createConflictEntryOptionalProperties({ name: 'conflictType', nullable: false }, { name: 'severity', nullable: false }, { name: 'message', nullable: false }, { name: 'affectedResourceId', nullable: false }, { name: 'affectedWorkorderId', nullable: false }, );
+    const optionalNumberProperties = createConflictEntryOptionalProperties();
+    const optionalBooleanProperties = createConflictEntryOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalConflictEntryPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalConflictEntryPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalConflictEntryPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

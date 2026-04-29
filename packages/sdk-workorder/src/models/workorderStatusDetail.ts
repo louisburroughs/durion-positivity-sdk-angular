@@ -85,19 +85,52 @@ export enum WorkorderStatusDetailStatusEnum {
 
 
 
+function isOptionalWorkorderStatusDetailPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type WorkorderStatusDetailOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createWorkorderStatusDetailPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createWorkorderStatusDetailOptionalProperties(
+    ...properties: WorkorderStatusDetailOptionalProperty[]
+): ReadonlyArray<WorkorderStatusDetailOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfWorkorderStatusDetail(value: object): value is WorkorderStatusDetail {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('workorderId' in _v && typeof _v['workorderId'] !== 'string') return false;
-    if ('status' in _v && typeof _v['status'] !== 'string') return false;
-    if ('assignedTechnicianId' in _v && typeof _v['assignedTechnicianId'] !== 'string') return false;
-    if ('locationId' in _v && typeof _v['locationId'] !== 'string') return false;
-    if ('customerName' in _v && typeof _v['customerName'] !== 'string') return false;
-    if ('vehicleInfo' in _v && typeof _v['vehicleInfo'] !== 'string') return false;
-    if ('phoneNumber' in _v && typeof _v['phoneNumber'] !== 'string') return false;
-    if ('vehicleVin' in _v && typeof _v['vehicleVin'] !== 'string') return false;
-    if ('serviceDescription' in _v && typeof _v['serviceDescription'] !== 'string') return false;
-    if ('internalNotes' in _v && typeof _v['internalNotes'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createWorkorderStatusDetailPropertyNames();
+    const optionalStringProperties = createWorkorderStatusDetailOptionalProperties({ name: 'workorderId', nullable: false }, { name: 'status', nullable: false }, { name: 'assignedTechnicianId', nullable: false }, { name: 'locationId', nullable: false }, { name: 'customerName', nullable: false }, { name: 'vehicleInfo', nullable: false }, { name: 'phoneNumber', nullable: false }, { name: 'vehicleVin', nullable: false }, { name: 'serviceDescription', nullable: false }, { name: 'internalNotes', nullable: false }, );
+    const optionalNumberProperties = createWorkorderStatusDetailOptionalProperties();
+    const optionalBooleanProperties = createWorkorderStatusDetailOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalWorkorderStatusDetailPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalWorkorderStatusDetailPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalWorkorderStatusDetailPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

@@ -23,13 +23,52 @@ export interface CreateWorkorderRequest {
     customerId: string;
 }
 
+function isOptionalCreateWorkorderRequestPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type CreateWorkorderRequestOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createCreateWorkorderRequestPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createCreateWorkorderRequestOptionalProperties(
+    ...properties: CreateWorkorderRequestOptionalProperty[]
+): ReadonlyArray<CreateWorkorderRequestOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfCreateWorkorderRequest(value: object): value is CreateWorkorderRequest {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if (!('estimateId' in _v) || _v['estimateId'] === undefined) return false;
-    if ('estimateId' in _v && typeof _v['estimateId'] !== 'string') return false;
-    if (!('customerId' in _v) || _v['customerId'] === undefined) return false;
-    if ('customerId' in _v && typeof _v['customerId'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createCreateWorkorderRequestPropertyNames('estimateId', 'customerId', );
+    const optionalStringProperties = createCreateWorkorderRequestOptionalProperties({ name: 'estimateId', nullable: false }, { name: 'customerId', nullable: false }, );
+    const optionalNumberProperties = createCreateWorkorderRequestOptionalProperties();
+    const optionalBooleanProperties = createCreateWorkorderRequestOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalCreateWorkorderRequestPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalCreateWorkorderRequestPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalCreateWorkorderRequestPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

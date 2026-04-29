@@ -39,19 +39,52 @@ export interface CreateEstimateFromAppointmentRequest {
     requestedServices?: Array<string>;
 }
 
+function isOptionalCreateEstimateFromAppointmentRequestPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type CreateEstimateFromAppointmentRequestOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createCreateEstimateFromAppointmentRequestPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createCreateEstimateFromAppointmentRequestOptionalProperties(
+    ...properties: CreateEstimateFromAppointmentRequestOptionalProperty[]
+): ReadonlyArray<CreateEstimateFromAppointmentRequestOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfCreateEstimateFromAppointmentRequest(value: object): value is CreateEstimateFromAppointmentRequest {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if (!('idempotencyKey' in _v) || _v['idempotencyKey'] === undefined) return false;
-    if ('idempotencyKey' in _v && typeof _v['idempotencyKey'] !== 'string') return false;
-    if (!('appointmentId' in _v) || _v['appointmentId'] === undefined) return false;
-    if ('appointmentId' in _v && typeof _v['appointmentId'] !== 'string') return false;
-    if (!('customerId' in _v) || _v['customerId'] === undefined) return false;
-    if ('customerId' in _v && typeof _v['customerId'] !== 'string') return false;
-    if (!('vehicleId' in _v) || _v['vehicleId'] === undefined) return false;
-    if ('vehicleId' in _v && typeof _v['vehicleId'] !== 'string') return false;
-    if (!('locationId' in _v) || _v['locationId'] === undefined) return false;
-    if ('locationId' in _v && typeof _v['locationId'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createCreateEstimateFromAppointmentRequestPropertyNames('idempotencyKey', 'appointmentId', 'customerId', 'vehicleId', 'locationId', );
+    const optionalStringProperties = createCreateEstimateFromAppointmentRequestOptionalProperties({ name: 'idempotencyKey', nullable: false }, { name: 'appointmentId', nullable: false }, { name: 'customerId', nullable: false }, { name: 'vehicleId', nullable: false }, { name: 'locationId', nullable: false }, );
+    const optionalNumberProperties = createCreateEstimateFromAppointmentRequestOptionalProperties();
+    const optionalBooleanProperties = createCreateEstimateFromAppointmentRequestOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalCreateEstimateFromAppointmentRequestPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalCreateEstimateFromAppointmentRequestPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalCreateEstimateFromAppointmentRequestPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

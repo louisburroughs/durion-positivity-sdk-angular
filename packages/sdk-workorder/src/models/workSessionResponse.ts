@@ -91,22 +91,52 @@ export enum WorkSessionResponseStatusEnum {
 
 
 
+function isOptionalWorkSessionResponsePropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type WorkSessionResponseOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createWorkSessionResponsePropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createWorkSessionResponseOptionalProperties(
+    ...properties: WorkSessionResponseOptionalProperty[]
+): ReadonlyArray<WorkSessionResponseOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfWorkSessionResponse(value: object): value is WorkSessionResponse {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('workSessionId' in _v && typeof _v['workSessionId'] !== 'string') return false;
-    if ('mechanicId' in _v && typeof _v['mechanicId'] !== 'string') return false;
-    if ('workOrderId' in _v && typeof _v['workOrderId'] !== 'string') return false;
-    if ('workOrderTaskId' in _v && typeof _v['workOrderTaskId'] !== 'string') return false;
-    if ('locationId' in _v && typeof _v['locationId'] !== 'string') return false;
-    if ('resourceId' in _v && typeof _v['resourceId'] !== 'string') return false;
-    if ('status' in _v && typeof _v['status'] !== 'string') return false;
-    if ('locked' in _v && typeof _v['locked'] !== 'boolean') return false;
-    if ('totalDurationSeconds' in _v && typeof _v['totalDurationSeconds'] !== 'number') return false;
-    if ('approvedByUserId' in _v && typeof _v['approvedByUserId'] !== 'string') return false;
-    if ('approvalNotes' in _v && typeof _v['approvalNotes'] !== 'string') return false;
-    if ('overlapOverrideUsed' in _v && typeof _v['overlapOverrideUsed'] !== 'boolean') return false;
-    if ('overrideReason' in _v && typeof _v['overrideReason'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createWorkSessionResponsePropertyNames();
+    const optionalStringProperties = createWorkSessionResponseOptionalProperties({ name: 'workSessionId', nullable: false }, { name: 'mechanicId', nullable: false }, { name: 'workOrderId', nullable: false }, { name: 'workOrderTaskId', nullable: false }, { name: 'locationId', nullable: false }, { name: 'resourceId', nullable: false }, { name: 'status', nullable: false }, { name: 'approvedByUserId', nullable: false }, { name: 'approvalNotes', nullable: false }, { name: 'overrideReason', nullable: false }, );
+    const optionalNumberProperties = createWorkSessionResponseOptionalProperties({ name: 'totalDurationSeconds', nullable: false }, );
+    const optionalBooleanProperties = createWorkSessionResponseOptionalProperties({ name: 'locked', nullable: false }, { name: 'overlapOverrideUsed', nullable: false }, );
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalWorkSessionResponsePropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalWorkSessionResponsePropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalWorkSessionResponsePropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

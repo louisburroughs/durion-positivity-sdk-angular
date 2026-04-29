@@ -13,11 +13,52 @@ export interface ConfirmPickLineRequest {
     quantityPicked: number;
 }
 
+function isOptionalConfirmPickLineRequestPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type ConfirmPickLineRequestOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createConfirmPickLineRequestPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createConfirmPickLineRequestOptionalProperties(
+    ...properties: ConfirmPickLineRequestOptionalProperty[]
+): ReadonlyArray<ConfirmPickLineRequestOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfConfirmPickLineRequest(value: object): value is ConfirmPickLineRequest {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if (!('quantityPicked' in _v) || _v['quantityPicked'] === undefined) return false;
-    if ('quantityPicked' in _v && typeof _v['quantityPicked'] !== 'number') return false;
-    return true;
+
+    const requiredProperties = createConfirmPickLineRequestPropertyNames('quantityPicked', );
+    const optionalStringProperties = createConfirmPickLineRequestOptionalProperties();
+    const optionalNumberProperties = createConfirmPickLineRequestOptionalProperties({ name: 'quantityPicked', nullable: false }, );
+    const optionalBooleanProperties = createConfirmPickLineRequestOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalConfirmPickLineRequestPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalConfirmPickLineRequestPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalConfirmPickLineRequestPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

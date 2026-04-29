@@ -14,13 +14,52 @@ export interface ResolveScanRequest {
     scannedLocationId: string;
 }
 
+function isOptionalResolveScanRequestPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type ResolveScanRequestOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createResolveScanRequestPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createResolveScanRequestOptionalProperties(
+    ...properties: ResolveScanRequestOptionalProperty[]
+): ReadonlyArray<ResolveScanRequestOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfResolveScanRequest(value: object): value is ResolveScanRequest {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if (!('scannedSkuId' in _v) || _v['scannedSkuId'] === undefined) return false;
-    if ('scannedSkuId' in _v && typeof _v['scannedSkuId'] !== 'string') return false;
-    if (!('scannedLocationId' in _v) || _v['scannedLocationId'] === undefined) return false;
-    if ('scannedLocationId' in _v && typeof _v['scannedLocationId'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createResolveScanRequestPropertyNames('scannedSkuId', 'scannedLocationId', );
+    const optionalStringProperties = createResolveScanRequestOptionalProperties({ name: 'scannedSkuId', nullable: false }, { name: 'scannedLocationId', nullable: false }, );
+    const optionalNumberProperties = createResolveScanRequestOptionalProperties();
+    const optionalBooleanProperties = createResolveScanRequestOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalResolveScanRequestPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalResolveScanRequestPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalResolveScanRequestPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

@@ -39,16 +39,52 @@ export interface ApprovalConfigurationRequest {
     priority?: number;
 }
 
+function isOptionalApprovalConfigurationRequestPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type ApprovalConfigurationRequestOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createApprovalConfigurationRequestPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createApprovalConfigurationRequestOptionalProperties(
+    ...properties: ApprovalConfigurationRequestOptionalProperty[]
+): ReadonlyArray<ApprovalConfigurationRequestOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfApprovalConfigurationRequest(value: object): value is ApprovalConfigurationRequest {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('locationId' in _v && typeof _v['locationId'] !== 'string') return false;
-    if ('customerId' in _v && typeof _v['customerId'] !== 'string') return false;
-    if (!('approvalMethod' in _v) || _v['approvalMethod'] === undefined) return false;
-    if ('approvalMethod' in _v && typeof _v['approvalMethod'] !== 'string') return false;
-    if ('declineExpiryDays' in _v && typeof _v['declineExpiryDays'] !== 'number') return false;
-    if ('requireSignature' in _v && typeof _v['requireSignature'] !== 'string') return false;
-    if ('priority' in _v && typeof _v['priority'] !== 'number') return false;
-    return true;
+
+    const requiredProperties = createApprovalConfigurationRequestPropertyNames('approvalMethod', );
+    const optionalStringProperties = createApprovalConfigurationRequestOptionalProperties({ name: 'locationId', nullable: false }, { name: 'customerId', nullable: false }, { name: 'approvalMethod', nullable: false }, { name: 'requireSignature', nullable: false }, );
+    const optionalNumberProperties = createApprovalConfigurationRequestOptionalProperties({ name: 'declineExpiryDays', nullable: false }, { name: 'priority', nullable: false }, );
+    const optionalBooleanProperties = createApprovalConfigurationRequestOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalApprovalConfigurationRequestPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalApprovalConfigurationRequestPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalApprovalConfigurationRequestPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

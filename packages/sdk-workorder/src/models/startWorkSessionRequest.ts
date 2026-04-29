@@ -39,19 +39,52 @@ export interface StartWorkSessionRequest {
     overlapOverrideReason?: string;
 }
 
+function isOptionalStartWorkSessionRequestPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type StartWorkSessionRequestOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createStartWorkSessionRequestPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createStartWorkSessionRequestOptionalProperties(
+    ...properties: StartWorkSessionRequestOptionalProperty[]
+): ReadonlyArray<StartWorkSessionRequestOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfStartWorkSessionRequest(value: object): value is StartWorkSessionRequest {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if (!('mechanicId' in _v) || _v['mechanicId'] === undefined) return false;
-    if ('mechanicId' in _v && typeof _v['mechanicId'] !== 'string') return false;
-    if (!('workOrderId' in _v) || _v['workOrderId'] === undefined) return false;
-    if ('workOrderId' in _v && typeof _v['workOrderId'] !== 'string') return false;
-    if (!('workOrderTaskId' in _v) || _v['workOrderTaskId'] === undefined) return false;
-    if ('workOrderTaskId' in _v && typeof _v['workOrderTaskId'] !== 'string') return false;
-    if (!('locationId' in _v) || _v['locationId'] === undefined) return false;
-    if ('locationId' in _v && typeof _v['locationId'] !== 'string') return false;
-    if ('resourceId' in _v && typeof _v['resourceId'] !== 'string') return false;
-    if ('overlapOverrideReason' in _v && typeof _v['overlapOverrideReason'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createStartWorkSessionRequestPropertyNames('mechanicId', 'workOrderId', 'workOrderTaskId', 'locationId', );
+    const optionalStringProperties = createStartWorkSessionRequestOptionalProperties({ name: 'mechanicId', nullable: false }, { name: 'workOrderId', nullable: false }, { name: 'workOrderTaskId', nullable: false }, { name: 'locationId', nullable: false }, { name: 'resourceId', nullable: false }, { name: 'overlapOverrideReason', nullable: false }, );
+    const optionalNumberProperties = createStartWorkSessionRequestOptionalProperties();
+    const optionalBooleanProperties = createStartWorkSessionRequestOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalStartWorkSessionRequestPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalStartWorkSessionRequestPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalStartWorkSessionRequestPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

@@ -35,13 +35,52 @@ export interface ReopenWorkorderResponse {
     message?: string;
 }
 
+function isOptionalReopenWorkorderResponsePropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type ReopenWorkorderResponseOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createReopenWorkorderResponsePropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createReopenWorkorderResponseOptionalProperties(
+    ...properties: ReopenWorkorderResponseOptionalProperty[]
+): ReadonlyArray<ReopenWorkorderResponseOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfReopenWorkorderResponse(value: object): value is ReopenWorkorderResponse {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('workorderId' in _v && typeof _v['workorderId'] !== 'string') return false;
-    if ('currentStatus' in _v && typeof _v['currentStatus'] !== 'string') return false;
-    if ('isReopened' in _v && typeof _v['isReopened'] !== 'boolean') return false;
-    if ('message' in _v && typeof _v['message'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createReopenWorkorderResponsePropertyNames();
+    const optionalStringProperties = createReopenWorkorderResponseOptionalProperties({ name: 'workorderId', nullable: false }, { name: 'currentStatus', nullable: false }, { name: 'message', nullable: false }, );
+    const optionalNumberProperties = createReopenWorkorderResponseOptionalProperties();
+    const optionalBooleanProperties = createReopenWorkorderResponseOptionalProperties({ name: 'isReopened', nullable: false }, );
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalReopenWorkorderResponsePropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalReopenWorkorderResponsePropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalReopenWorkorderResponsePropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

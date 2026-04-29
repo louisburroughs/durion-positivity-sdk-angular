@@ -24,11 +24,52 @@ export interface ReopenWorkorderRequest {
     reopenReason?: string;
 }
 
+function isOptionalReopenWorkorderRequestPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type ReopenWorkorderRequestOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createReopenWorkorderRequestPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createReopenWorkorderRequestOptionalProperties(
+    ...properties: ReopenWorkorderRequestOptionalProperty[]
+): ReadonlyArray<ReopenWorkorderRequestOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfReopenWorkorderRequest(value: object): value is ReopenWorkorderRequest {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('userId' in _v && typeof _v['userId'] !== 'string') return false;
-    if ('reopenReason' in _v && typeof _v['reopenReason'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createReopenWorkorderRequestPropertyNames();
+    const optionalStringProperties = createReopenWorkorderRequestOptionalProperties({ name: 'userId', nullable: false }, { name: 'reopenReason', nullable: false }, );
+    const optionalNumberProperties = createReopenWorkorderRequestOptionalProperties();
+    const optionalBooleanProperties = createReopenWorkorderRequestOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalReopenWorkorderRequestPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalReopenWorkorderRequestPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalReopenWorkorderRequestPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

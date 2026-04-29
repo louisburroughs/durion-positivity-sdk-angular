@@ -20,9 +20,52 @@ export interface WorkexecTimerStopResponse {
     stopped?: Array<WorkexecTimerEntryResponse>;
 }
 
+function isOptionalWorkexecTimerStopResponsePropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type WorkexecTimerStopResponseOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createWorkexecTimerStopResponsePropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createWorkexecTimerStopResponseOptionalProperties(
+    ...properties: WorkexecTimerStopResponseOptionalProperty[]
+): ReadonlyArray<WorkexecTimerStopResponseOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfWorkexecTimerStopResponse(value: object): value is WorkexecTimerStopResponse {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    return true;
+
+    const requiredProperties = createWorkexecTimerStopResponsePropertyNames();
+    const optionalStringProperties = createWorkexecTimerStopResponseOptionalProperties();
+    const optionalNumberProperties = createWorkexecTimerStopResponseOptionalProperties();
+    const optionalBooleanProperties = createWorkexecTimerStopResponseOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalWorkexecTimerStopResponsePropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalWorkexecTimerStopResponsePropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalWorkexecTimerStopResponsePropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

@@ -63,20 +63,52 @@ export interface WorkorderPartAdjustmentEventResponse {
     notes?: string;
 }
 
+function isOptionalWorkorderPartAdjustmentEventResponsePropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type WorkorderPartAdjustmentEventResponseOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createWorkorderPartAdjustmentEventResponsePropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createWorkorderPartAdjustmentEventResponseOptionalProperties(
+    ...properties: WorkorderPartAdjustmentEventResponseOptionalProperty[]
+): ReadonlyArray<WorkorderPartAdjustmentEventResponseOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfWorkorderPartAdjustmentEventResponse(value: object): value is WorkorderPartAdjustmentEventResponse {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('id' in _v && typeof _v['id'] !== 'string') return false;
-    if ('originalPartId' in _v && typeof _v['originalPartId'] !== 'string') return false;
-    if ('originalPartDescription' in _v && typeof _v['originalPartDescription'] !== 'string') return false;
-    if ('workorderId' in _v && typeof _v['workorderId'] !== 'string') return false;
-    if ('adjustmentType' in _v && typeof _v['adjustmentType'] !== 'string') return false;
-    if ('substitutedWithPartId' in _v && typeof _v['substitutedWithPartId'] !== 'string') return false;
-    if ('substitutedWithPartDescription' in _v && typeof _v['substitutedWithPartDescription'] !== 'string') return false;
-    if ('quantityAdjustment' in _v && typeof _v['quantityAdjustment'] !== 'number') return false;
-    if ('reason' in _v && typeof _v['reason'] !== 'string') return false;
-    if ('performedBy' in _v && typeof _v['performedBy'] !== 'string') return false;
-    if ('notes' in _v && typeof _v['notes'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createWorkorderPartAdjustmentEventResponsePropertyNames();
+    const optionalStringProperties = createWorkorderPartAdjustmentEventResponseOptionalProperties({ name: 'id', nullable: false }, { name: 'originalPartId', nullable: false }, { name: 'originalPartDescription', nullable: false }, { name: 'workorderId', nullable: false }, { name: 'adjustmentType', nullable: false }, { name: 'substitutedWithPartId', nullable: false }, { name: 'substitutedWithPartDescription', nullable: false }, { name: 'reason', nullable: false }, { name: 'performedBy', nullable: false }, { name: 'notes', nullable: false }, );
+    const optionalNumberProperties = createWorkorderPartAdjustmentEventResponseOptionalProperties({ name: 'quantityAdjustment', nullable: false }, );
+    const optionalBooleanProperties = createWorkorderPartAdjustmentEventResponseOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalWorkorderPartAdjustmentEventResponsePropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalWorkorderPartAdjustmentEventResponsePropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalWorkorderPartAdjustmentEventResponsePropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

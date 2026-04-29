@@ -47,16 +47,52 @@ export interface WorkorderStateTransitionResponse {
     metadata?: string;
 }
 
+function isOptionalWorkorderStateTransitionResponsePropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type WorkorderStateTransitionResponseOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createWorkorderStateTransitionResponsePropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createWorkorderStateTransitionResponseOptionalProperties(
+    ...properties: WorkorderStateTransitionResponseOptionalProperty[]
+): ReadonlyArray<WorkorderStateTransitionResponseOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfWorkorderStateTransitionResponse(value: object): value is WorkorderStateTransitionResponse {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('id' in _v && typeof _v['id'] !== 'string') return false;
-    if ('workorderId' in _v && typeof _v['workorderId'] !== 'string') return false;
-    if ('fromStatus' in _v && typeof _v['fromStatus'] !== 'string') return false;
-    if ('toStatus' in _v && typeof _v['toStatus'] !== 'string') return false;
-    if ('transitionedBy' in _v && typeof _v['transitionedBy'] !== 'string') return false;
-    if ('reason' in _v && typeof _v['reason'] !== 'string') return false;
-    if ('metadata' in _v && typeof _v['metadata'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createWorkorderStateTransitionResponsePropertyNames();
+    const optionalStringProperties = createWorkorderStateTransitionResponseOptionalProperties({ name: 'id', nullable: false }, { name: 'workorderId', nullable: false }, { name: 'fromStatus', nullable: false }, { name: 'toStatus', nullable: false }, { name: 'transitionedBy', nullable: false }, { name: 'reason', nullable: false }, { name: 'metadata', nullable: false }, );
+    const optionalNumberProperties = createWorkorderStateTransitionResponseOptionalProperties();
+    const optionalBooleanProperties = createWorkorderStateTransitionResponseOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalWorkorderStateTransitionResponsePropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalWorkorderStateTransitionResponsePropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalWorkorderStateTransitionResponsePropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

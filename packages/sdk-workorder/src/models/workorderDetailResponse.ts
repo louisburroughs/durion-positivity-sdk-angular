@@ -100,9 +100,6 @@ export interface WorkorderDetailResponse {
      * Total tax (conditionally included)
      */
     taxTotal?: number;
-    /**
-     * Capability flags indicating allowed actions
-     */
     capabilities: WorkorderCapabilities;
 }
 export enum WorkorderDetailResponseStatusEnum {
@@ -119,33 +116,52 @@ export enum WorkorderDetailResponseStatusEnum {
 
 
 
+function isOptionalWorkorderDetailResponsePropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type WorkorderDetailResponseOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createWorkorderDetailResponsePropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createWorkorderDetailResponseOptionalProperties(
+    ...properties: WorkorderDetailResponseOptionalProperty[]
+): ReadonlyArray<WorkorderDetailResponseOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfWorkorderDetailResponse(value: object): value is WorkorderDetailResponse {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if (!('workorderId' in _v) || _v['workorderId'] === undefined) return false;
-    if ('workorderId' in _v && typeof _v['workorderId'] !== 'string') return false;
-    if ('workorderNumber' in _v && typeof _v['workorderNumber'] !== 'string') return false;
-    if (!('status' in _v) || _v['status'] === undefined) return false;
-    if ('status' in _v && typeof _v['status'] !== 'string') return false;
-    if (!('customerId' in _v) || _v['customerId'] === undefined) return false;
-    if ('customerId' in _v && typeof _v['customerId'] !== 'string') return false;
-    if ('customerName' in _v && typeof _v['customerName'] !== 'string') return false;
-    if (!('vehicleId' in _v) || _v['vehicleId'] === undefined) return false;
-    if ('vehicleId' in _v && typeof _v['vehicleId'] !== 'string') return false;
-    if ('vehicleDescription' in _v && typeof _v['vehicleDescription'] !== 'string') return false;
-    if (!('createdAt' in _v) || _v['createdAt'] === undefined) return false;
-    if (!('createdBy' in _v) || _v['createdBy'] === undefined) return false;
-    if ('createdBy' in _v && typeof _v['createdBy'] !== 'string') return false;
-    if ('isStarted' in _v && typeof _v['isStarted'] !== 'string') return false;
-    if ('isInProgress' in _v && typeof _v['isInProgress'] !== 'string') return false;
-    if ('isCompleted' in _v && typeof _v['isCompleted'] !== 'string') return false;
-    if ('assignedTechnicianId' in _v && typeof _v['assignedTechnicianId'] !== 'string') return false;
-    if ('assignedTechnicianName' in _v && typeof _v['assignedTechnicianName'] !== 'string') return false;
-    if ('estimatedTotal' in _v && typeof _v['estimatedTotal'] !== 'number') return false;
-    if ('laborTotal' in _v && typeof _v['laborTotal'] !== 'number') return false;
-    if ('partsTotal' in _v && typeof _v['partsTotal'] !== 'number') return false;
-    if ('taxTotal' in _v && typeof _v['taxTotal'] !== 'number') return false;
-    if (!('capabilities' in _v) || _v['capabilities'] === undefined) return false;
-    return true;
+
+    const requiredProperties = createWorkorderDetailResponsePropertyNames('workorderId', 'status', 'customerId', 'vehicleId', 'createdAt', 'createdBy', 'capabilities', );
+    const optionalStringProperties = createWorkorderDetailResponseOptionalProperties({ name: 'workorderId', nullable: false }, { name: 'workorderNumber', nullable: false }, { name: 'status', nullable: false }, { name: 'customerId', nullable: false }, { name: 'customerName', nullable: false }, { name: 'vehicleId', nullable: false }, { name: 'vehicleDescription', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'isStarted', nullable: false }, { name: 'isInProgress', nullable: false }, { name: 'isCompleted', nullable: false }, { name: 'assignedTechnicianId', nullable: false }, { name: 'assignedTechnicianName', nullable: false }, );
+    const optionalNumberProperties = createWorkorderDetailResponseOptionalProperties({ name: 'estimatedTotal', nullable: false }, { name: 'laborTotal', nullable: false }, { name: 'partsTotal', nullable: false }, { name: 'taxTotal', nullable: false }, );
+    const optionalBooleanProperties = createWorkorderDetailResponseOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalWorkorderDetailResponsePropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalWorkorderDetailResponsePropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalWorkorderDetailResponsePropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

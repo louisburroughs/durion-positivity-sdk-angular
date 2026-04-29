@@ -55,17 +55,52 @@ export interface CompletionPreconditionsResponse {
     hasBillableItems?: boolean;
 }
 
+function isOptionalCompletionPreconditionsResponsePropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type CompletionPreconditionsResponseOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createCompletionPreconditionsResponsePropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createCompletionPreconditionsResponseOptionalProperties(
+    ...properties: CompletionPreconditionsResponseOptionalProperty[]
+): ReadonlyArray<CompletionPreconditionsResponseOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfCompletionPreconditionsResponse(value: object): value is CompletionPreconditionsResponse {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('workorderId' in _v && typeof _v['workorderId'] !== 'string') return false;
-    if ('canComplete' in _v && typeof _v['canComplete'] !== 'boolean') return false;
-    if ('currentStatus' in _v && typeof _v['currentStatus'] !== 'string') return false;
-    if ('unresolvedApprovalGatedChangeRequests' in _v && typeof _v['unresolvedApprovalGatedChangeRequests'] !== 'number') return false;
-    if ('nonTerminalServiceItems' in _v && typeof _v['nonTerminalServiceItems'] !== 'number') return false;
-    if ('nonTerminalPartItems' in _v && typeof _v['nonTerminalPartItems'] !== 'number') return false;
-    if ('emergencyDenialAcknowledged' in _v && typeof _v['emergencyDenialAcknowledged'] !== 'boolean') return false;
-    if ('hasBillableItems' in _v && typeof _v['hasBillableItems'] !== 'boolean') return false;
-    return true;
+
+    const requiredProperties = createCompletionPreconditionsResponsePropertyNames();
+    const optionalStringProperties = createCompletionPreconditionsResponseOptionalProperties({ name: 'workorderId', nullable: false }, { name: 'currentStatus', nullable: false }, );
+    const optionalNumberProperties = createCompletionPreconditionsResponseOptionalProperties({ name: 'unresolvedApprovalGatedChangeRequests', nullable: false }, { name: 'nonTerminalServiceItems', nullable: false }, { name: 'nonTerminalPartItems', nullable: false }, );
+    const optionalBooleanProperties = createCompletionPreconditionsResponseOptionalProperties({ name: 'canComplete', nullable: false }, { name: 'emergencyDenialAcknowledged', nullable: false }, { name: 'hasBillableItems', nullable: false }, );
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalCompletionPreconditionsResponsePropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalCompletionPreconditionsResponsePropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalCompletionPreconditionsResponsePropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

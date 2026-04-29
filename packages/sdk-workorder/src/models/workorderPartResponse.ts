@@ -69,20 +69,52 @@ export enum WorkorderPartResponseStatusEnum {
 
 
 
+function isOptionalWorkorderPartResponsePropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type WorkorderPartResponseOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createWorkorderPartResponsePropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createWorkorderPartResponseOptionalProperties(
+    ...properties: WorkorderPartResponseOptionalProperty[]
+): ReadonlyArray<WorkorderPartResponseOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfWorkorderPartResponse(value: object): value is WorkorderPartResponse {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('id' in _v && typeof _v['id'] !== 'string') return false;
-    if ('productEntityId' in _v && typeof _v['productEntityId'] !== 'string') return false;
-    if ('description' in _v && typeof _v['description'] !== 'string') return false;
-    if ('status' in _v && typeof _v['status'] !== 'string') return false;
-    if ('quantity' in _v && typeof _v['quantity'] !== 'number') return false;
-    if ('unitPrice' in _v && typeof _v['unitPrice'] !== 'number') return false;
-    if ('quantityIssued' in _v && typeof _v['quantityIssued'] !== 'number') return false;
-    if ('quantityConsumed' in _v && typeof _v['quantityConsumed'] !== 'number') return false;
-    if ('quantityReturned' in _v && typeof _v['quantityReturned'] !== 'number') return false;
-    if ('partCost' in _v && typeof _v['partCost'] !== 'number') return false;
-    if ('lineTotal' in _v && typeof _v['lineTotal'] !== 'number') return false;
-    return true;
+
+    const requiredProperties = createWorkorderPartResponsePropertyNames();
+    const optionalStringProperties = createWorkorderPartResponseOptionalProperties({ name: 'id', nullable: false }, { name: 'productEntityId', nullable: false }, { name: 'description', nullable: false }, { name: 'status', nullable: false }, );
+    const optionalNumberProperties = createWorkorderPartResponseOptionalProperties({ name: 'quantity', nullable: false }, { name: 'unitPrice', nullable: false }, { name: 'quantityIssued', nullable: false }, { name: 'quantityConsumed', nullable: false }, { name: 'quantityReturned', nullable: false }, { name: 'partCost', nullable: false }, { name: 'lineTotal', nullable: false }, );
+    const optionalBooleanProperties = createWorkorderPartResponseOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalWorkorderPartResponsePropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalWorkorderPartResponsePropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalWorkorderPartResponsePropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

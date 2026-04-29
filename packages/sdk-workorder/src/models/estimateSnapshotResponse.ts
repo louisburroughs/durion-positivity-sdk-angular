@@ -58,15 +58,52 @@ export enum EstimateSnapshotResponseStatusEnum {
 
 
 
+function isOptionalEstimateSnapshotResponsePropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type EstimateSnapshotResponseOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createEstimateSnapshotResponsePropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createEstimateSnapshotResponseOptionalProperties(
+    ...properties: EstimateSnapshotResponseOptionalProperty[]
+): ReadonlyArray<EstimateSnapshotResponseOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfEstimateSnapshotResponse(value: object): value is EstimateSnapshotResponse {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('id' in _v && typeof _v['id'] !== 'string') return false;
-    if ('estimateId' in _v && typeof _v['estimateId'] !== 'string') return false;
-    if ('status' in _v && typeof _v['status'] !== 'string') return false;
-    if ('snapshotData' in _v && typeof _v['snapshotData'] !== 'string') return false;
-    if ('capturedById' in _v && typeof _v['capturedById'] !== 'string') return false;
-    if ('notes' in _v && typeof _v['notes'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createEstimateSnapshotResponsePropertyNames();
+    const optionalStringProperties = createEstimateSnapshotResponseOptionalProperties({ name: 'id', nullable: false }, { name: 'estimateId', nullable: false }, { name: 'status', nullable: false }, { name: 'snapshotData', nullable: false }, { name: 'capturedById', nullable: false }, { name: 'notes', nullable: false }, );
+    const optionalNumberProperties = createEstimateSnapshotResponseOptionalProperties();
+    const optionalBooleanProperties = createEstimateSnapshotResponseOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalEstimateSnapshotResponsePropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalEstimateSnapshotResponsePropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalEstimateSnapshotResponsePropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

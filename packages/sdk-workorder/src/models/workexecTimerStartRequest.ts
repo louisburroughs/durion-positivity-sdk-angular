@@ -27,13 +27,52 @@ export interface WorkexecTimerStartRequest {
     laborCode?: string;
 }
 
+function isOptionalWorkexecTimerStartRequestPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type WorkexecTimerStartRequestOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createWorkexecTimerStartRequestPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createWorkexecTimerStartRequestOptionalProperties(
+    ...properties: WorkexecTimerStartRequestOptionalProperty[]
+): ReadonlyArray<WorkexecTimerStartRequestOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfWorkexecTimerStartRequest(value: object): value is WorkexecTimerStartRequest {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if (!('workorderId' in _v) || _v['workorderId'] === undefined) return false;
-    if ('workorderId' in _v && typeof _v['workorderId'] !== 'string') return false;
-    if ('workorderItemId' in _v && typeof _v['workorderItemId'] !== 'string') return false;
-    if ('laborCode' in _v && typeof _v['laborCode'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createWorkexecTimerStartRequestPropertyNames('workorderId', );
+    const optionalStringProperties = createWorkexecTimerStartRequestOptionalProperties({ name: 'workorderId', nullable: false }, { name: 'workorderItemId', nullable: false }, { name: 'laborCode', nullable: false }, );
+    const optionalNumberProperties = createWorkexecTimerStartRequestOptionalProperties();
+    const optionalBooleanProperties = createWorkexecTimerStartRequestOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalWorkexecTimerStartRequestPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalWorkexecTimerStartRequestPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalWorkexecTimerStartRequestPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

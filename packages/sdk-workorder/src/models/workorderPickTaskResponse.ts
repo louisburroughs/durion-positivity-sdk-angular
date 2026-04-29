@@ -22,19 +22,52 @@ export interface WorkorderPickTaskResponse {
     version?: number;
 }
 
+function isOptionalWorkorderPickTaskResponsePropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type WorkorderPickTaskResponseOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createWorkorderPickTaskResponsePropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createWorkorderPickTaskResponseOptionalProperties(
+    ...properties: WorkorderPickTaskResponseOptionalProperty[]
+): ReadonlyArray<WorkorderPickTaskResponseOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfWorkorderPickTaskResponse(value: object): value is WorkorderPickTaskResponse {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('pickTaskId' in _v && typeof _v['pickTaskId'] !== 'string') return false;
-    if ('pickListId' in _v && typeof _v['pickListId'] !== 'string') return false;
-    if ('skuId' in _v && typeof _v['skuId'] !== 'string') return false;
-    if ('locationId' in _v && typeof _v['locationId'] !== 'string') return false;
-    if ('requiredQty' in _v && typeof _v['requiredQty'] !== 'number') return false;
-    if ('pickedQty' in _v && typeof _v['pickedQty'] !== 'number') return false;
-    if ('remainingQty' in _v && typeof _v['remainingQty'] !== 'number') return false;
-    if ('status' in _v && typeof _v['status'] !== 'string') return false;
-    if ('sortOrder' in _v && typeof _v['sortOrder'] !== 'number') return false;
-    if ('version' in _v && typeof _v['version'] !== 'number') return false;
-    return true;
+
+    const requiredProperties = createWorkorderPickTaskResponsePropertyNames();
+    const optionalStringProperties = createWorkorderPickTaskResponseOptionalProperties({ name: 'pickTaskId', nullable: false }, { name: 'pickListId', nullable: false }, { name: 'skuId', nullable: false }, { name: 'locationId', nullable: false }, { name: 'status', nullable: false }, );
+    const optionalNumberProperties = createWorkorderPickTaskResponseOptionalProperties({ name: 'requiredQty', nullable: false }, { name: 'pickedQty', nullable: false }, { name: 'remainingQty', nullable: false }, { name: 'sortOrder', nullable: false }, { name: 'version', nullable: false }, );
+    const optionalBooleanProperties = createWorkorderPickTaskResponseOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalWorkorderPickTaskResponsePropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalWorkorderPickTaskResponsePropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalWorkorderPickTaskResponsePropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

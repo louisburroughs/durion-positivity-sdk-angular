@@ -27,14 +27,52 @@ export interface ReturnPartRequest {
     notes?: string;
 }
 
+function isOptionalReturnPartRequestPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type ReturnPartRequestOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createReturnPartRequestPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createReturnPartRequestOptionalProperties(
+    ...properties: ReturnPartRequestOptionalProperty[]
+): ReadonlyArray<ReturnPartRequestOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfReturnPartRequest(value: object): value is ReturnPartRequest {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if (!('workorderPartId' in _v) || _v['workorderPartId'] === undefined) return false;
-    if ('workorderPartId' in _v && typeof _v['workorderPartId'] !== 'string') return false;
-    if (!('quantity' in _v) || _v['quantity'] === undefined) return false;
-    if ('quantity' in _v && typeof _v['quantity'] !== 'number') return false;
-    if ('notes' in _v && typeof _v['notes'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createReturnPartRequestPropertyNames('workorderPartId', 'quantity', );
+    const optionalStringProperties = createReturnPartRequestOptionalProperties({ name: 'workorderPartId', nullable: false }, { name: 'notes', nullable: false }, );
+    const optionalNumberProperties = createReturnPartRequestOptionalProperties({ name: 'quantity', nullable: false }, );
+    const optionalBooleanProperties = createReturnPartRequestOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalReturnPartRequestPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalReturnPartRequestPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalReturnPartRequestPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

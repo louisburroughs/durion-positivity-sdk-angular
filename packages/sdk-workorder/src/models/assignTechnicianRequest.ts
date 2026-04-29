@@ -27,13 +27,52 @@ export interface AssignTechnicianRequest {
     notes?: string;
 }
 
+function isOptionalAssignTechnicianRequestPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type AssignTechnicianRequestOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createAssignTechnicianRequestPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createAssignTechnicianRequestOptionalProperties(
+    ...properties: AssignTechnicianRequestOptionalProperty[]
+): ReadonlyArray<AssignTechnicianRequestOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfAssignTechnicianRequest(value: object): value is AssignTechnicianRequest {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if (!('technicianId' in _v) || _v['technicianId'] === undefined) return false;
-    if ('technicianId' in _v && typeof _v['technicianId'] !== 'string') return false;
-    if ('assignedByUserId' in _v && typeof _v['assignedByUserId'] !== 'string') return false;
-    if ('notes' in _v && typeof _v['notes'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createAssignTechnicianRequestPropertyNames('technicianId', );
+    const optionalStringProperties = createAssignTechnicianRequestOptionalProperties({ name: 'technicianId', nullable: false }, { name: 'assignedByUserId', nullable: false }, { name: 'notes', nullable: false }, );
+    const optionalNumberProperties = createAssignTechnicianRequestOptionalProperties();
+    const optionalBooleanProperties = createAssignTechnicianRequestOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalAssignTechnicianRequestPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalAssignTechnicianRequestPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalAssignTechnicianRequestPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

@@ -46,13 +46,52 @@ export enum BreakSegmentResponseBreakTypeEnum {
 
 
 
+function isOptionalBreakSegmentResponsePropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type BreakSegmentResponseOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createBreakSegmentResponsePropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createBreakSegmentResponseOptionalProperties(
+    ...properties: BreakSegmentResponseOptionalProperty[]
+): ReadonlyArray<BreakSegmentResponseOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfBreakSegmentResponse(value: object): value is BreakSegmentResponse {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('breakSegmentId' in _v && typeof _v['breakSegmentId'] !== 'string') return false;
-    if ('workSessionId' in _v && typeof _v['workSessionId'] !== 'string') return false;
-    if ('breakType' in _v && typeof _v['breakType'] !== 'string') return false;
-    if ('notes' in _v && typeof _v['notes'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createBreakSegmentResponsePropertyNames();
+    const optionalStringProperties = createBreakSegmentResponseOptionalProperties({ name: 'breakSegmentId', nullable: false }, { name: 'workSessionId', nullable: false }, { name: 'breakType', nullable: false }, { name: 'notes', nullable: false }, );
+    const optionalNumberProperties = createBreakSegmentResponseOptionalProperties();
+    const optionalBooleanProperties = createBreakSegmentResponseOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalBreakSegmentResponsePropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalBreakSegmentResponsePropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalBreakSegmentResponsePropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

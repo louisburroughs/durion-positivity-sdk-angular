@@ -51,13 +51,52 @@ export interface OperationalContextResponse {
     locked?: boolean;
 }
 
+function isOptionalOperationalContextResponsePropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type OperationalContextResponseOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createOperationalContextResponsePropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createOperationalContextResponseOptionalProperties(
+    ...properties: OperationalContextResponseOptionalProperty[]
+): ReadonlyArray<OperationalContextResponseOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfOperationalContextResponse(value: object): value is OperationalContextResponse {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('version' in _v && typeof _v['version'] !== 'string') return false;
-    if ('locationId' in _v && typeof _v['locationId'] !== 'string') return false;
-    if ('bayId' in _v && typeof _v['bayId'] !== 'string') return false;
-    if ('locked' in _v && typeof _v['locked'] !== 'boolean') return false;
-    return true;
+
+    const requiredProperties = createOperationalContextResponsePropertyNames();
+    const optionalStringProperties = createOperationalContextResponseOptionalProperties({ name: 'version', nullable: false }, { name: 'locationId', nullable: false }, { name: 'bayId', nullable: false }, );
+    const optionalNumberProperties = createOperationalContextResponseOptionalProperties();
+    const optionalBooleanProperties = createOperationalContextResponseOptionalProperties({ name: 'locked', nullable: false }, );
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalOperationalContextResponsePropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalOperationalContextResponsePropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalOperationalContextResponsePropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

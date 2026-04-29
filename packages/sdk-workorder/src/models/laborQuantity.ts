@@ -14,13 +14,52 @@ export interface LaborQuantity {
     unit: string;
 }
 
+function isOptionalLaborQuantityPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type LaborQuantityOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createLaborQuantityPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createLaborQuantityOptionalProperties(
+    ...properties: LaborQuantityOptionalProperty[]
+): ReadonlyArray<LaborQuantityOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfLaborQuantity(value: object): value is LaborQuantity {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if (!('quantity' in _v) || _v['quantity'] === undefined) return false;
-    if ('quantity' in _v && typeof _v['quantity'] !== 'number') return false;
-    if (!('unit' in _v) || _v['unit'] === undefined) return false;
-    if ('unit' in _v && typeof _v['unit'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createLaborQuantityPropertyNames('quantity', 'unit', );
+    const optionalStringProperties = createLaborQuantityOptionalProperties({ name: 'unit', nullable: false }, );
+    const optionalNumberProperties = createLaborQuantityOptionalProperties({ name: 'quantity', nullable: false }, );
+    const optionalBooleanProperties = createLaborQuantityOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalLaborQuantityPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalLaborQuantityPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalLaborQuantityPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

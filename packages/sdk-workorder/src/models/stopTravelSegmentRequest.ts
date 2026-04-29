@@ -17,11 +17,52 @@ export interface StopTravelSegmentRequest {
     notes?: string;
 }
 
+function isOptionalStopTravelSegmentRequestPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type StopTravelSegmentRequestOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createStopTravelSegmentRequestPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createStopTravelSegmentRequestOptionalProperties(
+    ...properties: StopTravelSegmentRequestOptionalProperty[]
+): ReadonlyArray<StopTravelSegmentRequestOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfStopTravelSegmentRequest(value: object): value is StopTravelSegmentRequest {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('toLocationId' in _v && typeof _v['toLocationId'] !== 'string') return false;
-    if ('notes' in _v && typeof _v['notes'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createStopTravelSegmentRequestPropertyNames();
+    const optionalStringProperties = createStopTravelSegmentRequestOptionalProperties({ name: 'toLocationId', nullable: false }, { name: 'notes', nullable: false }, );
+    const optionalNumberProperties = createStopTravelSegmentRequestOptionalProperties();
+    const optionalBooleanProperties = createStopTravelSegmentRequestOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalStopTravelSegmentRequestPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalStopTravelSegmentRequestPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalStopTravelSegmentRequestPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

@@ -14,11 +14,52 @@ export interface SubmitTravelSegmentsRequest {
     notes?: string;
 }
 
+function isOptionalSubmitTravelSegmentsRequestPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type SubmitTravelSegmentsRequestOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createSubmitTravelSegmentsRequestPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createSubmitTravelSegmentsRequestOptionalProperties(
+    ...properties: SubmitTravelSegmentsRequestOptionalProperty[]
+): ReadonlyArray<SubmitTravelSegmentsRequestOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfSubmitTravelSegmentsRequest(value: object): value is SubmitTravelSegmentsRequest {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if (!('workDate' in _v) || _v['workDate'] === undefined) return false;
-    if ('notes' in _v && typeof _v['notes'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createSubmitTravelSegmentsRequestPropertyNames('workDate', );
+    const optionalStringProperties = createSubmitTravelSegmentsRequestOptionalProperties({ name: 'notes', nullable: false }, );
+    const optionalNumberProperties = createSubmitTravelSegmentsRequestOptionalProperties();
+    const optionalBooleanProperties = createSubmitTravelSegmentsRequestOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalSubmitTravelSegmentsRequestPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalSubmitTravelSegmentsRequestPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalSubmitTravelSegmentsRequestPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

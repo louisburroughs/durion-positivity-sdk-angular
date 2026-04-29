@@ -27,26 +27,56 @@ export interface WorkexecLaborPerformedRequest {
      * Timestamp when labor was performed
      */
     performedAt: string;
-    /**
-     * Labor quantity and unit
-     */
     labor: LaborQuantity;
-    /**
-     * External source metadata
-     */
     source: SourceReference;
+}
+
+function isOptionalWorkexecLaborPerformedRequestPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type WorkexecLaborPerformedRequestOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createWorkexecLaborPerformedRequestPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createWorkexecLaborPerformedRequestOptionalProperties(
+    ...properties: WorkexecLaborPerformedRequestOptionalProperty[]
+): ReadonlyArray<WorkexecLaborPerformedRequestOptionalProperty> {
+    return properties;
 }
 
 export function instanceOfWorkexecLaborPerformedRequest(value: object): value is WorkexecLaborPerformedRequest {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if (!('workorderId' in _v) || _v['workorderId'] === undefined) return false;
-    if ('workorderId' in _v && typeof _v['workorderId'] !== 'string') return false;
-    if (!('technicianId' in _v) || _v['technicianId'] === undefined) return false;
-    if ('technicianId' in _v && typeof _v['technicianId'] !== 'string') return false;
-    if (!('performedAt' in _v) || _v['performedAt'] === undefined) return false;
-    if (!('labor' in _v) || _v['labor'] === undefined) return false;
-    if (!('source' in _v) || _v['source'] === undefined) return false;
-    return true;
+
+    const requiredProperties = createWorkexecLaborPerformedRequestPropertyNames('workorderId', 'technicianId', 'performedAt', 'labor', 'source', );
+    const optionalStringProperties = createWorkexecLaborPerformedRequestOptionalProperties({ name: 'workorderId', nullable: false }, { name: 'technicianId', nullable: false }, );
+    const optionalNumberProperties = createWorkexecLaborPerformedRequestOptionalProperties();
+    const optionalBooleanProperties = createWorkexecLaborPerformedRequestOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalWorkexecLaborPerformedRequestPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalWorkexecLaborPerformedRequestPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalWorkexecLaborPerformedRequestPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

@@ -19,11 +19,52 @@ export interface RejectTimeEntryRequest {
     rejectionReason: string;
 }
 
+function isOptionalRejectTimeEntryRequestPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type RejectTimeEntryRequestOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createRejectTimeEntryRequestPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createRejectTimeEntryRequestOptionalProperties(
+    ...properties: RejectTimeEntryRequestOptionalProperty[]
+): ReadonlyArray<RejectTimeEntryRequestOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfRejectTimeEntryRequest(value: object): value is RejectTimeEntryRequest {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if (!('rejectionReason' in _v) || _v['rejectionReason'] === undefined) return false;
-    if ('rejectionReason' in _v && typeof _v['rejectionReason'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createRejectTimeEntryRequestPropertyNames('rejectionReason', );
+    const optionalStringProperties = createRejectTimeEntryRequestOptionalProperties({ name: 'rejectionReason', nullable: false }, );
+    const optionalNumberProperties = createRejectTimeEntryRequestOptionalProperties();
+    const optionalBooleanProperties = createRejectTimeEntryRequestOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalRejectTimeEntryRequestPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalRejectTimeEntryRequestPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalRejectTimeEntryRequestPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

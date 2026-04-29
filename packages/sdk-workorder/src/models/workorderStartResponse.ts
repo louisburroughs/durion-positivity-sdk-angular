@@ -19,14 +19,52 @@ export interface WorkorderStartResponse {
     message?: string;
 }
 
+function isOptionalWorkorderStartResponsePropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type WorkorderStartResponseOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createWorkorderStartResponsePropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createWorkorderStartResponseOptionalProperties(
+    ...properties: WorkorderStartResponseOptionalProperty[]
+): ReadonlyArray<WorkorderStartResponseOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfWorkorderStartResponse(value: object): value is WorkorderStartResponse {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('workorderId' in _v && typeof _v['workorderId'] !== 'string') return false;
-    if ('operationalContextVersion' in _v && typeof _v['operationalContextVersion'] !== 'string') return false;
-    if ('previousStatus' in _v && typeof _v['previousStatus'] !== 'string') return false;
-    if ('currentStatus' in _v && typeof _v['currentStatus'] !== 'string') return false;
-    if ('message' in _v && typeof _v['message'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createWorkorderStartResponsePropertyNames();
+    const optionalStringProperties = createWorkorderStartResponseOptionalProperties({ name: 'workorderId', nullable: false }, { name: 'operationalContextVersion', nullable: false }, { name: 'previousStatus', nullable: false }, { name: 'currentStatus', nullable: false }, { name: 'message', nullable: false }, );
+    const optionalNumberProperties = createWorkorderStartResponseOptionalProperties();
+    const optionalBooleanProperties = createWorkorderStartResponseOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalWorkorderStartResponsePropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalWorkorderStartResponsePropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalWorkorderStartResponsePropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

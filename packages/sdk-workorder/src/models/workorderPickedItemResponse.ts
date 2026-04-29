@@ -19,16 +19,52 @@ export interface WorkorderPickedItemResponse {
     status?: string;
 }
 
+function isOptionalWorkorderPickedItemResponsePropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type WorkorderPickedItemResponseOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createWorkorderPickedItemResponsePropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createWorkorderPickedItemResponseOptionalProperties(
+    ...properties: WorkorderPickedItemResponseOptionalProperty[]
+): ReadonlyArray<WorkorderPickedItemResponseOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfWorkorderPickedItemResponse(value: object): value is WorkorderPickedItemResponse {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('pickTaskId' in _v && typeof _v['pickTaskId'] !== 'string') return false;
-    if ('pickListId' in _v && typeof _v['pickListId'] !== 'string') return false;
-    if ('skuId' in _v && typeof _v['skuId'] !== 'string') return false;
-    if ('qtyPicked' in _v && typeof _v['qtyPicked'] !== 'number') return false;
-    if ('qtyConsumed' in _v && typeof _v['qtyConsumed'] !== 'number') return false;
-    if ('qtyRemaining' in _v && typeof _v['qtyRemaining'] !== 'number') return false;
-    if ('status' in _v && typeof _v['status'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createWorkorderPickedItemResponsePropertyNames();
+    const optionalStringProperties = createWorkorderPickedItemResponseOptionalProperties({ name: 'pickTaskId', nullable: false }, { name: 'pickListId', nullable: false }, { name: 'skuId', nullable: false }, { name: 'status', nullable: false }, );
+    const optionalNumberProperties = createWorkorderPickedItemResponseOptionalProperties({ name: 'qtyPicked', nullable: false }, { name: 'qtyConsumed', nullable: false }, { name: 'qtyRemaining', nullable: false }, );
+    const optionalBooleanProperties = createWorkorderPickedItemResponseOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalWorkorderPickedItemResponsePropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalWorkorderPickedItemResponsePropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalWorkorderPickedItemResponsePropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

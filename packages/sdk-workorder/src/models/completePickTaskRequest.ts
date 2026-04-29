@@ -13,10 +13,52 @@ export interface CompletePickTaskRequest {
     reason?: string;
 }
 
+function isOptionalCompletePickTaskRequestPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type CompletePickTaskRequestOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createCompletePickTaskRequestPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createCompletePickTaskRequestOptionalProperties(
+    ...properties: CompletePickTaskRequestOptionalProperty[]
+): ReadonlyArray<CompletePickTaskRequestOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfCompletePickTaskRequest(value: object): value is CompletePickTaskRequest {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('reason' in _v && typeof _v['reason'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createCompletePickTaskRequestPropertyNames();
+    const optionalStringProperties = createCompletePickTaskRequestOptionalProperties({ name: 'reason', nullable: false }, );
+    const optionalNumberProperties = createCompletePickTaskRequestOptionalProperties();
+    const optionalBooleanProperties = createCompletePickTaskRequestOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalCompletePickTaskRequestPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalCompletePickTaskRequestPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalCompletePickTaskRequestPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

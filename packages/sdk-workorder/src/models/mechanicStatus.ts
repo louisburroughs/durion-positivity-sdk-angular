@@ -21,15 +21,52 @@ export interface MechanicStatus {
     ptoEntries?: Array<PtoEntry>;
 }
 
+function isOptionalMechanicStatusPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type MechanicStatusOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createMechanicStatusPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createMechanicStatusOptionalProperties(
+    ...properties: MechanicStatusOptionalProperty[]
+): ReadonlyArray<MechanicStatusOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfMechanicStatus(value: object): value is MechanicStatus {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('personId' in _v && typeof _v['personId'] !== 'string') return false;
-    if ('firstName' in _v && typeof _v['firstName'] !== 'string') return false;
-    if ('lastName' in _v && typeof _v['lastName'] !== 'string') return false;
-    if ('currentStatus' in _v && typeof _v['currentStatus'] !== 'string') return false;
-    if ('assignedWorkorderId' in _v && typeof _v['assignedWorkorderId'] !== 'string') return false;
-    if ('onBreak' in _v && typeof _v['onBreak'] !== 'boolean') return false;
-    return true;
+
+    const requiredProperties = createMechanicStatusPropertyNames();
+    const optionalStringProperties = createMechanicStatusOptionalProperties({ name: 'personId', nullable: false }, { name: 'firstName', nullable: false }, { name: 'lastName', nullable: false }, { name: 'currentStatus', nullable: false }, { name: 'assignedWorkorderId', nullable: false }, );
+    const optionalNumberProperties = createMechanicStatusOptionalProperties();
+    const optionalBooleanProperties = createMechanicStatusOptionalProperties({ name: 'onBreak', nullable: false }, );
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalMechanicStatusPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalMechanicStatusPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalMechanicStatusPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

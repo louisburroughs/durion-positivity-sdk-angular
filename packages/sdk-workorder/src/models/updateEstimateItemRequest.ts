@@ -31,13 +31,52 @@ export interface UpdateEstimateItemRequest {
     taxCode?: string;
 }
 
+function isOptionalUpdateEstimateItemRequestPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type UpdateEstimateItemRequestOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createUpdateEstimateItemRequestPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createUpdateEstimateItemRequestOptionalProperties(
+    ...properties: UpdateEstimateItemRequestOptionalProperty[]
+): ReadonlyArray<UpdateEstimateItemRequestOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfUpdateEstimateItemRequest(value: object): value is UpdateEstimateItemRequest {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('description' in _v && typeof _v['description'] !== 'string') return false;
-    if ('quantity' in _v && typeof _v['quantity'] !== 'number') return false;
-    if ('unitPrice' in _v && typeof _v['unitPrice'] !== 'number') return false;
-    if ('taxCode' in _v && typeof _v['taxCode'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createUpdateEstimateItemRequestPropertyNames();
+    const optionalStringProperties = createUpdateEstimateItemRequestOptionalProperties({ name: 'description', nullable: false }, { name: 'taxCode', nullable: false }, );
+    const optionalNumberProperties = createUpdateEstimateItemRequestOptionalProperties({ name: 'quantity', nullable: false }, { name: 'unitPrice', nullable: false }, );
+    const optionalBooleanProperties = createUpdateEstimateItemRequestOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalUpdateEstimateItemRequestPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalUpdateEstimateItemRequestPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalUpdateEstimateItemRequestPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

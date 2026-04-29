@@ -21,17 +21,52 @@ export interface WorkorderSummary {
     estimatedLaborHours?: number;
 }
 
+function isOptionalWorkorderSummaryPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type WorkorderSummaryOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createWorkorderSummaryPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createWorkorderSummaryOptionalProperties(
+    ...properties: WorkorderSummaryOptionalProperty[]
+): ReadonlyArray<WorkorderSummaryOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfWorkorderSummary(value: object): value is WorkorderSummary {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('workorderId' in _v && typeof _v['workorderId'] !== 'string') return false;
-    if ('workorderNumber' in _v && typeof _v['workorderNumber'] !== 'string') return false;
-    if ('status' in _v && typeof _v['status'] !== 'string') return false;
-    if ('customerName' in _v && typeof _v['customerName'] !== 'string') return false;
-    if ('vehicleDescription' in _v && typeof _v['vehicleDescription'] !== 'string') return false;
-    if ('assignedMechanicId' in _v && typeof _v['assignedMechanicId'] !== 'string') return false;
-    if ('assignedBayId' in _v && typeof _v['assignedBayId'] !== 'string') return false;
-    if ('estimatedLaborHours' in _v && typeof _v['estimatedLaborHours'] !== 'number') return false;
-    return true;
+
+    const requiredProperties = createWorkorderSummaryPropertyNames();
+    const optionalStringProperties = createWorkorderSummaryOptionalProperties({ name: 'workorderId', nullable: false }, { name: 'workorderNumber', nullable: false }, { name: 'status', nullable: false }, { name: 'customerName', nullable: false }, { name: 'vehicleDescription', nullable: false }, { name: 'assignedMechanicId', nullable: false }, { name: 'assignedBayId', nullable: false }, );
+    const optionalNumberProperties = createWorkorderSummaryOptionalProperties({ name: 'estimatedLaborHours', nullable: false }, );
+    const optionalBooleanProperties = createWorkorderSummaryOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalWorkorderSummaryPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalWorkorderSummaryPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalWorkorderSummaryPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

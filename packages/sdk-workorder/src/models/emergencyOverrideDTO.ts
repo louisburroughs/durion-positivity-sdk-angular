@@ -19,11 +19,52 @@ export interface EmergencyOverrideDTO {
     exceptionReason: string;
 }
 
+function isOptionalEmergencyOverrideDTOPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type EmergencyOverrideDTOOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createEmergencyOverrideDTOPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createEmergencyOverrideDTOOptionalProperties(
+    ...properties: EmergencyOverrideDTOOptionalProperty[]
+): ReadonlyArray<EmergencyOverrideDTOOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfEmergencyOverrideDTO(value: object): value is EmergencyOverrideDTO {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if (!('exceptionReason' in _v) || _v['exceptionReason'] === undefined) return false;
-    if ('exceptionReason' in _v && typeof _v['exceptionReason'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createEmergencyOverrideDTOPropertyNames('exceptionReason', );
+    const optionalStringProperties = createEmergencyOverrideDTOOptionalProperties({ name: 'exceptionReason', nullable: false }, );
+    const optionalNumberProperties = createEmergencyOverrideDTOOptionalProperties();
+    const optionalBooleanProperties = createEmergencyOverrideDTOOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalEmergencyOverrideDTOPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalEmergencyOverrideDTOPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalEmergencyOverrideDTOPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

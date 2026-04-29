@@ -63,18 +63,52 @@ export interface WorkorderLaborEntryResponse {
     createdAt?: string;
 }
 
+function isOptionalWorkorderLaborEntryResponsePropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type WorkorderLaborEntryResponseOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createWorkorderLaborEntryResponsePropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createWorkorderLaborEntryResponseOptionalProperties(
+    ...properties: WorkorderLaborEntryResponseOptionalProperty[]
+): ReadonlyArray<WorkorderLaborEntryResponseOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfWorkorderLaborEntryResponse(value: object): value is WorkorderLaborEntryResponse {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('id' in _v && typeof _v['id'] !== 'string') return false;
-    if ('workorderId' in _v && typeof _v['workorderId'] !== 'string') return false;
-    if ('workorderServiceId' in _v && typeof _v['workorderServiceId'] !== 'string') return false;
-    if ('technicianId' in _v && typeof _v['technicianId'] !== 'string') return false;
-    if ('hoursWorked' in _v && typeof _v['hoursWorked'] !== 'number') return false;
-    if ('notes' in _v && typeof _v['notes'] !== 'string') return false;
-    if ('adjustmentReason' in _v && typeof _v['adjustmentReason'] !== 'string') return false;
-    if ('active' in _v && typeof _v['active'] !== 'boolean') return false;
-    if ('createdBy' in _v && typeof _v['createdBy'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createWorkorderLaborEntryResponsePropertyNames();
+    const optionalStringProperties = createWorkorderLaborEntryResponseOptionalProperties({ name: 'id', nullable: false }, { name: 'workorderId', nullable: false }, { name: 'workorderServiceId', nullable: false }, { name: 'technicianId', nullable: false }, { name: 'notes', nullable: false }, { name: 'adjustmentReason', nullable: false }, { name: 'createdBy', nullable: false }, );
+    const optionalNumberProperties = createWorkorderLaborEntryResponseOptionalProperties({ name: 'hoursWorked', nullable: false }, );
+    const optionalBooleanProperties = createWorkorderLaborEntryResponseOptionalProperties({ name: 'active', nullable: false }, );
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalWorkorderLaborEntryResponsePropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalWorkorderLaborEntryResponsePropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalWorkorderLaborEntryResponsePropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

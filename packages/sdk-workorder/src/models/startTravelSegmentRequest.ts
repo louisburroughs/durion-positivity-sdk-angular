@@ -38,20 +38,52 @@ export enum StartTravelSegmentRequestOnBehalfReasonCodeEnum {
 
 
 
+function isOptionalStartTravelSegmentRequestPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type StartTravelSegmentRequestOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createStartTravelSegmentRequestPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createStartTravelSegmentRequestOptionalProperties(
+    ...properties: StartTravelSegmentRequestOptionalProperty[]
+): ReadonlyArray<StartTravelSegmentRequestOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfStartTravelSegmentRequest(value: object): value is StartTravelSegmentRequest {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if (!('mobileWorkAssignmentId' in _v) || _v['mobileWorkAssignmentId'] === undefined) return false;
-    if ('mobileWorkAssignmentId' in _v && typeof _v['mobileWorkAssignmentId'] !== 'string') return false;
-    if (!('technicianId' in _v) || _v['technicianId'] === undefined) return false;
-    if ('technicianId' in _v && typeof _v['technicianId'] !== 'string') return false;
-    if (!('segmentType' in _v) || _v['segmentType'] === undefined) return false;
-    if ('segmentType' in _v && typeof _v['segmentType'] !== 'string') return false;
-    if ('fromLocationId' in _v && typeof _v['fromLocationId'] !== 'string') return false;
-    if ('toLocationId' in _v && typeof _v['toLocationId'] !== 'string') return false;
-    if ('workOrderId' in _v && typeof _v['workOrderId'] !== 'string') return false;
-    if ('actedForPersonId' in _v && typeof _v['actedForPersonId'] !== 'string') return false;
-    if ('onBehalfReasonCode' in _v && typeof _v['onBehalfReasonCode'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createStartTravelSegmentRequestPropertyNames('mobileWorkAssignmentId', 'technicianId', 'segmentType', );
+    const optionalStringProperties = createStartTravelSegmentRequestOptionalProperties({ name: 'mobileWorkAssignmentId', nullable: false }, { name: 'technicianId', nullable: false }, { name: 'segmentType', nullable: false }, { name: 'fromLocationId', nullable: false }, { name: 'toLocationId', nullable: false }, { name: 'workOrderId', nullable: false }, { name: 'actedForPersonId', nullable: false }, { name: 'onBehalfReasonCode', nullable: false }, );
+    const optionalNumberProperties = createStartTravelSegmentRequestOptionalProperties();
+    const optionalBooleanProperties = createStartTravelSegmentRequestOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalStartTravelSegmentRequestPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalStartTravelSegmentRequestPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalStartTravelSegmentRequestPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

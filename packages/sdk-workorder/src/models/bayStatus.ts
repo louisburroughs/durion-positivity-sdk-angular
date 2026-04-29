@@ -17,14 +17,52 @@ export interface BayStatus {
     available?: boolean;
 }
 
+function isOptionalBayStatusPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type BayStatusOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createBayStatusPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createBayStatusOptionalProperties(
+    ...properties: BayStatusOptionalProperty[]
+): ReadonlyArray<BayStatusOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfBayStatus(value: object): value is BayStatus {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('bayId' in _v && typeof _v['bayId'] !== 'string') return false;
-    if ('bayName' in _v && typeof _v['bayName'] !== 'string') return false;
-    if ('status' in _v && typeof _v['status'] !== 'string') return false;
-    if ('assignedWorkorderId' in _v && typeof _v['assignedWorkorderId'] !== 'string') return false;
-    if ('available' in _v && typeof _v['available'] !== 'boolean') return false;
-    return true;
+
+    const requiredProperties = createBayStatusPropertyNames();
+    const optionalStringProperties = createBayStatusOptionalProperties({ name: 'bayId', nullable: false }, { name: 'bayName', nullable: false }, { name: 'status', nullable: false }, { name: 'assignedWorkorderId', nullable: false }, );
+    const optionalNumberProperties = createBayStatusOptionalProperties();
+    const optionalBooleanProperties = createBayStatusOptionalProperties({ name: 'available', nullable: false }, );
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalBayStatusPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalBayStatusPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalBayStatusPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

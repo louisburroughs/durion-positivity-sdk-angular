@@ -35,12 +35,52 @@ export interface OperationalContextOverrideRequest {
     constraints?: Array<string>;
 }
 
+function isOptionalOperationalContextOverrideRequestPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type OperationalContextOverrideRequestOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createOperationalContextOverrideRequestPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createOperationalContextOverrideRequestOptionalProperties(
+    ...properties: OperationalContextOverrideRequestOptionalProperty[]
+): ReadonlyArray<OperationalContextOverrideRequestOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfOperationalContextOverrideRequest(value: object): value is OperationalContextOverrideRequest {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if (!('locationId' in _v) || _v['locationId'] === undefined) return false;
-    if ('locationId' in _v && typeof _v['locationId'] !== 'string') return false;
-    if ('bayId' in _v && typeof _v['bayId'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createOperationalContextOverrideRequestPropertyNames('locationId', );
+    const optionalStringProperties = createOperationalContextOverrideRequestOptionalProperties({ name: 'locationId', nullable: false }, { name: 'bayId', nullable: false }, );
+    const optionalNumberProperties = createOperationalContextOverrideRequestOptionalProperties();
+    const optionalBooleanProperties = createOperationalContextOverrideRequestOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalOperationalContextOverrideRequestPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalOperationalContextOverrideRequestPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalOperationalContextOverrideRequestPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

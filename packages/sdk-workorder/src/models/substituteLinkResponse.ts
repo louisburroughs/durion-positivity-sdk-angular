@@ -32,21 +32,52 @@ export enum SubstituteLinkResponseSubstituteTypeEnum {
 
 
 
+function isOptionalSubstituteLinkResponsePropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type SubstituteLinkResponseOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createSubstituteLinkResponsePropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createSubstituteLinkResponseOptionalProperties(
+    ...properties: SubstituteLinkResponseOptionalProperty[]
+): ReadonlyArray<SubstituteLinkResponseOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfSubstituteLinkResponse(value: object): value is SubstituteLinkResponse {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('id' in _v && typeof _v['id'] !== 'string') return false;
-    if ('productId' in _v && typeof _v['productId'] !== 'string') return false;
-    if ('substitutePartId' in _v && typeof _v['substitutePartId'] !== 'string') return false;
-    if ('substituteType' in _v && typeof _v['substituteType'] !== 'string') return false;
-    if ('priority' in _v && typeof _v['priority'] !== 'number') return false;
-    if ('version' in _v && typeof _v['version'] !== 'number') return false;
-    if ('createdBy' in _v && typeof _v['createdBy'] !== 'string') return false;
-    if ('updatedBy' in _v && typeof _v['updatedBy'] !== 'string') return false;
-    if ('active' in _v && typeof _v['active'] !== 'boolean') return false;
-    if ('autoSuggest' in _v && typeof _v['autoSuggest'] !== 'boolean') return false;
-    if ('isAutoSuggest' in _v && typeof _v['isAutoSuggest'] !== 'boolean') return false;
-    if ('isActive' in _v && typeof _v['isActive'] !== 'boolean') return false;
-    return true;
+
+    const requiredProperties = createSubstituteLinkResponsePropertyNames();
+    const optionalStringProperties = createSubstituteLinkResponseOptionalProperties({ name: 'id', nullable: false }, { name: 'productId', nullable: false }, { name: 'substitutePartId', nullable: false }, { name: 'substituteType', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'updatedBy', nullable: false }, );
+    const optionalNumberProperties = createSubstituteLinkResponseOptionalProperties({ name: 'priority', nullable: false }, { name: 'version', nullable: false }, );
+    const optionalBooleanProperties = createSubstituteLinkResponseOptionalProperties({ name: 'active', nullable: false }, { name: 'autoSuggest', nullable: false }, { name: 'isAutoSuggest', nullable: false }, { name: 'isActive', nullable: false }, );
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalSubstituteLinkResponsePropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalSubstituteLinkResponsePropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalSubstituteLinkResponsePropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

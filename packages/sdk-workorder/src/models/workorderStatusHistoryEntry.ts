@@ -44,12 +44,52 @@ export enum WorkorderStatusHistoryEntryStatusEnum {
 
 
 
+function isOptionalWorkorderStatusHistoryEntryPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type WorkorderStatusHistoryEntryOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createWorkorderStatusHistoryEntryPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createWorkorderStatusHistoryEntryOptionalProperties(
+    ...properties: WorkorderStatusHistoryEntryOptionalProperty[]
+): ReadonlyArray<WorkorderStatusHistoryEntryOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfWorkorderStatusHistoryEntry(value: object): value is WorkorderStatusHistoryEntry {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('status' in _v && typeof _v['status'] !== 'string') return false;
-    if ('changedBy' in _v && typeof _v['changedBy'] !== 'string') return false;
-    if ('reason' in _v && typeof _v['reason'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createWorkorderStatusHistoryEntryPropertyNames();
+    const optionalStringProperties = createWorkorderStatusHistoryEntryOptionalProperties({ name: 'status', nullable: false }, { name: 'changedBy', nullable: false }, { name: 'reason', nullable: false }, );
+    const optionalNumberProperties = createWorkorderStatusHistoryEntryOptionalProperties();
+    const optionalBooleanProperties = createWorkorderStatusHistoryEntryOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalWorkorderStatusHistoryEntryPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalWorkorderStatusHistoryEntryPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalWorkorderStatusHistoryEntryPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

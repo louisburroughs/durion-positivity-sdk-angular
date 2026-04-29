@@ -30,11 +30,52 @@ export enum AddBreakSegmentRequestBreakTypeEnum {
 
 
 
+function isOptionalAddBreakSegmentRequestPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type AddBreakSegmentRequestOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createAddBreakSegmentRequestPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createAddBreakSegmentRequestOptionalProperties(
+    ...properties: AddBreakSegmentRequestOptionalProperty[]
+): ReadonlyArray<AddBreakSegmentRequestOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfAddBreakSegmentRequest(value: object): value is AddBreakSegmentRequest {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('breakType' in _v && typeof _v['breakType'] !== 'string') return false;
-    if ('notes' in _v && typeof _v['notes'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createAddBreakSegmentRequestPropertyNames();
+    const optionalStringProperties = createAddBreakSegmentRequestOptionalProperties({ name: 'breakType', nullable: false }, { name: 'notes', nullable: false }, );
+    const optionalNumberProperties = createAddBreakSegmentRequestOptionalProperties();
+    const optionalBooleanProperties = createAddBreakSegmentRequestOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalAddBreakSegmentRequestPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalAddBreakSegmentRequestPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalAddBreakSegmentRequestPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

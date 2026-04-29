@@ -87,19 +87,52 @@ export enum EstimateSummaryResponseStatusEnum {
 
 
 
+function isOptionalEstimateSummaryResponsePropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type EstimateSummaryResponseOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createEstimateSummaryResponsePropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createEstimateSummaryResponseOptionalProperties(
+    ...properties: EstimateSummaryResponseOptionalProperty[]
+): ReadonlyArray<EstimateSummaryResponseOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfEstimateSummaryResponse(value: object): value is EstimateSummaryResponse {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('id' in _v && typeof _v['id'] !== 'string') return false;
-    if ('estimateNumber' in _v && typeof _v['estimateNumber'] !== 'string') return false;
-    if ('customerId' in _v && typeof _v['customerId'] !== 'string') return false;
-    if ('vehicleId' in _v && typeof _v['vehicleId'] !== 'string') return false;
-    if ('locationId' in _v && typeof _v['locationId'] !== 'string') return false;
-    if ('status' in _v && typeof _v['status'] !== 'string') return false;
-    if ('subtotal' in _v && typeof _v['subtotal'] !== 'number') return false;
-    if ('taxAmount' in _v && typeof _v['taxAmount'] !== 'number') return false;
-    if ('total' in _v && typeof _v['total'] !== 'number') return false;
-    if ('currencyUomId' in _v && typeof _v['currencyUomId'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createEstimateSummaryResponsePropertyNames();
+    const optionalStringProperties = createEstimateSummaryResponseOptionalProperties({ name: 'id', nullable: false }, { name: 'estimateNumber', nullable: false }, { name: 'customerId', nullable: false }, { name: 'vehicleId', nullable: false }, { name: 'locationId', nullable: false }, { name: 'status', nullable: false }, { name: 'currencyUomId', nullable: false }, );
+    const optionalNumberProperties = createEstimateSummaryResponseOptionalProperties({ name: 'subtotal', nullable: false }, { name: 'taxAmount', nullable: false }, { name: 'total', nullable: false }, );
+    const optionalBooleanProperties = createEstimateSummaryResponseOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalEstimateSummaryResponsePropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalEstimateSummaryResponsePropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalEstimateSummaryResponsePropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

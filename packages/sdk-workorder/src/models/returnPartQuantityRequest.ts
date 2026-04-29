@@ -31,16 +31,52 @@ export interface ReturnPartQuantityRequest {
     notes?: string;
 }
 
+function isOptionalReturnPartQuantityRequestPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type ReturnPartQuantityRequestOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createReturnPartQuantityRequestPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createReturnPartQuantityRequestOptionalProperties(
+    ...properties: ReturnPartQuantityRequestOptionalProperty[]
+): ReadonlyArray<ReturnPartQuantityRequestOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfReturnPartQuantityRequest(value: object): value is ReturnPartQuantityRequest {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if (!('workorderPartId' in _v) || _v['workorderPartId'] === undefined) return false;
-    if ('workorderPartId' in _v && typeof _v['workorderPartId'] !== 'string') return false;
-    if (!('quantity' in _v) || _v['quantity'] === undefined) return false;
-    if ('quantity' in _v && typeof _v['quantity'] !== 'number') return false;
-    if (!('reason' in _v) || _v['reason'] === undefined) return false;
-    if ('reason' in _v && typeof _v['reason'] !== 'string') return false;
-    if ('notes' in _v && typeof _v['notes'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createReturnPartQuantityRequestPropertyNames('workorderPartId', 'quantity', 'reason', );
+    const optionalStringProperties = createReturnPartQuantityRequestOptionalProperties({ name: 'workorderPartId', nullable: false }, { name: 'reason', nullable: false }, { name: 'notes', nullable: false }, );
+    const optionalNumberProperties = createReturnPartQuantityRequestOptionalProperties({ name: 'quantity', nullable: false }, );
+    const optionalBooleanProperties = createReturnPartQuantityRequestOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalReturnPartQuantityRequestPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalReturnPartQuantityRequestPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalReturnPartQuantityRequestPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

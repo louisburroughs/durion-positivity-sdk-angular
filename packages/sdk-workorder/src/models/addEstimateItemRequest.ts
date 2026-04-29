@@ -49,19 +49,52 @@ export enum AddEstimateItemRequestItemTypeEnum {
 
 
 
+function isOptionalAddEstimateItemRequestPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type AddEstimateItemRequestOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createAddEstimateItemRequestPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createAddEstimateItemRequestOptionalProperties(
+    ...properties: AddEstimateItemRequestOptionalProperty[]
+): ReadonlyArray<AddEstimateItemRequestOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfAddEstimateItemRequest(value: object): value is AddEstimateItemRequest {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if (!('itemType' in _v) || _v['itemType'] === undefined) return false;
-    if ('itemType' in _v && typeof _v['itemType'] !== 'string') return false;
-    if ('description' in _v && typeof _v['description'] !== 'string') return false;
-    if (!('quantity' in _v) || _v['quantity'] === undefined) return false;
-    if ('quantity' in _v && typeof _v['quantity'] !== 'number') return false;
-    if (!('unitPrice' in _v) || _v['unitPrice'] === undefined) return false;
-    if ('unitPrice' in _v && typeof _v['unitPrice'] !== 'number') return false;
-    if ('taxCode' in _v && typeof _v['taxCode'] !== 'string') return false;
-    if ('productId' in _v && typeof _v['productId'] !== 'string') return false;
-    if ('serviceId' in _v && typeof _v['serviceId'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createAddEstimateItemRequestPropertyNames('itemType', 'quantity', 'unitPrice', );
+    const optionalStringProperties = createAddEstimateItemRequestOptionalProperties({ name: 'itemType', nullable: false }, { name: 'description', nullable: false }, { name: 'taxCode', nullable: false }, { name: 'productId', nullable: false }, { name: 'serviceId', nullable: false }, );
+    const optionalNumberProperties = createAddEstimateItemRequestOptionalProperties({ name: 'quantity', nullable: false }, { name: 'unitPrice', nullable: false }, );
+    const optionalBooleanProperties = createAddEstimateItemRequestOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalAddEstimateItemRequestPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalAddEstimateItemRequestPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalAddEstimateItemRequestPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

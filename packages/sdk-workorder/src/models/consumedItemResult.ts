@@ -22,12 +22,52 @@ export enum ConsumedItemResultStatusEnum {
 
 
 
+function isOptionalConsumedItemResultPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type ConsumedItemResultOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createConsumedItemResultPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createConsumedItemResultOptionalProperties(
+    ...properties: ConsumedItemResultOptionalProperty[]
+): ReadonlyArray<ConsumedItemResultOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfConsumedItemResult(value: object): value is ConsumedItemResult {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('pickTaskId' in _v && typeof _v['pickTaskId'] !== 'string') return false;
-    if ('quantityConsumed' in _v && typeof _v['quantityConsumed'] !== 'number') return false;
-    if ('status' in _v && typeof _v['status'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createConsumedItemResultPropertyNames();
+    const optionalStringProperties = createConsumedItemResultOptionalProperties({ name: 'pickTaskId', nullable: false }, { name: 'status', nullable: false }, );
+    const optionalNumberProperties = createConsumedItemResultOptionalProperties({ name: 'quantityConsumed', nullable: false }, );
+    const optionalBooleanProperties = createConsumedItemResultOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalConsumedItemResultPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalConsumedItemResultPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalConsumedItemResultPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

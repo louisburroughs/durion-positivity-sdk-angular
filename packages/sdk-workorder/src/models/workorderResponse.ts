@@ -67,18 +67,52 @@ export interface WorkorderResponse {
     crmContactIds?: Array<string>;
 }
 
+function isOptionalWorkorderResponsePropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type WorkorderResponseOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createWorkorderResponsePropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createWorkorderResponseOptionalProperties(
+    ...properties: WorkorderResponseOptionalProperty[]
+): ReadonlyArray<WorkorderResponseOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfWorkorderResponse(value: object): value is WorkorderResponse {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('id' in _v && typeof _v['id'] !== 'string') return false;
-    if ('estimateId' in _v && typeof _v['estimateId'] !== 'string') return false;
-    if ('customerId' in _v && typeof _v['customerId'] !== 'string') return false;
-    if ('shopId' in _v && typeof _v['shopId'] !== 'string') return false;
-    if ('vehicleId' in _v && typeof _v['vehicleId'] !== 'string') return false;
-    if ('status' in _v && typeof _v['status'] !== 'string') return false;
-    if ('isReopened' in _v && typeof _v['isReopened'] !== 'boolean') return false;
-    if ('crmPartyId' in _v && typeof _v['crmPartyId'] !== 'string') return false;
-    if ('crmVehicleId' in _v && typeof _v['crmVehicleId'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createWorkorderResponsePropertyNames();
+    const optionalStringProperties = createWorkorderResponseOptionalProperties({ name: 'id', nullable: false }, { name: 'estimateId', nullable: false }, { name: 'customerId', nullable: false }, { name: 'shopId', nullable: false }, { name: 'vehicleId', nullable: false }, { name: 'status', nullable: false }, { name: 'crmPartyId', nullable: false }, { name: 'crmVehicleId', nullable: false }, );
+    const optionalNumberProperties = createWorkorderResponseOptionalProperties();
+    const optionalBooleanProperties = createWorkorderResponseOptionalProperties({ name: 'isReopened', nullable: false }, );
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalWorkorderResponsePropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalWorkorderResponsePropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalWorkorderResponsePropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

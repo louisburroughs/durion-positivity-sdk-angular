@@ -44,16 +44,52 @@ export interface ApproveEstimateRequest {
     purchaseOrderNumber?: string;
 }
 
+function isOptionalApproveEstimateRequestPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type ApproveEstimateRequestOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createApproveEstimateRequestPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createApproveEstimateRequestOptionalProperties(
+    ...properties: ApproveEstimateRequestOptionalProperty[]
+): ReadonlyArray<ApproveEstimateRequestOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfApproveEstimateRequest(value: object): value is ApproveEstimateRequest {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if (!('customerId' in _v) || _v['customerId'] === undefined) return false;
-    if ('customerId' in _v && typeof _v['customerId'] !== 'string') return false;
-    if ('signatureData' in _v && typeof _v['signatureData'] !== 'string') return false;
-    if ('signatureMimeType' in _v && typeof _v['signatureMimeType'] !== 'string') return false;
-    if ('signerName' in _v && typeof _v['signerName'] !== 'string') return false;
-    if ('notes' in _v && typeof _v['notes'] !== 'string') return false;
-    if ('purchaseOrderNumber' in _v && typeof _v['purchaseOrderNumber'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createApproveEstimateRequestPropertyNames('customerId', );
+    const optionalStringProperties = createApproveEstimateRequestOptionalProperties({ name: 'customerId', nullable: false }, { name: 'signatureData', nullable: false }, { name: 'signatureMimeType', nullable: false }, { name: 'signerName', nullable: false }, { name: 'notes', nullable: false }, { name: 'purchaseOrderNumber', nullable: false }, );
+    const optionalNumberProperties = createApproveEstimateRequestOptionalProperties();
+    const optionalBooleanProperties = createApproveEstimateRequestOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalApproveEstimateRequestPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalApproveEstimateRequestPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalApproveEstimateRequestPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

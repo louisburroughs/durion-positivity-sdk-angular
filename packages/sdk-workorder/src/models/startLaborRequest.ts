@@ -23,12 +23,52 @@ export interface StartLaborRequest {
     notes?: string;
 }
 
+function isOptionalStartLaborRequestPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type StartLaborRequestOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createStartLaborRequestPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createStartLaborRequestOptionalProperties(
+    ...properties: StartLaborRequestOptionalProperty[]
+): ReadonlyArray<StartLaborRequestOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfStartLaborRequest(value: object): value is StartLaborRequest {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if (!('technicianId' in _v) || _v['technicianId'] === undefined) return false;
-    if ('technicianId' in _v && typeof _v['technicianId'] !== 'string') return false;
-    if ('notes' in _v && typeof _v['notes'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createStartLaborRequestPropertyNames('technicianId', );
+    const optionalStringProperties = createStartLaborRequestOptionalProperties({ name: 'technicianId', nullable: false }, { name: 'notes', nullable: false }, );
+    const optionalNumberProperties = createStartLaborRequestOptionalProperties();
+    const optionalBooleanProperties = createStartLaborRequestOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalStartLaborRequestPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalStartLaborRequestPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalStartLaborRequestPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

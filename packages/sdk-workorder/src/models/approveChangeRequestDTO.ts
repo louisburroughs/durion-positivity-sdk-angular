@@ -24,12 +24,52 @@ export interface ApproveChangeRequestDTO {
     approvalNote: string;
 }
 
+function isOptionalApproveChangeRequestDTOPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type ApproveChangeRequestDTOOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createApproveChangeRequestDTOPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createApproveChangeRequestDTOOptionalProperties(
+    ...properties: ApproveChangeRequestDTOOptionalProperty[]
+): ReadonlyArray<ApproveChangeRequestDTOOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfApproveChangeRequestDTO(value: object): value is ApproveChangeRequestDTO {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('approvedBy' in _v && typeof _v['approvedBy'] !== 'string') return false;
-    if (!('approvalNote' in _v) || _v['approvalNote'] === undefined) return false;
-    if ('approvalNote' in _v && typeof _v['approvalNote'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createApproveChangeRequestDTOPropertyNames('approvalNote', );
+    const optionalStringProperties = createApproveChangeRequestDTOOptionalProperties({ name: 'approvedBy', nullable: false }, { name: 'approvalNote', nullable: false }, );
+    const optionalNumberProperties = createApproveChangeRequestDTOOptionalProperties();
+    const optionalBooleanProperties = createApproveChangeRequestDTOOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalApproveChangeRequestDTOPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalApproveChangeRequestDTOPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalApproveChangeRequestDTOPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

@@ -23,13 +23,52 @@ export interface AdjustLaborRequest {
     adjustmentReason: string;
 }
 
+function isOptionalAdjustLaborRequestPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type AdjustLaborRequestOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createAdjustLaborRequestPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createAdjustLaborRequestOptionalProperties(
+    ...properties: AdjustLaborRequestOptionalProperty[]
+): ReadonlyArray<AdjustLaborRequestOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfAdjustLaborRequest(value: object): value is AdjustLaborRequest {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if (!('hoursWorked' in _v) || _v['hoursWorked'] === undefined) return false;
-    if ('hoursWorked' in _v && typeof _v['hoursWorked'] !== 'number') return false;
-    if (!('adjustmentReason' in _v) || _v['adjustmentReason'] === undefined) return false;
-    if ('adjustmentReason' in _v && typeof _v['adjustmentReason'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createAdjustLaborRequestPropertyNames('hoursWorked', 'adjustmentReason', );
+    const optionalStringProperties = createAdjustLaborRequestOptionalProperties({ name: 'adjustmentReason', nullable: false }, );
+    const optionalNumberProperties = createAdjustLaborRequestOptionalProperties({ name: 'hoursWorked', nullable: false }, );
+    const optionalBooleanProperties = createAdjustLaborRequestOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalAdjustLaborRequestPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalAdjustLaborRequestPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalAdjustLaborRequestPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

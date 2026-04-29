@@ -22,28 +22,51 @@ export interface {{classname}}{{#allParents}}{{#-first}} extends {{/-first}}{{{.
 {{/vars}}
 }{{>modelGenericEnums}}
 
+function isOptional{{classname}}PropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type {{classname}}OptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function create{{classname}}PropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function create{{classname}}OptionalProperties(
+    ...properties: {{classname}}OptionalProperty[]
+): ReadonlyArray<{{classname}}OptionalProperty> {
+    return properties;
+}
+
 export function instanceOf{{classname}}(value: object): value is {{classname}} {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-{{#vars}}
-{{#required}}
-    if (!('{{name}}' in _v) || _v['{{name}}'] === undefined) return false;
-{{/required}}
-{{#isString}}
-    if ('{{name}}' in _v && {{#isNullable}}_v['{{name}}'] !== null && {{/isNullable}}typeof _v['{{name}}'] !== 'string') return false;
-{{/isString}}
-{{#isInteger}}
-    if ('{{name}}' in _v && {{#isNullable}}_v['{{name}}'] !== null && {{/isNullable}}typeof _v['{{name}}'] !== 'number') return false;
-{{/isInteger}}
-{{#isLong}}
-    if ('{{name}}' in _v && {{#isNullable}}_v['{{name}}'] !== null && {{/isNullable}}typeof _v['{{name}}'] !== 'number') return false;
-{{/isLong}}
-{{#isNumber}}
-    if ('{{name}}' in _v && {{#isNullable}}_v['{{name}}'] !== null && {{/isNullable}}typeof _v['{{name}}'] !== 'number') return false;
-{{/isNumber}}
-{{#isBoolean}}
-    if ('{{name}}' in _v && {{#isNullable}}_v['{{name}}'] !== null && {{/isNullable}}typeof _v['{{name}}'] !== 'boolean') return false;
-{{/isBoolean}}
-{{/vars}}
-    return true;
+
+    const requiredProperties = create{{classname}}PropertyNames({{#vars}}{{#required}}'{{name}}', {{/required}}{{/vars}});
+    const optionalStringProperties = create{{classname}}OptionalProperties({{#vars}}{{#isString}}{ name: '{{name}}', nullable: {{#isNullable}}true{{/isNullable}}{{^isNullable}}false{{/isNullable}} }, {{/isString}}{{/vars}});
+    const optionalNumberProperties = create{{classname}}OptionalProperties({{#vars}}{{#isInteger}}{ name: '{{name}}', nullable: {{#isNullable}}true{{/isNullable}}{{^isNullable}}false{{/isNullable}} }, {{/isInteger}}{{#isLong}}{ name: '{{name}}', nullable: {{#isNullable}}true{{/isNullable}}{{^isNullable}}false{{/isNullable}} }, {{/isLong}}{{#isNumber}}{ name: '{{name}}', nullable: {{#isNullable}}true{{/isNullable}}{{^isNullable}}false{{/isNullable}} }, {{/isNumber}}{{/vars}});
+    const optionalBooleanProperties = create{{classname}}OptionalProperties({{#vars}}{{#isBoolean}}{ name: '{{name}}', nullable: {{#isNullable}}true{{/isNullable}}{{^isNullable}}false{{/isNullable}} }, {{/isBoolean}}{{/vars}});
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptional{{classname}}PropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptional{{classname}}PropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptional{{classname}}PropertyOfType(_v, property.name, 'boolean', property.nullable));
 }

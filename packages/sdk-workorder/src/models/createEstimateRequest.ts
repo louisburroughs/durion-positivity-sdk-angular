@@ -59,24 +59,52 @@ export interface CreateEstimateRequest {
     crmContactIds: Array<string>;
 }
 
+function isOptionalCreateEstimateRequestPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type CreateEstimateRequestOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createCreateEstimateRequestPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createCreateEstimateRequestOptionalProperties(
+    ...properties: CreateEstimateRequestOptionalProperty[]
+): ReadonlyArray<CreateEstimateRequestOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfCreateEstimateRequest(value: object): value is CreateEstimateRequest {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if (!('customerId' in _v) || _v['customerId'] === undefined) return false;
-    if ('customerId' in _v && typeof _v['customerId'] !== 'string') return false;
-    if (!('vehicleId' in _v) || _v['vehicleId'] === undefined) return false;
-    if ('vehicleId' in _v && typeof _v['vehicleId'] !== 'string') return false;
-    if ('locationId' in _v && typeof _v['locationId'] !== 'string') return false;
-    if ('currencyUomId' in _v && typeof _v['currencyUomId'] !== 'string') return false;
-    if ('taxRegionId' in _v && typeof _v['taxRegionId'] !== 'string') return false;
-    if ('subtotal' in _v && typeof _v['subtotal'] !== 'number') return false;
-    if ('taxAmount' in _v && typeof _v['taxAmount'] !== 'number') return false;
-    if ('total' in _v && typeof _v['total'] !== 'number') return false;
-    if (!('crmPartyId' in _v) || _v['crmPartyId'] === undefined) return false;
-    if ('crmPartyId' in _v && typeof _v['crmPartyId'] !== 'string') return false;
-    if (!('crmVehicleId' in _v) || _v['crmVehicleId'] === undefined) return false;
-    if ('crmVehicleId' in _v && typeof _v['crmVehicleId'] !== 'string') return false;
-    if (!('crmContactIds' in _v) || _v['crmContactIds'] === undefined) return false;
-    return true;
+
+    const requiredProperties = createCreateEstimateRequestPropertyNames('customerId', 'vehicleId', 'crmPartyId', 'crmVehicleId', 'crmContactIds', );
+    const optionalStringProperties = createCreateEstimateRequestOptionalProperties({ name: 'customerId', nullable: false }, { name: 'vehicleId', nullable: false }, { name: 'locationId', nullable: false }, { name: 'currencyUomId', nullable: false }, { name: 'taxRegionId', nullable: false }, { name: 'crmPartyId', nullable: false }, { name: 'crmVehicleId', nullable: false }, );
+    const optionalNumberProperties = createCreateEstimateRequestOptionalProperties({ name: 'subtotal', nullable: false }, { name: 'taxAmount', nullable: false }, { name: 'total', nullable: false }, );
+    const optionalBooleanProperties = createCreateEstimateRequestOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalCreateEstimateRequestPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalCreateEstimateRequestPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalCreateEstimateRequestPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

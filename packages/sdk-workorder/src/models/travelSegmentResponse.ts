@@ -59,25 +59,52 @@ export enum TravelSegmentResponseOnBehalfReasonCodeEnum {
 
 
 
+function isOptionalTravelSegmentResponsePropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type TravelSegmentResponseOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createTravelSegmentResponsePropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createTravelSegmentResponseOptionalProperties(
+    ...properties: TravelSegmentResponseOptionalProperty[]
+): ReadonlyArray<TravelSegmentResponseOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfTravelSegmentResponse(value: object): value is TravelSegmentResponse {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('travelSegmentId' in _v && typeof _v['travelSegmentId'] !== 'string') return false;
-    if ('mobileWorkAssignmentId' in _v && typeof _v['mobileWorkAssignmentId'] !== 'string') return false;
-    if ('technicianId' in _v && typeof _v['technicianId'] !== 'string') return false;
-    if ('segmentType' in _v && typeof _v['segmentType'] !== 'string') return false;
-    if ('fromLocationId' in _v && typeof _v['fromLocationId'] !== 'string') return false;
-    if ('toLocationId' in _v && typeof _v['toLocationId'] !== 'string') return false;
-    if ('workOrderId' in _v && typeof _v['workOrderId'] !== 'string') return false;
-    if ('durationMinutes' in _v && typeof _v['durationMinutes'] !== 'number') return false;
-    if ('rawMinutes' in _v && typeof _v['rawMinutes'] !== 'number') return false;
-    if ('bufferedMinutes' in _v && typeof _v['bufferedMinutes'] !== 'number') return false;
-    if ('status' in _v && typeof _v['status'] !== 'string') return false;
-    if ('createdBy' in _v && typeof _v['createdBy'] !== 'string') return false;
-    if ('lastModifiedBy' in _v && typeof _v['lastModifiedBy'] !== 'string') return false;
-    if ('actedByUserId' in _v && typeof _v['actedByUserId'] !== 'string') return false;
-    if ('actedForPersonId' in _v && typeof _v['actedForPersonId'] !== 'string') return false;
-    if ('onBehalfReasonCode' in _v && typeof _v['onBehalfReasonCode'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createTravelSegmentResponsePropertyNames();
+    const optionalStringProperties = createTravelSegmentResponseOptionalProperties({ name: 'travelSegmentId', nullable: false }, { name: 'mobileWorkAssignmentId', nullable: false }, { name: 'technicianId', nullable: false }, { name: 'segmentType', nullable: false }, { name: 'fromLocationId', nullable: false }, { name: 'toLocationId', nullable: false }, { name: 'workOrderId', nullable: false }, { name: 'status', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'lastModifiedBy', nullable: false }, { name: 'actedByUserId', nullable: false }, { name: 'actedForPersonId', nullable: false }, { name: 'onBehalfReasonCode', nullable: false }, );
+    const optionalNumberProperties = createTravelSegmentResponseOptionalProperties({ name: 'durationMinutes', nullable: false }, { name: 'rawMinutes', nullable: false }, { name: 'bufferedMinutes', nullable: false }, );
+    const optionalBooleanProperties = createTravelSegmentResponseOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalTravelSegmentResponsePropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalTravelSegmentResponsePropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalTravelSegmentResponsePropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

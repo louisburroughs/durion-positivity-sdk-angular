@@ -67,19 +67,52 @@ export interface ChangeRequestResponse {
     declinedAt?: string;
 }
 
+function isOptionalChangeRequestResponsePropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type ChangeRequestResponseOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createChangeRequestResponsePropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createChangeRequestResponseOptionalProperties(
+    ...properties: ChangeRequestResponseOptionalProperty[]
+): ReadonlyArray<ChangeRequestResponseOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfChangeRequestResponse(value: object): value is ChangeRequestResponse {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('id' in _v && typeof _v['id'] !== 'string') return false;
-    if ('workorderId' in _v && typeof _v['workorderId'] !== 'string') return false;
-    if ('requestedByUserId' in _v && typeof _v['requestedByUserId'] !== 'string') return false;
-    if ('status' in _v && typeof _v['status'] !== 'string') return false;
-    if ('description' in _v && typeof _v['description'] !== 'string') return false;
-    if ('isEmergencyException' in _v && typeof _v['isEmergencyException'] !== 'boolean') return false;
-    if ('exceptionReason' in _v && typeof _v['exceptionReason'] !== 'string') return false;
-    if ('approvalNote' in _v && typeof _v['approvalNote'] !== 'string') return false;
-    if ('isApprovalGated' in _v && typeof _v['isApprovalGated'] !== 'boolean') return false;
-    if ('approvedBy' in _v && typeof _v['approvedBy'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createChangeRequestResponsePropertyNames();
+    const optionalStringProperties = createChangeRequestResponseOptionalProperties({ name: 'id', nullable: false }, { name: 'workorderId', nullable: false }, { name: 'requestedByUserId', nullable: false }, { name: 'status', nullable: false }, { name: 'description', nullable: false }, { name: 'exceptionReason', nullable: false }, { name: 'approvalNote', nullable: false }, { name: 'approvedBy', nullable: false }, );
+    const optionalNumberProperties = createChangeRequestResponseOptionalProperties();
+    const optionalBooleanProperties = createChangeRequestResponseOptionalProperties({ name: 'isEmergencyException', nullable: false }, { name: 'isApprovalGated', nullable: false }, );
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalChangeRequestResponsePropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalChangeRequestResponsePropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalChangeRequestResponsePropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

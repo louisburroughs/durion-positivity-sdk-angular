@@ -23,11 +23,52 @@ export interface FieldError {
     message?: string;
 }
 
+function isOptionalFieldErrorPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type FieldErrorOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createFieldErrorPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createFieldErrorOptionalProperties(
+    ...properties: FieldErrorOptionalProperty[]
+): ReadonlyArray<FieldErrorOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfFieldError(value: object): value is FieldError {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('field' in _v && typeof _v['field'] !== 'string') return false;
-    if ('message' in _v && typeof _v['message'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createFieldErrorPropertyNames();
+    const optionalStringProperties = createFieldErrorOptionalProperties({ name: 'field', nullable: false }, { name: 'message', nullable: false }, );
+    const optionalNumberProperties = createFieldErrorOptionalProperties();
+    const optionalBooleanProperties = createFieldErrorOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalFieldErrorPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalFieldErrorPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalFieldErrorPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

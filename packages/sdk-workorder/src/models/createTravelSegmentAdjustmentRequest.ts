@@ -15,11 +15,52 @@ export interface CreateTravelSegmentAdjustmentRequest {
     adjustmentReason: string;
 }
 
+function isOptionalCreateTravelSegmentAdjustmentRequestPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type CreateTravelSegmentAdjustmentRequestOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createCreateTravelSegmentAdjustmentRequestPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createCreateTravelSegmentAdjustmentRequestOptionalProperties(
+    ...properties: CreateTravelSegmentAdjustmentRequestOptionalProperty[]
+): ReadonlyArray<CreateTravelSegmentAdjustmentRequestOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfCreateTravelSegmentAdjustmentRequest(value: object): value is CreateTravelSegmentAdjustmentRequest {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if (!('adjustmentReason' in _v) || _v['adjustmentReason'] === undefined) return false;
-    if ('adjustmentReason' in _v && typeof _v['adjustmentReason'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createCreateTravelSegmentAdjustmentRequestPropertyNames('adjustmentReason', );
+    const optionalStringProperties = createCreateTravelSegmentAdjustmentRequestOptionalProperties({ name: 'adjustmentReason', nullable: false }, );
+    const optionalNumberProperties = createCreateTravelSegmentAdjustmentRequestOptionalProperties();
+    const optionalBooleanProperties = createCreateTravelSegmentAdjustmentRequestOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalCreateTravelSegmentAdjustmentRequestPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalCreateTravelSegmentAdjustmentRequestPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalCreateTravelSegmentAdjustmentRequestPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

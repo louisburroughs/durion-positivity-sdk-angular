@@ -24,11 +24,52 @@ export interface CompleteWorkorderRequest {
     completionNotes?: string;
 }
 
+function isOptionalCompleteWorkorderRequestPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type CompleteWorkorderRequestOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createCompleteWorkorderRequestPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createCompleteWorkorderRequestOptionalProperties(
+    ...properties: CompleteWorkorderRequestOptionalProperty[]
+): ReadonlyArray<CompleteWorkorderRequestOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfCompleteWorkorderRequest(value: object): value is CompleteWorkorderRequest {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('userId' in _v && typeof _v['userId'] !== 'string') return false;
-    if ('completionNotes' in _v && typeof _v['completionNotes'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createCompleteWorkorderRequestPropertyNames();
+    const optionalStringProperties = createCompleteWorkorderRequestOptionalProperties({ name: 'userId', nullable: false }, { name: 'completionNotes', nullable: false }, );
+    const optionalNumberProperties = createCompleteWorkorderRequestOptionalProperties();
+    const optionalBooleanProperties = createCompleteWorkorderRequestOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalCompleteWorkorderRequestPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalCompleteWorkorderRequestPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalCompleteWorkorderRequestPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

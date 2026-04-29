@@ -18,15 +18,52 @@ export interface ResolveScanResponse {
     matchStatus?: string;
 }
 
+function isOptionalResolveScanResponsePropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type ResolveScanResponseOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createResolveScanResponsePropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createResolveScanResponseOptionalProperties(
+    ...properties: ResolveScanResponseOptionalProperty[]
+): ReadonlyArray<ResolveScanResponseOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfResolveScanResponse(value: object): value is ResolveScanResponse {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('pickTaskId' in _v && typeof _v['pickTaskId'] !== 'string') return false;
-    if ('pickListId' in _v && typeof _v['pickListId'] !== 'string') return false;
-    if ('resolvedSkuId' in _v && typeof _v['resolvedSkuId'] !== 'string') return false;
-    if ('resolvedLocationId' in _v && typeof _v['resolvedLocationId'] !== 'string') return false;
-    if ('matched' in _v && typeof _v['matched'] !== 'boolean') return false;
-    if ('matchStatus' in _v && typeof _v['matchStatus'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createResolveScanResponsePropertyNames();
+    const optionalStringProperties = createResolveScanResponseOptionalProperties({ name: 'pickTaskId', nullable: false }, { name: 'pickListId', nullable: false }, { name: 'resolvedSkuId', nullable: false }, { name: 'resolvedLocationId', nullable: false }, { name: 'matchStatus', nullable: false }, );
+    const optionalNumberProperties = createResolveScanResponseOptionalProperties();
+    const optionalBooleanProperties = createResolveScanResponseOptionalProperties({ name: 'matched', nullable: false }, );
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalResolveScanResponsePropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalResolveScanResponsePropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalResolveScanResponsePropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

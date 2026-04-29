@@ -27,12 +27,52 @@ export interface CreateEstimateFromAppointmentResponse {
     created?: boolean;
 }
 
+function isOptionalCreateEstimateFromAppointmentResponsePropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type CreateEstimateFromAppointmentResponseOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createCreateEstimateFromAppointmentResponsePropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createCreateEstimateFromAppointmentResponseOptionalProperties(
+    ...properties: CreateEstimateFromAppointmentResponseOptionalProperty[]
+): ReadonlyArray<CreateEstimateFromAppointmentResponseOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfCreateEstimateFromAppointmentResponse(value: object): value is CreateEstimateFromAppointmentResponse {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('estimateId' in _v && typeof _v['estimateId'] !== 'string') return false;
-    if ('status' in _v && typeof _v['status'] !== 'string') return false;
-    if ('created' in _v && typeof _v['created'] !== 'boolean') return false;
-    return true;
+
+    const requiredProperties = createCreateEstimateFromAppointmentResponsePropertyNames();
+    const optionalStringProperties = createCreateEstimateFromAppointmentResponseOptionalProperties({ name: 'estimateId', nullable: false }, { name: 'status', nullable: false }, );
+    const optionalNumberProperties = createCreateEstimateFromAppointmentResponseOptionalProperties();
+    const optionalBooleanProperties = createCreateEstimateFromAppointmentResponseOptionalProperties({ name: 'created', nullable: false }, );
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalCreateEstimateFromAppointmentResponsePropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalCreateEstimateFromAppointmentResponsePropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalCreateEstimateFromAppointmentResponsePropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

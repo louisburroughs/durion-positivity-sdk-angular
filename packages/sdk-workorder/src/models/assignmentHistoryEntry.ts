@@ -43,14 +43,52 @@ export interface AssignmentHistoryEntry {
     notes?: string;
 }
 
+function isOptionalAssignmentHistoryEntryPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type AssignmentHistoryEntryOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createAssignmentHistoryEntryPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createAssignmentHistoryEntryOptionalProperties(
+    ...properties: AssignmentHistoryEntryOptionalProperty[]
+): ReadonlyArray<AssignmentHistoryEntryOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfAssignmentHistoryEntry(value: object): value is AssignmentHistoryEntry {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('technicianId' in _v && typeof _v['technicianId'] !== 'string') return false;
-    if ('technicianName' in _v && typeof _v['technicianName'] !== 'string') return false;
-    if ('assignedBy' in _v && typeof _v['assignedBy'] !== 'string') return false;
-    if ('reason' in _v && typeof _v['reason'] !== 'string') return false;
-    if ('notes' in _v && typeof _v['notes'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createAssignmentHistoryEntryPropertyNames();
+    const optionalStringProperties = createAssignmentHistoryEntryOptionalProperties({ name: 'technicianId', nullable: false }, { name: 'technicianName', nullable: false }, { name: 'assignedBy', nullable: false }, { name: 'reason', nullable: false }, { name: 'notes', nullable: false }, );
+    const optionalNumberProperties = createAssignmentHistoryEntryOptionalProperties();
+    const optionalBooleanProperties = createAssignmentHistoryEntryOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalAssignmentHistoryEntryPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalAssignmentHistoryEntryPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalAssignmentHistoryEntryPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

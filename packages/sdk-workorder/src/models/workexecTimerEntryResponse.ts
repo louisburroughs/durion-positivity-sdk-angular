@@ -51,16 +51,52 @@ export interface WorkexecTimerEntryResponse {
     status?: string;
 }
 
+function isOptionalWorkexecTimerEntryResponsePropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type WorkexecTimerEntryResponseOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createWorkexecTimerEntryResponsePropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createWorkexecTimerEntryResponseOptionalProperties(
+    ...properties: WorkexecTimerEntryResponseOptionalProperty[]
+): ReadonlyArray<WorkexecTimerEntryResponseOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfWorkexecTimerEntryResponse(value: object): value is WorkexecTimerEntryResponse {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('timeEntryId' in _v && typeof _v['timeEntryId'] !== 'string') return false;
-    if ('mechanicId' in _v && typeof _v['mechanicId'] !== 'string') return false;
-    if ('workorderId' in _v && typeof _v['workorderId'] !== 'string') return false;
-    if ('workorderItemId' in _v && typeof _v['workorderItemId'] !== 'string') return false;
-    if ('laborCode' in _v && typeof _v['laborCode'] !== 'string') return false;
-    if ('durationInSeconds' in _v && typeof _v['durationInSeconds'] !== 'number') return false;
-    if ('status' in _v && typeof _v['status'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createWorkexecTimerEntryResponsePropertyNames();
+    const optionalStringProperties = createWorkexecTimerEntryResponseOptionalProperties({ name: 'timeEntryId', nullable: false }, { name: 'mechanicId', nullable: false }, { name: 'workorderId', nullable: false }, { name: 'workorderItemId', nullable: false }, { name: 'laborCode', nullable: false }, { name: 'status', nullable: false }, );
+    const optionalNumberProperties = createWorkexecTimerEntryResponseOptionalProperties({ name: 'durationInSeconds', nullable: false }, );
+    const optionalBooleanProperties = createWorkexecTimerEntryResponseOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalWorkexecTimerEntryResponsePropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalWorkexecTimerEntryResponsePropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalWorkexecTimerEntryResponsePropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

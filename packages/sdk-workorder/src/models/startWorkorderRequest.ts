@@ -24,11 +24,52 @@ export interface StartWorkorderRequest {
     reason?: string;
 }
 
+function isOptionalStartWorkorderRequestPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type StartWorkorderRequestOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createStartWorkorderRequestPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createStartWorkorderRequestOptionalProperties(
+    ...properties: StartWorkorderRequestOptionalProperty[]
+): ReadonlyArray<StartWorkorderRequestOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfStartWorkorderRequest(value: object): value is StartWorkorderRequest {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('userId' in _v && typeof _v['userId'] !== 'string') return false;
-    if ('reason' in _v && typeof _v['reason'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createStartWorkorderRequestPropertyNames();
+    const optionalStringProperties = createStartWorkorderRequestOptionalProperties({ name: 'userId', nullable: false }, { name: 'reason', nullable: false }, );
+    const optionalNumberProperties = createStartWorkorderRequestOptionalProperties();
+    const optionalBooleanProperties = createStartWorkorderRequestOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalStartWorkorderRequestPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalStartWorkorderRequestPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalStartWorkorderRequestPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

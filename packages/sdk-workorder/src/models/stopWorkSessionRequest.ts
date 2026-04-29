@@ -19,10 +19,52 @@ export interface StopWorkSessionRequest {
     mechanicId?: string;
 }
 
+function isOptionalStopWorkSessionRequestPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type StopWorkSessionRequestOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createStopWorkSessionRequestPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createStopWorkSessionRequestOptionalProperties(
+    ...properties: StopWorkSessionRequestOptionalProperty[]
+): ReadonlyArray<StopWorkSessionRequestOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfStopWorkSessionRequest(value: object): value is StopWorkSessionRequest {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('mechanicId' in _v && typeof _v['mechanicId'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createStopWorkSessionRequestPropertyNames();
+    const optionalStringProperties = createStopWorkSessionRequestOptionalProperties({ name: 'mechanicId', nullable: false }, );
+    const optionalNumberProperties = createStopWorkSessionRequestOptionalProperties();
+    const optionalBooleanProperties = createStopWorkSessionRequestOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalStopWorkSessionRequestPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalStopWorkSessionRequestPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalStopWorkSessionRequestPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

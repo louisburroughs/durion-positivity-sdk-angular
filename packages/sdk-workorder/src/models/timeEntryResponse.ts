@@ -35,15 +35,52 @@ export enum TimeEntryResponseStatusEnum {
 
 
 
+function isOptionalTimeEntryResponsePropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type TimeEntryResponseOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createTimeEntryResponsePropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createTimeEntryResponseOptionalProperties(
+    ...properties: TimeEntryResponseOptionalProperty[]
+): ReadonlyArray<TimeEntryResponseOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfTimeEntryResponse(value: object): value is TimeEntryResponse {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('timeEntryId' in _v && typeof _v['timeEntryId'] !== 'string') return false;
-    if ('personId' in _v && typeof _v['personId'] !== 'string') return false;
-    if ('workOrderId' in _v && typeof _v['workOrderId'] !== 'string') return false;
-    if ('status' in _v && typeof _v['status'] !== 'string') return false;
-    if ('decisionByUserId' in _v && typeof _v['decisionByUserId'] !== 'string') return false;
-    if ('rejectionReason' in _v && typeof _v['rejectionReason'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createTimeEntryResponsePropertyNames();
+    const optionalStringProperties = createTimeEntryResponseOptionalProperties({ name: 'timeEntryId', nullable: false }, { name: 'personId', nullable: false }, { name: 'workOrderId', nullable: false }, { name: 'status', nullable: false }, { name: 'decisionByUserId', nullable: false }, { name: 'rejectionReason', nullable: false }, );
+    const optionalNumberProperties = createTimeEntryResponseOptionalProperties();
+    const optionalBooleanProperties = createTimeEntryResponseOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalTimeEntryResponsePropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalTimeEntryResponsePropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalTimeEntryResponsePropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

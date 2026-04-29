@@ -19,11 +19,52 @@ export interface DeclineChangeRequestDTO {
     approvalNote: string;
 }
 
+function isOptionalDeclineChangeRequestDTOPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type DeclineChangeRequestDTOOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createDeclineChangeRequestDTOPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createDeclineChangeRequestDTOOptionalProperties(
+    ...properties: DeclineChangeRequestDTOOptionalProperty[]
+): ReadonlyArray<DeclineChangeRequestDTOOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfDeclineChangeRequestDTO(value: object): value is DeclineChangeRequestDTO {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if (!('approvalNote' in _v) || _v['approvalNote'] === undefined) return false;
-    if ('approvalNote' in _v && typeof _v['approvalNote'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createDeclineChangeRequestDTOPropertyNames('approvalNote', );
+    const optionalStringProperties = createDeclineChangeRequestDTOOptionalProperties({ name: 'approvalNote', nullable: false }, );
+    const optionalNumberProperties = createDeclineChangeRequestDTOOptionalProperties();
+    const optionalBooleanProperties = createDeclineChangeRequestDTOOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalDeclineChangeRequestDTOPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalDeclineChangeRequestDTOPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalDeclineChangeRequestDTOPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

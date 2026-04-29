@@ -40,15 +40,52 @@ export interface ApproveWorkorderRequest {
     lineItemApprovals?: Array<LineItemApprovalDto>;
 }
 
+function isOptionalApproveWorkorderRequestPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type ApproveWorkorderRequestOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createApproveWorkorderRequestPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createApproveWorkorderRequestOptionalProperties(
+    ...properties: ApproveWorkorderRequestOptionalProperty[]
+): ReadonlyArray<ApproveWorkorderRequestOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfApproveWorkorderRequest(value: object): value is ApproveWorkorderRequest {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if (!('customerId' in _v) || _v['customerId'] === undefined) return false;
-    if ('customerId' in _v && typeof _v['customerId'] !== 'string') return false;
-    if ('signatureData' in _v && typeof _v['signatureData'] !== 'string') return false;
-    if ('signatureMimeType' in _v && typeof _v['signatureMimeType'] !== 'string') return false;
-    if ('signerName' in _v && typeof _v['signerName'] !== 'string') return false;
-    if ('notes' in _v && typeof _v['notes'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createApproveWorkorderRequestPropertyNames('customerId', );
+    const optionalStringProperties = createApproveWorkorderRequestOptionalProperties({ name: 'customerId', nullable: false }, { name: 'signatureData', nullable: false }, { name: 'signatureMimeType', nullable: false }, { name: 'signerName', nullable: false }, { name: 'notes', nullable: false }, );
+    const optionalNumberProperties = createApproveWorkorderRequestOptionalProperties();
+    const optionalBooleanProperties = createApproveWorkorderRequestOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalApproveWorkorderRequestPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalApproveWorkorderRequestPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalApproveWorkorderRequestPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

@@ -80,21 +80,52 @@ export interface TechnicianAssignmentResponse {
     assignmentHistory?: Array<AssignmentHistoryEntry>;
 }
 
+function isOptionalTechnicianAssignmentResponsePropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type TechnicianAssignmentResponseOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createTechnicianAssignmentResponsePropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createTechnicianAssignmentResponseOptionalProperties(
+    ...properties: TechnicianAssignmentResponseOptionalProperty[]
+): ReadonlyArray<TechnicianAssignmentResponseOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfTechnicianAssignmentResponse(value: object): value is TechnicianAssignmentResponse {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('workorderId' in _v && typeof _v['workorderId'] !== 'string') return false;
-    if ('technicianId' in _v && typeof _v['technicianId'] !== 'string') return false;
-    if ('technicianName' in _v && typeof _v['technicianName'] !== 'string') return false;
-    if ('assignedBy' in _v && typeof _v['assignedBy'] !== 'string') return false;
-    if ('previousTechnicianId' in _v && typeof _v['previousTechnicianId'] !== 'string') return false;
-    if ('previousTechnicianName' in _v && typeof _v['previousTechnicianName'] !== 'string') return false;
-    if ('status' in _v && typeof _v['status'] !== 'string') return false;
-    if ('message' in _v && typeof _v['message'] !== 'string') return false;
-    if ('notes' in _v && typeof _v['notes'] !== 'string') return false;
-    if ('reassignmentReason' in _v && typeof _v['reassignmentReason'] !== 'string') return false;
-    if ('reassignedBy' in _v && typeof _v['reassignedBy'] !== 'string') return false;
-    if ('currentStatus' in _v && typeof _v['currentStatus'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createTechnicianAssignmentResponsePropertyNames();
+    const optionalStringProperties = createTechnicianAssignmentResponseOptionalProperties({ name: 'workorderId', nullable: false }, { name: 'technicianId', nullable: false }, { name: 'technicianName', nullable: false }, { name: 'assignedBy', nullable: false }, { name: 'previousTechnicianId', nullable: false }, { name: 'previousTechnicianName', nullable: false }, { name: 'status', nullable: false }, { name: 'message', nullable: false }, { name: 'notes', nullable: false }, { name: 'reassignmentReason', nullable: false }, { name: 'reassignedBy', nullable: false }, { name: 'currentStatus', nullable: false }, );
+    const optionalNumberProperties = createTechnicianAssignmentResponseOptionalProperties();
+    const optionalBooleanProperties = createTechnicianAssignmentResponseOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalTechnicianAssignmentResponsePropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalTechnicianAssignmentResponsePropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalTechnicianAssignmentResponsePropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

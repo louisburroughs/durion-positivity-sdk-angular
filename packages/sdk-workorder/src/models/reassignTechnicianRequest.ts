@@ -35,15 +35,52 @@ export interface ReassignTechnicianRequest {
     notifyPreviousTechnician?: boolean;
 }
 
+function isOptionalReassignTechnicianRequestPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type ReassignTechnicianRequestOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createReassignTechnicianRequestPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createReassignTechnicianRequestOptionalProperties(
+    ...properties: ReassignTechnicianRequestOptionalProperty[]
+): ReadonlyArray<ReassignTechnicianRequestOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfReassignTechnicianRequest(value: object): value is ReassignTechnicianRequest {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if (!('newTechnicianId' in _v) || _v['newTechnicianId'] === undefined) return false;
-    if ('newTechnicianId' in _v && typeof _v['newTechnicianId'] !== 'string') return false;
-    if ('reassignedByUserId' in _v && typeof _v['reassignedByUserId'] !== 'string') return false;
-    if ('reason' in _v && typeof _v['reason'] !== 'string') return false;
-    if ('notes' in _v && typeof _v['notes'] !== 'string') return false;
-    if ('notifyPreviousTechnician' in _v && typeof _v['notifyPreviousTechnician'] !== 'boolean') return false;
-    return true;
+
+    const requiredProperties = createReassignTechnicianRequestPropertyNames('newTechnicianId', );
+    const optionalStringProperties = createReassignTechnicianRequestOptionalProperties({ name: 'newTechnicianId', nullable: false }, { name: 'reassignedByUserId', nullable: false }, { name: 'reason', nullable: false }, { name: 'notes', nullable: false }, );
+    const optionalNumberProperties = createReassignTechnicianRequestOptionalProperties();
+    const optionalBooleanProperties = createReassignTechnicianRequestOptionalProperties({ name: 'notifyPreviousTechnician', nullable: false }, );
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalReassignTechnicianRequestPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalReassignTechnicianRequestPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalReassignTechnicianRequestPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

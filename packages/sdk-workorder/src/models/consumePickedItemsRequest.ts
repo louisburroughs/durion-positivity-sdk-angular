@@ -14,10 +14,52 @@ export interface ConsumePickedItemsRequest {
     items: Array<ConsumeItem>;
 }
 
+function isOptionalConsumePickedItemsRequestPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type ConsumePickedItemsRequestOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createConsumePickedItemsRequestPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createConsumePickedItemsRequestOptionalProperties(
+    ...properties: ConsumePickedItemsRequestOptionalProperty[]
+): ReadonlyArray<ConsumePickedItemsRequestOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfConsumePickedItemsRequest(value: object): value is ConsumePickedItemsRequest {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if (!('items' in _v) || _v['items'] === undefined) return false;
-    return true;
+
+    const requiredProperties = createConsumePickedItemsRequestPropertyNames('items', );
+    const optionalStringProperties = createConsumePickedItemsRequestOptionalProperties();
+    const optionalNumberProperties = createConsumePickedItemsRequestOptionalProperties();
+    const optionalBooleanProperties = createConsumePickedItemsRequestOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalConsumePickedItemsRequestPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalConsumePickedItemsRequestPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalConsumePickedItemsRequestPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

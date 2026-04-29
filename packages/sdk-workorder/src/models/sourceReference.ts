@@ -14,13 +14,52 @@ export interface SourceReference {
     sourceReferenceId: string;
 }
 
+function isOptionalSourceReferencePropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type SourceReferenceOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createSourceReferencePropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createSourceReferenceOptionalProperties(
+    ...properties: SourceReferenceOptionalProperty[]
+): ReadonlyArray<SourceReferenceOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfSourceReference(value: object): value is SourceReference {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if (!('system' in _v) || _v['system'] === undefined) return false;
-    if ('system' in _v && typeof _v['system'] !== 'string') return false;
-    if (!('sourceReferenceId' in _v) || _v['sourceReferenceId'] === undefined) return false;
-    if ('sourceReferenceId' in _v && typeof _v['sourceReferenceId'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createSourceReferencePropertyNames('system', 'sourceReferenceId', );
+    const optionalStringProperties = createSourceReferenceOptionalProperties({ name: 'system', nullable: false }, { name: 'sourceReferenceId', nullable: false }, );
+    const optionalNumberProperties = createSourceReferenceOptionalProperties();
+    const optionalBooleanProperties = createSourceReferenceOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalSourceReferencePropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalSourceReferencePropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalSourceReferencePropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

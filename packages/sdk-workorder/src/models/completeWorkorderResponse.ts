@@ -35,13 +35,52 @@ export interface CompleteWorkorderResponse {
     message?: string;
 }
 
+function isOptionalCompleteWorkorderResponsePropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type CompleteWorkorderResponseOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createCompleteWorkorderResponsePropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createCompleteWorkorderResponseOptionalProperties(
+    ...properties: CompleteWorkorderResponseOptionalProperty[]
+): ReadonlyArray<CompleteWorkorderResponseOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfCompleteWorkorderResponse(value: object): value is CompleteWorkorderResponse {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('workorderId' in _v && typeof _v['workorderId'] !== 'string') return false;
-    if ('previousStatus' in _v && typeof _v['previousStatus'] !== 'string') return false;
-    if ('currentStatus' in _v && typeof _v['currentStatus'] !== 'string') return false;
-    if ('message' in _v && typeof _v['message'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createCompleteWorkorderResponsePropertyNames();
+    const optionalStringProperties = createCompleteWorkorderResponseOptionalProperties({ name: 'workorderId', nullable: false }, { name: 'previousStatus', nullable: false }, { name: 'currentStatus', nullable: false }, { name: 'message', nullable: false }, );
+    const optionalNumberProperties = createCompleteWorkorderResponseOptionalProperties();
+    const optionalBooleanProperties = createCompleteWorkorderResponseOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalCompleteWorkorderResponsePropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalCompleteWorkorderResponsePropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalCompleteWorkorderResponsePropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

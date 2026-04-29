@@ -27,14 +27,52 @@ export interface ConsumePartRequest {
     notes?: string;
 }
 
+function isOptionalConsumePartRequestPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type ConsumePartRequestOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createConsumePartRequestPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createConsumePartRequestOptionalProperties(
+    ...properties: ConsumePartRequestOptionalProperty[]
+): ReadonlyArray<ConsumePartRequestOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfConsumePartRequest(value: object): value is ConsumePartRequest {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if (!('workorderPartId' in _v) || _v['workorderPartId'] === undefined) return false;
-    if ('workorderPartId' in _v && typeof _v['workorderPartId'] !== 'string') return false;
-    if (!('quantity' in _v) || _v['quantity'] === undefined) return false;
-    if ('quantity' in _v && typeof _v['quantity'] !== 'number') return false;
-    if ('notes' in _v && typeof _v['notes'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createConsumePartRequestPropertyNames('workorderPartId', 'quantity', );
+    const optionalStringProperties = createConsumePartRequestOptionalProperties({ name: 'workorderPartId', nullable: false }, { name: 'notes', nullable: false }, );
+    const optionalNumberProperties = createConsumePartRequestOptionalProperties({ name: 'quantity', nullable: false }, );
+    const optionalBooleanProperties = createConsumePartRequestOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalConsumePartRequestPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalConsumePartRequestPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalConsumePartRequestPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

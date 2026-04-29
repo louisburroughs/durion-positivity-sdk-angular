@@ -31,15 +31,52 @@ export interface LineItemApprovalDto {
     notes?: string;
 }
 
+function isOptionalLineItemApprovalDtoPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type LineItemApprovalDtoOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createLineItemApprovalDtoPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createLineItemApprovalDtoOptionalProperties(
+    ...properties: LineItemApprovalDtoOptionalProperty[]
+): ReadonlyArray<LineItemApprovalDtoOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfLineItemApprovalDto(value: object): value is LineItemApprovalDto {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if (!('lineItemId' in _v) || _v['lineItemId'] === undefined) return false;
-    if ('lineItemId' in _v && typeof _v['lineItemId'] !== 'string') return false;
-    if (!('approved' in _v) || _v['approved'] === undefined) return false;
-    if ('approved' in _v && typeof _v['approved'] !== 'boolean') return false;
-    if ('rejectionReason' in _v && typeof _v['rejectionReason'] !== 'string') return false;
-    if ('notes' in _v && typeof _v['notes'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createLineItemApprovalDtoPropertyNames('lineItemId', 'approved', );
+    const optionalStringProperties = createLineItemApprovalDtoOptionalProperties({ name: 'lineItemId', nullable: false }, { name: 'rejectionReason', nullable: false }, { name: 'notes', nullable: false }, );
+    const optionalNumberProperties = createLineItemApprovalDtoOptionalProperties();
+    const optionalBooleanProperties = createLineItemApprovalDtoOptionalProperties({ name: 'approved', nullable: false }, );
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalLineItemApprovalDtoPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalLineItemApprovalDtoPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalLineItemApprovalDtoPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

@@ -40,14 +40,52 @@ export interface CreateChangeRequestDTO {
     parts?: Array<WorkorderItemDTO>;
 }
 
+function isOptionalCreateChangeRequestDTOPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type CreateChangeRequestDTOOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createCreateChangeRequestDTOPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createCreateChangeRequestDTOOptionalProperties(
+    ...properties: CreateChangeRequestDTOOptionalProperty[]
+): ReadonlyArray<CreateChangeRequestDTOOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfCreateChangeRequestDTO(value: object): value is CreateChangeRequestDTO {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('workorderId' in _v && typeof _v['workorderId'] !== 'string') return false;
-    if (!('description' in _v) || _v['description'] === undefined) return false;
-    if ('description' in _v && typeof _v['description'] !== 'string') return false;
-    if ('isEmergencyException' in _v && typeof _v['isEmergencyException'] !== 'boolean') return false;
-    if ('exceptionReason' in _v && typeof _v['exceptionReason'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createCreateChangeRequestDTOPropertyNames('description', );
+    const optionalStringProperties = createCreateChangeRequestDTOOptionalProperties({ name: 'workorderId', nullable: false }, { name: 'description', nullable: false }, { name: 'exceptionReason', nullable: false }, );
+    const optionalNumberProperties = createCreateChangeRequestDTOOptionalProperties();
+    const optionalBooleanProperties = createCreateChangeRequestDTOOptionalProperties({ name: 'isEmergencyException', nullable: false }, );
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalCreateChangeRequestDTOPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalCreateChangeRequestDTOPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalCreateChangeRequestDTOPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

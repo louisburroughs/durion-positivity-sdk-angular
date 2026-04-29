@@ -14,13 +14,52 @@ export interface ConsumeItem {
     quantityToConsume: number;
 }
 
+function isOptionalConsumeItemPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type ConsumeItemOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createConsumeItemPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createConsumeItemOptionalProperties(
+    ...properties: ConsumeItemOptionalProperty[]
+): ReadonlyArray<ConsumeItemOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfConsumeItem(value: object): value is ConsumeItem {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if (!('pickTaskId' in _v) || _v['pickTaskId'] === undefined) return false;
-    if ('pickTaskId' in _v && typeof _v['pickTaskId'] !== 'string') return false;
-    if (!('quantityToConsume' in _v) || _v['quantityToConsume'] === undefined) return false;
-    if ('quantityToConsume' in _v && typeof _v['quantityToConsume'] !== 'number') return false;
-    return true;
+
+    const requiredProperties = createConsumeItemPropertyNames('pickTaskId', 'quantityToConsume', );
+    const optionalStringProperties = createConsumeItemOptionalProperties({ name: 'pickTaskId', nullable: false }, );
+    const optionalNumberProperties = createConsumeItemOptionalProperties({ name: 'quantityToConsume', nullable: false }, );
+    const optionalBooleanProperties = createConsumeItemOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalConsumeItemPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalConsumeItemPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalConsumeItemPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

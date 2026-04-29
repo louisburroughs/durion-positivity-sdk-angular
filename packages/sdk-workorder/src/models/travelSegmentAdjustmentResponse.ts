@@ -22,15 +22,52 @@ export interface TravelSegmentAdjustmentResponse {
     createdAt?: string;
 }
 
+function isOptionalTravelSegmentAdjustmentResponsePropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type TravelSegmentAdjustmentResponseOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createTravelSegmentAdjustmentResponsePropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createTravelSegmentAdjustmentResponseOptionalProperties(
+    ...properties: TravelSegmentAdjustmentResponseOptionalProperty[]
+): ReadonlyArray<TravelSegmentAdjustmentResponseOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfTravelSegmentAdjustmentResponse(value: object): value is TravelSegmentAdjustmentResponse {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('adjustmentId' in _v && typeof _v['adjustmentId'] !== 'string') return false;
-    if ('travelSegmentId' in _v && typeof _v['travelSegmentId'] !== 'string') return false;
-    if ('adjustmentReason' in _v && typeof _v['adjustmentReason'] !== 'string') return false;
-    if ('adjustedByUserId' in _v && typeof _v['adjustedByUserId'] !== 'string') return false;
-    if ('approvalStatus' in _v && typeof _v['approvalStatus'] !== 'string') return false;
-    if ('approvedByUserId' in _v && typeof _v['approvedByUserId'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createTravelSegmentAdjustmentResponsePropertyNames();
+    const optionalStringProperties = createTravelSegmentAdjustmentResponseOptionalProperties({ name: 'adjustmentId', nullable: false }, { name: 'travelSegmentId', nullable: false }, { name: 'adjustmentReason', nullable: false }, { name: 'adjustedByUserId', nullable: false }, { name: 'approvalStatus', nullable: false }, { name: 'approvedByUserId', nullable: false }, );
+    const optionalNumberProperties = createTravelSegmentAdjustmentResponseOptionalProperties();
+    const optionalBooleanProperties = createTravelSegmentAdjustmentResponseOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalTravelSegmentAdjustmentResponsePropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalTravelSegmentAdjustmentResponsePropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalTravelSegmentAdjustmentResponsePropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

@@ -60,15 +60,52 @@ export enum WorkorderStatusViewStatusEnum {
 
 
 
+function isOptionalWorkorderStatusViewPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type WorkorderStatusViewOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createWorkorderStatusViewPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createWorkorderStatusViewOptionalProperties(
+    ...properties: WorkorderStatusViewOptionalProperty[]
+): ReadonlyArray<WorkorderStatusViewOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfWorkorderStatusView(value: object): value is WorkorderStatusView {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('workorderId' in _v && typeof _v['workorderId'] !== 'string') return false;
-    if ('status' in _v && typeof _v['status'] !== 'string') return false;
-    if ('assignedTechnicianId' in _v && typeof _v['assignedTechnicianId'] !== 'string') return false;
-    if ('locationId' in _v && typeof _v['locationId'] !== 'string') return false;
-    if ('customerName' in _v && typeof _v['customerName'] !== 'string') return false;
-    if ('vehicleInfo' in _v && typeof _v['vehicleInfo'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createWorkorderStatusViewPropertyNames();
+    const optionalStringProperties = createWorkorderStatusViewOptionalProperties({ name: 'workorderId', nullable: false }, { name: 'status', nullable: false }, { name: 'assignedTechnicianId', nullable: false }, { name: 'locationId', nullable: false }, { name: 'customerName', nullable: false }, { name: 'vehicleInfo', nullable: false }, );
+    const optionalNumberProperties = createWorkorderStatusViewOptionalProperties();
+    const optionalBooleanProperties = createWorkorderStatusViewOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalWorkorderStatusViewPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalWorkorderStatusViewPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalWorkorderStatusViewPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 
