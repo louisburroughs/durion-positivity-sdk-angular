@@ -118,6 +118,59 @@ cleanup_orphan_js() {
 	rm -f "${package_dir}/src/index.js" "${package_dir}/src/runtime.ts" "${package_dir}/src/runtime.js" 2>/dev/null || true
 }
 
+ensure_models_are_modules() {
+	# When a service has no DTO models, the generator emits empty src/models/index.ts
+	# and src/models/models.ts. TS treats empty files as scripts (TS2306). Stamp an
+	# explicit `export {};` so they parse as modules. Idempotent.
+	local module_name="$1"
+	local package_dir="packages/sdk-${module_name}"
+	local f
+	for f in "${package_dir}/src/models/index.ts" "${package_dir}/src/models/models.ts"; do
+		if [[ -f "$f" && ! -s "$f" ]]; then
+			echo "export {};" > "$f"
+		fi
+	done
+}
+
+write_src_index() {
+	# Idempotently regenerate packages/sdk-${module}/src/index.ts.
+	# - Always re-export the generated apis aggregator (./apis/api).
+	# - Re-export every workflow file under ./workflows (excluding .test.ts), if present.
+	# - Always overwrite to keep generation deterministic.
+	local module_name="$1"
+	local package_dir="packages/sdk-${module_name}"
+	local src_dir="${package_dir}/src"
+	local index_file="${src_dir}/index.ts"
+	local workflows_dir="${src_dir}/workflows"
+	local has_content=false
+
+	mkdir -p "${src_dir}"
+	: > "${index_file}"
+
+	if [[ -f "${src_dir}/apis/api.ts" ]]; then
+		echo "export * from './apis/api';" >> "${index_file}"
+		has_content=true
+	fi
+
+	if [[ -d "${workflows_dir}" ]]; then
+		shopt -s nullglob
+		local wf
+		for wf in "${workflows_dir}"/*.ts; do
+			local base
+			base="$(basename "${wf}" .ts)"
+			[[ "${base}" == *.test ]] && continue
+			[[ "${base}" == "index" ]] && continue
+			echo "export * from './workflows/${base}';" >> "${index_file}"
+			has_content=true
+		done
+		shopt -u nullglob
+	fi
+
+	if [[ "${has_content}" == "false" ]]; then
+		echo "export {};" >> "${index_file}"
+	fi
+}
+
 patch_package_dependencies() {
 	local module_name="$1"
 	local package_dir="packages/sdk-${module_name}"
@@ -191,6 +244,8 @@ if [[ -n "$module" ]]; then
 	cleanup_legacy_null_models "$module"
 	cleanup_legacy_fetch_apis "$module"
 	cleanup_orphan_js "$module"
+	ensure_models_are_modules "$module"
+	write_src_index "$module"
 	patch_package_dependencies "$module"
 else
 	# Generate all SDK modules in deterministic order
@@ -210,6 +265,8 @@ else
 		cleanup_legacy_null_models "$m"
 		cleanup_legacy_fetch_apis "$m"
 		cleanup_orphan_js "$m"
+		ensure_models_are_modules "$m"
+		write_src_index "$m"
 		patch_package_dependencies "$m"
 	done
 fi

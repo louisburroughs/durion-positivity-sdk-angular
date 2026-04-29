@@ -1,20 +1,22 @@
-import { ChangeRequestAPIApi } from '../apis/ChangeRequestAPIApi';
+import { Injectable, inject } from '@angular/core';
+import { ChangeRequestAPIService } from '../apis/changeRequestAPI.service';
 
+@Injectable({ providedIn: 'root' })
 export class WorkorderChangeRequestWorkflow {
-  constructor(private readonly changeRequestApi: ChangeRequestAPIApi) { }
+  private readonly changeRequestApi = inject(ChangeRequestAPIService);
 
   /** @operationId createChangeRequest */
-  submit(params: Parameters<ChangeRequestAPIApi['createChangeRequest']>[0]) {
-    return this.changeRequestApi.createChangeRequest(params);
+  submit(...args: unknown[]) {
+    return (this.changeRequestApi.createChangeRequest as (...a: unknown[]) => unknown)(...args);
   }
 
   /** @operationId approveChangeRequest */
-  approve(params: Parameters<ChangeRequestAPIApi['approveChangeRequest']>[0]) {
-    return this.changeRequestApi.approveChangeRequest(params);
+  approve(...args: unknown[]) {
+    return (this.changeRequestApi.approveChangeRequest as (...a: unknown[]) => unknown)(...args);
   }
 
   /** @operationId declineChangeRequest */
-  decline(params: Parameters<ChangeRequestAPIApi['declineChangeRequest']>[0]) {
-    return this.changeRequestApi.declineChangeRequest(params);
+  decline(...args: unknown[]) {
+    return (this.changeRequestApi.declineChangeRequest as (...a: unknown[]) => unknown)(...args);
   }
 }

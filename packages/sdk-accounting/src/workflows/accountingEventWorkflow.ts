@@ -1,20 +1,22 @@
-import { AccountingEventsApi } from '../apis/AccountingEventsApi';
+import { Injectable, inject } from '@angular/core';
+import { AccountingEventsService } from '../apis/accountingEvents.service';
 
+@Injectable({ providedIn: 'root' })
 export class AccountingEventWorkflow {
-  constructor(private readonly accountingEventsApi: AccountingEventsApi) { }
+  private readonly accountingEventsApi = inject(AccountingEventsService);
 
   /** @operationId retryEventProcessing */
-  retry(params: Parameters<AccountingEventsApi['retryEventProcessing']>[0]) {
-    return this.accountingEventsApi.retryEventProcessing(params);
+  retry(...args: unknown[]) {
+    return (this.accountingEventsApi.retryEventProcessing as (...a: unknown[]) => unknown)(...args);
   }
 
   /** @operationId reprocessSuspendedEvent */
-  reprocess(params: Parameters<AccountingEventsApi['reprocessSuspendedEvent']>[0]) {
-    return this.accountingEventsApi.reprocessSuspendedEvent(params);
+  reprocess(...args: unknown[]) {
+    return (this.accountingEventsApi.reprocessSuspendedEvent as (...a: unknown[]) => unknown)(...args);
   }
 
   /** @operationId submitEvent */
-  submit(params: Parameters<AccountingEventsApi['submitEvent']>[0]) {
-    return this.accountingEventsApi.submitEvent(params);
+  submit(...args: unknown[]) {
+    return (this.accountingEventsApi.submitEvent as (...a: unknown[]) => unknown)(...args);
   }
 }

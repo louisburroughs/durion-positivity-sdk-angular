@@ -1,30 +1,32 @@
-import { EstimateAPIApi } from '../apis/EstimateAPIApi';
+import { Injectable, inject } from '@angular/core';
+import { EstimateAPIService } from '../apis/estimateAPI.service';
 
+@Injectable({ providedIn: 'root' })
 export class WorkorderEstimateWorkflow {
-  constructor(private readonly estimateApi: EstimateAPIApi) { }
+  private readonly estimateApi = inject(EstimateAPIService);
 
   /** @operationId createEstimate */
-  create(params: Parameters<EstimateAPIApi['createEstimate']>[0]) {
-    return this.estimateApi.createEstimate(params);
+  create(...args: unknown[]) {
+    return (this.estimateApi.createEstimate as (...a: unknown[]) => unknown)(...args);
   }
 
   /** @operationId submitForApproval */
-  submitForApproval(params: Parameters<EstimateAPIApi['submitForApproval']>[0]) {
-    return this.estimateApi.submitForApproval(params);
+  submitForApproval(...args: unknown[]) {
+    return (this.estimateApi.submitForApproval as (...a: unknown[]) => unknown)(...args);
   }
 
   /** @operationId approveEstimate */
-  approve(params: Parameters<EstimateAPIApi['approveEstimate']>[0]) {
-    return this.estimateApi.approveEstimate(params);
+  approve(...args: unknown[]) {
+    return (this.estimateApi.approveEstimate as (...a: unknown[]) => unknown)(...args);
   }
 
   /** @operationId declineEstimate */
-  decline(params: Parameters<EstimateAPIApi['declineEstimate']>[0]) {
-    return this.estimateApi.declineEstimate(params);
+  decline(...args: unknown[]) {
+    return (this.estimateApi.declineEstimate as (...a: unknown[]) => unknown)(...args);
   }
 
   /** @operationId promoteEstimateToWorkorder */
-  promoteToWorkorder(params: Parameters<EstimateAPIApi['promoteEstimateToWorkorder']>[0]) {
-    return this.estimateApi.promoteEstimateToWorkorder(params);
+  promoteToWorkorder(...args: unknown[]) {
+    return (this.estimateApi.promoteEstimateToWorkorder as (...a: unknown[]) => unknown)(...args);
   }
 }

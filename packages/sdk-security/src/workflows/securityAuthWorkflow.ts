@@ -1,29 +1,29 @@
-import { AuthAPIApi } from '../apis/AuthAPIApi';
-import { JWTAPIApi } from '../apis/JWTAPIApi';
+import { Injectable, inject } from '@angular/core';
+import { AuthAPIService } from '../apis/authAPI.service';
+import { JWTAPIService } from '../apis/jWTAPI.service';
 
+@Injectable({ providedIn: 'root' })
 export class SecurityAuthWorkflow {
-  constructor(
-    private readonly authApi: AuthAPIApi,
-    private readonly jwtApi: JWTAPIApi,
-  ) { }
+  private readonly authApi = inject(AuthAPIService);
+  private readonly jwtApi = inject(JWTAPIService);
 
   /** @operationId login */
-  login(params: Parameters<AuthAPIApi['login']>[0]) {
-    return this.authApi.login(params);
+  login(...args: unknown[]) {
+    return (this.authApi.login as (...a: unknown[]) => unknown)(...args);
   }
 
   /** @operationId refreshAccessToken */
-  refresh(params: Parameters<JWTAPIApi['refreshAccessToken']>[0]) {
-    return this.jwtApi.refreshAccessToken(params);
+  refresh(...args: unknown[]) {
+    return (this.jwtApi.refreshAccessToken as (...a: unknown[]) => unknown)(...args);
   }
 
   /** @operationId validateToken */
-  validate(params: Parameters<JWTAPIApi['validateToken']>[0]) {
-    return this.jwtApi.validateToken(params);
+  validate(...args: unknown[]) {
+    return (this.jwtApi.validateToken as (...a: unknown[]) => unknown)(...args);
   }
 
   /** @operationId revokeToken */
-  revoke(params: Parameters<JWTAPIApi['revokeToken']>[0]) {
-    return this.jwtApi.revokeToken(params);
+  revoke(...args: unknown[]) {
+    return (this.jwtApi.revokeToken as (...a: unknown[]) => unknown)(...args);
   }
 }

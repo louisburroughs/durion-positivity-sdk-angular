@@ -1,25 +1,27 @@
-import { PriceOverridesApi } from '../apis/PriceOverridesApi';
+import { Injectable, inject } from '@angular/core';
+import { PriceOverridesService } from '../apis/priceOverrides.service';
 
+@Injectable({ providedIn: 'root' })
 export class OrderPriceOverrideWorkflow {
-  constructor(private readonly priceOverridesApi: PriceOverridesApi) { }
+  private readonly priceOverridesApi = inject(PriceOverridesService);
 
   /** @operationId applyPriceOverride */
-  submit(params: Parameters<PriceOverridesApi['applyPriceOverride']>[0]) {
-    return this.priceOverridesApi.applyPriceOverride(params);
+  submit(...args: unknown[]) {
+    return (this.priceOverridesApi.applyPriceOverride as (...a: unknown[]) => unknown)(...args);
   }
 
   /** @operationId approvePriceOverride */
-  approve(params: Parameters<PriceOverridesApi['approvePriceOverride']>[0]) {
-    return this.priceOverridesApi.approvePriceOverride(params);
+  approve(...args: unknown[]) {
+    return (this.priceOverridesApi.approvePriceOverride as (...a: unknown[]) => unknown)(...args);
   }
 
   /** @operationId rejectPriceOverride */
-  reject(params: Parameters<PriceOverridesApi['rejectPriceOverride']>[0]) {
-    return this.priceOverridesApi.rejectPriceOverride(params);
+  reject(...args: unknown[]) {
+    return (this.priceOverridesApi.rejectPriceOverride as (...a: unknown[]) => unknown)(...args);
   }
 
   /** @operationId getPendingApprovals */
-  getPending() {
-    return this.priceOverridesApi.getPendingApprovals();
+  getPending(...args: unknown[]) {
+    return (this.priceOverridesApi.getPendingApprovals as (...a: unknown[]) => unknown)(...args);
   }
 }
