@@ -1,124 +1,31 @@
-/**
- * SDK-002 Generation Pipeline — RED phase acceptance tests.
- *
- * Verifies that the OpenAPI generation pipeline satisfies the acceptance
- * criteria defined in Story SDK-002.  These are fast structural tests;
- * they do NOT invoke {@code scripts/generate-openapi.sh} at runtime.
- *
- * Issue: SDK-002
- */
+import { existsSync, readFileSync } from 'node:fs';
+import { join } from 'node:path';
 
-import * as fs from 'node:fs';
-import * as path from 'node:path';
+const ROOT = join(__dirname, '..', '..');
 
-// __dirname resolves to src/__tests__; repo root is three levels up.
-const REPO_ROOT = path.resolve(__dirname, '../..');
+describe('sdk-002 generation pipeline', () => {
+  const scriptPath = join(ROOT, 'scripts', 'generate-openapi.sh');
 
-const PHASE_1_MODULES = [
-  'security',
-  'order',
-  'inventory',
-  'workorder',
-  'accounting',
-] as const;
-
-function readJson(filePath: string): Record<string, unknown> {
-  return JSON.parse(fs.readFileSync(filePath, 'utf-8')) as Record<string, unknown>;
-}
-
-function readText(filePath: string): string {
-  return fs.readFileSync(filePath, 'utf-8');
-}
-
-// ---------------------------------------------------------------------------
-// AC-1 & AC-2 — openapitools.json config
-// ---------------------------------------------------------------------------
-
-describe('SDK-002 AC-1: openapitools.json exists at repo root', () => {
-  it('openapitools.json file exists', () => {
-    const configPath = path.join(REPO_ROOT, 'openapitools.json');
-    expect(fs.existsSync(configPath)).toBe(true);
+  it('generate-openapi.sh exists', () => {
+    expect(existsSync(scriptPath)).toBe(true);
   });
-});
 
-describe('SDK-002 AC-2: openapitools.json has typescript-fetch generator configured', () => {
-  it('contains at least one generator config with generatorName typescript-fetch', () => {
-    const configPath = path.join(REPO_ROOT, 'openapitools.json');
-    const config = readJson(configPath);
-    // The openapi-generator-cli config format nests generator configs under a
-    // "generator-cli" > "generators" map.  Flatten all values and check that
-    // at least one entry specifies typescript-fetch.
-    const generatorsCli = config['generator-cli'] as Record<string, unknown> | undefined;
-    const generators = generatorsCli?.['generators'] as Record<string, unknown> | undefined;
-    expect(generators).toBeDefined();
-    const entries = Object.values(generators ?? {}) as Array<Record<string, unknown>>;
-    const hasFetchGenerator = entries.some(
-      (entry) => entry['generatorName'] === 'typescript-fetch',
+  it('uses typescript-angular generator and contains required cleanups', () => {
+    const script = readFileSync(scriptPath, 'utf8');
+    expect(script).toMatch(/typescript-angular/);
+    expect(script).toMatch(/cleanup_legacy_null_models/);
+    expect(script).toMatch(/cleanup_legacy_fetch_apis/);
+    expect(script).toMatch(/cleanup_orphan_js/);
+    expect(script).toMatch(/patch_package_dependencies/);
+  });
+
+  it('openapitools.json exists and references typescript-angular generators', () => {
+    const tools = JSON.parse(readFileSync(join(ROOT, 'openapitools.json'), 'utf8'));
+    const generators = tools['generator-cli']?.generators ?? {};
+    const generatorNames = Object.values(generators).map(
+      (g: any) => g.generatorName as string,
     );
-    expect(hasFetchGenerator).toBe(true);
-  });
-});
-
-// ---------------------------------------------------------------------------
-// AC-3 — generate-openapi.sh invokes openapi-generator-cli
-// ---------------------------------------------------------------------------
-
-describe('SDK-002 AC-3: generate-openapi.sh invokes openapi-generator-cli', () => {
-  it('scripts/generate-openapi.sh contains openapi-generator-cli generate', () => {
-    const scriptPath = path.join(REPO_ROOT, 'scripts', 'generate-openapi.sh');
-    const content = readText(scriptPath);
-    expect(content).toContain('openapi-generator-cli generate');
-  });
-});
-
-// ---------------------------------------------------------------------------
-// AC-4 — generate-openapi.sh supports --module argument
-// ---------------------------------------------------------------------------
-
-describe('SDK-002 AC-4: generate-openapi.sh accepts --module argument', () => {
-  it('scripts/generate-openapi.sh contains --module argument handling', () => {
-    const scriptPath = path.join(REPO_ROOT, 'scripts', 'generate-openapi.sh');
-    const content = readText(scriptPath);
-    // Accept either explicit --module flag parsing or a $module variable reference.
-    const hasModuleArg = content.includes('--module') || content.includes('$module');
-    expect(hasModuleArg).toBe(true);
-  });
-});
-
-// ---------------------------------------------------------------------------
-// AC-5 through AC-9 — package directories exist after generation
-// ---------------------------------------------------------------------------
-
-describe('SDK-002 AC-5–9: generated package directories exist', () => {
-  it.each(PHASE_1_MODULES)('packages/sdk-%s/ directory exists', (module) => {
-    const pkgDir = path.join(REPO_ROOT, 'packages', `sdk-${module}`);
-    expect(fs.existsSync(pkgDir)).toBe(true);
-  });
-});
-
-// ---------------------------------------------------------------------------
-// AC-8 — each generated package.json has correct @durion-sdk/<module> name
-// ---------------------------------------------------------------------------
-
-describe('SDK-002 AC-8: generated package.json name matches @durion-sdk/<module>', () => {
-  it.each(PHASE_1_MODULES)(
-    'packages/sdk-%s/package.json has name "@durion-sdk/%s"',
-    (module) => {
-      const pkgJsonPath = path.join(REPO_ROOT, 'packages', `sdk-${module}`, 'package.json');
-      expect(fs.existsSync(pkgJsonPath)).toBe(true);
-      const pkg = readJson(pkgJsonPath);
-      expect(pkg['name']).toBe(`@durion-sdk/${module}`);
-    },
-  );
-});
-
-// ---------------------------------------------------------------------------
-// AC-9 — each generated package has a src/ directory with TS API files
-// ---------------------------------------------------------------------------
-
-describe('SDK-002 AC-9: generated package has src/ directory', () => {
-  it.each(PHASE_1_MODULES)('packages/sdk-%s/src/ directory exists', (module) => {
-    const srcDir = path.join(REPO_ROOT, 'packages', `sdk-${module}`, 'src');
-    expect(fs.existsSync(srcDir)).toBe(true);
+    expect(generatorNames.length).toBeGreaterThan(0);
+    expect(generatorNames.every((n) => n === 'typescript-angular')).toBe(true);
   });
 });

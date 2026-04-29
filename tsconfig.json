@@ -10,12 +10,14 @@
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
     "outDir": "dist",
     "rootDir": ".",
     "baseUrl": ".",
     "paths": {
       "@durion-sdk/*": [
-        "packages/sdk-*/dist"
+        "packages/sdk-*/src/index.ts"
       ]
     }
   },

@@ -1,0 +1,25 @@
+node_modules/
+dist/
+coverage/
+# Generated OpenAPI client output
+packages/sdk-*/src/apis/
+packages/sdk-*/src/models/
+packages/sdk-*/src/runtime.ts
+packages/sdk-*/src/encoder.ts
+packages/sdk-*/src/configuration.ts
+packages/sdk-*/src/variables.ts
+packages/sdk-*/src/param.ts
+packages/sdk-*/src/api.module.ts
+packages/sdk-*/src/api.base.service.ts
+packages/sdk-*/src/provide-api.ts
+packages/sdk-*/src/query.params.ts
+packages/sdk-*/api.base.service.ts
+packages/sdk-*/configuration.ts
+packages/sdk-*/encoder.ts
+packages/sdk-*/variables.ts
+packages/sdk-*/param.ts
+packages/sdk-*/api.module.ts
+packages/sdk-*/query.params.ts
+packages/sdk-*/index.ts
+packages/sdk-*/git_push.sh
+templates/

@@ -70,6 +70,67 @@ EOF
 	shopt -u nullglob
 }
 
+cleanup_legacy_null_models() {
+	local module_name="$1"
+	local package_dir="packages/sdk-${module_name}"
+	local models_index="${package_dir}/src/models/index.ts"
+	local removed_basename
+	local model_file
+
+	shopt -s nullglob
+	for model_file in "${package_dir}/src/models"/*.ts "${package_dir}/src/src/models"/*.ts; do
+		[[ -f "$model_file" ]] || continue
+		if grep -q "from '\.\./runtime'\|from '\.\./\.\./models/" "$model_file" 2>/dev/null; then
+			# nested shim files always re-export from ../../models/...; only delete if the
+			# referenced sibling no longer exists OR the file in src/models/ uses ../runtime
+			if grep -q "from '\.\./runtime'" "$model_file"; then
+				removed_basename="$(basename "$model_file" .ts)"
+				rm -f "$model_file"
+				rm -f "${package_dir}/src/src/models/${removed_basename}.ts"
+				if [[ -f "$models_index" ]]; then
+					sed -i "/export \* from '\.\/${removed_basename}'/d" "$models_index"
+				fi
+				echo "[generate] Removed legacy null model ${removed_basename} from sdk-${module_name}"
+			fi
+		fi
+	done
+	shopt -u nullglob
+}
+
+cleanup_legacy_fetch_apis() {
+	local module_name="$1"
+	local apis_dir="packages/sdk-${module_name}/src/apis"
+	local apis_index="${apis_dir}/index.ts"
+
+	# Delete legacy PascalCase *Api.ts files (fetch-style holdovers)
+	find "$apis_dir" -maxdepth 1 -type f -name '[A-Z]*Api.ts' -delete 2>/dev/null || true
+
+	# Force apis/index.ts to re-export the aggregator emitted by the Angular generator
+	if [[ -f "${apis_dir}/api.ts" ]]; then
+		echo "export * from './api';" > "$apis_index"
+	fi
+}
+
+cleanup_orphan_js() {
+	local module_name="$1"
+	local package_dir="packages/sdk-${module_name}"
+	find "${package_dir}/src" -name '*.js' -delete 2>/dev/null || true
+	rm -f "${package_dir}/src/index.js" "${package_dir}/src/runtime.ts" "${package_dir}/src/runtime.js" 2>/dev/null || true
+}
+
+patch_package_dependencies() {
+	local module_name="$1"
+	local package_dir="packages/sdk-${module_name}"
+
+	if [[ -f "${package_dir}/package.json" ]]; then
+		(
+			cd "${package_dir}"
+			npm pkg delete 'dependencies.@durion-sdk/transport' >/dev/null 2>&1 || true
+			npm pkg set 'peerDependencies.@durion-sdk/transport=*' >/dev/null
+		)
+	fi
+}
+
 cleanup_vehicle_inventory_duplicate_exports() {
 	# Post-generation cleanup: VehicleAPIApi defines request-parameter interfaces named
 	# CreateVehicleRequest and UpdateVehicleRequest that clash with same-named model DTOs
@@ -127,6 +188,10 @@ if [[ -n "$module" ]]; then
 	if [[ "$module" == "vehicle-inventory" ]]; then
 		cleanup_vehicle_inventory_duplicate_exports
 	fi
+	cleanup_legacy_null_models "$module"
+	cleanup_legacy_fetch_apis "$module"
+	cleanup_orphan_js "$module"
+	patch_package_dependencies "$module"
 else
 	# Generate all SDK modules in deterministic order
 	for m in "${MODULES[@]}"; do
@@ -142,6 +207,10 @@ else
 		if [[ "$m" == "vehicle-inventory" ]]; then
 			cleanup_vehicle_inventory_duplicate_exports
 		fi
+		cleanup_legacy_null_models "$m"
+		cleanup_legacy_fetch_apis "$m"
+		cleanup_orphan_js "$m"
+		patch_package_dependencies "$m"
 	done
 fi
 

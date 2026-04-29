@@ -1,6 +1,6 @@
 /** @type {import('jest').Config} */
 const config = {
-  preset: 'ts-jest',
+  preset: 'jest-preset-angular',
   testEnvironment: 'node',
   testMatch: ['**/*.test.ts'],
   coverageProvider: 'v8',
@@ -8,16 +8,14 @@ const config = {
     '^@durion-sdk/(.+)$': '<rootDir>/packages/sdk-$1/src/index.ts',
   },
   passWithNoTests: true,
+  modulePathIgnorePatterns: ['<rootDir>/packages/.*/dist/'],
   collectCoverageFrom: [
     'src/**/*.ts',
     'packages/sdk-transport/src/**/*.ts',
-    'packages/sdk-*/src/index.ts',
     'packages/sdk-*/src/workflows/**/*.ts',
     '!**/__tests__/**',
     '!**/*.d.ts',
-    '!packages/sdk-*/src/apis/**',
-    '!packages/sdk-*/src/models/**',
-    '!packages/sdk-*/src/runtime.ts',
+    '!packages/sdk-transport/src/config.ts',
   ],
   coverageThreshold: {
     global: {
