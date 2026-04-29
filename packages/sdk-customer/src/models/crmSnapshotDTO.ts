@@ -24,3 +24,9 @@ export interface CrmSnapshotDTO {
     billingRules?: BillingRuleRef;
 }
 
+export function instanceOfCrmSnapshotDTO(value: object): value is CrmSnapshotDTO {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    return true;
+}
+

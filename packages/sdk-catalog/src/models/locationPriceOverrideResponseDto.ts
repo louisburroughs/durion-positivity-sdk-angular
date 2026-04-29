@@ -40,3 +40,26 @@ export enum LocationPriceOverrideResponseDtoStatusEnum {
 
 
 
+export function instanceOfLocationPriceOverrideResponseDto(value: object): value is LocationPriceOverrideResponseDto {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('overrideId' in _v && typeof _v['overrideId'] !== 'string') return false;
+    if ('version' in _v && typeof _v['version'] !== 'number') return false;
+    if ('locationId' in _v && typeof _v['locationId'] !== 'string') return false;
+    if ('productId' in _v && typeof _v['productId'] !== 'string') return false;
+    if ('basePrice' in _v && typeof _v['basePrice'] !== 'number') return false;
+    if ('cost' in _v && typeof _v['cost'] !== 'number') return false;
+    if ('overridePrice' in _v && typeof _v['overridePrice'] !== 'number') return false;
+    if ('discountPercent' in _v && typeof _v['discountPercent'] !== 'number') return false;
+    if ('marginPercent' in _v && typeof _v['marginPercent'] !== 'number') return false;
+    if ('status' in _v && typeof _v['status'] !== 'string') return false;
+    if ('createdByUserId' in _v && typeof _v['createdByUserId'] !== 'string') return false;
+    if ('assignedApproverId' in _v && typeof _v['assignedApproverId'] !== 'string') return false;
+    if ('assignmentStrategy' in _v && typeof _v['assignmentStrategy'] !== 'string') return false;
+    if ('approvedByUserId' in _v && typeof _v['approvedByUserId'] !== 'string') return false;
+    if ('rejectedBy' in _v && typeof _v['rejectedBy'] !== 'string') return false;
+    if ('rejectionReasonCode' in _v && typeof _v['rejectionReasonCode'] !== 'string') return false;
+    if ('rejectionNotes' in _v && typeof _v['rejectionNotes'] !== 'string') return false;
+    return true;
+}
+

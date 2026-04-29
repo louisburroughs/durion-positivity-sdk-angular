@@ -28,6 +28,10 @@ export interface AccountingEventResponse {
     finalPostingReferenceId?: string;
     resolvedByUserId?: string;
     mappingVersionAttempted?: string;
+    idempotencyOutcome?: string;
+    ingestionId?: string;
+    domainKeyId?: string;
+    invoiceId?: string;
 }
 export enum AccountingEventResponseStatusEnum {
     Received = 'RECEIVED',
@@ -38,4 +42,28 @@ export enum AccountingEventResponseStatusEnum {
 };
 
 
+
+export function instanceOfAccountingEventResponse(value: object): value is AccountingEventResponse {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('eventId' in _v && typeof _v['eventId'] !== 'string') return false;
+    if ('organizationId' in _v && typeof _v['organizationId'] !== 'string') return false;
+    if ('eventType' in _v && typeof _v['eventType'] !== 'string') return false;
+    if ('sourceSystem' in _v && typeof _v['sourceSystem'] !== 'string') return false;
+    if ('status' in _v && typeof _v['status'] !== 'string') return false;
+    if ('journalEntryId' in _v && typeof _v['journalEntryId'] !== 'string') return false;
+    if ('errorMessage' in _v && typeof _v['errorMessage'] !== 'string') return false;
+    if ('sequenceNumber' in _v && typeof _v['sequenceNumber'] !== 'number') return false;
+    if ('failureReasonCode' in _v && typeof _v['failureReasonCode'] !== 'string') return false;
+    if ('failureDetails' in _v && typeof _v['failureDetails'] !== 'string') return false;
+    if ('attemptCount' in _v && typeof _v['attemptCount'] !== 'number') return false;
+    if ('finalPostingReferenceId' in _v && typeof _v['finalPostingReferenceId'] !== 'string') return false;
+    if ('resolvedByUserId' in _v && typeof _v['resolvedByUserId'] !== 'string') return false;
+    if ('mappingVersionAttempted' in _v && typeof _v['mappingVersionAttempted'] !== 'string') return false;
+    if ('idempotencyOutcome' in _v && typeof _v['idempotencyOutcome'] !== 'string') return false;
+    if ('ingestionId' in _v && typeof _v['ingestionId'] !== 'string') return false;
+    if ('domainKeyId' in _v && typeof _v['domainKeyId'] !== 'string') return false;
+    if ('invoiceId' in _v && typeof _v['invoiceId'] !== 'string') return false;
+    return true;
+}
 

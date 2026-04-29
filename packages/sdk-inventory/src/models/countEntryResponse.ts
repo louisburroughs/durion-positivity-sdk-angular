@@ -22,3 +22,18 @@ export interface CountEntryResponse {
     recount?: boolean;
 }
 
+export function instanceOfCountEntryResponse(value: object): value is CountEntryResponse {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('countEntryId' in _v && typeof _v['countEntryId'] !== 'string') return false;
+    if ('cycleCountTaskId' in _v && typeof _v['cycleCountTaskId'] !== 'string') return false;
+    if ('auditorId' in _v && typeof _v['auditorId'] !== 'string') return false;
+    if ('actualQuantity' in _v && typeof _v['actualQuantity'] !== 'number') return false;
+    if ('expectedQuantity' in _v && typeof _v['expectedQuantity'] !== 'number') return false;
+    if ('variance' in _v && typeof _v['variance'] !== 'number') return false;
+    if ('recountSequenceNumber' in _v && typeof _v['recountSequenceNumber'] !== 'number') return false;
+    if ('recountOfCountEntryId' in _v && typeof _v['recountOfCountEntryId'] !== 'string') return false;
+    if ('recount' in _v && typeof _v['recount'] !== 'boolean') return false;
+    return true;
+}
+

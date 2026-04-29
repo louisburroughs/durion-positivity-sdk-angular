@@ -47,3 +47,16 @@ export enum TimeEntryExceptionRequestSeverityEnum {
 
 
 
+export function instanceOfTimeEntryExceptionRequest(value: object): value is TimeEntryExceptionRequest {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if (!('employeeId' in _v) || _v['employeeId'] === undefined) return false;
+    if ('employeeId' in _v && typeof _v['employeeId'] !== 'string') return false;
+    if (!('exceptionCode' in _v) || _v['exceptionCode'] === undefined) return false;
+    if ('exceptionCode' in _v && typeof _v['exceptionCode'] !== 'string') return false;
+    if ('severity' in _v && typeof _v['severity'] !== 'string') return false;
+    if ('timeEntryId' in _v && typeof _v['timeEntryId'] !== 'string') return false;
+    if ('resolutionNotes' in _v && typeof _v['resolutionNotes'] !== 'string') return false;
+    return true;
+}
+

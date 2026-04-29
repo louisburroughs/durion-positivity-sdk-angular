@@ -19,3 +19,11 @@ export enum PrintDeliveryRequestStatusEnum {
 
 
 
+export function instanceOfPrintDeliveryRequest(value: object): value is PrintDeliveryRequest {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if (!('status' in _v) || _v['status'] === undefined) return false;
+    if ('status' in _v && typeof _v['status'] !== 'string') return false;
+    return true;
+}
+

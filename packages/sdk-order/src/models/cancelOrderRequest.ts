@@ -16,3 +16,14 @@ export interface CancelOrderRequest {
     idempotencyKey?: string;
 }
 
+export function instanceOfCancelOrderRequest(value: object): value is CancelOrderRequest {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if (!('cancellationReason' in _v) || _v['cancellationReason'] === undefined) return false;
+    if ('cancellationReason' in _v && typeof _v['cancellationReason'] !== 'string') return false;
+    if ('workOrderId' in _v && typeof _v['workOrderId'] !== 'string') return false;
+    if ('paymentId' in _v && typeof _v['paymentId'] !== 'string') return false;
+    if ('idempotencyKey' in _v && typeof _v['idempotencyKey'] !== 'string') return false;
+    return true;
+}
+

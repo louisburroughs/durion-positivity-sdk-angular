@@ -20,3 +20,13 @@ export interface EmployeeContactInfoDto {
     emergencyContact?: EmployeeEmergencyContactDto;
 }
 
+export function instanceOfEmployeeContactInfoDto(value: object): value is EmployeeContactInfoDto {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('primaryEmail' in _v && typeof _v['primaryEmail'] !== 'string') return false;
+    if ('primaryPhone' in _v && typeof _v['primaryPhone'] !== 'string') return false;
+    if ('secondaryEmail' in _v && typeof _v['secondaryEmail'] !== 'string') return false;
+    if ('secondaryPhone' in _v && typeof _v['secondaryPhone'] !== 'string') return false;
+    return true;
+}
+

@@ -32,3 +32,14 @@ export enum EmployeeProfileDtoStatusEnum {
 
 
 
+export function instanceOfEmployeeProfileDto(value: object): value is EmployeeProfileDto {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('id' in _v && typeof _v['id'] !== 'string') return false;
+    if ('legalName' in _v && typeof _v['legalName'] !== 'string') return false;
+    if ('preferredName' in _v && typeof _v['preferredName'] !== 'string') return false;
+    if ('employeeNumber' in _v && typeof _v['employeeNumber'] !== 'string') return false;
+    if ('status' in _v && typeof _v['status'] !== 'string') return false;
+    return true;
+}
+

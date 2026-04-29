@@ -31,3 +31,18 @@ export enum CountResponseTaskStatusEnum {
 
 
 
+export function instanceOfCountResponse(value: object): value is CountResponse {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('countEntryId' in _v && typeof _v['countEntryId'] !== 'string') return false;
+    if ('taskId' in _v && typeof _v['taskId'] !== 'string') return false;
+    if ('actualQuantity' in _v && typeof _v['actualQuantity'] !== 'number') return false;
+    if ('expectedQuantity' in _v && typeof _v['expectedQuantity'] !== 'number') return false;
+    if ('variance' in _v && typeof _v['variance'] !== 'number') return false;
+    if ('recountSequenceNumber' in _v && typeof _v['recountSequenceNumber'] !== 'number') return false;
+    if ('taskStatus' in _v && typeof _v['taskStatus'] !== 'string') return false;
+    if ('limitExceeded' in _v && typeof _v['limitExceeded'] !== 'boolean') return false;
+    if ('message' in _v && typeof _v['message'] !== 'string') return false;
+    return true;
+}
+

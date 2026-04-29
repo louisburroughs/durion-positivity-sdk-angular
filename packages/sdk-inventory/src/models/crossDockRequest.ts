@@ -16,3 +16,16 @@ export interface CrossDockRequest {
     notes?: string;
 }
 
+export function instanceOfCrossDockRequest(value: object): value is CrossDockRequest {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if (!('workorderId' in _v) || _v['workorderId'] === undefined) return false;
+    if ('workorderId' in _v && typeof _v['workorderId'] !== 'string') return false;
+    if (!('workorderLineId' in _v) || _v['workorderLineId'] === undefined) return false;
+    if ('workorderLineId' in _v && typeof _v['workorderLineId'] !== 'string') return false;
+    if (!('quantity' in _v) || _v['quantity'] === undefined) return false;
+    if ('quantity' in _v && typeof _v['quantity'] !== 'number') return false;
+    if ('notes' in _v && typeof _v['notes'] !== 'string') return false;
+    return true;
+}
+

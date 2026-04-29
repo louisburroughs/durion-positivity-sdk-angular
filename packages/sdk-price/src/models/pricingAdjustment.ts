@@ -32,3 +32,13 @@ export interface PricingAdjustment {
     metadata?: any | null;
 }
 
+export function instanceOfPricingAdjustment(value: object): value is PricingAdjustment {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('type' in _v && typeof _v['type'] !== 'string') return false;
+    if ('sourceId' in _v && typeof _v['sourceId'] !== 'string') return false;
+    if ('label' in _v && typeof _v['label'] !== 'string') return false;
+    if ('amount' in _v && typeof _v['amount'] !== 'number') return false;
+    return true;
+}
+

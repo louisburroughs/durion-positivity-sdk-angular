@@ -51,3 +51,16 @@ export interface ResolvePersonResponse {
     phoneNumbers?: Array<string>;
 }
 
+export function instanceOfResolvePersonResponse(value: object): value is ResolvePersonResponse {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('personId' in _v && typeof _v['personId'] !== 'string') return false;
+    if ('matchedExisting' in _v && typeof _v['matchedExisting'] !== 'boolean') return false;
+    if ('score' in _v && typeof _v['score'] !== 'number') return false;
+    if ('thresholdApplied' in _v && typeof _v['thresholdApplied'] !== 'number') return false;
+    if ('firstName' in _v && typeof _v['firstName'] !== 'string') return false;
+    if ('lastName' in _v && typeof _v['lastName'] !== 'string') return false;
+    if ('primaryEmail' in _v && typeof _v['primaryEmail'] !== 'string') return false;
+    return true;
+}
+

@@ -105,3 +105,26 @@ export enum SelfRegistrationReviewCaseResponseStatusEnum {
 
 
 
+export function instanceOfSelfRegistrationReviewCaseResponse(value: object): value is SelfRegistrationReviewCaseResponse {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('caseId' in _v && typeof _v['caseId'] !== 'string') return false;
+    if ('caseType' in _v && typeof _v['caseType'] !== 'string') return false;
+    if ('status' in _v && typeof _v['status'] !== 'string') return false;
+    if ('reasonCode' in _v && typeof _v['reasonCode'] !== 'string') return false;
+    if ('reasonMessage' in _v && typeof _v['reasonMessage'] !== 'string') return false;
+    if ('email' in _v && typeof _v['email'] !== 'string') return false;
+    if ('requestedUsername' in _v && typeof _v['requestedUsername'] !== 'string') return false;
+    if ('personId' in _v && typeof _v['personId'] !== 'string') return false;
+    if ('linkedUserId' in _v && typeof _v['linkedUserId'] !== 'string') return false;
+    if ('crmCandidateCount' in _v && typeof _v['crmCandidateCount'] !== 'number') return false;
+    if ('crmSharedIdentityCandidateCount' in _v && typeof _v['crmSharedIdentityCandidateCount'] !== 'number') return false;
+    if ('crmExactEmailMatch' in _v && typeof _v['crmExactEmailMatch'] !== 'boolean') return false;
+    if ('crmExactPhoneMatch' in _v && typeof _v['crmExactPhoneMatch'] !== 'boolean') return false;
+    if ('crmExactNameMatch' in _v && typeof _v['crmExactNameMatch'] !== 'boolean') return false;
+    if ('notes' in _v && typeof _v['notes'] !== 'string') return false;
+    if ('resolvedBy' in _v && typeof _v['resolvedBy'] !== 'string') return false;
+    if ('resolutionNotes' in _v && typeof _v['resolutionNotes'] !== 'string') return false;
+    return true;
+}
+

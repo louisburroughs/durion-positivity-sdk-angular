@@ -35,3 +35,13 @@ export interface ReopenWorkorderResponse {
     message?: string;
 }
 
+export function instanceOfReopenWorkorderResponse(value: object): value is ReopenWorkorderResponse {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('workorderId' in _v && typeof _v['workorderId'] !== 'string') return false;
+    if ('currentStatus' in _v && typeof _v['currentStatus'] !== 'string') return false;
+    if ('isReopened' in _v && typeof _v['isReopened'] !== 'boolean') return false;
+    if ('message' in _v && typeof _v['message'] !== 'string') return false;
+    return true;
+}
+

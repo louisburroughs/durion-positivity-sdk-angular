@@ -35,3 +35,12 @@ export interface OperationalContextOverrideRequest {
     constraints?: Array<string>;
 }
 
+export function instanceOfOperationalContextOverrideRequest(value: object): value is OperationalContextOverrideRequest {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if (!('locationId' in _v) || _v['locationId'] === undefined) return false;
+    if ('locationId' in _v && typeof _v['locationId'] !== 'string') return false;
+    if ('bayId' in _v && typeof _v['bayId'] !== 'string') return false;
+    return true;
+}
+

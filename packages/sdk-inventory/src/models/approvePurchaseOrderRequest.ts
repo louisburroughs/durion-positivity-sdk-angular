@@ -13,3 +13,10 @@ export interface ApprovePurchaseOrderRequest {
     approvalNotes?: string;
 }
 
+export function instanceOfApprovePurchaseOrderRequest(value: object): value is ApprovePurchaseOrderRequest {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('approvalNotes' in _v && typeof _v['approvalNotes'] !== 'string') return false;
+    return true;
+}
+

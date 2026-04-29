@@ -22,3 +22,12 @@ export interface ContactSummary {
     primary?: boolean;
 }
 
+export function instanceOfContactSummary(value: object): value is ContactSummary {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('contactId' in _v && typeof _v['contactId'] !== 'string') return false;
+    if ('name' in _v && typeof _v['name'] !== 'string') return false;
+    if ('primary' in _v && typeof _v['primary'] !== 'boolean') return false;
+    return true;
+}
+

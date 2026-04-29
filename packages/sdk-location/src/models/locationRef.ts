@@ -18,3 +18,14 @@ export interface LocationRef {
     updatedAt?: string;
 }
 
+export function instanceOfLocationRef(value: object): value is LocationRef {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('id' in _v && typeof _v['id'] !== 'string') return false;
+    if ('name' in _v && typeof _v['name'] !== 'string') return false;
+    if ('code' in _v && typeof _v['code'] !== 'string') return false;
+    if ('status' in _v && typeof _v['status'] !== 'string') return false;
+    if ('hrLocationId' in _v && typeof _v['hrLocationId'] !== 'string') return false;
+    return true;
+}
+

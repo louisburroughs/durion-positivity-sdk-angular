@@ -18,3 +18,13 @@ export interface CoverageRuleRequest {
     maxDistance?: number;
 }
 
+export function instanceOfCoverageRuleRequest(value: object): value is CoverageRuleRequest {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('serviceAreaId' in _v && typeof _v['serviceAreaId'] !== 'string') return false;
+    if ('ruleType' in _v && typeof _v['ruleType'] !== 'string') return false;
+    if ('priority' in _v && typeof _v['priority'] !== 'number') return false;
+    if ('maxDistance' in _v && typeof _v['maxDistance'] !== 'number') return false;
+    return true;
+}
+

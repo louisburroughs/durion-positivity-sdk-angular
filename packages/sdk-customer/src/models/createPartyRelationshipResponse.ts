@@ -57,3 +57,14 @@ export enum CreatePartyRelationshipResponseRolesEnum {
 
 
 
+export function instanceOfCreatePartyRelationshipResponse(value: object): value is CreatePartyRelationshipResponse {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('relationshipId' in _v && typeof _v['relationshipId'] !== 'string') return false;
+    if ('partyId' in _v && typeof _v['partyId'] !== 'string') return false;
+    if ('personId' in _v && typeof _v['personId'] !== 'string') return false;
+    if ('previousPrimaryDemoted' in _v && typeof _v['previousPrimaryDemoted'] !== 'boolean') return false;
+    if ('primaryBillingContact' in _v && typeof _v['primaryBillingContact'] !== 'boolean') return false;
+    return true;
+}
+

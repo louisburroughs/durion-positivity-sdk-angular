@@ -31,3 +31,13 @@ export interface ServiceDto {
     shortDescription?: string;
 }
 
+export function instanceOfServiceDto(value: object): value is ServiceDto {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('id' in _v && typeof _v['id'] !== 'string') return false;
+    if ('name' in _v && typeof _v['name'] !== 'string') return false;
+    if ('longDescription' in _v && typeof _v['longDescription'] !== 'string') return false;
+    if ('shortDescription' in _v && typeof _v['shortDescription'] !== 'string') return false;
+    return true;
+}
+

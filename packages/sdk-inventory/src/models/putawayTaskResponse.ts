@@ -26,3 +26,21 @@ export interface PutawayTaskResponse {
     updatedAt?: string;
 }
 
+export function instanceOfPutawayTaskResponse(value: object): value is PutawayTaskResponse {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('taskId' in _v && typeof _v['taskId'] !== 'string') return false;
+    if ('sourceReceiptId' in _v && typeof _v['sourceReceiptId'] !== 'string') return false;
+    if ('productId' in _v && typeof _v['productId'] !== 'string') return false;
+    if ('quantity' in _v && typeof _v['quantity'] !== 'number') return false;
+    if ('sourceLocationId' in _v && typeof _v['sourceLocationId'] !== 'string') return false;
+    if ('suggestedDestinationLocationId' in _v && typeof _v['suggestedDestinationLocationId'] !== 'string') return false;
+    if ('originalSuggestedLocationId' in _v && typeof _v['originalSuggestedLocationId'] !== 'string') return false;
+    if ('finalSuggestedLocationId' in _v && typeof _v['finalSuggestedLocationId'] !== 'string') return false;
+    if ('actualDestinationLocationId' in _v && typeof _v['actualDestinationLocationId'] !== 'string') return false;
+    if ('fallbackReason' in _v && typeof _v['fallbackReason'] !== 'string') return false;
+    if ('status' in _v && typeof _v['status'] !== 'string') return false;
+    if ('assigneeId' in _v && typeof _v['assigneeId'] !== 'string') return false;
+    return true;
+}
+

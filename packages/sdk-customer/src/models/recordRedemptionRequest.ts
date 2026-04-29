@@ -21,3 +21,23 @@ export interface RecordRedemptionRequest {
     redemptionTimestamp?: string;
 }
 
+export function instanceOfRecordRedemptionRequest(value: object): value is RecordRedemptionRequest {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if (!('promotionId' in _v) || _v['promotionId'] === undefined) return false;
+    if ('promotionId' in _v && typeof _v['promotionId'] !== 'string') return false;
+    if (!('customerId' in _v) || _v['customerId'] === undefined) return false;
+    if ('customerId' in _v && typeof _v['customerId'] !== 'string') return false;
+    if (!('workorderId' in _v) || _v['workorderId'] === undefined) return false;
+    if ('workorderId' in _v && typeof _v['workorderId'] !== 'string') return false;
+    if ('invoiceId' in _v && typeof _v['invoiceId'] !== 'string') return false;
+    if (!('discountAmount' in _v) || _v['discountAmount'] === undefined) return false;
+    if ('discountAmount' in _v && typeof _v['discountAmount'] !== 'number') return false;
+    if (!('discountType' in _v) || _v['discountType'] === undefined) return false;
+    if ('discountType' in _v && typeof _v['discountType'] !== 'string') return false;
+    if (!('promotionCode' in _v) || _v['promotionCode'] === undefined) return false;
+    if ('promotionCode' in _v && typeof _v['promotionCode'] !== 'string') return false;
+    if ('recordedOverLimit' in _v && typeof _v['recordedOverLimit'] !== 'boolean') return false;
+    return true;
+}
+

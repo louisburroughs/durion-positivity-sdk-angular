@@ -1,11 +1,1 @@
-/* tslint:disable */
-/* eslint-disable */
-export * from './AppointmentsAPIApi';
-export * from './AssignmentControllerApi';
-export * from './ConflictOverrideAPIApi';
-export * from './ScheduleAPIApi';
-export * from './ShopAPIApi';
-export * from './ShopAuditControllerApi';
-export * from './ShopBayAPIApi';
-export * from './ShopMobileUnitAPIApi';
-export * from './WorkorderOperationalContextAPIApi';
+export * from './api';

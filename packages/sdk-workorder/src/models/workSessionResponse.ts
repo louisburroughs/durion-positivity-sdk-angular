@@ -91,3 +91,22 @@ export enum WorkSessionResponseStatusEnum {
 
 
 
+export function instanceOfWorkSessionResponse(value: object): value is WorkSessionResponse {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('workSessionId' in _v && typeof _v['workSessionId'] !== 'string') return false;
+    if ('mechanicId' in _v && typeof _v['mechanicId'] !== 'string') return false;
+    if ('workOrderId' in _v && typeof _v['workOrderId'] !== 'string') return false;
+    if ('workOrderTaskId' in _v && typeof _v['workOrderTaskId'] !== 'string') return false;
+    if ('locationId' in _v && typeof _v['locationId'] !== 'string') return false;
+    if ('resourceId' in _v && typeof _v['resourceId'] !== 'string') return false;
+    if ('status' in _v && typeof _v['status'] !== 'string') return false;
+    if ('locked' in _v && typeof _v['locked'] !== 'boolean') return false;
+    if ('totalDurationSeconds' in _v && typeof _v['totalDurationSeconds'] !== 'number') return false;
+    if ('approvedByUserId' in _v && typeof _v['approvedByUserId'] !== 'string') return false;
+    if ('approvalNotes' in _v && typeof _v['approvalNotes'] !== 'string') return false;
+    if ('overlapOverrideUsed' in _v && typeof _v['overlapOverrideUsed'] !== 'boolean') return false;
+    if ('overrideReason' in _v && typeof _v['overrideReason'] !== 'string') return false;
+    return true;
+}
+

@@ -40,3 +40,17 @@ export interface EstimateContext {
     appliedPromoCodes?: Array<string> | null;
 }
 
+export function instanceOfEstimateContext(value: object): value is EstimateContext {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if (!('estimateId' in _v) || _v['estimateId'] === undefined) return false;
+    if ('estimateId' in _v && typeof _v['estimateId'] !== 'string') return false;
+    if (!('customerId' in _v) || _v['customerId'] === undefined) return false;
+    if ('customerId' in _v && typeof _v['customerId'] !== 'string') return false;
+    if ('vehicleId' in _v && _v['vehicleId'] !== null && typeof _v['vehicleId'] !== 'string') return false;
+    if (!('lineItems' in _v) || _v['lineItems'] === undefined) return false;
+    if (!('subtotal' in _v) || _v['subtotal'] === undefined) return false;
+    if ('subtotal' in _v && typeof _v['subtotal'] !== 'number') return false;
+    return true;
+}
+

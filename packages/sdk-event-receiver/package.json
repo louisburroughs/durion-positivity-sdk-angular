@@ -18,6 +18,7 @@
   },
   "peerDependencies": {
     "@angular/core": "^21.0.0",
+    "@durion-sdk/transport": "*",
     "rxjs": "^7.4.0"
   },
   "devDependencies": {
@@ -31,4 +32,5 @@
     "rxjs": "^7.4.0",
     "typescript": ">=5.9.0 <6.0.0",
     "zone.js": "^0.15.0"
-  }}
+  }
+}

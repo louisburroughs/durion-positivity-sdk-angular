@@ -27,3 +27,14 @@ export interface CostTierDto {
     unitCost: number;
 }
 
+export function instanceOfCostTierDto(value: object): value is CostTierDto {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if (!('minQuantity' in _v) || _v['minQuantity'] === undefined) return false;
+    if ('minQuantity' in _v && typeof _v['minQuantity'] !== 'number') return false;
+    if ('maxQuantity' in _v && _v['maxQuantity'] !== null && typeof _v['maxQuantity'] !== 'number') return false;
+    if (!('unitCost' in _v) || _v['unitCost'] === undefined) return false;
+    if ('unitCost' in _v && typeof _v['unitCost'] !== 'number') return false;
+    return true;
+}
+

@@ -43,3 +43,16 @@ export interface ApprovalConfigurationResponse {
     priority?: number;
 }
 
+export function instanceOfApprovalConfigurationResponse(value: object): value is ApprovalConfigurationResponse {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('id' in _v && typeof _v['id'] !== 'string') return false;
+    if ('locationId' in _v && typeof _v['locationId'] !== 'string') return false;
+    if ('customerId' in _v && typeof _v['customerId'] !== 'string') return false;
+    if ('approvalMethod' in _v && typeof _v['approvalMethod'] !== 'string') return false;
+    if ('declineExpiryDays' in _v && typeof _v['declineExpiryDays'] !== 'number') return false;
+    if ('requireSignature' in _v && typeof _v['requireSignature'] !== 'boolean') return false;
+    if ('priority' in _v && typeof _v['priority'] !== 'number') return false;
+    return true;
+}
+

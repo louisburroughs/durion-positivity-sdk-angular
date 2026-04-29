@@ -16,3 +16,13 @@ export interface EmployeeEmergencyContactDto {
     email?: string;
 }
 
+export function instanceOfEmployeeEmergencyContactDto(value: object): value is EmployeeEmergencyContactDto {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('name' in _v && typeof _v['name'] !== 'string') return false;
+    if ('relationship' in _v && typeof _v['relationship'] !== 'string') return false;
+    if ('phone' in _v && typeof _v['phone'] !== 'string') return false;
+    if ('email' in _v && typeof _v['email'] !== 'string') return false;
+    return true;
+}
+

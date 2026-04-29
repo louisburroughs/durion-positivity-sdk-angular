@@ -19,3 +19,15 @@ export interface PermissionRegistrationResponse {
     errors?: Array<string>;
 }
 
+export function instanceOfPermissionRegistrationResponse(value: object): value is PermissionRegistrationResponse {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('success' in _v && typeof _v['success'] !== 'boolean') return false;
+    if ('message' in _v && typeof _v['message'] !== 'string') return false;
+    if ('totalPermissions' in _v && typeof _v['totalPermissions'] !== 'number') return false;
+    if ('registeredPermissions' in _v && typeof _v['registeredPermissions'] !== 'number') return false;
+    if ('updatedPermissions' in _v && typeof _v['updatedPermissions'] !== 'number') return false;
+    if ('skippedPermissions' in _v && typeof _v['skippedPermissions'] !== 'number') return false;
+    return true;
+}
+

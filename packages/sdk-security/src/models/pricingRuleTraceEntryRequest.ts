@@ -16,3 +16,11 @@ export interface PricingRuleTraceEntryRequest {
     outputs?: any | null;
 }
 
+export function instanceOfPricingRuleTraceEntryRequest(value: object): value is PricingRuleTraceEntryRequest {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('ruleId' in _v && typeof _v['ruleId'] !== 'string') return false;
+    if ('status' in _v && typeof _v['status'] !== 'string') return false;
+    return true;
+}
+

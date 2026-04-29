@@ -21,3 +21,15 @@ export interface VehicleCarePreferenceResponse {
     version?: number;
 }
 
+export function instanceOfVehicleCarePreferenceResponse(value: object): value is VehicleCarePreferenceResponse {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('id' in _v && typeof _v['id'] !== 'string') return false;
+    if ('vehicleId' in _v && typeof _v['vehicleId'] !== 'string') return false;
+    if ('serviceNotes' in _v && typeof _v['serviceNotes'] !== 'string') return false;
+    if ('createdByUserId' in _v && typeof _v['createdByUserId'] !== 'string') return false;
+    if ('updatedByUserId' in _v && typeof _v['updatedByUserId'] !== 'string') return false;
+    if ('version' in _v && typeof _v['version'] !== 'number') return false;
+    return true;
+}
+

@@ -17,3 +17,14 @@ export interface UpsertCommunicationPreferencesResponse {
     updatedAt?: string;
 }
 
+export function instanceOfUpsertCommunicationPreferencesResponse(value: object): value is UpsertCommunicationPreferencesResponse {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('partyId' in _v && typeof _v['partyId'] !== 'string') return false;
+    if ('version' in _v && typeof _v['version'] !== 'string') return false;
+    if ('operationType' in _v && typeof _v['operationType'] !== 'string') return false;
+    if ('status' in _v && typeof _v['status'] !== 'string') return false;
+    if ('updatedAt' in _v && typeof _v['updatedAt'] !== 'string') return false;
+    return true;
+}
+

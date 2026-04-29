@@ -18,3 +18,15 @@ export interface GoodsReceiptLineResponse {
     lineAccruedAmountMinor?: number;
 }
 
+export function instanceOfGoodsReceiptLineResponse(value: object): value is GoodsReceiptLineResponse {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('receiptLineId' in _v && typeof _v['receiptLineId'] !== 'string') return false;
+    if ('poLineId' in _v && typeof _v['poLineId'] !== 'string') return false;
+    if ('sku' in _v && typeof _v['sku'] !== 'string') return false;
+    if ('quantityReceived' in _v && typeof _v['quantityReceived'] !== 'number') return false;
+    if ('unitCostMinor' in _v && typeof _v['unitCostMinor'] !== 'number') return false;
+    if ('lineAccruedAmountMinor' in _v && typeof _v['lineAccruedAmountMinor'] !== 'number') return false;
+    return true;
+}
+

@@ -47,3 +47,25 @@ export interface EventTypeResponse {
     p99Micros: number;
 }
 
+export function instanceOfEventTypeResponse(value: object): value is EventTypeResponse {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if (!('id' in _v) || _v['id'] === undefined) return false;
+    if ('id' in _v && typeof _v['id'] !== 'string') return false;
+    if (!('typeCode' in _v) || _v['typeCode'] === undefined) return false;
+    if ('typeCode' in _v && typeof _v['typeCode'] !== 'string') return false;
+    if (!('description' in _v) || _v['description'] === undefined) return false;
+    if ('description' in _v && typeof _v['description'] !== 'string') return false;
+    if (!('active' in _v) || _v['active'] === undefined) return false;
+    if ('active' in _v && typeof _v['active'] !== 'boolean') return false;
+    if (!('apiVersion' in _v) || _v['apiVersion'] === undefined) return false;
+    if ('apiVersion' in _v && typeof _v['apiVersion'] !== 'string') return false;
+    if (!('p50Micros' in _v) || _v['p50Micros'] === undefined) return false;
+    if ('p50Micros' in _v && typeof _v['p50Micros'] !== 'number') return false;
+    if (!('p95Micros' in _v) || _v['p95Micros'] === undefined) return false;
+    if ('p95Micros' in _v && typeof _v['p95Micros'] !== 'number') return false;
+    if (!('p99Micros' in _v) || _v['p99Micros'] === undefined) return false;
+    if ('p99Micros' in _v && typeof _v['p99Micros'] !== 'number') return false;
+    return true;
+}
+

@@ -20,3 +20,14 @@ export interface CreateVehicleForPartyRequest {
     licensePlateRegion?: string;
 }
 
+export function instanceOfCreateVehicleForPartyRequest(value: object): value is CreateVehicleForPartyRequest {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('vinNumber' in _v && typeof _v['vinNumber'] !== 'string') return false;
+    if ('unitNumber' in _v && typeof _v['unitNumber'] !== 'string') return false;
+    if ('description' in _v && typeof _v['description'] !== 'string') return false;
+    if ('licensePlate' in _v && typeof _v['licensePlate'] !== 'string') return false;
+    if ('licensePlateRegion' in _v && typeof _v['licensePlateRegion'] !== 'string') return false;
+    return true;
+}
+

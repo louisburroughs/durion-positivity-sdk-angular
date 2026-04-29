@@ -19,3 +19,10 @@ export interface FilterProductsRequest {
     vehicleAttributes: { [key: string]: string; };
 }
 
+export function instanceOfFilterProductsRequest(value: object): value is FilterProductsRequest {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if (!('vehicleAttributes' in _v) || _v['vehicleAttributes'] === undefined) return false;
+    return true;
+}
+

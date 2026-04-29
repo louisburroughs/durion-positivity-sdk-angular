@@ -28,3 +28,11 @@ export interface ApplyPromotionResponse {
     appliedAdjustments?: Array<PricingAdjustment>;
 }
 
+export function instanceOfApplyPromotionResponse(value: object): value is ApplyPromotionResponse {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('subtotal' in _v && typeof _v['subtotal'] !== 'number') return false;
+    if ('total' in _v && typeof _v['total'] !== 'number') return false;
+    return true;
+}
+

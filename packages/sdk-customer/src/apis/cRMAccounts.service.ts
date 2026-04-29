@@ -17,6 +17,8 @@ import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
 // @ts-ignore
+import { BillingRuleRef } from '../src/models/billingRuleRef';
+// @ts-ignore
 import { BillingTermsRef } from '../src/models/billingTermsRef';
 // @ts-ignore
 import { CreateCommercialAccountRequest } from '../src/models/createCommercialAccountRequest';
@@ -26,6 +28,8 @@ import { CreateCommercialAccountResponse } from '../src/models/createCommercialA
 import { CreateVehicleForPartyRequest } from '../src/models/createVehicleForPartyRequest';
 // @ts-ignore
 import { CreateVehicleForPartyResponse } from '../src/models/createVehicleForPartyResponse';
+// @ts-ignore
+import { DuplicateCheckResponse } from '../src/models/duplicateCheckResponse';
 // @ts-ignore
 import { GetAccountTierResponse } from '../src/models/getAccountTierResponse';
 // @ts-ignore
@@ -51,6 +55,8 @@ import { UpdateContactRolesRequest } from '../src/models/updateContactRolesReque
 // @ts-ignore
 import { UpdateContactRolesResponse } from '../src/models/updateContactRolesResponse';
 // @ts-ignore
+import { UpsertBillingRulesRequest } from '../src/models/upsertBillingRulesRequest';
+// @ts-ignore
 import { UpsertCommunicationPreferencesRequest } from '../src/models/upsertCommunicationPreferencesRequest';
 // @ts-ignore
 import { UpsertCommunicationPreferencesResponse } from '../src/models/upsertCommunicationPreferencesResponse';
@@ -69,6 +75,78 @@ export class CRMAccountsService extends BaseService {
 
     constructor(protected httpClient: HttpClient, @Optional() @Inject(BASE_PATH) basePath: string|string[], @Optional() configuration?: Configuration) {
         super(basePath, configuration);
+    }
+
+    /**
+     * Check for duplicate commercial parties
+     * Search for existing parties with a similar legal name to detect potential duplicates before creating a new commercial account.
+     * @endpoint get /v1/crm/accounts/parties/duplicate-check
+     * @param legalName Legal name to check for duplicates
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public checkPartyDuplicates(legalName: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<DuplicateCheckResponse>;
+    public checkPartyDuplicates(legalName: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<DuplicateCheckResponse>>;
+    public checkPartyDuplicates(legalName: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<DuplicateCheckResponse>>;
+    public checkPartyDuplicates(legalName: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (legalName === null || legalName === undefined) {
+            throw new Error('Required parameter legalName was null or undefined when calling checkPartyDuplicates.');
+        }
+
+        let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'legalName',
+            <any>legalName,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/crm/accounts/parties/duplicate-check`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<DuplicateCheckResponse>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                params: localVarQueryParameters.toHttpParams(),
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
     }
 
     /**
@@ -778,6 +856,80 @@ export class CRMAccountsService extends BaseService {
             {
                 context: localVarHttpContext,
                 body: updateContactRolesRequest,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Upsert billing rules for a party
+     * Create or update the billing rules configuration for a commercial party.
+     * @endpoint put /v1/crm/accounts/parties/{partyId}/billing-rules
+     * @param partyId Party ID
+     * @param upsertBillingRulesRequest 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public upsertBillingRules(partyId: string, upsertBillingRulesRequest: UpsertBillingRulesRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<BillingRuleRef>;
+    public upsertBillingRules(partyId: string, upsertBillingRulesRequest: UpsertBillingRulesRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<BillingRuleRef>>;
+    public upsertBillingRules(partyId: string, upsertBillingRulesRequest: UpsertBillingRulesRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<BillingRuleRef>>;
+    public upsertBillingRules(partyId: string, upsertBillingRulesRequest: UpsertBillingRulesRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (partyId === null || partyId === undefined) {
+            throw new Error('Required parameter partyId was null or undefined when calling upsertBillingRules.');
+        }
+        if (upsertBillingRulesRequest === null || upsertBillingRulesRequest === undefined) {
+            throw new Error('Required parameter upsertBillingRulesRequest was null or undefined when calling upsertBillingRules.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/crm/accounts/parties/${this.configuration.encodeParam({name: "partyId", value: partyId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/billing-rules`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<BillingRuleRef>('put', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                body: upsertBillingRulesRequest,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,

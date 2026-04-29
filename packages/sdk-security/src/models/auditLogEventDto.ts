@@ -21,3 +21,17 @@ export interface AuditLogEventDto {
     context?: string;
 }
 
+export function instanceOfAuditLogEventDto(value: object): value is AuditLogEventDto {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('eventId' in _v && typeof _v['eventId'] !== 'string') return false;
+    if ('eventType' in _v && typeof _v['eventType'] !== 'string') return false;
+    if ('actorId' in _v && typeof _v['actorId'] !== 'string') return false;
+    if ('entityId' in _v && typeof _v['entityId'] !== 'string') return false;
+    if ('entityType' in _v && typeof _v['entityType'] !== 'string') return false;
+    if ('oldValue' in _v && typeof _v['oldValue'] !== 'string') return false;
+    if ('newValue' in _v && typeof _v['newValue'] !== 'string') return false;
+    if ('context' in _v && typeof _v['context'] !== 'string') return false;
+    return true;
+}
+

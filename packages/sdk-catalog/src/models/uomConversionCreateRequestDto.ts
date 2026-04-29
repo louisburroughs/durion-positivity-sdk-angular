@@ -16,3 +16,16 @@ export interface UomConversionCreateRequestDto {
     createdBy?: string;
 }
 
+export function instanceOfUomConversionCreateRequestDto(value: object): value is UomConversionCreateRequestDto {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if (!('fromUomCode' in _v) || _v['fromUomCode'] === undefined) return false;
+    if ('fromUomCode' in _v && typeof _v['fromUomCode'] !== 'string') return false;
+    if (!('toUomCode' in _v) || _v['toUomCode'] === undefined) return false;
+    if ('toUomCode' in _v && typeof _v['toUomCode'] !== 'string') return false;
+    if (!('conversionFactor' in _v) || _v['conversionFactor'] === undefined) return false;
+    if ('conversionFactor' in _v && typeof _v['conversionFactor'] !== 'number') return false;
+    if ('createdBy' in _v && typeof _v['createdBy'] !== 'string') return false;
+    return true;
+}
+

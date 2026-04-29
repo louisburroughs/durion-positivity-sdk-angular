@@ -54,3 +54,13 @@ export enum ContactWithRoleRolesEnum {
 
 
 
+export function instanceOfContactWithRole(value: object): value is ContactWithRole {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('relationshipId' in _v && typeof _v['relationshipId'] !== 'string') return false;
+    if ('individualId' in _v && typeof _v['individualId'] !== 'string') return false;
+    if ('status' in _v && typeof _v['status'] !== 'string') return false;
+    if ('primaryBilling' in _v && typeof _v['primaryBilling'] !== 'boolean') return false;
+    return true;
+}
+

@@ -32,3 +32,16 @@ export enum PriceBookDtoStatusEnum {
 
 
 
+export function instanceOfPriceBookDto(value: object): value is PriceBookDto {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('priceBookId' in _v && typeof _v['priceBookId'] !== 'string') return false;
+    if ('name' in _v && typeof _v['name'] !== 'string') return false;
+    if ('scope' in _v && typeof _v['scope'] !== 'string') return false;
+    if ('scopeId' in _v && typeof _v['scopeId'] !== 'string') return false;
+    if ('status' in _v && typeof _v['status'] !== 'string') return false;
+    if ('version' in _v && typeof _v['version'] !== 'number') return false;
+    if ('_default' in _v && typeof _v['_default'] !== 'boolean') return false;
+    return true;
+}
+

@@ -14,3 +14,10 @@ export interface MovedItem {
     quantity?: number;
 }
 
+export function instanceOfMovedItem(value: object): value is MovedItem {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('itemId' in _v && typeof _v['itemId'] !== 'string') return false;
+    return true;
+}
+

@@ -17,3 +17,14 @@ export interface ConflictEntry {
     affectedWorkorderId?: string;
 }
 
+export function instanceOfConflictEntry(value: object): value is ConflictEntry {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('conflictType' in _v && typeof _v['conflictType'] !== 'string') return false;
+    if ('severity' in _v && typeof _v['severity'] !== 'string') return false;
+    if ('message' in _v && typeof _v['message'] !== 'string') return false;
+    if ('affectedResourceId' in _v && typeof _v['affectedResourceId'] !== 'string') return false;
+    if ('affectedWorkorderId' in _v && typeof _v['affectedWorkorderId'] !== 'string') return false;
+    return true;
+}
+

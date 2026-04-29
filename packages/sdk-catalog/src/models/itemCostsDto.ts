@@ -19,3 +19,13 @@ export interface ItemCostsDto {
     averageCost?: number;
 }
 
+export function instanceOfItemCostsDto(value: object): value is ItemCostsDto {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('itemId' in _v && typeof _v['itemId'] !== 'string') return false;
+    if ('standardCost' in _v && typeof _v['standardCost'] !== 'number') return false;
+    if ('lastCost' in _v && typeof _v['lastCost'] !== 'number') return false;
+    if ('averageCost' in _v && typeof _v['averageCost'] !== 'number') return false;
+    return true;
+}
+

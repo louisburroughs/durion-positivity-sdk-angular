@@ -18,3 +18,15 @@ export interface ResolveScanResponse {
     matchStatus?: string;
 }
 
+export function instanceOfResolveScanResponse(value: object): value is ResolveScanResponse {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('pickTaskId' in _v && typeof _v['pickTaskId'] !== 'string') return false;
+    if ('pickListId' in _v && typeof _v['pickListId'] !== 'string') return false;
+    if ('resolvedSkuId' in _v && typeof _v['resolvedSkuId'] !== 'string') return false;
+    if ('resolvedLocationId' in _v && typeof _v['resolvedLocationId'] !== 'string') return false;
+    if ('matched' in _v && typeof _v['matched'] !== 'boolean') return false;
+    if ('matchStatus' in _v && typeof _v['matchStatus'] !== 'string') return false;
+    return true;
+}
+

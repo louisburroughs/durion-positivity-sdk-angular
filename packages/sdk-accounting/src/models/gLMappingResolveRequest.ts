@@ -15,3 +15,14 @@ export interface GLMappingResolveRequest {
     transactionDate: string;
 }
 
+export function instanceOfGLMappingResolveRequest(value: object): value is GLMappingResolveRequest {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if (!('sourceSystem' in _v) || _v['sourceSystem'] === undefined) return false;
+    if ('sourceSystem' in _v && typeof _v['sourceSystem'] !== 'string') return false;
+    if (!('externalCode' in _v) || _v['externalCode'] === undefined) return false;
+    if ('externalCode' in _v && typeof _v['externalCode'] !== 'string') return false;
+    if (!('transactionDate' in _v) || _v['transactionDate'] === undefined) return false;
+    return true;
+}
+

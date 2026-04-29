@@ -15,3 +15,14 @@ export interface ReceivePurchaseOrderLineRequest {
     unitCostMinor?: number;
 }
 
+export function instanceOfReceivePurchaseOrderLineRequest(value: object): value is ReceivePurchaseOrderLineRequest {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if (!('lineId' in _v) || _v['lineId'] === undefined) return false;
+    if ('lineId' in _v && typeof _v['lineId'] !== 'string') return false;
+    if (!('quantityReceived' in _v) || _v['quantityReceived'] === undefined) return false;
+    if ('quantityReceived' in _v && typeof _v['quantityReceived'] !== 'number') return false;
+    if ('unitCostMinor' in _v && typeof _v['unitCostMinor'] !== 'number') return false;
+    return true;
+}
+

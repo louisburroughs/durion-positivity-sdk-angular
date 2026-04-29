@@ -65,3 +65,23 @@ export enum ExecuteAPPaymentRequestPaymentMethodEnum {
 
 
 
+export function instanceOfExecuteAPPaymentRequest(value: object): value is ExecuteAPPaymentRequest {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if (!('vendorId' in _v) || _v['vendorId'] === undefined) return false;
+    if ('vendorId' in _v && typeof _v['vendorId'] !== 'string') return false;
+    if (!('grossAmount' in _v) || _v['grossAmount'] === undefined) return false;
+    if ('grossAmount' in _v && typeof _v['grossAmount'] !== 'number') return false;
+    if ('feeAmount' in _v && typeof _v['feeAmount'] !== 'number') return false;
+    if ('netAmount' in _v && typeof _v['netAmount'] !== 'number') return false;
+    if (!('currency' in _v) || _v['currency'] === undefined) return false;
+    if ('currency' in _v && typeof _v['currency'] !== 'string') return false;
+    if (!('paymentRef' in _v) || _v['paymentRef'] === undefined) return false;
+    if ('paymentRef' in _v && typeof _v['paymentRef'] !== 'string') return false;
+    if (!('paymentMethod' in _v) || _v['paymentMethod'] === undefined) return false;
+    if ('paymentMethod' in _v && typeof _v['paymentMethod'] !== 'string') return false;
+    if ('paymentSource' in _v && typeof _v['paymentSource'] !== 'string') return false;
+    if ('memo' in _v && typeof _v['memo'] !== 'string') return false;
+    return true;
+}
+

@@ -32,3 +32,18 @@ export enum CycleCountTaskResponseStatusEnum {
 
 
 
+export function instanceOfCycleCountTaskResponse(value: object): value is CycleCountTaskResponse {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('taskId' in _v && typeof _v['taskId'] !== 'string') return false;
+    if ('binLocation' in _v && typeof _v['binLocation'] !== 'string') return false;
+    if ('itemSku' in _v && typeof _v['itemSku'] !== 'string') return false;
+    if ('itemDescription' in _v && typeof _v['itemDescription'] !== 'string') return false;
+    if ('expectedQuantity' in _v && typeof _v['expectedQuantity'] !== 'number') return false;
+    if ('auditorId' in _v && typeof _v['auditorId'] !== 'string') return false;
+    if ('status' in _v && typeof _v['status'] !== 'string') return false;
+    if ('latestCountEntryId' in _v && typeof _v['latestCountEntryId'] !== 'string') return false;
+    if ('countEntriesCount' in _v && typeof _v['countEntriesCount'] !== 'number') return false;
+    return true;
+}
+

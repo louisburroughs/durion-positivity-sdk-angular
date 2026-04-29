@@ -23,3 +23,11 @@ export interface MoneyAmount {
     currency?: string;
 }
 
+export function instanceOfMoneyAmount(value: object): value is MoneyAmount {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('amount' in _v && typeof _v['amount'] !== 'number') return false;
+    if ('currency' in _v && typeof _v['currency'] !== 'string') return false;
+    return true;
+}
+

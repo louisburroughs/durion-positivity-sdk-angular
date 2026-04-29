@@ -14,3 +14,13 @@ export interface PutawayLineItemRequest {
     quantity: number;
 }
 
+export function instanceOfPutawayLineItemRequest(value: object): value is PutawayLineItemRequest {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if (!('productId' in _v) || _v['productId'] === undefined) return false;
+    if ('productId' in _v && typeof _v['productId'] !== 'string') return false;
+    if (!('quantity' in _v) || _v['quantity'] === undefined) return false;
+    if ('quantity' in _v && typeof _v['quantity'] !== 'number') return false;
+    return true;
+}
+

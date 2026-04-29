@@ -18,3 +18,11 @@ export interface UserUpdateRequest {
     roles?: Set<string>;
 }
 
+export function instanceOfUserUpdateRequest(value: object): value is UserUpdateRequest {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('username' in _v && typeof _v['username'] !== 'string') return false;
+    if ('password' in _v && typeof _v['password'] !== 'string') return false;
+    return true;
+}
+

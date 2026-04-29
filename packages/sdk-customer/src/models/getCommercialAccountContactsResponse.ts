@@ -24,3 +24,10 @@ export interface GetCommercialAccountContactsResponse {
     contacts?: Array<ContactWithRole>;
 }
 
+export function instanceOfGetCommercialAccountContactsResponse(value: object): value is GetCommercialAccountContactsResponse {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('commercialAccountId' in _v && typeof _v['commercialAccountId'] !== 'string') return false;
+    return true;
+}
+

@@ -19,3 +19,14 @@ export interface WorkorderStartResponse {
     message?: string;
 }
 
+export function instanceOfWorkorderStartResponse(value: object): value is WorkorderStartResponse {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('workorderId' in _v && typeof _v['workorderId'] !== 'string') return false;
+    if ('operationalContextVersion' in _v && typeof _v['operationalContextVersion'] !== 'string') return false;
+    if ('previousStatus' in _v && typeof _v['previousStatus'] !== 'string') return false;
+    if ('currentStatus' in _v && typeof _v['currentStatus'] !== 'string') return false;
+    if ('message' in _v && typeof _v['message'] !== 'string') return false;
+    return true;
+}
+

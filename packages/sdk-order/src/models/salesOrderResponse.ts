@@ -25,3 +25,18 @@ export interface SalesOrderResponse {
     lines?: Array<SalesOrderLineResponse>;
 }
 
+export function instanceOfSalesOrderResponse(value: object): value is SalesOrderResponse {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('orderId' in _v && typeof _v['orderId'] !== 'string') return false;
+    if ('customerId' in _v && typeof _v['customerId'] !== 'string') return false;
+    if ('vehicleId' in _v && typeof _v['vehicleId'] !== 'string') return false;
+    if ('clerkId' in _v && typeof _v['clerkId'] !== 'string') return false;
+    if ('terminalId' in _v && typeof _v['terminalId'] !== 'string') return false;
+    if ('status' in _v && typeof _v['status'] !== 'string') return false;
+    if ('subtotal' in _v && typeof _v['subtotal'] !== 'number') return false;
+    if ('createdBy' in _v && typeof _v['createdBy'] !== 'string') return false;
+    if ('updatedBy' in _v && typeof _v['updatedBy'] !== 'string') return false;
+    return true;
+}
+

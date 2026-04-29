@@ -21,7 +21,13 @@ import { AccountingEventResponse } from '../src/models/accountingEventResponse';
 // @ts-ignore
 import { AccountingEventSubmitRequest } from '../src/models/accountingEventSubmitRequest';
 // @ts-ignore
-import { PagedResponseAccountingEventResponse } from '../src/models/pagedResponseAccountingEventResponse';
+import { EventEnvelopeContract } from '../src/models/eventEnvelopeContract';
+// @ts-ignore
+import { EventProcessingLogEntry } from '../src/models/eventProcessingLogEntry';
+// @ts-ignore
+import { PageAccountingEventResponse } from '../src/models/pageAccountingEventResponse';
+// @ts-ignore
+import { Pageable } from '../src/models/pageable';
 // @ts-ignore
 import { ReprocessEventRequest } from '../src/models/reprocessEventRequest';
 // @ts-ignore
@@ -104,17 +110,73 @@ export class AccountingEventsService extends BaseService {
     }
 
     /**
+     * Get event envelope contract
+     * Returns the current event envelope schema contract for SDK validation.
+     * @endpoint get /v1/accounting/events/contract
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public getEventContract(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<EventEnvelopeContract>;
+    public getEventContract(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<EventEnvelopeContract>>;
+    public getEventContract(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<EventEnvelopeContract>>;
+    public getEventContract(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/accounting/events/contract`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<EventEnvelopeContract>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
      * Get event processing log
-     * Retrieve the processing log for an accounting event.
+     * Retrieve the structured processing audit log for an accounting event. Returns an empty list if the event has no processing log.
      * @endpoint get /v1/accounting/events/{eventId}/processing-log
      * @param eventId Event identifier
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public getEventProcessingLog(eventId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<string>;
-    public getEventProcessingLog(eventId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<string>>;
-    public getEventProcessingLog(eventId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<string>>;
+    public getEventProcessingLog(eventId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<EventProcessingLogEntry>>;
+    public getEventProcessingLog(eventId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<EventProcessingLogEntry>>>;
+    public getEventProcessingLog(eventId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<EventProcessingLogEntry>>>;
     public getEventProcessingLog(eventId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (eventId === null || eventId === undefined) {
             throw new Error('Required parameter eventId was null or undefined when calling getEventProcessingLog.');
@@ -150,7 +212,7 @@ export class AccountingEventsService extends BaseService {
 
         let localVarPath = `/v1/accounting/events/${this.configuration.encodeParam({name: "eventId", value: eventId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/processing-log`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<string>('get', `${basePath}${localVarPath}`,
+        return this.httpClient.request<Array<EventProcessingLogEntry>>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,
@@ -224,23 +286,30 @@ export class AccountingEventsService extends BaseService {
     }
 
     /**
-     * List events
+     * List accounting events
      * Retrieve paginated accounting events with optional filters.
      * @endpoint get /v1/accounting/events
-     * @param organizationId Organization identifier
-     * @param page Page index (0-based)
-     * @param size Page size
+     * @param pageable 
+     * @param organizationId Filter by organization
+     * @param eventType Filter by event type
+     * @param idempotencyOutcome Filter by idempotency outcome
+     * @param receivedAtFrom Filter by received-at range start (ISO-8601)
+     * @param receivedAtTo Filter by received-at range end (ISO-8601)
+     * @param eventId Filter by event UUID
+     * @param ingestionId Filter by ingestion job UUID
+     * @param domainKeyId Filter by domain key
+     * @param invoiceId Filter by invoice UUID
      * @param status Filter by processing status
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public listEvents(organizationId: string, page?: number, size?: number, status?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PagedResponseAccountingEventResponse>;
-    public listEvents(organizationId: string, page?: number, size?: number, status?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PagedResponseAccountingEventResponse>>;
-    public listEvents(organizationId: string, page?: number, size?: number, status?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PagedResponseAccountingEventResponse>>;
-    public listEvents(organizationId: string, page?: number, size?: number, status?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
-        if (organizationId === null || organizationId === undefined) {
-            throw new Error('Required parameter organizationId was null or undefined when calling listEvents.');
+    public listAccountingEvents(pageable: Pageable, organizationId?: string, eventType?: string, idempotencyOutcome?: string, receivedAtFrom?: string, receivedAtTo?: string, eventId?: string, ingestionId?: string, domainKeyId?: string, invoiceId?: string, status?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PageAccountingEventResponse>;
+    public listAccountingEvents(pageable: Pageable, organizationId?: string, eventType?: string, idempotencyOutcome?: string, receivedAtFrom?: string, receivedAtTo?: string, eventId?: string, ingestionId?: string, domainKeyId?: string, invoiceId?: string, status?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PageAccountingEventResponse>>;
+    public listAccountingEvents(pageable: Pageable, organizationId?: string, eventType?: string, idempotencyOutcome?: string, receivedAtFrom?: string, receivedAtTo?: string, eventId?: string, ingestionId?: string, domainKeyId?: string, invoiceId?: string, status?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PageAccountingEventResponse>>;
+    public listAccountingEvents(pageable: Pageable, organizationId?: string, eventType?: string, idempotencyOutcome?: string, receivedAtFrom?: string, receivedAtTo?: string, eventId?: string, ingestionId?: string, domainKeyId?: string, invoiceId?: string, status?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (pageable === null || pageable === undefined) {
+            throw new Error('Required parameter pageable was null or undefined when calling listAccountingEvents.');
         }
 
         let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
@@ -256,8 +325,8 @@ export class AccountingEventsService extends BaseService {
 
         localVarQueryParameters = this.addToHttpParams(
             localVarQueryParameters,
-            'page',
-            <any>page,
+            'eventType',
+            <any>eventType,
             QueryParamStyle.Form,
             true,
         );
@@ -265,8 +334,62 @@ export class AccountingEventsService extends BaseService {
 
         localVarQueryParameters = this.addToHttpParams(
             localVarQueryParameters,
-            'size',
-            <any>size,
+            'idempotencyOutcome',
+            <any>idempotencyOutcome,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'receivedAtFrom',
+            <any>receivedAtFrom,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'receivedAtTo',
+            <any>receivedAtTo,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'eventId',
+            <any>eventId,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'ingestionId',
+            <any>ingestionId,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'domainKeyId',
+            <any>domainKeyId,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'invoiceId',
+            <any>invoiceId,
             QueryParamStyle.Form,
             true,
         );
@@ -276,6 +399,15 @@ export class AccountingEventsService extends BaseService {
             localVarQueryParameters,
             'status',
             <any>status,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'pageable',
+            <any>pageable,
             QueryParamStyle.Form,
             true,
         );
@@ -311,7 +443,7 @@ export class AccountingEventsService extends BaseService {
 
         let localVarPath = `/v1/accounting/events`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<PagedResponseAccountingEventResponse>('get', `${basePath}${localVarPath}`,
+        return this.httpClient.request<PageAccountingEventResponse>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 params: localVarQueryParameters.toHttpParams(),

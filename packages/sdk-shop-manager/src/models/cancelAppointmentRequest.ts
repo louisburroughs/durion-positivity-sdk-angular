@@ -23,3 +23,12 @@ export enum CancelAppointmentRequestCancellationReasonEnum {
 
 
 
+export function instanceOfCancelAppointmentRequest(value: object): value is CancelAppointmentRequest {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if (!('cancellationReason' in _v) || _v['cancellationReason'] === undefined) return false;
+    if ('cancellationReason' in _v && typeof _v['cancellationReason'] !== 'string') return false;
+    if ('notes' in _v && typeof _v['notes'] !== 'string') return false;
+    return true;
+}
+

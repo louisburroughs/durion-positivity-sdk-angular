@@ -33,3 +33,24 @@ export enum RefundRequestOriginalPaymentStatusEnum {
 
 
 
+export function instanceOfRefundRequest(value: object): value is RefundRequest {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if (!('invoiceId' in _v) || _v['invoiceId'] === undefined) return false;
+    if ('invoiceId' in _v && typeof _v['invoiceId'] !== 'string') return false;
+    if (!('paymentId' in _v) || _v['paymentId'] === undefined) return false;
+    if ('paymentId' in _v && typeof _v['paymentId'] !== 'string') return false;
+    if (!('refundType' in _v) || _v['refundType'] === undefined) return false;
+    if ('refundType' in _v && typeof _v['refundType'] !== 'string') return false;
+    if (!('refundAmount' in _v) || _v['refundAmount'] === undefined) return false;
+    if ('refundAmount' in _v && typeof _v['refundAmount'] !== 'number') return false;
+    if (!('originalPaymentStatus' in _v) || _v['originalPaymentStatus'] === undefined) return false;
+    if ('originalPaymentStatus' in _v && typeof _v['originalPaymentStatus'] !== 'string') return false;
+    if ('actorId' in _v && typeof _v['actorId'] !== 'string') return false;
+    if (!('actorRole' in _v) || _v['actorRole'] === undefined) return false;
+    if ('actorRole' in _v && typeof _v['actorRole'] !== 'string') return false;
+    if (!('reason' in _v) || _v['reason'] === undefined) return false;
+    if ('reason' in _v && typeof _v['reason'] !== 'string') return false;
+    return true;
+}
+

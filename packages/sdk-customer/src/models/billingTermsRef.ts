@@ -27,3 +27,12 @@ export interface BillingTermsRef {
     netDays?: number;
 }
 
+export function instanceOfBillingTermsRef(value: object): value is BillingTermsRef {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('code' in _v && typeof _v['code'] !== 'string') return false;
+    if ('label' in _v && typeof _v['label'] !== 'string') return false;
+    if ('netDays' in _v && typeof _v['netDays'] !== 'number') return false;
+    return true;
+}
+

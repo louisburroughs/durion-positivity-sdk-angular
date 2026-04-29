@@ -49,3 +49,19 @@ export enum BulkLoadJobResponseStatusEnum {
 
 
 
+export function instanceOfBulkLoadJobResponse(value: object): value is BulkLoadJobResponse {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('id' in _v && typeof _v['id'] !== 'string') return false;
+    if ('operatorId' in _v && typeof _v['operatorId'] !== 'string') return false;
+    if ('locationId' in _v && typeof _v['locationId'] !== 'string') return false;
+    if ('fileName' in _v && typeof _v['fileName'] !== 'string') return false;
+    if ('domainType' in _v && typeof _v['domainType'] !== 'string') return false;
+    if ('status' in _v && typeof _v['status'] !== 'string') return false;
+    if ('totalRows' in _v && typeof _v['totalRows'] !== 'number') return false;
+    if ('processedRows' in _v && typeof _v['processedRows'] !== 'number') return false;
+    if ('successCount' in _v && typeof _v['successCount'] !== 'number') return false;
+    if ('failureCount' in _v && typeof _v['failureCount'] !== 'number') return false;
+    return true;
+}
+

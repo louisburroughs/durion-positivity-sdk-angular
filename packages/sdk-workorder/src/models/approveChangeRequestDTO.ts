@@ -24,3 +24,12 @@ export interface ApproveChangeRequestDTO {
     approvalNote: string;
 }
 
+export function instanceOfApproveChangeRequestDTO(value: object): value is ApproveChangeRequestDTO {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('approvedBy' in _v && typeof _v['approvedBy'] !== 'string') return false;
+    if (!('approvalNote' in _v) || _v['approvalNote'] === undefined) return false;
+    if ('approvalNote' in _v && typeof _v['approvalNote'] !== 'string') return false;
+    return true;
+}
+

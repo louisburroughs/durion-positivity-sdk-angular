@@ -19,3 +19,14 @@ export interface PageableObject {
     unpaged?: boolean;
 }
 
+export function instanceOfPageableObject(value: object): value is PageableObject {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('offset' in _v && typeof _v['offset'] !== 'number') return false;
+    if ('paged' in _v && typeof _v['paged'] !== 'boolean') return false;
+    if ('pageNumber' in _v && typeof _v['pageNumber'] !== 'number') return false;
+    if ('pageSize' in _v && typeof _v['pageSize'] !== 'number') return false;
+    if ('unpaged' in _v && typeof _v['unpaged'] !== 'boolean') return false;
+    return true;
+}
+

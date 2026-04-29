@@ -87,3 +87,19 @@ export enum EstimateSummaryResponseStatusEnum {
 
 
 
+export function instanceOfEstimateSummaryResponse(value: object): value is EstimateSummaryResponse {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('id' in _v && typeof _v['id'] !== 'string') return false;
+    if ('estimateNumber' in _v && typeof _v['estimateNumber'] !== 'string') return false;
+    if ('customerId' in _v && typeof _v['customerId'] !== 'string') return false;
+    if ('vehicleId' in _v && typeof _v['vehicleId'] !== 'string') return false;
+    if ('locationId' in _v && typeof _v['locationId'] !== 'string') return false;
+    if ('status' in _v && typeof _v['status'] !== 'string') return false;
+    if ('subtotal' in _v && typeof _v['subtotal'] !== 'number') return false;
+    if ('taxAmount' in _v && typeof _v['taxAmount'] !== 'number') return false;
+    if ('total' in _v && typeof _v['total'] !== 'number') return false;
+    if ('currencyUomId' in _v && typeof _v['currencyUomId'] !== 'string') return false;
+    return true;
+}
+

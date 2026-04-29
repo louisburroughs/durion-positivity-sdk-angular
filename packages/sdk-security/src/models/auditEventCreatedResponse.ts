@@ -14,3 +14,10 @@ export interface AuditEventCreatedResponse {
     timestamp?: string;
 }
 
+export function instanceOfAuditEventCreatedResponse(value: object): value is AuditEventCreatedResponse {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('eventId' in _v && typeof _v['eventId'] !== 'string') return false;
+    return true;
+}
+

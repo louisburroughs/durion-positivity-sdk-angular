@@ -34,3 +34,21 @@ export enum PriceBookRuleCreateRequestDtoConditionTypeEnum {
 
 
 
+export function instanceOfPriceBookRuleCreateRequestDto(value: object): value is PriceBookRuleCreateRequestDto {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if (!('targetType' in _v) || _v['targetType'] === undefined) return false;
+    if ('targetType' in _v && typeof _v['targetType'] !== 'string') return false;
+    if ('targetId' in _v && typeof _v['targetId'] !== 'string') return false;
+    if (!('pricingLogic' in _v) || _v['pricingLogic'] === undefined) return false;
+    if ('pricingLogic' in _v && typeof _v['pricingLogic'] !== 'string') return false;
+    if ('conditionType' in _v && typeof _v['conditionType'] !== 'string') return false;
+    if ('conditionValue' in _v && typeof _v['conditionValue'] !== 'string') return false;
+    if ('priority' in _v && typeof _v['priority'] !== 'number') return false;
+    if (!('effectiveStartAt' in _v) || _v['effectiveStartAt'] === undefined) return false;
+    if (!('createdByUserId' in _v) || _v['createdByUserId'] === undefined) return false;
+    if ('createdByUserId' in _v && typeof _v['createdByUserId'] !== 'string') return false;
+    if ('version' in _v && typeof _v['version'] !== 'number') return false;
+    return true;
+}
+

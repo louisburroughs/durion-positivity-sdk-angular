@@ -27,3 +27,22 @@ export interface LocationResponseDTO {
     type?: LocationTypeDTO;
 }
 
+export function instanceOfLocationResponseDTO(value: object): value is LocationResponseDTO {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('id' in _v && typeof _v['id'] !== 'string') return false;
+    if ('name' in _v && typeof _v['name'] !== 'string') return false;
+    if ('code' in _v && typeof _v['code'] !== 'string') return false;
+    if ('geographicalLocationId' in _v && typeof _v['geographicalLocationId'] !== 'string') return false;
+    if ('addressLine1' in _v && typeof _v['addressLine1'] !== 'string') return false;
+    if ('addressLine2' in _v && typeof _v['addressLine2'] !== 'string') return false;
+    if ('city' in _v && typeof _v['city'] !== 'string') return false;
+    if ('state' in _v && typeof _v['state'] !== 'string') return false;
+    if ('postalCode' in _v && typeof _v['postalCode'] !== 'string') return false;
+    if ('country' in _v && typeof _v['country'] !== 'string') return false;
+    if ('mailingAddress' in _v && typeof _v['mailingAddress'] !== 'string') return false;
+    if ('active' in _v && typeof _v['active'] !== 'boolean') return false;
+    if ('responsiblePersonId' in _v && typeof _v['responsiblePersonId'] !== 'number') return false;
+    return true;
+}
+

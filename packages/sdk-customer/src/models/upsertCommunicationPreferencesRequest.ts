@@ -23,3 +23,16 @@ export interface UpsertCommunicationPreferencesRequest {
     updateSource?: string;
 }
 
+export function instanceOfUpsertCommunicationPreferencesRequest(value: object): value is UpsertCommunicationPreferencesRequest {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('version' in _v && typeof _v['version'] !== 'string') return false;
+    if ('emailPreference' in _v && typeof _v['emailPreference'] !== 'string') return false;
+    if ('smsPreference' in _v && typeof _v['smsPreference'] !== 'string') return false;
+    if ('phonePreference' in _v && typeof _v['phonePreference'] !== 'string') return false;
+    if ('marketingPreference' in _v && typeof _v['marketingPreference'] !== 'string') return false;
+    if ('preferencesNote' in _v && typeof _v['preferencesNote'] !== 'string') return false;
+    if ('updateSource' in _v && typeof _v['updateSource'] !== 'string') return false;
+    return true;
+}
+

@@ -31,3 +31,17 @@ export interface InvoiceLineItem {
     unitPrice: number;
 }
 
+export function instanceOfInvoiceLineItem(value: object): value is InvoiceLineItem {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if (!('productId' in _v) || _v['productId'] === undefined) return false;
+    if ('productId' in _v && typeof _v['productId'] !== 'string') return false;
+    if (!('description' in _v) || _v['description'] === undefined) return false;
+    if ('description' in _v && typeof _v['description'] !== 'string') return false;
+    if (!('quantity' in _v) || _v['quantity'] === undefined) return false;
+    if ('quantity' in _v && typeof _v['quantity'] !== 'number') return false;
+    if (!('unitPrice' in _v) || _v['unitPrice'] === undefined) return false;
+    if ('unitPrice' in _v && typeof _v['unitPrice'] !== 'number') return false;
+    return true;
+}
+

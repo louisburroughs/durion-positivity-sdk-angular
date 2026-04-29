@@ -17,3 +17,12 @@ export interface ReceiveItemsResponse {
     variances?: Array<VarianceSummaryResponse>;
 }
 
+export function instanceOfReceiveItemsResponse(value: object): value is ReceiveItemsResponse {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('sessionId' in _v && typeof _v['sessionId'] !== 'string') return false;
+    if ('sessionStatus' in _v && typeof _v['sessionStatus'] !== 'string') return false;
+    if ('linesProcessed' in _v && typeof _v['linesProcessed'] !== 'number') return false;
+    return true;
+}
+

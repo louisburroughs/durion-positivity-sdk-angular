@@ -23,3 +23,16 @@ export interface BayRequest {
     status?: string;
 }
 
+export function instanceOfBayRequest(value: object): value is BayRequest {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if (!('name' in _v) || _v['name'] === undefined) return false;
+    if ('name' in _v && typeof _v['name'] !== 'string') return false;
+    if (!('bayType' in _v) || _v['bayType'] === undefined) return false;
+    if ('bayType' in _v && typeof _v['bayType'] !== 'string') return false;
+    if (!('capacity' in _v) || _v['capacity'] === undefined) return false;
+    if ('maxConcurrentVehicles' in _v && typeof _v['maxConcurrentVehicles'] !== 'number') return false;
+    if ('status' in _v && typeof _v['status'] !== 'string') return false;
+    return true;
+}
+

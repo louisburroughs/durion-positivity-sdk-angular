@@ -17,11 +17,25 @@ export interface Page {
     size?: number;
     content?: Array<any>;
     number?: number;
-    pageable?: PageableObject;
     sort?: SortObject;
+    pageable?: PageableObject;
     first?: boolean;
     last?: boolean;
     numberOfElements?: number;
     empty?: boolean;
+}
+
+export function instanceOfPage(value: object): value is Page {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('totalElements' in _v && typeof _v['totalElements'] !== 'number') return false;
+    if ('totalPages' in _v && typeof _v['totalPages'] !== 'number') return false;
+    if ('size' in _v && typeof _v['size'] !== 'number') return false;
+    if ('number' in _v && typeof _v['number'] !== 'number') return false;
+    if ('first' in _v && typeof _v['first'] !== 'boolean') return false;
+    if ('last' in _v && typeof _v['last'] !== 'boolean') return false;
+    if ('numberOfElements' in _v && typeof _v['numberOfElements'] !== 'number') return false;
+    if ('empty' in _v && typeof _v['empty'] !== 'boolean') return false;
+    return true;
 }
 

@@ -27,3 +27,13 @@ export interface WorkexecTimerStartRequest {
     laborCode?: string;
 }
 
+export function instanceOfWorkexecTimerStartRequest(value: object): value is WorkexecTimerStartRequest {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if (!('workorderId' in _v) || _v['workorderId'] === undefined) return false;
+    if ('workorderId' in _v && typeof _v['workorderId'] !== 'string') return false;
+    if ('workorderItemId' in _v && typeof _v['workorderItemId'] !== 'string') return false;
+    if ('laborCode' in _v && typeof _v['laborCode'] !== 'string') return false;
+    return true;
+}
+

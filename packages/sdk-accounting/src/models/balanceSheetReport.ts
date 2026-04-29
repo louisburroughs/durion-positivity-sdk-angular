@@ -19,3 +19,13 @@ export interface BalanceSheetReport {
     balanced?: boolean;
 }
 
+export function instanceOfBalanceSheetReport(value: object): value is BalanceSheetReport {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('totalAssets' in _v && typeof _v['totalAssets'] !== 'number') return false;
+    if ('totalLiabilities' in _v && typeof _v['totalLiabilities'] !== 'number') return false;
+    if ('totalEquity' in _v && typeof _v['totalEquity'] !== 'number') return false;
+    if ('balanced' in _v && typeof _v['balanced'] !== 'boolean') return false;
+    return true;
+}
+

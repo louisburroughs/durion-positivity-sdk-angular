@@ -43,3 +43,16 @@ export interface TimeEntryAdjustmentRequest {
     createdBy?: string;
 }
 
+export function instanceOfTimeEntryAdjustmentRequest(value: object): value is TimeEntryAdjustmentRequest {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if (!('timeEntryId' in _v) || _v['timeEntryId'] === undefined) return false;
+    if ('timeEntryId' in _v && typeof _v['timeEntryId'] !== 'string') return false;
+    if (!('reasonCode' in _v) || _v['reasonCode'] === undefined) return false;
+    if ('reasonCode' in _v && typeof _v['reasonCode'] !== 'string') return false;
+    if ('notes' in _v && typeof _v['notes'] !== 'string') return false;
+    if ('minutesDelta' in _v && typeof _v['minutesDelta'] !== 'number') return false;
+    if ('createdBy' in _v && typeof _v['createdBy'] !== 'string') return false;
+    return true;
+}
+

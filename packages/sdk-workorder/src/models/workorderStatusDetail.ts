@@ -85,3 +85,19 @@ export enum WorkorderStatusDetailStatusEnum {
 
 
 
+export function instanceOfWorkorderStatusDetail(value: object): value is WorkorderStatusDetail {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('workorderId' in _v && typeof _v['workorderId'] !== 'string') return false;
+    if ('status' in _v && typeof _v['status'] !== 'string') return false;
+    if ('assignedTechnicianId' in _v && typeof _v['assignedTechnicianId'] !== 'string') return false;
+    if ('locationId' in _v && typeof _v['locationId'] !== 'string') return false;
+    if ('customerName' in _v && typeof _v['customerName'] !== 'string') return false;
+    if ('vehicleInfo' in _v && typeof _v['vehicleInfo'] !== 'string') return false;
+    if ('phoneNumber' in _v && typeof _v['phoneNumber'] !== 'string') return false;
+    if ('vehicleVin' in _v && typeof _v['vehicleVin'] !== 'string') return false;
+    if ('serviceDescription' in _v && typeof _v['serviceDescription'] !== 'string') return false;
+    if ('internalNotes' in _v && typeof _v['internalNotes'] !== 'string') return false;
+    return true;
+}
+

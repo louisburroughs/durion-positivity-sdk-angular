@@ -19,3 +19,16 @@ export interface AsnLineResponse {
     lotNumber?: string;
 }
 
+export function instanceOfAsnLineResponse(value: object): value is AsnLineResponse {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('asnLineId' in _v && typeof _v['asnLineId'] !== 'string') return false;
+    if ('poId' in _v && typeof _v['poId'] !== 'string') return false;
+    if ('sku' in _v && typeof _v['sku'] !== 'string') return false;
+    if ('quantityShipped' in _v && typeof _v['quantityShipped'] !== 'number') return false;
+    if ('quantityReceived' in _v && typeof _v['quantityReceived'] !== 'number') return false;
+    if ('unitOfMeasure' in _v && typeof _v['unitOfMeasure'] !== 'string') return false;
+    if ('lotNumber' in _v && typeof _v['lotNumber'] !== 'string') return false;
+    return true;
+}
+

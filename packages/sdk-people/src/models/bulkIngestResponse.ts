@@ -17,3 +17,12 @@ export interface BulkIngestResponse {
     results?: Array<BulkIngestResult>;
 }
 
+export function instanceOfBulkIngestResponse(value: object): value is BulkIngestResponse {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('totalSubmitted' in _v && typeof _v['totalSubmitted'] !== 'number') return false;
+    if ('successCount' in _v && typeof _v['successCount'] !== 'number') return false;
+    if ('failureCount' in _v && typeof _v['failureCount'] !== 'number') return false;
+    return true;
+}
+

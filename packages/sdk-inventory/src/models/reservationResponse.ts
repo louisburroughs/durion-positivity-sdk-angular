@@ -18,3 +18,15 @@ export interface ReservationResponse {
     status?: string;
 }
 
+export function instanceOfReservationResponse(value: object): value is ReservationResponse {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('reservationId' in _v && typeof _v['reservationId'] !== 'string') return false;
+    if ('workorderLineId' in _v && typeof _v['workorderLineId'] !== 'string') return false;
+    if ('stockItemId' in _v && typeof _v['stockItemId'] !== 'string') return false;
+    if ('requiredQuantity' in _v && typeof _v['requiredQuantity'] !== 'number') return false;
+    if ('allocatedQuantity' in _v && typeof _v['allocatedQuantity'] !== 'number') return false;
+    if ('status' in _v && typeof _v['status'] !== 'string') return false;
+    return true;
+}
+

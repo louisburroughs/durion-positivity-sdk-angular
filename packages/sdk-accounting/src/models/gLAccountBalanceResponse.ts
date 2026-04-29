@@ -17,3 +17,13 @@ export interface GLAccountBalanceResponse {
     asOfDate?: string;
 }
 
+export function instanceOfGLAccountBalanceResponse(value: object): value is GLAccountBalanceResponse {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('glAccountId' in _v && typeof _v['glAccountId'] !== 'string') return false;
+    if ('accountCode' in _v && typeof _v['accountCode'] !== 'string') return false;
+    if ('accountName' in _v && typeof _v['accountName'] !== 'string') return false;
+    if ('balance' in _v && typeof _v['balance'] !== 'number') return false;
+    return true;
+}
+

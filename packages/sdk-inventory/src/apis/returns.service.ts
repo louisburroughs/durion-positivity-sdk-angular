@@ -19,9 +19,13 @@ import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 // @ts-ignore
 import { ApiError } from '../src/models/apiError';
 // @ts-ignore
-import { ReturnItemsRequest } from '../src/models/returnItemsRequest';
+import { ReasonCodeDto } from '../src/models/reasonCodeDto';
 // @ts-ignore
-import { ReturnResponse } from '../src/models/returnResponse';
+import { ReturnSubmissionResultDto } from '../src/models/returnSubmissionResultDto';
+// @ts-ignore
+import { ReturnSubmitRequest } from '../src/models/returnSubmitRequest';
+// @ts-ignore
+import { ReturnableItemDto } from '../src/models/returnableItemDto';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
@@ -40,20 +44,148 @@ export class ReturnsService extends BaseService {
     }
 
     /**
-     * Return items to stock
-     * Returns issued parts to inventory and records resulting return movement
-     * @endpoint post /v1/inventory/returns
-     * @param returnItemsRequest 
+     * List return reason codes
+     * Returns reason codes available for inventory returns.
+     * @endpoint get /v1/inventory/returns/reason-codes
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public returnItemsToStock(returnItemsRequest: ReturnItemsRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ReturnResponse>;
-    public returnItemsToStock(returnItemsRequest: ReturnItemsRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ReturnResponse>>;
-    public returnItemsToStock(returnItemsRequest: ReturnItemsRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ReturnResponse>>;
-    public returnItemsToStock(returnItemsRequest: ReturnItemsRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
-        if (returnItemsRequest === null || returnItemsRequest === undefined) {
-            throw new Error('Required parameter returnItemsRequest was null or undefined when calling returnItemsToStock.');
+    public listReturnReasonCodes(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<ReasonCodeDto>>;
+    public listReturnReasonCodes(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<ReasonCodeDto>>>;
+    public listReturnReasonCodes(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<ReasonCodeDto>>>;
+    public listReturnReasonCodes(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/inventory/returns/reason-codes`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<Array<ReasonCodeDto>>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * List returnable items
+     * Returns items that can be returned to stock for a workorder.
+     * @endpoint get /v1/inventory/returns/returnable-items
+     * @param workorderId 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public listReturnableItems(workorderId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<ReturnableItemDto>>;
+    public listReturnableItems(workorderId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<ReturnableItemDto>>>;
+    public listReturnableItems(workorderId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<ReturnableItemDto>>>;
+    public listReturnableItems(workorderId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (workorderId === null || workorderId === undefined) {
+            throw new Error('Required parameter workorderId was null or undefined when calling listReturnableItems.');
+        }
+
+        let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'workorderId',
+            <any>workorderId,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/inventory/returns/returnable-items`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<Array<ReturnableItemDto>>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                params: localVarQueryParameters.toHttpParams(),
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Submit return to stock
+     * Submits inventory returns to stock.
+     * @endpoint post /v1/inventory/returns/submit-to-stock
+     * @param returnSubmitRequest 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public submitReturnToStock(returnSubmitRequest: ReturnSubmitRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ReturnSubmissionResultDto>;
+    public submitReturnToStock(returnSubmitRequest: ReturnSubmitRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ReturnSubmissionResultDto>>;
+    public submitReturnToStock(returnSubmitRequest: ReturnSubmitRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ReturnSubmissionResultDto>>;
+    public submitReturnToStock(returnSubmitRequest: ReturnSubmitRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (returnSubmitRequest === null || returnSubmitRequest === undefined) {
+            throw new Error('Required parameter returnSubmitRequest was null or undefined when calling submitReturnToStock.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -93,12 +225,12 @@ export class ReturnsService extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/inventory/returns`;
+        let localVarPath = `/v1/inventory/returns/submit-to-stock`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<ReturnResponse>('post', `${basePath}${localVarPath}`,
+        return this.httpClient.request<ReturnSubmissionResultDto>('post', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
-                body: returnItemsRequest,
+                body: returnSubmitRequest,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,

@@ -16,3 +16,13 @@ export interface AccountSummary {
     accountType?: string;
 }
 
+export function instanceOfAccountSummary(value: object): value is AccountSummary {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('partyId' in _v && typeof _v['partyId'] !== 'string') return false;
+    if ('accountNumber' in _v && typeof _v['accountNumber'] !== 'string') return false;
+    if ('accountName' in _v && typeof _v['accountName'] !== 'string') return false;
+    if ('accountType' in _v && typeof _v['accountType'] !== 'string') return false;
+    return true;
+}
+

@@ -23,3 +23,12 @@ export interface Decision {
     rejectionReason?: string;
 }
 
+export function instanceOfDecision(value: object): value is Decision {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if (!('timeEntryId' in _v) || _v['timeEntryId'] === undefined) return false;
+    if ('timeEntryId' in _v && typeof _v['timeEntryId'] !== 'string') return false;
+    if ('rejectionReason' in _v && typeof _v['rejectionReason'] !== 'string') return false;
+    return true;
+}
+

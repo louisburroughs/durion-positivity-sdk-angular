@@ -28,3 +28,17 @@ export enum PickTaskResponseStatusEnum {
 
 
 
+export function instanceOfPickTaskResponse(value: object): value is PickTaskResponse {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('pickTaskId' in _v && typeof _v['pickTaskId'] !== 'string') return false;
+    if ('pickListId' in _v && typeof _v['pickListId'] !== 'string') return false;
+    if ('skuId' in _v && typeof _v['skuId'] !== 'string') return false;
+    if ('locationId' in _v && typeof _v['locationId'] !== 'string') return false;
+    if ('quantityRequired' in _v && typeof _v['quantityRequired'] !== 'number') return false;
+    if ('quantityPicked' in _v && typeof _v['quantityPicked'] !== 'number') return false;
+    if ('status' in _v && typeof _v['status'] !== 'string') return false;
+    if ('sortOrder' in _v && typeof _v['sortOrder'] !== 'number') return false;
+    return true;
+}
+

@@ -17,3 +17,12 @@ export interface SearchVehiclesResponse {
     query?: string;
 }
 
+export function instanceOfSearchVehiclesResponse(value: object): value is SearchVehiclesResponse {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('totalCount' in _v && typeof _v['totalCount'] !== 'number') return false;
+    if ('hasMore' in _v && typeof _v['hasMore'] !== 'boolean') return false;
+    if ('query' in _v && typeof _v['query'] !== 'string') return false;
+    return true;
+}
+

@@ -20,3 +20,12 @@ export enum ReceiptResponseStatusEnum {
 
 
 
+export function instanceOfReceiptResponse(value: object): value is ReceiptResponse {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('receiptId' in _v && typeof _v['receiptId'] !== 'string') return false;
+    if ('reference' in _v && typeof _v['reference'] !== 'string') return false;
+    if ('status' in _v && typeof _v['status'] !== 'string') return false;
+    return true;
+}
+

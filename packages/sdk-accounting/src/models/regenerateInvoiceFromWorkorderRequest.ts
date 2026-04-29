@@ -14,3 +14,12 @@ export interface RegenerateInvoiceFromWorkorderRequest {
     idempotencyKey?: string;
 }
 
+export function instanceOfRegenerateInvoiceFromWorkorderRequest(value: object): value is RegenerateInvoiceFromWorkorderRequest {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if (!('workorderId' in _v) || _v['workorderId'] === undefined) return false;
+    if ('workorderId' in _v && typeof _v['workorderId'] !== 'string') return false;
+    if ('idempotencyKey' in _v && typeof _v['idempotencyKey'] !== 'string') return false;
+    return true;
+}
+

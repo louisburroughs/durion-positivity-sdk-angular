@@ -17,3 +17,14 @@ export interface StorageLocationValidationResponseDTO {
     maxUnitCapacity?: number;
 }
 
+export function instanceOfStorageLocationValidationResponseDTO(value: object): value is StorageLocationValidationResponseDTO {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('storageLocationId' in _v && typeof _v['storageLocationId'] !== 'string') return false;
+    if ('siteId' in _v && typeof _v['siteId'] !== 'string') return false;
+    if ('exists' in _v && typeof _v['exists'] !== 'boolean') return false;
+    if ('active' in _v && typeof _v['active'] !== 'boolean') return false;
+    if ('maxUnitCapacity' in _v && typeof _v['maxUnitCapacity'] !== 'number') return false;
+    return true;
+}
+

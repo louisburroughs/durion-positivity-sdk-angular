@@ -65,3 +65,23 @@ export enum StaffingAssignmentResponseStatusEnum {
 
 
 
+export function instanceOfStaffingAssignmentResponse(value: object): value is StaffingAssignmentResponse {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if (!('assignmentId' in _v) || _v['assignmentId'] === undefined) return false;
+    if ('assignmentId' in _v && typeof _v['assignmentId'] !== 'string') return false;
+    if (!('personId' in _v) || _v['personId'] === undefined) return false;
+    if ('personId' in _v && typeof _v['personId'] !== 'string') return false;
+    if (!('locationId' in _v) || _v['locationId'] === undefined) return false;
+    if ('locationId' in _v && typeof _v['locationId'] !== 'string') return false;
+    if (!('role' in _v) || _v['role'] === undefined) return false;
+    if ('role' in _v && typeof _v['role'] !== 'string') return false;
+    if (!('status' in _v) || _v['status'] === undefined) return false;
+    if ('status' in _v && typeof _v['status'] !== 'string') return false;
+    if (!('effectiveFrom' in _v) || _v['effectiveFrom'] === undefined) return false;
+    if ('createdBy' in _v && typeof _v['createdBy'] !== 'string') return false;
+    if (!('isPrimary' in _v) || _v['isPrimary'] === undefined) return false;
+    if ('isPrimary' in _v && typeof _v['isPrimary'] !== 'boolean') return false;
+    return true;
+}
+

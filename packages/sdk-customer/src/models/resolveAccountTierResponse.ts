@@ -61,3 +61,16 @@ export enum ResolveAccountTierResponseRecommendedTierEnum {
 
 
 
+export function instanceOfResolveAccountTierResponse(value: object): value is ResolveAccountTierResponse {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('accountId' in _v && typeof _v['accountId'] !== 'string') return false;
+    if ('currentTier' in _v && typeof _v['currentTier'] !== 'string') return false;
+    if ('recommendedTier' in _v && typeof _v['recommendedTier'] !== 'string') return false;
+    if ('tierApplied' in _v && typeof _v['tierApplied'] !== 'boolean') return false;
+    if ('manualOverrideActive' in _v && typeof _v['manualOverrideActive'] !== 'boolean') return false;
+    if ('resolutionReason' in _v && typeof _v['resolutionReason'] !== 'string') return false;
+    if ('tierScore' in _v && typeof _v['tierScore'] !== 'number') return false;
+    return true;
+}
+

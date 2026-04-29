@@ -27,3 +27,14 @@ export enum BulkLoadJobCreateRequestDomainTypeEnum {
 
 
 
+export function instanceOfBulkLoadJobCreateRequest(value: object): value is BulkLoadJobCreateRequest {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if (!('fileName' in _v) || _v['fileName'] === undefined) return false;
+    if ('fileName' in _v && typeof _v['fileName'] !== 'string') return false;
+    if (!('domainType' in _v) || _v['domainType'] === undefined) return false;
+    if ('domainType' in _v && typeof _v['domainType'] !== 'string') return false;
+    if ('locationId' in _v && typeof _v['locationId'] !== 'string') return false;
+    return true;
+}
+

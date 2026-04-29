@@ -33,3 +33,20 @@ export enum ShopAuditEntryResponseEventTypeEnum {
 
 
 
+export function instanceOfShopAuditEntryResponse(value: object): value is ShopAuditEntryResponse {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('id' in _v && typeof _v['id'] !== 'string') return false;
+    if ('eventType' in _v && typeof _v['eventType'] !== 'string') return false;
+    if ('workorderId' in _v && typeof _v['workorderId'] !== 'string') return false;
+    if ('appointmentId' in _v && typeof _v['appointmentId'] !== 'string') return false;
+    if ('mechanicId' in _v && typeof _v['mechanicId'] !== 'string') return false;
+    if ('locationId' in _v && typeof _v['locationId'] !== 'string') return false;
+    if ('actorUserId' in _v && typeof _v['actorUserId'] !== 'string') return false;
+    if ('changeSummaryText' in _v && typeof _v['changeSummaryText'] !== 'string') return false;
+    if ('changePatch' in _v && typeof _v['changePatch'] !== 'string') return false;
+    if ('reasonCode' in _v && typeof _v['reasonCode'] !== 'string') return false;
+    if ('retentionYears' in _v && typeof _v['retentionYears'] !== 'number') return false;
+    return true;
+}
+

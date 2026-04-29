@@ -26,3 +26,20 @@ export interface SearchPartiesRequest {
     sortOrder?: string;
 }
 
+export function instanceOfSearchPartiesRequest(value: object): value is SearchPartiesRequest {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('name' in _v && typeof _v['name'] !== 'string') return false;
+    if ('email' in _v && typeof _v['email'] !== 'string') return false;
+    if ('phone' in _v && typeof _v['phone'] !== 'string') return false;
+    if ('taxId' in _v && typeof _v['taxId'] !== 'string') return false;
+    if ('partyType' in _v && typeof _v['partyType'] !== 'string') return false;
+    if ('status' in _v && typeof _v['status'] !== 'string') return false;
+    if ('includeMerged' in _v && typeof _v['includeMerged'] !== 'boolean') return false;
+    if ('pageNumber' in _v && typeof _v['pageNumber'] !== 'number') return false;
+    if ('pageSize' in _v && typeof _v['pageSize'] !== 'number') return false;
+    if ('sortField' in _v && typeof _v['sortField'] !== 'string') return false;
+    if ('sortOrder' in _v && typeof _v['sortOrder'] !== 'string') return false;
+    return true;
+}
+

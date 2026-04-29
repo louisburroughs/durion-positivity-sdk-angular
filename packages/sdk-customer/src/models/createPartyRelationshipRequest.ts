@@ -41,3 +41,14 @@ export enum CreatePartyRelationshipRequestRolesEnum {
 
 
 
+export function instanceOfCreatePartyRelationshipRequest(value: object): value is CreatePartyRelationshipRequest {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if (!('personId' in _v) || _v['personId'] === undefined) return false;
+    if ('personId' in _v && typeof _v['personId'] !== 'string') return false;
+    if (!('roles' in _v) || _v['roles'] === undefined) return false;
+    if (!('effectiveStartDate' in _v) || _v['effectiveStartDate'] === undefined) return false;
+    if ('primaryBillingContact' in _v && typeof _v['primaryBillingContact'] !== 'boolean') return false;
+    return true;
+}
+

@@ -14,3 +14,12 @@ export interface RejectPriceOverrideRequest {
     comments?: string;
 }
 
+export function instanceOfRejectPriceOverrideRequest(value: object): value is RejectPriceOverrideRequest {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if (!('reason' in _v) || _v['reason'] === undefined) return false;
+    if ('reason' in _v && typeof _v['reason'] !== 'string') return false;
+    if ('comments' in _v && typeof _v['comments'] !== 'string') return false;
+    return true;
+}
+

@@ -17,3 +17,18 @@ export interface CreateReplenishmentPolicyRequest {
     minimumLessThanMaximum?: boolean;
 }
 
+export function instanceOfCreateReplenishmentPolicyRequest(value: object): value is CreateReplenishmentPolicyRequest {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if (!('locationId' in _v) || _v['locationId'] === undefined) return false;
+    if ('locationId' in _v && typeof _v['locationId'] !== 'string') return false;
+    if (!('itemSKU' in _v) || _v['itemSKU'] === undefined) return false;
+    if ('itemSKU' in _v && typeof _v['itemSKU'] !== 'string') return false;
+    if (!('minimumQuantity' in _v) || _v['minimumQuantity'] === undefined) return false;
+    if ('minimumQuantity' in _v && typeof _v['minimumQuantity'] !== 'number') return false;
+    if (!('maximumQuantity' in _v) || _v['maximumQuantity'] === undefined) return false;
+    if ('maximumQuantity' in _v && typeof _v['maximumQuantity'] !== 'number') return false;
+    if ('minimumLessThanMaximum' in _v && typeof _v['minimumLessThanMaximum'] !== 'boolean') return false;
+    return true;
+}
+

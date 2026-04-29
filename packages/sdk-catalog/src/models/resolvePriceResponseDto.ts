@@ -24,3 +24,14 @@ export enum ResolvePriceResponseDtoSourceEnum {
 
 
 
+export function instanceOfResolvePriceResponseDto(value: object): value is ResolvePriceResponseDto {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('resolvedAmount' in _v && typeof _v['resolvedAmount'] !== 'string') return false;
+    if ('currency' in _v && typeof _v['currency'] !== 'string') return false;
+    if ('source' in _v && typeof _v['source'] !== 'string') return false;
+    if ('sourceRuleId' in _v && typeof _v['sourceRuleId'] !== 'string') return false;
+    if ('fallbackReason' in _v && typeof _v['fallbackReason'] !== 'string') return false;
+    return true;
+}
+

@@ -17,3 +17,12 @@ export interface PermissionRegistrationRequest {
     version?: string;
 }
 
+export function instanceOfPermissionRegistrationRequest(value: object): value is PermissionRegistrationRequest {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('domain' in _v && typeof _v['domain'] !== 'string') return false;
+    if ('serviceName' in _v && typeof _v['serviceName'] !== 'string') return false;
+    if ('version' in _v && typeof _v['version'] !== 'string') return false;
+    return true;
+}
+

@@ -67,3 +67,18 @@ export interface WorkorderResponse {
     crmContactIds?: Array<string>;
 }
 
+export function instanceOfWorkorderResponse(value: object): value is WorkorderResponse {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('id' in _v && typeof _v['id'] !== 'string') return false;
+    if ('estimateId' in _v && typeof _v['estimateId'] !== 'string') return false;
+    if ('customerId' in _v && typeof _v['customerId'] !== 'string') return false;
+    if ('shopId' in _v && typeof _v['shopId'] !== 'string') return false;
+    if ('vehicleId' in _v && typeof _v['vehicleId'] !== 'string') return false;
+    if ('status' in _v && typeof _v['status'] !== 'string') return false;
+    if ('isReopened' in _v && typeof _v['isReopened'] !== 'boolean') return false;
+    if ('crmPartyId' in _v && typeof _v['crmPartyId'] !== 'string') return false;
+    if ('crmVehicleId' in _v && typeof _v['crmVehicleId'] !== 'string') return false;
+    return true;
+}
+

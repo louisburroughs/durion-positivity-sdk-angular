@@ -14,3 +14,13 @@ export interface ConsumeItem {
     quantityToConsume: number;
 }
 
+export function instanceOfConsumeItem(value: object): value is ConsumeItem {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if (!('pickTaskId' in _v) || _v['pickTaskId'] === undefined) return false;
+    if ('pickTaskId' in _v && typeof _v['pickTaskId'] !== 'string') return false;
+    if (!('quantityToConsume' in _v) || _v['quantityToConsume'] === undefined) return false;
+    if ('quantityToConsume' in _v && typeof _v['quantityToConsume'] !== 'number') return false;
+    return true;
+}
+

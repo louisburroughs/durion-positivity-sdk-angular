@@ -27,3 +27,13 @@ export interface TimeEntryAdjustmentResponse {
     message?: string;
 }
 
+export function instanceOfTimeEntryAdjustmentResponse(value: object): value is TimeEntryAdjustmentResponse {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('adjustmentId' in _v && typeof _v['adjustmentId'] !== 'string') return false;
+    if (!('success' in _v) || _v['success'] === undefined) return false;
+    if ('success' in _v && typeof _v['success'] !== 'boolean') return false;
+    if ('message' in _v && typeof _v['message'] !== 'string') return false;
+    return true;
+}
+

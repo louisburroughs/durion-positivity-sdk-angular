@@ -14,3 +14,13 @@ export interface LinkSourceRequest {
     sourceId: string;
 }
 
+export function instanceOfLinkSourceRequest(value: object): value is LinkSourceRequest {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if (!('sourceType' in _v) || _v['sourceType'] === undefined) return false;
+    if ('sourceType' in _v && typeof _v['sourceType'] !== 'string') return false;
+    if (!('sourceId' in _v) || _v['sourceId'] === undefined) return false;
+    if ('sourceId' in _v && typeof _v['sourceId'] !== 'string') return false;
+    return true;
+}
+

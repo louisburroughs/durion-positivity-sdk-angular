@@ -16,3 +16,12 @@ export interface UserDto {
     personId?: string;
 }
 
+export function instanceOfUserDto(value: object): value is UserDto {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('id' in _v && typeof _v['id'] !== 'string') return false;
+    if ('username' in _v && typeof _v['username'] !== 'string') return false;
+    if ('personId' in _v && typeof _v['personId'] !== 'string') return false;
+    return true;
+}
+

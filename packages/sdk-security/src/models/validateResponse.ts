@@ -19,3 +19,10 @@ export interface ValidateResponse {
     valid?: boolean;
 }
 
+export function instanceOfValidateResponse(value: object): value is ValidateResponse {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('valid' in _v && typeof _v['valid'] !== 'boolean') return false;
+    return true;
+}
+

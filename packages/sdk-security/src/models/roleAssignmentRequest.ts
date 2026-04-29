@@ -24,3 +24,12 @@ export enum RoleAssignmentRequestScopeTypeEnum {
 
 
 
+export function instanceOfRoleAssignmentRequest(value: object): value is RoleAssignmentRequest {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('userId' in _v && typeof _v['userId'] !== 'string') return false;
+    if ('roleId' in _v && typeof _v['roleId'] !== 'string') return false;
+    if ('scopeType' in _v && typeof _v['scopeType'] !== 'string') return false;
+    return true;
+}
+

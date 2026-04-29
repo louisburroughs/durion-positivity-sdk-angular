@@ -39,3 +39,17 @@ export interface TaxAddress {
     line2?: string;
 }
 
+export function instanceOfTaxAddress(value: object): value is TaxAddress {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if (!('countryCode' in _v) || _v['countryCode'] === undefined) return false;
+    if ('countryCode' in _v && typeof _v['countryCode'] !== 'string') return false;
+    if ('regionCode' in _v && typeof _v['regionCode'] !== 'string') return false;
+    if ('city' in _v && typeof _v['city'] !== 'string') return false;
+    if (!('postalCode' in _v) || _v['postalCode'] === undefined) return false;
+    if ('postalCode' in _v && typeof _v['postalCode'] !== 'string') return false;
+    if ('line1' in _v && typeof _v['line1'] !== 'string') return false;
+    if ('line2' in _v && typeof _v['line2'] !== 'string') return false;
+    return true;
+}
+

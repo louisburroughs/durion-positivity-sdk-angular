@@ -47,3 +47,16 @@ export interface WorkorderStateTransitionResponse {
     metadata?: string;
 }
 
+export function instanceOfWorkorderStateTransitionResponse(value: object): value is WorkorderStateTransitionResponse {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('id' in _v && typeof _v['id'] !== 'string') return false;
+    if ('workorderId' in _v && typeof _v['workorderId'] !== 'string') return false;
+    if ('fromStatus' in _v && typeof _v['fromStatus'] !== 'string') return false;
+    if ('toStatus' in _v && typeof _v['toStatus'] !== 'string') return false;
+    if ('transitionedBy' in _v && typeof _v['transitionedBy'] !== 'string') return false;
+    if ('reason' in _v && typeof _v['reason'] !== 'string') return false;
+    if ('metadata' in _v && typeof _v['metadata'] !== 'string') return false;
+    return true;
+}
+

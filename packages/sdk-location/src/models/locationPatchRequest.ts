@@ -24,3 +24,14 @@ export interface LocationPatchRequest {
     cleanupBufferMinutes?: number;
 }
 
+export function instanceOfLocationPatchRequest(value: object): value is LocationPatchRequest {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('name' in _v && typeof _v['name'] !== 'string') return false;
+    if ('status' in _v && typeof _v['status'] !== 'string') return false;
+    if ('timezone' in _v && typeof _v['timezone'] !== 'string') return false;
+    if ('checkInBufferMinutes' in _v && typeof _v['checkInBufferMinutes'] !== 'number') return false;
+    if ('cleanupBufferMinutes' in _v && typeof _v['cleanupBufferMinutes'] !== 'number') return false;
+    return true;
+}
+

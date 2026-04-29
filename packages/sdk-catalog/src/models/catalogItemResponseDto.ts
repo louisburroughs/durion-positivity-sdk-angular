@@ -35,3 +35,14 @@ export interface CatalogItemResponseDto {
     longDescription?: string;
 }
 
+export function instanceOfCatalogItemResponseDto(value: object): value is CatalogItemResponseDto {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('id' in _v && typeof _v['id'] !== 'string') return false;
+    if ('itemType' in _v && typeof _v['itemType'] !== 'string') return false;
+    if ('name' in _v && typeof _v['name'] !== 'string') return false;
+    if ('shortDescription' in _v && typeof _v['shortDescription'] !== 'string') return false;
+    if ('longDescription' in _v && typeof _v['longDescription'] !== 'string') return false;
+    return true;
+}
+

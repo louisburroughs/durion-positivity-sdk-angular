@@ -34,3 +34,18 @@ export enum UpdateEmployeeRequestDuplicatePolicyEnum {
 
 
 
+export function instanceOfUpdateEmployeeRequest(value: object): value is UpdateEmployeeRequest {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if (!('legalName' in _v) || _v['legalName'] === undefined) return false;
+    if ('legalName' in _v && typeof _v['legalName'] !== 'string') return false;
+    if ('preferredName' in _v && typeof _v['preferredName'] !== 'string') return false;
+    if (!('employeeNumber' in _v) || _v['employeeNumber'] === undefined) return false;
+    if ('employeeNumber' in _v && typeof _v['employeeNumber'] !== 'string') return false;
+    if (!('status' in _v) || _v['status'] === undefined) return false;
+    if ('status' in _v && typeof _v['status'] !== 'string') return false;
+    if (!('hireDate' in _v) || _v['hireDate'] === undefined) return false;
+    if ('duplicatePolicy' in _v && typeof _v['duplicatePolicy'] !== 'string') return false;
+    return true;
+}
+

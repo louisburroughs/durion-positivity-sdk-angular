@@ -43,3 +43,18 @@ export interface EventTypeRequest {
     p99Micros?: number;
 }
 
+export function instanceOfEventTypeRequest(value: object): value is EventTypeRequest {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if (!('typeCode' in _v) || _v['typeCode'] === undefined) return false;
+    if ('typeCode' in _v && typeof _v['typeCode'] !== 'string') return false;
+    if (!('description' in _v) || _v['description'] === undefined) return false;
+    if ('description' in _v && typeof _v['description'] !== 'string') return false;
+    if ('active' in _v && typeof _v['active'] !== 'boolean') return false;
+    if ('apiVersion' in _v && typeof _v['apiVersion'] !== 'string') return false;
+    if ('p50Micros' in _v && typeof _v['p50Micros'] !== 'number') return false;
+    if ('p95Micros' in _v && typeof _v['p95Micros'] !== 'number') return false;
+    if ('p99Micros' in _v && typeof _v['p99Micros'] !== 'number') return false;
+    return true;
+}
+

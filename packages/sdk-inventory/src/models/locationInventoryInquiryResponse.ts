@@ -21,5 +21,21 @@ export interface LocationInventoryInquiryResponse {
      * Current on-hand quantity across all stock items at the location
      */
     onHandQuantity: number;
+    /**
+     * Quantity available to promise after pending allocations. Note: reservation events are not yet factored in.
+     */
+    availableToPromiseQuantity: number;
+}
+
+export function instanceOfLocationInventoryInquiryResponse(value: object): value is LocationInventoryInquiryResponse {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if (!('locationId' in _v) || _v['locationId'] === undefined) return false;
+    if ('locationId' in _v && typeof _v['locationId'] !== 'string') return false;
+    if (!('onHandQuantity' in _v) || _v['onHandQuantity'] === undefined) return false;
+    if ('onHandQuantity' in _v && typeof _v['onHandQuantity'] !== 'number') return false;
+    if (!('availableToPromiseQuantity' in _v) || _v['availableToPromiseQuantity'] === undefined) return false;
+    if ('availableToPromiseQuantity' in _v && typeof _v['availableToPromiseQuantity'] !== 'number') return false;
+    return true;
 }
 

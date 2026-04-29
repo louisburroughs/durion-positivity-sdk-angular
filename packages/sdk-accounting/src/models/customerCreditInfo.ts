@@ -15,3 +15,11 @@ export interface CustomerCreditInfo {
     createdAt?: string;
 }
 
+export function instanceOfCustomerCreditInfo(value: object): value is CustomerCreditInfo {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('creditId' in _v && typeof _v['creditId'] !== 'string') return false;
+    if ('amount' in _v && typeof _v['amount'] !== 'number') return false;
+    return true;
+}
+

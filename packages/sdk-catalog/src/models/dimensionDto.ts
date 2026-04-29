@@ -61,3 +61,13 @@ export enum DimensionDtoDimensionTypeEnum {
 
 
 
+export function instanceOfDimensionDto(value: object): value is DimensionDto {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('id' in _v && typeof _v['id'] !== 'string') return false;
+    if ('dimensionType' in _v && typeof _v['dimensionType'] !== 'string') return false;
+    if ('description' in _v && typeof _v['description'] !== 'string') return false;
+    if ('unitOfMeasure' in _v && typeof _v['unitOfMeasure'] !== 'string') return false;
+    return true;
+}
+

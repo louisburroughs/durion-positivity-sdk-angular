@@ -14,3 +14,11 @@ export interface RoleAssignment {
     isPrimary?: boolean;
 }
 
+export function instanceOfRoleAssignment(value: object): value is RoleAssignment {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('roleCode' in _v && typeof _v['roleCode'] !== 'string') return false;
+    if ('isPrimary' in _v && typeof _v['isPrimary'] !== 'boolean') return false;
+    return true;
+}
+

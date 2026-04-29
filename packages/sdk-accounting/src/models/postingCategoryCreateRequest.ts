@@ -15,3 +15,14 @@ export interface PostingCategoryCreateRequest {
     createdBy: string;
 }
 
+export function instanceOfPostingCategoryCreateRequest(value: object): value is PostingCategoryCreateRequest {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if (!('categoryName' in _v) || _v['categoryName'] === undefined) return false;
+    if ('categoryName' in _v && typeof _v['categoryName'] !== 'string') return false;
+    if ('description' in _v && typeof _v['description'] !== 'string') return false;
+    if (!('createdBy' in _v) || _v['createdBy'] === undefined) return false;
+    if ('createdBy' in _v && typeof _v['createdBy'] !== 'string') return false;
+    return true;
+}
+

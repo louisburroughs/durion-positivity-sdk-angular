@@ -15,3 +15,12 @@ export interface PaymentApplicationRequest {
     applications: Array<InvoiceApplication>;
 }
 
+export function instanceOfPaymentApplicationRequest(value: object): value is PaymentApplicationRequest {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if (!('applicationRequestId' in _v) || _v['applicationRequestId'] === undefined) return false;
+    if ('applicationRequestId' in _v && typeof _v['applicationRequestId'] !== 'string') return false;
+    if (!('applications' in _v) || _v['applications'] === undefined) return false;
+    return true;
+}
+

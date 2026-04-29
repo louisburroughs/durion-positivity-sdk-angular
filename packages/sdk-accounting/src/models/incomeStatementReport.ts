@@ -19,3 +19,12 @@ export interface IncomeStatementReport {
     netIncome?: number;
 }
 
+export function instanceOfIncomeStatementReport(value: object): value is IncomeStatementReport {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('totalRevenue' in _v && typeof _v['totalRevenue'] !== 'number') return false;
+    if ('totalExpenses' in _v && typeof _v['totalExpenses'] !== 'number') return false;
+    if ('netIncome' in _v && typeof _v['netIncome'] !== 'number') return false;
+    return true;
+}
+

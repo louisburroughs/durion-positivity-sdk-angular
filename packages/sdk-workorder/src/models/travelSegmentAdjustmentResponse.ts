@@ -22,3 +22,15 @@ export interface TravelSegmentAdjustmentResponse {
     createdAt?: string;
 }
 
+export function instanceOfTravelSegmentAdjustmentResponse(value: object): value is TravelSegmentAdjustmentResponse {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('adjustmentId' in _v && typeof _v['adjustmentId'] !== 'string') return false;
+    if ('travelSegmentId' in _v && typeof _v['travelSegmentId'] !== 'string') return false;
+    if ('adjustmentReason' in _v && typeof _v['adjustmentReason'] !== 'string') return false;
+    if ('adjustedByUserId' in _v && typeof _v['adjustedByUserId'] !== 'string') return false;
+    if ('approvalStatus' in _v && typeof _v['approvalStatus'] !== 'string') return false;
+    if ('approvedByUserId' in _v && typeof _v['approvedByUserId'] !== 'string') return false;
+    return true;
+}
+

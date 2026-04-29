@@ -29,3 +29,17 @@ export enum AuditRecordResponseReviewStatusEnum {
 
 
 
+export function instanceOfAuditRecordResponse(value: object): value is AuditRecordResponse {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('id' in _v && typeof _v['id'] !== 'string') return false;
+    if ('jobId' in _v && typeof _v['jobId'] !== 'string') return false;
+    if ('entityType' in _v && typeof _v['entityType'] !== 'string') return false;
+    if ('entityId' in _v && typeof _v['entityId'] !== 'string') return false;
+    if ('rowNumber' in _v && typeof _v['rowNumber'] !== 'number') return false;
+    if ('reviewStatus' in _v && typeof _v['reviewStatus'] !== 'string') return false;
+    if ('reasonCodes' in _v && typeof _v['reasonCodes'] !== 'string') return false;
+    if ('originalValues' in _v && typeof _v['originalValues'] !== 'string') return false;
+    return true;
+}
+

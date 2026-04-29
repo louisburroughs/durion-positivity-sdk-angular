@@ -51,3 +51,13 @@ export enum ProductLifecycleResponseLifecycleStateEnum {
 
 
 
+export function instanceOfProductLifecycleResponse(value: object): value is ProductLifecycleResponse {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('productId' in _v && typeof _v['productId'] !== 'string') return false;
+    if ('lifecycleState' in _v && typeof _v['lifecycleState'] !== 'string') return false;
+    if ('lastStateChangedBy' in _v && typeof _v['lastStateChangedBy'] !== 'string') return false;
+    if ('lifecycleOverrideReason' in _v && typeof _v['lifecycleOverrideReason'] !== 'string') return false;
+    return true;
+}
+

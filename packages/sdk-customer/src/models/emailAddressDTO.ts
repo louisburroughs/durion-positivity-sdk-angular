@@ -14,3 +14,11 @@ export interface EmailAddressDTO {
     address?: string;
 }
 
+export function instanceOfEmailAddressDTO(value: object): value is EmailAddressDTO {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('type' in _v && typeof _v['type'] !== 'string') return false;
+    if ('address' in _v && typeof _v['address'] !== 'string') return false;
+    return true;
+}
+

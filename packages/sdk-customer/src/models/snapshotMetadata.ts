@@ -18,3 +18,13 @@ export interface SnapshotMetadata {
     staleSince?: string;
 }
 
+export function instanceOfSnapshotMetadata(value: object): value is SnapshotMetadata {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('snapshotId' in _v && typeof _v['snapshotId'] !== 'string') return false;
+    if ('version' in _v && typeof _v['version'] !== 'string') return false;
+    if ('source' in _v && typeof _v['source'] !== 'string') return false;
+    if ('stale' in _v && typeof _v['stale'] !== 'boolean') return false;
+    return true;
+}
+

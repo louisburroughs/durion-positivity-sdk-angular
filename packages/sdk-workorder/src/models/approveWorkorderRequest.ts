@@ -40,3 +40,15 @@ export interface ApproveWorkorderRequest {
     lineItemApprovals?: Array<LineItemApprovalDto>;
 }
 
+export function instanceOfApproveWorkorderRequest(value: object): value is ApproveWorkorderRequest {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if (!('customerId' in _v) || _v['customerId'] === undefined) return false;
+    if ('customerId' in _v && typeof _v['customerId'] !== 'string') return false;
+    if ('signatureData' in _v && typeof _v['signatureData'] !== 'string') return false;
+    if ('signatureMimeType' in _v && typeof _v['signatureMimeType'] !== 'string') return false;
+    if ('signerName' in _v && typeof _v['signerName'] !== 'string') return false;
+    if ('notes' in _v && typeof _v['notes'] !== 'string') return false;
+    return true;
+}
+

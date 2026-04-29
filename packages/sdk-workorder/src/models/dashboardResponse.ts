@@ -51,3 +51,11 @@ export interface DashboardResponse {
     dataQualityWarning?: boolean;
 }
 
+export function instanceOfDashboardResponse(value: object): value is DashboardResponse {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('locationId' in _v && typeof _v['locationId'] !== 'string') return false;
+    if ('dataQualityWarning' in _v && typeof _v['dataQualityWarning'] !== 'boolean') return false;
+    return true;
+}
+

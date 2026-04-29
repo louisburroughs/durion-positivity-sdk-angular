@@ -18,3 +18,18 @@ export interface PersonBulkIngestRecord {
     primaryPhone?: string;
 }
 
+export function instanceOfPersonBulkIngestRecord(value: object): value is PersonBulkIngestRecord {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if (!('legalName' in _v) || _v['legalName'] === undefined) return false;
+    if ('legalName' in _v && typeof _v['legalName'] !== 'string') return false;
+    if ('preferredName' in _v && typeof _v['preferredName'] !== 'string') return false;
+    if (!('employeeNumber' in _v) || _v['employeeNumber'] === undefined) return false;
+    if ('employeeNumber' in _v && typeof _v['employeeNumber'] !== 'string') return false;
+    if (!('hireDate' in _v) || _v['hireDate'] === undefined) return false;
+    if ('hireDate' in _v && typeof _v['hireDate'] !== 'string') return false;
+    if ('primaryEmail' in _v && typeof _v['primaryEmail'] !== 'string') return false;
+    if ('primaryPhone' in _v && typeof _v['primaryPhone'] !== 'string') return false;
+    return true;
+}
+

@@ -16,3 +16,13 @@ export interface AccountDrilldownResponse {
     statementLineCode?: string;
 }
 
+export function instanceOfAccountDrilldownResponse(value: object): value is AccountDrilldownResponse {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('accountId' in _v && typeof _v['accountId'] !== 'string') return false;
+    if ('accountName' in _v && typeof _v['accountName'] !== 'string') return false;
+    if ('balance' in _v && typeof _v['balance'] !== 'number') return false;
+    if ('statementLineCode' in _v && typeof _v['statementLineCode'] !== 'string') return false;
+    return true;
+}
+

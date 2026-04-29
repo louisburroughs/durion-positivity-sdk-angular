@@ -15,3 +15,12 @@ export interface SortObject {
     unsorted?: boolean;
 }
 
+export function instanceOfSortObject(value: object): value is SortObject {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('empty' in _v && typeof _v['empty'] !== 'boolean') return false;
+    if ('sorted' in _v && typeof _v['sorted'] !== 'boolean') return false;
+    if ('unsorted' in _v && typeof _v['unsorted'] !== 'boolean') return false;
+    return true;
+}
+

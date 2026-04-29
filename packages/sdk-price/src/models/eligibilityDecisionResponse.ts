@@ -37,3 +37,12 @@ export enum EligibilityDecisionResponseReasonCodeEnum {
 
 
 
+export function instanceOfEligibilityDecisionResponse(value: object): value is EligibilityDecisionResponse {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('reasonCode' in _v && typeof _v['reasonCode'] !== 'string') return false;
+    if ('eligible' in _v && typeof _v['eligible'] !== 'boolean') return false;
+    if ('isEligible' in _v && typeof _v['isEligible'] !== 'boolean') return false;
+    return true;
+}
+

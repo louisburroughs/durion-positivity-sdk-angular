@@ -17,3 +17,14 @@ export interface PricingRuleTraceEntryDto {
     outputs?: string;
 }
 
+export function instanceOfPricingRuleTraceEntryDto(value: object): value is PricingRuleTraceEntryDto {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('id' in _v && typeof _v['id'] !== 'string') return false;
+    if ('ruleId' in _v && typeof _v['ruleId'] !== 'string') return false;
+    if ('status' in _v && typeof _v['status'] !== 'string') return false;
+    if ('inputs' in _v && typeof _v['inputs'] !== 'string') return false;
+    if ('outputs' in _v && typeof _v['outputs'] !== 'string') return false;
+    return true;
+}
+

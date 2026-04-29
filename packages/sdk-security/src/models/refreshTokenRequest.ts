@@ -19,3 +19,11 @@ export interface RefreshTokenRequest {
     refreshToken: string;
 }
 
+export function instanceOfRefreshTokenRequest(value: object): value is RefreshTokenRequest {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if (!('refreshToken' in _v) || _v['refreshToken'] === undefined) return false;
+    if ('refreshToken' in _v && typeof _v['refreshToken'] !== 'string') return false;
+    return true;
+}
+

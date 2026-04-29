@@ -22,3 +22,12 @@ export enum ConsumedItemResultStatusEnum {
 
 
 
+export function instanceOfConsumedItemResult(value: object): value is ConsumedItemResult {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('pickTaskId' in _v && typeof _v['pickTaskId'] !== 'string') return false;
+    if ('quantityConsumed' in _v && typeof _v['quantityConsumed'] !== 'number') return false;
+    if ('status' in _v && typeof _v['status'] !== 'string') return false;
+    return true;
+}
+

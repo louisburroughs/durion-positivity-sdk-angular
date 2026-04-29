@@ -40,3 +40,17 @@ export enum RestrictionEvaluationItemContextEnum {
 
 
 
+export function instanceOfRestrictionEvaluationItem(value: object): value is RestrictionEvaluationItem {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if (!('productId' in _v) || _v['productId'] === undefined) return false;
+    if ('productId' in _v && typeof _v['productId'] !== 'string') return false;
+    if (!('locationTag' in _v) || _v['locationTag'] === undefined) return false;
+    if ('locationTag' in _v && typeof _v['locationTag'] !== 'string') return false;
+    if (!('serviceTag' in _v) || _v['serviceTag'] === undefined) return false;
+    if ('serviceTag' in _v && typeof _v['serviceTag'] !== 'string') return false;
+    if (!('context' in _v) || _v['context'] === undefined) return false;
+    if ('context' in _v && typeof _v['context'] !== 'string') return false;
+    return true;
+}
+

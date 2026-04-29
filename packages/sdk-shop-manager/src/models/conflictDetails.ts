@@ -13,3 +13,9 @@ export interface ConflictDetails {
     conflictingEventIds?: Array<string>;
 }
 
+export function instanceOfConflictDetails(value: object): value is ConflictDetails {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    return true;
+}
+

@@ -14,3 +14,13 @@ export interface ResolveScanRequest {
     scannedLocationId: string;
 }
 
+export function instanceOfResolveScanRequest(value: object): value is ResolveScanRequest {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if (!('scannedSkuId' in _v) || _v['scannedSkuId'] === undefined) return false;
+    if ('scannedSkuId' in _v && typeof _v['scannedSkuId'] !== 'string') return false;
+    if (!('scannedLocationId' in _v) || _v['scannedLocationId'] === undefined) return false;
+    if ('scannedLocationId' in _v && typeof _v['scannedLocationId'] !== 'string') return false;
+    return true;
+}
+

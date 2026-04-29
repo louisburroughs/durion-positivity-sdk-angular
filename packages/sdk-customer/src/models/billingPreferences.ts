@@ -15,3 +15,12 @@ export interface BillingPreferences {
     invoiceDeliveryMethod?: string;
 }
 
+export function instanceOfBillingPreferences(value: object): value is BillingPreferences {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('marketingOptOut' in _v && typeof _v['marketingOptOut'] !== 'boolean') return false;
+    if ('doNotContact' in _v && typeof _v['doNotContact'] !== 'boolean') return false;
+    if ('invoiceDeliveryMethod' in _v && typeof _v['invoiceDeliveryMethod'] !== 'string') return false;
+    return true;
+}
+

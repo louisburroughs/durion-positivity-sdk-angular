@@ -16,3 +16,13 @@ export interface LocationParentResponseDTO {
     parentType?: string;
 }
 
+export function instanceOfLocationParentResponseDTO(value: object): value is LocationParentResponseDTO {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('id' in _v && typeof _v['id'] !== 'string') return false;
+    if ('parentId' in _v && typeof _v['parentId'] !== 'string') return false;
+    if ('childId' in _v && typeof _v['childId'] !== 'string') return false;
+    if ('parentType' in _v && typeof _v['parentType'] !== 'string') return false;
+    return true;
+}
+

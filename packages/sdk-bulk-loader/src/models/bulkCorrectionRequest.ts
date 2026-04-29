@@ -20,3 +20,10 @@ export interface BulkCorrectionRequest {
     corrections: Array<BulkCorrectionItem>;
 }
 
+export function instanceOfBulkCorrectionRequest(value: object): value is BulkCorrectionRequest {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if (!('corrections' in _v) || _v['corrections'] === undefined) return false;
+    return true;
+}
+

@@ -46,12 +46,12 @@ export class PutawayService extends BaseService {
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public claimTask(taskId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PutawayTaskResponse>;
-    public claimTask(taskId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PutawayTaskResponse>>;
-    public claimTask(taskId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PutawayTaskResponse>>;
-    public claimTask(taskId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public claimPutawayTask(taskId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PutawayTaskResponse>;
+    public claimPutawayTask(taskId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PutawayTaskResponse>>;
+    public claimPutawayTask(taskId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PutawayTaskResponse>>;
+    public claimPutawayTask(taskId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (taskId === null || taskId === undefined) {
-            throw new Error('Required parameter taskId was null or undefined when calling claimTask.');
+            throw new Error('Required parameter taskId was null or undefined when calling claimPutawayTask.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -106,12 +106,12 @@ export class PutawayService extends BaseService {
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public generateTasks(generatePutawayTasksRequest: GeneratePutawayTasksRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<PutawayTaskResponse>>;
-    public generateTasks(generatePutawayTasksRequest: GeneratePutawayTasksRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<PutawayTaskResponse>>>;
-    public generateTasks(generatePutawayTasksRequest: GeneratePutawayTasksRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<PutawayTaskResponse>>>;
-    public generateTasks(generatePutawayTasksRequest: GeneratePutawayTasksRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public generatePutawayTasks(generatePutawayTasksRequest: GeneratePutawayTasksRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<PutawayTaskResponse>>;
+    public generatePutawayTasks(generatePutawayTasksRequest: GeneratePutawayTasksRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<PutawayTaskResponse>>>;
+    public generatePutawayTasks(generatePutawayTasksRequest: GeneratePutawayTasksRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<PutawayTaskResponse>>>;
+    public generatePutawayTasks(generatePutawayTasksRequest: GeneratePutawayTasksRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (generatePutawayTasksRequest === null || generatePutawayTasksRequest === undefined) {
-            throw new Error('Required parameter generatePutawayTasksRequest was null or undefined when calling generateTasks.');
+            throw new Error('Required parameter generatePutawayTasksRequest was null or undefined when calling generatePutawayTasks.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -171,14 +171,36 @@ export class PutawayService extends BaseService {
      * List available putaway tasks
      * Returns all currently available putaway tasks.
      * @endpoint get /v1/inventory/putaway/tasks
+     * @param locationId Location identifier
+     * @param storageLocationId Storage location identifier
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public getAvailableTasks(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<PutawayTaskResponse>>;
-    public getAvailableTasks(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<PutawayTaskResponse>>>;
-    public getAvailableTasks(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<PutawayTaskResponse>>>;
-    public getAvailableTasks(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public listPutawayTasks(locationId?: string, storageLocationId?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<PutawayTaskResponse>>;
+    public listPutawayTasks(locationId?: string, storageLocationId?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<PutawayTaskResponse>>>;
+    public listPutawayTasks(locationId?: string, storageLocationId?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<PutawayTaskResponse>>>;
+    public listPutawayTasks(locationId?: string, storageLocationId?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+
+        let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'locationId',
+            <any>locationId,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'storageLocationId',
+            <any>storageLocationId,
+            QueryParamStyle.Form,
+            true,
+        );
+
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -213,6 +235,7 @@ export class PutawayService extends BaseService {
         return this.httpClient.request<Array<PutawayTaskResponse>>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
+                params: localVarQueryParameters.toHttpParams(),
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,

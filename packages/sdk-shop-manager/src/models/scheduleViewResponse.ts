@@ -21,3 +21,11 @@ export interface ScheduleViewResponse {
     resources?: Array<ScheduleResourceView>;
 }
 
+export function instanceOfScheduleViewResponse(value: object): value is ScheduleViewResponse {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('locationId' in _v && typeof _v['locationId'] !== 'string') return false;
+    if ('availabilityOverlayStatus' in _v && typeof _v['availabilityOverlayStatus'] !== 'string') return false;
+    return true;
+}
+

@@ -14,3 +14,13 @@ export interface SourceReference {
     sourceReferenceId: string;
 }
 
+export function instanceOfSourceReference(value: object): value is SourceReference {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if (!('system' in _v) || _v['system'] === undefined) return false;
+    if ('system' in _v && typeof _v['system'] !== 'string') return false;
+    if (!('sourceReferenceId' in _v) || _v['sourceReferenceId'] === undefined) return false;
+    if ('sourceReferenceId' in _v && typeof _v['sourceReferenceId'] !== 'string') return false;
+    return true;
+}
+

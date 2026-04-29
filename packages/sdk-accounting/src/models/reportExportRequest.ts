@@ -47,3 +47,18 @@ export enum ReportExportRequestFormatEnum {
 
 
 
+export function instanceOfReportExportRequest(value: object): value is ReportExportRequest {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if (!('format' in _v) || _v['format'] === undefined) return false;
+    if ('format' in _v && typeof _v['format'] !== 'string') return false;
+    if (!('reportType' in _v) || _v['reportType'] === undefined) return false;
+    if ('reportType' in _v && typeof _v['reportType'] !== 'string') return false;
+    if (!('startDate' in _v) || _v['startDate'] === undefined) return false;
+    if (!('endDate' in _v) || _v['endDate'] === undefined) return false;
+    if (!('organizationId' in _v) || _v['organizationId'] === undefined) return false;
+    if ('organizationId' in _v && typeof _v['organizationId'] !== 'string') return false;
+    if ('filename' in _v && typeof _v['filename'] !== 'string') return false;
+    return true;
+}
+

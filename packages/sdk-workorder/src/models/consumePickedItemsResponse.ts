@@ -16,3 +16,11 @@ export interface ConsumePickedItemsResponse {
     results?: Array<ConsumedItemResult>;
 }
 
+export function instanceOfConsumePickedItemsResponse(value: object): value is ConsumePickedItemsResponse {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('workorderId' in _v && typeof _v['workorderId'] !== 'string') return false;
+    if ('totalItemsConsumed' in _v && typeof _v['totalItemsConsumed'] !== 'number') return false;
+    return true;
+}
+

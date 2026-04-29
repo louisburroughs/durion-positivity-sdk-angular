@@ -32,3 +32,21 @@ export enum SubstituteLinkResponseSubstituteTypeEnum {
 
 
 
+export function instanceOfSubstituteLinkResponse(value: object): value is SubstituteLinkResponse {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('id' in _v && typeof _v['id'] !== 'string') return false;
+    if ('productId' in _v && typeof _v['productId'] !== 'string') return false;
+    if ('substitutePartId' in _v && typeof _v['substitutePartId'] !== 'string') return false;
+    if ('substituteType' in _v && typeof _v['substituteType'] !== 'string') return false;
+    if ('priority' in _v && typeof _v['priority'] !== 'number') return false;
+    if ('version' in _v && typeof _v['version'] !== 'number') return false;
+    if ('createdBy' in _v && typeof _v['createdBy'] !== 'string') return false;
+    if ('updatedBy' in _v && typeof _v['updatedBy'] !== 'string') return false;
+    if ('active' in _v && typeof _v['active'] !== 'boolean') return false;
+    if ('autoSuggest' in _v && typeof _v['autoSuggest'] !== 'boolean') return false;
+    if ('isAutoSuggest' in _v && typeof _v['isAutoSuggest'] !== 'boolean') return false;
+    if ('isActive' in _v && typeof _v['isActive'] !== 'boolean') return false;
+    return true;
+}
+

@@ -61,3 +61,18 @@ export enum WorkorderServiceResponseStatusEnum {
 
 
 
+export function instanceOfWorkorderServiceResponse(value: object): value is WorkorderServiceResponse {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('id' in _v && typeof _v['id'] !== 'string') return false;
+    if ('serviceEntityId' in _v && typeof _v['serviceEntityId'] !== 'string') return false;
+    if ('description' in _v && typeof _v['description'] !== 'string') return false;
+    if ('status' in _v && typeof _v['status'] !== 'string') return false;
+    if ('quantity' in _v && typeof _v['quantity'] !== 'number') return false;
+    if ('unitPrice' in _v && typeof _v['unitPrice'] !== 'number') return false;
+    if ('totalLaborHours' in _v && typeof _v['totalLaborHours'] !== 'number') return false;
+    if ('laborCost' in _v && typeof _v['laborCost'] !== 'number') return false;
+    if ('lineTotal' in _v && typeof _v['lineTotal'] !== 'number') return false;
+    return true;
+}
+

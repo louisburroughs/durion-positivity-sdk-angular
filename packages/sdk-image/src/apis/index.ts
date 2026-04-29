@@ -1,3 +1,1 @@
-/* tslint:disable */
-/* eslint-disable */
-export * from './ImageAPIApi';
+export * from './api';

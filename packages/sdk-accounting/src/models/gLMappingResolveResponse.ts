@@ -13,3 +13,10 @@ export interface GLMappingResolveResponse {
     glAccountId?: string;
 }
 
+export function instanceOfGLMappingResolveResponse(value: object): value is GLMappingResolveResponse {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('glAccountId' in _v && typeof _v['glAccountId'] !== 'string') return false;
+    return true;
+}
+

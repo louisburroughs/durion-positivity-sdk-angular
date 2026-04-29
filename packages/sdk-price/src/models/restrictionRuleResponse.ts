@@ -36,3 +36,14 @@ export enum RestrictionRuleResponseServiceTagEnum {
 
 
 
+export function instanceOfRestrictionRuleResponse(value: object): value is RestrictionRuleResponse {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('ruleId' in _v && typeof _v['ruleId'] !== 'string') return false;
+    if ('productId' in _v && typeof _v['productId'] !== 'string') return false;
+    if ('locationTag' in _v && typeof _v['locationTag'] !== 'string') return false;
+    if ('serviceTag' in _v && typeof _v['serviceTag'] !== 'string') return false;
+    if ('active' in _v && typeof _v['active'] !== 'boolean') return false;
+    return true;
+}
+

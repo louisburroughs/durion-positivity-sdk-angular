@@ -28,3 +28,21 @@ export enum RestrictionOverrideRequestOverrideContextEnum {
 
 
 
+export function instanceOfRestrictionOverrideRequest(value: object): value is RestrictionOverrideRequest {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if (!('ruleId' in _v) || _v['ruleId'] === undefined) return false;
+    if ('ruleId' in _v && typeof _v['ruleId'] !== 'string') return false;
+    if (!('transactionId' in _v) || _v['transactionId'] === undefined) return false;
+    if ('transactionId' in _v && typeof _v['transactionId'] !== 'string') return false;
+    if (!('productId' in _v) || _v['productId'] === undefined) return false;
+    if ('productId' in _v && typeof _v['productId'] !== 'string') return false;
+    if (!('overrideContext' in _v) || _v['overrideContext'] === undefined) return false;
+    if ('overrideContext' in _v && typeof _v['overrideContext'] !== 'string') return false;
+    if (!('reasonCode' in _v) || _v['reasonCode'] === undefined) return false;
+    if ('reasonCode' in _v && typeof _v['reasonCode'] !== 'string') return false;
+    if ('notes' in _v && typeof _v['notes'] !== 'string') return false;
+    if ('approvedBy' in _v && typeof _v['approvedBy'] !== 'string') return false;
+    return true;
+}
+

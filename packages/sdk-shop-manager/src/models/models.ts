@@ -1,3 +1,4 @@
+export * from './apiError';
 export * from './appointmentCreateRequest';
 export * from './appointmentResponse';
 export * from './assignedMechanicInfo';
@@ -7,6 +8,7 @@ export * from './conflictDetails';
 export * from './conflictOverrideRequest';
 export * from './conflictOverrideResponse';
 export * from './createAssignmentRequest';
+export * from './fieldError';
 export * from './mechanicAssignmentItem';
 export * from './personDTO';
 export * from './rescheduleAppointmentRequest';

@@ -15,3 +15,12 @@ export interface SiteDefaultsResponse {
     defaultQuarantineLocationId?: string;
 }
 
+export function instanceOfSiteDefaultsResponse(value: object): value is SiteDefaultsResponse {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('siteId' in _v && typeof _v['siteId'] !== 'string') return false;
+    if ('defaultStagingLocationId' in _v && typeof _v['defaultStagingLocationId'] !== 'string') return false;
+    if ('defaultQuarantineLocationId' in _v && typeof _v['defaultQuarantineLocationId'] !== 'string') return false;
+    return true;
+}
+

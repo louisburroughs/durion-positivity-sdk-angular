@@ -47,3 +47,16 @@ export interface WorkexecLaborPerformedResponse {
     sourceReferenceId?: string;
 }
 
+export function instanceOfWorkexecLaborPerformedResponse(value: object): value is WorkexecLaborPerformedResponse {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('laborPerformedId' in _v && typeof _v['laborPerformedId'] !== 'string') return false;
+    if ('workorderId' in _v && typeof _v['workorderId'] !== 'string') return false;
+    if ('technicianId' in _v && typeof _v['technicianId'] !== 'string') return false;
+    if ('quantity' in _v && typeof _v['quantity'] !== 'number') return false;
+    if ('unit' in _v && typeof _v['unit'] !== 'string') return false;
+    if ('sourceSystem' in _v && typeof _v['sourceSystem'] !== 'string') return false;
+    if ('sourceReferenceId' in _v && typeof _v['sourceReferenceId'] !== 'string') return false;
+    return true;
+}
+

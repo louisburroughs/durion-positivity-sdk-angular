@@ -35,3 +35,13 @@ export interface ReplacementOption {
     effectiveAt?: string;
 }
 
+export function instanceOfReplacementOption(value: object): value is ReplacementOption {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('replacementId' in _v && typeof _v['replacementId'] !== 'string') return false;
+    if ('replacementProductId' in _v && typeof _v['replacementProductId'] !== 'string') return false;
+    if ('priorityOrder' in _v && typeof _v['priorityOrder'] !== 'number') return false;
+    if ('notes' in _v && typeof _v['notes'] !== 'string') return false;
+    return true;
+}
+

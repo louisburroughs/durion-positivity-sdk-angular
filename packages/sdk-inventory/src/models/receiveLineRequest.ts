@@ -14,3 +14,13 @@ export interface ReceiveLineRequest {
     receivedQuantity: number;
 }
 
+export function instanceOfReceiveLineRequest(value: object): value is ReceiveLineRequest {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if (!('lineId' in _v) || _v['lineId'] === undefined) return false;
+    if ('lineId' in _v && typeof _v['lineId'] !== 'string') return false;
+    if (!('receivedQuantity' in _v) || _v['receivedQuantity'] === undefined) return false;
+    if ('receivedQuantity' in _v && typeof _v['receivedQuantity'] !== 'number') return false;
+    return true;
+}
+

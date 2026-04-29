@@ -15,3 +15,11 @@ export interface CreateTravelSegmentAdjustmentRequest {
     adjustmentReason: string;
 }
 
+export function instanceOfCreateTravelSegmentAdjustmentRequest(value: object): value is CreateTravelSegmentAdjustmentRequest {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if (!('adjustmentReason' in _v) || _v['adjustmentReason'] === undefined) return false;
+    if ('adjustmentReason' in _v && typeof _v['adjustmentReason'] !== 'string') return false;
+    return true;
+}
+

@@ -19,3 +19,11 @@ export interface EmergencyOverrideDTO {
     exceptionReason: string;
 }
 
+export function instanceOfEmergencyOverrideDTO(value: object): value is EmergencyOverrideDTO {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if (!('exceptionReason' in _v) || _v['exceptionReason'] === undefined) return false;
+    if ('exceptionReason' in _v && typeof _v['exceptionReason'] !== 'string') return false;
+    return true;
+}
+

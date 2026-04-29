@@ -28,3 +28,16 @@ export enum PriceBookCreateRequestDtoStatusEnum {
 
 
 
+export function instanceOfPriceBookCreateRequestDto(value: object): value is PriceBookCreateRequestDto {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if (!('name' in _v) || _v['name'] === undefined) return false;
+    if ('name' in _v && typeof _v['name'] !== 'string') return false;
+    if (!('scope' in _v) || _v['scope'] === undefined) return false;
+    if ('scope' in _v && typeof _v['scope'] !== 'string') return false;
+    if ('scopeId' in _v && typeof _v['scopeId'] !== 'string') return false;
+    if ('isDefault' in _v && typeof _v['isDefault'] !== 'boolean') return false;
+    if ('status' in _v && typeof _v['status'] !== 'string') return false;
+    return true;
+}
+

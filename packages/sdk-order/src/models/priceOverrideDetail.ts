@@ -34,3 +34,26 @@ export interface PriceOverrideDetail {
     appliedAt?: string;
 }
 
+export function instanceOfPriceOverrideDetail(value: object): value is PriceOverrideDetail {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('overrideId' in _v && typeof _v['overrideId'] !== 'string') return false;
+    if ('orderId' in _v && typeof _v['orderId'] !== 'string') return false;
+    if ('orderLineId' in _v && typeof _v['orderLineId'] !== 'string') return false;
+    if ('productId' in _v && typeof _v['productId'] !== 'string') return false;
+    if ('originalPrice' in _v && typeof _v['originalPrice'] !== 'number') return false;
+    if ('overridePrice' in _v && typeof _v['overridePrice'] !== 'number') return false;
+    if ('discountAmount' in _v && typeof _v['discountAmount'] !== 'number') return false;
+    if ('discountPercentage' in _v && typeof _v['discountPercentage'] !== 'number') return false;
+    if ('reasonCode' in _v && typeof _v['reasonCode'] !== 'string') return false;
+    if ('justification' in _v && typeof _v['justification'] !== 'string') return false;
+    if ('status' in _v && typeof _v['status'] !== 'string') return false;
+    if ('requiresApproval' in _v && typeof _v['requiresApproval'] !== 'boolean') return false;
+    if ('affectsCommission' in _v && typeof _v['affectsCommission'] !== 'boolean') return false;
+    if ('requestedByUserId' in _v && typeof _v['requestedByUserId'] !== 'string') return false;
+    if ('approvedByUserId' in _v && typeof _v['approvedByUserId'] !== 'string') return false;
+    if ('rejectedByUserId' in _v && typeof _v['rejectedByUserId'] !== 'string') return false;
+    if ('rejectionReason' in _v && typeof _v['rejectionReason'] !== 'string') return false;
+    return true;
+}
+

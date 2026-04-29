@@ -23,3 +23,11 @@ export interface SubstitutionHint {
     reason?: string;
 }
 
+export function instanceOfSubstitutionHint(value: object): value is SubstitutionHint {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('productId' in _v && typeof _v['productId'] !== 'string') return false;
+    if ('reason' in _v && typeof _v['reason'] !== 'string') return false;
+    return true;
+}
+

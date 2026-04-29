@@ -17,3 +17,14 @@ export interface BayStatus {
     available?: boolean;
 }
 
+export function instanceOfBayStatus(value: object): value is BayStatus {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('bayId' in _v && typeof _v['bayId'] !== 'string') return false;
+    if ('bayName' in _v && typeof _v['bayName'] !== 'string') return false;
+    if ('status' in _v && typeof _v['status'] !== 'string') return false;
+    if ('assignedWorkorderId' in _v && typeof _v['assignedWorkorderId'] !== 'string') return false;
+    if ('available' in _v && typeof _v['available'] !== 'boolean') return false;
+    return true;
+}
+

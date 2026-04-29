@@ -17,3 +17,13 @@ export interface ConflictOverrideResponse {
     overrideReason?: string;
 }
 
+export function instanceOfConflictOverrideResponse(value: object): value is ConflictOverrideResponse {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('overrideId' in _v && typeof _v['overrideId'] !== 'string') return false;
+    if ('appointmentId' in _v && typeof _v['appointmentId'] !== 'string') return false;
+    if ('overriddenByUserId' in _v && typeof _v['overriddenByUserId'] !== 'string') return false;
+    if ('overrideReason' in _v && typeof _v['overrideReason'] !== 'string') return false;
+    return true;
+}
+

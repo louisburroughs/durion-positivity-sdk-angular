@@ -21,3 +21,11 @@ export enum DisableEmployeeRequestDtoAssignmentPolicyEnum {
 
 
 
+export function instanceOfDisableEmployeeRequestDto(value: object): value is DisableEmployeeRequestDto {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('disableReason' in _v && typeof _v['disableReason'] !== 'string') return false;
+    if ('assignmentPolicy' in _v && typeof _v['assignmentPolicy'] !== 'string') return false;
+    return true;
+}
+

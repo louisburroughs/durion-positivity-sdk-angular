@@ -44,3 +44,18 @@ export interface HintResponse {
     updatedBy?: string;
 }
 
+export function instanceOfHintResponse(value: object): value is HintResponse {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if (!('hintId' in _v) || _v['hintId'] === undefined) return false;
+    if ('hintId' in _v && typeof _v['hintId'] !== 'string') return false;
+    if (!('productId' in _v) || _v['productId'] === undefined) return false;
+    if ('productId' in _v && typeof _v['productId'] !== 'string') return false;
+    if (!('fitmentTags' in _v) || _v['fitmentTags'] === undefined) return false;
+    if (!('createdAt' in _v) || _v['createdAt'] === undefined) return false;
+    if (!('updatedAt' in _v) || _v['updatedAt'] === undefined) return false;
+    if ('createdBy' in _v && typeof _v['createdBy'] !== 'string') return false;
+    if ('updatedBy' in _v && typeof _v['updatedBy'] !== 'string') return false;
+    return true;
+}
+

@@ -37,3 +37,16 @@ export interface WorkexecLaborPerformedRequest {
     source: SourceReference;
 }
 
+export function instanceOfWorkexecLaborPerformedRequest(value: object): value is WorkexecLaborPerformedRequest {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if (!('workorderId' in _v) || _v['workorderId'] === undefined) return false;
+    if ('workorderId' in _v && typeof _v['workorderId'] !== 'string') return false;
+    if (!('technicianId' in _v) || _v['technicianId'] === undefined) return false;
+    if ('technicianId' in _v && typeof _v['technicianId'] !== 'string') return false;
+    if (!('performedAt' in _v) || _v['performedAt'] === undefined) return false;
+    if (!('labor' in _v) || _v['labor'] === undefined) return false;
+    if (!('source' in _v) || _v['source'] === undefined) return false;
+    return true;
+}
+

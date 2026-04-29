@@ -14,3 +14,11 @@ export interface PostalCodeEntry {
     countryCode?: string;
 }
 
+export function instanceOfPostalCodeEntry(value: object): value is PostalCodeEntry {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('postalCode' in _v && typeof _v['postalCode'] !== 'string') return false;
+    if ('countryCode' in _v && typeof _v['countryCode'] !== 'string') return false;
+    return true;
+}
+

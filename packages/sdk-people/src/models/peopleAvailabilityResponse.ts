@@ -28,3 +28,16 @@ export enum PeopleAvailabilityResponseAssignmentStatusEnum {
 
 
 
+export function instanceOfPeopleAvailabilityResponse(value: object): value is PeopleAvailabilityResponse {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('personId' in _v && typeof _v['personId'] !== 'string') return false;
+    if ('firstName' in _v && typeof _v['firstName'] !== 'string') return false;
+    if ('lastName' in _v && typeof _v['lastName'] !== 'string') return false;
+    if ('locationId' in _v && typeof _v['locationId'] !== 'string') return false;
+    if ('role' in _v && typeof _v['role'] !== 'string') return false;
+    if ('primary' in _v && typeof _v['primary'] !== 'boolean') return false;
+    if ('assignmentStatus' in _v && typeof _v['assignmentStatus'] !== 'string') return false;
+    return true;
+}
+

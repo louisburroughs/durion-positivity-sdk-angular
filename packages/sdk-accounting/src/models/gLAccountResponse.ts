@@ -40,3 +40,19 @@ export enum GLAccountResponseStatusEnum {
 
 
 
+export function instanceOfGLAccountResponse(value: object): value is GLAccountResponse {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('glAccountId' in _v && typeof _v['glAccountId'] !== 'string') return false;
+    if ('accountCode' in _v && typeof _v['accountCode'] !== 'string') return false;
+    if ('accountName' in _v && typeof _v['accountName'] !== 'string') return false;
+    if ('accountType' in _v && typeof _v['accountType'] !== 'string') return false;
+    if ('description' in _v && typeof _v['description'] !== 'string') return false;
+    if ('parentAccountId' in _v && typeof _v['parentAccountId'] !== 'string') return false;
+    if ('status' in _v && typeof _v['status'] !== 'string') return false;
+    if ('createdBy' in _v && typeof _v['createdBy'] !== 'string') return false;
+    if ('modifiedBy' in _v && typeof _v['modifiedBy'] !== 'string') return false;
+    if ('version' in _v && typeof _v['version'] !== 'number') return false;
+    return true;
+}
+

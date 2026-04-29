@@ -14,3 +14,11 @@ export interface PhoneNumberDTO {
     number?: string;
 }
 
+export function instanceOfPhoneNumberDTO(value: object): value is PhoneNumberDTO {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('type' in _v && typeof _v['type'] !== 'string') return false;
+    if ('number' in _v && typeof _v['number'] !== 'string') return false;
+    return true;
+}
+

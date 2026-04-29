@@ -15,3 +15,14 @@ export interface PostingCategoryUpdateRequest {
     modifiedBy: string;
 }
 
+export function instanceOfPostingCategoryUpdateRequest(value: object): value is PostingCategoryUpdateRequest {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if (!('categoryName' in _v) || _v['categoryName'] === undefined) return false;
+    if ('categoryName' in _v && typeof _v['categoryName'] !== 'string') return false;
+    if ('description' in _v && typeof _v['description'] !== 'string') return false;
+    if (!('modifiedBy' in _v) || _v['modifiedBy'] === undefined) return false;
+    if ('modifiedBy' in _v && typeof _v['modifiedBy'] !== 'string') return false;
+    return true;
+}
+

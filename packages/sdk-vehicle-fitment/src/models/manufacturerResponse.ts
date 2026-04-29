@@ -23,3 +23,13 @@ export interface ManufacturerResponse {
     name: string;
 }
 
+export function instanceOfManufacturerResponse(value: object): value is ManufacturerResponse {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if (!('id' in _v) || _v['id'] === undefined) return false;
+    if ('id' in _v && typeof _v['id'] !== 'string') return false;
+    if (!('name' in _v) || _v['name'] === undefined) return false;
+    if ('name' in _v && typeof _v['name'] !== 'string') return false;
+    return true;
+}
+

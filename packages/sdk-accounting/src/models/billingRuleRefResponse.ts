@@ -23,3 +23,19 @@ export interface BillingRuleRefResponse {
     extensions?: { [key: string]: any; };
 }
 
+export function instanceOfBillingRuleRefResponse(value: object): value is BillingRuleRefResponse {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('poRequired' in _v && typeof _v['poRequired'] !== 'boolean') return false;
+    if ('taxExempt' in _v && typeof _v['taxExempt'] !== 'boolean') return false;
+    if ('paymentTerms' in _v && typeof _v['paymentTerms'] !== 'string') return false;
+    if ('creditLimit' in _v && typeof _v['creditLimit'] !== 'number') return false;
+    if ('creditHold' in _v && typeof _v['creditHold'] !== 'boolean') return false;
+    if ('invoiceDeliveryMethod' in _v && typeof _v['invoiceDeliveryMethod'] !== 'string') return false;
+    if ('billingAddressId' in _v && typeof _v['billingAddressId'] !== 'string') return false;
+    if ('autoPayEnabled' in _v && typeof _v['autoPayEnabled'] !== 'boolean') return false;
+    if ('discountPolicyRef' in _v && typeof _v['discountPolicyRef'] !== 'string') return false;
+    if ('currency' in _v && typeof _v['currency'] !== 'string') return false;
+    return true;
+}
+

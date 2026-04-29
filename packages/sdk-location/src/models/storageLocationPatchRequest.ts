@@ -27,3 +27,14 @@ export enum StorageLocationPatchRequestStatusEnum {
 
 
 
+export function instanceOfStorageLocationPatchRequest(value: object): value is StorageLocationPatchRequest {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('name' in _v && typeof _v['name'] !== 'string') return false;
+    if ('barcode' in _v && typeof _v['barcode'] !== 'string') return false;
+    if ('status' in _v && typeof _v['status'] !== 'string') return false;
+    if ('parentStorageLocationId' in _v && typeof _v['parentStorageLocationId'] !== 'string') return false;
+    if ('destinationStorageLocationId' in _v && typeof _v['destinationStorageLocationId'] !== 'string') return false;
+    return true;
+}
+

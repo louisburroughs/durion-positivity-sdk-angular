@@ -31,3 +31,13 @@ export interface UpdateEstimateItemRequest {
     taxCode?: string;
 }
 
+export function instanceOfUpdateEstimateItemRequest(value: object): value is UpdateEstimateItemRequest {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('description' in _v && typeof _v['description'] !== 'string') return false;
+    if ('quantity' in _v && typeof _v['quantity'] !== 'number') return false;
+    if ('unitPrice' in _v && typeof _v['unitPrice'] !== 'number') return false;
+    if ('taxCode' in _v && typeof _v['taxCode'] !== 'string') return false;
+    return true;
+}
+

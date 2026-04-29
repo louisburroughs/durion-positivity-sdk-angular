@@ -48,3 +48,14 @@ export interface SupplierItemCostDto {
     tiers?: Array<CostTierDto>;
 }
 
+export function instanceOfSupplierItemCostDto(value: object): value is SupplierItemCostDto {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('id' in _v && typeof _v['id'] !== 'string') return false;
+    if ('supplierId' in _v && typeof _v['supplierId'] !== 'string') return false;
+    if ('itemId' in _v && typeof _v['itemId'] !== 'string') return false;
+    if ('currencyCode' in _v && typeof _v['currencyCode'] !== 'string') return false;
+    if ('baseCost' in _v && typeof _v['baseCost'] !== 'number') return false;
+    return true;
+}
+

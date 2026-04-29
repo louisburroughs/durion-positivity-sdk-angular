@@ -16,3 +16,17 @@ export interface SubmitRecountRequest {
     permission: string;
 }
 
+export function instanceOfSubmitRecountRequest(value: object): value is SubmitRecountRequest {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if (!('taskId' in _v) || _v['taskId'] === undefined) return false;
+    if ('taskId' in _v && typeof _v['taskId'] !== 'string') return false;
+    if (!('auditorId' in _v) || _v['auditorId'] === undefined) return false;
+    if ('auditorId' in _v && typeof _v['auditorId'] !== 'string') return false;
+    if (!('actualQuantity' in _v) || _v['actualQuantity'] === undefined) return false;
+    if ('actualQuantity' in _v && typeof _v['actualQuantity'] !== 'number') return false;
+    if (!('permission' in _v) || _v['permission'] === undefined) return false;
+    if ('permission' in _v && typeof _v['permission'] !== 'string') return false;
+    return true;
+}
+

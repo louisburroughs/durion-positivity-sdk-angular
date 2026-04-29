@@ -48,3 +48,20 @@ export interface GoodsReceivedEvent {
     dimensions?: { [key: string]: string; };
 }
 
+export function instanceOfGoodsReceivedEvent(value: object): value is GoodsReceivedEvent {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if (!('eventId' in _v) || _v['eventId'] === undefined) return false;
+    if ('eventId' in _v && typeof _v['eventId'] !== 'string') return false;
+    if (!('organizationId' in _v) || _v['organizationId'] === undefined) return false;
+    if ('organizationId' in _v && typeof _v['organizationId'] !== 'string') return false;
+    if (!('purchaseOrderId' in _v) || _v['purchaseOrderId'] === undefined) return false;
+    if ('purchaseOrderId' in _v && typeof _v['purchaseOrderId'] !== 'string') return false;
+    if (!('vendorId' in _v) || _v['vendorId'] === undefined) return false;
+    if ('vendorId' in _v && typeof _v['vendorId'] !== 'string') return false;
+    if ('vendorName' in _v && typeof _v['vendorName'] !== 'string') return false;
+    if (!('receivedDate' in _v) || _v['receivedDate'] === undefined) return false;
+    if (!('lineItems' in _v) || _v['lineItems'] === undefined) return false;
+    return true;
+}
+

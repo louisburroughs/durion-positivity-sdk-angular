@@ -18,3 +18,15 @@ export interface ContactPreferences {
     preferredLanguage?: string;
 }
 
+export function instanceOfContactPreferences(value: object): value is ContactPreferences {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('emailOptIn' in _v && typeof _v['emailOptIn'] !== 'boolean') return false;
+    if ('smsOptIn' in _v && typeof _v['smsOptIn'] !== 'boolean') return false;
+    if ('phoneOptIn' in _v && typeof _v['phoneOptIn'] !== 'boolean') return false;
+    if ('doNotContact' in _v && typeof _v['doNotContact'] !== 'boolean') return false;
+    if ('preferredContactMethod' in _v && typeof _v['preferredContactMethod'] !== 'string') return false;
+    if ('preferredLanguage' in _v && typeof _v['preferredLanguage'] !== 'string') return false;
+    return true;
+}
+

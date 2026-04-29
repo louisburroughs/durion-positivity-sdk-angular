@@ -17,3 +17,12 @@ export interface ScheduleResourceView {
     events?: Array<ScheduleEventView>;
 }
 
+export function instanceOfScheduleResourceView(value: object): value is ScheduleResourceView {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('resourceId' in _v && typeof _v['resourceId'] !== 'string') return false;
+    if ('resourceType' in _v && typeof _v['resourceType'] !== 'string') return false;
+    if ('resourceName' in _v && typeof _v['resourceName'] !== 'string') return false;
+    return true;
+}
+

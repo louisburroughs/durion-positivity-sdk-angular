@@ -16,3 +16,13 @@ export interface SearchVehiclesRequest {
     enableContainsMatching?: boolean;
 }
 
+export function instanceOfSearchVehiclesRequest(value: object): value is SearchVehiclesRequest {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('query' in _v && typeof _v['query'] !== 'string') return false;
+    if ('limit' in _v && typeof _v['limit'] !== 'number') return false;
+    if ('cursor' in _v && typeof _v['cursor'] !== 'string') return false;
+    if ('enableContainsMatching' in _v && typeof _v['enableContainsMatching'] !== 'boolean') return false;
+    return true;
+}
+

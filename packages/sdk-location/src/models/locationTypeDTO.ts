@@ -15,3 +15,12 @@ export interface LocationTypeDTO {
     description?: string;
 }
 
+export function instanceOfLocationTypeDTO(value: object): value is LocationTypeDTO {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('id' in _v && typeof _v['id'] !== 'string') return false;
+    if ('name' in _v && typeof _v['name'] !== 'string') return false;
+    if ('description' in _v && typeof _v['description'] !== 'string') return false;
+    return true;
+}
+

@@ -51,3 +51,23 @@ export interface AttendanceDiscrepancyReportResponse {
     isFlagged: boolean;
 }
 
+export function instanceOfAttendanceDiscrepancyReportResponse(value: object): value is AttendanceDiscrepancyReportResponse {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if (!('technicianId' in _v) || _v['technicianId'] === undefined) return false;
+    if ('technicianId' in _v && typeof _v['technicianId'] !== 'string') return false;
+    if (!('technicianName' in _v) || _v['technicianName'] === undefined) return false;
+    if ('technicianName' in _v && typeof _v['technicianName'] !== 'string') return false;
+    if (!('locationId' in _v) || _v['locationId'] === undefined) return false;
+    if ('locationId' in _v && typeof _v['locationId'] !== 'string') return false;
+    if (!('reportDate' in _v) || _v['reportDate'] === undefined) return false;
+    if (!('totalAttendanceHours' in _v) || _v['totalAttendanceHours'] === undefined) return false;
+    if (!('totalJobHours' in _v) || _v['totalJobHours'] === undefined) return false;
+    if (!('discrepancyHours' in _v) || _v['discrepancyHours'] === undefined) return false;
+    if (!('thresholdApplied' in _v) || _v['thresholdApplied'] === undefined) return false;
+    if ('thresholdApplied' in _v && typeof _v['thresholdApplied'] !== 'number') return false;
+    if (!('isFlagged' in _v) || _v['isFlagged'] === undefined) return false;
+    if ('isFlagged' in _v && typeof _v['isFlagged'] !== 'boolean') return false;
+    return true;
+}
+

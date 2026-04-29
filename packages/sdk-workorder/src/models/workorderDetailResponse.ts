@@ -119,3 +119,33 @@ export enum WorkorderDetailResponseStatusEnum {
 
 
 
+export function instanceOfWorkorderDetailResponse(value: object): value is WorkorderDetailResponse {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if (!('workorderId' in _v) || _v['workorderId'] === undefined) return false;
+    if ('workorderId' in _v && typeof _v['workorderId'] !== 'string') return false;
+    if ('workorderNumber' in _v && typeof _v['workorderNumber'] !== 'string') return false;
+    if (!('status' in _v) || _v['status'] === undefined) return false;
+    if ('status' in _v && typeof _v['status'] !== 'string') return false;
+    if (!('customerId' in _v) || _v['customerId'] === undefined) return false;
+    if ('customerId' in _v && typeof _v['customerId'] !== 'string') return false;
+    if ('customerName' in _v && typeof _v['customerName'] !== 'string') return false;
+    if (!('vehicleId' in _v) || _v['vehicleId'] === undefined) return false;
+    if ('vehicleId' in _v && typeof _v['vehicleId'] !== 'string') return false;
+    if ('vehicleDescription' in _v && typeof _v['vehicleDescription'] !== 'string') return false;
+    if (!('createdAt' in _v) || _v['createdAt'] === undefined) return false;
+    if (!('createdBy' in _v) || _v['createdBy'] === undefined) return false;
+    if ('createdBy' in _v && typeof _v['createdBy'] !== 'string') return false;
+    if ('isStarted' in _v && typeof _v['isStarted'] !== 'string') return false;
+    if ('isInProgress' in _v && typeof _v['isInProgress'] !== 'string') return false;
+    if ('isCompleted' in _v && typeof _v['isCompleted'] !== 'string') return false;
+    if ('assignedTechnicianId' in _v && typeof _v['assignedTechnicianId'] !== 'string') return false;
+    if ('assignedTechnicianName' in _v && typeof _v['assignedTechnicianName'] !== 'string') return false;
+    if ('estimatedTotal' in _v && typeof _v['estimatedTotal'] !== 'number') return false;
+    if ('laborTotal' in _v && typeof _v['laborTotal'] !== 'number') return false;
+    if ('partsTotal' in _v && typeof _v['partsTotal'] !== 'number') return false;
+    if ('taxTotal' in _v && typeof _v['taxTotal'] !== 'number') return false;
+    if (!('capabilities' in _v) || _v['capabilities'] === undefined) return false;
+    return true;
+}
+

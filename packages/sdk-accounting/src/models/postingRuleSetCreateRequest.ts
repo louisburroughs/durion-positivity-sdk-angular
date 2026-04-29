@@ -17,3 +17,18 @@ export interface PostingRuleSetCreateRequest {
     createdBy: string;
 }
 
+export function instanceOfPostingRuleSetCreateRequest(value: object): value is PostingRuleSetCreateRequest {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if (!('name' in _v) || _v['name'] === undefined) return false;
+    if ('name' in _v && typeof _v['name'] !== 'string') return false;
+    if (!('eventType' in _v) || _v['eventType'] === undefined) return false;
+    if ('eventType' in _v && typeof _v['eventType'] !== 'string') return false;
+    if ('description' in _v && typeof _v['description'] !== 'string') return false;
+    if (!('rulesDefinition' in _v) || _v['rulesDefinition'] === undefined) return false;
+    if ('rulesDefinition' in _v && typeof _v['rulesDefinition'] !== 'string') return false;
+    if (!('createdBy' in _v) || _v['createdBy'] === undefined) return false;
+    if ('createdBy' in _v && typeof _v['createdBy'] !== 'string') return false;
+    return true;
+}
+

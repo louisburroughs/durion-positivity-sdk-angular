@@ -28,3 +28,13 @@ export enum ReceivePurchaseOrderResponseStatusEnum {
 
 
 
+export function instanceOfReceivePurchaseOrderResponse(value: object): value is ReceivePurchaseOrderResponse {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('poId' in _v && typeof _v['poId'] !== 'string') return false;
+    if ('status' in _v && typeof _v['status'] !== 'string') return false;
+    if ('openBalanceMinor' in _v && typeof _v['openBalanceMinor'] !== 'number') return false;
+    if ('message' in _v && typeof _v['message'] !== 'string') return false;
+    return true;
+}
+

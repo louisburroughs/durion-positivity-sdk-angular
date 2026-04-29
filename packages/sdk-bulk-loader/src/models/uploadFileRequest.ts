@@ -13,3 +13,10 @@ export interface UploadFileRequest {
     file: Blob;
 }
 
+export function instanceOfUploadFileRequest(value: object): value is UploadFileRequest {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if (!('file' in _v) || _v['file'] === undefined) return false;
+    return true;
+}
+

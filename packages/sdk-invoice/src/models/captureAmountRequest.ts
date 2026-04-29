@@ -14,3 +14,13 @@ export interface CaptureAmountRequest {
     captureIdempotencyKey: string;
 }
 
+export function instanceOfCaptureAmountRequest(value: object): value is CaptureAmountRequest {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if (!('amount' in _v) || _v['amount'] === undefined) return false;
+    if ('amount' in _v && typeof _v['amount'] !== 'number') return false;
+    if (!('captureIdempotencyKey' in _v) || _v['captureIdempotencyKey'] === undefined) return false;
+    if ('captureIdempotencyKey' in _v && typeof _v['captureIdempotencyKey'] !== 'string') return false;
+    return true;
+}
+

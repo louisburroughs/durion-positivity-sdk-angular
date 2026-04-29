@@ -40,3 +40,14 @@ export interface CreateChangeRequestDTO {
     parts?: Array<WorkorderItemDTO>;
 }
 
+export function instanceOfCreateChangeRequestDTO(value: object): value is CreateChangeRequestDTO {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('workorderId' in _v && typeof _v['workorderId'] !== 'string') return false;
+    if (!('description' in _v) || _v['description'] === undefined) return false;
+    if ('description' in _v && typeof _v['description'] !== 'string') return false;
+    if ('isEmergencyException' in _v && typeof _v['isEmergencyException'] !== 'boolean') return false;
+    if ('exceptionReason' in _v && typeof _v['exceptionReason'] !== 'string') return false;
+    return true;
+}
+

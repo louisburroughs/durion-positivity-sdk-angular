@@ -17,3 +17,13 @@ export interface GeneratePutawayTasksRequest {
     lineItems?: Array<PutawayLineItemRequest>;
 }
 
+export function instanceOfGeneratePutawayTasksRequest(value: object): value is GeneratePutawayTasksRequest {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if (!('sourceReceiptId' in _v) || _v['sourceReceiptId'] === undefined) return false;
+    if ('sourceReceiptId' in _v && typeof _v['sourceReceiptId'] !== 'string') return false;
+    if ('productId' in _v && typeof _v['productId'] !== 'string') return false;
+    if ('quantity' in _v && typeof _v['quantity'] !== 'number') return false;
+    return true;
+}
+

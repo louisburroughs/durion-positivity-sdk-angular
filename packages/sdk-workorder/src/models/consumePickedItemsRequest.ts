@@ -14,3 +14,10 @@ export interface ConsumePickedItemsRequest {
     items: Array<ConsumeItem>;
 }
 
+export function instanceOfConsumePickedItemsRequest(value: object): value is ConsumePickedItemsRequest {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if (!('items' in _v) || _v['items'] === undefined) return false;
+    return true;
+}
+

@@ -23,3 +23,20 @@ export interface ReplenishmentTaskResponse {
     createdAt?: string;
 }
 
+export function instanceOfReplenishmentTaskResponse(value: object): value is ReplenishmentTaskResponse {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('taskId' in _v && typeof _v['taskId'] !== 'string') return false;
+    if ('itemSKU' in _v && typeof _v['itemSKU'] !== 'string') return false;
+    if ('quantity' in _v && typeof _v['quantity'] !== 'number') return false;
+    if ('sourceLocationId' in _v && typeof _v['sourceLocationId'] !== 'string') return false;
+    if ('destinationLocationId' in _v && typeof _v['destinationLocationId'] !== 'string') return false;
+    if ('status' in _v && typeof _v['status'] !== 'string') return false;
+    if ('triggerType' in _v && typeof _v['triggerType'] !== 'string') return false;
+    if ('decisionReason' in _v && typeof _v['decisionReason'] !== 'string') return false;
+    if ('sourcingReason' in _v && typeof _v['sourcingReason'] !== 'string') return false;
+    if ('assignedTo' in _v && typeof _v['assignedTo'] !== 'string') return false;
+    if ('createdAt' in _v && typeof _v['createdAt'] !== 'string') return false;
+    return true;
+}
+

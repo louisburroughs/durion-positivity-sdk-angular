@@ -13,3 +13,10 @@ export interface GLAccountActivateRequest {
     effectiveDate: string;
 }
 
+export function instanceOfGLAccountActivateRequest(value: object): value is GLAccountActivateRequest {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if (!('effectiveDate' in _v) || _v['effectiveDate'] === undefined) return false;
+    return true;
+}
+

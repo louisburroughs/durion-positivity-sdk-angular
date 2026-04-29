@@ -123,3 +123,31 @@ export interface EstimateResponse {
     crmContactIds?: Array<string>;
 }
 
+export function instanceOfEstimateResponse(value: object): value is EstimateResponse {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('id' in _v && typeof _v['id'] !== 'string') return false;
+    if ('estimateNumber' in _v && typeof _v['estimateNumber'] !== 'string') return false;
+    if ('customerId' in _v && typeof _v['customerId'] !== 'string') return false;
+    if ('vehicleId' in _v && typeof _v['vehicleId'] !== 'string') return false;
+    if ('locationId' in _v && typeof _v['locationId'] !== 'string') return false;
+    if ('currencyUomId' in _v && typeof _v['currencyUomId'] !== 'string') return false;
+    if ('taxRegionId' in _v && typeof _v['taxRegionId'] !== 'string') return false;
+    if ('status' in _v && typeof _v['status'] !== 'string') return false;
+    if ('createdByUserId' in _v && typeof _v['createdByUserId'] !== 'string') return false;
+    if ('subtotal' in _v && typeof _v['subtotal'] !== 'number') return false;
+    if ('taxAmount' in _v && typeof _v['taxAmount'] !== 'number') return false;
+    if ('total' in _v && typeof _v['total'] !== 'number') return false;
+    if ('submittedBy' in _v && typeof _v['submittedBy'] !== 'string') return false;
+    if ('approvedBy' in _v && typeof _v['approvedBy'] !== 'string') return false;
+    if ('signatureData' in _v && typeof _v['signatureData'] !== 'string') return false;
+    if ('signatureMimeType' in _v && typeof _v['signatureMimeType'] !== 'string') return false;
+    if ('signerName' in _v && typeof _v['signerName'] !== 'string') return false;
+    if ('approvalNotes' in _v && typeof _v['approvalNotes'] !== 'string') return false;
+    if ('purchaseOrderNumber' in _v && typeof _v['purchaseOrderNumber'] !== 'string') return false;
+    if ('version' in _v && typeof _v['version'] !== 'number') return false;
+    if ('crmPartyId' in _v && typeof _v['crmPartyId'] !== 'string') return false;
+    if ('crmVehicleId' in _v && typeof _v['crmVehicleId'] !== 'string') return false;
+    return true;
+}
+

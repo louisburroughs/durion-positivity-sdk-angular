@@ -28,3 +28,14 @@ export enum RefundPaymentRequestReasonEnum {
 
 
 
+export function instanceOfRefundPaymentRequest(value: object): value is RefundPaymentRequest {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if (!('amount' in _v) || _v['amount'] === undefined) return false;
+    if ('amount' in _v && typeof _v['amount'] !== 'number') return false;
+    if (!('reason' in _v) || _v['reason'] === undefined) return false;
+    if ('reason' in _v && typeof _v['reason'] !== 'string') return false;
+    if ('notes' in _v && typeof _v['notes'] !== 'string') return false;
+    return true;
+}
+

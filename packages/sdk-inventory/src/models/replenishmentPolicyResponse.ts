@@ -18,3 +18,15 @@ export interface ReplenishmentPolicyResponse {
     createdAt?: string;
 }
 
+export function instanceOfReplenishmentPolicyResponse(value: object): value is ReplenishmentPolicyResponse {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('policyId' in _v && typeof _v['policyId'] !== 'string') return false;
+    if ('locationId' in _v && typeof _v['locationId'] !== 'string') return false;
+    if ('itemSKU' in _v && typeof _v['itemSKU'] !== 'string') return false;
+    if ('minimumQuantity' in _v && typeof _v['minimumQuantity'] !== 'number') return false;
+    if ('maximumQuantity' in _v && typeof _v['maximumQuantity'] !== 'number') return false;
+    if ('createdAt' in _v && typeof _v['createdAt'] !== 'string') return false;
+    return true;
+}
+

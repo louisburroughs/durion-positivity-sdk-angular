@@ -32,3 +32,11 @@ export interface PricingBreakdownEntry {
     resultingValue?: MoneyAmount;
 }
 
+export function instanceOfPricingBreakdownEntry(value: object): value is PricingBreakdownEntry {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('ruleName' in _v && typeof _v['ruleName'] !== 'string') return false;
+    if ('ruleType' in _v && typeof _v['ruleType'] !== 'string') return false;
+    return true;
+}
+

@@ -16,3 +16,12 @@ export interface ConsumeItemsRequest {
     items?: Array<ConsumeItemLine>;
 }
 
+export function instanceOfConsumeItemsRequest(value: object): value is ConsumeItemsRequest {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if (!('workorderId' in _v) || _v['workorderId'] === undefined) return false;
+    if ('workorderId' in _v && typeof _v['workorderId'] !== 'string') return false;
+    if ('pickListId' in _v && typeof _v['pickListId'] !== 'string') return false;
+    return true;
+}
+

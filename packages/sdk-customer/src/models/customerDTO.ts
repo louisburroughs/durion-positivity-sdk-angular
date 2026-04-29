@@ -51,3 +51,19 @@ export interface CustomerDTO {
     customerType?: string;
 }
 
+export function instanceOfCustomerDTO(value: object): value is CustomerDTO {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('id' in _v && typeof _v['id'] !== 'string') return false;
+    if ('customerNumber' in _v && typeof _v['customerNumber'] !== 'string') return false;
+    if (!('lastName' in _v) || _v['lastName'] === undefined) return false;
+    if ('lastName' in _v && typeof _v['lastName'] !== 'string') return false;
+    if (!('firstName' in _v) || _v['firstName'] === undefined) return false;
+    if ('firstName' in _v && typeof _v['firstName'] !== 'string') return false;
+    if ('phoneNumber' in _v && typeof _v['phoneNumber'] !== 'string') return false;
+    if ('email' in _v && typeof _v['email'] !== 'string') return false;
+    if ('primaryAddress' in _v && typeof _v['primaryAddress'] !== 'string') return false;
+    if ('customerType' in _v && typeof _v['customerType'] !== 'string') return false;
+    return true;
+}
+

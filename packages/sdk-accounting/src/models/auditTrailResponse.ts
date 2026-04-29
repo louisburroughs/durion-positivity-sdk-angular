@@ -96,3 +96,40 @@ export enum AuditTrailResponseAccountingStatusEnum {
 
 
 
+export function instanceOfAuditTrailResponse(value: object): value is AuditTrailResponse {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('auditId' in _v && typeof _v['auditId'] !== 'string') return false;
+    if ('exceptionType' in _v && typeof _v['exceptionType'] !== 'string') return false;
+    if ('actorId' in _v && typeof _v['actorId'] !== 'string') return false;
+    if ('actorRole' in _v && typeof _v['actorRole'] !== 'string') return false;
+    if ('reason' in _v && typeof _v['reason'] !== 'string') return false;
+    if ('authorizationLevel' in _v && typeof _v['authorizationLevel'] !== 'string') return false;
+    if ('policyVersion' in _v && typeof _v['policyVersion'] !== 'string') return false;
+    if ('orderId' in _v && typeof _v['orderId'] !== 'string') return false;
+    if ('lineItemId' in _v && typeof _v['lineItemId'] !== 'string') return false;
+    if ('originalPrice' in _v && typeof _v['originalPrice'] !== 'number') return false;
+    if ('adjustedPrice' in _v && typeof _v['adjustedPrice'] !== 'number') return false;
+    if ('overrideAmountOrPercent' in _v && typeof _v['overrideAmountOrPercent'] !== 'string') return false;
+    if ('forbiddenCategoryCode' in _v && typeof _v['forbiddenCategoryCode'] !== 'string') return false;
+    if ('policyValidationResult' in _v && typeof _v['policyValidationResult'] !== 'string') return false;
+    if ('invoiceId' in _v && typeof _v['invoiceId'] !== 'string') return false;
+    if ('paymentId' in _v && typeof _v['paymentId'] !== 'string') return false;
+    if ('refundType' in _v && typeof _v['refundType'] !== 'string') return false;
+    if ('refundAmount' in _v && typeof _v['refundAmount'] !== 'number') return false;
+    if ('originalPaymentStatus' in _v && typeof _v['originalPaymentStatus'] !== 'string') return false;
+    if ('refundMethod' in _v && typeof _v['refundMethod'] !== 'string') return false;
+    if ('linkedSourceIds' in _v && typeof _v['linkedSourceIds'] !== 'string') return false;
+    if ('cancellationType' in _v && typeof _v['cancellationType'] !== 'string') return false;
+    if ('beforeSnapshot' in _v && typeof _v['beforeSnapshot'] !== 'string') return false;
+    if ('afterSnapshot' in _v && typeof _v['afterSnapshot'] !== 'string') return false;
+    if ('partialPaymentInfo' in _v && typeof _v['partialPaymentInfo'] !== 'string') return false;
+    if ('glReversalStatus' in _v && typeof _v['glReversalStatus'] !== 'string') return false;
+    if ('accountingIntent' in _v && typeof _v['accountingIntent'] !== 'string') return false;
+    if ('accountingStatus' in _v && typeof _v['accountingStatus'] !== 'string') return false;
+    if ('expectedAccountingOutcome' in _v && typeof _v['expectedAccountingOutcome'] !== 'string') return false;
+    if ('sourceEventId' in _v && typeof _v['sourceEventId'] !== 'string') return false;
+    if ('sourceDocumentId' in _v && typeof _v['sourceDocumentId'] !== 'string') return false;
+    return true;
+}
+

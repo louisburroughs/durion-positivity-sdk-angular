@@ -13,3 +13,10 @@ export interface PricingSnapshotCreatedResponse {
     snapshotId?: string;
 }
 
+export function instanceOfPricingSnapshotCreatedResponse(value: object): value is PricingSnapshotCreatedResponse {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('snapshotId' in _v && typeof _v['snapshotId'] !== 'string') return false;
+    return true;
+}
+

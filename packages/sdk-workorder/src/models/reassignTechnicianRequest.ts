@@ -35,3 +35,15 @@ export interface ReassignTechnicianRequest {
     notifyPreviousTechnician?: boolean;
 }
 
+export function instanceOfReassignTechnicianRequest(value: object): value is ReassignTechnicianRequest {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if (!('newTechnicianId' in _v) || _v['newTechnicianId'] === undefined) return false;
+    if ('newTechnicianId' in _v && typeof _v['newTechnicianId'] !== 'string') return false;
+    if ('reassignedByUserId' in _v && typeof _v['reassignedByUserId'] !== 'string') return false;
+    if ('reason' in _v && typeof _v['reason'] !== 'string') return false;
+    if ('notes' in _v && typeof _v['notes'] !== 'string') return false;
+    if ('notifyPreviousTechnician' in _v && typeof _v['notifyPreviousTechnician'] !== 'boolean') return false;
+    return true;
+}
+

@@ -16,3 +16,11 @@ export interface TimeEntryExceptionWaiveRequest {
     waiveReason: string;
 }
 
+export function instanceOfTimeEntryExceptionWaiveRequest(value: object): value is TimeEntryExceptionWaiveRequest {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if (!('waiveReason' in _v) || _v['waiveReason'] === undefined) return false;
+    if ('waiveReason' in _v && typeof _v['waiveReason'] !== 'string') return false;
+    return true;
+}
+

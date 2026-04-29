@@ -14,3 +14,11 @@ export interface ApproveAdjustmentRequest {
     notes?: string;
 }
 
+export function instanceOfApproveAdjustmentRequest(value: object): value is ApproveAdjustmentRequest {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('approverUserId' in _v && typeof _v['approverUserId'] !== 'string') return false;
+    if ('notes' in _v && typeof _v['notes'] !== 'string') return false;
+    return true;
+}
+

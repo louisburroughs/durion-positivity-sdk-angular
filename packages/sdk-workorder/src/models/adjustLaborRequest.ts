@@ -23,3 +23,13 @@ export interface AdjustLaborRequest {
     adjustmentReason: string;
 }
 
+export function instanceOfAdjustLaborRequest(value: object): value is AdjustLaborRequest {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if (!('hoursWorked' in _v) || _v['hoursWorked'] === undefined) return false;
+    if ('hoursWorked' in _v && typeof _v['hoursWorked'] !== 'number') return false;
+    if (!('adjustmentReason' in _v) || _v['adjustmentReason'] === undefined) return false;
+    if ('adjustmentReason' in _v && typeof _v['adjustmentReason'] !== 'string') return false;
+    return true;
+}
+

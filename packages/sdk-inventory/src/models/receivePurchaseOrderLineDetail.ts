@@ -14,3 +14,11 @@ export interface ReceivePurchaseOrderLineDetail {
     openQuantityDecimal?: number;
 }
 
+export function instanceOfReceivePurchaseOrderLineDetail(value: object): value is ReceivePurchaseOrderLineDetail {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('lineId' in _v && typeof _v['lineId'] !== 'string') return false;
+    if ('openQuantityDecimal' in _v && typeof _v['openQuantityDecimal'] !== 'number') return false;
+    return true;
+}
+

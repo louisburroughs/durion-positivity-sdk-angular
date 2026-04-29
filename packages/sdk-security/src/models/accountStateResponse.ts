@@ -24,3 +24,16 @@ export interface AccountStateResponse {
     credentialsExpireAt?: string;
 }
 
+export function instanceOfAccountStateResponse(value: object): value is AccountStateResponse {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('userId' in _v && typeof _v['userId'] !== 'string') return false;
+    if ('enabled' in _v && typeof _v['enabled'] !== 'boolean') return false;
+    if ('accountNonLocked' in _v && typeof _v['accountNonLocked'] !== 'boolean') return false;
+    if ('accountNonExpired' in _v && typeof _v['accountNonExpired'] !== 'boolean') return false;
+    if ('credentialsNonExpired' in _v && typeof _v['credentialsNonExpired'] !== 'boolean') return false;
+    if ('failedLoginAttempts' in _v && typeof _v['failedLoginAttempts'] !== 'number') return false;
+    if ('disabledBy' in _v && typeof _v['disabledBy'] !== 'string') return false;
+    return true;
+}
+

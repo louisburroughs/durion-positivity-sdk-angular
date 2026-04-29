@@ -27,3 +27,23 @@ export interface ProductCreateRequestDto {
     attributes?: string;
 }
 
+export function instanceOfProductCreateRequestDto(value: object): value is ProductCreateRequestDto {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if (!('name' in _v) || _v['name'] === undefined) return false;
+    if ('name' in _v && typeof _v['name'] !== 'string') return false;
+    if (!('description' in _v) || _v['description'] === undefined) return false;
+    if ('description' in _v && typeof _v['description'] !== 'string') return false;
+    if (!('unitOfMeasure' in _v) || _v['unitOfMeasure'] === undefined) return false;
+    if ('unitOfMeasure' in _v && typeof _v['unitOfMeasure'] !== 'string') return false;
+    if ('manufacturerId' in _v && typeof _v['manufacturerId'] !== 'string') return false;
+    if ('categoryId' in _v && typeof _v['categoryId'] !== 'string') return false;
+    if (!('sku' in _v) || _v['sku'] === undefined) return false;
+    if ('sku' in _v && typeof _v['sku'] !== 'string') return false;
+    if (!('mpn' in _v) || _v['mpn'] === undefined) return false;
+    if ('mpn' in _v && typeof _v['mpn'] !== 'string') return false;
+    if ('upc' in _v && typeof _v['upc'] !== 'string') return false;
+    if ('attributes' in _v && typeof _v['attributes'] !== 'string') return false;
+    return true;
+}
+

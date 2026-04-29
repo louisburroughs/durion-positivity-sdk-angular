@@ -13,3 +13,11 @@ export interface ConfirmPickLineRequest {
     quantityPicked: number;
 }
 
+export function instanceOfConfirmPickLineRequest(value: object): value is ConfirmPickLineRequest {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if (!('quantityPicked' in _v) || _v['quantityPicked'] === undefined) return false;
+    if ('quantityPicked' in _v && typeof _v['quantityPicked'] !== 'number') return false;
+    return true;
+}
+

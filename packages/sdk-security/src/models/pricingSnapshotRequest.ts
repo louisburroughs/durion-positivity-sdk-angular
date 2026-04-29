@@ -16,3 +16,10 @@ export interface PricingSnapshotRequest {
     evaluationSteps?: Array<PricingRuleTraceEntryRequest>;
 }
 
+export function instanceOfPricingSnapshotRequest(value: object): value is PricingSnapshotRequest {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('finalPrice' in _v && typeof _v['finalPrice'] !== 'number') return false;
+    return true;
+}
+

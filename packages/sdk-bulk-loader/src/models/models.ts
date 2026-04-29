@@ -7,6 +7,7 @@ export * from './bulkLoadJobResponse';
 export * from './columnMappingApproveRequest';
 export * from './columnMappingResponse';
 export * from './columnMappingUpdateRequest';
+export * from './correctionResultDto';
 export * from './fileUploadResponse';
 export * from './pageBulkLoadJobResponse';
 export * from './pageable';

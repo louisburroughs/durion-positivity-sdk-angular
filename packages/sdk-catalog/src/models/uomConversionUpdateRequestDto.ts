@@ -13,3 +13,11 @@ export interface UomConversionUpdateRequestDto {
     conversionFactor: number;
 }
 
+export function instanceOfUomConversionUpdateRequestDto(value: object): value is UomConversionUpdateRequestDto {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if (!('conversionFactor' in _v) || _v['conversionFactor'] === undefined) return false;
+    if ('conversionFactor' in _v && typeof _v['conversionFactor'] !== 'number') return false;
+    return true;
+}
+

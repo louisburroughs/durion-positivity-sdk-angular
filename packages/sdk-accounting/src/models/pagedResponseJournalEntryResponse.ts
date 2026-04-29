@@ -20,3 +20,14 @@ export interface PagedResponseJournalEntryResponse {
     totalElements?: number;
 }
 
+export function instanceOfPagedResponseJournalEntryResponse(value: object): value is PagedResponseJournalEntryResponse {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('pageNumber' in _v && typeof _v['pageNumber'] !== 'number') return false;
+    if ('pageSize' in _v && typeof _v['pageSize'] !== 'number') return false;
+    if ('totalCount' in _v && typeof _v['totalCount'] !== 'number') return false;
+    if ('totalPages' in _v && typeof _v['totalPages'] !== 'number') return false;
+    if ('totalElements' in _v && typeof _v['totalElements'] !== 'number') return false;
+    return true;
+}
+

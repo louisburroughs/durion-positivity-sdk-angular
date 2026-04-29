@@ -23,3 +23,11 @@ export interface GLAccountUpdateRequest {
     description?: string;
 }
 
+export function instanceOfGLAccountUpdateRequest(value: object): value is GLAccountUpdateRequest {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('accountName' in _v && typeof _v['accountName'] !== 'string') return false;
+    if ('description' in _v && typeof _v['description'] !== 'string') return false;
+    return true;
+}
+

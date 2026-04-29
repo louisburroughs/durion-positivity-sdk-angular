@@ -14,3 +14,11 @@ export interface PermissionDefinition {
     description?: string;
 }
 
+export function instanceOfPermissionDefinition(value: object): value is PermissionDefinition {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('name' in _v && typeof _v['name'] !== 'string') return false;
+    if ('description' in _v && typeof _v['description'] !== 'string') return false;
+    return true;
+}
+

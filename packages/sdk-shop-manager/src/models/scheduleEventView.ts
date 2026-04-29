@@ -22,3 +22,15 @@ export interface ScheduleEventView {
     conflictDetails?: ConflictDetails;
 }
 
+export function instanceOfScheduleEventView(value: object): value is ScheduleEventView {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('eventId' in _v && typeof _v['eventId'] !== 'string') return false;
+    if ('eventType' in _v && typeof _v['eventType'] !== 'string') return false;
+    if ('subType' in _v && typeof _v['subType'] !== 'string') return false;
+    if ('title' in _v && typeof _v['title'] !== 'string') return false;
+    if ('hasConflict' in _v && typeof _v['hasConflict'] !== 'boolean') return false;
+    if ('severity' in _v && typeof _v['severity'] !== 'string') return false;
+    return true;
+}
+

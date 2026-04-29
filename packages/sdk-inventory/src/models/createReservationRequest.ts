@@ -15,3 +15,14 @@ export interface CreateReservationRequest {
     requiredQuantity?: number;
 }
 
+export function instanceOfCreateReservationRequest(value: object): value is CreateReservationRequest {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if (!('workorderLineId' in _v) || _v['workorderLineId'] === undefined) return false;
+    if ('workorderLineId' in _v && typeof _v['workorderLineId'] !== 'string') return false;
+    if (!('stockItemId' in _v) || _v['stockItemId'] === undefined) return false;
+    if ('stockItemId' in _v && typeof _v['stockItemId'] !== 'string') return false;
+    if ('requiredQuantity' in _v && typeof _v['requiredQuantity'] !== 'number') return false;
+    return true;
+}
+

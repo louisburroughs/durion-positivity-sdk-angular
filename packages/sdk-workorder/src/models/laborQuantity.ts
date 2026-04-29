@@ -14,3 +14,13 @@ export interface LaborQuantity {
     unit: string;
 }
 
+export function instanceOfLaborQuantity(value: object): value is LaborQuantity {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if (!('quantity' in _v) || _v['quantity'] === undefined) return false;
+    if ('quantity' in _v && typeof _v['quantity'] !== 'number') return false;
+    if (!('unit' in _v) || _v['unit'] === undefined) return false;
+    if ('unit' in _v && typeof _v['unit'] !== 'string') return false;
+    return true;
+}
+

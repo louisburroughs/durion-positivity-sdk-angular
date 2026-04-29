@@ -40,3 +40,19 @@ export interface CreateStaffingAssignmentRequest {
     isPrimary: boolean;
 }
 
+export function instanceOfCreateStaffingAssignmentRequest(value: object): value is CreateStaffingAssignmentRequest {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if (!('personId' in _v) || _v['personId'] === undefined) return false;
+    if ('personId' in _v && typeof _v['personId'] !== 'string') return false;
+    if (!('locationId' in _v) || _v['locationId'] === undefined) return false;
+    if ('locationId' in _v && typeof _v['locationId'] !== 'string') return false;
+    if (!('role' in _v) || _v['role'] === undefined) return false;
+    if ('role' in _v && typeof _v['role'] !== 'string') return false;
+    if (!('effectiveFrom' in _v) || _v['effectiveFrom'] === undefined) return false;
+    if ('effectiveDateRangeValid' in _v && typeof _v['effectiveDateRangeValid'] !== 'boolean') return false;
+    if (!('isPrimary' in _v) || _v['isPrimary'] === undefined) return false;
+    if ('isPrimary' in _v && typeof _v['isPrimary'] !== 'boolean') return false;
+    return true;
+}
+

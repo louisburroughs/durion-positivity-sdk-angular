@@ -24,3 +24,12 @@ export interface ApplyPromotionRequest {
     estimateContext: EstimateContext;
 }
 
+export function instanceOfApplyPromotionRequest(value: object): value is ApplyPromotionRequest {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if (!('promotionCode' in _v) || _v['promotionCode'] === undefined) return false;
+    if ('promotionCode' in _v && typeof _v['promotionCode'] !== 'string') return false;
+    if (!('estimateContext' in _v) || _v['estimateContext'] === undefined) return false;
+    return true;
+}
+

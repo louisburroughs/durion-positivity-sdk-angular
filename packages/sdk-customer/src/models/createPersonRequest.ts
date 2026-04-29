@@ -45,3 +45,15 @@ export enum CreatePersonRequestPreferredContactMethodEnum {
 
 
 
+export function instanceOfCreatePersonRequest(value: object): value is CreatePersonRequest {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if (!('firstName' in _v) || _v['firstName'] === undefined) return false;
+    if ('firstName' in _v && typeof _v['firstName'] !== 'string') return false;
+    if (!('lastName' in _v) || _v['lastName'] === undefined) return false;
+    if ('lastName' in _v && typeof _v['lastName'] !== 'string') return false;
+    if (!('preferredContactMethod' in _v) || _v['preferredContactMethod'] === undefined) return false;
+    if ('preferredContactMethod' in _v && typeof _v['preferredContactMethod'] !== 'string') return false;
+    return true;
+}
+

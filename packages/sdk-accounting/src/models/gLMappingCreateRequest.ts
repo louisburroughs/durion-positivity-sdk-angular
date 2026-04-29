@@ -18,3 +18,16 @@ export interface GLMappingCreateRequest {
     dimensions?: { [key: string]: string; };
 }
 
+export function instanceOfGLMappingCreateRequest(value: object): value is GLMappingCreateRequest {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if (!('sourceSystem' in _v) || _v['sourceSystem'] === undefined) return false;
+    if ('sourceSystem' in _v && typeof _v['sourceSystem'] !== 'string') return false;
+    if (!('externalCode' in _v) || _v['externalCode'] === undefined) return false;
+    if ('externalCode' in _v && typeof _v['externalCode'] !== 'string') return false;
+    if (!('glAccountId' in _v) || _v['glAccountId'] === undefined) return false;
+    if ('glAccountId' in _v && typeof _v['glAccountId'] !== 'string') return false;
+    if (!('effectiveStartDate' in _v) || _v['effectiveStartDate'] === undefined) return false;
+    return true;
+}
+

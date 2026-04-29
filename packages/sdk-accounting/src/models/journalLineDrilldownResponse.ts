@@ -19,3 +19,15 @@ export interface JournalLineDrilldownResponse {
     sourceEventType?: string;
 }
 
+export function instanceOfJournalLineDrilldownResponse(value: object): value is JournalLineDrilldownResponse {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('journalEntryId' in _v && typeof _v['journalEntryId'] !== 'string') return false;
+    if ('description' in _v && typeof _v['description'] !== 'string') return false;
+    if ('debitAmount' in _v && typeof _v['debitAmount'] !== 'number') return false;
+    if ('creditAmount' in _v && typeof _v['creditAmount'] !== 'number') return false;
+    if ('sourceEventId' in _v && typeof _v['sourceEventId'] !== 'string') return false;
+    if ('sourceEventType' in _v && typeof _v['sourceEventType'] !== 'string') return false;
+    return true;
+}
+

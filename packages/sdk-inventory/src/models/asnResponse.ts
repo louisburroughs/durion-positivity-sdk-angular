@@ -31,3 +31,14 @@ export enum AsnResponseStatusEnum {
 
 
 
+export function instanceOfAsnResponse(value: object): value is AsnResponse {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('asnId' in _v && typeof _v['asnId'] !== 'string') return false;
+    if ('asnReferenceNumber' in _v && typeof _v['asnReferenceNumber'] !== 'string') return false;
+    if ('vendorId' in _v && typeof _v['vendorId'] !== 'string') return false;
+    if ('status' in _v && typeof _v['status'] !== 'string') return false;
+    if ('createdBy' in _v && typeof _v['createdBy'] !== 'string') return false;
+    return true;
+}
+

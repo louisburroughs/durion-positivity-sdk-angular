@@ -27,3 +27,14 @@ export interface ConsumePartRequest {
     notes?: string;
 }
 
+export function instanceOfConsumePartRequest(value: object): value is ConsumePartRequest {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if (!('workorderPartId' in _v) || _v['workorderPartId'] === undefined) return false;
+    if ('workorderPartId' in _v && typeof _v['workorderPartId'] !== 'string') return false;
+    if (!('quantity' in _v) || _v['quantity'] === undefined) return false;
+    if ('quantity' in _v && typeof _v['quantity'] !== 'number') return false;
+    if ('notes' in _v && typeof _v['notes'] !== 'string') return false;
+    return true;
+}
+

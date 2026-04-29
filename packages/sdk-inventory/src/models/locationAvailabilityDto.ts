@@ -16,3 +16,13 @@ export interface LocationAvailabilityDto {
     availableToPromiseQuantity?: number;
 }
 
+export function instanceOfLocationAvailabilityDto(value: object): value is LocationAvailabilityDto {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('locationId' in _v && typeof _v['locationId'] !== 'string') return false;
+    if ('locationName' in _v && typeof _v['locationName'] !== 'string') return false;
+    if ('onHandQuantity' in _v && typeof _v['onHandQuantity'] !== 'number') return false;
+    if ('availableToPromiseQuantity' in _v && typeof _v['availableToPromiseQuantity'] !== 'number') return false;
+    return true;
+}
+

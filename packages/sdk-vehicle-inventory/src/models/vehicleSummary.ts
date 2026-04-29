@@ -20,3 +20,17 @@ export interface VehicleSummary {
     model?: string;
 }
 
+export function instanceOfVehicleSummary(value: object): value is VehicleSummary {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('vehicleId' in _v && typeof _v['vehicleId'] !== 'string') return false;
+    if ('vin' in _v && typeof _v['vin'] !== 'string') return false;
+    if ('unitNumber' in _v && typeof _v['unitNumber'] !== 'string') return false;
+    if ('licensePlate' in _v && typeof _v['licensePlate'] !== 'string') return false;
+    if ('description' in _v && typeof _v['description'] !== 'string') return false;
+    if ('year' in _v && typeof _v['year'] !== 'number') return false;
+    if ('make' in _v && typeof _v['make'] !== 'string') return false;
+    if ('model' in _v && typeof _v['model'] !== 'string') return false;
+    return true;
+}
+

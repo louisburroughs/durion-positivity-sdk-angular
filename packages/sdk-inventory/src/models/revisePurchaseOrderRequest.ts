@@ -21,3 +21,17 @@ export interface RevisePurchaseOrderRequest {
     revisionReason: string;
 }
 
+export function instanceOfRevisePurchaseOrderRequest(value: object): value is RevisePurchaseOrderRequest {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if (!('poDate' in _v) || _v['poDate'] === undefined) return false;
+    if ('paymentTermsId' in _v && typeof _v['paymentTermsId'] !== 'string') return false;
+    if ('shipToLocationId' in _v && typeof _v['shipToLocationId'] !== 'string') return false;
+    if ('requestedBy' in _v && typeof _v['requestedBy'] !== 'string') return false;
+    if ('comment' in _v && typeof _v['comment'] !== 'string') return false;
+    if (!('lines' in _v) || _v['lines'] === undefined) return false;
+    if (!('revisionReason' in _v) || _v['revisionReason'] === undefined) return false;
+    if ('revisionReason' in _v && typeof _v['revisionReason'] !== 'string') return false;
+    return true;
+}
+

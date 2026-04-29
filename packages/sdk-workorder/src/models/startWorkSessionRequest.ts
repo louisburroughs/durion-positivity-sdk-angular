@@ -39,3 +39,19 @@ export interface StartWorkSessionRequest {
     overlapOverrideReason?: string;
 }
 
+export function instanceOfStartWorkSessionRequest(value: object): value is StartWorkSessionRequest {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if (!('mechanicId' in _v) || _v['mechanicId'] === undefined) return false;
+    if ('mechanicId' in _v && typeof _v['mechanicId'] !== 'string') return false;
+    if (!('workOrderId' in _v) || _v['workOrderId'] === undefined) return false;
+    if ('workOrderId' in _v && typeof _v['workOrderId'] !== 'string') return false;
+    if (!('workOrderTaskId' in _v) || _v['workOrderTaskId'] === undefined) return false;
+    if ('workOrderTaskId' in _v && typeof _v['workOrderTaskId'] !== 'string') return false;
+    if (!('locationId' in _v) || _v['locationId'] === undefined) return false;
+    if ('locationId' in _v && typeof _v['locationId'] !== 'string') return false;
+    if ('resourceId' in _v && typeof _v['resourceId'] !== 'string') return false;
+    if ('overlapOverrideReason' in _v && typeof _v['overlapOverrideReason'] !== 'string') return false;
+    return true;
+}
+

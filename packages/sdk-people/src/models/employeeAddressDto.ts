@@ -18,3 +18,15 @@ export interface EmployeeAddressDto {
     country?: string;
 }
 
+export function instanceOfEmployeeAddressDto(value: object): value is EmployeeAddressDto {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('line1' in _v && typeof _v['line1'] !== 'string') return false;
+    if ('line2' in _v && typeof _v['line2'] !== 'string') return false;
+    if ('city' in _v && typeof _v['city'] !== 'string') return false;
+    if ('region' in _v && typeof _v['region'] !== 'string') return false;
+    if ('postalCode' in _v && typeof _v['postalCode'] !== 'string') return false;
+    if ('country' in _v && typeof _v['country'] !== 'string') return false;
+    return true;
+}
+

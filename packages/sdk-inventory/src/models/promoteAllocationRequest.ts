@@ -13,3 +13,10 @@ export interface PromoteAllocationRequest {
     hardenedReason?: string;
 }
 
+export function instanceOfPromoteAllocationRequest(value: object): value is PromoteAllocationRequest {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('hardenedReason' in _v && typeof _v['hardenedReason'] !== 'string') return false;
+    return true;
+}
+

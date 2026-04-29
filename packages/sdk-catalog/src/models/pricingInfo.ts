@@ -52,3 +52,12 @@ export enum PricingInfoConfidenceEnum {
 
 
 
+export function instanceOfPricingInfo(value: object): value is PricingInfo {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('currency' in _v && typeof _v['currency'] !== 'string') return false;
+    if ('status' in _v && typeof _v['status'] !== 'string') return false;
+    if ('confidence' in _v && typeof _v['confidence'] !== 'string') return false;
+    return true;
+}
+

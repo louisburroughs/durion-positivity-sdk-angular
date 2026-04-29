@@ -19,3 +19,16 @@ export interface AvailabilityView {
     unitOfMeasure?: string;
 }
 
+export function instanceOfAvailabilityView(value: object): value is AvailabilityView {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('productSku' in _v && typeof _v['productSku'] !== 'string') return false;
+    if ('locationId' in _v && typeof _v['locationId'] !== 'string') return false;
+    if ('storageLocationId' in _v && typeof _v['storageLocationId'] !== 'string') return false;
+    if ('onHandQuantity' in _v && typeof _v['onHandQuantity'] !== 'number') return false;
+    if ('allocatedQuantity' in _v && typeof _v['allocatedQuantity'] !== 'number') return false;
+    if ('availableToPromiseQuantity' in _v && typeof _v['availableToPromiseQuantity'] !== 'number') return false;
+    if ('unitOfMeasure' in _v && typeof _v['unitOfMeasure'] !== 'string') return false;
+    return true;
+}
+

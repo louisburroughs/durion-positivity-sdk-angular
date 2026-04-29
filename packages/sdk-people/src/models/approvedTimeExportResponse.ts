@@ -51,3 +51,25 @@ export interface ApprovedTimeExportResponse {
     approvedBy: string;
 }
 
+export function instanceOfApprovedTimeExportResponse(value: object): value is ApprovedTimeExportResponse {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if (!('timeEntryId' in _v) || _v['timeEntryId'] === undefined) return false;
+    if ('timeEntryId' in _v && typeof _v['timeEntryId'] !== 'string') return false;
+    if (!('employeeId' in _v) || _v['employeeId'] === undefined) return false;
+    if ('employeeId' in _v && typeof _v['employeeId'] !== 'string') return false;
+    if (!('employeeName' in _v) || _v['employeeName'] === undefined) return false;
+    if ('employeeName' in _v && typeof _v['employeeName'] !== 'string') return false;
+    if (!('locationId' in _v) || _v['locationId'] === undefined) return false;
+    if ('locationId' in _v && typeof _v['locationId'] !== 'string') return false;
+    if (!('locationName' in _v) || _v['locationName'] === undefined) return false;
+    if ('locationName' in _v && typeof _v['locationName'] !== 'string') return false;
+    if (!('entryDate' in _v) || _v['entryDate'] === undefined) return false;
+    if (!('hoursWorked' in _v) || _v['hoursWorked'] === undefined) return false;
+    if ('hoursWorked' in _v && typeof _v['hoursWorked'] !== 'number') return false;
+    if (!('approvedAt' in _v) || _v['approvedAt'] === undefined) return false;
+    if (!('approvedBy' in _v) || _v['approvedBy'] === undefined) return false;
+    if ('approvedBy' in _v && typeof _v['approvedBy'] !== 'string') return false;
+    return true;
+}
+

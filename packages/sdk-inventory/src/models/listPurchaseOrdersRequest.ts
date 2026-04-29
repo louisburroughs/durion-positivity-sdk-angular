@@ -26,3 +26,13 @@ export enum ListPurchaseOrdersRequestStatusEnum {
 
 
 
+export function instanceOfListPurchaseOrdersRequest(value: object): value is ListPurchaseOrdersRequest {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('vendorId' in _v && typeof _v['vendorId'] !== 'string') return false;
+    if ('status' in _v && typeof _v['status'] !== 'string') return false;
+    if ('currency' in _v && typeof _v['currency'] !== 'string') return false;
+    if ('locationId' in _v && typeof _v['locationId'] !== 'string') return false;
+    return true;
+}
+

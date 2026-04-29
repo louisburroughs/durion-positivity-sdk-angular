@@ -23,3 +23,11 @@ export interface TokenPairResponse {
     refreshToken?: string;
 }
 
+export function instanceOfTokenPairResponse(value: object): value is TokenPairResponse {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('accessToken' in _v && typeof _v['accessToken'] !== 'string') return false;
+    if ('refreshToken' in _v && typeof _v['refreshToken'] !== 'string') return false;
+    return true;
+}
+

@@ -19,3 +19,13 @@ export interface AuditLogEventRequest {
     context?: any | null;
 }
 
+export function instanceOfAuditLogEventRequest(value: object): value is AuditLogEventRequest {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('eventType' in _v && typeof _v['eventType'] !== 'string') return false;
+    if ('actorId' in _v && typeof _v['actorId'] !== 'string') return false;
+    if ('entityId' in _v && typeof _v['entityId'] !== 'string') return false;
+    if ('entityType' in _v && typeof _v['entityType'] !== 'string') return false;
+    return true;
+}
+

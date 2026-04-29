@@ -22,3 +22,15 @@ export interface ProductMsrpDto {
     version?: number;
 }
 
+export function instanceOfProductMsrpDto(value: object): value is ProductMsrpDto {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('msrpId' in _v && typeof _v['msrpId'] !== 'string') return false;
+    if ('productId' in _v && typeof _v['productId'] !== 'string') return false;
+    if ('amount' in _v && typeof _v['amount'] !== 'string') return false;
+    if ('currency' in _v && typeof _v['currency'] !== 'string') return false;
+    if ('updatedBy' in _v && typeof _v['updatedBy'] !== 'string') return false;
+    if ('version' in _v && typeof _v['version'] !== 'number') return false;
+    return true;
+}
+

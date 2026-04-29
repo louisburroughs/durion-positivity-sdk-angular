@@ -16,3 +16,15 @@ export interface CreateCartRequest {
     vehicleId?: string;
 }
 
+export function instanceOfCreateCartRequest(value: object): value is CreateCartRequest {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if (!('clerkId' in _v) || _v['clerkId'] === undefined) return false;
+    if ('clerkId' in _v && typeof _v['clerkId'] !== 'string') return false;
+    if (!('terminalId' in _v) || _v['terminalId'] === undefined) return false;
+    if ('terminalId' in _v && typeof _v['terminalId'] !== 'string') return false;
+    if ('customerId' in _v && typeof _v['customerId'] !== 'string') return false;
+    if ('vehicleId' in _v && typeof _v['vehicleId'] !== 'string') return false;
+    return true;
+}
+

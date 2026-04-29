@@ -14,3 +14,11 @@ export interface FinalizationRequest {
     overrideReason?: string;
 }
 
+export function instanceOfFinalizationRequest(value: object): value is FinalizationRequest {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('managerApprovalCode' in _v && typeof _v['managerApprovalCode'] !== 'string') return false;
+    if ('overrideReason' in _v && typeof _v['overrideReason'] !== 'string') return false;
+    return true;
+}
+

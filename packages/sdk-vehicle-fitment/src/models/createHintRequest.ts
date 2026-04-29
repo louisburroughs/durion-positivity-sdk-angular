@@ -24,3 +24,12 @@ export interface CreateHintRequest {
     fitmentTags: Array<FitmentTagDto>;
 }
 
+export function instanceOfCreateHintRequest(value: object): value is CreateHintRequest {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if (!('productId' in _v) || _v['productId'] === undefined) return false;
+    if ('productId' in _v && typeof _v['productId'] !== 'string') return false;
+    if (!('fitmentTags' in _v) || _v['fitmentTags'] === undefined) return false;
+    return true;
+}
+

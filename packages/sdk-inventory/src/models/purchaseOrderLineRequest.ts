@@ -19,3 +19,20 @@ export interface PurchaseOrderLineRequest {
     glAccountId?: string;
 }
 
+export function instanceOfPurchaseOrderLineRequest(value: object): value is PurchaseOrderLineRequest {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if (!('lineNumber' in _v) || _v['lineNumber'] === undefined) return false;
+    if ('lineNumber' in _v && typeof _v['lineNumber'] !== 'number') return false;
+    if ('skuId' in _v && typeof _v['skuId'] !== 'string') return false;
+    if (!('description' in _v) || _v['description'] === undefined) return false;
+    if ('description' in _v && typeof _v['description'] !== 'string') return false;
+    if (!('quantity' in _v) || _v['quantity'] === undefined) return false;
+    if ('quantity' in _v && typeof _v['quantity'] !== 'number') return false;
+    if (!('unitCostMinor' in _v) || _v['unitCostMinor'] === undefined) return false;
+    if ('unitCostMinor' in _v && typeof _v['unitCostMinor'] !== 'number') return false;
+    if ('taxCodeId' in _v && typeof _v['taxCodeId'] !== 'string') return false;
+    if ('glAccountId' in _v && typeof _v['glAccountId'] !== 'string') return false;
+    return true;
+}
+

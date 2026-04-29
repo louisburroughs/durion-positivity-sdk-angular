@@ -13,3 +13,11 @@ export interface JournalEntryReversalRequest {
     reason: string;
 }
 
+export function instanceOfJournalEntryReversalRequest(value: object): value is JournalEntryReversalRequest {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if (!('reason' in _v) || _v['reason'] === undefined) return false;
+    if ('reason' in _v && typeof _v['reason'] !== 'string') return false;
+    return true;
+}
+

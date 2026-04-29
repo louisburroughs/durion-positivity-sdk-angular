@@ -22,3 +22,19 @@ export interface PutawayExecutionResponse {
     actorId?: string;
 }
 
+export function instanceOfPutawayExecutionResponse(value: object): value is PutawayExecutionResponse {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('ledgerEntryId' in _v && typeof _v['ledgerEntryId'] !== 'string') return false;
+    if ('taskId' in _v && typeof _v['taskId'] !== 'string') return false;
+    if ('skuId' in _v && typeof _v['skuId'] !== 'string') return false;
+    if ('sourceLocationId' in _v && typeof _v['sourceLocationId'] !== 'string') return false;
+    if ('destinationLocationId' in _v && typeof _v['destinationLocationId'] !== 'string') return false;
+    if ('quantityMoved' in _v && typeof _v['quantityMoved'] !== 'number') return false;
+    if ('transactionType' in _v && typeof _v['transactionType'] !== 'string') return false;
+    if ('status' in _v && typeof _v['status'] !== 'string') return false;
+    if ('executedAt' in _v && typeof _v['executedAt'] !== 'string') return false;
+    if ('actorId' in _v && typeof _v['actorId'] !== 'string') return false;
+    return true;
+}
+

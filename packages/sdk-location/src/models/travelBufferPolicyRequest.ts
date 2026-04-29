@@ -16,3 +16,13 @@ export interface TravelBufferPolicyRequest {
     notes?: string;
 }
 
+export function instanceOfTravelBufferPolicyRequest(value: object): value is TravelBufferPolicyRequest {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('name' in _v && typeof _v['name'] !== 'string') return false;
+    if ('bufferType' in _v && typeof _v['bufferType'] !== 'string') return false;
+    if ('bufferValue' in _v && typeof _v['bufferValue'] !== 'number') return false;
+    if ('notes' in _v && typeof _v['notes'] !== 'string') return false;
+    return true;
+}
+

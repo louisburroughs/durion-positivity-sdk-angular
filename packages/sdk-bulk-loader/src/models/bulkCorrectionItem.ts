@@ -23,3 +23,12 @@ export interface BulkCorrectionItem {
     correctedData: { [key: string]: string; };
 }
 
+export function instanceOfBulkCorrectionItem(value: object): value is BulkCorrectionItem {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if (!('auditRecordId' in _v) || _v['auditRecordId'] === undefined) return false;
+    if ('auditRecordId' in _v && typeof _v['auditRecordId'] !== 'string') return false;
+    if (!('correctedData' in _v) || _v['correctedData'] === undefined) return false;
+    return true;
+}
+

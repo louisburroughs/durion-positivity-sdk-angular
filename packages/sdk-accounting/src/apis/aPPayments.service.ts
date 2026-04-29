@@ -21,7 +21,9 @@ import { APPaymentResponse } from '../src/models/aPPaymentResponse';
 // @ts-ignore
 import { ExecuteAPPaymentRequest } from '../src/models/executeAPPaymentRequest';
 // @ts-ignore
-import { VendorBillSummaryResponse } from '../src/models/vendorBillSummaryResponse';
+import { PageVendorBillSummaryResponse } from '../src/models/pageVendorBillSummaryResponse';
+// @ts-ignore
+import { Pageable } from '../src/models/pageable';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
@@ -231,19 +233,20 @@ export class APPaymentsService extends BaseService {
 
     /**
      * List eligible vendor bills
-     * Get eligible vendor bills for payment (status &#x3D; APPROVED). Bills are ordered by due date (oldest first, nulls last), then bill date, then bill ID.
+     * Get eligible vendor bills for payment (status &#x3D; APPROVED). Bills are ordered by due date (oldest first, nulls last), then bill date, then bill ID. Sort order is server-controlled.
      * @endpoint get /v1/accounting/ap/bills
+     * @param pageable 
      * @param vendorId Vendor UUID
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public listBills(vendorId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<VendorBillSummaryResponse>>;
-    public listBills(vendorId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<VendorBillSummaryResponse>>>;
-    public listBills(vendorId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<VendorBillSummaryResponse>>>;
-    public listBills(vendorId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
-        if (vendorId === null || vendorId === undefined) {
-            throw new Error('Required parameter vendorId was null or undefined when calling listBills.');
+    public listApBills(pageable: Pageable, vendorId?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PageVendorBillSummaryResponse>;
+    public listApBills(pageable: Pageable, vendorId?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PageVendorBillSummaryResponse>>;
+    public listApBills(pageable: Pageable, vendorId?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PageVendorBillSummaryResponse>>;
+    public listApBills(pageable: Pageable, vendorId?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (pageable === null || pageable === undefined) {
+            throw new Error('Required parameter pageable was null or undefined when calling listApBills.');
         }
 
         let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
@@ -252,6 +255,15 @@ export class APPaymentsService extends BaseService {
             localVarQueryParameters,
             'vendorId',
             <any>vendorId,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'pageable',
+            <any>pageable,
             QueryParamStyle.Form,
             true,
         );
@@ -287,7 +299,7 @@ export class APPaymentsService extends BaseService {
 
         let localVarPath = `/v1/accounting/ap/bills`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<Array<VendorBillSummaryResponse>>('get', `${basePath}${localVarPath}`,
+        return this.httpClient.request<PageVendorBillSummaryResponse>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 params: localVarQueryParameters.toHttpParams(),

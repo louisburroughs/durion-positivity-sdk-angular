@@ -14,3 +14,10 @@ export interface ColumnMappingApproveRequest {
     mappings: Array<ColumnMappingUpdateRequest>;
 }
 
+export function instanceOfColumnMappingApproveRequest(value: object): value is ColumnMappingApproveRequest {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if (!('mappings' in _v) || _v['mappings'] === undefined) return false;
+    return true;
+}
+

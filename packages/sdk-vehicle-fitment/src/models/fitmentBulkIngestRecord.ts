@@ -21,3 +21,19 @@ export interface FitmentBulkIngestRecord {
     notes?: string;
 }
 
+export function instanceOfFitmentBulkIngestRecord(value: object): value is FitmentBulkIngestRecord {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if (!('partNumberId' in _v) || _v['partNumberId'] === undefined) return false;
+    if ('partNumberId' in _v && typeof _v['partNumberId'] !== 'number') return false;
+    if ('manufacturerName' in _v && typeof _v['manufacturerName'] !== 'string') return false;
+    if ('makeName' in _v && typeof _v['makeName'] !== 'string') return false;
+    if ('modelName' in _v && typeof _v['modelName'] !== 'string') return false;
+    if ('vehicleTypeName' in _v && typeof _v['vehicleTypeName'] !== 'string') return false;
+    if ('vehicleYear' in _v && typeof _v['vehicleYear'] !== 'string') return false;
+    if ('engineType' in _v && typeof _v['engineType'] !== 'string') return false;
+    if ('submodel' in _v && typeof _v['submodel'] !== 'string') return false;
+    if ('notes' in _v && typeof _v['notes'] !== 'string') return false;
+    return true;
+}
+

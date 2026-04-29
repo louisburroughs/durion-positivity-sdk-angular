@@ -23,3 +23,20 @@ export interface SalesOrderLineResponse {
     sourceLineId?: string;
 }
 
+export function instanceOfSalesOrderLineResponse(value: object): value is SalesOrderLineResponse {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('orderLineId' in _v && typeof _v['orderLineId'] !== 'string') return false;
+    if ('itemSku' in _v && typeof _v['itemSku'] !== 'string') return false;
+    if ('itemDescription' in _v && typeof _v['itemDescription'] !== 'string') return false;
+    if ('quantity' in _v && typeof _v['quantity'] !== 'number') return false;
+    if ('unitPrice' in _v && typeof _v['unitPrice'] !== 'number') return false;
+    if ('fulfillmentStatus' in _v && typeof _v['fulfillmentStatus'] !== 'string') return false;
+    if ('priceSource' in _v && typeof _v['priceSource'] !== 'string') return false;
+    if ('reasonCode' in _v && typeof _v['reasonCode'] !== 'string') return false;
+    if ('sourceType' in _v && typeof _v['sourceType'] !== 'string') return false;
+    if ('sourceId' in _v && typeof _v['sourceId'] !== 'string') return false;
+    if ('sourceLineId' in _v && typeof _v['sourceLineId'] !== 'string') return false;
+    return true;
+}
+

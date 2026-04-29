@@ -39,3 +39,16 @@ export interface AccountingEventSubmitRequest {
     payload: { [key: string]: any; };
 }
 
+export function instanceOfAccountingEventSubmitRequest(value: object): value is AccountingEventSubmitRequest {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('eventId' in _v && typeof _v['eventId'] !== 'string') return false;
+    if (!('eventType' in _v) || _v['eventType'] === undefined) return false;
+    if ('eventType' in _v && typeof _v['eventType'] !== 'string') return false;
+    if (!('organizationId' in _v) || _v['organizationId'] === undefined) return false;
+    if ('organizationId' in _v && typeof _v['organizationId'] !== 'string') return false;
+    if ('sourceSystem' in _v && typeof _v['sourceSystem'] !== 'string') return false;
+    if (!('payload' in _v) || _v['payload'] === undefined) return false;
+    return true;
+}
+

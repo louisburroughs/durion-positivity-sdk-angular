@@ -38,3 +38,20 @@ export enum StartTravelSegmentRequestOnBehalfReasonCodeEnum {
 
 
 
+export function instanceOfStartTravelSegmentRequest(value: object): value is StartTravelSegmentRequest {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if (!('mobileWorkAssignmentId' in _v) || _v['mobileWorkAssignmentId'] === undefined) return false;
+    if ('mobileWorkAssignmentId' in _v && typeof _v['mobileWorkAssignmentId'] !== 'string') return false;
+    if (!('technicianId' in _v) || _v['technicianId'] === undefined) return false;
+    if ('technicianId' in _v && typeof _v['technicianId'] !== 'string') return false;
+    if (!('segmentType' in _v) || _v['segmentType'] === undefined) return false;
+    if ('segmentType' in _v && typeof _v['segmentType'] !== 'string') return false;
+    if ('fromLocationId' in _v && typeof _v['fromLocationId'] !== 'string') return false;
+    if ('toLocationId' in _v && typeof _v['toLocationId'] !== 'string') return false;
+    if ('workOrderId' in _v && typeof _v['workOrderId'] !== 'string') return false;
+    if ('actedForPersonId' in _v && typeof _v['actedForPersonId'] !== 'string') return false;
+    if ('onBehalfReasonCode' in _v && typeof _v['onBehalfReasonCode'] !== 'string') return false;
+    return true;
+}
+

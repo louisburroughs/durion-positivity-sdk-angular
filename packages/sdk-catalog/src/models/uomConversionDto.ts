@@ -20,3 +20,15 @@ export interface UomConversionDto {
     createdBy?: string;
 }
 
+export function instanceOfUomConversionDto(value: object): value is UomConversionDto {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('id' in _v && typeof _v['id'] !== 'string') return false;
+    if ('fromUomCode' in _v && typeof _v['fromUomCode'] !== 'string') return false;
+    if ('toUomCode' in _v && typeof _v['toUomCode'] !== 'string') return false;
+    if ('conversionFactor' in _v && typeof _v['conversionFactor'] !== 'number') return false;
+    if ('active' in _v && typeof _v['active'] !== 'boolean') return false;
+    if ('createdBy' in _v && typeof _v['createdBy'] !== 'string') return false;
+    return true;
+}
+

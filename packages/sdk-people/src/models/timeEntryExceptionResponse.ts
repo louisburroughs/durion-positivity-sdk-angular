@@ -27,3 +27,13 @@ export interface TimeEntryExceptionResponse {
     message?: string;
 }
 
+export function instanceOfTimeEntryExceptionResponse(value: object): value is TimeEntryExceptionResponse {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('exceptionId' in _v && typeof _v['exceptionId'] !== 'string') return false;
+    if (!('success' in _v) || _v['success'] === undefined) return false;
+    if ('success' in _v && typeof _v['success'] !== 'boolean') return false;
+    if ('message' in _v && typeof _v['message'] !== 'string') return false;
+    return true;
+}
+

@@ -39,3 +39,19 @@ export interface CreateEstimateFromAppointmentRequest {
     requestedServices?: Array<string>;
 }
 
+export function instanceOfCreateEstimateFromAppointmentRequest(value: object): value is CreateEstimateFromAppointmentRequest {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if (!('idempotencyKey' in _v) || _v['idempotencyKey'] === undefined) return false;
+    if ('idempotencyKey' in _v && typeof _v['idempotencyKey'] !== 'string') return false;
+    if (!('appointmentId' in _v) || _v['appointmentId'] === undefined) return false;
+    if ('appointmentId' in _v && typeof _v['appointmentId'] !== 'string') return false;
+    if (!('customerId' in _v) || _v['customerId'] === undefined) return false;
+    if ('customerId' in _v && typeof _v['customerId'] !== 'string') return false;
+    if (!('vehicleId' in _v) || _v['vehicleId'] === undefined) return false;
+    if ('vehicleId' in _v && typeof _v['vehicleId'] !== 'string') return false;
+    if (!('locationId' in _v) || _v['locationId'] === undefined) return false;
+    if ('locationId' in _v && typeof _v['locationId'] !== 'string') return false;
+    return true;
+}
+

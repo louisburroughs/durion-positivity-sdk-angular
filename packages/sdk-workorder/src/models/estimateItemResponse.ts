@@ -69,3 +69,19 @@ export enum EstimateItemResponseItemTypeEnum {
 
 
 
+export function instanceOfEstimateItemResponse(value: object): value is EstimateItemResponse {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('id' in _v && typeof _v['id'] !== 'string') return false;
+    if ('estimateId' in _v && typeof _v['estimateId'] !== 'string') return false;
+    if ('itemType' in _v && typeof _v['itemType'] !== 'string') return false;
+    if ('description' in _v && typeof _v['description'] !== 'string') return false;
+    if ('quantity' in _v && typeof _v['quantity'] !== 'number') return false;
+    if ('unitPrice' in _v && typeof _v['unitPrice'] !== 'number') return false;
+    if ('lineTotal' in _v && typeof _v['lineTotal'] !== 'number') return false;
+    if ('taxCode' in _v && typeof _v['taxCode'] !== 'string') return false;
+    if ('productId' in _v && typeof _v['productId'] !== 'string') return false;
+    if ('serviceId' in _v && typeof _v['serviceId'] !== 'string') return false;
+    return true;
+}
+

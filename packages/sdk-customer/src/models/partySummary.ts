@@ -18,3 +18,15 @@ export interface PartySummary {
     createdAt?: string;
 }
 
+export function instanceOfPartySummary(value: object): value is PartySummary {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('partyId' in _v && typeof _v['partyId'] !== 'string') return false;
+    if ('legalName' in _v && typeof _v['legalName'] !== 'string') return false;
+    if ('displayName' in _v && typeof _v['displayName'] !== 'string') return false;
+    if ('partyType' in _v && typeof _v['partyType'] !== 'string') return false;
+    if ('status' in _v && typeof _v['status'] !== 'string') return false;
+    if ('createdAt' in _v && typeof _v['createdAt'] !== 'string') return false;
+    return true;
+}
+

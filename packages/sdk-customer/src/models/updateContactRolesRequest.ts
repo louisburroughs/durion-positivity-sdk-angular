@@ -18,3 +18,10 @@ export interface UpdateContactRolesRequest {
     roles?: Array<RoleAssignment>;
 }
 
+export function instanceOfUpdateContactRolesRequest(value: object): value is UpdateContactRolesRequest {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('version' in _v && typeof _v['version'] !== 'string') return false;
+    return true;
+}
+

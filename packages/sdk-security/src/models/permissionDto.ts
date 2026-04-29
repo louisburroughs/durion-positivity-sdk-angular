@@ -17,3 +17,14 @@ export interface PermissionDto {
     deprecated?: boolean;
 }
 
+export function instanceOfPermissionDto(value: object): value is PermissionDto {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('id' in _v && typeof _v['id'] !== 'string') return false;
+    if ('name' in _v && typeof _v['name'] !== 'string') return false;
+    if ('domain' in _v && typeof _v['domain'] !== 'string') return false;
+    if ('description' in _v && typeof _v['description'] !== 'string') return false;
+    if ('deprecated' in _v && typeof _v['deprecated'] !== 'boolean') return false;
+    return true;
+}
+

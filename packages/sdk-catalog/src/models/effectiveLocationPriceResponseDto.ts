@@ -25,3 +25,14 @@ export enum EffectiveLocationPriceResponseDtoOverrideStatusEnum {
 
 
 
+export function instanceOfEffectiveLocationPriceResponseDto(value: object): value is EffectiveLocationPriceResponseDto {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('locationId' in _v && typeof _v['locationId'] !== 'string') return false;
+    if ('productId' in _v && typeof _v['productId'] !== 'string') return false;
+    if ('basePrice' in _v && typeof _v['basePrice'] !== 'number') return false;
+    if ('effectivePrice' in _v && typeof _v['effectivePrice'] !== 'number') return false;
+    if ('overrideStatus' in _v && typeof _v['overrideStatus'] !== 'string') return false;
+    return true;
+}
+

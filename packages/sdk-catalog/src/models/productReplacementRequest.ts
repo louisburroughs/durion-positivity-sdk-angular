@@ -31,3 +31,12 @@ export interface ProductReplacementRequest {
     effectiveAt?: string;
 }
 
+export function instanceOfProductReplacementRequest(value: object): value is ProductReplacementRequest {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('replacementProductId' in _v && typeof _v['replacementProductId'] !== 'string') return false;
+    if ('priorityOrder' in _v && typeof _v['priorityOrder'] !== 'number') return false;
+    if ('notes' in _v && typeof _v['notes'] !== 'string') return false;
+    return true;
+}
+

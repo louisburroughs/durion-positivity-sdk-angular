@@ -15,3 +15,15 @@ export interface SubmitCountRequest {
     actualQuantity: number;
 }
 
+export function instanceOfSubmitCountRequest(value: object): value is SubmitCountRequest {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if (!('taskId' in _v) || _v['taskId'] === undefined) return false;
+    if ('taskId' in _v && typeof _v['taskId'] !== 'string') return false;
+    if (!('auditorId' in _v) || _v['auditorId'] === undefined) return false;
+    if ('auditorId' in _v && typeof _v['auditorId'] !== 'string') return false;
+    if (!('actualQuantity' in _v) || _v['actualQuantity'] === undefined) return false;
+    if ('actualQuantity' in _v && typeof _v['actualQuantity'] !== 'number') return false;
+    return true;
+}
+

@@ -15,3 +15,10 @@ export interface GetContactsWithRolesResponse {
     contacts?: Array<ContactWithRoles>;
 }
 
+export function instanceOfGetContactsWithRolesResponse(value: object): value is GetContactsWithRolesResponse {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('partyId' in _v && typeof _v['partyId'] !== 'string') return false;
+    return true;
+}
+

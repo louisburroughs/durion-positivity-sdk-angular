@@ -25,3 +25,15 @@ export enum ReprocessingAttemptHistoryResponseOutcomeEnum {
 
 
 
+export function instanceOfReprocessingAttemptHistoryResponse(value: object): value is ReprocessingAttemptHistoryResponse {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('attemptId' in _v && typeof _v['attemptId'] !== 'string') return false;
+    if ('eventId' in _v && typeof _v['eventId'] !== 'string') return false;
+    if ('triggeredByUserId' in _v && typeof _v['triggeredByUserId'] !== 'string') return false;
+    if ('outcome' in _v && typeof _v['outcome'] !== 'string') return false;
+    if ('outcomeDetails' in _v && typeof _v['outcomeDetails'] !== 'string') return false;
+    if ('mappingVersionUsed' in _v && typeof _v['mappingVersionUsed'] !== 'string') return false;
+    return true;
+}
+

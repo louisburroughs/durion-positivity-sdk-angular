@@ -23,3 +23,17 @@ export enum AdjustmentRequestTypeEnum {
 
 
 
+export function instanceOfAdjustmentRequest(value: object): value is AdjustmentRequest {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if (!('type' in _v) || _v['type'] === undefined) return false;
+    if ('type' in _v && typeof _v['type'] !== 'string') return false;
+    if (!('amount' in _v) || _v['amount'] === undefined) return false;
+    if ('amount' in _v && typeof _v['amount'] !== 'number') return false;
+    if (!('reason' in _v) || _v['reason'] === undefined) return false;
+    if ('reason' in _v && typeof _v['reason'] !== 'string') return false;
+    if (!('authorizedBy' in _v) || _v['authorizedBy'] === undefined) return false;
+    if ('authorizedBy' in _v && typeof _v['authorizedBy'] !== 'string') return false;
+    return true;
+}
+

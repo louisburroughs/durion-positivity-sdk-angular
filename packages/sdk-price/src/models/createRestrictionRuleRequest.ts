@@ -36,3 +36,18 @@ export enum CreateRestrictionRuleRequestServiceTagEnum {
 
 
 
+export function instanceOfCreateRestrictionRuleRequest(value: object): value is CreateRestrictionRuleRequest {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if (!('productId' in _v) || _v['productId'] === undefined) return false;
+    if ('productId' in _v && typeof _v['productId'] !== 'string') return false;
+    if (!('locationTag' in _v) || _v['locationTag'] === undefined) return false;
+    if ('locationTag' in _v && typeof _v['locationTag'] !== 'string') return false;
+    if (!('serviceTag' in _v) || _v['serviceTag'] === undefined) return false;
+    if ('serviceTag' in _v && typeof _v['serviceTag'] !== 'string') return false;
+    if (!('effectiveFrom' in _v) || _v['effectiveFrom'] === undefined) return false;
+    if ('policyVersion' in _v && typeof _v['policyVersion'] !== 'number') return false;
+    if ('overrideable' in _v && typeof _v['overrideable'] !== 'boolean') return false;
+    return true;
+}
+

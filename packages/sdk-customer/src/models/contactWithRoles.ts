@@ -20,3 +20,15 @@ export interface ContactWithRoles {
     invoiceDeliveryMethod?: string;
 }
 
+export function instanceOfContactWithRoles(value: object): value is ContactWithRoles {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('contactId' in _v && typeof _v['contactId'] !== 'string') return false;
+    if ('contactName' in _v && typeof _v['contactName'] !== 'string') return false;
+    if ('email' in _v && typeof _v['email'] !== 'string') return false;
+    if ('phone' in _v && typeof _v['phone'] !== 'string') return false;
+    if ('hasPrimaryEmail' in _v && typeof _v['hasPrimaryEmail'] !== 'boolean') return false;
+    if ('invoiceDeliveryMethod' in _v && typeof _v['invoiceDeliveryMethod'] !== 'string') return false;
+    return true;
+}
+

@@ -22,3 +22,19 @@ export interface CreatePurchaseOrderRequest {
     lines: Array<PurchaseOrderLineRequest>;
 }
 
+export function instanceOfCreatePurchaseOrderRequest(value: object): value is CreatePurchaseOrderRequest {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if (!('vendorId' in _v) || _v['vendorId'] === undefined) return false;
+    if ('vendorId' in _v && typeof _v['vendorId'] !== 'string') return false;
+    if (!('poDate' in _v) || _v['poDate'] === undefined) return false;
+    if (!('currency' in _v) || _v['currency'] === undefined) return false;
+    if ('currency' in _v && typeof _v['currency'] !== 'string') return false;
+    if ('paymentTermsId' in _v && typeof _v['paymentTermsId'] !== 'string') return false;
+    if ('shipToLocationId' in _v && typeof _v['shipToLocationId'] !== 'string') return false;
+    if ('requestedBy' in _v && typeof _v['requestedBy'] !== 'string') return false;
+    if ('comment' in _v && typeof _v['comment'] !== 'string') return false;
+    if (!('lines' in _v) || _v['lines'] === undefined) return false;
+    return true;
+}
+

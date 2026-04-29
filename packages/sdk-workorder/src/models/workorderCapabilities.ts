@@ -47,3 +47,17 @@ export interface WorkorderCapabilities {
     canDeleteWorkorder?: boolean;
 }
 
+export function instanceOfWorkorderCapabilities(value: object): value is WorkorderCapabilities {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('canStart' in _v && typeof _v['canStart'] !== 'boolean') return false;
+    if ('canApprove' in _v && typeof _v['canApprove'] !== 'boolean') return false;
+    if ('canAssignTechnician' in _v && typeof _v['canAssignTechnician'] !== 'boolean') return false;
+    if ('canRecordLabor' in _v && typeof _v['canRecordLabor'] !== 'boolean') return false;
+    if ('canRecordPartsUsage' in _v && typeof _v['canRecordPartsUsage'] !== 'boolean') return false;
+    if ('canViewFinancials' in _v && typeof _v['canViewFinancials'] !== 'boolean') return false;
+    if ('canEditWorkorder' in _v && typeof _v['canEditWorkorder'] !== 'boolean') return false;
+    if ('canDeleteWorkorder' in _v && typeof _v['canDeleteWorkorder'] !== 'boolean') return false;
+    return true;
+}
+

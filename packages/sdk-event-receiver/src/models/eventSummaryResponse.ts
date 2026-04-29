@@ -23,3 +23,11 @@ export interface EventSummaryResponse {
     count?: number;
 }
 
+export function instanceOfEventSummaryResponse(value: object): value is EventSummaryResponse {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('eventTypeId' in _v && typeof _v['eventTypeId'] !== 'string') return false;
+    if ('count' in _v && typeof _v['count'] !== 'number') return false;
+    return true;
+}
+

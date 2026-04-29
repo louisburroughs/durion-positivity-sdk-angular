@@ -15,3 +15,14 @@ export interface ColumnMappingUpdateRequest {
     targetField: string;
 }
 
+export function instanceOfColumnMappingUpdateRequest(value: object): value is ColumnMappingUpdateRequest {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('mappingId' in _v && typeof _v['mappingId'] !== 'string') return false;
+    if (!('sourceColumn' in _v) || _v['sourceColumn'] === undefined) return false;
+    if ('sourceColumn' in _v && typeof _v['sourceColumn'] !== 'string') return false;
+    if (!('targetField' in _v) || _v['targetField'] === undefined) return false;
+    if ('targetField' in _v && typeof _v['targetField'] !== 'string') return false;
+    return true;
+}
+

@@ -27,3 +27,13 @@ export interface AssignTechnicianRequest {
     notes?: string;
 }
 
+export function instanceOfAssignTechnicianRequest(value: object): value is AssignTechnicianRequest {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if (!('technicianId' in _v) || _v['technicianId'] === undefined) return false;
+    if ('technicianId' in _v && typeof _v['technicianId'] !== 'string') return false;
+    if ('assignedByUserId' in _v && typeof _v['assignedByUserId'] !== 'string') return false;
+    if ('notes' in _v && typeof _v['notes'] !== 'string') return false;
+    return true;
+}
+

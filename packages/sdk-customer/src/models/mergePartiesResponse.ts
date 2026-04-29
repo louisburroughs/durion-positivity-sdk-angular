@@ -18,3 +18,15 @@ export interface MergePartiesResponse {
     completedAt?: string;
 }
 
+export function instanceOfMergePartiesResponse(value: object): value is MergePartiesResponse {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('mergeAuditId' in _v && typeof _v['mergeAuditId'] !== 'string') return false;
+    if ('survivorPartyId' in _v && typeof _v['survivorPartyId'] !== 'string') return false;
+    if ('losingPartyId' in _v && typeof _v['losingPartyId'] !== 'string') return false;
+    if ('mergedPartyAlias' in _v && typeof _v['mergedPartyAlias'] !== 'string') return false;
+    if ('status' in _v && typeof _v['status'] !== 'string') return false;
+    if ('completedAt' in _v && typeof _v['completedAt'] !== 'string') return false;
+    return true;
+}
+

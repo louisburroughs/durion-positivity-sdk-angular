@@ -27,3 +27,22 @@ export interface DefaultGLMappingResponse {
     modifiedBy?: string;
 }
 
+export function instanceOfDefaultGLMappingResponse(value: object): value is DefaultGLMappingResponse {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('mappingId' in _v && typeof _v['mappingId'] !== 'string') return false;
+    if ('eventType' in _v && typeof _v['eventType'] !== 'string') return false;
+    if ('organizationId' in _v && typeof _v['organizationId'] !== 'string') return false;
+    if ('debitAccountId' in _v && typeof _v['debitAccountId'] !== 'string') return false;
+    if ('debitAccountCode' in _v && typeof _v['debitAccountCode'] !== 'string') return false;
+    if ('debitAccountName' in _v && typeof _v['debitAccountName'] !== 'string') return false;
+    if ('creditAccountId' in _v && typeof _v['creditAccountId'] !== 'string') return false;
+    if ('creditAccountCode' in _v && typeof _v['creditAccountCode'] !== 'string') return false;
+    if ('creditAccountName' in _v && typeof _v['creditAccountName'] !== 'string') return false;
+    if ('description' in _v && typeof _v['description'] !== 'string') return false;
+    if ('active' in _v && typeof _v['active'] !== 'boolean') return false;
+    if ('createdBy' in _v && typeof _v['createdBy'] !== 'string') return false;
+    if ('modifiedBy' in _v && typeof _v['modifiedBy'] !== 'string') return false;
+    return true;
+}
+

@@ -34,3 +34,13 @@ export enum FitmentTagDtoTagTypeEnum {
 
 
 
+export function instanceOfFitmentTagDto(value: object): value is FitmentTagDto {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if (!('tagType' in _v) || _v['tagType'] === undefined) return false;
+    if ('tagType' in _v && typeof _v['tagType'] !== 'string') return false;
+    if (!('tagValue' in _v) || _v['tagValue'] === undefined) return false;
+    if ('tagValue' in _v && typeof _v['tagValue'] !== 'string') return false;
+    return true;
+}
+

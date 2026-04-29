@@ -14,3 +14,10 @@ export interface ReceivePurchaseOrderRequest {
     lines: Array<ReceivePurchaseOrderLineRequest>;
 }
 
+export function instanceOfReceivePurchaseOrderRequest(value: object): value is ReceivePurchaseOrderRequest {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if (!('lines' in _v) || _v['lines'] === undefined) return false;
+    return true;
+}
+

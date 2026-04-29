@@ -60,3 +60,15 @@ export enum WorkorderStatusViewStatusEnum {
 
 
 
+export function instanceOfWorkorderStatusView(value: object): value is WorkorderStatusView {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('workorderId' in _v && typeof _v['workorderId'] !== 'string') return false;
+    if ('status' in _v && typeof _v['status'] !== 'string') return false;
+    if ('assignedTechnicianId' in _v && typeof _v['assignedTechnicianId'] !== 'string') return false;
+    if ('locationId' in _v && typeof _v['locationId'] !== 'string') return false;
+    if ('customerName' in _v && typeof _v['customerName'] !== 'string') return false;
+    if ('vehicleInfo' in _v && typeof _v['vehicleInfo'] !== 'string') return false;
+    return true;
+}
+

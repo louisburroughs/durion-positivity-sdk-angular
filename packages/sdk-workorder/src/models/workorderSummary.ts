@@ -21,3 +21,17 @@ export interface WorkorderSummary {
     estimatedLaborHours?: number;
 }
 
+export function instanceOfWorkorderSummary(value: object): value is WorkorderSummary {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('workorderId' in _v && typeof _v['workorderId'] !== 'string') return false;
+    if ('workorderNumber' in _v && typeof _v['workorderNumber'] !== 'string') return false;
+    if ('status' in _v && typeof _v['status'] !== 'string') return false;
+    if ('customerName' in _v && typeof _v['customerName'] !== 'string') return false;
+    if ('vehicleDescription' in _v && typeof _v['vehicleDescription'] !== 'string') return false;
+    if ('assignedMechanicId' in _v && typeof _v['assignedMechanicId'] !== 'string') return false;
+    if ('assignedBayId' in _v && typeof _v['assignedBayId'] !== 'string') return false;
+    if ('estimatedLaborHours' in _v && typeof _v['estimatedLaborHours'] !== 'number') return false;
+    return true;
+}
+

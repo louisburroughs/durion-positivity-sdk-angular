@@ -27,3 +27,13 @@ export enum StorageLocationRequestTypeEnum {
 
 
 
+export function instanceOfStorageLocationRequest(value: object): value is StorageLocationRequest {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('name' in _v && typeof _v['name'] !== 'string') return false;
+    if ('barcode' in _v && typeof _v['barcode'] !== 'string') return false;
+    if ('type' in _v && typeof _v['type'] !== 'string') return false;
+    if ('parentStorageLocationId' in _v && typeof _v['parentStorageLocationId'] !== 'string') return false;
+    return true;
+}
+

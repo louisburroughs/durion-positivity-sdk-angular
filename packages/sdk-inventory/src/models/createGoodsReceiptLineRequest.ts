@@ -17,3 +17,17 @@ export interface CreateGoodsReceiptLineRequest {
     lotNumber?: string;
 }
 
+export function instanceOfCreateGoodsReceiptLineRequest(value: object): value is CreateGoodsReceiptLineRequest {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('poLineId' in _v && typeof _v['poLineId'] !== 'string') return false;
+    if (!('sku' in _v) || _v['sku'] === undefined) return false;
+    if ('sku' in _v && typeof _v['sku'] !== 'string') return false;
+    if (!('quantityReceived' in _v) || _v['quantityReceived'] === undefined) return false;
+    if ('quantityReceived' in _v && typeof _v['quantityReceived'] !== 'number') return false;
+    if (!('unitCostMinor' in _v) || _v['unitCostMinor'] === undefined) return false;
+    if ('unitCostMinor' in _v && typeof _v['unitCostMinor'] !== 'number') return false;
+    if ('lotNumber' in _v && typeof _v['lotNumber'] !== 'string') return false;
+    return true;
+}
+

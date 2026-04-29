@@ -21,3 +21,18 @@ export interface CrmMatchSummaryDto {
     reviewRequired?: boolean;
 }
 
+export function instanceOfCrmMatchSummaryDto(value: object): value is CrmMatchSummaryDto {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('candidateCount' in _v && typeof _v['candidateCount'] !== 'number') return false;
+    if ('anyMatches' in _v && typeof _v['anyMatches'] !== 'boolean') return false;
+    if ('individualCustomerCandidateCount' in _v && typeof _v['individualCustomerCandidateCount'] !== 'number') return false;
+    if ('commercialContactCandidateCount' in _v && typeof _v['commercialContactCandidateCount'] !== 'number') return false;
+    if ('sharedIdentityCandidateCount' in _v && typeof _v['sharedIdentityCandidateCount'] !== 'number') return false;
+    if ('exactEmailMatch' in _v && typeof _v['exactEmailMatch'] !== 'boolean') return false;
+    if ('exactPhoneMatch' in _v && typeof _v['exactPhoneMatch'] !== 'boolean') return false;
+    if ('exactNameMatch' in _v && typeof _v['exactNameMatch'] !== 'boolean') return false;
+    if ('reviewRequired' in _v && typeof _v['reviewRequired'] !== 'boolean') return false;
+    return true;
+}
+

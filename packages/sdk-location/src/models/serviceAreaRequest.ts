@@ -17,3 +17,12 @@ export interface ServiceAreaRequest {
     postalCodes?: Array<PostalCodeEntry>;
 }
 
+export function instanceOfServiceAreaRequest(value: object): value is ServiceAreaRequest {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('name' in _v && typeof _v['name'] !== 'string') return false;
+    if ('description' in _v && typeof _v['description'] !== 'string') return false;
+    if ('active' in _v && typeof _v['active'] !== 'boolean') return false;
+    return true;
+}
+

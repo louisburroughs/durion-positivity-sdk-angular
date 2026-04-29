@@ -173,3 +173,36 @@ export enum ProductDtoLifecycleStateEnum {
 
 
 
+export function instanceOfProductDto(value: object): value is ProductDto {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('id' in _v && typeof _v['id'] !== 'string') return false;
+    if ('name' in _v && typeof _v['name'] !== 'string') return false;
+    if ('shortDescription' in _v && typeof _v['shortDescription'] !== 'string') return false;
+    if ('longDescription' in _v && typeof _v['longDescription'] !== 'string') return false;
+    if ('description' in _v && typeof _v['description'] !== 'string') return false;
+    if ('manufacturerPartNumber' in _v && typeof _v['manufacturerPartNumber'] !== 'string') return false;
+    if ('manufacturerId' in _v && typeof _v['manufacturerId'] !== 'string') return false;
+    if ('manufacturerName' in _v && typeof _v['manufacturerName'] !== 'string') return false;
+    if ('manufacturerWarranty' in _v && typeof _v['manufacturerWarranty'] !== 'string') return false;
+    if ('manufacturerBrand' in _v && typeof _v['manufacturerBrand'] !== 'string') return false;
+    if ('countryOfOrigin' in _v && typeof _v['countryOfOrigin'] !== 'string') return false;
+    if ('sku' in _v && typeof _v['sku'] !== 'string') return false;
+    if ('mpn' in _v && typeof _v['mpn'] !== 'string') return false;
+    if ('upc' in _v && typeof _v['upc'] !== 'string') return false;
+    if ('attributes' in _v && typeof _v['attributes'] !== 'string') return false;
+    if ('unitOfMeasure' in _v && typeof _v['unitOfMeasure'] !== 'string') return false;
+    if ('status' in _v && typeof _v['status'] !== 'string') return false;
+    if ('productCode' in _v && typeof _v['productCode'] !== 'string') return false;
+    if ('productCodeType' in _v && typeof _v['productCodeType'] !== 'string') return false;
+    if ('type' in _v && typeof _v['type'] !== 'string') return false;
+    if ('material' in _v && typeof _v['material'] !== 'string') return false;
+    if ('color' in _v && typeof _v['color'] !== 'string') return false;
+    if ('warranty' in _v && typeof _v['warranty'] !== 'string') return false;
+    if ('specifications' in _v && typeof _v['specifications'] !== 'string') return false;
+    if ('lifecycleState' in _v && typeof _v['lifecycleState'] !== 'string') return false;
+    if ('lastStateChangedBy' in _v && typeof _v['lastStateChangedBy'] !== 'string') return false;
+    if ('lifecycleOverrideReason' in _v && typeof _v['lifecycleOverrideReason'] !== 'string') return false;
+    return true;
+}
+

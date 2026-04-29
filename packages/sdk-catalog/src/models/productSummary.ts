@@ -39,3 +39,15 @@ export interface ProductSummary {
     manufacturerBrand?: string;
 }
 
+export function instanceOfProductSummary(value: object): value is ProductSummary {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('productId' in _v && typeof _v['productId'] !== 'string') return false;
+    if ('name' in _v && typeof _v['name'] !== 'string') return false;
+    if ('sku' in _v && typeof _v['sku'] !== 'string') return false;
+    if ('category' in _v && typeof _v['category'] !== 'string') return false;
+    if ('thumbnailUrl' in _v && typeof _v['thumbnailUrl'] !== 'string') return false;
+    if ('manufacturerBrand' in _v && typeof _v['manufacturerBrand'] !== 'string') return false;
+    return true;
+}
+

@@ -28,3 +28,11 @@ export interface CatalogSearchResultDto {
     limit?: number;
 }
 
+export function instanceOfCatalogSearchResultDto(value: object): value is CatalogSearchResultDto {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('nextCursor' in _v && typeof _v['nextCursor'] !== 'string') return false;
+    if ('limit' in _v && typeof _v['limit'] !== 'number') return false;
+    return true;
+}
+

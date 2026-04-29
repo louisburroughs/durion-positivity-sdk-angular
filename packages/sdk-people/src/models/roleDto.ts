@@ -17,3 +17,14 @@ export interface RoleDto {
     active?: boolean;
 }
 
+export function instanceOfRoleDto(value: object): value is RoleDto {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('code' in _v && typeof _v['code'] !== 'string') return false;
+    if ('name' in _v && typeof _v['name'] !== 'string') return false;
+    if ('description' in _v && typeof _v['description'] !== 'string') return false;
+    if ('scopeType' in _v && typeof _v['scopeType'] !== 'string') return false;
+    if ('active' in _v && typeof _v['active'] !== 'boolean') return false;
+    return true;
+}
+

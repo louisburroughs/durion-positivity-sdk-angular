@@ -57,3 +57,14 @@ export enum ReportExportResponseFormatEnum {
 
 
 
+export function instanceOfReportExportResponse(value: object): value is ReportExportResponse {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('exportId' in _v && typeof _v['exportId'] !== 'string') return false;
+    if ('status' in _v && typeof _v['status'] !== 'string') return false;
+    if ('downloadUrl' in _v && typeof _v['downloadUrl'] !== 'string') return false;
+    if ('format' in _v && typeof _v['format'] !== 'string') return false;
+    if ('reportType' in _v && typeof _v['reportType'] !== 'string') return false;
+    return true;
+}
+

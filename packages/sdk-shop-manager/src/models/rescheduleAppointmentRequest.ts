@@ -30,3 +30,15 @@ export enum RescheduleAppointmentRequestReasonEnum {
 
 
 
+export function instanceOfRescheduleAppointmentRequest(value: object): value is RescheduleAppointmentRequest {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if (!('newStartAt' in _v) || _v['newStartAt'] === undefined) return false;
+    if (!('newEndAt' in _v) || _v['newEndAt'] === undefined) return false;
+    if (!('reason' in _v) || _v['reason'] === undefined) return false;
+    if ('reason' in _v && typeof _v['reason'] !== 'string') return false;
+    if ('rescheduleReasonNotes' in _v && typeof _v['rescheduleReasonNotes'] !== 'string') return false;
+    if ('notifyCustomer' in _v && typeof _v['notifyCustomer'] !== 'boolean') return false;
+    return true;
+}
+

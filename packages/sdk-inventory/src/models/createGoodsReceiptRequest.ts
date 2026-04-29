@@ -17,3 +17,15 @@ export interface CreateGoodsReceiptRequest {
     lines: Array<CreateGoodsReceiptLineRequest>;
 }
 
+export function instanceOfCreateGoodsReceiptRequest(value: object): value is CreateGoodsReceiptRequest {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if (!('poId' in _v) || _v['poId'] === undefined) return false;
+    if ('poId' in _v && typeof _v['poId'] !== 'string') return false;
+    if ('asnId' in _v && typeof _v['asnId'] !== 'string') return false;
+    if (!('locationId' in _v) || _v['locationId'] === undefined) return false;
+    if ('locationId' in _v && typeof _v['locationId'] !== 'string') return false;
+    if (!('lines' in _v) || _v['lines'] === undefined) return false;
+    return true;
+}
+

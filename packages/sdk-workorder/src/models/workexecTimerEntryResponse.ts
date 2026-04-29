@@ -51,3 +51,16 @@ export interface WorkexecTimerEntryResponse {
     status?: string;
 }
 
+export function instanceOfWorkexecTimerEntryResponse(value: object): value is WorkexecTimerEntryResponse {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('timeEntryId' in _v && typeof _v['timeEntryId'] !== 'string') return false;
+    if ('mechanicId' in _v && typeof _v['mechanicId'] !== 'string') return false;
+    if ('workorderId' in _v && typeof _v['workorderId'] !== 'string') return false;
+    if ('workorderItemId' in _v && typeof _v['workorderItemId'] !== 'string') return false;
+    if ('laborCode' in _v && typeof _v['laborCode'] !== 'string') return false;
+    if ('durationInSeconds' in _v && typeof _v['durationInSeconds'] !== 'number') return false;
+    if ('status' in _v && typeof _v['status'] !== 'string') return false;
+    return true;
+}
+

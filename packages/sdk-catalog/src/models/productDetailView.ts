@@ -58,3 +58,12 @@ export enum ProductDetailViewConfidenceEnum {
 
 
 
+export function instanceOfProductDetailView(value: object): value is ProductDetailView {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('productId' in _v && typeof _v['productId'] !== 'string') return false;
+    if ('description' in _v && typeof _v['description'] !== 'string') return false;
+    if ('confidence' in _v && typeof _v['confidence'] !== 'string') return false;
+    return true;
+}
+

@@ -31,3 +31,17 @@ export interface Person {
     username?: string;
 }
 
+export function instanceOfPerson(value: object): value is Person {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('id' in _v && typeof _v['id'] !== 'string') return false;
+    if (!('firstName' in _v) || _v['firstName'] === undefined) return false;
+    if ('firstName' in _v && typeof _v['firstName'] !== 'string') return false;
+    if (!('lastName' in _v) || _v['lastName'] === undefined) return false;
+    if ('lastName' in _v && typeof _v['lastName'] !== 'string') return false;
+    if ('primaryEmail' in _v && typeof _v['primaryEmail'] !== 'string') return false;
+    if ('secondaryEmail' in _v && typeof _v['secondaryEmail'] !== 'string') return false;
+    if ('username' in _v && typeof _v['username'] !== 'string') return false;
+    return true;
+}
+

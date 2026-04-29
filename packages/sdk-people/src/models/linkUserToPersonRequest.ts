@@ -16,3 +16,15 @@ export interface LinkUserToPersonRequest {
     notes?: string;
 }
 
+export function instanceOfLinkUserToPersonRequest(value: object): value is LinkUserToPersonRequest {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if (!('userId' in _v) || _v['userId'] === undefined) return false;
+    if ('userId' in _v && typeof _v['userId'] !== 'string') return false;
+    if (!('personId' in _v) || _v['personId'] === undefined) return false;
+    if ('personId' in _v && typeof _v['personId'] !== 'string') return false;
+    if ('linkType' in _v && typeof _v['linkType'] !== 'string') return false;
+    if ('notes' in _v && typeof _v['notes'] !== 'string') return false;
+    return true;
+}
+

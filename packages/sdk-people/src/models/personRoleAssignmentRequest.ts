@@ -16,3 +16,12 @@ export interface PersonRoleAssignmentRequest {
     endDate?: string;
 }
 
+export function instanceOfPersonRoleAssignmentRequest(value: object): value is PersonRoleAssignmentRequest {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if (!('roleCode' in _v) || _v['roleCode'] === undefined) return false;
+    if ('roleCode' in _v && typeof _v['roleCode'] !== 'string') return false;
+    if ('locationId' in _v && typeof _v['locationId'] !== 'string') return false;
+    return true;
+}
+

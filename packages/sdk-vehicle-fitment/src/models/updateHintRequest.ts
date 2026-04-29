@@ -20,3 +20,10 @@ export interface UpdateHintRequest {
     fitmentTags: Array<FitmentTagDto>;
 }
 
+export function instanceOfUpdateHintRequest(value: object): value is UpdateHintRequest {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if (!('fitmentTags' in _v) || _v['fitmentTags'] === undefined) return false;
+    return true;
+}
+

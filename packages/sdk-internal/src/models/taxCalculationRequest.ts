@@ -64,3 +64,22 @@ export enum TaxCalculationRequestReferenceTypeEnum {
 
 
 
+export function instanceOfTaxCalculationRequest(value: object): value is TaxCalculationRequest {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if (!('lineItems' in _v) || _v['lineItems'] === undefined) return false;
+    if (!('destinationAddress' in _v) || _v['destinationAddress'] === undefined) return false;
+    if ('currencyCode' in _v && typeof _v['currencyCode'] !== 'string') return false;
+    if ('locale' in _v && typeof _v['locale'] !== 'string') return false;
+    if ('customerId' in _v && typeof _v['customerId'] !== 'string') return false;
+    if ('transactionDate' in _v && typeof _v['transactionDate'] !== 'string') return false;
+    if ('referenceId' in _v && typeof _v['referenceId'] !== 'string') return false;
+    if ('referenceType' in _v && typeof _v['referenceType'] !== 'string') return false;
+    if ('address' in _v && typeof _v['address'] !== 'string') return false;
+    if ('countryCode' in _v && typeof _v['countryCode'] !== 'string') return false;
+    if ('postalCode' in _v && typeof _v['postalCode'] !== 'string') return false;
+    if ('stateCode' in _v && typeof _v['stateCode'] !== 'string') return false;
+    if ('city' in _v && typeof _v['city'] !== 'string') return false;
+    return true;
+}
+

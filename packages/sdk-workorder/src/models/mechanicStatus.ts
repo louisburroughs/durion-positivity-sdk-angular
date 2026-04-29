@@ -21,3 +21,15 @@ export interface MechanicStatus {
     ptoEntries?: Array<PtoEntry>;
 }
 
+export function instanceOfMechanicStatus(value: object): value is MechanicStatus {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('personId' in _v && typeof _v['personId'] !== 'string') return false;
+    if ('firstName' in _v && typeof _v['firstName'] !== 'string') return false;
+    if ('lastName' in _v && typeof _v['lastName'] !== 'string') return false;
+    if ('currentStatus' in _v && typeof _v['currentStatus'] !== 'string') return false;
+    if ('assignedWorkorderId' in _v && typeof _v['assignedWorkorderId'] !== 'string') return false;
+    if ('onBreak' in _v && typeof _v['onBreak'] !== 'boolean') return false;
+    return true;
+}
+

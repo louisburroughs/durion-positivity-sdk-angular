@@ -14,3 +14,10 @@ export interface RolePermissionsRequest {
     permissionNames?: Set<string>;
 }
 
+export function instanceOfRolePermissionsRequest(value: object): value is RolePermissionsRequest {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('roleId' in _v && typeof _v['roleId'] !== 'string') return false;
+    return true;
+}
+

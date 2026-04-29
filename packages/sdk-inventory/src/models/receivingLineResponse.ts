@@ -19,3 +19,16 @@ export interface ReceivingLineResponse {
     workorderLineId?: string;
 }
 
+export function instanceOfReceivingLineResponse(value: object): value is ReceivingLineResponse {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('lineId' in _v && typeof _v['lineId'] !== 'string') return false;
+    if ('productId' in _v && typeof _v['productId'] !== 'string') return false;
+    if ('expectedQuantity' in _v && typeof _v['expectedQuantity'] !== 'number') return false;
+    if ('receivedQuantity' in _v && typeof _v['receivedQuantity'] !== 'number') return false;
+    if ('status' in _v && typeof _v['status'] !== 'string') return false;
+    if ('workorderId' in _v && typeof _v['workorderId'] !== 'string') return false;
+    if ('workorderLineId' in _v && typeof _v['workorderLineId'] !== 'string') return false;
+    return true;
+}
+

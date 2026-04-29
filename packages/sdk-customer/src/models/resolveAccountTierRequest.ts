@@ -39,3 +39,15 @@ export interface ResolveAccountTierRequest {
     forceRecalculation?: boolean;
 }
 
+export function instanceOfResolveAccountTierRequest(value: object): value is ResolveAccountTierRequest {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('accountId' in _v && typeof _v['accountId'] !== 'string') return false;
+    if ('annualRevenue' in _v && typeof _v['annualRevenue'] !== 'number') return false;
+    if ('activeContractCount' in _v && typeof _v['activeContractCount'] !== 'number') return false;
+    if ('accountAgeMonths' in _v && typeof _v['accountAgeMonths'] !== 'number') return false;
+    if ('applyTier' in _v && typeof _v['applyTier'] !== 'boolean') return false;
+    if ('forceRecalculation' in _v && typeof _v['forceRecalculation'] !== 'boolean') return false;
+    return true;
+}
+

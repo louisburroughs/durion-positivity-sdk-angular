@@ -47,3 +47,17 @@ export interface WorkorderItemDTO {
     photoNotPossible?: boolean;
 }
 
+export function instanceOfWorkorderItemDTO(value: object): value is WorkorderItemDTO {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('serviceEntityId' in _v && typeof _v['serviceEntityId'] !== 'string') return false;
+    if ('productEntityId' in _v && typeof _v['productEntityId'] !== 'string') return false;
+    if ('nonInventoryProductEntityId' in _v && typeof _v['nonInventoryProductEntityId'] !== 'string') return false;
+    if ('quantity' in _v && typeof _v['quantity'] !== 'number') return false;
+    if ('isEmergencySafety' in _v && typeof _v['isEmergencySafety'] !== 'boolean') return false;
+    if ('photoEvidenceUrl' in _v && typeof _v['photoEvidenceUrl'] !== 'string') return false;
+    if ('emergencyNotes' in _v && typeof _v['emergencyNotes'] !== 'string') return false;
+    if ('photoNotPossible' in _v && typeof _v['photoNotPossible'] !== 'boolean') return false;
+    return true;
+}
+

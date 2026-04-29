@@ -23,3 +23,12 @@ export interface WorkSessionRequest {
     actor?: string;
 }
 
+export function instanceOfWorkSessionRequest(value: object): value is WorkSessionRequest {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if (!('personId' in _v) || _v['personId'] === undefined) return false;
+    if ('personId' in _v && typeof _v['personId'] !== 'string') return false;
+    if ('actor' in _v && typeof _v['actor'] !== 'string') return false;
+    return true;
+}
+

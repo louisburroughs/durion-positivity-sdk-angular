@@ -25,3 +25,18 @@ export interface CreateCommercialAccountRequest {
     phone?: string;
 }
 
+export function instanceOfCreateCommercialAccountRequest(value: object): value is CreateCommercialAccountRequest {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('legalName' in _v && typeof _v['legalName'] !== 'string') return false;
+    if ('displayName' in _v && typeof _v['displayName'] !== 'string') return false;
+    if ('taxId' in _v && typeof _v['taxId'] !== 'string') return false;
+    if ('partyType' in _v && typeof _v['partyType'] !== 'string') return false;
+    if ('billingTermsId' in _v && typeof _v['billingTermsId'] !== 'string') return false;
+    if ('contactFirstName' in _v && typeof _v['contactFirstName'] !== 'string') return false;
+    if ('contactLastName' in _v && typeof _v['contactLastName'] !== 'string') return false;
+    if ('email' in _v && typeof _v['email'] !== 'string') return false;
+    if ('phone' in _v && typeof _v['phone'] !== 'string') return false;
+    return true;
+}
+

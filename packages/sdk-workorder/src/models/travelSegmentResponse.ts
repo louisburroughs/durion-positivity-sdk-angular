@@ -59,3 +59,25 @@ export enum TravelSegmentResponseOnBehalfReasonCodeEnum {
 
 
 
+export function instanceOfTravelSegmentResponse(value: object): value is TravelSegmentResponse {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('travelSegmentId' in _v && typeof _v['travelSegmentId'] !== 'string') return false;
+    if ('mobileWorkAssignmentId' in _v && typeof _v['mobileWorkAssignmentId'] !== 'string') return false;
+    if ('technicianId' in _v && typeof _v['technicianId'] !== 'string') return false;
+    if ('segmentType' in _v && typeof _v['segmentType'] !== 'string') return false;
+    if ('fromLocationId' in _v && typeof _v['fromLocationId'] !== 'string') return false;
+    if ('toLocationId' in _v && typeof _v['toLocationId'] !== 'string') return false;
+    if ('workOrderId' in _v && typeof _v['workOrderId'] !== 'string') return false;
+    if ('durationMinutes' in _v && typeof _v['durationMinutes'] !== 'number') return false;
+    if ('rawMinutes' in _v && typeof _v['rawMinutes'] !== 'number') return false;
+    if ('bufferedMinutes' in _v && typeof _v['bufferedMinutes'] !== 'number') return false;
+    if ('status' in _v && typeof _v['status'] !== 'string') return false;
+    if ('createdBy' in _v && typeof _v['createdBy'] !== 'string') return false;
+    if ('lastModifiedBy' in _v && typeof _v['lastModifiedBy'] !== 'string') return false;
+    if ('actedByUserId' in _v && typeof _v['actedByUserId'] !== 'string') return false;
+    if ('actedForPersonId' in _v && typeof _v['actedForPersonId'] !== 'string') return false;
+    if ('onBehalfReasonCode' in _v && typeof _v['onBehalfReasonCode'] !== 'string') return false;
+    return true;
+}
+

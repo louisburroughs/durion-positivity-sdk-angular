@@ -51,3 +51,14 @@ export enum LeadTimeInfoConfidenceEnum {
 
 
 
+export function instanceOfLeadTimeInfo(value: object): value is LeadTimeInfo {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('source' in _v && typeof _v['source'] !== 'string') return false;
+    if ('minDays' in _v && typeof _v['minDays'] !== 'number') return false;
+    if ('maxDays' in _v && typeof _v['maxDays'] !== 'number') return false;
+    if ('displayText' in _v && typeof _v['displayText'] !== 'string') return false;
+    if ('confidence' in _v && typeof _v['confidence'] !== 'string') return false;
+    return true;
+}
+

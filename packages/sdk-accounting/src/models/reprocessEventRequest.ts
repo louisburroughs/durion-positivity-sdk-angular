@@ -15,3 +15,13 @@ export interface ReprocessEventRequest {
     reprocessingNotes?: string;
 }
 
+export function instanceOfReprocessEventRequest(value: object): value is ReprocessEventRequest {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if (!('triggeredByUserId' in _v) || _v['triggeredByUserId'] === undefined) return false;
+    if ('triggeredByUserId' in _v && typeof _v['triggeredByUserId'] !== 'string') return false;
+    if ('mappingVersionToUse' in _v && typeof _v['mappingVersionToUse'] !== 'string') return false;
+    if ('reprocessingNotes' in _v && typeof _v['reprocessingNotes'] !== 'string') return false;
+    return true;
+}
+

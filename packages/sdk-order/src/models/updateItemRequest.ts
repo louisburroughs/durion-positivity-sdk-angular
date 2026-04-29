@@ -13,3 +13,10 @@ export interface UpdateItemRequest {
     quantity?: number;
 }
 
+export function instanceOfUpdateItemRequest(value: object): value is UpdateItemRequest {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('quantity' in _v && typeof _v['quantity'] !== 'number') return false;
+    return true;
+}
+

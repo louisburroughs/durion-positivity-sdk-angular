@@ -13,3 +13,10 @@ export interface CompletePickTaskRequest {
     reason?: string;
 }
 
+export function instanceOfCompletePickTaskRequest(value: object): value is CompletePickTaskRequest {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('reason' in _v && typeof _v['reason'] !== 'string') return false;
+    return true;
+}
+

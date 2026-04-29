@@ -63,3 +63,18 @@ export interface WorkorderLaborEntryResponse {
     createdAt?: string;
 }
 
+export function instanceOfWorkorderLaborEntryResponse(value: object): value is WorkorderLaborEntryResponse {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('id' in _v && typeof _v['id'] !== 'string') return false;
+    if ('workorderId' in _v && typeof _v['workorderId'] !== 'string') return false;
+    if ('workorderServiceId' in _v && typeof _v['workorderServiceId'] !== 'string') return false;
+    if ('technicianId' in _v && typeof _v['technicianId'] !== 'string') return false;
+    if ('hoursWorked' in _v && typeof _v['hoursWorked'] !== 'number') return false;
+    if ('notes' in _v && typeof _v['notes'] !== 'string') return false;
+    if ('adjustmentReason' in _v && typeof _v['adjustmentReason'] !== 'string') return false;
+    if ('active' in _v && typeof _v['active'] !== 'boolean') return false;
+    if ('createdBy' in _v && typeof _v['createdBy'] !== 'string') return false;
+    return true;
+}
+

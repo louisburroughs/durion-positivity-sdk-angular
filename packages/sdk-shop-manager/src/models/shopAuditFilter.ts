@@ -9,14 +9,41 @@
  */
 
 
+/**
+ * Filter criteria for querying the shop audit trail. At least one field must be non-null.
+ */
 export interface ShopAuditFilter { 
+    /**
+     * Workorder UUID to filter by - one word per workspace naming policy
+     */
     workorderId?: string;
+    /**
+     * Appointment UUID to filter by
+     */
     appointmentId?: string;
+    /**
+     * Mechanic user ID to filter by
+     */
     mechanicId?: string;
+    /**
+     * Actor user ID to filter by
+     */
     actorUserId?: string;
+    /**
+     * Specific audit event type to filter by
+     */
     eventType?: ShopAuditFilterEventTypeEnum;
+    /**
+     * Location ID to filter by
+     */
     locationId?: string;
+    /**
+     * Inclusive start timestamp for date-time range filter
+     */
     fromDateTime?: string;
+    /**
+     * Inclusive end timestamp for date-time range filter
+     */
     toDateTime?: string;
 }
 export enum ShopAuditFilterEventTypeEnum {
@@ -28,4 +55,16 @@ export enum ShopAuditFilterEventTypeEnum {
 };
 
 
+
+export function instanceOfShopAuditFilter(value: object): value is ShopAuditFilter {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('workorderId' in _v && typeof _v['workorderId'] !== 'string') return false;
+    if ('appointmentId' in _v && typeof _v['appointmentId'] !== 'string') return false;
+    if ('mechanicId' in _v && typeof _v['mechanicId'] !== 'string') return false;
+    if ('actorUserId' in _v && typeof _v['actorUserId'] !== 'string') return false;
+    if ('eventType' in _v && typeof _v['eventType'] !== 'string') return false;
+    if ('locationId' in _v && typeof _v['locationId'] !== 'string') return false;
+    return true;
+}
 

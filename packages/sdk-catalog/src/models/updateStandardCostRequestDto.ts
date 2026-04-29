@@ -23,3 +23,13 @@ export interface UpdateStandardCostRequestDto {
     reasonCode: string;
 }
 
+export function instanceOfUpdateStandardCostRequestDto(value: object): value is UpdateStandardCostRequestDto {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if (!('newCost' in _v) || _v['newCost'] === undefined) return false;
+    if ('newCost' in _v && typeof _v['newCost'] !== 'number') return false;
+    if (!('reasonCode' in _v) || _v['reasonCode'] === undefined) return false;
+    if ('reasonCode' in _v && typeof _v['reasonCode'] !== 'string') return false;
+    return true;
+}
+

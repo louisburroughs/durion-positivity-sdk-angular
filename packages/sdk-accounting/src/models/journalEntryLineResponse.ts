@@ -51,3 +51,17 @@ export interface JournalEntryLineResponse {
     dimensions?: { [key: string]: string; };
 }
 
+export function instanceOfJournalEntryLineResponse(value: object): value is JournalEntryLineResponse {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('lineId' in _v && typeof _v['lineId'] !== 'string') return false;
+    if ('lineNumber' in _v && typeof _v['lineNumber'] !== 'number') return false;
+    if ('glAccountId' in _v && typeof _v['glAccountId'] !== 'string') return false;
+    if ('accountCode' in _v && typeof _v['accountCode'] !== 'string') return false;
+    if ('accountName' in _v && typeof _v['accountName'] !== 'string') return false;
+    if ('debitAmount' in _v && typeof _v['debitAmount'] !== 'number') return false;
+    if ('creditAmount' in _v && typeof _v['creditAmount'] !== 'number') return false;
+    if ('description' in _v && typeof _v['description'] !== 'string') return false;
+    return true;
+}
+

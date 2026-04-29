@@ -18,3 +18,17 @@ export interface UpdateMsrpRequestDto {
     version?: number;
 }
 
+export function instanceOfUpdateMsrpRequestDto(value: object): value is UpdateMsrpRequestDto {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if (!('amount' in _v) || _v['amount'] === undefined) return false;
+    if ('amount' in _v && typeof _v['amount'] !== 'number') return false;
+    if (!('currency' in _v) || _v['currency'] === undefined) return false;
+    if ('currency' in _v && typeof _v['currency'] !== 'string') return false;
+    if (!('effectiveStartDate' in _v) || _v['effectiveStartDate'] === undefined) return false;
+    if (!('createdByUserId' in _v) || _v['createdByUserId'] === undefined) return false;
+    if ('createdByUserId' in _v && typeof _v['createdByUserId'] !== 'string') return false;
+    if ('version' in _v && typeof _v['version'] !== 'number') return false;
+    return true;
+}
+

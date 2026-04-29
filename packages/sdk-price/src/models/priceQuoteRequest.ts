@@ -35,3 +35,17 @@ export interface PriceQuoteRequest {
     effectiveTimestamp?: string | null;
 }
 
+export function instanceOfPriceQuoteRequest(value: object): value is PriceQuoteRequest {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if (!('productId' in _v) || _v['productId'] === undefined) return false;
+    if ('productId' in _v && typeof _v['productId'] !== 'string') return false;
+    if (!('quantity' in _v) || _v['quantity'] === undefined) return false;
+    if ('quantity' in _v && typeof _v['quantity'] !== 'number') return false;
+    if (!('locationId' in _v) || _v['locationId'] === undefined) return false;
+    if ('locationId' in _v && typeof _v['locationId'] !== 'string') return false;
+    if (!('customerTierId' in _v) || _v['customerTierId'] === undefined) return false;
+    if ('customerTierId' in _v && typeof _v['customerTierId'] !== 'string') return false;
+    return true;
+}
+

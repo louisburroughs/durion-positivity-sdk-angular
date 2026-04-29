@@ -14,3 +14,11 @@ export interface ModeResponse {
     testMode?: boolean;
 }
 
+export function instanceOfModeResponse(value: object): value is ModeResponse {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('mode' in _v && typeof _v['mode'] !== 'string') return false;
+    if ('testMode' in _v && typeof _v['testMode'] !== 'boolean') return false;
+    return true;
+}
+

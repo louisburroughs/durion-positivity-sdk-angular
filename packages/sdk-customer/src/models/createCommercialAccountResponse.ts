@@ -18,3 +18,12 @@ export interface CreateCommercialAccountResponse {
     duplicateCandidates?: Array<DuplicateCandidate>;
 }
 
+export function instanceOfCreateCommercialAccountResponse(value: object): value is CreateCommercialAccountResponse {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('partyId' in _v && typeof _v['partyId'] !== 'string') return false;
+    if ('legalName' in _v && typeof _v['legalName'] !== 'string') return false;
+    if ('status' in _v && typeof _v['status'] !== 'string') return false;
+    return true;
+}
+

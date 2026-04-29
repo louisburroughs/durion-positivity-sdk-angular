@@ -23,3 +23,12 @@ export interface FilterProductsResponse {
     count: number;
 }
 
+export function instanceOfFilterProductsResponse(value: object): value is FilterProductsResponse {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if (!('productIds' in _v) || _v['productIds'] === undefined) return false;
+    if (!('count' in _v) || _v['count'] === undefined) return false;
+    if ('count' in _v && typeof _v['count'] !== 'number') return false;
+    return true;
+}
+

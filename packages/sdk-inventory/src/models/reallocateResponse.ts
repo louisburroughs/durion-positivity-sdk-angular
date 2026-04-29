@@ -16,3 +16,13 @@ export interface ReallocateResponse {
     atpAfterReallocation?: number;
 }
 
+export function instanceOfReallocateResponse(value: object): value is ReallocateResponse {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('stockItemId' in _v && typeof _v['stockItemId'] !== 'string') return false;
+    if ('totalReallocated' in _v && typeof _v['totalReallocated'] !== 'number') return false;
+    if ('auditRecordsCreated' in _v && typeof _v['auditRecordsCreated'] !== 'number') return false;
+    if ('atpAfterReallocation' in _v && typeof _v['atpAfterReallocation'] !== 'number') return false;
+    return true;
+}
+

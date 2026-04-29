@@ -23,3 +23,11 @@ export interface EligibilityContext {
     vehicleId?: string | null;
 }
 
+export function instanceOfEligibilityContext(value: object): value is EligibilityContext {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('accountId' in _v && _v['accountId'] !== null && typeof _v['accountId'] !== 'string') return false;
+    if ('vehicleId' in _v && _v['vehicleId'] !== null && typeof _v['vehicleId'] !== 'string') return false;
+    return true;
+}
+

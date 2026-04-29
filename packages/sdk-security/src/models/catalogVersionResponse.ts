@@ -14,3 +14,11 @@ export interface CatalogVersionResponse {
     permissionCount?: number;
 }
 
+export function instanceOfCatalogVersionResponse(value: object): value is CatalogVersionResponse {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('version' in _v && typeof _v['version'] !== 'number') return false;
+    if ('permissionCount' in _v && typeof _v['permissionCount'] !== 'number') return false;
+    return true;
+}
+

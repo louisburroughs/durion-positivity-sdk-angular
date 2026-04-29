@@ -14,3 +14,11 @@ export interface SiteDefaultsRequest {
     defaultQuarantineLocationId?: string;
 }
 
+export function instanceOfSiteDefaultsRequest(value: object): value is SiteDefaultsRequest {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('defaultStagingLocationId' in _v && typeof _v['defaultStagingLocationId'] !== 'string') return false;
+    if ('defaultQuarantineLocationId' in _v && typeof _v['defaultQuarantineLocationId'] !== 'string') return false;
+    return true;
+}
+

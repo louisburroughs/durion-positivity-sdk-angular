@@ -36,3 +36,13 @@ export interface InvoiceCreationRequest {
     lineItems?: Array<InvoiceLineItem>;
 }
 
+export function instanceOfInvoiceCreationRequest(value: object): value is InvoiceCreationRequest {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('workorderId' in _v && typeof _v['workorderId'] !== 'string') return false;
+    if ('estimateId' in _v && typeof _v['estimateId'] !== 'string') return false;
+    if ('approvalId' in _v && typeof _v['approvalId'] !== 'string') return false;
+    if ('idempotencyKey' in _v && typeof _v['idempotencyKey'] !== 'string') return false;
+    return true;
+}
+

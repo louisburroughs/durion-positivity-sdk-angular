@@ -20,3 +20,11 @@ export enum AssignedMechanicInfoRoleEnum {
 
 
 
+export function instanceOfAssignedMechanicInfo(value: object): value is AssignedMechanicInfo {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('mechanicId' in _v && typeof _v['mechanicId'] !== 'string') return false;
+    if ('role' in _v && typeof _v['role'] !== 'string') return false;
+    return true;
+}
+

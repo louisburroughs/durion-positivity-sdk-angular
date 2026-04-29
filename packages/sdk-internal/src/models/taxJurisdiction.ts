@@ -66,3 +66,23 @@ export enum TaxJurisdictionJurisdictionTypeEnum {
 
 
 
+export function instanceOfTaxJurisdiction(value: object): value is TaxJurisdiction {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if (!('countryCode' in _v) || _v['countryCode'] === undefined) return false;
+    if ('countryCode' in _v && typeof _v['countryCode'] !== 'string') return false;
+    if ('regionCode' in _v && typeof _v['regionCode'] !== 'string') return false;
+    if ('city' in _v && typeof _v['city'] !== 'string') return false;
+    if ('postalCode' in _v && typeof _v['postalCode'] !== 'string') return false;
+    if ('line1' in _v && typeof _v['line1'] !== 'string') return false;
+    if ('line2' in _v && typeof _v['line2'] !== 'string') return false;
+    if (!('taxRate' in _v) || _v['taxRate'] === undefined) return false;
+    if ('taxRate' in _v && typeof _v['taxRate'] !== 'number') return false;
+    if (!('jurisdictionType' in _v) || _v['jurisdictionType'] === undefined) return false;
+    if ('jurisdictionType' in _v && typeof _v['jurisdictionType'] !== 'string') return false;
+    if (!('taxAmount' in _v) || _v['taxAmount'] === undefined) return false;
+    if ('taxAmount' in _v && typeof _v['taxAmount'] !== 'number') return false;
+    if ('jurisdictionTypeI18nKey' in _v && typeof _v['jurisdictionTypeI18nKey'] !== 'string') return false;
+    return true;
+}
+

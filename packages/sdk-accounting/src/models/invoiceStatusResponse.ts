@@ -28,3 +28,15 @@ export enum InvoiceStatusResponseStatusEnum {
 
 
 
+export function instanceOfInvoiceStatusResponse(value: object): value is InvoiceStatusResponse {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('invoiceId' in _v && typeof _v['invoiceId'] !== 'string') return false;
+    if ('status' in _v && typeof _v['status'] !== 'string') return false;
+    if ('totalPaid' in _v && typeof _v['totalPaid'] !== 'number') return false;
+    if ('invoiceTotal' in _v && typeof _v['invoiceTotal'] !== 'number') return false;
+    if ('remainingBalance' in _v && typeof _v['remainingBalance'] !== 'number') return false;
+    if ('latestTransactionReference' in _v && typeof _v['latestTransactionReference'] !== 'string') return false;
+    return true;
+}
+

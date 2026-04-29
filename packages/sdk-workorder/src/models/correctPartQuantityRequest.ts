@@ -31,3 +31,16 @@ export interface CorrectPartQuantityRequest {
     notes?: string;
 }
 
+export function instanceOfCorrectPartQuantityRequest(value: object): value is CorrectPartQuantityRequest {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if (!('workorderPartId' in _v) || _v['workorderPartId'] === undefined) return false;
+    if ('workorderPartId' in _v && typeof _v['workorderPartId'] !== 'string') return false;
+    if (!('newQuantity' in _v) || _v['newQuantity'] === undefined) return false;
+    if ('newQuantity' in _v && typeof _v['newQuantity'] !== 'number') return false;
+    if (!('reason' in _v) || _v['reason'] === undefined) return false;
+    if ('reason' in _v && typeof _v['reason'] !== 'string') return false;
+    if ('notes' in _v && typeof _v['notes'] !== 'string') return false;
+    return true;
+}
+

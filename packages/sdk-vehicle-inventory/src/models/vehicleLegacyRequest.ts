@@ -21,3 +21,15 @@ export interface VehicleLegacyRequest {
     vehicleType?: string;
 }
 
+export function instanceOfVehicleLegacyRequest(value: object): value is VehicleLegacyRequest {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('id' in _v && typeof _v['id'] !== 'string') return false;
+    if ('make' in _v && typeof _v['make'] !== 'string') return false;
+    if ('model' in _v && typeof _v['model'] !== 'string') return false;
+    if ('year' in _v && typeof _v['year'] !== 'number') return false;
+    if ('vin' in _v && typeof _v['vin'] !== 'string') return false;
+    if ('vehicleType' in _v && typeof _v['vehicleType'] !== 'string') return false;
+    return true;
+}
+

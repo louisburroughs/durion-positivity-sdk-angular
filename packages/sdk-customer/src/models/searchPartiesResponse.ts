@@ -17,3 +17,12 @@ export interface SearchPartiesResponse {
     pageSize?: number;
 }
 
+export function instanceOfSearchPartiesResponse(value: object): value is SearchPartiesResponse {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('totalCount' in _v && typeof _v['totalCount'] !== 'number') return false;
+    if ('pageNumber' in _v && typeof _v['pageNumber'] !== 'number') return false;
+    if ('pageSize' in _v && typeof _v['pageSize'] !== 'number') return false;
+    return true;
+}
+

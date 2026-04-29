@@ -35,3 +35,18 @@ export interface LineItemTax {
     taxExempt?: boolean;
 }
 
+export function instanceOfLineItemTax(value: object): value is LineItemTax {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if (!('lineItemId' in _v) || _v['lineItemId'] === undefined) return false;
+    if ('lineItemId' in _v && typeof _v['lineItemId'] !== 'string') return false;
+    if (!('subtotal' in _v) || _v['subtotal'] === undefined) return false;
+    if ('subtotal' in _v && typeof _v['subtotal'] !== 'number') return false;
+    if (!('taxAmount' in _v) || _v['taxAmount'] === undefined) return false;
+    if ('taxAmount' in _v && typeof _v['taxAmount'] !== 'number') return false;
+    if (!('total' in _v) || _v['total'] === undefined) return false;
+    if ('total' in _v && typeof _v['total'] !== 'number') return false;
+    if ('taxExempt' in _v && typeof _v['taxExempt'] !== 'boolean') return false;
+    return true;
+}
+

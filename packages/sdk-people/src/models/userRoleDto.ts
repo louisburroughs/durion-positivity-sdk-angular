@@ -18,3 +18,13 @@ export interface UserRoleDto {
     active?: boolean;
 }
 
+export function instanceOfUserRoleDto(value: object): value is UserRoleDto {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('userId' in _v && typeof _v['userId'] !== 'string') return false;
+    if ('roleCode' in _v && typeof _v['roleCode'] !== 'string') return false;
+    if ('locationId' in _v && typeof _v['locationId'] !== 'string') return false;
+    if ('active' in _v && typeof _v['active'] !== 'boolean') return false;
+    return true;
+}
+

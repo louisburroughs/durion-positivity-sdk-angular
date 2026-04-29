@@ -43,3 +43,14 @@ export interface AssignmentHistoryEntry {
     notes?: string;
 }
 
+export function instanceOfAssignmentHistoryEntry(value: object): value is AssignmentHistoryEntry {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('technicianId' in _v && typeof _v['technicianId'] !== 'string') return false;
+    if ('technicianName' in _v && typeof _v['technicianName'] !== 'string') return false;
+    if ('assignedBy' in _v && typeof _v['assignedBy'] !== 'string') return false;
+    if ('reason' in _v && typeof _v['reason'] !== 'string') return false;
+    if ('notes' in _v && typeof _v['notes'] !== 'string') return false;
+    return true;
+}
+

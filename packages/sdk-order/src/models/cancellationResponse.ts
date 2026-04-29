@@ -16,3 +16,13 @@ export interface CancellationResponse {
     cancellationIdempotencyKey?: string;
 }
 
+export function instanceOfCancellationResponse(value: object): value is CancellationResponse {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('orderId' in _v && typeof _v['orderId'] !== 'string') return false;
+    if ('status' in _v && typeof _v['status'] !== 'string') return false;
+    if ('message' in _v && typeof _v['message'] !== 'string') return false;
+    if ('cancellationIdempotencyKey' in _v && typeof _v['cancellationIdempotencyKey'] !== 'string') return false;
+    return true;
+}
+

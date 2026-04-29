@@ -16,3 +16,16 @@ export interface CreateCreditMemoRequest {
     justificationNote?: string;
 }
 
+export function instanceOfCreateCreditMemoRequest(value: object): value is CreateCreditMemoRequest {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if (!('originalInvoiceId' in _v) || _v['originalInvoiceId'] === undefined) return false;
+    if ('originalInvoiceId' in _v && typeof _v['originalInvoiceId'] !== 'string') return false;
+    if (!('creditAmount' in _v) || _v['creditAmount'] === undefined) return false;
+    if ('creditAmount' in _v && typeof _v['creditAmount'] !== 'number') return false;
+    if (!('reasonCode' in _v) || _v['reasonCode'] === undefined) return false;
+    if ('reasonCode' in _v && typeof _v['reasonCode'] !== 'string') return false;
+    if ('justificationNote' in _v && typeof _v['justificationNote'] !== 'string') return false;
+    return true;
+}
+

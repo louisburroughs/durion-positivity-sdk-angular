@@ -68,3 +68,17 @@ export enum GetPersonResponsePreferredContactMethodEnum {
 
 
 
+export function instanceOfGetPersonResponse(value: object): value is GetPersonResponse {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('personId' in _v && typeof _v['personId'] !== 'string') return false;
+    if ('firstName' in _v && typeof _v['firstName'] !== 'string') return false;
+    if ('lastName' in _v && typeof _v['lastName'] !== 'string') return false;
+    if ('displayName' in _v && typeof _v['displayName'] !== 'string') return false;
+    if ('preferredContactMethod' in _v && typeof _v['preferredContactMethod'] !== 'string') return false;
+    if ('individualCustomer' in _v && typeof _v['individualCustomer'] !== 'boolean') return false;
+    if ('commercialContact' in _v && typeof _v['commercialContact'] !== 'boolean') return false;
+    if ('commercialAccountCount' in _v && typeof _v['commercialAccountCount'] !== 'number') return false;
+    return true;
+}
+

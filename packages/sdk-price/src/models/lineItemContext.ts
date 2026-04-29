@@ -27,3 +27,15 @@ export interface LineItemContext {
     unitPrice: number;
 }
 
+export function instanceOfLineItemContext(value: object): value is LineItemContext {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if (!('sku' in _v) || _v['sku'] === undefined) return false;
+    if ('sku' in _v && typeof _v['sku'] !== 'string') return false;
+    if (!('quantity' in _v) || _v['quantity'] === undefined) return false;
+    if ('quantity' in _v && typeof _v['quantity'] !== 'number') return false;
+    if (!('unitPrice' in _v) || _v['unitPrice'] === undefined) return false;
+    if ('unitPrice' in _v && typeof _v['unitPrice'] !== 'number') return false;
+    return true;
+}
+

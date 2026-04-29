@@ -36,3 +36,16 @@ export interface SupplierItemCostCreateRequestDto {
     tiers?: Array<CostTierDto>;
 }
 
+export function instanceOfSupplierItemCostCreateRequestDto(value: object): value is SupplierItemCostCreateRequestDto {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if (!('supplierId' in _v) || _v['supplierId'] === undefined) return false;
+    if ('supplierId' in _v && typeof _v['supplierId'] !== 'string') return false;
+    if (!('itemId' in _v) || _v['itemId'] === undefined) return false;
+    if ('itemId' in _v && typeof _v['itemId'] !== 'string') return false;
+    if (!('currencyCode' in _v) || _v['currencyCode'] === undefined) return false;
+    if ('currencyCode' in _v && typeof _v['currencyCode'] !== 'string') return false;
+    if ('baseCost' in _v && typeof _v['baseCost'] !== 'number') return false;
+    return true;
+}
+

@@ -16,3 +16,17 @@ export interface GuardrailPolicyUpsertRequestDto {
     autoApprovalThresholdPercent: number;
 }
 
+export function instanceOfGuardrailPolicyUpsertRequestDto(value: object): value is GuardrailPolicyUpsertRequestDto {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if (!('scopeId' in _v) || _v['scopeId'] === undefined) return false;
+    if ('scopeId' in _v && typeof _v['scopeId'] !== 'string') return false;
+    if (!('minMarginPercent' in _v) || _v['minMarginPercent'] === undefined) return false;
+    if ('minMarginPercent' in _v && typeof _v['minMarginPercent'] !== 'number') return false;
+    if (!('maxDiscountPercent' in _v) || _v['maxDiscountPercent'] === undefined) return false;
+    if ('maxDiscountPercent' in _v && typeof _v['maxDiscountPercent'] !== 'number') return false;
+    if (!('autoApprovalThresholdPercent' in _v) || _v['autoApprovalThresholdPercent'] === undefined) return false;
+    if ('autoApprovalThresholdPercent' in _v && typeof _v['autoApprovalThresholdPercent'] !== 'number') return false;
+    return true;
+}
+

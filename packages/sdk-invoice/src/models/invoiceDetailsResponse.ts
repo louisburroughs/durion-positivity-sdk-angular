@@ -42,3 +42,23 @@ export enum InvoiceDetailsResponseStatusEnum {
 
 
 
+export function instanceOfInvoiceDetailsResponse(value: object): value is InvoiceDetailsResponse {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('invoiceId' in _v && typeof _v['invoiceId'] !== 'string') return false;
+    if ('invoiceNumber' in _v && typeof _v['invoiceNumber'] !== 'string') return false;
+    if ('workorderId' in _v && typeof _v['workorderId'] !== 'string') return false;
+    if ('estimateId' in _v && typeof _v['estimateId'] !== 'string') return false;
+    if ('approvalId' in _v && typeof _v['approvalId'] !== 'string') return false;
+    if ('partyId' in _v && typeof _v['partyId'] !== 'string') return false;
+    if ('status' in _v && typeof _v['status'] !== 'string') return false;
+    if ('subtotal' in _v && typeof _v['subtotal'] !== 'number') return false;
+    if ('tax' in _v && typeof _v['tax'] !== 'number') return false;
+    if ('total' in _v && typeof _v['total'] !== 'number') return false;
+    if ('adjustments' in _v && typeof _v['adjustments'] !== 'number') return false;
+    if ('finalizedBy' in _v && typeof _v['finalizedBy'] !== 'string') return false;
+    if ('reversionReason' in _v && typeof _v['reversionReason'] !== 'string') return false;
+    if ('revertedBy' in _v && typeof _v['revertedBy'] !== 'string') return false;
+    return true;
+}
+

@@ -24,3 +24,16 @@ export interface PaymentApplicationResponse {
     applicationRequestId?: string;
 }
 
+export function instanceOfPaymentApplicationResponse(value: object): value is PaymentApplicationResponse {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('paymentId' in _v && typeof _v['paymentId'] !== 'string') return false;
+    if ('customerId' in _v && typeof _v['customerId'] !== 'string') return false;
+    if ('currency' in _v && typeof _v['currency'] !== 'string') return false;
+    if ('totalAmount' in _v && typeof _v['totalAmount'] !== 'number') return false;
+    if ('appliedAmount' in _v && typeof _v['appliedAmount'] !== 'number') return false;
+    if ('remainingAmount' in _v && typeof _v['remainingAmount'] !== 'number') return false;
+    if ('applicationRequestId' in _v && typeof _v['applicationRequestId'] !== 'string') return false;
+    return true;
+}
+

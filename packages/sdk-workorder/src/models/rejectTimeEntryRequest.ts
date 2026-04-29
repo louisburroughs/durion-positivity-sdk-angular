@@ -19,3 +19,11 @@ export interface RejectTimeEntryRequest {
     rejectionReason: string;
 }
 
+export function instanceOfRejectTimeEntryRequest(value: object): value is RejectTimeEntryRequest {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if (!('rejectionReason' in _v) || _v['rejectionReason'] === undefined) return false;
+    if ('rejectionReason' in _v && typeof _v['rejectionReason'] !== 'string') return false;
+    return true;
+}
+

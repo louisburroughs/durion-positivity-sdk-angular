@@ -16,3 +16,10 @@ export interface TimeEntryExceptionResolveRequest {
     resolutionNotes?: string;
 }
 
+export function instanceOfTimeEntryExceptionResolveRequest(value: object): value is TimeEntryExceptionResolveRequest {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('resolutionNotes' in _v && typeof _v['resolutionNotes'] !== 'string') return false;
+    return true;
+}
+

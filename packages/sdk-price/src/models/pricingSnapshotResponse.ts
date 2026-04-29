@@ -47,3 +47,16 @@ export interface PricingSnapshotResponse {
     policyVersion?: string;
 }
 
+export function instanceOfPricingSnapshotResponse(value: object): value is PricingSnapshotResponse {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('snapshotId' in _v && typeof _v['snapshotId'] !== 'string') return false;
+    if ('sourceContext' in _v && _v['sourceContext'] !== null && typeof _v['sourceContext'] !== 'string') return false;
+    if ('itemIdentifier' in _v && typeof _v['itemIdentifier'] !== 'string') return false;
+    if ('quantity' in _v && typeof _v['quantity'] !== 'number') return false;
+    if ('prices' in _v && typeof _v['prices'] !== 'string') return false;
+    if ('appliedRules' in _v && _v['appliedRules'] !== null && typeof _v['appliedRules'] !== 'string') return false;
+    if ('policyVersion' in _v && typeof _v['policyVersion'] !== 'string') return false;
+    return true;
+}
+

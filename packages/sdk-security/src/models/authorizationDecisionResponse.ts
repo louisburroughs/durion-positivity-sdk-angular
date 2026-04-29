@@ -13,3 +13,10 @@ export interface AuthorizationDecisionResponse {
     decision?: string;
 }
 
+export function instanceOfAuthorizationDecisionResponse(value: object): value is AuthorizationDecisionResponse {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('decision' in _v && typeof _v['decision'] !== 'string') return false;
+    return true;
+}
+

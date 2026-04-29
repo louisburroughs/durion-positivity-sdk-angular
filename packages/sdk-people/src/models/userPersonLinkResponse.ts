@@ -19,3 +19,15 @@ export interface UserPersonLinkResponse {
     notes?: string;
 }
 
+export function instanceOfUserPersonLinkResponse(value: object): value is UserPersonLinkResponse {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('linkId' in _v && typeof _v['linkId'] !== 'string') return false;
+    if ('userId' in _v && typeof _v['userId'] !== 'string') return false;
+    if ('personId' in _v && typeof _v['personId'] !== 'string') return false;
+    if ('linkType' in _v && typeof _v['linkType'] !== 'string') return false;
+    if ('createdBy' in _v && typeof _v['createdBy'] !== 'string') return false;
+    if ('notes' in _v && typeof _v['notes'] !== 'string') return false;
+    return true;
+}
+

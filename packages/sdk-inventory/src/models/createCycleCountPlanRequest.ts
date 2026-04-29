@@ -16,3 +16,11 @@ export interface CreateCycleCountPlanRequest {
     scheduledDate?: string;
 }
 
+export function instanceOfCreateCycleCountPlanRequest(value: object): value is CreateCycleCountPlanRequest {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('locationId' in _v && typeof _v['locationId'] !== 'string') return false;
+    if ('planName' in _v && typeof _v['planName'] !== 'string') return false;
+    return true;
+}
+

@@ -36,3 +36,18 @@ export enum ItemCostAuditDtoChangeSourceTypeEnum {
 
 
 
+export function instanceOfItemCostAuditDto(value: object): value is ItemCostAuditDto {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('auditId' in _v && typeof _v['auditId'] !== 'string') return false;
+    if ('itemId' in _v && typeof _v['itemId'] !== 'string') return false;
+    if ('costTypeChanged' in _v && typeof _v['costTypeChanged'] !== 'string') return false;
+    if ('oldValue' in _v && typeof _v['oldValue'] !== 'number') return false;
+    if ('newValue' in _v && typeof _v['newValue'] !== 'number') return false;
+    if ('changeSourceType' in _v && typeof _v['changeSourceType'] !== 'string') return false;
+    if ('changeSourceId' in _v && typeof _v['changeSourceId'] !== 'string') return false;
+    if ('actor' in _v && typeof _v['actor'] !== 'string') return false;
+    if ('reasonCode' in _v && typeof _v['reasonCode'] !== 'string') return false;
+    return true;
+}
+

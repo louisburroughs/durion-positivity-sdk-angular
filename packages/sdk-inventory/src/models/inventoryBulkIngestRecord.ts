@@ -17,3 +17,16 @@ export interface InventoryBulkIngestRecord {
     unitOfMeasure?: string;
 }
 
+export function instanceOfInventoryBulkIngestRecord(value: object): value is InventoryBulkIngestRecord {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if (!('sku' in _v) || _v['sku'] === undefined) return false;
+    if ('sku' in _v && typeof _v['sku'] !== 'string') return false;
+    if ('locationId' in _v && typeof _v['locationId'] !== 'string') return false;
+    if (!('quantity' in _v) || _v['quantity'] === undefined) return false;
+    if ('quantity' in _v && typeof _v['quantity'] !== 'number') return false;
+    if ('reasonCode' in _v && typeof _v['reasonCode'] !== 'string') return false;
+    if ('unitOfMeasure' in _v && typeof _v['unitOfMeasure'] !== 'string') return false;
+    return true;
+}
+

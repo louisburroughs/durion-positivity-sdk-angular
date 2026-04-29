@@ -20,3 +20,15 @@ export interface PostingCategoryResponse {
     modifiedBy?: string;
 }
 
+export function instanceOfPostingCategoryResponse(value: object): value is PostingCategoryResponse {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('postingCategoryId' in _v && typeof _v['postingCategoryId'] !== 'string') return false;
+    if ('categoryName' in _v && typeof _v['categoryName'] !== 'string') return false;
+    if ('description' in _v && typeof _v['description'] !== 'string') return false;
+    if ('isActive' in _v && typeof _v['isActive'] !== 'boolean') return false;
+    if ('createdBy' in _v && typeof _v['createdBy'] !== 'string') return false;
+    if ('modifiedBy' in _v && typeof _v['modifiedBy'] !== 'string') return false;
+    return true;
+}
+

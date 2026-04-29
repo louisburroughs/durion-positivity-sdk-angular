@@ -53,3 +53,13 @@ export enum AvailabilityInfoConfidenceEnum {
 
 
 
+export function instanceOfAvailabilityInfo(value: object): value is AvailabilityInfo {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('onHandQuantity' in _v && typeof _v['onHandQuantity'] !== 'number') return false;
+    if ('availableToPromiseQuantity' in _v && typeof _v['availableToPromiseQuantity'] !== 'number') return false;
+    if ('status' in _v && typeof _v['status'] !== 'string') return false;
+    if ('confidence' in _v && typeof _v['confidence'] !== 'string') return false;
+    return true;
+}
+

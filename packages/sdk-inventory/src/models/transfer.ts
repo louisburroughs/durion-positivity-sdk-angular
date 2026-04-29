@@ -15,3 +15,9 @@ export interface Transfer {
     movedAt?: string;
 }
 
+export function instanceOfTransfer(value: object): value is Transfer {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    return true;
+}
+

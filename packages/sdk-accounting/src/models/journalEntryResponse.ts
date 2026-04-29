@@ -108,3 +108,24 @@ export enum JournalEntryResponseStatusEnum {
 
 
 
+export function instanceOfJournalEntryResponse(value: object): value is JournalEntryResponse {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('journalEntryId' in _v && typeof _v['journalEntryId'] !== 'string') return false;
+    if ('status' in _v && typeof _v['status'] !== 'string') return false;
+    if ('description' in _v && typeof _v['description'] !== 'string') return false;
+    if ('sourceEventId' in _v && typeof _v['sourceEventId'] !== 'string') return false;
+    if ('sourceEventType' in _v && typeof _v['sourceEventType'] !== 'string') return false;
+    if ('postingRuleSetId' in _v && typeof _v['postingRuleSetId'] !== 'string') return false;
+    if ('postingRuleVersionId' in _v && typeof _v['postingRuleVersionId'] !== 'string') return false;
+    if ('reversalJournalEntryId' in _v && typeof _v['reversalJournalEntryId'] !== 'string') return false;
+    if ('reversedByJournalEntryId' in _v && typeof _v['reversedByJournalEntryId'] !== 'string') return false;
+    if ('totalDebits' in _v && typeof _v['totalDebits'] !== 'number') return false;
+    if ('totalCredits' in _v && typeof _v['totalCredits'] !== 'number') return false;
+    if ('isBalanced' in _v && typeof _v['isBalanced'] !== 'boolean') return false;
+    if ('createdBy' in _v && typeof _v['createdBy'] !== 'string') return false;
+    if ('modifiedBy' in _v && typeof _v['modifiedBy'] !== 'string') return false;
+    if ('postedBy' in _v && typeof _v['postedBy'] !== 'string') return false;
+    return true;
+}
+

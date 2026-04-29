@@ -28,3 +28,16 @@ export enum PostingRuleVersionResponseStateEnum {
 
 
 
+export function instanceOfPostingRuleVersionResponse(value: object): value is PostingRuleVersionResponse {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('versionId' in _v && typeof _v['versionId'] !== 'string') return false;
+    if ('postingRuleSetId' in _v && typeof _v['postingRuleSetId'] !== 'string') return false;
+    if ('versionNumber' in _v && typeof _v['versionNumber'] !== 'number') return false;
+    if ('state' in _v && typeof _v['state'] !== 'string') return false;
+    if ('rulesDefinition' in _v && typeof _v['rulesDefinition'] !== 'string') return false;
+    if ('createdBy' in _v && typeof _v['createdBy'] !== 'string') return false;
+    if ('modifiedBy' in _v && typeof _v['modifiedBy'] !== 'string') return false;
+    return true;
+}
+

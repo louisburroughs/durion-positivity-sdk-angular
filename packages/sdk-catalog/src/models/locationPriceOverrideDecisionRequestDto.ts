@@ -16,3 +16,15 @@ export interface LocationPriceOverrideDecisionRequestDto {
     rejectionNotes?: string;
 }
 
+export function instanceOfLocationPriceOverrideDecisionRequestDto(value: object): value is LocationPriceOverrideDecisionRequestDto {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if (!('version' in _v) || _v['version'] === undefined) return false;
+    if ('version' in _v && typeof _v['version'] !== 'number') return false;
+    if (!('actorUserId' in _v) || _v['actorUserId'] === undefined) return false;
+    if ('actorUserId' in _v && typeof _v['actorUserId'] !== 'string') return false;
+    if ('rejectionReasonCode' in _v && typeof _v['rejectionReasonCode'] !== 'string') return false;
+    if ('rejectionNotes' in _v && typeof _v['rejectionNotes'] !== 'string') return false;
+    return true;
+}
+

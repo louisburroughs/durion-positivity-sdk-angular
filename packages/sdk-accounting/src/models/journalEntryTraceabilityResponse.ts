@@ -19,3 +19,11 @@ export interface JournalEntryTraceabilityResponse {
     relatedJournalEntries?: Array<JournalEntryResponse>;
 }
 
+export function instanceOfJournalEntryTraceabilityResponse(value: object): value is JournalEntryTraceabilityResponse {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('journalEntryId' in _v && typeof _v['journalEntryId'] !== 'string') return false;
+    if ('sourceEventId' in _v && typeof _v['sourceEventId'] !== 'string') return false;
+    return true;
+}
+

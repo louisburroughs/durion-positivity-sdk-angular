@@ -18,3 +18,13 @@ export interface PostingRuleSetListResponse {
     pageSize?: number;
 }
 
+export function instanceOfPostingRuleSetListResponse(value: object): value is PostingRuleSetListResponse {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('totalElements' in _v && typeof _v['totalElements'] !== 'number') return false;
+    if ('totalPages' in _v && typeof _v['totalPages'] !== 'number') return false;
+    if ('currentPage' in _v && typeof _v['currentPage'] !== 'number') return false;
+    if ('pageSize' in _v && typeof _v['pageSize'] !== 'number') return false;
+    return true;
+}
+

@@ -31,3 +31,17 @@ export enum StorageLocationResponseTypeEnum {
 
 
 
+export function instanceOfStorageLocationResponse(value: object): value is StorageLocationResponse {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('id' in _v && typeof _v['id'] !== 'string') return false;
+    if ('name' in _v && typeof _v['name'] !== 'string') return false;
+    if ('barcode' in _v && typeof _v['barcode'] !== 'string') return false;
+    if ('type' in _v && typeof _v['type'] !== 'string') return false;
+    if ('status' in _v && typeof _v['status'] !== 'string') return false;
+    if ('siteId' in _v && typeof _v['siteId'] !== 'string') return false;
+    if ('parentStorageLocationId' in _v && typeof _v['parentStorageLocationId'] !== 'string') return false;
+    if ('inventoryCount' in _v && typeof _v['inventoryCount'] !== 'number') return false;
+    return true;
+}
+

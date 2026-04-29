@@ -21,3 +21,15 @@ export interface MobileUnitResponse {
     updatedAt?: string;
 }
 
+export function instanceOfMobileUnitResponse(value: object): value is MobileUnitResponse {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('id' in _v && typeof _v['id'] !== 'string') return false;
+    if ('name' in _v && typeof _v['name'] !== 'string') return false;
+    if ('baseLocationId' in _v && typeof _v['baseLocationId'] !== 'string') return false;
+    if ('status' in _v && typeof _v['status'] !== 'string') return false;
+    if ('travelBufferPolicyId' in _v && typeof _v['travelBufferPolicyId'] !== 'string') return false;
+    if ('notes' in _v && typeof _v['notes'] !== 'string') return false;
+    return true;
+}
+

@@ -34,3 +34,17 @@ export enum BillingRulesDTOInvoiceGroupingStrategyEnum {
 
 
 
+export function instanceOfBillingRulesDTO(value: object): value is BillingRulesDTO {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('id' in _v && typeof _v['id'] !== 'string') return false;
+    if ('partyId' in _v && typeof _v['partyId'] !== 'string') return false;
+    if ('purchaseOrderRequired' in _v && typeof _v['purchaseOrderRequired'] !== 'boolean') return false;
+    if ('paymentTermsCode' in _v && typeof _v['paymentTermsCode'] !== 'string') return false;
+    if ('invoiceDeliveryMethod' in _v && typeof _v['invoiceDeliveryMethod'] !== 'string') return false;
+    if ('invoiceGroupingStrategy' in _v && typeof _v['invoiceGroupingStrategy'] !== 'string') return false;
+    if ('version' in _v && typeof _v['version'] !== 'number') return false;
+    if ('updatedBy' in _v && typeof _v['updatedBy'] !== 'string') return false;
+    return true;
+}
+

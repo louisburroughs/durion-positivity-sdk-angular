@@ -48,3 +48,17 @@ export interface JournalEntryCreateRequest {
     lines: Array<JournalEntryLineRequest>;
 }
 
+export function instanceOfJournalEntryCreateRequest(value: object): value is JournalEntryCreateRequest {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('organizationId' in _v && typeof _v['organizationId'] !== 'string') return false;
+    if (!('transactionDate' in _v) || _v['transactionDate'] === undefined) return false;
+    if ('description' in _v && typeof _v['description'] !== 'string') return false;
+    if ('sourceEventId' in _v && typeof _v['sourceEventId'] !== 'string') return false;
+    if ('sourceEventType' in _v && typeof _v['sourceEventType'] !== 'string') return false;
+    if ('postingRuleSetId' in _v && typeof _v['postingRuleSetId'] !== 'string') return false;
+    if ('postingRuleVersionId' in _v && typeof _v['postingRuleVersionId'] !== 'string') return false;
+    if (!('lines' in _v) || _v['lines'] === undefined) return false;
+    return true;
+}
+

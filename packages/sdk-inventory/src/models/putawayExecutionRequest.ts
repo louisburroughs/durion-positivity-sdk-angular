@@ -33,3 +33,18 @@ export enum PutawayExecutionRequestOverrideReasonCodeEnum {
 
 
 
+export function instanceOfPutawayExecutionRequest(value: object): value is PutawayExecutionRequest {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('skuId' in _v && typeof _v['skuId'] !== 'string') return false;
+    if ('sourceLocationId' in _v && typeof _v['sourceLocationId'] !== 'string') return false;
+    if ('destinationLocationId' in _v && typeof _v['destinationLocationId'] !== 'string') return false;
+    if ('quantity' in _v && typeof _v['quantity'] !== 'number') return false;
+    if ('overrideLocationCompatibility' in _v && typeof _v['overrideLocationCompatibility'] !== 'boolean') return false;
+    if ('overrideCapacity' in _v && typeof _v['overrideCapacity'] !== 'boolean') return false;
+    if ('overrideReasonCode' in _v && typeof _v['overrideReasonCode'] !== 'string') return false;
+    if ('overrideJustification' in _v && typeof _v['overrideJustification'] !== 'string') return false;
+    if ('approvedBy' in _v && typeof _v['approvedBy'] !== 'string') return false;
+    return true;
+}
+

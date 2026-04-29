@@ -36,3 +36,23 @@ export enum CreditMemoResponseStatusEnum {
 
 
 
+export function instanceOfCreditMemoResponse(value: object): value is CreditMemoResponse {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('creditMemoId' in _v && typeof _v['creditMemoId'] !== 'string') return false;
+    if ('originalInvoiceId' in _v && typeof _v['originalInvoiceId'] !== 'string') return false;
+    if ('customerId' in _v && typeof _v['customerId'] !== 'string') return false;
+    if ('creditAmount' in _v && typeof _v['creditAmount'] !== 'number') return false;
+    if ('taxAmountReversed' in _v && typeof _v['taxAmountReversed'] !== 'number') return false;
+    if ('totalAmount' in _v && typeof _v['totalAmount'] !== 'number') return false;
+    if ('reasonCode' in _v && typeof _v['reasonCode'] !== 'string') return false;
+    if ('justificationNote' in _v && typeof _v['justificationNote'] !== 'string') return false;
+    if ('status' in _v && typeof _v['status'] !== 'string') return false;
+    if ('createdByUserId' in _v && typeof _v['createdByUserId'] !== 'string') return false;
+    if ('priorPeriodAdjustment' in _v && typeof _v['priorPeriodAdjustment'] !== 'boolean') return false;
+    if ('originalPeriodId' in _v && typeof _v['originalPeriodId'] !== 'string') return false;
+    if ('currency' in _v && typeof _v['currency'] !== 'string') return false;
+    if ('invoiceBalanceAfter' in _v && typeof _v['invoiceBalanceAfter'] !== 'number') return false;
+    return true;
+}
+

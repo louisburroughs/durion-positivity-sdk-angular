@@ -28,3 +28,15 @@ export enum ApplicationDetailInvoiceStatusEnum {
 
 
 
+export function instanceOfApplicationDetail(value: object): value is ApplicationDetail {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('paymentApplicationId' in _v && typeof _v['paymentApplicationId'] !== 'string') return false;
+    if ('invoiceId' in _v && typeof _v['invoiceId'] !== 'string') return false;
+    if ('appliedAmount' in _v && typeof _v['appliedAmount'] !== 'number') return false;
+    if ('invoiceBalanceBefore' in _v && typeof _v['invoiceBalanceBefore'] !== 'number') return false;
+    if ('invoiceBalanceAfter' in _v && typeof _v['invoiceBalanceAfter'] !== 'number') return false;
+    if ('invoiceStatus' in _v && typeof _v['invoiceStatus'] !== 'string') return false;
+    return true;
+}
+

@@ -17,3 +17,14 @@ export interface BulkIngestResult {
     errorMessage?: string;
 }
 
+export function instanceOfBulkIngestResult(value: object): value is BulkIngestResult {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('rowIndex' in _v && typeof _v['rowIndex'] !== 'number') return false;
+    if ('entityId' in _v && typeof _v['entityId'] !== 'string') return false;
+    if ('success' in _v && typeof _v['success'] !== 'boolean') return false;
+    if ('errorCode' in _v && typeof _v['errorCode'] !== 'string') return false;
+    if ('errorMessage' in _v && typeof _v['errorMessage'] !== 'string') return false;
+    return true;
+}
+

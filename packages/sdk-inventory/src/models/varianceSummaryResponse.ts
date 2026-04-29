@@ -18,3 +18,15 @@ export interface VarianceSummaryResponse {
     receivedQuantity?: number;
 }
 
+export function instanceOfVarianceSummaryResponse(value: object): value is VarianceSummaryResponse {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('lineId' in _v && typeof _v['lineId'] !== 'string') return false;
+    if ('productId' in _v && typeof _v['productId'] !== 'string') return false;
+    if ('varianceType' in _v && typeof _v['varianceType'] !== 'string') return false;
+    if ('varianceQuantity' in _v && typeof _v['varianceQuantity'] !== 'number') return false;
+    if ('expectedQuantity' in _v && typeof _v['expectedQuantity'] !== 'number') return false;
+    if ('receivedQuantity' in _v && typeof _v['receivedQuantity'] !== 'number') return false;
+    return true;
+}
+

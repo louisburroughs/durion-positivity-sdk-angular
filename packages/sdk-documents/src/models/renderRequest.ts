@@ -24,3 +24,14 @@ export enum RenderRequestFormatEnum {
 
 
 
+export function instanceOfRenderRequest(value: object): value is RenderRequest {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if (!('format' in _v) || _v['format'] === undefined) return false;
+    if ('format' in _v && typeof _v['format'] !== 'string') return false;
+    if ('templateId' in _v && typeof _v['templateId'] !== 'string') return false;
+    if (!('content' in _v) || _v['content'] === undefined) return false;
+    if ('content' in _v && typeof _v['content'] !== 'string') return false;
+    return true;
+}
+

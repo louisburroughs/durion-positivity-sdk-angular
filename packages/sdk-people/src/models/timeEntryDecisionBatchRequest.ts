@@ -20,3 +20,10 @@ export interface TimeEntryDecisionBatchRequest {
     decisions: Array<Decision>;
 }
 
+export function instanceOfTimeEntryDecisionBatchRequest(value: object): value is TimeEntryDecisionBatchRequest {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if (!('decisions' in _v) || _v['decisions'] === undefined) return false;
+    return true;
+}
+

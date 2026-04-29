@@ -25,6 +25,8 @@ import { AuditLogEventDto } from '../src/models/auditLogEventDto';
 // @ts-ignore
 import { AuditLogEventRequest } from '../src/models/auditLogEventRequest';
 // @ts-ignore
+import { PageAuditLogEventDto } from '../src/models/pageAuditLogEventDto';
+// @ts-ignore
 import { PricingSnapshotCreatedResponse } from '../src/models/pricingSnapshotCreatedResponse';
 // @ts-ignore
 import { PricingSnapshotDto } from '../src/models/pricingSnapshotDto';
@@ -365,28 +367,36 @@ export class AuditService extends BaseService {
 
     /**
      * Search audit events
-     * Searches audit events by event type alone or by entity identity with an optional time range.
+     * Searches audit events using rich filter criteria with pagination support.
      * @endpoint get /v1/audit/events
-     * @param entityId Entity identifier to match. Must be supplied together with entityType.
-     * @param entityType Entity type to match. Must be supplied together with entityId.
-     * @param eventType Event type code to search by when not searching by entity.
-     * @param from Inclusive start timestamp for the audit search window.
-     * @param to Inclusive end timestamp for the audit search window.
+     * @param fromDate Inclusive start timestamp (ISO-8601)
+     * @param toDate Exclusive end timestamp (ISO-8601)
+     * @param actorId Actor username or user identifier
+     * @param workorderId Workorder UUID - one word per workspace naming policy
+     * @param movementId Movement UUID
+     * @param productId Product UUID
+     * @param sku SKU code
+     * @param eventType Event type code
+     * @param aggregateId Aggregate identifier
+     * @param correlationId Correlation ID UUID for distributed tracing
+     * @param reasonCode Reason code string
+     * @param pageToken Cursor token for page navigation
+     * @param locationIds Location UUID list - repeated query param
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public searchEvents(entityId?: string, entityType?: string, eventType?: string, from?: string, to?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<AuditLogEventDto>>;
-    public searchEvents(entityId?: string, entityType?: string, eventType?: string, from?: string, to?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<AuditLogEventDto>>>;
-    public searchEvents(entityId?: string, entityType?: string, eventType?: string, from?: string, to?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<AuditLogEventDto>>>;
-    public searchEvents(entityId?: string, entityType?: string, eventType?: string, from?: string, to?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public searchAuditEvents(fromDate?: string, toDate?: string, actorId?: string, workorderId?: string, movementId?: string, productId?: string, sku?: string, eventType?: string, aggregateId?: string, correlationId?: string, reasonCode?: string, pageToken?: string, locationIds?: Array<string>, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PageAuditLogEventDto>;
+    public searchAuditEvents(fromDate?: string, toDate?: string, actorId?: string, workorderId?: string, movementId?: string, productId?: string, sku?: string, eventType?: string, aggregateId?: string, correlationId?: string, reasonCode?: string, pageToken?: string, locationIds?: Array<string>, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PageAuditLogEventDto>>;
+    public searchAuditEvents(fromDate?: string, toDate?: string, actorId?: string, workorderId?: string, movementId?: string, productId?: string, sku?: string, eventType?: string, aggregateId?: string, correlationId?: string, reasonCode?: string, pageToken?: string, locationIds?: Array<string>, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PageAuditLogEventDto>>;
+    public searchAuditEvents(fromDate?: string, toDate?: string, actorId?: string, workorderId?: string, movementId?: string, productId?: string, sku?: string, eventType?: string, aggregateId?: string, correlationId?: string, reasonCode?: string, pageToken?: string, locationIds?: Array<string>, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
 
         localVarQueryParameters = this.addToHttpParams(
             localVarQueryParameters,
-            'entityId',
-            <any>entityId,
+            'fromDate',
+            <any>fromDate,
             QueryParamStyle.Form,
             true,
         );
@@ -394,8 +404,53 @@ export class AuditService extends BaseService {
 
         localVarQueryParameters = this.addToHttpParams(
             localVarQueryParameters,
-            'entityType',
-            <any>entityType,
+            'toDate',
+            <any>toDate,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'actorId',
+            <any>actorId,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'workorderId',
+            <any>workorderId,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'movementId',
+            <any>movementId,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'productId',
+            <any>productId,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'sku',
+            <any>sku,
             QueryParamStyle.Form,
             true,
         );
@@ -412,8 +467,8 @@ export class AuditService extends BaseService {
 
         localVarQueryParameters = this.addToHttpParams(
             localVarQueryParameters,
-            'from',
-            <any>from,
+            'aggregateId',
+            <any>aggregateId,
             QueryParamStyle.Form,
             true,
         );
@@ -421,8 +476,35 @@ export class AuditService extends BaseService {
 
         localVarQueryParameters = this.addToHttpParams(
             localVarQueryParameters,
-            'to',
-            <any>to,
+            'correlationId',
+            <any>correlationId,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'reasonCode',
+            <any>reasonCode,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'pageToken',
+            <any>pageToken,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'locationIds',
+            <any>locationIds,
             QueryParamStyle.Form,
             true,
         );
@@ -458,7 +540,7 @@ export class AuditService extends BaseService {
 
         let localVarPath = `/v1/audit/events`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<Array<AuditLogEventDto>>('get', `${basePath}${localVarPath}`,
+        return this.httpClient.request<PageAuditLogEventDto>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 params: localVarQueryParameters.toHttpParams(),

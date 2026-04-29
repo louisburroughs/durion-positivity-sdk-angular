@@ -14,3 +14,12 @@ export interface PermissionDecodeRequest {
     perm_ver?: number;
 }
 
+export function instanceOfPermissionDecodeRequest(value: object): value is PermissionDecodeRequest {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if (!('perm_bits' in _v) || _v['perm_bits'] === undefined) return false;
+    if ('perm_bits' in _v && typeof _v['perm_bits'] !== 'string') return false;
+    if ('perm_ver' in _v && typeof _v['perm_ver'] !== 'number') return false;
+    return true;
+}
+

@@ -23,3 +23,11 @@ export interface SubcategoryDto {
     name?: string;
 }
 
+export function instanceOfSubcategoryDto(value: object): value is SubcategoryDto {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('id' in _v && typeof _v['id'] !== 'string') return false;
+    if ('name' in _v && typeof _v['name'] !== 'string') return false;
+    return true;
+}
+

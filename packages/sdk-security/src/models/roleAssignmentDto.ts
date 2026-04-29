@@ -30,3 +30,15 @@ export enum RoleAssignmentDtoScopeTypeEnum {
 
 
 
+export function instanceOfRoleAssignmentDto(value: object): value is RoleAssignmentDto {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('id' in _v && typeof _v['id'] !== 'string') return false;
+    if ('userId' in _v && typeof _v['userId'] !== 'string') return false;
+    if ('roleId' in _v && typeof _v['roleId'] !== 'string') return false;
+    if ('scopeType' in _v && typeof _v['scopeType'] !== 'string') return false;
+    if ('createdBy' in _v && typeof _v['createdBy'] !== 'string') return false;
+    if ('lastModifiedBy' in _v && typeof _v['lastModifiedBy'] !== 'string') return false;
+    return true;
+}
+

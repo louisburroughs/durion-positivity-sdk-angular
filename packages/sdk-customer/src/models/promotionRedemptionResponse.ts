@@ -31,3 +31,20 @@ export enum PromotionRedemptionResponseStatusEnum {
 
 
 
+export function instanceOfPromotionRedemptionResponse(value: object): value is PromotionRedemptionResponse {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('promotionRedemptionId' in _v && typeof _v['promotionRedemptionId'] !== 'string') return false;
+    if ('promotionId' in _v && typeof _v['promotionId'] !== 'string') return false;
+    if ('customerId' in _v && typeof _v['customerId'] !== 'string') return false;
+    if ('workorderId' in _v && typeof _v['workorderId'] !== 'string') return false;
+    if ('invoiceId' in _v && typeof _v['invoiceId'] !== 'string') return false;
+    if ('discountAmount' in _v && typeof _v['discountAmount'] !== 'number') return false;
+    if ('discountType' in _v && typeof _v['discountType'] !== 'string') return false;
+    if ('promotionCode' in _v && typeof _v['promotionCode'] !== 'string') return false;
+    if ('recordedBy' in _v && typeof _v['recordedBy'] !== 'string') return false;
+    if ('recordedOverLimit' in _v && typeof _v['recordedOverLimit'] !== 'boolean') return false;
+    if ('status' in _v && typeof _v['status'] !== 'string') return false;
+    return true;
+}
+

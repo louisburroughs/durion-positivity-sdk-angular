@@ -19,3 +19,10 @@ export interface StopWorkSessionRequest {
     mechanicId?: string;
 }
 
+export function instanceOfStopWorkSessionRequest(value: object): value is StopWorkSessionRequest {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('mechanicId' in _v && typeof _v['mechanicId'] !== 'string') return false;
+    return true;
+}
+

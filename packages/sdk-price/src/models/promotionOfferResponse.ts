@@ -88,3 +88,20 @@ export enum PromotionOfferResponseStatusEnum {
 
 
 
+export function instanceOfPromotionOfferResponse(value: object): value is PromotionOfferResponse {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('promotionOfferId' in _v && typeof _v['promotionOfferId'] !== 'string') return false;
+    if ('promoCode' in _v && typeof _v['promoCode'] !== 'string') return false;
+    if ('name' in _v && typeof _v['name'] !== 'string') return false;
+    if ('description' in _v && _v['description'] !== null && typeof _v['description'] !== 'string') return false;
+    if ('discountType' in _v && typeof _v['discountType'] !== 'string') return false;
+    if ('discountValue' in _v && typeof _v['discountValue'] !== 'number') return false;
+    if ('usageLimit' in _v && _v['usageLimit'] !== null && typeof _v['usageLimit'] !== 'number') return false;
+    if ('usageCount' in _v && typeof _v['usageCount'] !== 'number') return false;
+    if ('status' in _v && typeof _v['status'] !== 'string') return false;
+    if ('storeCode' in _v && _v['storeCode'] !== null && typeof _v['storeCode'] !== 'string') return false;
+    if ('createdBy' in _v && _v['createdBy'] !== null && typeof _v['createdBy'] !== 'string') return false;
+    return true;
+}
+

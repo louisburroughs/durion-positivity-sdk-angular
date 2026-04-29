@@ -14,3 +14,13 @@ export interface InvoiceApplication {
     amountToApply: number;
 }
 
+export function instanceOfInvoiceApplication(value: object): value is InvoiceApplication {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if (!('invoiceId' in _v) || _v['invoiceId'] === undefined) return false;
+    if ('invoiceId' in _v && typeof _v['invoiceId'] !== 'string') return false;
+    if (!('amountToApply' in _v) || _v['amountToApply'] === undefined) return false;
+    if ('amountToApply' in _v && typeof _v['amountToApply'] !== 'number') return false;
+    return true;
+}
+

@@ -23,3 +23,11 @@ export interface ProductSpecification {
     value?: string;
 }
 
+export function instanceOfProductSpecification(value: object): value is ProductSpecification {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('name' in _v && typeof _v['name'] !== 'string') return false;
+    if ('value' in _v && typeof _v['value'] !== 'string') return false;
+    return true;
+}
+

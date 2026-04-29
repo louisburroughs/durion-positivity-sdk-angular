@@ -67,3 +67,19 @@ export interface ChangeRequestResponse {
     declinedAt?: string;
 }
 
+export function instanceOfChangeRequestResponse(value: object): value is ChangeRequestResponse {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('id' in _v && typeof _v['id'] !== 'string') return false;
+    if ('workorderId' in _v && typeof _v['workorderId'] !== 'string') return false;
+    if ('requestedByUserId' in _v && typeof _v['requestedByUserId'] !== 'string') return false;
+    if ('status' in _v && typeof _v['status'] !== 'string') return false;
+    if ('description' in _v && typeof _v['description'] !== 'string') return false;
+    if ('isEmergencyException' in _v && typeof _v['isEmergencyException'] !== 'boolean') return false;
+    if ('exceptionReason' in _v && typeof _v['exceptionReason'] !== 'string') return false;
+    if ('approvalNote' in _v && typeof _v['approvalNote'] !== 'string') return false;
+    if ('isApprovalGated' in _v && typeof _v['isApprovalGated'] !== 'boolean') return false;
+    if ('approvedBy' in _v && typeof _v['approvedBy'] !== 'string') return false;
+    return true;
+}
+

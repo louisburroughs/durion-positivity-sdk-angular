@@ -18,3 +18,21 @@ export interface CreateAdjustmentRequest {
     createdByUserId: string;
 }
 
+export function instanceOfCreateAdjustmentRequest(value: object): value is CreateAdjustmentRequest {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if (!('stockItemId' in _v) || _v['stockItemId'] === undefined) return false;
+    if ('stockItemId' in _v && typeof _v['stockItemId'] !== 'string') return false;
+    if (!('reasonCode' in _v) || _v['reasonCode'] === undefined) return false;
+    if ('reasonCode' in _v && typeof _v['reasonCode'] !== 'string') return false;
+    if (!('countedQuantity' in _v) || _v['countedQuantity'] === undefined) return false;
+    if ('countedQuantity' in _v && typeof _v['countedQuantity'] !== 'number') return false;
+    if (!('quantityOnHandBefore' in _v) || _v['quantityOnHandBefore'] === undefined) return false;
+    if ('quantityOnHandBefore' in _v && typeof _v['quantityOnHandBefore'] !== 'number') return false;
+    if (!('costAtTimeOfAdjustment' in _v) || _v['costAtTimeOfAdjustment'] === undefined) return false;
+    if ('costAtTimeOfAdjustment' in _v && typeof _v['costAtTimeOfAdjustment'] !== 'number') return false;
+    if (!('createdByUserId' in _v) || _v['createdByUserId'] === undefined) return false;
+    if ('createdByUserId' in _v && typeof _v['createdByUserId'] !== 'string') return false;
+    return true;
+}
+

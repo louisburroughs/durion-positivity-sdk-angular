@@ -18,3 +18,14 @@ export interface ProblemDetail {
     properties?: { [key: string]: any; };
 }
 
+export function instanceOfProblemDetail(value: object): value is ProblemDetail {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('type' in _v && typeof _v['type'] !== 'string') return false;
+    if ('title' in _v && typeof _v['title'] !== 'string') return false;
+    if ('status' in _v && typeof _v['status'] !== 'number') return false;
+    if ('detail' in _v && typeof _v['detail'] !== 'string') return false;
+    if ('instance' in _v && typeof _v['instance'] !== 'string') return false;
+    return true;
+}
+

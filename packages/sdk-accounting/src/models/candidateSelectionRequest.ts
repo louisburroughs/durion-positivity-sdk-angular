@@ -19,3 +19,11 @@ export interface CandidateSelectionRequest {
     operatorId: string;
 }
 
+export function instanceOfCandidateSelectionRequest(value: object): value is CandidateSelectionRequest {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if (!('operatorId' in _v) || _v['operatorId'] === undefined) return false;
+    if ('operatorId' in _v && typeof _v['operatorId'] !== 'string') return false;
+    return true;
+}
+

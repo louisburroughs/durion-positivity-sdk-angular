@@ -31,3 +31,13 @@ export interface AllocationLineResponse {
     allocationSequence?: number;
 }
 
+export function instanceOfAllocationLineResponse(value: object): value is AllocationLineResponse {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('allocationId' in _v && typeof _v['allocationId'] !== 'string') return false;
+    if ('vendorBillId' in _v && typeof _v['vendorBillId'] !== 'string') return false;
+    if ('appliedAmount' in _v && typeof _v['appliedAmount'] !== 'number') return false;
+    if ('allocationSequence' in _v && typeof _v['allocationSequence'] !== 'number') return false;
+    return true;
+}
+

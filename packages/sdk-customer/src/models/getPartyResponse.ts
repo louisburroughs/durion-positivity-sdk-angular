@@ -21,3 +21,18 @@ export interface GetPartyResponse {
     modifiedAt?: string;
 }
 
+export function instanceOfGetPartyResponse(value: object): value is GetPartyResponse {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('partyId' in _v && typeof _v['partyId'] !== 'string') return false;
+    if ('partyType' in _v && typeof _v['partyType'] !== 'string') return false;
+    if ('legalName' in _v && typeof _v['legalName'] !== 'string') return false;
+    if ('displayName' in _v && typeof _v['displayName'] !== 'string') return false;
+    if ('taxId' in _v && typeof _v['taxId'] !== 'string') return false;
+    if ('status' in _v && typeof _v['status'] !== 'string') return false;
+    if ('billingTermsId' in _v && typeof _v['billingTermsId'] !== 'string') return false;
+    if ('createdAt' in _v && typeof _v['createdAt'] !== 'string') return false;
+    if ('modifiedAt' in _v && typeof _v['modifiedAt'] !== 'string') return false;
+    return true;
+}
+

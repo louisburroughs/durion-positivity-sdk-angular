@@ -20,3 +20,9 @@ export interface WorkexecTimerStopResponse {
     stopped?: Array<WorkexecTimerEntryResponse>;
 }
 
+export function instanceOfWorkexecTimerStopResponse(value: object): value is WorkexecTimerStopResponse {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    return true;
+}
+

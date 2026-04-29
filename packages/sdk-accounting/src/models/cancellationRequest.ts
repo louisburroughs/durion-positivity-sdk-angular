@@ -28,3 +28,23 @@ export enum CancellationRequestCancellationTypeEnum {
 
 
 
+export function instanceOfCancellationRequest(value: object): value is CancellationRequest {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('orderId' in _v && typeof _v['orderId'] !== 'string') return false;
+    if ('invoiceId' in _v && typeof _v['invoiceId'] !== 'string') return false;
+    if (!('cancellationType' in _v) || _v['cancellationType'] === undefined) return false;
+    if ('cancellationType' in _v && typeof _v['cancellationType'] !== 'string') return false;
+    if (!('beforeSnapshot' in _v) || _v['beforeSnapshot'] === undefined) return false;
+    if ('beforeSnapshot' in _v && typeof _v['beforeSnapshot'] !== 'string') return false;
+    if (!('afterSnapshot' in _v) || _v['afterSnapshot'] === undefined) return false;
+    if ('afterSnapshot' in _v && typeof _v['afterSnapshot'] !== 'string') return false;
+    if ('partialPaymentInfo' in _v && typeof _v['partialPaymentInfo'] !== 'string') return false;
+    if ('actorId' in _v && typeof _v['actorId'] !== 'string') return false;
+    if (!('actorRole' in _v) || _v['actorRole'] === undefined) return false;
+    if ('actorRole' in _v && typeof _v['actorRole'] !== 'string') return false;
+    if (!('reason' in _v) || _v['reason'] === undefined) return false;
+    if ('reason' in _v && typeof _v['reason'] !== 'string') return false;
+    return true;
+}
+

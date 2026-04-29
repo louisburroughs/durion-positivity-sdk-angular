@@ -24,3 +24,11 @@ export interface ReopenWorkorderRequest {
     reopenReason?: string;
 }
 
+export function instanceOfReopenWorkorderRequest(value: object): value is ReopenWorkorderRequest {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('userId' in _v && typeof _v['userId'] !== 'string') return false;
+    if ('reopenReason' in _v && typeof _v['reopenReason'] !== 'string') return false;
+    return true;
+}
+

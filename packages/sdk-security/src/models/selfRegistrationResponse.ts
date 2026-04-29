@@ -48,3 +48,16 @@ export interface SelfRegistrationResponse {
     issuedTokens?: boolean;
 }
 
+export function instanceOfSelfRegistrationResponse(value: object): value is SelfRegistrationResponse {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('userId' in _v && typeof _v['userId'] !== 'string') return false;
+    if ('personId' in _v && typeof _v['personId'] !== 'string') return false;
+    if ('username' in _v && typeof _v['username'] !== 'string') return false;
+    if ('linkStatus' in _v && typeof _v['linkStatus'] !== 'string') return false;
+    if ('matchedExistingPerson' in _v && typeof _v['matchedExistingPerson'] !== 'boolean') return false;
+    if ('idempotencyKey' in _v && typeof _v['idempotencyKey'] !== 'string') return false;
+    if ('issuedTokens' in _v && typeof _v['issuedTokens'] !== 'boolean') return false;
+    return true;
+}
+

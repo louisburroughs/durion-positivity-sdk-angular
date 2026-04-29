@@ -16,3 +16,17 @@ export interface GenerateReceiptRequest {
     templateVersion: string;
 }
 
+export function instanceOfGenerateReceiptRequest(value: object): value is GenerateReceiptRequest {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if (!('paymentIntentId' in _v) || _v['paymentIntentId'] === undefined) return false;
+    if ('paymentIntentId' in _v && typeof _v['paymentIntentId'] !== 'string') return false;
+    if (!('terminalId' in _v) || _v['terminalId'] === undefined) return false;
+    if ('terminalId' in _v && typeof _v['terminalId'] !== 'string') return false;
+    if (!('templateId' in _v) || _v['templateId'] === undefined) return false;
+    if ('templateId' in _v && typeof _v['templateId'] !== 'string') return false;
+    if (!('templateVersion' in _v) || _v['templateVersion'] === undefined) return false;
+    if ('templateVersion' in _v && typeof _v['templateVersion'] !== 'string') return false;
+    return true;
+}
+

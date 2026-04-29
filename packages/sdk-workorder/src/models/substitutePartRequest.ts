@@ -31,3 +31,16 @@ export interface SubstitutePartRequest {
     notes?: string;
 }
 
+export function instanceOfSubstitutePartRequest(value: object): value is SubstitutePartRequest {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if (!('originalPartId' in _v) || _v['originalPartId'] === undefined) return false;
+    if ('originalPartId' in _v && typeof _v['originalPartId'] !== 'string') return false;
+    if (!('substitutePartId' in _v) || _v['substitutePartId'] === undefined) return false;
+    if ('substitutePartId' in _v && typeof _v['substitutePartId'] !== 'string') return false;
+    if (!('reason' in _v) || _v['reason'] === undefined) return false;
+    if ('reason' in _v && typeof _v['reason'] !== 'string') return false;
+    if ('notes' in _v && typeof _v['notes'] !== 'string') return false;
+    return true;
+}
+

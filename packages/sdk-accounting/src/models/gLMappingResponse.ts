@@ -24,3 +24,17 @@ export interface GLMappingResponse {
     createdBy?: string;
 }
 
+export function instanceOfGLMappingResponse(value: object): value is GLMappingResponse {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('glMappingId' in _v && typeof _v['glMappingId'] !== 'string') return false;
+    if ('sourceSystem' in _v && typeof _v['sourceSystem'] !== 'string') return false;
+    if ('externalCode' in _v && typeof _v['externalCode'] !== 'string') return false;
+    if ('glAccountId' in _v && typeof _v['glAccountId'] !== 'string') return false;
+    if ('accountCode' in _v && typeof _v['accountCode'] !== 'string') return false;
+    if ('accountName' in _v && typeof _v['accountName'] !== 'string') return false;
+    if ('priority' in _v && typeof _v['priority'] !== 'number') return false;
+    if ('createdBy' in _v && typeof _v['createdBy'] !== 'string') return false;
+    return true;
+}
+

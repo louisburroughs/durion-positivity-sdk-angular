@@ -14,3 +14,10 @@ export interface RestrictionOverrideResponse {
     expiresAt?: string;
 }
 
+export function instanceOfRestrictionOverrideResponse(value: object): value is RestrictionOverrideResponse {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('overrideId' in _v && typeof _v['overrideId'] !== 'string') return false;
+    return true;
+}
+

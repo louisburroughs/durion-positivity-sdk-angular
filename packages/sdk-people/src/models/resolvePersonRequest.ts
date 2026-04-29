@@ -35,3 +35,14 @@ export interface ResolvePersonRequest {
     threshold?: number;
 }
 
+export function instanceOfResolvePersonRequest(value: object): value is ResolvePersonRequest {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('email' in _v && typeof _v['email'] !== 'string') return false;
+    if ('phone' in _v && typeof _v['phone'] !== 'string') return false;
+    if ('lastName' in _v && typeof _v['lastName'] !== 'string') return false;
+    if ('firstName' in _v && typeof _v['firstName'] !== 'string') return false;
+    if ('threshold' in _v && typeof _v['threshold'] !== 'number') return false;
+    return true;
+}
+

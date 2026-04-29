@@ -22,3 +22,15 @@ export interface BayResponse {
     lastModifiedAt?: string;
 }
 
+export function instanceOfBayResponse(value: object): value is BayResponse {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('id' in _v && typeof _v['id'] !== 'string') return false;
+    if ('locationId' in _v && typeof _v['locationId'] !== 'string') return false;
+    if ('name' in _v && typeof _v['name'] !== 'string') return false;
+    if ('bayType' in _v && typeof _v['bayType'] !== 'string') return false;
+    if ('status' in _v && typeof _v['status'] !== 'string') return false;
+    if ('maxConcurrentVehicles' in _v && typeof _v['maxConcurrentVehicles'] !== 'number') return false;
+    return true;
+}
+

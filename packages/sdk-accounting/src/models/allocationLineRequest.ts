@@ -23,3 +23,13 @@ export interface AllocationLineRequest {
     appliedAmount: number;
 }
 
+export function instanceOfAllocationLineRequest(value: object): value is AllocationLineRequest {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if (!('vendorBillId' in _v) || _v['vendorBillId'] === undefined) return false;
+    if ('vendorBillId' in _v && typeof _v['vendorBillId'] !== 'string') return false;
+    if (!('appliedAmount' in _v) || _v['appliedAmount'] === undefined) return false;
+    if ('appliedAmount' in _v && typeof _v['appliedAmount'] !== 'number') return false;
+    return true;
+}
+

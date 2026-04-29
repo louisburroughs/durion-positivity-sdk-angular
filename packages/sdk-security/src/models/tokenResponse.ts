@@ -19,3 +19,10 @@ export interface TokenResponse {
     token?: string;
 }
 
+export function instanceOfTokenResponse(value: object): value is TokenResponse {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('token' in _v && typeof _v['token'] !== 'string') return false;
+    return true;
+}
+

@@ -16,3 +16,12 @@ export interface PreferencesUpsertDto {
     updatedByUserId?: string;
 }
 
+export function instanceOfPreferencesUpsertDto(value: object): value is PreferencesUpsertDto {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('serviceNotes' in _v && typeof _v['serviceNotes'] !== 'string') return false;
+    if ('createdByUserId' in _v && typeof _v['createdByUserId'] !== 'string') return false;
+    if ('updatedByUserId' in _v && typeof _v['updatedByUserId'] !== 'string') return false;
+    return true;
+}
+

@@ -27,3 +27,12 @@ export interface CreateEstimateFromAppointmentResponse {
     created?: boolean;
 }
 
+export function instanceOfCreateEstimateFromAppointmentResponse(value: object): value is CreateEstimateFromAppointmentResponse {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('estimateId' in _v && typeof _v['estimateId'] !== 'string') return false;
+    if ('status' in _v && typeof _v['status'] !== 'string') return false;
+    if ('created' in _v && typeof _v['created'] !== 'boolean') return false;
+    return true;
+}
+

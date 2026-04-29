@@ -20,3 +20,17 @@ export interface CreateVehicleForPartyResponse {
     createdAt?: string;
 }
 
+export function instanceOfCreateVehicleForPartyResponse(value: object): value is CreateVehicleForPartyResponse {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('vehicleId' in _v && typeof _v['vehicleId'] !== 'string') return false;
+    if ('partyId' in _v && typeof _v['partyId'] !== 'string') return false;
+    if ('vinNumber' in _v && typeof _v['vinNumber'] !== 'string') return false;
+    if ('unitNumber' in _v && typeof _v['unitNumber'] !== 'string') return false;
+    if ('description' in _v && typeof _v['description'] !== 'string') return false;
+    if ('licensePlate' in _v && typeof _v['licensePlate'] !== 'string') return false;
+    if ('status' in _v && typeof _v['status'] !== 'string') return false;
+    if ('createdAt' in _v && typeof _v['createdAt'] !== 'string') return false;
+    return true;
+}
+

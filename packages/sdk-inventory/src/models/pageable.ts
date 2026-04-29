@@ -15,3 +15,11 @@ export interface Pageable {
     sort?: Array<string>;
 }
 
+export function instanceOfPageable(value: object): value is Pageable {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('page' in _v && typeof _v['page'] !== 'number') return false;
+    if ('size' in _v && typeof _v['size'] !== 'number') return false;
+    return true;
+}
+

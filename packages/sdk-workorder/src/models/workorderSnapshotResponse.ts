@@ -47,3 +47,16 @@ export interface WorkorderSnapshotResponse {
     reason?: string;
 }
 
+export function instanceOfWorkorderSnapshotResponse(value: object): value is WorkorderSnapshotResponse {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('id' in _v && typeof _v['id'] !== 'string') return false;
+    if ('workorderId' in _v && typeof _v['workorderId'] !== 'string') return false;
+    if ('status' in _v && typeof _v['status'] !== 'string') return false;
+    if ('capturedBy' in _v && typeof _v['capturedBy'] !== 'string') return false;
+    if ('snapshotType' in _v && typeof _v['snapshotType'] !== 'string') return false;
+    if ('snapshotData' in _v && typeof _v['snapshotData'] !== 'string') return false;
+    if ('reason' in _v && typeof _v['reason'] !== 'string') return false;
+    return true;
+}
+

@@ -17,3 +17,11 @@ export interface StopTravelSegmentRequest {
     notes?: string;
 }
 
+export function instanceOfStopTravelSegmentRequest(value: object): value is StopTravelSegmentRequest {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('toLocationId' in _v && typeof _v['toLocationId'] !== 'string') return false;
+    if ('notes' in _v && typeof _v['notes'] !== 'string') return false;
+    return true;
+}
+

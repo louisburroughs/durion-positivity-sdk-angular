@@ -23,3 +23,11 @@ export interface FieldError {
     message?: string;
 }
 
+export function instanceOfFieldError(value: object): value is FieldError {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('field' in _v && typeof _v['field'] !== 'string') return false;
+    if ('message' in _v && typeof _v['message'] !== 'string') return false;
+    return true;
+}
+

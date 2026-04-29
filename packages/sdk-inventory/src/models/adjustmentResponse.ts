@@ -48,3 +48,26 @@ export enum AdjustmentResponseRequiredApprovalTierEnum {
 
 
 
+export function instanceOfAdjustmentResponse(value: object): value is AdjustmentResponse {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('adjustmentId' in _v && typeof _v['adjustmentId'] !== 'string') return false;
+    if ('stockItemId' in _v && typeof _v['stockItemId'] !== 'string') return false;
+    if ('reasonCode' in _v && typeof _v['reasonCode'] !== 'string') return false;
+    if ('quantityChange' in _v && typeof _v['quantityChange'] !== 'number') return false;
+    if ('costAtTimeOfAdjustment' in _v && typeof _v['costAtTimeOfAdjustment'] !== 'number') return false;
+    if ('quantityOnHandBefore' in _v && typeof _v['quantityOnHandBefore'] !== 'number') return false;
+    if ('countedQuantity' in _v && typeof _v['countedQuantity'] !== 'number') return false;
+    if ('status' in _v && typeof _v['status'] !== 'string') return false;
+    if ('requiredApprovalTier' in _v && typeof _v['requiredApprovalTier'] !== 'string') return false;
+    if ('createdByUserId' in _v && typeof _v['createdByUserId'] !== 'string') return false;
+    if ('approvedByUserId' in _v && typeof _v['approvedByUserId'] !== 'string') return false;
+    if ('rejectedByUserId' in _v && typeof _v['rejectedByUserId'] !== 'string') return false;
+    if ('rejectionReason' in _v && typeof _v['rejectionReason'] !== 'string') return false;
+    if ('ledgerEntryId' in _v && typeof _v['ledgerEntryId'] !== 'string') return false;
+    if ('errorMessage' in _v && typeof _v['errorMessage'] !== 'string') return false;
+    if ('varianceValue' in _v && typeof _v['varianceValue'] !== 'number') return false;
+    if ('variancePercentage' in _v && typeof _v['variancePercentage'] !== 'number') return false;
+    return true;
+}
+

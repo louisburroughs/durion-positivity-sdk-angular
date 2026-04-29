@@ -55,3 +55,17 @@ export interface CompletionPreconditionsResponse {
     hasBillableItems?: boolean;
 }
 
+export function instanceOfCompletionPreconditionsResponse(value: object): value is CompletionPreconditionsResponse {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('workorderId' in _v && typeof _v['workorderId'] !== 'string') return false;
+    if ('canComplete' in _v && typeof _v['canComplete'] !== 'boolean') return false;
+    if ('currentStatus' in _v && typeof _v['currentStatus'] !== 'string') return false;
+    if ('unresolvedApprovalGatedChangeRequests' in _v && typeof _v['unresolvedApprovalGatedChangeRequests'] !== 'number') return false;
+    if ('nonTerminalServiceItems' in _v && typeof _v['nonTerminalServiceItems'] !== 'number') return false;
+    if ('nonTerminalPartItems' in _v && typeof _v['nonTerminalPartItems'] !== 'number') return false;
+    if ('emergencyDenialAcknowledged' in _v && typeof _v['emergencyDenialAcknowledged'] !== 'boolean') return false;
+    if ('hasBillableItems' in _v && typeof _v['hasBillableItems'] !== 'boolean') return false;
+    return true;
+}
+

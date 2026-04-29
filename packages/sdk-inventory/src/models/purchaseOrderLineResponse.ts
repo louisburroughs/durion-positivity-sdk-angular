@@ -21,3 +21,18 @@ export interface PurchaseOrderLineResponse {
     openQuantityDecimal?: number;
 }
 
+export function instanceOfPurchaseOrderLineResponse(value: object): value is PurchaseOrderLineResponse {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('lineId' in _v && typeof _v['lineId'] !== 'string') return false;
+    if ('lineNumber' in _v && typeof _v['lineNumber'] !== 'number') return false;
+    if ('skuId' in _v && typeof _v['skuId'] !== 'string') return false;
+    if ('description' in _v && typeof _v['description'] !== 'string') return false;
+    if ('quantityDecimal' in _v && typeof _v['quantityDecimal'] !== 'number') return false;
+    if ('unitCostMinor' in _v && typeof _v['unitCostMinor'] !== 'number') return false;
+    if ('lineTotalMinor' in _v && typeof _v['lineTotalMinor'] !== 'number') return false;
+    if ('taxMinor' in _v && typeof _v['taxMinor'] !== 'number') return false;
+    if ('openQuantityDecimal' in _v && typeof _v['openQuantityDecimal'] !== 'number') return false;
+    return true;
+}
+

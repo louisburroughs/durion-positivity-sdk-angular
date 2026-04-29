@@ -39,3 +39,16 @@ export interface ApprovalConfigurationRequest {
     priority?: number;
 }
 
+export function instanceOfApprovalConfigurationRequest(value: object): value is ApprovalConfigurationRequest {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('locationId' in _v && typeof _v['locationId'] !== 'string') return false;
+    if ('customerId' in _v && typeof _v['customerId'] !== 'string') return false;
+    if (!('approvalMethod' in _v) || _v['approvalMethod'] === undefined) return false;
+    if ('approvalMethod' in _v && typeof _v['approvalMethod'] !== 'string') return false;
+    if ('declineExpiryDays' in _v && typeof _v['declineExpiryDays'] !== 'number') return false;
+    if ('requireSignature' in _v && typeof _v['requireSignature'] !== 'string') return false;
+    if ('priority' in _v && typeof _v['priority'] !== 'number') return false;
+    return true;
+}
+

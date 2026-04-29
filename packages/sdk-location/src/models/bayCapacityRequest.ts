@@ -13,3 +13,11 @@ export interface BayCapacityRequest {
     maxConcurrentVehicles: number;
 }
 
+export function instanceOfBayCapacityRequest(value: object): value is BayCapacityRequest {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if (!('maxConcurrentVehicles' in _v) || _v['maxConcurrentVehicles'] === undefined) return false;
+    if ('maxConcurrentVehicles' in _v && typeof _v['maxConcurrentVehicles'] !== 'number') return false;
+    return true;
+}
+

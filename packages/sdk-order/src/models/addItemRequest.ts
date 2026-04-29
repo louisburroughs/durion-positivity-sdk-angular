@@ -16,3 +16,14 @@ export interface AddItemRequest {
     manualPrice?: number;
 }
 
+export function instanceOfAddItemRequest(value: object): value is AddItemRequest {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if (!('itemSku' in _v) || _v['itemSku'] === undefined) return false;
+    if ('itemSku' in _v && typeof _v['itemSku'] !== 'string') return false;
+    if ('quantity' in _v && typeof _v['quantity'] !== 'number') return false;
+    if ('reasonCode' in _v && typeof _v['reasonCode'] !== 'string') return false;
+    if ('manualPrice' in _v && typeof _v['manualPrice'] !== 'number') return false;
+    return true;
+}
+

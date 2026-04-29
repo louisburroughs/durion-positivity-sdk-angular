@@ -53,3 +53,16 @@ export enum InitiatePaymentResponseStatusEnum {
 
 
 
+export function instanceOfInitiatePaymentResponse(value: object): value is InitiatePaymentResponse {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('paymentIntentId' in _v && typeof _v['paymentIntentId'] !== 'string') return false;
+    if ('status' in _v && typeof _v['status'] !== 'string') return false;
+    if ('authorizedAmount' in _v && typeof _v['authorizedAmount'] !== 'number') return false;
+    if ('capturedAmount' in _v && typeof _v['capturedAmount'] !== 'number') return false;
+    if ('voidedRemainderAmount' in _v && typeof _v['voidedRemainderAmount'] !== 'number') return false;
+    if ('gatewayProvider' in _v && typeof _v['gatewayProvider'] !== 'string') return false;
+    if ('gatewayResponse' in _v && typeof _v['gatewayResponse'] !== 'string') return false;
+    return true;
+}
+

@@ -19,3 +19,16 @@ export interface WorkorderPickedItemResponse {
     status?: string;
 }
 
+export function instanceOfWorkorderPickedItemResponse(value: object): value is WorkorderPickedItemResponse {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('pickTaskId' in _v && typeof _v['pickTaskId'] !== 'string') return false;
+    if ('pickListId' in _v && typeof _v['pickListId'] !== 'string') return false;
+    if ('skuId' in _v && typeof _v['skuId'] !== 'string') return false;
+    if ('qtyPicked' in _v && typeof _v['qtyPicked'] !== 'number') return false;
+    if ('qtyConsumed' in _v && typeof _v['qtyConsumed'] !== 'number') return false;
+    if ('qtyRemaining' in _v && typeof _v['qtyRemaining'] !== 'number') return false;
+    if ('status' in _v && typeof _v['status'] !== 'string') return false;
+    return true;
+}
+

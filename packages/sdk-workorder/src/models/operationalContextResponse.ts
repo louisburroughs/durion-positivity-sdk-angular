@@ -51,3 +51,13 @@ export interface OperationalContextResponse {
     locked?: boolean;
 }
 
+export function instanceOfOperationalContextResponse(value: object): value is OperationalContextResponse {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('version' in _v && typeof _v['version'] !== 'string') return false;
+    if ('locationId' in _v && typeof _v['locationId'] !== 'string') return false;
+    if ('bayId' in _v && typeof _v['bayId'] !== 'string') return false;
+    if ('locked' in _v && typeof _v['locked'] !== 'boolean') return false;
+    return true;
+}
+

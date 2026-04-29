@@ -16,3 +16,17 @@ export interface BasePriceBulkIngestRecord {
     effectiveFrom: string;
 }
 
+export function instanceOfBasePriceBulkIngestRecord(value: object): value is BasePriceBulkIngestRecord {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if (!('productId' in _v) || _v['productId'] === undefined) return false;
+    if ('productId' in _v && typeof _v['productId'] !== 'string') return false;
+    if (!('msrp' in _v) || _v['msrp'] === undefined) return false;
+    if ('msrp' in _v && typeof _v['msrp'] !== 'string') return false;
+    if (!('currency' in _v) || _v['currency'] === undefined) return false;
+    if ('currency' in _v && typeof _v['currency'] !== 'string') return false;
+    if (!('effectiveFrom' in _v) || _v['effectiveFrom'] === undefined) return false;
+    if ('effectiveFrom' in _v && typeof _v['effectiveFrom'] !== 'string') return false;
+    return true;
+}
+

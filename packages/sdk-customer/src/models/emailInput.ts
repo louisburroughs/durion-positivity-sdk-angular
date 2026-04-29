@@ -20,3 +20,12 @@ export interface EmailInput {
     primary?: boolean;
 }
 
+export function instanceOfEmailInput(value: object): value is EmailInput {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if (!('value' in _v) || _v['value'] === undefined) return false;
+    if ('value' in _v && typeof _v['value'] !== 'string') return false;
+    if ('primary' in _v && typeof _v['primary'] !== 'boolean') return false;
+    return true;
+}
+

@@ -23,3 +23,11 @@ export interface TokenPairRequest {
     roles?: Set<string>;
 }
 
+export function instanceOfTokenPairRequest(value: object): value is TokenPairRequest {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if (!('subject' in _v) || _v['subject'] === undefined) return false;
+    if ('subject' in _v && typeof _v['subject'] !== 'string') return false;
+    return true;
+}
+

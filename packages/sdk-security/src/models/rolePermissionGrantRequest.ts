@@ -13,3 +13,10 @@ export interface RolePermissionGrantRequest {
     permission?: string;
 }
 
+export function instanceOfRolePermissionGrantRequest(value: object): value is RolePermissionGrantRequest {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('permission' in _v && typeof _v['permission'] !== 'string') return false;
+    return true;
+}
+

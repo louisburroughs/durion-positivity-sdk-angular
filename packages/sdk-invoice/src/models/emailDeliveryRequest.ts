@@ -20,3 +20,13 @@ export enum EmailDeliveryRequestStatusEnum {
 
 
 
+export function instanceOfEmailDeliveryRequest(value: object): value is EmailDeliveryRequest {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if (!('emailAddress' in _v) || _v['emailAddress'] === undefined) return false;
+    if ('emailAddress' in _v && typeof _v['emailAddress'] !== 'string') return false;
+    if (!('status' in _v) || _v['status'] === undefined) return false;
+    if ('status' in _v && typeof _v['status'] !== 'string') return false;
+    return true;
+}
+

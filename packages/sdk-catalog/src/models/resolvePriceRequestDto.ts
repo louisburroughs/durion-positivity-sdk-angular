@@ -18,3 +18,15 @@ export interface ResolvePriceRequestDto {
     asOf?: string;
 }
 
+export function instanceOfResolvePriceRequestDto(value: object): value is ResolvePriceRequestDto {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if (!('productId' in _v) || _v['productId'] === undefined) return false;
+    if ('productId' in _v && typeof _v['productId'] !== 'string') return false;
+    if ('priceBookId' in _v && typeof _v['priceBookId'] !== 'string') return false;
+    if ('locationId' in _v && typeof _v['locationId'] !== 'string') return false;
+    if ('customerTier' in _v && typeof _v['customerTier'] !== 'string') return false;
+    if ('currency' in _v && typeof _v['currency'] !== 'string') return false;
+    return true;
+}
+

@@ -23,3 +23,17 @@ export interface ReceivingSessionResponse {
     lines?: Array<ReceivingLineResponse>;
 }
 
+export function instanceOfReceivingSessionResponse(value: object): value is ReceivingSessionResponse {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('sessionId' in _v && typeof _v['sessionId'] !== 'string') return false;
+    if ('sourceDocumentId' in _v && typeof _v['sourceDocumentId'] !== 'string') return false;
+    if ('sourceDocumentType' in _v && typeof _v['sourceDocumentType'] !== 'string') return false;
+    if ('supplierId' in _v && typeof _v['supplierId'] !== 'string') return false;
+    if ('shipmentReference' in _v && typeof _v['shipmentReference'] !== 'string') return false;
+    if ('status' in _v && typeof _v['status'] !== 'string') return false;
+    if ('entryMethod' in _v && typeof _v['entryMethod'] !== 'string') return false;
+    if ('createdByUserId' in _v && typeof _v['createdByUserId'] !== 'string') return false;
+    return true;
+}
+

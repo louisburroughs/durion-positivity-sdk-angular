@@ -13,3 +13,10 @@ export interface ApprovePriceOverrideRequest {
     comments?: string;
 }
 
+export function instanceOfApprovePriceOverrideRequest(value: object): value is ApprovePriceOverrideRequest {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('comments' in _v && typeof _v['comments'] !== 'string') return false;
+    return true;
+}
+

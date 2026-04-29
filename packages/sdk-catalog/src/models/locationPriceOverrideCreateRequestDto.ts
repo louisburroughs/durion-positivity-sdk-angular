@@ -18,3 +18,20 @@ export interface LocationPriceOverrideCreateRequestDto {
     createdByUserId: string;
 }
 
+export function instanceOfLocationPriceOverrideCreateRequestDto(value: object): value is LocationPriceOverrideCreateRequestDto {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if (!('locationId' in _v) || _v['locationId'] === undefined) return false;
+    if ('locationId' in _v && typeof _v['locationId'] !== 'string') return false;
+    if (!('productId' in _v) || _v['productId'] === undefined) return false;
+    if ('productId' in _v && typeof _v['productId'] !== 'string') return false;
+    if (!('basePrice' in _v) || _v['basePrice'] === undefined) return false;
+    if ('basePrice' in _v && typeof _v['basePrice'] !== 'number') return false;
+    if ('cost' in _v && typeof _v['cost'] !== 'number') return false;
+    if (!('overridePrice' in _v) || _v['overridePrice'] === undefined) return false;
+    if ('overridePrice' in _v && typeof _v['overridePrice'] !== 'number') return false;
+    if (!('createdByUserId' in _v) || _v['createdByUserId'] === undefined) return false;
+    if ('createdByUserId' in _v && typeof _v['createdByUserId'] !== 'string') return false;
+    return true;
+}
+

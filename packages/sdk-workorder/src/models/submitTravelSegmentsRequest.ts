@@ -14,3 +14,11 @@ export interface SubmitTravelSegmentsRequest {
     notes?: string;
 }
 
+export function instanceOfSubmitTravelSegmentsRequest(value: object): value is SubmitTravelSegmentsRequest {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if (!('workDate' in _v) || _v['workDate'] === undefined) return false;
+    if ('notes' in _v && typeof _v['notes'] !== 'string') return false;
+    return true;
+}
+

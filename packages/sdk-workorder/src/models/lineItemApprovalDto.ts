@@ -31,3 +31,15 @@ export interface LineItemApprovalDto {
     notes?: string;
 }
 
+export function instanceOfLineItemApprovalDto(value: object): value is LineItemApprovalDto {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if (!('lineItemId' in _v) || _v['lineItemId'] === undefined) return false;
+    if ('lineItemId' in _v && typeof _v['lineItemId'] !== 'string') return false;
+    if (!('approved' in _v) || _v['approved'] === undefined) return false;
+    if ('approved' in _v && typeof _v['approved'] !== 'boolean') return false;
+    if ('rejectionReason' in _v && typeof _v['rejectionReason'] !== 'string') return false;
+    if ('notes' in _v && typeof _v['notes'] !== 'string') return false;
+    return true;
+}
+

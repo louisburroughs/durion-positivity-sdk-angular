@@ -15,3 +15,13 @@ export interface ReallocateRequest {
     triggerReferenceId?: string;
 }
 
+export function instanceOfReallocateRequest(value: object): value is ReallocateRequest {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if (!('stockItemId' in _v) || _v['stockItemId'] === undefined) return false;
+    if ('stockItemId' in _v && typeof _v['stockItemId'] !== 'string') return false;
+    if ('triggerType' in _v && typeof _v['triggerType'] !== 'string') return false;
+    if ('triggerReferenceId' in _v && typeof _v['triggerReferenceId'] !== 'string') return false;
+    return true;
+}
+

@@ -22,3 +22,15 @@ export interface PostingRuleSetResponse {
     modifiedBy?: string;
 }
 
+export function instanceOfPostingRuleSetResponse(value: object): value is PostingRuleSetResponse {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('postingRuleSetId' in _v && typeof _v['postingRuleSetId'] !== 'string') return false;
+    if ('name' in _v && typeof _v['name'] !== 'string') return false;
+    if ('eventType' in _v && typeof _v['eventType'] !== 'string') return false;
+    if ('description' in _v && typeof _v['description'] !== 'string') return false;
+    if ('createdBy' in _v && typeof _v['createdBy'] !== 'string') return false;
+    if ('modifiedBy' in _v && typeof _v['modifiedBy'] !== 'string') return false;
+    return true;
+}
+

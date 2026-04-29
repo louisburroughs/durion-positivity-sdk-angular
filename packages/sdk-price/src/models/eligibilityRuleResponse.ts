@@ -48,3 +48,14 @@ export enum EligibilityRuleResponseOperatorEnum {
 
 
 
+export function instanceOfEligibilityRuleResponse(value: object): value is EligibilityRuleResponse {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('ruleId' in _v && typeof _v['ruleId'] !== 'string') return false;
+    if ('promotionId' in _v && typeof _v['promotionId'] !== 'string') return false;
+    if ('conditionType' in _v && typeof _v['conditionType'] !== 'string') return false;
+    if ('operator' in _v && typeof _v['operator'] !== 'string') return false;
+    if ('value' in _v && typeof _v['value'] !== 'string') return false;
+    return true;
+}
+

@@ -35,3 +35,13 @@ export interface BulkCorrectionResponse {
     rejections?: Array<string>;
 }
 
+export function instanceOfBulkCorrectionResponse(value: object): value is BulkCorrectionResponse {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('jobId' in _v && typeof _v['jobId'] !== 'string') return false;
+    if ('submittedCount' in _v && typeof _v['submittedCount'] !== 'number') return false;
+    if ('acceptedCount' in _v && typeof _v['acceptedCount'] !== 'number') return false;
+    if ('rejectedCount' in _v && typeof _v['rejectedCount'] !== 'number') return false;
+    return true;
+}
+

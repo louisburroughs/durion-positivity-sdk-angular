@@ -15,3 +15,12 @@ export interface DuplicateCandidate {
     matchReason?: string;
 }
 
+export function instanceOfDuplicateCandidate(value: object): value is DuplicateCandidate {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('partyId' in _v && typeof _v['partyId'] !== 'string') return false;
+    if ('legalName' in _v && typeof _v['legalName'] !== 'string') return false;
+    if ('matchReason' in _v && typeof _v['matchReason'] !== 'string') return false;
+    return true;
+}
+

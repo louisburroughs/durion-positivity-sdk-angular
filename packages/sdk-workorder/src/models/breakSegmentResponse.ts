@@ -46,3 +46,13 @@ export enum BreakSegmentResponseBreakTypeEnum {
 
 
 
+export function instanceOfBreakSegmentResponse(value: object): value is BreakSegmentResponse {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('breakSegmentId' in _v && typeof _v['breakSegmentId'] !== 'string') return false;
+    if ('workSessionId' in _v && typeof _v['workSessionId'] !== 'string') return false;
+    if ('breakType' in _v && typeof _v['breakType'] !== 'string') return false;
+    if ('notes' in _v && typeof _v['notes'] !== 'string') return false;
+    return true;
+}
+

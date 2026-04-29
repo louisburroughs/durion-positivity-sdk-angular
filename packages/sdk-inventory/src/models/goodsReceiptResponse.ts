@@ -22,3 +22,16 @@ export interface GoodsReceiptResponse {
     lines?: Array<GoodsReceiptLineResponse>;
 }
 
+export function instanceOfGoodsReceiptResponse(value: object): value is GoodsReceiptResponse {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('receiptId' in _v && typeof _v['receiptId'] !== 'string') return false;
+    if ('receiptNumber' in _v && typeof _v['receiptNumber'] !== 'string') return false;
+    if ('poId' in _v && typeof _v['poId'] !== 'string') return false;
+    if ('asnId' in _v && typeof _v['asnId'] !== 'string') return false;
+    if ('locationId' in _v && typeof _v['locationId'] !== 'string') return false;
+    if ('totalAccruedAmountMinor' in _v && typeof _v['totalAccruedAmountMinor'] !== 'number') return false;
+    if ('createdBy' in _v && typeof _v['createdBy'] !== 'string') return false;
+    return true;
+}
+

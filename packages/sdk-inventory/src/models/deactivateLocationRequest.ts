@@ -13,3 +13,10 @@ export interface DeactivateLocationRequest {
     destinationLocationId?: string;
 }
 
+export function instanceOfDeactivateLocationRequest(value: object): value is DeactivateLocationRequest {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('destinationLocationId' in _v && typeof _v['destinationLocationId'] !== 'string') return false;
+    return true;
+}
+

@@ -13,3 +13,9 @@ export interface PermissionDecodeResponse {
     permissions?: Array<string>;
 }
 
+export function instanceOfPermissionDecodeResponse(value: object): value is PermissionDecodeResponse {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    return true;
+}
+

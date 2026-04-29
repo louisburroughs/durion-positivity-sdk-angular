@@ -31,3 +31,16 @@ export enum AssignmentResponseStatusEnum {
 
 
 
+export function instanceOfAssignmentResponse(value: object): value is AssignmentResponse {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('assignmentId' in _v && typeof _v['assignmentId'] !== 'string') return false;
+    if ('appointmentId' in _v && typeof _v['appointmentId'] !== 'string') return false;
+    if ('resourceId' in _v && typeof _v['resourceId'] !== 'string') return false;
+    if ('resourceType' in _v && typeof _v['resourceType'] !== 'string') return false;
+    if ('status' in _v && typeof _v['status'] !== 'string') return false;
+    if ('override' in _v && typeof _v['override'] !== 'boolean') return false;
+    if ('assignmentNotes' in _v && typeof _v['assignmentNotes'] !== 'string') return false;
+    return true;
+}
+

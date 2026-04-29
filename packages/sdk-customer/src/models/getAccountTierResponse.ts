@@ -53,3 +53,15 @@ export enum GetAccountTierResponseTierEnum {
 
 
 
+export function instanceOfGetAccountTierResponse(value: object): value is GetAccountTierResponse {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('accountId' in _v && typeof _v['accountId'] !== 'string') return false;
+    if ('tier' in _v && typeof _v['tier'] !== 'string') return false;
+    if ('tierDisplayName' in _v && typeof _v['tierDisplayName'] !== 'string') return false;
+    if ('tierAssignedBy' in _v && typeof _v['tierAssignedBy'] !== 'string') return false;
+    if ('notes' in _v && typeof _v['notes'] !== 'string') return false;
+    if ('manualOverride' in _v && typeof _v['manualOverride'] !== 'boolean') return false;
+    return true;
+}
+

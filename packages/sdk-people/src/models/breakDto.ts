@@ -15,3 +15,10 @@ export interface BreakDto {
     endedAt?: string;
 }
 
+export function instanceOfBreakDto(value: object): value is BreakDto {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('sessionId' in _v && typeof _v['sessionId'] !== 'string') return false;
+    return true;
+}
+

@@ -15,3 +15,14 @@ export interface MappingKeyUpdateRequest {
     modifiedBy: string;
 }
 
+export function instanceOfMappingKeyUpdateRequest(value: object): value is MappingKeyUpdateRequest {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if (!('keyName' in _v) || _v['keyName'] === undefined) return false;
+    if ('keyName' in _v && typeof _v['keyName'] !== 'string') return false;
+    if ('description' in _v && typeof _v['description'] !== 'string') return false;
+    if (!('modifiedBy' in _v) || _v['modifiedBy'] === undefined) return false;
+    if ('modifiedBy' in _v && typeof _v['modifiedBy'] !== 'string') return false;
+    return true;
+}
+

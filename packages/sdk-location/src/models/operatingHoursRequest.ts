@@ -15,3 +15,12 @@ export interface OperatingHoursRequest {
     closeTime?: string;
 }
 
+export function instanceOfOperatingHoursRequest(value: object): value is OperatingHoursRequest {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('dayOfWeek' in _v && typeof _v['dayOfWeek'] !== 'string') return false;
+    if ('openTime' in _v && typeof _v['openTime'] !== 'string') return false;
+    if ('closeTime' in _v && typeof _v['closeTime'] !== 'string') return false;
+    return true;
+}
+

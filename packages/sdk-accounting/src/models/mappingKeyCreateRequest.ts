@@ -16,3 +16,16 @@ export interface MappingKeyCreateRequest {
     createdBy: string;
 }
 
+export function instanceOfMappingKeyCreateRequest(value: object): value is MappingKeyCreateRequest {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if (!('postingCategoryId' in _v) || _v['postingCategoryId'] === undefined) return false;
+    if ('postingCategoryId' in _v && typeof _v['postingCategoryId'] !== 'string') return false;
+    if (!('keyName' in _v) || _v['keyName'] === undefined) return false;
+    if ('keyName' in _v && typeof _v['keyName'] !== 'string') return false;
+    if ('description' in _v && typeof _v['description'] !== 'string') return false;
+    if (!('createdBy' in _v) || _v['createdBy'] === undefined) return false;
+    if ('createdBy' in _v && typeof _v['createdBy'] !== 'string') return false;
+    return true;
+}
+

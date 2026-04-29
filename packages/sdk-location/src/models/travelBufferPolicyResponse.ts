@@ -19,3 +19,14 @@ export interface TravelBufferPolicyResponse {
     updatedAt?: string;
 }
 
+export function instanceOfTravelBufferPolicyResponse(value: object): value is TravelBufferPolicyResponse {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('id' in _v && typeof _v['id'] !== 'string') return false;
+    if ('name' in _v && typeof _v['name'] !== 'string') return false;
+    if ('bufferType' in _v && typeof _v['bufferType'] !== 'string') return false;
+    if ('bufferValue' in _v && typeof _v['bufferValue'] !== 'number') return false;
+    if ('notes' in _v && typeof _v['notes'] !== 'string') return false;
+    return true;
+}
+

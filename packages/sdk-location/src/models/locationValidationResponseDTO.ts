@@ -15,3 +15,12 @@ export interface LocationValidationResponseDTO {
     active?: boolean;
 }
 
+export function instanceOfLocationValidationResponseDTO(value: object): value is LocationValidationResponseDTO {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('locationId' in _v && typeof _v['locationId'] !== 'string') return false;
+    if ('exists' in _v && typeof _v['exists'] !== 'boolean') return false;
+    if ('active' in _v && typeof _v['active'] !== 'boolean') return false;
+    return true;
+}
+

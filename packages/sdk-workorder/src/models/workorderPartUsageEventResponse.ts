@@ -51,3 +51,17 @@ export interface WorkorderPartUsageEventResponse {
     partDescription?: string;
 }
 
+export function instanceOfWorkorderPartUsageEventResponse(value: object): value is WorkorderPartUsageEventResponse {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('id' in _v && typeof _v['id'] !== 'string') return false;
+    if ('workorderPartId' in _v && typeof _v['workorderPartId'] !== 'string') return false;
+    if ('workorderId' in _v && typeof _v['workorderId'] !== 'string') return false;
+    if ('eventType' in _v && typeof _v['eventType'] !== 'string') return false;
+    if ('quantity' in _v && typeof _v['quantity'] !== 'number') return false;
+    if ('performedBy' in _v && typeof _v['performedBy'] !== 'string') return false;
+    if ('notes' in _v && typeof _v['notes'] !== 'string') return false;
+    if ('partDescription' in _v && typeof _v['partDescription'] !== 'string') return false;
+    return true;
+}
+

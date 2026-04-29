@@ -14,3 +14,9 @@ export interface RestrictionEvaluationResponse {
     results?: Array<RestrictionEvaluationResult>;
 }
 
+export function instanceOfRestrictionEvaluationResponse(value: object): value is RestrictionEvaluationResponse {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    return true;
+}
+

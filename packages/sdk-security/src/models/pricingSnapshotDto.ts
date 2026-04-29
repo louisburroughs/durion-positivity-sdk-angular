@@ -18,3 +18,12 @@ export interface PricingSnapshotDto {
     evaluationSteps?: Array<PricingRuleTraceEntryDto>;
 }
 
+export function instanceOfPricingSnapshotDto(value: object): value is PricingSnapshotDto {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('snapshotId' in _v && typeof _v['snapshotId'] !== 'string') return false;
+    if ('quoteContext' in _v && typeof _v['quoteContext'] !== 'string') return false;
+    if ('finalPrice' in _v && typeof _v['finalPrice'] !== 'number') return false;
+    return true;
+}
+

@@ -63,3 +63,20 @@ export interface WorkorderPartAdjustmentEventResponse {
     notes?: string;
 }
 
+export function instanceOfWorkorderPartAdjustmentEventResponse(value: object): value is WorkorderPartAdjustmentEventResponse {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('id' in _v && typeof _v['id'] !== 'string') return false;
+    if ('originalPartId' in _v && typeof _v['originalPartId'] !== 'string') return false;
+    if ('originalPartDescription' in _v && typeof _v['originalPartDescription'] !== 'string') return false;
+    if ('workorderId' in _v && typeof _v['workorderId'] !== 'string') return false;
+    if ('adjustmentType' in _v && typeof _v['adjustmentType'] !== 'string') return false;
+    if ('substitutedWithPartId' in _v && typeof _v['substitutedWithPartId'] !== 'string') return false;
+    if ('substitutedWithPartDescription' in _v && typeof _v['substitutedWithPartDescription'] !== 'string') return false;
+    if ('quantityAdjustment' in _v && typeof _v['quantityAdjustment'] !== 'number') return false;
+    if ('reason' in _v && typeof _v['reason'] !== 'string') return false;
+    if ('performedBy' in _v && typeof _v['performedBy'] !== 'string') return false;
+    if ('notes' in _v && typeof _v['notes'] !== 'string') return false;
+    return true;
+}
+

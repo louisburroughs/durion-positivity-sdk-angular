@@ -14,3 +14,12 @@ export interface CreateReceivingSessionRequest {
     entryMethod?: string;
 }
 
+export function instanceOfCreateReceivingSessionRequest(value: object): value is CreateReceivingSessionRequest {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if (!('sourceDocumentId' in _v) || _v['sourceDocumentId'] === undefined) return false;
+    if ('sourceDocumentId' in _v && typeof _v['sourceDocumentId'] !== 'string') return false;
+    if ('entryMethod' in _v && typeof _v['entryMethod'] !== 'string') return false;
+    return true;
+}
+

@@ -19,9 +19,11 @@ import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 // @ts-ignore
 import { ApiError } from '../src/models/apiError';
 // @ts-ignore
-import { ShortageResolutionRequest } from '../src/models/shortageResolutionRequest';
+import { ShortageOptionDto } from '../src/models/shortageOptionDto';
 // @ts-ignore
-import { ShortageResolutionResponse } from '../src/models/shortageResolutionResponse';
+import { ShortageResolutionResultDto } from '../src/models/shortageResolutionResultDto';
+// @ts-ignore
+import { ShortageResolveRequest } from '../src/models/shortageResolveRequest';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
@@ -40,20 +42,92 @@ export class ShortageResolutionService extends BaseService {
     }
 
     /**
-     * Resolve shortage
-     * Returns candidate shortage resolution options from substitutes and external availability
-     * @endpoint post /v1/inventory/allocations/shortages/resolve
-     * @param shortageResolutionRequest 
+     * List shortage options
+     * Returns available shortage resolution options for an allocation.
+     * @endpoint get /v1/inventory/shortage/options
+     * @param allocationId 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public resolveShortage(shortageResolutionRequest: ShortageResolutionRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ShortageResolutionResponse>;
-    public resolveShortage(shortageResolutionRequest: ShortageResolutionRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ShortageResolutionResponse>>;
-    public resolveShortage(shortageResolutionRequest: ShortageResolutionRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ShortageResolutionResponse>>;
-    public resolveShortage(shortageResolutionRequest: ShortageResolutionRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
-        if (shortageResolutionRequest === null || shortageResolutionRequest === undefined) {
-            throw new Error('Required parameter shortageResolutionRequest was null or undefined when calling resolveShortage.');
+    public listShortageOptions(allocationId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<ShortageOptionDto>>;
+    public listShortageOptions(allocationId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<ShortageOptionDto>>>;
+    public listShortageOptions(allocationId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<ShortageOptionDto>>>;
+    public listShortageOptions(allocationId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (allocationId === null || allocationId === undefined) {
+            throw new Error('Required parameter allocationId was null or undefined when calling listShortageOptions.');
+        }
+
+        let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'allocationId',
+            <any>allocationId,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/inventory/shortage/options`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<Array<ShortageOptionDto>>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                params: localVarQueryParameters.toHttpParams(),
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Resolve shortage
+     * Resolves inventory shortage using a selected strategy.
+     * @endpoint post /v1/inventory/shortage/resolve
+     * @param shortageResolveRequest 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public resolveShortage(shortageResolveRequest: ShortageResolveRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ShortageResolutionResultDto>;
+    public resolveShortage(shortageResolveRequest: ShortageResolveRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ShortageResolutionResultDto>>;
+    public resolveShortage(shortageResolveRequest: ShortageResolveRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ShortageResolutionResultDto>>;
+    public resolveShortage(shortageResolveRequest: ShortageResolveRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (shortageResolveRequest === null || shortageResolveRequest === undefined) {
+            throw new Error('Required parameter shortageResolveRequest was null or undefined when calling resolveShortage.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -93,12 +167,12 @@ export class ShortageResolutionService extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/inventory/allocations/shortages/resolve`;
+        let localVarPath = `/v1/inventory/shortage/resolve`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<ShortageResolutionResponse>('post', `${basePath}${localVarPath}`,
+        return this.httpClient.request<ShortageResolutionResultDto>('post', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
-                body: shortageResolutionRequest,
+                body: shortageResolveRequest,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,

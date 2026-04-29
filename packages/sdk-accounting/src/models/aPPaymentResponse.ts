@@ -103,3 +103,24 @@ export enum APPaymentResponseStatusEnum {
 
 
 
+export function instanceOfAPPaymentResponse(value: object): value is APPaymentResponse {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('paymentId' in _v && typeof _v['paymentId'] !== 'string') return false;
+    if ('paymentRef' in _v && typeof _v['paymentRef'] !== 'string') return false;
+    if ('vendorId' in _v && typeof _v['vendorId'] !== 'string') return false;
+    if ('vendorName' in _v && typeof _v['vendorName'] !== 'string') return false;
+    if ('grossAmount' in _v && typeof _v['grossAmount'] !== 'number') return false;
+    if ('feeAmount' in _v && typeof _v['feeAmount'] !== 'number') return false;
+    if ('netAmount' in _v && typeof _v['netAmount'] !== 'number') return false;
+    if ('unappliedAmount' in _v && typeof _v['unappliedAmount'] !== 'number') return false;
+    if ('currency' in _v && typeof _v['currency'] !== 'string') return false;
+    if ('status' in _v && typeof _v['status'] !== 'string') return false;
+    if ('gatewayTransactionId' in _v && typeof _v['gatewayTransactionId'] !== 'string') return false;
+    if ('glJournalEntryId' in _v && typeof _v['glJournalEntryId'] !== 'string') return false;
+    if ('glPostError' in _v && typeof _v['glPostError'] !== 'string') return false;
+    if ('memo' in _v && typeof _v['memo'] !== 'string') return false;
+    if ('createdBy' in _v && typeof _v['createdBy'] !== 'string') return false;
+    return true;
+}
+

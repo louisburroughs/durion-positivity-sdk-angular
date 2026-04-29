@@ -18,3 +18,12 @@ export interface MergePartiesRequest {
     justification?: string;
 }
 
+export function instanceOfMergePartiesRequest(value: object): value is MergePartiesRequest {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('survivorPartyId' in _v && typeof _v['survivorPartyId'] !== 'string') return false;
+    if ('losingPartyId' in _v && typeof _v['losingPartyId'] !== 'string') return false;
+    if ('justification' in _v && typeof _v['justification'] !== 'string') return false;
+    return true;
+}
+

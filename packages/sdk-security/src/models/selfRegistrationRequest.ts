@@ -47,3 +47,21 @@ export interface SelfRegistrationRequest {
     idempotencyKey?: string;
 }
 
+export function instanceOfSelfRegistrationRequest(value: object): value is SelfRegistrationRequest {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if (!('email' in _v) || _v['email'] === undefined) return false;
+    if ('email' in _v && typeof _v['email'] !== 'string') return false;
+    if (!('password' in _v) || _v['password'] === undefined) return false;
+    if ('password' in _v && typeof _v['password'] !== 'string') return false;
+    if (!('firstName' in _v) || _v['firstName'] === undefined) return false;
+    if ('firstName' in _v && typeof _v['firstName'] !== 'string') return false;
+    if (!('lastName' in _v) || _v['lastName'] === undefined) return false;
+    if ('lastName' in _v && typeof _v['lastName'] !== 'string') return false;
+    if ('phone' in _v && typeof _v['phone'] !== 'string') return false;
+    if ('username' in _v && typeof _v['username'] !== 'string') return false;
+    if ('idpSubject' in _v && typeof _v['idpSubject'] !== 'string') return false;
+    if ('idempotencyKey' in _v && typeof _v['idempotencyKey'] !== 'string') return false;
+    return true;
+}
+

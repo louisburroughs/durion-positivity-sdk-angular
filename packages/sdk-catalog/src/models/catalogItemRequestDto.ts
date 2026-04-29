@@ -83,3 +83,25 @@ export interface CatalogItemRequestDto {
     specifications?: string;
 }
 
+export function instanceOfCatalogItemRequestDto(value: object): value is CatalogItemRequestDto {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('name' in _v && typeof _v['name'] !== 'string') return false;
+    if ('shortDescription' in _v && typeof _v['shortDescription'] !== 'string') return false;
+    if ('longDescription' in _v && typeof _v['longDescription'] !== 'string') return false;
+    if ('manufacturerPartNumber' in _v && typeof _v['manufacturerPartNumber'] !== 'string') return false;
+    if ('manufacturerId' in _v && typeof _v['manufacturerId'] !== 'string') return false;
+    if ('manufacturerName' in _v && typeof _v['manufacturerName'] !== 'string') return false;
+    if ('manufacturerWarranty' in _v && typeof _v['manufacturerWarranty'] !== 'string') return false;
+    if ('manufacturerBrand' in _v && typeof _v['manufacturerBrand'] !== 'string') return false;
+    if ('countryOfOrigin' in _v && typeof _v['countryOfOrigin'] !== 'string') return false;
+    if ('sku' in _v && typeof _v['sku'] !== 'string') return false;
+    if ('productCode' in _v && typeof _v['productCode'] !== 'string') return false;
+    if ('type' in _v && typeof _v['type'] !== 'string') return false;
+    if ('material' in _v && typeof _v['material'] !== 'string') return false;
+    if ('color' in _v && typeof _v['color'] !== 'string') return false;
+    if ('warranty' in _v && typeof _v['warranty'] !== 'string') return false;
+    if ('specifications' in _v && typeof _v['specifications'] !== 'string') return false;
+    return true;
+}
+

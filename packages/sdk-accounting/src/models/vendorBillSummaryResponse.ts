@@ -61,3 +61,16 @@ export enum VendorBillSummaryResponseStatusEnum {
 
 
 
+export function instanceOfVendorBillSummaryResponse(value: object): value is VendorBillSummaryResponse {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('vendorBillId' in _v && typeof _v['vendorBillId'] !== 'string') return false;
+    if ('vendorId' in _v && typeof _v['vendorId'] !== 'string') return false;
+    if ('vendorName' in _v && typeof _v['vendorName'] !== 'string') return false;
+    if ('billNumber' in _v && typeof _v['billNumber'] !== 'string') return false;
+    if ('totalAmount' in _v && typeof _v['totalAmount'] !== 'number') return false;
+    if ('openAmount' in _v && typeof _v['openAmount'] !== 'number') return false;
+    if ('status' in _v && typeof _v['status'] !== 'string') return false;
+    return true;
+}
+

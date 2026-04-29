@@ -14,3 +14,13 @@ export interface CreateUserLinkRequest {
     personId: string;
 }
 
+export function instanceOfCreateUserLinkRequest(value: object): value is CreateUserLinkRequest {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if (!('userId' in _v) || _v['userId'] === undefined) return false;
+    if ('userId' in _v && typeof _v['userId'] !== 'string') return false;
+    if (!('personId' in _v) || _v['personId'] === undefined) return false;
+    if ('personId' in _v && typeof _v['personId'] !== 'string') return false;
+    return true;
+}
+

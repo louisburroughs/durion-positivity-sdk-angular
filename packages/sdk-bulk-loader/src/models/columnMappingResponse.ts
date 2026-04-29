@@ -19,3 +19,14 @@ export interface ColumnMappingResponse {
     createdAt?: string;
 }
 
+export function instanceOfColumnMappingResponse(value: object): value is ColumnMappingResponse {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('id' in _v && typeof _v['id'] !== 'string') return false;
+    if ('jobId' in _v && typeof _v['jobId'] !== 'string') return false;
+    if ('sourceColumn' in _v && typeof _v['sourceColumn'] !== 'string') return false;
+    if ('targetField' in _v && typeof _v['targetField'] !== 'string') return false;
+    if ('overriddenByUser' in _v && typeof _v['overriddenByUser'] !== 'boolean') return false;
+    return true;
+}
+

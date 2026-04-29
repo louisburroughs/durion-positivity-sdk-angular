@@ -48,3 +48,16 @@ export enum AddEligibilityRuleRequestRuleCombinationEnum {
 
 
 
+export function instanceOfAddEligibilityRuleRequest(value: object): value is AddEligibilityRuleRequest {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if (!('conditionType' in _v) || _v['conditionType'] === undefined) return false;
+    if ('conditionType' in _v && typeof _v['conditionType'] !== 'string') return false;
+    if (!('operator' in _v) || _v['operator'] === undefined) return false;
+    if ('operator' in _v && typeof _v['operator'] !== 'string') return false;
+    if (!('value' in _v) || _v['value'] === undefined) return false;
+    if ('value' in _v && typeof _v['value'] !== 'string') return false;
+    if ('ruleCombination' in _v && _v['ruleCombination'] !== null && typeof _v['ruleCombination'] !== 'string') return false;
+    return true;
+}
+

@@ -16,3 +16,13 @@ export interface CreatePickListRequest {
     reservationId?: string;
 }
 
+export function instanceOfCreatePickListRequest(value: object): value is CreatePickListRequest {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if (!('workorderId' in _v) || _v['workorderId'] === undefined) return false;
+    if ('workorderId' in _v && typeof _v['workorderId'] !== 'string') return false;
+    if ('priority' in _v && typeof _v['priority'] !== 'number') return false;
+    if ('reservationId' in _v && typeof _v['reservationId'] !== 'string') return false;
+    return true;
+}
+

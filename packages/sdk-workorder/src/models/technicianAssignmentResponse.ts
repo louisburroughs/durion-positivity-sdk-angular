@@ -80,3 +80,21 @@ export interface TechnicianAssignmentResponse {
     assignmentHistory?: Array<AssignmentHistoryEntry>;
 }
 
+export function instanceOfTechnicianAssignmentResponse(value: object): value is TechnicianAssignmentResponse {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('workorderId' in _v && typeof _v['workorderId'] !== 'string') return false;
+    if ('technicianId' in _v && typeof _v['technicianId'] !== 'string') return false;
+    if ('technicianName' in _v && typeof _v['technicianName'] !== 'string') return false;
+    if ('assignedBy' in _v && typeof _v['assignedBy'] !== 'string') return false;
+    if ('previousTechnicianId' in _v && typeof _v['previousTechnicianId'] !== 'string') return false;
+    if ('previousTechnicianName' in _v && typeof _v['previousTechnicianName'] !== 'string') return false;
+    if ('status' in _v && typeof _v['status'] !== 'string') return false;
+    if ('message' in _v && typeof _v['message'] !== 'string') return false;
+    if ('notes' in _v && typeof _v['notes'] !== 'string') return false;
+    if ('reassignmentReason' in _v && typeof _v['reassignmentReason'] !== 'string') return false;
+    if ('reassignedBy' in _v && typeof _v['reassignedBy'] !== 'string') return false;
+    if ('currentStatus' in _v && typeof _v['currentStatus'] !== 'string') return false;
+    return true;
+}
+

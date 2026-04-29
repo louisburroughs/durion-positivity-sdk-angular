@@ -16,3 +16,11 @@ export interface PtoEntry {
     ptoType?: string;
 }
 
+export function instanceOfPtoEntry(value: object): value is PtoEntry {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('ptoId' in _v && typeof _v['ptoId'] !== 'string') return false;
+    if ('ptoType' in _v && typeof _v['ptoType'] !== 'string') return false;
+    return true;
+}
+

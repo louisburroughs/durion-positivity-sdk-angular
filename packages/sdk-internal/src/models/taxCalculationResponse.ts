@@ -71,3 +71,24 @@ export enum TaxCalculationResponseReferenceTypeEnum {
 
 
 
+export function instanceOfTaxCalculationResponse(value: object): value is TaxCalculationResponse {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if (!('subtotal' in _v) || _v['subtotal'] === undefined) return false;
+    if ('subtotal' in _v && typeof _v['subtotal'] !== 'number') return false;
+    if (!('totalTax' in _v) || _v['totalTax'] === undefined) return false;
+    if ('totalTax' in _v && typeof _v['totalTax'] !== 'number') return false;
+    if (!('total' in _v) || _v['total'] === undefined) return false;
+    if ('total' in _v && typeof _v['total'] !== 'number') return false;
+    if (!('effectiveTaxRate' in _v) || _v['effectiveTaxRate'] === undefined) return false;
+    if ('effectiveTaxRate' in _v && typeof _v['effectiveTaxRate'] !== 'number') return false;
+    if (!('jurisdictions' in _v) || _v['jurisdictions'] === undefined) return false;
+    if (!('lineItemTaxes' in _v) || _v['lineItemTaxes'] === undefined) return false;
+    if ('testMode' in _v && typeof _v['testMode'] !== 'boolean') return false;
+    if (!('calculatedAt' in _v) || _v['calculatedAt'] === undefined) return false;
+    if ('referenceId' in _v && typeof _v['referenceId'] !== 'string') return false;
+    if ('referenceType' in _v && typeof _v['referenceType'] !== 'string') return false;
+    if ('externalTransactionId' in _v && typeof _v['externalTransactionId'] !== 'string') return false;
+    return true;
+}
+

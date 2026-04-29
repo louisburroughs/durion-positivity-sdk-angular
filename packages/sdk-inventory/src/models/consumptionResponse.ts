@@ -18,3 +18,13 @@ export interface ConsumptionResponse {
     ledgerEntryIds?: Array<string>;
 }
 
+export function instanceOfConsumptionResponse(value: object): value is ConsumptionResponse {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('consumptionId' in _v && typeof _v['consumptionId'] !== 'string') return false;
+    if ('workorderId' in _v && typeof _v['workorderId'] !== 'string') return false;
+    if ('pickListId' in _v && typeof _v['pickListId'] !== 'string') return false;
+    if ('totalItemsConsumed' in _v && typeof _v['totalItemsConsumed'] !== 'number') return false;
+    return true;
+}
+

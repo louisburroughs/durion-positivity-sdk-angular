@@ -24,3 +24,11 @@ export enum RestrictionEvaluationResultDecisionEnum {
 
 
 
+export function instanceOfRestrictionEvaluationResult(value: object): value is RestrictionEvaluationResult {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('productId' in _v && typeof _v['productId'] !== 'string') return false;
+    if ('decision' in _v && typeof _v['decision'] !== 'string') return false;
+    return true;
+}
+

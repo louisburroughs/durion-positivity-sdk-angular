@@ -18,3 +18,12 @@ export interface ConflictOverrideRequest {
     conflictDetails?: string;
 }
 
+export function instanceOfConflictOverrideRequest(value: object): value is ConflictOverrideRequest {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('appointmentId' in _v && typeof _v['appointmentId'] !== 'string') return false;
+    if ('overrideReason' in _v && typeof _v['overrideReason'] !== 'string') return false;
+    if ('conflictDetails' in _v && typeof _v['conflictDetails'] !== 'string') return false;
+    return true;
+}
+

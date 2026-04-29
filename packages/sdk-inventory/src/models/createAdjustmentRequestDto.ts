@@ -17,3 +17,18 @@ export interface CreateAdjustmentRequestDto {
     unitOfMeasure?: string;
 }
 
+export function instanceOfCreateAdjustmentRequestDto(value: object): value is CreateAdjustmentRequestDto {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if (!('productSku' in _v) || _v['productSku'] === undefined) return false;
+    if ('productSku' in _v && typeof _v['productSku'] !== 'string') return false;
+    if (!('locationId' in _v) || _v['locationId'] === undefined) return false;
+    if ('locationId' in _v && typeof _v['locationId'] !== 'string') return false;
+    if (!('quantity' in _v) || _v['quantity'] === undefined) return false;
+    if ('quantity' in _v && typeof _v['quantity'] !== 'number') return false;
+    if (!('reasonCode' in _v) || _v['reasonCode'] === undefined) return false;
+    if ('reasonCode' in _v && typeof _v['reasonCode'] !== 'string') return false;
+    if ('unitOfMeasure' in _v && typeof _v['unitOfMeasure'] !== 'string') return false;
+    return true;
+}
+

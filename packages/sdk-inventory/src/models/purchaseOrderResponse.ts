@@ -48,3 +48,28 @@ export enum PurchaseOrderResponseStatusEnum {
 
 
 
+export function instanceOfPurchaseOrderResponse(value: object): value is PurchaseOrderResponse {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('purchaseOrderId' in _v && typeof _v['purchaseOrderId'] !== 'string') return false;
+    if ('vendorId' in _v && typeof _v['vendorId'] !== 'string') return false;
+    if ('poNumber' in _v && typeof _v['poNumber'] !== 'string') return false;
+    if ('status' in _v && typeof _v['status'] !== 'string') return false;
+    if ('versionNumber' in _v && typeof _v['versionNumber'] !== 'number') return false;
+    if ('currency' in _v && typeof _v['currency'] !== 'string') return false;
+    if ('subtotalMinor' in _v && typeof _v['subtotalMinor'] !== 'number') return false;
+    if ('taxMinor' in _v && typeof _v['taxMinor'] !== 'number') return false;
+    if ('grandTotalMinor' in _v && typeof _v['grandTotalMinor'] !== 'number') return false;
+    if ('openBalanceMinor' in _v && typeof _v['openBalanceMinor'] !== 'number') return false;
+    if ('shipToLocationId' in _v && typeof _v['shipToLocationId'] !== 'string') return false;
+    if ('paymentTermsId' in _v && typeof _v['paymentTermsId'] !== 'string') return false;
+    if ('requestedBy' in _v && typeof _v['requestedBy'] !== 'string') return false;
+    if ('comment' in _v && typeof _v['comment'] !== 'string') return false;
+    if ('approverId' in _v && typeof _v['approverId'] !== 'string') return false;
+    if ('approvalNotes' in _v && typeof _v['approvalNotes'] !== 'string') return false;
+    if ('encumbranceRef' in _v && typeof _v['encumbranceRef'] !== 'string') return false;
+    if ('createdBy' in _v && typeof _v['createdBy'] !== 'string') return false;
+    if ('updatedBy' in _v && typeof _v['updatedBy'] !== 'string') return false;
+    return true;
+}
+

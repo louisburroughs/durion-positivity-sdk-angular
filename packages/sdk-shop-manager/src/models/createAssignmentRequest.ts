@@ -19,3 +19,14 @@ export interface CreateAssignmentRequest {
     overrideReason?: string;
 }
 
+export function instanceOfCreateAssignmentRequest(value: object): value is CreateAssignmentRequest {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('appointmentId' in _v && typeof _v['appointmentId'] !== 'string') return false;
+    if ('resourceId' in _v && typeof _v['resourceId'] !== 'string') return false;
+    if ('resourceType' in _v && typeof _v['resourceType'] !== 'string') return false;
+    if ('override' in _v && typeof _v['override'] !== 'boolean') return false;
+    if ('overrideReason' in _v && typeof _v['overrideReason'] !== 'string') return false;
+    return true;
+}
+

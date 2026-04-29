@@ -26,3 +26,17 @@ export interface AppointmentResponse {
     vehicleSnapshot?: { [key: string]: any; };
 }
 
+export function instanceOfAppointmentResponse(value: object): value is AppointmentResponse {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('appointmentId' in _v && typeof _v['appointmentId'] !== 'string') return false;
+    if ('status' in _v && typeof _v['status'] !== 'string') return false;
+    if ('locationId' in _v && typeof _v['locationId'] !== 'string') return false;
+    if ('resourceId' in _v && typeof _v['resourceId'] !== 'string') return false;
+    if ('crmCustomerId' in _v && typeof _v['crmCustomerId'] !== 'string') return false;
+    if ('crmVehicleId' in _v && typeof _v['crmVehicleId'] !== 'string') return false;
+    if ('cancellationReason' in _v && typeof _v['cancellationReason'] !== 'string') return false;
+    if ('cancellationNotes' in _v && typeof _v['cancellationNotes'] !== 'string') return false;
+    return true;
+}
+

@@ -58,3 +58,15 @@ export enum EstimateSnapshotResponseStatusEnum {
 
 
 
+export function instanceOfEstimateSnapshotResponse(value: object): value is EstimateSnapshotResponse {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('id' in _v && typeof _v['id'] !== 'string') return false;
+    if ('estimateId' in _v && typeof _v['estimateId'] !== 'string') return false;
+    if ('status' in _v && typeof _v['status'] !== 'string') return false;
+    if ('snapshotData' in _v && typeof _v['snapshotData'] !== 'string') return false;
+    if ('capturedById' in _v && typeof _v['capturedById'] !== 'string') return false;
+    if ('notes' in _v && typeof _v['notes'] !== 'string') return false;
+    return true;
+}
+

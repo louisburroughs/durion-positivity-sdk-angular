@@ -19,3 +19,15 @@ export interface CrossDockResponse {
     lineStatus?: string;
 }
 
+export function instanceOfCrossDockResponse(value: object): value is CrossDockResponse {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('lineId' in _v && typeof _v['lineId'] !== 'string') return false;
+    if ('workorderId' in _v && typeof _v['workorderId'] !== 'string') return false;
+    if ('workorderLineId' in _v && typeof _v['workorderLineId'] !== 'string') return false;
+    if ('crossDockedQuantity' in _v && typeof _v['crossDockedQuantity'] !== 'number') return false;
+    if ('sessionStatus' in _v && typeof _v['sessionStatus'] !== 'string') return false;
+    if ('lineStatus' in _v && typeof _v['lineStatus'] !== 'string') return false;
+    return true;
+}
+

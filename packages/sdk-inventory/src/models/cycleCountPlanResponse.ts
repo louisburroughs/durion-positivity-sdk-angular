@@ -21,3 +21,14 @@ export interface CycleCountPlanResponse {
     updatedAt?: string;
 }
 
+export function instanceOfCycleCountPlanResponse(value: object): value is CycleCountPlanResponse {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('planId' in _v && typeof _v['planId'] !== 'string') return false;
+    if ('locationId' in _v && typeof _v['locationId'] !== 'string') return false;
+    if ('planName' in _v && typeof _v['planName'] !== 'string') return false;
+    if ('status' in _v && typeof _v['status'] !== 'string') return false;
+    if ('createdBy' in _v && typeof _v['createdBy'] !== 'string') return false;
+    return true;
+}
+

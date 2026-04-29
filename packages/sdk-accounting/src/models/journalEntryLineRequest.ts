@@ -36,3 +36,15 @@ export interface JournalEntryLineRequest {
     singleSidedAmount?: boolean;
 }
 
+export function instanceOfJournalEntryLineRequest(value: object): value is JournalEntryLineRequest {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if (!('glAccountId' in _v) || _v['glAccountId'] === undefined) return false;
+    if ('glAccountId' in _v && typeof _v['glAccountId'] !== 'string') return false;
+    if ('debitAmount' in _v && typeof _v['debitAmount'] !== 'number') return false;
+    if ('creditAmount' in _v && typeof _v['creditAmount'] !== 'number') return false;
+    if ('description' in _v && typeof _v['description'] !== 'string') return false;
+    if ('singleSidedAmount' in _v && typeof _v['singleSidedAmount'] !== 'boolean') return false;
+    return true;
+}
+

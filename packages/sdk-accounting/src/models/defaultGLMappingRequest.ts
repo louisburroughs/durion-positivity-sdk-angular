@@ -18,3 +18,18 @@ export interface DefaultGLMappingRequest {
     active?: boolean;
 }
 
+export function instanceOfDefaultGLMappingRequest(value: object): value is DefaultGLMappingRequest {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if (!('eventType' in _v) || _v['eventType'] === undefined) return false;
+    if ('eventType' in _v && typeof _v['eventType'] !== 'string') return false;
+    if ('organizationId' in _v && typeof _v['organizationId'] !== 'string') return false;
+    if (!('debitAccountId' in _v) || _v['debitAccountId'] === undefined) return false;
+    if ('debitAccountId' in _v && typeof _v['debitAccountId'] !== 'string') return false;
+    if (!('creditAccountId' in _v) || _v['creditAccountId'] === undefined) return false;
+    if ('creditAccountId' in _v && typeof _v['creditAccountId'] !== 'string') return false;
+    if ('description' in _v && typeof _v['description'] !== 'string') return false;
+    if ('active' in _v && typeof _v['active'] !== 'boolean') return false;
+    return true;
+}
+

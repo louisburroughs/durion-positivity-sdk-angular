@@ -52,3 +52,17 @@ export interface ApiError {
     supportAction?: string;
 }
 
+export function instanceOfApiError(value: object): value is ApiError {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('code' in _v && typeof _v['code'] !== 'string') return false;
+    if ('message' in _v && typeof _v['message'] !== 'string') return false;
+    if ('status' in _v && typeof _v['status'] !== 'number') return false;
+    if ('timestamp' in _v && typeof _v['timestamp'] !== 'string') return false;
+    if ('correlationId' in _v && typeof _v['correlationId'] !== 'string') return false;
+    if ('referenceId' in _v && typeof _v['referenceId'] !== 'string') return false;
+    if ('nextAction' in _v && typeof _v['nextAction'] !== 'string') return false;
+    if ('supportAction' in _v && typeof _v['supportAction'] !== 'string') return false;
+    return true;
+}
+

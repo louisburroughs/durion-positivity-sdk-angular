@@ -37,3 +37,17 @@ export enum InitiatePaymentRequestPaymentFlowEnum {
 
 
 
+export function instanceOfInitiatePaymentRequest(value: object): value is InitiatePaymentRequest {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if (!('paymentFlow' in _v) || _v['paymentFlow'] === undefined) return false;
+    if ('paymentFlow' in _v && typeof _v['paymentFlow'] !== 'string') return false;
+    if (!('amount' in _v) || _v['amount'] === undefined) return false;
+    if ('amount' in _v && typeof _v['amount'] !== 'number') return false;
+    if (!('idempotencyKey' in _v) || _v['idempotencyKey'] === undefined) return false;
+    if ('idempotencyKey' in _v && typeof _v['idempotencyKey'] !== 'string') return false;
+    if (!('paymentToken' in _v) || _v['paymentToken'] === undefined) return false;
+    if ('paymentToken' in _v && typeof _v['paymentToken'] !== 'string') return false;
+    return true;
+}
+

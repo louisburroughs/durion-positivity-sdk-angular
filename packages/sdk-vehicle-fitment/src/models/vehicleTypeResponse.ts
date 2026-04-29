@@ -31,3 +31,16 @@ export interface VehicleTypeResponse {
     vehicleTypeName: string;
 }
 
+export function instanceOfVehicleTypeResponse(value: object): value is VehicleTypeResponse {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if (!('id' in _v) || _v['id'] === undefined) return false;
+    if ('id' in _v && typeof _v['id'] !== 'string') return false;
+    if ('makeId' in _v && typeof _v['makeId'] !== 'string') return false;
+    if (!('vehicleTypeId' in _v) || _v['vehicleTypeId'] === undefined) return false;
+    if ('vehicleTypeId' in _v && typeof _v['vehicleTypeId'] !== 'string') return false;
+    if (!('vehicleTypeName' in _v) || _v['vehicleTypeName'] === undefined) return false;
+    if ('vehicleTypeName' in _v && typeof _v['vehicleTypeName'] !== 'string') return false;
+    return true;
+}
+

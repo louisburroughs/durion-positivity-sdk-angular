@@ -37,3 +37,13 @@ export enum ContactPointDtoContactTypeEnum {
 
 
 
+export function instanceOfContactPointDto(value: object): value is ContactPointDto {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('contactPointId' in _v && typeof _v['contactPointId'] !== 'string') return false;
+    if ('contactType' in _v && typeof _v['contactType'] !== 'string') return false;
+    if ('value' in _v && typeof _v['value'] !== 'string') return false;
+    if ('primary' in _v && typeof _v['primary'] !== 'boolean') return false;
+    return true;
+}
+

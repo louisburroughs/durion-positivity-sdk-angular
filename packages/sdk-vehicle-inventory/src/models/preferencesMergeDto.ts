@@ -14,3 +14,10 @@ export interface PreferencesMergeDto {
     updatedByUserId?: string;
 }
 
+export function instanceOfPreferencesMergeDto(value: object): value is PreferencesMergeDto {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('updatedByUserId' in _v && typeof _v['updatedByUserId'] !== 'string') return false;
+    return true;
+}
+

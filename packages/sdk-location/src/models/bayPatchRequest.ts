@@ -20,3 +20,13 @@ export interface BayPatchRequest {
     skillRequirementIds?: Array<string>;
 }
 
+export function instanceOfBayPatchRequest(value: object): value is BayPatchRequest {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    const _v = value as Record<string, unknown>;
+    if ('name' in _v && typeof _v['name'] !== 'string') return false;
+    if ('bayType' in _v && typeof _v['bayType'] !== 'string') return false;
+    if ('status' in _v && typeof _v['status'] !== 'string') return false;
+    if ('maxConcurrentVehicles' in _v && typeof _v['maxConcurrentVehicles'] !== 'number') return false;
+    return true;
+}
+
