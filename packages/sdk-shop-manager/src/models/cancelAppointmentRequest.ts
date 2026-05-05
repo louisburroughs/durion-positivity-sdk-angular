@@ -23,12 +23,52 @@ export enum CancelAppointmentRequestCancellationReasonEnum {
 
 
 
+function isOptionalCancelAppointmentRequestPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type CancelAppointmentRequestOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createCancelAppointmentRequestPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createCancelAppointmentRequestOptionalProperties(
+    ...properties: CancelAppointmentRequestOptionalProperty[]
+): ReadonlyArray<CancelAppointmentRequestOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfCancelAppointmentRequest(value: object): value is CancelAppointmentRequest {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if (!('cancellationReason' in _v) || _v['cancellationReason'] === undefined) return false;
-    if ('cancellationReason' in _v && typeof _v['cancellationReason'] !== 'string') return false;
-    if ('notes' in _v && typeof _v['notes'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createCancelAppointmentRequestPropertyNames('cancellationReason', );
+    const optionalStringProperties = createCancelAppointmentRequestOptionalProperties({ name: 'cancellationReason', nullable: false }, { name: 'notes', nullable: false }, );
+    const optionalNumberProperties = createCancelAppointmentRequestOptionalProperties();
+    const optionalBooleanProperties = createCancelAppointmentRequestOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalCancelAppointmentRequestPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalCancelAppointmentRequestPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalCancelAppointmentRequestPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

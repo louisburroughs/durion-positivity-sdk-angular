@@ -23,16 +23,52 @@ export interface BayRequest {
     status?: string;
 }
 
+function isOptionalBayRequestPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type BayRequestOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createBayRequestPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createBayRequestOptionalProperties(
+    ...properties: BayRequestOptionalProperty[]
+): ReadonlyArray<BayRequestOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfBayRequest(value: object): value is BayRequest {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if (!('name' in _v) || _v['name'] === undefined) return false;
-    if ('name' in _v && typeof _v['name'] !== 'string') return false;
-    if (!('bayType' in _v) || _v['bayType'] === undefined) return false;
-    if ('bayType' in _v && typeof _v['bayType'] !== 'string') return false;
-    if (!('capacity' in _v) || _v['capacity'] === undefined) return false;
-    if ('maxConcurrentVehicles' in _v && typeof _v['maxConcurrentVehicles'] !== 'number') return false;
-    if ('status' in _v && typeof _v['status'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createBayRequestPropertyNames('name', 'bayType', 'capacity', );
+    const optionalStringProperties = createBayRequestOptionalProperties({ name: 'name', nullable: false }, { name: 'bayType', nullable: false }, { name: 'status', nullable: false }, );
+    const optionalNumberProperties = createBayRequestOptionalProperties({ name: 'maxConcurrentVehicles', nullable: false }, );
+    const optionalBooleanProperties = createBayRequestOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalBayRequestPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalBayRequestPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalBayRequestPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

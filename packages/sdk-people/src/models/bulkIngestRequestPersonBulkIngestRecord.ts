@@ -17,15 +17,52 @@ export interface BulkIngestRequestPersonBulkIngestRecord {
     operatorId?: string;
 }
 
+function isOptionalBulkIngestRequestPersonBulkIngestRecordPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type BulkIngestRequestPersonBulkIngestRecordOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createBulkIngestRequestPersonBulkIngestRecordPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createBulkIngestRequestPersonBulkIngestRecordOptionalProperties(
+    ...properties: BulkIngestRequestPersonBulkIngestRecordOptionalProperty[]
+): ReadonlyArray<BulkIngestRequestPersonBulkIngestRecordOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfBulkIngestRequestPersonBulkIngestRecord(value: object): value is BulkIngestRequestPersonBulkIngestRecord {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if (!('jobId' in _v) || _v['jobId'] === undefined) return false;
-    if ('jobId' in _v && typeof _v['jobId'] !== 'string') return false;
-    if (!('locationId' in _v) || _v['locationId'] === undefined) return false;
-    if ('locationId' in _v && typeof _v['locationId'] !== 'string') return false;
-    if (!('records' in _v) || _v['records'] === undefined) return false;
-    if ('operatorId' in _v && typeof _v['operatorId'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createBulkIngestRequestPersonBulkIngestRecordPropertyNames('jobId', 'locationId', 'records', );
+    const optionalStringProperties = createBulkIngestRequestPersonBulkIngestRecordOptionalProperties({ name: 'jobId', nullable: false }, { name: 'locationId', nullable: false }, { name: 'operatorId', nullable: false }, );
+    const optionalNumberProperties = createBulkIngestRequestPersonBulkIngestRecordOptionalProperties();
+    const optionalBooleanProperties = createBulkIngestRequestPersonBulkIngestRecordOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalBulkIngestRequestPersonBulkIngestRecordPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalBulkIngestRequestPersonBulkIngestRecordPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalBulkIngestRequestPersonBulkIngestRecordPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

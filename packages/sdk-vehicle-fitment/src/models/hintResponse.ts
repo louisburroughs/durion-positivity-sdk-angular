@@ -44,18 +44,52 @@ export interface HintResponse {
     updatedBy?: string;
 }
 
+function isOptionalHintResponsePropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type HintResponseOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createHintResponsePropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createHintResponseOptionalProperties(
+    ...properties: HintResponseOptionalProperty[]
+): ReadonlyArray<HintResponseOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfHintResponse(value: object): value is HintResponse {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if (!('hintId' in _v) || _v['hintId'] === undefined) return false;
-    if ('hintId' in _v && typeof _v['hintId'] !== 'string') return false;
-    if (!('productId' in _v) || _v['productId'] === undefined) return false;
-    if ('productId' in _v && typeof _v['productId'] !== 'string') return false;
-    if (!('fitmentTags' in _v) || _v['fitmentTags'] === undefined) return false;
-    if (!('createdAt' in _v) || _v['createdAt'] === undefined) return false;
-    if (!('updatedAt' in _v) || _v['updatedAt'] === undefined) return false;
-    if ('createdBy' in _v && typeof _v['createdBy'] !== 'string') return false;
-    if ('updatedBy' in _v && typeof _v['updatedBy'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createHintResponsePropertyNames('hintId', 'productId', 'fitmentTags', 'createdAt', 'updatedAt', );
+    const optionalStringProperties = createHintResponseOptionalProperties({ name: 'hintId', nullable: false }, { name: 'productId', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'updatedBy', nullable: false }, );
+    const optionalNumberProperties = createHintResponseOptionalProperties();
+    const optionalBooleanProperties = createHintResponseOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalHintResponsePropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalHintResponsePropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalHintResponsePropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

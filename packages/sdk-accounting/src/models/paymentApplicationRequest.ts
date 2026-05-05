@@ -15,12 +15,52 @@ export interface PaymentApplicationRequest {
     applications: Array<InvoiceApplication>;
 }
 
+function isOptionalPaymentApplicationRequestPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type PaymentApplicationRequestOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createPaymentApplicationRequestPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createPaymentApplicationRequestOptionalProperties(
+    ...properties: PaymentApplicationRequestOptionalProperty[]
+): ReadonlyArray<PaymentApplicationRequestOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfPaymentApplicationRequest(value: object): value is PaymentApplicationRequest {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if (!('applicationRequestId' in _v) || _v['applicationRequestId'] === undefined) return false;
-    if ('applicationRequestId' in _v && typeof _v['applicationRequestId'] !== 'string') return false;
-    if (!('applications' in _v) || _v['applications'] === undefined) return false;
-    return true;
+
+    const requiredProperties = createPaymentApplicationRequestPropertyNames('applicationRequestId', 'applications', );
+    const optionalStringProperties = createPaymentApplicationRequestOptionalProperties({ name: 'applicationRequestId', nullable: false }, );
+    const optionalNumberProperties = createPaymentApplicationRequestOptionalProperties();
+    const optionalBooleanProperties = createPaymentApplicationRequestOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalPaymentApplicationRequestPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalPaymentApplicationRequestPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalPaymentApplicationRequestPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

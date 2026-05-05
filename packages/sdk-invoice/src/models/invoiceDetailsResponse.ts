@@ -42,23 +42,52 @@ export enum InvoiceDetailsResponseStatusEnum {
 
 
 
+function isOptionalInvoiceDetailsResponsePropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type InvoiceDetailsResponseOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createInvoiceDetailsResponsePropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createInvoiceDetailsResponseOptionalProperties(
+    ...properties: InvoiceDetailsResponseOptionalProperty[]
+): ReadonlyArray<InvoiceDetailsResponseOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfInvoiceDetailsResponse(value: object): value is InvoiceDetailsResponse {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('invoiceId' in _v && typeof _v['invoiceId'] !== 'string') return false;
-    if ('invoiceNumber' in _v && typeof _v['invoiceNumber'] !== 'string') return false;
-    if ('workorderId' in _v && typeof _v['workorderId'] !== 'string') return false;
-    if ('estimateId' in _v && typeof _v['estimateId'] !== 'string') return false;
-    if ('approvalId' in _v && typeof _v['approvalId'] !== 'string') return false;
-    if ('partyId' in _v && typeof _v['partyId'] !== 'string') return false;
-    if ('status' in _v && typeof _v['status'] !== 'string') return false;
-    if ('subtotal' in _v && typeof _v['subtotal'] !== 'number') return false;
-    if ('tax' in _v && typeof _v['tax'] !== 'number') return false;
-    if ('total' in _v && typeof _v['total'] !== 'number') return false;
-    if ('adjustments' in _v && typeof _v['adjustments'] !== 'number') return false;
-    if ('finalizedBy' in _v && typeof _v['finalizedBy'] !== 'string') return false;
-    if ('reversionReason' in _v && typeof _v['reversionReason'] !== 'string') return false;
-    if ('revertedBy' in _v && typeof _v['revertedBy'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createInvoiceDetailsResponsePropertyNames();
+    const optionalStringProperties = createInvoiceDetailsResponseOptionalProperties({ name: 'invoiceId', nullable: false }, { name: 'invoiceNumber', nullable: false }, { name: 'workorderId', nullable: false }, { name: 'estimateId', nullable: false }, { name: 'approvalId', nullable: false }, { name: 'partyId', nullable: false }, { name: 'status', nullable: false }, { name: 'finalizedBy', nullable: false }, { name: 'reversionReason', nullable: false }, { name: 'revertedBy', nullable: false }, );
+    const optionalNumberProperties = createInvoiceDetailsResponseOptionalProperties({ name: 'subtotal', nullable: false }, { name: 'tax', nullable: false }, { name: 'total', nullable: false }, { name: 'adjustments', nullable: false }, );
+    const optionalBooleanProperties = createInvoiceDetailsResponseOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalInvoiceDetailsResponsePropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalInvoiceDetailsResponsePropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalInvoiceDetailsResponsePropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

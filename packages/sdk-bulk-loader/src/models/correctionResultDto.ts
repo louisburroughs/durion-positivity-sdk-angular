@@ -33,12 +33,52 @@ export enum CorrectionResultDtoStatusEnum {
 
 
 
+function isOptionalCorrectionResultDtoPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type CorrectionResultDtoOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createCorrectionResultDtoPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createCorrectionResultDtoOptionalProperties(
+    ...properties: CorrectionResultDtoOptionalProperty[]
+): ReadonlyArray<CorrectionResultDtoOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfCorrectionResultDto(value: object): value is CorrectionResultDto {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('auditRecordId' in _v && typeof _v['auditRecordId'] !== 'string') return false;
-    if ('status' in _v && typeof _v['status'] !== 'string') return false;
-    if ('rejectionReason' in _v && _v['rejectionReason'] !== null && typeof _v['rejectionReason'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createCorrectionResultDtoPropertyNames();
+    const optionalStringProperties = createCorrectionResultDtoOptionalProperties({ name: 'auditRecordId', nullable: false }, { name: 'status', nullable: false }, { name: 'rejectionReason', nullable: true }, );
+    const optionalNumberProperties = createCorrectionResultDtoOptionalProperties();
+    const optionalBooleanProperties = createCorrectionResultDtoOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalCorrectionResultDtoPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalCorrectionResultDtoPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalCorrectionResultDtoPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

@@ -23,13 +23,52 @@ export interface UpdateStandardCostRequestDto {
     reasonCode: string;
 }
 
+function isOptionalUpdateStandardCostRequestDtoPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type UpdateStandardCostRequestDtoOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createUpdateStandardCostRequestDtoPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createUpdateStandardCostRequestDtoOptionalProperties(
+    ...properties: UpdateStandardCostRequestDtoOptionalProperty[]
+): ReadonlyArray<UpdateStandardCostRequestDtoOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfUpdateStandardCostRequestDto(value: object): value is UpdateStandardCostRequestDto {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if (!('newCost' in _v) || _v['newCost'] === undefined) return false;
-    if ('newCost' in _v && typeof _v['newCost'] !== 'number') return false;
-    if (!('reasonCode' in _v) || _v['reasonCode'] === undefined) return false;
-    if ('reasonCode' in _v && typeof _v['reasonCode'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createUpdateStandardCostRequestDtoPropertyNames('newCost', 'reasonCode', );
+    const optionalStringProperties = createUpdateStandardCostRequestDtoOptionalProperties({ name: 'reasonCode', nullable: false }, );
+    const optionalNumberProperties = createUpdateStandardCostRequestDtoOptionalProperties({ name: 'newCost', nullable: false }, );
+    const optionalBooleanProperties = createUpdateStandardCostRequestDtoOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalUpdateStandardCostRequestDtoPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalUpdateStandardCostRequestDtoPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalUpdateStandardCostRequestDtoPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

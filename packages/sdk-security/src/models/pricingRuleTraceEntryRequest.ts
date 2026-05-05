@@ -12,15 +12,54 @@
 export interface PricingRuleTraceEntryRequest { 
     ruleId?: string;
     status?: string;
-    inputs?: any | null;
-    outputs?: any | null;
+}
+
+function isOptionalPricingRuleTraceEntryRequestPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type PricingRuleTraceEntryRequestOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createPricingRuleTraceEntryRequestPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createPricingRuleTraceEntryRequestOptionalProperties(
+    ...properties: PricingRuleTraceEntryRequestOptionalProperty[]
+): ReadonlyArray<PricingRuleTraceEntryRequestOptionalProperty> {
+    return properties;
 }
 
 export function instanceOfPricingRuleTraceEntryRequest(value: object): value is PricingRuleTraceEntryRequest {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('ruleId' in _v && typeof _v['ruleId'] !== 'string') return false;
-    if ('status' in _v && typeof _v['status'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createPricingRuleTraceEntryRequestPropertyNames();
+    const optionalStringProperties = createPricingRuleTraceEntryRequestOptionalProperties({ name: 'ruleId', nullable: false }, { name: 'status', nullable: false }, );
+    const optionalNumberProperties = createPricingRuleTraceEntryRequestOptionalProperties();
+    const optionalBooleanProperties = createPricingRuleTraceEntryRequestOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalPricingRuleTraceEntryRequestPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalPricingRuleTraceEntryRequestPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalPricingRuleTraceEntryRequestPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

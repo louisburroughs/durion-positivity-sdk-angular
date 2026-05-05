@@ -17,12 +17,52 @@ export interface ReceiveItemsResponse {
     variances?: Array<VarianceSummaryResponse>;
 }
 
+function isOptionalReceiveItemsResponsePropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type ReceiveItemsResponseOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createReceiveItemsResponsePropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createReceiveItemsResponseOptionalProperties(
+    ...properties: ReceiveItemsResponseOptionalProperty[]
+): ReadonlyArray<ReceiveItemsResponseOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfReceiveItemsResponse(value: object): value is ReceiveItemsResponse {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('sessionId' in _v && typeof _v['sessionId'] !== 'string') return false;
-    if ('sessionStatus' in _v && typeof _v['sessionStatus'] !== 'string') return false;
-    if ('linesProcessed' in _v && typeof _v['linesProcessed'] !== 'number') return false;
-    return true;
+
+    const requiredProperties = createReceiveItemsResponsePropertyNames();
+    const optionalStringProperties = createReceiveItemsResponseOptionalProperties({ name: 'sessionId', nullable: false }, { name: 'sessionStatus', nullable: false }, );
+    const optionalNumberProperties = createReceiveItemsResponseOptionalProperties({ name: 'linesProcessed', nullable: false }, );
+    const optionalBooleanProperties = createReceiveItemsResponseOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalReceiveItemsResponsePropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalReceiveItemsResponsePropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalReceiveItemsResponsePropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

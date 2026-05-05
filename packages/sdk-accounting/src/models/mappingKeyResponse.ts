@@ -22,17 +22,52 @@ export interface MappingKeyResponse {
     modifiedBy?: string;
 }
 
+function isOptionalMappingKeyResponsePropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type MappingKeyResponseOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createMappingKeyResponsePropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createMappingKeyResponseOptionalProperties(
+    ...properties: MappingKeyResponseOptionalProperty[]
+): ReadonlyArray<MappingKeyResponseOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfMappingKeyResponse(value: object): value is MappingKeyResponse {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('mappingKeyId' in _v && typeof _v['mappingKeyId'] !== 'string') return false;
-    if ('postingCategoryId' in _v && typeof _v['postingCategoryId'] !== 'string') return false;
-    if ('postingCategoryName' in _v && typeof _v['postingCategoryName'] !== 'string') return false;
-    if ('keyName' in _v && typeof _v['keyName'] !== 'string') return false;
-    if ('description' in _v && typeof _v['description'] !== 'string') return false;
-    if ('isActive' in _v && typeof _v['isActive'] !== 'boolean') return false;
-    if ('createdBy' in _v && typeof _v['createdBy'] !== 'string') return false;
-    if ('modifiedBy' in _v && typeof _v['modifiedBy'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createMappingKeyResponsePropertyNames();
+    const optionalStringProperties = createMappingKeyResponseOptionalProperties({ name: 'mappingKeyId', nullable: false }, { name: 'postingCategoryId', nullable: false }, { name: 'postingCategoryName', nullable: false }, { name: 'keyName', nullable: false }, { name: 'description', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'modifiedBy', nullable: false }, );
+    const optionalNumberProperties = createMappingKeyResponseOptionalProperties();
+    const optionalBooleanProperties = createMappingKeyResponseOptionalProperties({ name: 'isActive', nullable: false }, );
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalMappingKeyResponsePropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalMappingKeyResponsePropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalMappingKeyResponsePropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

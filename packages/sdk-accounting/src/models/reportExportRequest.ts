@@ -47,18 +47,52 @@ export enum ReportExportRequestFormatEnum {
 
 
 
+function isOptionalReportExportRequestPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type ReportExportRequestOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createReportExportRequestPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createReportExportRequestOptionalProperties(
+    ...properties: ReportExportRequestOptionalProperty[]
+): ReadonlyArray<ReportExportRequestOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfReportExportRequest(value: object): value is ReportExportRequest {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if (!('format' in _v) || _v['format'] === undefined) return false;
-    if ('format' in _v && typeof _v['format'] !== 'string') return false;
-    if (!('reportType' in _v) || _v['reportType'] === undefined) return false;
-    if ('reportType' in _v && typeof _v['reportType'] !== 'string') return false;
-    if (!('startDate' in _v) || _v['startDate'] === undefined) return false;
-    if (!('endDate' in _v) || _v['endDate'] === undefined) return false;
-    if (!('organizationId' in _v) || _v['organizationId'] === undefined) return false;
-    if ('organizationId' in _v && typeof _v['organizationId'] !== 'string') return false;
-    if ('filename' in _v && typeof _v['filename'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createReportExportRequestPropertyNames('format', 'reportType', 'startDate', 'endDate', 'organizationId', );
+    const optionalStringProperties = createReportExportRequestOptionalProperties({ name: 'format', nullable: false }, { name: 'reportType', nullable: false }, { name: 'organizationId', nullable: false }, { name: 'filename', nullable: false }, );
+    const optionalNumberProperties = createReportExportRequestOptionalProperties();
+    const optionalBooleanProperties = createReportExportRequestOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalReportExportRequestPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalReportExportRequestPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalReportExportRequestPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

@@ -13,11 +13,52 @@ export interface ReprintReceiptRequest {
     reason: string;
 }
 
+function isOptionalReprintReceiptRequestPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type ReprintReceiptRequestOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createReprintReceiptRequestPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createReprintReceiptRequestOptionalProperties(
+    ...properties: ReprintReceiptRequestOptionalProperty[]
+): ReadonlyArray<ReprintReceiptRequestOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfReprintReceiptRequest(value: object): value is ReprintReceiptRequest {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if (!('reason' in _v) || _v['reason'] === undefined) return false;
-    if ('reason' in _v && typeof _v['reason'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createReprintReceiptRequestPropertyNames('reason', );
+    const optionalStringProperties = createReprintReceiptRequestOptionalProperties({ name: 'reason', nullable: false }, );
+    const optionalNumberProperties = createReprintReceiptRequestOptionalProperties();
+    const optionalBooleanProperties = createReprintReceiptRequestOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalReprintReceiptRequestPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalReprintReceiptRequestPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalReprintReceiptRequestPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

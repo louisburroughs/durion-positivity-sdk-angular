@@ -49,19 +49,52 @@ export enum BulkLoadJobResponseStatusEnum {
 
 
 
+function isOptionalBulkLoadJobResponsePropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type BulkLoadJobResponseOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createBulkLoadJobResponsePropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createBulkLoadJobResponseOptionalProperties(
+    ...properties: BulkLoadJobResponseOptionalProperty[]
+): ReadonlyArray<BulkLoadJobResponseOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfBulkLoadJobResponse(value: object): value is BulkLoadJobResponse {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('id' in _v && typeof _v['id'] !== 'string') return false;
-    if ('operatorId' in _v && typeof _v['operatorId'] !== 'string') return false;
-    if ('locationId' in _v && typeof _v['locationId'] !== 'string') return false;
-    if ('fileName' in _v && typeof _v['fileName'] !== 'string') return false;
-    if ('domainType' in _v && typeof _v['domainType'] !== 'string') return false;
-    if ('status' in _v && typeof _v['status'] !== 'string') return false;
-    if ('totalRows' in _v && typeof _v['totalRows'] !== 'number') return false;
-    if ('processedRows' in _v && typeof _v['processedRows'] !== 'number') return false;
-    if ('successCount' in _v && typeof _v['successCount'] !== 'number') return false;
-    if ('failureCount' in _v && typeof _v['failureCount'] !== 'number') return false;
-    return true;
+
+    const requiredProperties = createBulkLoadJobResponsePropertyNames();
+    const optionalStringProperties = createBulkLoadJobResponseOptionalProperties({ name: 'id', nullable: false }, { name: 'operatorId', nullable: false }, { name: 'locationId', nullable: false }, { name: 'fileName', nullable: false }, { name: 'domainType', nullable: false }, { name: 'status', nullable: false }, );
+    const optionalNumberProperties = createBulkLoadJobResponseOptionalProperties({ name: 'totalRows', nullable: false }, { name: 'processedRows', nullable: false }, { name: 'successCount', nullable: false }, { name: 'failureCount', nullable: false }, );
+    const optionalBooleanProperties = createBulkLoadJobResponseOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalBulkLoadJobResponsePropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalBulkLoadJobResponsePropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalBulkLoadJobResponsePropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

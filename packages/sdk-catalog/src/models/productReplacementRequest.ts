@@ -31,12 +31,52 @@ export interface ProductReplacementRequest {
     effectiveAt?: string;
 }
 
+function isOptionalProductReplacementRequestPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type ProductReplacementRequestOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createProductReplacementRequestPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createProductReplacementRequestOptionalProperties(
+    ...properties: ProductReplacementRequestOptionalProperty[]
+): ReadonlyArray<ProductReplacementRequestOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfProductReplacementRequest(value: object): value is ProductReplacementRequest {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('replacementProductId' in _v && typeof _v['replacementProductId'] !== 'string') return false;
-    if ('priorityOrder' in _v && typeof _v['priorityOrder'] !== 'number') return false;
-    if ('notes' in _v && typeof _v['notes'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createProductReplacementRequestPropertyNames();
+    const optionalStringProperties = createProductReplacementRequestOptionalProperties({ name: 'replacementProductId', nullable: false }, { name: 'notes', nullable: false }, );
+    const optionalNumberProperties = createProductReplacementRequestOptionalProperties({ name: 'priorityOrder', nullable: false }, );
+    const optionalBooleanProperties = createProductReplacementRequestOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalProductReplacementRequestPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalProductReplacementRequestPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalProductReplacementRequestPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

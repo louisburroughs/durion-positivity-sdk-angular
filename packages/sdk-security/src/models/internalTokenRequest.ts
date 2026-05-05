@@ -23,11 +23,52 @@ export interface InternalTokenRequest {
     roles?: Set<string>;
 }
 
+function isOptionalInternalTokenRequestPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type InternalTokenRequestOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createInternalTokenRequestPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createInternalTokenRequestOptionalProperties(
+    ...properties: InternalTokenRequestOptionalProperty[]
+): ReadonlyArray<InternalTokenRequestOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfInternalTokenRequest(value: object): value is InternalTokenRequest {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if (!('subject' in _v) || _v['subject'] === undefined) return false;
-    if ('subject' in _v && typeof _v['subject'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createInternalTokenRequestPropertyNames('subject', );
+    const optionalStringProperties = createInternalTokenRequestOptionalProperties({ name: 'subject', nullable: false }, );
+    const optionalNumberProperties = createInternalTokenRequestOptionalProperties();
+    const optionalBooleanProperties = createInternalTokenRequestOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalInternalTokenRequestPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalInternalTokenRequestPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalInternalTokenRequestPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

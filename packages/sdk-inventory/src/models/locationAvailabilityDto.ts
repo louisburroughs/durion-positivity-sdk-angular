@@ -16,13 +16,52 @@ export interface LocationAvailabilityDto {
     availableToPromiseQuantity?: number;
 }
 
+function isOptionalLocationAvailabilityDtoPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type LocationAvailabilityDtoOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createLocationAvailabilityDtoPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createLocationAvailabilityDtoOptionalProperties(
+    ...properties: LocationAvailabilityDtoOptionalProperty[]
+): ReadonlyArray<LocationAvailabilityDtoOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfLocationAvailabilityDto(value: object): value is LocationAvailabilityDto {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('locationId' in _v && typeof _v['locationId'] !== 'string') return false;
-    if ('locationName' in _v && typeof _v['locationName'] !== 'string') return false;
-    if ('onHandQuantity' in _v && typeof _v['onHandQuantity'] !== 'number') return false;
-    if ('availableToPromiseQuantity' in _v && typeof _v['availableToPromiseQuantity'] !== 'number') return false;
-    return true;
+
+    const requiredProperties = createLocationAvailabilityDtoPropertyNames();
+    const optionalStringProperties = createLocationAvailabilityDtoOptionalProperties({ name: 'locationId', nullable: false }, { name: 'locationName', nullable: false }, );
+    const optionalNumberProperties = createLocationAvailabilityDtoOptionalProperties({ name: 'onHandQuantity', nullable: false }, { name: 'availableToPromiseQuantity', nullable: false }, );
+    const optionalBooleanProperties = createLocationAvailabilityDtoOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalLocationAvailabilityDtoPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalLocationAvailabilityDtoPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalLocationAvailabilityDtoPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

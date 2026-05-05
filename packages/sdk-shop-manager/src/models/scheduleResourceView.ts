@@ -17,12 +17,52 @@ export interface ScheduleResourceView {
     events?: Array<ScheduleEventView>;
 }
 
+function isOptionalScheduleResourceViewPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type ScheduleResourceViewOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createScheduleResourceViewPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createScheduleResourceViewOptionalProperties(
+    ...properties: ScheduleResourceViewOptionalProperty[]
+): ReadonlyArray<ScheduleResourceViewOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfScheduleResourceView(value: object): value is ScheduleResourceView {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('resourceId' in _v && typeof _v['resourceId'] !== 'string') return false;
-    if ('resourceType' in _v && typeof _v['resourceType'] !== 'string') return false;
-    if ('resourceName' in _v && typeof _v['resourceName'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createScheduleResourceViewPropertyNames();
+    const optionalStringProperties = createScheduleResourceViewOptionalProperties({ name: 'resourceId', nullable: false }, { name: 'resourceType', nullable: false }, { name: 'resourceName', nullable: false }, );
+    const optionalNumberProperties = createScheduleResourceViewOptionalProperties();
+    const optionalBooleanProperties = createScheduleResourceViewOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalScheduleResourceViewPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalScheduleResourceViewPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalScheduleResourceViewPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

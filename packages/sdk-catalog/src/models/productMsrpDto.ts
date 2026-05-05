@@ -22,15 +22,52 @@ export interface ProductMsrpDto {
     version?: number;
 }
 
+function isOptionalProductMsrpDtoPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type ProductMsrpDtoOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createProductMsrpDtoPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createProductMsrpDtoOptionalProperties(
+    ...properties: ProductMsrpDtoOptionalProperty[]
+): ReadonlyArray<ProductMsrpDtoOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfProductMsrpDto(value: object): value is ProductMsrpDto {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('msrpId' in _v && typeof _v['msrpId'] !== 'string') return false;
-    if ('productId' in _v && typeof _v['productId'] !== 'string') return false;
-    if ('amount' in _v && typeof _v['amount'] !== 'string') return false;
-    if ('currency' in _v && typeof _v['currency'] !== 'string') return false;
-    if ('updatedBy' in _v && typeof _v['updatedBy'] !== 'string') return false;
-    if ('version' in _v && typeof _v['version'] !== 'number') return false;
-    return true;
+
+    const requiredProperties = createProductMsrpDtoPropertyNames();
+    const optionalStringProperties = createProductMsrpDtoOptionalProperties({ name: 'msrpId', nullable: false }, { name: 'productId', nullable: false }, { name: 'amount', nullable: false }, { name: 'currency', nullable: false }, { name: 'updatedBy', nullable: false }, );
+    const optionalNumberProperties = createProductMsrpDtoOptionalProperties({ name: 'version', nullable: false }, );
+    const optionalBooleanProperties = createProductMsrpDtoOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalProductMsrpDtoPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalProductMsrpDtoPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalProductMsrpDtoPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

@@ -47,16 +47,52 @@ export interface PricingSnapshotResponse {
     policyVersion?: string;
 }
 
+function isOptionalPricingSnapshotResponsePropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type PricingSnapshotResponseOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createPricingSnapshotResponsePropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createPricingSnapshotResponseOptionalProperties(
+    ...properties: PricingSnapshotResponseOptionalProperty[]
+): ReadonlyArray<PricingSnapshotResponseOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfPricingSnapshotResponse(value: object): value is PricingSnapshotResponse {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('snapshotId' in _v && typeof _v['snapshotId'] !== 'string') return false;
-    if ('sourceContext' in _v && _v['sourceContext'] !== null && typeof _v['sourceContext'] !== 'string') return false;
-    if ('itemIdentifier' in _v && typeof _v['itemIdentifier'] !== 'string') return false;
-    if ('quantity' in _v && typeof _v['quantity'] !== 'number') return false;
-    if ('prices' in _v && typeof _v['prices'] !== 'string') return false;
-    if ('appliedRules' in _v && _v['appliedRules'] !== null && typeof _v['appliedRules'] !== 'string') return false;
-    if ('policyVersion' in _v && typeof _v['policyVersion'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createPricingSnapshotResponsePropertyNames();
+    const optionalStringProperties = createPricingSnapshotResponseOptionalProperties({ name: 'snapshotId', nullable: false }, { name: 'sourceContext', nullable: true }, { name: 'itemIdentifier', nullable: false }, { name: 'prices', nullable: false }, { name: 'appliedRules', nullable: true }, { name: 'policyVersion', nullable: false }, );
+    const optionalNumberProperties = createPricingSnapshotResponseOptionalProperties({ name: 'quantity', nullable: false }, );
+    const optionalBooleanProperties = createPricingSnapshotResponseOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalPricingSnapshotResponsePropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalPricingSnapshotResponsePropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalPricingSnapshotResponsePropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

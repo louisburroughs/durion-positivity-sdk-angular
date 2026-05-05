@@ -51,13 +51,52 @@ export enum ProductLifecycleResponseLifecycleStateEnum {
 
 
 
+function isOptionalProductLifecycleResponsePropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type ProductLifecycleResponseOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createProductLifecycleResponsePropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createProductLifecycleResponseOptionalProperties(
+    ...properties: ProductLifecycleResponseOptionalProperty[]
+): ReadonlyArray<ProductLifecycleResponseOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfProductLifecycleResponse(value: object): value is ProductLifecycleResponse {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('productId' in _v && typeof _v['productId'] !== 'string') return false;
-    if ('lifecycleState' in _v && typeof _v['lifecycleState'] !== 'string') return false;
-    if ('lastStateChangedBy' in _v && typeof _v['lastStateChangedBy'] !== 'string') return false;
-    if ('lifecycleOverrideReason' in _v && typeof _v['lifecycleOverrideReason'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createProductLifecycleResponsePropertyNames();
+    const optionalStringProperties = createProductLifecycleResponseOptionalProperties({ name: 'productId', nullable: false }, { name: 'lifecycleState', nullable: false }, { name: 'lastStateChangedBy', nullable: false }, { name: 'lifecycleOverrideReason', nullable: false }, );
+    const optionalNumberProperties = createProductLifecycleResponseOptionalProperties();
+    const optionalBooleanProperties = createProductLifecycleResponseOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalProductLifecycleResponsePropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalProductLifecycleResponsePropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalProductLifecycleResponsePropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

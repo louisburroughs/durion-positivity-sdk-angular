@@ -13,10 +13,52 @@ export interface AuthorizationDecisionResponse {
     decision?: string;
 }
 
+function isOptionalAuthorizationDecisionResponsePropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type AuthorizationDecisionResponseOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createAuthorizationDecisionResponsePropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createAuthorizationDecisionResponseOptionalProperties(
+    ...properties: AuthorizationDecisionResponseOptionalProperty[]
+): ReadonlyArray<AuthorizationDecisionResponseOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfAuthorizationDecisionResponse(value: object): value is AuthorizationDecisionResponse {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('decision' in _v && typeof _v['decision'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createAuthorizationDecisionResponsePropertyNames();
+    const optionalStringProperties = createAuthorizationDecisionResponseOptionalProperties({ name: 'decision', nullable: false }, );
+    const optionalNumberProperties = createAuthorizationDecisionResponseOptionalProperties();
+    const optionalBooleanProperties = createAuthorizationDecisionResponseOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalAuthorizationDecisionResponsePropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalAuthorizationDecisionResponsePropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalAuthorizationDecisionResponsePropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

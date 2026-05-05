@@ -17,8 +17,8 @@ export interface StorageLocationResponse {
     status?: string;
     siteId?: string;
     parentStorageLocationId?: string;
-    capacity?: { [key: string]: any; };
-    temperature?: { [key: string]: any; };
+    capacity?: object;
+    temperature?: object;
     inventoryCount?: number;
 }
 export enum StorageLocationResponseTypeEnum {
@@ -31,17 +31,52 @@ export enum StorageLocationResponseTypeEnum {
 
 
 
+function isOptionalStorageLocationResponsePropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type StorageLocationResponseOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createStorageLocationResponsePropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createStorageLocationResponseOptionalProperties(
+    ...properties: StorageLocationResponseOptionalProperty[]
+): ReadonlyArray<StorageLocationResponseOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfStorageLocationResponse(value: object): value is StorageLocationResponse {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('id' in _v && typeof _v['id'] !== 'string') return false;
-    if ('name' in _v && typeof _v['name'] !== 'string') return false;
-    if ('barcode' in _v && typeof _v['barcode'] !== 'string') return false;
-    if ('type' in _v && typeof _v['type'] !== 'string') return false;
-    if ('status' in _v && typeof _v['status'] !== 'string') return false;
-    if ('siteId' in _v && typeof _v['siteId'] !== 'string') return false;
-    if ('parentStorageLocationId' in _v && typeof _v['parentStorageLocationId'] !== 'string') return false;
-    if ('inventoryCount' in _v && typeof _v['inventoryCount'] !== 'number') return false;
-    return true;
+
+    const requiredProperties = createStorageLocationResponsePropertyNames();
+    const optionalStringProperties = createStorageLocationResponseOptionalProperties({ name: 'id', nullable: false }, { name: 'name', nullable: false }, { name: 'barcode', nullable: false }, { name: 'type', nullable: false }, { name: 'status', nullable: false }, { name: 'siteId', nullable: false }, { name: 'parentStorageLocationId', nullable: false }, );
+    const optionalNumberProperties = createStorageLocationResponseOptionalProperties({ name: 'inventoryCount', nullable: false }, );
+    const optionalBooleanProperties = createStorageLocationResponseOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalStorageLocationResponsePropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalStorageLocationResponsePropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalStorageLocationResponsePropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

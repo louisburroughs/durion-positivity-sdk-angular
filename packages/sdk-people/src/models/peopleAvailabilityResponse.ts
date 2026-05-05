@@ -28,16 +28,52 @@ export enum PeopleAvailabilityResponseAssignmentStatusEnum {
 
 
 
+function isOptionalPeopleAvailabilityResponsePropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type PeopleAvailabilityResponseOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createPeopleAvailabilityResponsePropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createPeopleAvailabilityResponseOptionalProperties(
+    ...properties: PeopleAvailabilityResponseOptionalProperty[]
+): ReadonlyArray<PeopleAvailabilityResponseOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfPeopleAvailabilityResponse(value: object): value is PeopleAvailabilityResponse {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('personId' in _v && typeof _v['personId'] !== 'string') return false;
-    if ('firstName' in _v && typeof _v['firstName'] !== 'string') return false;
-    if ('lastName' in _v && typeof _v['lastName'] !== 'string') return false;
-    if ('locationId' in _v && typeof _v['locationId'] !== 'string') return false;
-    if ('role' in _v && typeof _v['role'] !== 'string') return false;
-    if ('primary' in _v && typeof _v['primary'] !== 'boolean') return false;
-    if ('assignmentStatus' in _v && typeof _v['assignmentStatus'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createPeopleAvailabilityResponsePropertyNames();
+    const optionalStringProperties = createPeopleAvailabilityResponseOptionalProperties({ name: 'personId', nullable: false }, { name: 'firstName', nullable: false }, { name: 'lastName', nullable: false }, { name: 'locationId', nullable: false }, { name: 'role', nullable: false }, { name: 'assignmentStatus', nullable: false }, );
+    const optionalNumberProperties = createPeopleAvailabilityResponseOptionalProperties();
+    const optionalBooleanProperties = createPeopleAvailabilityResponseOptionalProperties({ name: 'primary', nullable: false }, );
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalPeopleAvailabilityResponsePropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalPeopleAvailabilityResponsePropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalPeopleAvailabilityResponsePropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

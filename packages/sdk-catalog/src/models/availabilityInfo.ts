@@ -22,9 +22,6 @@ export interface AvailabilityInfo {
      * Available to promise quantity
      */
     availableToPromiseQuantity?: number;
-    /**
-     * Lead time information
-     */
     leadTime?: LeadTimeInfo;
     /**
      * Availability data status
@@ -53,13 +50,52 @@ export enum AvailabilityInfoConfidenceEnum {
 
 
 
+function isOptionalAvailabilityInfoPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type AvailabilityInfoOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createAvailabilityInfoPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createAvailabilityInfoOptionalProperties(
+    ...properties: AvailabilityInfoOptionalProperty[]
+): ReadonlyArray<AvailabilityInfoOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfAvailabilityInfo(value: object): value is AvailabilityInfo {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('onHandQuantity' in _v && typeof _v['onHandQuantity'] !== 'number') return false;
-    if ('availableToPromiseQuantity' in _v && typeof _v['availableToPromiseQuantity'] !== 'number') return false;
-    if ('status' in _v && typeof _v['status'] !== 'string') return false;
-    if ('confidence' in _v && typeof _v['confidence'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createAvailabilityInfoPropertyNames();
+    const optionalStringProperties = createAvailabilityInfoOptionalProperties({ name: 'status', nullable: false }, { name: 'confidence', nullable: false }, );
+    const optionalNumberProperties = createAvailabilityInfoOptionalProperties({ name: 'onHandQuantity', nullable: false }, { name: 'availableToPromiseQuantity', nullable: false }, );
+    const optionalBooleanProperties = createAvailabilityInfoOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalAvailabilityInfoPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalAvailabilityInfoPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalAvailabilityInfoPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

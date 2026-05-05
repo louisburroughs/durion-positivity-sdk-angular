@@ -18,15 +18,52 @@ export interface ShortageOptionDto {
     estimatedDays?: number;
 }
 
+function isOptionalShortageOptionDtoPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type ShortageOptionDtoOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createShortageOptionDtoPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createShortageOptionDtoOptionalProperties(
+    ...properties: ShortageOptionDtoOptionalProperty[]
+): ReadonlyArray<ShortageOptionDtoOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfShortageOptionDto(value: object): value is ShortageOptionDto {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('allocationId' in _v && typeof _v['allocationId'] !== 'string') return false;
-    if ('allocationLineId' in _v && typeof _v['allocationLineId'] !== 'string') return false;
-    if ('resolution' in _v && typeof _v['resolution'] !== 'string') return false;
-    if ('description' in _v && typeof _v['description'] !== 'string') return false;
-    if ('substituteSku' in _v && typeof _v['substituteSku'] !== 'string') return false;
-    if ('estimatedDays' in _v && typeof _v['estimatedDays'] !== 'number') return false;
-    return true;
+
+    const requiredProperties = createShortageOptionDtoPropertyNames();
+    const optionalStringProperties = createShortageOptionDtoOptionalProperties({ name: 'allocationId', nullable: false }, { name: 'allocationLineId', nullable: false }, { name: 'resolution', nullable: false }, { name: 'description', nullable: false }, { name: 'substituteSku', nullable: false }, );
+    const optionalNumberProperties = createShortageOptionDtoOptionalProperties({ name: 'estimatedDays', nullable: false }, );
+    const optionalBooleanProperties = createShortageOptionDtoOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalShortageOptionDtoPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalShortageOptionDtoPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalShortageOptionDtoPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

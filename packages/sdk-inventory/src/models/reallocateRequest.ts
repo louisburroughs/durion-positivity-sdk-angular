@@ -15,13 +15,52 @@ export interface ReallocateRequest {
     triggerReferenceId?: string;
 }
 
+function isOptionalReallocateRequestPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type ReallocateRequestOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createReallocateRequestPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createReallocateRequestOptionalProperties(
+    ...properties: ReallocateRequestOptionalProperty[]
+): ReadonlyArray<ReallocateRequestOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfReallocateRequest(value: object): value is ReallocateRequest {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if (!('stockItemId' in _v) || _v['stockItemId'] === undefined) return false;
-    if ('stockItemId' in _v && typeof _v['stockItemId'] !== 'string') return false;
-    if ('triggerType' in _v && typeof _v['triggerType'] !== 'string') return false;
-    if ('triggerReferenceId' in _v && typeof _v['triggerReferenceId'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createReallocateRequestPropertyNames('stockItemId', );
+    const optionalStringProperties = createReallocateRequestOptionalProperties({ name: 'stockItemId', nullable: false }, { name: 'triggerType', nullable: false }, { name: 'triggerReferenceId', nullable: false }, );
+    const optionalNumberProperties = createReallocateRequestOptionalProperties();
+    const optionalBooleanProperties = createReallocateRequestOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalReallocateRequestPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalReallocateRequestPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalReallocateRequestPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

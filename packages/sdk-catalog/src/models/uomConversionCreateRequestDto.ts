@@ -16,16 +16,52 @@ export interface UomConversionCreateRequestDto {
     createdBy?: string;
 }
 
+function isOptionalUomConversionCreateRequestDtoPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type UomConversionCreateRequestDtoOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createUomConversionCreateRequestDtoPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createUomConversionCreateRequestDtoOptionalProperties(
+    ...properties: UomConversionCreateRequestDtoOptionalProperty[]
+): ReadonlyArray<UomConversionCreateRequestDtoOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfUomConversionCreateRequestDto(value: object): value is UomConversionCreateRequestDto {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if (!('fromUomCode' in _v) || _v['fromUomCode'] === undefined) return false;
-    if ('fromUomCode' in _v && typeof _v['fromUomCode'] !== 'string') return false;
-    if (!('toUomCode' in _v) || _v['toUomCode'] === undefined) return false;
-    if ('toUomCode' in _v && typeof _v['toUomCode'] !== 'string') return false;
-    if (!('conversionFactor' in _v) || _v['conversionFactor'] === undefined) return false;
-    if ('conversionFactor' in _v && typeof _v['conversionFactor'] !== 'number') return false;
-    if ('createdBy' in _v && typeof _v['createdBy'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createUomConversionCreateRequestDtoPropertyNames('fromUomCode', 'toUomCode', 'conversionFactor', );
+    const optionalStringProperties = createUomConversionCreateRequestDtoOptionalProperties({ name: 'fromUomCode', nullable: false }, { name: 'toUomCode', nullable: false }, { name: 'createdBy', nullable: false }, );
+    const optionalNumberProperties = createUomConversionCreateRequestDtoOptionalProperties({ name: 'conversionFactor', nullable: false }, );
+    const optionalBooleanProperties = createUomConversionCreateRequestDtoOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalUomConversionCreateRequestDtoPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalUomConversionCreateRequestDtoPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalUomConversionCreateRequestDtoPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

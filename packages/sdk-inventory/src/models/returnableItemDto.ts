@@ -17,14 +17,52 @@ export interface ReturnableItemDto {
     workorderId?: string;
 }
 
+function isOptionalReturnableItemDtoPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type ReturnableItemDtoOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createReturnableItemDtoPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createReturnableItemDtoOptionalProperties(
+    ...properties: ReturnableItemDtoOptionalProperty[]
+): ReadonlyArray<ReturnableItemDtoOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfReturnableItemDto(value: object): value is ReturnableItemDto {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('itemId' in _v && typeof _v['itemId'] !== 'string') return false;
-    if ('sku' in _v && typeof _v['sku'] !== 'string') return false;
-    if ('description' in _v && typeof _v['description'] !== 'string') return false;
-    if ('quantityReturnable' in _v && typeof _v['quantityReturnable'] !== 'number') return false;
-    if ('workorderId' in _v && typeof _v['workorderId'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createReturnableItemDtoPropertyNames();
+    const optionalStringProperties = createReturnableItemDtoOptionalProperties({ name: 'itemId', nullable: false }, { name: 'sku', nullable: false }, { name: 'description', nullable: false }, { name: 'workorderId', nullable: false }, );
+    const optionalNumberProperties = createReturnableItemDtoOptionalProperties({ name: 'quantityReturnable', nullable: false }, );
+    const optionalBooleanProperties = createReturnableItemDtoOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalReturnableItemDtoPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalReturnableItemDtoPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalReturnableItemDtoPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

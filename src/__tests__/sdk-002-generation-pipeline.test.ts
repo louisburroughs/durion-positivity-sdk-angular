@@ -16,6 +16,8 @@ describe('sdk-002 generation pipeline', () => {
     expect(script).toMatch(/cleanup_legacy_null_models/);
     expect(script).toMatch(/cleanup_legacy_fetch_apis/);
     expect(script).toMatch(/cleanup_orphan_js/);
+    expect(script).toMatch(/gateway_base_path_for_module/);
+    expect(script).toMatch(/apply_gateway_base_path_default/);
     expect(script).toMatch(/patch_package_dependencies/);
   });
 

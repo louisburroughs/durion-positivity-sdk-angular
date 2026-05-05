@@ -28,14 +28,52 @@ export enum RefundPaymentRequestReasonEnum {
 
 
 
+function isOptionalRefundPaymentRequestPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type RefundPaymentRequestOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createRefundPaymentRequestPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createRefundPaymentRequestOptionalProperties(
+    ...properties: RefundPaymentRequestOptionalProperty[]
+): ReadonlyArray<RefundPaymentRequestOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfRefundPaymentRequest(value: object): value is RefundPaymentRequest {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if (!('amount' in _v) || _v['amount'] === undefined) return false;
-    if ('amount' in _v && typeof _v['amount'] !== 'number') return false;
-    if (!('reason' in _v) || _v['reason'] === undefined) return false;
-    if ('reason' in _v && typeof _v['reason'] !== 'string') return false;
-    if ('notes' in _v && typeof _v['notes'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createRefundPaymentRequestPropertyNames('amount', 'reason', );
+    const optionalStringProperties = createRefundPaymentRequestOptionalProperties({ name: 'reason', nullable: false }, { name: 'notes', nullable: false }, );
+    const optionalNumberProperties = createRefundPaymentRequestOptionalProperties({ name: 'amount', nullable: false }, );
+    const optionalBooleanProperties = createRefundPaymentRequestOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalRefundPaymentRequestPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalRefundPaymentRequestPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalRefundPaymentRequestPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

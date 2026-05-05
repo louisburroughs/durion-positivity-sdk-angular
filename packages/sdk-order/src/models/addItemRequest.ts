@@ -16,14 +16,52 @@ export interface AddItemRequest {
     manualPrice?: number;
 }
 
+function isOptionalAddItemRequestPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type AddItemRequestOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createAddItemRequestPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createAddItemRequestOptionalProperties(
+    ...properties: AddItemRequestOptionalProperty[]
+): ReadonlyArray<AddItemRequestOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfAddItemRequest(value: object): value is AddItemRequest {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if (!('itemSku' in _v) || _v['itemSku'] === undefined) return false;
-    if ('itemSku' in _v && typeof _v['itemSku'] !== 'string') return false;
-    if ('quantity' in _v && typeof _v['quantity'] !== 'number') return false;
-    if ('reasonCode' in _v && typeof _v['reasonCode'] !== 'string') return false;
-    if ('manualPrice' in _v && typeof _v['manualPrice'] !== 'number') return false;
-    return true;
+
+    const requiredProperties = createAddItemRequestPropertyNames('itemSku', );
+    const optionalStringProperties = createAddItemRequestOptionalProperties({ name: 'itemSku', nullable: false }, { name: 'reasonCode', nullable: false }, );
+    const optionalNumberProperties = createAddItemRequestOptionalProperties({ name: 'quantity', nullable: false }, { name: 'manualPrice', nullable: false }, );
+    const optionalBooleanProperties = createAddItemRequestOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalAddItemRequestPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalAddItemRequestPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalAddItemRequestPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

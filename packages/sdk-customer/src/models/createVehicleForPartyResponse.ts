@@ -20,17 +20,52 @@ export interface CreateVehicleForPartyResponse {
     createdAt?: string;
 }
 
+function isOptionalCreateVehicleForPartyResponsePropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type CreateVehicleForPartyResponseOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createCreateVehicleForPartyResponsePropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createCreateVehicleForPartyResponseOptionalProperties(
+    ...properties: CreateVehicleForPartyResponseOptionalProperty[]
+): ReadonlyArray<CreateVehicleForPartyResponseOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfCreateVehicleForPartyResponse(value: object): value is CreateVehicleForPartyResponse {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('vehicleId' in _v && typeof _v['vehicleId'] !== 'string') return false;
-    if ('partyId' in _v && typeof _v['partyId'] !== 'string') return false;
-    if ('vinNumber' in _v && typeof _v['vinNumber'] !== 'string') return false;
-    if ('unitNumber' in _v && typeof _v['unitNumber'] !== 'string') return false;
-    if ('description' in _v && typeof _v['description'] !== 'string') return false;
-    if ('licensePlate' in _v && typeof _v['licensePlate'] !== 'string') return false;
-    if ('status' in _v && typeof _v['status'] !== 'string') return false;
-    if ('createdAt' in _v && typeof _v['createdAt'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createCreateVehicleForPartyResponsePropertyNames();
+    const optionalStringProperties = createCreateVehicleForPartyResponseOptionalProperties({ name: 'vehicleId', nullable: false }, { name: 'partyId', nullable: false }, { name: 'vinNumber', nullable: false }, { name: 'unitNumber', nullable: false }, { name: 'description', nullable: false }, { name: 'licensePlate', nullable: false }, { name: 'status', nullable: false }, { name: 'createdAt', nullable: false }, );
+    const optionalNumberProperties = createCreateVehicleForPartyResponseOptionalProperties();
+    const optionalBooleanProperties = createCreateVehicleForPartyResponseOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalCreateVehicleForPartyResponsePropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalCreateVehicleForPartyResponsePropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalCreateVehicleForPartyResponsePropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

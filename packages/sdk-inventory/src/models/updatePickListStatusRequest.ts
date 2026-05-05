@@ -22,11 +22,52 @@ export enum UpdatePickListStatusRequestStatusEnum {
 
 
 
+function isOptionalUpdatePickListStatusRequestPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type UpdatePickListStatusRequestOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createUpdatePickListStatusRequestPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createUpdatePickListStatusRequestOptionalProperties(
+    ...properties: UpdatePickListStatusRequestOptionalProperty[]
+): ReadonlyArray<UpdatePickListStatusRequestOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfUpdatePickListStatusRequest(value: object): value is UpdatePickListStatusRequest {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if (!('status' in _v) || _v['status'] === undefined) return false;
-    if ('status' in _v && typeof _v['status'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createUpdatePickListStatusRequestPropertyNames('status', );
+    const optionalStringProperties = createUpdatePickListStatusRequestOptionalProperties({ name: 'status', nullable: false }, );
+    const optionalNumberProperties = createUpdatePickListStatusRequestOptionalProperties();
+    const optionalBooleanProperties = createUpdatePickListStatusRequestOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalUpdatePickListStatusRequestPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalUpdatePickListStatusRequestPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalUpdatePickListStatusRequestPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

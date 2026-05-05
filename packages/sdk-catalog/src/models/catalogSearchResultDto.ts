@@ -28,11 +28,52 @@ export interface CatalogSearchResultDto {
     limit?: number;
 }
 
+function isOptionalCatalogSearchResultDtoPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type CatalogSearchResultDtoOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createCatalogSearchResultDtoPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createCatalogSearchResultDtoOptionalProperties(
+    ...properties: CatalogSearchResultDtoOptionalProperty[]
+): ReadonlyArray<CatalogSearchResultDtoOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfCatalogSearchResultDto(value: object): value is CatalogSearchResultDto {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('nextCursor' in _v && typeof _v['nextCursor'] !== 'string') return false;
-    if ('limit' in _v && typeof _v['limit'] !== 'number') return false;
-    return true;
+
+    const requiredProperties = createCatalogSearchResultDtoPropertyNames();
+    const optionalStringProperties = createCatalogSearchResultDtoOptionalProperties({ name: 'nextCursor', nullable: false }, );
+    const optionalNumberProperties = createCatalogSearchResultDtoOptionalProperties({ name: 'limit', nullable: false }, );
+    const optionalBooleanProperties = createCatalogSearchResultDtoOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalCatalogSearchResultDtoPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalCatalogSearchResultDtoPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalCatalogSearchResultDtoPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

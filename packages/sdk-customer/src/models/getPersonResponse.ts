@@ -68,17 +68,52 @@ export enum GetPersonResponsePreferredContactMethodEnum {
 
 
 
+function isOptionalGetPersonResponsePropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type GetPersonResponseOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createGetPersonResponsePropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createGetPersonResponseOptionalProperties(
+    ...properties: GetPersonResponseOptionalProperty[]
+): ReadonlyArray<GetPersonResponseOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfGetPersonResponse(value: object): value is GetPersonResponse {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('personId' in _v && typeof _v['personId'] !== 'string') return false;
-    if ('firstName' in _v && typeof _v['firstName'] !== 'string') return false;
-    if ('lastName' in _v && typeof _v['lastName'] !== 'string') return false;
-    if ('displayName' in _v && typeof _v['displayName'] !== 'string') return false;
-    if ('preferredContactMethod' in _v && typeof _v['preferredContactMethod'] !== 'string') return false;
-    if ('individualCustomer' in _v && typeof _v['individualCustomer'] !== 'boolean') return false;
-    if ('commercialContact' in _v && typeof _v['commercialContact'] !== 'boolean') return false;
-    if ('commercialAccountCount' in _v && typeof _v['commercialAccountCount'] !== 'number') return false;
-    return true;
+
+    const requiredProperties = createGetPersonResponsePropertyNames();
+    const optionalStringProperties = createGetPersonResponseOptionalProperties({ name: 'personId', nullable: false }, { name: 'firstName', nullable: false }, { name: 'lastName', nullable: false }, { name: 'displayName', nullable: false }, { name: 'preferredContactMethod', nullable: false }, );
+    const optionalNumberProperties = createGetPersonResponseOptionalProperties({ name: 'commercialAccountCount', nullable: false }, );
+    const optionalBooleanProperties = createGetPersonResponseOptionalProperties({ name: 'individualCustomer', nullable: false }, { name: 'commercialContact', nullable: false }, );
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalGetPersonResponsePropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalGetPersonResponsePropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalGetPersonResponsePropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

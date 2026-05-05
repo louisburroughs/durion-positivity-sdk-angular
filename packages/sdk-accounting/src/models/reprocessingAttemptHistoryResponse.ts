@@ -25,15 +25,52 @@ export enum ReprocessingAttemptHistoryResponseOutcomeEnum {
 
 
 
+function isOptionalReprocessingAttemptHistoryResponsePropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type ReprocessingAttemptHistoryResponseOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createReprocessingAttemptHistoryResponsePropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createReprocessingAttemptHistoryResponseOptionalProperties(
+    ...properties: ReprocessingAttemptHistoryResponseOptionalProperty[]
+): ReadonlyArray<ReprocessingAttemptHistoryResponseOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfReprocessingAttemptHistoryResponse(value: object): value is ReprocessingAttemptHistoryResponse {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('attemptId' in _v && typeof _v['attemptId'] !== 'string') return false;
-    if ('eventId' in _v && typeof _v['eventId'] !== 'string') return false;
-    if ('triggeredByUserId' in _v && typeof _v['triggeredByUserId'] !== 'string') return false;
-    if ('outcome' in _v && typeof _v['outcome'] !== 'string') return false;
-    if ('outcomeDetails' in _v && typeof _v['outcomeDetails'] !== 'string') return false;
-    if ('mappingVersionUsed' in _v && typeof _v['mappingVersionUsed'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createReprocessingAttemptHistoryResponsePropertyNames();
+    const optionalStringProperties = createReprocessingAttemptHistoryResponseOptionalProperties({ name: 'attemptId', nullable: false }, { name: 'eventId', nullable: false }, { name: 'triggeredByUserId', nullable: false }, { name: 'outcome', nullable: false }, { name: 'outcomeDetails', nullable: false }, { name: 'mappingVersionUsed', nullable: false }, );
+    const optionalNumberProperties = createReprocessingAttemptHistoryResponseOptionalProperties();
+    const optionalBooleanProperties = createReprocessingAttemptHistoryResponseOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalReprocessingAttemptHistoryResponsePropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalReprocessingAttemptHistoryResponsePropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalReprocessingAttemptHistoryResponsePropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

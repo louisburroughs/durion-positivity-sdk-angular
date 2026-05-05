@@ -17,14 +17,52 @@ export interface RoleDto {
     active?: boolean;
 }
 
+function isOptionalRoleDtoPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type RoleDtoOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createRoleDtoPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createRoleDtoOptionalProperties(
+    ...properties: RoleDtoOptionalProperty[]
+): ReadonlyArray<RoleDtoOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfRoleDto(value: object): value is RoleDto {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('code' in _v && typeof _v['code'] !== 'string') return false;
-    if ('name' in _v && typeof _v['name'] !== 'string') return false;
-    if ('description' in _v && typeof _v['description'] !== 'string') return false;
-    if ('scopeType' in _v && typeof _v['scopeType'] !== 'string') return false;
-    if ('active' in _v && typeof _v['active'] !== 'boolean') return false;
-    return true;
+
+    const requiredProperties = createRoleDtoPropertyNames();
+    const optionalStringProperties = createRoleDtoOptionalProperties({ name: 'code', nullable: false }, { name: 'name', nullable: false }, { name: 'description', nullable: false }, { name: 'scopeType', nullable: false }, );
+    const optionalNumberProperties = createRoleDtoOptionalProperties();
+    const optionalBooleanProperties = createRoleDtoOptionalProperties({ name: 'active', nullable: false }, );
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalRoleDtoPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalRoleDtoPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalRoleDtoPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

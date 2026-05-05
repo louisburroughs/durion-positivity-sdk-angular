@@ -48,14 +48,52 @@ export interface SupplierItemCostDto {
     tiers?: Array<CostTierDto>;
 }
 
+function isOptionalSupplierItemCostDtoPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type SupplierItemCostDtoOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createSupplierItemCostDtoPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createSupplierItemCostDtoOptionalProperties(
+    ...properties: SupplierItemCostDtoOptionalProperty[]
+): ReadonlyArray<SupplierItemCostDtoOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfSupplierItemCostDto(value: object): value is SupplierItemCostDto {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('id' in _v && typeof _v['id'] !== 'string') return false;
-    if ('supplierId' in _v && typeof _v['supplierId'] !== 'string') return false;
-    if ('itemId' in _v && typeof _v['itemId'] !== 'string') return false;
-    if ('currencyCode' in _v && typeof _v['currencyCode'] !== 'string') return false;
-    if ('baseCost' in _v && typeof _v['baseCost'] !== 'number') return false;
-    return true;
+
+    const requiredProperties = createSupplierItemCostDtoPropertyNames();
+    const optionalStringProperties = createSupplierItemCostDtoOptionalProperties({ name: 'id', nullable: false }, { name: 'supplierId', nullable: false }, { name: 'itemId', nullable: false }, { name: 'currencyCode', nullable: false }, );
+    const optionalNumberProperties = createSupplierItemCostDtoOptionalProperties({ name: 'baseCost', nullable: false }, );
+    const optionalBooleanProperties = createSupplierItemCostDtoOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalSupplierItemCostDtoPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalSupplierItemCostDtoPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalSupplierItemCostDtoPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

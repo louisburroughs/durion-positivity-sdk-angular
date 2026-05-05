@@ -34,30 +34,55 @@ export interface LocationRequestDTO {
     checkInBufferMinutes?: number;
     cleanupBufferMinutes?: number;
     type: LocationTypeDTO;
-    parents?: { [key: string]: any; };
+    parents?: object;
+}
+
+function isOptionalLocationRequestDTOPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type LocationRequestDTOOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createLocationRequestDTOPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createLocationRequestDTOOptionalProperties(
+    ...properties: LocationRequestDTOOptionalProperty[]
+): ReadonlyArray<LocationRequestDTOOptionalProperty> {
+    return properties;
 }
 
 export function instanceOfLocationRequestDTO(value: object): value is LocationRequestDTO {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if (!('name' in _v) || _v['name'] === undefined) return false;
-    if ('name' in _v && typeof _v['name'] !== 'string') return false;
-    if (!('code' in _v) || _v['code'] === undefined) return false;
-    if ('code' in _v && typeof _v['code'] !== 'string') return false;
-    if ('geographicalLocationId' in _v && typeof _v['geographicalLocationId'] !== 'string') return false;
-    if ('addressLine1' in _v && typeof _v['addressLine1'] !== 'string') return false;
-    if ('addressLine2' in _v && typeof _v['addressLine2'] !== 'string') return false;
-    if ('city' in _v && typeof _v['city'] !== 'string') return false;
-    if ('state' in _v && typeof _v['state'] !== 'string') return false;
-    if ('postalCode' in _v && typeof _v['postalCode'] !== 'string') return false;
-    if ('country' in _v && typeof _v['country'] !== 'string') return false;
-    if ('mailingAddress' in _v && typeof _v['mailingAddress'] !== 'string') return false;
-    if ('active' in _v && typeof _v['active'] !== 'boolean') return false;
-    if ('responsiblePersonId' in _v && typeof _v['responsiblePersonId'] !== 'number') return false;
-    if ('timezone' in _v && typeof _v['timezone'] !== 'string') return false;
-    if ('checkInBufferMinutes' in _v && typeof _v['checkInBufferMinutes'] !== 'number') return false;
-    if ('cleanupBufferMinutes' in _v && typeof _v['cleanupBufferMinutes'] !== 'number') return false;
-    if (!('type' in _v) || _v['type'] === undefined) return false;
-    return true;
+
+    const requiredProperties = createLocationRequestDTOPropertyNames('name', 'code', 'type', );
+    const optionalStringProperties = createLocationRequestDTOOptionalProperties({ name: 'name', nullable: false }, { name: 'code', nullable: false }, { name: 'geographicalLocationId', nullable: false }, { name: 'addressLine1', nullable: false }, { name: 'addressLine2', nullable: false }, { name: 'city', nullable: false }, { name: 'state', nullable: false }, { name: 'postalCode', nullable: false }, { name: 'country', nullable: false }, { name: 'mailingAddress', nullable: false }, { name: 'timezone', nullable: false }, );
+    const optionalNumberProperties = createLocationRequestDTOOptionalProperties({ name: 'responsiblePersonId', nullable: false }, { name: 'checkInBufferMinutes', nullable: false }, { name: 'cleanupBufferMinutes', nullable: false }, );
+    const optionalBooleanProperties = createLocationRequestDTOOptionalProperties({ name: 'active', nullable: false }, );
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalLocationRequestDTOPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalLocationRequestDTOPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalLocationRequestDTOPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

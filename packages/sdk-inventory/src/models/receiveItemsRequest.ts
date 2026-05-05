@@ -14,10 +14,52 @@ export interface ReceiveItemsRequest {
     lines: Array<ReceiveLineRequest>;
 }
 
+function isOptionalReceiveItemsRequestPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type ReceiveItemsRequestOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createReceiveItemsRequestPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createReceiveItemsRequestOptionalProperties(
+    ...properties: ReceiveItemsRequestOptionalProperty[]
+): ReadonlyArray<ReceiveItemsRequestOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfReceiveItemsRequest(value: object): value is ReceiveItemsRequest {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if (!('lines' in _v) || _v['lines'] === undefined) return false;
-    return true;
+
+    const requiredProperties = createReceiveItemsRequestPropertyNames('lines', );
+    const optionalStringProperties = createReceiveItemsRequestOptionalProperties();
+    const optionalNumberProperties = createReceiveItemsRequestOptionalProperties();
+    const optionalBooleanProperties = createReceiveItemsRequestOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalReceiveItemsRequestPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalReceiveItemsRequestPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalReceiveItemsRequestPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

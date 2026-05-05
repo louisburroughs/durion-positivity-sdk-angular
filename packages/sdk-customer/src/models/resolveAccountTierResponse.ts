@@ -61,16 +61,52 @@ export enum ResolveAccountTierResponseRecommendedTierEnum {
 
 
 
+function isOptionalResolveAccountTierResponsePropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type ResolveAccountTierResponseOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createResolveAccountTierResponsePropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createResolveAccountTierResponseOptionalProperties(
+    ...properties: ResolveAccountTierResponseOptionalProperty[]
+): ReadonlyArray<ResolveAccountTierResponseOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfResolveAccountTierResponse(value: object): value is ResolveAccountTierResponse {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('accountId' in _v && typeof _v['accountId'] !== 'string') return false;
-    if ('currentTier' in _v && typeof _v['currentTier'] !== 'string') return false;
-    if ('recommendedTier' in _v && typeof _v['recommendedTier'] !== 'string') return false;
-    if ('tierApplied' in _v && typeof _v['tierApplied'] !== 'boolean') return false;
-    if ('manualOverrideActive' in _v && typeof _v['manualOverrideActive'] !== 'boolean') return false;
-    if ('resolutionReason' in _v && typeof _v['resolutionReason'] !== 'string') return false;
-    if ('tierScore' in _v && typeof _v['tierScore'] !== 'number') return false;
-    return true;
+
+    const requiredProperties = createResolveAccountTierResponsePropertyNames();
+    const optionalStringProperties = createResolveAccountTierResponseOptionalProperties({ name: 'accountId', nullable: false }, { name: 'currentTier', nullable: false }, { name: 'recommendedTier', nullable: false }, { name: 'resolutionReason', nullable: false }, );
+    const optionalNumberProperties = createResolveAccountTierResponseOptionalProperties({ name: 'tierScore', nullable: false }, );
+    const optionalBooleanProperties = createResolveAccountTierResponseOptionalProperties({ name: 'tierApplied', nullable: false }, { name: 'manualOverrideActive', nullable: false }, );
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalResolveAccountTierResponsePropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalResolveAccountTierResponsePropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalResolveAccountTierResponsePropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

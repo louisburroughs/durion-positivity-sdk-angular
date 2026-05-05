@@ -14,12 +14,52 @@ export interface CreateReceivingSessionRequest {
     entryMethod?: string;
 }
 
+function isOptionalCreateReceivingSessionRequestPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type CreateReceivingSessionRequestOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createCreateReceivingSessionRequestPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createCreateReceivingSessionRequestOptionalProperties(
+    ...properties: CreateReceivingSessionRequestOptionalProperty[]
+): ReadonlyArray<CreateReceivingSessionRequestOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfCreateReceivingSessionRequest(value: object): value is CreateReceivingSessionRequest {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if (!('sourceDocumentId' in _v) || _v['sourceDocumentId'] === undefined) return false;
-    if ('sourceDocumentId' in _v && typeof _v['sourceDocumentId'] !== 'string') return false;
-    if ('entryMethod' in _v && typeof _v['entryMethod'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createCreateReceivingSessionRequestPropertyNames('sourceDocumentId', );
+    const optionalStringProperties = createCreateReceivingSessionRequestOptionalProperties({ name: 'sourceDocumentId', nullable: false }, { name: 'entryMethod', nullable: false }, );
+    const optionalNumberProperties = createCreateReceivingSessionRequestOptionalProperties();
+    const optionalBooleanProperties = createCreateReceivingSessionRequestOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalCreateReceivingSessionRequestPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalCreateReceivingSessionRequestPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalCreateReceivingSessionRequestPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

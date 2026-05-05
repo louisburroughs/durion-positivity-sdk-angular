@@ -52,17 +52,52 @@ export interface ApiError {
     supportAction?: string;
 }
 
+function isOptionalApiErrorPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type ApiErrorOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createApiErrorPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createApiErrorOptionalProperties(
+    ...properties: ApiErrorOptionalProperty[]
+): ReadonlyArray<ApiErrorOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfApiError(value: object): value is ApiError {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('code' in _v && typeof _v['code'] !== 'string') return false;
-    if ('message' in _v && typeof _v['message'] !== 'string') return false;
-    if ('status' in _v && typeof _v['status'] !== 'number') return false;
-    if ('timestamp' in _v && typeof _v['timestamp'] !== 'string') return false;
-    if ('correlationId' in _v && typeof _v['correlationId'] !== 'string') return false;
-    if ('referenceId' in _v && typeof _v['referenceId'] !== 'string') return false;
-    if ('nextAction' in _v && typeof _v['nextAction'] !== 'string') return false;
-    if ('supportAction' in _v && typeof _v['supportAction'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createApiErrorPropertyNames();
+    const optionalStringProperties = createApiErrorOptionalProperties({ name: 'code', nullable: false }, { name: 'message', nullable: false }, { name: 'timestamp', nullable: false }, { name: 'correlationId', nullable: false }, { name: 'referenceId', nullable: false }, { name: 'nextAction', nullable: false }, { name: 'supportAction', nullable: false }, );
+    const optionalNumberProperties = createApiErrorOptionalProperties({ name: 'status', nullable: false }, );
+    const optionalBooleanProperties = createApiErrorOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalApiErrorPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalApiErrorPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalApiErrorPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

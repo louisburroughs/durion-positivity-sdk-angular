@@ -17,18 +17,52 @@ export interface PostingRuleSetCreateRequest {
     createdBy: string;
 }
 
+function isOptionalPostingRuleSetCreateRequestPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type PostingRuleSetCreateRequestOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createPostingRuleSetCreateRequestPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createPostingRuleSetCreateRequestOptionalProperties(
+    ...properties: PostingRuleSetCreateRequestOptionalProperty[]
+): ReadonlyArray<PostingRuleSetCreateRequestOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfPostingRuleSetCreateRequest(value: object): value is PostingRuleSetCreateRequest {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if (!('name' in _v) || _v['name'] === undefined) return false;
-    if ('name' in _v && typeof _v['name'] !== 'string') return false;
-    if (!('eventType' in _v) || _v['eventType'] === undefined) return false;
-    if ('eventType' in _v && typeof _v['eventType'] !== 'string') return false;
-    if ('description' in _v && typeof _v['description'] !== 'string') return false;
-    if (!('rulesDefinition' in _v) || _v['rulesDefinition'] === undefined) return false;
-    if ('rulesDefinition' in _v && typeof _v['rulesDefinition'] !== 'string') return false;
-    if (!('createdBy' in _v) || _v['createdBy'] === undefined) return false;
-    if ('createdBy' in _v && typeof _v['createdBy'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createPostingRuleSetCreateRequestPropertyNames('name', 'eventType', 'rulesDefinition', 'createdBy', );
+    const optionalStringProperties = createPostingRuleSetCreateRequestOptionalProperties({ name: 'name', nullable: false }, { name: 'eventType', nullable: false }, { name: 'description', nullable: false }, { name: 'rulesDefinition', nullable: false }, { name: 'createdBy', nullable: false }, );
+    const optionalNumberProperties = createPostingRuleSetCreateRequestOptionalProperties();
+    const optionalBooleanProperties = createPostingRuleSetCreateRequestOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalPostingRuleSetCreateRequestPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalPostingRuleSetCreateRequestPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalPostingRuleSetCreateRequestPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

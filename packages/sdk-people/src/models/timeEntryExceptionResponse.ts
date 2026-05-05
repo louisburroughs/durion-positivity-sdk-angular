@@ -27,13 +27,52 @@ export interface TimeEntryExceptionResponse {
     message?: string;
 }
 
+function isOptionalTimeEntryExceptionResponsePropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type TimeEntryExceptionResponseOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createTimeEntryExceptionResponsePropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createTimeEntryExceptionResponseOptionalProperties(
+    ...properties: TimeEntryExceptionResponseOptionalProperty[]
+): ReadonlyArray<TimeEntryExceptionResponseOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfTimeEntryExceptionResponse(value: object): value is TimeEntryExceptionResponse {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('exceptionId' in _v && typeof _v['exceptionId'] !== 'string') return false;
-    if (!('success' in _v) || _v['success'] === undefined) return false;
-    if ('success' in _v && typeof _v['success'] !== 'boolean') return false;
-    if ('message' in _v && typeof _v['message'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createTimeEntryExceptionResponsePropertyNames('success', );
+    const optionalStringProperties = createTimeEntryExceptionResponseOptionalProperties({ name: 'exceptionId', nullable: false }, { name: 'message', nullable: false }, );
+    const optionalNumberProperties = createTimeEntryExceptionResponseOptionalProperties();
+    const optionalBooleanProperties = createTimeEntryExceptionResponseOptionalProperties({ name: 'success', nullable: false }, );
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalTimeEntryExceptionResponsePropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalTimeEntryExceptionResponsePropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalTimeEntryExceptionResponsePropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

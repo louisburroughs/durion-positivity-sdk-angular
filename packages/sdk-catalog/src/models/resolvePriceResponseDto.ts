@@ -24,14 +24,52 @@ export enum ResolvePriceResponseDtoSourceEnum {
 
 
 
+function isOptionalResolvePriceResponseDtoPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type ResolvePriceResponseDtoOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createResolvePriceResponseDtoPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createResolvePriceResponseDtoOptionalProperties(
+    ...properties: ResolvePriceResponseDtoOptionalProperty[]
+): ReadonlyArray<ResolvePriceResponseDtoOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfResolvePriceResponseDto(value: object): value is ResolvePriceResponseDto {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('resolvedAmount' in _v && typeof _v['resolvedAmount'] !== 'string') return false;
-    if ('currency' in _v && typeof _v['currency'] !== 'string') return false;
-    if ('source' in _v && typeof _v['source'] !== 'string') return false;
-    if ('sourceRuleId' in _v && typeof _v['sourceRuleId'] !== 'string') return false;
-    if ('fallbackReason' in _v && typeof _v['fallbackReason'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createResolvePriceResponseDtoPropertyNames();
+    const optionalStringProperties = createResolvePriceResponseDtoOptionalProperties({ name: 'resolvedAmount', nullable: false }, { name: 'currency', nullable: false }, { name: 'source', nullable: false }, { name: 'sourceRuleId', nullable: false }, { name: 'fallbackReason', nullable: false }, );
+    const optionalNumberProperties = createResolvePriceResponseDtoOptionalProperties();
+    const optionalBooleanProperties = createResolvePriceResponseDtoOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalResolvePriceResponseDtoPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalResolvePriceResponseDtoPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalResolvePriceResponseDtoPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

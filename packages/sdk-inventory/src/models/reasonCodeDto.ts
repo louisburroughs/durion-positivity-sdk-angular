@@ -15,12 +15,52 @@ export interface ReasonCodeDto {
     category?: string;
 }
 
+function isOptionalReasonCodeDtoPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type ReasonCodeDtoOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createReasonCodeDtoPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createReasonCodeDtoOptionalProperties(
+    ...properties: ReasonCodeDtoOptionalProperty[]
+): ReadonlyArray<ReasonCodeDtoOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfReasonCodeDto(value: object): value is ReasonCodeDto {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('code' in _v && typeof _v['code'] !== 'string') return false;
-    if ('description' in _v && typeof _v['description'] !== 'string') return false;
-    if ('category' in _v && typeof _v['category'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createReasonCodeDtoPropertyNames();
+    const optionalStringProperties = createReasonCodeDtoOptionalProperties({ name: 'code', nullable: false }, { name: 'description', nullable: false }, { name: 'category', nullable: false }, );
+    const optionalNumberProperties = createReasonCodeDtoOptionalProperties();
+    const optionalBooleanProperties = createReasonCodeDtoOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalReasonCodeDtoPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalReasonCodeDtoPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalReasonCodeDtoPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

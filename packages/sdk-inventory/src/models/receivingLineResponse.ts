@@ -19,16 +19,52 @@ export interface ReceivingLineResponse {
     workorderLineId?: string;
 }
 
+function isOptionalReceivingLineResponsePropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type ReceivingLineResponseOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createReceivingLineResponsePropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createReceivingLineResponseOptionalProperties(
+    ...properties: ReceivingLineResponseOptionalProperty[]
+): ReadonlyArray<ReceivingLineResponseOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfReceivingLineResponse(value: object): value is ReceivingLineResponse {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('lineId' in _v && typeof _v['lineId'] !== 'string') return false;
-    if ('productId' in _v && typeof _v['productId'] !== 'string') return false;
-    if ('expectedQuantity' in _v && typeof _v['expectedQuantity'] !== 'number') return false;
-    if ('receivedQuantity' in _v && typeof _v['receivedQuantity'] !== 'number') return false;
-    if ('status' in _v && typeof _v['status'] !== 'string') return false;
-    if ('workorderId' in _v && typeof _v['workorderId'] !== 'string') return false;
-    if ('workorderLineId' in _v && typeof _v['workorderLineId'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createReceivingLineResponsePropertyNames();
+    const optionalStringProperties = createReceivingLineResponseOptionalProperties({ name: 'lineId', nullable: false }, { name: 'productId', nullable: false }, { name: 'status', nullable: false }, { name: 'workorderId', nullable: false }, { name: 'workorderLineId', nullable: false }, );
+    const optionalNumberProperties = createReceivingLineResponseOptionalProperties({ name: 'expectedQuantity', nullable: false }, { name: 'receivedQuantity', nullable: false }, );
+    const optionalBooleanProperties = createReceivingLineResponseOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalReceivingLineResponsePropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalReceivingLineResponsePropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalReceivingLineResponsePropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

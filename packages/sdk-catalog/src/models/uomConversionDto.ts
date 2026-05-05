@@ -20,15 +20,52 @@ export interface UomConversionDto {
     createdBy?: string;
 }
 
+function isOptionalUomConversionDtoPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type UomConversionDtoOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createUomConversionDtoPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createUomConversionDtoOptionalProperties(
+    ...properties: UomConversionDtoOptionalProperty[]
+): ReadonlyArray<UomConversionDtoOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfUomConversionDto(value: object): value is UomConversionDto {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('id' in _v && typeof _v['id'] !== 'string') return false;
-    if ('fromUomCode' in _v && typeof _v['fromUomCode'] !== 'string') return false;
-    if ('toUomCode' in _v && typeof _v['toUomCode'] !== 'string') return false;
-    if ('conversionFactor' in _v && typeof _v['conversionFactor'] !== 'number') return false;
-    if ('active' in _v && typeof _v['active'] !== 'boolean') return false;
-    if ('createdBy' in _v && typeof _v['createdBy'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createUomConversionDtoPropertyNames();
+    const optionalStringProperties = createUomConversionDtoOptionalProperties({ name: 'id', nullable: false }, { name: 'fromUomCode', nullable: false }, { name: 'toUomCode', nullable: false }, { name: 'createdBy', nullable: false }, );
+    const optionalNumberProperties = createUomConversionDtoOptionalProperties({ name: 'conversionFactor', nullable: false }, );
+    const optionalBooleanProperties = createUomConversionDtoOptionalProperties({ name: 'active', nullable: false }, );
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalUomConversionDtoPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalUomConversionDtoPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalUomConversionDtoPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

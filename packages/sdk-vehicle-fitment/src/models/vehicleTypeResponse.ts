@@ -31,16 +31,52 @@ export interface VehicleTypeResponse {
     vehicleTypeName: string;
 }
 
+function isOptionalVehicleTypeResponsePropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type VehicleTypeResponseOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createVehicleTypeResponsePropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createVehicleTypeResponseOptionalProperties(
+    ...properties: VehicleTypeResponseOptionalProperty[]
+): ReadonlyArray<VehicleTypeResponseOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfVehicleTypeResponse(value: object): value is VehicleTypeResponse {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if (!('id' in _v) || _v['id'] === undefined) return false;
-    if ('id' in _v && typeof _v['id'] !== 'string') return false;
-    if ('makeId' in _v && typeof _v['makeId'] !== 'string') return false;
-    if (!('vehicleTypeId' in _v) || _v['vehicleTypeId'] === undefined) return false;
-    if ('vehicleTypeId' in _v && typeof _v['vehicleTypeId'] !== 'string') return false;
-    if (!('vehicleTypeName' in _v) || _v['vehicleTypeName'] === undefined) return false;
-    if ('vehicleTypeName' in _v && typeof _v['vehicleTypeName'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createVehicleTypeResponsePropertyNames('id', 'vehicleTypeId', 'vehicleTypeName', );
+    const optionalStringProperties = createVehicleTypeResponseOptionalProperties({ name: 'id', nullable: false }, { name: 'makeId', nullable: false }, { name: 'vehicleTypeId', nullable: false }, { name: 'vehicleTypeName', nullable: false }, );
+    const optionalNumberProperties = createVehicleTypeResponseOptionalProperties();
+    const optionalBooleanProperties = createVehicleTypeResponseOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalVehicleTypeResponsePropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalVehicleTypeResponsePropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalVehicleTypeResponsePropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

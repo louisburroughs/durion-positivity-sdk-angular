@@ -14,11 +14,52 @@ export interface PermissionDefinition {
     description?: string;
 }
 
+function isOptionalPermissionDefinitionPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type PermissionDefinitionOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createPermissionDefinitionPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createPermissionDefinitionOptionalProperties(
+    ...properties: PermissionDefinitionOptionalProperty[]
+): ReadonlyArray<PermissionDefinitionOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfPermissionDefinition(value: object): value is PermissionDefinition {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('name' in _v && typeof _v['name'] !== 'string') return false;
-    if ('description' in _v && typeof _v['description'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createPermissionDefinitionPropertyNames();
+    const optionalStringProperties = createPermissionDefinitionOptionalProperties({ name: 'name', nullable: false }, { name: 'description', nullable: false }, );
+    const optionalNumberProperties = createPermissionDefinitionOptionalProperties();
+    const optionalBooleanProperties = createPermissionDefinitionOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalPermissionDefinitionPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalPermissionDefinitionPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalPermissionDefinitionPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

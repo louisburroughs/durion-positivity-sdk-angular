@@ -19,10 +19,52 @@ export interface FilterProductsRequest {
     vehicleAttributes: { [key: string]: string; };
 }
 
+function isOptionalFilterProductsRequestPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type FilterProductsRequestOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createFilterProductsRequestPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createFilterProductsRequestOptionalProperties(
+    ...properties: FilterProductsRequestOptionalProperty[]
+): ReadonlyArray<FilterProductsRequestOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfFilterProductsRequest(value: object): value is FilterProductsRequest {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if (!('vehicleAttributes' in _v) || _v['vehicleAttributes'] === undefined) return false;
-    return true;
+
+    const requiredProperties = createFilterProductsRequestPropertyNames('vehicleAttributes', );
+    const optionalStringProperties = createFilterProductsRequestOptionalProperties();
+    const optionalNumberProperties = createFilterProductsRequestOptionalProperties();
+    const optionalBooleanProperties = createFilterProductsRequestOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalFilterProductsRequestPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalFilterProductsRequestPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalFilterProductsRequestPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

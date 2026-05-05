@@ -18,15 +18,52 @@ export interface VarianceSummaryResponse {
     receivedQuantity?: number;
 }
 
+function isOptionalVarianceSummaryResponsePropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type VarianceSummaryResponseOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createVarianceSummaryResponsePropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createVarianceSummaryResponseOptionalProperties(
+    ...properties: VarianceSummaryResponseOptionalProperty[]
+): ReadonlyArray<VarianceSummaryResponseOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfVarianceSummaryResponse(value: object): value is VarianceSummaryResponse {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('lineId' in _v && typeof _v['lineId'] !== 'string') return false;
-    if ('productId' in _v && typeof _v['productId'] !== 'string') return false;
-    if ('varianceType' in _v && typeof _v['varianceType'] !== 'string') return false;
-    if ('varianceQuantity' in _v && typeof _v['varianceQuantity'] !== 'number') return false;
-    if ('expectedQuantity' in _v && typeof _v['expectedQuantity'] !== 'number') return false;
-    if ('receivedQuantity' in _v && typeof _v['receivedQuantity'] !== 'number') return false;
-    return true;
+
+    const requiredProperties = createVarianceSummaryResponsePropertyNames();
+    const optionalStringProperties = createVarianceSummaryResponseOptionalProperties({ name: 'lineId', nullable: false }, { name: 'productId', nullable: false }, { name: 'varianceType', nullable: false }, );
+    const optionalNumberProperties = createVarianceSummaryResponseOptionalProperties({ name: 'varianceQuantity', nullable: false }, { name: 'expectedQuantity', nullable: false }, { name: 'receivedQuantity', nullable: false }, );
+    const optionalBooleanProperties = createVarianceSummaryResponseOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalVarianceSummaryResponsePropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalVarianceSummaryResponsePropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalVarianceSummaryResponsePropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

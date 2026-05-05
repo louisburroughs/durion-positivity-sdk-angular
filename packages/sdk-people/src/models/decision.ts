@@ -23,12 +23,52 @@ export interface Decision {
     rejectionReason?: string;
 }
 
+function isOptionalDecisionPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type DecisionOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createDecisionPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createDecisionOptionalProperties(
+    ...properties: DecisionOptionalProperty[]
+): ReadonlyArray<DecisionOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfDecision(value: object): value is Decision {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if (!('timeEntryId' in _v) || _v['timeEntryId'] === undefined) return false;
-    if ('timeEntryId' in _v && typeof _v['timeEntryId'] !== 'string') return false;
-    if ('rejectionReason' in _v && typeof _v['rejectionReason'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createDecisionPropertyNames('timeEntryId', );
+    const optionalStringProperties = createDecisionOptionalProperties({ name: 'timeEntryId', nullable: false }, { name: 'rejectionReason', nullable: false }, );
+    const optionalNumberProperties = createDecisionOptionalProperties();
+    const optionalBooleanProperties = createDecisionOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalDecisionPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalDecisionPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalDecisionPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

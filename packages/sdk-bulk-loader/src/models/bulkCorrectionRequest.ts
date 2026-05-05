@@ -20,10 +20,52 @@ export interface BulkCorrectionRequest {
     corrections: Array<BulkCorrectionItem>;
 }
 
+function isOptionalBulkCorrectionRequestPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type BulkCorrectionRequestOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createBulkCorrectionRequestPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createBulkCorrectionRequestOptionalProperties(
+    ...properties: BulkCorrectionRequestOptionalProperty[]
+): ReadonlyArray<BulkCorrectionRequestOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfBulkCorrectionRequest(value: object): value is BulkCorrectionRequest {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if (!('corrections' in _v) || _v['corrections'] === undefined) return false;
-    return true;
+
+    const requiredProperties = createBulkCorrectionRequestPropertyNames('corrections', );
+    const optionalStringProperties = createBulkCorrectionRequestOptionalProperties();
+    const optionalNumberProperties = createBulkCorrectionRequestOptionalProperties();
+    const optionalBooleanProperties = createBulkCorrectionRequestOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalBulkCorrectionRequestPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalBulkCorrectionRequestPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalBulkCorrectionRequestPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

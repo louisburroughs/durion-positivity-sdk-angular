@@ -15,14 +15,52 @@ export interface CreateReservationRequest {
     requiredQuantity?: number;
 }
 
+function isOptionalCreateReservationRequestPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type CreateReservationRequestOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createCreateReservationRequestPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createCreateReservationRequestOptionalProperties(
+    ...properties: CreateReservationRequestOptionalProperty[]
+): ReadonlyArray<CreateReservationRequestOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfCreateReservationRequest(value: object): value is CreateReservationRequest {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if (!('workorderLineId' in _v) || _v['workorderLineId'] === undefined) return false;
-    if ('workorderLineId' in _v && typeof _v['workorderLineId'] !== 'string') return false;
-    if (!('stockItemId' in _v) || _v['stockItemId'] === undefined) return false;
-    if ('stockItemId' in _v && typeof _v['stockItemId'] !== 'string') return false;
-    if ('requiredQuantity' in _v && typeof _v['requiredQuantity'] !== 'number') return false;
-    return true;
+
+    const requiredProperties = createCreateReservationRequestPropertyNames('workorderLineId', 'stockItemId', );
+    const optionalStringProperties = createCreateReservationRequestOptionalProperties({ name: 'workorderLineId', nullable: false }, { name: 'stockItemId', nullable: false }, );
+    const optionalNumberProperties = createCreateReservationRequestOptionalProperties({ name: 'requiredQuantity', nullable: false }, );
+    const optionalBooleanProperties = createCreateReservationRequestOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalCreateReservationRequestPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalCreateReservationRequestPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalCreateReservationRequestPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

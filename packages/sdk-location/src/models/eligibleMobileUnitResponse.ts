@@ -16,13 +16,52 @@ export interface EligibleMobileUnitResponse {
     priority?: number;
 }
 
+function isOptionalEligibleMobileUnitResponsePropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type EligibleMobileUnitResponseOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createEligibleMobileUnitResponsePropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createEligibleMobileUnitResponseOptionalProperties(
+    ...properties: EligibleMobileUnitResponseOptionalProperty[]
+): ReadonlyArray<EligibleMobileUnitResponseOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfEligibleMobileUnitResponse(value: object): value is EligibleMobileUnitResponse {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('id' in _v && typeof _v['id'] !== 'string') return false;
-    if ('name' in _v && typeof _v['name'] !== 'string') return false;
-    if ('baseLocationId' in _v && typeof _v['baseLocationId'] !== 'string') return false;
-    if ('priority' in _v && typeof _v['priority'] !== 'number') return false;
-    return true;
+
+    const requiredProperties = createEligibleMobileUnitResponsePropertyNames();
+    const optionalStringProperties = createEligibleMobileUnitResponseOptionalProperties({ name: 'id', nullable: false }, { name: 'name', nullable: false }, { name: 'baseLocationId', nullable: false }, );
+    const optionalNumberProperties = createEligibleMobileUnitResponseOptionalProperties({ name: 'priority', nullable: false }, );
+    const optionalBooleanProperties = createEligibleMobileUnitResponseOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalEligibleMobileUnitResponsePropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalEligibleMobileUnitResponsePropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalEligibleMobileUnitResponsePropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

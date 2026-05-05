@@ -15,14 +15,52 @@ export interface ColumnMappingUpdateRequest {
     targetField: string;
 }
 
+function isOptionalColumnMappingUpdateRequestPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type ColumnMappingUpdateRequestOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createColumnMappingUpdateRequestPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createColumnMappingUpdateRequestOptionalProperties(
+    ...properties: ColumnMappingUpdateRequestOptionalProperty[]
+): ReadonlyArray<ColumnMappingUpdateRequestOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfColumnMappingUpdateRequest(value: object): value is ColumnMappingUpdateRequest {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('mappingId' in _v && typeof _v['mappingId'] !== 'string') return false;
-    if (!('sourceColumn' in _v) || _v['sourceColumn'] === undefined) return false;
-    if ('sourceColumn' in _v && typeof _v['sourceColumn'] !== 'string') return false;
-    if (!('targetField' in _v) || _v['targetField'] === undefined) return false;
-    if ('targetField' in _v && typeof _v['targetField'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createColumnMappingUpdateRequestPropertyNames('sourceColumn', 'targetField', );
+    const optionalStringProperties = createColumnMappingUpdateRequestOptionalProperties({ name: 'mappingId', nullable: false }, { name: 'sourceColumn', nullable: false }, { name: 'targetField', nullable: false }, );
+    const optionalNumberProperties = createColumnMappingUpdateRequestOptionalProperties();
+    const optionalBooleanProperties = createColumnMappingUpdateRequestOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalColumnMappingUpdateRequestPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalColumnMappingUpdateRequestPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalColumnMappingUpdateRequestPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

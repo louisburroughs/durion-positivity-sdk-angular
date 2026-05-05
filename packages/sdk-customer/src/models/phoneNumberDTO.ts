@@ -14,11 +14,52 @@ export interface PhoneNumberDTO {
     number?: string;
 }
 
+function isOptionalPhoneNumberDTOPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type PhoneNumberDTOOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createPhoneNumberDTOPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createPhoneNumberDTOOptionalProperties(
+    ...properties: PhoneNumberDTOOptionalProperty[]
+): ReadonlyArray<PhoneNumberDTOOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfPhoneNumberDTO(value: object): value is PhoneNumberDTO {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('type' in _v && typeof _v['type'] !== 'string') return false;
-    if ('number' in _v && typeof _v['number'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createPhoneNumberDTOPropertyNames();
+    const optionalStringProperties = createPhoneNumberDTOOptionalProperties({ name: 'type', nullable: false }, { name: 'number', nullable: false }, );
+    const optionalNumberProperties = createPhoneNumberDTOOptionalProperties();
+    const optionalBooleanProperties = createPhoneNumberDTOOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalPhoneNumberDTOPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalPhoneNumberDTOPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalPhoneNumberDTOPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

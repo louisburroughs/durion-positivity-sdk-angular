@@ -18,13 +18,52 @@ export interface ConsumptionResponse {
     ledgerEntryIds?: Array<string>;
 }
 
+function isOptionalConsumptionResponsePropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type ConsumptionResponseOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createConsumptionResponsePropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createConsumptionResponseOptionalProperties(
+    ...properties: ConsumptionResponseOptionalProperty[]
+): ReadonlyArray<ConsumptionResponseOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfConsumptionResponse(value: object): value is ConsumptionResponse {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('consumptionId' in _v && typeof _v['consumptionId'] !== 'string') return false;
-    if ('workorderId' in _v && typeof _v['workorderId'] !== 'string') return false;
-    if ('pickListId' in _v && typeof _v['pickListId'] !== 'string') return false;
-    if ('totalItemsConsumed' in _v && typeof _v['totalItemsConsumed'] !== 'number') return false;
-    return true;
+
+    const requiredProperties = createConsumptionResponsePropertyNames();
+    const optionalStringProperties = createConsumptionResponseOptionalProperties({ name: 'consumptionId', nullable: false }, { name: 'workorderId', nullable: false }, { name: 'pickListId', nullable: false }, );
+    const optionalNumberProperties = createConsumptionResponseOptionalProperties({ name: 'totalItemsConsumed', nullable: false }, );
+    const optionalBooleanProperties = createConsumptionResponseOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalConsumptionResponsePropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalConsumptionResponsePropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalConsumptionResponsePropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

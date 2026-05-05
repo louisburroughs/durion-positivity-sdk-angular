@@ -29,17 +29,52 @@ export enum AuditRecordResponseReviewStatusEnum {
 
 
 
+function isOptionalAuditRecordResponsePropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type AuditRecordResponseOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createAuditRecordResponsePropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createAuditRecordResponseOptionalProperties(
+    ...properties: AuditRecordResponseOptionalProperty[]
+): ReadonlyArray<AuditRecordResponseOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfAuditRecordResponse(value: object): value is AuditRecordResponse {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('id' in _v && typeof _v['id'] !== 'string') return false;
-    if ('jobId' in _v && typeof _v['jobId'] !== 'string') return false;
-    if ('entityType' in _v && typeof _v['entityType'] !== 'string') return false;
-    if ('entityId' in _v && typeof _v['entityId'] !== 'string') return false;
-    if ('rowNumber' in _v && typeof _v['rowNumber'] !== 'number') return false;
-    if ('reviewStatus' in _v && typeof _v['reviewStatus'] !== 'string') return false;
-    if ('reasonCodes' in _v && typeof _v['reasonCodes'] !== 'string') return false;
-    if ('originalValues' in _v && typeof _v['originalValues'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createAuditRecordResponsePropertyNames();
+    const optionalStringProperties = createAuditRecordResponseOptionalProperties({ name: 'id', nullable: false }, { name: 'jobId', nullable: false }, { name: 'entityType', nullable: false }, { name: 'entityId', nullable: false }, { name: 'reviewStatus', nullable: false }, { name: 'reasonCodes', nullable: false }, { name: 'originalValues', nullable: false }, );
+    const optionalNumberProperties = createAuditRecordResponseOptionalProperties({ name: 'rowNumber', nullable: false }, );
+    const optionalBooleanProperties = createAuditRecordResponseOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalAuditRecordResponsePropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalAuditRecordResponsePropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalAuditRecordResponsePropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

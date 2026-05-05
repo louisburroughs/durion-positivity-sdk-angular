@@ -14,13 +14,52 @@ export interface ReceiveLineRequest {
     receivedQuantity: number;
 }
 
+function isOptionalReceiveLineRequestPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type ReceiveLineRequestOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createReceiveLineRequestPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createReceiveLineRequestOptionalProperties(
+    ...properties: ReceiveLineRequestOptionalProperty[]
+): ReadonlyArray<ReceiveLineRequestOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfReceiveLineRequest(value: object): value is ReceiveLineRequest {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if (!('lineId' in _v) || _v['lineId'] === undefined) return false;
-    if ('lineId' in _v && typeof _v['lineId'] !== 'string') return false;
-    if (!('receivedQuantity' in _v) || _v['receivedQuantity'] === undefined) return false;
-    if ('receivedQuantity' in _v && typeof _v['receivedQuantity'] !== 'number') return false;
-    return true;
+
+    const requiredProperties = createReceiveLineRequestPropertyNames('lineId', 'receivedQuantity', );
+    const optionalStringProperties = createReceiveLineRequestOptionalProperties({ name: 'lineId', nullable: false }, );
+    const optionalNumberProperties = createReceiveLineRequestOptionalProperties({ name: 'receivedQuantity', nullable: false }, );
+    const optionalBooleanProperties = createReceiveLineRequestOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalReceiveLineRequestPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalReceiveLineRequestPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalReceiveLineRequestPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

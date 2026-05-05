@@ -19,15 +19,52 @@ export interface CreateAsnRequest {
     lineItems: Array<CreateAsnLineRequest>;
 }
 
+function isOptionalCreateAsnRequestPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type CreateAsnRequestOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createCreateAsnRequestPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createCreateAsnRequestOptionalProperties(
+    ...properties: CreateAsnRequestOptionalProperty[]
+): ReadonlyArray<CreateAsnRequestOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfCreateAsnRequest(value: object): value is CreateAsnRequest {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if (!('vendorId' in _v) || _v['vendorId'] === undefined) return false;
-    if ('vendorId' in _v && typeof _v['vendorId'] !== 'string') return false;
-    if (!('asnReferenceNumber' in _v) || _v['asnReferenceNumber'] === undefined) return false;
-    if ('asnReferenceNumber' in _v && typeof _v['asnReferenceNumber'] !== 'string') return false;
-    if (!('relatedPoIds' in _v) || _v['relatedPoIds'] === undefined) return false;
-    if (!('lineItems' in _v) || _v['lineItems'] === undefined) return false;
-    return true;
+
+    const requiredProperties = createCreateAsnRequestPropertyNames('vendorId', 'asnReferenceNumber', 'relatedPoIds', 'lineItems', );
+    const optionalStringProperties = createCreateAsnRequestOptionalProperties({ name: 'vendorId', nullable: false }, { name: 'asnReferenceNumber', nullable: false }, );
+    const optionalNumberProperties = createCreateAsnRequestOptionalProperties();
+    const optionalBooleanProperties = createCreateAsnRequestOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalCreateAsnRequestPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalCreateAsnRequestPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalCreateAsnRequestPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

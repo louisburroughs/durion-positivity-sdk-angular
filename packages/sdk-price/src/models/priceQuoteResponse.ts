@@ -23,17 +23,8 @@ export interface PriceQuoteResponse {
      * Quoted quantity
      */
     quantity?: number;
-    /**
-     * Manufacturer suggested retail price
-     */
     msrp?: MoneyAmount;
-    /**
-     * Final unit price after applying applicable rules
-     */
     unitPrice?: MoneyAmount;
-    /**
-     * Extended price (unit price multiplied by quantity)
-     */
     extendedPrice?: MoneyAmount;
     /**
      * Source from which the final price was resolved
@@ -49,12 +40,52 @@ export interface PriceQuoteResponse {
     warnings?: Array<string>;
 }
 
+function isOptionalPriceQuoteResponsePropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type PriceQuoteResponseOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createPriceQuoteResponsePropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createPriceQuoteResponseOptionalProperties(
+    ...properties: PriceQuoteResponseOptionalProperty[]
+): ReadonlyArray<PriceQuoteResponseOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfPriceQuoteResponse(value: object): value is PriceQuoteResponse {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('productId' in _v && typeof _v['productId'] !== 'string') return false;
-    if ('quantity' in _v && typeof _v['quantity'] !== 'number') return false;
-    if ('priceSource' in _v && typeof _v['priceSource'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createPriceQuoteResponsePropertyNames();
+    const optionalStringProperties = createPriceQuoteResponseOptionalProperties({ name: 'productId', nullable: false }, { name: 'priceSource', nullable: false }, );
+    const optionalNumberProperties = createPriceQuoteResponseOptionalProperties({ name: 'quantity', nullable: false }, );
+    const optionalBooleanProperties = createPriceQuoteResponseOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalPriceQuoteResponsePropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalPriceQuoteResponsePropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalPriceQuoteResponsePropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

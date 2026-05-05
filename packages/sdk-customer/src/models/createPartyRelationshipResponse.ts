@@ -57,14 +57,52 @@ export enum CreatePartyRelationshipResponseRolesEnum {
 
 
 
+function isOptionalCreatePartyRelationshipResponsePropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type CreatePartyRelationshipResponseOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createCreatePartyRelationshipResponsePropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createCreatePartyRelationshipResponseOptionalProperties(
+    ...properties: CreatePartyRelationshipResponseOptionalProperty[]
+): ReadonlyArray<CreatePartyRelationshipResponseOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfCreatePartyRelationshipResponse(value: object): value is CreatePartyRelationshipResponse {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('relationshipId' in _v && typeof _v['relationshipId'] !== 'string') return false;
-    if ('partyId' in _v && typeof _v['partyId'] !== 'string') return false;
-    if ('personId' in _v && typeof _v['personId'] !== 'string') return false;
-    if ('previousPrimaryDemoted' in _v && typeof _v['previousPrimaryDemoted'] !== 'boolean') return false;
-    if ('primaryBillingContact' in _v && typeof _v['primaryBillingContact'] !== 'boolean') return false;
-    return true;
+
+    const requiredProperties = createCreatePartyRelationshipResponsePropertyNames();
+    const optionalStringProperties = createCreatePartyRelationshipResponseOptionalProperties({ name: 'relationshipId', nullable: false }, { name: 'partyId', nullable: false }, { name: 'personId', nullable: false }, );
+    const optionalNumberProperties = createCreatePartyRelationshipResponseOptionalProperties();
+    const optionalBooleanProperties = createCreatePartyRelationshipResponseOptionalProperties({ name: 'previousPrimaryDemoted', nullable: false }, { name: 'primaryBillingContact', nullable: false }, );
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalCreatePartyRelationshipResponsePropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalCreatePartyRelationshipResponsePropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalCreatePartyRelationshipResponsePropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

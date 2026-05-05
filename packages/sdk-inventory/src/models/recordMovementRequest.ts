@@ -32,20 +32,52 @@ export enum RecordMovementRequestMovementTypeEnum {
 
 
 
+function isOptionalRecordMovementRequestPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type RecordMovementRequestOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createRecordMovementRequestPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createRecordMovementRequestOptionalProperties(
+    ...properties: RecordMovementRequestOptionalProperty[]
+): ReadonlyArray<RecordMovementRequestOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfRecordMovementRequest(value: object): value is RecordMovementRequest {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if (!('productSku' in _v) || _v['productSku'] === undefined) return false;
-    if ('productSku' in _v && typeof _v['productSku'] !== 'string') return false;
-    if (!('fromLocationId' in _v) || _v['fromLocationId'] === undefined) return false;
-    if ('fromLocationId' in _v && typeof _v['fromLocationId'] !== 'string') return false;
-    if ('toLocationId' in _v && typeof _v['toLocationId'] !== 'string') return false;
-    if (!('movementType' in _v) || _v['movementType'] === undefined) return false;
-    if ('movementType' in _v && typeof _v['movementType'] !== 'string') return false;
-    if (!('quantity' in _v) || _v['quantity'] === undefined) return false;
-    if ('quantity' in _v && typeof _v['quantity'] !== 'number') return false;
-    if ('unitOfMeasure' in _v && typeof _v['unitOfMeasure'] !== 'string') return false;
-    if ('sourceTransactionId' in _v && typeof _v['sourceTransactionId'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createRecordMovementRequestPropertyNames('productSku', 'fromLocationId', 'movementType', 'quantity', );
+    const optionalStringProperties = createRecordMovementRequestOptionalProperties({ name: 'productSku', nullable: false }, { name: 'fromLocationId', nullable: false }, { name: 'toLocationId', nullable: false }, { name: 'movementType', nullable: false }, { name: 'unitOfMeasure', nullable: false }, { name: 'sourceTransactionId', nullable: false }, );
+    const optionalNumberProperties = createRecordMovementRequestOptionalProperties({ name: 'quantity', nullable: false }, );
+    const optionalBooleanProperties = createRecordMovementRequestOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalRecordMovementRequestPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalRecordMovementRequestPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalRecordMovementRequestPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

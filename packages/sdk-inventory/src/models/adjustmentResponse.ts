@@ -48,26 +48,52 @@ export enum AdjustmentResponseRequiredApprovalTierEnum {
 
 
 
+function isOptionalAdjustmentResponsePropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type AdjustmentResponseOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createAdjustmentResponsePropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createAdjustmentResponseOptionalProperties(
+    ...properties: AdjustmentResponseOptionalProperty[]
+): ReadonlyArray<AdjustmentResponseOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfAdjustmentResponse(value: object): value is AdjustmentResponse {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('adjustmentId' in _v && typeof _v['adjustmentId'] !== 'string') return false;
-    if ('stockItemId' in _v && typeof _v['stockItemId'] !== 'string') return false;
-    if ('reasonCode' in _v && typeof _v['reasonCode'] !== 'string') return false;
-    if ('quantityChange' in _v && typeof _v['quantityChange'] !== 'number') return false;
-    if ('costAtTimeOfAdjustment' in _v && typeof _v['costAtTimeOfAdjustment'] !== 'number') return false;
-    if ('quantityOnHandBefore' in _v && typeof _v['quantityOnHandBefore'] !== 'number') return false;
-    if ('countedQuantity' in _v && typeof _v['countedQuantity'] !== 'number') return false;
-    if ('status' in _v && typeof _v['status'] !== 'string') return false;
-    if ('requiredApprovalTier' in _v && typeof _v['requiredApprovalTier'] !== 'string') return false;
-    if ('createdByUserId' in _v && typeof _v['createdByUserId'] !== 'string') return false;
-    if ('approvedByUserId' in _v && typeof _v['approvedByUserId'] !== 'string') return false;
-    if ('rejectedByUserId' in _v && typeof _v['rejectedByUserId'] !== 'string') return false;
-    if ('rejectionReason' in _v && typeof _v['rejectionReason'] !== 'string') return false;
-    if ('ledgerEntryId' in _v && typeof _v['ledgerEntryId'] !== 'string') return false;
-    if ('errorMessage' in _v && typeof _v['errorMessage'] !== 'string') return false;
-    if ('varianceValue' in _v && typeof _v['varianceValue'] !== 'number') return false;
-    if ('variancePercentage' in _v && typeof _v['variancePercentage'] !== 'number') return false;
-    return true;
+
+    const requiredProperties = createAdjustmentResponsePropertyNames();
+    const optionalStringProperties = createAdjustmentResponseOptionalProperties({ name: 'adjustmentId', nullable: false }, { name: 'stockItemId', nullable: false }, { name: 'reasonCode', nullable: false }, { name: 'status', nullable: false }, { name: 'requiredApprovalTier', nullable: false }, { name: 'createdByUserId', nullable: false }, { name: 'approvedByUserId', nullable: false }, { name: 'rejectedByUserId', nullable: false }, { name: 'rejectionReason', nullable: false }, { name: 'ledgerEntryId', nullable: false }, { name: 'errorMessage', nullable: false }, );
+    const optionalNumberProperties = createAdjustmentResponseOptionalProperties({ name: 'quantityChange', nullable: false }, { name: 'costAtTimeOfAdjustment', nullable: false }, { name: 'quantityOnHandBefore', nullable: false }, { name: 'countedQuantity', nullable: false }, { name: 'varianceValue', nullable: false }, { name: 'variancePercentage', nullable: false }, );
+    const optionalBooleanProperties = createAdjustmentResponseOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalAdjustmentResponsePropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalAdjustmentResponsePropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalAdjustmentResponsePropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

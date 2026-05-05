@@ -15,14 +15,52 @@ export interface ReceivePurchaseOrderLineRequest {
     unitCostMinor?: number;
 }
 
+function isOptionalReceivePurchaseOrderLineRequestPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type ReceivePurchaseOrderLineRequestOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createReceivePurchaseOrderLineRequestPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createReceivePurchaseOrderLineRequestOptionalProperties(
+    ...properties: ReceivePurchaseOrderLineRequestOptionalProperty[]
+): ReadonlyArray<ReceivePurchaseOrderLineRequestOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfReceivePurchaseOrderLineRequest(value: object): value is ReceivePurchaseOrderLineRequest {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if (!('lineId' in _v) || _v['lineId'] === undefined) return false;
-    if ('lineId' in _v && typeof _v['lineId'] !== 'string') return false;
-    if (!('quantityReceived' in _v) || _v['quantityReceived'] === undefined) return false;
-    if ('quantityReceived' in _v && typeof _v['quantityReceived'] !== 'number') return false;
-    if ('unitCostMinor' in _v && typeof _v['unitCostMinor'] !== 'number') return false;
-    return true;
+
+    const requiredProperties = createReceivePurchaseOrderLineRequestPropertyNames('lineId', 'quantityReceived', );
+    const optionalStringProperties = createReceivePurchaseOrderLineRequestOptionalProperties({ name: 'lineId', nullable: false }, );
+    const optionalNumberProperties = createReceivePurchaseOrderLineRequestOptionalProperties({ name: 'quantityReceived', nullable: false }, { name: 'unitCostMinor', nullable: false }, );
+    const optionalBooleanProperties = createReceivePurchaseOrderLineRequestOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalReceivePurchaseOrderLineRequestPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalReceivePurchaseOrderLineRequestPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalReceivePurchaseOrderLineRequestPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

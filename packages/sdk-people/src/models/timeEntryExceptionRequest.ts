@@ -47,16 +47,52 @@ export enum TimeEntryExceptionRequestSeverityEnum {
 
 
 
+function isOptionalTimeEntryExceptionRequestPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type TimeEntryExceptionRequestOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createTimeEntryExceptionRequestPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createTimeEntryExceptionRequestOptionalProperties(
+    ...properties: TimeEntryExceptionRequestOptionalProperty[]
+): ReadonlyArray<TimeEntryExceptionRequestOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfTimeEntryExceptionRequest(value: object): value is TimeEntryExceptionRequest {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if (!('employeeId' in _v) || _v['employeeId'] === undefined) return false;
-    if ('employeeId' in _v && typeof _v['employeeId'] !== 'string') return false;
-    if (!('exceptionCode' in _v) || _v['exceptionCode'] === undefined) return false;
-    if ('exceptionCode' in _v && typeof _v['exceptionCode'] !== 'string') return false;
-    if ('severity' in _v && typeof _v['severity'] !== 'string') return false;
-    if ('timeEntryId' in _v && typeof _v['timeEntryId'] !== 'string') return false;
-    if ('resolutionNotes' in _v && typeof _v['resolutionNotes'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createTimeEntryExceptionRequestPropertyNames('employeeId', 'exceptionCode', );
+    const optionalStringProperties = createTimeEntryExceptionRequestOptionalProperties({ name: 'employeeId', nullable: false }, { name: 'exceptionCode', nullable: false }, { name: 'severity', nullable: false }, { name: 'timeEntryId', nullable: false }, { name: 'resolutionNotes', nullable: false }, );
+    const optionalNumberProperties = createTimeEntryExceptionRequestOptionalProperties();
+    const optionalBooleanProperties = createTimeEntryExceptionRequestOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalTimeEntryExceptionRequestPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalTimeEntryExceptionRequestPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalTimeEntryExceptionRequestPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

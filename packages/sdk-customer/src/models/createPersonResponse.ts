@@ -47,14 +47,52 @@ export enum CreatePersonResponsePreferredContactMethodEnum {
 
 
 
+function isOptionalCreatePersonResponsePropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type CreatePersonResponseOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createCreatePersonResponsePropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createCreatePersonResponseOptionalProperties(
+    ...properties: CreatePersonResponseOptionalProperty[]
+): ReadonlyArray<CreatePersonResponseOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfCreatePersonResponse(value: object): value is CreatePersonResponse {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('personId' in _v && typeof _v['personId'] !== 'string') return false;
-    if ('firstName' in _v && typeof _v['firstName'] !== 'string') return false;
-    if ('lastName' in _v && typeof _v['lastName'] !== 'string') return false;
-    if ('preferredContactMethod' in _v && typeof _v['preferredContactMethod'] !== 'string') return false;
-    if ('contactPointsCreated' in _v && typeof _v['contactPointsCreated'] !== 'number') return false;
-    return true;
+
+    const requiredProperties = createCreatePersonResponsePropertyNames();
+    const optionalStringProperties = createCreatePersonResponseOptionalProperties({ name: 'personId', nullable: false }, { name: 'firstName', nullable: false }, { name: 'lastName', nullable: false }, { name: 'preferredContactMethod', nullable: false }, );
+    const optionalNumberProperties = createCreatePersonResponseOptionalProperties({ name: 'contactPointsCreated', nullable: false }, );
+    const optionalBooleanProperties = createCreatePersonResponseOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalCreatePersonResponsePropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalCreatePersonResponsePropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalCreatePersonResponsePropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

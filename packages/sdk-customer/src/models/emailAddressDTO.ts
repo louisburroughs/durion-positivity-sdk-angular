@@ -14,11 +14,52 @@ export interface EmailAddressDTO {
     address?: string;
 }
 
+function isOptionalEmailAddressDTOPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type EmailAddressDTOOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createEmailAddressDTOPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createEmailAddressDTOOptionalProperties(
+    ...properties: EmailAddressDTOOptionalProperty[]
+): ReadonlyArray<EmailAddressDTOOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfEmailAddressDTO(value: object): value is EmailAddressDTO {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('type' in _v && typeof _v['type'] !== 'string') return false;
-    if ('address' in _v && typeof _v['address'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createEmailAddressDTOPropertyNames();
+    const optionalStringProperties = createEmailAddressDTOOptionalProperties({ name: 'type', nullable: false }, { name: 'address', nullable: false }, );
+    const optionalNumberProperties = createEmailAddressDTOOptionalProperties();
+    const optionalBooleanProperties = createEmailAddressDTOOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalEmailAddressDTOPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalEmailAddressDTOPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalEmailAddressDTOPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

@@ -10,14 +10,56 @@
 
 
 export interface PreferencesMergeDto { 
-    partialPreferences?: { [key: string]: any; };
+    partialPreferences?: object;
     updatedByUserId?: string;
+}
+
+function isOptionalPreferencesMergeDtoPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type PreferencesMergeDtoOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createPreferencesMergeDtoPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createPreferencesMergeDtoOptionalProperties(
+    ...properties: PreferencesMergeDtoOptionalProperty[]
+): ReadonlyArray<PreferencesMergeDtoOptionalProperty> {
+    return properties;
 }
 
 export function instanceOfPreferencesMergeDto(value: object): value is PreferencesMergeDto {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('updatedByUserId' in _v && typeof _v['updatedByUserId'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createPreferencesMergeDtoPropertyNames();
+    const optionalStringProperties = createPreferencesMergeDtoOptionalProperties({ name: 'updatedByUserId', nullable: false }, );
+    const optionalNumberProperties = createPreferencesMergeDtoOptionalProperties();
+    const optionalBooleanProperties = createPreferencesMergeDtoOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalPreferencesMergeDtoPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalPreferencesMergeDtoPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalPreferencesMergeDtoPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

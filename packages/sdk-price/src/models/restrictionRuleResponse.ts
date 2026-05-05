@@ -36,14 +36,52 @@ export enum RestrictionRuleResponseServiceTagEnum {
 
 
 
+function isOptionalRestrictionRuleResponsePropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type RestrictionRuleResponseOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createRestrictionRuleResponsePropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createRestrictionRuleResponseOptionalProperties(
+    ...properties: RestrictionRuleResponseOptionalProperty[]
+): ReadonlyArray<RestrictionRuleResponseOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfRestrictionRuleResponse(value: object): value is RestrictionRuleResponse {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('ruleId' in _v && typeof _v['ruleId'] !== 'string') return false;
-    if ('productId' in _v && typeof _v['productId'] !== 'string') return false;
-    if ('locationTag' in _v && typeof _v['locationTag'] !== 'string') return false;
-    if ('serviceTag' in _v && typeof _v['serviceTag'] !== 'string') return false;
-    if ('active' in _v && typeof _v['active'] !== 'boolean') return false;
-    return true;
+
+    const requiredProperties = createRestrictionRuleResponsePropertyNames();
+    const optionalStringProperties = createRestrictionRuleResponseOptionalProperties({ name: 'ruleId', nullable: false }, { name: 'productId', nullable: false }, { name: 'locationTag', nullable: false }, { name: 'serviceTag', nullable: false }, );
+    const optionalNumberProperties = createRestrictionRuleResponseOptionalProperties();
+    const optionalBooleanProperties = createRestrictionRuleResponseOptionalProperties({ name: 'active', nullable: false }, );
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalRestrictionRuleResponsePropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalRestrictionRuleResponsePropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalRestrictionRuleResponsePropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

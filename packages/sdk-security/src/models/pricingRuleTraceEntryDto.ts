@@ -17,14 +17,52 @@ export interface PricingRuleTraceEntryDto {
     outputs?: string;
 }
 
+function isOptionalPricingRuleTraceEntryDtoPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type PricingRuleTraceEntryDtoOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createPricingRuleTraceEntryDtoPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createPricingRuleTraceEntryDtoOptionalProperties(
+    ...properties: PricingRuleTraceEntryDtoOptionalProperty[]
+): ReadonlyArray<PricingRuleTraceEntryDtoOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfPricingRuleTraceEntryDto(value: object): value is PricingRuleTraceEntryDto {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('id' in _v && typeof _v['id'] !== 'string') return false;
-    if ('ruleId' in _v && typeof _v['ruleId'] !== 'string') return false;
-    if ('status' in _v && typeof _v['status'] !== 'string') return false;
-    if ('inputs' in _v && typeof _v['inputs'] !== 'string') return false;
-    if ('outputs' in _v && typeof _v['outputs'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createPricingRuleTraceEntryDtoPropertyNames();
+    const optionalStringProperties = createPricingRuleTraceEntryDtoOptionalProperties({ name: 'id', nullable: false }, { name: 'ruleId', nullable: false }, { name: 'status', nullable: false }, { name: 'inputs', nullable: false }, { name: 'outputs', nullable: false }, );
+    const optionalNumberProperties = createPricingRuleTraceEntryDtoOptionalProperties();
+    const optionalBooleanProperties = createPricingRuleTraceEntryDtoOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalPricingRuleTraceEntryDtoPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalPricingRuleTraceEntryDtoPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalPricingRuleTraceEntryDtoPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

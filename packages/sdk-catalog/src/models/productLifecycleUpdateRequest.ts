@@ -42,12 +42,52 @@ export enum ProductLifecycleUpdateRequestLifecycleStateEnum {
 
 
 
+function isOptionalProductLifecycleUpdateRequestPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type ProductLifecycleUpdateRequestOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createProductLifecycleUpdateRequestPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createProductLifecycleUpdateRequestOptionalProperties(
+    ...properties: ProductLifecycleUpdateRequestOptionalProperty[]
+): ReadonlyArray<ProductLifecycleUpdateRequestOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfProductLifecycleUpdateRequest(value: object): value is ProductLifecycleUpdateRequest {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('lifecycleState' in _v && typeof _v['lifecycleState'] !== 'string') return false;
-    if ('changedBy' in _v && typeof _v['changedBy'] !== 'string') return false;
-    if ('overrideReason' in _v && typeof _v['overrideReason'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createProductLifecycleUpdateRequestPropertyNames();
+    const optionalStringProperties = createProductLifecycleUpdateRequestOptionalProperties({ name: 'lifecycleState', nullable: false }, { name: 'changedBy', nullable: false }, { name: 'overrideReason', nullable: false }, );
+    const optionalNumberProperties = createProductLifecycleUpdateRequestOptionalProperties();
+    const optionalBooleanProperties = createProductLifecycleUpdateRequestOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalProductLifecycleUpdateRequestPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalProductLifecycleUpdateRequestPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalProductLifecycleUpdateRequestPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

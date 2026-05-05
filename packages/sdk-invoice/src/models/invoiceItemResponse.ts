@@ -18,15 +18,52 @@ export interface InvoiceItemResponse {
     workorderItemId?: string;
 }
 
+function isOptionalInvoiceItemResponsePropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type InvoiceItemResponseOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createInvoiceItemResponsePropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createInvoiceItemResponseOptionalProperties(
+    ...properties: InvoiceItemResponseOptionalProperty[]
+): ReadonlyArray<InvoiceItemResponseOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfInvoiceItemResponse(value: object): value is InvoiceItemResponse {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('id' in _v && typeof _v['id'] !== 'string') return false;
-    if ('description' in _v && typeof _v['description'] !== 'string') return false;
-    if ('quantity' in _v && typeof _v['quantity'] !== 'number') return false;
-    if ('unitPrice' in _v && typeof _v['unitPrice'] !== 'number') return false;
-    if ('amount' in _v && typeof _v['amount'] !== 'number') return false;
-    if ('workorderItemId' in _v && typeof _v['workorderItemId'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createInvoiceItemResponsePropertyNames();
+    const optionalStringProperties = createInvoiceItemResponseOptionalProperties({ name: 'id', nullable: false }, { name: 'description', nullable: false }, { name: 'workorderItemId', nullable: false }, );
+    const optionalNumberProperties = createInvoiceItemResponseOptionalProperties({ name: 'quantity', nullable: false }, { name: 'unitPrice', nullable: false }, { name: 'amount', nullable: false }, );
+    const optionalBooleanProperties = createInvoiceItemResponseOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalInvoiceItemResponsePropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalInvoiceItemResponsePropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalInvoiceItemResponsePropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

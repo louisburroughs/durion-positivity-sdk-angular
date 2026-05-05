@@ -16,12 +16,52 @@ export interface PersonRoleAssignmentRequest {
     endDate?: string;
 }
 
+function isOptionalPersonRoleAssignmentRequestPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type PersonRoleAssignmentRequestOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createPersonRoleAssignmentRequestPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createPersonRoleAssignmentRequestOptionalProperties(
+    ...properties: PersonRoleAssignmentRequestOptionalProperty[]
+): ReadonlyArray<PersonRoleAssignmentRequestOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfPersonRoleAssignmentRequest(value: object): value is PersonRoleAssignmentRequest {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if (!('roleCode' in _v) || _v['roleCode'] === undefined) return false;
-    if ('roleCode' in _v && typeof _v['roleCode'] !== 'string') return false;
-    if ('locationId' in _v && typeof _v['locationId'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createPersonRoleAssignmentRequestPropertyNames('roleCode', );
+    const optionalStringProperties = createPersonRoleAssignmentRequestOptionalProperties({ name: 'roleCode', nullable: false }, { name: 'locationId', nullable: false }, );
+    const optionalNumberProperties = createPersonRoleAssignmentRequestOptionalProperties();
+    const optionalBooleanProperties = createPersonRoleAssignmentRequestOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalPersonRoleAssignmentRequestPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalPersonRoleAssignmentRequestPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalPersonRoleAssignmentRequestPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

@@ -23,13 +23,52 @@ export interface LoginRequest {
     password: string;
 }
 
+function isOptionalLoginRequestPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type LoginRequestOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createLoginRequestPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createLoginRequestOptionalProperties(
+    ...properties: LoginRequestOptionalProperty[]
+): ReadonlyArray<LoginRequestOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfLoginRequest(value: object): value is LoginRequest {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if (!('username' in _v) || _v['username'] === undefined) return false;
-    if ('username' in _v && typeof _v['username'] !== 'string') return false;
-    if (!('password' in _v) || _v['password'] === undefined) return false;
-    if ('password' in _v && typeof _v['password'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createLoginRequestPropertyNames('username', 'password', );
+    const optionalStringProperties = createLoginRequestOptionalProperties({ name: 'username', nullable: false }, { name: 'password', nullable: false }, );
+    const optionalNumberProperties = createLoginRequestOptionalProperties();
+    const optionalBooleanProperties = createLoginRequestOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalLoginRequestPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalLoginRequestPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalLoginRequestPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

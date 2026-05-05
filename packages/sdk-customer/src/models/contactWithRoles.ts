@@ -20,15 +20,52 @@ export interface ContactWithRoles {
     invoiceDeliveryMethod?: string;
 }
 
+function isOptionalContactWithRolesPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type ContactWithRolesOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createContactWithRolesPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createContactWithRolesOptionalProperties(
+    ...properties: ContactWithRolesOptionalProperty[]
+): ReadonlyArray<ContactWithRolesOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfContactWithRoles(value: object): value is ContactWithRoles {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('contactId' in _v && typeof _v['contactId'] !== 'string') return false;
-    if ('contactName' in _v && typeof _v['contactName'] !== 'string') return false;
-    if ('email' in _v && typeof _v['email'] !== 'string') return false;
-    if ('phone' in _v && typeof _v['phone'] !== 'string') return false;
-    if ('hasPrimaryEmail' in _v && typeof _v['hasPrimaryEmail'] !== 'boolean') return false;
-    if ('invoiceDeliveryMethod' in _v && typeof _v['invoiceDeliveryMethod'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createContactWithRolesPropertyNames();
+    const optionalStringProperties = createContactWithRolesOptionalProperties({ name: 'contactId', nullable: false }, { name: 'contactName', nullable: false }, { name: 'email', nullable: false }, { name: 'phone', nullable: false }, { name: 'invoiceDeliveryMethod', nullable: false }, );
+    const optionalNumberProperties = createContactWithRolesOptionalProperties();
+    const optionalBooleanProperties = createContactWithRolesOptionalProperties({ name: 'hasPrimaryEmail', nullable: false }, );
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalContactWithRolesPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalContactWithRolesPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalContactWithRolesPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

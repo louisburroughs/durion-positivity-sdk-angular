@@ -45,15 +45,52 @@ export enum CreatePersonRequestPreferredContactMethodEnum {
 
 
 
+function isOptionalCreatePersonRequestPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type CreatePersonRequestOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createCreatePersonRequestPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createCreatePersonRequestOptionalProperties(
+    ...properties: CreatePersonRequestOptionalProperty[]
+): ReadonlyArray<CreatePersonRequestOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfCreatePersonRequest(value: object): value is CreatePersonRequest {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if (!('firstName' in _v) || _v['firstName'] === undefined) return false;
-    if ('firstName' in _v && typeof _v['firstName'] !== 'string') return false;
-    if (!('lastName' in _v) || _v['lastName'] === undefined) return false;
-    if ('lastName' in _v && typeof _v['lastName'] !== 'string') return false;
-    if (!('preferredContactMethod' in _v) || _v['preferredContactMethod'] === undefined) return false;
-    if ('preferredContactMethod' in _v && typeof _v['preferredContactMethod'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createCreatePersonRequestPropertyNames('firstName', 'lastName', 'preferredContactMethod', );
+    const optionalStringProperties = createCreatePersonRequestOptionalProperties({ name: 'firstName', nullable: false }, { name: 'lastName', nullable: false }, { name: 'preferredContactMethod', nullable: false }, );
+    const optionalNumberProperties = createCreatePersonRequestOptionalProperties();
+    const optionalBooleanProperties = createCreatePersonRequestOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalCreatePersonRequestPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalCreatePersonRequestPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalCreatePersonRequestPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

@@ -22,15 +22,52 @@ export interface ScheduleEventView {
     conflictDetails?: ConflictDetails;
 }
 
+function isOptionalScheduleEventViewPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type ScheduleEventViewOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createScheduleEventViewPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createScheduleEventViewOptionalProperties(
+    ...properties: ScheduleEventViewOptionalProperty[]
+): ReadonlyArray<ScheduleEventViewOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfScheduleEventView(value: object): value is ScheduleEventView {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('eventId' in _v && typeof _v['eventId'] !== 'string') return false;
-    if ('eventType' in _v && typeof _v['eventType'] !== 'string') return false;
-    if ('subType' in _v && typeof _v['subType'] !== 'string') return false;
-    if ('title' in _v && typeof _v['title'] !== 'string') return false;
-    if ('hasConflict' in _v && typeof _v['hasConflict'] !== 'boolean') return false;
-    if ('severity' in _v && typeof _v['severity'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createScheduleEventViewPropertyNames();
+    const optionalStringProperties = createScheduleEventViewOptionalProperties({ name: 'eventId', nullable: false }, { name: 'eventType', nullable: false }, { name: 'subType', nullable: false }, { name: 'title', nullable: false }, { name: 'severity', nullable: false }, );
+    const optionalNumberProperties = createScheduleEventViewOptionalProperties();
+    const optionalBooleanProperties = createScheduleEventViewOptionalProperties({ name: 'hasConflict', nullable: false }, );
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalScheduleEventViewPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalScheduleEventViewPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalScheduleEventViewPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

@@ -15,12 +15,52 @@ export interface OperatingHoursRequest {
     closeTime?: string;
 }
 
+function isOptionalOperatingHoursRequestPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type OperatingHoursRequestOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createOperatingHoursRequestPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createOperatingHoursRequestOptionalProperties(
+    ...properties: OperatingHoursRequestOptionalProperty[]
+): ReadonlyArray<OperatingHoursRequestOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfOperatingHoursRequest(value: object): value is OperatingHoursRequest {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('dayOfWeek' in _v && typeof _v['dayOfWeek'] !== 'string') return false;
-    if ('openTime' in _v && typeof _v['openTime'] !== 'string') return false;
-    if ('closeTime' in _v && typeof _v['closeTime'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createOperatingHoursRequestPropertyNames();
+    const optionalStringProperties = createOperatingHoursRequestOptionalProperties({ name: 'dayOfWeek', nullable: false }, { name: 'openTime', nullable: false }, { name: 'closeTime', nullable: false }, );
+    const optionalNumberProperties = createOperatingHoursRequestOptionalProperties();
+    const optionalBooleanProperties = createOperatingHoursRequestOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalOperatingHoursRequestPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalOperatingHoursRequestPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalOperatingHoursRequestPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

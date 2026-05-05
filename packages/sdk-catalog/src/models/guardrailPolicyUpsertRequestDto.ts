@@ -16,17 +16,52 @@ export interface GuardrailPolicyUpsertRequestDto {
     autoApprovalThresholdPercent: number;
 }
 
+function isOptionalGuardrailPolicyUpsertRequestDtoPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type GuardrailPolicyUpsertRequestDtoOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createGuardrailPolicyUpsertRequestDtoPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createGuardrailPolicyUpsertRequestDtoOptionalProperties(
+    ...properties: GuardrailPolicyUpsertRequestDtoOptionalProperty[]
+): ReadonlyArray<GuardrailPolicyUpsertRequestDtoOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfGuardrailPolicyUpsertRequestDto(value: object): value is GuardrailPolicyUpsertRequestDto {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if (!('scopeId' in _v) || _v['scopeId'] === undefined) return false;
-    if ('scopeId' in _v && typeof _v['scopeId'] !== 'string') return false;
-    if (!('minMarginPercent' in _v) || _v['minMarginPercent'] === undefined) return false;
-    if ('minMarginPercent' in _v && typeof _v['minMarginPercent'] !== 'number') return false;
-    if (!('maxDiscountPercent' in _v) || _v['maxDiscountPercent'] === undefined) return false;
-    if ('maxDiscountPercent' in _v && typeof _v['maxDiscountPercent'] !== 'number') return false;
-    if (!('autoApprovalThresholdPercent' in _v) || _v['autoApprovalThresholdPercent'] === undefined) return false;
-    if ('autoApprovalThresholdPercent' in _v && typeof _v['autoApprovalThresholdPercent'] !== 'number') return false;
-    return true;
+
+    const requiredProperties = createGuardrailPolicyUpsertRequestDtoPropertyNames('scopeId', 'minMarginPercent', 'maxDiscountPercent', 'autoApprovalThresholdPercent', );
+    const optionalStringProperties = createGuardrailPolicyUpsertRequestDtoOptionalProperties({ name: 'scopeId', nullable: false }, );
+    const optionalNumberProperties = createGuardrailPolicyUpsertRequestDtoOptionalProperties({ name: 'minMarginPercent', nullable: false }, { name: 'maxDiscountPercent', nullable: false }, { name: 'autoApprovalThresholdPercent', nullable: false }, );
+    const optionalBooleanProperties = createGuardrailPolicyUpsertRequestDtoOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalGuardrailPolicyUpsertRequestDtoPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalGuardrailPolicyUpsertRequestDtoPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalGuardrailPolicyUpsertRequestDtoPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

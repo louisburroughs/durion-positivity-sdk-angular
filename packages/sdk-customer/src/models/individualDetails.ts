@@ -27,12 +27,52 @@ export interface IndividualDetails {
     phone?: string;
 }
 
+function isOptionalIndividualDetailsPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type IndividualDetailsOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createIndividualDetailsPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createIndividualDetailsOptionalProperties(
+    ...properties: IndividualDetailsOptionalProperty[]
+): ReadonlyArray<IndividualDetailsOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfIndividualDetails(value: object): value is IndividualDetails {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('displayName' in _v && typeof _v['displayName'] !== 'string') return false;
-    if ('email' in _v && typeof _v['email'] !== 'string') return false;
-    if ('phone' in _v && typeof _v['phone'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createIndividualDetailsPropertyNames();
+    const optionalStringProperties = createIndividualDetailsOptionalProperties({ name: 'displayName', nullable: false }, { name: 'email', nullable: false }, { name: 'phone', nullable: false }, );
+    const optionalNumberProperties = createIndividualDetailsOptionalProperties();
+    const optionalBooleanProperties = createIndividualDetailsOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalIndividualDetailsPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalIndividualDetailsPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalIndividualDetailsPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

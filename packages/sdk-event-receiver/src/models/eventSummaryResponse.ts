@@ -23,11 +23,52 @@ export interface EventSummaryResponse {
     count?: number;
 }
 
+function isOptionalEventSummaryResponsePropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type EventSummaryResponseOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createEventSummaryResponsePropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createEventSummaryResponseOptionalProperties(
+    ...properties: EventSummaryResponseOptionalProperty[]
+): ReadonlyArray<EventSummaryResponseOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfEventSummaryResponse(value: object): value is EventSummaryResponse {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('eventTypeId' in _v && typeof _v['eventTypeId'] !== 'string') return false;
-    if ('count' in _v && typeof _v['count'] !== 'number') return false;
-    return true;
+
+    const requiredProperties = createEventSummaryResponsePropertyNames();
+    const optionalStringProperties = createEventSummaryResponseOptionalProperties({ name: 'eventTypeId', nullable: false }, );
+    const optionalNumberProperties = createEventSummaryResponseOptionalProperties({ name: 'count', nullable: false }, );
+    const optionalBooleanProperties = createEventSummaryResponseOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalEventSummaryResponsePropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalEventSummaryResponsePropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalEventSummaryResponsePropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

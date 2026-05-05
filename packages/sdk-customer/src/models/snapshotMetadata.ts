@@ -18,13 +18,52 @@ export interface SnapshotMetadata {
     staleSince?: string;
 }
 
+function isOptionalSnapshotMetadataPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type SnapshotMetadataOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createSnapshotMetadataPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createSnapshotMetadataOptionalProperties(
+    ...properties: SnapshotMetadataOptionalProperty[]
+): ReadonlyArray<SnapshotMetadataOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfSnapshotMetadata(value: object): value is SnapshotMetadata {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('snapshotId' in _v && typeof _v['snapshotId'] !== 'string') return false;
-    if ('version' in _v && typeof _v['version'] !== 'string') return false;
-    if ('source' in _v && typeof _v['source'] !== 'string') return false;
-    if ('stale' in _v && typeof _v['stale'] !== 'boolean') return false;
-    return true;
+
+    const requiredProperties = createSnapshotMetadataPropertyNames();
+    const optionalStringProperties = createSnapshotMetadataOptionalProperties({ name: 'snapshotId', nullable: false }, { name: 'version', nullable: false }, { name: 'source', nullable: false }, );
+    const optionalNumberProperties = createSnapshotMetadataOptionalProperties();
+    const optionalBooleanProperties = createSnapshotMetadataOptionalProperties({ name: 'stale', nullable: false }, );
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalSnapshotMetadataPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalSnapshotMetadataPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalSnapshotMetadataPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

@@ -19,22 +19,52 @@ export interface PriceOverrideRequest {
     categoryCode?: string;
 }
 
+function isOptionalPriceOverrideRequestPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type PriceOverrideRequestOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createPriceOverrideRequestPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createPriceOverrideRequestOptionalProperties(
+    ...properties: PriceOverrideRequestOptionalProperty[]
+): ReadonlyArray<PriceOverrideRequestOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfPriceOverrideRequest(value: object): value is PriceOverrideRequest {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if (!('orderId' in _v) || _v['orderId'] === undefined) return false;
-    if ('orderId' in _v && typeof _v['orderId'] !== 'string') return false;
-    if (!('lineItemId' in _v) || _v['lineItemId'] === undefined) return false;
-    if ('lineItemId' in _v && typeof _v['lineItemId'] !== 'string') return false;
-    if (!('originalPrice' in _v) || _v['originalPrice'] === undefined) return false;
-    if ('originalPrice' in _v && typeof _v['originalPrice'] !== 'number') return false;
-    if (!('adjustedPrice' in _v) || _v['adjustedPrice'] === undefined) return false;
-    if ('adjustedPrice' in _v && typeof _v['adjustedPrice'] !== 'number') return false;
-    if (!('actorRole' in _v) || _v['actorRole'] === undefined) return false;
-    if ('actorRole' in _v && typeof _v['actorRole'] !== 'string') return false;
-    if (!('reason' in _v) || _v['reason'] === undefined) return false;
-    if ('reason' in _v && typeof _v['reason'] !== 'string') return false;
-    if ('categoryCode' in _v && typeof _v['categoryCode'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createPriceOverrideRequestPropertyNames('orderId', 'lineItemId', 'originalPrice', 'adjustedPrice', 'actorRole', 'reason', );
+    const optionalStringProperties = createPriceOverrideRequestOptionalProperties({ name: 'orderId', nullable: false }, { name: 'lineItemId', nullable: false }, { name: 'actorRole', nullable: false }, { name: 'reason', nullable: false }, { name: 'categoryCode', nullable: false }, );
+    const optionalNumberProperties = createPriceOverrideRequestOptionalProperties({ name: 'originalPrice', nullable: false }, { name: 'adjustedPrice', nullable: false }, );
+    const optionalBooleanProperties = createPriceOverrideRequestOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalPriceOverrideRequestPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalPriceOverrideRequestPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalPriceOverrideRequestPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

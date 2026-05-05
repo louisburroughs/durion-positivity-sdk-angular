@@ -19,11 +19,52 @@ export enum PrintDeliveryRequestStatusEnum {
 
 
 
+function isOptionalPrintDeliveryRequestPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type PrintDeliveryRequestOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createPrintDeliveryRequestPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createPrintDeliveryRequestOptionalProperties(
+    ...properties: PrintDeliveryRequestOptionalProperty[]
+): ReadonlyArray<PrintDeliveryRequestOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfPrintDeliveryRequest(value: object): value is PrintDeliveryRequest {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if (!('status' in _v) || _v['status'] === undefined) return false;
-    if ('status' in _v && typeof _v['status'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createPrintDeliveryRequestPropertyNames('status', );
+    const optionalStringProperties = createPrintDeliveryRequestOptionalProperties({ name: 'status', nullable: false }, );
+    const optionalNumberProperties = createPrintDeliveryRequestOptionalProperties();
+    const optionalBooleanProperties = createPrintDeliveryRequestOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalPrintDeliveryRequestPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalPrintDeliveryRequestPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalPrintDeliveryRequestPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

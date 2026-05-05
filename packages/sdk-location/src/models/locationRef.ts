@@ -18,14 +18,52 @@ export interface LocationRef {
     updatedAt?: string;
 }
 
+function isOptionalLocationRefPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type LocationRefOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createLocationRefPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createLocationRefOptionalProperties(
+    ...properties: LocationRefOptionalProperty[]
+): ReadonlyArray<LocationRefOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfLocationRef(value: object): value is LocationRef {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('id' in _v && typeof _v['id'] !== 'string') return false;
-    if ('name' in _v && typeof _v['name'] !== 'string') return false;
-    if ('code' in _v && typeof _v['code'] !== 'string') return false;
-    if ('status' in _v && typeof _v['status'] !== 'string') return false;
-    if ('hrLocationId' in _v && typeof _v['hrLocationId'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createLocationRefPropertyNames();
+    const optionalStringProperties = createLocationRefOptionalProperties({ name: 'id', nullable: false }, { name: 'name', nullable: false }, { name: 'code', nullable: false }, { name: 'status', nullable: false }, { name: 'hrLocationId', nullable: false }, );
+    const optionalNumberProperties = createLocationRefOptionalProperties();
+    const optionalBooleanProperties = createLocationRefOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalLocationRefPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalLocationRefPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalLocationRefPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

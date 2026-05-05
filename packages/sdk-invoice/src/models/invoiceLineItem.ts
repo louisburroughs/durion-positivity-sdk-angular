@@ -31,17 +31,52 @@ export interface InvoiceLineItem {
     amount: number;
 }
 
+function isOptionalInvoiceLineItemPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type InvoiceLineItemOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createInvoiceLineItemPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createInvoiceLineItemOptionalProperties(
+    ...properties: InvoiceLineItemOptionalProperty[]
+): ReadonlyArray<InvoiceLineItemOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfInvoiceLineItem(value: object): value is InvoiceLineItem {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if (!('description' in _v) || _v['description'] === undefined) return false;
-    if ('description' in _v && typeof _v['description'] !== 'string') return false;
-    if (!('quantity' in _v) || _v['quantity'] === undefined) return false;
-    if ('quantity' in _v && typeof _v['quantity'] !== 'number') return false;
-    if (!('unitPrice' in _v) || _v['unitPrice'] === undefined) return false;
-    if ('unitPrice' in _v && typeof _v['unitPrice'] !== 'number') return false;
-    if (!('amount' in _v) || _v['amount'] === undefined) return false;
-    if ('amount' in _v && typeof _v['amount'] !== 'number') return false;
-    return true;
+
+    const requiredProperties = createInvoiceLineItemPropertyNames('description', 'quantity', 'unitPrice', 'amount', );
+    const optionalStringProperties = createInvoiceLineItemOptionalProperties({ name: 'description', nullable: false }, );
+    const optionalNumberProperties = createInvoiceLineItemOptionalProperties({ name: 'quantity', nullable: false }, { name: 'unitPrice', nullable: false }, { name: 'amount', nullable: false }, );
+    const optionalBooleanProperties = createInvoiceLineItemOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalInvoiceLineItemPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalInvoiceLineItemPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalInvoiceLineItemPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

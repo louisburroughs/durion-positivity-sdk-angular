@@ -15,17 +15,55 @@ export interface ProblemDetail {
     status?: number;
     detail?: string;
     instance?: string;
-    properties?: { [key: string]: any; };
+    properties?: object;
+}
+
+function isOptionalProblemDetailPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type ProblemDetailOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createProblemDetailPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createProblemDetailOptionalProperties(
+    ...properties: ProblemDetailOptionalProperty[]
+): ReadonlyArray<ProblemDetailOptionalProperty> {
+    return properties;
 }
 
 export function instanceOfProblemDetail(value: object): value is ProblemDetail {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('type' in _v && typeof _v['type'] !== 'string') return false;
-    if ('title' in _v && typeof _v['title'] !== 'string') return false;
-    if ('status' in _v && typeof _v['status'] !== 'number') return false;
-    if ('detail' in _v && typeof _v['detail'] !== 'string') return false;
-    if ('instance' in _v && typeof _v['instance'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createProblemDetailPropertyNames();
+    const optionalStringProperties = createProblemDetailOptionalProperties({ name: 'type', nullable: false }, { name: 'title', nullable: false }, { name: 'detail', nullable: false }, { name: 'instance', nullable: false }, );
+    const optionalNumberProperties = createProblemDetailOptionalProperties({ name: 'status', nullable: false }, );
+    const optionalBooleanProperties = createProblemDetailOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalProblemDetailPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalProblemDetailPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalProblemDetailPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

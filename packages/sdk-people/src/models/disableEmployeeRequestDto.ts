@@ -21,11 +21,52 @@ export enum DisableEmployeeRequestDtoAssignmentPolicyEnum {
 
 
 
+function isOptionalDisableEmployeeRequestDtoPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type DisableEmployeeRequestDtoOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createDisableEmployeeRequestDtoPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createDisableEmployeeRequestDtoOptionalProperties(
+    ...properties: DisableEmployeeRequestDtoOptionalProperty[]
+): ReadonlyArray<DisableEmployeeRequestDtoOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfDisableEmployeeRequestDto(value: object): value is DisableEmployeeRequestDto {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('disableReason' in _v && typeof _v['disableReason'] !== 'string') return false;
-    if ('assignmentPolicy' in _v && typeof _v['assignmentPolicy'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createDisableEmployeeRequestDtoPropertyNames();
+    const optionalStringProperties = createDisableEmployeeRequestDtoOptionalProperties({ name: 'disableReason', nullable: false }, { name: 'assignmentPolicy', nullable: false }, );
+    const optionalNumberProperties = createDisableEmployeeRequestDtoOptionalProperties();
+    const optionalBooleanProperties = createDisableEmployeeRequestDtoOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalDisableEmployeeRequestDtoPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalDisableEmployeeRequestDtoPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalDisableEmployeeRequestDtoPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

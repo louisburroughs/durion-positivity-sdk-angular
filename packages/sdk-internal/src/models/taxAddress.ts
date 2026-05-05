@@ -39,17 +39,52 @@ export interface TaxAddress {
     line2?: string;
 }
 
+function isOptionalTaxAddressPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type TaxAddressOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createTaxAddressPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createTaxAddressOptionalProperties(
+    ...properties: TaxAddressOptionalProperty[]
+): ReadonlyArray<TaxAddressOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfTaxAddress(value: object): value is TaxAddress {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if (!('countryCode' in _v) || _v['countryCode'] === undefined) return false;
-    if ('countryCode' in _v && typeof _v['countryCode'] !== 'string') return false;
-    if ('regionCode' in _v && typeof _v['regionCode'] !== 'string') return false;
-    if ('city' in _v && typeof _v['city'] !== 'string') return false;
-    if (!('postalCode' in _v) || _v['postalCode'] === undefined) return false;
-    if ('postalCode' in _v && typeof _v['postalCode'] !== 'string') return false;
-    if ('line1' in _v && typeof _v['line1'] !== 'string') return false;
-    if ('line2' in _v && typeof _v['line2'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createTaxAddressPropertyNames('countryCode', 'postalCode', );
+    const optionalStringProperties = createTaxAddressOptionalProperties({ name: 'countryCode', nullable: false }, { name: 'regionCode', nullable: false }, { name: 'city', nullable: false }, { name: 'postalCode', nullable: false }, { name: 'line1', nullable: false }, { name: 'line2', nullable: false }, );
+    const optionalNumberProperties = createTaxAddressOptionalProperties();
+    const optionalBooleanProperties = createTaxAddressOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalTaxAddressPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalTaxAddressPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalTaxAddressPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

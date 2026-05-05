@@ -38,9 +38,6 @@ export interface ContactWithRole {
      * Effective end date (null if active)
      */
     effectiveTo?: string;
-    /**
-     * Individual person details
-     */
     individual?: IndividualDetails;
     primaryBilling?: boolean;
 }
@@ -54,13 +51,52 @@ export enum ContactWithRoleRolesEnum {
 
 
 
+function isOptionalContactWithRolePropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type ContactWithRoleOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createContactWithRolePropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createContactWithRoleOptionalProperties(
+    ...properties: ContactWithRoleOptionalProperty[]
+): ReadonlyArray<ContactWithRoleOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfContactWithRole(value: object): value is ContactWithRole {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('relationshipId' in _v && typeof _v['relationshipId'] !== 'string') return false;
-    if ('individualId' in _v && typeof _v['individualId'] !== 'string') return false;
-    if ('status' in _v && typeof _v['status'] !== 'string') return false;
-    if ('primaryBilling' in _v && typeof _v['primaryBilling'] !== 'boolean') return false;
-    return true;
+
+    const requiredProperties = createContactWithRolePropertyNames();
+    const optionalStringProperties = createContactWithRoleOptionalProperties({ name: 'relationshipId', nullable: false }, { name: 'individualId', nullable: false }, { name: 'status', nullable: false }, );
+    const optionalNumberProperties = createContactWithRoleOptionalProperties();
+    const optionalBooleanProperties = createContactWithRoleOptionalProperties({ name: 'primaryBilling', nullable: false }, );
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalContactWithRolePropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalContactWithRolePropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalContactWithRolePropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

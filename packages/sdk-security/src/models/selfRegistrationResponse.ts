@@ -34,9 +34,6 @@ export interface SelfRegistrationResponse {
      * True when an existing person was reused
      */
     matchedExistingPerson?: boolean;
-    /**
-     * Summary of CRM person search candidates
-     */
     crmMatchSummary?: CrmMatchSummaryDto;
     /**
      * Idempotency key echoed back when the caller supplied one
@@ -48,16 +45,52 @@ export interface SelfRegistrationResponse {
     issuedTokens?: boolean;
 }
 
+function isOptionalSelfRegistrationResponsePropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type SelfRegistrationResponseOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createSelfRegistrationResponsePropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createSelfRegistrationResponseOptionalProperties(
+    ...properties: SelfRegistrationResponseOptionalProperty[]
+): ReadonlyArray<SelfRegistrationResponseOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfSelfRegistrationResponse(value: object): value is SelfRegistrationResponse {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('userId' in _v && typeof _v['userId'] !== 'string') return false;
-    if ('personId' in _v && typeof _v['personId'] !== 'string') return false;
-    if ('username' in _v && typeof _v['username'] !== 'string') return false;
-    if ('linkStatus' in _v && typeof _v['linkStatus'] !== 'string') return false;
-    if ('matchedExistingPerson' in _v && typeof _v['matchedExistingPerson'] !== 'boolean') return false;
-    if ('idempotencyKey' in _v && typeof _v['idempotencyKey'] !== 'string') return false;
-    if ('issuedTokens' in _v && typeof _v['issuedTokens'] !== 'boolean') return false;
-    return true;
+
+    const requiredProperties = createSelfRegistrationResponsePropertyNames();
+    const optionalStringProperties = createSelfRegistrationResponseOptionalProperties({ name: 'userId', nullable: false }, { name: 'personId', nullable: false }, { name: 'username', nullable: false }, { name: 'linkStatus', nullable: false }, { name: 'idempotencyKey', nullable: false }, );
+    const optionalNumberProperties = createSelfRegistrationResponseOptionalProperties();
+    const optionalBooleanProperties = createSelfRegistrationResponseOptionalProperties({ name: 'matchedExistingPerson', nullable: false }, { name: 'issuedTokens', nullable: false }, );
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalSelfRegistrationResponsePropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalSelfRegistrationResponsePropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalSelfRegistrationResponsePropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

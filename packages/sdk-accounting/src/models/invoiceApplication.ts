@@ -14,13 +14,52 @@ export interface InvoiceApplication {
     amountToApply: number;
 }
 
+function isOptionalInvoiceApplicationPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type InvoiceApplicationOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createInvoiceApplicationPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createInvoiceApplicationOptionalProperties(
+    ...properties: InvoiceApplicationOptionalProperty[]
+): ReadonlyArray<InvoiceApplicationOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfInvoiceApplication(value: object): value is InvoiceApplication {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if (!('invoiceId' in _v) || _v['invoiceId'] === undefined) return false;
-    if ('invoiceId' in _v && typeof _v['invoiceId'] !== 'string') return false;
-    if (!('amountToApply' in _v) || _v['amountToApply'] === undefined) return false;
-    if ('amountToApply' in _v && typeof _v['amountToApply'] !== 'number') return false;
-    return true;
+
+    const requiredProperties = createInvoiceApplicationPropertyNames('invoiceId', 'amountToApply', );
+    const optionalStringProperties = createInvoiceApplicationOptionalProperties({ name: 'invoiceId', nullable: false }, );
+    const optionalNumberProperties = createInvoiceApplicationOptionalProperties({ name: 'amountToApply', nullable: false }, );
+    const optionalBooleanProperties = createInvoiceApplicationOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalInvoiceApplicationPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalInvoiceApplicationPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalInvoiceApplicationPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

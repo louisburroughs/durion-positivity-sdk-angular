@@ -23,17 +23,52 @@ export interface ReceivingSessionResponse {
     lines?: Array<ReceivingLineResponse>;
 }
 
+function isOptionalReceivingSessionResponsePropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type ReceivingSessionResponseOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createReceivingSessionResponsePropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createReceivingSessionResponseOptionalProperties(
+    ...properties: ReceivingSessionResponseOptionalProperty[]
+): ReadonlyArray<ReceivingSessionResponseOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfReceivingSessionResponse(value: object): value is ReceivingSessionResponse {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('sessionId' in _v && typeof _v['sessionId'] !== 'string') return false;
-    if ('sourceDocumentId' in _v && typeof _v['sourceDocumentId'] !== 'string') return false;
-    if ('sourceDocumentType' in _v && typeof _v['sourceDocumentType'] !== 'string') return false;
-    if ('supplierId' in _v && typeof _v['supplierId'] !== 'string') return false;
-    if ('shipmentReference' in _v && typeof _v['shipmentReference'] !== 'string') return false;
-    if ('status' in _v && typeof _v['status'] !== 'string') return false;
-    if ('entryMethod' in _v && typeof _v['entryMethod'] !== 'string') return false;
-    if ('createdByUserId' in _v && typeof _v['createdByUserId'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createReceivingSessionResponsePropertyNames();
+    const optionalStringProperties = createReceivingSessionResponseOptionalProperties({ name: 'sessionId', nullable: false }, { name: 'sourceDocumentId', nullable: false }, { name: 'sourceDocumentType', nullable: false }, { name: 'supplierId', nullable: false }, { name: 'shipmentReference', nullable: false }, { name: 'status', nullable: false }, { name: 'entryMethod', nullable: false }, { name: 'createdByUserId', nullable: false }, );
+    const optionalNumberProperties = createReceivingSessionResponseOptionalProperties();
+    const optionalBooleanProperties = createReceivingSessionResponseOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalReceivingSessionResponsePropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalReceivingSessionResponsePropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalReceivingSessionResponsePropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

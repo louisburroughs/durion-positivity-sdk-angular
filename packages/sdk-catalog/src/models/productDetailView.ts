@@ -29,13 +29,7 @@ export interface ProductDetailView {
      * Product specifications
      */
     specifications?: Array<ProductSpecification>;
-    /**
-     * Pricing information with status indicator
-     */
     pricing?: PricingInfo;
-    /**
-     * Availability information with status indicator
-     */
     availability?: AvailabilityInfo;
     /**
      * Substitution product suggestions
@@ -58,12 +52,52 @@ export enum ProductDetailViewConfidenceEnum {
 
 
 
+function isOptionalProductDetailViewPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type ProductDetailViewOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createProductDetailViewPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createProductDetailViewOptionalProperties(
+    ...properties: ProductDetailViewOptionalProperty[]
+): ReadonlyArray<ProductDetailViewOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfProductDetailView(value: object): value is ProductDetailView {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('productId' in _v && typeof _v['productId'] !== 'string') return false;
-    if ('description' in _v && typeof _v['description'] !== 'string') return false;
-    if ('confidence' in _v && typeof _v['confidence'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createProductDetailViewPropertyNames();
+    const optionalStringProperties = createProductDetailViewOptionalProperties({ name: 'productId', nullable: false }, { name: 'description', nullable: false }, { name: 'confidence', nullable: false }, );
+    const optionalNumberProperties = createProductDetailViewOptionalProperties();
+    const optionalBooleanProperties = createProductDetailViewOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalProductDetailViewPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalProductDetailViewPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalProductDetailViewPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

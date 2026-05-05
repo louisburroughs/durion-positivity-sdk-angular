@@ -14,10 +14,52 @@ export interface ColumnMappingApproveRequest {
     mappings: Array<ColumnMappingUpdateRequest>;
 }
 
+function isOptionalColumnMappingApproveRequestPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type ColumnMappingApproveRequestOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createColumnMappingApproveRequestPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createColumnMappingApproveRequestOptionalProperties(
+    ...properties: ColumnMappingApproveRequestOptionalProperty[]
+): ReadonlyArray<ColumnMappingApproveRequestOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfColumnMappingApproveRequest(value: object): value is ColumnMappingApproveRequest {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if (!('mappings' in _v) || _v['mappings'] === undefined) return false;
-    return true;
+
+    const requiredProperties = createColumnMappingApproveRequestPropertyNames('mappings', );
+    const optionalStringProperties = createColumnMappingApproveRequestOptionalProperties();
+    const optionalNumberProperties = createColumnMappingApproveRequestOptionalProperties();
+    const optionalBooleanProperties = createColumnMappingApproveRequestOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalColumnMappingApproveRequestPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalColumnMappingApproveRequestPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalColumnMappingApproveRequestPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

@@ -34,15 +34,52 @@ export enum ExceptionResolutionRequestResolutionActionEnum {
 
 
 
+function isOptionalExceptionResolutionRequestPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type ExceptionResolutionRequestOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createExceptionResolutionRequestPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createExceptionResolutionRequestOptionalProperties(
+    ...properties: ExceptionResolutionRequestOptionalProperty[]
+): ReadonlyArray<ExceptionResolutionRequestOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfExceptionResolutionRequest(value: object): value is ExceptionResolutionRequest {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if (!('resolutionAction' in _v) || _v['resolutionAction'] === undefined) return false;
-    if ('resolutionAction' in _v && typeof _v['resolutionAction'] !== 'string') return false;
-    if (!('reason' in _v) || _v['reason'] === undefined) return false;
-    if ('reason' in _v && typeof _v['reason'] !== 'string') return false;
-    if (!('operatorId' in _v) || _v['operatorId'] === undefined) return false;
-    if ('operatorId' in _v && typeof _v['operatorId'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createExceptionResolutionRequestPropertyNames('resolutionAction', 'reason', 'operatorId', );
+    const optionalStringProperties = createExceptionResolutionRequestOptionalProperties({ name: 'resolutionAction', nullable: false }, { name: 'reason', nullable: false }, { name: 'operatorId', nullable: false }, );
+    const optionalNumberProperties = createExceptionResolutionRequestOptionalProperties();
+    const optionalBooleanProperties = createExceptionResolutionRequestOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalExceptionResolutionRequestPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalExceptionResolutionRequestPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalExceptionResolutionRequestPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

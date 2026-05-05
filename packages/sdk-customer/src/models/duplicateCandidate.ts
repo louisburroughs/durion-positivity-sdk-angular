@@ -15,12 +15,52 @@ export interface DuplicateCandidate {
     matchReason?: string;
 }
 
+function isOptionalDuplicateCandidatePropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type DuplicateCandidateOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createDuplicateCandidatePropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createDuplicateCandidateOptionalProperties(
+    ...properties: DuplicateCandidateOptionalProperty[]
+): ReadonlyArray<DuplicateCandidateOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfDuplicateCandidate(value: object): value is DuplicateCandidate {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('partyId' in _v && typeof _v['partyId'] !== 'string') return false;
-    if ('legalName' in _v && typeof _v['legalName'] !== 'string') return false;
-    if ('matchReason' in _v && typeof _v['matchReason'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createDuplicateCandidatePropertyNames();
+    const optionalStringProperties = createDuplicateCandidateOptionalProperties({ name: 'partyId', nullable: false }, { name: 'legalName', nullable: false }, { name: 'matchReason', nullable: false }, );
+    const optionalNumberProperties = createDuplicateCandidateOptionalProperties();
+    const optionalBooleanProperties = createDuplicateCandidateOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalDuplicateCandidatePropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalDuplicateCandidatePropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalDuplicateCandidatePropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

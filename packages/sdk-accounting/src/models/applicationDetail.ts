@@ -28,15 +28,52 @@ export enum ApplicationDetailInvoiceStatusEnum {
 
 
 
+function isOptionalApplicationDetailPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type ApplicationDetailOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createApplicationDetailPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createApplicationDetailOptionalProperties(
+    ...properties: ApplicationDetailOptionalProperty[]
+): ReadonlyArray<ApplicationDetailOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfApplicationDetail(value: object): value is ApplicationDetail {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('paymentApplicationId' in _v && typeof _v['paymentApplicationId'] !== 'string') return false;
-    if ('invoiceId' in _v && typeof _v['invoiceId'] !== 'string') return false;
-    if ('appliedAmount' in _v && typeof _v['appliedAmount'] !== 'number') return false;
-    if ('invoiceBalanceBefore' in _v && typeof _v['invoiceBalanceBefore'] !== 'number') return false;
-    if ('invoiceBalanceAfter' in _v && typeof _v['invoiceBalanceAfter'] !== 'number') return false;
-    if ('invoiceStatus' in _v && typeof _v['invoiceStatus'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createApplicationDetailPropertyNames();
+    const optionalStringProperties = createApplicationDetailOptionalProperties({ name: 'paymentApplicationId', nullable: false }, { name: 'invoiceId', nullable: false }, { name: 'invoiceStatus', nullable: false }, );
+    const optionalNumberProperties = createApplicationDetailOptionalProperties({ name: 'appliedAmount', nullable: false }, { name: 'invoiceBalanceBefore', nullable: false }, { name: 'invoiceBalanceAfter', nullable: false }, );
+    const optionalBooleanProperties = createApplicationDetailOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalApplicationDetailPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalApplicationDetailPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalApplicationDetailPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

@@ -48,14 +48,52 @@ export enum EligibilityRuleResponseOperatorEnum {
 
 
 
+function isOptionalEligibilityRuleResponsePropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type EligibilityRuleResponseOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createEligibilityRuleResponsePropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createEligibilityRuleResponseOptionalProperties(
+    ...properties: EligibilityRuleResponseOptionalProperty[]
+): ReadonlyArray<EligibilityRuleResponseOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfEligibilityRuleResponse(value: object): value is EligibilityRuleResponse {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('ruleId' in _v && typeof _v['ruleId'] !== 'string') return false;
-    if ('promotionId' in _v && typeof _v['promotionId'] !== 'string') return false;
-    if ('conditionType' in _v && typeof _v['conditionType'] !== 'string') return false;
-    if ('operator' in _v && typeof _v['operator'] !== 'string') return false;
-    if ('value' in _v && typeof _v['value'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createEligibilityRuleResponsePropertyNames();
+    const optionalStringProperties = createEligibilityRuleResponseOptionalProperties({ name: 'ruleId', nullable: false }, { name: 'promotionId', nullable: false }, { name: 'conditionType', nullable: false }, { name: 'operator', nullable: false }, { name: 'value', nullable: false }, );
+    const optionalNumberProperties = createEligibilityRuleResponseOptionalProperties();
+    const optionalBooleanProperties = createEligibilityRuleResponseOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalEligibilityRuleResponsePropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalEligibilityRuleResponsePropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalEligibilityRuleResponsePropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

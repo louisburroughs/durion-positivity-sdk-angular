@@ -13,10 +13,52 @@ export interface GLMappingResolveResponse {
     glAccountId?: string;
 }
 
+function isOptionalGLMappingResolveResponsePropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type GLMappingResolveResponseOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createGLMappingResolveResponsePropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createGLMappingResolveResponseOptionalProperties(
+    ...properties: GLMappingResolveResponseOptionalProperty[]
+): ReadonlyArray<GLMappingResolveResponseOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfGLMappingResolveResponse(value: object): value is GLMappingResolveResponse {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('glAccountId' in _v && typeof _v['glAccountId'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createGLMappingResolveResponsePropertyNames();
+    const optionalStringProperties = createGLMappingResolveResponseOptionalProperties({ name: 'glAccountId', nullable: false }, );
+    const optionalNumberProperties = createGLMappingResolveResponseOptionalProperties();
+    const optionalBooleanProperties = createGLMappingResolveResponseOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalGLMappingResolveResponsePropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalGLMappingResolveResponsePropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalGLMappingResolveResponsePropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

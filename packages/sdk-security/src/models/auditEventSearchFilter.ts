@@ -67,19 +67,52 @@ export interface AuditEventSearchFilter {
     locationIds?: Array<string>;
 }
 
+function isOptionalAuditEventSearchFilterPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type AuditEventSearchFilterOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createAuditEventSearchFilterPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createAuditEventSearchFilterOptionalProperties(
+    ...properties: AuditEventSearchFilterOptionalProperty[]
+): ReadonlyArray<AuditEventSearchFilterOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfAuditEventSearchFilter(value: object): value is AuditEventSearchFilter {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('actorId' in _v && typeof _v['actorId'] !== 'string') return false;
-    if ('workorderId' in _v && typeof _v['workorderId'] !== 'string') return false;
-    if ('movementId' in _v && typeof _v['movementId'] !== 'string') return false;
-    if ('productId' in _v && typeof _v['productId'] !== 'string') return false;
-    if ('sku' in _v && typeof _v['sku'] !== 'string') return false;
-    if ('eventType' in _v && typeof _v['eventType'] !== 'string') return false;
-    if ('aggregateId' in _v && typeof _v['aggregateId'] !== 'string') return false;
-    if ('correlationId' in _v && typeof _v['correlationId'] !== 'string') return false;
-    if ('reasonCode' in _v && typeof _v['reasonCode'] !== 'string') return false;
-    if ('pageToken' in _v && typeof _v['pageToken'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createAuditEventSearchFilterPropertyNames();
+    const optionalStringProperties = createAuditEventSearchFilterOptionalProperties({ name: 'actorId', nullable: false }, { name: 'workorderId', nullable: false }, { name: 'movementId', nullable: false }, { name: 'productId', nullable: false }, { name: 'sku', nullable: false }, { name: 'eventType', nullable: false }, { name: 'aggregateId', nullable: false }, { name: 'correlationId', nullable: false }, { name: 'reasonCode', nullable: false }, { name: 'pageToken', nullable: false }, );
+    const optionalNumberProperties = createAuditEventSearchFilterOptionalProperties();
+    const optionalBooleanProperties = createAuditEventSearchFilterOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalAuditEventSearchFilterPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalAuditEventSearchFilterPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalAuditEventSearchFilterPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

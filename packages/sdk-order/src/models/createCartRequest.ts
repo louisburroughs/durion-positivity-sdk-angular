@@ -16,15 +16,52 @@ export interface CreateCartRequest {
     vehicleId?: string;
 }
 
+function isOptionalCreateCartRequestPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type CreateCartRequestOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createCreateCartRequestPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createCreateCartRequestOptionalProperties(
+    ...properties: CreateCartRequestOptionalProperty[]
+): ReadonlyArray<CreateCartRequestOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfCreateCartRequest(value: object): value is CreateCartRequest {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if (!('clerkId' in _v) || _v['clerkId'] === undefined) return false;
-    if ('clerkId' in _v && typeof _v['clerkId'] !== 'string') return false;
-    if (!('terminalId' in _v) || _v['terminalId'] === undefined) return false;
-    if ('terminalId' in _v && typeof _v['terminalId'] !== 'string') return false;
-    if ('customerId' in _v && typeof _v['customerId'] !== 'string') return false;
-    if ('vehicleId' in _v && typeof _v['vehicleId'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createCreateCartRequestPropertyNames('clerkId', 'terminalId', );
+    const optionalStringProperties = createCreateCartRequestOptionalProperties({ name: 'clerkId', nullable: false }, { name: 'terminalId', nullable: false }, { name: 'customerId', nullable: false }, { name: 'vehicleId', nullable: false }, );
+    const optionalNumberProperties = createCreateCartRequestOptionalProperties();
+    const optionalBooleanProperties = createCreateCartRequestOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalCreateCartRequestPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalCreateCartRequestPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalCreateCartRequestPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

@@ -19,15 +19,52 @@ export interface UserPersonLinkResponse {
     notes?: string;
 }
 
+function isOptionalUserPersonLinkResponsePropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type UserPersonLinkResponseOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createUserPersonLinkResponsePropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createUserPersonLinkResponseOptionalProperties(
+    ...properties: UserPersonLinkResponseOptionalProperty[]
+): ReadonlyArray<UserPersonLinkResponseOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfUserPersonLinkResponse(value: object): value is UserPersonLinkResponse {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('linkId' in _v && typeof _v['linkId'] !== 'string') return false;
-    if ('userId' in _v && typeof _v['userId'] !== 'string') return false;
-    if ('personId' in _v && typeof _v['personId'] !== 'string') return false;
-    if ('linkType' in _v && typeof _v['linkType'] !== 'string') return false;
-    if ('createdBy' in _v && typeof _v['createdBy'] !== 'string') return false;
-    if ('notes' in _v && typeof _v['notes'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createUserPersonLinkResponsePropertyNames();
+    const optionalStringProperties = createUserPersonLinkResponseOptionalProperties({ name: 'linkId', nullable: false }, { name: 'userId', nullable: false }, { name: 'personId', nullable: false }, { name: 'linkType', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'notes', nullable: false }, );
+    const optionalNumberProperties = createUserPersonLinkResponseOptionalProperties();
+    const optionalBooleanProperties = createUserPersonLinkResponseOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalUserPersonLinkResponsePropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalUserPersonLinkResponsePropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalUserPersonLinkResponsePropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

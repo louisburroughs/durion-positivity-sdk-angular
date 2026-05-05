@@ -14,11 +14,52 @@ export interface SiteDefaultsRequest {
     defaultQuarantineLocationId?: string;
 }
 
+function isOptionalSiteDefaultsRequestPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type SiteDefaultsRequestOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createSiteDefaultsRequestPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createSiteDefaultsRequestOptionalProperties(
+    ...properties: SiteDefaultsRequestOptionalProperty[]
+): ReadonlyArray<SiteDefaultsRequestOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfSiteDefaultsRequest(value: object): value is SiteDefaultsRequest {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('defaultStagingLocationId' in _v && typeof _v['defaultStagingLocationId'] !== 'string') return false;
-    if ('defaultQuarantineLocationId' in _v && typeof _v['defaultQuarantineLocationId'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createSiteDefaultsRequestPropertyNames();
+    const optionalStringProperties = createSiteDefaultsRequestOptionalProperties({ name: 'defaultStagingLocationId', nullable: false }, { name: 'defaultQuarantineLocationId', nullable: false }, );
+    const optionalNumberProperties = createSiteDefaultsRequestOptionalProperties();
+    const optionalBooleanProperties = createSiteDefaultsRequestOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalSiteDefaultsRequestPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalSiteDefaultsRequestPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalSiteDefaultsRequestPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

@@ -22,19 +22,52 @@ export interface CreatePurchaseOrderRequest {
     lines: Array<PurchaseOrderLineRequest>;
 }
 
+function isOptionalCreatePurchaseOrderRequestPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type CreatePurchaseOrderRequestOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createCreatePurchaseOrderRequestPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createCreatePurchaseOrderRequestOptionalProperties(
+    ...properties: CreatePurchaseOrderRequestOptionalProperty[]
+): ReadonlyArray<CreatePurchaseOrderRequestOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfCreatePurchaseOrderRequest(value: object): value is CreatePurchaseOrderRequest {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if (!('vendorId' in _v) || _v['vendorId'] === undefined) return false;
-    if ('vendorId' in _v && typeof _v['vendorId'] !== 'string') return false;
-    if (!('poDate' in _v) || _v['poDate'] === undefined) return false;
-    if (!('currency' in _v) || _v['currency'] === undefined) return false;
-    if ('currency' in _v && typeof _v['currency'] !== 'string') return false;
-    if ('paymentTermsId' in _v && typeof _v['paymentTermsId'] !== 'string') return false;
-    if ('shipToLocationId' in _v && typeof _v['shipToLocationId'] !== 'string') return false;
-    if ('requestedBy' in _v && typeof _v['requestedBy'] !== 'string') return false;
-    if ('comment' in _v && typeof _v['comment'] !== 'string') return false;
-    if (!('lines' in _v) || _v['lines'] === undefined) return false;
-    return true;
+
+    const requiredProperties = createCreatePurchaseOrderRequestPropertyNames('vendorId', 'poDate', 'currency', 'lines', );
+    const optionalStringProperties = createCreatePurchaseOrderRequestOptionalProperties({ name: 'vendorId', nullable: false }, { name: 'currency', nullable: false }, { name: 'paymentTermsId', nullable: false }, { name: 'shipToLocationId', nullable: false }, { name: 'requestedBy', nullable: false }, { name: 'comment', nullable: false }, );
+    const optionalNumberProperties = createCreatePurchaseOrderRequestOptionalProperties();
+    const optionalBooleanProperties = createCreatePurchaseOrderRequestOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalCreatePurchaseOrderRequestPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalCreatePurchaseOrderRequestPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalCreatePurchaseOrderRequestPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

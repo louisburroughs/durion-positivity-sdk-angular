@@ -18,15 +18,52 @@ export interface ReservationResponse {
     status?: string;
 }
 
+function isOptionalReservationResponsePropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type ReservationResponseOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createReservationResponsePropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createReservationResponseOptionalProperties(
+    ...properties: ReservationResponseOptionalProperty[]
+): ReadonlyArray<ReservationResponseOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfReservationResponse(value: object): value is ReservationResponse {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('reservationId' in _v && typeof _v['reservationId'] !== 'string') return false;
-    if ('workorderLineId' in _v && typeof _v['workorderLineId'] !== 'string') return false;
-    if ('stockItemId' in _v && typeof _v['stockItemId'] !== 'string') return false;
-    if ('requiredQuantity' in _v && typeof _v['requiredQuantity'] !== 'number') return false;
-    if ('allocatedQuantity' in _v && typeof _v['allocatedQuantity'] !== 'number') return false;
-    if ('status' in _v && typeof _v['status'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createReservationResponsePropertyNames();
+    const optionalStringProperties = createReservationResponseOptionalProperties({ name: 'reservationId', nullable: false }, { name: 'workorderLineId', nullable: false }, { name: 'stockItemId', nullable: false }, { name: 'status', nullable: false }, );
+    const optionalNumberProperties = createReservationResponseOptionalProperties({ name: 'requiredQuantity', nullable: false }, { name: 'allocatedQuantity', nullable: false }, );
+    const optionalBooleanProperties = createReservationResponseOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalReservationResponsePropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalReservationResponsePropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalReservationResponsePropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

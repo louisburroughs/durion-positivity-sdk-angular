@@ -13,9 +13,52 @@ export interface ConflictDetails {
     conflictingEventIds?: Array<string>;
 }
 
+function isOptionalConflictDetailsPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type ConflictDetailsOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createConflictDetailsPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createConflictDetailsOptionalProperties(
+    ...properties: ConflictDetailsOptionalProperty[]
+): ReadonlyArray<ConflictDetailsOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfConflictDetails(value: object): value is ConflictDetails {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    return true;
+
+    const requiredProperties = createConflictDetailsPropertyNames();
+    const optionalStringProperties = createConflictDetailsOptionalProperties();
+    const optionalNumberProperties = createConflictDetailsOptionalProperties();
+    const optionalBooleanProperties = createConflictDetailsOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalConflictDetailsPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalConflictDetailsPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalConflictDetailsPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

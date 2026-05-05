@@ -19,10 +19,52 @@ export interface ValidateResponse {
     valid?: boolean;
 }
 
+function isOptionalValidateResponsePropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type ValidateResponseOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createValidateResponsePropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createValidateResponseOptionalProperties(
+    ...properties: ValidateResponseOptionalProperty[]
+): ReadonlyArray<ValidateResponseOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfValidateResponse(value: object): value is ValidateResponse {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('valid' in _v && typeof _v['valid'] !== 'boolean') return false;
-    return true;
+
+    const requiredProperties = createValidateResponsePropertyNames();
+    const optionalStringProperties = createValidateResponseOptionalProperties();
+    const optionalNumberProperties = createValidateResponseOptionalProperties();
+    const optionalBooleanProperties = createValidateResponseOptionalProperties({ name: 'valid', nullable: false }, );
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalValidateResponsePropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalValidateResponsePropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalValidateResponsePropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

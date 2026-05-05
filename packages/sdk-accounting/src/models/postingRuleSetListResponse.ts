@@ -18,13 +18,52 @@ export interface PostingRuleSetListResponse {
     pageSize?: number;
 }
 
+function isOptionalPostingRuleSetListResponsePropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type PostingRuleSetListResponseOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createPostingRuleSetListResponsePropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createPostingRuleSetListResponseOptionalProperties(
+    ...properties: PostingRuleSetListResponseOptionalProperty[]
+): ReadonlyArray<PostingRuleSetListResponseOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfPostingRuleSetListResponse(value: object): value is PostingRuleSetListResponse {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('totalElements' in _v && typeof _v['totalElements'] !== 'number') return false;
-    if ('totalPages' in _v && typeof _v['totalPages'] !== 'number') return false;
-    if ('currentPage' in _v && typeof _v['currentPage'] !== 'number') return false;
-    if ('pageSize' in _v && typeof _v['pageSize'] !== 'number') return false;
-    return true;
+
+    const requiredProperties = createPostingRuleSetListResponsePropertyNames();
+    const optionalStringProperties = createPostingRuleSetListResponseOptionalProperties();
+    const optionalNumberProperties = createPostingRuleSetListResponseOptionalProperties({ name: 'totalElements', nullable: false }, { name: 'totalPages', nullable: false }, { name: 'currentPage', nullable: false }, { name: 'pageSize', nullable: false }, );
+    const optionalBooleanProperties = createPostingRuleSetListResponseOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalPostingRuleSetListResponsePropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalPostingRuleSetListResponsePropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalPostingRuleSetListResponsePropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

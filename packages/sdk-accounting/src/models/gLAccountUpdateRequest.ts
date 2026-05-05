@@ -23,11 +23,52 @@ export interface GLAccountUpdateRequest {
     description?: string;
 }
 
+function isOptionalGLAccountUpdateRequestPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type GLAccountUpdateRequestOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createGLAccountUpdateRequestPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createGLAccountUpdateRequestOptionalProperties(
+    ...properties: GLAccountUpdateRequestOptionalProperty[]
+): ReadonlyArray<GLAccountUpdateRequestOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfGLAccountUpdateRequest(value: object): value is GLAccountUpdateRequest {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('accountName' in _v && typeof _v['accountName'] !== 'string') return false;
-    if ('description' in _v && typeof _v['description'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createGLAccountUpdateRequestPropertyNames();
+    const optionalStringProperties = createGLAccountUpdateRequestOptionalProperties({ name: 'accountName', nullable: false }, { name: 'description', nullable: false }, );
+    const optionalNumberProperties = createGLAccountUpdateRequestOptionalProperties();
+    const optionalBooleanProperties = createGLAccountUpdateRequestOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalGLAccountUpdateRequestPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalGLAccountUpdateRequestPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalGLAccountUpdateRequestPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

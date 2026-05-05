@@ -16,13 +16,52 @@ export interface AccountDrilldownResponse {
     statementLineCode?: string;
 }
 
+function isOptionalAccountDrilldownResponsePropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type AccountDrilldownResponseOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createAccountDrilldownResponsePropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createAccountDrilldownResponseOptionalProperties(
+    ...properties: AccountDrilldownResponseOptionalProperty[]
+): ReadonlyArray<AccountDrilldownResponseOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfAccountDrilldownResponse(value: object): value is AccountDrilldownResponse {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('accountId' in _v && typeof _v['accountId'] !== 'string') return false;
-    if ('accountName' in _v && typeof _v['accountName'] !== 'string') return false;
-    if ('balance' in _v && typeof _v['balance'] !== 'number') return false;
-    if ('statementLineCode' in _v && typeof _v['statementLineCode'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createAccountDrilldownResponsePropertyNames();
+    const optionalStringProperties = createAccountDrilldownResponseOptionalProperties({ name: 'accountId', nullable: false }, { name: 'accountName', nullable: false }, { name: 'statementLineCode', nullable: false }, );
+    const optionalNumberProperties = createAccountDrilldownResponseOptionalProperties({ name: 'balance', nullable: false }, );
+    const optionalBooleanProperties = createAccountDrilldownResponseOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalAccountDrilldownResponsePropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalAccountDrilldownResponsePropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalAccountDrilldownResponsePropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

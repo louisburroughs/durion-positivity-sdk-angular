@@ -51,17 +51,52 @@ export interface JournalEntryLineResponse {
     dimensions?: { [key: string]: string; };
 }
 
+function isOptionalJournalEntryLineResponsePropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type JournalEntryLineResponseOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createJournalEntryLineResponsePropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createJournalEntryLineResponseOptionalProperties(
+    ...properties: JournalEntryLineResponseOptionalProperty[]
+): ReadonlyArray<JournalEntryLineResponseOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfJournalEntryLineResponse(value: object): value is JournalEntryLineResponse {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('lineId' in _v && typeof _v['lineId'] !== 'string') return false;
-    if ('lineNumber' in _v && typeof _v['lineNumber'] !== 'number') return false;
-    if ('glAccountId' in _v && typeof _v['glAccountId'] !== 'string') return false;
-    if ('accountCode' in _v && typeof _v['accountCode'] !== 'string') return false;
-    if ('accountName' in _v && typeof _v['accountName'] !== 'string') return false;
-    if ('debitAmount' in _v && typeof _v['debitAmount'] !== 'number') return false;
-    if ('creditAmount' in _v && typeof _v['creditAmount'] !== 'number') return false;
-    if ('description' in _v && typeof _v['description'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createJournalEntryLineResponsePropertyNames();
+    const optionalStringProperties = createJournalEntryLineResponseOptionalProperties({ name: 'lineId', nullable: false }, { name: 'glAccountId', nullable: false }, { name: 'accountCode', nullable: false }, { name: 'accountName', nullable: false }, { name: 'description', nullable: false }, );
+    const optionalNumberProperties = createJournalEntryLineResponseOptionalProperties({ name: 'lineNumber', nullable: false }, { name: 'debitAmount', nullable: false }, { name: 'creditAmount', nullable: false }, );
+    const optionalBooleanProperties = createJournalEntryLineResponseOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalJournalEntryLineResponsePropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalJournalEntryLineResponsePropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalJournalEntryLineResponsePropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

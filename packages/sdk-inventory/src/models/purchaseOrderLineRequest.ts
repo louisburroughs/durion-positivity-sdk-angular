@@ -19,20 +19,52 @@ export interface PurchaseOrderLineRequest {
     glAccountId?: string;
 }
 
+function isOptionalPurchaseOrderLineRequestPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type PurchaseOrderLineRequestOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createPurchaseOrderLineRequestPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createPurchaseOrderLineRequestOptionalProperties(
+    ...properties: PurchaseOrderLineRequestOptionalProperty[]
+): ReadonlyArray<PurchaseOrderLineRequestOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfPurchaseOrderLineRequest(value: object): value is PurchaseOrderLineRequest {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if (!('lineNumber' in _v) || _v['lineNumber'] === undefined) return false;
-    if ('lineNumber' in _v && typeof _v['lineNumber'] !== 'number') return false;
-    if ('skuId' in _v && typeof _v['skuId'] !== 'string') return false;
-    if (!('description' in _v) || _v['description'] === undefined) return false;
-    if ('description' in _v && typeof _v['description'] !== 'string') return false;
-    if (!('quantity' in _v) || _v['quantity'] === undefined) return false;
-    if ('quantity' in _v && typeof _v['quantity'] !== 'number') return false;
-    if (!('unitCostMinor' in _v) || _v['unitCostMinor'] === undefined) return false;
-    if ('unitCostMinor' in _v && typeof _v['unitCostMinor'] !== 'number') return false;
-    if ('taxCodeId' in _v && typeof _v['taxCodeId'] !== 'string') return false;
-    if ('glAccountId' in _v && typeof _v['glAccountId'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createPurchaseOrderLineRequestPropertyNames('lineNumber', 'description', 'quantity', 'unitCostMinor', );
+    const optionalStringProperties = createPurchaseOrderLineRequestOptionalProperties({ name: 'skuId', nullable: false }, { name: 'description', nullable: false }, { name: 'taxCodeId', nullable: false }, { name: 'glAccountId', nullable: false }, );
+    const optionalNumberProperties = createPurchaseOrderLineRequestOptionalProperties({ name: 'lineNumber', nullable: false }, { name: 'quantity', nullable: false }, { name: 'unitCostMinor', nullable: false }, );
+    const optionalBooleanProperties = createPurchaseOrderLineRequestOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalPurchaseOrderLineRequestPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalPurchaseOrderLineRequestPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalPurchaseOrderLineRequestPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

@@ -14,10 +14,52 @@ export interface MovedItem {
     quantity?: number;
 }
 
+function isOptionalMovedItemPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type MovedItemOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createMovedItemPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createMovedItemOptionalProperties(
+    ...properties: MovedItemOptionalProperty[]
+): ReadonlyArray<MovedItemOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfMovedItem(value: object): value is MovedItem {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('itemId' in _v && typeof _v['itemId'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createMovedItemPropertyNames();
+    const optionalStringProperties = createMovedItemOptionalProperties({ name: 'itemId', nullable: false }, );
+    const optionalNumberProperties = createMovedItemOptionalProperties();
+    const optionalBooleanProperties = createMovedItemOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalMovedItemPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalMovedItemPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalMovedItemPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

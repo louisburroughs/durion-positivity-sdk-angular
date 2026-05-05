@@ -18,15 +18,52 @@ export interface ResolvePriceRequestDto {
     asOf?: string;
 }
 
+function isOptionalResolvePriceRequestDtoPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type ResolvePriceRequestDtoOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createResolvePriceRequestDtoPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createResolvePriceRequestDtoOptionalProperties(
+    ...properties: ResolvePriceRequestDtoOptionalProperty[]
+): ReadonlyArray<ResolvePriceRequestDtoOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfResolvePriceRequestDto(value: object): value is ResolvePriceRequestDto {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if (!('productId' in _v) || _v['productId'] === undefined) return false;
-    if ('productId' in _v && typeof _v['productId'] !== 'string') return false;
-    if ('priceBookId' in _v && typeof _v['priceBookId'] !== 'string') return false;
-    if ('locationId' in _v && typeof _v['locationId'] !== 'string') return false;
-    if ('customerTier' in _v && typeof _v['customerTier'] !== 'string') return false;
-    if ('currency' in _v && typeof _v['currency'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createResolvePriceRequestDtoPropertyNames('productId', );
+    const optionalStringProperties = createResolvePriceRequestDtoOptionalProperties({ name: 'productId', nullable: false }, { name: 'priceBookId', nullable: false }, { name: 'locationId', nullable: false }, { name: 'customerTier', nullable: false }, { name: 'currency', nullable: false }, );
+    const optionalNumberProperties = createResolvePriceRequestDtoOptionalProperties();
+    const optionalBooleanProperties = createResolvePriceRequestDtoOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalResolvePriceRequestDtoPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalResolvePriceRequestDtoPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalResolvePriceRequestDtoPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

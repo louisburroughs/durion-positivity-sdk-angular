@@ -16,16 +16,52 @@ export interface CreateCreditMemoRequest {
     justificationNote?: string;
 }
 
+function isOptionalCreateCreditMemoRequestPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type CreateCreditMemoRequestOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createCreateCreditMemoRequestPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createCreateCreditMemoRequestOptionalProperties(
+    ...properties: CreateCreditMemoRequestOptionalProperty[]
+): ReadonlyArray<CreateCreditMemoRequestOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfCreateCreditMemoRequest(value: object): value is CreateCreditMemoRequest {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if (!('originalInvoiceId' in _v) || _v['originalInvoiceId'] === undefined) return false;
-    if ('originalInvoiceId' in _v && typeof _v['originalInvoiceId'] !== 'string') return false;
-    if (!('creditAmount' in _v) || _v['creditAmount'] === undefined) return false;
-    if ('creditAmount' in _v && typeof _v['creditAmount'] !== 'number') return false;
-    if (!('reasonCode' in _v) || _v['reasonCode'] === undefined) return false;
-    if ('reasonCode' in _v && typeof _v['reasonCode'] !== 'string') return false;
-    if ('justificationNote' in _v && typeof _v['justificationNote'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createCreateCreditMemoRequestPropertyNames('originalInvoiceId', 'creditAmount', 'reasonCode', );
+    const optionalStringProperties = createCreateCreditMemoRequestOptionalProperties({ name: 'originalInvoiceId', nullable: false }, { name: 'reasonCode', nullable: false }, { name: 'justificationNote', nullable: false }, );
+    const optionalNumberProperties = createCreateCreditMemoRequestOptionalProperties({ name: 'creditAmount', nullable: false }, );
+    const optionalBooleanProperties = createCreateCreditMemoRequestOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalCreateCreditMemoRequestPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalCreateCreditMemoRequestPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalCreateCreditMemoRequestPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

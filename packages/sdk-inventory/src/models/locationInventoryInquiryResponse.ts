@@ -27,15 +27,52 @@ export interface LocationInventoryInquiryResponse {
     availableToPromiseQuantity: number;
 }
 
+function isOptionalLocationInventoryInquiryResponsePropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type LocationInventoryInquiryResponseOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createLocationInventoryInquiryResponsePropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createLocationInventoryInquiryResponseOptionalProperties(
+    ...properties: LocationInventoryInquiryResponseOptionalProperty[]
+): ReadonlyArray<LocationInventoryInquiryResponseOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfLocationInventoryInquiryResponse(value: object): value is LocationInventoryInquiryResponse {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if (!('locationId' in _v) || _v['locationId'] === undefined) return false;
-    if ('locationId' in _v && typeof _v['locationId'] !== 'string') return false;
-    if (!('onHandQuantity' in _v) || _v['onHandQuantity'] === undefined) return false;
-    if ('onHandQuantity' in _v && typeof _v['onHandQuantity'] !== 'number') return false;
-    if (!('availableToPromiseQuantity' in _v) || _v['availableToPromiseQuantity'] === undefined) return false;
-    if ('availableToPromiseQuantity' in _v && typeof _v['availableToPromiseQuantity'] !== 'number') return false;
-    return true;
+
+    const requiredProperties = createLocationInventoryInquiryResponsePropertyNames('locationId', 'onHandQuantity', 'availableToPromiseQuantity', );
+    const optionalStringProperties = createLocationInventoryInquiryResponseOptionalProperties({ name: 'locationId', nullable: false }, );
+    const optionalNumberProperties = createLocationInventoryInquiryResponseOptionalProperties({ name: 'onHandQuantity', nullable: false }, { name: 'availableToPromiseQuantity', nullable: false }, );
+    const optionalBooleanProperties = createLocationInventoryInquiryResponseOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalLocationInventoryInquiryResponsePropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalLocationInventoryInquiryResponsePropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalLocationInventoryInquiryResponsePropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

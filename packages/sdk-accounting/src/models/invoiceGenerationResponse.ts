@@ -51,17 +51,52 @@ export interface InvoiceGenerationResponse {
     createdAt?: string;
 }
 
+function isOptionalInvoiceGenerationResponsePropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type InvoiceGenerationResponseOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createInvoiceGenerationResponsePropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createInvoiceGenerationResponseOptionalProperties(
+    ...properties: InvoiceGenerationResponseOptionalProperty[]
+): ReadonlyArray<InvoiceGenerationResponseOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfInvoiceGenerationResponse(value: object): value is InvoiceGenerationResponse {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('invoiceId' in _v && typeof _v['invoiceId'] !== 'string') return false;
-    if ('status' in _v && typeof _v['status'] !== 'string') return false;
-    if ('workorderId' in _v && typeof _v['workorderId'] !== 'string') return false;
-    if ('estimateId' in _v && typeof _v['estimateId'] !== 'string') return false;
-    if ('approvalId' in _v && typeof _v['approvalId'] !== 'string') return false;
-    if ('subtotal' in _v && typeof _v['subtotal'] !== 'number') return false;
-    if ('taxAmount' in _v && typeof _v['taxAmount'] !== 'number') return false;
-    if ('totalAmount' in _v && typeof _v['totalAmount'] !== 'number') return false;
-    return true;
+
+    const requiredProperties = createInvoiceGenerationResponsePropertyNames();
+    const optionalStringProperties = createInvoiceGenerationResponseOptionalProperties({ name: 'invoiceId', nullable: false }, { name: 'status', nullable: false }, { name: 'workorderId', nullable: false }, { name: 'estimateId', nullable: false }, { name: 'approvalId', nullable: false }, );
+    const optionalNumberProperties = createInvoiceGenerationResponseOptionalProperties({ name: 'subtotal', nullable: false }, { name: 'taxAmount', nullable: false }, { name: 'totalAmount', nullable: false }, );
+    const optionalBooleanProperties = createInvoiceGenerationResponseOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalInvoiceGenerationResponsePropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalInvoiceGenerationResponsePropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalInvoiceGenerationResponsePropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

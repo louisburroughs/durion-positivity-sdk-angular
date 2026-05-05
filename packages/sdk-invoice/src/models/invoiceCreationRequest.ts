@@ -36,13 +36,52 @@ export interface InvoiceCreationRequest {
     lineItems?: Array<InvoiceLineItem>;
 }
 
+function isOptionalInvoiceCreationRequestPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type InvoiceCreationRequestOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createInvoiceCreationRequestPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createInvoiceCreationRequestOptionalProperties(
+    ...properties: InvoiceCreationRequestOptionalProperty[]
+): ReadonlyArray<InvoiceCreationRequestOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfInvoiceCreationRequest(value: object): value is InvoiceCreationRequest {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('workorderId' in _v && typeof _v['workorderId'] !== 'string') return false;
-    if ('estimateId' in _v && typeof _v['estimateId'] !== 'string') return false;
-    if ('approvalId' in _v && typeof _v['approvalId'] !== 'string') return false;
-    if ('idempotencyKey' in _v && typeof _v['idempotencyKey'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createInvoiceCreationRequestPropertyNames();
+    const optionalStringProperties = createInvoiceCreationRequestOptionalProperties({ name: 'workorderId', nullable: false }, { name: 'estimateId', nullable: false }, { name: 'approvalId', nullable: false }, { name: 'idempotencyKey', nullable: false }, );
+    const optionalNumberProperties = createInvoiceCreationRequestOptionalProperties();
+    const optionalBooleanProperties = createInvoiceCreationRequestOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalInvoiceCreationRequestPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalInvoiceCreationRequestPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalInvoiceCreationRequestPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

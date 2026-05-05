@@ -19,14 +19,52 @@ export interface ColumnMappingResponse {
     createdAt?: string;
 }
 
+function isOptionalColumnMappingResponsePropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type ColumnMappingResponseOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createColumnMappingResponsePropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createColumnMappingResponseOptionalProperties(
+    ...properties: ColumnMappingResponseOptionalProperty[]
+): ReadonlyArray<ColumnMappingResponseOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfColumnMappingResponse(value: object): value is ColumnMappingResponse {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('id' in _v && typeof _v['id'] !== 'string') return false;
-    if ('jobId' in _v && typeof _v['jobId'] !== 'string') return false;
-    if ('sourceColumn' in _v && typeof _v['sourceColumn'] !== 'string') return false;
-    if ('targetField' in _v && typeof _v['targetField'] !== 'string') return false;
-    if ('overriddenByUser' in _v && typeof _v['overriddenByUser'] !== 'boolean') return false;
-    return true;
+
+    const requiredProperties = createColumnMappingResponsePropertyNames();
+    const optionalStringProperties = createColumnMappingResponseOptionalProperties({ name: 'id', nullable: false }, { name: 'jobId', nullable: false }, { name: 'sourceColumn', nullable: false }, { name: 'targetField', nullable: false }, );
+    const optionalNumberProperties = createColumnMappingResponseOptionalProperties();
+    const optionalBooleanProperties = createColumnMappingResponseOptionalProperties({ name: 'overriddenByUser', nullable: false }, );
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalColumnMappingResponsePropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalColumnMappingResponsePropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalColumnMappingResponsePropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

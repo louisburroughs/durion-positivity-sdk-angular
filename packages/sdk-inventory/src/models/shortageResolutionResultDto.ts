@@ -16,12 +16,52 @@ export interface ShortageResolutionResultDto {
     status?: string;
 }
 
+function isOptionalShortageResolutionResultDtoPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type ShortageResolutionResultDtoOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createShortageResolutionResultDtoPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createShortageResolutionResultDtoOptionalProperties(
+    ...properties: ShortageResolutionResultDtoOptionalProperty[]
+): ReadonlyArray<ShortageResolutionResultDtoOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfShortageResolutionResultDto(value: object): value is ShortageResolutionResultDto {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('allocationId' in _v && typeof _v['allocationId'] !== 'string') return false;
-    if ('resolution' in _v && typeof _v['resolution'] !== 'string') return false;
-    if ('status' in _v && typeof _v['status'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createShortageResolutionResultDtoPropertyNames();
+    const optionalStringProperties = createShortageResolutionResultDtoOptionalProperties({ name: 'allocationId', nullable: false }, { name: 'resolution', nullable: false }, { name: 'status', nullable: false }, );
+    const optionalNumberProperties = createShortageResolutionResultDtoOptionalProperties();
+    const optionalBooleanProperties = createShortageResolutionResultDtoOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalShortageResolutionResultDtoPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalShortageResolutionResultDtoPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalShortageResolutionResultDtoPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

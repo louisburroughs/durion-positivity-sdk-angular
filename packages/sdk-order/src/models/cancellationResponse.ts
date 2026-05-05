@@ -16,13 +16,52 @@ export interface CancellationResponse {
     cancellationIdempotencyKey?: string;
 }
 
+function isOptionalCancellationResponsePropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type CancellationResponseOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createCancellationResponsePropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createCancellationResponseOptionalProperties(
+    ...properties: CancellationResponseOptionalProperty[]
+): ReadonlyArray<CancellationResponseOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfCancellationResponse(value: object): value is CancellationResponse {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('orderId' in _v && typeof _v['orderId'] !== 'string') return false;
-    if ('status' in _v && typeof _v['status'] !== 'string') return false;
-    if ('message' in _v && typeof _v['message'] !== 'string') return false;
-    if ('cancellationIdempotencyKey' in _v && typeof _v['cancellationIdempotencyKey'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createCancellationResponsePropertyNames();
+    const optionalStringProperties = createCancellationResponseOptionalProperties({ name: 'orderId', nullable: false }, { name: 'status', nullable: false }, { name: 'message', nullable: false }, { name: 'cancellationIdempotencyKey', nullable: false }, );
+    const optionalNumberProperties = createCancellationResponseOptionalProperties();
+    const optionalBooleanProperties = createCancellationResponseOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalCancellationResponsePropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalCancellationResponsePropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalCancellationResponsePropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

@@ -28,16 +28,52 @@ export enum PriceBookCreateRequestDtoStatusEnum {
 
 
 
+function isOptionalPriceBookCreateRequestDtoPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type PriceBookCreateRequestDtoOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createPriceBookCreateRequestDtoPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createPriceBookCreateRequestDtoOptionalProperties(
+    ...properties: PriceBookCreateRequestDtoOptionalProperty[]
+): ReadonlyArray<PriceBookCreateRequestDtoOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfPriceBookCreateRequestDto(value: object): value is PriceBookCreateRequestDto {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if (!('name' in _v) || _v['name'] === undefined) return false;
-    if ('name' in _v && typeof _v['name'] !== 'string') return false;
-    if (!('scope' in _v) || _v['scope'] === undefined) return false;
-    if ('scope' in _v && typeof _v['scope'] !== 'string') return false;
-    if ('scopeId' in _v && typeof _v['scopeId'] !== 'string') return false;
-    if ('isDefault' in _v && typeof _v['isDefault'] !== 'boolean') return false;
-    if ('status' in _v && typeof _v['status'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createPriceBookCreateRequestDtoPropertyNames('name', 'scope', );
+    const optionalStringProperties = createPriceBookCreateRequestDtoOptionalProperties({ name: 'name', nullable: false }, { name: 'scope', nullable: false }, { name: 'scopeId', nullable: false }, { name: 'status', nullable: false }, );
+    const optionalNumberProperties = createPriceBookCreateRequestDtoOptionalProperties();
+    const optionalBooleanProperties = createPriceBookCreateRequestDtoOptionalProperties({ name: 'isDefault', nullable: false }, );
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalPriceBookCreateRequestDtoPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalPriceBookCreateRequestDtoPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalPriceBookCreateRequestDtoPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

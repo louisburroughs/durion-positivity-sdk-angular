@@ -21,18 +21,52 @@ export interface PurchaseOrderLineResponse {
     openQuantityDecimal?: number;
 }
 
+function isOptionalPurchaseOrderLineResponsePropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type PurchaseOrderLineResponseOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createPurchaseOrderLineResponsePropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createPurchaseOrderLineResponseOptionalProperties(
+    ...properties: PurchaseOrderLineResponseOptionalProperty[]
+): ReadonlyArray<PurchaseOrderLineResponseOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfPurchaseOrderLineResponse(value: object): value is PurchaseOrderLineResponse {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('lineId' in _v && typeof _v['lineId'] !== 'string') return false;
-    if ('lineNumber' in _v && typeof _v['lineNumber'] !== 'number') return false;
-    if ('skuId' in _v && typeof _v['skuId'] !== 'string') return false;
-    if ('description' in _v && typeof _v['description'] !== 'string') return false;
-    if ('quantityDecimal' in _v && typeof _v['quantityDecimal'] !== 'number') return false;
-    if ('unitCostMinor' in _v && typeof _v['unitCostMinor'] !== 'number') return false;
-    if ('lineTotalMinor' in _v && typeof _v['lineTotalMinor'] !== 'number') return false;
-    if ('taxMinor' in _v && typeof _v['taxMinor'] !== 'number') return false;
-    if ('openQuantityDecimal' in _v && typeof _v['openQuantityDecimal'] !== 'number') return false;
-    return true;
+
+    const requiredProperties = createPurchaseOrderLineResponsePropertyNames();
+    const optionalStringProperties = createPurchaseOrderLineResponseOptionalProperties({ name: 'lineId', nullable: false }, { name: 'skuId', nullable: false }, { name: 'description', nullable: false }, );
+    const optionalNumberProperties = createPurchaseOrderLineResponseOptionalProperties({ name: 'lineNumber', nullable: false }, { name: 'quantityDecimal', nullable: false }, { name: 'unitCostMinor', nullable: false }, { name: 'lineTotalMinor', nullable: false }, { name: 'taxMinor', nullable: false }, { name: 'openQuantityDecimal', nullable: false }, );
+    const optionalBooleanProperties = createPurchaseOrderLineResponseOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalPurchaseOrderLineResponsePropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalPurchaseOrderLineResponsePropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalPurchaseOrderLineResponsePropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

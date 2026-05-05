@@ -39,12 +39,52 @@ export interface CatalogDto {
     nonInventoryProductIds?: Array<string>;
 }
 
+function isOptionalCatalogDtoPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type CatalogDtoOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createCatalogDtoPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createCatalogDtoOptionalProperties(
+    ...properties: CatalogDtoOptionalProperty[]
+): ReadonlyArray<CatalogDtoOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfCatalogDto(value: object): value is CatalogDto {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('id' in _v && typeof _v['id'] !== 'string') return false;
-    if ('name' in _v && typeof _v['name'] !== 'string') return false;
-    if ('description' in _v && typeof _v['description'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createCatalogDtoPropertyNames();
+    const optionalStringProperties = createCatalogDtoOptionalProperties({ name: 'id', nullable: false }, { name: 'name', nullable: false }, { name: 'description', nullable: false }, );
+    const optionalNumberProperties = createCatalogDtoOptionalProperties();
+    const optionalBooleanProperties = createCatalogDtoOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalCatalogDtoPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalCatalogDtoPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalCatalogDtoPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

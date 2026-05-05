@@ -16,12 +16,52 @@ export interface UserDto {
     personId?: string;
 }
 
+function isOptionalUserDtoPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type UserDtoOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createUserDtoPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createUserDtoOptionalProperties(
+    ...properties: UserDtoOptionalProperty[]
+): ReadonlyArray<UserDtoOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfUserDto(value: object): value is UserDto {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('id' in _v && typeof _v['id'] !== 'string') return false;
-    if ('username' in _v && typeof _v['username'] !== 'string') return false;
-    if ('personId' in _v && typeof _v['personId'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createUserDtoPropertyNames();
+    const optionalStringProperties = createUserDtoOptionalProperties({ name: 'id', nullable: false }, { name: 'username', nullable: false }, { name: 'personId', nullable: false }, );
+    const optionalNumberProperties = createUserDtoOptionalProperties();
+    const optionalBooleanProperties = createUserDtoOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalUserDtoPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalUserDtoPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalUserDtoPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

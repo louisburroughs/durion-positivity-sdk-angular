@@ -30,15 +30,52 @@ export enum RescheduleAppointmentRequestReasonEnum {
 
 
 
+function isOptionalRescheduleAppointmentRequestPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type RescheduleAppointmentRequestOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createRescheduleAppointmentRequestPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createRescheduleAppointmentRequestOptionalProperties(
+    ...properties: RescheduleAppointmentRequestOptionalProperty[]
+): ReadonlyArray<RescheduleAppointmentRequestOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfRescheduleAppointmentRequest(value: object): value is RescheduleAppointmentRequest {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if (!('newStartAt' in _v) || _v['newStartAt'] === undefined) return false;
-    if (!('newEndAt' in _v) || _v['newEndAt'] === undefined) return false;
-    if (!('reason' in _v) || _v['reason'] === undefined) return false;
-    if ('reason' in _v && typeof _v['reason'] !== 'string') return false;
-    if ('rescheduleReasonNotes' in _v && typeof _v['rescheduleReasonNotes'] !== 'string') return false;
-    if ('notifyCustomer' in _v && typeof _v['notifyCustomer'] !== 'boolean') return false;
-    return true;
+
+    const requiredProperties = createRescheduleAppointmentRequestPropertyNames('newStartAt', 'newEndAt', 'reason', );
+    const optionalStringProperties = createRescheduleAppointmentRequestOptionalProperties({ name: 'reason', nullable: false }, { name: 'rescheduleReasonNotes', nullable: false }, );
+    const optionalNumberProperties = createRescheduleAppointmentRequestOptionalProperties();
+    const optionalBooleanProperties = createRescheduleAppointmentRequestOptionalProperties({ name: 'notifyCustomer', nullable: false }, );
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalRescheduleAppointmentRequestPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalRescheduleAppointmentRequestPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalRescheduleAppointmentRequestPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

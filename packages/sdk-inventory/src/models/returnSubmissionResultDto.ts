@@ -17,13 +17,52 @@ export interface ReturnSubmissionResultDto {
     processedAt?: string;
 }
 
+function isOptionalReturnSubmissionResultDtoPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type ReturnSubmissionResultDtoOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createReturnSubmissionResultDtoPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createReturnSubmissionResultDtoOptionalProperties(
+    ...properties: ReturnSubmissionResultDtoOptionalProperty[]
+): ReadonlyArray<ReturnSubmissionResultDtoOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfReturnSubmissionResultDto(value: object): value is ReturnSubmissionResultDto {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('returnId' in _v && typeof _v['returnId'] !== 'string') return false;
-    if ('workorderId' in _v && typeof _v['workorderId'] !== 'string') return false;
-    if ('processedLines' in _v && typeof _v['processedLines'] !== 'number') return false;
-    if ('status' in _v && typeof _v['status'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createReturnSubmissionResultDtoPropertyNames();
+    const optionalStringProperties = createReturnSubmissionResultDtoOptionalProperties({ name: 'returnId', nullable: false }, { name: 'workorderId', nullable: false }, { name: 'status', nullable: false }, );
+    const optionalNumberProperties = createReturnSubmissionResultDtoOptionalProperties({ name: 'processedLines', nullable: false }, );
+    const optionalBooleanProperties = createReturnSubmissionResultDtoOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalReturnSubmissionResultDtoPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalReturnSubmissionResultDtoPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalReturnSubmissionResultDtoPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

@@ -51,16 +51,52 @@ export interface ResolvePersonResponse {
     phoneNumbers?: Array<string>;
 }
 
+function isOptionalResolvePersonResponsePropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type ResolvePersonResponseOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createResolvePersonResponsePropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createResolvePersonResponseOptionalProperties(
+    ...properties: ResolvePersonResponseOptionalProperty[]
+): ReadonlyArray<ResolvePersonResponseOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfResolvePersonResponse(value: object): value is ResolvePersonResponse {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('personId' in _v && typeof _v['personId'] !== 'string') return false;
-    if ('matchedExisting' in _v && typeof _v['matchedExisting'] !== 'boolean') return false;
-    if ('score' in _v && typeof _v['score'] !== 'number') return false;
-    if ('thresholdApplied' in _v && typeof _v['thresholdApplied'] !== 'number') return false;
-    if ('firstName' in _v && typeof _v['firstName'] !== 'string') return false;
-    if ('lastName' in _v && typeof _v['lastName'] !== 'string') return false;
-    if ('primaryEmail' in _v && typeof _v['primaryEmail'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createResolvePersonResponsePropertyNames();
+    const optionalStringProperties = createResolvePersonResponseOptionalProperties({ name: 'personId', nullable: false }, { name: 'firstName', nullable: false }, { name: 'lastName', nullable: false }, { name: 'primaryEmail', nullable: false }, );
+    const optionalNumberProperties = createResolvePersonResponseOptionalProperties({ name: 'score', nullable: false }, { name: 'thresholdApplied', nullable: false }, );
+    const optionalBooleanProperties = createResolvePersonResponseOptionalProperties({ name: 'matchedExisting', nullable: false }, );
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalResolvePersonResponsePropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalResolvePersonResponsePropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalResolvePersonResponsePropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

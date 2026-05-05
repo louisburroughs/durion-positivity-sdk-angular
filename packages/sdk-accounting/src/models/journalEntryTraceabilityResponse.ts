@@ -19,11 +19,52 @@ export interface JournalEntryTraceabilityResponse {
     relatedJournalEntries?: Array<JournalEntryResponse>;
 }
 
+function isOptionalJournalEntryTraceabilityResponsePropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type JournalEntryTraceabilityResponseOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createJournalEntryTraceabilityResponsePropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createJournalEntryTraceabilityResponseOptionalProperties(
+    ...properties: JournalEntryTraceabilityResponseOptionalProperty[]
+): ReadonlyArray<JournalEntryTraceabilityResponseOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfJournalEntryTraceabilityResponse(value: object): value is JournalEntryTraceabilityResponse {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('journalEntryId' in _v && typeof _v['journalEntryId'] !== 'string') return false;
-    if ('sourceEventId' in _v && typeof _v['sourceEventId'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createJournalEntryTraceabilityResponsePropertyNames();
+    const optionalStringProperties = createJournalEntryTraceabilityResponseOptionalProperties({ name: 'journalEntryId', nullable: false }, { name: 'sourceEventId', nullable: false }, );
+    const optionalNumberProperties = createJournalEntryTraceabilityResponseOptionalProperties();
+    const optionalBooleanProperties = createJournalEntryTraceabilityResponseOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalJournalEntryTraceabilityResponsePropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalJournalEntryTraceabilityResponsePropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalJournalEntryTraceabilityResponsePropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

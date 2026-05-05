@@ -13,9 +13,52 @@ export interface PermissionDecodeResponse {
     permissions?: Array<string>;
 }
 
+function isOptionalPermissionDecodeResponsePropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type PermissionDecodeResponseOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createPermissionDecodeResponsePropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createPermissionDecodeResponseOptionalProperties(
+    ...properties: PermissionDecodeResponseOptionalProperty[]
+): ReadonlyArray<PermissionDecodeResponseOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfPermissionDecodeResponse(value: object): value is PermissionDecodeResponse {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    return true;
+
+    const requiredProperties = createPermissionDecodeResponsePropertyNames();
+    const optionalStringProperties = createPermissionDecodeResponseOptionalProperties();
+    const optionalNumberProperties = createPermissionDecodeResponseOptionalProperties();
+    const optionalBooleanProperties = createPermissionDecodeResponseOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalPermissionDecodeResponsePropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalPermissionDecodeResponsePropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalPermissionDecodeResponsePropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

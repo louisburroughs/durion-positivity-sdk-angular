@@ -20,7 +20,7 @@ export interface BillingRuleRef {
     autoPayEnabled?: boolean;
     discountPolicyRef?: string;
     currency?: string;
-    extensions?: { [key: string]: any; };
+    extensions?: object;
 }
 export enum BillingRuleRefInvoiceDeliveryMethodEnum {
     Email = 'EMAIL',
@@ -31,19 +31,52 @@ export enum BillingRuleRefInvoiceDeliveryMethodEnum {
 
 
 
+function isOptionalBillingRuleRefPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type BillingRuleRefOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createBillingRuleRefPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createBillingRuleRefOptionalProperties(
+    ...properties: BillingRuleRefOptionalProperty[]
+): ReadonlyArray<BillingRuleRefOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfBillingRuleRef(value: object): value is BillingRuleRef {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('poRequired' in _v && typeof _v['poRequired'] !== 'boolean') return false;
-    if ('taxExempt' in _v && typeof _v['taxExempt'] !== 'boolean') return false;
-    if ('paymentTerms' in _v && typeof _v['paymentTerms'] !== 'string') return false;
-    if ('creditLimit' in _v && typeof _v['creditLimit'] !== 'number') return false;
-    if ('creditHold' in _v && typeof _v['creditHold'] !== 'boolean') return false;
-    if ('invoiceDeliveryMethod' in _v && typeof _v['invoiceDeliveryMethod'] !== 'string') return false;
-    if ('billingAddressId' in _v && typeof _v['billingAddressId'] !== 'string') return false;
-    if ('autoPayEnabled' in _v && typeof _v['autoPayEnabled'] !== 'boolean') return false;
-    if ('discountPolicyRef' in _v && typeof _v['discountPolicyRef'] !== 'string') return false;
-    if ('currency' in _v && typeof _v['currency'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createBillingRuleRefPropertyNames();
+    const optionalStringProperties = createBillingRuleRefOptionalProperties({ name: 'paymentTerms', nullable: false }, { name: 'invoiceDeliveryMethod', nullable: false }, { name: 'billingAddressId', nullable: false }, { name: 'discountPolicyRef', nullable: false }, { name: 'currency', nullable: false }, );
+    const optionalNumberProperties = createBillingRuleRefOptionalProperties({ name: 'creditLimit', nullable: false }, );
+    const optionalBooleanProperties = createBillingRuleRefOptionalProperties({ name: 'poRequired', nullable: false }, { name: 'taxExempt', nullable: false }, { name: 'creditHold', nullable: false }, { name: 'autoPayEnabled', nullable: false }, );
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalBillingRuleRefPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalBillingRuleRefPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalBillingRuleRefPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

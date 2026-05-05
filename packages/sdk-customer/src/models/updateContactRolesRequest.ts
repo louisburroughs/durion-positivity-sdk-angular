@@ -18,10 +18,52 @@ export interface UpdateContactRolesRequest {
     roles?: Array<RoleAssignment>;
 }
 
+function isOptionalUpdateContactRolesRequestPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type UpdateContactRolesRequestOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createUpdateContactRolesRequestPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createUpdateContactRolesRequestOptionalProperties(
+    ...properties: UpdateContactRolesRequestOptionalProperty[]
+): ReadonlyArray<UpdateContactRolesRequestOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfUpdateContactRolesRequest(value: object): value is UpdateContactRolesRequest {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('version' in _v && typeof _v['version'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createUpdateContactRolesRequestPropertyNames();
+    const optionalStringProperties = createUpdateContactRolesRequestOptionalProperties({ name: 'version', nullable: false }, );
+    const optionalNumberProperties = createUpdateContactRolesRequestOptionalProperties();
+    const optionalBooleanProperties = createUpdateContactRolesRequestOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalUpdateContactRolesRequestPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalUpdateContactRolesRequestPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalUpdateContactRolesRequestPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

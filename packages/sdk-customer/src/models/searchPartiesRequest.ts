@@ -26,20 +26,52 @@ export interface SearchPartiesRequest {
     sortOrder?: string;
 }
 
+function isOptionalSearchPartiesRequestPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type SearchPartiesRequestOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createSearchPartiesRequestPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createSearchPartiesRequestOptionalProperties(
+    ...properties: SearchPartiesRequestOptionalProperty[]
+): ReadonlyArray<SearchPartiesRequestOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfSearchPartiesRequest(value: object): value is SearchPartiesRequest {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('name' in _v && typeof _v['name'] !== 'string') return false;
-    if ('email' in _v && typeof _v['email'] !== 'string') return false;
-    if ('phone' in _v && typeof _v['phone'] !== 'string') return false;
-    if ('taxId' in _v && typeof _v['taxId'] !== 'string') return false;
-    if ('partyType' in _v && typeof _v['partyType'] !== 'string') return false;
-    if ('status' in _v && typeof _v['status'] !== 'string') return false;
-    if ('includeMerged' in _v && typeof _v['includeMerged'] !== 'boolean') return false;
-    if ('pageNumber' in _v && typeof _v['pageNumber'] !== 'number') return false;
-    if ('pageSize' in _v && typeof _v['pageSize'] !== 'number') return false;
-    if ('sortField' in _v && typeof _v['sortField'] !== 'string') return false;
-    if ('sortOrder' in _v && typeof _v['sortOrder'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createSearchPartiesRequestPropertyNames();
+    const optionalStringProperties = createSearchPartiesRequestOptionalProperties({ name: 'name', nullable: false }, { name: 'email', nullable: false }, { name: 'phone', nullable: false }, { name: 'taxId', nullable: false }, { name: 'partyType', nullable: false }, { name: 'status', nullable: false }, { name: 'sortField', nullable: false }, { name: 'sortOrder', nullable: false }, );
+    const optionalNumberProperties = createSearchPartiesRequestOptionalProperties({ name: 'pageNumber', nullable: false }, { name: 'pageSize', nullable: false }, );
+    const optionalBooleanProperties = createSearchPartiesRequestOptionalProperties({ name: 'includeMerged', nullable: false }, );
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalSearchPartiesRequestPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalSearchPartiesRequestPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalSearchPartiesRequestPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

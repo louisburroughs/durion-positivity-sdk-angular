@@ -20,15 +20,52 @@ export interface PostingCategoryResponse {
     modifiedBy?: string;
 }
 
+function isOptionalPostingCategoryResponsePropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type PostingCategoryResponseOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createPostingCategoryResponsePropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createPostingCategoryResponseOptionalProperties(
+    ...properties: PostingCategoryResponseOptionalProperty[]
+): ReadonlyArray<PostingCategoryResponseOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfPostingCategoryResponse(value: object): value is PostingCategoryResponse {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('postingCategoryId' in _v && typeof _v['postingCategoryId'] !== 'string') return false;
-    if ('categoryName' in _v && typeof _v['categoryName'] !== 'string') return false;
-    if ('description' in _v && typeof _v['description'] !== 'string') return false;
-    if ('isActive' in _v && typeof _v['isActive'] !== 'boolean') return false;
-    if ('createdBy' in _v && typeof _v['createdBy'] !== 'string') return false;
-    if ('modifiedBy' in _v && typeof _v['modifiedBy'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createPostingCategoryResponsePropertyNames();
+    const optionalStringProperties = createPostingCategoryResponseOptionalProperties({ name: 'postingCategoryId', nullable: false }, { name: 'categoryName', nullable: false }, { name: 'description', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'modifiedBy', nullable: false }, );
+    const optionalNumberProperties = createPostingCategoryResponseOptionalProperties();
+    const optionalBooleanProperties = createPostingCategoryResponseOptionalProperties({ name: 'isActive', nullable: false }, );
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalPostingCategoryResponsePropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalPostingCategoryResponsePropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalPostingCategoryResponsePropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

@@ -17,14 +17,52 @@ export interface BulkIngestResult {
     errorMessage?: string;
 }
 
+function isOptionalBulkIngestResultPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type BulkIngestResultOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createBulkIngestResultPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createBulkIngestResultOptionalProperties(
+    ...properties: BulkIngestResultOptionalProperty[]
+): ReadonlyArray<BulkIngestResultOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfBulkIngestResult(value: object): value is BulkIngestResult {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('rowIndex' in _v && typeof _v['rowIndex'] !== 'number') return false;
-    if ('entityId' in _v && typeof _v['entityId'] !== 'string') return false;
-    if ('success' in _v && typeof _v['success'] !== 'boolean') return false;
-    if ('errorCode' in _v && typeof _v['errorCode'] !== 'string') return false;
-    if ('errorMessage' in _v && typeof _v['errorMessage'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createBulkIngestResultPropertyNames();
+    const optionalStringProperties = createBulkIngestResultOptionalProperties({ name: 'entityId', nullable: false }, { name: 'errorCode', nullable: false }, { name: 'errorMessage', nullable: false }, );
+    const optionalNumberProperties = createBulkIngestResultOptionalProperties({ name: 'rowIndex', nullable: false }, );
+    const optionalBooleanProperties = createBulkIngestResultOptionalProperties({ name: 'success', nullable: false }, );
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalBulkIngestResultPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalBulkIngestResultPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalBulkIngestResultPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

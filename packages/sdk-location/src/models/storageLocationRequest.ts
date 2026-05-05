@@ -14,8 +14,8 @@ export interface StorageLocationRequest {
     barcode?: string;
     type?: StorageLocationRequestTypeEnum;
     parentStorageLocationId?: string;
-    capacity?: { [key: string]: any; };
-    temperature?: { [key: string]: any; };
+    capacity?: object;
+    temperature?: object;
 }
 export enum StorageLocationRequestTypeEnum {
     Floor = 'FLOOR',
@@ -27,13 +27,52 @@ export enum StorageLocationRequestTypeEnum {
 
 
 
+function isOptionalStorageLocationRequestPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type StorageLocationRequestOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createStorageLocationRequestPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createStorageLocationRequestOptionalProperties(
+    ...properties: StorageLocationRequestOptionalProperty[]
+): ReadonlyArray<StorageLocationRequestOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfStorageLocationRequest(value: object): value is StorageLocationRequest {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('name' in _v && typeof _v['name'] !== 'string') return false;
-    if ('barcode' in _v && typeof _v['barcode'] !== 'string') return false;
-    if ('type' in _v && typeof _v['type'] !== 'string') return false;
-    if ('parentStorageLocationId' in _v && typeof _v['parentStorageLocationId'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createStorageLocationRequestPropertyNames();
+    const optionalStringProperties = createStorageLocationRequestOptionalProperties({ name: 'name', nullable: false }, { name: 'barcode', nullable: false }, { name: 'type', nullable: false }, { name: 'parentStorageLocationId', nullable: false }, );
+    const optionalNumberProperties = createStorageLocationRequestOptionalProperties();
+    const optionalBooleanProperties = createStorageLocationRequestOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalStorageLocationRequestPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalStorageLocationRequestPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalStorageLocationRequestPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

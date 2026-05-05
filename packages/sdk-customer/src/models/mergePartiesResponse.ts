@@ -18,15 +18,52 @@ export interface MergePartiesResponse {
     completedAt?: string;
 }
 
+function isOptionalMergePartiesResponsePropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type MergePartiesResponseOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createMergePartiesResponsePropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createMergePartiesResponseOptionalProperties(
+    ...properties: MergePartiesResponseOptionalProperty[]
+): ReadonlyArray<MergePartiesResponseOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfMergePartiesResponse(value: object): value is MergePartiesResponse {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('mergeAuditId' in _v && typeof _v['mergeAuditId'] !== 'string') return false;
-    if ('survivorPartyId' in _v && typeof _v['survivorPartyId'] !== 'string') return false;
-    if ('losingPartyId' in _v && typeof _v['losingPartyId'] !== 'string') return false;
-    if ('mergedPartyAlias' in _v && typeof _v['mergedPartyAlias'] !== 'string') return false;
-    if ('status' in _v && typeof _v['status'] !== 'string') return false;
-    if ('completedAt' in _v && typeof _v['completedAt'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createMergePartiesResponsePropertyNames();
+    const optionalStringProperties = createMergePartiesResponseOptionalProperties({ name: 'mergeAuditId', nullable: false }, { name: 'survivorPartyId', nullable: false }, { name: 'losingPartyId', nullable: false }, { name: 'mergedPartyAlias', nullable: false }, { name: 'status', nullable: false }, { name: 'completedAt', nullable: false }, );
+    const optionalNumberProperties = createMergePartiesResponseOptionalProperties();
+    const optionalBooleanProperties = createMergePartiesResponseOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalMergePartiesResponsePropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalMergePartiesResponsePropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalMergePartiesResponsePropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

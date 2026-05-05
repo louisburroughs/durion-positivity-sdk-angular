@@ -17,15 +17,52 @@ export interface CreateGoodsReceiptRequest {
     lines: Array<CreateGoodsReceiptLineRequest>;
 }
 
+function isOptionalCreateGoodsReceiptRequestPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type CreateGoodsReceiptRequestOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createCreateGoodsReceiptRequestPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createCreateGoodsReceiptRequestOptionalProperties(
+    ...properties: CreateGoodsReceiptRequestOptionalProperty[]
+): ReadonlyArray<CreateGoodsReceiptRequestOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfCreateGoodsReceiptRequest(value: object): value is CreateGoodsReceiptRequest {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if (!('poId' in _v) || _v['poId'] === undefined) return false;
-    if ('poId' in _v && typeof _v['poId'] !== 'string') return false;
-    if ('asnId' in _v && typeof _v['asnId'] !== 'string') return false;
-    if (!('locationId' in _v) || _v['locationId'] === undefined) return false;
-    if ('locationId' in _v && typeof _v['locationId'] !== 'string') return false;
-    if (!('lines' in _v) || _v['lines'] === undefined) return false;
-    return true;
+
+    const requiredProperties = createCreateGoodsReceiptRequestPropertyNames('poId', 'locationId', 'lines', );
+    const optionalStringProperties = createCreateGoodsReceiptRequestOptionalProperties({ name: 'poId', nullable: false }, { name: 'asnId', nullable: false }, { name: 'locationId', nullable: false }, );
+    const optionalNumberProperties = createCreateGoodsReceiptRequestOptionalProperties();
+    const optionalBooleanProperties = createCreateGoodsReceiptRequestOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalCreateGoodsReceiptRequestPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalCreateGoodsReceiptRequestPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalCreateGoodsReceiptRequestPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

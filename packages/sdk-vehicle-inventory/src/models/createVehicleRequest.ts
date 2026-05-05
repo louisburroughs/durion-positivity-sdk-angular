@@ -55,23 +55,52 @@ export interface CreateVehicleRequest {
     trim?: string;
 }
 
+function isOptionalCreateVehicleRequestPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type CreateVehicleRequestOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createCreateVehicleRequestPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createCreateVehicleRequestOptionalProperties(
+    ...properties: CreateVehicleRequestOptionalProperty[]
+): ReadonlyArray<CreateVehicleRequestOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfCreateVehicleRequest(value: object): value is CreateVehicleRequest {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if (!('accountId' in _v) || _v['accountId'] === undefined) return false;
-    if ('accountId' in _v && typeof _v['accountId'] !== 'string') return false;
-    if (!('vin' in _v) || _v['vin'] === undefined) return false;
-    if ('vin' in _v && typeof _v['vin'] !== 'string') return false;
-    if (!('unitNumber' in _v) || _v['unitNumber'] === undefined) return false;
-    if ('unitNumber' in _v && typeof _v['unitNumber'] !== 'string') return false;
-    if (!('description' in _v) || _v['description'] === undefined) return false;
-    if ('description' in _v && typeof _v['description'] !== 'string') return false;
-    if ('licensePlate' in _v && typeof _v['licensePlate'] !== 'string') return false;
-    if ('licensePlateJurisdiction' in _v && typeof _v['licensePlateJurisdiction'] !== 'string') return false;
-    if ('year' in _v && typeof _v['year'] !== 'number') return false;
-    if ('make' in _v && typeof _v['make'] !== 'string') return false;
-    if ('model' in _v && typeof _v['model'] !== 'string') return false;
-    if ('trim' in _v && typeof _v['trim'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createCreateVehicleRequestPropertyNames('accountId', 'vin', 'unitNumber', 'description', );
+    const optionalStringProperties = createCreateVehicleRequestOptionalProperties({ name: 'accountId', nullable: false }, { name: 'vin', nullable: false }, { name: 'unitNumber', nullable: false }, { name: 'description', nullable: false }, { name: 'licensePlate', nullable: false }, { name: 'licensePlateJurisdiction', nullable: false }, { name: 'make', nullable: false }, { name: 'model', nullable: false }, { name: 'trim', nullable: false }, );
+    const optionalNumberProperties = createCreateVehicleRequestOptionalProperties({ name: 'year', nullable: false }, );
+    const optionalBooleanProperties = createCreateVehicleRequestOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalCreateVehicleRequestPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalCreateVehicleRequestPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalCreateVehicleRequestPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

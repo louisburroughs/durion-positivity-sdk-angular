@@ -19,15 +19,52 @@ export interface PersonDTO {
     username?: string;
 }
 
+function isOptionalPersonDTOPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type PersonDTOOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createPersonDTOPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createPersonDTOOptionalProperties(
+    ...properties: PersonDTOOptionalProperty[]
+): ReadonlyArray<PersonDTOOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfPersonDTO(value: object): value is PersonDTO {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('id' in _v && typeof _v['id'] !== 'number') return false;
-    if ('firstName' in _v && typeof _v['firstName'] !== 'string') return false;
-    if ('lastName' in _v && typeof _v['lastName'] !== 'string') return false;
-    if ('primaryEmail' in _v && typeof _v['primaryEmail'] !== 'string') return false;
-    if ('secondaryEmail' in _v && typeof _v['secondaryEmail'] !== 'string') return false;
-    if ('username' in _v && typeof _v['username'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createPersonDTOPropertyNames();
+    const optionalStringProperties = createPersonDTOOptionalProperties({ name: 'firstName', nullable: false }, { name: 'lastName', nullable: false }, { name: 'primaryEmail', nullable: false }, { name: 'secondaryEmail', nullable: false }, { name: 'username', nullable: false }, );
+    const optionalNumberProperties = createPersonDTOOptionalProperties({ name: 'id', nullable: false }, );
+    const optionalBooleanProperties = createPersonDTOOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalPersonDTOPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalPersonDTOPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalPersonDTOPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

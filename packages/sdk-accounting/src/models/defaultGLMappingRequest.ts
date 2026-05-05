@@ -18,18 +18,52 @@ export interface DefaultGLMappingRequest {
     active?: boolean;
 }
 
+function isOptionalDefaultGLMappingRequestPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type DefaultGLMappingRequestOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createDefaultGLMappingRequestPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createDefaultGLMappingRequestOptionalProperties(
+    ...properties: DefaultGLMappingRequestOptionalProperty[]
+): ReadonlyArray<DefaultGLMappingRequestOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfDefaultGLMappingRequest(value: object): value is DefaultGLMappingRequest {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if (!('eventType' in _v) || _v['eventType'] === undefined) return false;
-    if ('eventType' in _v && typeof _v['eventType'] !== 'string') return false;
-    if ('organizationId' in _v && typeof _v['organizationId'] !== 'string') return false;
-    if (!('debitAccountId' in _v) || _v['debitAccountId'] === undefined) return false;
-    if ('debitAccountId' in _v && typeof _v['debitAccountId'] !== 'string') return false;
-    if (!('creditAccountId' in _v) || _v['creditAccountId'] === undefined) return false;
-    if ('creditAccountId' in _v && typeof _v['creditAccountId'] !== 'string') return false;
-    if ('description' in _v && typeof _v['description'] !== 'string') return false;
-    if ('active' in _v && typeof _v['active'] !== 'boolean') return false;
-    return true;
+
+    const requiredProperties = createDefaultGLMappingRequestPropertyNames('eventType', 'debitAccountId', 'creditAccountId', );
+    const optionalStringProperties = createDefaultGLMappingRequestOptionalProperties({ name: 'eventType', nullable: false }, { name: 'organizationId', nullable: false }, { name: 'debitAccountId', nullable: false }, { name: 'creditAccountId', nullable: false }, { name: 'description', nullable: false }, );
+    const optionalNumberProperties = createDefaultGLMappingRequestOptionalProperties();
+    const optionalBooleanProperties = createDefaultGLMappingRequestOptionalProperties({ name: 'active', nullable: false }, );
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalDefaultGLMappingRequestPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalDefaultGLMappingRequestPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalDefaultGLMappingRequestPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

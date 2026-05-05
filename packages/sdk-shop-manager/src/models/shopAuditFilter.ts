@@ -56,15 +56,52 @@ export enum ShopAuditFilterEventTypeEnum {
 
 
 
+function isOptionalShopAuditFilterPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type ShopAuditFilterOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createShopAuditFilterPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createShopAuditFilterOptionalProperties(
+    ...properties: ShopAuditFilterOptionalProperty[]
+): ReadonlyArray<ShopAuditFilterOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfShopAuditFilter(value: object): value is ShopAuditFilter {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('workorderId' in _v && typeof _v['workorderId'] !== 'string') return false;
-    if ('appointmentId' in _v && typeof _v['appointmentId'] !== 'string') return false;
-    if ('mechanicId' in _v && typeof _v['mechanicId'] !== 'string') return false;
-    if ('actorUserId' in _v && typeof _v['actorUserId'] !== 'string') return false;
-    if ('eventType' in _v && typeof _v['eventType'] !== 'string') return false;
-    if ('locationId' in _v && typeof _v['locationId'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createShopAuditFilterPropertyNames();
+    const optionalStringProperties = createShopAuditFilterOptionalProperties({ name: 'workorderId', nullable: false }, { name: 'appointmentId', nullable: false }, { name: 'mechanicId', nullable: false }, { name: 'actorUserId', nullable: false }, { name: 'eventType', nullable: false }, { name: 'locationId', nullable: false }, );
+    const optionalNumberProperties = createShopAuditFilterOptionalProperties();
+    const optionalBooleanProperties = createShopAuditFilterOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalShopAuditFilterPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalShopAuditFilterPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalShopAuditFilterPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

@@ -71,24 +71,52 @@ export enum TaxCalculationResponseReferenceTypeEnum {
 
 
 
+function isOptionalTaxCalculationResponsePropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type TaxCalculationResponseOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createTaxCalculationResponsePropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createTaxCalculationResponseOptionalProperties(
+    ...properties: TaxCalculationResponseOptionalProperty[]
+): ReadonlyArray<TaxCalculationResponseOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfTaxCalculationResponse(value: object): value is TaxCalculationResponse {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if (!('subtotal' in _v) || _v['subtotal'] === undefined) return false;
-    if ('subtotal' in _v && typeof _v['subtotal'] !== 'number') return false;
-    if (!('totalTax' in _v) || _v['totalTax'] === undefined) return false;
-    if ('totalTax' in _v && typeof _v['totalTax'] !== 'number') return false;
-    if (!('total' in _v) || _v['total'] === undefined) return false;
-    if ('total' in _v && typeof _v['total'] !== 'number') return false;
-    if (!('effectiveTaxRate' in _v) || _v['effectiveTaxRate'] === undefined) return false;
-    if ('effectiveTaxRate' in _v && typeof _v['effectiveTaxRate'] !== 'number') return false;
-    if (!('jurisdictions' in _v) || _v['jurisdictions'] === undefined) return false;
-    if (!('lineItemTaxes' in _v) || _v['lineItemTaxes'] === undefined) return false;
-    if ('testMode' in _v && typeof _v['testMode'] !== 'boolean') return false;
-    if (!('calculatedAt' in _v) || _v['calculatedAt'] === undefined) return false;
-    if ('referenceId' in _v && typeof _v['referenceId'] !== 'string') return false;
-    if ('referenceType' in _v && typeof _v['referenceType'] !== 'string') return false;
-    if ('externalTransactionId' in _v && typeof _v['externalTransactionId'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createTaxCalculationResponsePropertyNames('subtotal', 'totalTax', 'total', 'effectiveTaxRate', 'jurisdictions', 'lineItemTaxes', 'calculatedAt', );
+    const optionalStringProperties = createTaxCalculationResponseOptionalProperties({ name: 'referenceId', nullable: false }, { name: 'referenceType', nullable: false }, { name: 'externalTransactionId', nullable: false }, );
+    const optionalNumberProperties = createTaxCalculationResponseOptionalProperties({ name: 'subtotal', nullable: false }, { name: 'totalTax', nullable: false }, { name: 'total', nullable: false }, { name: 'effectiveTaxRate', nullable: false }, );
+    const optionalBooleanProperties = createTaxCalculationResponseOptionalProperties({ name: 'testMode', nullable: false }, );
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalTaxCalculationResponsePropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalTaxCalculationResponsePropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalTaxCalculationResponsePropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

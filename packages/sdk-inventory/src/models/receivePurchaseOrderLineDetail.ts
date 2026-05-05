@@ -14,11 +14,52 @@ export interface ReceivePurchaseOrderLineDetail {
     openQuantityDecimal?: number;
 }
 
+function isOptionalReceivePurchaseOrderLineDetailPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type ReceivePurchaseOrderLineDetailOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createReceivePurchaseOrderLineDetailPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createReceivePurchaseOrderLineDetailOptionalProperties(
+    ...properties: ReceivePurchaseOrderLineDetailOptionalProperty[]
+): ReadonlyArray<ReceivePurchaseOrderLineDetailOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfReceivePurchaseOrderLineDetail(value: object): value is ReceivePurchaseOrderLineDetail {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('lineId' in _v && typeof _v['lineId'] !== 'string') return false;
-    if ('openQuantityDecimal' in _v && typeof _v['openQuantityDecimal'] !== 'number') return false;
-    return true;
+
+    const requiredProperties = createReceivePurchaseOrderLineDetailPropertyNames();
+    const optionalStringProperties = createReceivePurchaseOrderLineDetailOptionalProperties({ name: 'lineId', nullable: false }, );
+    const optionalNumberProperties = createReceivePurchaseOrderLineDetailOptionalProperties({ name: 'openQuantityDecimal', nullable: false }, );
+    const optionalBooleanProperties = createReceivePurchaseOrderLineDetailOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalReceivePurchaseOrderLineDetailPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalReceivePurchaseOrderLineDetailPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalReceivePurchaseOrderLineDetailPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

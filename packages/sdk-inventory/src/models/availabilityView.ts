@@ -19,16 +19,52 @@ export interface AvailabilityView {
     unitOfMeasure?: string;
 }
 
+function isOptionalAvailabilityViewPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type AvailabilityViewOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createAvailabilityViewPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createAvailabilityViewOptionalProperties(
+    ...properties: AvailabilityViewOptionalProperty[]
+): ReadonlyArray<AvailabilityViewOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfAvailabilityView(value: object): value is AvailabilityView {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('productSku' in _v && typeof _v['productSku'] !== 'string') return false;
-    if ('locationId' in _v && typeof _v['locationId'] !== 'string') return false;
-    if ('storageLocationId' in _v && typeof _v['storageLocationId'] !== 'string') return false;
-    if ('onHandQuantity' in _v && typeof _v['onHandQuantity'] !== 'number') return false;
-    if ('allocatedQuantity' in _v && typeof _v['allocatedQuantity'] !== 'number') return false;
-    if ('availableToPromiseQuantity' in _v && typeof _v['availableToPromiseQuantity'] !== 'number') return false;
-    if ('unitOfMeasure' in _v && typeof _v['unitOfMeasure'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createAvailabilityViewPropertyNames();
+    const optionalStringProperties = createAvailabilityViewOptionalProperties({ name: 'productSku', nullable: false }, { name: 'locationId', nullable: false }, { name: 'storageLocationId', nullable: false }, { name: 'unitOfMeasure', nullable: false }, );
+    const optionalNumberProperties = createAvailabilityViewOptionalProperties({ name: 'onHandQuantity', nullable: false }, { name: 'allocatedQuantity', nullable: false }, { name: 'availableToPromiseQuantity', nullable: false }, );
+    const optionalBooleanProperties = createAvailabilityViewOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalAvailabilityViewPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalAvailabilityViewPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalAvailabilityViewPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

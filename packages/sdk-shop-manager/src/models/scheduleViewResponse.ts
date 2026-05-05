@@ -21,11 +21,52 @@ export interface ScheduleViewResponse {
     resources?: Array<ScheduleResourceView>;
 }
 
+function isOptionalScheduleViewResponsePropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type ScheduleViewResponseOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createScheduleViewResponsePropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createScheduleViewResponseOptionalProperties(
+    ...properties: ScheduleViewResponseOptionalProperty[]
+): ReadonlyArray<ScheduleViewResponseOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfScheduleViewResponse(value: object): value is ScheduleViewResponse {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('locationId' in _v && typeof _v['locationId'] !== 'string') return false;
-    if ('availabilityOverlayStatus' in _v && typeof _v['availabilityOverlayStatus'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createScheduleViewResponsePropertyNames();
+    const optionalStringProperties = createScheduleViewResponseOptionalProperties({ name: 'locationId', nullable: false }, { name: 'availabilityOverlayStatus', nullable: false }, );
+    const optionalNumberProperties = createScheduleViewResponseOptionalProperties();
+    const optionalBooleanProperties = createScheduleViewResponseOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalScheduleViewResponsePropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalScheduleViewResponsePropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalScheduleViewResponsePropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

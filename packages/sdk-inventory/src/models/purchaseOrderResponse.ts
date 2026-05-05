@@ -48,28 +48,52 @@ export enum PurchaseOrderResponseStatusEnum {
 
 
 
+function isOptionalPurchaseOrderResponsePropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type PurchaseOrderResponseOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createPurchaseOrderResponsePropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createPurchaseOrderResponseOptionalProperties(
+    ...properties: PurchaseOrderResponseOptionalProperty[]
+): ReadonlyArray<PurchaseOrderResponseOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfPurchaseOrderResponse(value: object): value is PurchaseOrderResponse {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('purchaseOrderId' in _v && typeof _v['purchaseOrderId'] !== 'string') return false;
-    if ('vendorId' in _v && typeof _v['vendorId'] !== 'string') return false;
-    if ('poNumber' in _v && typeof _v['poNumber'] !== 'string') return false;
-    if ('status' in _v && typeof _v['status'] !== 'string') return false;
-    if ('versionNumber' in _v && typeof _v['versionNumber'] !== 'number') return false;
-    if ('currency' in _v && typeof _v['currency'] !== 'string') return false;
-    if ('subtotalMinor' in _v && typeof _v['subtotalMinor'] !== 'number') return false;
-    if ('taxMinor' in _v && typeof _v['taxMinor'] !== 'number') return false;
-    if ('grandTotalMinor' in _v && typeof _v['grandTotalMinor'] !== 'number') return false;
-    if ('openBalanceMinor' in _v && typeof _v['openBalanceMinor'] !== 'number') return false;
-    if ('shipToLocationId' in _v && typeof _v['shipToLocationId'] !== 'string') return false;
-    if ('paymentTermsId' in _v && typeof _v['paymentTermsId'] !== 'string') return false;
-    if ('requestedBy' in _v && typeof _v['requestedBy'] !== 'string') return false;
-    if ('comment' in _v && typeof _v['comment'] !== 'string') return false;
-    if ('approverId' in _v && typeof _v['approverId'] !== 'string') return false;
-    if ('approvalNotes' in _v && typeof _v['approvalNotes'] !== 'string') return false;
-    if ('encumbranceRef' in _v && typeof _v['encumbranceRef'] !== 'string') return false;
-    if ('createdBy' in _v && typeof _v['createdBy'] !== 'string') return false;
-    if ('updatedBy' in _v && typeof _v['updatedBy'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createPurchaseOrderResponsePropertyNames();
+    const optionalStringProperties = createPurchaseOrderResponseOptionalProperties({ name: 'purchaseOrderId', nullable: false }, { name: 'vendorId', nullable: false }, { name: 'poNumber', nullable: false }, { name: 'status', nullable: false }, { name: 'currency', nullable: false }, { name: 'shipToLocationId', nullable: false }, { name: 'paymentTermsId', nullable: false }, { name: 'requestedBy', nullable: false }, { name: 'comment', nullable: false }, { name: 'approverId', nullable: false }, { name: 'approvalNotes', nullable: false }, { name: 'encumbranceRef', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'updatedBy', nullable: false }, );
+    const optionalNumberProperties = createPurchaseOrderResponseOptionalProperties({ name: 'versionNumber', nullable: false }, { name: 'subtotalMinor', nullable: false }, { name: 'taxMinor', nullable: false }, { name: 'grandTotalMinor', nullable: false }, { name: 'openBalanceMinor', nullable: false }, );
+    const optionalBooleanProperties = createPurchaseOrderResponseOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalPurchaseOrderResponsePropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalPurchaseOrderResponsePropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalPurchaseOrderResponsePropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

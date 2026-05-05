@@ -15,12 +15,52 @@ export interface ConsumeItemLine {
     quantity?: number;
 }
 
+function isOptionalConsumeItemLinePropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type ConsumeItemLineOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createConsumeItemLinePropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createConsumeItemLineOptionalProperties(
+    ...properties: ConsumeItemLineOptionalProperty[]
+): ReadonlyArray<ConsumeItemLineOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfConsumeItemLine(value: object): value is ConsumeItemLine {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('pickTaskId' in _v && typeof _v['pickTaskId'] !== 'string') return false;
-    if ('skuId' in _v && typeof _v['skuId'] !== 'string') return false;
-    if ('quantity' in _v && typeof _v['quantity'] !== 'number') return false;
-    return true;
+
+    const requiredProperties = createConsumeItemLinePropertyNames();
+    const optionalStringProperties = createConsumeItemLineOptionalProperties({ name: 'pickTaskId', nullable: false }, { name: 'skuId', nullable: false }, );
+    const optionalNumberProperties = createConsumeItemLineOptionalProperties({ name: 'quantity', nullable: false }, );
+    const optionalBooleanProperties = createConsumeItemLineOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalConsumeItemLinePropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalConsumeItemLinePropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalConsumeItemLinePropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

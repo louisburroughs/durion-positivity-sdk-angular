@@ -19,13 +19,52 @@ export interface BalanceSheetReport {
     balanced?: boolean;
 }
 
+function isOptionalBalanceSheetReportPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type BalanceSheetReportOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createBalanceSheetReportPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createBalanceSheetReportOptionalProperties(
+    ...properties: BalanceSheetReportOptionalProperty[]
+): ReadonlyArray<BalanceSheetReportOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfBalanceSheetReport(value: object): value is BalanceSheetReport {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('totalAssets' in _v && typeof _v['totalAssets'] !== 'number') return false;
-    if ('totalLiabilities' in _v && typeof _v['totalLiabilities'] !== 'number') return false;
-    if ('totalEquity' in _v && typeof _v['totalEquity'] !== 'number') return false;
-    if ('balanced' in _v && typeof _v['balanced'] !== 'boolean') return false;
-    return true;
+
+    const requiredProperties = createBalanceSheetReportPropertyNames();
+    const optionalStringProperties = createBalanceSheetReportOptionalProperties();
+    const optionalNumberProperties = createBalanceSheetReportOptionalProperties({ name: 'totalAssets', nullable: false }, { name: 'totalLiabilities', nullable: false }, { name: 'totalEquity', nullable: false }, );
+    const optionalBooleanProperties = createBalanceSheetReportOptionalProperties({ name: 'balanced', nullable: false }, );
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalBalanceSheetReportPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalBalanceSheetReportPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalBalanceSheetReportPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

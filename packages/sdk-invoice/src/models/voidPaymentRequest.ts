@@ -24,12 +24,52 @@ export enum VoidPaymentRequestReasonEnum {
 
 
 
+function isOptionalVoidPaymentRequestPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type VoidPaymentRequestOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createVoidPaymentRequestPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createVoidPaymentRequestOptionalProperties(
+    ...properties: VoidPaymentRequestOptionalProperty[]
+): ReadonlyArray<VoidPaymentRequestOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfVoidPaymentRequest(value: object): value is VoidPaymentRequest {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if (!('reason' in _v) || _v['reason'] === undefined) return false;
-    if ('reason' in _v && typeof _v['reason'] !== 'string') return false;
-    if ('notes' in _v && typeof _v['notes'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createVoidPaymentRequestPropertyNames('reason', );
+    const optionalStringProperties = createVoidPaymentRequestOptionalProperties({ name: 'reason', nullable: false }, { name: 'notes', nullable: false }, );
+    const optionalNumberProperties = createVoidPaymentRequestOptionalProperties();
+    const optionalBooleanProperties = createVoidPaymentRequestOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalVoidPaymentRequestPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalVoidPaymentRequestPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalVoidPaymentRequestPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

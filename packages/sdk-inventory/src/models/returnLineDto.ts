@@ -17,17 +17,52 @@ export interface ReturnLineDto {
     storageLocationId?: string;
 }
 
+function isOptionalReturnLineDtoPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type ReturnLineDtoOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createReturnLineDtoPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createReturnLineDtoOptionalProperties(
+    ...properties: ReturnLineDtoOptionalProperty[]
+): ReadonlyArray<ReturnLineDtoOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfReturnLineDto(value: object): value is ReturnLineDto {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if (!('itemId' in _v) || _v['itemId'] === undefined) return false;
-    if ('itemId' in _v && typeof _v['itemId'] !== 'string') return false;
-    if ('quantity' in _v && typeof _v['quantity'] !== 'number') return false;
-    if (!('reasonCode' in _v) || _v['reasonCode'] === undefined) return false;
-    if ('reasonCode' in _v && typeof _v['reasonCode'] !== 'string') return false;
-    if (!('locationId' in _v) || _v['locationId'] === undefined) return false;
-    if ('locationId' in _v && typeof _v['locationId'] !== 'string') return false;
-    if ('storageLocationId' in _v && typeof _v['storageLocationId'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createReturnLineDtoPropertyNames('itemId', 'reasonCode', 'locationId', );
+    const optionalStringProperties = createReturnLineDtoOptionalProperties({ name: 'itemId', nullable: false }, { name: 'reasonCode', nullable: false }, { name: 'locationId', nullable: false }, { name: 'storageLocationId', nullable: false }, );
+    const optionalNumberProperties = createReturnLineDtoOptionalProperties({ name: 'quantity', nullable: false }, );
+    const optionalBooleanProperties = createReturnLineDtoOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalReturnLineDtoPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalReturnLineDtoPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalReturnLineDtoPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

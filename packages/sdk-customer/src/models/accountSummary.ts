@@ -16,13 +16,52 @@ export interface AccountSummary {
     accountType?: string;
 }
 
+function isOptionalAccountSummaryPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type AccountSummaryOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createAccountSummaryPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createAccountSummaryOptionalProperties(
+    ...properties: AccountSummaryOptionalProperty[]
+): ReadonlyArray<AccountSummaryOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfAccountSummary(value: object): value is AccountSummary {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('partyId' in _v && typeof _v['partyId'] !== 'string') return false;
-    if ('accountNumber' in _v && typeof _v['accountNumber'] !== 'string') return false;
-    if ('accountName' in _v && typeof _v['accountName'] !== 'string') return false;
-    if ('accountType' in _v && typeof _v['accountType'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createAccountSummaryPropertyNames();
+    const optionalStringProperties = createAccountSummaryOptionalProperties({ name: 'partyId', nullable: false }, { name: 'accountNumber', nullable: false }, { name: 'accountName', nullable: false }, { name: 'accountType', nullable: false }, );
+    const optionalNumberProperties = createAccountSummaryOptionalProperties();
+    const optionalBooleanProperties = createAccountSummaryOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalAccountSummaryPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalAccountSummaryPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalAccountSummaryPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

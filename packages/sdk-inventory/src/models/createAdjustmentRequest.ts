@@ -18,21 +18,52 @@ export interface CreateAdjustmentRequest {
     createdByUserId: string;
 }
 
+function isOptionalCreateAdjustmentRequestPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type CreateAdjustmentRequestOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createCreateAdjustmentRequestPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createCreateAdjustmentRequestOptionalProperties(
+    ...properties: CreateAdjustmentRequestOptionalProperty[]
+): ReadonlyArray<CreateAdjustmentRequestOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfCreateAdjustmentRequest(value: object): value is CreateAdjustmentRequest {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if (!('stockItemId' in _v) || _v['stockItemId'] === undefined) return false;
-    if ('stockItemId' in _v && typeof _v['stockItemId'] !== 'string') return false;
-    if (!('reasonCode' in _v) || _v['reasonCode'] === undefined) return false;
-    if ('reasonCode' in _v && typeof _v['reasonCode'] !== 'string') return false;
-    if (!('countedQuantity' in _v) || _v['countedQuantity'] === undefined) return false;
-    if ('countedQuantity' in _v && typeof _v['countedQuantity'] !== 'number') return false;
-    if (!('quantityOnHandBefore' in _v) || _v['quantityOnHandBefore'] === undefined) return false;
-    if ('quantityOnHandBefore' in _v && typeof _v['quantityOnHandBefore'] !== 'number') return false;
-    if (!('costAtTimeOfAdjustment' in _v) || _v['costAtTimeOfAdjustment'] === undefined) return false;
-    if ('costAtTimeOfAdjustment' in _v && typeof _v['costAtTimeOfAdjustment'] !== 'number') return false;
-    if (!('createdByUserId' in _v) || _v['createdByUserId'] === undefined) return false;
-    if ('createdByUserId' in _v && typeof _v['createdByUserId'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createCreateAdjustmentRequestPropertyNames('stockItemId', 'reasonCode', 'countedQuantity', 'quantityOnHandBefore', 'costAtTimeOfAdjustment', 'createdByUserId', );
+    const optionalStringProperties = createCreateAdjustmentRequestOptionalProperties({ name: 'stockItemId', nullable: false }, { name: 'reasonCode', nullable: false }, { name: 'createdByUserId', nullable: false }, );
+    const optionalNumberProperties = createCreateAdjustmentRequestOptionalProperties({ name: 'countedQuantity', nullable: false }, { name: 'quantityOnHandBefore', nullable: false }, { name: 'costAtTimeOfAdjustment', nullable: false }, );
+    const optionalBooleanProperties = createCreateAdjustmentRequestOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalCreateAdjustmentRequestPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalCreateAdjustmentRequestPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalCreateAdjustmentRequestPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

@@ -43,18 +43,52 @@ export interface EventTypeRequest {
     p99Micros?: number;
 }
 
+function isOptionalEventTypeRequestPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type EventTypeRequestOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createEventTypeRequestPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createEventTypeRequestOptionalProperties(
+    ...properties: EventTypeRequestOptionalProperty[]
+): ReadonlyArray<EventTypeRequestOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfEventTypeRequest(value: object): value is EventTypeRequest {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if (!('typeCode' in _v) || _v['typeCode'] === undefined) return false;
-    if ('typeCode' in _v && typeof _v['typeCode'] !== 'string') return false;
-    if (!('description' in _v) || _v['description'] === undefined) return false;
-    if ('description' in _v && typeof _v['description'] !== 'string') return false;
-    if ('active' in _v && typeof _v['active'] !== 'boolean') return false;
-    if ('apiVersion' in _v && typeof _v['apiVersion'] !== 'string') return false;
-    if ('p50Micros' in _v && typeof _v['p50Micros'] !== 'number') return false;
-    if ('p95Micros' in _v && typeof _v['p95Micros'] !== 'number') return false;
-    if ('p99Micros' in _v && typeof _v['p99Micros'] !== 'number') return false;
-    return true;
+
+    const requiredProperties = createEventTypeRequestPropertyNames('typeCode', 'description', );
+    const optionalStringProperties = createEventTypeRequestOptionalProperties({ name: 'typeCode', nullable: false }, { name: 'description', nullable: false }, { name: 'apiVersion', nullable: false }, );
+    const optionalNumberProperties = createEventTypeRequestOptionalProperties({ name: 'p50Micros', nullable: false }, { name: 'p95Micros', nullable: false }, { name: 'p99Micros', nullable: false }, );
+    const optionalBooleanProperties = createEventTypeRequestOptionalProperties({ name: 'active', nullable: false }, );
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalEventTypeRequestPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalEventTypeRequestPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalEventTypeRequestPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

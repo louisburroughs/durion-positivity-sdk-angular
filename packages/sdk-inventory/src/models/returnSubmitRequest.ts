@@ -15,12 +15,52 @@ export interface ReturnSubmitRequest {
     lines: Array<ReturnLineDto>;
 }
 
+function isOptionalReturnSubmitRequestPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type ReturnSubmitRequestOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createReturnSubmitRequestPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createReturnSubmitRequestOptionalProperties(
+    ...properties: ReturnSubmitRequestOptionalProperty[]
+): ReadonlyArray<ReturnSubmitRequestOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfReturnSubmitRequest(value: object): value is ReturnSubmitRequest {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if (!('workorderId' in _v) || _v['workorderId'] === undefined) return false;
-    if ('workorderId' in _v && typeof _v['workorderId'] !== 'string') return false;
-    if (!('lines' in _v) || _v['lines'] === undefined) return false;
-    return true;
+
+    const requiredProperties = createReturnSubmitRequestPropertyNames('workorderId', 'lines', );
+    const optionalStringProperties = createReturnSubmitRequestOptionalProperties({ name: 'workorderId', nullable: false }, );
+    const optionalNumberProperties = createReturnSubmitRequestOptionalProperties();
+    const optionalBooleanProperties = createReturnSubmitRequestOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalReturnSubmitRequestPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalReturnSubmitRequestPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalReturnSubmitRequestPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

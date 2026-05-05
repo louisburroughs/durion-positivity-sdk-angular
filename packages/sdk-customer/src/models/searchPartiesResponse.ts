@@ -17,12 +17,52 @@ export interface SearchPartiesResponse {
     pageSize?: number;
 }
 
+function isOptionalSearchPartiesResponsePropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type SearchPartiesResponseOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createSearchPartiesResponsePropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createSearchPartiesResponseOptionalProperties(
+    ...properties: SearchPartiesResponseOptionalProperty[]
+): ReadonlyArray<SearchPartiesResponseOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfSearchPartiesResponse(value: object): value is SearchPartiesResponse {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('totalCount' in _v && typeof _v['totalCount'] !== 'number') return false;
-    if ('pageNumber' in _v && typeof _v['pageNumber'] !== 'number') return false;
-    if ('pageSize' in _v && typeof _v['pageSize'] !== 'number') return false;
-    return true;
+
+    const requiredProperties = createSearchPartiesResponsePropertyNames();
+    const optionalStringProperties = createSearchPartiesResponseOptionalProperties();
+    const optionalNumberProperties = createSearchPartiesResponseOptionalProperties({ name: 'totalCount', nullable: false }, { name: 'pageNumber', nullable: false }, { name: 'pageSize', nullable: false }, );
+    const optionalBooleanProperties = createSearchPartiesResponseOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalSearchPartiesResponsePropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalSearchPartiesResponsePropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalSearchPartiesResponsePropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

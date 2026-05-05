@@ -14,13 +14,52 @@ export interface RevertRequest {
     reason: string;
 }
 
+function isOptionalRevertRequestPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type RevertRequestOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createRevertRequestPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createRevertRequestOptionalProperties(
+    ...properties: RevertRequestOptionalProperty[]
+): ReadonlyArray<RevertRequestOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfRevertRequest(value: object): value is RevertRequest {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if (!('managerApprovalCode' in _v) || _v['managerApprovalCode'] === undefined) return false;
-    if ('managerApprovalCode' in _v && typeof _v['managerApprovalCode'] !== 'string') return false;
-    if (!('reason' in _v) || _v['reason'] === undefined) return false;
-    if ('reason' in _v && typeof _v['reason'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createRevertRequestPropertyNames('managerApprovalCode', 'reason', );
+    const optionalStringProperties = createRevertRequestOptionalProperties({ name: 'managerApprovalCode', nullable: false }, { name: 'reason', nullable: false }, );
+    const optionalNumberProperties = createRevertRequestOptionalProperties();
+    const optionalBooleanProperties = createRevertRequestOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalRevertRequestPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalRevertRequestPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalRevertRequestPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

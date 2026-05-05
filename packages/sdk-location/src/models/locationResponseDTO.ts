@@ -27,22 +27,52 @@ export interface LocationResponseDTO {
     type?: LocationTypeDTO;
 }
 
+function isOptionalLocationResponseDTOPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type LocationResponseDTOOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createLocationResponseDTOPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createLocationResponseDTOOptionalProperties(
+    ...properties: LocationResponseDTOOptionalProperty[]
+): ReadonlyArray<LocationResponseDTOOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfLocationResponseDTO(value: object): value is LocationResponseDTO {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('id' in _v && typeof _v['id'] !== 'string') return false;
-    if ('name' in _v && typeof _v['name'] !== 'string') return false;
-    if ('code' in _v && typeof _v['code'] !== 'string') return false;
-    if ('geographicalLocationId' in _v && typeof _v['geographicalLocationId'] !== 'string') return false;
-    if ('addressLine1' in _v && typeof _v['addressLine1'] !== 'string') return false;
-    if ('addressLine2' in _v && typeof _v['addressLine2'] !== 'string') return false;
-    if ('city' in _v && typeof _v['city'] !== 'string') return false;
-    if ('state' in _v && typeof _v['state'] !== 'string') return false;
-    if ('postalCode' in _v && typeof _v['postalCode'] !== 'string') return false;
-    if ('country' in _v && typeof _v['country'] !== 'string') return false;
-    if ('mailingAddress' in _v && typeof _v['mailingAddress'] !== 'string') return false;
-    if ('active' in _v && typeof _v['active'] !== 'boolean') return false;
-    if ('responsiblePersonId' in _v && typeof _v['responsiblePersonId'] !== 'number') return false;
-    return true;
+
+    const requiredProperties = createLocationResponseDTOPropertyNames();
+    const optionalStringProperties = createLocationResponseDTOOptionalProperties({ name: 'id', nullable: false }, { name: 'name', nullable: false }, { name: 'code', nullable: false }, { name: 'geographicalLocationId', nullable: false }, { name: 'addressLine1', nullable: false }, { name: 'addressLine2', nullable: false }, { name: 'city', nullable: false }, { name: 'state', nullable: false }, { name: 'postalCode', nullable: false }, { name: 'country', nullable: false }, { name: 'mailingAddress', nullable: false }, );
+    const optionalNumberProperties = createLocationResponseDTOOptionalProperties({ name: 'responsiblePersonId', nullable: false }, );
+    const optionalBooleanProperties = createLocationResponseDTOOptionalProperties({ name: 'active', nullable: false }, );
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalLocationResponseDTOPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalLocationResponseDTOPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalLocationResponseDTOPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

@@ -10,18 +10,58 @@
 
 
 export interface PreferencesUpsertDto { 
-    preferences?: { [key: string]: any; };
+    preferences?: object;
     serviceNotes?: string;
     createdByUserId?: string;
     updatedByUserId?: string;
 }
 
+function isOptionalPreferencesUpsertDtoPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type PreferencesUpsertDtoOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createPreferencesUpsertDtoPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createPreferencesUpsertDtoOptionalProperties(
+    ...properties: PreferencesUpsertDtoOptionalProperty[]
+): ReadonlyArray<PreferencesUpsertDtoOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfPreferencesUpsertDto(value: object): value is PreferencesUpsertDto {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('serviceNotes' in _v && typeof _v['serviceNotes'] !== 'string') return false;
-    if ('createdByUserId' in _v && typeof _v['createdByUserId'] !== 'string') return false;
-    if ('updatedByUserId' in _v && typeof _v['updatedByUserId'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createPreferencesUpsertDtoPropertyNames();
+    const optionalStringProperties = createPreferencesUpsertDtoOptionalProperties({ name: 'serviceNotes', nullable: false }, { name: 'createdByUserId', nullable: false }, { name: 'updatedByUserId', nullable: false }, );
+    const optionalNumberProperties = createPreferencesUpsertDtoOptionalProperties();
+    const optionalBooleanProperties = createPreferencesUpsertDtoOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalPreferencesUpsertDtoPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalPreferencesUpsertDtoPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalPreferencesUpsertDtoPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

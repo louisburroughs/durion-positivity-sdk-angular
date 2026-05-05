@@ -13,10 +13,52 @@ export interface ApprovePurchaseOrderRequest {
     approvalNotes?: string;
 }
 
+function isOptionalApprovePurchaseOrderRequestPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type ApprovePurchaseOrderRequestOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createApprovePurchaseOrderRequestPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createApprovePurchaseOrderRequestOptionalProperties(
+    ...properties: ApprovePurchaseOrderRequestOptionalProperty[]
+): ReadonlyArray<ApprovePurchaseOrderRequestOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfApprovePurchaseOrderRequest(value: object): value is ApprovePurchaseOrderRequest {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('approvalNotes' in _v && typeof _v['approvalNotes'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createApprovePurchaseOrderRequestPropertyNames();
+    const optionalStringProperties = createApprovePurchaseOrderRequestOptionalProperties({ name: 'approvalNotes', nullable: false }, );
+    const optionalNumberProperties = createApprovePurchaseOrderRequestOptionalProperties();
+    const optionalBooleanProperties = createApprovePurchaseOrderRequestOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalApprovePurchaseOrderRequestPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalApprovePurchaseOrderRequestPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalApprovePurchaseOrderRequestPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

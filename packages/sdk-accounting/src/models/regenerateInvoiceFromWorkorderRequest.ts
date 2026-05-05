@@ -14,12 +14,52 @@ export interface RegenerateInvoiceFromWorkorderRequest {
     idempotencyKey?: string;
 }
 
+function isOptionalRegenerateInvoiceFromWorkorderRequestPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type RegenerateInvoiceFromWorkorderRequestOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createRegenerateInvoiceFromWorkorderRequestPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createRegenerateInvoiceFromWorkorderRequestOptionalProperties(
+    ...properties: RegenerateInvoiceFromWorkorderRequestOptionalProperty[]
+): ReadonlyArray<RegenerateInvoiceFromWorkorderRequestOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfRegenerateInvoiceFromWorkorderRequest(value: object): value is RegenerateInvoiceFromWorkorderRequest {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if (!('workorderId' in _v) || _v['workorderId'] === undefined) return false;
-    if ('workorderId' in _v && typeof _v['workorderId'] !== 'string') return false;
-    if ('idempotencyKey' in _v && typeof _v['idempotencyKey'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createRegenerateInvoiceFromWorkorderRequestPropertyNames('workorderId', );
+    const optionalStringProperties = createRegenerateInvoiceFromWorkorderRequestOptionalProperties({ name: 'workorderId', nullable: false }, { name: 'idempotencyKey', nullable: false }, );
+    const optionalNumberProperties = createRegenerateInvoiceFromWorkorderRequestOptionalProperties();
+    const optionalBooleanProperties = createRegenerateInvoiceFromWorkorderRequestOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalRegenerateInvoiceFromWorkorderRequestPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalRegenerateInvoiceFromWorkorderRequestPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalRegenerateInvoiceFromWorkorderRequestPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

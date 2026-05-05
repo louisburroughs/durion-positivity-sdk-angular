@@ -18,18 +18,52 @@ export interface PersonBulkIngestRecord {
     primaryPhone?: string;
 }
 
+function isOptionalPersonBulkIngestRecordPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type PersonBulkIngestRecordOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createPersonBulkIngestRecordPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createPersonBulkIngestRecordOptionalProperties(
+    ...properties: PersonBulkIngestRecordOptionalProperty[]
+): ReadonlyArray<PersonBulkIngestRecordOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfPersonBulkIngestRecord(value: object): value is PersonBulkIngestRecord {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if (!('legalName' in _v) || _v['legalName'] === undefined) return false;
-    if ('legalName' in _v && typeof _v['legalName'] !== 'string') return false;
-    if ('preferredName' in _v && typeof _v['preferredName'] !== 'string') return false;
-    if (!('employeeNumber' in _v) || _v['employeeNumber'] === undefined) return false;
-    if ('employeeNumber' in _v && typeof _v['employeeNumber'] !== 'string') return false;
-    if (!('hireDate' in _v) || _v['hireDate'] === undefined) return false;
-    if ('hireDate' in _v && typeof _v['hireDate'] !== 'string') return false;
-    if ('primaryEmail' in _v && typeof _v['primaryEmail'] !== 'string') return false;
-    if ('primaryPhone' in _v && typeof _v['primaryPhone'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createPersonBulkIngestRecordPropertyNames('legalName', 'employeeNumber', 'hireDate', );
+    const optionalStringProperties = createPersonBulkIngestRecordOptionalProperties({ name: 'legalName', nullable: false }, { name: 'preferredName', nullable: false }, { name: 'employeeNumber', nullable: false }, { name: 'hireDate', nullable: false }, { name: 'primaryEmail', nullable: false }, { name: 'primaryPhone', nullable: false }, );
+    const optionalNumberProperties = createPersonBulkIngestRecordOptionalProperties();
+    const optionalBooleanProperties = createPersonBulkIngestRecordOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalPersonBulkIngestRecordPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalPersonBulkIngestRecordPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalPersonBulkIngestRecordPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

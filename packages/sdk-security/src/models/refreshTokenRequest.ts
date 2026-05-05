@@ -19,11 +19,52 @@ export interface RefreshTokenRequest {
     refreshToken: string;
 }
 
+function isOptionalRefreshTokenRequestPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type RefreshTokenRequestOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createRefreshTokenRequestPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createRefreshTokenRequestOptionalProperties(
+    ...properties: RefreshTokenRequestOptionalProperty[]
+): ReadonlyArray<RefreshTokenRequestOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfRefreshTokenRequest(value: object): value is RefreshTokenRequest {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if (!('refreshToken' in _v) || _v['refreshToken'] === undefined) return false;
-    if ('refreshToken' in _v && typeof _v['refreshToken'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createRefreshTokenRequestPropertyNames('refreshToken', );
+    const optionalStringProperties = createRefreshTokenRequestOptionalProperties({ name: 'refreshToken', nullable: false }, );
+    const optionalNumberProperties = createRefreshTokenRequestOptionalProperties();
+    const optionalBooleanProperties = createRefreshTokenRequestOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalRefreshTokenRequestPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalRefreshTokenRequestPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalRefreshTokenRequestPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

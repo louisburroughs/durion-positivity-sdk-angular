@@ -36,18 +36,52 @@ export enum CreateRestrictionRuleRequestServiceTagEnum {
 
 
 
+function isOptionalCreateRestrictionRuleRequestPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type CreateRestrictionRuleRequestOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createCreateRestrictionRuleRequestPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createCreateRestrictionRuleRequestOptionalProperties(
+    ...properties: CreateRestrictionRuleRequestOptionalProperty[]
+): ReadonlyArray<CreateRestrictionRuleRequestOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfCreateRestrictionRuleRequest(value: object): value is CreateRestrictionRuleRequest {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if (!('productId' in _v) || _v['productId'] === undefined) return false;
-    if ('productId' in _v && typeof _v['productId'] !== 'string') return false;
-    if (!('locationTag' in _v) || _v['locationTag'] === undefined) return false;
-    if ('locationTag' in _v && typeof _v['locationTag'] !== 'string') return false;
-    if (!('serviceTag' in _v) || _v['serviceTag'] === undefined) return false;
-    if ('serviceTag' in _v && typeof _v['serviceTag'] !== 'string') return false;
-    if (!('effectiveFrom' in _v) || _v['effectiveFrom'] === undefined) return false;
-    if ('policyVersion' in _v && typeof _v['policyVersion'] !== 'number') return false;
-    if ('overrideable' in _v && typeof _v['overrideable'] !== 'boolean') return false;
-    return true;
+
+    const requiredProperties = createCreateRestrictionRuleRequestPropertyNames('productId', 'locationTag', 'serviceTag', 'effectiveFrom', );
+    const optionalStringProperties = createCreateRestrictionRuleRequestOptionalProperties({ name: 'productId', nullable: false }, { name: 'locationTag', nullable: false }, { name: 'serviceTag', nullable: false }, );
+    const optionalNumberProperties = createCreateRestrictionRuleRequestOptionalProperties({ name: 'policyVersion', nullable: false }, );
+    const optionalBooleanProperties = createCreateRestrictionRuleRequestOptionalProperties({ name: 'overrideable', nullable: false }, );
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalCreateRestrictionRuleRequestPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalCreateRestrictionRuleRequestPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalCreateRestrictionRuleRequestPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

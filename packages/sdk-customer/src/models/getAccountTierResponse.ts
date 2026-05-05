@@ -53,15 +53,52 @@ export enum GetAccountTierResponseTierEnum {
 
 
 
+function isOptionalGetAccountTierResponsePropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type GetAccountTierResponseOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createGetAccountTierResponsePropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createGetAccountTierResponseOptionalProperties(
+    ...properties: GetAccountTierResponseOptionalProperty[]
+): ReadonlyArray<GetAccountTierResponseOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfGetAccountTierResponse(value: object): value is GetAccountTierResponse {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('accountId' in _v && typeof _v['accountId'] !== 'string') return false;
-    if ('tier' in _v && typeof _v['tier'] !== 'string') return false;
-    if ('tierDisplayName' in _v && typeof _v['tierDisplayName'] !== 'string') return false;
-    if ('tierAssignedBy' in _v && typeof _v['tierAssignedBy'] !== 'string') return false;
-    if ('notes' in _v && typeof _v['notes'] !== 'string') return false;
-    if ('manualOverride' in _v && typeof _v['manualOverride'] !== 'boolean') return false;
-    return true;
+
+    const requiredProperties = createGetAccountTierResponsePropertyNames();
+    const optionalStringProperties = createGetAccountTierResponseOptionalProperties({ name: 'accountId', nullable: false }, { name: 'tier', nullable: false }, { name: 'tierDisplayName', nullable: false }, { name: 'tierAssignedBy', nullable: false }, { name: 'notes', nullable: false }, );
+    const optionalNumberProperties = createGetAccountTierResponseOptionalProperties();
+    const optionalBooleanProperties = createGetAccountTierResponseOptionalProperties({ name: 'manualOverride', nullable: false }, );
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalGetAccountTierResponsePropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalGetAccountTierResponsePropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalGetAccountTierResponsePropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

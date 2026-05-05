@@ -23,13 +23,52 @@ export interface AllocationLineRequest {
     appliedAmount: number;
 }
 
+function isOptionalAllocationLineRequestPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type AllocationLineRequestOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createAllocationLineRequestPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createAllocationLineRequestOptionalProperties(
+    ...properties: AllocationLineRequestOptionalProperty[]
+): ReadonlyArray<AllocationLineRequestOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfAllocationLineRequest(value: object): value is AllocationLineRequest {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if (!('vendorBillId' in _v) || _v['vendorBillId'] === undefined) return false;
-    if ('vendorBillId' in _v && typeof _v['vendorBillId'] !== 'string') return false;
-    if (!('appliedAmount' in _v) || _v['appliedAmount'] === undefined) return false;
-    if ('appliedAmount' in _v && typeof _v['appliedAmount'] !== 'number') return false;
-    return true;
+
+    const requiredProperties = createAllocationLineRequestPropertyNames('vendorBillId', 'appliedAmount', );
+    const optionalStringProperties = createAllocationLineRequestOptionalProperties({ name: 'vendorBillId', nullable: false }, );
+    const optionalNumberProperties = createAllocationLineRequestOptionalProperties({ name: 'appliedAmount', nullable: false }, );
+    const optionalBooleanProperties = createAllocationLineRequestOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalAllocationLineRequestPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalAllocationLineRequestPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalAllocationLineRequestPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

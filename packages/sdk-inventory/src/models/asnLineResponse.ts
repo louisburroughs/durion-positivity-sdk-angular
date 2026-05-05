@@ -19,16 +19,52 @@ export interface AsnLineResponse {
     lotNumber?: string;
 }
 
+function isOptionalAsnLineResponsePropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type AsnLineResponseOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createAsnLineResponsePropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createAsnLineResponseOptionalProperties(
+    ...properties: AsnLineResponseOptionalProperty[]
+): ReadonlyArray<AsnLineResponseOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfAsnLineResponse(value: object): value is AsnLineResponse {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('asnLineId' in _v && typeof _v['asnLineId'] !== 'string') return false;
-    if ('poId' in _v && typeof _v['poId'] !== 'string') return false;
-    if ('sku' in _v && typeof _v['sku'] !== 'string') return false;
-    if ('quantityShipped' in _v && typeof _v['quantityShipped'] !== 'number') return false;
-    if ('quantityReceived' in _v && typeof _v['quantityReceived'] !== 'number') return false;
-    if ('unitOfMeasure' in _v && typeof _v['unitOfMeasure'] !== 'string') return false;
-    if ('lotNumber' in _v && typeof _v['lotNumber'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createAsnLineResponsePropertyNames();
+    const optionalStringProperties = createAsnLineResponseOptionalProperties({ name: 'asnLineId', nullable: false }, { name: 'poId', nullable: false }, { name: 'sku', nullable: false }, { name: 'unitOfMeasure', nullable: false }, { name: 'lotNumber', nullable: false }, );
+    const optionalNumberProperties = createAsnLineResponseOptionalProperties({ name: 'quantityShipped', nullable: false }, { name: 'quantityReceived', nullable: false }, );
+    const optionalBooleanProperties = createAsnLineResponseOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalAsnLineResponsePropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalAsnLineResponsePropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalAsnLineResponsePropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

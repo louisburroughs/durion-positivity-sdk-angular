@@ -13,10 +13,52 @@ export interface PromoteAllocationRequest {
     hardenedReason?: string;
 }
 
+function isOptionalPromoteAllocationRequestPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type PromoteAllocationRequestOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createPromoteAllocationRequestPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createPromoteAllocationRequestOptionalProperties(
+    ...properties: PromoteAllocationRequestOptionalProperty[]
+): ReadonlyArray<PromoteAllocationRequestOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfPromoteAllocationRequest(value: object): value is PromoteAllocationRequest {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('hardenedReason' in _v && typeof _v['hardenedReason'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createPromoteAllocationRequestPropertyNames();
+    const optionalStringProperties = createPromoteAllocationRequestOptionalProperties({ name: 'hardenedReason', nullable: false }, );
+    const optionalNumberProperties = createPromoteAllocationRequestOptionalProperties();
+    const optionalBooleanProperties = createPromoteAllocationRequestOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalPromoteAllocationRequestPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalPromoteAllocationRequestPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalPromoteAllocationRequestPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

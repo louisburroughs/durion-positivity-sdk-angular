@@ -20,13 +20,52 @@ export interface ServiceAreaResponse {
     updatedAt?: string;
 }
 
+function isOptionalServiceAreaResponsePropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type ServiceAreaResponseOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createServiceAreaResponsePropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createServiceAreaResponseOptionalProperties(
+    ...properties: ServiceAreaResponseOptionalProperty[]
+): ReadonlyArray<ServiceAreaResponseOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfServiceAreaResponse(value: object): value is ServiceAreaResponse {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('id' in _v && typeof _v['id'] !== 'string') return false;
-    if ('name' in _v && typeof _v['name'] !== 'string') return false;
-    if ('description' in _v && typeof _v['description'] !== 'string') return false;
-    if ('active' in _v && typeof _v['active'] !== 'boolean') return false;
-    return true;
+
+    const requiredProperties = createServiceAreaResponsePropertyNames();
+    const optionalStringProperties = createServiceAreaResponseOptionalProperties({ name: 'id', nullable: false }, { name: 'name', nullable: false }, { name: 'description', nullable: false }, );
+    const optionalNumberProperties = createServiceAreaResponseOptionalProperties();
+    const optionalBooleanProperties = createServiceAreaResponseOptionalProperties({ name: 'active', nullable: false }, );
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalServiceAreaResponsePropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalServiceAreaResponsePropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalServiceAreaResponsePropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

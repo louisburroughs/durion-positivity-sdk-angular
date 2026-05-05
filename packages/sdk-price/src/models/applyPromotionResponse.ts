@@ -28,11 +28,52 @@ export interface ApplyPromotionResponse {
     appliedAdjustments?: Array<PricingAdjustment>;
 }
 
+function isOptionalApplyPromotionResponsePropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type ApplyPromotionResponseOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createApplyPromotionResponsePropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createApplyPromotionResponseOptionalProperties(
+    ...properties: ApplyPromotionResponseOptionalProperty[]
+): ReadonlyArray<ApplyPromotionResponseOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfApplyPromotionResponse(value: object): value is ApplyPromotionResponse {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('subtotal' in _v && typeof _v['subtotal'] !== 'number') return false;
-    if ('total' in _v && typeof _v['total'] !== 'number') return false;
-    return true;
+
+    const requiredProperties = createApplyPromotionResponsePropertyNames();
+    const optionalStringProperties = createApplyPromotionResponseOptionalProperties();
+    const optionalNumberProperties = createApplyPromotionResponseOptionalProperties({ name: 'subtotal', nullable: false }, { name: 'total', nullable: false }, );
+    const optionalBooleanProperties = createApplyPromotionResponseOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalApplyPromotionResponsePropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalApplyPromotionResponsePropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalApplyPromotionResponsePropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

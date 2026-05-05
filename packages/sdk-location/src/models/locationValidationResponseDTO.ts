@@ -15,12 +15,52 @@ export interface LocationValidationResponseDTO {
     active?: boolean;
 }
 
+function isOptionalLocationValidationResponseDTOPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type LocationValidationResponseDTOOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createLocationValidationResponseDTOPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createLocationValidationResponseDTOOptionalProperties(
+    ...properties: LocationValidationResponseDTOOptionalProperty[]
+): ReadonlyArray<LocationValidationResponseDTOOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfLocationValidationResponseDTO(value: object): value is LocationValidationResponseDTO {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('locationId' in _v && typeof _v['locationId'] !== 'string') return false;
-    if ('exists' in _v && typeof _v['exists'] !== 'boolean') return false;
-    if ('active' in _v && typeof _v['active'] !== 'boolean') return false;
-    return true;
+
+    const requiredProperties = createLocationValidationResponseDTOPropertyNames();
+    const optionalStringProperties = createLocationValidationResponseDTOOptionalProperties({ name: 'locationId', nullable: false }, );
+    const optionalNumberProperties = createLocationValidationResponseDTOOptionalProperties();
+    const optionalBooleanProperties = createLocationValidationResponseDTOOptionalProperties({ name: 'exists', nullable: false }, { name: 'active', nullable: false }, );
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalLocationValidationResponseDTOPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalLocationValidationResponseDTOPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalLocationValidationResponseDTOPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

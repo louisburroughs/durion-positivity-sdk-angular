@@ -36,23 +36,52 @@ export enum CreditMemoResponseStatusEnum {
 
 
 
+function isOptionalCreditMemoResponsePropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type CreditMemoResponseOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createCreditMemoResponsePropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createCreditMemoResponseOptionalProperties(
+    ...properties: CreditMemoResponseOptionalProperty[]
+): ReadonlyArray<CreditMemoResponseOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfCreditMemoResponse(value: object): value is CreditMemoResponse {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('creditMemoId' in _v && typeof _v['creditMemoId'] !== 'string') return false;
-    if ('originalInvoiceId' in _v && typeof _v['originalInvoiceId'] !== 'string') return false;
-    if ('customerId' in _v && typeof _v['customerId'] !== 'string') return false;
-    if ('creditAmount' in _v && typeof _v['creditAmount'] !== 'number') return false;
-    if ('taxAmountReversed' in _v && typeof _v['taxAmountReversed'] !== 'number') return false;
-    if ('totalAmount' in _v && typeof _v['totalAmount'] !== 'number') return false;
-    if ('reasonCode' in _v && typeof _v['reasonCode'] !== 'string') return false;
-    if ('justificationNote' in _v && typeof _v['justificationNote'] !== 'string') return false;
-    if ('status' in _v && typeof _v['status'] !== 'string') return false;
-    if ('createdByUserId' in _v && typeof _v['createdByUserId'] !== 'string') return false;
-    if ('priorPeriodAdjustment' in _v && typeof _v['priorPeriodAdjustment'] !== 'boolean') return false;
-    if ('originalPeriodId' in _v && typeof _v['originalPeriodId'] !== 'string') return false;
-    if ('currency' in _v && typeof _v['currency'] !== 'string') return false;
-    if ('invoiceBalanceAfter' in _v && typeof _v['invoiceBalanceAfter'] !== 'number') return false;
-    return true;
+
+    const requiredProperties = createCreditMemoResponsePropertyNames();
+    const optionalStringProperties = createCreditMemoResponseOptionalProperties({ name: 'creditMemoId', nullable: false }, { name: 'originalInvoiceId', nullable: false }, { name: 'customerId', nullable: false }, { name: 'reasonCode', nullable: false }, { name: 'justificationNote', nullable: false }, { name: 'status', nullable: false }, { name: 'createdByUserId', nullable: false }, { name: 'originalPeriodId', nullable: false }, { name: 'currency', nullable: false }, );
+    const optionalNumberProperties = createCreditMemoResponseOptionalProperties({ name: 'creditAmount', nullable: false }, { name: 'taxAmountReversed', nullable: false }, { name: 'totalAmount', nullable: false }, { name: 'invoiceBalanceAfter', nullable: false }, );
+    const optionalBooleanProperties = createCreditMemoResponseOptionalProperties({ name: 'priorPeriodAdjustment', nullable: false }, );
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalCreditMemoResponsePropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalCreditMemoResponsePropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalCreditMemoResponsePropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

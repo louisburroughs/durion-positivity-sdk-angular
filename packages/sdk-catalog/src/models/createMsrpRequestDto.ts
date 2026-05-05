@@ -17,16 +17,52 @@ export interface CreateMsrpRequestDto {
     createdByUserId: string;
 }
 
+function isOptionalCreateMsrpRequestDtoPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type CreateMsrpRequestDtoOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createCreateMsrpRequestDtoPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createCreateMsrpRequestDtoOptionalProperties(
+    ...properties: CreateMsrpRequestDtoOptionalProperty[]
+): ReadonlyArray<CreateMsrpRequestDtoOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfCreateMsrpRequestDto(value: object): value is CreateMsrpRequestDto {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if (!('amount' in _v) || _v['amount'] === undefined) return false;
-    if ('amount' in _v && typeof _v['amount'] !== 'number') return false;
-    if (!('currency' in _v) || _v['currency'] === undefined) return false;
-    if ('currency' in _v && typeof _v['currency'] !== 'string') return false;
-    if (!('effectiveStartDate' in _v) || _v['effectiveStartDate'] === undefined) return false;
-    if (!('createdByUserId' in _v) || _v['createdByUserId'] === undefined) return false;
-    if ('createdByUserId' in _v && typeof _v['createdByUserId'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createCreateMsrpRequestDtoPropertyNames('amount', 'currency', 'effectiveStartDate', 'createdByUserId', );
+    const optionalStringProperties = createCreateMsrpRequestDtoOptionalProperties({ name: 'currency', nullable: false }, { name: 'createdByUserId', nullable: false }, );
+    const optionalNumberProperties = createCreateMsrpRequestDtoOptionalProperties({ name: 'amount', nullable: false }, );
+    const optionalBooleanProperties = createCreateMsrpRequestDtoOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalCreateMsrpRequestDtoPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalCreateMsrpRequestDtoPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalCreateMsrpRequestDtoPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

@@ -33,20 +33,52 @@ export enum ShopAuditEntryResponseEventTypeEnum {
 
 
 
+function isOptionalShopAuditEntryResponsePropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type ShopAuditEntryResponseOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createShopAuditEntryResponsePropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createShopAuditEntryResponseOptionalProperties(
+    ...properties: ShopAuditEntryResponseOptionalProperty[]
+): ReadonlyArray<ShopAuditEntryResponseOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfShopAuditEntryResponse(value: object): value is ShopAuditEntryResponse {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('id' in _v && typeof _v['id'] !== 'string') return false;
-    if ('eventType' in _v && typeof _v['eventType'] !== 'string') return false;
-    if ('workorderId' in _v && typeof _v['workorderId'] !== 'string') return false;
-    if ('appointmentId' in _v && typeof _v['appointmentId'] !== 'string') return false;
-    if ('mechanicId' in _v && typeof _v['mechanicId'] !== 'string') return false;
-    if ('locationId' in _v && typeof _v['locationId'] !== 'string') return false;
-    if ('actorUserId' in _v && typeof _v['actorUserId'] !== 'string') return false;
-    if ('changeSummaryText' in _v && typeof _v['changeSummaryText'] !== 'string') return false;
-    if ('changePatch' in _v && typeof _v['changePatch'] !== 'string') return false;
-    if ('reasonCode' in _v && typeof _v['reasonCode'] !== 'string') return false;
-    if ('retentionYears' in _v && typeof _v['retentionYears'] !== 'number') return false;
-    return true;
+
+    const requiredProperties = createShopAuditEntryResponsePropertyNames();
+    const optionalStringProperties = createShopAuditEntryResponseOptionalProperties({ name: 'id', nullable: false }, { name: 'eventType', nullable: false }, { name: 'workorderId', nullable: false }, { name: 'appointmentId', nullable: false }, { name: 'mechanicId', nullable: false }, { name: 'locationId', nullable: false }, { name: 'actorUserId', nullable: false }, { name: 'changeSummaryText', nullable: false }, { name: 'changePatch', nullable: false }, { name: 'reasonCode', nullable: false }, );
+    const optionalNumberProperties = createShopAuditEntryResponseOptionalProperties({ name: 'retentionYears', nullable: false }, );
+    const optionalBooleanProperties = createShopAuditEntryResponseOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalShopAuditEntryResponsePropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalShopAuditEntryResponsePropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalShopAuditEntryResponsePropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

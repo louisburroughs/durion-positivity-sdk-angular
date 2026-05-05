@@ -41,14 +41,52 @@ export enum CreatePartyRelationshipRequestRolesEnum {
 
 
 
+function isOptionalCreatePartyRelationshipRequestPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type CreatePartyRelationshipRequestOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createCreatePartyRelationshipRequestPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createCreatePartyRelationshipRequestOptionalProperties(
+    ...properties: CreatePartyRelationshipRequestOptionalProperty[]
+): ReadonlyArray<CreatePartyRelationshipRequestOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfCreatePartyRelationshipRequest(value: object): value is CreatePartyRelationshipRequest {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if (!('personId' in _v) || _v['personId'] === undefined) return false;
-    if ('personId' in _v && typeof _v['personId'] !== 'string') return false;
-    if (!('roles' in _v) || _v['roles'] === undefined) return false;
-    if (!('effectiveStartDate' in _v) || _v['effectiveStartDate'] === undefined) return false;
-    if ('primaryBillingContact' in _v && typeof _v['primaryBillingContact'] !== 'boolean') return false;
-    return true;
+
+    const requiredProperties = createCreatePartyRelationshipRequestPropertyNames('personId', 'roles', 'effectiveStartDate', );
+    const optionalStringProperties = createCreatePartyRelationshipRequestOptionalProperties({ name: 'personId', nullable: false }, );
+    const optionalNumberProperties = createCreatePartyRelationshipRequestOptionalProperties();
+    const optionalBooleanProperties = createCreatePartyRelationshipRequestOptionalProperties({ name: 'primaryBillingContact', nullable: false }, );
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalCreatePartyRelationshipRequestPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalCreatePartyRelationshipRequestPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalCreatePartyRelationshipRequestPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

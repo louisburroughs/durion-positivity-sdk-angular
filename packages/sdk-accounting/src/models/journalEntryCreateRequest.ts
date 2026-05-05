@@ -48,17 +48,52 @@ export interface JournalEntryCreateRequest {
     lines: Array<JournalEntryLineRequest>;
 }
 
+function isOptionalJournalEntryCreateRequestPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type JournalEntryCreateRequestOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createJournalEntryCreateRequestPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createJournalEntryCreateRequestOptionalProperties(
+    ...properties: JournalEntryCreateRequestOptionalProperty[]
+): ReadonlyArray<JournalEntryCreateRequestOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfJournalEntryCreateRequest(value: object): value is JournalEntryCreateRequest {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('organizationId' in _v && typeof _v['organizationId'] !== 'string') return false;
-    if (!('transactionDate' in _v) || _v['transactionDate'] === undefined) return false;
-    if ('description' in _v && typeof _v['description'] !== 'string') return false;
-    if ('sourceEventId' in _v && typeof _v['sourceEventId'] !== 'string') return false;
-    if ('sourceEventType' in _v && typeof _v['sourceEventType'] !== 'string') return false;
-    if ('postingRuleSetId' in _v && typeof _v['postingRuleSetId'] !== 'string') return false;
-    if ('postingRuleVersionId' in _v && typeof _v['postingRuleVersionId'] !== 'string') return false;
-    if (!('lines' in _v) || _v['lines'] === undefined) return false;
-    return true;
+
+    const requiredProperties = createJournalEntryCreateRequestPropertyNames('transactionDate', 'lines', );
+    const optionalStringProperties = createJournalEntryCreateRequestOptionalProperties({ name: 'organizationId', nullable: false }, { name: 'description', nullable: false }, { name: 'sourceEventId', nullable: false }, { name: 'sourceEventType', nullable: false }, { name: 'postingRuleSetId', nullable: false }, { name: 'postingRuleVersionId', nullable: false }, );
+    const optionalNumberProperties = createJournalEntryCreateRequestOptionalProperties();
+    const optionalBooleanProperties = createJournalEntryCreateRequestOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalJournalEntryCreateRequestPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalJournalEntryCreateRequestPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalJournalEntryCreateRequestPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

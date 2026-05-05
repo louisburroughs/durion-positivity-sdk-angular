@@ -28,13 +28,52 @@ export enum PickListResponseStatusEnum {
 
 
 
+function isOptionalPickListResponsePropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type PickListResponseOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createPickListResponsePropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createPickListResponseOptionalProperties(
+    ...properties: PickListResponseOptionalProperty[]
+): ReadonlyArray<PickListResponseOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfPickListResponse(value: object): value is PickListResponse {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('pickListId' in _v && typeof _v['pickListId'] !== 'string') return false;
-    if ('workorderId' in _v && typeof _v['workorderId'] !== 'string') return false;
-    if ('status' in _v && typeof _v['status'] !== 'string') return false;
-    if ('priority' in _v && typeof _v['priority'] !== 'number') return false;
-    return true;
+
+    const requiredProperties = createPickListResponsePropertyNames();
+    const optionalStringProperties = createPickListResponseOptionalProperties({ name: 'pickListId', nullable: false }, { name: 'workorderId', nullable: false }, { name: 'status', nullable: false }, );
+    const optionalNumberProperties = createPickListResponseOptionalProperties({ name: 'priority', nullable: false }, );
+    const optionalBooleanProperties = createPickListResponseOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalPickListResponsePropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalPickListResponsePropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalPickListResponsePropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

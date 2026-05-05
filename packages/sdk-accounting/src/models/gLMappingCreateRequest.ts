@@ -18,16 +18,52 @@ export interface GLMappingCreateRequest {
     dimensions?: { [key: string]: string; };
 }
 
+function isOptionalGLMappingCreateRequestPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type GLMappingCreateRequestOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createGLMappingCreateRequestPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createGLMappingCreateRequestOptionalProperties(
+    ...properties: GLMappingCreateRequestOptionalProperty[]
+): ReadonlyArray<GLMappingCreateRequestOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfGLMappingCreateRequest(value: object): value is GLMappingCreateRequest {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if (!('sourceSystem' in _v) || _v['sourceSystem'] === undefined) return false;
-    if ('sourceSystem' in _v && typeof _v['sourceSystem'] !== 'string') return false;
-    if (!('externalCode' in _v) || _v['externalCode'] === undefined) return false;
-    if ('externalCode' in _v && typeof _v['externalCode'] !== 'string') return false;
-    if (!('glAccountId' in _v) || _v['glAccountId'] === undefined) return false;
-    if ('glAccountId' in _v && typeof _v['glAccountId'] !== 'string') return false;
-    if (!('effectiveStartDate' in _v) || _v['effectiveStartDate'] === undefined) return false;
-    return true;
+
+    const requiredProperties = createGLMappingCreateRequestPropertyNames('sourceSystem', 'externalCode', 'glAccountId', 'effectiveStartDate', );
+    const optionalStringProperties = createGLMappingCreateRequestOptionalProperties({ name: 'sourceSystem', nullable: false }, { name: 'externalCode', nullable: false }, { name: 'glAccountId', nullable: false }, );
+    const optionalNumberProperties = createGLMappingCreateRequestOptionalProperties();
+    const optionalBooleanProperties = createGLMappingCreateRequestOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalGLMappingCreateRequestPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalGLMappingCreateRequestPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalGLMappingCreateRequestPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

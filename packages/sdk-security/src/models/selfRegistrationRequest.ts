@@ -47,21 +47,52 @@ export interface SelfRegistrationRequest {
     idempotencyKey?: string;
 }
 
+function isOptionalSelfRegistrationRequestPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type SelfRegistrationRequestOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createSelfRegistrationRequestPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createSelfRegistrationRequestOptionalProperties(
+    ...properties: SelfRegistrationRequestOptionalProperty[]
+): ReadonlyArray<SelfRegistrationRequestOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfSelfRegistrationRequest(value: object): value is SelfRegistrationRequest {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if (!('email' in _v) || _v['email'] === undefined) return false;
-    if ('email' in _v && typeof _v['email'] !== 'string') return false;
-    if (!('password' in _v) || _v['password'] === undefined) return false;
-    if ('password' in _v && typeof _v['password'] !== 'string') return false;
-    if (!('firstName' in _v) || _v['firstName'] === undefined) return false;
-    if ('firstName' in _v && typeof _v['firstName'] !== 'string') return false;
-    if (!('lastName' in _v) || _v['lastName'] === undefined) return false;
-    if ('lastName' in _v && typeof _v['lastName'] !== 'string') return false;
-    if ('phone' in _v && typeof _v['phone'] !== 'string') return false;
-    if ('username' in _v && typeof _v['username'] !== 'string') return false;
-    if ('idpSubject' in _v && typeof _v['idpSubject'] !== 'string') return false;
-    if ('idempotencyKey' in _v && typeof _v['idempotencyKey'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createSelfRegistrationRequestPropertyNames('email', 'password', 'firstName', 'lastName', );
+    const optionalStringProperties = createSelfRegistrationRequestOptionalProperties({ name: 'email', nullable: false }, { name: 'password', nullable: false }, { name: 'firstName', nullable: false }, { name: 'lastName', nullable: false }, { name: 'phone', nullable: false }, { name: 'username', nullable: false }, { name: 'idpSubject', nullable: false }, { name: 'idempotencyKey', nullable: false }, );
+    const optionalNumberProperties = createSelfRegistrationRequestOptionalProperties();
+    const optionalBooleanProperties = createSelfRegistrationRequestOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalSelfRegistrationRequestPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalSelfRegistrationRequestPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalSelfRegistrationRequestPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

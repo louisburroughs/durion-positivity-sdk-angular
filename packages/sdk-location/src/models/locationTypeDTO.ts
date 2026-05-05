@@ -15,12 +15,52 @@ export interface LocationTypeDTO {
     description?: string;
 }
 
+function isOptionalLocationTypeDTOPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type LocationTypeDTOOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createLocationTypeDTOPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createLocationTypeDTOOptionalProperties(
+    ...properties: LocationTypeDTOOptionalProperty[]
+): ReadonlyArray<LocationTypeDTOOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfLocationTypeDTO(value: object): value is LocationTypeDTO {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('id' in _v && typeof _v['id'] !== 'string') return false;
-    if ('name' in _v && typeof _v['name'] !== 'string') return false;
-    if ('description' in _v && typeof _v['description'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createLocationTypeDTOPropertyNames();
+    const optionalStringProperties = createLocationTypeDTOOptionalProperties({ name: 'id', nullable: false }, { name: 'name', nullable: false }, { name: 'description', nullable: false }, );
+    const optionalNumberProperties = createLocationTypeDTOOptionalProperties();
+    const optionalBooleanProperties = createLocationTypeDTOOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalLocationTypeDTOPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalLocationTypeDTOPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalLocationTypeDTOPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

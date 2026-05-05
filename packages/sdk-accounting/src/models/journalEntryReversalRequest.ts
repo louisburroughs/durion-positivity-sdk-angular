@@ -13,11 +13,52 @@ export interface JournalEntryReversalRequest {
     reason: string;
 }
 
+function isOptionalJournalEntryReversalRequestPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type JournalEntryReversalRequestOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createJournalEntryReversalRequestPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createJournalEntryReversalRequestOptionalProperties(
+    ...properties: JournalEntryReversalRequestOptionalProperty[]
+): ReadonlyArray<JournalEntryReversalRequestOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfJournalEntryReversalRequest(value: object): value is JournalEntryReversalRequest {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if (!('reason' in _v) || _v['reason'] === undefined) return false;
-    if ('reason' in _v && typeof _v['reason'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createJournalEntryReversalRequestPropertyNames('reason', );
+    const optionalStringProperties = createJournalEntryReversalRequestOptionalProperties({ name: 'reason', nullable: false }, );
+    const optionalNumberProperties = createJournalEntryReversalRequestOptionalProperties();
+    const optionalBooleanProperties = createJournalEntryReversalRequestOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalJournalEntryReversalRequestPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalJournalEntryReversalRequestPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalJournalEntryReversalRequestPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

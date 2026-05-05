@@ -18,13 +18,52 @@ export interface GLAccountListResponse {
     totalElements?: number;
 }
 
+function isOptionalGLAccountListResponsePropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type GLAccountListResponseOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createGLAccountListResponsePropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createGLAccountListResponseOptionalProperties(
+    ...properties: GLAccountListResponseOptionalProperty[]
+): ReadonlyArray<GLAccountListResponseOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfGLAccountListResponse(value: object): value is GLAccountListResponse {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('pageNumber' in _v && typeof _v['pageNumber'] !== 'number') return false;
-    if ('pageSize' in _v && typeof _v['pageSize'] !== 'number') return false;
-    if ('totalPages' in _v && typeof _v['totalPages'] !== 'number') return false;
-    if ('totalElements' in _v && typeof _v['totalElements'] !== 'number') return false;
-    return true;
+
+    const requiredProperties = createGLAccountListResponsePropertyNames();
+    const optionalStringProperties = createGLAccountListResponseOptionalProperties();
+    const optionalNumberProperties = createGLAccountListResponseOptionalProperties({ name: 'pageNumber', nullable: false }, { name: 'pageSize', nullable: false }, { name: 'totalPages', nullable: false }, { name: 'totalElements', nullable: false }, );
+    const optionalBooleanProperties = createGLAccountListResponseOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalGLAccountListResponsePropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalGLAccountListResponsePropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalGLAccountListResponsePropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

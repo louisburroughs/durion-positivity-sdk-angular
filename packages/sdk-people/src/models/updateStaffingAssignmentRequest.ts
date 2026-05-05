@@ -40,19 +40,52 @@ export interface UpdateStaffingAssignmentRequest {
     isPrimary: boolean;
 }
 
+function isOptionalUpdateStaffingAssignmentRequestPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type UpdateStaffingAssignmentRequestOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createUpdateStaffingAssignmentRequestPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createUpdateStaffingAssignmentRequestOptionalProperties(
+    ...properties: UpdateStaffingAssignmentRequestOptionalProperty[]
+): ReadonlyArray<UpdateStaffingAssignmentRequestOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfUpdateStaffingAssignmentRequest(value: object): value is UpdateStaffingAssignmentRequest {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if (!('personId' in _v) || _v['personId'] === undefined) return false;
-    if ('personId' in _v && typeof _v['personId'] !== 'string') return false;
-    if (!('locationId' in _v) || _v['locationId'] === undefined) return false;
-    if ('locationId' in _v && typeof _v['locationId'] !== 'string') return false;
-    if (!('role' in _v) || _v['role'] === undefined) return false;
-    if ('role' in _v && typeof _v['role'] !== 'string') return false;
-    if (!('effectiveFrom' in _v) || _v['effectiveFrom'] === undefined) return false;
-    if ('effectiveDateRangeValid' in _v && typeof _v['effectiveDateRangeValid'] !== 'boolean') return false;
-    if (!('isPrimary' in _v) || _v['isPrimary'] === undefined) return false;
-    if ('isPrimary' in _v && typeof _v['isPrimary'] !== 'boolean') return false;
-    return true;
+
+    const requiredProperties = createUpdateStaffingAssignmentRequestPropertyNames('personId', 'locationId', 'role', 'effectiveFrom', 'isPrimary', );
+    const optionalStringProperties = createUpdateStaffingAssignmentRequestOptionalProperties({ name: 'personId', nullable: false }, { name: 'locationId', nullable: false }, { name: 'role', nullable: false }, );
+    const optionalNumberProperties = createUpdateStaffingAssignmentRequestOptionalProperties();
+    const optionalBooleanProperties = createUpdateStaffingAssignmentRequestOptionalProperties({ name: 'effectiveDateRangeValid', nullable: false }, { name: 'isPrimary', nullable: false }, );
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalUpdateStaffingAssignmentRequestPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalUpdateStaffingAssignmentRequestPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalUpdateStaffingAssignmentRequestPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

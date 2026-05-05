@@ -23,11 +23,52 @@ export interface SubstitutionHint {
     reason?: string;
 }
 
+function isOptionalSubstitutionHintPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type SubstitutionHintOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createSubstitutionHintPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createSubstitutionHintOptionalProperties(
+    ...properties: SubstitutionHintOptionalProperty[]
+): ReadonlyArray<SubstitutionHintOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfSubstitutionHint(value: object): value is SubstitutionHint {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('productId' in _v && typeof _v['productId'] !== 'string') return false;
-    if ('reason' in _v && typeof _v['reason'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createSubstitutionHintPropertyNames();
+    const optionalStringProperties = createSubstitutionHintOptionalProperties({ name: 'productId', nullable: false }, { name: 'reason', nullable: false }, );
+    const optionalNumberProperties = createSubstitutionHintOptionalProperties();
+    const optionalBooleanProperties = createSubstitutionHintOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalSubstitutionHintPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalSubstitutionHintPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalSubstitutionHintPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

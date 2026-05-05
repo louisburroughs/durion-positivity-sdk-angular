@@ -25,14 +25,52 @@ export enum EffectiveLocationPriceResponseDtoOverrideStatusEnum {
 
 
 
+function isOptionalEffectiveLocationPriceResponseDtoPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type EffectiveLocationPriceResponseDtoOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createEffectiveLocationPriceResponseDtoPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createEffectiveLocationPriceResponseDtoOptionalProperties(
+    ...properties: EffectiveLocationPriceResponseDtoOptionalProperty[]
+): ReadonlyArray<EffectiveLocationPriceResponseDtoOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfEffectiveLocationPriceResponseDto(value: object): value is EffectiveLocationPriceResponseDto {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('locationId' in _v && typeof _v['locationId'] !== 'string') return false;
-    if ('productId' in _v && typeof _v['productId'] !== 'string') return false;
-    if ('basePrice' in _v && typeof _v['basePrice'] !== 'number') return false;
-    if ('effectivePrice' in _v && typeof _v['effectivePrice'] !== 'number') return false;
-    if ('overrideStatus' in _v && typeof _v['overrideStatus'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createEffectiveLocationPriceResponseDtoPropertyNames();
+    const optionalStringProperties = createEffectiveLocationPriceResponseDtoOptionalProperties({ name: 'locationId', nullable: false }, { name: 'productId', nullable: false }, { name: 'overrideStatus', nullable: false }, );
+    const optionalNumberProperties = createEffectiveLocationPriceResponseDtoOptionalProperties({ name: 'basePrice', nullable: false }, { name: 'effectivePrice', nullable: false }, );
+    const optionalBooleanProperties = createEffectiveLocationPriceResponseDtoOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalEffectiveLocationPriceResponseDtoPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalEffectiveLocationPriceResponseDtoPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalEffectiveLocationPriceResponseDtoPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

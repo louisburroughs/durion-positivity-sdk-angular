@@ -30,15 +30,52 @@ export enum RoleAssignmentDtoScopeTypeEnum {
 
 
 
+function isOptionalRoleAssignmentDtoPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type RoleAssignmentDtoOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createRoleAssignmentDtoPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createRoleAssignmentDtoOptionalProperties(
+    ...properties: RoleAssignmentDtoOptionalProperty[]
+): ReadonlyArray<RoleAssignmentDtoOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfRoleAssignmentDto(value: object): value is RoleAssignmentDto {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('id' in _v && typeof _v['id'] !== 'string') return false;
-    if ('userId' in _v && typeof _v['userId'] !== 'string') return false;
-    if ('roleId' in _v && typeof _v['roleId'] !== 'string') return false;
-    if ('scopeType' in _v && typeof _v['scopeType'] !== 'string') return false;
-    if ('createdBy' in _v && typeof _v['createdBy'] !== 'string') return false;
-    if ('lastModifiedBy' in _v && typeof _v['lastModifiedBy'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createRoleAssignmentDtoPropertyNames();
+    const optionalStringProperties = createRoleAssignmentDtoOptionalProperties({ name: 'id', nullable: false }, { name: 'userId', nullable: false }, { name: 'roleId', nullable: false }, { name: 'scopeType', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'lastModifiedBy', nullable: false }, );
+    const optionalNumberProperties = createRoleAssignmentDtoOptionalProperties();
+    const optionalBooleanProperties = createRoleAssignmentDtoOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalRoleAssignmentDtoPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalRoleAssignmentDtoPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalRoleAssignmentDtoPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

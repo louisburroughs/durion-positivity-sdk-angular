@@ -35,14 +35,52 @@ export interface ResolvePersonRequest {
     threshold?: number;
 }
 
+function isOptionalResolvePersonRequestPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type ResolvePersonRequestOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createResolvePersonRequestPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createResolvePersonRequestOptionalProperties(
+    ...properties: ResolvePersonRequestOptionalProperty[]
+): ReadonlyArray<ResolvePersonRequestOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfResolvePersonRequest(value: object): value is ResolvePersonRequest {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('email' in _v && typeof _v['email'] !== 'string') return false;
-    if ('phone' in _v && typeof _v['phone'] !== 'string') return false;
-    if ('lastName' in _v && typeof _v['lastName'] !== 'string') return false;
-    if ('firstName' in _v && typeof _v['firstName'] !== 'string') return false;
-    if ('threshold' in _v && typeof _v['threshold'] !== 'number') return false;
-    return true;
+
+    const requiredProperties = createResolvePersonRequestPropertyNames();
+    const optionalStringProperties = createResolvePersonRequestOptionalProperties({ name: 'email', nullable: false }, { name: 'phone', nullable: false }, { name: 'lastName', nullable: false }, { name: 'firstName', nullable: false }, );
+    const optionalNumberProperties = createResolvePersonRequestOptionalProperties({ name: 'threshold', nullable: false }, );
+    const optionalBooleanProperties = createResolvePersonRequestOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalResolvePersonRequestPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalResolvePersonRequestPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalResolvePersonRequestPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

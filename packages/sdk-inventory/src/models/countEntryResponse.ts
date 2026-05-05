@@ -22,18 +22,52 @@ export interface CountEntryResponse {
     recount?: boolean;
 }
 
+function isOptionalCountEntryResponsePropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type CountEntryResponseOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createCountEntryResponsePropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createCountEntryResponseOptionalProperties(
+    ...properties: CountEntryResponseOptionalProperty[]
+): ReadonlyArray<CountEntryResponseOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfCountEntryResponse(value: object): value is CountEntryResponse {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('countEntryId' in _v && typeof _v['countEntryId'] !== 'string') return false;
-    if ('cycleCountTaskId' in _v && typeof _v['cycleCountTaskId'] !== 'string') return false;
-    if ('auditorId' in _v && typeof _v['auditorId'] !== 'string') return false;
-    if ('actualQuantity' in _v && typeof _v['actualQuantity'] !== 'number') return false;
-    if ('expectedQuantity' in _v && typeof _v['expectedQuantity'] !== 'number') return false;
-    if ('variance' in _v && typeof _v['variance'] !== 'number') return false;
-    if ('recountSequenceNumber' in _v && typeof _v['recountSequenceNumber'] !== 'number') return false;
-    if ('recountOfCountEntryId' in _v && typeof _v['recountOfCountEntryId'] !== 'string') return false;
-    if ('recount' in _v && typeof _v['recount'] !== 'boolean') return false;
-    return true;
+
+    const requiredProperties = createCountEntryResponsePropertyNames();
+    const optionalStringProperties = createCountEntryResponseOptionalProperties({ name: 'countEntryId', nullable: false }, { name: 'cycleCountTaskId', nullable: false }, { name: 'auditorId', nullable: false }, { name: 'recountOfCountEntryId', nullable: false }, );
+    const optionalNumberProperties = createCountEntryResponseOptionalProperties({ name: 'actualQuantity', nullable: false }, { name: 'expectedQuantity', nullable: false }, { name: 'variance', nullable: false }, { name: 'recountSequenceNumber', nullable: false }, );
+    const optionalBooleanProperties = createCountEntryResponseOptionalProperties({ name: 'recount', nullable: false }, );
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalCountEntryResponsePropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalCountEntryResponsePropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalCountEntryResponsePropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

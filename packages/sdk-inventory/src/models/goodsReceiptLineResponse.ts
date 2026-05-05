@@ -18,15 +18,52 @@ export interface GoodsReceiptLineResponse {
     lineAccruedAmountMinor?: number;
 }
 
+function isOptionalGoodsReceiptLineResponsePropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type GoodsReceiptLineResponseOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createGoodsReceiptLineResponsePropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createGoodsReceiptLineResponseOptionalProperties(
+    ...properties: GoodsReceiptLineResponseOptionalProperty[]
+): ReadonlyArray<GoodsReceiptLineResponseOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfGoodsReceiptLineResponse(value: object): value is GoodsReceiptLineResponse {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('receiptLineId' in _v && typeof _v['receiptLineId'] !== 'string') return false;
-    if ('poLineId' in _v && typeof _v['poLineId'] !== 'string') return false;
-    if ('sku' in _v && typeof _v['sku'] !== 'string') return false;
-    if ('quantityReceived' in _v && typeof _v['quantityReceived'] !== 'number') return false;
-    if ('unitCostMinor' in _v && typeof _v['unitCostMinor'] !== 'number') return false;
-    if ('lineAccruedAmountMinor' in _v && typeof _v['lineAccruedAmountMinor'] !== 'number') return false;
-    return true;
+
+    const requiredProperties = createGoodsReceiptLineResponsePropertyNames();
+    const optionalStringProperties = createGoodsReceiptLineResponseOptionalProperties({ name: 'receiptLineId', nullable: false }, { name: 'poLineId', nullable: false }, { name: 'sku', nullable: false }, );
+    const optionalNumberProperties = createGoodsReceiptLineResponseOptionalProperties({ name: 'quantityReceived', nullable: false }, { name: 'unitCostMinor', nullable: false }, { name: 'lineAccruedAmountMinor', nullable: false }, );
+    const optionalBooleanProperties = createGoodsReceiptLineResponseOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalGoodsReceiptLineResponsePropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalGoodsReceiptLineResponsePropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalGoodsReceiptLineResponsePropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

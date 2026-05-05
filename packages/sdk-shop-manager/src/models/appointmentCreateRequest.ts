@@ -31,22 +31,52 @@ export enum AppointmentCreateRequestSourceTypeEnum {
 
 
 
+function isOptionalAppointmentCreateRequestPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type AppointmentCreateRequestOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createAppointmentCreateRequestPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createAppointmentCreateRequestOptionalProperties(
+    ...properties: AppointmentCreateRequestOptionalProperty[]
+): ReadonlyArray<AppointmentCreateRequestOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfAppointmentCreateRequest(value: object): value is AppointmentCreateRequest {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if (!('crmCustomerId' in _v) || _v['crmCustomerId'] === undefined) return false;
-    if ('crmCustomerId' in _v && typeof _v['crmCustomerId'] !== 'string') return false;
-    if (!('crmVehicleId' in _v) || _v['crmVehicleId'] === undefined) return false;
-    if ('crmVehicleId' in _v && typeof _v['crmVehicleId'] !== 'string') return false;
-    if (!('locationId' in _v) || _v['locationId'] === undefined) return false;
-    if ('locationId' in _v && typeof _v['locationId'] !== 'string') return false;
-    if ('resourceId' in _v && typeof _v['resourceId'] !== 'string') return false;
-    if (!('startAt' in _v) || _v['startAt'] === undefined) return false;
-    if (!('endAt' in _v) || _v['endAt'] === undefined) return false;
-    if (!('serviceRequestIds' in _v) || _v['serviceRequestIds'] === undefined) return false;
-    if ('workorderLinkRef' in _v && typeof _v['workorderLinkRef'] !== 'string') return false;
-    if ('sourceType' in _v && typeof _v['sourceType'] !== 'string') return false;
-    if ('sourceId' in _v && typeof _v['sourceId'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createAppointmentCreateRequestPropertyNames('crmCustomerId', 'crmVehicleId', 'locationId', 'startAt', 'endAt', 'serviceRequestIds', );
+    const optionalStringProperties = createAppointmentCreateRequestOptionalProperties({ name: 'crmCustomerId', nullable: false }, { name: 'crmVehicleId', nullable: false }, { name: 'locationId', nullable: false }, { name: 'resourceId', nullable: false }, { name: 'workorderLinkRef', nullable: false }, { name: 'sourceType', nullable: false }, { name: 'sourceId', nullable: false }, );
+    const optionalNumberProperties = createAppointmentCreateRequestOptionalProperties();
+    const optionalBooleanProperties = createAppointmentCreateRequestOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalAppointmentCreateRequestPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalAppointmentCreateRequestPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalAppointmentCreateRequestPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

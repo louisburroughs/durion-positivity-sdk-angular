@@ -47,23 +47,52 @@ export interface InventoryAvailabilityResponse {
     expectedReceiptsQty?: number | null;
 }
 
+function isOptionalInventoryAvailabilityResponsePropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type InventoryAvailabilityResponseOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createInventoryAvailabilityResponsePropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createInventoryAvailabilityResponseOptionalProperties(
+    ...properties: InventoryAvailabilityResponseOptionalProperty[]
+): ReadonlyArray<InventoryAvailabilityResponseOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfInventoryAvailabilityResponse(value: object): value is InventoryAvailabilityResponse {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if (!('productId' in _v) || _v['productId'] === undefined) return false;
-    if ('productId' in _v && typeof _v['productId'] !== 'string') return false;
-    if (!('locationId' in _v) || _v['locationId'] === undefined) return false;
-    if ('locationId' in _v && typeof _v['locationId'] !== 'string') return false;
-    if (!('onHandQty' in _v) || _v['onHandQty'] === undefined) return false;
-    if ('onHandQty' in _v && typeof _v['onHandQty'] !== 'number') return false;
-    if (!('allocatedQty' in _v) || _v['allocatedQty'] === undefined) return false;
-    if ('allocatedQty' in _v && typeof _v['allocatedQty'] !== 'number') return false;
-    if (!('atpQty' in _v) || _v['atpQty'] === undefined) return false;
-    if ('atpQty' in _v && typeof _v['atpQty'] !== 'number') return false;
-    if (!('uom' in _v) || _v['uom'] === undefined) return false;
-    if ('uom' in _v && typeof _v['uom'] !== 'string') return false;
-    if (!('asOfTimestamp' in _v) || _v['asOfTimestamp'] === undefined) return false;
-    if ('expectedReceiptsQty' in _v && _v['expectedReceiptsQty'] !== null && typeof _v['expectedReceiptsQty'] !== 'number') return false;
-    return true;
+
+    const requiredProperties = createInventoryAvailabilityResponsePropertyNames('productId', 'locationId', 'onHandQty', 'allocatedQty', 'atpQty', 'uom', 'asOfTimestamp', );
+    const optionalStringProperties = createInventoryAvailabilityResponseOptionalProperties({ name: 'productId', nullable: false }, { name: 'locationId', nullable: false }, { name: 'uom', nullable: false }, );
+    const optionalNumberProperties = createInventoryAvailabilityResponseOptionalProperties({ name: 'onHandQty', nullable: false }, { name: 'allocatedQty', nullable: false }, { name: 'atpQty', nullable: false }, { name: 'expectedReceiptsQty', nullable: true }, );
+    const optionalBooleanProperties = createInventoryAvailabilityResponseOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalInventoryAvailabilityResponsePropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalInventoryAvailabilityResponsePropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalInventoryAvailabilityResponsePropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

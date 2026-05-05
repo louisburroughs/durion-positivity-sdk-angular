@@ -23,12 +23,52 @@ export interface WorkSessionRequest {
     actor?: string;
 }
 
+function isOptionalWorkSessionRequestPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type WorkSessionRequestOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createWorkSessionRequestPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createWorkSessionRequestOptionalProperties(
+    ...properties: WorkSessionRequestOptionalProperty[]
+): ReadonlyArray<WorkSessionRequestOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfWorkSessionRequest(value: object): value is WorkSessionRequest {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if (!('personId' in _v) || _v['personId'] === undefined) return false;
-    if ('personId' in _v && typeof _v['personId'] !== 'string') return false;
-    if ('actor' in _v && typeof _v['actor'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createWorkSessionRequestPropertyNames('personId', );
+    const optionalStringProperties = createWorkSessionRequestOptionalProperties({ name: 'personId', nullable: false }, { name: 'actor', nullable: false }, );
+    const optionalNumberProperties = createWorkSessionRequestOptionalProperties();
+    const optionalBooleanProperties = createWorkSessionRequestOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalWorkSessionRequestPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalWorkSessionRequestPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalWorkSessionRequestPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

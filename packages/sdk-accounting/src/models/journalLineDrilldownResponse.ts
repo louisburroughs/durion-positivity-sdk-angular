@@ -19,15 +19,52 @@ export interface JournalLineDrilldownResponse {
     sourceEventType?: string;
 }
 
+function isOptionalJournalLineDrilldownResponsePropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type JournalLineDrilldownResponseOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createJournalLineDrilldownResponsePropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createJournalLineDrilldownResponseOptionalProperties(
+    ...properties: JournalLineDrilldownResponseOptionalProperty[]
+): ReadonlyArray<JournalLineDrilldownResponseOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfJournalLineDrilldownResponse(value: object): value is JournalLineDrilldownResponse {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('journalEntryId' in _v && typeof _v['journalEntryId'] !== 'string') return false;
-    if ('description' in _v && typeof _v['description'] !== 'string') return false;
-    if ('debitAmount' in _v && typeof _v['debitAmount'] !== 'number') return false;
-    if ('creditAmount' in _v && typeof _v['creditAmount'] !== 'number') return false;
-    if ('sourceEventId' in _v && typeof _v['sourceEventId'] !== 'string') return false;
-    if ('sourceEventType' in _v && typeof _v['sourceEventType'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createJournalLineDrilldownResponsePropertyNames();
+    const optionalStringProperties = createJournalLineDrilldownResponseOptionalProperties({ name: 'journalEntryId', nullable: false }, { name: 'description', nullable: false }, { name: 'sourceEventId', nullable: false }, { name: 'sourceEventType', nullable: false }, );
+    const optionalNumberProperties = createJournalLineDrilldownResponseOptionalProperties({ name: 'debitAmount', nullable: false }, { name: 'creditAmount', nullable: false }, );
+    const optionalBooleanProperties = createJournalLineDrilldownResponseOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalJournalLineDrilldownResponsePropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalJournalLineDrilldownResponsePropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalJournalLineDrilldownResponsePropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

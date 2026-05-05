@@ -15,14 +15,52 @@ export interface MappingKeyUpdateRequest {
     modifiedBy: string;
 }
 
+function isOptionalMappingKeyUpdateRequestPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type MappingKeyUpdateRequestOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createMappingKeyUpdateRequestPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createMappingKeyUpdateRequestOptionalProperties(
+    ...properties: MappingKeyUpdateRequestOptionalProperty[]
+): ReadonlyArray<MappingKeyUpdateRequestOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfMappingKeyUpdateRequest(value: object): value is MappingKeyUpdateRequest {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if (!('keyName' in _v) || _v['keyName'] === undefined) return false;
-    if ('keyName' in _v && typeof _v['keyName'] !== 'string') return false;
-    if ('description' in _v && typeof _v['description'] !== 'string') return false;
-    if (!('modifiedBy' in _v) || _v['modifiedBy'] === undefined) return false;
-    if ('modifiedBy' in _v && typeof _v['modifiedBy'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createMappingKeyUpdateRequestPropertyNames('keyName', 'modifiedBy', );
+    const optionalStringProperties = createMappingKeyUpdateRequestOptionalProperties({ name: 'keyName', nullable: false }, { name: 'description', nullable: false }, { name: 'modifiedBy', nullable: false }, );
+    const optionalNumberProperties = createMappingKeyUpdateRequestOptionalProperties();
+    const optionalBooleanProperties = createMappingKeyUpdateRequestOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalMappingKeyUpdateRequestPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalMappingKeyUpdateRequestPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalMappingKeyUpdateRequestPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

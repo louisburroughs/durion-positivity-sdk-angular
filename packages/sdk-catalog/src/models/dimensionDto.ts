@@ -61,13 +61,52 @@ export enum DimensionDtoDimensionTypeEnum {
 
 
 
+function isOptionalDimensionDtoPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type DimensionDtoOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createDimensionDtoPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createDimensionDtoOptionalProperties(
+    ...properties: DimensionDtoOptionalProperty[]
+): ReadonlyArray<DimensionDtoOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfDimensionDto(value: object): value is DimensionDto {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('id' in _v && typeof _v['id'] !== 'string') return false;
-    if ('dimensionType' in _v && typeof _v['dimensionType'] !== 'string') return false;
-    if ('description' in _v && typeof _v['description'] !== 'string') return false;
-    if ('unitOfMeasure' in _v && typeof _v['unitOfMeasure'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createDimensionDtoPropertyNames();
+    const optionalStringProperties = createDimensionDtoOptionalProperties({ name: 'id', nullable: false }, { name: 'dimensionType', nullable: false }, { name: 'description', nullable: false }, { name: 'unitOfMeasure', nullable: false }, );
+    const optionalNumberProperties = createDimensionDtoOptionalProperties();
+    const optionalBooleanProperties = createDimensionDtoOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalDimensionDtoPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalDimensionDtoPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalDimensionDtoPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

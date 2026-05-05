@@ -18,20 +18,52 @@ export interface LocationPriceOverrideCreateRequestDto {
     createdByUserId: string;
 }
 
+function isOptionalLocationPriceOverrideCreateRequestDtoPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type LocationPriceOverrideCreateRequestDtoOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createLocationPriceOverrideCreateRequestDtoPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createLocationPriceOverrideCreateRequestDtoOptionalProperties(
+    ...properties: LocationPriceOverrideCreateRequestDtoOptionalProperty[]
+): ReadonlyArray<LocationPriceOverrideCreateRequestDtoOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfLocationPriceOverrideCreateRequestDto(value: object): value is LocationPriceOverrideCreateRequestDto {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if (!('locationId' in _v) || _v['locationId'] === undefined) return false;
-    if ('locationId' in _v && typeof _v['locationId'] !== 'string') return false;
-    if (!('productId' in _v) || _v['productId'] === undefined) return false;
-    if ('productId' in _v && typeof _v['productId'] !== 'string') return false;
-    if (!('basePrice' in _v) || _v['basePrice'] === undefined) return false;
-    if ('basePrice' in _v && typeof _v['basePrice'] !== 'number') return false;
-    if ('cost' in _v && typeof _v['cost'] !== 'number') return false;
-    if (!('overridePrice' in _v) || _v['overridePrice'] === undefined) return false;
-    if ('overridePrice' in _v && typeof _v['overridePrice'] !== 'number') return false;
-    if (!('createdByUserId' in _v) || _v['createdByUserId'] === undefined) return false;
-    if ('createdByUserId' in _v && typeof _v['createdByUserId'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createLocationPriceOverrideCreateRequestDtoPropertyNames('locationId', 'productId', 'basePrice', 'overridePrice', 'createdByUserId', );
+    const optionalStringProperties = createLocationPriceOverrideCreateRequestDtoOptionalProperties({ name: 'locationId', nullable: false }, { name: 'productId', nullable: false }, { name: 'createdByUserId', nullable: false }, );
+    const optionalNumberProperties = createLocationPriceOverrideCreateRequestDtoOptionalProperties({ name: 'basePrice', nullable: false }, { name: 'cost', nullable: false }, { name: 'overridePrice', nullable: false }, );
+    const optionalBooleanProperties = createLocationPriceOverrideCreateRequestDtoOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalLocationPriceOverrideCreateRequestDtoPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalLocationPriceOverrideCreateRequestDtoPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalLocationPriceOverrideCreateRequestDtoPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

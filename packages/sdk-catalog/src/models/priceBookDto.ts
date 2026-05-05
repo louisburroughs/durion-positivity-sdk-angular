@@ -32,16 +32,52 @@ export enum PriceBookDtoStatusEnum {
 
 
 
+function isOptionalPriceBookDtoPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type PriceBookDtoOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createPriceBookDtoPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createPriceBookDtoOptionalProperties(
+    ...properties: PriceBookDtoOptionalProperty[]
+): ReadonlyArray<PriceBookDtoOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfPriceBookDto(value: object): value is PriceBookDto {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('priceBookId' in _v && typeof _v['priceBookId'] !== 'string') return false;
-    if ('name' in _v && typeof _v['name'] !== 'string') return false;
-    if ('scope' in _v && typeof _v['scope'] !== 'string') return false;
-    if ('scopeId' in _v && typeof _v['scopeId'] !== 'string') return false;
-    if ('status' in _v && typeof _v['status'] !== 'string') return false;
-    if ('version' in _v && typeof _v['version'] !== 'number') return false;
-    if ('_default' in _v && typeof _v['_default'] !== 'boolean') return false;
-    return true;
+
+    const requiredProperties = createPriceBookDtoPropertyNames();
+    const optionalStringProperties = createPriceBookDtoOptionalProperties({ name: 'priceBookId', nullable: false }, { name: 'name', nullable: false }, { name: 'scope', nullable: false }, { name: 'scopeId', nullable: false }, { name: 'status', nullable: false }, );
+    const optionalNumberProperties = createPriceBookDtoOptionalProperties({ name: 'version', nullable: false }, );
+    const optionalBooleanProperties = createPriceBookDtoOptionalProperties({ name: '_default', nullable: false }, );
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalPriceBookDtoPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalPriceBookDtoPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalPriceBookDtoPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

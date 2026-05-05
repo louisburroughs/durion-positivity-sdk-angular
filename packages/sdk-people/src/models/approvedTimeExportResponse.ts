@@ -51,25 +51,52 @@ export interface ApprovedTimeExportResponse {
     approvedBy: string;
 }
 
+function isOptionalApprovedTimeExportResponsePropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type ApprovedTimeExportResponseOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createApprovedTimeExportResponsePropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createApprovedTimeExportResponseOptionalProperties(
+    ...properties: ApprovedTimeExportResponseOptionalProperty[]
+): ReadonlyArray<ApprovedTimeExportResponseOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfApprovedTimeExportResponse(value: object): value is ApprovedTimeExportResponse {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if (!('timeEntryId' in _v) || _v['timeEntryId'] === undefined) return false;
-    if ('timeEntryId' in _v && typeof _v['timeEntryId'] !== 'string') return false;
-    if (!('employeeId' in _v) || _v['employeeId'] === undefined) return false;
-    if ('employeeId' in _v && typeof _v['employeeId'] !== 'string') return false;
-    if (!('employeeName' in _v) || _v['employeeName'] === undefined) return false;
-    if ('employeeName' in _v && typeof _v['employeeName'] !== 'string') return false;
-    if (!('locationId' in _v) || _v['locationId'] === undefined) return false;
-    if ('locationId' in _v && typeof _v['locationId'] !== 'string') return false;
-    if (!('locationName' in _v) || _v['locationName'] === undefined) return false;
-    if ('locationName' in _v && typeof _v['locationName'] !== 'string') return false;
-    if (!('entryDate' in _v) || _v['entryDate'] === undefined) return false;
-    if (!('hoursWorked' in _v) || _v['hoursWorked'] === undefined) return false;
-    if ('hoursWorked' in _v && typeof _v['hoursWorked'] !== 'number') return false;
-    if (!('approvedAt' in _v) || _v['approvedAt'] === undefined) return false;
-    if (!('approvedBy' in _v) || _v['approvedBy'] === undefined) return false;
-    if ('approvedBy' in _v && typeof _v['approvedBy'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createApprovedTimeExportResponsePropertyNames('timeEntryId', 'employeeId', 'employeeName', 'locationId', 'locationName', 'entryDate', 'hoursWorked', 'approvedAt', 'approvedBy', );
+    const optionalStringProperties = createApprovedTimeExportResponseOptionalProperties({ name: 'timeEntryId', nullable: false }, { name: 'employeeId', nullable: false }, { name: 'employeeName', nullable: false }, { name: 'locationId', nullable: false }, { name: 'locationName', nullable: false }, { name: 'approvedBy', nullable: false }, );
+    const optionalNumberProperties = createApprovedTimeExportResponseOptionalProperties({ name: 'hoursWorked', nullable: false }, );
+    const optionalBooleanProperties = createApprovedTimeExportResponseOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalApprovedTimeExportResponsePropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalApprovedTimeExportResponsePropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalApprovedTimeExportResponsePropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

@@ -52,12 +52,52 @@ export enum PricingInfoConfidenceEnum {
 
 
 
+function isOptionalPricingInfoPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type PricingInfoOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createPricingInfoPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createPricingInfoOptionalProperties(
+    ...properties: PricingInfoOptionalProperty[]
+): ReadonlyArray<PricingInfoOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfPricingInfo(value: object): value is PricingInfo {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('currency' in _v && typeof _v['currency'] !== 'string') return false;
-    if ('status' in _v && typeof _v['status'] !== 'string') return false;
-    if ('confidence' in _v && typeof _v['confidence'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createPricingInfoPropertyNames();
+    const optionalStringProperties = createPricingInfoOptionalProperties({ name: 'currency', nullable: false }, { name: 'status', nullable: false }, { name: 'confidence', nullable: false }, );
+    const optionalNumberProperties = createPricingInfoOptionalProperties();
+    const optionalBooleanProperties = createPricingInfoOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalPricingInfoPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalPricingInfoPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalPricingInfoPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

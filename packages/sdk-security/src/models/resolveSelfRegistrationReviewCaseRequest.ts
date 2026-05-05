@@ -19,11 +19,52 @@ export interface ResolveSelfRegistrationReviewCaseRequest {
     resolutionNotes: string;
 }
 
+function isOptionalResolveSelfRegistrationReviewCaseRequestPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type ResolveSelfRegistrationReviewCaseRequestOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createResolveSelfRegistrationReviewCaseRequestPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createResolveSelfRegistrationReviewCaseRequestOptionalProperties(
+    ...properties: ResolveSelfRegistrationReviewCaseRequestOptionalProperty[]
+): ReadonlyArray<ResolveSelfRegistrationReviewCaseRequestOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfResolveSelfRegistrationReviewCaseRequest(value: object): value is ResolveSelfRegistrationReviewCaseRequest {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if (!('resolutionNotes' in _v) || _v['resolutionNotes'] === undefined) return false;
-    if ('resolutionNotes' in _v && typeof _v['resolutionNotes'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createResolveSelfRegistrationReviewCaseRequestPropertyNames('resolutionNotes', );
+    const optionalStringProperties = createResolveSelfRegistrationReviewCaseRequestOptionalProperties({ name: 'resolutionNotes', nullable: false }, );
+    const optionalNumberProperties = createResolveSelfRegistrationReviewCaseRequestOptionalProperties();
+    const optionalBooleanProperties = createResolveSelfRegistrationReviewCaseRequestOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalResolveSelfRegistrationReviewCaseRequestPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalResolveSelfRegistrationReviewCaseRequestPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalResolveSelfRegistrationReviewCaseRequestPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

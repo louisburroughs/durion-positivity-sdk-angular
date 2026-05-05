@@ -23,12 +23,52 @@ export interface FilterProductsResponse {
     count: number;
 }
 
+function isOptionalFilterProductsResponsePropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type FilterProductsResponseOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createFilterProductsResponsePropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createFilterProductsResponseOptionalProperties(
+    ...properties: FilterProductsResponseOptionalProperty[]
+): ReadonlyArray<FilterProductsResponseOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfFilterProductsResponse(value: object): value is FilterProductsResponse {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if (!('productIds' in _v) || _v['productIds'] === undefined) return false;
-    if (!('count' in _v) || _v['count'] === undefined) return false;
-    if ('count' in _v && typeof _v['count'] !== 'number') return false;
-    return true;
+
+    const requiredProperties = createFilterProductsResponsePropertyNames('productIds', 'count', );
+    const optionalStringProperties = createFilterProductsResponseOptionalProperties();
+    const optionalNumberProperties = createFilterProductsResponseOptionalProperties({ name: 'count', nullable: false }, );
+    const optionalBooleanProperties = createFilterProductsResponseOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalFilterProductsResponsePropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalFilterProductsResponsePropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalFilterProductsResponsePropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

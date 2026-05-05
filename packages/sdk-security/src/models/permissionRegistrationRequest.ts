@@ -17,12 +17,52 @@ export interface PermissionRegistrationRequest {
     version?: string;
 }
 
+function isOptionalPermissionRegistrationRequestPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type PermissionRegistrationRequestOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createPermissionRegistrationRequestPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createPermissionRegistrationRequestOptionalProperties(
+    ...properties: PermissionRegistrationRequestOptionalProperty[]
+): ReadonlyArray<PermissionRegistrationRequestOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfPermissionRegistrationRequest(value: object): value is PermissionRegistrationRequest {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('domain' in _v && typeof _v['domain'] !== 'string') return false;
-    if ('serviceName' in _v && typeof _v['serviceName'] !== 'string') return false;
-    if ('version' in _v && typeof _v['version'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createPermissionRegistrationRequestPropertyNames();
+    const optionalStringProperties = createPermissionRegistrationRequestOptionalProperties({ name: 'domain', nullable: false }, { name: 'serviceName', nullable: false }, { name: 'version', nullable: false }, );
+    const optionalNumberProperties = createPermissionRegistrationRequestOptionalProperties();
+    const optionalBooleanProperties = createPermissionRegistrationRequestOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalPermissionRegistrationRequestPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalPermissionRegistrationRequestPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalPermissionRegistrationRequestPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

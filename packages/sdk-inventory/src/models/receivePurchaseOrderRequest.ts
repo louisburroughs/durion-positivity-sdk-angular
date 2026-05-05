@@ -14,10 +14,52 @@ export interface ReceivePurchaseOrderRequest {
     lines: Array<ReceivePurchaseOrderLineRequest>;
 }
 
+function isOptionalReceivePurchaseOrderRequestPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type ReceivePurchaseOrderRequestOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createReceivePurchaseOrderRequestPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createReceivePurchaseOrderRequestOptionalProperties(
+    ...properties: ReceivePurchaseOrderRequestOptionalProperty[]
+): ReadonlyArray<ReceivePurchaseOrderRequestOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfReceivePurchaseOrderRequest(value: object): value is ReceivePurchaseOrderRequest {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if (!('lines' in _v) || _v['lines'] === undefined) return false;
-    return true;
+
+    const requiredProperties = createReceivePurchaseOrderRequestPropertyNames('lines', );
+    const optionalStringProperties = createReceivePurchaseOrderRequestOptionalProperties();
+    const optionalNumberProperties = createReceivePurchaseOrderRequestOptionalProperties();
+    const optionalBooleanProperties = createReceivePurchaseOrderRequestOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalReceivePurchaseOrderRequestPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalReceivePurchaseOrderRequestPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalReceivePurchaseOrderRequestPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

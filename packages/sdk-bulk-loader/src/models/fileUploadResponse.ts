@@ -16,13 +16,52 @@ export interface FileUploadResponse {
     sizeBytes?: number;
 }
 
+function isOptionalFileUploadResponsePropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type FileUploadResponseOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createFileUploadResponsePropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createFileUploadResponseOptionalProperties(
+    ...properties: FileUploadResponseOptionalProperty[]
+): ReadonlyArray<FileUploadResponseOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfFileUploadResponse(value: object): value is FileUploadResponse {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('jobId' in _v && typeof _v['jobId'] !== 'string') return false;
-    if ('storagePath' in _v && typeof _v['storagePath'] !== 'string') return false;
-    if ('fileName' in _v && typeof _v['fileName'] !== 'string') return false;
-    if ('sizeBytes' in _v && typeof _v['sizeBytes'] !== 'number') return false;
-    return true;
+
+    const requiredProperties = createFileUploadResponsePropertyNames();
+    const optionalStringProperties = createFileUploadResponseOptionalProperties({ name: 'jobId', nullable: false }, { name: 'storagePath', nullable: false }, { name: 'fileName', nullable: false }, );
+    const optionalNumberProperties = createFileUploadResponseOptionalProperties({ name: 'sizeBytes', nullable: false }, );
+    const optionalBooleanProperties = createFileUploadResponseOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalFileUploadResponsePropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalFileUploadResponsePropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalFileUploadResponsePropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

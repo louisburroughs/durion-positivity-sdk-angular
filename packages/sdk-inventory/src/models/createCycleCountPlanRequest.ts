@@ -16,11 +16,52 @@ export interface CreateCycleCountPlanRequest {
     scheduledDate?: string;
 }
 
+function isOptionalCreateCycleCountPlanRequestPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type CreateCycleCountPlanRequestOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createCreateCycleCountPlanRequestPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createCreateCycleCountPlanRequestOptionalProperties(
+    ...properties: CreateCycleCountPlanRequestOptionalProperty[]
+): ReadonlyArray<CreateCycleCountPlanRequestOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfCreateCycleCountPlanRequest(value: object): value is CreateCycleCountPlanRequest {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('locationId' in _v && typeof _v['locationId'] !== 'string') return false;
-    if ('planName' in _v && typeof _v['planName'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createCreateCycleCountPlanRequestPropertyNames();
+    const optionalStringProperties = createCreateCycleCountPlanRequestOptionalProperties({ name: 'locationId', nullable: false }, { name: 'planName', nullable: false }, );
+    const optionalNumberProperties = createCreateCycleCountPlanRequestOptionalProperties();
+    const optionalBooleanProperties = createCreateCycleCountPlanRequestOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalCreateCycleCountPlanRequestPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalCreateCycleCountPlanRequestPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalCreateCycleCountPlanRequestPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

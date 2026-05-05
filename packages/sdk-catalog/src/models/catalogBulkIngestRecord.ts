@@ -19,18 +19,52 @@ export interface CatalogBulkIngestRecord {
     price?: number;
 }
 
+function isOptionalCatalogBulkIngestRecordPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type CatalogBulkIngestRecordOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createCatalogBulkIngestRecordPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createCatalogBulkIngestRecordOptionalProperties(
+    ...properties: CatalogBulkIngestRecordOptionalProperty[]
+): ReadonlyArray<CatalogBulkIngestRecordOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfCatalogBulkIngestRecord(value: object): value is CatalogBulkIngestRecord {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if (!('sku' in _v) || _v['sku'] === undefined) return false;
-    if ('sku' in _v && typeof _v['sku'] !== 'string') return false;
-    if ('upc' in _v && typeof _v['upc'] !== 'string') return false;
-    if (!('name' in _v) || _v['name'] === undefined) return false;
-    if ('name' in _v && typeof _v['name'] !== 'string') return false;
-    if ('description' in _v && typeof _v['description'] !== 'string') return false;
-    if ('categoryName' in _v && typeof _v['categoryName'] !== 'string') return false;
-    if ('subcategoryName' in _v && typeof _v['subcategoryName'] !== 'string') return false;
-    if ('price' in _v && typeof _v['price'] !== 'number') return false;
-    return true;
+
+    const requiredProperties = createCatalogBulkIngestRecordPropertyNames('sku', 'name', );
+    const optionalStringProperties = createCatalogBulkIngestRecordOptionalProperties({ name: 'sku', nullable: false }, { name: 'upc', nullable: false }, { name: 'name', nullable: false }, { name: 'description', nullable: false }, { name: 'categoryName', nullable: false }, { name: 'subcategoryName', nullable: false }, );
+    const optionalNumberProperties = createCatalogBulkIngestRecordOptionalProperties({ name: 'price', nullable: false }, );
+    const optionalBooleanProperties = createCatalogBulkIngestRecordOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalCatalogBulkIngestRecordPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalCatalogBulkIngestRecordPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalCatalogBulkIngestRecordPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

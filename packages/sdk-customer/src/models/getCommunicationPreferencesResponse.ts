@@ -22,18 +22,52 @@ export interface GetCommunicationPreferencesResponse {
     updateSource?: string;
 }
 
+function isOptionalGetCommunicationPreferencesResponsePropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type GetCommunicationPreferencesResponseOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createGetCommunicationPreferencesResponsePropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createGetCommunicationPreferencesResponseOptionalProperties(
+    ...properties: GetCommunicationPreferencesResponseOptionalProperty[]
+): ReadonlyArray<GetCommunicationPreferencesResponseOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfGetCommunicationPreferencesResponse(value: object): value is GetCommunicationPreferencesResponse {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('partyId' in _v && typeof _v['partyId'] !== 'string') return false;
-    if ('version' in _v && typeof _v['version'] !== 'string') return false;
-    if ('emailPreference' in _v && typeof _v['emailPreference'] !== 'string') return false;
-    if ('smsPreference' in _v && typeof _v['smsPreference'] !== 'string') return false;
-    if ('phonePreference' in _v && typeof _v['phonePreference'] !== 'string') return false;
-    if ('marketingPreference' in _v && typeof _v['marketingPreference'] !== 'string') return false;
-    if ('preferencesNote' in _v && typeof _v['preferencesNote'] !== 'string') return false;
-    if ('updatedAt' in _v && typeof _v['updatedAt'] !== 'string') return false;
-    if ('updateSource' in _v && typeof _v['updateSource'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createGetCommunicationPreferencesResponsePropertyNames();
+    const optionalStringProperties = createGetCommunicationPreferencesResponseOptionalProperties({ name: 'partyId', nullable: false }, { name: 'version', nullable: false }, { name: 'emailPreference', nullable: false }, { name: 'smsPreference', nullable: false }, { name: 'phonePreference', nullable: false }, { name: 'marketingPreference', nullable: false }, { name: 'preferencesNote', nullable: false }, { name: 'updatedAt', nullable: false }, { name: 'updateSource', nullable: false }, );
+    const optionalNumberProperties = createGetCommunicationPreferencesResponseOptionalProperties();
+    const optionalBooleanProperties = createGetCommunicationPreferencesResponseOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalGetCommunicationPreferencesResponsePropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalGetCommunicationPreferencesResponsePropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalGetCommunicationPreferencesResponsePropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

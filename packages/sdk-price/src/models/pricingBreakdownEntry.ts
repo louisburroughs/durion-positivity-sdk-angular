@@ -22,21 +22,56 @@ export interface PricingBreakdownEntry {
      * Rule category/type
      */
     ruleType?: string;
-    /**
-     * Amount adjusted by this rule
-     */
     adjustment?: MoneyAmount;
-    /**
-     * Running value after this rule adjustment
-     */
     resultingValue?: MoneyAmount;
+}
+
+function isOptionalPricingBreakdownEntryPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type PricingBreakdownEntryOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createPricingBreakdownEntryPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createPricingBreakdownEntryOptionalProperties(
+    ...properties: PricingBreakdownEntryOptionalProperty[]
+): ReadonlyArray<PricingBreakdownEntryOptionalProperty> {
+    return properties;
 }
 
 export function instanceOfPricingBreakdownEntry(value: object): value is PricingBreakdownEntry {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('ruleName' in _v && typeof _v['ruleName'] !== 'string') return false;
-    if ('ruleType' in _v && typeof _v['ruleType'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createPricingBreakdownEntryPropertyNames();
+    const optionalStringProperties = createPricingBreakdownEntryOptionalProperties({ name: 'ruleName', nullable: false }, { name: 'ruleType', nullable: false }, );
+    const optionalNumberProperties = createPricingBreakdownEntryOptionalProperties();
+    const optionalBooleanProperties = createPricingBreakdownEntryOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalPricingBreakdownEntryPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalPricingBreakdownEntryPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalPricingBreakdownEntryPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

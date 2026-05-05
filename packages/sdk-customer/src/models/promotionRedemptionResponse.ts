@@ -31,20 +31,52 @@ export enum PromotionRedemptionResponseStatusEnum {
 
 
 
+function isOptionalPromotionRedemptionResponsePropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type PromotionRedemptionResponseOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createPromotionRedemptionResponsePropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createPromotionRedemptionResponseOptionalProperties(
+    ...properties: PromotionRedemptionResponseOptionalProperty[]
+): ReadonlyArray<PromotionRedemptionResponseOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfPromotionRedemptionResponse(value: object): value is PromotionRedemptionResponse {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('promotionRedemptionId' in _v && typeof _v['promotionRedemptionId'] !== 'string') return false;
-    if ('promotionId' in _v && typeof _v['promotionId'] !== 'string') return false;
-    if ('customerId' in _v && typeof _v['customerId'] !== 'string') return false;
-    if ('workorderId' in _v && typeof _v['workorderId'] !== 'string') return false;
-    if ('invoiceId' in _v && typeof _v['invoiceId'] !== 'string') return false;
-    if ('discountAmount' in _v && typeof _v['discountAmount'] !== 'number') return false;
-    if ('discountType' in _v && typeof _v['discountType'] !== 'string') return false;
-    if ('promotionCode' in _v && typeof _v['promotionCode'] !== 'string') return false;
-    if ('recordedBy' in _v && typeof _v['recordedBy'] !== 'string') return false;
-    if ('recordedOverLimit' in _v && typeof _v['recordedOverLimit'] !== 'boolean') return false;
-    if ('status' in _v && typeof _v['status'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createPromotionRedemptionResponsePropertyNames();
+    const optionalStringProperties = createPromotionRedemptionResponseOptionalProperties({ name: 'promotionRedemptionId', nullable: false }, { name: 'promotionId', nullable: false }, { name: 'customerId', nullable: false }, { name: 'workorderId', nullable: false }, { name: 'invoiceId', nullable: false }, { name: 'discountType', nullable: false }, { name: 'promotionCode', nullable: false }, { name: 'recordedBy', nullable: false }, { name: 'status', nullable: false }, );
+    const optionalNumberProperties = createPromotionRedemptionResponseOptionalProperties({ name: 'discountAmount', nullable: false }, );
+    const optionalBooleanProperties = createPromotionRedemptionResponseOptionalProperties({ name: 'recordedOverLimit', nullable: false }, );
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalPromotionRedemptionResponsePropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalPromotionRedemptionResponsePropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalPromotionRedemptionResponsePropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

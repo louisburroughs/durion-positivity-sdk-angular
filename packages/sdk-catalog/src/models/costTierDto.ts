@@ -27,14 +27,52 @@ export interface CostTierDto {
     unitCost: number;
 }
 
+function isOptionalCostTierDtoPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type CostTierDtoOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createCostTierDtoPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createCostTierDtoOptionalProperties(
+    ...properties: CostTierDtoOptionalProperty[]
+): ReadonlyArray<CostTierDtoOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfCostTierDto(value: object): value is CostTierDto {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if (!('minQuantity' in _v) || _v['minQuantity'] === undefined) return false;
-    if ('minQuantity' in _v && typeof _v['minQuantity'] !== 'number') return false;
-    if ('maxQuantity' in _v && _v['maxQuantity'] !== null && typeof _v['maxQuantity'] !== 'number') return false;
-    if (!('unitCost' in _v) || _v['unitCost'] === undefined) return false;
-    if ('unitCost' in _v && typeof _v['unitCost'] !== 'number') return false;
-    return true;
+
+    const requiredProperties = createCostTierDtoPropertyNames('minQuantity', 'unitCost', );
+    const optionalStringProperties = createCostTierDtoOptionalProperties();
+    const optionalNumberProperties = createCostTierDtoOptionalProperties({ name: 'minQuantity', nullable: false }, { name: 'maxQuantity', nullable: true }, { name: 'unitCost', nullable: false }, );
+    const optionalBooleanProperties = createCostTierDtoOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalCostTierDtoPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalCostTierDtoPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalCostTierDtoPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

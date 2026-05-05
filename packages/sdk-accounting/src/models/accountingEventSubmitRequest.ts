@@ -36,19 +36,55 @@ export interface AccountingEventSubmitRequest {
     /**
      * Event-specific payload content
      */
-    payload: { [key: string]: any; };
+    payload: object;
+}
+
+function isOptionalAccountingEventSubmitRequestPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type AccountingEventSubmitRequestOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createAccountingEventSubmitRequestPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createAccountingEventSubmitRequestOptionalProperties(
+    ...properties: AccountingEventSubmitRequestOptionalProperty[]
+): ReadonlyArray<AccountingEventSubmitRequestOptionalProperty> {
+    return properties;
 }
 
 export function instanceOfAccountingEventSubmitRequest(value: object): value is AccountingEventSubmitRequest {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('eventId' in _v && typeof _v['eventId'] !== 'string') return false;
-    if (!('eventType' in _v) || _v['eventType'] === undefined) return false;
-    if ('eventType' in _v && typeof _v['eventType'] !== 'string') return false;
-    if (!('organizationId' in _v) || _v['organizationId'] === undefined) return false;
-    if ('organizationId' in _v && typeof _v['organizationId'] !== 'string') return false;
-    if ('sourceSystem' in _v && typeof _v['sourceSystem'] !== 'string') return false;
-    if (!('payload' in _v) || _v['payload'] === undefined) return false;
-    return true;
+
+    const requiredProperties = createAccountingEventSubmitRequestPropertyNames('eventType', 'organizationId', 'payload', );
+    const optionalStringProperties = createAccountingEventSubmitRequestOptionalProperties({ name: 'eventId', nullable: false }, { name: 'eventType', nullable: false }, { name: 'organizationId', nullable: false }, { name: 'sourceSystem', nullable: false }, );
+    const optionalNumberProperties = createAccountingEventSubmitRequestOptionalProperties();
+    const optionalBooleanProperties = createAccountingEventSubmitRequestOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalAccountingEventSubmitRequestPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalAccountingEventSubmitRequestPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalAccountingEventSubmitRequestPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

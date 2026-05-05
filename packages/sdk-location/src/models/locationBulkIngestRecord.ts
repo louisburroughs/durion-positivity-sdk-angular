@@ -23,22 +23,52 @@ export interface LocationBulkIngestRecord {
     locationTypeName?: string;
 }
 
+function isOptionalLocationBulkIngestRecordPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type LocationBulkIngestRecordOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createLocationBulkIngestRecordPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createLocationBulkIngestRecordOptionalProperties(
+    ...properties: LocationBulkIngestRecordOptionalProperty[]
+): ReadonlyArray<LocationBulkIngestRecordOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfLocationBulkIngestRecord(value: object): value is LocationBulkIngestRecord {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if (!('name' in _v) || _v['name'] === undefined) return false;
-    if ('name' in _v && typeof _v['name'] !== 'string') return false;
-    if (!('code' in _v) || _v['code'] === undefined) return false;
-    if ('code' in _v && typeof _v['code'] !== 'string') return false;
-    if ('addressLine1' in _v && typeof _v['addressLine1'] !== 'string') return false;
-    if ('addressLine2' in _v && typeof _v['addressLine2'] !== 'string') return false;
-    if ('city' in _v && typeof _v['city'] !== 'string') return false;
-    if ('stateOrProvince' in _v && typeof _v['stateOrProvince'] !== 'string') return false;
-    if ('postalCode' in _v && typeof _v['postalCode'] !== 'string') return false;
-    if ('countryCode' in _v && typeof _v['countryCode'] !== 'string') return false;
-    if ('phoneNumber' in _v && typeof _v['phoneNumber'] !== 'string') return false;
-    if ('active' in _v && typeof _v['active'] !== 'boolean') return false;
-    if ('locationTypeName' in _v && typeof _v['locationTypeName'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createLocationBulkIngestRecordPropertyNames('name', 'code', );
+    const optionalStringProperties = createLocationBulkIngestRecordOptionalProperties({ name: 'name', nullable: false }, { name: 'code', nullable: false }, { name: 'addressLine1', nullable: false }, { name: 'addressLine2', nullable: false }, { name: 'city', nullable: false }, { name: 'stateOrProvince', nullable: false }, { name: 'postalCode', nullable: false }, { name: 'countryCode', nullable: false }, { name: 'phoneNumber', nullable: false }, { name: 'locationTypeName', nullable: false }, );
+    const optionalNumberProperties = createLocationBulkIngestRecordOptionalProperties();
+    const optionalBooleanProperties = createLocationBulkIngestRecordOptionalProperties({ name: 'active', nullable: false }, );
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalLocationBulkIngestRecordPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalLocationBulkIngestRecordPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalLocationBulkIngestRecordPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

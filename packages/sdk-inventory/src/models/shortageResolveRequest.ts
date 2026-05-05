@@ -17,16 +17,52 @@ export interface ShortageResolveRequest {
     notes?: string;
 }
 
+function isOptionalShortageResolveRequestPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type ShortageResolveRequestOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createShortageResolveRequestPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createShortageResolveRequestOptionalProperties(
+    ...properties: ShortageResolveRequestOptionalProperty[]
+): ReadonlyArray<ShortageResolveRequestOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfShortageResolveRequest(value: object): value is ShortageResolveRequest {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if (!('allocationId' in _v) || _v['allocationId'] === undefined) return false;
-    if ('allocationId' in _v && typeof _v['allocationId'] !== 'string') return false;
-    if ('allocationLineId' in _v && typeof _v['allocationLineId'] !== 'string') return false;
-    if (!('resolution' in _v) || _v['resolution'] === undefined) return false;
-    if ('resolution' in _v && typeof _v['resolution'] !== 'string') return false;
-    if ('substituteSku' in _v && typeof _v['substituteSku'] !== 'string') return false;
-    if ('notes' in _v && typeof _v['notes'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createShortageResolveRequestPropertyNames('allocationId', 'resolution', );
+    const optionalStringProperties = createShortageResolveRequestOptionalProperties({ name: 'allocationId', nullable: false }, { name: 'allocationLineId', nullable: false }, { name: 'resolution', nullable: false }, { name: 'substituteSku', nullable: false }, { name: 'notes', nullable: false }, );
+    const optionalNumberProperties = createShortageResolveRequestOptionalProperties();
+    const optionalBooleanProperties = createShortageResolveRequestOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalShortageResolveRequestPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalShortageResolveRequestPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalShortageResolveRequestPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

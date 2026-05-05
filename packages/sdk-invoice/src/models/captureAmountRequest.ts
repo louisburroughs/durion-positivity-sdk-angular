@@ -14,13 +14,52 @@ export interface CaptureAmountRequest {
     captureIdempotencyKey: string;
 }
 
+function isOptionalCaptureAmountRequestPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type CaptureAmountRequestOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createCaptureAmountRequestPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createCaptureAmountRequestOptionalProperties(
+    ...properties: CaptureAmountRequestOptionalProperty[]
+): ReadonlyArray<CaptureAmountRequestOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfCaptureAmountRequest(value: object): value is CaptureAmountRequest {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if (!('amount' in _v) || _v['amount'] === undefined) return false;
-    if ('amount' in _v && typeof _v['amount'] !== 'number') return false;
-    if (!('captureIdempotencyKey' in _v) || _v['captureIdempotencyKey'] === undefined) return false;
-    if ('captureIdempotencyKey' in _v && typeof _v['captureIdempotencyKey'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createCaptureAmountRequestPropertyNames('amount', 'captureIdempotencyKey', );
+    const optionalStringProperties = createCaptureAmountRequestOptionalProperties({ name: 'captureIdempotencyKey', nullable: false }, );
+    const optionalNumberProperties = createCaptureAmountRequestOptionalProperties({ name: 'amount', nullable: false }, );
+    const optionalBooleanProperties = createCaptureAmountRequestOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalCaptureAmountRequestPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalCaptureAmountRequestPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalCaptureAmountRequestPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

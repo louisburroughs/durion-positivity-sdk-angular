@@ -18,12 +18,52 @@ export interface ConflictOverrideRequest {
     conflictDetails?: string;
 }
 
+function isOptionalConflictOverrideRequestPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type ConflictOverrideRequestOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createConflictOverrideRequestPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createConflictOverrideRequestOptionalProperties(
+    ...properties: ConflictOverrideRequestOptionalProperty[]
+): ReadonlyArray<ConflictOverrideRequestOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfConflictOverrideRequest(value: object): value is ConflictOverrideRequest {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('appointmentId' in _v && typeof _v['appointmentId'] !== 'string') return false;
-    if ('overrideReason' in _v && typeof _v['overrideReason'] !== 'string') return false;
-    if ('conflictDetails' in _v && typeof _v['conflictDetails'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createConflictOverrideRequestPropertyNames();
+    const optionalStringProperties = createConflictOverrideRequestOptionalProperties({ name: 'appointmentId', nullable: false }, { name: 'overrideReason', nullable: false }, { name: 'conflictDetails', nullable: false }, );
+    const optionalNumberProperties = createConflictOverrideRequestOptionalProperties();
+    const optionalBooleanProperties = createConflictOverrideRequestOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalConflictOverrideRequestPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalConflictOverrideRequestPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalConflictOverrideRequestPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

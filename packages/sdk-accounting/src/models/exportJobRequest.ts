@@ -20,7 +20,7 @@ export interface ExportJobRequest {
     /**
      * Optional filter criteria as key-value pairs
      */
-    filters?: { [key: string]: any; };
+    filters?: object;
     /**
      * Export format: CSV or JSON
      */
@@ -31,14 +31,52 @@ export interface ExportJobRequest {
     deliveryMode?: string;
 }
 
+function isOptionalExportJobRequestPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type ExportJobRequestOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createExportJobRequestPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createExportJobRequestOptionalProperties(
+    ...properties: ExportJobRequestOptionalProperty[]
+): ReadonlyArray<ExportJobRequestOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfExportJobRequest(value: object): value is ExportJobRequest {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if (!('exportType' in _v) || _v['exportType'] === undefined) return false;
-    if ('exportType' in _v && typeof _v['exportType'] !== 'string') return false;
-    if (!('format' in _v) || _v['format'] === undefined) return false;
-    if ('format' in _v && typeof _v['format'] !== 'string') return false;
-    if ('deliveryMode' in _v && typeof _v['deliveryMode'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createExportJobRequestPropertyNames('exportType', 'format', );
+    const optionalStringProperties = createExportJobRequestOptionalProperties({ name: 'exportType', nullable: false }, { name: 'format', nullable: false }, { name: 'deliveryMode', nullable: false }, );
+    const optionalNumberProperties = createExportJobRequestOptionalProperties();
+    const optionalBooleanProperties = createExportJobRequestOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalExportJobRequestPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalExportJobRequestPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalExportJobRequestPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

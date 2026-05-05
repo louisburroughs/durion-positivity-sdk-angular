@@ -20,10 +20,52 @@ export interface UpdateHintRequest {
     fitmentTags: Array<FitmentTagDto>;
 }
 
+function isOptionalUpdateHintRequestPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type UpdateHintRequestOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createUpdateHintRequestPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createUpdateHintRequestOptionalProperties(
+    ...properties: UpdateHintRequestOptionalProperty[]
+): ReadonlyArray<UpdateHintRequestOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfUpdateHintRequest(value: object): value is UpdateHintRequest {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if (!('fitmentTags' in _v) || _v['fitmentTags'] === undefined) return false;
-    return true;
+
+    const requiredProperties = createUpdateHintRequestPropertyNames('fitmentTags', );
+    const optionalStringProperties = createUpdateHintRequestOptionalProperties();
+    const optionalNumberProperties = createUpdateHintRequestOptionalProperties();
+    const optionalBooleanProperties = createUpdateHintRequestOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalUpdateHintRequestPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalUpdateHintRequestPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalUpdateHintRequestPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

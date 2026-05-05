@@ -23,14 +23,52 @@ export interface MobileUnitRequest {
     coverageRules?: Array<CoverageRuleRequest>;
 }
 
+function isOptionalMobileUnitRequestPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type MobileUnitRequestOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createMobileUnitRequestPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createMobileUnitRequestOptionalProperties(
+    ...properties: MobileUnitRequestOptionalProperty[]
+): ReadonlyArray<MobileUnitRequestOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfMobileUnitRequest(value: object): value is MobileUnitRequest {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('name' in _v && typeof _v['name'] !== 'string') return false;
-    if ('baseLocationId' in _v && typeof _v['baseLocationId'] !== 'string') return false;
-    if ('status' in _v && typeof _v['status'] !== 'string') return false;
-    if ('travelBufferPolicyId' in _v && typeof _v['travelBufferPolicyId'] !== 'string') return false;
-    if ('notes' in _v && typeof _v['notes'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createMobileUnitRequestPropertyNames();
+    const optionalStringProperties = createMobileUnitRequestOptionalProperties({ name: 'name', nullable: false }, { name: 'baseLocationId', nullable: false }, { name: 'status', nullable: false }, { name: 'travelBufferPolicyId', nullable: false }, { name: 'notes', nullable: false }, );
+    const optionalNumberProperties = createMobileUnitRequestOptionalProperties();
+    const optionalBooleanProperties = createMobileUnitRequestOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalMobileUnitRequestPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalMobileUnitRequestPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalMobileUnitRequestPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

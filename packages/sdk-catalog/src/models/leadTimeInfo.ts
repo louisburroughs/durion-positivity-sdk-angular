@@ -51,14 +51,52 @@ export enum LeadTimeInfoConfidenceEnum {
 
 
 
+function isOptionalLeadTimeInfoPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type LeadTimeInfoOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createLeadTimeInfoPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createLeadTimeInfoOptionalProperties(
+    ...properties: LeadTimeInfoOptionalProperty[]
+): ReadonlyArray<LeadTimeInfoOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfLeadTimeInfo(value: object): value is LeadTimeInfo {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('source' in _v && typeof _v['source'] !== 'string') return false;
-    if ('minDays' in _v && typeof _v['minDays'] !== 'number') return false;
-    if ('maxDays' in _v && typeof _v['maxDays'] !== 'number') return false;
-    if ('displayText' in _v && typeof _v['displayText'] !== 'string') return false;
-    if ('confidence' in _v && typeof _v['confidence'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createLeadTimeInfoPropertyNames();
+    const optionalStringProperties = createLeadTimeInfoOptionalProperties({ name: 'source', nullable: false }, { name: 'displayText', nullable: false }, { name: 'confidence', nullable: false }, );
+    const optionalNumberProperties = createLeadTimeInfoOptionalProperties({ name: 'minDays', nullable: false }, { name: 'maxDays', nullable: false }, );
+    const optionalBooleanProperties = createLeadTimeInfoOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalLeadTimeInfoPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalLeadTimeInfoPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalLeadTimeInfoPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

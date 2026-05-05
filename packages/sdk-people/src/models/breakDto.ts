@@ -15,10 +15,52 @@ export interface BreakDto {
     endedAt?: string;
 }
 
+function isOptionalBreakDtoPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type BreakDtoOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createBreakDtoPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createBreakDtoOptionalProperties(
+    ...properties: BreakDtoOptionalProperty[]
+): ReadonlyArray<BreakDtoOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfBreakDto(value: object): value is BreakDto {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('sessionId' in _v && typeof _v['sessionId'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createBreakDtoPropertyNames();
+    const optionalStringProperties = createBreakDtoOptionalProperties({ name: 'sessionId', nullable: false }, );
+    const optionalNumberProperties = createBreakDtoOptionalProperties();
+    const optionalBooleanProperties = createBreakDtoOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalBreakDtoPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalBreakDtoPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalBreakDtoPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

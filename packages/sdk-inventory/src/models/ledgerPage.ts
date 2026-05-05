@@ -14,10 +14,52 @@ export interface LedgerPage {
     nextPageToken?: string;
 }
 
+function isOptionalLedgerPagePropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type LedgerPageOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createLedgerPagePropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createLedgerPageOptionalProperties(
+    ...properties: LedgerPageOptionalProperty[]
+): ReadonlyArray<LedgerPageOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfLedgerPage(value: object): value is LedgerPage {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('nextPageToken' in _v && typeof _v['nextPageToken'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createLedgerPagePropertyNames();
+    const optionalStringProperties = createLedgerPageOptionalProperties({ name: 'nextPageToken', nullable: false }, );
+    const optionalNumberProperties = createLedgerPageOptionalProperties();
+    const optionalBooleanProperties = createLedgerPageOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalLedgerPagePropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalLedgerPagePropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalLedgerPagePropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

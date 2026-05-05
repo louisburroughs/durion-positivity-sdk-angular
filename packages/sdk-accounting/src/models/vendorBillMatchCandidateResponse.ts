@@ -23,19 +23,52 @@ export interface VendorBillMatchCandidateResponse {
     createdAt?: string;
 }
 
+function isOptionalVendorBillMatchCandidateResponsePropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type VendorBillMatchCandidateResponseOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createVendorBillMatchCandidateResponsePropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createVendorBillMatchCandidateResponseOptionalProperties(
+    ...properties: VendorBillMatchCandidateResponseOptionalProperty[]
+): ReadonlyArray<VendorBillMatchCandidateResponseOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfVendorBillMatchCandidateResponse(value: object): value is VendorBillMatchCandidateResponse {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('candidateId' in _v && typeof _v['candidateId'] !== 'string') return false;
-    if ('invoiceEventId' in _v && typeof _v['invoiceEventId'] !== 'string') return false;
-    if ('vendorBillId' in _v && typeof _v['vendorBillId'] !== 'string') return false;
-    if ('vendorId' in _v && typeof _v['vendorId'] !== 'string') return false;
-    if ('billNumber' in _v && typeof _v['billNumber'] !== 'string') return false;
-    if ('billTotalAmount' in _v && typeof _v['billTotalAmount'] !== 'number') return false;
-    if ('matchScore' in _v && typeof _v['matchScore'] !== 'number') return false;
-    if ('scoreBreakdown' in _v && typeof _v['scoreBreakdown'] !== 'string') return false;
-    if ('resolved' in _v && typeof _v['resolved'] !== 'boolean') return false;
-    if ('selected' in _v && typeof _v['selected'] !== 'boolean') return false;
-    return true;
+
+    const requiredProperties = createVendorBillMatchCandidateResponsePropertyNames();
+    const optionalStringProperties = createVendorBillMatchCandidateResponseOptionalProperties({ name: 'candidateId', nullable: false }, { name: 'invoiceEventId', nullable: false }, { name: 'vendorBillId', nullable: false }, { name: 'vendorId', nullable: false }, { name: 'billNumber', nullable: false }, { name: 'scoreBreakdown', nullable: false }, );
+    const optionalNumberProperties = createVendorBillMatchCandidateResponseOptionalProperties({ name: 'billTotalAmount', nullable: false }, { name: 'matchScore', nullable: false }, );
+    const optionalBooleanProperties = createVendorBillMatchCandidateResponseOptionalProperties({ name: 'resolved', nullable: false }, { name: 'selected', nullable: false }, );
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalVendorBillMatchCandidateResponsePropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalVendorBillMatchCandidateResponsePropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalVendorBillMatchCandidateResponsePropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

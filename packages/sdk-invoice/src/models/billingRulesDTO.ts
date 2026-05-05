@@ -34,17 +34,52 @@ export enum BillingRulesDTOInvoiceGroupingStrategyEnum {
 
 
 
+function isOptionalBillingRulesDTOPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type BillingRulesDTOOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createBillingRulesDTOPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createBillingRulesDTOOptionalProperties(
+    ...properties: BillingRulesDTOOptionalProperty[]
+): ReadonlyArray<BillingRulesDTOOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfBillingRulesDTO(value: object): value is BillingRulesDTO {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('id' in _v && typeof _v['id'] !== 'string') return false;
-    if ('partyId' in _v && typeof _v['partyId'] !== 'string') return false;
-    if ('purchaseOrderRequired' in _v && typeof _v['purchaseOrderRequired'] !== 'boolean') return false;
-    if ('paymentTermsCode' in _v && typeof _v['paymentTermsCode'] !== 'string') return false;
-    if ('invoiceDeliveryMethod' in _v && typeof _v['invoiceDeliveryMethod'] !== 'string') return false;
-    if ('invoiceGroupingStrategy' in _v && typeof _v['invoiceGroupingStrategy'] !== 'string') return false;
-    if ('version' in _v && typeof _v['version'] !== 'number') return false;
-    if ('updatedBy' in _v && typeof _v['updatedBy'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createBillingRulesDTOPropertyNames();
+    const optionalStringProperties = createBillingRulesDTOOptionalProperties({ name: 'id', nullable: false }, { name: 'partyId', nullable: false }, { name: 'paymentTermsCode', nullable: false }, { name: 'invoiceDeliveryMethod', nullable: false }, { name: 'invoiceGroupingStrategy', nullable: false }, { name: 'updatedBy', nullable: false }, );
+    const optionalNumberProperties = createBillingRulesDTOOptionalProperties({ name: 'version', nullable: false }, );
+    const optionalBooleanProperties = createBillingRulesDTOOptionalProperties({ name: 'purchaseOrderRequired', nullable: false }, );
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalBillingRulesDTOPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalBillingRulesDTOPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalBillingRulesDTOPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

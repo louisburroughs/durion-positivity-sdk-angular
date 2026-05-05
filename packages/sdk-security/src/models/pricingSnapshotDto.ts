@@ -18,12 +18,52 @@ export interface PricingSnapshotDto {
     evaluationSteps?: Array<PricingRuleTraceEntryDto>;
 }
 
+function isOptionalPricingSnapshotDtoPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type PricingSnapshotDtoOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createPricingSnapshotDtoPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createPricingSnapshotDtoOptionalProperties(
+    ...properties: PricingSnapshotDtoOptionalProperty[]
+): ReadonlyArray<PricingSnapshotDtoOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfPricingSnapshotDto(value: object): value is PricingSnapshotDto {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('snapshotId' in _v && typeof _v['snapshotId'] !== 'string') return false;
-    if ('quoteContext' in _v && typeof _v['quoteContext'] !== 'string') return false;
-    if ('finalPrice' in _v && typeof _v['finalPrice'] !== 'number') return false;
-    return true;
+
+    const requiredProperties = createPricingSnapshotDtoPropertyNames();
+    const optionalStringProperties = createPricingSnapshotDtoOptionalProperties({ name: 'snapshotId', nullable: false }, { name: 'quoteContext', nullable: false }, );
+    const optionalNumberProperties = createPricingSnapshotDtoOptionalProperties({ name: 'finalPrice', nullable: false }, );
+    const optionalBooleanProperties = createPricingSnapshotDtoOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalPricingSnapshotDtoPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalPricingSnapshotDtoPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalPricingSnapshotDtoPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

@@ -24,14 +24,52 @@ export interface LocationPatchRequest {
     cleanupBufferMinutes?: number;
 }
 
+function isOptionalLocationPatchRequestPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type LocationPatchRequestOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createLocationPatchRequestPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createLocationPatchRequestOptionalProperties(
+    ...properties: LocationPatchRequestOptionalProperty[]
+): ReadonlyArray<LocationPatchRequestOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfLocationPatchRequest(value: object): value is LocationPatchRequest {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('name' in _v && typeof _v['name'] !== 'string') return false;
-    if ('status' in _v && typeof _v['status'] !== 'string') return false;
-    if ('timezone' in _v && typeof _v['timezone'] !== 'string') return false;
-    if ('checkInBufferMinutes' in _v && typeof _v['checkInBufferMinutes'] !== 'number') return false;
-    if ('cleanupBufferMinutes' in _v && typeof _v['cleanupBufferMinutes'] !== 'number') return false;
-    return true;
+
+    const requiredProperties = createLocationPatchRequestPropertyNames();
+    const optionalStringProperties = createLocationPatchRequestOptionalProperties({ name: 'name', nullable: false }, { name: 'status', nullable: false }, { name: 'timezone', nullable: false }, );
+    const optionalNumberProperties = createLocationPatchRequestOptionalProperties({ name: 'checkInBufferMinutes', nullable: false }, { name: 'cleanupBufferMinutes', nullable: false }, );
+    const optionalBooleanProperties = createLocationPatchRequestOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalLocationPatchRequestPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalLocationPatchRequestPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalLocationPatchRequestPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

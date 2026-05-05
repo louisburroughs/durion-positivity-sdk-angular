@@ -31,13 +31,52 @@ export interface NonInventoryProductDto {
     shortDescription?: string;
 }
 
+function isOptionalNonInventoryProductDtoPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type NonInventoryProductDtoOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createNonInventoryProductDtoPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createNonInventoryProductDtoOptionalProperties(
+    ...properties: NonInventoryProductDtoOptionalProperty[]
+): ReadonlyArray<NonInventoryProductDtoOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfNonInventoryProductDto(value: object): value is NonInventoryProductDto {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('id' in _v && typeof _v['id'] !== 'string') return false;
-    if ('name' in _v && typeof _v['name'] !== 'string') return false;
-    if ('longDescription' in _v && typeof _v['longDescription'] !== 'string') return false;
-    if ('shortDescription' in _v && typeof _v['shortDescription'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createNonInventoryProductDtoPropertyNames();
+    const optionalStringProperties = createNonInventoryProductDtoOptionalProperties({ name: 'id', nullable: false }, { name: 'name', nullable: false }, { name: 'longDescription', nullable: false }, { name: 'shortDescription', nullable: false }, );
+    const optionalNumberProperties = createNonInventoryProductDtoOptionalProperties();
+    const optionalBooleanProperties = createNonInventoryProductDtoOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalNonInventoryProductDtoPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalNonInventoryProductDtoPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalNonInventoryProductDtoPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

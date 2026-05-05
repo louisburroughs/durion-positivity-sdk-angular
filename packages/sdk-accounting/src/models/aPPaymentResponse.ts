@@ -103,24 +103,52 @@ export enum APPaymentResponseStatusEnum {
 
 
 
+function isOptionalAPPaymentResponsePropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type APPaymentResponseOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createAPPaymentResponsePropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createAPPaymentResponseOptionalProperties(
+    ...properties: APPaymentResponseOptionalProperty[]
+): ReadonlyArray<APPaymentResponseOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfAPPaymentResponse(value: object): value is APPaymentResponse {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('paymentId' in _v && typeof _v['paymentId'] !== 'string') return false;
-    if ('paymentRef' in _v && typeof _v['paymentRef'] !== 'string') return false;
-    if ('vendorId' in _v && typeof _v['vendorId'] !== 'string') return false;
-    if ('vendorName' in _v && typeof _v['vendorName'] !== 'string') return false;
-    if ('grossAmount' in _v && typeof _v['grossAmount'] !== 'number') return false;
-    if ('feeAmount' in _v && typeof _v['feeAmount'] !== 'number') return false;
-    if ('netAmount' in _v && typeof _v['netAmount'] !== 'number') return false;
-    if ('unappliedAmount' in _v && typeof _v['unappliedAmount'] !== 'number') return false;
-    if ('currency' in _v && typeof _v['currency'] !== 'string') return false;
-    if ('status' in _v && typeof _v['status'] !== 'string') return false;
-    if ('gatewayTransactionId' in _v && typeof _v['gatewayTransactionId'] !== 'string') return false;
-    if ('glJournalEntryId' in _v && typeof _v['glJournalEntryId'] !== 'string') return false;
-    if ('glPostError' in _v && typeof _v['glPostError'] !== 'string') return false;
-    if ('memo' in _v && typeof _v['memo'] !== 'string') return false;
-    if ('createdBy' in _v && typeof _v['createdBy'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createAPPaymentResponsePropertyNames();
+    const optionalStringProperties = createAPPaymentResponseOptionalProperties({ name: 'paymentId', nullable: false }, { name: 'paymentRef', nullable: false }, { name: 'vendorId', nullable: false }, { name: 'vendorName', nullable: false }, { name: 'currency', nullable: false }, { name: 'status', nullable: false }, { name: 'gatewayTransactionId', nullable: false }, { name: 'glJournalEntryId', nullable: false }, { name: 'glPostError', nullable: false }, { name: 'memo', nullable: false }, { name: 'createdBy', nullable: false }, );
+    const optionalNumberProperties = createAPPaymentResponseOptionalProperties({ name: 'grossAmount', nullable: false }, { name: 'feeAmount', nullable: false }, { name: 'netAmount', nullable: false }, { name: 'unappliedAmount', nullable: false }, );
+    const optionalBooleanProperties = createAPPaymentResponseOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalAPPaymentResponsePropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalAPPaymentResponsePropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalAPPaymentResponsePropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

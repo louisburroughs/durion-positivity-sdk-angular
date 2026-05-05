@@ -16,12 +16,52 @@ export interface ConsumeItemsRequest {
     items?: Array<ConsumeItemLine>;
 }
 
+function isOptionalConsumeItemsRequestPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type ConsumeItemsRequestOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createConsumeItemsRequestPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createConsumeItemsRequestOptionalProperties(
+    ...properties: ConsumeItemsRequestOptionalProperty[]
+): ReadonlyArray<ConsumeItemsRequestOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfConsumeItemsRequest(value: object): value is ConsumeItemsRequest {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if (!('workorderId' in _v) || _v['workorderId'] === undefined) return false;
-    if ('workorderId' in _v && typeof _v['workorderId'] !== 'string') return false;
-    if ('pickListId' in _v && typeof _v['pickListId'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createConsumeItemsRequestPropertyNames('workorderId', );
+    const optionalStringProperties = createConsumeItemsRequestOptionalProperties({ name: 'workorderId', nullable: false }, { name: 'pickListId', nullable: false }, );
+    const optionalNumberProperties = createConsumeItemsRequestOptionalProperties();
+    const optionalBooleanProperties = createConsumeItemsRequestOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalConsumeItemsRequestPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalConsumeItemsRequestPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalConsumeItemsRequestPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

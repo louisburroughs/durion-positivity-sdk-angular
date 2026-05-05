@@ -35,14 +35,52 @@ export interface CatalogItemResponseDto {
     longDescription?: string;
 }
 
+function isOptionalCatalogItemResponseDtoPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type CatalogItemResponseDtoOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createCatalogItemResponseDtoPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createCatalogItemResponseDtoOptionalProperties(
+    ...properties: CatalogItemResponseDtoOptionalProperty[]
+): ReadonlyArray<CatalogItemResponseDtoOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfCatalogItemResponseDto(value: object): value is CatalogItemResponseDto {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('id' in _v && typeof _v['id'] !== 'string') return false;
-    if ('itemType' in _v && typeof _v['itemType'] !== 'string') return false;
-    if ('name' in _v && typeof _v['name'] !== 'string') return false;
-    if ('shortDescription' in _v && typeof _v['shortDescription'] !== 'string') return false;
-    if ('longDescription' in _v && typeof _v['longDescription'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createCatalogItemResponseDtoPropertyNames();
+    const optionalStringProperties = createCatalogItemResponseDtoOptionalProperties({ name: 'id', nullable: false }, { name: 'itemType', nullable: false }, { name: 'name', nullable: false }, { name: 'shortDescription', nullable: false }, { name: 'longDescription', nullable: false }, );
+    const optionalNumberProperties = createCatalogItemResponseDtoOptionalProperties();
+    const optionalBooleanProperties = createCatalogItemResponseDtoOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalCatalogItemResponseDtoPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalCatalogItemResponseDtoPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalCatalogItemResponseDtoPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

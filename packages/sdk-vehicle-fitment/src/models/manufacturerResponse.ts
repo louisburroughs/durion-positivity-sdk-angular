@@ -23,13 +23,52 @@ export interface ManufacturerResponse {
     name: string;
 }
 
+function isOptionalManufacturerResponsePropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type ManufacturerResponseOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createManufacturerResponsePropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createManufacturerResponseOptionalProperties(
+    ...properties: ManufacturerResponseOptionalProperty[]
+): ReadonlyArray<ManufacturerResponseOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfManufacturerResponse(value: object): value is ManufacturerResponse {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if (!('id' in _v) || _v['id'] === undefined) return false;
-    if ('id' in _v && typeof _v['id'] !== 'string') return false;
-    if (!('name' in _v) || _v['name'] === undefined) return false;
-    if ('name' in _v && typeof _v['name'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createManufacturerResponsePropertyNames('id', 'name', );
+    const optionalStringProperties = createManufacturerResponseOptionalProperties({ name: 'id', nullable: false }, { name: 'name', nullable: false }, );
+    const optionalNumberProperties = createManufacturerResponseOptionalProperties();
+    const optionalBooleanProperties = createManufacturerResponseOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalManufacturerResponsePropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalManufacturerResponsePropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalManufacturerResponsePropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

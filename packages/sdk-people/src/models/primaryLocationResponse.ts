@@ -19,11 +19,52 @@ export interface PrimaryLocationResponse {
     locationId: string;
 }
 
+function isOptionalPrimaryLocationResponsePropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type PrimaryLocationResponseOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createPrimaryLocationResponsePropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createPrimaryLocationResponseOptionalProperties(
+    ...properties: PrimaryLocationResponseOptionalProperty[]
+): ReadonlyArray<PrimaryLocationResponseOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfPrimaryLocationResponse(value: object): value is PrimaryLocationResponse {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if (!('locationId' in _v) || _v['locationId'] === undefined) return false;
-    if ('locationId' in _v && typeof _v['locationId'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createPrimaryLocationResponsePropertyNames('locationId', );
+    const optionalStringProperties = createPrimaryLocationResponseOptionalProperties({ name: 'locationId', nullable: false }, );
+    const optionalNumberProperties = createPrimaryLocationResponseOptionalProperties();
+    const optionalBooleanProperties = createPrimaryLocationResponseOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalPrimaryLocationResponsePropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalPrimaryLocationResponsePropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalPrimaryLocationResponsePropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

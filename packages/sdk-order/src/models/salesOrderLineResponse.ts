@@ -23,20 +23,52 @@ export interface SalesOrderLineResponse {
     sourceLineId?: string;
 }
 
+function isOptionalSalesOrderLineResponsePropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type SalesOrderLineResponseOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createSalesOrderLineResponsePropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createSalesOrderLineResponseOptionalProperties(
+    ...properties: SalesOrderLineResponseOptionalProperty[]
+): ReadonlyArray<SalesOrderLineResponseOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfSalesOrderLineResponse(value: object): value is SalesOrderLineResponse {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('orderLineId' in _v && typeof _v['orderLineId'] !== 'string') return false;
-    if ('itemSku' in _v && typeof _v['itemSku'] !== 'string') return false;
-    if ('itemDescription' in _v && typeof _v['itemDescription'] !== 'string') return false;
-    if ('quantity' in _v && typeof _v['quantity'] !== 'number') return false;
-    if ('unitPrice' in _v && typeof _v['unitPrice'] !== 'number') return false;
-    if ('fulfillmentStatus' in _v && typeof _v['fulfillmentStatus'] !== 'string') return false;
-    if ('priceSource' in _v && typeof _v['priceSource'] !== 'string') return false;
-    if ('reasonCode' in _v && typeof _v['reasonCode'] !== 'string') return false;
-    if ('sourceType' in _v && typeof _v['sourceType'] !== 'string') return false;
-    if ('sourceId' in _v && typeof _v['sourceId'] !== 'string') return false;
-    if ('sourceLineId' in _v && typeof _v['sourceLineId'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createSalesOrderLineResponsePropertyNames();
+    const optionalStringProperties = createSalesOrderLineResponseOptionalProperties({ name: 'orderLineId', nullable: false }, { name: 'itemSku', nullable: false }, { name: 'itemDescription', nullable: false }, { name: 'fulfillmentStatus', nullable: false }, { name: 'priceSource', nullable: false }, { name: 'reasonCode', nullable: false }, { name: 'sourceType', nullable: false }, { name: 'sourceId', nullable: false }, { name: 'sourceLineId', nullable: false }, );
+    const optionalNumberProperties = createSalesOrderLineResponseOptionalProperties({ name: 'quantity', nullable: false }, { name: 'unitPrice', nullable: false }, );
+    const optionalBooleanProperties = createSalesOrderLineResponseOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalSalesOrderLineResponsePropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalSalesOrderLineResponsePropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalSalesOrderLineResponsePropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

@@ -19,20 +19,52 @@ export interface TaxLineItem {
     taxExempt?: boolean;
 }
 
+function isOptionalTaxLineItemPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type TaxLineItemOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createTaxLineItemPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createTaxLineItemOptionalProperties(
+    ...properties: TaxLineItemOptionalProperty[]
+): ReadonlyArray<TaxLineItemOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfTaxLineItem(value: object): value is TaxLineItem {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if (!('lineItemId' in _v) || _v['lineItemId'] === undefined) return false;
-    if ('lineItemId' in _v && typeof _v['lineItemId'] !== 'string') return false;
-    if (!('description' in _v) || _v['description'] === undefined) return false;
-    if ('description' in _v && typeof _v['description'] !== 'string') return false;
-    if (!('quantity' in _v) || _v['quantity'] === undefined) return false;
-    if ('quantity' in _v && typeof _v['quantity'] !== 'number') return false;
-    if (!('unitPrice' in _v) || _v['unitPrice'] === undefined) return false;
-    if ('unitPrice' in _v && typeof _v['unitPrice'] !== 'number') return false;
-    if ('subtotal' in _v && typeof _v['subtotal'] !== 'number') return false;
-    if ('taxCategory' in _v && typeof _v['taxCategory'] !== 'string') return false;
-    if ('taxExempt' in _v && typeof _v['taxExempt'] !== 'boolean') return false;
-    return true;
+
+    const requiredProperties = createTaxLineItemPropertyNames('lineItemId', 'description', 'quantity', 'unitPrice', );
+    const optionalStringProperties = createTaxLineItemOptionalProperties({ name: 'lineItemId', nullable: false }, { name: 'description', nullable: false }, { name: 'taxCategory', nullable: false }, );
+    const optionalNumberProperties = createTaxLineItemOptionalProperties({ name: 'quantity', nullable: false }, { name: 'unitPrice', nullable: false }, { name: 'subtotal', nullable: false }, );
+    const optionalBooleanProperties = createTaxLineItemOptionalProperties({ name: 'taxExempt', nullable: false }, );
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalTaxLineItemPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalTaxLineItemPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalTaxLineItemPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

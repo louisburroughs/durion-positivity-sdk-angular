@@ -23,16 +23,52 @@ export interface UpsertCommunicationPreferencesRequest {
     updateSource?: string;
 }
 
+function isOptionalUpsertCommunicationPreferencesRequestPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type UpsertCommunicationPreferencesRequestOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createUpsertCommunicationPreferencesRequestPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createUpsertCommunicationPreferencesRequestOptionalProperties(
+    ...properties: UpsertCommunicationPreferencesRequestOptionalProperty[]
+): ReadonlyArray<UpsertCommunicationPreferencesRequestOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfUpsertCommunicationPreferencesRequest(value: object): value is UpsertCommunicationPreferencesRequest {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('version' in _v && typeof _v['version'] !== 'string') return false;
-    if ('emailPreference' in _v && typeof _v['emailPreference'] !== 'string') return false;
-    if ('smsPreference' in _v && typeof _v['smsPreference'] !== 'string') return false;
-    if ('phonePreference' in _v && typeof _v['phonePreference'] !== 'string') return false;
-    if ('marketingPreference' in _v && typeof _v['marketingPreference'] !== 'string') return false;
-    if ('preferencesNote' in _v && typeof _v['preferencesNote'] !== 'string') return false;
-    if ('updateSource' in _v && typeof _v['updateSource'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createUpsertCommunicationPreferencesRequestPropertyNames();
+    const optionalStringProperties = createUpsertCommunicationPreferencesRequestOptionalProperties({ name: 'version', nullable: false }, { name: 'emailPreference', nullable: false }, { name: 'smsPreference', nullable: false }, { name: 'phonePreference', nullable: false }, { name: 'marketingPreference', nullable: false }, { name: 'preferencesNote', nullable: false }, { name: 'updateSource', nullable: false }, );
+    const optionalNumberProperties = createUpsertCommunicationPreferencesRequestOptionalProperties();
+    const optionalBooleanProperties = createUpsertCommunicationPreferencesRequestOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalUpsertCommunicationPreferencesRequestPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalUpsertCommunicationPreferencesRequestPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalUpsertCommunicationPreferencesRequestPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

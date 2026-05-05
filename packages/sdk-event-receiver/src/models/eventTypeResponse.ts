@@ -47,25 +47,52 @@ export interface EventTypeResponse {
     p99Micros: number;
 }
 
+function isOptionalEventTypeResponsePropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type EventTypeResponseOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createEventTypeResponsePropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createEventTypeResponseOptionalProperties(
+    ...properties: EventTypeResponseOptionalProperty[]
+): ReadonlyArray<EventTypeResponseOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfEventTypeResponse(value: object): value is EventTypeResponse {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if (!('id' in _v) || _v['id'] === undefined) return false;
-    if ('id' in _v && typeof _v['id'] !== 'string') return false;
-    if (!('typeCode' in _v) || _v['typeCode'] === undefined) return false;
-    if ('typeCode' in _v && typeof _v['typeCode'] !== 'string') return false;
-    if (!('description' in _v) || _v['description'] === undefined) return false;
-    if ('description' in _v && typeof _v['description'] !== 'string') return false;
-    if (!('active' in _v) || _v['active'] === undefined) return false;
-    if ('active' in _v && typeof _v['active'] !== 'boolean') return false;
-    if (!('apiVersion' in _v) || _v['apiVersion'] === undefined) return false;
-    if ('apiVersion' in _v && typeof _v['apiVersion'] !== 'string') return false;
-    if (!('p50Micros' in _v) || _v['p50Micros'] === undefined) return false;
-    if ('p50Micros' in _v && typeof _v['p50Micros'] !== 'number') return false;
-    if (!('p95Micros' in _v) || _v['p95Micros'] === undefined) return false;
-    if ('p95Micros' in _v && typeof _v['p95Micros'] !== 'number') return false;
-    if (!('p99Micros' in _v) || _v['p99Micros'] === undefined) return false;
-    if ('p99Micros' in _v && typeof _v['p99Micros'] !== 'number') return false;
-    return true;
+
+    const requiredProperties = createEventTypeResponsePropertyNames('id', 'typeCode', 'description', 'active', 'apiVersion', 'p50Micros', 'p95Micros', 'p99Micros', );
+    const optionalStringProperties = createEventTypeResponseOptionalProperties({ name: 'id', nullable: false }, { name: 'typeCode', nullable: false }, { name: 'description', nullable: false }, { name: 'apiVersion', nullable: false }, );
+    const optionalNumberProperties = createEventTypeResponseOptionalProperties({ name: 'p50Micros', nullable: false }, { name: 'p95Micros', nullable: false }, { name: 'p99Micros', nullable: false }, );
+    const optionalBooleanProperties = createEventTypeResponseOptionalProperties({ name: 'active', nullable: false }, );
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalEventTypeResponsePropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalEventTypeResponsePropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalEventTypeResponsePropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

@@ -15,12 +15,52 @@ export interface ServiceEntityDTO {
     description?: string;
 }
 
+function isOptionalServiceEntityDTOPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type ServiceEntityDTOOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createServiceEntityDTOPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createServiceEntityDTOOptionalProperties(
+    ...properties: ServiceEntityDTOOptionalProperty[]
+): ReadonlyArray<ServiceEntityDTOOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfServiceEntityDTO(value: object): value is ServiceEntityDTO {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('id' in _v && typeof _v['id'] !== 'number') return false;
-    if ('name' in _v && typeof _v['name'] !== 'string') return false;
-    if ('description' in _v && typeof _v['description'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createServiceEntityDTOPropertyNames();
+    const optionalStringProperties = createServiceEntityDTOOptionalProperties({ name: 'name', nullable: false }, { name: 'description', nullable: false }, );
+    const optionalNumberProperties = createServiceEntityDTOOptionalProperties({ name: 'id', nullable: false }, );
+    const optionalBooleanProperties = createServiceEntityDTOOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalServiceEntityDTOPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalServiceEntityDTOPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalServiceEntityDTOPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

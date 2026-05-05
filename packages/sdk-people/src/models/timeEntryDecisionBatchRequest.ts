@@ -20,10 +20,52 @@ export interface TimeEntryDecisionBatchRequest {
     decisions: Array<Decision>;
 }
 
+function isOptionalTimeEntryDecisionBatchRequestPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type TimeEntryDecisionBatchRequestOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createTimeEntryDecisionBatchRequestPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createTimeEntryDecisionBatchRequestOptionalProperties(
+    ...properties: TimeEntryDecisionBatchRequestOptionalProperty[]
+): ReadonlyArray<TimeEntryDecisionBatchRequestOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfTimeEntryDecisionBatchRequest(value: object): value is TimeEntryDecisionBatchRequest {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if (!('decisions' in _v) || _v['decisions'] === undefined) return false;
-    return true;
+
+    const requiredProperties = createTimeEntryDecisionBatchRequestPropertyNames('decisions', );
+    const optionalStringProperties = createTimeEntryDecisionBatchRequestOptionalProperties();
+    const optionalNumberProperties = createTimeEntryDecisionBatchRequestOptionalProperties();
+    const optionalBooleanProperties = createTimeEntryDecisionBatchRequestOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalTimeEntryDecisionBatchRequestPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalTimeEntryDecisionBatchRequestPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalTimeEntryDecisionBatchRequestPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

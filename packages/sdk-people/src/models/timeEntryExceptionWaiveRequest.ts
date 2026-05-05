@@ -16,11 +16,52 @@ export interface TimeEntryExceptionWaiveRequest {
     waiveReason: string;
 }
 
+function isOptionalTimeEntryExceptionWaiveRequestPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type TimeEntryExceptionWaiveRequestOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createTimeEntryExceptionWaiveRequestPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createTimeEntryExceptionWaiveRequestOptionalProperties(
+    ...properties: TimeEntryExceptionWaiveRequestOptionalProperty[]
+): ReadonlyArray<TimeEntryExceptionWaiveRequestOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfTimeEntryExceptionWaiveRequest(value: object): value is TimeEntryExceptionWaiveRequest {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if (!('waiveReason' in _v) || _v['waiveReason'] === undefined) return false;
-    if ('waiveReason' in _v && typeof _v['waiveReason'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createTimeEntryExceptionWaiveRequestPropertyNames('waiveReason', );
+    const optionalStringProperties = createTimeEntryExceptionWaiveRequestOptionalProperties({ name: 'waiveReason', nullable: false }, );
+    const optionalNumberProperties = createTimeEntryExceptionWaiveRequestOptionalProperties();
+    const optionalBooleanProperties = createTimeEntryExceptionWaiveRequestOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalTimeEntryExceptionWaiveRequestPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalTimeEntryExceptionWaiveRequestPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalTimeEntryExceptionWaiveRequestPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

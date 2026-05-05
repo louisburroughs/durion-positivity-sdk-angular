@@ -15,11 +15,52 @@ export interface CustomerCreditInfo {
     createdAt?: string;
 }
 
+function isOptionalCustomerCreditInfoPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type CustomerCreditInfoOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createCustomerCreditInfoPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createCustomerCreditInfoOptionalProperties(
+    ...properties: CustomerCreditInfoOptionalProperty[]
+): ReadonlyArray<CustomerCreditInfoOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfCustomerCreditInfo(value: object): value is CustomerCreditInfo {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('creditId' in _v && typeof _v['creditId'] !== 'string') return false;
-    if ('amount' in _v && typeof _v['amount'] !== 'number') return false;
-    return true;
+
+    const requiredProperties = createCustomerCreditInfoPropertyNames();
+    const optionalStringProperties = createCustomerCreditInfoOptionalProperties({ name: 'creditId', nullable: false }, );
+    const optionalNumberProperties = createCustomerCreditInfoOptionalProperties({ name: 'amount', nullable: false }, );
+    const optionalBooleanProperties = createCustomerCreditInfoOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalCustomerCreditInfoPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalCustomerCreditInfoPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalCustomerCreditInfoPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

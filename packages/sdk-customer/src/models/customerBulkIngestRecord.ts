@@ -18,17 +18,52 @@ export interface CustomerBulkIngestRecord {
     customerNumber?: string;
 }
 
+function isOptionalCustomerBulkIngestRecordPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type CustomerBulkIngestRecordOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createCustomerBulkIngestRecordPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createCustomerBulkIngestRecordOptionalProperties(
+    ...properties: CustomerBulkIngestRecordOptionalProperty[]
+): ReadonlyArray<CustomerBulkIngestRecordOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfCustomerBulkIngestRecord(value: object): value is CustomerBulkIngestRecord {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if (!('firstName' in _v) || _v['firstName'] === undefined) return false;
-    if ('firstName' in _v && typeof _v['firstName'] !== 'string') return false;
-    if (!('lastName' in _v) || _v['lastName'] === undefined) return false;
-    if ('lastName' in _v && typeof _v['lastName'] !== 'string') return false;
-    if ('email' in _v && typeof _v['email'] !== 'string') return false;
-    if ('phoneNumber' in _v && typeof _v['phoneNumber'] !== 'string') return false;
-    if ('primaryAddress' in _v && typeof _v['primaryAddress'] !== 'string') return false;
-    if ('customerNumber' in _v && typeof _v['customerNumber'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createCustomerBulkIngestRecordPropertyNames('firstName', 'lastName', );
+    const optionalStringProperties = createCustomerBulkIngestRecordOptionalProperties({ name: 'firstName', nullable: false }, { name: 'lastName', nullable: false }, { name: 'email', nullable: false }, { name: 'phoneNumber', nullable: false }, { name: 'primaryAddress', nullable: false }, { name: 'customerNumber', nullable: false }, );
+    const optionalNumberProperties = createCustomerBulkIngestRecordOptionalProperties();
+    const optionalBooleanProperties = createCustomerBulkIngestRecordOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalCustomerBulkIngestRecordPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalCustomerBulkIngestRecordPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalCustomerBulkIngestRecordPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

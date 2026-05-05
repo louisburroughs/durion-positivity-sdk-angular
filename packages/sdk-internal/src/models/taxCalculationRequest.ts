@@ -19,9 +19,6 @@ export interface TaxCalculationRequest {
      * Line items to calculate tax for
      */
     lineItems: Array<TaxLineItem>;
-    /**
-     * Destination address used to determine applicable tax jurisdictions
-     */
     destinationAddress: TaxAddress;
     /**
      * Transaction currency in ISO 4217 alpha-3 format
@@ -64,22 +61,52 @@ export enum TaxCalculationRequestReferenceTypeEnum {
 
 
 
+function isOptionalTaxCalculationRequestPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type TaxCalculationRequestOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createTaxCalculationRequestPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createTaxCalculationRequestOptionalProperties(
+    ...properties: TaxCalculationRequestOptionalProperty[]
+): ReadonlyArray<TaxCalculationRequestOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfTaxCalculationRequest(value: object): value is TaxCalculationRequest {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if (!('lineItems' in _v) || _v['lineItems'] === undefined) return false;
-    if (!('destinationAddress' in _v) || _v['destinationAddress'] === undefined) return false;
-    if ('currencyCode' in _v && typeof _v['currencyCode'] !== 'string') return false;
-    if ('locale' in _v && typeof _v['locale'] !== 'string') return false;
-    if ('customerId' in _v && typeof _v['customerId'] !== 'string') return false;
-    if ('transactionDate' in _v && typeof _v['transactionDate'] !== 'string') return false;
-    if ('referenceId' in _v && typeof _v['referenceId'] !== 'string') return false;
-    if ('referenceType' in _v && typeof _v['referenceType'] !== 'string') return false;
-    if ('address' in _v && typeof _v['address'] !== 'string') return false;
-    if ('countryCode' in _v && typeof _v['countryCode'] !== 'string') return false;
-    if ('postalCode' in _v && typeof _v['postalCode'] !== 'string') return false;
-    if ('stateCode' in _v && typeof _v['stateCode'] !== 'string') return false;
-    if ('city' in _v && typeof _v['city'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createTaxCalculationRequestPropertyNames('lineItems', 'destinationAddress', );
+    const optionalStringProperties = createTaxCalculationRequestOptionalProperties({ name: 'currencyCode', nullable: false }, { name: 'locale', nullable: false }, { name: 'customerId', nullable: false }, { name: 'transactionDate', nullable: false }, { name: 'referenceId', nullable: false }, { name: 'referenceType', nullable: false }, { name: 'address', nullable: false }, { name: 'countryCode', nullable: false }, { name: 'postalCode', nullable: false }, { name: 'stateCode', nullable: false }, { name: 'city', nullable: false }, );
+    const optionalNumberProperties = createTaxCalculationRequestOptionalProperties();
+    const optionalBooleanProperties = createTaxCalculationRequestOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalTaxCalculationRequestPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalTaxCalculationRequestPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalTaxCalculationRequestPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

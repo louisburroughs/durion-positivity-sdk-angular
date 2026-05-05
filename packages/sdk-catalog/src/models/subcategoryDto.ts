@@ -23,11 +23,52 @@ export interface SubcategoryDto {
     name?: string;
 }
 
+function isOptionalSubcategoryDtoPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type SubcategoryDtoOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createSubcategoryDtoPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createSubcategoryDtoOptionalProperties(
+    ...properties: SubcategoryDtoOptionalProperty[]
+): ReadonlyArray<SubcategoryDtoOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfSubcategoryDto(value: object): value is SubcategoryDto {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('id' in _v && typeof _v['id'] !== 'string') return false;
-    if ('name' in _v && typeof _v['name'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createSubcategoryDtoPropertyNames();
+    const optionalStringProperties = createSubcategoryDtoOptionalProperties({ name: 'id', nullable: false }, { name: 'name', nullable: false }, );
+    const optionalNumberProperties = createSubcategoryDtoOptionalProperties();
+    const optionalBooleanProperties = createSubcategoryDtoOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalSubcategoryDtoPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalSubcategoryDtoPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalSubcategoryDtoPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

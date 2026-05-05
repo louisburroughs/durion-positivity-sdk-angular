@@ -18,11 +18,52 @@ export interface UserUpdateRequest {
     roles?: Set<string>;
 }
 
+function isOptionalUserUpdateRequestPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type UserUpdateRequestOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createUserUpdateRequestPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createUserUpdateRequestOptionalProperties(
+    ...properties: UserUpdateRequestOptionalProperty[]
+): ReadonlyArray<UserUpdateRequestOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfUserUpdateRequest(value: object): value is UserUpdateRequest {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('username' in _v && typeof _v['username'] !== 'string') return false;
-    if ('password' in _v && typeof _v['password'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createUserUpdateRequestPropertyNames();
+    const optionalStringProperties = createUserUpdateRequestOptionalProperties({ name: 'username', nullable: false }, { name: 'password', nullable: false }, );
+    const optionalNumberProperties = createUserUpdateRequestOptionalProperties();
+    const optionalBooleanProperties = createUserUpdateRequestOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalUserUpdateRequestPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalUserUpdateRequestPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalUserUpdateRequestPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

@@ -26,13 +26,52 @@ export enum ListPurchaseOrdersRequestStatusEnum {
 
 
 
+function isOptionalListPurchaseOrdersRequestPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type ListPurchaseOrdersRequestOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createListPurchaseOrdersRequestPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createListPurchaseOrdersRequestOptionalProperties(
+    ...properties: ListPurchaseOrdersRequestOptionalProperty[]
+): ReadonlyArray<ListPurchaseOrdersRequestOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfListPurchaseOrdersRequest(value: object): value is ListPurchaseOrdersRequest {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('vendorId' in _v && typeof _v['vendorId'] !== 'string') return false;
-    if ('status' in _v && typeof _v['status'] !== 'string') return false;
-    if ('currency' in _v && typeof _v['currency'] !== 'string') return false;
-    if ('locationId' in _v && typeof _v['locationId'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createListPurchaseOrdersRequestPropertyNames();
+    const optionalStringProperties = createListPurchaseOrdersRequestOptionalProperties({ name: 'vendorId', nullable: false }, { name: 'status', nullable: false }, { name: 'currency', nullable: false }, { name: 'locationId', nullable: false }, );
+    const optionalNumberProperties = createListPurchaseOrdersRequestOptionalProperties();
+    const optionalBooleanProperties = createListPurchaseOrdersRequestOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalListPurchaseOrdersRequestPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalListPurchaseOrdersRequestPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalListPurchaseOrdersRequestPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

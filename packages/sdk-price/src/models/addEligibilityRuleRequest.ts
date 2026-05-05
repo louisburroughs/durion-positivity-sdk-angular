@@ -48,16 +48,52 @@ export enum AddEligibilityRuleRequestRuleCombinationEnum {
 
 
 
+function isOptionalAddEligibilityRuleRequestPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type AddEligibilityRuleRequestOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createAddEligibilityRuleRequestPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createAddEligibilityRuleRequestOptionalProperties(
+    ...properties: AddEligibilityRuleRequestOptionalProperty[]
+): ReadonlyArray<AddEligibilityRuleRequestOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfAddEligibilityRuleRequest(value: object): value is AddEligibilityRuleRequest {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if (!('conditionType' in _v) || _v['conditionType'] === undefined) return false;
-    if ('conditionType' in _v && typeof _v['conditionType'] !== 'string') return false;
-    if (!('operator' in _v) || _v['operator'] === undefined) return false;
-    if ('operator' in _v && typeof _v['operator'] !== 'string') return false;
-    if (!('value' in _v) || _v['value'] === undefined) return false;
-    if ('value' in _v && typeof _v['value'] !== 'string') return false;
-    if ('ruleCombination' in _v && _v['ruleCombination'] !== null && typeof _v['ruleCombination'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createAddEligibilityRuleRequestPropertyNames('conditionType', 'operator', 'value', );
+    const optionalStringProperties = createAddEligibilityRuleRequestOptionalProperties({ name: 'conditionType', nullable: false }, { name: 'operator', nullable: false }, { name: 'value', nullable: false }, { name: 'ruleCombination', nullable: true }, );
+    const optionalNumberProperties = createAddEligibilityRuleRequestOptionalProperties();
+    const optionalBooleanProperties = createAddEligibilityRuleRequestOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalAddEligibilityRuleRequestPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalAddEligibilityRuleRequestPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalAddEligibilityRuleRequestPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

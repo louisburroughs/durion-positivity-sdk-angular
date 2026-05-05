@@ -23,20 +23,52 @@ export interface ReplenishmentTaskResponse {
     createdAt?: string;
 }
 
+function isOptionalReplenishmentTaskResponsePropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type ReplenishmentTaskResponseOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createReplenishmentTaskResponsePropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createReplenishmentTaskResponseOptionalProperties(
+    ...properties: ReplenishmentTaskResponseOptionalProperty[]
+): ReadonlyArray<ReplenishmentTaskResponseOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfReplenishmentTaskResponse(value: object): value is ReplenishmentTaskResponse {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('taskId' in _v && typeof _v['taskId'] !== 'string') return false;
-    if ('itemSKU' in _v && typeof _v['itemSKU'] !== 'string') return false;
-    if ('quantity' in _v && typeof _v['quantity'] !== 'number') return false;
-    if ('sourceLocationId' in _v && typeof _v['sourceLocationId'] !== 'string') return false;
-    if ('destinationLocationId' in _v && typeof _v['destinationLocationId'] !== 'string') return false;
-    if ('status' in _v && typeof _v['status'] !== 'string') return false;
-    if ('triggerType' in _v && typeof _v['triggerType'] !== 'string') return false;
-    if ('decisionReason' in _v && typeof _v['decisionReason'] !== 'string') return false;
-    if ('sourcingReason' in _v && typeof _v['sourcingReason'] !== 'string') return false;
-    if ('assignedTo' in _v && typeof _v['assignedTo'] !== 'string') return false;
-    if ('createdAt' in _v && typeof _v['createdAt'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createReplenishmentTaskResponsePropertyNames();
+    const optionalStringProperties = createReplenishmentTaskResponseOptionalProperties({ name: 'taskId', nullable: false }, { name: 'itemSKU', nullable: false }, { name: 'sourceLocationId', nullable: false }, { name: 'destinationLocationId', nullable: false }, { name: 'status', nullable: false }, { name: 'triggerType', nullable: false }, { name: 'decisionReason', nullable: false }, { name: 'sourcingReason', nullable: false }, { name: 'assignedTo', nullable: false }, { name: 'createdAt', nullable: false }, );
+    const optionalNumberProperties = createReplenishmentTaskResponseOptionalProperties({ name: 'quantity', nullable: false }, );
+    const optionalBooleanProperties = createReplenishmentTaskResponseOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalReplenishmentTaskResponsePropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalReplenishmentTaskResponsePropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalReplenishmentTaskResponsePropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

@@ -31,17 +31,52 @@ export interface Person {
     username?: string;
 }
 
+function isOptionalPersonPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type PersonOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createPersonPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createPersonOptionalProperties(
+    ...properties: PersonOptionalProperty[]
+): ReadonlyArray<PersonOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfPerson(value: object): value is Person {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('id' in _v && typeof _v['id'] !== 'string') return false;
-    if (!('firstName' in _v) || _v['firstName'] === undefined) return false;
-    if ('firstName' in _v && typeof _v['firstName'] !== 'string') return false;
-    if (!('lastName' in _v) || _v['lastName'] === undefined) return false;
-    if ('lastName' in _v && typeof _v['lastName'] !== 'string') return false;
-    if ('primaryEmail' in _v && typeof _v['primaryEmail'] !== 'string') return false;
-    if ('secondaryEmail' in _v && typeof _v['secondaryEmail'] !== 'string') return false;
-    if ('username' in _v && typeof _v['username'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createPersonPropertyNames('firstName', 'lastName', );
+    const optionalStringProperties = createPersonOptionalProperties({ name: 'id', nullable: false }, { name: 'firstName', nullable: false }, { name: 'lastName', nullable: false }, { name: 'primaryEmail', nullable: false }, { name: 'secondaryEmail', nullable: false }, { name: 'username', nullable: false }, );
+    const optionalNumberProperties = createPersonOptionalProperties();
+    const optionalBooleanProperties = createPersonOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalPersonPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalPersonPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalPersonPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

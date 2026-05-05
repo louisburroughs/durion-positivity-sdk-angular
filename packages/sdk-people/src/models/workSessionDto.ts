@@ -17,12 +17,52 @@ export interface WorkSessionDto {
     endedAt?: string;
 }
 
+function isOptionalWorkSessionDtoPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type WorkSessionDtoOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createWorkSessionDtoPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createWorkSessionDtoOptionalProperties(
+    ...properties: WorkSessionDtoOptionalProperty[]
+): ReadonlyArray<WorkSessionDtoOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfWorkSessionDto(value: object): value is WorkSessionDto {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('sessionId' in _v && typeof _v['sessionId'] !== 'string') return false;
-    if ('personId' in _v && typeof _v['personId'] !== 'string') return false;
-    if ('status' in _v && typeof _v['status'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createWorkSessionDtoPropertyNames();
+    const optionalStringProperties = createWorkSessionDtoOptionalProperties({ name: 'sessionId', nullable: false }, { name: 'personId', nullable: false }, { name: 'status', nullable: false }, );
+    const optionalNumberProperties = createWorkSessionDtoOptionalProperties();
+    const optionalBooleanProperties = createWorkSessionDtoOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalWorkSessionDtoPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalWorkSessionDtoPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalWorkSessionDtoPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

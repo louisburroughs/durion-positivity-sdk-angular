@@ -15,10 +15,52 @@ export interface GetContactsWithRolesResponse {
     contacts?: Array<ContactWithRoles>;
 }
 
+function isOptionalGetContactsWithRolesResponsePropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type GetContactsWithRolesResponseOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createGetContactsWithRolesResponsePropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createGetContactsWithRolesResponseOptionalProperties(
+    ...properties: GetContactsWithRolesResponseOptionalProperty[]
+): ReadonlyArray<GetContactsWithRolesResponseOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfGetContactsWithRolesResponse(value: object): value is GetContactsWithRolesResponse {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('partyId' in _v && typeof _v['partyId'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createGetContactsWithRolesResponsePropertyNames();
+    const optionalStringProperties = createGetContactsWithRolesResponseOptionalProperties({ name: 'partyId', nullable: false }, );
+    const optionalNumberProperties = createGetContactsWithRolesResponseOptionalProperties();
+    const optionalBooleanProperties = createGetContactsWithRolesResponseOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalGetContactsWithRolesResponsePropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalGetContactsWithRolesResponsePropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalGetContactsWithRolesResponsePropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

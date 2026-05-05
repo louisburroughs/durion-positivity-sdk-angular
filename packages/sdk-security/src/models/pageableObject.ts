@@ -19,14 +19,52 @@ export interface PageableObject {
     unpaged?: boolean;
 }
 
+function isOptionalPageableObjectPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type PageableObjectOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createPageableObjectPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createPageableObjectOptionalProperties(
+    ...properties: PageableObjectOptionalProperty[]
+): ReadonlyArray<PageableObjectOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfPageableObject(value: object): value is PageableObject {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('offset' in _v && typeof _v['offset'] !== 'number') return false;
-    if ('paged' in _v && typeof _v['paged'] !== 'boolean') return false;
-    if ('pageNumber' in _v && typeof _v['pageNumber'] !== 'number') return false;
-    if ('pageSize' in _v && typeof _v['pageSize'] !== 'number') return false;
-    if ('unpaged' in _v && typeof _v['unpaged'] !== 'boolean') return false;
-    return true;
+
+    const requiredProperties = createPageableObjectPropertyNames();
+    const optionalStringProperties = createPageableObjectOptionalProperties();
+    const optionalNumberProperties = createPageableObjectOptionalProperties({ name: 'offset', nullable: false }, { name: 'pageNumber', nullable: false }, { name: 'pageSize', nullable: false }, );
+    const optionalBooleanProperties = createPageableObjectOptionalProperties({ name: 'paged', nullable: false }, { name: 'unpaged', nullable: false }, );
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalPageableObjectPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalPageableObjectPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalPageableObjectPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

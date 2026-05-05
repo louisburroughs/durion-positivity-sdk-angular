@@ -17,14 +17,52 @@ export interface UpsertCommunicationPreferencesResponse {
     updatedAt?: string;
 }
 
+function isOptionalUpsertCommunicationPreferencesResponsePropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type UpsertCommunicationPreferencesResponseOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createUpsertCommunicationPreferencesResponsePropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createUpsertCommunicationPreferencesResponseOptionalProperties(
+    ...properties: UpsertCommunicationPreferencesResponseOptionalProperty[]
+): ReadonlyArray<UpsertCommunicationPreferencesResponseOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfUpsertCommunicationPreferencesResponse(value: object): value is UpsertCommunicationPreferencesResponse {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('partyId' in _v && typeof _v['partyId'] !== 'string') return false;
-    if ('version' in _v && typeof _v['version'] !== 'string') return false;
-    if ('operationType' in _v && typeof _v['operationType'] !== 'string') return false;
-    if ('status' in _v && typeof _v['status'] !== 'string') return false;
-    if ('updatedAt' in _v && typeof _v['updatedAt'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createUpsertCommunicationPreferencesResponsePropertyNames();
+    const optionalStringProperties = createUpsertCommunicationPreferencesResponseOptionalProperties({ name: 'partyId', nullable: false }, { name: 'version', nullable: false }, { name: 'operationType', nullable: false }, { name: 'status', nullable: false }, { name: 'updatedAt', nullable: false }, );
+    const optionalNumberProperties = createUpsertCommunicationPreferencesResponseOptionalProperties();
+    const optionalBooleanProperties = createUpsertCommunicationPreferencesResponseOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalUpsertCommunicationPreferencesResponsePropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalUpsertCommunicationPreferencesResponsePropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalUpsertCommunicationPreferencesResponsePropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

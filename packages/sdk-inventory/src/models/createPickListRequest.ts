@@ -16,13 +16,52 @@ export interface CreatePickListRequest {
     reservationId?: string;
 }
 
+function isOptionalCreatePickListRequestPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type CreatePickListRequestOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createCreatePickListRequestPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createCreatePickListRequestOptionalProperties(
+    ...properties: CreatePickListRequestOptionalProperty[]
+): ReadonlyArray<CreatePickListRequestOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfCreatePickListRequest(value: object): value is CreatePickListRequest {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if (!('workorderId' in _v) || _v['workorderId'] === undefined) return false;
-    if ('workorderId' in _v && typeof _v['workorderId'] !== 'string') return false;
-    if ('priority' in _v && typeof _v['priority'] !== 'number') return false;
-    if ('reservationId' in _v && typeof _v['reservationId'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createCreatePickListRequestPropertyNames('workorderId', );
+    const optionalStringProperties = createCreatePickListRequestOptionalProperties({ name: 'workorderId', nullable: false }, { name: 'reservationId', nullable: false }, );
+    const optionalNumberProperties = createCreatePickListRequestOptionalProperties({ name: 'priority', nullable: false }, );
+    const optionalBooleanProperties = createCreatePickListRequestOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalCreatePickListRequestPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalCreatePickListRequestPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalCreatePickListRequestPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

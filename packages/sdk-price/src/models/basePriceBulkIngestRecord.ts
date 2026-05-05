@@ -16,17 +16,52 @@ export interface BasePriceBulkIngestRecord {
     effectiveFrom: string;
 }
 
+function isOptionalBasePriceBulkIngestRecordPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type BasePriceBulkIngestRecordOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createBasePriceBulkIngestRecordPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createBasePriceBulkIngestRecordOptionalProperties(
+    ...properties: BasePriceBulkIngestRecordOptionalProperty[]
+): ReadonlyArray<BasePriceBulkIngestRecordOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfBasePriceBulkIngestRecord(value: object): value is BasePriceBulkIngestRecord {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if (!('productId' in _v) || _v['productId'] === undefined) return false;
-    if ('productId' in _v && typeof _v['productId'] !== 'string') return false;
-    if (!('msrp' in _v) || _v['msrp'] === undefined) return false;
-    if ('msrp' in _v && typeof _v['msrp'] !== 'string') return false;
-    if (!('currency' in _v) || _v['currency'] === undefined) return false;
-    if ('currency' in _v && typeof _v['currency'] !== 'string') return false;
-    if (!('effectiveFrom' in _v) || _v['effectiveFrom'] === undefined) return false;
-    if ('effectiveFrom' in _v && typeof _v['effectiveFrom'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createBasePriceBulkIngestRecordPropertyNames('productId', 'msrp', 'currency', 'effectiveFrom', );
+    const optionalStringProperties = createBasePriceBulkIngestRecordOptionalProperties({ name: 'productId', nullable: false }, { name: 'msrp', nullable: false }, { name: 'currency', nullable: false }, { name: 'effectiveFrom', nullable: false }, );
+    const optionalNumberProperties = createBasePriceBulkIngestRecordOptionalProperties();
+    const optionalBooleanProperties = createBasePriceBulkIngestRecordOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalBasePriceBulkIngestRecordPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalBasePriceBulkIngestRecordPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalBasePriceBulkIngestRecordPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

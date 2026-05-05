@@ -20,11 +20,52 @@ export enum MechanicAssignmentItemRoleEnum {
 
 
 
+function isOptionalMechanicAssignmentItemPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type MechanicAssignmentItemOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createMechanicAssignmentItemPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createMechanicAssignmentItemOptionalProperties(
+    ...properties: MechanicAssignmentItemOptionalProperty[]
+): ReadonlyArray<MechanicAssignmentItemOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfMechanicAssignmentItem(value: object): value is MechanicAssignmentItem {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('mechanicPersonId' in _v && typeof _v['mechanicPersonId'] !== 'string') return false;
-    if ('role' in _v && typeof _v['role'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createMechanicAssignmentItemPropertyNames();
+    const optionalStringProperties = createMechanicAssignmentItemOptionalProperties({ name: 'mechanicPersonId', nullable: false }, { name: 'role', nullable: false }, );
+    const optionalNumberProperties = createMechanicAssignmentItemOptionalProperties();
+    const optionalBooleanProperties = createMechanicAssignmentItemOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalMechanicAssignmentItemPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalMechanicAssignmentItemPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalMechanicAssignmentItemPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

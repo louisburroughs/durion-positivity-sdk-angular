@@ -14,13 +14,52 @@ export interface PutawayLineItemRequest {
     quantity: number;
 }
 
+function isOptionalPutawayLineItemRequestPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type PutawayLineItemRequestOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createPutawayLineItemRequestPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createPutawayLineItemRequestOptionalProperties(
+    ...properties: PutawayLineItemRequestOptionalProperty[]
+): ReadonlyArray<PutawayLineItemRequestOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfPutawayLineItemRequest(value: object): value is PutawayLineItemRequest {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if (!('productId' in _v) || _v['productId'] === undefined) return false;
-    if ('productId' in _v && typeof _v['productId'] !== 'string') return false;
-    if (!('quantity' in _v) || _v['quantity'] === undefined) return false;
-    if ('quantity' in _v && typeof _v['quantity'] !== 'number') return false;
-    return true;
+
+    const requiredProperties = createPutawayLineItemRequestPropertyNames('productId', 'quantity', );
+    const optionalStringProperties = createPutawayLineItemRequestOptionalProperties({ name: 'productId', nullable: false }, );
+    const optionalNumberProperties = createPutawayLineItemRequestOptionalProperties({ name: 'quantity', nullable: false }, );
+    const optionalBooleanProperties = createPutawayLineItemRequestOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalPutawayLineItemRequestPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalPutawayLineItemRequestPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalPutawayLineItemRequestPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

@@ -21,17 +21,52 @@ export interface AuditLogEventDto {
     context?: string;
 }
 
+function isOptionalAuditLogEventDtoPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type AuditLogEventDtoOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createAuditLogEventDtoPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createAuditLogEventDtoOptionalProperties(
+    ...properties: AuditLogEventDtoOptionalProperty[]
+): ReadonlyArray<AuditLogEventDtoOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfAuditLogEventDto(value: object): value is AuditLogEventDto {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('eventId' in _v && typeof _v['eventId'] !== 'string') return false;
-    if ('eventType' in _v && typeof _v['eventType'] !== 'string') return false;
-    if ('actorId' in _v && typeof _v['actorId'] !== 'string') return false;
-    if ('entityId' in _v && typeof _v['entityId'] !== 'string') return false;
-    if ('entityType' in _v && typeof _v['entityType'] !== 'string') return false;
-    if ('oldValue' in _v && typeof _v['oldValue'] !== 'string') return false;
-    if ('newValue' in _v && typeof _v['newValue'] !== 'string') return false;
-    if ('context' in _v && typeof _v['context'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createAuditLogEventDtoPropertyNames();
+    const optionalStringProperties = createAuditLogEventDtoOptionalProperties({ name: 'eventId', nullable: false }, { name: 'eventType', nullable: false }, { name: 'actorId', nullable: false }, { name: 'entityId', nullable: false }, { name: 'entityType', nullable: false }, { name: 'oldValue', nullable: false }, { name: 'newValue', nullable: false }, { name: 'context', nullable: false }, );
+    const optionalNumberProperties = createAuditLogEventDtoOptionalProperties();
+    const optionalBooleanProperties = createAuditLogEventDtoOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalAuditLogEventDtoPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalAuditLogEventDtoPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalAuditLogEventDtoPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

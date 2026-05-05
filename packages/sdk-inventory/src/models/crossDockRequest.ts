@@ -16,16 +16,52 @@ export interface CrossDockRequest {
     notes?: string;
 }
 
+function isOptionalCrossDockRequestPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type CrossDockRequestOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createCrossDockRequestPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createCrossDockRequestOptionalProperties(
+    ...properties: CrossDockRequestOptionalProperty[]
+): ReadonlyArray<CrossDockRequestOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfCrossDockRequest(value: object): value is CrossDockRequest {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if (!('workorderId' in _v) || _v['workorderId'] === undefined) return false;
-    if ('workorderId' in _v && typeof _v['workorderId'] !== 'string') return false;
-    if (!('workorderLineId' in _v) || _v['workorderLineId'] === undefined) return false;
-    if ('workorderLineId' in _v && typeof _v['workorderLineId'] !== 'string') return false;
-    if (!('quantity' in _v) || _v['quantity'] === undefined) return false;
-    if ('quantity' in _v && typeof _v['quantity'] !== 'number') return false;
-    if ('notes' in _v && typeof _v['notes'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createCrossDockRequestPropertyNames('workorderId', 'workorderLineId', 'quantity', );
+    const optionalStringProperties = createCrossDockRequestOptionalProperties({ name: 'workorderId', nullable: false }, { name: 'workorderLineId', nullable: false }, { name: 'notes', nullable: false }, );
+    const optionalNumberProperties = createCrossDockRequestOptionalProperties({ name: 'quantity', nullable: false }, );
+    const optionalBooleanProperties = createCrossDockRequestOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalCrossDockRequestPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalCrossDockRequestPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalCrossDockRequestPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

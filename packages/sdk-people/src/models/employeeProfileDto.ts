@@ -32,14 +32,52 @@ export enum EmployeeProfileDtoStatusEnum {
 
 
 
+function isOptionalEmployeeProfileDtoPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type EmployeeProfileDtoOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createEmployeeProfileDtoPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createEmployeeProfileDtoOptionalProperties(
+    ...properties: EmployeeProfileDtoOptionalProperty[]
+): ReadonlyArray<EmployeeProfileDtoOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfEmployeeProfileDto(value: object): value is EmployeeProfileDto {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('id' in _v && typeof _v['id'] !== 'string') return false;
-    if ('legalName' in _v && typeof _v['legalName'] !== 'string') return false;
-    if ('preferredName' in _v && typeof _v['preferredName'] !== 'string') return false;
-    if ('employeeNumber' in _v && typeof _v['employeeNumber'] !== 'string') return false;
-    if ('status' in _v && typeof _v['status'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createEmployeeProfileDtoPropertyNames();
+    const optionalStringProperties = createEmployeeProfileDtoOptionalProperties({ name: 'id', nullable: false }, { name: 'legalName', nullable: false }, { name: 'preferredName', nullable: false }, { name: 'employeeNumber', nullable: false }, { name: 'status', nullable: false }, );
+    const optionalNumberProperties = createEmployeeProfileDtoOptionalProperties();
+    const optionalBooleanProperties = createEmployeeProfileDtoOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalEmployeeProfileDtoPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalEmployeeProfileDtoPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalEmployeeProfileDtoPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

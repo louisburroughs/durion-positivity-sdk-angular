@@ -28,16 +28,52 @@ export enum PostingRuleVersionResponseStateEnum {
 
 
 
+function isOptionalPostingRuleVersionResponsePropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type PostingRuleVersionResponseOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createPostingRuleVersionResponsePropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createPostingRuleVersionResponseOptionalProperties(
+    ...properties: PostingRuleVersionResponseOptionalProperty[]
+): ReadonlyArray<PostingRuleVersionResponseOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfPostingRuleVersionResponse(value: object): value is PostingRuleVersionResponse {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('versionId' in _v && typeof _v['versionId'] !== 'string') return false;
-    if ('postingRuleSetId' in _v && typeof _v['postingRuleSetId'] !== 'string') return false;
-    if ('versionNumber' in _v && typeof _v['versionNumber'] !== 'number') return false;
-    if ('state' in _v && typeof _v['state'] !== 'string') return false;
-    if ('rulesDefinition' in _v && typeof _v['rulesDefinition'] !== 'string') return false;
-    if ('createdBy' in _v && typeof _v['createdBy'] !== 'string') return false;
-    if ('modifiedBy' in _v && typeof _v['modifiedBy'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createPostingRuleVersionResponsePropertyNames();
+    const optionalStringProperties = createPostingRuleVersionResponseOptionalProperties({ name: 'versionId', nullable: false }, { name: 'postingRuleSetId', nullable: false }, { name: 'state', nullable: false }, { name: 'rulesDefinition', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'modifiedBy', nullable: false }, );
+    const optionalNumberProperties = createPostingRuleVersionResponseOptionalProperties({ name: 'versionNumber', nullable: false }, );
+    const optionalBooleanProperties = createPostingRuleVersionResponseOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalPostingRuleVersionResponsePropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalPostingRuleVersionResponsePropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalPostingRuleVersionResponsePropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

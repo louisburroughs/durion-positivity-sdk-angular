@@ -13,11 +13,52 @@ export interface BayCapacityRequest {
     maxConcurrentVehicles: number;
 }
 
+function isOptionalBayCapacityRequestPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type BayCapacityRequestOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createBayCapacityRequestPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createBayCapacityRequestOptionalProperties(
+    ...properties: BayCapacityRequestOptionalProperty[]
+): ReadonlyArray<BayCapacityRequestOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfBayCapacityRequest(value: object): value is BayCapacityRequest {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if (!('maxConcurrentVehicles' in _v) || _v['maxConcurrentVehicles'] === undefined) return false;
-    if ('maxConcurrentVehicles' in _v && typeof _v['maxConcurrentVehicles'] !== 'number') return false;
-    return true;
+
+    const requiredProperties = createBayCapacityRequestPropertyNames('maxConcurrentVehicles', );
+    const optionalStringProperties = createBayCapacityRequestOptionalProperties();
+    const optionalNumberProperties = createBayCapacityRequestOptionalProperties({ name: 'maxConcurrentVehicles', nullable: false }, );
+    const optionalBooleanProperties = createBayCapacityRequestOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalBayCapacityRequestPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalBayCapacityRequestPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalBayCapacityRequestPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

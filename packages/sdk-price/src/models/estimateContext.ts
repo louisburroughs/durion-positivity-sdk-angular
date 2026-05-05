@@ -40,17 +40,52 @@ export interface EstimateContext {
     appliedPromoCodes?: Array<string> | null;
 }
 
+function isOptionalEstimateContextPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type EstimateContextOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createEstimateContextPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createEstimateContextOptionalProperties(
+    ...properties: EstimateContextOptionalProperty[]
+): ReadonlyArray<EstimateContextOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfEstimateContext(value: object): value is EstimateContext {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if (!('estimateId' in _v) || _v['estimateId'] === undefined) return false;
-    if ('estimateId' in _v && typeof _v['estimateId'] !== 'string') return false;
-    if (!('customerId' in _v) || _v['customerId'] === undefined) return false;
-    if ('customerId' in _v && typeof _v['customerId'] !== 'string') return false;
-    if ('vehicleId' in _v && _v['vehicleId'] !== null && typeof _v['vehicleId'] !== 'string') return false;
-    if (!('lineItems' in _v) || _v['lineItems'] === undefined) return false;
-    if (!('subtotal' in _v) || _v['subtotal'] === undefined) return false;
-    if ('subtotal' in _v && typeof _v['subtotal'] !== 'number') return false;
-    return true;
+
+    const requiredProperties = createEstimateContextPropertyNames('estimateId', 'customerId', 'lineItems', 'subtotal', );
+    const optionalStringProperties = createEstimateContextOptionalProperties({ name: 'estimateId', nullable: false }, { name: 'customerId', nullable: false }, { name: 'vehicleId', nullable: true }, );
+    const optionalNumberProperties = createEstimateContextOptionalProperties({ name: 'subtotal', nullable: false }, );
+    const optionalBooleanProperties = createEstimateContextOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalEstimateContextPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalEstimateContextPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalEstimateContextPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

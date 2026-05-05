@@ -47,13 +47,52 @@ export enum AuditExportJobResponseStatusEnum {
 
 
 
+function isOptionalAuditExportJobResponsePropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type AuditExportJobResponseOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createAuditExportJobResponsePropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createAuditExportJobResponseOptionalProperties(
+    ...properties: AuditExportJobResponseOptionalProperty[]
+): ReadonlyArray<AuditExportJobResponseOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfAuditExportJobResponse(value: object): value is AuditExportJobResponse {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('jobId' in _v && typeof _v['jobId'] !== 'string') return false;
-    if ('status' in _v && typeof _v['status'] !== 'string') return false;
-    if ('downloadUrl' in _v && typeof _v['downloadUrl'] !== 'string') return false;
-    if ('errorMessage' in _v && typeof _v['errorMessage'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createAuditExportJobResponsePropertyNames();
+    const optionalStringProperties = createAuditExportJobResponseOptionalProperties({ name: 'jobId', nullable: false }, { name: 'status', nullable: false }, { name: 'downloadUrl', nullable: false }, { name: 'errorMessage', nullable: false }, );
+    const optionalNumberProperties = createAuditExportJobResponseOptionalProperties();
+    const optionalBooleanProperties = createAuditExportJobResponseOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalAuditExportJobResponsePropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalAuditExportJobResponsePropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalAuditExportJobResponsePropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

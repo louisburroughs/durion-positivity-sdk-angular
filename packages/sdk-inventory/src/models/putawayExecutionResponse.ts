@@ -22,19 +22,52 @@ export interface PutawayExecutionResponse {
     actorId?: string;
 }
 
+function isOptionalPutawayExecutionResponsePropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type PutawayExecutionResponseOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createPutawayExecutionResponsePropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createPutawayExecutionResponseOptionalProperties(
+    ...properties: PutawayExecutionResponseOptionalProperty[]
+): ReadonlyArray<PutawayExecutionResponseOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfPutawayExecutionResponse(value: object): value is PutawayExecutionResponse {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('ledgerEntryId' in _v && typeof _v['ledgerEntryId'] !== 'string') return false;
-    if ('taskId' in _v && typeof _v['taskId'] !== 'string') return false;
-    if ('skuId' in _v && typeof _v['skuId'] !== 'string') return false;
-    if ('sourceLocationId' in _v && typeof _v['sourceLocationId'] !== 'string') return false;
-    if ('destinationLocationId' in _v && typeof _v['destinationLocationId'] !== 'string') return false;
-    if ('quantityMoved' in _v && typeof _v['quantityMoved'] !== 'number') return false;
-    if ('transactionType' in _v && typeof _v['transactionType'] !== 'string') return false;
-    if ('status' in _v && typeof _v['status'] !== 'string') return false;
-    if ('executedAt' in _v && typeof _v['executedAt'] !== 'string') return false;
-    if ('actorId' in _v && typeof _v['actorId'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createPutawayExecutionResponsePropertyNames();
+    const optionalStringProperties = createPutawayExecutionResponseOptionalProperties({ name: 'ledgerEntryId', nullable: false }, { name: 'taskId', nullable: false }, { name: 'skuId', nullable: false }, { name: 'sourceLocationId', nullable: false }, { name: 'destinationLocationId', nullable: false }, { name: 'transactionType', nullable: false }, { name: 'status', nullable: false }, { name: 'executedAt', nullable: false }, { name: 'actorId', nullable: false }, );
+    const optionalNumberProperties = createPutawayExecutionResponseOptionalProperties({ name: 'quantityMoved', nullable: false }, );
+    const optionalBooleanProperties = createPutawayExecutionResponseOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalPutawayExecutionResponsePropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalPutawayExecutionResponsePropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalPutawayExecutionResponsePropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

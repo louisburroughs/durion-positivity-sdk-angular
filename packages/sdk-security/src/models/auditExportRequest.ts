@@ -14,9 +14,6 @@ import { AuditEventSearchFilter } from './auditEventSearchFilter';
  * Audit export job submission request
  */
 export interface AuditExportRequest { 
-    /**
-     * Filter criteria to scope the export
-     */
     filters?: AuditEventSearchFilter;
     /**
      * Output format for the export
@@ -38,13 +35,52 @@ export enum AuditExportRequestDeliveryModeEnum {
 
 
 
+function isOptionalAuditExportRequestPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type AuditExportRequestOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createAuditExportRequestPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createAuditExportRequestOptionalProperties(
+    ...properties: AuditExportRequestOptionalProperty[]
+): ReadonlyArray<AuditExportRequestOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfAuditExportRequest(value: object): value is AuditExportRequest {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if (!('format' in _v) || _v['format'] === undefined) return false;
-    if ('format' in _v && typeof _v['format'] !== 'string') return false;
-    if (!('deliveryMode' in _v) || _v['deliveryMode'] === undefined) return false;
-    if ('deliveryMode' in _v && typeof _v['deliveryMode'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createAuditExportRequestPropertyNames('format', 'deliveryMode', );
+    const optionalStringProperties = createAuditExportRequestOptionalProperties({ name: 'format', nullable: false }, { name: 'deliveryMode', nullable: false }, );
+    const optionalNumberProperties = createAuditExportRequestOptionalProperties();
+    const optionalBooleanProperties = createAuditExportRequestOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalAuditExportRequestPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalAuditExportRequestPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalAuditExportRequestPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

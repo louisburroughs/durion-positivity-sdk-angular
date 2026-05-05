@@ -20,13 +20,52 @@ export interface BayPatchRequest {
     skillRequirementIds?: Array<string>;
 }
 
+function isOptionalBayPatchRequestPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type BayPatchRequestOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createBayPatchRequestPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createBayPatchRequestOptionalProperties(
+    ...properties: BayPatchRequestOptionalProperty[]
+): ReadonlyArray<BayPatchRequestOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfBayPatchRequest(value: object): value is BayPatchRequest {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('name' in _v && typeof _v['name'] !== 'string') return false;
-    if ('bayType' in _v && typeof _v['bayType'] !== 'string') return false;
-    if ('status' in _v && typeof _v['status'] !== 'string') return false;
-    if ('maxConcurrentVehicles' in _v && typeof _v['maxConcurrentVehicles'] !== 'number') return false;
-    return true;
+
+    const requiredProperties = createBayPatchRequestPropertyNames();
+    const optionalStringProperties = createBayPatchRequestOptionalProperties({ name: 'name', nullable: false }, { name: 'bayType', nullable: false }, { name: 'status', nullable: false }, );
+    const optionalNumberProperties = createBayPatchRequestOptionalProperties({ name: 'maxConcurrentVehicles', nullable: false }, );
+    const optionalBooleanProperties = createBayPatchRequestOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalBayPatchRequestPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalBayPatchRequestPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalBayPatchRequestPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

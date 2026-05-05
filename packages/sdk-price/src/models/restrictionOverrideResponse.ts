@@ -14,10 +14,52 @@ export interface RestrictionOverrideResponse {
     expiresAt?: string;
 }
 
+function isOptionalRestrictionOverrideResponsePropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type RestrictionOverrideResponseOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createRestrictionOverrideResponsePropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createRestrictionOverrideResponseOptionalProperties(
+    ...properties: RestrictionOverrideResponseOptionalProperty[]
+): ReadonlyArray<RestrictionOverrideResponseOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfRestrictionOverrideResponse(value: object): value is RestrictionOverrideResponse {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('overrideId' in _v && typeof _v['overrideId'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createRestrictionOverrideResponsePropertyNames();
+    const optionalStringProperties = createRestrictionOverrideResponseOptionalProperties({ name: 'overrideId', nullable: false }, );
+    const optionalNumberProperties = createRestrictionOverrideResponseOptionalProperties();
+    const optionalBooleanProperties = createRestrictionOverrideResponseOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalRestrictionOverrideResponsePropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalRestrictionOverrideResponsePropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalRestrictionOverrideResponsePropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

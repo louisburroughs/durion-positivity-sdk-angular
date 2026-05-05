@@ -27,15 +27,52 @@ export interface LineItemContext {
     unitPrice: number;
 }
 
+function isOptionalLineItemContextPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type LineItemContextOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createLineItemContextPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createLineItemContextOptionalProperties(
+    ...properties: LineItemContextOptionalProperty[]
+): ReadonlyArray<LineItemContextOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfLineItemContext(value: object): value is LineItemContext {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if (!('sku' in _v) || _v['sku'] === undefined) return false;
-    if ('sku' in _v && typeof _v['sku'] !== 'string') return false;
-    if (!('quantity' in _v) || _v['quantity'] === undefined) return false;
-    if ('quantity' in _v && typeof _v['quantity'] !== 'number') return false;
-    if (!('unitPrice' in _v) || _v['unitPrice'] === undefined) return false;
-    if ('unitPrice' in _v && typeof _v['unitPrice'] !== 'number') return false;
-    return true;
+
+    const requiredProperties = createLineItemContextPropertyNames('sku', 'quantity', 'unitPrice', );
+    const optionalStringProperties = createLineItemContextOptionalProperties({ name: 'sku', nullable: false }, );
+    const optionalNumberProperties = createLineItemContextOptionalProperties({ name: 'quantity', nullable: false }, { name: 'unitPrice', nullable: false }, );
+    const optionalBooleanProperties = createLineItemContextOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalLineItemContextPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalLineItemContextPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalLineItemContextPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

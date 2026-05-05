@@ -44,20 +44,52 @@ export enum PriceBookRuleDtoStatusEnum {
 
 
 
+function isOptionalPriceBookRuleDtoPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type PriceBookRuleDtoOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createPriceBookRuleDtoPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createPriceBookRuleDtoOptionalProperties(
+    ...properties: PriceBookRuleDtoOptionalProperty[]
+): ReadonlyArray<PriceBookRuleDtoOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfPriceBookRuleDto(value: object): value is PriceBookRuleDto {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('ruleId' in _v && typeof _v['ruleId'] !== 'string') return false;
-    if ('priceBookId' in _v && typeof _v['priceBookId'] !== 'string') return false;
-    if ('targetType' in _v && typeof _v['targetType'] !== 'string') return false;
-    if ('targetId' in _v && typeof _v['targetId'] !== 'string') return false;
-    if ('pricingLogic' in _v && typeof _v['pricingLogic'] !== 'string') return false;
-    if ('conditionType' in _v && typeof _v['conditionType'] !== 'string') return false;
-    if ('conditionValue' in _v && typeof _v['conditionValue'] !== 'string') return false;
-    if ('priority' in _v && typeof _v['priority'] !== 'number') return false;
-    if ('status' in _v && typeof _v['status'] !== 'string') return false;
-    if ('createdByUserId' in _v && typeof _v['createdByUserId'] !== 'string') return false;
-    if ('version' in _v && typeof _v['version'] !== 'number') return false;
-    return true;
+
+    const requiredProperties = createPriceBookRuleDtoPropertyNames();
+    const optionalStringProperties = createPriceBookRuleDtoOptionalProperties({ name: 'ruleId', nullable: false }, { name: 'priceBookId', nullable: false }, { name: 'targetType', nullable: false }, { name: 'targetId', nullable: false }, { name: 'pricingLogic', nullable: false }, { name: 'conditionType', nullable: false }, { name: 'conditionValue', nullable: false }, { name: 'status', nullable: false }, { name: 'createdByUserId', nullable: false }, );
+    const optionalNumberProperties = createPriceBookRuleDtoOptionalProperties({ name: 'priority', nullable: false }, { name: 'version', nullable: false }, );
+    const optionalBooleanProperties = createPriceBookRuleDtoOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalPriceBookRuleDtoPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalPriceBookRuleDtoPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalPriceBookRuleDtoPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

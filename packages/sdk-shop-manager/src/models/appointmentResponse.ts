@@ -22,21 +22,56 @@ export interface AppointmentResponse {
     cancellationReason?: string;
     cancellationNotes?: string;
     serviceRequestIds?: Array<string>;
-    customerSnapshot?: { [key: string]: any; };
-    vehicleSnapshot?: { [key: string]: any; };
+    customerSnapshot?: object;
+    vehicleSnapshot?: object;
+}
+
+function isOptionalAppointmentResponsePropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type AppointmentResponseOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createAppointmentResponsePropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createAppointmentResponseOptionalProperties(
+    ...properties: AppointmentResponseOptionalProperty[]
+): ReadonlyArray<AppointmentResponseOptionalProperty> {
+    return properties;
 }
 
 export function instanceOfAppointmentResponse(value: object): value is AppointmentResponse {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('appointmentId' in _v && typeof _v['appointmentId'] !== 'string') return false;
-    if ('status' in _v && typeof _v['status'] !== 'string') return false;
-    if ('locationId' in _v && typeof _v['locationId'] !== 'string') return false;
-    if ('resourceId' in _v && typeof _v['resourceId'] !== 'string') return false;
-    if ('crmCustomerId' in _v && typeof _v['crmCustomerId'] !== 'string') return false;
-    if ('crmVehicleId' in _v && typeof _v['crmVehicleId'] !== 'string') return false;
-    if ('cancellationReason' in _v && typeof _v['cancellationReason'] !== 'string') return false;
-    if ('cancellationNotes' in _v && typeof _v['cancellationNotes'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createAppointmentResponsePropertyNames();
+    const optionalStringProperties = createAppointmentResponseOptionalProperties({ name: 'appointmentId', nullable: false }, { name: 'status', nullable: false }, { name: 'locationId', nullable: false }, { name: 'resourceId', nullable: false }, { name: 'crmCustomerId', nullable: false }, { name: 'crmVehicleId', nullable: false }, { name: 'cancellationReason', nullable: false }, { name: 'cancellationNotes', nullable: false }, );
+    const optionalNumberProperties = createAppointmentResponseOptionalProperties();
+    const optionalBooleanProperties = createAppointmentResponseOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalAppointmentResponsePropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalAppointmentResponsePropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalAppointmentResponsePropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

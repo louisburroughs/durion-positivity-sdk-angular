@@ -13,10 +13,52 @@ export interface PricingSnapshotCreatedResponse {
     snapshotId?: string;
 }
 
+function isOptionalPricingSnapshotCreatedResponsePropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type PricingSnapshotCreatedResponseOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createPricingSnapshotCreatedResponsePropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createPricingSnapshotCreatedResponseOptionalProperties(
+    ...properties: PricingSnapshotCreatedResponseOptionalProperty[]
+): ReadonlyArray<PricingSnapshotCreatedResponseOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfPricingSnapshotCreatedResponse(value: object): value is PricingSnapshotCreatedResponse {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('snapshotId' in _v && typeof _v['snapshotId'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createPricingSnapshotCreatedResponsePropertyNames();
+    const optionalStringProperties = createPricingSnapshotCreatedResponseOptionalProperties({ name: 'snapshotId', nullable: false }, );
+    const optionalNumberProperties = createPricingSnapshotCreatedResponseOptionalProperties();
+    const optionalBooleanProperties = createPricingSnapshotCreatedResponseOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalPricingSnapshotCreatedResponsePropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalPricingSnapshotCreatedResponsePropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalPricingSnapshotCreatedResponsePropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

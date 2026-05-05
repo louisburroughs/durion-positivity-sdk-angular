@@ -13,10 +13,52 @@ export interface UploadFileRequest {
     file: Blob;
 }
 
+function isOptionalUploadFileRequestPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type UploadFileRequestOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createUploadFileRequestPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createUploadFileRequestOptionalProperties(
+    ...properties: UploadFileRequestOptionalProperty[]
+): ReadonlyArray<UploadFileRequestOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfUploadFileRequest(value: object): value is UploadFileRequest {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if (!('file' in _v) || _v['file'] === undefined) return false;
-    return true;
+
+    const requiredProperties = createUploadFileRequestPropertyNames('file', );
+    const optionalStringProperties = createUploadFileRequestOptionalProperties();
+    const optionalNumberProperties = createUploadFileRequestOptionalProperties();
+    const optionalBooleanProperties = createUploadFileRequestOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalUploadFileRequestPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalUploadFileRequestPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalUploadFileRequestPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

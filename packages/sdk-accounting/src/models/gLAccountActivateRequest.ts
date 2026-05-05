@@ -13,10 +13,52 @@ export interface GLAccountActivateRequest {
     effectiveDate: string;
 }
 
+function isOptionalGLAccountActivateRequestPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type GLAccountActivateRequestOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createGLAccountActivateRequestPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createGLAccountActivateRequestOptionalProperties(
+    ...properties: GLAccountActivateRequestOptionalProperty[]
+): ReadonlyArray<GLAccountActivateRequestOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfGLAccountActivateRequest(value: object): value is GLAccountActivateRequest {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if (!('effectiveDate' in _v) || _v['effectiveDate'] === undefined) return false;
-    return true;
+
+    const requiredProperties = createGLAccountActivateRequestPropertyNames('effectiveDate', );
+    const optionalStringProperties = createGLAccountActivateRequestOptionalProperties();
+    const optionalNumberProperties = createGLAccountActivateRequestOptionalProperties();
+    const optionalBooleanProperties = createGLAccountActivateRequestOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalGLAccountActivateRequestPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalGLAccountActivateRequestPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalGLAccountActivateRequestPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

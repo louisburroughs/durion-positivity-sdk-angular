@@ -21,19 +21,52 @@ export interface FitmentBulkIngestRecord {
     notes?: string;
 }
 
+function isOptionalFitmentBulkIngestRecordPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type FitmentBulkIngestRecordOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createFitmentBulkIngestRecordPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createFitmentBulkIngestRecordOptionalProperties(
+    ...properties: FitmentBulkIngestRecordOptionalProperty[]
+): ReadonlyArray<FitmentBulkIngestRecordOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfFitmentBulkIngestRecord(value: object): value is FitmentBulkIngestRecord {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if (!('partNumberId' in _v) || _v['partNumberId'] === undefined) return false;
-    if ('partNumberId' in _v && typeof _v['partNumberId'] !== 'number') return false;
-    if ('manufacturerName' in _v && typeof _v['manufacturerName'] !== 'string') return false;
-    if ('makeName' in _v && typeof _v['makeName'] !== 'string') return false;
-    if ('modelName' in _v && typeof _v['modelName'] !== 'string') return false;
-    if ('vehicleTypeName' in _v && typeof _v['vehicleTypeName'] !== 'string') return false;
-    if ('vehicleYear' in _v && typeof _v['vehicleYear'] !== 'string') return false;
-    if ('engineType' in _v && typeof _v['engineType'] !== 'string') return false;
-    if ('submodel' in _v && typeof _v['submodel'] !== 'string') return false;
-    if ('notes' in _v && typeof _v['notes'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createFitmentBulkIngestRecordPropertyNames('partNumberId', );
+    const optionalStringProperties = createFitmentBulkIngestRecordOptionalProperties({ name: 'manufacturerName', nullable: false }, { name: 'makeName', nullable: false }, { name: 'modelName', nullable: false }, { name: 'vehicleTypeName', nullable: false }, { name: 'vehicleYear', nullable: false }, { name: 'engineType', nullable: false }, { name: 'submodel', nullable: false }, { name: 'notes', nullable: false }, );
+    const optionalNumberProperties = createFitmentBulkIngestRecordOptionalProperties({ name: 'partNumberId', nullable: false }, );
+    const optionalBooleanProperties = createFitmentBulkIngestRecordOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalFitmentBulkIngestRecordPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalFitmentBulkIngestRecordPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalFitmentBulkIngestRecordPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

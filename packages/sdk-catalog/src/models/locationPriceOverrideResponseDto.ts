@@ -40,26 +40,52 @@ export enum LocationPriceOverrideResponseDtoStatusEnum {
 
 
 
+function isOptionalLocationPriceOverrideResponseDtoPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type LocationPriceOverrideResponseDtoOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createLocationPriceOverrideResponseDtoPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createLocationPriceOverrideResponseDtoOptionalProperties(
+    ...properties: LocationPriceOverrideResponseDtoOptionalProperty[]
+): ReadonlyArray<LocationPriceOverrideResponseDtoOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfLocationPriceOverrideResponseDto(value: object): value is LocationPriceOverrideResponseDto {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('overrideId' in _v && typeof _v['overrideId'] !== 'string') return false;
-    if ('version' in _v && typeof _v['version'] !== 'number') return false;
-    if ('locationId' in _v && typeof _v['locationId'] !== 'string') return false;
-    if ('productId' in _v && typeof _v['productId'] !== 'string') return false;
-    if ('basePrice' in _v && typeof _v['basePrice'] !== 'number') return false;
-    if ('cost' in _v && typeof _v['cost'] !== 'number') return false;
-    if ('overridePrice' in _v && typeof _v['overridePrice'] !== 'number') return false;
-    if ('discountPercent' in _v && typeof _v['discountPercent'] !== 'number') return false;
-    if ('marginPercent' in _v && typeof _v['marginPercent'] !== 'number') return false;
-    if ('status' in _v && typeof _v['status'] !== 'string') return false;
-    if ('createdByUserId' in _v && typeof _v['createdByUserId'] !== 'string') return false;
-    if ('assignedApproverId' in _v && typeof _v['assignedApproverId'] !== 'string') return false;
-    if ('assignmentStrategy' in _v && typeof _v['assignmentStrategy'] !== 'string') return false;
-    if ('approvedByUserId' in _v && typeof _v['approvedByUserId'] !== 'string') return false;
-    if ('rejectedBy' in _v && typeof _v['rejectedBy'] !== 'string') return false;
-    if ('rejectionReasonCode' in _v && typeof _v['rejectionReasonCode'] !== 'string') return false;
-    if ('rejectionNotes' in _v && typeof _v['rejectionNotes'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createLocationPriceOverrideResponseDtoPropertyNames();
+    const optionalStringProperties = createLocationPriceOverrideResponseDtoOptionalProperties({ name: 'overrideId', nullable: false }, { name: 'locationId', nullable: false }, { name: 'productId', nullable: false }, { name: 'status', nullable: false }, { name: 'createdByUserId', nullable: false }, { name: 'assignedApproverId', nullable: false }, { name: 'assignmentStrategy', nullable: false }, { name: 'approvedByUserId', nullable: false }, { name: 'rejectedBy', nullable: false }, { name: 'rejectionReasonCode', nullable: false }, { name: 'rejectionNotes', nullable: false }, );
+    const optionalNumberProperties = createLocationPriceOverrideResponseDtoOptionalProperties({ name: 'version', nullable: false }, { name: 'basePrice', nullable: false }, { name: 'cost', nullable: false }, { name: 'overridePrice', nullable: false }, { name: 'discountPercent', nullable: false }, { name: 'marginPercent', nullable: false }, );
+    const optionalBooleanProperties = createLocationPriceOverrideResponseDtoOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalLocationPriceOverrideResponseDtoPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalLocationPriceOverrideResponseDtoPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalLocationPriceOverrideResponseDtoPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

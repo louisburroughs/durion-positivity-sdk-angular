@@ -16,15 +16,52 @@ export interface LinkUserToPersonRequest {
     notes?: string;
 }
 
+function isOptionalLinkUserToPersonRequestPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type LinkUserToPersonRequestOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createLinkUserToPersonRequestPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createLinkUserToPersonRequestOptionalProperties(
+    ...properties: LinkUserToPersonRequestOptionalProperty[]
+): ReadonlyArray<LinkUserToPersonRequestOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfLinkUserToPersonRequest(value: object): value is LinkUserToPersonRequest {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if (!('userId' in _v) || _v['userId'] === undefined) return false;
-    if ('userId' in _v && typeof _v['userId'] !== 'string') return false;
-    if (!('personId' in _v) || _v['personId'] === undefined) return false;
-    if ('personId' in _v && typeof _v['personId'] !== 'string') return false;
-    if ('linkType' in _v && typeof _v['linkType'] !== 'string') return false;
-    if ('notes' in _v && typeof _v['notes'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createLinkUserToPersonRequestPropertyNames('userId', 'personId', );
+    const optionalStringProperties = createLinkUserToPersonRequestOptionalProperties({ name: 'userId', nullable: false }, { name: 'personId', nullable: false }, { name: 'linkType', nullable: false }, { name: 'notes', nullable: false }, );
+    const optionalNumberProperties = createLinkUserToPersonRequestOptionalProperties();
+    const optionalBooleanProperties = createLinkUserToPersonRequestOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalLinkUserToPersonRequestPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalLinkUserToPersonRequestPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalLinkUserToPersonRequestPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

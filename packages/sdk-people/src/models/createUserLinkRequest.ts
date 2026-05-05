@@ -14,13 +14,52 @@ export interface CreateUserLinkRequest {
     personId: string;
 }
 
+function isOptionalCreateUserLinkRequestPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type CreateUserLinkRequestOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createCreateUserLinkRequestPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createCreateUserLinkRequestOptionalProperties(
+    ...properties: CreateUserLinkRequestOptionalProperty[]
+): ReadonlyArray<CreateUserLinkRequestOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfCreateUserLinkRequest(value: object): value is CreateUserLinkRequest {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if (!('userId' in _v) || _v['userId'] === undefined) return false;
-    if ('userId' in _v && typeof _v['userId'] !== 'string') return false;
-    if (!('personId' in _v) || _v['personId'] === undefined) return false;
-    if ('personId' in _v && typeof _v['personId'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createCreateUserLinkRequestPropertyNames('userId', 'personId', );
+    const optionalStringProperties = createCreateUserLinkRequestOptionalProperties({ name: 'userId', nullable: false }, { name: 'personId', nullable: false }, );
+    const optionalNumberProperties = createCreateUserLinkRequestOptionalProperties();
+    const optionalBooleanProperties = createCreateUserLinkRequestOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalCreateUserLinkRequestPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalCreateUserLinkRequestPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalCreateUserLinkRequestPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

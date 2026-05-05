@@ -47,17 +47,52 @@ export interface UpdateVehicleRequest {
     trim?: string;
 }
 
+function isOptionalUpdateVehicleRequestPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type UpdateVehicleRequestOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createUpdateVehicleRequestPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createUpdateVehicleRequestOptionalProperties(
+    ...properties: UpdateVehicleRequestOptionalProperty[]
+): ReadonlyArray<UpdateVehicleRequestOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfUpdateVehicleRequest(value: object): value is UpdateVehicleRequest {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('unitNumber' in _v && typeof _v['unitNumber'] !== 'string') return false;
-    if ('description' in _v && typeof _v['description'] !== 'string') return false;
-    if ('licensePlate' in _v && typeof _v['licensePlate'] !== 'string') return false;
-    if ('licensePlateJurisdiction' in _v && typeof _v['licensePlateJurisdiction'] !== 'string') return false;
-    if ('year' in _v && typeof _v['year'] !== 'number') return false;
-    if ('make' in _v && typeof _v['make'] !== 'string') return false;
-    if ('model' in _v && typeof _v['model'] !== 'string') return false;
-    if ('trim' in _v && typeof _v['trim'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createUpdateVehicleRequestPropertyNames();
+    const optionalStringProperties = createUpdateVehicleRequestOptionalProperties({ name: 'unitNumber', nullable: false }, { name: 'description', nullable: false }, { name: 'licensePlate', nullable: false }, { name: 'licensePlateJurisdiction', nullable: false }, { name: 'make', nullable: false }, { name: 'model', nullable: false }, { name: 'trim', nullable: false }, );
+    const optionalNumberProperties = createUpdateVehicleRequestOptionalProperties({ name: 'year', nullable: false }, );
+    const optionalBooleanProperties = createUpdateVehicleRequestOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalUpdateVehicleRequestPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalUpdateVehicleRequestPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalUpdateVehicleRequestPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

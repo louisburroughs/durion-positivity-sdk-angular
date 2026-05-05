@@ -14,13 +14,52 @@ export interface LinkSourceRequest {
     sourceId: string;
 }
 
+function isOptionalLinkSourceRequestPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type LinkSourceRequestOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createLinkSourceRequestPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createLinkSourceRequestOptionalProperties(
+    ...properties: LinkSourceRequestOptionalProperty[]
+): ReadonlyArray<LinkSourceRequestOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfLinkSourceRequest(value: object): value is LinkSourceRequest {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if (!('sourceType' in _v) || _v['sourceType'] === undefined) return false;
-    if ('sourceType' in _v && typeof _v['sourceType'] !== 'string') return false;
-    if (!('sourceId' in _v) || _v['sourceId'] === undefined) return false;
-    if ('sourceId' in _v && typeof _v['sourceId'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createLinkSourceRequestPropertyNames('sourceType', 'sourceId', );
+    const optionalStringProperties = createLinkSourceRequestOptionalProperties({ name: 'sourceType', nullable: false }, { name: 'sourceId', nullable: false }, );
+    const optionalNumberProperties = createLinkSourceRequestOptionalProperties();
+    const optionalBooleanProperties = createLinkSourceRequestOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalLinkSourceRequestPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalLinkSourceRequestPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalLinkSourceRequestPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

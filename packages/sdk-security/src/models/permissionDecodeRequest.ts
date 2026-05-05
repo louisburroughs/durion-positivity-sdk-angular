@@ -14,12 +14,52 @@ export interface PermissionDecodeRequest {
     perm_ver?: number;
 }
 
+function isOptionalPermissionDecodeRequestPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type PermissionDecodeRequestOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createPermissionDecodeRequestPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createPermissionDecodeRequestOptionalProperties(
+    ...properties: PermissionDecodeRequestOptionalProperty[]
+): ReadonlyArray<PermissionDecodeRequestOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfPermissionDecodeRequest(value: object): value is PermissionDecodeRequest {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if (!('perm_bits' in _v) || _v['perm_bits'] === undefined) return false;
-    if ('perm_bits' in _v && typeof _v['perm_bits'] !== 'string') return false;
-    if ('perm_ver' in _v && typeof _v['perm_ver'] !== 'number') return false;
-    return true;
+
+    const requiredProperties = createPermissionDecodeRequestPropertyNames('perm_bits', );
+    const optionalStringProperties = createPermissionDecodeRequestOptionalProperties({ name: 'perm_bits', nullable: false }, );
+    const optionalNumberProperties = createPermissionDecodeRequestOptionalProperties({ name: 'perm_ver', nullable: false }, );
+    const optionalBooleanProperties = createPermissionDecodeRequestOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalPermissionDecodeRequestPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalPermissionDecodeRequestPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalPermissionDecodeRequestPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

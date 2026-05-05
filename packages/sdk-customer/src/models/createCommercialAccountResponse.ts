@@ -18,12 +18,52 @@ export interface CreateCommercialAccountResponse {
     duplicateCandidates?: Array<DuplicateCandidate>;
 }
 
+function isOptionalCreateCommercialAccountResponsePropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type CreateCommercialAccountResponseOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createCreateCommercialAccountResponsePropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createCreateCommercialAccountResponseOptionalProperties(
+    ...properties: CreateCommercialAccountResponseOptionalProperty[]
+): ReadonlyArray<CreateCommercialAccountResponseOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfCreateCommercialAccountResponse(value: object): value is CreateCommercialAccountResponse {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('partyId' in _v && typeof _v['partyId'] !== 'string') return false;
-    if ('legalName' in _v && typeof _v['legalName'] !== 'string') return false;
-    if ('status' in _v && typeof _v['status'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createCreateCommercialAccountResponsePropertyNames();
+    const optionalStringProperties = createCreateCommercialAccountResponseOptionalProperties({ name: 'partyId', nullable: false }, { name: 'legalName', nullable: false }, { name: 'status', nullable: false }, );
+    const optionalNumberProperties = createCreateCommercialAccountResponseOptionalProperties();
+    const optionalBooleanProperties = createCreateCommercialAccountResponseOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalCreateCommercialAccountResponsePropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalCreateCommercialAccountResponsePropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalCreateCommercialAccountResponsePropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

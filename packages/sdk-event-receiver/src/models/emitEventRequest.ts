@@ -35,18 +35,52 @@ export interface EmitEventRequest {
     publishedAt: string;
 }
 
+function isOptionalEmitEventRequestPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type EmitEventRequestOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createEmitEventRequestPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createEmitEventRequestOptionalProperties(
+    ...properties: EmitEventRequestOptionalProperty[]
+): ReadonlyArray<EmitEventRequestOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfEmitEventRequest(value: object): value is EmitEventRequest {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if (!('id' in _v) || _v['id'] === undefined) return false;
-    if ('id' in _v && typeof _v['id'] !== 'string') return false;
-    if (!('apiVersion' in _v) || _v['apiVersion'] === undefined) return false;
-    if ('apiVersion' in _v && typeof _v['apiVersion'] !== 'string') return false;
-    if (!('timestamp' in _v) || _v['timestamp'] === undefined) return false;
-    if ('timestamp' in _v && typeof _v['timestamp'] !== 'number') return false;
-    if (!('elapsedMs' in _v) || _v['elapsedMs'] === undefined) return false;
-    if ('elapsedMs' in _v && typeof _v['elapsedMs'] !== 'number') return false;
-    if (!('publishedAt' in _v) || _v['publishedAt'] === undefined) return false;
-    return true;
+
+    const requiredProperties = createEmitEventRequestPropertyNames('id', 'apiVersion', 'timestamp', 'elapsedMs', 'publishedAt', );
+    const optionalStringProperties = createEmitEventRequestOptionalProperties({ name: 'id', nullable: false }, { name: 'apiVersion', nullable: false }, );
+    const optionalNumberProperties = createEmitEventRequestOptionalProperties({ name: 'timestamp', nullable: false }, { name: 'elapsedMs', nullable: false }, );
+    const optionalBooleanProperties = createEmitEventRequestOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalEmitEventRequestPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalEmitEventRequestPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalEmitEventRequestPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

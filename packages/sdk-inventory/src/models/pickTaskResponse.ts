@@ -28,17 +28,52 @@ export enum PickTaskResponseStatusEnum {
 
 
 
+function isOptionalPickTaskResponsePropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type PickTaskResponseOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createPickTaskResponsePropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createPickTaskResponseOptionalProperties(
+    ...properties: PickTaskResponseOptionalProperty[]
+): ReadonlyArray<PickTaskResponseOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfPickTaskResponse(value: object): value is PickTaskResponse {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('pickTaskId' in _v && typeof _v['pickTaskId'] !== 'string') return false;
-    if ('pickListId' in _v && typeof _v['pickListId'] !== 'string') return false;
-    if ('skuId' in _v && typeof _v['skuId'] !== 'string') return false;
-    if ('locationId' in _v && typeof _v['locationId'] !== 'string') return false;
-    if ('quantityRequired' in _v && typeof _v['quantityRequired'] !== 'number') return false;
-    if ('quantityPicked' in _v && typeof _v['quantityPicked'] !== 'number') return false;
-    if ('status' in _v && typeof _v['status'] !== 'string') return false;
-    if ('sortOrder' in _v && typeof _v['sortOrder'] !== 'number') return false;
-    return true;
+
+    const requiredProperties = createPickTaskResponsePropertyNames();
+    const optionalStringProperties = createPickTaskResponseOptionalProperties({ name: 'pickTaskId', nullable: false }, { name: 'pickListId', nullable: false }, { name: 'skuId', nullable: false }, { name: 'locationId', nullable: false }, { name: 'status', nullable: false }, );
+    const optionalNumberProperties = createPickTaskResponseOptionalProperties({ name: 'quantityRequired', nullable: false }, { name: 'quantityPicked', nullable: false }, { name: 'sortOrder', nullable: false }, );
+    const optionalBooleanProperties = createPickTaskResponseOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalPickTaskResponsePropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalPickTaskResponsePropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalPickTaskResponsePropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

@@ -15,8 +15,8 @@ export interface StorageLocationPatchRequest {
     status?: StorageLocationPatchRequestStatusEnum;
     parentStorageLocationId?: string;
     destinationStorageLocationId?: string;
-    capacity?: { [key: string]: any; };
-    temperature?: { [key: string]: any; };
+    capacity?: object;
+    temperature?: object;
 }
 export enum StorageLocationPatchRequestStatusEnum {
     Active = 'ACTIVE',
@@ -27,14 +27,52 @@ export enum StorageLocationPatchRequestStatusEnum {
 
 
 
+function isOptionalStorageLocationPatchRequestPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type StorageLocationPatchRequestOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createStorageLocationPatchRequestPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createStorageLocationPatchRequestOptionalProperties(
+    ...properties: StorageLocationPatchRequestOptionalProperty[]
+): ReadonlyArray<StorageLocationPatchRequestOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfStorageLocationPatchRequest(value: object): value is StorageLocationPatchRequest {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('name' in _v && typeof _v['name'] !== 'string') return false;
-    if ('barcode' in _v && typeof _v['barcode'] !== 'string') return false;
-    if ('status' in _v && typeof _v['status'] !== 'string') return false;
-    if ('parentStorageLocationId' in _v && typeof _v['parentStorageLocationId'] !== 'string') return false;
-    if ('destinationStorageLocationId' in _v && typeof _v['destinationStorageLocationId'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createStorageLocationPatchRequestPropertyNames();
+    const optionalStringProperties = createStorageLocationPatchRequestOptionalProperties({ name: 'name', nullable: false }, { name: 'barcode', nullable: false }, { name: 'status', nullable: false }, { name: 'parentStorageLocationId', nullable: false }, { name: 'destinationStorageLocationId', nullable: false }, );
+    const optionalNumberProperties = createStorageLocationPatchRequestOptionalProperties();
+    const optionalBooleanProperties = createStorageLocationPatchRequestOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalStorageLocationPatchRequestPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalStorageLocationPatchRequestPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalStorageLocationPatchRequestPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

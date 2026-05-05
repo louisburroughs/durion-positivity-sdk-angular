@@ -16,13 +16,52 @@ export interface ReallocateResponse {
     atpAfterReallocation?: number;
 }
 
+function isOptionalReallocateResponsePropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type ReallocateResponseOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createReallocateResponsePropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createReallocateResponseOptionalProperties(
+    ...properties: ReallocateResponseOptionalProperty[]
+): ReadonlyArray<ReallocateResponseOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfReallocateResponse(value: object): value is ReallocateResponse {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('stockItemId' in _v && typeof _v['stockItemId'] !== 'string') return false;
-    if ('totalReallocated' in _v && typeof _v['totalReallocated'] !== 'number') return false;
-    if ('auditRecordsCreated' in _v && typeof _v['auditRecordsCreated'] !== 'number') return false;
-    if ('atpAfterReallocation' in _v && typeof _v['atpAfterReallocation'] !== 'number') return false;
-    return true;
+
+    const requiredProperties = createReallocateResponsePropertyNames();
+    const optionalStringProperties = createReallocateResponseOptionalProperties({ name: 'stockItemId', nullable: false }, );
+    const optionalNumberProperties = createReallocateResponseOptionalProperties({ name: 'totalReallocated', nullable: false }, { name: 'auditRecordsCreated', nullable: false }, { name: 'atpAfterReallocation', nullable: false }, );
+    const optionalBooleanProperties = createReallocateResponseOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalReallocateResponsePropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalReallocateResponsePropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalReallocateResponsePropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

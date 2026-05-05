@@ -17,12 +17,52 @@ export interface BulkIngestResponse {
     results?: Array<BulkIngestResult>;
 }
 
+function isOptionalBulkIngestResponsePropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type BulkIngestResponseOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createBulkIngestResponsePropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createBulkIngestResponseOptionalProperties(
+    ...properties: BulkIngestResponseOptionalProperty[]
+): ReadonlyArray<BulkIngestResponseOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfBulkIngestResponse(value: object): value is BulkIngestResponse {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('totalSubmitted' in _v && typeof _v['totalSubmitted'] !== 'number') return false;
-    if ('successCount' in _v && typeof _v['successCount'] !== 'number') return false;
-    if ('failureCount' in _v && typeof _v['failureCount'] !== 'number') return false;
-    return true;
+
+    const requiredProperties = createBulkIngestResponsePropertyNames();
+    const optionalStringProperties = createBulkIngestResponseOptionalProperties();
+    const optionalNumberProperties = createBulkIngestResponseOptionalProperties({ name: 'totalSubmitted', nullable: false }, { name: 'successCount', nullable: false }, { name: 'failureCount', nullable: false }, );
+    const optionalBooleanProperties = createBulkIngestResponseOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalBulkIngestResponsePropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalBulkIngestResponsePropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalBulkIngestResponsePropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

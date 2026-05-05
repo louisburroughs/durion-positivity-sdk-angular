@@ -24,9 +24,52 @@ export interface CrmSnapshotDTO {
     billingRules?: BillingRuleRef;
 }
 
+function isOptionalCrmSnapshotDTOPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type CrmSnapshotDTOOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createCrmSnapshotDTOPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createCrmSnapshotDTOOptionalProperties(
+    ...properties: CrmSnapshotDTOOptionalProperty[]
+): ReadonlyArray<CrmSnapshotDTOOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfCrmSnapshotDTO(value: object): value is CrmSnapshotDTO {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    return true;
+
+    const requiredProperties = createCrmSnapshotDTOPropertyNames();
+    const optionalStringProperties = createCrmSnapshotDTOOptionalProperties();
+    const optionalNumberProperties = createCrmSnapshotDTOOptionalProperties();
+    const optionalBooleanProperties = createCrmSnapshotDTOOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalCrmSnapshotDTOPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalCrmSnapshotDTOPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalCrmSnapshotDTOPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

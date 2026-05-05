@@ -24,14 +24,52 @@ export enum RenderRequestFormatEnum {
 
 
 
+function isOptionalRenderRequestPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type RenderRequestOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createRenderRequestPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createRenderRequestOptionalProperties(
+    ...properties: RenderRequestOptionalProperty[]
+): ReadonlyArray<RenderRequestOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfRenderRequest(value: object): value is RenderRequest {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if (!('format' in _v) || _v['format'] === undefined) return false;
-    if ('format' in _v && typeof _v['format'] !== 'string') return false;
-    if ('templateId' in _v && typeof _v['templateId'] !== 'string') return false;
-    if (!('content' in _v) || _v['content'] === undefined) return false;
-    if ('content' in _v && typeof _v['content'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createRenderRequestPropertyNames('format', 'content', );
+    const optionalStringProperties = createRenderRequestOptionalProperties({ name: 'format', nullable: false }, { name: 'templateId', nullable: false }, { name: 'content', nullable: false }, );
+    const optionalNumberProperties = createRenderRequestOptionalProperties();
+    const optionalBooleanProperties = createRenderRequestOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalRenderRequestPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalRenderRequestPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalRenderRequestPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

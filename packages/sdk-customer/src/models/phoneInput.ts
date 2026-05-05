@@ -33,13 +33,52 @@ export enum PhoneInputTypeEnum {
 
 
 
+function isOptionalPhoneInputPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type PhoneInputOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createPhoneInputPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createPhoneInputOptionalProperties(
+    ...properties: PhoneInputOptionalProperty[]
+): ReadonlyArray<PhoneInputOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfPhoneInput(value: object): value is PhoneInput {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if (!('value' in _v) || _v['value'] === undefined) return false;
-    if ('value' in _v && typeof _v['value'] !== 'string') return false;
-    if ('type' in _v && typeof _v['type'] !== 'string') return false;
-    if ('primary' in _v && typeof _v['primary'] !== 'boolean') return false;
-    return true;
+
+    const requiredProperties = createPhoneInputPropertyNames('value', );
+    const optionalStringProperties = createPhoneInputOptionalProperties({ name: 'value', nullable: false }, { name: 'type', nullable: false }, );
+    const optionalNumberProperties = createPhoneInputOptionalProperties();
+    const optionalBooleanProperties = createPhoneInputOptionalProperties({ name: 'primary', nullable: false }, );
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalPhoneInputPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalPhoneInputPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalPhoneInputPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

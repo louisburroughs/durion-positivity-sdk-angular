@@ -35,17 +35,52 @@ export interface PriceQuoteRequest {
     effectiveTimestamp?: string | null;
 }
 
+function isOptionalPriceQuoteRequestPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type PriceQuoteRequestOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createPriceQuoteRequestPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createPriceQuoteRequestOptionalProperties(
+    ...properties: PriceQuoteRequestOptionalProperty[]
+): ReadonlyArray<PriceQuoteRequestOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfPriceQuoteRequest(value: object): value is PriceQuoteRequest {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if (!('productId' in _v) || _v['productId'] === undefined) return false;
-    if ('productId' in _v && typeof _v['productId'] !== 'string') return false;
-    if (!('quantity' in _v) || _v['quantity'] === undefined) return false;
-    if ('quantity' in _v && typeof _v['quantity'] !== 'number') return false;
-    if (!('locationId' in _v) || _v['locationId'] === undefined) return false;
-    if ('locationId' in _v && typeof _v['locationId'] !== 'string') return false;
-    if (!('customerTierId' in _v) || _v['customerTierId'] === undefined) return false;
-    if ('customerTierId' in _v && typeof _v['customerTierId'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createPriceQuoteRequestPropertyNames('productId', 'quantity', 'locationId', 'customerTierId', );
+    const optionalStringProperties = createPriceQuoteRequestOptionalProperties({ name: 'productId', nullable: false }, { name: 'locationId', nullable: false }, { name: 'customerTierId', nullable: false }, );
+    const optionalNumberProperties = createPriceQuoteRequestOptionalProperties({ name: 'quantity', nullable: false }, );
+    const optionalBooleanProperties = createPriceQuoteRequestOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalPriceQuoteRequestPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalPriceQuoteRequestPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalPriceQuoteRequestPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

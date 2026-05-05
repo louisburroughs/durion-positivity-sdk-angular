@@ -28,13 +28,52 @@ export enum ReceivePurchaseOrderResponseStatusEnum {
 
 
 
+function isOptionalReceivePurchaseOrderResponsePropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type ReceivePurchaseOrderResponseOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createReceivePurchaseOrderResponsePropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createReceivePurchaseOrderResponseOptionalProperties(
+    ...properties: ReceivePurchaseOrderResponseOptionalProperty[]
+): ReadonlyArray<ReceivePurchaseOrderResponseOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfReceivePurchaseOrderResponse(value: object): value is ReceivePurchaseOrderResponse {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('poId' in _v && typeof _v['poId'] !== 'string') return false;
-    if ('status' in _v && typeof _v['status'] !== 'string') return false;
-    if ('openBalanceMinor' in _v && typeof _v['openBalanceMinor'] !== 'number') return false;
-    if ('message' in _v && typeof _v['message'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createReceivePurchaseOrderResponsePropertyNames();
+    const optionalStringProperties = createReceivePurchaseOrderResponseOptionalProperties({ name: 'poId', nullable: false }, { name: 'status', nullable: false }, { name: 'message', nullable: false }, );
+    const optionalNumberProperties = createReceivePurchaseOrderResponseOptionalProperties({ name: 'openBalanceMinor', nullable: false }, );
+    const optionalBooleanProperties = createReceivePurchaseOrderResponseOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalReceivePurchaseOrderResponsePropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalReceivePurchaseOrderResponsePropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalReceivePurchaseOrderResponsePropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

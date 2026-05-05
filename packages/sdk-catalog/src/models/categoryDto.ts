@@ -23,11 +23,52 @@ export interface CategoryDto {
     name?: string;
 }
 
+function isOptionalCategoryDtoPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type CategoryDtoOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createCategoryDtoPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createCategoryDtoOptionalProperties(
+    ...properties: CategoryDtoOptionalProperty[]
+): ReadonlyArray<CategoryDtoOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfCategoryDto(value: object): value is CategoryDto {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('id' in _v && typeof _v['id'] !== 'string') return false;
-    if ('name' in _v && typeof _v['name'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createCategoryDtoPropertyNames();
+    const optionalStringProperties = createCategoryDtoOptionalProperties({ name: 'id', nullable: false }, { name: 'name', nullable: false }, );
+    const optionalNumberProperties = createCategoryDtoOptionalProperties();
+    const optionalBooleanProperties = createCategoryDtoOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalCategoryDtoPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalCategoryDtoPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalCategoryDtoPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

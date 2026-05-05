@@ -14,9 +14,52 @@ export interface GLMappingCreateResponse {
     mapping?: GLMappingResponse;
 }
 
+function isOptionalGLMappingCreateResponsePropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type GLMappingCreateResponseOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createGLMappingCreateResponsePropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createGLMappingCreateResponseOptionalProperties(
+    ...properties: GLMappingCreateResponseOptionalProperty[]
+): ReadonlyArray<GLMappingCreateResponseOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfGLMappingCreateResponse(value: object): value is GLMappingCreateResponse {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    return true;
+
+    const requiredProperties = createGLMappingCreateResponsePropertyNames();
+    const optionalStringProperties = createGLMappingCreateResponseOptionalProperties();
+    const optionalNumberProperties = createGLMappingCreateResponseOptionalProperties();
+    const optionalBooleanProperties = createGLMappingCreateResponseOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalGLMappingCreateResponsePropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalGLMappingCreateResponsePropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalGLMappingCreateResponsePropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

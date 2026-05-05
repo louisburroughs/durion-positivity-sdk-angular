@@ -15,12 +15,52 @@ export interface BillingPreferences {
     invoiceDeliveryMethod?: string;
 }
 
+function isOptionalBillingPreferencesPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type BillingPreferencesOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createBillingPreferencesPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createBillingPreferencesOptionalProperties(
+    ...properties: BillingPreferencesOptionalProperty[]
+): ReadonlyArray<BillingPreferencesOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfBillingPreferences(value: object): value is BillingPreferences {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('marketingOptOut' in _v && typeof _v['marketingOptOut'] !== 'boolean') return false;
-    if ('doNotContact' in _v && typeof _v['doNotContact'] !== 'boolean') return false;
-    if ('invoiceDeliveryMethod' in _v && typeof _v['invoiceDeliveryMethod'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createBillingPreferencesPropertyNames();
+    const optionalStringProperties = createBillingPreferencesOptionalProperties({ name: 'invoiceDeliveryMethod', nullable: false }, );
+    const optionalNumberProperties = createBillingPreferencesOptionalProperties();
+    const optionalBooleanProperties = createBillingPreferencesOptionalProperties({ name: 'marketingOptOut', nullable: false }, { name: 'doNotContact', nullable: false }, );
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalBillingPreferencesPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalBillingPreferencesPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalBillingPreferencesPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

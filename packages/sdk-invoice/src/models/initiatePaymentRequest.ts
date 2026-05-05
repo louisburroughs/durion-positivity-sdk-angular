@@ -37,17 +37,52 @@ export enum InitiatePaymentRequestPaymentFlowEnum {
 
 
 
+function isOptionalInitiatePaymentRequestPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type InitiatePaymentRequestOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createInitiatePaymentRequestPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createInitiatePaymentRequestOptionalProperties(
+    ...properties: InitiatePaymentRequestOptionalProperty[]
+): ReadonlyArray<InitiatePaymentRequestOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfInitiatePaymentRequest(value: object): value is InitiatePaymentRequest {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if (!('paymentFlow' in _v) || _v['paymentFlow'] === undefined) return false;
-    if ('paymentFlow' in _v && typeof _v['paymentFlow'] !== 'string') return false;
-    if (!('amount' in _v) || _v['amount'] === undefined) return false;
-    if ('amount' in _v && typeof _v['amount'] !== 'number') return false;
-    if (!('idempotencyKey' in _v) || _v['idempotencyKey'] === undefined) return false;
-    if ('idempotencyKey' in _v && typeof _v['idempotencyKey'] !== 'string') return false;
-    if (!('paymentToken' in _v) || _v['paymentToken'] === undefined) return false;
-    if ('paymentToken' in _v && typeof _v['paymentToken'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createInitiatePaymentRequestPropertyNames('paymentFlow', 'amount', 'idempotencyKey', 'paymentToken', );
+    const optionalStringProperties = createInitiatePaymentRequestOptionalProperties({ name: 'paymentFlow', nullable: false }, { name: 'idempotencyKey', nullable: false }, { name: 'paymentToken', nullable: false }, );
+    const optionalNumberProperties = createInitiatePaymentRequestOptionalProperties({ name: 'amount', nullable: false }, );
+    const optionalBooleanProperties = createInitiatePaymentRequestOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalInitiatePaymentRequestPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalInitiatePaymentRequestPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalInitiatePaymentRequestPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

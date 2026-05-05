@@ -24,16 +24,52 @@ export interface PaymentApplicationResponse {
     applicationRequestId?: string;
 }
 
+function isOptionalPaymentApplicationResponsePropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type PaymentApplicationResponseOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createPaymentApplicationResponsePropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createPaymentApplicationResponseOptionalProperties(
+    ...properties: PaymentApplicationResponseOptionalProperty[]
+): ReadonlyArray<PaymentApplicationResponseOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfPaymentApplicationResponse(value: object): value is PaymentApplicationResponse {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('paymentId' in _v && typeof _v['paymentId'] !== 'string') return false;
-    if ('customerId' in _v && typeof _v['customerId'] !== 'string') return false;
-    if ('currency' in _v && typeof _v['currency'] !== 'string') return false;
-    if ('totalAmount' in _v && typeof _v['totalAmount'] !== 'number') return false;
-    if ('appliedAmount' in _v && typeof _v['appliedAmount'] !== 'number') return false;
-    if ('remainingAmount' in _v && typeof _v['remainingAmount'] !== 'number') return false;
-    if ('applicationRequestId' in _v && typeof _v['applicationRequestId'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createPaymentApplicationResponsePropertyNames();
+    const optionalStringProperties = createPaymentApplicationResponseOptionalProperties({ name: 'paymentId', nullable: false }, { name: 'customerId', nullable: false }, { name: 'currency', nullable: false }, { name: 'applicationRequestId', nullable: false }, );
+    const optionalNumberProperties = createPaymentApplicationResponseOptionalProperties({ name: 'totalAmount', nullable: false }, { name: 'appliedAmount', nullable: false }, { name: 'remainingAmount', nullable: false }, );
+    const optionalBooleanProperties = createPaymentApplicationResponseOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalPaymentApplicationResponsePropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalPaymentApplicationResponsePropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalPaymentApplicationResponsePropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

@@ -27,12 +27,52 @@ export interface BillingTermsRef {
     netDays?: number;
 }
 
+function isOptionalBillingTermsRefPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type BillingTermsRefOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createBillingTermsRefPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createBillingTermsRefOptionalProperties(
+    ...properties: BillingTermsRefOptionalProperty[]
+): ReadonlyArray<BillingTermsRefOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfBillingTermsRef(value: object): value is BillingTermsRef {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('code' in _v && typeof _v['code'] !== 'string') return false;
-    if ('label' in _v && typeof _v['label'] !== 'string') return false;
-    if ('netDays' in _v && typeof _v['netDays'] !== 'number') return false;
-    return true;
+
+    const requiredProperties = createBillingTermsRefPropertyNames();
+    const optionalStringProperties = createBillingTermsRefOptionalProperties({ name: 'code', nullable: false }, { name: 'label', nullable: false }, );
+    const optionalNumberProperties = createBillingTermsRefOptionalProperties({ name: 'netDays', nullable: false }, );
+    const optionalBooleanProperties = createBillingTermsRefOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalBillingTermsRefPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalBillingTermsRefPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalBillingTermsRefPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

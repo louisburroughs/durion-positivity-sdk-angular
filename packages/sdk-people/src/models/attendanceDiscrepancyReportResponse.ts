@@ -51,23 +51,52 @@ export interface AttendanceDiscrepancyReportResponse {
     isFlagged: boolean;
 }
 
+function isOptionalAttendanceDiscrepancyReportResponsePropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type AttendanceDiscrepancyReportResponseOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createAttendanceDiscrepancyReportResponsePropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createAttendanceDiscrepancyReportResponseOptionalProperties(
+    ...properties: AttendanceDiscrepancyReportResponseOptionalProperty[]
+): ReadonlyArray<AttendanceDiscrepancyReportResponseOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfAttendanceDiscrepancyReportResponse(value: object): value is AttendanceDiscrepancyReportResponse {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if (!('technicianId' in _v) || _v['technicianId'] === undefined) return false;
-    if ('technicianId' in _v && typeof _v['technicianId'] !== 'string') return false;
-    if (!('technicianName' in _v) || _v['technicianName'] === undefined) return false;
-    if ('technicianName' in _v && typeof _v['technicianName'] !== 'string') return false;
-    if (!('locationId' in _v) || _v['locationId'] === undefined) return false;
-    if ('locationId' in _v && typeof _v['locationId'] !== 'string') return false;
-    if (!('reportDate' in _v) || _v['reportDate'] === undefined) return false;
-    if (!('totalAttendanceHours' in _v) || _v['totalAttendanceHours'] === undefined) return false;
-    if (!('totalJobHours' in _v) || _v['totalJobHours'] === undefined) return false;
-    if (!('discrepancyHours' in _v) || _v['discrepancyHours'] === undefined) return false;
-    if (!('thresholdApplied' in _v) || _v['thresholdApplied'] === undefined) return false;
-    if ('thresholdApplied' in _v && typeof _v['thresholdApplied'] !== 'number') return false;
-    if (!('isFlagged' in _v) || _v['isFlagged'] === undefined) return false;
-    if ('isFlagged' in _v && typeof _v['isFlagged'] !== 'boolean') return false;
-    return true;
+
+    const requiredProperties = createAttendanceDiscrepancyReportResponsePropertyNames('technicianId', 'technicianName', 'locationId', 'reportDate', 'totalAttendanceHours', 'totalJobHours', 'discrepancyHours', 'thresholdApplied', 'isFlagged', );
+    const optionalStringProperties = createAttendanceDiscrepancyReportResponseOptionalProperties({ name: 'technicianId', nullable: false }, { name: 'technicianName', nullable: false }, { name: 'locationId', nullable: false }, );
+    const optionalNumberProperties = createAttendanceDiscrepancyReportResponseOptionalProperties({ name: 'thresholdApplied', nullable: false }, );
+    const optionalBooleanProperties = createAttendanceDiscrepancyReportResponseOptionalProperties({ name: 'isFlagged', nullable: false }, );
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalAttendanceDiscrepancyReportResponsePropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalAttendanceDiscrepancyReportResponsePropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalAttendanceDiscrepancyReportResponsePropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

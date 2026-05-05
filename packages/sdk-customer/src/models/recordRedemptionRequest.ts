@@ -21,23 +21,52 @@ export interface RecordRedemptionRequest {
     redemptionTimestamp?: string;
 }
 
+function isOptionalRecordRedemptionRequestPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type RecordRedemptionRequestOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createRecordRedemptionRequestPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createRecordRedemptionRequestOptionalProperties(
+    ...properties: RecordRedemptionRequestOptionalProperty[]
+): ReadonlyArray<RecordRedemptionRequestOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfRecordRedemptionRequest(value: object): value is RecordRedemptionRequest {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if (!('promotionId' in _v) || _v['promotionId'] === undefined) return false;
-    if ('promotionId' in _v && typeof _v['promotionId'] !== 'string') return false;
-    if (!('customerId' in _v) || _v['customerId'] === undefined) return false;
-    if ('customerId' in _v && typeof _v['customerId'] !== 'string') return false;
-    if (!('workorderId' in _v) || _v['workorderId'] === undefined) return false;
-    if ('workorderId' in _v && typeof _v['workorderId'] !== 'string') return false;
-    if ('invoiceId' in _v && typeof _v['invoiceId'] !== 'string') return false;
-    if (!('discountAmount' in _v) || _v['discountAmount'] === undefined) return false;
-    if ('discountAmount' in _v && typeof _v['discountAmount'] !== 'number') return false;
-    if (!('discountType' in _v) || _v['discountType'] === undefined) return false;
-    if ('discountType' in _v && typeof _v['discountType'] !== 'string') return false;
-    if (!('promotionCode' in _v) || _v['promotionCode'] === undefined) return false;
-    if ('promotionCode' in _v && typeof _v['promotionCode'] !== 'string') return false;
-    if ('recordedOverLimit' in _v && typeof _v['recordedOverLimit'] !== 'boolean') return false;
-    return true;
+
+    const requiredProperties = createRecordRedemptionRequestPropertyNames('promotionId', 'customerId', 'workorderId', 'discountAmount', 'discountType', 'promotionCode', );
+    const optionalStringProperties = createRecordRedemptionRequestOptionalProperties({ name: 'promotionId', nullable: false }, { name: 'customerId', nullable: false }, { name: 'workorderId', nullable: false }, { name: 'invoiceId', nullable: false }, { name: 'discountType', nullable: false }, { name: 'promotionCode', nullable: false }, );
+    const optionalNumberProperties = createRecordRedemptionRequestOptionalProperties({ name: 'discountAmount', nullable: false }, );
+    const optionalBooleanProperties = createRecordRedemptionRequestOptionalProperties({ name: 'recordedOverLimit', nullable: false }, );
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalRecordRedemptionRequestPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalRecordRedemptionRequestPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalRecordRedemptionRequestPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

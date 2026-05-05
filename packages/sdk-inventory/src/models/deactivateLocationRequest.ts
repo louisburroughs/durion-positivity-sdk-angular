@@ -13,10 +13,52 @@ export interface DeactivateLocationRequest {
     destinationLocationId?: string;
 }
 
+function isOptionalDeactivateLocationRequestPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type DeactivateLocationRequestOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createDeactivateLocationRequestPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createDeactivateLocationRequestOptionalProperties(
+    ...properties: DeactivateLocationRequestOptionalProperty[]
+): ReadonlyArray<DeactivateLocationRequestOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfDeactivateLocationRequest(value: object): value is DeactivateLocationRequest {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('destinationLocationId' in _v && typeof _v['destinationLocationId'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createDeactivateLocationRequestPropertyNames();
+    const optionalStringProperties = createDeactivateLocationRequestOptionalProperties({ name: 'destinationLocationId', nullable: false }, );
+    const optionalNumberProperties = createDeactivateLocationRequestOptionalProperties();
+    const optionalBooleanProperties = createDeactivateLocationRequestOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalDeactivateLocationRequestPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalDeactivateLocationRequestPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalDeactivateLocationRequestPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

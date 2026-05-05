@@ -21,14 +21,52 @@ export interface ContractField {
     enumValues?: Array<string> | null;
 }
 
+function isOptionalContractFieldPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type ContractFieldOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createContractFieldPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createContractFieldOptionalProperties(
+    ...properties: ContractFieldOptionalProperty[]
+): ReadonlyArray<ContractFieldOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfContractField(value: object): value is ContractField {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('name' in _v && typeof _v['name'] !== 'string') return false;
-    if ('jsonPath' in _v && typeof _v['jsonPath'] !== 'string') return false;
-    if ('type' in _v && typeof _v['type'] !== 'string') return false;
-    if ('required' in _v && typeof _v['required'] !== 'boolean') return false;
-    if ('description' in _v && typeof _v['description'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createContractFieldPropertyNames();
+    const optionalStringProperties = createContractFieldOptionalProperties({ name: 'name', nullable: false }, { name: 'jsonPath', nullable: false }, { name: 'type', nullable: false }, { name: 'description', nullable: false }, );
+    const optionalNumberProperties = createContractFieldOptionalProperties();
+    const optionalBooleanProperties = createContractFieldOptionalProperties({ name: 'required', nullable: false }, );
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalContractFieldPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalContractFieldPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalContractFieldPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

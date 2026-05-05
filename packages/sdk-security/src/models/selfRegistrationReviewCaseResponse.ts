@@ -105,26 +105,52 @@ export enum SelfRegistrationReviewCaseResponseStatusEnum {
 
 
 
+function isOptionalSelfRegistrationReviewCaseResponsePropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type SelfRegistrationReviewCaseResponseOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createSelfRegistrationReviewCaseResponsePropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createSelfRegistrationReviewCaseResponseOptionalProperties(
+    ...properties: SelfRegistrationReviewCaseResponseOptionalProperty[]
+): ReadonlyArray<SelfRegistrationReviewCaseResponseOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfSelfRegistrationReviewCaseResponse(value: object): value is SelfRegistrationReviewCaseResponse {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('caseId' in _v && typeof _v['caseId'] !== 'string') return false;
-    if ('caseType' in _v && typeof _v['caseType'] !== 'string') return false;
-    if ('status' in _v && typeof _v['status'] !== 'string') return false;
-    if ('reasonCode' in _v && typeof _v['reasonCode'] !== 'string') return false;
-    if ('reasonMessage' in _v && typeof _v['reasonMessage'] !== 'string') return false;
-    if ('email' in _v && typeof _v['email'] !== 'string') return false;
-    if ('requestedUsername' in _v && typeof _v['requestedUsername'] !== 'string') return false;
-    if ('personId' in _v && typeof _v['personId'] !== 'string') return false;
-    if ('linkedUserId' in _v && typeof _v['linkedUserId'] !== 'string') return false;
-    if ('crmCandidateCount' in _v && typeof _v['crmCandidateCount'] !== 'number') return false;
-    if ('crmSharedIdentityCandidateCount' in _v && typeof _v['crmSharedIdentityCandidateCount'] !== 'number') return false;
-    if ('crmExactEmailMatch' in _v && typeof _v['crmExactEmailMatch'] !== 'boolean') return false;
-    if ('crmExactPhoneMatch' in _v && typeof _v['crmExactPhoneMatch'] !== 'boolean') return false;
-    if ('crmExactNameMatch' in _v && typeof _v['crmExactNameMatch'] !== 'boolean') return false;
-    if ('notes' in _v && typeof _v['notes'] !== 'string') return false;
-    if ('resolvedBy' in _v && typeof _v['resolvedBy'] !== 'string') return false;
-    if ('resolutionNotes' in _v && typeof _v['resolutionNotes'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createSelfRegistrationReviewCaseResponsePropertyNames();
+    const optionalStringProperties = createSelfRegistrationReviewCaseResponseOptionalProperties({ name: 'caseId', nullable: false }, { name: 'caseType', nullable: false }, { name: 'status', nullable: false }, { name: 'reasonCode', nullable: false }, { name: 'reasonMessage', nullable: false }, { name: 'email', nullable: false }, { name: 'requestedUsername', nullable: false }, { name: 'personId', nullable: false }, { name: 'linkedUserId', nullable: false }, { name: 'notes', nullable: false }, { name: 'resolvedBy', nullable: false }, { name: 'resolutionNotes', nullable: false }, );
+    const optionalNumberProperties = createSelfRegistrationReviewCaseResponseOptionalProperties({ name: 'crmCandidateCount', nullable: false }, { name: 'crmSharedIdentityCandidateCount', nullable: false }, );
+    const optionalBooleanProperties = createSelfRegistrationReviewCaseResponseOptionalProperties({ name: 'crmExactEmailMatch', nullable: false }, { name: 'crmExactPhoneMatch', nullable: false }, { name: 'crmExactNameMatch', nullable: false }, );
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalSelfRegistrationReviewCaseResponsePropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalSelfRegistrationReviewCaseResponsePropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalSelfRegistrationReviewCaseResponsePropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

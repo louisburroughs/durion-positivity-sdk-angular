@@ -16,14 +16,52 @@ export interface CancelOrderRequest {
     idempotencyKey?: string;
 }
 
+function isOptionalCancelOrderRequestPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type CancelOrderRequestOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createCancelOrderRequestPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createCancelOrderRequestOptionalProperties(
+    ...properties: CancelOrderRequestOptionalProperty[]
+): ReadonlyArray<CancelOrderRequestOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfCancelOrderRequest(value: object): value is CancelOrderRequest {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if (!('cancellationReason' in _v) || _v['cancellationReason'] === undefined) return false;
-    if ('cancellationReason' in _v && typeof _v['cancellationReason'] !== 'string') return false;
-    if ('workOrderId' in _v && typeof _v['workOrderId'] !== 'string') return false;
-    if ('paymentId' in _v && typeof _v['paymentId'] !== 'string') return false;
-    if ('idempotencyKey' in _v && typeof _v['idempotencyKey'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createCancelOrderRequestPropertyNames('cancellationReason', );
+    const optionalStringProperties = createCancelOrderRequestOptionalProperties({ name: 'cancellationReason', nullable: false }, { name: 'workOrderId', nullable: false }, { name: 'paymentId', nullable: false }, { name: 'idempotencyKey', nullable: false }, );
+    const optionalNumberProperties = createCancelOrderRequestOptionalProperties();
+    const optionalBooleanProperties = createCancelOrderRequestOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalCancelOrderRequestPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalCancelOrderRequestPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalCancelOrderRequestPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

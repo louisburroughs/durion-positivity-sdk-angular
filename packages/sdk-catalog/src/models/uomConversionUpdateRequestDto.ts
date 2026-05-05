@@ -13,11 +13,52 @@ export interface UomConversionUpdateRequestDto {
     conversionFactor: number;
 }
 
+function isOptionalUomConversionUpdateRequestDtoPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type UomConversionUpdateRequestDtoOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createUomConversionUpdateRequestDtoPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createUomConversionUpdateRequestDtoOptionalProperties(
+    ...properties: UomConversionUpdateRequestDtoOptionalProperty[]
+): ReadonlyArray<UomConversionUpdateRequestDtoOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfUomConversionUpdateRequestDto(value: object): value is UomConversionUpdateRequestDto {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if (!('conversionFactor' in _v) || _v['conversionFactor'] === undefined) return false;
-    if ('conversionFactor' in _v && typeof _v['conversionFactor'] !== 'number') return false;
-    return true;
+
+    const requiredProperties = createUomConversionUpdateRequestDtoPropertyNames('conversionFactor', );
+    const optionalStringProperties = createUomConversionUpdateRequestDtoOptionalProperties();
+    const optionalNumberProperties = createUomConversionUpdateRequestDtoOptionalProperties({ name: 'conversionFactor', nullable: false }, );
+    const optionalBooleanProperties = createUomConversionUpdateRequestDtoOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalUomConversionUpdateRequestDtoPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalUomConversionUpdateRequestDtoPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalUomConversionUpdateRequestDtoPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

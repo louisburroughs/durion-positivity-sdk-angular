@@ -17,18 +17,52 @@ export interface CreateAdjustmentRequestDto {
     unitOfMeasure?: string;
 }
 
+function isOptionalCreateAdjustmentRequestDtoPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type CreateAdjustmentRequestDtoOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createCreateAdjustmentRequestDtoPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createCreateAdjustmentRequestDtoOptionalProperties(
+    ...properties: CreateAdjustmentRequestDtoOptionalProperty[]
+): ReadonlyArray<CreateAdjustmentRequestDtoOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfCreateAdjustmentRequestDto(value: object): value is CreateAdjustmentRequestDto {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if (!('productSku' in _v) || _v['productSku'] === undefined) return false;
-    if ('productSku' in _v && typeof _v['productSku'] !== 'string') return false;
-    if (!('locationId' in _v) || _v['locationId'] === undefined) return false;
-    if ('locationId' in _v && typeof _v['locationId'] !== 'string') return false;
-    if (!('quantity' in _v) || _v['quantity'] === undefined) return false;
-    if ('quantity' in _v && typeof _v['quantity'] !== 'number') return false;
-    if (!('reasonCode' in _v) || _v['reasonCode'] === undefined) return false;
-    if ('reasonCode' in _v && typeof _v['reasonCode'] !== 'string') return false;
-    if ('unitOfMeasure' in _v && typeof _v['unitOfMeasure'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createCreateAdjustmentRequestDtoPropertyNames('productSku', 'locationId', 'quantity', 'reasonCode', );
+    const optionalStringProperties = createCreateAdjustmentRequestDtoOptionalProperties({ name: 'productSku', nullable: false }, { name: 'locationId', nullable: false }, { name: 'reasonCode', nullable: false }, { name: 'unitOfMeasure', nullable: false }, );
+    const optionalNumberProperties = createCreateAdjustmentRequestDtoOptionalProperties({ name: 'quantity', nullable: false }, );
+    const optionalBooleanProperties = createCreateAdjustmentRequestDtoOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalCreateAdjustmentRequestDtoPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalCreateAdjustmentRequestDtoPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalCreateAdjustmentRequestDtoPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

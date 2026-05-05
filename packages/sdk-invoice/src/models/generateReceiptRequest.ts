@@ -16,17 +16,52 @@ export interface GenerateReceiptRequest {
     templateVersion: string;
 }
 
+function isOptionalGenerateReceiptRequestPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type GenerateReceiptRequestOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createGenerateReceiptRequestPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createGenerateReceiptRequestOptionalProperties(
+    ...properties: GenerateReceiptRequestOptionalProperty[]
+): ReadonlyArray<GenerateReceiptRequestOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfGenerateReceiptRequest(value: object): value is GenerateReceiptRequest {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if (!('paymentIntentId' in _v) || _v['paymentIntentId'] === undefined) return false;
-    if ('paymentIntentId' in _v && typeof _v['paymentIntentId'] !== 'string') return false;
-    if (!('terminalId' in _v) || _v['terminalId'] === undefined) return false;
-    if ('terminalId' in _v && typeof _v['terminalId'] !== 'string') return false;
-    if (!('templateId' in _v) || _v['templateId'] === undefined) return false;
-    if ('templateId' in _v && typeof _v['templateId'] !== 'string') return false;
-    if (!('templateVersion' in _v) || _v['templateVersion'] === undefined) return false;
-    if ('templateVersion' in _v && typeof _v['templateVersion'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createGenerateReceiptRequestPropertyNames('paymentIntentId', 'terminalId', 'templateId', 'templateVersion', );
+    const optionalStringProperties = createGenerateReceiptRequestOptionalProperties({ name: 'paymentIntentId', nullable: false }, { name: 'terminalId', nullable: false }, { name: 'templateId', nullable: false }, { name: 'templateVersion', nullable: false }, );
+    const optionalNumberProperties = createGenerateReceiptRequestOptionalProperties();
+    const optionalBooleanProperties = createGenerateReceiptRequestOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalGenerateReceiptRequestPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalGenerateReceiptRequestPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalGenerateReceiptRequestPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

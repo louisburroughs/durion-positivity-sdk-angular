@@ -15,12 +15,52 @@ export interface AssignedRole {
     isPrimary?: boolean;
 }
 
+function isOptionalAssignedRolePropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type AssignedRoleOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createAssignedRolePropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createAssignedRoleOptionalProperties(
+    ...properties: AssignedRoleOptionalProperty[]
+): ReadonlyArray<AssignedRoleOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfAssignedRole(value: object): value is AssignedRole {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('roleCode' in _v && typeof _v['roleCode'] !== 'string') return false;
-    if ('roleLabel' in _v && typeof _v['roleLabel'] !== 'string') return false;
-    if ('isPrimary' in _v && typeof _v['isPrimary'] !== 'boolean') return false;
-    return true;
+
+    const requiredProperties = createAssignedRolePropertyNames();
+    const optionalStringProperties = createAssignedRoleOptionalProperties({ name: 'roleCode', nullable: false }, { name: 'roleLabel', nullable: false }, );
+    const optionalNumberProperties = createAssignedRoleOptionalProperties();
+    const optionalBooleanProperties = createAssignedRoleOptionalProperties({ name: 'isPrimary', nullable: false }, );
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalAssignedRolePropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalAssignedRolePropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalAssignedRolePropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

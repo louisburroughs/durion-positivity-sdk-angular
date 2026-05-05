@@ -15,14 +15,52 @@ export interface PostingCategoryCreateRequest {
     createdBy: string;
 }
 
+function isOptionalPostingCategoryCreateRequestPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type PostingCategoryCreateRequestOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createPostingCategoryCreateRequestPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createPostingCategoryCreateRequestOptionalProperties(
+    ...properties: PostingCategoryCreateRequestOptionalProperty[]
+): ReadonlyArray<PostingCategoryCreateRequestOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfPostingCategoryCreateRequest(value: object): value is PostingCategoryCreateRequest {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if (!('categoryName' in _v) || _v['categoryName'] === undefined) return false;
-    if ('categoryName' in _v && typeof _v['categoryName'] !== 'string') return false;
-    if ('description' in _v && typeof _v['description'] !== 'string') return false;
-    if (!('createdBy' in _v) || _v['createdBy'] === undefined) return false;
-    if ('createdBy' in _v && typeof _v['createdBy'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createPostingCategoryCreateRequestPropertyNames('categoryName', 'createdBy', );
+    const optionalStringProperties = createPostingCategoryCreateRequestOptionalProperties({ name: 'categoryName', nullable: false }, { name: 'description', nullable: false }, { name: 'createdBy', nullable: false }, );
+    const optionalNumberProperties = createPostingCategoryCreateRequestOptionalProperties();
+    const optionalBooleanProperties = createPostingCategoryCreateRequestOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalPostingCategoryCreateRequestPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalPostingCategoryCreateRequestPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalPostingCategoryCreateRequestPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

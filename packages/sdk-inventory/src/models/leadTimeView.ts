@@ -44,16 +44,52 @@ export interface LeadTimeView {
     asOf?: string;
 }
 
+function isOptionalLeadTimeViewPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type LeadTimeViewOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createLeadTimeViewPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createLeadTimeViewOptionalProperties(
+    ...properties: LeadTimeViewOptionalProperty[]
+): ReadonlyArray<LeadTimeViewOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfLeadTimeView(value: object): value is LeadTimeView {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('productId' in _v && typeof _v['productId'] !== 'string') return false;
-    if ('locationId' in _v && typeof _v['locationId'] !== 'string') return false;
-    if ('source' in _v && typeof _v['source'] !== 'string') return false;
-    if ('minDays' in _v && typeof _v['minDays'] !== 'number') return false;
-    if ('maxDays' in _v && typeof _v['maxDays'] !== 'number') return false;
-    if ('displayText' in _v && typeof _v['displayText'] !== 'string') return false;
-    if ('confidence' in _v && typeof _v['confidence'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createLeadTimeViewPropertyNames();
+    const optionalStringProperties = createLeadTimeViewOptionalProperties({ name: 'productId', nullable: false }, { name: 'locationId', nullable: false }, { name: 'source', nullable: false }, { name: 'displayText', nullable: false }, { name: 'confidence', nullable: false }, );
+    const optionalNumberProperties = createLeadTimeViewOptionalProperties({ name: 'minDays', nullable: false }, { name: 'maxDays', nullable: false }, );
+    const optionalBooleanProperties = createLeadTimeViewOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalLeadTimeViewPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalLeadTimeViewPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalLeadTimeViewPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

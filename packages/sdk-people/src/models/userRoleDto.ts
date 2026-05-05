@@ -18,13 +18,52 @@ export interface UserRoleDto {
     active?: boolean;
 }
 
+function isOptionalUserRoleDtoPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type UserRoleDtoOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createUserRoleDtoPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createUserRoleDtoOptionalProperties(
+    ...properties: UserRoleDtoOptionalProperty[]
+): ReadonlyArray<UserRoleDtoOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfUserRoleDto(value: object): value is UserRoleDto {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('userId' in _v && typeof _v['userId'] !== 'string') return false;
-    if ('roleCode' in _v && typeof _v['roleCode'] !== 'string') return false;
-    if ('locationId' in _v && typeof _v['locationId'] !== 'string') return false;
-    if ('active' in _v && typeof _v['active'] !== 'boolean') return false;
-    return true;
+
+    const requiredProperties = createUserRoleDtoPropertyNames();
+    const optionalStringProperties = createUserRoleDtoOptionalProperties({ name: 'userId', nullable: false }, { name: 'roleCode', nullable: false }, { name: 'locationId', nullable: false }, );
+    const optionalNumberProperties = createUserRoleDtoOptionalProperties();
+    const optionalBooleanProperties = createUserRoleDtoOptionalProperties({ name: 'active', nullable: false }, );
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalUserRoleDtoPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalUserRoleDtoPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalUserRoleDtoPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

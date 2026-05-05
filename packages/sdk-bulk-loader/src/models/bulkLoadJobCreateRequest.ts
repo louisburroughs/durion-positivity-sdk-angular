@@ -27,14 +27,52 @@ export enum BulkLoadJobCreateRequestDomainTypeEnum {
 
 
 
+function isOptionalBulkLoadJobCreateRequestPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type BulkLoadJobCreateRequestOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createBulkLoadJobCreateRequestPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createBulkLoadJobCreateRequestOptionalProperties(
+    ...properties: BulkLoadJobCreateRequestOptionalProperty[]
+): ReadonlyArray<BulkLoadJobCreateRequestOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfBulkLoadJobCreateRequest(value: object): value is BulkLoadJobCreateRequest {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if (!('fileName' in _v) || _v['fileName'] === undefined) return false;
-    if ('fileName' in _v && typeof _v['fileName'] !== 'string') return false;
-    if (!('domainType' in _v) || _v['domainType'] === undefined) return false;
-    if ('domainType' in _v && typeof _v['domainType'] !== 'string') return false;
-    if ('locationId' in _v && typeof _v['locationId'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createBulkLoadJobCreateRequestPropertyNames('fileName', 'domainType', );
+    const optionalStringProperties = createBulkLoadJobCreateRequestOptionalProperties({ name: 'fileName', nullable: false }, { name: 'domainType', nullable: false }, { name: 'locationId', nullable: false }, );
+    const optionalNumberProperties = createBulkLoadJobCreateRequestOptionalProperties();
+    const optionalBooleanProperties = createBulkLoadJobCreateRequestOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalBulkLoadJobCreateRequestPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalBulkLoadJobCreateRequestPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalBulkLoadJobCreateRequestPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

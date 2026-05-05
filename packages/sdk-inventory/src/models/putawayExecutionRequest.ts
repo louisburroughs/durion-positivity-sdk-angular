@@ -33,18 +33,52 @@ export enum PutawayExecutionRequestOverrideReasonCodeEnum {
 
 
 
+function isOptionalPutawayExecutionRequestPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type PutawayExecutionRequestOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createPutawayExecutionRequestPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createPutawayExecutionRequestOptionalProperties(
+    ...properties: PutawayExecutionRequestOptionalProperty[]
+): ReadonlyArray<PutawayExecutionRequestOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfPutawayExecutionRequest(value: object): value is PutawayExecutionRequest {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('skuId' in _v && typeof _v['skuId'] !== 'string') return false;
-    if ('sourceLocationId' in _v && typeof _v['sourceLocationId'] !== 'string') return false;
-    if ('destinationLocationId' in _v && typeof _v['destinationLocationId'] !== 'string') return false;
-    if ('quantity' in _v && typeof _v['quantity'] !== 'number') return false;
-    if ('overrideLocationCompatibility' in _v && typeof _v['overrideLocationCompatibility'] !== 'boolean') return false;
-    if ('overrideCapacity' in _v && typeof _v['overrideCapacity'] !== 'boolean') return false;
-    if ('overrideReasonCode' in _v && typeof _v['overrideReasonCode'] !== 'string') return false;
-    if ('overrideJustification' in _v && typeof _v['overrideJustification'] !== 'string') return false;
-    if ('approvedBy' in _v && typeof _v['approvedBy'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createPutawayExecutionRequestPropertyNames();
+    const optionalStringProperties = createPutawayExecutionRequestOptionalProperties({ name: 'skuId', nullable: false }, { name: 'sourceLocationId', nullable: false }, { name: 'destinationLocationId', nullable: false }, { name: 'overrideReasonCode', nullable: false }, { name: 'overrideJustification', nullable: false }, { name: 'approvedBy', nullable: false }, );
+    const optionalNumberProperties = createPutawayExecutionRequestOptionalProperties({ name: 'quantity', nullable: false }, );
+    const optionalBooleanProperties = createPutawayExecutionRequestOptionalProperties({ name: 'overrideLocationCompatibility', nullable: false }, { name: 'overrideCapacity', nullable: false }, );
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalPutawayExecutionRequestPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalPutawayExecutionRequestPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalPutawayExecutionRequestPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

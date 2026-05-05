@@ -23,11 +23,52 @@ export interface TokenPairResponse {
     refreshToken?: string;
 }
 
+function isOptionalTokenPairResponsePropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type TokenPairResponseOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createTokenPairResponsePropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createTokenPairResponseOptionalProperties(
+    ...properties: TokenPairResponseOptionalProperty[]
+): ReadonlyArray<TokenPairResponseOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfTokenPairResponse(value: object): value is TokenPairResponse {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('accessToken' in _v && typeof _v['accessToken'] !== 'string') return false;
-    if ('refreshToken' in _v && typeof _v['refreshToken'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createTokenPairResponsePropertyNames();
+    const optionalStringProperties = createTokenPairResponseOptionalProperties({ name: 'accessToken', nullable: false }, { name: 'refreshToken', nullable: false }, );
+    const optionalNumberProperties = createTokenPairResponseOptionalProperties();
+    const optionalBooleanProperties = createTokenPairResponseOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalTokenPairResponsePropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalTokenPairResponsePropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalTokenPairResponsePropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

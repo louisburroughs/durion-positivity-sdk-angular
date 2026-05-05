@@ -71,22 +71,52 @@ export enum TimeEntryExceptionStatusEnum {
 
 
 
+function isOptionalTimeEntryExceptionPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type TimeEntryExceptionOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createTimeEntryExceptionPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createTimeEntryExceptionOptionalProperties(
+    ...properties: TimeEntryExceptionOptionalProperty[]
+): ReadonlyArray<TimeEntryExceptionOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfTimeEntryException(value: object): value is TimeEntryException {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('exceptionId' in _v && typeof _v['exceptionId'] !== 'string') return false;
-    if (!('employeeId' in _v) || _v['employeeId'] === undefined) return false;
-    if ('employeeId' in _v && typeof _v['employeeId'] !== 'string') return false;
-    if (!('workDate' in _v) || _v['workDate'] === undefined) return false;
-    if (!('exceptionCode' in _v) || _v['exceptionCode'] === undefined) return false;
-    if ('exceptionCode' in _v && typeof _v['exceptionCode'] !== 'string') return false;
-    if (!('severity' in _v) || _v['severity'] === undefined) return false;
-    if ('severity' in _v && typeof _v['severity'] !== 'string') return false;
-    if (!('status' in _v) || _v['status'] === undefined) return false;
-    if ('status' in _v && typeof _v['status'] !== 'string') return false;
-    if ('timeEntryId' in _v && typeof _v['timeEntryId'] !== 'string') return false;
-    if ('resolutionNotes' in _v && typeof _v['resolutionNotes'] !== 'string') return false;
-    if ('resolvedBy' in _v && typeof _v['resolvedBy'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createTimeEntryExceptionPropertyNames('employeeId', 'workDate', 'exceptionCode', 'severity', 'status', );
+    const optionalStringProperties = createTimeEntryExceptionOptionalProperties({ name: 'exceptionId', nullable: false }, { name: 'employeeId', nullable: false }, { name: 'exceptionCode', nullable: false }, { name: 'severity', nullable: false }, { name: 'status', nullable: false }, { name: 'timeEntryId', nullable: false }, { name: 'resolutionNotes', nullable: false }, { name: 'resolvedBy', nullable: false }, );
+    const optionalNumberProperties = createTimeEntryExceptionOptionalProperties();
+    const optionalBooleanProperties = createTimeEntryExceptionOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalTimeEntryExceptionPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalTimeEntryExceptionPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalTimeEntryExceptionPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

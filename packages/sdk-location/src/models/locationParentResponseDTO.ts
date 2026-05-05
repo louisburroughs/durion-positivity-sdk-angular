@@ -16,13 +16,52 @@ export interface LocationParentResponseDTO {
     parentType?: string;
 }
 
+function isOptionalLocationParentResponseDTOPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type LocationParentResponseDTOOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createLocationParentResponseDTOPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createLocationParentResponseDTOOptionalProperties(
+    ...properties: LocationParentResponseDTOOptionalProperty[]
+): ReadonlyArray<LocationParentResponseDTOOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfLocationParentResponseDTO(value: object): value is LocationParentResponseDTO {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('id' in _v && typeof _v['id'] !== 'string') return false;
-    if ('parentId' in _v && typeof _v['parentId'] !== 'string') return false;
-    if ('childId' in _v && typeof _v['childId'] !== 'string') return false;
-    if ('parentType' in _v && typeof _v['parentType'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createLocationParentResponseDTOPropertyNames();
+    const optionalStringProperties = createLocationParentResponseDTOOptionalProperties({ name: 'id', nullable: false }, { name: 'parentId', nullable: false }, { name: 'childId', nullable: false }, { name: 'parentType', nullable: false }, );
+    const optionalNumberProperties = createLocationParentResponseDTOOptionalProperties();
+    const optionalBooleanProperties = createLocationParentResponseDTOOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalLocationParentResponseDTOPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalLocationParentResponseDTOPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalLocationParentResponseDTOPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

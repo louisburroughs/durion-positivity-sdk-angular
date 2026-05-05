@@ -18,13 +18,52 @@ export interface CoverageRuleRequest {
     maxDistance?: number;
 }
 
+function isOptionalCoverageRuleRequestPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type CoverageRuleRequestOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createCoverageRuleRequestPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createCoverageRuleRequestOptionalProperties(
+    ...properties: CoverageRuleRequestOptionalProperty[]
+): ReadonlyArray<CoverageRuleRequestOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfCoverageRuleRequest(value: object): value is CoverageRuleRequest {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('serviceAreaId' in _v && typeof _v['serviceAreaId'] !== 'string') return false;
-    if ('ruleType' in _v && typeof _v['ruleType'] !== 'string') return false;
-    if ('priority' in _v && typeof _v['priority'] !== 'number') return false;
-    if ('maxDistance' in _v && typeof _v['maxDistance'] !== 'number') return false;
-    return true;
+
+    const requiredProperties = createCoverageRuleRequestPropertyNames();
+    const optionalStringProperties = createCoverageRuleRequestOptionalProperties({ name: 'serviceAreaId', nullable: false }, { name: 'ruleType', nullable: false }, );
+    const optionalNumberProperties = createCoverageRuleRequestOptionalProperties({ name: 'priority', nullable: false }, { name: 'maxDistance', nullable: false }, );
+    const optionalBooleanProperties = createCoverageRuleRequestOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalCoverageRuleRequestPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalCoverageRuleRequestPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalCoverageRuleRequestPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

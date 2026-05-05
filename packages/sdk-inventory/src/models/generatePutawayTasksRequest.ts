@@ -17,13 +17,52 @@ export interface GeneratePutawayTasksRequest {
     lineItems?: Array<PutawayLineItemRequest>;
 }
 
+function isOptionalGeneratePutawayTasksRequestPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type GeneratePutawayTasksRequestOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createGeneratePutawayTasksRequestPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createGeneratePutawayTasksRequestOptionalProperties(
+    ...properties: GeneratePutawayTasksRequestOptionalProperty[]
+): ReadonlyArray<GeneratePutawayTasksRequestOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfGeneratePutawayTasksRequest(value: object): value is GeneratePutawayTasksRequest {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if (!('sourceReceiptId' in _v) || _v['sourceReceiptId'] === undefined) return false;
-    if ('sourceReceiptId' in _v && typeof _v['sourceReceiptId'] !== 'string') return false;
-    if ('productId' in _v && typeof _v['productId'] !== 'string') return false;
-    if ('quantity' in _v && typeof _v['quantity'] !== 'number') return false;
-    return true;
+
+    const requiredProperties = createGeneratePutawayTasksRequestPropertyNames('sourceReceiptId', );
+    const optionalStringProperties = createGeneratePutawayTasksRequestOptionalProperties({ name: 'sourceReceiptId', nullable: false }, { name: 'productId', nullable: false }, );
+    const optionalNumberProperties = createGeneratePutawayTasksRequestOptionalProperties({ name: 'quantity', nullable: false }, );
+    const optionalBooleanProperties = createGeneratePutawayTasksRequestOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalGeneratePutawayTasksRequestPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalGeneratePutawayTasksRequestPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalGeneratePutawayTasksRequestPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

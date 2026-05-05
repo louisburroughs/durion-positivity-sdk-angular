@@ -20,15 +20,52 @@ export interface VehicleLegacyResponse {
     updatedAt?: string;
 }
 
+function isOptionalVehicleLegacyResponsePropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type VehicleLegacyResponseOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createVehicleLegacyResponsePropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createVehicleLegacyResponseOptionalProperties(
+    ...properties: VehicleLegacyResponseOptionalProperty[]
+): ReadonlyArray<VehicleLegacyResponseOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfVehicleLegacyResponse(value: object): value is VehicleLegacyResponse {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('id' in _v && typeof _v['id'] !== 'string') return false;
-    if ('make' in _v && typeof _v['make'] !== 'string') return false;
-    if ('model' in _v && typeof _v['model'] !== 'string') return false;
-    if ('year' in _v && typeof _v['year'] !== 'number') return false;
-    if ('vin' in _v && typeof _v['vin'] !== 'string') return false;
-    if ('vehicleType' in _v && typeof _v['vehicleType'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createVehicleLegacyResponsePropertyNames();
+    const optionalStringProperties = createVehicleLegacyResponseOptionalProperties({ name: 'id', nullable: false }, { name: 'make', nullable: false }, { name: 'model', nullable: false }, { name: 'vin', nullable: false }, { name: 'vehicleType', nullable: false }, );
+    const optionalNumberProperties = createVehicleLegacyResponseOptionalProperties({ name: 'year', nullable: false }, );
+    const optionalBooleanProperties = createVehicleLegacyResponseOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalVehicleLegacyResponsePropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalVehicleLegacyResponsePropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalVehicleLegacyResponsePropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

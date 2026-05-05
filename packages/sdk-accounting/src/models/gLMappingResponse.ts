@@ -24,17 +24,52 @@ export interface GLMappingResponse {
     createdBy?: string;
 }
 
+function isOptionalGLMappingResponsePropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type GLMappingResponseOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createGLMappingResponsePropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createGLMappingResponseOptionalProperties(
+    ...properties: GLMappingResponseOptionalProperty[]
+): ReadonlyArray<GLMappingResponseOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfGLMappingResponse(value: object): value is GLMappingResponse {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('glMappingId' in _v && typeof _v['glMappingId'] !== 'string') return false;
-    if ('sourceSystem' in _v && typeof _v['sourceSystem'] !== 'string') return false;
-    if ('externalCode' in _v && typeof _v['externalCode'] !== 'string') return false;
-    if ('glAccountId' in _v && typeof _v['glAccountId'] !== 'string') return false;
-    if ('accountCode' in _v && typeof _v['accountCode'] !== 'string') return false;
-    if ('accountName' in _v && typeof _v['accountName'] !== 'string') return false;
-    if ('priority' in _v && typeof _v['priority'] !== 'number') return false;
-    if ('createdBy' in _v && typeof _v['createdBy'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createGLMappingResponsePropertyNames();
+    const optionalStringProperties = createGLMappingResponseOptionalProperties({ name: 'glMappingId', nullable: false }, { name: 'sourceSystem', nullable: false }, { name: 'externalCode', nullable: false }, { name: 'glAccountId', nullable: false }, { name: 'accountCode', nullable: false }, { name: 'accountName', nullable: false }, { name: 'createdBy', nullable: false }, );
+    const optionalNumberProperties = createGLMappingResponseOptionalProperties({ name: 'priority', nullable: false }, );
+    const optionalBooleanProperties = createGLMappingResponseOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalGLMappingResponsePropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalGLMappingResponsePropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalGLMappingResponsePropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

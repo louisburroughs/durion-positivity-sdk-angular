@@ -32,18 +32,52 @@ export enum CycleCountTaskResponseStatusEnum {
 
 
 
+function isOptionalCycleCountTaskResponsePropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type CycleCountTaskResponseOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createCycleCountTaskResponsePropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createCycleCountTaskResponseOptionalProperties(
+    ...properties: CycleCountTaskResponseOptionalProperty[]
+): ReadonlyArray<CycleCountTaskResponseOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfCycleCountTaskResponse(value: object): value is CycleCountTaskResponse {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('taskId' in _v && typeof _v['taskId'] !== 'string') return false;
-    if ('binLocation' in _v && typeof _v['binLocation'] !== 'string') return false;
-    if ('itemSku' in _v && typeof _v['itemSku'] !== 'string') return false;
-    if ('itemDescription' in _v && typeof _v['itemDescription'] !== 'string') return false;
-    if ('expectedQuantity' in _v && typeof _v['expectedQuantity'] !== 'number') return false;
-    if ('auditorId' in _v && typeof _v['auditorId'] !== 'string') return false;
-    if ('status' in _v && typeof _v['status'] !== 'string') return false;
-    if ('latestCountEntryId' in _v && typeof _v['latestCountEntryId'] !== 'string') return false;
-    if ('countEntriesCount' in _v && typeof _v['countEntriesCount'] !== 'number') return false;
-    return true;
+
+    const requiredProperties = createCycleCountTaskResponsePropertyNames();
+    const optionalStringProperties = createCycleCountTaskResponseOptionalProperties({ name: 'taskId', nullable: false }, { name: 'binLocation', nullable: false }, { name: 'itemSku', nullable: false }, { name: 'itemDescription', nullable: false }, { name: 'auditorId', nullable: false }, { name: 'status', nullable: false }, { name: 'latestCountEntryId', nullable: false }, );
+    const optionalNumberProperties = createCycleCountTaskResponseOptionalProperties({ name: 'expectedQuantity', nullable: false }, { name: 'countEntriesCount', nullable: false }, );
+    const optionalBooleanProperties = createCycleCountTaskResponseOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalCycleCountTaskResponsePropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalCycleCountTaskResponsePropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalCycleCountTaskResponsePropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

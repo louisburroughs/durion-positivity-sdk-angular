@@ -20,13 +20,52 @@ export interface EmployeeContactInfoDto {
     emergencyContact?: EmployeeEmergencyContactDto;
 }
 
+function isOptionalEmployeeContactInfoDtoPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type EmployeeContactInfoDtoOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createEmployeeContactInfoDtoPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createEmployeeContactInfoDtoOptionalProperties(
+    ...properties: EmployeeContactInfoDtoOptionalProperty[]
+): ReadonlyArray<EmployeeContactInfoDtoOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfEmployeeContactInfoDto(value: object): value is EmployeeContactInfoDto {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('primaryEmail' in _v && typeof _v['primaryEmail'] !== 'string') return false;
-    if ('primaryPhone' in _v && typeof _v['primaryPhone'] !== 'string') return false;
-    if ('secondaryEmail' in _v && typeof _v['secondaryEmail'] !== 'string') return false;
-    if ('secondaryPhone' in _v && typeof _v['secondaryPhone'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createEmployeeContactInfoDtoPropertyNames();
+    const optionalStringProperties = createEmployeeContactInfoDtoOptionalProperties({ name: 'primaryEmail', nullable: false }, { name: 'primaryPhone', nullable: false }, { name: 'secondaryEmail', nullable: false }, { name: 'secondaryPhone', nullable: false }, );
+    const optionalNumberProperties = createEmployeeContactInfoDtoOptionalProperties();
+    const optionalBooleanProperties = createEmployeeContactInfoDtoOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalEmployeeContactInfoDtoPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalEmployeeContactInfoDtoPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalEmployeeContactInfoDtoPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

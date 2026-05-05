@@ -25,18 +25,52 @@ export interface CreateCommercialAccountRequest {
     phone?: string;
 }
 
+function isOptionalCreateCommercialAccountRequestPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type CreateCommercialAccountRequestOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createCreateCommercialAccountRequestPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createCreateCommercialAccountRequestOptionalProperties(
+    ...properties: CreateCommercialAccountRequestOptionalProperty[]
+): ReadonlyArray<CreateCommercialAccountRequestOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfCreateCommercialAccountRequest(value: object): value is CreateCommercialAccountRequest {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('legalName' in _v && typeof _v['legalName'] !== 'string') return false;
-    if ('displayName' in _v && typeof _v['displayName'] !== 'string') return false;
-    if ('taxId' in _v && typeof _v['taxId'] !== 'string') return false;
-    if ('partyType' in _v && typeof _v['partyType'] !== 'string') return false;
-    if ('billingTermsId' in _v && typeof _v['billingTermsId'] !== 'string') return false;
-    if ('contactFirstName' in _v && typeof _v['contactFirstName'] !== 'string') return false;
-    if ('contactLastName' in _v && typeof _v['contactLastName'] !== 'string') return false;
-    if ('email' in _v && typeof _v['email'] !== 'string') return false;
-    if ('phone' in _v && typeof _v['phone'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createCreateCommercialAccountRequestPropertyNames();
+    const optionalStringProperties = createCreateCommercialAccountRequestOptionalProperties({ name: 'legalName', nullable: false }, { name: 'displayName', nullable: false }, { name: 'taxId', nullable: false }, { name: 'partyType', nullable: false }, { name: 'billingTermsId', nullable: false }, { name: 'contactFirstName', nullable: false }, { name: 'contactLastName', nullable: false }, { name: 'email', nullable: false }, { name: 'phone', nullable: false }, );
+    const optionalNumberProperties = createCreateCommercialAccountRequestOptionalProperties();
+    const optionalBooleanProperties = createCreateCommercialAccountRequestOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalCreateCommercialAccountRequestPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalCreateCommercialAccountRequestPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalCreateCommercialAccountRequestPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

@@ -57,14 +57,52 @@ export enum ReportExportResponseFormatEnum {
 
 
 
+function isOptionalReportExportResponsePropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type ReportExportResponseOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createReportExportResponsePropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createReportExportResponseOptionalProperties(
+    ...properties: ReportExportResponseOptionalProperty[]
+): ReadonlyArray<ReportExportResponseOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfReportExportResponse(value: object): value is ReportExportResponse {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('exportId' in _v && typeof _v['exportId'] !== 'string') return false;
-    if ('status' in _v && typeof _v['status'] !== 'string') return false;
-    if ('downloadUrl' in _v && typeof _v['downloadUrl'] !== 'string') return false;
-    if ('format' in _v && typeof _v['format'] !== 'string') return false;
-    if ('reportType' in _v && typeof _v['reportType'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createReportExportResponsePropertyNames();
+    const optionalStringProperties = createReportExportResponseOptionalProperties({ name: 'exportId', nullable: false }, { name: 'status', nullable: false }, { name: 'downloadUrl', nullable: false }, { name: 'format', nullable: false }, { name: 'reportType', nullable: false }, );
+    const optionalNumberProperties = createReportExportResponseOptionalProperties();
+    const optionalBooleanProperties = createReportExportResponseOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalReportExportResponsePropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalReportExportResponsePropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalReportExportResponsePropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

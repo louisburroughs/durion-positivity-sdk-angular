@@ -53,16 +53,52 @@ export enum InitiatePaymentResponseStatusEnum {
 
 
 
+function isOptionalInitiatePaymentResponsePropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type InitiatePaymentResponseOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createInitiatePaymentResponsePropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createInitiatePaymentResponseOptionalProperties(
+    ...properties: InitiatePaymentResponseOptionalProperty[]
+): ReadonlyArray<InitiatePaymentResponseOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfInitiatePaymentResponse(value: object): value is InitiatePaymentResponse {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('paymentIntentId' in _v && typeof _v['paymentIntentId'] !== 'string') return false;
-    if ('status' in _v && typeof _v['status'] !== 'string') return false;
-    if ('authorizedAmount' in _v && typeof _v['authorizedAmount'] !== 'number') return false;
-    if ('capturedAmount' in _v && typeof _v['capturedAmount'] !== 'number') return false;
-    if ('voidedRemainderAmount' in _v && typeof _v['voidedRemainderAmount'] !== 'number') return false;
-    if ('gatewayProvider' in _v && typeof _v['gatewayProvider'] !== 'string') return false;
-    if ('gatewayResponse' in _v && typeof _v['gatewayResponse'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createInitiatePaymentResponsePropertyNames();
+    const optionalStringProperties = createInitiatePaymentResponseOptionalProperties({ name: 'paymentIntentId', nullable: false }, { name: 'status', nullable: false }, { name: 'gatewayProvider', nullable: false }, { name: 'gatewayResponse', nullable: false }, );
+    const optionalNumberProperties = createInitiatePaymentResponseOptionalProperties({ name: 'authorizedAmount', nullable: false }, { name: 'capturedAmount', nullable: false }, { name: 'voidedRemainderAmount', nullable: false }, );
+    const optionalBooleanProperties = createInitiatePaymentResponseOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalInitiatePaymentResponsePropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalInitiatePaymentResponsePropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalInitiatePaymentResponsePropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

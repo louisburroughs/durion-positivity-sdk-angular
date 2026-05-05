@@ -35,13 +35,52 @@ export interface EventProcessingLogEntry {
     contextJson?: string | null;
 }
 
+function isOptionalEventProcessingLogEntryPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type EventProcessingLogEntryOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createEventProcessingLogEntryPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createEventProcessingLogEntryOptionalProperties(
+    ...properties: EventProcessingLogEntryOptionalProperty[]
+): ReadonlyArray<EventProcessingLogEntryOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfEventProcessingLogEntry(value: object): value is EventProcessingLogEntry {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('entryId' in _v && typeof _v['entryId'] !== 'string') return false;
-    if ('severity' in _v && typeof _v['severity'] !== 'string') return false;
-    if ('message' in _v && typeof _v['message'] !== 'string') return false;
-    if ('contextJson' in _v && _v['contextJson'] !== null && typeof _v['contextJson'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createEventProcessingLogEntryPropertyNames();
+    const optionalStringProperties = createEventProcessingLogEntryOptionalProperties({ name: 'entryId', nullable: false }, { name: 'severity', nullable: false }, { name: 'message', nullable: false }, { name: 'contextJson', nullable: true }, );
+    const optionalNumberProperties = createEventProcessingLogEntryOptionalProperties();
+    const optionalBooleanProperties = createEventProcessingLogEntryOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalEventProcessingLogEntryPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalEventProcessingLogEntryPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalEventProcessingLogEntryPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

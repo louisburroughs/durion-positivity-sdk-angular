@@ -31,16 +31,52 @@ export enum AssignmentResponseStatusEnum {
 
 
 
+function isOptionalAssignmentResponsePropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type AssignmentResponseOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createAssignmentResponsePropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createAssignmentResponseOptionalProperties(
+    ...properties: AssignmentResponseOptionalProperty[]
+): ReadonlyArray<AssignmentResponseOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfAssignmentResponse(value: object): value is AssignmentResponse {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('assignmentId' in _v && typeof _v['assignmentId'] !== 'string') return false;
-    if ('appointmentId' in _v && typeof _v['appointmentId'] !== 'string') return false;
-    if ('resourceId' in _v && typeof _v['resourceId'] !== 'string') return false;
-    if ('resourceType' in _v && typeof _v['resourceType'] !== 'string') return false;
-    if ('status' in _v && typeof _v['status'] !== 'string') return false;
-    if ('override' in _v && typeof _v['override'] !== 'boolean') return false;
-    if ('assignmentNotes' in _v && typeof _v['assignmentNotes'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createAssignmentResponsePropertyNames();
+    const optionalStringProperties = createAssignmentResponseOptionalProperties({ name: 'assignmentId', nullable: false }, { name: 'appointmentId', nullable: false }, { name: 'resourceId', nullable: false }, { name: 'resourceType', nullable: false }, { name: 'status', nullable: false }, { name: 'assignmentNotes', nullable: false }, );
+    const optionalNumberProperties = createAssignmentResponseOptionalProperties();
+    const optionalBooleanProperties = createAssignmentResponseOptionalProperties({ name: 'override', nullable: false }, );
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalAssignmentResponsePropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalAssignmentResponsePropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalAssignmentResponsePropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

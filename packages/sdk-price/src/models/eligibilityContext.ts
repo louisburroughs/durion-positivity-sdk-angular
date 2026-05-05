@@ -23,11 +23,52 @@ export interface EligibilityContext {
     vehicleId?: string | null;
 }
 
+function isOptionalEligibilityContextPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type EligibilityContextOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createEligibilityContextPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createEligibilityContextOptionalProperties(
+    ...properties: EligibilityContextOptionalProperty[]
+): ReadonlyArray<EligibilityContextOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfEligibilityContext(value: object): value is EligibilityContext {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('accountId' in _v && _v['accountId'] !== null && typeof _v['accountId'] !== 'string') return false;
-    if ('vehicleId' in _v && _v['vehicleId'] !== null && typeof _v['vehicleId'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createEligibilityContextPropertyNames();
+    const optionalStringProperties = createEligibilityContextOptionalProperties({ name: 'accountId', nullable: true }, { name: 'vehicleId', nullable: true }, );
+    const optionalNumberProperties = createEligibilityContextOptionalProperties();
+    const optionalBooleanProperties = createEligibilityContextOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalEligibilityContextPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalEligibilityContextPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalEligibilityContextPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

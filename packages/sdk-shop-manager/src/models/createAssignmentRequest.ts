@@ -19,14 +19,52 @@ export interface CreateAssignmentRequest {
     overrideReason?: string;
 }
 
+function isOptionalCreateAssignmentRequestPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type CreateAssignmentRequestOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createCreateAssignmentRequestPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createCreateAssignmentRequestOptionalProperties(
+    ...properties: CreateAssignmentRequestOptionalProperty[]
+): ReadonlyArray<CreateAssignmentRequestOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfCreateAssignmentRequest(value: object): value is CreateAssignmentRequest {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('appointmentId' in _v && typeof _v['appointmentId'] !== 'string') return false;
-    if ('resourceId' in _v && typeof _v['resourceId'] !== 'string') return false;
-    if ('resourceType' in _v && typeof _v['resourceType'] !== 'string') return false;
-    if ('override' in _v && typeof _v['override'] !== 'boolean') return false;
-    if ('overrideReason' in _v && typeof _v['overrideReason'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createCreateAssignmentRequestPropertyNames();
+    const optionalStringProperties = createCreateAssignmentRequestOptionalProperties({ name: 'appointmentId', nullable: false }, { name: 'resourceId', nullable: false }, { name: 'resourceType', nullable: false }, { name: 'overrideReason', nullable: false }, );
+    const optionalNumberProperties = createCreateAssignmentRequestOptionalProperties();
+    const optionalBooleanProperties = createCreateAssignmentRequestOptionalProperties({ name: 'override', nullable: false }, );
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalCreateAssignmentRequestPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalCreateAssignmentRequestPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalCreateAssignmentRequestPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

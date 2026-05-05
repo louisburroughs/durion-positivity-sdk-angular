@@ -40,19 +40,52 @@ export enum GLAccountResponseStatusEnum {
 
 
 
+function isOptionalGLAccountResponsePropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type GLAccountResponseOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createGLAccountResponsePropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createGLAccountResponseOptionalProperties(
+    ...properties: GLAccountResponseOptionalProperty[]
+): ReadonlyArray<GLAccountResponseOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfGLAccountResponse(value: object): value is GLAccountResponse {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('glAccountId' in _v && typeof _v['glAccountId'] !== 'string') return false;
-    if ('accountCode' in _v && typeof _v['accountCode'] !== 'string') return false;
-    if ('accountName' in _v && typeof _v['accountName'] !== 'string') return false;
-    if ('accountType' in _v && typeof _v['accountType'] !== 'string') return false;
-    if ('description' in _v && typeof _v['description'] !== 'string') return false;
-    if ('parentAccountId' in _v && typeof _v['parentAccountId'] !== 'string') return false;
-    if ('status' in _v && typeof _v['status'] !== 'string') return false;
-    if ('createdBy' in _v && typeof _v['createdBy'] !== 'string') return false;
-    if ('modifiedBy' in _v && typeof _v['modifiedBy'] !== 'string') return false;
-    if ('version' in _v && typeof _v['version'] !== 'number') return false;
-    return true;
+
+    const requiredProperties = createGLAccountResponsePropertyNames();
+    const optionalStringProperties = createGLAccountResponseOptionalProperties({ name: 'glAccountId', nullable: false }, { name: 'accountCode', nullable: false }, { name: 'accountName', nullable: false }, { name: 'accountType', nullable: false }, { name: 'description', nullable: false }, { name: 'parentAccountId', nullable: false }, { name: 'status', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'modifiedBy', nullable: false }, );
+    const optionalNumberProperties = createGLAccountResponseOptionalProperties({ name: 'version', nullable: false }, );
+    const optionalBooleanProperties = createGLAccountResponseOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalGLAccountResponsePropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalGLAccountResponsePropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalGLAccountResponsePropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

@@ -44,19 +44,52 @@ export interface VendorInvoiceReceivedEvent {
     lineItems: Array<InvoiceLineItem>;
 }
 
+function isOptionalVendorInvoiceReceivedEventPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type VendorInvoiceReceivedEventOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createVendorInvoiceReceivedEventPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createVendorInvoiceReceivedEventOptionalProperties(
+    ...properties: VendorInvoiceReceivedEventOptionalProperty[]
+): ReadonlyArray<VendorInvoiceReceivedEventOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfVendorInvoiceReceivedEvent(value: object): value is VendorInvoiceReceivedEvent {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if (!('eventId' in _v) || _v['eventId'] === undefined) return false;
-    if ('eventId' in _v && typeof _v['eventId'] !== 'string') return false;
-    if (!('organizationId' in _v) || _v['organizationId'] === undefined) return false;
-    if ('organizationId' in _v && typeof _v['organizationId'] !== 'string') return false;
-    if (!('vendorId' in _v) || _v['vendorId'] === undefined) return false;
-    if ('vendorId' in _v && typeof _v['vendorId'] !== 'string') return false;
-    if (!('invoiceReference' in _v) || _v['invoiceReference'] === undefined) return false;
-    if ('invoiceReference' in _v && typeof _v['invoiceReference'] !== 'string') return false;
-    if (!('invoiceDate' in _v) || _v['invoiceDate'] === undefined) return false;
-    if (!('lineItems' in _v) || _v['lineItems'] === undefined) return false;
-    return true;
+
+    const requiredProperties = createVendorInvoiceReceivedEventPropertyNames('eventId', 'organizationId', 'vendorId', 'invoiceReference', 'invoiceDate', 'lineItems', );
+    const optionalStringProperties = createVendorInvoiceReceivedEventOptionalProperties({ name: 'eventId', nullable: false }, { name: 'organizationId', nullable: false }, { name: 'vendorId', nullable: false }, { name: 'invoiceReference', nullable: false }, );
+    const optionalNumberProperties = createVendorInvoiceReceivedEventOptionalProperties();
+    const optionalBooleanProperties = createVendorInvoiceReceivedEventOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalVendorInvoiceReceivedEventPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalVendorInvoiceReceivedEventPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalVendorInvoiceReceivedEventPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

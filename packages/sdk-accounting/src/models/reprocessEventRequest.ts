@@ -15,13 +15,52 @@ export interface ReprocessEventRequest {
     reprocessingNotes?: string;
 }
 
+function isOptionalReprocessEventRequestPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type ReprocessEventRequestOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createReprocessEventRequestPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createReprocessEventRequestOptionalProperties(
+    ...properties: ReprocessEventRequestOptionalProperty[]
+): ReadonlyArray<ReprocessEventRequestOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfReprocessEventRequest(value: object): value is ReprocessEventRequest {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if (!('triggeredByUserId' in _v) || _v['triggeredByUserId'] === undefined) return false;
-    if ('triggeredByUserId' in _v && typeof _v['triggeredByUserId'] !== 'string') return false;
-    if ('mappingVersionToUse' in _v && typeof _v['mappingVersionToUse'] !== 'string') return false;
-    if ('reprocessingNotes' in _v && typeof _v['reprocessingNotes'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createReprocessEventRequestPropertyNames('triggeredByUserId', );
+    const optionalStringProperties = createReprocessEventRequestOptionalProperties({ name: 'triggeredByUserId', nullable: false }, { name: 'mappingVersionToUse', nullable: false }, { name: 'reprocessingNotes', nullable: false }, );
+    const optionalNumberProperties = createReprocessEventRequestOptionalProperties();
+    const optionalBooleanProperties = createReprocessEventRequestOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalReprocessEventRequestPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalReprocessEventRequestPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalReprocessEventRequestPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

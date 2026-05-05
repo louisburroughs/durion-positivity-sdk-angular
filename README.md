@@ -200,6 +200,32 @@ export const appConfig: ApplicationConfig = {
 };
 ```
 
+### Base path per gateway route
+
+Configure each generated package with the API gateway route prefix from your application environment or other build-time config. Do not hardcode per-service host/port values, and do not include `/v1` in the configured prefix because the generated clients already append versioned endpoint paths.
+
+For the Angular frontend, this should match the gateway-backed environment value used in `durion-positivity-frontend`:
+
+```typescript
+import { Configuration as AccountingConfiguration } from "@durion-sdk/accounting";
+import { Configuration as SecurityConfiguration } from "@durion-sdk/security";
+import { environment } from "../environments/environment";
+
+export const appConfig: ApplicationConfig = {
+  providers: [
+    { provide: AccountingConfiguration, useFactory: () => new AccountingConfiguration({ basePath: `${environment.apiBaseUrl}/accounting` }) },
+    { provide: SecurityConfiguration, useFactory: () => new SecurityConfiguration({ basePath: `${environment.apiBaseUrl}/security-service` }) },
+  ],
+};
+```
+
+Examples:
+
+- Frontend dev proxy: `${environment.apiBaseUrl}/order` -> `http://localhost:8080/api/order`
+- Direct gateway host: `https://alpha.example.com/order`
+
+This preserves the gateway-routed browser contract required by backend issue `durion-positivity-backend#641`.
+
 ### Auth token via interceptor (recommended)
 
 Use a functional Angular HTTP interceptor to attach the `Authorization` header on every outbound request. This approach works with the generated Angular services and respects Angular's DI lifecycle:

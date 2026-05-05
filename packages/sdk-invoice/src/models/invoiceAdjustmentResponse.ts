@@ -25,14 +25,52 @@ export enum InvoiceAdjustmentResponseTypeEnum {
 
 
 
+function isOptionalInvoiceAdjustmentResponsePropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type InvoiceAdjustmentResponseOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createInvoiceAdjustmentResponsePropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createInvoiceAdjustmentResponseOptionalProperties(
+    ...properties: InvoiceAdjustmentResponseOptionalProperty[]
+): ReadonlyArray<InvoiceAdjustmentResponseOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfInvoiceAdjustmentResponse(value: object): value is InvoiceAdjustmentResponse {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('id' in _v && typeof _v['id'] !== 'string') return false;
-    if ('type' in _v && typeof _v['type'] !== 'string') return false;
-    if ('amount' in _v && typeof _v['amount'] !== 'number') return false;
-    if ('reason' in _v && typeof _v['reason'] !== 'string') return false;
-    if ('authorizedBy' in _v && typeof _v['authorizedBy'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createInvoiceAdjustmentResponsePropertyNames();
+    const optionalStringProperties = createInvoiceAdjustmentResponseOptionalProperties({ name: 'id', nullable: false }, { name: 'type', nullable: false }, { name: 'reason', nullable: false }, { name: 'authorizedBy', nullable: false }, );
+    const optionalNumberProperties = createInvoiceAdjustmentResponseOptionalProperties({ name: 'amount', nullable: false }, );
+    const optionalBooleanProperties = createInvoiceAdjustmentResponseOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalInvoiceAdjustmentResponsePropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalInvoiceAdjustmentResponsePropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalInvoiceAdjustmentResponsePropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

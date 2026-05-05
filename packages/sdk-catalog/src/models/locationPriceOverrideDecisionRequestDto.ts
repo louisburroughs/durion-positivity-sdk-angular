@@ -16,15 +16,52 @@ export interface LocationPriceOverrideDecisionRequestDto {
     rejectionNotes?: string;
 }
 
+function isOptionalLocationPriceOverrideDecisionRequestDtoPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type LocationPriceOverrideDecisionRequestDtoOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createLocationPriceOverrideDecisionRequestDtoPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createLocationPriceOverrideDecisionRequestDtoOptionalProperties(
+    ...properties: LocationPriceOverrideDecisionRequestDtoOptionalProperty[]
+): ReadonlyArray<LocationPriceOverrideDecisionRequestDtoOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfLocationPriceOverrideDecisionRequestDto(value: object): value is LocationPriceOverrideDecisionRequestDto {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if (!('version' in _v) || _v['version'] === undefined) return false;
-    if ('version' in _v && typeof _v['version'] !== 'number') return false;
-    if (!('actorUserId' in _v) || _v['actorUserId'] === undefined) return false;
-    if ('actorUserId' in _v && typeof _v['actorUserId'] !== 'string') return false;
-    if ('rejectionReasonCode' in _v && typeof _v['rejectionReasonCode'] !== 'string') return false;
-    if ('rejectionNotes' in _v && typeof _v['rejectionNotes'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createLocationPriceOverrideDecisionRequestDtoPropertyNames('version', 'actorUserId', );
+    const optionalStringProperties = createLocationPriceOverrideDecisionRequestDtoOptionalProperties({ name: 'actorUserId', nullable: false }, { name: 'rejectionReasonCode', nullable: false }, { name: 'rejectionNotes', nullable: false }, );
+    const optionalNumberProperties = createLocationPriceOverrideDecisionRequestDtoOptionalProperties({ name: 'version', nullable: false }, );
+    const optionalBooleanProperties = createLocationPriceOverrideDecisionRequestDtoOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalLocationPriceOverrideDecisionRequestDtoPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalLocationPriceOverrideDecisionRequestDtoPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalLocationPriceOverrideDecisionRequestDtoPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

@@ -36,18 +36,52 @@ export enum ItemCostAuditDtoChangeSourceTypeEnum {
 
 
 
+function isOptionalItemCostAuditDtoPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type ItemCostAuditDtoOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createItemCostAuditDtoPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createItemCostAuditDtoOptionalProperties(
+    ...properties: ItemCostAuditDtoOptionalProperty[]
+): ReadonlyArray<ItemCostAuditDtoOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfItemCostAuditDto(value: object): value is ItemCostAuditDto {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('auditId' in _v && typeof _v['auditId'] !== 'string') return false;
-    if ('itemId' in _v && typeof _v['itemId'] !== 'string') return false;
-    if ('costTypeChanged' in _v && typeof _v['costTypeChanged'] !== 'string') return false;
-    if ('oldValue' in _v && typeof _v['oldValue'] !== 'number') return false;
-    if ('newValue' in _v && typeof _v['newValue'] !== 'number') return false;
-    if ('changeSourceType' in _v && typeof _v['changeSourceType'] !== 'string') return false;
-    if ('changeSourceId' in _v && typeof _v['changeSourceId'] !== 'string') return false;
-    if ('actor' in _v && typeof _v['actor'] !== 'string') return false;
-    if ('reasonCode' in _v && typeof _v['reasonCode'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createItemCostAuditDtoPropertyNames();
+    const optionalStringProperties = createItemCostAuditDtoOptionalProperties({ name: 'auditId', nullable: false }, { name: 'itemId', nullable: false }, { name: 'costTypeChanged', nullable: false }, { name: 'changeSourceType', nullable: false }, { name: 'changeSourceId', nullable: false }, { name: 'actor', nullable: false }, { name: 'reasonCode', nullable: false }, );
+    const optionalNumberProperties = createItemCostAuditDtoOptionalProperties({ name: 'oldValue', nullable: false }, { name: 'newValue', nullable: false }, );
+    const optionalBooleanProperties = createItemCostAuditDtoOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalItemCostAuditDtoPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalItemCostAuditDtoPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalItemCostAuditDtoPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

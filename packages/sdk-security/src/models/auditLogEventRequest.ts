@@ -14,18 +14,54 @@ export interface AuditLogEventRequest {
     actorId?: string;
     entityId?: string;
     entityType?: string;
-    oldValue?: any | null;
-    newValue?: any | null;
-    context?: any | null;
+}
+
+function isOptionalAuditLogEventRequestPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type AuditLogEventRequestOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createAuditLogEventRequestPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createAuditLogEventRequestOptionalProperties(
+    ...properties: AuditLogEventRequestOptionalProperty[]
+): ReadonlyArray<AuditLogEventRequestOptionalProperty> {
+    return properties;
 }
 
 export function instanceOfAuditLogEventRequest(value: object): value is AuditLogEventRequest {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('eventType' in _v && typeof _v['eventType'] !== 'string') return false;
-    if ('actorId' in _v && typeof _v['actorId'] !== 'string') return false;
-    if ('entityId' in _v && typeof _v['entityId'] !== 'string') return false;
-    if ('entityType' in _v && typeof _v['entityType'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createAuditLogEventRequestPropertyNames();
+    const optionalStringProperties = createAuditLogEventRequestOptionalProperties({ name: 'eventType', nullable: false }, { name: 'actorId', nullable: false }, { name: 'entityId', nullable: false }, { name: 'entityType', nullable: false }, );
+    const optionalNumberProperties = createAuditLogEventRequestOptionalProperties();
+    const optionalBooleanProperties = createAuditLogEventRequestOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalAuditLogEventRequestPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalAuditLogEventRequestPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalAuditLogEventRequestPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

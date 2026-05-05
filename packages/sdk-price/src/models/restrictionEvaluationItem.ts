@@ -40,17 +40,52 @@ export enum RestrictionEvaluationItemContextEnum {
 
 
 
+function isOptionalRestrictionEvaluationItemPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type RestrictionEvaluationItemOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createRestrictionEvaluationItemPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createRestrictionEvaluationItemOptionalProperties(
+    ...properties: RestrictionEvaluationItemOptionalProperty[]
+): ReadonlyArray<RestrictionEvaluationItemOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfRestrictionEvaluationItem(value: object): value is RestrictionEvaluationItem {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if (!('productId' in _v) || _v['productId'] === undefined) return false;
-    if ('productId' in _v && typeof _v['productId'] !== 'string') return false;
-    if (!('locationTag' in _v) || _v['locationTag'] === undefined) return false;
-    if ('locationTag' in _v && typeof _v['locationTag'] !== 'string') return false;
-    if (!('serviceTag' in _v) || _v['serviceTag'] === undefined) return false;
-    if ('serviceTag' in _v && typeof _v['serviceTag'] !== 'string') return false;
-    if (!('context' in _v) || _v['context'] === undefined) return false;
-    if ('context' in _v && typeof _v['context'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createRestrictionEvaluationItemPropertyNames('productId', 'locationTag', 'serviceTag', 'context', );
+    const optionalStringProperties = createRestrictionEvaluationItemOptionalProperties({ name: 'productId', nullable: false }, { name: 'locationTag', nullable: false }, { name: 'serviceTag', nullable: false }, { name: 'context', nullable: false }, );
+    const optionalNumberProperties = createRestrictionEvaluationItemOptionalProperties();
+    const optionalBooleanProperties = createRestrictionEvaluationItemOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalRestrictionEvaluationItemPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalRestrictionEvaluationItemPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalRestrictionEvaluationItemPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

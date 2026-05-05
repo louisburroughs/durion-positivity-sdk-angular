@@ -18,13 +18,52 @@ export interface DefaultGLMappingListResponse {
     totalPages?: number;
 }
 
+function isOptionalDefaultGLMappingListResponsePropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type DefaultGLMappingListResponseOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createDefaultGLMappingListResponsePropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createDefaultGLMappingListResponseOptionalProperties(
+    ...properties: DefaultGLMappingListResponseOptionalProperty[]
+): ReadonlyArray<DefaultGLMappingListResponseOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfDefaultGLMappingListResponse(value: object): value is DefaultGLMappingListResponse {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('page' in _v && typeof _v['page'] !== 'number') return false;
-    if ('size' in _v && typeof _v['size'] !== 'number') return false;
-    if ('totalElements' in _v && typeof _v['totalElements'] !== 'number') return false;
-    if ('totalPages' in _v && typeof _v['totalPages'] !== 'number') return false;
-    return true;
+
+    const requiredProperties = createDefaultGLMappingListResponsePropertyNames();
+    const optionalStringProperties = createDefaultGLMappingListResponseOptionalProperties();
+    const optionalNumberProperties = createDefaultGLMappingListResponseOptionalProperties({ name: 'page', nullable: false }, { name: 'size', nullable: false }, { name: 'totalElements', nullable: false }, { name: 'totalPages', nullable: false }, );
+    const optionalBooleanProperties = createDefaultGLMappingListResponseOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalDefaultGLMappingListResponsePropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalDefaultGLMappingListResponsePropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalDefaultGLMappingListResponsePropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

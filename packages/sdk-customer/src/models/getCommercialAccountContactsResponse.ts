@@ -24,10 +24,52 @@ export interface GetCommercialAccountContactsResponse {
     contacts?: Array<ContactWithRole>;
 }
 
+function isOptionalGetCommercialAccountContactsResponsePropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type GetCommercialAccountContactsResponseOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createGetCommercialAccountContactsResponsePropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createGetCommercialAccountContactsResponseOptionalProperties(
+    ...properties: GetCommercialAccountContactsResponseOptionalProperty[]
+): ReadonlyArray<GetCommercialAccountContactsResponseOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfGetCommercialAccountContactsResponse(value: object): value is GetCommercialAccountContactsResponse {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('commercialAccountId' in _v && typeof _v['commercialAccountId'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createGetCommercialAccountContactsResponsePropertyNames();
+    const optionalStringProperties = createGetCommercialAccountContactsResponseOptionalProperties({ name: 'commercialAccountId', nullable: false }, );
+    const optionalNumberProperties = createGetCommercialAccountContactsResponseOptionalProperties();
+    const optionalBooleanProperties = createGetCommercialAccountContactsResponseOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalGetCommercialAccountContactsResponsePropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalGetCommercialAccountContactsResponsePropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalGetCommercialAccountContactsResponsePropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

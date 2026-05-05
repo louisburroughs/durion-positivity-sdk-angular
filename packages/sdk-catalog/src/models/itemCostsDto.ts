@@ -19,13 +19,52 @@ export interface ItemCostsDto {
     averageCost?: number;
 }
 
+function isOptionalItemCostsDtoPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type ItemCostsDtoOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createItemCostsDtoPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createItemCostsDtoOptionalProperties(
+    ...properties: ItemCostsDtoOptionalProperty[]
+): ReadonlyArray<ItemCostsDtoOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfItemCostsDto(value: object): value is ItemCostsDto {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('itemId' in _v && typeof _v['itemId'] !== 'string') return false;
-    if ('standardCost' in _v && typeof _v['standardCost'] !== 'number') return false;
-    if ('lastCost' in _v && typeof _v['lastCost'] !== 'number') return false;
-    if ('averageCost' in _v && typeof _v['averageCost'] !== 'number') return false;
-    return true;
+
+    const requiredProperties = createItemCostsDtoPropertyNames();
+    const optionalStringProperties = createItemCostsDtoOptionalProperties({ name: 'itemId', nullable: false }, );
+    const optionalNumberProperties = createItemCostsDtoOptionalProperties({ name: 'standardCost', nullable: false }, { name: 'lastCost', nullable: false }, { name: 'averageCost', nullable: false }, );
+    const optionalBooleanProperties = createItemCostsDtoOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalItemCostsDtoPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalItemCostsDtoPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalItemCostsDtoPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

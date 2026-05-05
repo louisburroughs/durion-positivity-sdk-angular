@@ -20,14 +20,52 @@ export interface CreateVehicleForPartyRequest {
     licensePlateRegion?: string;
 }
 
+function isOptionalCreateVehicleForPartyRequestPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type CreateVehicleForPartyRequestOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createCreateVehicleForPartyRequestPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createCreateVehicleForPartyRequestOptionalProperties(
+    ...properties: CreateVehicleForPartyRequestOptionalProperty[]
+): ReadonlyArray<CreateVehicleForPartyRequestOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfCreateVehicleForPartyRequest(value: object): value is CreateVehicleForPartyRequest {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('vinNumber' in _v && typeof _v['vinNumber'] !== 'string') return false;
-    if ('unitNumber' in _v && typeof _v['unitNumber'] !== 'string') return false;
-    if ('description' in _v && typeof _v['description'] !== 'string') return false;
-    if ('licensePlate' in _v && typeof _v['licensePlate'] !== 'string') return false;
-    if ('licensePlateRegion' in _v && typeof _v['licensePlateRegion'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createCreateVehicleForPartyRequestPropertyNames();
+    const optionalStringProperties = createCreateVehicleForPartyRequestOptionalProperties({ name: 'vinNumber', nullable: false }, { name: 'unitNumber', nullable: false }, { name: 'description', nullable: false }, { name: 'licensePlate', nullable: false }, { name: 'licensePlateRegion', nullable: false }, );
+    const optionalNumberProperties = createCreateVehicleForPartyRequestOptionalProperties();
+    const optionalBooleanProperties = createCreateVehicleForPartyRequestOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalCreateVehicleForPartyRequestPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalCreateVehicleForPartyRequestPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalCreateVehicleForPartyRequestPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

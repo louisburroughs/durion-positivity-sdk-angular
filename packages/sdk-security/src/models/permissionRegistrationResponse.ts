@@ -19,15 +19,52 @@ export interface PermissionRegistrationResponse {
     errors?: Array<string>;
 }
 
+function isOptionalPermissionRegistrationResponsePropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type PermissionRegistrationResponseOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createPermissionRegistrationResponsePropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createPermissionRegistrationResponseOptionalProperties(
+    ...properties: PermissionRegistrationResponseOptionalProperty[]
+): ReadonlyArray<PermissionRegistrationResponseOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfPermissionRegistrationResponse(value: object): value is PermissionRegistrationResponse {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('success' in _v && typeof _v['success'] !== 'boolean') return false;
-    if ('message' in _v && typeof _v['message'] !== 'string') return false;
-    if ('totalPermissions' in _v && typeof _v['totalPermissions'] !== 'number') return false;
-    if ('registeredPermissions' in _v && typeof _v['registeredPermissions'] !== 'number') return false;
-    if ('updatedPermissions' in _v && typeof _v['updatedPermissions'] !== 'number') return false;
-    if ('skippedPermissions' in _v && typeof _v['skippedPermissions'] !== 'number') return false;
-    return true;
+
+    const requiredProperties = createPermissionRegistrationResponsePropertyNames();
+    const optionalStringProperties = createPermissionRegistrationResponseOptionalProperties({ name: 'message', nullable: false }, );
+    const optionalNumberProperties = createPermissionRegistrationResponseOptionalProperties({ name: 'totalPermissions', nullable: false }, { name: 'registeredPermissions', nullable: false }, { name: 'updatedPermissions', nullable: false }, { name: 'skippedPermissions', nullable: false }, );
+    const optionalBooleanProperties = createPermissionRegistrationResponseOptionalProperties({ name: 'success', nullable: false }, );
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalPermissionRegistrationResponsePropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalPermissionRegistrationResponsePropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalPermissionRegistrationResponsePropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

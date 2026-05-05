@@ -27,22 +27,52 @@ export interface DefaultGLMappingResponse {
     modifiedBy?: string;
 }
 
+function isOptionalDefaultGLMappingResponsePropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type DefaultGLMappingResponseOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createDefaultGLMappingResponsePropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createDefaultGLMappingResponseOptionalProperties(
+    ...properties: DefaultGLMappingResponseOptionalProperty[]
+): ReadonlyArray<DefaultGLMappingResponseOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfDefaultGLMappingResponse(value: object): value is DefaultGLMappingResponse {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('mappingId' in _v && typeof _v['mappingId'] !== 'string') return false;
-    if ('eventType' in _v && typeof _v['eventType'] !== 'string') return false;
-    if ('organizationId' in _v && typeof _v['organizationId'] !== 'string') return false;
-    if ('debitAccountId' in _v && typeof _v['debitAccountId'] !== 'string') return false;
-    if ('debitAccountCode' in _v && typeof _v['debitAccountCode'] !== 'string') return false;
-    if ('debitAccountName' in _v && typeof _v['debitAccountName'] !== 'string') return false;
-    if ('creditAccountId' in _v && typeof _v['creditAccountId'] !== 'string') return false;
-    if ('creditAccountCode' in _v && typeof _v['creditAccountCode'] !== 'string') return false;
-    if ('creditAccountName' in _v && typeof _v['creditAccountName'] !== 'string') return false;
-    if ('description' in _v && typeof _v['description'] !== 'string') return false;
-    if ('active' in _v && typeof _v['active'] !== 'boolean') return false;
-    if ('createdBy' in _v && typeof _v['createdBy'] !== 'string') return false;
-    if ('modifiedBy' in _v && typeof _v['modifiedBy'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createDefaultGLMappingResponsePropertyNames();
+    const optionalStringProperties = createDefaultGLMappingResponseOptionalProperties({ name: 'mappingId', nullable: false }, { name: 'eventType', nullable: false }, { name: 'organizationId', nullable: false }, { name: 'debitAccountId', nullable: false }, { name: 'debitAccountCode', nullable: false }, { name: 'debitAccountName', nullable: false }, { name: 'creditAccountId', nullable: false }, { name: 'creditAccountCode', nullable: false }, { name: 'creditAccountName', nullable: false }, { name: 'description', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'modifiedBy', nullable: false }, );
+    const optionalNumberProperties = createDefaultGLMappingResponseOptionalProperties();
+    const optionalBooleanProperties = createDefaultGLMappingResponseOptionalProperties({ name: 'active', nullable: false }, );
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalDefaultGLMappingResponsePropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalDefaultGLMappingResponsePropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalDefaultGLMappingResponsePropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

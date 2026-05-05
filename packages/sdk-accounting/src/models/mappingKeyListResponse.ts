@@ -18,13 +18,52 @@ export interface MappingKeyListResponse {
     totalPages?: number;
 }
 
+function isOptionalMappingKeyListResponsePropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type MappingKeyListResponseOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createMappingKeyListResponsePropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createMappingKeyListResponseOptionalProperties(
+    ...properties: MappingKeyListResponseOptionalProperty[]
+): ReadonlyArray<MappingKeyListResponseOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfMappingKeyListResponse(value: object): value is MappingKeyListResponse {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('totalCount' in _v && typeof _v['totalCount'] !== 'number') return false;
-    if ('pageNumber' in _v && typeof _v['pageNumber'] !== 'number') return false;
-    if ('pageSize' in _v && typeof _v['pageSize'] !== 'number') return false;
-    if ('totalPages' in _v && typeof _v['totalPages'] !== 'number') return false;
-    return true;
+
+    const requiredProperties = createMappingKeyListResponsePropertyNames();
+    const optionalStringProperties = createMappingKeyListResponseOptionalProperties();
+    const optionalNumberProperties = createMappingKeyListResponseOptionalProperties({ name: 'totalCount', nullable: false }, { name: 'pageNumber', nullable: false }, { name: 'pageSize', nullable: false }, { name: 'totalPages', nullable: false }, );
+    const optionalBooleanProperties = createMappingKeyListResponseOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalMappingKeyListResponsePropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalMappingKeyListResponsePropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalMappingKeyListResponsePropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

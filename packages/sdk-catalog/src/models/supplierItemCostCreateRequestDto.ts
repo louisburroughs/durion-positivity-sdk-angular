@@ -36,16 +36,52 @@ export interface SupplierItemCostCreateRequestDto {
     tiers?: Array<CostTierDto>;
 }
 
+function isOptionalSupplierItemCostCreateRequestDtoPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type SupplierItemCostCreateRequestDtoOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createSupplierItemCostCreateRequestDtoPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createSupplierItemCostCreateRequestDtoOptionalProperties(
+    ...properties: SupplierItemCostCreateRequestDtoOptionalProperty[]
+): ReadonlyArray<SupplierItemCostCreateRequestDtoOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfSupplierItemCostCreateRequestDto(value: object): value is SupplierItemCostCreateRequestDto {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if (!('supplierId' in _v) || _v['supplierId'] === undefined) return false;
-    if ('supplierId' in _v && typeof _v['supplierId'] !== 'string') return false;
-    if (!('itemId' in _v) || _v['itemId'] === undefined) return false;
-    if ('itemId' in _v && typeof _v['itemId'] !== 'string') return false;
-    if (!('currencyCode' in _v) || _v['currencyCode'] === undefined) return false;
-    if ('currencyCode' in _v && typeof _v['currencyCode'] !== 'string') return false;
-    if ('baseCost' in _v && typeof _v['baseCost'] !== 'number') return false;
-    return true;
+
+    const requiredProperties = createSupplierItemCostCreateRequestDtoPropertyNames('supplierId', 'itemId', 'currencyCode', );
+    const optionalStringProperties = createSupplierItemCostCreateRequestDtoOptionalProperties({ name: 'supplierId', nullable: false }, { name: 'itemId', nullable: false }, { name: 'currencyCode', nullable: false }, );
+    const optionalNumberProperties = createSupplierItemCostCreateRequestDtoOptionalProperties({ name: 'baseCost', nullable: false }, );
+    const optionalBooleanProperties = createSupplierItemCostCreateRequestDtoOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalSupplierItemCostCreateRequestDtoPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalSupplierItemCostCreateRequestDtoPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalSupplierItemCostCreateRequestDtoPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

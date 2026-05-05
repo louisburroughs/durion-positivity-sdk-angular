@@ -15,11 +15,52 @@ export interface Pageable {
     sort?: Array<string>;
 }
 
+function isOptionalPageablePropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type PageableOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createPageablePropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createPageableOptionalProperties(
+    ...properties: PageableOptionalProperty[]
+): ReadonlyArray<PageableOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfPageable(value: object): value is Pageable {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('page' in _v && typeof _v['page'] !== 'number') return false;
-    if ('size' in _v && typeof _v['size'] !== 'number') return false;
-    return true;
+
+    const requiredProperties = createPageablePropertyNames();
+    const optionalStringProperties = createPageableOptionalProperties();
+    const optionalNumberProperties = createPageableOptionalProperties({ name: 'page', nullable: false }, { name: 'size', nullable: false }, );
+    const optionalBooleanProperties = createPageableOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalPageablePropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalPageablePropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalPageablePropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

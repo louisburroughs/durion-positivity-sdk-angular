@@ -14,11 +14,52 @@ export interface PostalCodeEntry {
     countryCode?: string;
 }
 
+function isOptionalPostalCodeEntryPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type PostalCodeEntryOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createPostalCodeEntryPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createPostalCodeEntryOptionalProperties(
+    ...properties: PostalCodeEntryOptionalProperty[]
+): ReadonlyArray<PostalCodeEntryOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfPostalCodeEntry(value: object): value is PostalCodeEntry {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('postalCode' in _v && typeof _v['postalCode'] !== 'string') return false;
-    if ('countryCode' in _v && typeof _v['countryCode'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createPostalCodeEntryPropertyNames();
+    const optionalStringProperties = createPostalCodeEntryOptionalProperties({ name: 'postalCode', nullable: false }, { name: 'countryCode', nullable: false }, );
+    const optionalNumberProperties = createPostalCodeEntryOptionalProperties();
+    const optionalBooleanProperties = createPostalCodeEntryOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalPostalCodeEntryPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalPostalCodeEntryPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalPostalCodeEntryPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

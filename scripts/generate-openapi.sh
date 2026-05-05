@@ -216,6 +216,49 @@ cleanup_inventory_duplicate_exports() {
 	fi
 }
 
+gateway_base_path_for_module() {
+	case "$1" in
+		accounting) echo "http://api-gateway.local/accounting" ;;
+		bulk-loader) echo "http://api-gateway.local/bulk-loader" ;;
+		catalog) echo "http://api-gateway.local/catalog" ;;
+		customer) echo "http://api-gateway.local/customer" ;;
+		event-receiver) echo "http://api-gateway.local/event-receiver" ;;
+		image) echo "http://api-gateway.local/image" ;;
+		inquiry) echo "http://api-gateway.local/inquiry" ;;
+		inventory) echo "http://api-gateway.local/inventory" ;;
+		invoice) echo "http://api-gateway.local/invoice" ;;
+		location) echo "http://api-gateway.local/location" ;;
+		order) echo "http://api-gateway.local/order" ;;
+		people) echo "http://api-gateway.local/people" ;;
+		price) echo "http://api-gateway.local/price" ;;
+		security) echo "http://api-gateway.local/security-service" ;;
+		shop-manager) echo "http://api-gateway.local/shop-manager" ;;
+		vehicle-fitment) echo "http://api-gateway.local/vehicle-fitment" ;;
+		vehicle-inventory) echo "http://api-gateway.local/vehicle-inventory" ;;
+		workorder) echo "http://api-gateway.local/workorder" ;;
+		*) return 1 ;;
+	esac
+}
+
+apply_gateway_base_path_default() {
+	local module_name="$1"
+	local package_dir="packages/sdk-${module_name}"
+	local api_base_service="${package_dir}/api.base.service.ts"
+	local gateway_base_path
+
+	if ! gateway_base_path="$(gateway_base_path_for_module "${module_name}")"; then
+		return 0
+	fi
+
+	if [[ ! -f "${api_base_service}" ]]; then
+		echo "[generate] Missing ${api_base_service}; cannot apply gateway base path default" >&2
+		return 1
+	fi
+
+	sed -i "s|protected basePath = '.*';|protected basePath = '${gateway_base_path}';|" "${api_base_service}"
+	echo "[generate] Patched sdk-${module_name} basePath default -> ${gateway_base_path}"
+}
+
 if [[ -n "$module" ]]; then
 	# Validate the provided module name
 	valid=false
@@ -245,6 +288,7 @@ if [[ -n "$module" ]]; then
 	cleanup_legacy_fetch_apis "$module"
 	cleanup_orphan_js "$module"
 	ensure_models_are_modules "$module"
+	apply_gateway_base_path_default "$module"
 	write_src_index "$module"
 	patch_package_dependencies "$module"
 else
@@ -266,6 +310,7 @@ else
 		cleanup_legacy_fetch_apis "$m"
 		cleanup_orphan_js "$m"
 		ensure_models_are_modules "$m"
+		apply_gateway_base_path_default "$m"
 		write_src_index "$m"
 		patch_package_dependencies "$m"
 	done

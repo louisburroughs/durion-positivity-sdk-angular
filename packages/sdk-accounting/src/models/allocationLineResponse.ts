@@ -31,13 +31,52 @@ export interface AllocationLineResponse {
     allocationSequence?: number;
 }
 
+function isOptionalAllocationLineResponsePropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type AllocationLineResponseOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createAllocationLineResponsePropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createAllocationLineResponseOptionalProperties(
+    ...properties: AllocationLineResponseOptionalProperty[]
+): ReadonlyArray<AllocationLineResponseOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfAllocationLineResponse(value: object): value is AllocationLineResponse {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('allocationId' in _v && typeof _v['allocationId'] !== 'string') return false;
-    if ('vendorBillId' in _v && typeof _v['vendorBillId'] !== 'string') return false;
-    if ('appliedAmount' in _v && typeof _v['appliedAmount'] !== 'number') return false;
-    if ('allocationSequence' in _v && typeof _v['allocationSequence'] !== 'number') return false;
-    return true;
+
+    const requiredProperties = createAllocationLineResponsePropertyNames();
+    const optionalStringProperties = createAllocationLineResponseOptionalProperties({ name: 'allocationId', nullable: false }, { name: 'vendorBillId', nullable: false }, );
+    const optionalNumberProperties = createAllocationLineResponseOptionalProperties({ name: 'appliedAmount', nullable: false }, { name: 'allocationSequence', nullable: false }, );
+    const optionalBooleanProperties = createAllocationLineResponseOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalAllocationLineResponsePropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalAllocationLineResponsePropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalAllocationLineResponsePropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

@@ -20,14 +20,52 @@ export interface PagedResponseJournalEntryResponse {
     totalElements?: number;
 }
 
+function isOptionalPagedResponseJournalEntryResponsePropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type PagedResponseJournalEntryResponseOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createPagedResponseJournalEntryResponsePropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createPagedResponseJournalEntryResponseOptionalProperties(
+    ...properties: PagedResponseJournalEntryResponseOptionalProperty[]
+): ReadonlyArray<PagedResponseJournalEntryResponseOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfPagedResponseJournalEntryResponse(value: object): value is PagedResponseJournalEntryResponse {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('pageNumber' in _v && typeof _v['pageNumber'] !== 'number') return false;
-    if ('pageSize' in _v && typeof _v['pageSize'] !== 'number') return false;
-    if ('totalCount' in _v && typeof _v['totalCount'] !== 'number') return false;
-    if ('totalPages' in _v && typeof _v['totalPages'] !== 'number') return false;
-    if ('totalElements' in _v && typeof _v['totalElements'] !== 'number') return false;
-    return true;
+
+    const requiredProperties = createPagedResponseJournalEntryResponsePropertyNames();
+    const optionalStringProperties = createPagedResponseJournalEntryResponseOptionalProperties();
+    const optionalNumberProperties = createPagedResponseJournalEntryResponseOptionalProperties({ name: 'pageNumber', nullable: false }, { name: 'pageSize', nullable: false }, { name: 'totalCount', nullable: false }, { name: 'totalPages', nullable: false }, { name: 'totalElements', nullable: false }, );
+    const optionalBooleanProperties = createPagedResponseJournalEntryResponseOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalPagedResponseJournalEntryResponsePropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalPagedResponseJournalEntryResponsePropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalPagedResponseJournalEntryResponsePropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

@@ -28,23 +28,52 @@ export enum CancellationRequestCancellationTypeEnum {
 
 
 
+function isOptionalCancellationRequestPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type CancellationRequestOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createCancellationRequestPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createCancellationRequestOptionalProperties(
+    ...properties: CancellationRequestOptionalProperty[]
+): ReadonlyArray<CancellationRequestOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfCancellationRequest(value: object): value is CancellationRequest {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('orderId' in _v && typeof _v['orderId'] !== 'string') return false;
-    if ('invoiceId' in _v && typeof _v['invoiceId'] !== 'string') return false;
-    if (!('cancellationType' in _v) || _v['cancellationType'] === undefined) return false;
-    if ('cancellationType' in _v && typeof _v['cancellationType'] !== 'string') return false;
-    if (!('beforeSnapshot' in _v) || _v['beforeSnapshot'] === undefined) return false;
-    if ('beforeSnapshot' in _v && typeof _v['beforeSnapshot'] !== 'string') return false;
-    if (!('afterSnapshot' in _v) || _v['afterSnapshot'] === undefined) return false;
-    if ('afterSnapshot' in _v && typeof _v['afterSnapshot'] !== 'string') return false;
-    if ('partialPaymentInfo' in _v && typeof _v['partialPaymentInfo'] !== 'string') return false;
-    if ('actorId' in _v && typeof _v['actorId'] !== 'string') return false;
-    if (!('actorRole' in _v) || _v['actorRole'] === undefined) return false;
-    if ('actorRole' in _v && typeof _v['actorRole'] !== 'string') return false;
-    if (!('reason' in _v) || _v['reason'] === undefined) return false;
-    if ('reason' in _v && typeof _v['reason'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createCancellationRequestPropertyNames('cancellationType', 'beforeSnapshot', 'afterSnapshot', 'actorRole', 'reason', );
+    const optionalStringProperties = createCancellationRequestOptionalProperties({ name: 'orderId', nullable: false }, { name: 'invoiceId', nullable: false }, { name: 'cancellationType', nullable: false }, { name: 'beforeSnapshot', nullable: false }, { name: 'afterSnapshot', nullable: false }, { name: 'partialPaymentInfo', nullable: false }, { name: 'actorId', nullable: false }, { name: 'actorRole', nullable: false }, { name: 'reason', nullable: false }, );
+    const optionalNumberProperties = createCancellationRequestOptionalProperties();
+    const optionalBooleanProperties = createCancellationRequestOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalCancellationRequestPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalCancellationRequestPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalCancellationRequestPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

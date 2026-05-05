@@ -17,11 +17,52 @@ export interface VehicleTransferRequest {
     notes?: string;
 }
 
+function isOptionalVehicleTransferRequestPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type VehicleTransferRequestOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createVehicleTransferRequestPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createVehicleTransferRequestOptionalProperties(
+    ...properties: VehicleTransferRequestOptionalProperty[]
+): ReadonlyArray<VehicleTransferRequestOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfVehicleTransferRequest(value: object): value is VehicleTransferRequest {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('targetCustomerId' in _v && typeof _v['targetCustomerId'] !== 'string') return false;
-    if ('notes' in _v && typeof _v['notes'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createVehicleTransferRequestPropertyNames();
+    const optionalStringProperties = createVehicleTransferRequestOptionalProperties({ name: 'targetCustomerId', nullable: false }, { name: 'notes', nullable: false }, );
+    const optionalNumberProperties = createVehicleTransferRequestOptionalProperties();
+    const optionalBooleanProperties = createVehicleTransferRequestOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalVehicleTransferRequestPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalVehicleTransferRequestPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalVehicleTransferRequestPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

@@ -14,10 +14,52 @@ export interface RolePermissionsRequest {
     permissionNames?: Set<string>;
 }
 
+function isOptionalRolePermissionsRequestPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type RolePermissionsRequestOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createRolePermissionsRequestPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createRolePermissionsRequestOptionalProperties(
+    ...properties: RolePermissionsRequestOptionalProperty[]
+): ReadonlyArray<RolePermissionsRequestOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfRolePermissionsRequest(value: object): value is RolePermissionsRequest {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('roleId' in _v && typeof _v['roleId'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createRolePermissionsRequestPropertyNames();
+    const optionalStringProperties = createRolePermissionsRequestOptionalProperties({ name: 'roleId', nullable: false }, );
+    const optionalNumberProperties = createRolePermissionsRequestOptionalProperties();
+    const optionalBooleanProperties = createRolePermissionsRequestOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalRolePermissionsRequestPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalRolePermissionsRequestPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalRolePermissionsRequestPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

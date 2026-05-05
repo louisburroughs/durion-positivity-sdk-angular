@@ -35,13 +35,52 @@ export interface BulkCorrectionResponse {
     rejections?: Array<string>;
 }
 
+function isOptionalBulkCorrectionResponsePropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type BulkCorrectionResponseOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createBulkCorrectionResponsePropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createBulkCorrectionResponseOptionalProperties(
+    ...properties: BulkCorrectionResponseOptionalProperty[]
+): ReadonlyArray<BulkCorrectionResponseOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfBulkCorrectionResponse(value: object): value is BulkCorrectionResponse {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('jobId' in _v && typeof _v['jobId'] !== 'string') return false;
-    if ('submittedCount' in _v && typeof _v['submittedCount'] !== 'number') return false;
-    if ('acceptedCount' in _v && typeof _v['acceptedCount'] !== 'number') return false;
-    if ('rejectedCount' in _v && typeof _v['rejectedCount'] !== 'number') return false;
-    return true;
+
+    const requiredProperties = createBulkCorrectionResponsePropertyNames();
+    const optionalStringProperties = createBulkCorrectionResponseOptionalProperties({ name: 'jobId', nullable: false }, );
+    const optionalNumberProperties = createBulkCorrectionResponseOptionalProperties({ name: 'submittedCount', nullable: false }, { name: 'acceptedCount', nullable: false }, { name: 'rejectedCount', nullable: false }, );
+    const optionalBooleanProperties = createBulkCorrectionResponseOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalBulkCorrectionResponsePropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalBulkCorrectionResponsePropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalBulkCorrectionResponsePropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

@@ -108,24 +108,52 @@ export enum JournalEntryResponseStatusEnum {
 
 
 
+function isOptionalJournalEntryResponsePropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type JournalEntryResponseOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createJournalEntryResponsePropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createJournalEntryResponseOptionalProperties(
+    ...properties: JournalEntryResponseOptionalProperty[]
+): ReadonlyArray<JournalEntryResponseOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfJournalEntryResponse(value: object): value is JournalEntryResponse {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('journalEntryId' in _v && typeof _v['journalEntryId'] !== 'string') return false;
-    if ('status' in _v && typeof _v['status'] !== 'string') return false;
-    if ('description' in _v && typeof _v['description'] !== 'string') return false;
-    if ('sourceEventId' in _v && typeof _v['sourceEventId'] !== 'string') return false;
-    if ('sourceEventType' in _v && typeof _v['sourceEventType'] !== 'string') return false;
-    if ('postingRuleSetId' in _v && typeof _v['postingRuleSetId'] !== 'string') return false;
-    if ('postingRuleVersionId' in _v && typeof _v['postingRuleVersionId'] !== 'string') return false;
-    if ('reversalJournalEntryId' in _v && typeof _v['reversalJournalEntryId'] !== 'string') return false;
-    if ('reversedByJournalEntryId' in _v && typeof _v['reversedByJournalEntryId'] !== 'string') return false;
-    if ('totalDebits' in _v && typeof _v['totalDebits'] !== 'number') return false;
-    if ('totalCredits' in _v && typeof _v['totalCredits'] !== 'number') return false;
-    if ('isBalanced' in _v && typeof _v['isBalanced'] !== 'boolean') return false;
-    if ('createdBy' in _v && typeof _v['createdBy'] !== 'string') return false;
-    if ('modifiedBy' in _v && typeof _v['modifiedBy'] !== 'string') return false;
-    if ('postedBy' in _v && typeof _v['postedBy'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createJournalEntryResponsePropertyNames();
+    const optionalStringProperties = createJournalEntryResponseOptionalProperties({ name: 'journalEntryId', nullable: false }, { name: 'status', nullable: false }, { name: 'description', nullable: false }, { name: 'sourceEventId', nullable: false }, { name: 'sourceEventType', nullable: false }, { name: 'postingRuleSetId', nullable: false }, { name: 'postingRuleVersionId', nullable: false }, { name: 'reversalJournalEntryId', nullable: false }, { name: 'reversedByJournalEntryId', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'modifiedBy', nullable: false }, { name: 'postedBy', nullable: false }, );
+    const optionalNumberProperties = createJournalEntryResponseOptionalProperties({ name: 'totalDebits', nullable: false }, { name: 'totalCredits', nullable: false }, );
+    const optionalBooleanProperties = createJournalEntryResponseOptionalProperties({ name: 'isBalanced', nullable: false }, );
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalJournalEntryResponsePropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalJournalEntryResponsePropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalJournalEntryResponsePropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

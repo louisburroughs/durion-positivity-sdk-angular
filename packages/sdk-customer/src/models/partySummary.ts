@@ -18,15 +18,52 @@ export interface PartySummary {
     createdAt?: string;
 }
 
+function isOptionalPartySummaryPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type PartySummaryOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createPartySummaryPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createPartySummaryOptionalProperties(
+    ...properties: PartySummaryOptionalProperty[]
+): ReadonlyArray<PartySummaryOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfPartySummary(value: object): value is PartySummary {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('partyId' in _v && typeof _v['partyId'] !== 'string') return false;
-    if ('legalName' in _v && typeof _v['legalName'] !== 'string') return false;
-    if ('displayName' in _v && typeof _v['displayName'] !== 'string') return false;
-    if ('partyType' in _v && typeof _v['partyType'] !== 'string') return false;
-    if ('status' in _v && typeof _v['status'] !== 'string') return false;
-    if ('createdAt' in _v && typeof _v['createdAt'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createPartySummaryPropertyNames();
+    const optionalStringProperties = createPartySummaryOptionalProperties({ name: 'partyId', nullable: false }, { name: 'legalName', nullable: false }, { name: 'displayName', nullable: false }, { name: 'partyType', nullable: false }, { name: 'status', nullable: false }, { name: 'createdAt', nullable: false }, );
+    const optionalNumberProperties = createPartySummaryOptionalProperties();
+    const optionalBooleanProperties = createPartySummaryOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalPartySummaryPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalPartySummaryPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalPartySummaryPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

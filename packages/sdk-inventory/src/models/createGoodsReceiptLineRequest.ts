@@ -17,17 +17,52 @@ export interface CreateGoodsReceiptLineRequest {
     lotNumber?: string;
 }
 
+function isOptionalCreateGoodsReceiptLineRequestPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type CreateGoodsReceiptLineRequestOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createCreateGoodsReceiptLineRequestPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createCreateGoodsReceiptLineRequestOptionalProperties(
+    ...properties: CreateGoodsReceiptLineRequestOptionalProperty[]
+): ReadonlyArray<CreateGoodsReceiptLineRequestOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfCreateGoodsReceiptLineRequest(value: object): value is CreateGoodsReceiptLineRequest {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('poLineId' in _v && typeof _v['poLineId'] !== 'string') return false;
-    if (!('sku' in _v) || _v['sku'] === undefined) return false;
-    if ('sku' in _v && typeof _v['sku'] !== 'string') return false;
-    if (!('quantityReceived' in _v) || _v['quantityReceived'] === undefined) return false;
-    if ('quantityReceived' in _v && typeof _v['quantityReceived'] !== 'number') return false;
-    if (!('unitCostMinor' in _v) || _v['unitCostMinor'] === undefined) return false;
-    if ('unitCostMinor' in _v && typeof _v['unitCostMinor'] !== 'number') return false;
-    if ('lotNumber' in _v && typeof _v['lotNumber'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createCreateGoodsReceiptLineRequestPropertyNames('sku', 'quantityReceived', 'unitCostMinor', );
+    const optionalStringProperties = createCreateGoodsReceiptLineRequestOptionalProperties({ name: 'poLineId', nullable: false }, { name: 'sku', nullable: false }, { name: 'lotNumber', nullable: false }, );
+    const optionalNumberProperties = createCreateGoodsReceiptLineRequestOptionalProperties({ name: 'quantityReceived', nullable: false }, { name: 'unitCostMinor', nullable: false }, );
+    const optionalBooleanProperties = createCreateGoodsReceiptLineRequestOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalCreateGoodsReceiptLineRequestPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalCreateGoodsReceiptLineRequestPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalCreateGoodsReceiptLineRequestPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

@@ -19,19 +19,52 @@ export interface CreateAsnLineRequest {
     lotNumber?: string;
 }
 
+function isOptionalCreateAsnLineRequestPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type CreateAsnLineRequestOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createCreateAsnLineRequestPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createCreateAsnLineRequestOptionalProperties(
+    ...properties: CreateAsnLineRequestOptionalProperty[]
+): ReadonlyArray<CreateAsnLineRequestOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfCreateAsnLineRequest(value: object): value is CreateAsnLineRequest {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if (!('poId' in _v) || _v['poId'] === undefined) return false;
-    if ('poId' in _v && typeof _v['poId'] !== 'string') return false;
-    if ('poLineId' in _v && typeof _v['poLineId'] !== 'string') return false;
-    if (!('sku' in _v) || _v['sku'] === undefined) return false;
-    if ('sku' in _v && typeof _v['sku'] !== 'string') return false;
-    if (!('quantityShipped' in _v) || _v['quantityShipped'] === undefined) return false;
-    if ('quantityShipped' in _v && typeof _v['quantityShipped'] !== 'number') return false;
-    if ('unitOfMeasure' in _v && typeof _v['unitOfMeasure'] !== 'string') return false;
-    if ('unitCostMinor' in _v && typeof _v['unitCostMinor'] !== 'number') return false;
-    if ('lotNumber' in _v && typeof _v['lotNumber'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createCreateAsnLineRequestPropertyNames('poId', 'sku', 'quantityShipped', );
+    const optionalStringProperties = createCreateAsnLineRequestOptionalProperties({ name: 'poId', nullable: false }, { name: 'poLineId', nullable: false }, { name: 'sku', nullable: false }, { name: 'unitOfMeasure', nullable: false }, { name: 'lotNumber', nullable: false }, );
+    const optionalNumberProperties = createCreateAsnLineRequestOptionalProperties({ name: 'quantityShipped', nullable: false }, { name: 'unitCostMinor', nullable: false }, );
+    const optionalBooleanProperties = createCreateAsnLineRequestOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalCreateAsnLineRequestPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalCreateAsnLineRequestPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalCreateAsnLineRequestPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

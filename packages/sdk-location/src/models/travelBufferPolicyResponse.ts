@@ -19,14 +19,52 @@ export interface TravelBufferPolicyResponse {
     updatedAt?: string;
 }
 
+function isOptionalTravelBufferPolicyResponsePropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type TravelBufferPolicyResponseOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createTravelBufferPolicyResponsePropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createTravelBufferPolicyResponseOptionalProperties(
+    ...properties: TravelBufferPolicyResponseOptionalProperty[]
+): ReadonlyArray<TravelBufferPolicyResponseOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfTravelBufferPolicyResponse(value: object): value is TravelBufferPolicyResponse {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('id' in _v && typeof _v['id'] !== 'string') return false;
-    if ('name' in _v && typeof _v['name'] !== 'string') return false;
-    if ('bufferType' in _v && typeof _v['bufferType'] !== 'string') return false;
-    if ('bufferValue' in _v && typeof _v['bufferValue'] !== 'number') return false;
-    if ('notes' in _v && typeof _v['notes'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createTravelBufferPolicyResponsePropertyNames();
+    const optionalStringProperties = createTravelBufferPolicyResponseOptionalProperties({ name: 'id', nullable: false }, { name: 'name', nullable: false }, { name: 'bufferType', nullable: false }, { name: 'notes', nullable: false }, );
+    const optionalNumberProperties = createTravelBufferPolicyResponseOptionalProperties({ name: 'bufferValue', nullable: false }, );
+    const optionalBooleanProperties = createTravelBufferPolicyResponseOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalTravelBufferPolicyResponsePropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalTravelBufferPolicyResponsePropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalTravelBufferPolicyResponsePropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

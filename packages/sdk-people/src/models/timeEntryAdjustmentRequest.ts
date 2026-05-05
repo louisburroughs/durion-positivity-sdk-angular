@@ -43,16 +43,52 @@ export interface TimeEntryAdjustmentRequest {
     createdBy?: string;
 }
 
+function isOptionalTimeEntryAdjustmentRequestPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type TimeEntryAdjustmentRequestOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createTimeEntryAdjustmentRequestPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createTimeEntryAdjustmentRequestOptionalProperties(
+    ...properties: TimeEntryAdjustmentRequestOptionalProperty[]
+): ReadonlyArray<TimeEntryAdjustmentRequestOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfTimeEntryAdjustmentRequest(value: object): value is TimeEntryAdjustmentRequest {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if (!('timeEntryId' in _v) || _v['timeEntryId'] === undefined) return false;
-    if ('timeEntryId' in _v && typeof _v['timeEntryId'] !== 'string') return false;
-    if (!('reasonCode' in _v) || _v['reasonCode'] === undefined) return false;
-    if ('reasonCode' in _v && typeof _v['reasonCode'] !== 'string') return false;
-    if ('notes' in _v && typeof _v['notes'] !== 'string') return false;
-    if ('minutesDelta' in _v && typeof _v['minutesDelta'] !== 'number') return false;
-    if ('createdBy' in _v && typeof _v['createdBy'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createTimeEntryAdjustmentRequestPropertyNames('timeEntryId', 'reasonCode', );
+    const optionalStringProperties = createTimeEntryAdjustmentRequestOptionalProperties({ name: 'timeEntryId', nullable: false }, { name: 'reasonCode', nullable: false }, { name: 'notes', nullable: false }, { name: 'createdBy', nullable: false }, );
+    const optionalNumberProperties = createTimeEntryAdjustmentRequestOptionalProperties({ name: 'minutesDelta', nullable: false }, );
+    const optionalBooleanProperties = createTimeEntryAdjustmentRequestOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalTimeEntryAdjustmentRequestPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalTimeEntryAdjustmentRequestPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalTimeEntryAdjustmentRequestPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

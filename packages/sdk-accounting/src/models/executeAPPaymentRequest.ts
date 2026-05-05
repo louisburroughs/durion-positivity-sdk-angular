@@ -65,23 +65,52 @@ export enum ExecuteAPPaymentRequestPaymentMethodEnum {
 
 
 
+function isOptionalExecuteAPPaymentRequestPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type ExecuteAPPaymentRequestOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createExecuteAPPaymentRequestPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createExecuteAPPaymentRequestOptionalProperties(
+    ...properties: ExecuteAPPaymentRequestOptionalProperty[]
+): ReadonlyArray<ExecuteAPPaymentRequestOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfExecuteAPPaymentRequest(value: object): value is ExecuteAPPaymentRequest {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if (!('vendorId' in _v) || _v['vendorId'] === undefined) return false;
-    if ('vendorId' in _v && typeof _v['vendorId'] !== 'string') return false;
-    if (!('grossAmount' in _v) || _v['grossAmount'] === undefined) return false;
-    if ('grossAmount' in _v && typeof _v['grossAmount'] !== 'number') return false;
-    if ('feeAmount' in _v && typeof _v['feeAmount'] !== 'number') return false;
-    if ('netAmount' in _v && typeof _v['netAmount'] !== 'number') return false;
-    if (!('currency' in _v) || _v['currency'] === undefined) return false;
-    if ('currency' in _v && typeof _v['currency'] !== 'string') return false;
-    if (!('paymentRef' in _v) || _v['paymentRef'] === undefined) return false;
-    if ('paymentRef' in _v && typeof _v['paymentRef'] !== 'string') return false;
-    if (!('paymentMethod' in _v) || _v['paymentMethod'] === undefined) return false;
-    if ('paymentMethod' in _v && typeof _v['paymentMethod'] !== 'string') return false;
-    if ('paymentSource' in _v && typeof _v['paymentSource'] !== 'string') return false;
-    if ('memo' in _v && typeof _v['memo'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createExecuteAPPaymentRequestPropertyNames('vendorId', 'grossAmount', 'currency', 'paymentRef', 'paymentMethod', );
+    const optionalStringProperties = createExecuteAPPaymentRequestOptionalProperties({ name: 'vendorId', nullable: false }, { name: 'currency', nullable: false }, { name: 'paymentRef', nullable: false }, { name: 'paymentMethod', nullable: false }, { name: 'paymentSource', nullable: false }, { name: 'memo', nullable: false }, );
+    const optionalNumberProperties = createExecuteAPPaymentRequestOptionalProperties({ name: 'grossAmount', nullable: false }, { name: 'feeAmount', nullable: false }, { name: 'netAmount', nullable: false }, );
+    const optionalBooleanProperties = createExecuteAPPaymentRequestOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalExecuteAPPaymentRequestPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalExecuteAPPaymentRequestPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalExecuteAPPaymentRequestPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

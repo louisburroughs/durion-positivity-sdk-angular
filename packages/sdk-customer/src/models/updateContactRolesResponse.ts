@@ -17,14 +17,52 @@ export interface UpdateContactRolesResponse {
     updatedAt?: string;
 }
 
+function isOptionalUpdateContactRolesResponsePropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type UpdateContactRolesResponseOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createUpdateContactRolesResponsePropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createUpdateContactRolesResponseOptionalProperties(
+    ...properties: UpdateContactRolesResponseOptionalProperty[]
+): ReadonlyArray<UpdateContactRolesResponseOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfUpdateContactRolesResponse(value: object): value is UpdateContactRolesResponse {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('partyId' in _v && typeof _v['partyId'] !== 'string') return false;
-    if ('contactId' in _v && typeof _v['contactId'] !== 'string') return false;
-    if ('version' in _v && typeof _v['version'] !== 'string') return false;
-    if ('status' in _v && typeof _v['status'] !== 'string') return false;
-    if ('updatedAt' in _v && typeof _v['updatedAt'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createUpdateContactRolesResponsePropertyNames();
+    const optionalStringProperties = createUpdateContactRolesResponseOptionalProperties({ name: 'partyId', nullable: false }, { name: 'contactId', nullable: false }, { name: 'version', nullable: false }, { name: 'status', nullable: false }, { name: 'updatedAt', nullable: false }, );
+    const optionalNumberProperties = createUpdateContactRolesResponseOptionalProperties();
+    const optionalBooleanProperties = createUpdateContactRolesResponseOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalUpdateContactRolesResponsePropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalUpdateContactRolesResponsePropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalUpdateContactRolesResponsePropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

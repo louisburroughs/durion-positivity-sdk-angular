@@ -19,10 +19,52 @@ export interface TokenResponse {
     token?: string;
 }
 
+function isOptionalTokenResponsePropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type TokenResponseOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createTokenResponsePropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createTokenResponseOptionalProperties(
+    ...properties: TokenResponseOptionalProperty[]
+): ReadonlyArray<TokenResponseOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfTokenResponse(value: object): value is TokenResponse {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('token' in _v && typeof _v['token'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createTokenResponsePropertyNames();
+    const optionalStringProperties = createTokenResponseOptionalProperties({ name: 'token', nullable: false }, );
+    const optionalNumberProperties = createTokenResponseOptionalProperties();
+    const optionalBooleanProperties = createTokenResponseOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalTokenResponsePropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalTokenResponsePropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalTokenResponsePropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

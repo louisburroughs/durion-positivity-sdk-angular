@@ -39,15 +39,52 @@ export interface ResolveAccountTierRequest {
     forceRecalculation?: boolean;
 }
 
+function isOptionalResolveAccountTierRequestPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type ResolveAccountTierRequestOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createResolveAccountTierRequestPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createResolveAccountTierRequestOptionalProperties(
+    ...properties: ResolveAccountTierRequestOptionalProperty[]
+): ReadonlyArray<ResolveAccountTierRequestOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfResolveAccountTierRequest(value: object): value is ResolveAccountTierRequest {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('accountId' in _v && typeof _v['accountId'] !== 'string') return false;
-    if ('annualRevenue' in _v && typeof _v['annualRevenue'] !== 'number') return false;
-    if ('activeContractCount' in _v && typeof _v['activeContractCount'] !== 'number') return false;
-    if ('accountAgeMonths' in _v && typeof _v['accountAgeMonths'] !== 'number') return false;
-    if ('applyTier' in _v && typeof _v['applyTier'] !== 'boolean') return false;
-    if ('forceRecalculation' in _v && typeof _v['forceRecalculation'] !== 'boolean') return false;
-    return true;
+
+    const requiredProperties = createResolveAccountTierRequestPropertyNames();
+    const optionalStringProperties = createResolveAccountTierRequestOptionalProperties({ name: 'accountId', nullable: false }, );
+    const optionalNumberProperties = createResolveAccountTierRequestOptionalProperties({ name: 'annualRevenue', nullable: false }, { name: 'activeContractCount', nullable: false }, { name: 'accountAgeMonths', nullable: false }, );
+    const optionalBooleanProperties = createResolveAccountTierRequestOptionalProperties({ name: 'applyTier', nullable: false }, { name: 'forceRecalculation', nullable: false }, );
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalResolveAccountTierRequestPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalResolveAccountTierRequestPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalResolveAccountTierRequestPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

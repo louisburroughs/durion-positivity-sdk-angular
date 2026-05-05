@@ -39,15 +39,52 @@ export interface ProductSummary {
     manufacturerBrand?: string;
 }
 
+function isOptionalProductSummaryPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type ProductSummaryOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createProductSummaryPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createProductSummaryOptionalProperties(
+    ...properties: ProductSummaryOptionalProperty[]
+): ReadonlyArray<ProductSummaryOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfProductSummary(value: object): value is ProductSummary {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('productId' in _v && typeof _v['productId'] !== 'string') return false;
-    if ('name' in _v && typeof _v['name'] !== 'string') return false;
-    if ('sku' in _v && typeof _v['sku'] !== 'string') return false;
-    if ('category' in _v && typeof _v['category'] !== 'string') return false;
-    if ('thumbnailUrl' in _v && typeof _v['thumbnailUrl'] !== 'string') return false;
-    if ('manufacturerBrand' in _v && typeof _v['manufacturerBrand'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createProductSummaryPropertyNames();
+    const optionalStringProperties = createProductSummaryOptionalProperties({ name: 'productId', nullable: false }, { name: 'name', nullable: false }, { name: 'sku', nullable: false }, { name: 'category', nullable: false }, { name: 'thumbnailUrl', nullable: false }, { name: 'manufacturerBrand', nullable: false }, );
+    const optionalNumberProperties = createProductSummaryOptionalProperties();
+    const optionalBooleanProperties = createProductSummaryOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalProductSummaryPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalProductSummaryPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalProductSummaryPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

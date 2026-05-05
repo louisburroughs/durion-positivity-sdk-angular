@@ -17,12 +17,52 @@ export interface SearchVehiclesResponse {
     query?: string;
 }
 
+function isOptionalSearchVehiclesResponsePropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type SearchVehiclesResponseOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createSearchVehiclesResponsePropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createSearchVehiclesResponseOptionalProperties(
+    ...properties: SearchVehiclesResponseOptionalProperty[]
+): ReadonlyArray<SearchVehiclesResponseOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfSearchVehiclesResponse(value: object): value is SearchVehiclesResponse {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('totalCount' in _v && typeof _v['totalCount'] !== 'number') return false;
-    if ('hasMore' in _v && typeof _v['hasMore'] !== 'boolean') return false;
-    if ('query' in _v && typeof _v['query'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createSearchVehiclesResponsePropertyNames();
+    const optionalStringProperties = createSearchVehiclesResponseOptionalProperties({ name: 'query', nullable: false }, );
+    const optionalNumberProperties = createSearchVehiclesResponseOptionalProperties({ name: 'totalCount', nullable: false }, );
+    const optionalBooleanProperties = createSearchVehiclesResponseOptionalProperties({ name: 'hasMore', nullable: false }, );
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalSearchVehiclesResponsePropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalSearchVehiclesResponsePropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalSearchVehiclesResponsePropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

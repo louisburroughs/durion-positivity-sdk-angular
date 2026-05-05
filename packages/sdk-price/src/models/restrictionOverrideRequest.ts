@@ -28,21 +28,52 @@ export enum RestrictionOverrideRequestOverrideContextEnum {
 
 
 
+function isOptionalRestrictionOverrideRequestPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type RestrictionOverrideRequestOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createRestrictionOverrideRequestPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createRestrictionOverrideRequestOptionalProperties(
+    ...properties: RestrictionOverrideRequestOptionalProperty[]
+): ReadonlyArray<RestrictionOverrideRequestOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfRestrictionOverrideRequest(value: object): value is RestrictionOverrideRequest {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if (!('ruleId' in _v) || _v['ruleId'] === undefined) return false;
-    if ('ruleId' in _v && typeof _v['ruleId'] !== 'string') return false;
-    if (!('transactionId' in _v) || _v['transactionId'] === undefined) return false;
-    if ('transactionId' in _v && typeof _v['transactionId'] !== 'string') return false;
-    if (!('productId' in _v) || _v['productId'] === undefined) return false;
-    if ('productId' in _v && typeof _v['productId'] !== 'string') return false;
-    if (!('overrideContext' in _v) || _v['overrideContext'] === undefined) return false;
-    if ('overrideContext' in _v && typeof _v['overrideContext'] !== 'string') return false;
-    if (!('reasonCode' in _v) || _v['reasonCode'] === undefined) return false;
-    if ('reasonCode' in _v && typeof _v['reasonCode'] !== 'string') return false;
-    if ('notes' in _v && typeof _v['notes'] !== 'string') return false;
-    if ('approvedBy' in _v && typeof _v['approvedBy'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createRestrictionOverrideRequestPropertyNames('ruleId', 'transactionId', 'productId', 'overrideContext', 'reasonCode', );
+    const optionalStringProperties = createRestrictionOverrideRequestOptionalProperties({ name: 'ruleId', nullable: false }, { name: 'transactionId', nullable: false }, { name: 'productId', nullable: false }, { name: 'overrideContext', nullable: false }, { name: 'reasonCode', nullable: false }, { name: 'notes', nullable: false }, { name: 'approvedBy', nullable: false }, );
+    const optionalNumberProperties = createRestrictionOverrideRequestOptionalProperties();
+    const optionalBooleanProperties = createRestrictionOverrideRequestOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalRestrictionOverrideRequestPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalRestrictionOverrideRequestPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalRestrictionOverrideRequestPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

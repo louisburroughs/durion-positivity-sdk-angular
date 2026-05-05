@@ -28,15 +28,52 @@ export enum InvoiceStatusResponseStatusEnum {
 
 
 
+function isOptionalInvoiceStatusResponsePropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type InvoiceStatusResponseOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createInvoiceStatusResponsePropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createInvoiceStatusResponseOptionalProperties(
+    ...properties: InvoiceStatusResponseOptionalProperty[]
+): ReadonlyArray<InvoiceStatusResponseOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfInvoiceStatusResponse(value: object): value is InvoiceStatusResponse {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('invoiceId' in _v && typeof _v['invoiceId'] !== 'string') return false;
-    if ('status' in _v && typeof _v['status'] !== 'string') return false;
-    if ('totalPaid' in _v && typeof _v['totalPaid'] !== 'number') return false;
-    if ('invoiceTotal' in _v && typeof _v['invoiceTotal'] !== 'number') return false;
-    if ('remainingBalance' in _v && typeof _v['remainingBalance'] !== 'number') return false;
-    if ('latestTransactionReference' in _v && typeof _v['latestTransactionReference'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createInvoiceStatusResponsePropertyNames();
+    const optionalStringProperties = createInvoiceStatusResponseOptionalProperties({ name: 'invoiceId', nullable: false }, { name: 'status', nullable: false }, { name: 'latestTransactionReference', nullable: false }, );
+    const optionalNumberProperties = createInvoiceStatusResponseOptionalProperties({ name: 'totalPaid', nullable: false }, { name: 'invoiceTotal', nullable: false }, { name: 'remainingBalance', nullable: false }, );
+    const optionalBooleanProperties = createInvoiceStatusResponseOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalInvoiceStatusResponsePropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalInvoiceStatusResponsePropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalInvoiceStatusResponsePropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

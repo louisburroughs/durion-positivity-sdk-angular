@@ -36,15 +36,52 @@ export interface JournalEntryLineRequest {
     singleSidedAmount?: boolean;
 }
 
+function isOptionalJournalEntryLineRequestPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type JournalEntryLineRequestOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createJournalEntryLineRequestPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createJournalEntryLineRequestOptionalProperties(
+    ...properties: JournalEntryLineRequestOptionalProperty[]
+): ReadonlyArray<JournalEntryLineRequestOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfJournalEntryLineRequest(value: object): value is JournalEntryLineRequest {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if (!('glAccountId' in _v) || _v['glAccountId'] === undefined) return false;
-    if ('glAccountId' in _v && typeof _v['glAccountId'] !== 'string') return false;
-    if ('debitAmount' in _v && typeof _v['debitAmount'] !== 'number') return false;
-    if ('creditAmount' in _v && typeof _v['creditAmount'] !== 'number') return false;
-    if ('description' in _v && typeof _v['description'] !== 'string') return false;
-    if ('singleSidedAmount' in _v && typeof _v['singleSidedAmount'] !== 'boolean') return false;
-    return true;
+
+    const requiredProperties = createJournalEntryLineRequestPropertyNames('glAccountId', );
+    const optionalStringProperties = createJournalEntryLineRequestOptionalProperties({ name: 'glAccountId', nullable: false }, { name: 'description', nullable: false }, );
+    const optionalNumberProperties = createJournalEntryLineRequestOptionalProperties({ name: 'debitAmount', nullable: false }, { name: 'creditAmount', nullable: false }, );
+    const optionalBooleanProperties = createJournalEntryLineRequestOptionalProperties({ name: 'singleSidedAmount', nullable: false }, );
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalJournalEntryLineRequestPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalJournalEntryLineRequestPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalJournalEntryLineRequestPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

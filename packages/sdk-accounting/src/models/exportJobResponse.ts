@@ -39,13 +39,52 @@ export interface ExportJobResponse {
     errorMessage?: string | null;
 }
 
+function isOptionalExportJobResponsePropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type ExportJobResponseOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createExportJobResponsePropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createExportJobResponseOptionalProperties(
+    ...properties: ExportJobResponseOptionalProperty[]
+): ReadonlyArray<ExportJobResponseOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfExportJobResponse(value: object): value is ExportJobResponse {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('jobId' in _v && typeof _v['jobId'] !== 'string') return false;
-    if ('status' in _v && typeof _v['status'] !== 'string') return false;
-    if ('downloadUrl' in _v && _v['downloadUrl'] !== null && typeof _v['downloadUrl'] !== 'string') return false;
-    if ('errorMessage' in _v && _v['errorMessage'] !== null && typeof _v['errorMessage'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createExportJobResponsePropertyNames();
+    const optionalStringProperties = createExportJobResponseOptionalProperties({ name: 'jobId', nullable: false }, { name: 'status', nullable: false }, { name: 'downloadUrl', nullable: true }, { name: 'errorMessage', nullable: true }, );
+    const optionalNumberProperties = createExportJobResponseOptionalProperties();
+    const optionalBooleanProperties = createExportJobResponseOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalExportJobResponsePropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalExportJobResponsePropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalExportJobResponsePropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

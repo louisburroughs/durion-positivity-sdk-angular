@@ -18,15 +18,52 @@ export interface AdjustmentRequestResponse {
     status?: string;
 }
 
+function isOptionalAdjustmentRequestResponsePropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type AdjustmentRequestResponseOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createAdjustmentRequestResponsePropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createAdjustmentRequestResponseOptionalProperties(
+    ...properties: AdjustmentRequestResponseOptionalProperty[]
+): ReadonlyArray<AdjustmentRequestResponseOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfAdjustmentRequestResponse(value: object): value is AdjustmentRequestResponse {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('adjustmentRequestId' in _v && typeof _v['adjustmentRequestId'] !== 'string') return false;
-    if ('productSku' in _v && typeof _v['productSku'] !== 'string') return false;
-    if ('locationId' in _v && typeof _v['locationId'] !== 'string') return false;
-    if ('quantity' in _v && typeof _v['quantity'] !== 'number') return false;
-    if ('reasonCode' in _v && typeof _v['reasonCode'] !== 'string') return false;
-    if ('status' in _v && typeof _v['status'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createAdjustmentRequestResponsePropertyNames();
+    const optionalStringProperties = createAdjustmentRequestResponseOptionalProperties({ name: 'adjustmentRequestId', nullable: false }, { name: 'productSku', nullable: false }, { name: 'locationId', nullable: false }, { name: 'reasonCode', nullable: false }, { name: 'status', nullable: false }, );
+    const optionalNumberProperties = createAdjustmentRequestResponseOptionalProperties({ name: 'quantity', nullable: false }, );
+    const optionalBooleanProperties = createAdjustmentRequestResponseOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalAdjustmentRequestResponsePropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalAdjustmentRequestResponsePropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalAdjustmentRequestResponsePropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

@@ -61,16 +61,52 @@ export enum VendorBillSummaryResponseStatusEnum {
 
 
 
+function isOptionalVendorBillSummaryResponsePropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type VendorBillSummaryResponseOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createVendorBillSummaryResponsePropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createVendorBillSummaryResponseOptionalProperties(
+    ...properties: VendorBillSummaryResponseOptionalProperty[]
+): ReadonlyArray<VendorBillSummaryResponseOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfVendorBillSummaryResponse(value: object): value is VendorBillSummaryResponse {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('vendorBillId' in _v && typeof _v['vendorBillId'] !== 'string') return false;
-    if ('vendorId' in _v && typeof _v['vendorId'] !== 'string') return false;
-    if ('vendorName' in _v && typeof _v['vendorName'] !== 'string') return false;
-    if ('billNumber' in _v && typeof _v['billNumber'] !== 'string') return false;
-    if ('totalAmount' in _v && typeof _v['totalAmount'] !== 'number') return false;
-    if ('openAmount' in _v && typeof _v['openAmount'] !== 'number') return false;
-    if ('status' in _v && typeof _v['status'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createVendorBillSummaryResponsePropertyNames();
+    const optionalStringProperties = createVendorBillSummaryResponseOptionalProperties({ name: 'vendorBillId', nullable: false }, { name: 'vendorId', nullable: false }, { name: 'vendorName', nullable: false }, { name: 'billNumber', nullable: false }, { name: 'status', nullable: false }, );
+    const optionalNumberProperties = createVendorBillSummaryResponseOptionalProperties({ name: 'totalAmount', nullable: false }, { name: 'openAmount', nullable: false }, );
+    const optionalBooleanProperties = createVendorBillSummaryResponseOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalVendorBillSummaryResponsePropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalVendorBillSummaryResponsePropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalVendorBillSummaryResponsePropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

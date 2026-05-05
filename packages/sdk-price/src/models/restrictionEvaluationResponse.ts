@@ -14,9 +14,52 @@ export interface RestrictionEvaluationResponse {
     results?: Array<RestrictionEvaluationResult>;
 }
 
+function isOptionalRestrictionEvaluationResponsePropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type RestrictionEvaluationResponseOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createRestrictionEvaluationResponsePropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createRestrictionEvaluationResponseOptionalProperties(
+    ...properties: RestrictionEvaluationResponseOptionalProperty[]
+): ReadonlyArray<RestrictionEvaluationResponseOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfRestrictionEvaluationResponse(value: object): value is RestrictionEvaluationResponse {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    return true;
+
+    const requiredProperties = createRestrictionEvaluationResponsePropertyNames();
+    const optionalStringProperties = createRestrictionEvaluationResponseOptionalProperties();
+    const optionalNumberProperties = createRestrictionEvaluationResponseOptionalProperties();
+    const optionalBooleanProperties = createRestrictionEvaluationResponseOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalRestrictionEvaluationResponsePropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalRestrictionEvaluationResponsePropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalRestrictionEvaluationResponsePropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

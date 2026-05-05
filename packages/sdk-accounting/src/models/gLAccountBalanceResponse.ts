@@ -17,13 +17,52 @@ export interface GLAccountBalanceResponse {
     asOfDate?: string;
 }
 
+function isOptionalGLAccountBalanceResponsePropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type GLAccountBalanceResponseOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createGLAccountBalanceResponsePropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createGLAccountBalanceResponseOptionalProperties(
+    ...properties: GLAccountBalanceResponseOptionalProperty[]
+): ReadonlyArray<GLAccountBalanceResponseOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfGLAccountBalanceResponse(value: object): value is GLAccountBalanceResponse {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('glAccountId' in _v && typeof _v['glAccountId'] !== 'string') return false;
-    if ('accountCode' in _v && typeof _v['accountCode'] !== 'string') return false;
-    if ('accountName' in _v && typeof _v['accountName'] !== 'string') return false;
-    if ('balance' in _v && typeof _v['balance'] !== 'number') return false;
-    return true;
+
+    const requiredProperties = createGLAccountBalanceResponsePropertyNames();
+    const optionalStringProperties = createGLAccountBalanceResponseOptionalProperties({ name: 'glAccountId', nullable: false }, { name: 'accountCode', nullable: false }, { name: 'accountName', nullable: false }, );
+    const optionalNumberProperties = createGLAccountBalanceResponseOptionalProperties({ name: 'balance', nullable: false }, );
+    const optionalBooleanProperties = createGLAccountBalanceResponseOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalGLAccountBalanceResponsePropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalGLAccountBalanceResponsePropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalGLAccountBalanceResponsePropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

@@ -13,10 +13,52 @@ export interface UpdateItemRequest {
     quantity?: number;
 }
 
+function isOptionalUpdateItemRequestPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type UpdateItemRequestOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createUpdateItemRequestPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createUpdateItemRequestOptionalProperties(
+    ...properties: UpdateItemRequestOptionalProperty[]
+): ReadonlyArray<UpdateItemRequestOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfUpdateItemRequest(value: object): value is UpdateItemRequest {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('quantity' in _v && typeof _v['quantity'] !== 'number') return false;
-    return true;
+
+    const requiredProperties = createUpdateItemRequestPropertyNames();
+    const optionalStringProperties = createUpdateItemRequestOptionalProperties();
+    const optionalNumberProperties = createUpdateItemRequestOptionalProperties({ name: 'quantity', nullable: false }, );
+    const optionalBooleanProperties = createUpdateItemRequestOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalUpdateItemRequestPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalUpdateItemRequestPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalUpdateItemRequestPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

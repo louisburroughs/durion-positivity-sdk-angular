@@ -18,18 +18,55 @@ export interface ApplyPromotionRequest {
      * Promotion code to apply
      */
     promotionCode: string;
-    /**
-     * Estimate context used for promotion evaluation
-     */
     estimateContext: EstimateContext;
+}
+
+function isOptionalApplyPromotionRequestPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type ApplyPromotionRequestOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createApplyPromotionRequestPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createApplyPromotionRequestOptionalProperties(
+    ...properties: ApplyPromotionRequestOptionalProperty[]
+): ReadonlyArray<ApplyPromotionRequestOptionalProperty> {
+    return properties;
 }
 
 export function instanceOfApplyPromotionRequest(value: object): value is ApplyPromotionRequest {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if (!('promotionCode' in _v) || _v['promotionCode'] === undefined) return false;
-    if ('promotionCode' in _v && typeof _v['promotionCode'] !== 'string') return false;
-    if (!('estimateContext' in _v) || _v['estimateContext'] === undefined) return false;
-    return true;
+
+    const requiredProperties = createApplyPromotionRequestPropertyNames('promotionCode', 'estimateContext', );
+    const optionalStringProperties = createApplyPromotionRequestOptionalProperties({ name: 'promotionCode', nullable: false }, );
+    const optionalNumberProperties = createApplyPromotionRequestOptionalProperties();
+    const optionalBooleanProperties = createApplyPromotionRequestOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalApplyPromotionRequestPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalApplyPromotionRequestPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalApplyPromotionRequestPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

@@ -12,7 +12,7 @@
 export interface VehicleCarePreferenceResponse { 
     id?: string;
     vehicleId?: string;
-    preferences?: { [key: string]: any; };
+    preferences?: object;
     serviceNotes?: string;
     createdByUserId?: string;
     updatedByUserId?: string;
@@ -21,15 +21,52 @@ export interface VehicleCarePreferenceResponse {
     version?: number;
 }
 
+function isOptionalVehicleCarePreferenceResponsePropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type VehicleCarePreferenceResponseOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createVehicleCarePreferenceResponsePropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createVehicleCarePreferenceResponseOptionalProperties(
+    ...properties: VehicleCarePreferenceResponseOptionalProperty[]
+): ReadonlyArray<VehicleCarePreferenceResponseOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfVehicleCarePreferenceResponse(value: object): value is VehicleCarePreferenceResponse {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('id' in _v && typeof _v['id'] !== 'string') return false;
-    if ('vehicleId' in _v && typeof _v['vehicleId'] !== 'string') return false;
-    if ('serviceNotes' in _v && typeof _v['serviceNotes'] !== 'string') return false;
-    if ('createdByUserId' in _v && typeof _v['createdByUserId'] !== 'string') return false;
-    if ('updatedByUserId' in _v && typeof _v['updatedByUserId'] !== 'string') return false;
-    if ('version' in _v && typeof _v['version'] !== 'number') return false;
-    return true;
+
+    const requiredProperties = createVehicleCarePreferenceResponsePropertyNames();
+    const optionalStringProperties = createVehicleCarePreferenceResponseOptionalProperties({ name: 'id', nullable: false }, { name: 'vehicleId', nullable: false }, { name: 'serviceNotes', nullable: false }, { name: 'createdByUserId', nullable: false }, { name: 'updatedByUserId', nullable: false }, );
+    const optionalNumberProperties = createVehicleCarePreferenceResponseOptionalProperties({ name: 'version', nullable: false }, );
+    const optionalBooleanProperties = createVehicleCarePreferenceResponseOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalVehicleCarePreferenceResponsePropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalVehicleCarePreferenceResponsePropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalVehicleCarePreferenceResponsePropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

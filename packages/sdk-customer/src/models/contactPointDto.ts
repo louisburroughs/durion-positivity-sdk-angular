@@ -37,13 +37,52 @@ export enum ContactPointDtoContactTypeEnum {
 
 
 
+function isOptionalContactPointDtoPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type ContactPointDtoOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createContactPointDtoPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createContactPointDtoOptionalProperties(
+    ...properties: ContactPointDtoOptionalProperty[]
+): ReadonlyArray<ContactPointDtoOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfContactPointDto(value: object): value is ContactPointDto {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('contactPointId' in _v && typeof _v['contactPointId'] !== 'string') return false;
-    if ('contactType' in _v && typeof _v['contactType'] !== 'string') return false;
-    if ('value' in _v && typeof _v['value'] !== 'string') return false;
-    if ('primary' in _v && typeof _v['primary'] !== 'boolean') return false;
-    return true;
+
+    const requiredProperties = createContactPointDtoPropertyNames();
+    const optionalStringProperties = createContactPointDtoOptionalProperties({ name: 'contactPointId', nullable: false }, { name: 'contactType', nullable: false }, { name: 'value', nullable: false }, );
+    const optionalNumberProperties = createContactPointDtoOptionalProperties();
+    const optionalBooleanProperties = createContactPointDtoOptionalProperties({ name: 'primary', nullable: false }, );
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalContactPointDtoPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalContactPointDtoPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalContactPointDtoPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

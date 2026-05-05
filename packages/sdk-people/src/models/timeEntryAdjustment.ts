@@ -71,20 +71,52 @@ export enum TimeEntryAdjustmentStatusEnum {
 
 
 
+function isOptionalTimeEntryAdjustmentPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type TimeEntryAdjustmentOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createTimeEntryAdjustmentPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createTimeEntryAdjustmentOptionalProperties(
+    ...properties: TimeEntryAdjustmentOptionalProperty[]
+): ReadonlyArray<TimeEntryAdjustmentOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfTimeEntryAdjustment(value: object): value is TimeEntryAdjustment {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('adjustmentId' in _v && typeof _v['adjustmentId'] !== 'string') return false;
-    if (!('timeEntryId' in _v) || _v['timeEntryId'] === undefined) return false;
-    if ('timeEntryId' in _v && typeof _v['timeEntryId'] !== 'string') return false;
-    if (!('reasonCode' in _v) || _v['reasonCode'] === undefined) return false;
-    if ('reasonCode' in _v && typeof _v['reasonCode'] !== 'string') return false;
-    if ('notes' in _v && typeof _v['notes'] !== 'string') return false;
-    if ('minutesDelta' in _v && typeof _v['minutesDelta'] !== 'number') return false;
-    if (!('status' in _v) || _v['status'] === undefined) return false;
-    if ('status' in _v && typeof _v['status'] !== 'string') return false;
-    if ('createdBy' in _v && typeof _v['createdBy'] !== 'string') return false;
-    if ('decidedBy' in _v && typeof _v['decidedBy'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createTimeEntryAdjustmentPropertyNames('timeEntryId', 'reasonCode', 'status', );
+    const optionalStringProperties = createTimeEntryAdjustmentOptionalProperties({ name: 'adjustmentId', nullable: false }, { name: 'timeEntryId', nullable: false }, { name: 'reasonCode', nullable: false }, { name: 'notes', nullable: false }, { name: 'status', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'decidedBy', nullable: false }, );
+    const optionalNumberProperties = createTimeEntryAdjustmentOptionalProperties({ name: 'minutesDelta', nullable: false }, );
+    const optionalBooleanProperties = createTimeEntryAdjustmentOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalTimeEntryAdjustmentPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalTimeEntryAdjustmentPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalTimeEntryAdjustmentPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

@@ -58,22 +58,52 @@ export enum CreatePromotionOfferRequestDiscountTypeEnum {
 
 
 
+function isOptionalCreatePromotionOfferRequestPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type CreatePromotionOfferRequestOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createCreatePromotionOfferRequestPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createCreatePromotionOfferRequestOptionalProperties(
+    ...properties: CreatePromotionOfferRequestOptionalProperty[]
+): ReadonlyArray<CreatePromotionOfferRequestOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfCreatePromotionOfferRequest(value: object): value is CreatePromotionOfferRequest {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if (!('promoCode' in _v) || _v['promoCode'] === undefined) return false;
-    if ('promoCode' in _v && typeof _v['promoCode'] !== 'string') return false;
-    if (!('name' in _v) || _v['name'] === undefined) return false;
-    if ('name' in _v && typeof _v['name'] !== 'string') return false;
-    if ('description' in _v && _v['description'] !== null && typeof _v['description'] !== 'string') return false;
-    if (!('discountType' in _v) || _v['discountType'] === undefined) return false;
-    if ('discountType' in _v && typeof _v['discountType'] !== 'string') return false;
-    if (!('discountValue' in _v) || _v['discountValue'] === undefined) return false;
-    if ('discountValue' in _v && typeof _v['discountValue'] !== 'number') return false;
-    if (!('startDate' in _v) || _v['startDate'] === undefined) return false;
-    if (!('endDate' in _v) || _v['endDate'] === undefined) return false;
-    if ('usageLimit' in _v && _v['usageLimit'] !== null && typeof _v['usageLimit'] !== 'number') return false;
-    if ('storeCode' in _v && _v['storeCode'] !== null && typeof _v['storeCode'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createCreatePromotionOfferRequestPropertyNames('promoCode', 'name', 'discountType', 'discountValue', 'startDate', 'endDate', );
+    const optionalStringProperties = createCreatePromotionOfferRequestOptionalProperties({ name: 'promoCode', nullable: false }, { name: 'name', nullable: false }, { name: 'description', nullable: true }, { name: 'discountType', nullable: false }, { name: 'storeCode', nullable: true }, );
+    const optionalNumberProperties = createCreatePromotionOfferRequestOptionalProperties({ name: 'discountValue', nullable: false }, { name: 'usageLimit', nullable: true }, );
+    const optionalBooleanProperties = createCreatePromotionOfferRequestOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalCreatePromotionOfferRequestPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalCreatePromotionOfferRequestPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalCreatePromotionOfferRequestPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

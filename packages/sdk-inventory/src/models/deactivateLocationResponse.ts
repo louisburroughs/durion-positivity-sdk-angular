@@ -17,12 +17,52 @@ export interface DeactivateLocationResponse {
     transfer?: Transfer;
 }
 
+function isOptionalDeactivateLocationResponsePropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type DeactivateLocationResponseOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createDeactivateLocationResponsePropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createDeactivateLocationResponseOptionalProperties(
+    ...properties: DeactivateLocationResponseOptionalProperty[]
+): ReadonlyArray<DeactivateLocationResponseOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfDeactivateLocationResponse(value: object): value is DeactivateLocationResponse {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('sourceLocationId' in _v && typeof _v['sourceLocationId'] !== 'string') return false;
-    if ('destinationLocationId' in _v && typeof _v['destinationLocationId'] !== 'string') return false;
-    if ('status' in _v && typeof _v['status'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createDeactivateLocationResponsePropertyNames();
+    const optionalStringProperties = createDeactivateLocationResponseOptionalProperties({ name: 'sourceLocationId', nullable: false }, { name: 'destinationLocationId', nullable: false }, { name: 'status', nullable: false }, );
+    const optionalNumberProperties = createDeactivateLocationResponseOptionalProperties();
+    const optionalBooleanProperties = createDeactivateLocationResponseOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalDeactivateLocationResponsePropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalDeactivateLocationResponsePropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalDeactivateLocationResponsePropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

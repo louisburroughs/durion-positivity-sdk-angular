@@ -22,12 +22,52 @@ export interface ContactSummary {
     primary?: boolean;
 }
 
+function isOptionalContactSummaryPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type ContactSummaryOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createContactSummaryPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createContactSummaryOptionalProperties(
+    ...properties: ContactSummaryOptionalProperty[]
+): ReadonlyArray<ContactSummaryOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfContactSummary(value: object): value is ContactSummary {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('contactId' in _v && typeof _v['contactId'] !== 'string') return false;
-    if ('name' in _v && typeof _v['name'] !== 'string') return false;
-    if ('primary' in _v && typeof _v['primary'] !== 'boolean') return false;
-    return true;
+
+    const requiredProperties = createContactSummaryPropertyNames();
+    const optionalStringProperties = createContactSummaryOptionalProperties({ name: 'contactId', nullable: false }, { name: 'name', nullable: false }, );
+    const optionalNumberProperties = createContactSummaryOptionalProperties();
+    const optionalBooleanProperties = createContactSummaryOptionalProperties({ name: 'primary', nullable: false }, );
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalContactSummaryPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalContactSummaryPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalContactSummaryPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

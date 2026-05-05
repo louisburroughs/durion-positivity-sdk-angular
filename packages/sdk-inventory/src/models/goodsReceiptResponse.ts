@@ -22,16 +22,52 @@ export interface GoodsReceiptResponse {
     lines?: Array<GoodsReceiptLineResponse>;
 }
 
+function isOptionalGoodsReceiptResponsePropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type GoodsReceiptResponseOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createGoodsReceiptResponsePropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createGoodsReceiptResponseOptionalProperties(
+    ...properties: GoodsReceiptResponseOptionalProperty[]
+): ReadonlyArray<GoodsReceiptResponseOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfGoodsReceiptResponse(value: object): value is GoodsReceiptResponse {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('receiptId' in _v && typeof _v['receiptId'] !== 'string') return false;
-    if ('receiptNumber' in _v && typeof _v['receiptNumber'] !== 'string') return false;
-    if ('poId' in _v && typeof _v['poId'] !== 'string') return false;
-    if ('asnId' in _v && typeof _v['asnId'] !== 'string') return false;
-    if ('locationId' in _v && typeof _v['locationId'] !== 'string') return false;
-    if ('totalAccruedAmountMinor' in _v && typeof _v['totalAccruedAmountMinor'] !== 'number') return false;
-    if ('createdBy' in _v && typeof _v['createdBy'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createGoodsReceiptResponsePropertyNames();
+    const optionalStringProperties = createGoodsReceiptResponseOptionalProperties({ name: 'receiptId', nullable: false }, { name: 'receiptNumber', nullable: false }, { name: 'poId', nullable: false }, { name: 'asnId', nullable: false }, { name: 'locationId', nullable: false }, { name: 'createdBy', nullable: false }, );
+    const optionalNumberProperties = createGoodsReceiptResponseOptionalProperties({ name: 'totalAccruedAmountMinor', nullable: false }, );
+    const optionalBooleanProperties = createGoodsReceiptResponseOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalGoodsReceiptResponsePropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalGoodsReceiptResponsePropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalGoodsReceiptResponsePropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

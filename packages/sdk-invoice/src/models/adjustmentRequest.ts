@@ -23,17 +23,52 @@ export enum AdjustmentRequestTypeEnum {
 
 
 
+function isOptionalAdjustmentRequestPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type AdjustmentRequestOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createAdjustmentRequestPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createAdjustmentRequestOptionalProperties(
+    ...properties: AdjustmentRequestOptionalProperty[]
+): ReadonlyArray<AdjustmentRequestOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfAdjustmentRequest(value: object): value is AdjustmentRequest {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if (!('type' in _v) || _v['type'] === undefined) return false;
-    if ('type' in _v && typeof _v['type'] !== 'string') return false;
-    if (!('amount' in _v) || _v['amount'] === undefined) return false;
-    if ('amount' in _v && typeof _v['amount'] !== 'number') return false;
-    if (!('reason' in _v) || _v['reason'] === undefined) return false;
-    if ('reason' in _v && typeof _v['reason'] !== 'string') return false;
-    if (!('authorizedBy' in _v) || _v['authorizedBy'] === undefined) return false;
-    if ('authorizedBy' in _v && typeof _v['authorizedBy'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createAdjustmentRequestPropertyNames('type', 'amount', 'reason', 'authorizedBy', );
+    const optionalStringProperties = createAdjustmentRequestOptionalProperties({ name: 'type', nullable: false }, { name: 'reason', nullable: false }, { name: 'authorizedBy', nullable: false }, );
+    const optionalNumberProperties = createAdjustmentRequestOptionalProperties({ name: 'amount', nullable: false }, );
+    const optionalBooleanProperties = createAdjustmentRequestOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalAdjustmentRequestPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalAdjustmentRequestPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalAdjustmentRequestPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

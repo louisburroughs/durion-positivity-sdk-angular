@@ -21,15 +21,52 @@ export interface MobileUnitResponse {
     updatedAt?: string;
 }
 
+function isOptionalMobileUnitResponsePropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type MobileUnitResponseOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createMobileUnitResponsePropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createMobileUnitResponseOptionalProperties(
+    ...properties: MobileUnitResponseOptionalProperty[]
+): ReadonlyArray<MobileUnitResponseOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfMobileUnitResponse(value: object): value is MobileUnitResponse {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('id' in _v && typeof _v['id'] !== 'string') return false;
-    if ('name' in _v && typeof _v['name'] !== 'string') return false;
-    if ('baseLocationId' in _v && typeof _v['baseLocationId'] !== 'string') return false;
-    if ('status' in _v && typeof _v['status'] !== 'string') return false;
-    if ('travelBufferPolicyId' in _v && typeof _v['travelBufferPolicyId'] !== 'string') return false;
-    if ('notes' in _v && typeof _v['notes'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createMobileUnitResponsePropertyNames();
+    const optionalStringProperties = createMobileUnitResponseOptionalProperties({ name: 'id', nullable: false }, { name: 'name', nullable: false }, { name: 'baseLocationId', nullable: false }, { name: 'status', nullable: false }, { name: 'travelBufferPolicyId', nullable: false }, { name: 'notes', nullable: false }, );
+    const optionalNumberProperties = createMobileUnitResponseOptionalProperties();
+    const optionalBooleanProperties = createMobileUnitResponseOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalMobileUnitResponsePropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalMobileUnitResponsePropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalMobileUnitResponsePropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

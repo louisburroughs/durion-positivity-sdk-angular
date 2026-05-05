@@ -24,16 +24,52 @@ export interface AccountStateResponse {
     credentialsExpireAt?: string;
 }
 
+function isOptionalAccountStateResponsePropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type AccountStateResponseOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createAccountStateResponsePropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createAccountStateResponseOptionalProperties(
+    ...properties: AccountStateResponseOptionalProperty[]
+): ReadonlyArray<AccountStateResponseOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfAccountStateResponse(value: object): value is AccountStateResponse {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('userId' in _v && typeof _v['userId'] !== 'string') return false;
-    if ('enabled' in _v && typeof _v['enabled'] !== 'boolean') return false;
-    if ('accountNonLocked' in _v && typeof _v['accountNonLocked'] !== 'boolean') return false;
-    if ('accountNonExpired' in _v && typeof _v['accountNonExpired'] !== 'boolean') return false;
-    if ('credentialsNonExpired' in _v && typeof _v['credentialsNonExpired'] !== 'boolean') return false;
-    if ('failedLoginAttempts' in _v && typeof _v['failedLoginAttempts'] !== 'number') return false;
-    if ('disabledBy' in _v && typeof _v['disabledBy'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createAccountStateResponsePropertyNames();
+    const optionalStringProperties = createAccountStateResponseOptionalProperties({ name: 'userId', nullable: false }, { name: 'disabledBy', nullable: false }, );
+    const optionalNumberProperties = createAccountStateResponseOptionalProperties({ name: 'failedLoginAttempts', nullable: false }, );
+    const optionalBooleanProperties = createAccountStateResponseOptionalProperties({ name: 'enabled', nullable: false }, { name: 'accountNonLocked', nullable: false }, { name: 'accountNonExpired', nullable: false }, { name: 'credentialsNonExpired', nullable: false }, );
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalAccountStateResponsePropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalAccountStateResponsePropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalAccountStateResponsePropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

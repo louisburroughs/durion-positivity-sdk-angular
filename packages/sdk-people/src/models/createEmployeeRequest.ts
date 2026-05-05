@@ -34,18 +34,52 @@ export enum CreateEmployeeRequestDuplicatePolicyEnum {
 
 
 
+function isOptionalCreateEmployeeRequestPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type CreateEmployeeRequestOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createCreateEmployeeRequestPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createCreateEmployeeRequestOptionalProperties(
+    ...properties: CreateEmployeeRequestOptionalProperty[]
+): ReadonlyArray<CreateEmployeeRequestOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfCreateEmployeeRequest(value: object): value is CreateEmployeeRequest {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if (!('legalName' in _v) || _v['legalName'] === undefined) return false;
-    if ('legalName' in _v && typeof _v['legalName'] !== 'string') return false;
-    if ('preferredName' in _v && typeof _v['preferredName'] !== 'string') return false;
-    if (!('employeeNumber' in _v) || _v['employeeNumber'] === undefined) return false;
-    if ('employeeNumber' in _v && typeof _v['employeeNumber'] !== 'string') return false;
-    if (!('status' in _v) || _v['status'] === undefined) return false;
-    if ('status' in _v && typeof _v['status'] !== 'string') return false;
-    if (!('hireDate' in _v) || _v['hireDate'] === undefined) return false;
-    if ('duplicatePolicy' in _v && typeof _v['duplicatePolicy'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createCreateEmployeeRequestPropertyNames('legalName', 'employeeNumber', 'status', 'hireDate', );
+    const optionalStringProperties = createCreateEmployeeRequestOptionalProperties({ name: 'legalName', nullable: false }, { name: 'preferredName', nullable: false }, { name: 'employeeNumber', nullable: false }, { name: 'status', nullable: false }, { name: 'duplicatePolicy', nullable: false }, );
+    const optionalNumberProperties = createCreateEmployeeRequestOptionalProperties();
+    const optionalBooleanProperties = createCreateEmployeeRequestOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalCreateEmployeeRequestPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalCreateEmployeeRequestPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalCreateEmployeeRequestPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

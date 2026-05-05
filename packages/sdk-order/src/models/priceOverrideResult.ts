@@ -28,24 +28,52 @@ export interface PriceOverrideResult {
     message?: string;
 }
 
+function isOptionalPriceOverrideResultPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type PriceOverrideResultOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createPriceOverrideResultPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createPriceOverrideResultOptionalProperties(
+    ...properties: PriceOverrideResultOptionalProperty[]
+): ReadonlyArray<PriceOverrideResultOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfPriceOverrideResult(value: object): value is PriceOverrideResult {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('overrideId' in _v && typeof _v['overrideId'] !== 'string') return false;
-    if ('orderId' in _v && typeof _v['orderId'] !== 'string') return false;
-    if ('orderLineId' in _v && typeof _v['orderLineId'] !== 'string') return false;
-    if ('productId' in _v && typeof _v['productId'] !== 'string') return false;
-    if ('originalPrice' in _v && typeof _v['originalPrice'] !== 'number') return false;
-    if ('overridePrice' in _v && typeof _v['overridePrice'] !== 'number') return false;
-    if ('discountAmount' in _v && typeof _v['discountAmount'] !== 'number') return false;
-    if ('discountPercentage' in _v && typeof _v['discountPercentage'] !== 'number') return false;
-    if ('reasonCode' in _v && typeof _v['reasonCode'] !== 'string') return false;
-    if ('justification' in _v && typeof _v['justification'] !== 'string') return false;
-    if ('status' in _v && typeof _v['status'] !== 'string') return false;
-    if ('requiresApproval' in _v && typeof _v['requiresApproval'] !== 'boolean') return false;
-    if ('affectsCommission' in _v && typeof _v['affectsCommission'] !== 'boolean') return false;
-    if ('requestedByUserId' in _v && typeof _v['requestedByUserId'] !== 'string') return false;
-    if ('message' in _v && typeof _v['message'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createPriceOverrideResultPropertyNames();
+    const optionalStringProperties = createPriceOverrideResultOptionalProperties({ name: 'overrideId', nullable: false }, { name: 'orderId', nullable: false }, { name: 'orderLineId', nullable: false }, { name: 'productId', nullable: false }, { name: 'reasonCode', nullable: false }, { name: 'justification', nullable: false }, { name: 'status', nullable: false }, { name: 'requestedByUserId', nullable: false }, { name: 'message', nullable: false }, );
+    const optionalNumberProperties = createPriceOverrideResultOptionalProperties({ name: 'originalPrice', nullable: false }, { name: 'overridePrice', nullable: false }, { name: 'discountAmount', nullable: false }, { name: 'discountPercentage', nullable: false }, );
+    const optionalBooleanProperties = createPriceOverrideResultOptionalProperties({ name: 'requiresApproval', nullable: false }, { name: 'affectsCommission', nullable: false }, );
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalPriceOverrideResultPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalPriceOverrideResultPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalPriceOverrideResultPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

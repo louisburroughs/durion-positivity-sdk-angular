@@ -14,11 +14,52 @@ export interface CatalogVersionResponse {
     permissionCount?: number;
 }
 
+function isOptionalCatalogVersionResponsePropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type CatalogVersionResponseOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createCatalogVersionResponsePropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createCatalogVersionResponseOptionalProperties(
+    ...properties: CatalogVersionResponseOptionalProperty[]
+): ReadonlyArray<CatalogVersionResponseOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfCatalogVersionResponse(value: object): value is CatalogVersionResponse {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('version' in _v && typeof _v['version'] !== 'number') return false;
-    if ('permissionCount' in _v && typeof _v['permissionCount'] !== 'number') return false;
-    return true;
+
+    const requiredProperties = createCatalogVersionResponsePropertyNames();
+    const optionalStringProperties = createCatalogVersionResponseOptionalProperties();
+    const optionalNumberProperties = createCatalogVersionResponseOptionalProperties({ name: 'version', nullable: false }, { name: 'permissionCount', nullable: false }, );
+    const optionalBooleanProperties = createCatalogVersionResponseOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalCatalogVersionResponsePropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalCatalogVersionResponsePropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalCatalogVersionResponsePropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

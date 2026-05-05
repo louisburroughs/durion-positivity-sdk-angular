@@ -14,11 +14,52 @@ export interface FinalizationRequest {
     overrideReason?: string;
 }
 
+function isOptionalFinalizationRequestPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type FinalizationRequestOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createFinalizationRequestPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createFinalizationRequestOptionalProperties(
+    ...properties: FinalizationRequestOptionalProperty[]
+): ReadonlyArray<FinalizationRequestOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfFinalizationRequest(value: object): value is FinalizationRequest {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('managerApprovalCode' in _v && typeof _v['managerApprovalCode'] !== 'string') return false;
-    if ('overrideReason' in _v && typeof _v['overrideReason'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createFinalizationRequestPropertyNames();
+    const optionalStringProperties = createFinalizationRequestOptionalProperties({ name: 'managerApprovalCode', nullable: false }, { name: 'overrideReason', nullable: false }, );
+    const optionalNumberProperties = createFinalizationRequestOptionalProperties();
+    const optionalBooleanProperties = createFinalizationRequestOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalFinalizationRequestPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalFinalizationRequestPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalFinalizationRequestPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

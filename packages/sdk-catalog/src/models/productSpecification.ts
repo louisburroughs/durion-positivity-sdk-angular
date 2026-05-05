@@ -23,11 +23,52 @@ export interface ProductSpecification {
     value?: string;
 }
 
+function isOptionalProductSpecificationPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type ProductSpecificationOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createProductSpecificationPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createProductSpecificationOptionalProperties(
+    ...properties: ProductSpecificationOptionalProperty[]
+): ReadonlyArray<ProductSpecificationOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfProductSpecification(value: object): value is ProductSpecification {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('name' in _v && typeof _v['name'] !== 'string') return false;
-    if ('value' in _v && typeof _v['value'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createProductSpecificationPropertyNames();
+    const optionalStringProperties = createProductSpecificationOptionalProperties({ name: 'name', nullable: false }, { name: 'value', nullable: false }, );
+    const optionalNumberProperties = createProductSpecificationOptionalProperties();
+    const optionalBooleanProperties = createProductSpecificationOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalProductSpecificationPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalProductSpecificationPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalProductSpecificationPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

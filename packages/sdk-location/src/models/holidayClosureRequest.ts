@@ -14,10 +14,52 @@ export interface HolidayClosureRequest {
     reason?: string;
 }
 
+function isOptionalHolidayClosureRequestPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type HolidayClosureRequestOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createHolidayClosureRequestPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createHolidayClosureRequestOptionalProperties(
+    ...properties: HolidayClosureRequestOptionalProperty[]
+): ReadonlyArray<HolidayClosureRequestOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfHolidayClosureRequest(value: object): value is HolidayClosureRequest {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('reason' in _v && typeof _v['reason'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createHolidayClosureRequestPropertyNames();
+    const optionalStringProperties = createHolidayClosureRequestOptionalProperties({ name: 'reason', nullable: false }, );
+    const optionalNumberProperties = createHolidayClosureRequestOptionalProperties();
+    const optionalBooleanProperties = createHolidayClosureRequestOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalHolidayClosureRequestPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalHolidayClosureRequestPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalHolidayClosureRequestPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

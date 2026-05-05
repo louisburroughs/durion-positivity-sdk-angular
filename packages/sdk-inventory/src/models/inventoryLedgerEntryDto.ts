@@ -55,24 +55,52 @@ export enum InventoryLedgerEntryDtoEventTypeEnum {
 
 
 
+function isOptionalInventoryLedgerEntryDtoPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type InventoryLedgerEntryDtoOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createInventoryLedgerEntryDtoPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createInventoryLedgerEntryDtoOptionalProperties(
+    ...properties: InventoryLedgerEntryDtoOptionalProperty[]
+): ReadonlyArray<InventoryLedgerEntryDtoOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfInventoryLedgerEntryDto(value: object): value is InventoryLedgerEntryDto {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('ledgerEntryId' in _v && typeof _v['ledgerEntryId'] !== 'string') return false;
-    if ('stockItemId' in _v && typeof _v['stockItemId'] !== 'string') return false;
-    if ('adjustmentId' in _v && typeof _v['adjustmentId'] !== 'string') return false;
-    if ('eventType' in _v && typeof _v['eventType'] !== 'string') return false;
-    if ('changeInQuantity' in _v && typeof _v['changeInQuantity'] !== 'number') return false;
-    if ('quantityAfter' in _v && typeof _v['quantityAfter'] !== 'number') return false;
-    if ('unitCost' in _v && typeof _v['unitCost'] !== 'number') return false;
-    if ('transactionUserId' in _v && typeof _v['transactionUserId'] !== 'string') return false;
-    if ('locationId' in _v && typeof _v['locationId'] !== 'string') return false;
-    if ('fromLocationId' in _v && typeof _v['fromLocationId'] !== 'string') return false;
-    if ('toLocationId' in _v && typeof _v['toLocationId'] !== 'string') return false;
-    if ('reasonCode' in _v && typeof _v['reasonCode'] !== 'string') return false;
-    if ('sourceTransactionId' in _v && typeof _v['sourceTransactionId'] !== 'string') return false;
-    if ('unitOfMeasure' in _v && typeof _v['unitOfMeasure'] !== 'string') return false;
-    if ('notes' in _v && typeof _v['notes'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createInventoryLedgerEntryDtoPropertyNames();
+    const optionalStringProperties = createInventoryLedgerEntryDtoOptionalProperties({ name: 'ledgerEntryId', nullable: false }, { name: 'stockItemId', nullable: false }, { name: 'adjustmentId', nullable: false }, { name: 'eventType', nullable: false }, { name: 'transactionUserId', nullable: false }, { name: 'locationId', nullable: false }, { name: 'fromLocationId', nullable: false }, { name: 'toLocationId', nullable: false }, { name: 'reasonCode', nullable: false }, { name: 'sourceTransactionId', nullable: false }, { name: 'unitOfMeasure', nullable: false }, { name: 'notes', nullable: false }, );
+    const optionalNumberProperties = createInventoryLedgerEntryDtoOptionalProperties({ name: 'changeInQuantity', nullable: false }, { name: 'quantityAfter', nullable: false }, { name: 'unitCost', nullable: false }, );
+    const optionalBooleanProperties = createInventoryLedgerEntryDtoOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalInventoryLedgerEntryDtoPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalInventoryLedgerEntryDtoPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalInventoryLedgerEntryDtoPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

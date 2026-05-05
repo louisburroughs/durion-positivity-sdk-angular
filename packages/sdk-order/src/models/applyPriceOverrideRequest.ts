@@ -26,23 +26,52 @@ export interface ApplyPriceOverrideRequest {
     idempotencyKey?: string;
 }
 
+function isOptionalApplyPriceOverrideRequestPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type ApplyPriceOverrideRequestOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createApplyPriceOverrideRequestPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createApplyPriceOverrideRequestOptionalProperties(
+    ...properties: ApplyPriceOverrideRequestOptionalProperty[]
+): ReadonlyArray<ApplyPriceOverrideRequestOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfApplyPriceOverrideRequest(value: object): value is ApplyPriceOverrideRequest {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if (!('orderId' in _v) || _v['orderId'] === undefined) return false;
-    if ('orderId' in _v && typeof _v['orderId'] !== 'string') return false;
-    if (!('orderLineId' in _v) || _v['orderLineId'] === undefined) return false;
-    if ('orderLineId' in _v && typeof _v['orderLineId'] !== 'string') return false;
-    if (!('productId' in _v) || _v['productId'] === undefined) return false;
-    if ('productId' in _v && typeof _v['productId'] !== 'string') return false;
-    if (!('originalPrice' in _v) || _v['originalPrice'] === undefined) return false;
-    if ('originalPrice' in _v && typeof _v['originalPrice'] !== 'number') return false;
-    if (!('overridePrice' in _v) || _v['overridePrice'] === undefined) return false;
-    if ('overridePrice' in _v && typeof _v['overridePrice'] !== 'number') return false;
-    if (!('reasonCode' in _v) || _v['reasonCode'] === undefined) return false;
-    if ('reasonCode' in _v && typeof _v['reasonCode'] !== 'string') return false;
-    if ('justification' in _v && typeof _v['justification'] !== 'string') return false;
-    if ('idempotencyKey' in _v && typeof _v['idempotencyKey'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createApplyPriceOverrideRequestPropertyNames('orderId', 'orderLineId', 'productId', 'originalPrice', 'overridePrice', 'reasonCode', );
+    const optionalStringProperties = createApplyPriceOverrideRequestOptionalProperties({ name: 'orderId', nullable: false }, { name: 'orderLineId', nullable: false }, { name: 'productId', nullable: false }, { name: 'reasonCode', nullable: false }, { name: 'justification', nullable: false }, { name: 'idempotencyKey', nullable: false }, );
+    const optionalNumberProperties = createApplyPriceOverrideRequestOptionalProperties({ name: 'originalPrice', nullable: false }, { name: 'overridePrice', nullable: false }, );
+    const optionalBooleanProperties = createApplyPriceOverrideRequestOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalApplyPriceOverrideRequestPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalApplyPriceOverrideRequestPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalApplyPriceOverrideRequestPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

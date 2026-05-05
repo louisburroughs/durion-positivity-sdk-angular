@@ -15,9 +15,52 @@ export interface Transfer {
     movedAt?: string;
 }
 
+function isOptionalTransferPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type TransferOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createTransferPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createTransferOptionalProperties(
+    ...properties: TransferOptionalProperty[]
+): ReadonlyArray<TransferOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfTransfer(value: object): value is Transfer {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    return true;
+
+    const requiredProperties = createTransferPropertyNames();
+    const optionalStringProperties = createTransferOptionalProperties();
+    const optionalNumberProperties = createTransferOptionalProperties();
+    const optionalBooleanProperties = createTransferOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalTransferPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalTransferPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalTransferPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

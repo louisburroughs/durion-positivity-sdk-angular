@@ -27,22 +27,52 @@ export interface ProductUpdateRequestDto {
     attributes?: string;
 }
 
+function isOptionalProductUpdateRequestDtoPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type ProductUpdateRequestDtoOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createProductUpdateRequestDtoPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createProductUpdateRequestDtoOptionalProperties(
+    ...properties: ProductUpdateRequestDtoOptionalProperty[]
+): ReadonlyArray<ProductUpdateRequestDtoOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfProductUpdateRequestDto(value: object): value is ProductUpdateRequestDto {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if (!('name' in _v) || _v['name'] === undefined) return false;
-    if ('name' in _v && typeof _v['name'] !== 'string') return false;
-    if (!('description' in _v) || _v['description'] === undefined) return false;
-    if ('description' in _v && typeof _v['description'] !== 'string') return false;
-    if (!('unitOfMeasure' in _v) || _v['unitOfMeasure'] === undefined) return false;
-    if ('unitOfMeasure' in _v && typeof _v['unitOfMeasure'] !== 'string') return false;
-    if ('manufacturerId' in _v && typeof _v['manufacturerId'] !== 'string') return false;
-    if ('categoryId' in _v && typeof _v['categoryId'] !== 'string') return false;
-    if ('sku' in _v && typeof _v['sku'] !== 'string') return false;
-    if (!('mpn' in _v) || _v['mpn'] === undefined) return false;
-    if ('mpn' in _v && typeof _v['mpn'] !== 'string') return false;
-    if ('upc' in _v && typeof _v['upc'] !== 'string') return false;
-    if ('attributes' in _v && typeof _v['attributes'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createProductUpdateRequestDtoPropertyNames('name', 'description', 'unitOfMeasure', 'mpn', );
+    const optionalStringProperties = createProductUpdateRequestDtoOptionalProperties({ name: 'name', nullable: false }, { name: 'description', nullable: false }, { name: 'unitOfMeasure', nullable: false }, { name: 'manufacturerId', nullable: false }, { name: 'categoryId', nullable: false }, { name: 'sku', nullable: false }, { name: 'mpn', nullable: false }, { name: 'upc', nullable: false }, { name: 'attributes', nullable: false }, );
+    const optionalNumberProperties = createProductUpdateRequestDtoOptionalProperties();
+    const optionalBooleanProperties = createProductUpdateRequestDtoOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalProductUpdateRequestDtoPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalProductUpdateRequestDtoPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalProductUpdateRequestDtoPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

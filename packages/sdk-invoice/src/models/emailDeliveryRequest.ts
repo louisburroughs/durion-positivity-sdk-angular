@@ -20,13 +20,52 @@ export enum EmailDeliveryRequestStatusEnum {
 
 
 
+function isOptionalEmailDeliveryRequestPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type EmailDeliveryRequestOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createEmailDeliveryRequestPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createEmailDeliveryRequestOptionalProperties(
+    ...properties: EmailDeliveryRequestOptionalProperty[]
+): ReadonlyArray<EmailDeliveryRequestOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfEmailDeliveryRequest(value: object): value is EmailDeliveryRequest {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if (!('emailAddress' in _v) || _v['emailAddress'] === undefined) return false;
-    if ('emailAddress' in _v && typeof _v['emailAddress'] !== 'string') return false;
-    if (!('status' in _v) || _v['status'] === undefined) return false;
-    if ('status' in _v && typeof _v['status'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createEmailDeliveryRequestPropertyNames('emailAddress', 'status', );
+    const optionalStringProperties = createEmailDeliveryRequestOptionalProperties({ name: 'emailAddress', nullable: false }, { name: 'status', nullable: false }, );
+    const optionalNumberProperties = createEmailDeliveryRequestOptionalProperties();
+    const optionalBooleanProperties = createEmailDeliveryRequestOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalEmailDeliveryRequestPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalEmailDeliveryRequestPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalEmailDeliveryRequestPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

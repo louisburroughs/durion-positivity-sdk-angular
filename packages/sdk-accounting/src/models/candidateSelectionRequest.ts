@@ -19,11 +19,52 @@ export interface CandidateSelectionRequest {
     operatorId: string;
 }
 
+function isOptionalCandidateSelectionRequestPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type CandidateSelectionRequestOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createCandidateSelectionRequestPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createCandidateSelectionRequestOptionalProperties(
+    ...properties: CandidateSelectionRequestOptionalProperty[]
+): ReadonlyArray<CandidateSelectionRequestOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfCandidateSelectionRequest(value: object): value is CandidateSelectionRequest {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if (!('operatorId' in _v) || _v['operatorId'] === undefined) return false;
-    if ('operatorId' in _v && typeof _v['operatorId'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createCandidateSelectionRequestPropertyNames('operatorId', );
+    const optionalStringProperties = createCandidateSelectionRequestOptionalProperties({ name: 'operatorId', nullable: false }, );
+    const optionalNumberProperties = createCandidateSelectionRequestOptionalProperties();
+    const optionalBooleanProperties = createCandidateSelectionRequestOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalCandidateSelectionRequestPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalCandidateSelectionRequestPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalCandidateSelectionRequestPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

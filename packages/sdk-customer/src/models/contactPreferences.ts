@@ -18,15 +18,52 @@ export interface ContactPreferences {
     preferredLanguage?: string;
 }
 
+function isOptionalContactPreferencesPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type ContactPreferencesOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createContactPreferencesPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createContactPreferencesOptionalProperties(
+    ...properties: ContactPreferencesOptionalProperty[]
+): ReadonlyArray<ContactPreferencesOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfContactPreferences(value: object): value is ContactPreferences {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('emailOptIn' in _v && typeof _v['emailOptIn'] !== 'boolean') return false;
-    if ('smsOptIn' in _v && typeof _v['smsOptIn'] !== 'boolean') return false;
-    if ('phoneOptIn' in _v && typeof _v['phoneOptIn'] !== 'boolean') return false;
-    if ('doNotContact' in _v && typeof _v['doNotContact'] !== 'boolean') return false;
-    if ('preferredContactMethod' in _v && typeof _v['preferredContactMethod'] !== 'string') return false;
-    if ('preferredLanguage' in _v && typeof _v['preferredLanguage'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createContactPreferencesPropertyNames();
+    const optionalStringProperties = createContactPreferencesOptionalProperties({ name: 'preferredContactMethod', nullable: false }, { name: 'preferredLanguage', nullable: false }, );
+    const optionalNumberProperties = createContactPreferencesOptionalProperties();
+    const optionalBooleanProperties = createContactPreferencesOptionalProperties({ name: 'emailOptIn', nullable: false }, { name: 'smsOptIn', nullable: false }, { name: 'phoneOptIn', nullable: false }, { name: 'doNotContact', nullable: false }, );
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalContactPreferencesPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalContactPreferencesPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalContactPreferencesPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

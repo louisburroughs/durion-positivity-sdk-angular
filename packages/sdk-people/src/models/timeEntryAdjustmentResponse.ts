@@ -27,13 +27,52 @@ export interface TimeEntryAdjustmentResponse {
     message?: string;
 }
 
+function isOptionalTimeEntryAdjustmentResponsePropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type TimeEntryAdjustmentResponseOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createTimeEntryAdjustmentResponsePropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createTimeEntryAdjustmentResponseOptionalProperties(
+    ...properties: TimeEntryAdjustmentResponseOptionalProperty[]
+): ReadonlyArray<TimeEntryAdjustmentResponseOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfTimeEntryAdjustmentResponse(value: object): value is TimeEntryAdjustmentResponse {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('adjustmentId' in _v && typeof _v['adjustmentId'] !== 'string') return false;
-    if (!('success' in _v) || _v['success'] === undefined) return false;
-    if ('success' in _v && typeof _v['success'] !== 'boolean') return false;
-    if ('message' in _v && typeof _v['message'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createTimeEntryAdjustmentResponsePropertyNames('success', );
+    const optionalStringProperties = createTimeEntryAdjustmentResponseOptionalProperties({ name: 'adjustmentId', nullable: false }, { name: 'message', nullable: false }, );
+    const optionalNumberProperties = createTimeEntryAdjustmentResponseOptionalProperties();
+    const optionalBooleanProperties = createTimeEntryAdjustmentResponseOptionalProperties({ name: 'success', nullable: false }, );
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalTimeEntryAdjustmentResponsePropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalTimeEntryAdjustmentResponsePropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalTimeEntryAdjustmentResponsePropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

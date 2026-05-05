@@ -18,15 +18,52 @@ export interface EmployeeAddressDto {
     country?: string;
 }
 
+function isOptionalEmployeeAddressDtoPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type EmployeeAddressDtoOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createEmployeeAddressDtoPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createEmployeeAddressDtoOptionalProperties(
+    ...properties: EmployeeAddressDtoOptionalProperty[]
+): ReadonlyArray<EmployeeAddressDtoOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfEmployeeAddressDto(value: object): value is EmployeeAddressDto {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('line1' in _v && typeof _v['line1'] !== 'string') return false;
-    if ('line2' in _v && typeof _v['line2'] !== 'string') return false;
-    if ('city' in _v && typeof _v['city'] !== 'string') return false;
-    if ('region' in _v && typeof _v['region'] !== 'string') return false;
-    if ('postalCode' in _v && typeof _v['postalCode'] !== 'string') return false;
-    if ('country' in _v && typeof _v['country'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createEmployeeAddressDtoPropertyNames();
+    const optionalStringProperties = createEmployeeAddressDtoOptionalProperties({ name: 'line1', nullable: false }, { name: 'line2', nullable: false }, { name: 'city', nullable: false }, { name: 'region', nullable: false }, { name: 'postalCode', nullable: false }, { name: 'country', nullable: false }, );
+    const optionalNumberProperties = createEmployeeAddressDtoOptionalProperties();
+    const optionalBooleanProperties = createEmployeeAddressDtoOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalEmployeeAddressDtoPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalEmployeeAddressDtoPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalEmployeeAddressDtoPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

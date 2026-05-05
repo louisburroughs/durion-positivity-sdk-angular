@@ -20,15 +20,52 @@ export interface CoverageRuleResponse {
     maxDistance?: number;
 }
 
+function isOptionalCoverageRuleResponsePropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type CoverageRuleResponseOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createCoverageRuleResponsePropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createCoverageRuleResponseOptionalProperties(
+    ...properties: CoverageRuleResponseOptionalProperty[]
+): ReadonlyArray<CoverageRuleResponseOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfCoverageRuleResponse(value: object): value is CoverageRuleResponse {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('id' in _v && typeof _v['id'] !== 'string') return false;
-    if ('mobileUnitId' in _v && typeof _v['mobileUnitId'] !== 'string') return false;
-    if ('serviceAreaId' in _v && typeof _v['serviceAreaId'] !== 'string') return false;
-    if ('ruleType' in _v && typeof _v['ruleType'] !== 'string') return false;
-    if ('priority' in _v && typeof _v['priority'] !== 'number') return false;
-    if ('maxDistance' in _v && typeof _v['maxDistance'] !== 'number') return false;
-    return true;
+
+    const requiredProperties = createCoverageRuleResponsePropertyNames();
+    const optionalStringProperties = createCoverageRuleResponseOptionalProperties({ name: 'id', nullable: false }, { name: 'mobileUnitId', nullable: false }, { name: 'serviceAreaId', nullable: false }, { name: 'ruleType', nullable: false }, );
+    const optionalNumberProperties = createCoverageRuleResponseOptionalProperties({ name: 'priority', nullable: false }, { name: 'maxDistance', nullable: false }, );
+    const optionalBooleanProperties = createCoverageRuleResponseOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalCoverageRuleResponsePropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalCoverageRuleResponsePropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalCoverageRuleResponsePropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

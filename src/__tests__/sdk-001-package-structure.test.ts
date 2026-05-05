@@ -8,6 +8,27 @@ const SDK_PACKAGES = readdirSync(PACKAGES_DIR)
   .filter((n) => n.startsWith('sdk-') && n !== 'sdk-transport')
   .filter((n) => statSync(join(PACKAGES_DIR, n)).isDirectory());
 
+const EXPECTED_GATEWAY_BASE_PATHS: Record<string, string> = {
+  'sdk-accounting': 'http://api-gateway.local/accounting',
+  'sdk-bulk-loader': 'http://api-gateway.local/bulk-loader',
+  'sdk-catalog': 'http://api-gateway.local/catalog',
+  'sdk-customer': 'http://api-gateway.local/customer',
+  'sdk-event-receiver': 'http://api-gateway.local/event-receiver',
+  'sdk-image': 'http://api-gateway.local/image',
+  'sdk-inquiry': 'http://api-gateway.local/inquiry',
+  'sdk-inventory': 'http://api-gateway.local/inventory',
+  'sdk-invoice': 'http://api-gateway.local/invoice',
+  'sdk-location': 'http://api-gateway.local/location',
+  'sdk-order': 'http://api-gateway.local/order',
+  'sdk-people': 'http://api-gateway.local/people',
+  'sdk-price': 'http://api-gateway.local/price',
+  'sdk-security': 'http://api-gateway.local/security-service',
+  'sdk-shop-manager': 'http://api-gateway.local/shop-manager',
+  'sdk-vehicle-fitment': 'http://api-gateway.local/vehicle-fitment',
+  'sdk-vehicle-inventory': 'http://api-gateway.local/vehicle-inventory',
+  'sdk-workorder': 'http://api-gateway.local/workorder',
+};
+
 describe('sdk-001 package structure', () => {
   it('has at least one sdk-* package besides transport', () => {
     expect(SDK_PACKAGES.length).toBeGreaterThan(0);
@@ -59,6 +80,18 @@ describe('sdk-001 package structure', () => {
 
     it('does not retain legacy fetch-style runtime.ts', () => {
       expect(existsSync(join(pkgDir, 'src', 'runtime.ts'))).toBe(false);
+    });
+
+    it('uses the expected gateway route prefix as the generated basePath default when browser-facing', () => {
+      const expectedBasePath = EXPECTED_GATEWAY_BASE_PATHS[pkg];
+      if (!expectedBasePath) {
+        return;
+      }
+
+      const baseService = readFileSync(join(pkgDir, 'api.base.service.ts'), 'utf8');
+      expect(baseService).toContain(`protected basePath = '${expectedBasePath}';`);
+      expect(baseService).not.toContain('/v1/');
+      expect(baseService).not.toContain('http://localhost:8086');
     });
   });
 });

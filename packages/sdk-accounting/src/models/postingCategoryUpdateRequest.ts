@@ -15,14 +15,52 @@ export interface PostingCategoryUpdateRequest {
     modifiedBy: string;
 }
 
+function isOptionalPostingCategoryUpdateRequestPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type PostingCategoryUpdateRequestOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createPostingCategoryUpdateRequestPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createPostingCategoryUpdateRequestOptionalProperties(
+    ...properties: PostingCategoryUpdateRequestOptionalProperty[]
+): ReadonlyArray<PostingCategoryUpdateRequestOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfPostingCategoryUpdateRequest(value: object): value is PostingCategoryUpdateRequest {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if (!('categoryName' in _v) || _v['categoryName'] === undefined) return false;
-    if ('categoryName' in _v && typeof _v['categoryName'] !== 'string') return false;
-    if ('description' in _v && typeof _v['description'] !== 'string') return false;
-    if (!('modifiedBy' in _v) || _v['modifiedBy'] === undefined) return false;
-    if ('modifiedBy' in _v && typeof _v['modifiedBy'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createPostingCategoryUpdateRequestPropertyNames('categoryName', 'modifiedBy', );
+    const optionalStringProperties = createPostingCategoryUpdateRequestOptionalProperties({ name: 'categoryName', nullable: false }, { name: 'description', nullable: false }, { name: 'modifiedBy', nullable: false }, );
+    const optionalNumberProperties = createPostingCategoryUpdateRequestOptionalProperties();
+    const optionalBooleanProperties = createPostingCategoryUpdateRequestOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalPostingCategoryUpdateRequestPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalPostingCategoryUpdateRequestPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalPostingCategoryUpdateRequestPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

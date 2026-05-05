@@ -18,25 +18,60 @@ export interface PageSupplierItemCostDto {
     size?: number;
     content?: Array<SupplierItemCostDto>;
     number?: number;
-    sort?: SortObject;
     pageable?: PageableObject;
+    sort?: SortObject;
     first?: boolean;
     last?: boolean;
     numberOfElements?: number;
     empty?: boolean;
 }
 
+function isOptionalPageSupplierItemCostDtoPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type PageSupplierItemCostDtoOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createPageSupplierItemCostDtoPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createPageSupplierItemCostDtoOptionalProperties(
+    ...properties: PageSupplierItemCostDtoOptionalProperty[]
+): ReadonlyArray<PageSupplierItemCostDtoOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfPageSupplierItemCostDto(value: object): value is PageSupplierItemCostDto {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('totalElements' in _v && typeof _v['totalElements'] !== 'number') return false;
-    if ('totalPages' in _v && typeof _v['totalPages'] !== 'number') return false;
-    if ('size' in _v && typeof _v['size'] !== 'number') return false;
-    if ('number' in _v && typeof _v['number'] !== 'number') return false;
-    if ('first' in _v && typeof _v['first'] !== 'boolean') return false;
-    if ('last' in _v && typeof _v['last'] !== 'boolean') return false;
-    if ('numberOfElements' in _v && typeof _v['numberOfElements'] !== 'number') return false;
-    if ('empty' in _v && typeof _v['empty'] !== 'boolean') return false;
-    return true;
+
+    const requiredProperties = createPageSupplierItemCostDtoPropertyNames();
+    const optionalStringProperties = createPageSupplierItemCostDtoOptionalProperties();
+    const optionalNumberProperties = createPageSupplierItemCostDtoOptionalProperties({ name: 'totalElements', nullable: false }, { name: 'totalPages', nullable: false }, { name: 'size', nullable: false }, { name: 'number', nullable: false }, { name: 'numberOfElements', nullable: false }, );
+    const optionalBooleanProperties = createPageSupplierItemCostDtoOptionalProperties({ name: 'first', nullable: false }, { name: 'last', nullable: false }, { name: 'empty', nullable: false }, );
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalPageSupplierItemCostDtoPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalPageSupplierItemCostDtoPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalPageSupplierItemCostDtoPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

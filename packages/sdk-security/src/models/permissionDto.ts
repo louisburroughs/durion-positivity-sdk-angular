@@ -17,14 +17,52 @@ export interface PermissionDto {
     deprecated?: boolean;
 }
 
+function isOptionalPermissionDtoPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type PermissionDtoOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createPermissionDtoPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createPermissionDtoOptionalProperties(
+    ...properties: PermissionDtoOptionalProperty[]
+): ReadonlyArray<PermissionDtoOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfPermissionDto(value: object): value is PermissionDto {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('id' in _v && typeof _v['id'] !== 'string') return false;
-    if ('name' in _v && typeof _v['name'] !== 'string') return false;
-    if ('domain' in _v && typeof _v['domain'] !== 'string') return false;
-    if ('description' in _v && typeof _v['description'] !== 'string') return false;
-    if ('deprecated' in _v && typeof _v['deprecated'] !== 'boolean') return false;
-    return true;
+
+    const requiredProperties = createPermissionDtoPropertyNames();
+    const optionalStringProperties = createPermissionDtoOptionalProperties({ name: 'id', nullable: false }, { name: 'name', nullable: false }, { name: 'domain', nullable: false }, { name: 'description', nullable: false }, );
+    const optionalNumberProperties = createPermissionDtoOptionalProperties();
+    const optionalBooleanProperties = createPermissionDtoOptionalProperties({ name: 'deprecated', nullable: false }, );
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalPermissionDtoPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalPermissionDtoPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalPermissionDtoPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

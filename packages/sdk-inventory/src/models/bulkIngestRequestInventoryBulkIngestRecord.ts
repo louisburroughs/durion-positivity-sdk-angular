@@ -17,15 +17,52 @@ export interface BulkIngestRequestInventoryBulkIngestRecord {
     operatorId?: string;
 }
 
+function isOptionalBulkIngestRequestInventoryBulkIngestRecordPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type BulkIngestRequestInventoryBulkIngestRecordOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createBulkIngestRequestInventoryBulkIngestRecordPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createBulkIngestRequestInventoryBulkIngestRecordOptionalProperties(
+    ...properties: BulkIngestRequestInventoryBulkIngestRecordOptionalProperty[]
+): ReadonlyArray<BulkIngestRequestInventoryBulkIngestRecordOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfBulkIngestRequestInventoryBulkIngestRecord(value: object): value is BulkIngestRequestInventoryBulkIngestRecord {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if (!('jobId' in _v) || _v['jobId'] === undefined) return false;
-    if ('jobId' in _v && typeof _v['jobId'] !== 'string') return false;
-    if (!('locationId' in _v) || _v['locationId'] === undefined) return false;
-    if ('locationId' in _v && typeof _v['locationId'] !== 'string') return false;
-    if (!('records' in _v) || _v['records'] === undefined) return false;
-    if ('operatorId' in _v && typeof _v['operatorId'] !== 'string') return false;
-    return true;
+
+    const requiredProperties = createBulkIngestRequestInventoryBulkIngestRecordPropertyNames('jobId', 'locationId', 'records', );
+    const optionalStringProperties = createBulkIngestRequestInventoryBulkIngestRecordOptionalProperties({ name: 'jobId', nullable: false }, { name: 'locationId', nullable: false }, { name: 'operatorId', nullable: false }, );
+    const optionalNumberProperties = createBulkIngestRequestInventoryBulkIngestRecordOptionalProperties();
+    const optionalBooleanProperties = createBulkIngestRequestInventoryBulkIngestRecordOptionalProperties();
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalBulkIngestRequestInventoryBulkIngestRecordPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalBulkIngestRequestInventoryBulkIngestRecordPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalBulkIngestRequestInventoryBulkIngestRecordPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 

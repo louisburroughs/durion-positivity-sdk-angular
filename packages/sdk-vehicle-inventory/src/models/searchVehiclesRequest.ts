@@ -16,13 +16,52 @@ export interface SearchVehiclesRequest {
     enableContainsMatching?: boolean;
 }
 
+function isOptionalSearchVehiclesRequestPropertyOfType(
+    value: Record<string, unknown>,
+    propertyName: string,
+    propertyType: 'string' | 'number' | 'boolean',
+    isNullable = false
+): boolean {
+    if (!(propertyName in value)) {
+        return true;
+    }
+
+    const propertyValue = value[propertyName];
+    if (isNullable && propertyValue === null) {
+        return true;
+    }
+
+    return typeof propertyValue === propertyType;
+}
+
+type SearchVehiclesRequestOptionalProperty = Readonly<{
+    name: string;
+    nullable: boolean;
+}>;
+
+function createSearchVehiclesRequestPropertyNames(...propertyNames: string[]): ReadonlyArray<string> {
+    return propertyNames;
+}
+
+function createSearchVehiclesRequestOptionalProperties(
+    ...properties: SearchVehiclesRequestOptionalProperty[]
+): ReadonlyArray<SearchVehiclesRequestOptionalProperty> {
+    return properties;
+}
+
 export function instanceOfSearchVehiclesRequest(value: object): value is SearchVehiclesRequest {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+
     const _v = value as Record<string, unknown>;
-    if ('query' in _v && typeof _v['query'] !== 'string') return false;
-    if ('limit' in _v && typeof _v['limit'] !== 'number') return false;
-    if ('cursor' in _v && typeof _v['cursor'] !== 'string') return false;
-    if ('enableContainsMatching' in _v && typeof _v['enableContainsMatching'] !== 'boolean') return false;
-    return true;
+
+    const requiredProperties = createSearchVehiclesRequestPropertyNames();
+    const optionalStringProperties = createSearchVehiclesRequestOptionalProperties({ name: 'query', nullable: false }, { name: 'cursor', nullable: false }, );
+    const optionalNumberProperties = createSearchVehiclesRequestOptionalProperties({ name: 'limit', nullable: false }, );
+    const optionalBooleanProperties = createSearchVehiclesRequestOptionalProperties({ name: 'enableContainsMatching', nullable: false }, );
+
+    return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
+        && optionalStringProperties.every((property) => isOptionalSearchVehiclesRequestPropertyOfType(_v, property.name, 'string', property.nullable))
+        && optionalNumberProperties.every((property) => isOptionalSearchVehiclesRequestPropertyOfType(_v, property.name, 'number', property.nullable))
+        && optionalBooleanProperties.every((property) => isOptionalSearchVehiclesRequestPropertyOfType(_v, property.name, 'boolean', property.nullable));
 }
 
