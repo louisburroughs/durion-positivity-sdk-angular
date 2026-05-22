@@ -1,7 +1,7 @@
+export * from './appointmentAssignments.service';
+import { AppointmentAssignmentsService } from './appointmentAssignments.service';
 export * from './appointmentsAPI.service';
 import { AppointmentsAPIService } from './appointmentsAPI.service';
-export * from './assignmentController.service';
-import { AssignmentControllerService } from './assignmentController.service';
 export * from './conflictOverrideAPI.service';
 import { ConflictOverrideAPIService } from './conflictOverrideAPI.service';
 export * from './scheduleAPI.service';
@@ -16,4 +16,4 @@ export * from './shopMobileUnitAPI.service';
 import { ShopMobileUnitAPIService } from './shopMobileUnitAPI.service';
 export * from './workorderOperationalContextAPI.service';
 import { WorkorderOperationalContextAPIService } from './workorderOperationalContextAPI.service';
-export const APIS = [AppointmentsAPIService, AssignmentControllerService, ConflictOverrideAPIService, ScheduleAPIService, ShopAPIService, ShopAuditService, ShopBayAPIService, ShopMobileUnitAPIService, WorkorderOperationalContextAPIService];
+export const APIS = [AppointmentAssignmentsService, AppointmentsAPIService, ConflictOverrideAPIService, ScheduleAPIService, ShopAPIService, ShopAuditService, ShopBayAPIService, ShopMobileUnitAPIService, WorkorderOperationalContextAPIService];

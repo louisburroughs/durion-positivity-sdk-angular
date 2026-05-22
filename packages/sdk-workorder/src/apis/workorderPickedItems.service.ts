@@ -43,6 +43,7 @@ export class WorkorderPickedItemsService extends BaseService {
 
     /**
      * Consume picked items into workorder
+     * Consume the picked items for a workorder so parts usage is recorded against the job
      * @endpoint post /v1/workorders/{workorderId}/picked-items:consume
      * @param workorderId Workorder ID
      * @param consumePickedItemsRequest 
@@ -116,6 +117,7 @@ export class WorkorderPickedItemsService extends BaseService {
 
     /**
      * Get picked items for workorder
+     * Retrieve the items already picked for a workorder before they are consumed
      * @endpoint get /v1/workorders/{workorderId}/picked-items
      * @param workorderId Workorder ID
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.

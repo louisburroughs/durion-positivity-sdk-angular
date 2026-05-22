@@ -15,8 +15,8 @@ export interface StorageLocationPatchRequest {
     status?: StorageLocationPatchRequestStatusEnum;
     parentStorageLocationId?: string;
     destinationStorageLocationId?: string;
-    capacity?: object;
-    temperature?: object;
+    capacity?: { [key: string]: any; };
+    temperature?: { [key: string]: any; };
 }
 export enum StorageLocationPatchRequestStatusEnum {
     Active = 'ACTIVE',

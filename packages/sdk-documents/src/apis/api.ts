@@ -1,3 +1,3 @@
-export * from './documentRenderController.service';
-import { DocumentRenderControllerService } from './documentRenderController.service';
-export const APIS = [DocumentRenderControllerService];
+export * from './documentRenderAPI.service';
+import { DocumentRenderAPIService } from './documentRenderAPI.service';
+export const APIS = [DocumentRenderAPIService];

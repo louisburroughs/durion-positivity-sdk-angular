@@ -100,6 +100,9 @@ export interface WorkorderDetailResponse {
      * Total tax (conditionally included)
      */
     taxTotal?: number;
+    /**
+     * Capability flags indicating allowed actions
+     */
     capabilities: WorkorderCapabilities;
 }
 export enum WorkorderDetailResponseStatusEnum {

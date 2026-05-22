@@ -14,8 +14,8 @@ export interface StorageLocationRequest {
     barcode?: string;
     type?: StorageLocationRequestTypeEnum;
     parentStorageLocationId?: string;
-    capacity?: object;
-    temperature?: object;
+    capacity?: { [key: string]: any; };
+    temperature?: { [key: string]: any; };
 }
 export enum StorageLocationRequestTypeEnum {
     Floor = 'FLOOR',

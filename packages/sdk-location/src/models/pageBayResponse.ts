@@ -13,8 +13,8 @@ import { BayResponse } from './bayResponse';
 
 
 export interface PageBayResponse { 
-    totalElements?: number;
     totalPages?: number;
+    totalElements?: number;
     size?: number;
     content?: Array<BayResponse>;
     number?: number;
@@ -66,7 +66,7 @@ export function instanceOfPageBayResponse(value: object): value is PageBayRespon
 
     const requiredProperties = createPageBayResponsePropertyNames();
     const optionalStringProperties = createPageBayResponseOptionalProperties();
-    const optionalNumberProperties = createPageBayResponseOptionalProperties({ name: 'totalElements', nullable: false }, { name: 'totalPages', nullable: false }, { name: 'size', nullable: false }, { name: 'number', nullable: false }, { name: 'numberOfElements', nullable: false }, );
+    const optionalNumberProperties = createPageBayResponseOptionalProperties({ name: 'totalPages', nullable: false }, { name: 'totalElements', nullable: false }, { name: 'size', nullable: false }, { name: 'number', nullable: false }, { name: 'numberOfElements', nullable: false }, );
     const optionalBooleanProperties = createPageBayResponseOptionalProperties({ name: 'first', nullable: false }, { name: 'last', nullable: false }, { name: 'empty', nullable: false }, );
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

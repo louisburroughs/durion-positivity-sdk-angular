@@ -44,6 +44,8 @@ export class ReceiptService extends BaseService {
     }
 
     /**
+     * Generate invoice receipt
+     * Generate a receipt for an invoice payment using the requested terminal and template
      * @endpoint post /v1/invoices/{invoiceId}/receipts
      * @param invoiceId 
      * @param generateReceiptRequest 
@@ -116,6 +118,8 @@ export class ReceiptService extends BaseService {
     }
 
     /**
+     * Record printed receipt delivery
+     * Record the delivery status for a printed receipt associated with an invoice
      * @endpoint post /v1/invoices/{invoiceId}/receipts/{receiptId}/print
      * @param invoiceId 
      * @param receiptId 
@@ -191,6 +195,8 @@ export class ReceiptService extends BaseService {
     }
 
     /**
+     * Reprint invoice receipt
+     * Create a reprint of an existing receipt and record the reason for the reprint
      * @endpoint post /v1/invoices/{invoiceId}/receipts/{receiptId}/reprint
      * @param invoiceId 
      * @param receiptId 
@@ -267,6 +273,8 @@ export class ReceiptService extends BaseService {
     }
 
     /**
+     * Email invoice receipt
+     * Send an invoice receipt by email and record the delivery status for the attempt
      * @endpoint post /v1/invoices/{invoiceId}/receipts/{receiptId}/email
      * @param invoiceId 
      * @param receiptId 

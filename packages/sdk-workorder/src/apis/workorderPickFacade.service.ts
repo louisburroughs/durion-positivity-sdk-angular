@@ -49,6 +49,7 @@ export class WorkorderPickFacadeService extends BaseService {
 
     /**
      * Complete pick task
+     * Complete a workorder pick task after all of its pick lines are confirmed
      * @endpoint post /v1/workorders/{workorderId}/pick-tasks/{pickTaskId}:complete
      * @param workorderId Workorder ID
      * @param pickTaskId Pick task ID
@@ -123,6 +124,7 @@ export class WorkorderPickFacadeService extends BaseService {
 
     /**
      * Confirm pick line quantity
+     * Confirm the picked quantity for a workorder pick line after scan resolution
      * @endpoint post /v1/workorders/{workorderId}/pick-tasks/{pickTaskId}/lines/{pickLineId}:confirm
      * @param workorderId Workorder ID
      * @param pickTaskId Pick task ID
@@ -204,6 +206,7 @@ export class WorkorderPickFacadeService extends BaseService {
 
     /**
      * Get pick list for workorder
+     * Retrieve the pick list for a workorder so parts can be staged and fulfilled
      * @endpoint get /v1/workorders/{workorderId}/pick-list
      * @param workorderId Workorder ID
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -263,6 +266,7 @@ export class WorkorderPickFacadeService extends BaseService {
 
     /**
      * Get pick tasks for workorder
+     * Retrieve the pick tasks for a workorder to guide pick-list execution
      * @endpoint get /v1/workorders/{workorderId}/pick-list/tasks
      * @param workorderId Workorder ID
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -322,6 +326,7 @@ export class WorkorderPickFacadeService extends BaseService {
 
     /**
      * Resolve scan for pick task
+     * Resolve a scanned item for a workorder pick task before confirming fulfillment
      * @endpoint post /v1/workorders/{workorderId}/pick-tasks/{pickTaskId}:resolve-scan
      * @param workorderId Workorder ID
      * @param pickTaskId Pick task ID

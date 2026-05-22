@@ -22,6 +22,9 @@ export interface AvailabilityInfo {
      * Available to promise quantity
      */
     availableToPromiseQuantity?: number;
+    /**
+     * Lead time information
+     */
     leadTime?: LeadTimeInfo;
     /**
      * Availability data status

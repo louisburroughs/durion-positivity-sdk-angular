@@ -41,6 +41,7 @@ export class SupplierItemCostAPIService extends BaseService {
 
     /**
      * Create supplier cost structure
+     * Creates a supplier-specific item cost structure with the submitted supplier, item, and tier details.
      * @endpoint post /v1/products/supplier-costs
      * @param supplierItemCostCreateRequestDto 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -110,6 +111,7 @@ export class SupplierItemCostAPIService extends BaseService {
 
     /**
      * Delete supplier cost structure
+     * Deletes the supplier item cost structure identified by the supplied cost structure ID.
      * @endpoint delete /v1/products/supplier-costs/{id}
      * @param id 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -168,6 +170,7 @@ export class SupplierItemCostAPIService extends BaseService {
 
     /**
      * Get supplier cost structure
+     * Returns the supplier item cost structure identified by the supplied cost structure ID.
      * @endpoint get /v1/products/supplier-costs/{id}
      * @param id 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -227,6 +230,7 @@ export class SupplierItemCostAPIService extends BaseService {
 
     /**
      * Update supplier cost structure
+     * Updates the supplier item cost structure identified by the supplied cost structure ID.
      * @endpoint put /v1/products/supplier-costs/{id}
      * @param id 
      * @param supplierItemCostUpdateRequestDto 

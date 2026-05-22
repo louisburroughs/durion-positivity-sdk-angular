@@ -1,8 +1,8 @@
 # @durion-sdk/documents@0.1.0-alpha
 
-Document rendering service with multi-format PDF output
+API documentation for document rendering and format conversion
 
-The version of the OpenAPI document: 1.0
+The version of the OpenAPI document: v1
 
 ## Building
 

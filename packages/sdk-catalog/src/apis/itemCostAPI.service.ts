@@ -41,6 +41,7 @@ export class ItemCostAPIService extends BaseService {
 
     /**
      * Get item cost audit history
+     * Returns the recorded audit history entries for item cost changes on the specified item.
      * @endpoint get /v1/products/items/{itemId}/costs/audit
      * @param itemId 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -100,6 +101,7 @@ export class ItemCostAPIService extends BaseService {
 
     /**
      * Get current item costs
+     * Returns the current standard, average, and last known cost values for the specified item.
      * @endpoint get /v1/products/items/{itemId}/costs
      * @param itemId 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -159,6 +161,7 @@ export class ItemCostAPIService extends BaseService {
 
     /**
      * Update standard item cost
+     * Updates the standard cost for the specified item and returns the refreshed item cost values.
      * @endpoint put /v1/products/items/{itemId}/standard-cost
      * @param itemId 
      * @param updateStandardCostRequestDto 

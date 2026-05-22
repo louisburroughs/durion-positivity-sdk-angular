@@ -41,6 +41,7 @@ export class PaymentReversalService extends BaseService {
 
     /**
      * Refund captured payment
+     * Create a refund for a captured invoice payment and record the refund details
      * @endpoint post /v1/invoices/{invoiceId}/payments/{paymentId}/refunds
      * @param invoiceId 
      * @param paymentId 
@@ -118,6 +119,7 @@ export class PaymentReversalService extends BaseService {
 
     /**
      * Void authorized payment
+     * Void a previously authorized invoice payment before it is captured
      * @endpoint post /v1/invoices/{invoiceId}/payments/{paymentId}/void
      * @param invoiceId 
      * @param paymentId 

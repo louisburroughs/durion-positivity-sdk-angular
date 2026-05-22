@@ -39,6 +39,7 @@ export class TimeEntryAPIService extends BaseService {
 
     /**
      * Approve a time entry in SUBMITTED state
+     * Approve a submitted time entry so it can move forward in the workorder timekeeping workflow
      * @endpoint post /v1/workorders/timeEntries/{timeEntryId}/approve
      * @param timeEntryId 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -98,6 +99,7 @@ export class TimeEntryAPIService extends BaseService {
 
     /**
      * Reject a time entry in SUBMITTED state
+     * Reject a submitted time entry and record the rejection details for follow-up
      * @endpoint post /v1/workorders/timeEntries/{timeEntryId}/reject
      * @param timeEntryId 
      * @param rejectTimeEntryRequest 

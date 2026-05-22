@@ -23,8 +23,17 @@ export interface PriceQuoteResponse {
      * Quoted quantity
      */
     quantity?: number;
+    /**
+     * Manufacturer suggested retail price
+     */
     msrp?: MoneyAmount;
+    /**
+     * Final unit price after applying applicable rules
+     */
     unitPrice?: MoneyAmount;
+    /**
+     * Extended price (unit price multiplied by quantity)
+     */
     extendedPrice?: MoneyAmount;
     /**
      * Source from which the final price was resolved

@@ -13,8 +13,8 @@ import { SortObject } from './sortObject';
 
 
 export interface PageMobileUnitResponse { 
-    totalElements?: number;
     totalPages?: number;
+    totalElements?: number;
     size?: number;
     content?: Array<MobileUnitResponse>;
     number?: number;
@@ -66,7 +66,7 @@ export function instanceOfPageMobileUnitResponse(value: object): value is PageMo
 
     const requiredProperties = createPageMobileUnitResponsePropertyNames();
     const optionalStringProperties = createPageMobileUnitResponseOptionalProperties();
-    const optionalNumberProperties = createPageMobileUnitResponseOptionalProperties({ name: 'totalElements', nullable: false }, { name: 'totalPages', nullable: false }, { name: 'size', nullable: false }, { name: 'number', nullable: false }, { name: 'numberOfElements', nullable: false }, );
+    const optionalNumberProperties = createPageMobileUnitResponseOptionalProperties({ name: 'totalPages', nullable: false }, { name: 'totalElements', nullable: false }, { name: 'size', nullable: false }, { name: 'number', nullable: false }, { name: 'numberOfElements', nullable: false }, );
     const optionalBooleanProperties = createPageMobileUnitResponseOptionalProperties({ name: 'first', nullable: false }, { name: 'last', nullable: false }, { name: 'empty', nullable: false }, );
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

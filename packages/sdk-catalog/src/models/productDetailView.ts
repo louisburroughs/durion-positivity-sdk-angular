@@ -29,7 +29,13 @@ export interface ProductDetailView {
      * Product specifications
      */
     specifications?: Array<ProductSpecification>;
+    /**
+     * Pricing information with status indicator
+     */
     pricing?: PricingInfo;
+    /**
+     * Availability information with status indicator
+     */
     availability?: AvailabilityInfo;
     /**
      * Substitution product suggestions

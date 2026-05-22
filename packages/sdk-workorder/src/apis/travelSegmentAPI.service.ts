@@ -47,6 +47,7 @@ export class TravelSegmentAPIService extends BaseService {
 
     /**
      * Create a post-approval adjustment for a travel segment
+     * Create an adjustment for a previously recorded travel segment after approval
      * @endpoint post /v1/workorders/travelSegments/{travelSegmentId}/adjustments
      * @param travelSegmentId 
      * @param createTravelSegmentAdjustmentRequest 
@@ -120,6 +121,7 @@ export class TravelSegmentAPIService extends BaseService {
 
     /**
      * Start a travel segment
+     * Start a travel segment for a technician beginning travel related to work execution
      * @endpoint post /v1/workorders/travelSegments/start
      * @param startTravelSegmentRequest 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -189,6 +191,7 @@ export class TravelSegmentAPIService extends BaseService {
 
     /**
      * Stop a travel segment
+     * Stop an active travel segment and record the final travel details
      * @endpoint post /v1/workorders/travelSegments/{travelSegmentId}/stop
      * @param travelSegmentId 
      * @param stopTravelSegmentRequest 
@@ -262,6 +265,7 @@ export class TravelSegmentAPIService extends BaseService {
 
     /**
      * Submit travel segments for a mobile work assignment
+     * Submit recorded travel segments for a mobile work assignment for downstream processing
      * @endpoint post /v1/workorders/travelSegments/submit/{mobileWorkAssignmentId}
      * @param mobileWorkAssignmentId 
      * @param submitTravelSegmentsRequest 

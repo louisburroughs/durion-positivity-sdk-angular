@@ -39,6 +39,7 @@ export class RestrictionRulesService extends BaseService {
 
     /**
      * Create a restriction rule
+     * Creates a price restriction rule for a product, location tag, and service tag combination.
      * @endpoint post /v1/price/restrictions/rules
      * @param createRestrictionRuleRequest 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -108,6 +109,7 @@ export class RestrictionRulesService extends BaseService {
 
     /**
      * Deactivate a restriction rule
+     * Deactivates the specified restriction rule so it no longer participates in price restriction evaluation.
      * @endpoint delete /v1/price/restrictions/rules/{ruleId}
      * @param ruleId 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -167,6 +169,7 @@ export class RestrictionRulesService extends BaseService {
 
     /**
      * Get a restriction rule by ID
+     * Returns the active or inactive restriction rule identified by the supplied rule ID.
      * @endpoint get /v1/price/restrictions/rules/{ruleId}
      * @param ruleId 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -226,6 +229,7 @@ export class RestrictionRulesService extends BaseService {
 
     /**
      * List all active restriction rules
+     * Returns all currently active price restriction rules that can affect pricing decisions.
      * @endpoint get /v1/price/restrictions/rules
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.

@@ -96,7 +96,13 @@ export interface ProductDto {
      * Product code type
      */
     productCodeType?: ProductDtoProductCodeTypeEnum;
+    /**
+     * Category detail
+     */
     category?: CategoryDto;
+    /**
+     * Subcategory detail
+     */
     subcategory?: SubcategoryDto;
     /**
      * Product type
