@@ -34,6 +34,7 @@ This is the **Angular-native** sibling of [durion-positivity-sdk](https://github
     - [Requirements](#requirements)
   - [App Setup](#app-setup)
     - [Providing HttpClient](#providing-httpclient)
+    - [Base path per gateway route](#base-path-per-gateway-route)
     - [Auth token via interceptor (recommended)](#auth-token-via-interceptor-recommended)
     - [Auth token via transport config](#auth-token-via-transport-config)
   - [Quick Start](#quick-start)
@@ -194,9 +195,9 @@ import { authInterceptor } from "./core/auth/auth.interceptor";
 
 export const appConfig: ApplicationConfig = {
   providers: [
-    provideHttpClient(withInterceptors([authInterceptor])),
+    provideHttpClient(withInterceptors([authInterceptor]))
     // ...
-  ],
+  ]
 };
 ```
 
@@ -213,9 +214,21 @@ import { environment } from "../environments/environment";
 
 export const appConfig: ApplicationConfig = {
   providers: [
-    { provide: AccountingConfiguration, useFactory: () => new AccountingConfiguration({ basePath: `${environment.apiBaseUrl}/accounting` }) },
-    { provide: SecurityConfiguration, useFactory: () => new SecurityConfiguration({ basePath: `${environment.apiBaseUrl}/security-service` }) },
-  ],
+    {
+      provide: AccountingConfiguration,
+      useFactory: () =>
+        new AccountingConfiguration({
+          basePath: `${environment.apiBaseUrl}/accounting`
+        })
+    },
+    {
+      provide: SecurityConfiguration,
+      useFactory: () =>
+        new SecurityConfiguration({
+          basePath: `${environment.apiBaseUrl}/security-service`
+        })
+    }
+  ]
 };
 ```
 
@@ -242,8 +255,8 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
 
   return next(
     req.clone({
-      setHeaders: { Authorization: `Bearer ${token}` },
-    }),
+      setHeaders: { Authorization: `Bearer ${token}` }
+    })
   );
 };
 ```
@@ -257,7 +270,7 @@ import { DurionSdkConfig } from "@durion-sdk/transport";
 
 const config: DurionSdkConfig = {
   baseUrl: "https://api.example.com",
-  token: () => inject(AuthTokenStore).getAccessToken(),
+  token: () => inject(AuthTokenStore).getAccessToken()
 };
 ```
 
@@ -275,7 +288,7 @@ import { AuthAPIApiService, TokenPairResponse } from "@durion-sdk/security";
 @Component({
   selector: "app-login",
   standalone: true,
-  templateUrl: "./login.component.html",
+  templateUrl: "./login.component.html"
 })
 export class LoginComponent {
   private readonly authService = inject(AuthAPIApiService);
@@ -293,7 +306,7 @@ export class LoginComponent {
           this.tokenStore.save(tokens);
           this.state.set("idle");
         },
-        error: () => this.state.set("error"),
+        error: () => this.state.set("error")
       });
   }
 }
@@ -324,7 +337,7 @@ const config: DurionSdkConfig = {
 
   // Optional — override the default idempotency key generator
   // Only called for POST, PUT, PATCH, DELETE
-  idempotencyKeyGenerator: (method, url) => `${method}:${url}:${Date.now()}`,
+  idempotencyKeyGenerator: (method, url) => `${method}:${url}:${Date.now()}`
 };
 ```
 
@@ -488,7 +501,7 @@ this.authService
           console.error(`  ${field}: ${message}`);
         });
       }
-    },
+    }
   });
 ```
 
@@ -783,12 +796,12 @@ import { createSecurityClient } from "@durion-sdk/security";
 
 const security = createSecurityClient({
   baseUrl: "https://api.example.com",
-  token: async () => localStorage.getItem("access_token") ?? "",
+  token: async () => localStorage.getItem("access_token") ?? ""
 });
 
 // Login
 const response = await security.authAPIApi.login({
-  loginRequest: { username: "user@example.com", password: "secret" },
+  loginRequest: { username: "user@example.com", password: "secret" }
 });
 
 // Every other domain follows the same pattern
@@ -796,7 +809,7 @@ import { createOrderClient } from "@durion-sdk/order";
 
 const orders = createOrderClient({
   baseUrl: "https://api.example.com",
-  token: async () => getAccessToken(),
+  token: async () => getAccessToken()
 });
 
 const salesOrders = await orders.salesOrdersApi.listOrders();
@@ -826,7 +839,7 @@ const config: DurionSdkConfig = {
 
   // Optional — override the default idempotency key generator
   // Only called for POST, PUT, PATCH, DELETE
-  idempotencyKeyGenerator: (method, url) => `${method}:${url}:${Date.now()}`,
+  idempotencyKeyGenerator: (method, url) => `${method}:${url}:${Date.now()}`
 };
 ```
 
@@ -874,7 +887,7 @@ const {
   roleManagementApi,
   selfRegistrationReviewAPIApi,
   userAPIApi,
-  userRoleManagementApi,
+  userRoleManagementApi
 } = createSecurityClient(config);
 ```
 
@@ -907,7 +920,7 @@ const {
   paymentApplicationsApi,
   postingCategoriesApi,
   postingRulesApi,
-  vendorBillAPIApi,
+  vendorBillAPIApi
 } = createAccountingClient(config);
 ```
 
@@ -929,7 +942,7 @@ const auth = new SecurityAuthWorkflow(client.authAPIApi, client.jwtAPIApi);
 
 const tokens = await auth.login({ loginRequest: { username, password } });
 const refreshed = await auth.refresh({
-  refreshTokenRequest: { refresh_token },
+  refreshTokenRequest: { refresh_token }
 });
 await auth.validate({ token });
 await auth.revoke({ token });
@@ -1166,10 +1179,13 @@ durion-positivity-sdk/
 
 ## Contributing
 
-1. **Install** — `npm install` from the repo root.
+1. **Never edit generated files** — modify the backend OpenAPI spec and run `npm run generate` instead.
 2. **Build** — `npm run build` before running tests.
-3. **Never edit generated files** — modify the backend OpenAPI spec and run `npm run generate` instead.
+3. **Install** — `npm install` from the repo root.
 4. **Workflow helpers** — new multi-step operations belong in `packages/sdk-{domain}/src/workflows/`, not in the consuming application.
 5. **Transport changes** — any new header or request behaviour goes in `SdkHttpClient`; update the test in `sdk-007-transport-enhancements.test.ts`.
 6. **Tests required** — coverage threshold is 80%; new workflow methods need a corresponding test in `sdk-008-workflow-helpers.test.ts` or a domain-specific test file.
 7. **Lint** — `npm run lint` must pass before opening a PR.
+
+(cd /home/louis-burroughs/IdeaProjects/durion-positivity-sdk-angular && npm run generate && npm run build) && \
+(cd /home/louis-burroughs/IdeaProjects/durion-positivity-frontend && npm run sdk:install)
