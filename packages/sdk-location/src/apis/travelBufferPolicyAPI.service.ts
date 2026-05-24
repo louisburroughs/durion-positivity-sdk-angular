@@ -168,20 +168,20 @@ export class TravelBufferPolicyAPIService extends BaseService {
      * Patch an existing travel buffer policy using the provided partial field updates
      * @endpoint patch /v1/travel-buffer-policies/{id}
      * @param id 
-     * @param requestBody 
+     * @param body 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public patch(id: string, requestBody: { [key: string]: any; }, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<TravelBufferPolicyResponse>;
-    public patch(id: string, requestBody: { [key: string]: any; }, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<TravelBufferPolicyResponse>>;
-    public patch(id: string, requestBody: { [key: string]: any; }, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<TravelBufferPolicyResponse>>;
-    public patch(id: string, requestBody: { [key: string]: any; }, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public patch(id: string, body: object, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<TravelBufferPolicyResponse>;
+    public patch(id: string, body: object, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<TravelBufferPolicyResponse>>;
+    public patch(id: string, body: object, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<TravelBufferPolicyResponse>>;
+    public patch(id: string, body: object, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (id === null || id === undefined) {
             throw new Error('Required parameter id was null or undefined when calling patch.');
         }
-        if (requestBody === null || requestBody === undefined) {
-            throw new Error('Required parameter requestBody was null or undefined when calling patch.');
+        if (body === null || body === undefined) {
+            throw new Error('Required parameter body was null or undefined when calling patch.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -226,7 +226,7 @@ export class TravelBufferPolicyAPIService extends BaseService {
         return this.httpClient.request<TravelBufferPolicyResponse>('patch', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
-                body: requestBody,
+                body: body,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,

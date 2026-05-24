@@ -17,8 +17,8 @@ export interface StorageLocationResponse {
     status?: string;
     siteId?: string;
     parentStorageLocationId?: string;
-    capacity?: { [key: string]: any; };
-    temperature?: { [key: string]: any; };
+    capacity?: object;
+    temperature?: object;
     inventoryCount?: number;
 }
 export enum StorageLocationResponseTypeEnum {

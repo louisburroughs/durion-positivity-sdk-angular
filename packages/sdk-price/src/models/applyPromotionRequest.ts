@@ -18,9 +18,6 @@ export interface ApplyPromotionRequest {
      * Promotion code to apply
      */
     promotionCode: string;
-    /**
-     * Estimate context used for promotion evaluation
-     */
     estimateContext: EstimateContext;
 }
 

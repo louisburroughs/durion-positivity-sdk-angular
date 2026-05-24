@@ -27,13 +27,7 @@ export interface WorkexecLaborPerformedRequest {
      * Timestamp when labor was performed
      */
     performedAt: string;
-    /**
-     * Labor quantity and unit
-     */
     labor: LaborQuantity;
-    /**
-     * External source metadata
-     */
     source: SourceReference;
 }
 

@@ -34,7 +34,7 @@ export interface LocationRequestDTO {
     checkInBufferMinutes?: number;
     cleanupBufferMinutes?: number;
     type: LocationTypeDTO;
-    parents?: { [key: string]: any; };
+    parents?: object;
 }
 
 function isOptionalLocationRequestDTOPropertyOfType(

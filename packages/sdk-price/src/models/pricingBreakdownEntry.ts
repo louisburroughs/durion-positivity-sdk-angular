@@ -22,13 +22,7 @@ export interface PricingBreakdownEntry {
      * Rule category/type
      */
     ruleType?: string;
-    /**
-     * Amount adjusted by this rule
-     */
     adjustment?: MoneyAmount;
-    /**
-     * Running value after this rule adjustment
-     */
     resultingValue?: MoneyAmount;
 }
 

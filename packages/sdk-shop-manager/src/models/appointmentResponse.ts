@@ -22,8 +22,8 @@ export interface AppointmentResponse {
     cancellationReason?: string;
     cancellationNotes?: string;
     serviceRequestIds?: Array<string>;
-    customerSnapshot?: { [key: string]: any; };
-    vehicleSnapshot?: { [key: string]: any; };
+    customerSnapshot?: object;
+    vehicleSnapshot?: object;
 }
 
 function isOptionalAppointmentResponsePropertyOfType(

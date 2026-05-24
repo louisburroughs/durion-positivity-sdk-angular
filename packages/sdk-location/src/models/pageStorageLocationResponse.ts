@@ -13,8 +13,8 @@ import { StorageLocationResponse } from './storageLocationResponse';
 
 
 export interface PageStorageLocationResponse { 
-    totalPages?: number;
     totalElements?: number;
+    totalPages?: number;
     size?: number;
     content?: Array<StorageLocationResponse>;
     number?: number;
@@ -66,7 +66,7 @@ export function instanceOfPageStorageLocationResponse(value: object): value is P
 
     const requiredProperties = createPageStorageLocationResponsePropertyNames();
     const optionalStringProperties = createPageStorageLocationResponseOptionalProperties();
-    const optionalNumberProperties = createPageStorageLocationResponseOptionalProperties({ name: 'totalPages', nullable: false }, { name: 'totalElements', nullable: false }, { name: 'size', nullable: false }, { name: 'number', nullable: false }, { name: 'numberOfElements', nullable: false }, );
+    const optionalNumberProperties = createPageStorageLocationResponseOptionalProperties({ name: 'totalElements', nullable: false }, { name: 'totalPages', nullable: false }, { name: 'size', nullable: false }, { name: 'number', nullable: false }, { name: 'numberOfElements', nullable: false }, );
     const optionalBooleanProperties = createPageStorageLocationResponseOptionalProperties({ name: 'first', nullable: false }, { name: 'last', nullable: false }, { name: 'empty', nullable: false }, );
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
