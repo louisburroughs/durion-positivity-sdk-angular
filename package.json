@@ -7,7 +7,7 @@
     "packages/*"
   ],
   "scripts": {
-    "build": "tsc --project tsconfig.json",
+    "build": "npm run build --workspaces",
     "test": "jest",
     "lint": "eslint . --ext .ts,.tsx",
     "generate": "bash scripts/generate-openapi.sh"
