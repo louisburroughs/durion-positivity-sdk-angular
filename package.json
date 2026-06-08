@@ -1,8 +1,8 @@
 {
-  "name": "durion-positivity-sdk",
+  "name": "durion-positivity-sdk-angular",
   "version": "0.1.0-alpha",
   "private": true,
-  "description": "Durion Positivity Backend SDK — TypeScript client library",
+  "description": "Durion Positivity Angular SDK — TypeScript/Angular client library",
   "workspaces": [
     "packages/*"
   ],
@@ -25,6 +25,6 @@
     "jest-preset-angular": "^16.1.4",
     "rxjs": "^7.8.0",
     "ts-jest": "^29.4.9",
-    "typescript": "^5.4.0"
+    "typescript": ">=5.9.0 <6.0.0"
   }
 }
