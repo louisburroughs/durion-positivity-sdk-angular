@@ -48,8 +48,8 @@ export class JWTAPIService extends BaseService {
     }
 
     /**
-     * Issue JWT token pair (access + refresh)
-     * Authenticate and receive both access token (1-hour) and refresh token (7-day). See BACKEND_CONTRACT_GUIDE.md §Token Pair Endpoint for full specification.
+     * Issue privileged JWT token pair (access + refresh)
+     * Privileged internal endpoint that issues both access token (1-hour) and refresh token (7-day). Requires authority security:token:issue_internal. See BACKEND_CONTRACT_GUIDE.md §Token Pair Endpoint for full specification.
      * @endpoint post /v1/auth/token-pair
      * @param tokenPairRequest 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -65,6 +65,9 @@ export class JWTAPIService extends BaseService {
         }
 
         let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
 
         const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
             'application/json'

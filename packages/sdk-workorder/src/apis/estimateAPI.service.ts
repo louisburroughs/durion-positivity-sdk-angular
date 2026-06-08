@@ -610,9 +610,9 @@ export class EstimateAPIService extends BaseService {
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public generateEstimatePdf(estimateId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/pdf', context?: HttpContext, transferCache?: boolean}): Observable<{ [key: string]: any; }>;
-    public generateEstimatePdf(estimateId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/pdf', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<{ [key: string]: any; }>>;
-    public generateEstimatePdf(estimateId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/pdf', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<{ [key: string]: any; }>>;
+    public generateEstimatePdf(estimateId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/pdf', context?: HttpContext, transferCache?: boolean}): Observable<Blob>;
+    public generateEstimatePdf(estimateId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/pdf', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Blob>>;
+    public generateEstimatePdf(estimateId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/pdf', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Blob>>;
     public generateEstimatePdf(estimateId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/pdf', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (estimateId === null || estimateId === undefined) {
             throw new Error('Required parameter estimateId was null or undefined when calling generateEstimatePdf.');
@@ -635,23 +635,12 @@ export class EstimateAPIService extends BaseService {
         const localVarTransferCache: boolean = options?.transferCache ?? true;
 
 
-        let responseType_: 'text' | 'json' | 'blob' = 'json';
-        if (localVarHttpHeaderAcceptSelected) {
-            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
-                responseType_ = 'text';
-            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
-                responseType_ = 'json';
-            } else {
-                responseType_ = 'blob';
-            }
-        }
-
         let localVarPath = `/v1/workorders/estimates/${this.configuration.encodeParam({name: "estimateId", value: estimateId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/pdf`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<{ [key: string]: any; }>('get', `${basePath}${localVarPath}`,
+        return this.httpClient.request('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
-                responseType: <any>responseType_,
+                responseType: "blob",
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,
                 observe: observe,
