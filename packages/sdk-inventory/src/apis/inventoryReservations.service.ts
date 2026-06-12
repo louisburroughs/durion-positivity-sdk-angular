@@ -173,7 +173,7 @@ export class InventoryReservationsService extends BaseService {
 
     /**
      * Promote allocation to hard
-     * Promotes an existing allocation to HARD state when ATP is sufficient
+     * Promotes an existing allocation to HARD state when ATP is sufficient. Requires a storageLocationId; the hardened allocation is pinned to that storage location and an ALLOCATION_CREATED ledger event is recorded against it. A repeat promote of an already-HARD allocation keeps its original location and writes no duplicate event.
      * @endpoint post /v1/inventory/reservations/{allocationId}/promote
      * @param allocationId Allocation identifier to promote
      * @param promoteAllocationRequest Promotion request details

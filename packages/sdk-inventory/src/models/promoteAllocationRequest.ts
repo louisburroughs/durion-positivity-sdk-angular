@@ -10,6 +10,13 @@
 
 
 export interface PromoteAllocationRequest { 
+    /**
+     * Storage location identifier where the hardened allocation pins stock
+     */
+    storageLocationId: string;
+    /**
+     * Reason the allocation is being hardened
+     */
     hardenedReason?: string;
 }
 
@@ -51,8 +58,8 @@ export function instanceOfPromoteAllocationRequest(value: object): value is Prom
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createPromoteAllocationRequestPropertyNames();
-    const optionalStringProperties = createPromoteAllocationRequestOptionalProperties({ name: 'hardenedReason', nullable: false }, );
+    const requiredProperties = createPromoteAllocationRequestPropertyNames('storageLocationId', );
+    const optionalStringProperties = createPromoteAllocationRequestOptionalProperties({ name: 'storageLocationId', nullable: false }, { name: 'hardenedReason', nullable: false }, );
     const optionalNumberProperties = createPromoteAllocationRequestOptionalProperties();
     const optionalBooleanProperties = createPromoteAllocationRequestOptionalProperties();
 
