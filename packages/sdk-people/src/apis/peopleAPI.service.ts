@@ -170,16 +170,38 @@ export class PeopleAPIService extends BaseService {
 
     /**
      * Get all people
-     * Retrieve a list of all people.
+     * Retrieve people with optional type and text filters.
      * @endpoint get /v1/people
+     * @param type Filter by person type: EMPLOYEE, ACTIVE, INACTIVE, or ALL (default).
+     * @param q Case-insensitive text search on firstName, lastName, primaryEmail, username.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public getAllPeople(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<Person>>;
-    public getAllPeople(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<Person>>>;
-    public getAllPeople(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<Person>>>;
-    public getAllPeople(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getAllPeople(type?: 'ALL' | 'EMPLOYEE' | 'ACTIVE' | 'INACTIVE', q?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<Person>>;
+    public getAllPeople(type?: 'ALL' | 'EMPLOYEE' | 'ACTIVE' | 'INACTIVE', q?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<Person>>>;
+    public getAllPeople(type?: 'ALL' | 'EMPLOYEE' | 'ACTIVE' | 'INACTIVE', q?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<Person>>>;
+    public getAllPeople(type?: 'ALL' | 'EMPLOYEE' | 'ACTIVE' | 'INACTIVE', q?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+
+        let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'type',
+            <any>type,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'q',
+            <any>q,
+            QueryParamStyle.Form,
+            true,
+        );
+
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -214,6 +236,7 @@ export class PeopleAPIService extends BaseService {
         return this.httpClient.request<Array<Person>>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
+                params: localVarQueryParameters.toHttpParams(),
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,

@@ -29,7 +29,20 @@ export interface Person {
     secondaryEmail?: string;
     phoneNumbers?: Array<string>;
     username?: string;
+    /**
+     * Employee status. Null if the person has no employee record.
+     */
+    employeeStatus?: PersonEmployeeStatusEnum;
 }
+export enum PersonEmployeeStatusEnum {
+    Active = 'ACTIVE',
+    OnLeave = 'ON_LEAVE',
+    Suspended = 'SUSPENDED',
+    Terminated = 'TERMINATED',
+    Disabled = 'DISABLED'
+};
+
+
 
 function isOptionalPersonPropertyOfType(
     value: Record<string, unknown>,
@@ -70,7 +83,7 @@ export function instanceOfPerson(value: object): value is Person {
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createPersonPropertyNames('firstName', 'lastName', );
-    const optionalStringProperties = createPersonOptionalProperties({ name: 'id', nullable: false }, { name: 'firstName', nullable: false }, { name: 'lastName', nullable: false }, { name: 'primaryEmail', nullable: false }, { name: 'secondaryEmail', nullable: false }, { name: 'username', nullable: false }, );
+    const optionalStringProperties = createPersonOptionalProperties({ name: 'id', nullable: false }, { name: 'firstName', nullable: false }, { name: 'lastName', nullable: false }, { name: 'primaryEmail', nullable: false }, { name: 'secondaryEmail', nullable: false }, { name: 'username', nullable: false }, { name: 'employeeStatus', nullable: false }, );
     const optionalNumberProperties = createPersonOptionalProperties();
     const optionalBooleanProperties = createPersonOptionalProperties();
 
