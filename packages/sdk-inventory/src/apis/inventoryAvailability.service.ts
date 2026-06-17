@@ -308,6 +308,108 @@ export class InventoryAvailabilityService extends BaseService {
     }
 
     /**
+     * Query inventory availability by SKU (list form)
+     * Returns on-hand, allocated, and available-to-promise quantities for a product at a specific location, wrapped in a list. Accepts \&#39;sku\&#39; as the query param name.
+     * @endpoint get /v1/inventory/availability
+     * @param sku Product SKU
+     * @param locationId Location identifier
+     * @param storageLocationId Storage location identifier (optional; narrows to sub-location)
+     * @param sourceType Inventory lookup strategy
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public queryAvailabilityBySkuList(sku: string, locationId?: string, storageLocationId?: string, sourceType?: 'WAREHOUSE' | 'SUPPLIER' | 'TRANSIT', observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<AvailabilityView>>;
+    public queryAvailabilityBySkuList(sku: string, locationId?: string, storageLocationId?: string, sourceType?: 'WAREHOUSE' | 'SUPPLIER' | 'TRANSIT', observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<AvailabilityView>>>;
+    public queryAvailabilityBySkuList(sku: string, locationId?: string, storageLocationId?: string, sourceType?: 'WAREHOUSE' | 'SUPPLIER' | 'TRANSIT', observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<AvailabilityView>>>;
+    public queryAvailabilityBySkuList(sku: string, locationId?: string, storageLocationId?: string, sourceType?: 'WAREHOUSE' | 'SUPPLIER' | 'TRANSIT', observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (sku === null || sku === undefined) {
+            throw new Error('Required parameter sku was null or undefined when calling queryAvailabilityBySkuList.');
+        }
+
+        let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'sku',
+            <any>sku,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'locationId',
+            <any>locationId,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'storageLocationId',
+            <any>storageLocationId,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'sourceType',
+            <any>sourceType,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/inventory/availability`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<Array<AvailabilityView>>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                params: localVarQueryParameters.toHttpParams(),
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
      * Update inventory availability
      * Not implemented by design. Availability is derived from ledger events and is read-only via this endpoint. Use POST /v1/inventory/stock-movements or POST /v1/inventory/adjustments for inventory changes.
      * @endpoint post /v1/inventory/availability/{productId}

@@ -11,7 +11,7 @@ import { RoleAssignment } from './roleAssignment';
 
 
 /**
- * Role update request
+ * Role assignment request
  */
 export interface UpdateContactRolesRequest { 
     version?: string;

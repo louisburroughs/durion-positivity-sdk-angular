@@ -7,6 +7,7 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { ContactPointDto } from './contactPointDto';
 
 
 /**
@@ -33,6 +34,10 @@ export interface Person {
      * Employee status. Null if the person has no employee record.
      */
     employeeStatus?: PersonEmployeeStatusEnum;
+    /**
+     * Typed contact points (email, phone). Populated on batch by-id lookups.
+     */
+    contactPoints?: Array<ContactPointDto>;
 }
 export enum PersonEmployeeStatusEnum {
     Active = 'ACTIVE',

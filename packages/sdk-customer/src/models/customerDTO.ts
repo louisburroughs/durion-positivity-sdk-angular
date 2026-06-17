@@ -30,14 +30,6 @@ export interface CustomerDTO {
      */
     firstName: string;
     /**
-     * Phone number of the customer
-     */
-    phoneNumber?: string;
-    /**
-     * Email address of the customer
-     */
-    email?: string;
-    /**
      * Primary address label or identifier for the customer
      */
     primaryAddress?: string;
@@ -90,7 +82,7 @@ export function instanceOfCustomerDTO(value: object): value is CustomerDTO {
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createCustomerDTOPropertyNames('lastName', 'firstName', );
-    const optionalStringProperties = createCustomerDTOOptionalProperties({ name: 'id', nullable: false }, { name: 'customerNumber', nullable: false }, { name: 'lastName', nullable: false }, { name: 'firstName', nullable: false }, { name: 'phoneNumber', nullable: false }, { name: 'email', nullable: false }, { name: 'primaryAddress', nullable: false }, { name: 'customerType', nullable: false }, );
+    const optionalStringProperties = createCustomerDTOOptionalProperties({ name: 'id', nullable: false }, { name: 'customerNumber', nullable: false }, { name: 'lastName', nullable: false }, { name: 'firstName', nullable: false }, { name: 'primaryAddress', nullable: false }, { name: 'customerType', nullable: false }, );
     const optionalNumberProperties = createCustomerDTOOptionalProperties();
     const optionalBooleanProperties = createCustomerDTOOptionalProperties();
 

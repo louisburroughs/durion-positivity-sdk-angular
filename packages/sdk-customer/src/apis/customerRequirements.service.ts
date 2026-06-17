@@ -1,5 +1,5 @@
 /**
- * POS Workorder Service API
+ * Positivity Customer API
  *
  * Contact: louis.burroughs@gmail.com
  *
@@ -16,8 +16,6 @@ import { HttpClient, HttpHeaders, HttpParams,
 import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
-// @ts-ignore
-import { WorkorderDetailResponse } from '../src/models/workorderDetailResponse';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
@@ -29,27 +27,27 @@ import { BaseService } from '../api.base.service';
 @Injectable({
   providedIn: 'root'
 })
-export class WorkorderDetailService extends BaseService {
+export class CustomerRequirementsService extends BaseService {
 
     constructor(protected httpClient: HttpClient, @Optional() @Inject(BASE_PATH) basePath: string|string[], @Optional() configuration?: Configuration) {
         super(basePath, configuration);
     }
 
     /**
-     * Get workorder detail with role-based visibility
-     * Returns comprehensive workorder detail. Financial fields are conditionally included based on user authorities. Capability flags indicate which actions the user can perform.
-     * @endpoint get /v1/workorders/{workorderId}/detail
-     * @param workorderId Workorder ID
+     * Check whether a customer meets requirements
+     * Returns true when the customer is active and, for commercial parties, not on credit hold.
+     * @endpoint get /v1/customers/{id}/requirements-met
+     * @param id Customer ID
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public getWorkorderDetail(workorderId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<WorkorderDetailResponse>;
-    public getWorkorderDetail(workorderId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<WorkorderDetailResponse>>;
-    public getWorkorderDetail(workorderId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<WorkorderDetailResponse>>;
-    public getWorkorderDetail(workorderId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
-        if (workorderId === null || workorderId === undefined) {
-            throw new Error('Required parameter workorderId was null or undefined when calling getWorkorderDetail.');
+    public requirementsMet(id: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<boolean>;
+    public requirementsMet(id: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<boolean>>;
+    public requirementsMet(id: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<boolean>>;
+    public requirementsMet(id: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (id === null || id === undefined) {
+            throw new Error('Required parameter id was null or undefined when calling requirementsMet.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -80,9 +78,9 @@ export class WorkorderDetailService extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/workorders/${this.configuration.encodeParam({name: "workorderId", value: workorderId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/detail`;
+        let localVarPath = `/v1/customers/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/requirements-met`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<WorkorderDetailResponse>('get', `${basePath}${localVarPath}`,
+        return this.httpClient.request<boolean>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,

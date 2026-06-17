@@ -35,8 +35,6 @@ import { GetAccountTierResponse } from '../src/models/getAccountTierResponse';
 // @ts-ignore
 import { GetCommunicationPreferencesResponse } from '../src/models/getCommunicationPreferencesResponse';
 // @ts-ignore
-import { GetContactsWithRolesResponse } from '../src/models/getContactsWithRolesResponse';
-// @ts-ignore
 import { GetPartyResponse } from '../src/models/getPartyResponse';
 // @ts-ignore
 import { MergePartiesRequest } from '../src/models/mergePartiesRequest';
@@ -52,10 +50,6 @@ import { ResolveAccountTierResponse } from '../src/models/resolveAccountTierResp
 import { SearchPartiesRequest } from '../src/models/searchPartiesRequest';
 // @ts-ignore
 import { SearchPartiesResponse } from '../src/models/searchPartiesResponse';
-// @ts-ignore
-import { UpdateContactRolesRequest } from '../src/models/updateContactRolesRequest';
-// @ts-ignore
-import { UpdateContactRolesResponse } from '../src/models/updateContactRolesResponse';
 // @ts-ignore
 import { UpsertBillingRulesRequest } from '../src/models/upsertBillingRulesRequest';
 // @ts-ignore
@@ -482,66 +476,6 @@ export class CRMAccountsService extends BaseService {
     }
 
     /**
-     * Get contacts with roles
-     * Retrieve all contacts for a party including their role assignments
-     * @endpoint get /v1/crm/accounts/parties/{partyId}/contacts
-     * @param partyId Party ID
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     * @param options additional options
-     */
-    public getContactsWithRoles1(partyId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<GetContactsWithRolesResponse>;
-    public getContactsWithRoles1(partyId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<GetContactsWithRolesResponse>>;
-    public getContactsWithRoles1(partyId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<GetContactsWithRolesResponse>>;
-    public getContactsWithRoles1(partyId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
-        if (partyId === null || partyId === undefined) {
-            throw new Error('Required parameter partyId was null or undefined when calling getContactsWithRoles1.');
-        }
-
-        let localVarHeaders = this.defaultHeaders;
-
-        // authentication (bearerAuth) required
-        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
-
-        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
-            'application/json'
-        ]);
-        if (localVarHttpHeaderAcceptSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
-        }
-
-        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
-
-        const localVarTransferCache: boolean = options?.transferCache ?? true;
-
-
-        let responseType_: 'text' | 'json' | 'blob' = 'json';
-        if (localVarHttpHeaderAcceptSelected) {
-            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
-                responseType_ = 'text';
-            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
-                responseType_ = 'json';
-            } else {
-                responseType_ = 'blob';
-            }
-        }
-
-        let localVarPath = `/v1/crm/accounts/parties/${this.configuration.encodeParam({name: "partyId", value: partyId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/contacts`;
-        const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<GetContactsWithRolesResponse>('get', `${basePath}${localVarPath}`,
-            {
-                context: localVarHttpContext,
-                responseType: <any>responseType_,
-                ...(withCredentials ? { withCredentials } : {}),
-                headers: localVarHeaders,
-                observe: observe,
-                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
      * Get party details
      * Retrieve details for a specific party by ID
      * @endpoint get /v1/crm/accounts/parties/{partyId}
@@ -855,81 +789,6 @@ export class CRMAccountsService extends BaseService {
             {
                 context: localVarHttpContext,
                 body: searchPartiesRequest,
-                responseType: <any>responseType_,
-                ...(withCredentials ? { withCredentials } : {}),
-                headers: localVarHeaders,
-                observe: observe,
-                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * Update contact roles
-     * Assign or update role assignments for a specific contact within a party
-     * @endpoint put /v1/crm/accounts/parties/{partyId}/contacts/{contactId}/roles
-     * @param partyId Party ID
-     * @param contactId Contact ID
-     * @param updateContactRolesRequest 
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     * @param options additional options
-     */
-    public updateContactRoles1(partyId: string, contactId: string, updateContactRolesRequest?: UpdateContactRolesRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<UpdateContactRolesResponse>;
-    public updateContactRoles1(partyId: string, contactId: string, updateContactRolesRequest?: UpdateContactRolesRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<UpdateContactRolesResponse>>;
-    public updateContactRoles1(partyId: string, contactId: string, updateContactRolesRequest?: UpdateContactRolesRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<UpdateContactRolesResponse>>;
-    public updateContactRoles1(partyId: string, contactId: string, updateContactRolesRequest?: UpdateContactRolesRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
-        if (partyId === null || partyId === undefined) {
-            throw new Error('Required parameter partyId was null or undefined when calling updateContactRoles1.');
-        }
-        if (contactId === null || contactId === undefined) {
-            throw new Error('Required parameter contactId was null or undefined when calling updateContactRoles1.');
-        }
-
-        let localVarHeaders = this.defaultHeaders;
-
-        // authentication (bearerAuth) required
-        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
-
-        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
-            'application/json'
-        ]);
-        if (localVarHttpHeaderAcceptSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
-        }
-
-        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
-
-        const localVarTransferCache: boolean = options?.transferCache ?? true;
-
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-            'application/json'
-        ];
-        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
-        if (httpContentTypeSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
-        }
-
-        let responseType_: 'text' | 'json' | 'blob' = 'json';
-        if (localVarHttpHeaderAcceptSelected) {
-            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
-                responseType_ = 'text';
-            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
-                responseType_ = 'json';
-            } else {
-                responseType_ = 'blob';
-            }
-        }
-
-        let localVarPath = `/v1/crm/accounts/parties/${this.configuration.encodeParam({name: "partyId", value: partyId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/contacts/${this.configuration.encodeParam({name: "contactId", value: contactId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/roles`;
-        const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<UpdateContactRolesResponse>('put', `${basePath}${localVarPath}`,
-            {
-                context: localVarHttpContext,
-                body: updateContactRolesRequest,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,

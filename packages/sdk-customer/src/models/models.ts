@@ -40,6 +40,7 @@ export * from './pageable';
 export * from './pageableObject';
 export * from './partyMatch';
 export * from './partySummary';
+export * from './personLinkReport';
 export * from './phoneInput';
 export * from './phoneNumberDTO';
 export * from './promotionRedemptionResponse';
