@@ -45,6 +45,8 @@ export * from './ledgerPage';
 export * from './listPurchaseOrdersRequest';
 export * from './locationAvailabilityDto';
 export * from './locationInventoryInquiryResponse';
+export * from './locationInventoryItem';
+export * from './locationInventoryItemsResponse';
 export * from './locationInventoryRollupResponse';
 export * from './movedItem';
 export * from './pagePurchaseOrderResponse';
