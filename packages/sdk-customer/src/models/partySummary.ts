@@ -7,6 +7,7 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { PrimaryContact } from './primaryContact';
 
 
 export interface PartySummary { 
@@ -16,6 +17,7 @@ export interface PartySummary {
     partyType?: string;
     status?: string;
     createdAt?: string;
+    primaryContact?: PrimaryContact;
 }
 
 function isOptionalPartySummaryPropertyOfType(

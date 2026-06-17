@@ -43,6 +43,7 @@ export * from './partySummary';
 export * from './personLinkReport';
 export * from './phoneInput';
 export * from './phoneNumberDTO';
+export * from './primaryContact';
 export * from './promotionRedemptionResponse';
 export * from './recordRedemptionRequest';
 export * from './resolveAccountTierRequest';
