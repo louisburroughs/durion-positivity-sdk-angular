@@ -18,6 +18,7 @@ export interface PartySummary {
     status?: string;
     createdAt?: string;
     primaryContact?: PrimaryContact;
+    vehicleCount?: number;
 }
 
 function isOptionalPartySummaryPropertyOfType(
@@ -60,7 +61,7 @@ export function instanceOfPartySummary(value: object): value is PartySummary {
 
     const requiredProperties = createPartySummaryPropertyNames();
     const optionalStringProperties = createPartySummaryOptionalProperties({ name: 'partyId', nullable: false }, { name: 'legalName', nullable: false }, { name: 'displayName', nullable: false }, { name: 'partyType', nullable: false }, { name: 'status', nullable: false }, { name: 'createdAt', nullable: false }, );
-    const optionalNumberProperties = createPartySummaryOptionalProperties();
+    const optionalNumberProperties = createPartySummaryOptionalProperties({ name: 'vehicleCount', nullable: false }, );
     const optionalBooleanProperties = createPartySummaryOptionalProperties();
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
