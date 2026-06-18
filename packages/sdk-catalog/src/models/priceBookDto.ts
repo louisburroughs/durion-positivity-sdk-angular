@@ -9,15 +9,42 @@
  */
 
 
+/**
+ * Price book detail
+ */
 export interface PriceBookDto { 
-    priceBookId?: string;
-    name?: string;
-    scope?: PriceBookDtoScopeEnum;
+    /**
+     * Price book identifier
+     */
+    priceBookId: string;
+    /**
+     * Price book name
+     */
+    name: string;
+    /**
+     * Scope the price book applies to
+     */
+    scope: PriceBookDtoScopeEnum;
+    /**
+     * Identifier of the scoped entity (location or customer tier)
+     */
     scopeId?: string;
-    status?: PriceBookDtoStatusEnum;
-    createdAt?: string;
+    /**
+     * Current status of the price book
+     */
+    status: PriceBookDtoStatusEnum;
+    /**
+     * Timestamp the price book was created
+     */
+    createdAt: string;
+    /**
+     * Timestamp the price book was last updated
+     */
     updatedAt?: string;
-    version?: number;
+    /**
+     * Version for optimistic locking
+     */
+    version: number;
     'default'?: boolean;
 }
 export enum PriceBookDtoScopeEnum {
@@ -70,7 +97,7 @@ export function instanceOfPriceBookDto(value: object): value is PriceBookDto {
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createPriceBookDtoPropertyNames();
+    const requiredProperties = createPriceBookDtoPropertyNames('priceBookId', 'name', 'scope', 'status', 'createdAt', 'version', );
     const optionalStringProperties = createPriceBookDtoOptionalProperties({ name: 'priceBookId', nullable: false }, { name: 'name', nullable: false }, { name: 'scope', nullable: false }, { name: 'scopeId', nullable: false }, { name: 'status', nullable: false }, );
     const optionalNumberProperties = createPriceBookDtoOptionalProperties({ name: 'version', nullable: false }, );
     const optionalBooleanProperties = createPriceBookDtoOptionalProperties({ name: '_default', nullable: false }, );

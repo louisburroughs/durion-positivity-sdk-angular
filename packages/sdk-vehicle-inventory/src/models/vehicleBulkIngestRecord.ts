@@ -9,16 +9,49 @@
  */
 
 
+/**
+ * Single vehicle record within a bulk ingest request
+ */
 export interface VehicleBulkIngestRecord { 
+    /**
+     * Identifier of the account that owns the vehicle
+     */
     accountId: string;
+    /**
+     * 17-character Vehicle Identification Number
+     */
     vin: string;
+    /**
+     * Fleet unit number assigned to the vehicle
+     */
     unitNumber: string;
+    /**
+     * Human-readable description of the vehicle
+     */
     description: string;
+    /**
+     * License plate number
+     */
     licensePlate?: string;
+    /**
+     * Jurisdiction (state/province) that issued the license plate
+     */
     licensePlateJurisdiction?: string;
+    /**
+     * Model year of the vehicle
+     */
     year?: number;
+    /**
+     * Manufacturer of the vehicle
+     */
     make?: string;
+    /**
+     * Model of the vehicle
+     */
     model?: string;
+    /**
+     * Trim level of the vehicle
+     */
     trim?: string;
 }
 

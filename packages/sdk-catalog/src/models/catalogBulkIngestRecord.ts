@@ -9,13 +9,37 @@
  */
 
 
+/**
+ * Single record in a catalog bulk-ingest request
+ */
 export interface CatalogBulkIngestRecord { 
+    /**
+     * Stock keeping unit for the record
+     */
     sku: string;
+    /**
+     * Universal product code
+     */
     upc?: string;
+    /**
+     * Display name of the item
+     */
     name: string;
+    /**
+     * Long description of the item
+     */
     description?: string;
+    /**
+     * Category name to associate the item with
+     */
     categoryName?: string;
+    /**
+     * Subcategory name to associate the item with
+     */
     subcategoryName?: string;
+    /**
+     * List price for the item
+     */
     price?: number;
 }
 

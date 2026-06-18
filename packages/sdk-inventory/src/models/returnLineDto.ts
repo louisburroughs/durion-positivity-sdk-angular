@@ -9,11 +9,29 @@
  */
 
 
+/**
+ * A single line of a return submission: item, quantity, reason and disposition location
+ */
 export interface ReturnLineDto { 
+    /**
+     * Identifier of the item being returned
+     */
     itemId: string;
-    quantity?: number;
+    /**
+     * Quantity of the item being returned
+     */
+    quantity: number;
+    /**
+     * Reason code explaining the return
+     */
     reasonCode: string;
+    /**
+     * Identifier of the location the item is returned to
+     */
     locationId: string;
+    /**
+     * Optional storage location within the location to receive the returned item
+     */
     storageLocationId?: string;
 }
 
@@ -55,7 +73,7 @@ export function instanceOfReturnLineDto(value: object): value is ReturnLineDto {
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createReturnLineDtoPropertyNames('itemId', 'reasonCode', 'locationId', );
+    const requiredProperties = createReturnLineDtoPropertyNames('itemId', 'quantity', 'reasonCode', 'locationId', );
     const optionalStringProperties = createReturnLineDtoOptionalProperties({ name: 'itemId', nullable: false }, { name: 'reasonCode', nullable: false }, { name: 'locationId', nullable: false }, { name: 'storageLocationId', nullable: false }, );
     const optionalNumberProperties = createReturnLineDtoOptionalProperties({ name: 'quantity', nullable: false }, );
     const optionalBooleanProperties = createReturnLineDtoOptionalProperties();

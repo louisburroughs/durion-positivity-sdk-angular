@@ -9,7 +9,13 @@
  */
 
 
+/**
+ * Request to confirm a picked pick-list line
+ */
 export interface ConfirmPickLineRequest { 
+    /**
+     * Quantity picked for the line
+     */
     quantityPicked: number;
 }
 

@@ -16,11 +16,11 @@ export interface EstimateResponse {
     /**
      * Unique identifier for the estimate
      */
-    id?: string;
+    id: string;
     /**
      * Estimate number
      */
-    estimateNumber?: string;
+    estimateNumber: string;
     /**
      * Customer ID
      */
@@ -44,7 +44,7 @@ export interface EstimateResponse {
     /**
      * Estimate status
      */
-    status?: string;
+    status: string;
     /**
      * Username who created the estimate
      */
@@ -161,7 +161,7 @@ export function instanceOfEstimateResponse(value: object): value is EstimateResp
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createEstimateResponsePropertyNames();
+    const requiredProperties = createEstimateResponsePropertyNames('id', 'estimateNumber', 'status', );
     const optionalStringProperties = createEstimateResponseOptionalProperties({ name: 'id', nullable: false }, { name: 'estimateNumber', nullable: false }, { name: 'customerId', nullable: false }, { name: 'vehicleId', nullable: false }, { name: 'locationId', nullable: false }, { name: 'currencyUomId', nullable: false }, { name: 'taxRegionId', nullable: false }, { name: 'status', nullable: false }, { name: 'createdByUserId', nullable: false }, { name: 'submittedBy', nullable: false }, { name: 'approvedBy', nullable: false }, { name: 'signatureData', nullable: false }, { name: 'signatureMimeType', nullable: false }, { name: 'signerName', nullable: false }, { name: 'approvalNotes', nullable: false }, { name: 'purchaseOrderNumber', nullable: false }, { name: 'crmPartyId', nullable: false }, { name: 'crmVehicleId', nullable: false }, );
     const optionalNumberProperties = createEstimateResponseOptionalProperties({ name: 'subtotal', nullable: false }, { name: 'taxAmount', nullable: false }, { name: 'total', nullable: false }, { name: 'version', nullable: false }, );
     const optionalBooleanProperties = createEstimateResponseOptionalProperties();

@@ -9,15 +9,45 @@
  */
 
 
+/**
+ * Result of processing a refund against an invoice payment
+ */
 export interface RefundPaymentResponse { 
-    refundId?: string;
-    invoiceId?: string;
+    /**
+     * Unique identifier of the refund
+     */
+    refundId: string;
+    /**
+     * Identifier of the invoice being refunded
+     */
+    invoiceId: string;
+    /**
+     * Identifier of the originating payment intent
+     */
     paymentIntentId?: string;
+    /**
+     * Refunded amount
+     */
     amount?: number;
+    /**
+     * Reason for the refund
+     */
     reason?: RefundPaymentResponseReasonEnum;
+    /**
+     * Free-text notes accompanying the refund
+     */
     notes?: string;
-    status?: RefundPaymentResponseStatusEnum;
+    /**
+     * Current status of the refund
+     */
+    status: RefundPaymentResponseStatusEnum;
+    /**
+     * Gateway reference identifier for the refund
+     */
     gatewayReference?: string;
+    /**
+     * Timestamp when the refund completed
+     */
     completedAt?: string;
 }
 export enum RefundPaymentResponseReasonEnum {
@@ -77,7 +107,7 @@ export function instanceOfRefundPaymentResponse(value: object): value is RefundP
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createRefundPaymentResponsePropertyNames();
+    const requiredProperties = createRefundPaymentResponsePropertyNames('refundId', 'invoiceId', 'status', );
     const optionalStringProperties = createRefundPaymentResponseOptionalProperties({ name: 'refundId', nullable: false }, { name: 'invoiceId', nullable: false }, { name: 'paymentIntentId', nullable: false }, { name: 'reason', nullable: false }, { name: 'notes', nullable: false }, { name: 'status', nullable: false }, { name: 'gatewayReference', nullable: false }, );
     const optionalNumberProperties = createRefundPaymentResponseOptionalProperties({ name: 'amount', nullable: false }, );
     const optionalBooleanProperties = createRefundPaymentResponseOptionalProperties();

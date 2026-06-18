@@ -9,11 +9,29 @@
  */
 
 
+/**
+ * Request to reschedule an appointment to a new time window with a mandatory reason
+ */
 export interface RescheduleAppointmentRequest { 
+    /**
+     * New appointment start instant in UTC (ISO-8601)
+     */
     newStartAt: string;
+    /**
+     * New appointment end instant in UTC (ISO-8601); must be after newStartAt
+     */
     newEndAt: string;
+    /**
+     * Mandatory reschedule reason code
+     */
     reason: RescheduleAppointmentRequestReasonEnum;
+    /**
+     * Optional notes; required when reason is OTHER or when overriding a hard conflict
+     */
     rescheduleReasonNotes?: string;
+    /**
+     * Whether to notify the customer of this reschedule (defaults to true)
+     */
     notifyCustomer?: boolean;
 }
 export enum RescheduleAppointmentRequestReasonEnum {

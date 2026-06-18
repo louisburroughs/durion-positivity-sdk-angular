@@ -9,10 +9,25 @@
  */
 
 
+/**
+ * Request to assign a role to a person
+ */
 export interface PersonRoleAssignmentRequest { 
+    /**
+     * Stable role code to assign
+     */
     roleCode: string;
+    /**
+     * Location identifier the role is scoped to
+     */
     locationId?: string;
+    /**
+     * Date and time the assignment becomes effective
+     */
     startDate?: string;
+    /**
+     * Date and time the assignment ends
+     */
     endDate?: string;
 }
 

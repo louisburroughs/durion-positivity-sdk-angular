@@ -9,14 +9,38 @@
  */
 
 
+/**
+ * Inferred or user-overridden mapping from a source column to a target field
+ */
 export interface ColumnMappingResponse { 
-    id?: string;
-    jobId?: string;
-    sourceColumn?: string;
-    targetField?: string;
+    /**
+     * Unique identifier of the column mapping
+     */
+    id: string;
+    /**
+     * Identifier of the bulk load job this mapping belongs to
+     */
+    jobId: string;
+    /**
+     * Name of the column in the source file
+     */
+    sourceColumn: string;
+    /**
+     * Name of the target domain field the column maps to
+     */
+    targetField: string;
+    /**
+     * Confidence score of the inferred mapping, between 0 and 1
+     */
     confidence?: number;
+    /**
+     * Whether the mapping was overridden by a user
+     */
     overriddenByUser?: boolean;
-    createdAt?: string;
+    /**
+     * Timestamp when the mapping was created (ISO 8601)
+     */
+    createdAt: string;
 }
 
 function isOptionalColumnMappingResponsePropertyOfType(
@@ -57,7 +81,7 @@ export function instanceOfColumnMappingResponse(value: object): value is ColumnM
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createColumnMappingResponsePropertyNames();
+    const requiredProperties = createColumnMappingResponsePropertyNames('id', 'jobId', 'sourceColumn', 'targetField', 'createdAt', );
     const optionalStringProperties = createColumnMappingResponseOptionalProperties({ name: 'id', nullable: false }, { name: 'jobId', nullable: false }, { name: 'sourceColumn', nullable: false }, { name: 'targetField', nullable: false }, );
     const optionalNumberProperties = createColumnMappingResponseOptionalProperties();
     const optionalBooleanProperties = createColumnMappingResponseOptionalProperties({ name: 'overriddenByUser', nullable: false }, );

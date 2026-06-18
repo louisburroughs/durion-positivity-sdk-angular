@@ -10,12 +10,33 @@
 import { MechanicAssignmentItem } from './mechanicAssignmentItem';
 
 
+/**
+ * Request to assign mechanics and an optional resource to an appointment
+ */
 export interface CreateAssignmentRequest { 
-    appointmentId?: string;
-    mechanics?: Array<MechanicAssignmentItem>;
+    /**
+     * Appointment identifier the mechanics are assigned to
+     */
+    appointmentId: string;
+    /**
+     * Mechanics to assign; at least one entry with role LEAD is required
+     */
+    mechanics: Array<MechanicAssignmentItem>;
+    /**
+     * Optional resource (bay or mobile unit) to associate with the assignment
+     */
     resourceId?: string;
+    /**
+     * Type of the associated resource (e.g. BAY or MOBILE_UNIT)
+     */
     resourceType?: string;
+    /**
+     * When true, the caller asserts override authority for detected conflicts
+     */
     override?: boolean;
+    /**
+     * Reason for overriding detected conflicts; required when override is true
+     */
     overrideReason?: string;
 }
 
@@ -57,7 +78,7 @@ export function instanceOfCreateAssignmentRequest(value: object): value is Creat
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createCreateAssignmentRequestPropertyNames();
+    const requiredProperties = createCreateAssignmentRequestPropertyNames('appointmentId', 'mechanics', );
     const optionalStringProperties = createCreateAssignmentRequestOptionalProperties({ name: 'appointmentId', nullable: false }, { name: 'resourceId', nullable: false }, { name: 'resourceType', nullable: false }, { name: 'overrideReason', nullable: false }, );
     const optionalNumberProperties = createCreateAssignmentRequestOptionalProperties();
     const optionalBooleanProperties = createCreateAssignmentRequestOptionalProperties({ name: 'override', nullable: false }, );

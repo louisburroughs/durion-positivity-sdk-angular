@@ -16,19 +16,19 @@ export interface EventProcessingLogEntry {
     /**
      * Unique identifier for this log entry
      */
-    entryId?: string;
+    entryId: string;
     /**
-     * When this log entry was created
+     * When this log entry was created (ISO 8601)
      */
-    occurredAt?: string;
+    occurredAt: string;
     /**
      * Severity level: INFO, WARN, or ERROR
      */
-    severity?: string;
+    severity: string;
     /**
      * Human-readable log message
      */
-    message?: string;
+    message: string;
     /**
      * Optional JSON context for debugging
      */
@@ -73,7 +73,7 @@ export function instanceOfEventProcessingLogEntry(value: object): value is Event
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createEventProcessingLogEntryPropertyNames();
+    const requiredProperties = createEventProcessingLogEntryPropertyNames('entryId', 'occurredAt', 'severity', 'message', );
     const optionalStringProperties = createEventProcessingLogEntryOptionalProperties({ name: 'entryId', nullable: false }, { name: 'severity', nullable: false }, { name: 'message', nullable: false }, { name: 'contextJson', nullable: true }, );
     const optionalNumberProperties = createEventProcessingLogEntryOptionalProperties();
     const optionalBooleanProperties = createEventProcessingLogEntryOptionalProperties();

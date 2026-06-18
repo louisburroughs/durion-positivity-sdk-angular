@@ -9,8 +9,17 @@
  */
 
 
+/**
+ * Request payload for submitting travel segments for a work date
+ */
 export interface SubmitTravelSegmentsRequest { 
+    /**
+     * Work date whose travel segments are being submitted
+     */
     workDate: string;
+    /**
+     * Optional notes accompanying the travel segment submission
+     */
     notes?: string;
 }
 

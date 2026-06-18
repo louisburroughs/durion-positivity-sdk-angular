@@ -9,11 +9,26 @@
  */
 
 
+/**
+ * Result of applying a resolution to an inventory shortage
+ */
 export interface ShortageResolutionResultDto { 
-    allocationId?: string;
-    resolution?: string;
-    resolvedAt?: string;
-    status?: string;
+    /**
+     * Identifier of the allocation that was resolved
+     */
+    allocationId: string;
+    /**
+     * Resolution strategy that was applied
+     */
+    resolution: string;
+    /**
+     * Timestamp when the shortage was resolved
+     */
+    resolvedAt: string;
+    /**
+     * Resulting status of the allocation after resolution
+     */
+    status: string;
 }
 
 function isOptionalShortageResolutionResultDtoPropertyOfType(
@@ -54,7 +69,7 @@ export function instanceOfShortageResolutionResultDto(value: object): value is S
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createShortageResolutionResultDtoPropertyNames();
+    const requiredProperties = createShortageResolutionResultDtoPropertyNames('allocationId', 'resolution', 'resolvedAt', 'status', );
     const optionalStringProperties = createShortageResolutionResultDtoOptionalProperties({ name: 'allocationId', nullable: false }, { name: 'resolution', nullable: false }, { name: 'status', nullable: false }, );
     const optionalNumberProperties = createShortageResolutionResultDtoOptionalProperties();
     const optionalBooleanProperties = createShortageResolutionResultDtoOptionalProperties();

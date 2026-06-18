@@ -9,11 +9,29 @@
  */
 
 
+/**
+ * Resolved price result for a product in a given context
+ */
 export interface ResolvePriceResponseDto { 
+    /**
+     * Resolved price amount (null when source is UNAVAILABLE)
+     */
     resolvedAmount?: string;
+    /**
+     * ISO currency code of the resolved amount (null when source is UNAVAILABLE)
+     */
     currency?: string;
-    source?: ResolvePriceResponseDtoSourceEnum;
+    /**
+     * Origin of the resolved price
+     */
+    source: ResolvePriceResponseDtoSourceEnum;
+    /**
+     * Identifier of the price book rule that produced the amount, when sourced from a price book
+     */
     sourceRuleId?: string;
+    /**
+     * Explanation for a fallback or unavailable result
+     */
     fallbackReason?: string;
 }
 export enum ResolvePriceResponseDtoSourceEnum {
@@ -62,7 +80,7 @@ export function instanceOfResolvePriceResponseDto(value: object): value is Resol
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createResolvePriceResponseDtoPropertyNames();
+    const requiredProperties = createResolvePriceResponseDtoPropertyNames('source', );
     const optionalStringProperties = createResolvePriceResponseDtoOptionalProperties({ name: 'resolvedAmount', nullable: false }, { name: 'currency', nullable: false }, { name: 'source', nullable: false }, { name: 'sourceRuleId', nullable: false }, { name: 'fallbackReason', nullable: false }, );
     const optionalNumberProperties = createResolvePriceResponseDtoOptionalProperties();
     const optionalBooleanProperties = createResolvePriceResponseDtoOptionalProperties();

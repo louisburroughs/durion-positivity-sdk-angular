@@ -10,10 +10,22 @@
 import { Transfer } from './transfer';
 
 
+/**
+ * Response describing the outcome of deactivating a location and any inventory transfer performed
+ */
 export interface DeactivateLocationResponse { 
-    sourceLocationId?: string;
+    /**
+     * Identifier of the location that was deactivated
+     */
+    sourceLocationId: string;
+    /**
+     * Identifier of the destination location inventory was moved to, if any
+     */
     destinationLocationId?: string;
-    status?: string;
+    /**
+     * Resulting status of the source location after deactivation
+     */
+    status: string;
     transfer?: Transfer;
 }
 
@@ -55,7 +67,7 @@ export function instanceOfDeactivateLocationResponse(value: object): value is De
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createDeactivateLocationResponsePropertyNames();
+    const requiredProperties = createDeactivateLocationResponsePropertyNames('sourceLocationId', 'status', );
     const optionalStringProperties = createDeactivateLocationResponseOptionalProperties({ name: 'sourceLocationId', nullable: false }, { name: 'destinationLocationId', nullable: false }, { name: 'status', nullable: false }, );
     const optionalNumberProperties = createDeactivateLocationResponseOptionalProperties();
     const optionalBooleanProperties = createDeactivateLocationResponseOptionalProperties();

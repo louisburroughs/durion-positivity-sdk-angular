@@ -11,16 +11,46 @@ import { ApplicationDetail } from './applicationDetail';
 import { CustomerCreditInfo } from './customerCreditInfo';
 
 
+/**
+ * Result of applying a payment to one or more invoices
+ */
 export interface PaymentApplicationResponse { 
-    paymentId?: string;
+    /**
+     * Identifier of the payment that was applied
+     */
+    paymentId: string;
+    /**
+     * Identifier of the customer who made the payment
+     */
     customerId?: string;
+    /**
+     * Currency code (ISO 4217)
+     */
     currency?: string;
+    /**
+     * Total payment amount
+     */
     totalAmount?: number;
+    /**
+     * Amount of the payment applied to invoices
+     */
     appliedAmount?: number;
+    /**
+     * Amount of the payment remaining after application
+     */
     remainingAmount?: number;
+    /**
+     * Per-invoice application details
+     */
     applications?: Array<ApplicationDetail>;
     customerCredit?: CustomerCreditInfo;
+    /**
+     * Timestamp when the payment was applied (ISO 8601)
+     */
     applicationTimestamp?: string;
+    /**
+     * Idempotency key echoed from the application request
+     */
     applicationRequestId?: string;
 }
 
@@ -62,7 +92,7 @@ export function instanceOfPaymentApplicationResponse(value: object): value is Pa
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createPaymentApplicationResponsePropertyNames();
+    const requiredProperties = createPaymentApplicationResponsePropertyNames('paymentId', );
     const optionalStringProperties = createPaymentApplicationResponseOptionalProperties({ name: 'paymentId', nullable: false }, { name: 'customerId', nullable: false }, { name: 'currency', nullable: false }, { name: 'applicationRequestId', nullable: false }, );
     const optionalNumberProperties = createPaymentApplicationResponseOptionalProperties({ name: 'totalAmount', nullable: false }, { name: 'appliedAmount', nullable: false }, { name: 'remainingAmount', nullable: false }, );
     const optionalBooleanProperties = createPaymentApplicationResponseOptionalProperties();

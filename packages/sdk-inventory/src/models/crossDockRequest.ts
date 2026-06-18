@@ -9,10 +9,25 @@
  */
 
 
+/**
+ * Request to cross-dock received stock directly against a workorder line
+ */
 export interface CrossDockRequest { 
+    /**
+     * Identifier of the workorder the received stock is cross-docked to
+     */
     workorderId: string;
+    /**
+     * Identifier of the workorder line the received stock fulfils
+     */
     workorderLineId: string;
+    /**
+     * Quantity of stock to cross-dock against the workorder line
+     */
     quantity: number;
+    /**
+     * Optional free-text note describing the cross-dock action
+     */
     notes?: string;
 }
 

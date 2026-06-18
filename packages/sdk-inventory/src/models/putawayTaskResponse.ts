@@ -9,21 +9,66 @@
  */
 
 
+/**
+ * Putaway task describing a product to move from staging to a suggested storage location
+ */
 export interface PutawayTaskResponse { 
-    taskId?: string;
-    sourceReceiptId?: string;
-    productId?: string;
-    quantity?: number;
+    /**
+     * Unique identifier of the putaway task
+     */
+    taskId: string;
+    /**
+     * Identifier of the receipt the goods were received against
+     */
+    sourceReceiptId: string;
+    /**
+     * Identifier of the product to be put away
+     */
+    productId: string;
+    /**
+     * Quantity of the product to be put away
+     */
+    quantity: number;
+    /**
+     * Identifier of the staging location the goods are moved from
+     */
     sourceLocationId?: string;
+    /**
+     * Currently suggested destination location for the goods
+     */
     suggestedDestinationLocationId?: string;
+    /**
+     * Originally suggested destination location before any fallback
+     */
     originalSuggestedLocationId?: string;
+    /**
+     * Final suggested destination location after fallback resolution
+     */
     finalSuggestedLocationId?: string;
+    /**
+     * Actual destination location where the goods were placed
+     */
     actualDestinationLocationId?: string;
+    /**
+     * Reason the suggested location fell back to an alternate, when applicable
+     */
     fallbackReason?: string;
-    status?: string;
+    /**
+     * Current status of the putaway task
+     */
+    status: string;
+    /**
+     * Identifier of the worker assigned to the task, when assigned
+     */
     assigneeId?: string;
-    createdAt?: string;
-    updatedAt?: string;
+    /**
+     * Timestamp when the putaway task was created
+     */
+    createdAt: string;
+    /**
+     * Timestamp when the putaway task was last updated
+     */
+    updatedAt: string;
 }
 
 function isOptionalPutawayTaskResponsePropertyOfType(
@@ -64,7 +109,7 @@ export function instanceOfPutawayTaskResponse(value: object): value is PutawayTa
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createPutawayTaskResponsePropertyNames();
+    const requiredProperties = createPutawayTaskResponsePropertyNames('taskId', 'sourceReceiptId', 'productId', 'quantity', 'status', 'createdAt', 'updatedAt', );
     const optionalStringProperties = createPutawayTaskResponseOptionalProperties({ name: 'taskId', nullable: false }, { name: 'sourceReceiptId', nullable: false }, { name: 'productId', nullable: false }, { name: 'sourceLocationId', nullable: false }, { name: 'suggestedDestinationLocationId', nullable: false }, { name: 'originalSuggestedLocationId', nullable: false }, { name: 'finalSuggestedLocationId', nullable: false }, { name: 'actualDestinationLocationId', nullable: false }, { name: 'fallbackReason', nullable: false }, { name: 'status', nullable: false }, { name: 'assigneeId', nullable: false }, );
     const optionalNumberProperties = createPutawayTaskResponseOptionalProperties({ name: 'quantity', nullable: false }, );
     const optionalBooleanProperties = createPutawayTaskResponseOptionalProperties();

@@ -9,16 +9,49 @@
  */
 
 
+/**
+ * Mapping key details
+ */
 export interface MappingKeyResponse { 
-    mappingKeyId?: string;
-    postingCategoryId?: string;
+    /**
+     * Unique identifier of the mapping key
+     */
+    mappingKeyId: string;
+    /**
+     * Identifier of the posting category this mapping key belongs to
+     */
+    postingCategoryId: string;
+    /**
+     * Name of the posting category this mapping key belongs to
+     */
     postingCategoryName?: string;
-    keyName?: string;
+    /**
+     * Name of the mapping key
+     */
+    keyName: string;
+    /**
+     * Description of the mapping key
+     */
     description?: string;
+    /**
+     * Whether the mapping key is active
+     */
     isActive?: boolean;
+    /**
+     * Timestamp when the mapping key was created (ISO 8601)
+     */
     createdAt?: string;
+    /**
+     * Identifier of the user who created the mapping key
+     */
     createdBy?: string;
+    /**
+     * Timestamp when the mapping key was last modified (ISO 8601)
+     */
     modifiedAt?: string;
+    /**
+     * Identifier of the user who last modified the mapping key
+     */
     modifiedBy?: string;
 }
 
@@ -60,7 +93,7 @@ export function instanceOfMappingKeyResponse(value: object): value is MappingKey
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createMappingKeyResponsePropertyNames();
+    const requiredProperties = createMappingKeyResponsePropertyNames('mappingKeyId', 'postingCategoryId', 'keyName', );
     const optionalStringProperties = createMappingKeyResponseOptionalProperties({ name: 'mappingKeyId', nullable: false }, { name: 'postingCategoryId', nullable: false }, { name: 'postingCategoryName', nullable: false }, { name: 'keyName', nullable: false }, { name: 'description', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'modifiedBy', nullable: false }, );
     const optionalNumberProperties = createMappingKeyResponseOptionalProperties();
     const optionalBooleanProperties = createMappingKeyResponseOptionalProperties({ name: 'isActive', nullable: false }, );

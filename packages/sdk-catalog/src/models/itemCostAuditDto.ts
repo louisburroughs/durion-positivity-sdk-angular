@@ -13,15 +13,45 @@
  * Item cost audit event
  */
 export interface ItemCostAuditDto { 
-    auditId?: string;
-    itemId?: string;
-    timestamp?: string;
-    costTypeChanged?: ItemCostAuditDtoCostTypeChangedEnum;
+    /**
+     * Audit event identifier
+     */
+    auditId: string;
+    /**
+     * Item identifier the audit event belongs to
+     */
+    itemId: string;
+    /**
+     * Timestamp the cost change occurred
+     */
+    timestamp: string;
+    /**
+     * Type of cost that changed
+     */
+    costTypeChanged: ItemCostAuditDtoCostTypeChangedEnum;
+    /**
+     * Previous cost value
+     */
     oldValue?: number;
+    /**
+     * New cost value
+     */
     newValue?: number;
-    changeSourceType?: ItemCostAuditDtoChangeSourceTypeEnum;
+    /**
+     * Source that triggered the cost change
+     */
+    changeSourceType: ItemCostAuditDtoChangeSourceTypeEnum;
+    /**
+     * Identifier of the change source
+     */
     changeSourceId?: string;
+    /**
+     * Actor responsible for the change
+     */
     actor?: string;
+    /**
+     * Reason code for the change
+     */
     reasonCode?: string;
 }
 export enum ItemCostAuditDtoCostTypeChangedEnum {
@@ -74,7 +104,7 @@ export function instanceOfItemCostAuditDto(value: object): value is ItemCostAudi
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createItemCostAuditDtoPropertyNames();
+    const requiredProperties = createItemCostAuditDtoPropertyNames('auditId', 'itemId', 'timestamp', 'costTypeChanged', 'changeSourceType', );
     const optionalStringProperties = createItemCostAuditDtoOptionalProperties({ name: 'auditId', nullable: false }, { name: 'itemId', nullable: false }, { name: 'costTypeChanged', nullable: false }, { name: 'changeSourceType', nullable: false }, { name: 'changeSourceId', nullable: false }, { name: 'actor', nullable: false }, { name: 'reasonCode', nullable: false }, );
     const optionalNumberProperties = createItemCostAuditDtoOptionalProperties({ name: 'oldValue', nullable: false }, { name: 'newValue', nullable: false }, );
     const optionalBooleanProperties = createItemCostAuditDtoOptionalProperties();

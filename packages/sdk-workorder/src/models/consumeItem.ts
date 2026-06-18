@@ -9,8 +9,17 @@
  */
 
 
+/**
+ * A single picked item to consume
+ */
 export interface ConsumeItem { 
+    /**
+     * Identifier of the pick task to consume from
+     */
     pickTaskId: string;
+    /**
+     * Quantity to consume
+     */
     quantityToConsume: number;
 }
 

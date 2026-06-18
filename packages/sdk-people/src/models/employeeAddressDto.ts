@@ -9,12 +9,33 @@
  */
 
 
+/**
+ * Postal address for an employee
+ */
 export interface EmployeeAddressDto { 
+    /**
+     * First address line
+     */
     line1?: string;
+    /**
+     * Second address line
+     */
     line2?: string;
+    /**
+     * City
+     */
     city?: string;
+    /**
+     * State, province, or region
+     */
     region?: string;
+    /**
+     * Postal or ZIP code
+     */
     postalCode?: string;
+    /**
+     * Country
+     */
     country?: string;
 }
 

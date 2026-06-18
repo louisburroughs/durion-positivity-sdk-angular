@@ -10,16 +10,49 @@
 import { ReceivingLineResponse } from './receivingLineResponse';
 
 
+/**
+ * Inventory receiving session with its lines and source document context
+ */
 export interface ReceivingSessionResponse { 
-    sessionId?: string;
-    sourceDocumentId?: string;
+    /**
+     * Identifier of the receiving session
+     */
+    sessionId: string;
+    /**
+     * Identifier of the source document the session receives against
+     */
+    sourceDocumentId: string;
+    /**
+     * Type of the source document, such as PURCHASE_ORDER or WORKORDER
+     */
     sourceDocumentType?: string;
+    /**
+     * Identifier of the supplier providing the received stock
+     */
     supplierId?: string;
+    /**
+     * Carrier or shipment reference for the received goods
+     */
     shipmentReference?: string;
-    status?: string;
+    /**
+     * Status of the receiving session, such as IN_PROGRESS or COMPLETED
+     */
+    status: string;
+    /**
+     * Method used to enter receiving lines, such as SCAN or MANUAL
+     */
     entryMethod?: string;
+    /**
+     * Identifier of the user who created the receiving session
+     */
     createdByUserId?: string;
-    createdAt?: string;
+    /**
+     * Timestamp when the receiving session was created
+     */
+    createdAt: string;
+    /**
+     * Receiving lines belonging to the session
+     */
     lines?: Array<ReceivingLineResponse>;
 }
 
@@ -61,7 +94,7 @@ export function instanceOfReceivingSessionResponse(value: object): value is Rece
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createReceivingSessionResponsePropertyNames();
+    const requiredProperties = createReceivingSessionResponsePropertyNames('sessionId', 'sourceDocumentId', 'status', 'createdAt', );
     const optionalStringProperties = createReceivingSessionResponseOptionalProperties({ name: 'sessionId', nullable: false }, { name: 'sourceDocumentId', nullable: false }, { name: 'sourceDocumentType', nullable: false }, { name: 'supplierId', nullable: false }, { name: 'shipmentReference', nullable: false }, { name: 'status', nullable: false }, { name: 'entryMethod', nullable: false }, { name: 'createdByUserId', nullable: false }, );
     const optionalNumberProperties = createReceivingSessionResponseOptionalProperties();
     const optionalBooleanProperties = createReceivingSessionResponseOptionalProperties();

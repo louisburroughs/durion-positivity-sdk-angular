@@ -9,11 +9,26 @@
  */
 
 
+/**
+ * Request to create a cycle count plan scheduling counts across a location and zones
+ */
 export interface CreateCycleCountPlanRequest { 
-    locationId?: string;
+    /**
+     * Identifier of the location the plan applies to
+     */
+    locationId: string;
+    /**
+     * Identifiers of the zones within the location to include in the plan
+     */
     zoneIds?: Array<string>;
-    planName?: string;
-    scheduledDate?: string;
+    /**
+     * Human-readable name for the cycle count plan
+     */
+    planName: string;
+    /**
+     * Date on which the cycle count is scheduled to occur
+     */
+    scheduledDate: string;
 }
 
 function isOptionalCreateCycleCountPlanRequestPropertyOfType(
@@ -54,7 +69,7 @@ export function instanceOfCreateCycleCountPlanRequest(value: object): value is C
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createCreateCycleCountPlanRequestPropertyNames();
+    const requiredProperties = createCreateCycleCountPlanRequestPropertyNames('locationId', 'planName', 'scheduledDate', );
     const optionalStringProperties = createCreateCycleCountPlanRequestOptionalProperties({ name: 'locationId', nullable: false }, { name: 'planName', nullable: false }, );
     const optionalNumberProperties = createCreateCycleCountPlanRequestOptionalProperties();
     const optionalBooleanProperties = createCreateCycleCountPlanRequestOptionalProperties();

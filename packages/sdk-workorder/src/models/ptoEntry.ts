@@ -9,11 +9,26 @@
  */
 
 
+/**
+ * Paid time off entry affecting technician availability
+ */
 export interface PtoEntry { 
-    ptoId?: string;
-    start?: string;
-    end?: string;
-    ptoType?: string;
+    /**
+     * Identifier of the PTO entry
+     */
+    ptoId: string;
+    /**
+     * Start timestamp of the PTO period
+     */
+    start: string;
+    /**
+     * End timestamp of the PTO period
+     */
+    end: string;
+    /**
+     * Type of paid time off
+     */
+    ptoType: string;
 }
 
 function isOptionalPtoEntryPropertyOfType(
@@ -54,7 +69,7 @@ export function instanceOfPtoEntry(value: object): value is PtoEntry {
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createPtoEntryPropertyNames();
+    const requiredProperties = createPtoEntryPropertyNames('ptoId', 'start', 'end', 'ptoType', );
     const optionalStringProperties = createPtoEntryOptionalProperties({ name: 'ptoId', nullable: false }, { name: 'ptoType', nullable: false }, );
     const optionalNumberProperties = createPtoEntryOptionalProperties();
     const optionalBooleanProperties = createPtoEntryOptionalProperties();

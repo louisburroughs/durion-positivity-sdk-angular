@@ -9,12 +9,33 @@
  */
 
 
+/**
+ * Request to assign a role to a user within a scope
+ */
 export interface RoleAssignmentRequest { 
-    userId?: string;
-    roleId?: string;
+    /**
+     * Identifier of the user to assign the role to
+     */
+    userId: string;
+    /**
+     * Identifier of the role to assign
+     */
+    roleId: string;
+    /**
+     * Scope type that constrains the assignment
+     */
     scopeType?: RoleAssignmentRequestScopeTypeEnum;
+    /**
+     * Location identifiers the assignment applies to when scopeType is LOCATION
+     */
     scopeLocationIds?: Set<string>;
+    /**
+     * Inclusive start of the effective window
+     */
     effectiveStartDate?: string;
+    /**
+     * Exclusive end of the effective window
+     */
     effectiveEndDate?: string;
 }
 export enum RoleAssignmentRequestScopeTypeEnum {
@@ -62,7 +83,7 @@ export function instanceOfRoleAssignmentRequest(value: object): value is RoleAss
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createRoleAssignmentRequestPropertyNames();
+    const requiredProperties = createRoleAssignmentRequestPropertyNames('userId', 'roleId', );
     const optionalStringProperties = createRoleAssignmentRequestOptionalProperties({ name: 'userId', nullable: false }, { name: 'roleId', nullable: false }, { name: 'scopeType', nullable: false }, );
     const optionalNumberProperties = createRoleAssignmentRequestOptionalProperties();
     const optionalBooleanProperties = createRoleAssignmentRequestOptionalProperties();

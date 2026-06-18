@@ -16,11 +16,11 @@ export interface EventSummaryResponse {
     /**
      * Event type identifier
      */
-    eventTypeId?: string;
+    eventTypeId: string;
     /**
      * Number of events of this type in the timeframe
      */
-    count?: number;
+    count: number;
 }
 
 function isOptionalEventSummaryResponsePropertyOfType(
@@ -61,7 +61,7 @@ export function instanceOfEventSummaryResponse(value: object): value is EventSum
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createEventSummaryResponsePropertyNames();
+    const requiredProperties = createEventSummaryResponsePropertyNames('eventTypeId', 'count', );
     const optionalStringProperties = createEventSummaryResponseOptionalProperties({ name: 'eventTypeId', nullable: false }, );
     const optionalNumberProperties = createEventSummaryResponseOptionalProperties({ name: 'count', nullable: false }, );
     const optionalBooleanProperties = createEventSummaryResponseOptionalProperties();

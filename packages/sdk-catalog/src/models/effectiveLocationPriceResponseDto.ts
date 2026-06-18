@@ -9,11 +9,29 @@
  */
 
 
+/**
+ * Effective location-specific price for a product
+ */
 export interface EffectiveLocationPriceResponseDto { 
-    locationId?: string;
-    productId?: string;
-    basePrice?: number;
-    effectivePrice?: number;
+    /**
+     * Location identifier
+     */
+    locationId: string;
+    /**
+     * Product identifier
+     */
+    productId: string;
+    /**
+     * Base price before any override
+     */
+    basePrice: number;
+    /**
+     * Effective price after applying any override
+     */
+    effectivePrice: number;
+    /**
+     * Status of the override applied to derive the effective price
+     */
     overrideStatus?: EffectiveLocationPriceResponseDtoOverrideStatusEnum;
 }
 export enum EffectiveLocationPriceResponseDtoOverrideStatusEnum {
@@ -63,7 +81,7 @@ export function instanceOfEffectiveLocationPriceResponseDto(value: object): valu
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createEffectiveLocationPriceResponseDtoPropertyNames();
+    const requiredProperties = createEffectiveLocationPriceResponseDtoPropertyNames('locationId', 'productId', 'basePrice', 'effectivePrice', );
     const optionalStringProperties = createEffectiveLocationPriceResponseDtoOptionalProperties({ name: 'locationId', nullable: false }, { name: 'productId', nullable: false }, { name: 'overrideStatus', nullable: false }, );
     const optionalNumberProperties = createEffectiveLocationPriceResponseDtoOptionalProperties({ name: 'basePrice', nullable: false }, { name: 'effectivePrice', nullable: false }, );
     const optionalBooleanProperties = createEffectiveLocationPriceResponseDtoOptionalProperties();

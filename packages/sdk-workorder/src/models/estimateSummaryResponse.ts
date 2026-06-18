@@ -17,11 +17,11 @@ export interface EstimateSummaryResponse {
     /**
      * Estimate identifier
      */
-    id?: string;
+    id: string;
     /**
      * Estimate number
      */
-    estimateNumber?: string;
+    estimateNumber: string;
     /**
      * Creation timestamp
      */
@@ -45,7 +45,7 @@ export interface EstimateSummaryResponse {
     /**
      * Current estimate status
      */
-    status?: EstimateSummaryResponseStatusEnum;
+    status: EstimateSummaryResponseStatusEnum;
     /**
      * Part line items
      */
@@ -125,7 +125,7 @@ export function instanceOfEstimateSummaryResponse(value: object): value is Estim
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createEstimateSummaryResponsePropertyNames();
+    const requiredProperties = createEstimateSummaryResponsePropertyNames('id', 'estimateNumber', 'status', );
     const optionalStringProperties = createEstimateSummaryResponseOptionalProperties({ name: 'id', nullable: false }, { name: 'estimateNumber', nullable: false }, { name: 'customerId', nullable: false }, { name: 'vehicleId', nullable: false }, { name: 'locationId', nullable: false }, { name: 'status', nullable: false }, { name: 'currencyUomId', nullable: false }, );
     const optionalNumberProperties = createEstimateSummaryResponseOptionalProperties({ name: 'subtotal', nullable: false }, { name: 'taxAmount', nullable: false }, { name: 'total', nullable: false }, );
     const optionalBooleanProperties = createEstimateSummaryResponseOptionalProperties();

@@ -9,11 +9,26 @@
  */
 
 
+/**
+ * Result of an approve/reject decision applied across a person\'s time period entries
+ */
 export interface TimePeriodDecisionResponse { 
-    personId?: string;
-    timePeriodId?: string;
-    processedCount?: number;
-    status?: string;
+    /**
+     * Person identifier
+     */
+    personId: string;
+    /**
+     * Time period identifier
+     */
+    timePeriodId: string;
+    /**
+     * Number of entries processed by the decision
+     */
+    processedCount: number;
+    /**
+     * Resulting status of the operation
+     */
+    status: string;
 }
 
 function isOptionalTimePeriodDecisionResponsePropertyOfType(
@@ -54,7 +69,7 @@ export function instanceOfTimePeriodDecisionResponse(value: object): value is Ti
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createTimePeriodDecisionResponsePropertyNames();
+    const requiredProperties = createTimePeriodDecisionResponsePropertyNames('personId', 'timePeriodId', 'processedCount', 'status', );
     const optionalStringProperties = createTimePeriodDecisionResponseOptionalProperties({ name: 'personId', nullable: false }, { name: 'timePeriodId', nullable: false }, { name: 'status', nullable: false }, );
     const optionalNumberProperties = createTimePeriodDecisionResponseOptionalProperties({ name: 'processedCount', nullable: false }, );
     const optionalBooleanProperties = createTimePeriodDecisionResponseOptionalProperties();

@@ -9,17 +9,50 @@
  */
 
 
+/**
+ * Response representation of a travel segment time adjustment
+ */
 export interface TravelSegmentAdjustmentResponse { 
-    adjustmentId?: string;
-    travelSegmentId?: string;
+    /**
+     * Unique identifier of the adjustment
+     */
+    adjustmentId: string;
+    /**
+     * Identifier of the travel segment that was adjusted
+     */
+    travelSegmentId: string;
+    /**
+     * Adjusted start timestamp of the travel segment
+     */
     adjustedStartAt?: string;
+    /**
+     * Adjusted end timestamp of the travel segment
+     */
     adjustedEndAt?: string;
+    /**
+     * Reason recorded for the adjustment
+     */
     adjustmentReason?: string;
+    /**
+     * Identifier of the user who made the adjustment
+     */
     adjustedByUserId?: string;
+    /**
+     * Approval status of the adjustment
+     */
     approvalStatus?: string;
+    /**
+     * Identifier of the user who approved the adjustment
+     */
     approvedByUserId?: string;
+    /**
+     * Timestamp when the adjustment was approved
+     */
     approvedAt?: string;
-    createdAt?: string;
+    /**
+     * Timestamp when the adjustment was created
+     */
+    createdAt: string;
 }
 
 function isOptionalTravelSegmentAdjustmentResponsePropertyOfType(
@@ -60,7 +93,7 @@ export function instanceOfTravelSegmentAdjustmentResponse(value: object): value 
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createTravelSegmentAdjustmentResponsePropertyNames();
+    const requiredProperties = createTravelSegmentAdjustmentResponsePropertyNames('adjustmentId', 'travelSegmentId', 'createdAt', );
     const optionalStringProperties = createTravelSegmentAdjustmentResponseOptionalProperties({ name: 'adjustmentId', nullable: false }, { name: 'travelSegmentId', nullable: false }, { name: 'adjustmentReason', nullable: false }, { name: 'adjustedByUserId', nullable: false }, { name: 'approvalStatus', nullable: false }, { name: 'approvedByUserId', nullable: false }, );
     const optionalNumberProperties = createTravelSegmentAdjustmentResponseOptionalProperties();
     const optionalBooleanProperties = createTravelSegmentAdjustmentResponseOptionalProperties();

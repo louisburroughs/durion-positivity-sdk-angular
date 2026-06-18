@@ -10,11 +10,29 @@
 import { PricingRuleTraceEntryDto } from './pricingRuleTraceEntryDto';
 
 
+/**
+ * Pricing snapshot including its rule-evaluation trace
+ */
 export interface PricingSnapshotDto { 
-    snapshotId?: string;
-    timestamp?: string;
+    /**
+     * Snapshot identifier
+     */
+    snapshotId: string;
+    /**
+     * Timestamp the snapshot was captured
+     */
+    timestamp: string;
+    /**
+     * Serialized quote context evaluated
+     */
     quoteContext?: string;
-    finalPrice?: number;
+    /**
+     * Final computed price
+     */
+    finalPrice: number;
+    /**
+     * Ordered rule-evaluation steps that produced the price
+     */
     evaluationSteps?: Array<PricingRuleTraceEntryDto>;
 }
 
@@ -56,7 +74,7 @@ export function instanceOfPricingSnapshotDto(value: object): value is PricingSna
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createPricingSnapshotDtoPropertyNames();
+    const requiredProperties = createPricingSnapshotDtoPropertyNames('snapshotId', 'timestamp', 'finalPrice', );
     const optionalStringProperties = createPricingSnapshotDtoOptionalProperties({ name: 'snapshotId', nullable: false }, { name: 'quoteContext', nullable: false }, );
     const optionalNumberProperties = createPricingSnapshotDtoOptionalProperties({ name: 'finalPrice', nullable: false }, );
     const optionalBooleanProperties = createPricingSnapshotDtoOptionalProperties();

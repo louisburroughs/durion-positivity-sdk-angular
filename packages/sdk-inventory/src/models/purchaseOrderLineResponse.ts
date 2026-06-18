@@ -9,15 +9,45 @@
  */
 
 
+/**
+ * A single line item returned as part of a purchase order
+ */
 export interface PurchaseOrderLineResponse { 
-    lineId?: string;
-    lineNumber?: number;
+    /**
+     * Unique identifier of this purchase order line
+     */
+    lineId: string;
+    /**
+     * Sequential line number identifying this line within the purchase order
+     */
+    lineNumber: number;
+    /**
+     * Identifier of the SKU on this line
+     */
     skuId?: string;
+    /**
+     * Human-readable description of the item on this line
+     */
     description?: string;
+    /**
+     * Quantity ordered on this line
+     */
     quantityDecimal?: number;
+    /**
+     * Unit cost of the item in the smallest currency unit (e.g. cents)
+     */
     unitCostMinor?: number;
+    /**
+     * Total cost of this line in the smallest currency unit (e.g. cents)
+     */
     lineTotalMinor?: number;
+    /**
+     * Tax amount for this line in the smallest currency unit (e.g. cents)
+     */
     taxMinor?: number;
+    /**
+     * Quantity on this line not yet received
+     */
     openQuantityDecimal?: number;
 }
 
@@ -59,7 +89,7 @@ export function instanceOfPurchaseOrderLineResponse(value: object): value is Pur
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createPurchaseOrderLineResponsePropertyNames();
+    const requiredProperties = createPurchaseOrderLineResponsePropertyNames('lineId', 'lineNumber', );
     const optionalStringProperties = createPurchaseOrderLineResponseOptionalProperties({ name: 'lineId', nullable: false }, { name: 'skuId', nullable: false }, { name: 'description', nullable: false }, );
     const optionalNumberProperties = createPurchaseOrderLineResponseOptionalProperties({ name: 'lineNumber', nullable: false }, { name: 'quantityDecimal', nullable: false }, { name: 'unitCostMinor', nullable: false }, { name: 'lineTotalMinor', nullable: false }, { name: 'taxMinor', nullable: false }, { name: 'openQuantityDecimal', nullable: false }, );
     const optionalBooleanProperties = createPurchaseOrderLineResponseOptionalProperties();

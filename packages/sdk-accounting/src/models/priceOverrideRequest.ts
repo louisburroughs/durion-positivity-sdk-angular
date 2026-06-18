@@ -9,13 +9,37 @@
  */
 
 
+/**
+ * Request to record a price override audit event
+ */
 export interface PriceOverrideRequest { 
+    /**
+     * Identifier of the order containing the line item
+     */
     orderId: string;
+    /**
+     * Identifier of the line item being overridden
+     */
     lineItemId: string;
+    /**
+     * Original price before the override
+     */
     originalPrice: number;
+    /**
+     * Adjusted price after the override
+     */
     adjustedPrice: number;
+    /**
+     * Role of the actor performing the override
+     */
     actorRole: string;
+    /**
+     * Reason for the price override
+     */
     reason: string;
+    /**
+     * Optional forbidden category code (e.g., BELOW_COST, STACKING_VIOLATION)
+     */
     categoryCode?: string;
 }
 

@@ -9,14 +9,41 @@
  */
 
 
+/**
+ * Legacy vehicle representation returned by vehicle endpoints
+ */
 export interface VehicleLegacyResponse { 
-    id?: string;
-    make?: string;
-    model?: string;
-    year?: number;
-    vin?: string;
-    vehicleType?: string;
+    /**
+     * Unique identifier of the vehicle
+     */
+    id: string;
+    /**
+     * Manufacturer of the vehicle
+     */
+    make: string;
+    /**
+     * Model of the vehicle
+     */
+    model: string;
+    /**
+     * Model year of the vehicle
+     */
+    year: number;
+    /**
+     * 17-character Vehicle Identification Number
+     */
+    vin: string;
+    /**
+     * Vehicle type classification (CAR, VAN, COMMERCIAL_TRUCK, PASSENGER_TRUCK)
+     */
+    vehicleType: string;
+    /**
+     * Timestamp when the vehicle record was created
+     */
     createdAt?: string;
+    /**
+     * Timestamp when the vehicle record was last updated
+     */
     updatedAt?: string;
 }
 
@@ -58,7 +85,7 @@ export function instanceOfVehicleLegacyResponse(value: object): value is Vehicle
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createVehicleLegacyResponsePropertyNames();
+    const requiredProperties = createVehicleLegacyResponsePropertyNames('id', 'make', 'model', 'year', 'vin', 'vehicleType', );
     const optionalStringProperties = createVehicleLegacyResponseOptionalProperties({ name: 'id', nullable: false }, { name: 'make', nullable: false }, { name: 'model', nullable: false }, { name: 'vin', nullable: false }, { name: 'vehicleType', nullable: false }, );
     const optionalNumberProperties = createVehicleLegacyResponseOptionalProperties({ name: 'year', nullable: false }, );
     const optionalBooleanProperties = createVehicleLegacyResponseOptionalProperties();

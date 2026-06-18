@@ -9,9 +9,18 @@
  */
 
 
+/**
+ * Response payload confirming a created sale-restriction override
+ */
 export interface RestrictionOverrideResponse { 
-    overrideId?: string;
-    expiresAt?: string;
+    /**
+     * Identifier of the created override
+     */
+    overrideId: string;
+    /**
+     * Timestamp when the override expires
+     */
+    expiresAt: string;
 }
 
 function isOptionalRestrictionOverrideResponsePropertyOfType(
@@ -52,7 +61,7 @@ export function instanceOfRestrictionOverrideResponse(value: object): value is R
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createRestrictionOverrideResponsePropertyNames();
+    const requiredProperties = createRestrictionOverrideResponsePropertyNames('overrideId', 'expiresAt', );
     const optionalStringProperties = createRestrictionOverrideResponseOptionalProperties({ name: 'overrideId', nullable: false }, );
     const optionalNumberProperties = createRestrictionOverrideResponseOptionalProperties();
     const optionalBooleanProperties = createRestrictionOverrideResponseOptionalProperties();

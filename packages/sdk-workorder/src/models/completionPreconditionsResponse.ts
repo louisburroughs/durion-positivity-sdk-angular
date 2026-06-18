@@ -16,15 +16,15 @@ export interface CompletionPreconditionsResponse {
     /**
      * Workorder identifier
      */
-    workorderId?: string;
+    workorderId: string;
     /**
      * Whether the workorder can be completed
      */
-    canComplete?: boolean;
+    canComplete: boolean;
     /**
      * Current status
      */
-    currentStatus?: string;
+    currentStatus: string;
     /**
      * Checklist items evaluated before completion
      */
@@ -93,7 +93,7 @@ export function instanceOfCompletionPreconditionsResponse(value: object): value 
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createCompletionPreconditionsResponsePropertyNames();
+    const requiredProperties = createCompletionPreconditionsResponsePropertyNames('workorderId', 'canComplete', 'currentStatus', );
     const optionalStringProperties = createCompletionPreconditionsResponseOptionalProperties({ name: 'workorderId', nullable: false }, { name: 'currentStatus', nullable: false }, );
     const optionalNumberProperties = createCompletionPreconditionsResponseOptionalProperties({ name: 'unresolvedApprovalGatedChangeRequests', nullable: false }, { name: 'nonTerminalServiceItems', nullable: false }, { name: 'nonTerminalPartItems', nullable: false }, );
     const optionalBooleanProperties = createCompletionPreconditionsResponseOptionalProperties({ name: 'canComplete', nullable: false }, { name: 'emergencyDenialAcknowledged', nullable: false }, { name: 'hasBillableItems', nullable: false }, );

@@ -13,11 +13,29 @@
  * Vehicle object to be created
  */
 export interface VehicleLegacyRequest { 
+    /**
+     * Identifier of the vehicle to update; omit to create a new vehicle
+     */
     id?: string;
-    make?: string;
-    model?: string;
+    /**
+     * Manufacturer of the vehicle
+     */
+    make: string;
+    /**
+     * Model of the vehicle
+     */
+    model: string;
+    /**
+     * Model year of the vehicle
+     */
     year?: number;
-    vin?: string;
+    /**
+     * 17-character Vehicle Identification Number
+     */
+    vin: string;
+    /**
+     * Vehicle type classification (CAR, VAN, COMMERCIAL_TRUCK, PASSENGER_TRUCK)
+     */
     vehicleType?: string;
 }
 
@@ -59,7 +77,7 @@ export function instanceOfVehicleLegacyRequest(value: object): value is VehicleL
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createVehicleLegacyRequestPropertyNames();
+    const requiredProperties = createVehicleLegacyRequestPropertyNames('make', 'model', 'vin', );
     const optionalStringProperties = createVehicleLegacyRequestOptionalProperties({ name: 'id', nullable: false }, { name: 'make', nullable: false }, { name: 'model', nullable: false }, { name: 'vin', nullable: false }, { name: 'vehicleType', nullable: false }, );
     const optionalNumberProperties = createVehicleLegacyRequestOptionalProperties({ name: 'year', nullable: false }, );
     const optionalBooleanProperties = createVehicleLegacyRequestOptionalProperties();

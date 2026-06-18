@@ -9,11 +9,26 @@
  */
 
 
+/**
+ * Result of uploading a source file for a bulk load job
+ */
 export interface FileUploadResponse { 
-    jobId?: string;
-    storagePath?: string;
-    fileName?: string;
-    sizeBytes?: number;
+    /**
+     * Identifier of the bulk load job the file was uploaded for
+     */
+    jobId: string;
+    /**
+     * Storage path where the uploaded file is persisted
+     */
+    storagePath: string;
+    /**
+     * Original name of the uploaded file
+     */
+    fileName: string;
+    /**
+     * Size of the uploaded file in bytes
+     */
+    sizeBytes: number;
 }
 
 function isOptionalFileUploadResponsePropertyOfType(
@@ -54,7 +69,7 @@ export function instanceOfFileUploadResponse(value: object): value is FileUpload
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createFileUploadResponsePropertyNames();
+    const requiredProperties = createFileUploadResponsePropertyNames('jobId', 'storagePath', 'fileName', 'sizeBytes', );
     const optionalStringProperties = createFileUploadResponseOptionalProperties({ name: 'jobId', nullable: false }, { name: 'storagePath', nullable: false }, { name: 'fileName', nullable: false }, );
     const optionalNumberProperties = createFileUploadResponseOptionalProperties({ name: 'sizeBytes', nullable: false }, );
     const optionalBooleanProperties = createFileUploadResponseOptionalProperties();

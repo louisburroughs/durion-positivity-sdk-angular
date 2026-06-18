@@ -9,13 +9,37 @@
  */
 
 
+/**
+ * Person details resolved from the people system
+ */
 export interface PersonDTO { 
-    id?: number;
+    /**
+     * Internal person identifier
+     */
+    id: number;
+    /**
+     * Person first name
+     */
     firstName?: string;
+    /**
+     * Person last name
+     */
     lastName?: string;
+    /**
+     * Primary email address
+     */
     primaryEmail?: string;
+    /**
+     * Secondary email address
+     */
     secondaryEmail?: string;
+    /**
+     * Associated phone numbers
+     */
     phoneNumbers?: Array<string>;
+    /**
+     * Login username
+     */
     username?: string;
 }
 
@@ -57,7 +81,7 @@ export function instanceOfPersonDTO(value: object): value is PersonDTO {
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createPersonDTOPropertyNames();
+    const requiredProperties = createPersonDTOPropertyNames('id', );
     const optionalStringProperties = createPersonDTOOptionalProperties({ name: 'firstName', nullable: false }, { name: 'lastName', nullable: false }, { name: 'primaryEmail', nullable: false }, { name: 'secondaryEmail', nullable: false }, { name: 'username', nullable: false }, );
     const optionalNumberProperties = createPersonDTOOptionalProperties({ name: 'id', nullable: false }, );
     const optionalBooleanProperties = createPersonDTOOptionalProperties();

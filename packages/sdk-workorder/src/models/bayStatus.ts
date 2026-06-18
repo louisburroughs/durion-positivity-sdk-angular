@@ -9,12 +9,30 @@
  */
 
 
+/**
+ * Current status of a service bay
+ */
 export interface BayStatus { 
-    bayId?: string;
+    /**
+     * Identifier of the bay
+     */
+    bayId: string;
+    /**
+     * Human-readable bay name
+     */
     bayName?: string;
-    status?: string;
+    /**
+     * Operational status of the bay
+     */
+    status: string;
+    /**
+     * Identifier of the workorder currently assigned to the bay
+     */
     assignedWorkorderId?: string;
-    available?: boolean;
+    /**
+     * Whether the bay is currently available
+     */
+    available: boolean;
 }
 
 function isOptionalBayStatusPropertyOfType(
@@ -55,7 +73,7 @@ export function instanceOfBayStatus(value: object): value is BayStatus {
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createBayStatusPropertyNames();
+    const requiredProperties = createBayStatusPropertyNames('bayId', 'status', 'available', );
     const optionalStringProperties = createBayStatusOptionalProperties({ name: 'bayId', nullable: false }, { name: 'bayName', nullable: false }, { name: 'status', nullable: false }, { name: 'assignedWorkorderId', nullable: false }, );
     const optionalNumberProperties = createBayStatusOptionalProperties();
     const optionalBooleanProperties = createBayStatusOptionalProperties({ name: 'available', nullable: false }, );

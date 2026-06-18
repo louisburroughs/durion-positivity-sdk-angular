@@ -9,12 +9,30 @@
  */
 
 
+/**
+ * Balance of a GL account as of a point in time
+ */
 export interface GLAccountBalanceResponse { 
-    glAccountId?: string;
+    /**
+     * Unique identifier of the GL account
+     */
+    glAccountId: string;
+    /**
+     * Account code of the GL account
+     */
     accountCode?: string;
+    /**
+     * Account name of the GL account
+     */
     accountName?: string;
-    balance?: number;
-    asOfDate?: string;
+    /**
+     * Balance of the account
+     */
+    balance: number;
+    /**
+     * Point in time the balance is computed as of (ISO 8601)
+     */
+    asOfDate: string;
 }
 
 function isOptionalGLAccountBalanceResponsePropertyOfType(
@@ -55,7 +73,7 @@ export function instanceOfGLAccountBalanceResponse(value: object): value is GLAc
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createGLAccountBalanceResponsePropertyNames();
+    const requiredProperties = createGLAccountBalanceResponsePropertyNames('glAccountId', 'balance', 'asOfDate', );
     const optionalStringProperties = createGLAccountBalanceResponseOptionalProperties({ name: 'glAccountId', nullable: false }, { name: 'accountCode', nullable: false }, { name: 'accountName', nullable: false }, );
     const optionalNumberProperties = createGLAccountBalanceResponseOptionalProperties({ name: 'balance', nullable: false }, );
     const optionalBooleanProperties = createGLAccountBalanceResponseOptionalProperties();

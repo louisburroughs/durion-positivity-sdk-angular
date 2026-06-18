@@ -10,11 +10,29 @@
 import { MappingKeyResponse } from './mappingKeyResponse';
 
 
+/**
+ * Paginated list of mapping keys
+ */
 export interface MappingKeyListResponse { 
-    results?: Array<MappingKeyResponse>;
+    /**
+     * Mapping keys on the current page
+     */
+    results: Array<MappingKeyResponse>;
+    /**
+     * Total number of mapping keys matching the query
+     */
     totalCount?: number;
+    /**
+     * Zero-based index of the current page
+     */
     pageNumber?: number;
+    /**
+     * Number of items per page
+     */
     pageSize?: number;
+    /**
+     * Total number of pages available
+     */
     totalPages?: number;
 }
 
@@ -56,7 +74,7 @@ export function instanceOfMappingKeyListResponse(value: object): value is Mappin
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createMappingKeyListResponsePropertyNames();
+    const requiredProperties = createMappingKeyListResponsePropertyNames('results', );
     const optionalStringProperties = createMappingKeyListResponseOptionalProperties();
     const optionalNumberProperties = createMappingKeyListResponseOptionalProperties({ name: 'totalCount', nullable: false }, { name: 'pageNumber', nullable: false }, { name: 'pageSize', nullable: false }, { name: 'totalPages', nullable: false }, );
     const optionalBooleanProperties = createMappingKeyListResponseOptionalProperties();

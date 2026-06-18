@@ -9,14 +9,41 @@
  */
 
 
+/**
+ * Request to record a refund audit event
+ */
 export interface RefundRequest { 
+    /**
+     * Identifier of the invoice being refunded
+     */
     invoiceId: string;
+    /**
+     * Identifier of the payment being refunded
+     */
     paymentId: string;
+    /**
+     * Type of refund being recorded
+     */
     refundType: RefundRequestRefundTypeEnum;
+    /**
+     * Amount being refunded
+     */
     refundAmount: number;
+    /**
+     * Status of the original payment being refunded
+     */
     originalPaymentStatus: RefundRequestOriginalPaymentStatusEnum;
+    /**
+     * Legacy client-provided actor identifier; service resolves authoritative actor from security context
+     */
     actorId?: string;
+    /**
+     * Role of the actor performing the refund
+     */
     actorRole: string;
+    /**
+     * Reason for the refund
+     */
     reason: string;
 }
 export enum RefundRequestRefundTypeEnum {

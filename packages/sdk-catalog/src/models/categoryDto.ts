@@ -16,11 +16,11 @@ export interface CategoryDto {
     /**
      * Category identifier
      */
-    id?: string;
+    id: string;
     /**
      * Category name
      */
-    name?: string;
+    name: string;
 }
 
 function isOptionalCategoryDtoPropertyOfType(
@@ -61,7 +61,7 @@ export function instanceOfCategoryDto(value: object): value is CategoryDto {
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createCategoryDtoPropertyNames();
+    const requiredProperties = createCategoryDtoPropertyNames('id', 'name', );
     const optionalStringProperties = createCategoryDtoOptionalProperties({ name: 'id', nullable: false }, { name: 'name', nullable: false }, );
     const optionalNumberProperties = createCategoryDtoOptionalProperties();
     const optionalBooleanProperties = createCategoryDtoOptionalProperties();

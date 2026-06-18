@@ -9,12 +9,33 @@
  */
 
 
+/**
+ * Request to create or update a default GL account mapping
+ */
 export interface DefaultGLMappingRequest { 
+    /**
+     * Accounting event type the mapping applies to
+     */
     eventType: string;
+    /**
+     * Organization scope for the mapping; null for the global default
+     */
     organizationId?: string;
+    /**
+     * Identifier of the GL account to debit
+     */
     debitAccountId: string;
+    /**
+     * Identifier of the GL account to credit
+     */
     creditAccountId: string;
+    /**
+     * Optional description of the mapping
+     */
     description?: string;
+    /**
+     * Whether the mapping is active
+     */
     active?: boolean;
 }
 

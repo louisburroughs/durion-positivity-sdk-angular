@@ -9,10 +9,22 @@
  */
 
 
+/**
+ * A single line in a consumption request, identifying a SKU and quantity to consume against a pick task
+ */
 export interface ConsumeItemLine { 
-    pickTaskId?: string;
-    skuId?: string;
-    quantity?: number;
+    /**
+     * Identifier of the pick task the consumed items are drawn from
+     */
+    pickTaskId: string;
+    /**
+     * Identifier of the SKU being consumed
+     */
+    skuId: string;
+    /**
+     * Quantity of the SKU to consume
+     */
+    quantity: number;
 }
 
 function isOptionalConsumeItemLinePropertyOfType(
@@ -53,7 +65,7 @@ export function instanceOfConsumeItemLine(value: object): value is ConsumeItemLi
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createConsumeItemLinePropertyNames();
+    const requiredProperties = createConsumeItemLinePropertyNames('pickTaskId', 'skuId', 'quantity', );
     const optionalStringProperties = createConsumeItemLineOptionalProperties({ name: 'pickTaskId', nullable: false }, { name: 'skuId', nullable: false }, );
     const optionalNumberProperties = createConsumeItemLineOptionalProperties({ name: 'quantity', nullable: false }, );
     const optionalBooleanProperties = createConsumeItemLineOptionalProperties();

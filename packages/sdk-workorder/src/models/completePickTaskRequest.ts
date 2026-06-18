@@ -9,7 +9,13 @@
  */
 
 
+/**
+ * Request to complete a pick task
+ */
 export interface CompletePickTaskRequest { 
+    /**
+     * Optional reason for completing the pick task
+     */
     reason?: string;
 }
 

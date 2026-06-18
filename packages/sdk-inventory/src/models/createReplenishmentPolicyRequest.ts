@@ -9,10 +9,25 @@
  */
 
 
+/**
+ * Request to create a replenishment policy defining min/max stock thresholds for an item at a location
+ */
 export interface CreateReplenishmentPolicyRequest { 
+    /**
+     * Identifier of the location the replenishment policy applies to
+     */
     locationId: string;
+    /**
+     * SKU of the item the replenishment policy applies to
+     */
     itemSKU: string;
+    /**
+     * Minimum on-hand quantity that triggers replenishment when reached
+     */
     minimumQuantity: number;
+    /**
+     * Maximum on-hand quantity replenishment aims to restock up to
+     */
     maximumQuantity: number;
     minimumLessThanMaximum?: boolean;
 }

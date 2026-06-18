@@ -16,11 +16,11 @@ export interface ProductSpecification {
     /**
      * Specification name
      */
-    name?: string;
+    name: string;
     /**
      * Specification value
      */
-    value?: string;
+    value: string;
 }
 
 function isOptionalProductSpecificationPropertyOfType(
@@ -61,7 +61,7 @@ export function instanceOfProductSpecification(value: object): value is ProductS
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createProductSpecificationPropertyNames();
+    const requiredProperties = createProductSpecificationPropertyNames('name', 'value', );
     const optionalStringProperties = createProductSpecificationOptionalProperties({ name: 'name', nullable: false }, { name: 'value', nullable: false }, );
     const optionalNumberProperties = createProductSpecificationOptionalProperties();
     const optionalBooleanProperties = createProductSpecificationOptionalProperties();

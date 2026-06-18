@@ -9,9 +9,21 @@
  */
 
 
+/**
+ * Account-level billing preferences within a CRM snapshot
+ */
 export interface BillingPreferences { 
-    marketingOptOut?: boolean;
-    doNotContact?: boolean;
+    /**
+     * Whether the account has opted out of marketing communications
+     */
+    marketingOptOut: boolean;
+    /**
+     * Whether the account should not be contacted at all
+     */
+    doNotContact: boolean;
+    /**
+     * Preferred invoice delivery method
+     */
     invoiceDeliveryMethod?: string;
 }
 
@@ -53,7 +65,7 @@ export function instanceOfBillingPreferences(value: object): value is BillingPre
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createBillingPreferencesPropertyNames();
+    const requiredProperties = createBillingPreferencesPropertyNames('marketingOptOut', 'doNotContact', );
     const optionalStringProperties = createBillingPreferencesOptionalProperties({ name: 'invoiceDeliveryMethod', nullable: false }, );
     const optionalNumberProperties = createBillingPreferencesOptionalProperties();
     const optionalBooleanProperties = createBillingPreferencesOptionalProperties({ name: 'marketingOptOut', nullable: false }, { name: 'doNotContact', nullable: false }, );

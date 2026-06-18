@@ -9,28 +9,97 @@
  */
 
 
+/**
+ * Detailed view of a price override including approval workflow state
+ */
 export interface PriceOverrideDetail { 
-    overrideId?: string;
-    orderId?: string;
-    orderLineId?: string;
-    productId?: string;
-    originalPrice?: number;
-    overridePrice?: number;
-    discountAmount?: number;
-    discountPercentage?: number;
-    reasonCode?: string;
+    /**
+     * Unique identifier of the price override
+     */
+    overrideId: string;
+    /**
+     * Identifier of the order the override applies to
+     */
+    orderId: string;
+    /**
+     * Identifier of the order line the override applies to
+     */
+    orderLineId: string;
+    /**
+     * Identifier of the product on the overridden line
+     */
+    productId: string;
+    /**
+     * Original price before the override
+     */
+    originalPrice: number;
+    /**
+     * Overridden price applied to the line
+     */
+    overridePrice: number;
+    /**
+     * Absolute discount amount granted by the override
+     */
+    discountAmount: number;
+    /**
+     * Discount expressed as a percentage of the original price
+     */
+    discountPercentage: number;
+    /**
+     * Reason code supplied for the override
+     */
+    reasonCode: string;
+    /**
+     * Free-text justification supporting the override
+     */
     justification?: string;
-    status?: string;
-    requiresApproval?: boolean;
-    affectsCommission?: boolean;
-    requestedByUserId?: string;
+    /**
+     * Current override status (e.g. APPROVED, PENDING_APPROVAL, REJECTED)
+     */
+    status: string;
+    /**
+     * Whether the override required approval
+     */
+    requiresApproval: boolean;
+    /**
+     * Whether the override affects sales commission
+     */
+    affectsCommission: boolean;
+    /**
+     * Identifier of the user who requested the override
+     */
+    requestedByUserId: string;
+    /**
+     * Identifier of the user who approved the override, if approved
+     */
     approvedByUserId?: string;
+    /**
+     * Identifier of the user who rejected the override, if rejected
+     */
     rejectedByUserId?: string;
+    /**
+     * Reason the override was rejected, if rejected
+     */
     rejectionReason?: string;
-    createdAt?: string;
+    /**
+     * Timestamp when the override was created
+     */
+    createdAt: string;
+    /**
+     * Timestamp when the override was last updated
+     */
     updatedAt?: string;
+    /**
+     * Timestamp when the override was approved, if approved
+     */
     approvedAt?: string;
+    /**
+     * Timestamp when the override was rejected, if rejected
+     */
     rejectedAt?: string;
+    /**
+     * Timestamp when the override was applied to the line, if applied
+     */
     appliedAt?: string;
 }
 
@@ -72,7 +141,7 @@ export function instanceOfPriceOverrideDetail(value: object): value is PriceOver
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createPriceOverrideDetailPropertyNames();
+    const requiredProperties = createPriceOverrideDetailPropertyNames('overrideId', 'orderId', 'orderLineId', 'productId', 'originalPrice', 'overridePrice', 'discountAmount', 'discountPercentage', 'reasonCode', 'status', 'requiresApproval', 'affectsCommission', 'requestedByUserId', 'createdAt', );
     const optionalStringProperties = createPriceOverrideDetailOptionalProperties({ name: 'overrideId', nullable: false }, { name: 'orderId', nullable: false }, { name: 'orderLineId', nullable: false }, { name: 'productId', nullable: false }, { name: 'reasonCode', nullable: false }, { name: 'justification', nullable: false }, { name: 'status', nullable: false }, { name: 'requestedByUserId', nullable: false }, { name: 'approvedByUserId', nullable: false }, { name: 'rejectedByUserId', nullable: false }, { name: 'rejectionReason', nullable: false }, );
     const optionalNumberProperties = createPriceOverrideDetailOptionalProperties({ name: 'originalPrice', nullable: false }, { name: 'overridePrice', nullable: false }, { name: 'discountAmount', nullable: false }, { name: 'discountPercentage', nullable: false }, );
     const optionalBooleanProperties = createPriceOverrideDetailOptionalProperties({ name: 'requiresApproval', nullable: false }, { name: 'affectsCommission', nullable: false }, );

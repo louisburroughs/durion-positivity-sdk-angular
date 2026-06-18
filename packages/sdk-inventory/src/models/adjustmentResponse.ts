@@ -9,28 +9,97 @@
  */
 
 
+/**
+ * Result of a cycle count inventory adjustment, including approval state and posting outcome
+ */
 export interface AdjustmentResponse { 
-    adjustmentId?: string;
-    stockItemId?: string;
-    reasonCode?: string;
-    quantityChange?: number;
-    costAtTimeOfAdjustment?: number;
-    quantityOnHandBefore?: number;
-    countedQuantity?: number;
-    status?: AdjustmentResponseStatusEnum;
+    /**
+     * Unique identifier of the adjustment record
+     */
+    adjustmentId: string;
+    /**
+     * Identifier of the stock item the adjustment applies to
+     */
+    stockItemId: string;
+    /**
+     * Reason code explaining why the adjustment was made
+     */
+    reasonCode: string;
+    /**
+     * Net change in quantity on hand resulting from the adjustment (may be negative)
+     */
+    quantityChange: number;
+    /**
+     * Unit cost captured at the moment the adjustment was created
+     */
+    costAtTimeOfAdjustment: number;
+    /**
+     * Quantity on hand recorded before the count was applied
+     */
+    quantityOnHandBefore: number;
+    /**
+     * Quantity physically counted by the auditor
+     */
+    countedQuantity: number;
+    /**
+     * Current lifecycle status of the adjustment
+     */
+    status: AdjustmentResponseStatusEnum;
+    /**
+     * Approval tier required to authorize the adjustment, when manual approval applies
+     */
     requiredApprovalTier?: AdjustmentResponseRequiredApprovalTierEnum;
-    createdByUserId?: string;
+    /**
+     * Identifier of the user who created the adjustment
+     */
+    createdByUserId: string;
+    /**
+     * Identifier of the user who approved the adjustment, if approved
+     */
     approvedByUserId?: string;
+    /**
+     * Identifier of the user who rejected the adjustment, if rejected
+     */
     rejectedByUserId?: string;
+    /**
+     * Free-text reason supplied when the adjustment was rejected
+     */
     rejectionReason?: string;
-    createdAt?: string;
-    updatedAt?: string;
+    /**
+     * Timestamp when the adjustment was created
+     */
+    createdAt: string;
+    /**
+     * Timestamp when the adjustment was last updated
+     */
+    updatedAt: string;
+    /**
+     * Timestamp when the adjustment was approved, if approved
+     */
     approvedAt?: string;
+    /**
+     * Timestamp when the adjustment was rejected, if rejected
+     */
     rejectedAt?: string;
+    /**
+     * Timestamp when the adjustment was posted to the inventory ledger, if posted
+     */
     postedAt?: string;
+    /**
+     * Identifier of the inventory ledger entry created when the adjustment was posted
+     */
     ledgerEntryId?: string;
+    /**
+     * Error message describing why processing failed, if the adjustment failed
+     */
     errorMessage?: string;
+    /**
+     * Monetary value of the counted variance
+     */
     varianceValue?: number;
+    /**
+     * Variance expressed as a percentage of expected quantity on hand
+     */
     variancePercentage?: number;
 }
 export enum AdjustmentResponseStatusEnum {
@@ -86,7 +155,7 @@ export function instanceOfAdjustmentResponse(value: object): value is Adjustment
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createAdjustmentResponsePropertyNames();
+    const requiredProperties = createAdjustmentResponsePropertyNames('adjustmentId', 'stockItemId', 'reasonCode', 'quantityChange', 'costAtTimeOfAdjustment', 'quantityOnHandBefore', 'countedQuantity', 'status', 'createdByUserId', 'createdAt', 'updatedAt', );
     const optionalStringProperties = createAdjustmentResponseOptionalProperties({ name: 'adjustmentId', nullable: false }, { name: 'stockItemId', nullable: false }, { name: 'reasonCode', nullable: false }, { name: 'status', nullable: false }, { name: 'requiredApprovalTier', nullable: false }, { name: 'createdByUserId', nullable: false }, { name: 'approvedByUserId', nullable: false }, { name: 'rejectedByUserId', nullable: false }, { name: 'rejectionReason', nullable: false }, { name: 'ledgerEntryId', nullable: false }, { name: 'errorMessage', nullable: false }, );
     const optionalNumberProperties = createAdjustmentResponseOptionalProperties({ name: 'quantityChange', nullable: false }, { name: 'costAtTimeOfAdjustment', nullable: false }, { name: 'quantityOnHandBefore', nullable: false }, { name: 'countedQuantity', nullable: false }, { name: 'varianceValue', nullable: false }, { name: 'variancePercentage', nullable: false }, );
     const optionalBooleanProperties = createAdjustmentResponseOptionalProperties();

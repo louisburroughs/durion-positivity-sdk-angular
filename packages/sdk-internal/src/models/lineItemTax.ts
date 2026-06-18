@@ -32,7 +32,7 @@ export interface LineItemTax {
     /**
      * Whether this line item is tax exempt
      */
-    taxExempt?: boolean;
+    taxExempt: boolean;
 }
 
 function isOptionalLineItemTaxPropertyOfType(
@@ -73,7 +73,7 @@ export function instanceOfLineItemTax(value: object): value is LineItemTax {
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createLineItemTaxPropertyNames('lineItemId', 'subtotal', 'taxAmount', 'total', );
+    const requiredProperties = createLineItemTaxPropertyNames('lineItemId', 'subtotal', 'taxAmount', 'total', 'taxExempt', );
     const optionalStringProperties = createLineItemTaxOptionalProperties({ name: 'lineItemId', nullable: false }, );
     const optionalNumberProperties = createLineItemTaxOptionalProperties({ name: 'subtotal', nullable: false }, { name: 'taxAmount', nullable: false }, { name: 'total', nullable: false }, );
     const optionalBooleanProperties = createLineItemTaxOptionalProperties({ name: 'taxExempt', nullable: false }, );

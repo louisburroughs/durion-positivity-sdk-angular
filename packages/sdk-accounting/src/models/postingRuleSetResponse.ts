@@ -10,15 +10,45 @@
 import { PostingRuleVersionResponse } from './postingRuleVersionResponse';
 
 
+/**
+ * Posting rule set with its versions and audit metadata
+ */
 export interface PostingRuleSetResponse { 
-    postingRuleSetId?: string;
+    /**
+     * Unique identifier of the posting rule set
+     */
+    postingRuleSetId: string;
+    /**
+     * Display name of the posting rule set
+     */
     name?: string;
+    /**
+     * Accounting event type the rule set applies to
+     */
     eventType?: string;
+    /**
+     * Human-readable description of the rule set
+     */
     description?: string;
+    /**
+     * Versions belonging to this posting rule set
+     */
     versions?: Array<PostingRuleVersionResponse>;
+    /**
+     * Timestamp when the rule set was created (ISO 8601)
+     */
     createdAt?: string;
+    /**
+     * Identifier of the user who created the rule set
+     */
     createdBy?: string;
+    /**
+     * Timestamp when the rule set was last modified (ISO 8601)
+     */
     modifiedAt?: string;
+    /**
+     * Identifier of the user who last modified the rule set
+     */
     modifiedBy?: string;
 }
 
@@ -60,7 +90,7 @@ export function instanceOfPostingRuleSetResponse(value: object): value is Postin
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createPostingRuleSetResponsePropertyNames();
+    const requiredProperties = createPostingRuleSetResponsePropertyNames('postingRuleSetId', );
     const optionalStringProperties = createPostingRuleSetResponseOptionalProperties({ name: 'postingRuleSetId', nullable: false }, { name: 'name', nullable: false }, { name: 'eventType', nullable: false }, { name: 'description', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'modifiedBy', nullable: false }, );
     const optionalNumberProperties = createPostingRuleSetResponseOptionalProperties();
     const optionalBooleanProperties = createPostingRuleSetResponseOptionalProperties();

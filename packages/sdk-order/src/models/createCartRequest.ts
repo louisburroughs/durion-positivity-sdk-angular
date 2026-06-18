@@ -9,10 +9,25 @@
  */
 
 
+/**
+ * Request payload for creating a new cart
+ */
 export interface CreateCartRequest { 
+    /**
+     * Identifier of the clerk creating the cart
+     */
     clerkId: string;
+    /**
+     * Identifier of the terminal where the cart is created
+     */
     terminalId: string;
+    /**
+     * Identifier of the customer associated with the cart, when known
+     */
     customerId?: string;
+    /**
+     * Identifier of the vehicle associated with the cart, when applicable
+     */
     vehicleId?: string;
 }
 

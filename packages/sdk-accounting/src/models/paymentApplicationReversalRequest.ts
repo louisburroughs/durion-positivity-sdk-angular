@@ -9,7 +9,13 @@
  */
 
 
+/**
+ * Request payload for reversing a payment application
+ */
 export interface PaymentApplicationReversalRequest { 
+    /**
+     * Reason for the reversal, recorded for the audit trail
+     */
     reason: string;
 }
 

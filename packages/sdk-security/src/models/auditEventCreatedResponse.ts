@@ -9,9 +9,18 @@
  */
 
 
+/**
+ * Minimal acknowledgement returned after creating an audit event
+ */
 export interface AuditEventCreatedResponse { 
-    eventId?: string;
-    timestamp?: string;
+    /**
+     * Identifier of the created audit event
+     */
+    eventId: string;
+    /**
+     * Timestamp recorded for the audit event
+     */
+    timestamp: string;
 }
 
 function isOptionalAuditEventCreatedResponsePropertyOfType(
@@ -52,7 +61,7 @@ export function instanceOfAuditEventCreatedResponse(value: object): value is Aud
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createAuditEventCreatedResponsePropertyNames();
+    const requiredProperties = createAuditEventCreatedResponsePropertyNames('eventId', 'timestamp', );
     const optionalStringProperties = createAuditEventCreatedResponseOptionalProperties({ name: 'eventId', nullable: false }, );
     const optionalNumberProperties = createAuditEventCreatedResponseOptionalProperties();
     const optionalBooleanProperties = createAuditEventCreatedResponseOptionalProperties();

@@ -9,13 +9,37 @@
  */
 
 
+/**
+ * Outcome of a permission catalog registration request
+ */
 export interface PermissionRegistrationResponse { 
-    success?: boolean;
+    /**
+     * True when the registration completed without fatal errors
+     */
+    success: boolean;
+    /**
+     * Human-readable summary of the registration outcome
+     */
     message?: string;
-    totalPermissions?: number;
-    registeredPermissions?: number;
-    updatedPermissions?: number;
-    skippedPermissions?: number;
+    /**
+     * Total number of permissions submitted in the manifest
+     */
+    totalPermissions: number;
+    /**
+     * Number of new permissions registered
+     */
+    registeredPermissions: number;
+    /**
+     * Number of existing permissions updated
+     */
+    updatedPermissions: number;
+    /**
+     * Number of permissions skipped because they were unchanged
+     */
+    skippedPermissions: number;
+    /**
+     * Per-permission error messages, when any occurred
+     */
     errors?: Array<string>;
 }
 
@@ -57,7 +81,7 @@ export function instanceOfPermissionRegistrationResponse(value: object): value i
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createPermissionRegistrationResponsePropertyNames();
+    const requiredProperties = createPermissionRegistrationResponsePropertyNames('success', 'totalPermissions', 'registeredPermissions', 'updatedPermissions', 'skippedPermissions', );
     const optionalStringProperties = createPermissionRegistrationResponseOptionalProperties({ name: 'message', nullable: false }, );
     const optionalNumberProperties = createPermissionRegistrationResponseOptionalProperties({ name: 'totalPermissions', nullable: false }, { name: 'registeredPermissions', nullable: false }, { name: 'updatedPermissions', nullable: false }, { name: 'skippedPermissions', nullable: false }, );
     const optionalBooleanProperties = createPermissionRegistrationResponseOptionalProperties({ name: 'success', nullable: false }, );

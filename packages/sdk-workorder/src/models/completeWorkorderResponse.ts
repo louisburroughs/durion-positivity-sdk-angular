@@ -16,19 +16,19 @@ export interface CompleteWorkorderResponse {
     /**
      * Workorder identifier
      */
-    workorderId?: string;
+    workorderId: string;
     /**
      * Status prior to completion
      */
-    previousStatus?: string;
+    previousStatus: string;
     /**
      * Status after completion
      */
-    currentStatus?: string;
+    currentStatus: string;
     /**
      * Timestamp when completion was recorded
      */
-    completedAt?: string;
+    completedAt: string;
     /**
      * Operation outcome message
      */
@@ -73,7 +73,7 @@ export function instanceOfCompleteWorkorderResponse(value: object): value is Com
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createCompleteWorkorderResponsePropertyNames();
+    const requiredProperties = createCompleteWorkorderResponsePropertyNames('workorderId', 'previousStatus', 'currentStatus', 'completedAt', );
     const optionalStringProperties = createCompleteWorkorderResponseOptionalProperties({ name: 'workorderId', nullable: false }, { name: 'previousStatus', nullable: false }, { name: 'currentStatus', nullable: false }, { name: 'message', nullable: false }, );
     const optionalNumberProperties = createCompleteWorkorderResponseOptionalProperties();
     const optionalBooleanProperties = createCompleteWorkorderResponseOptionalProperties();

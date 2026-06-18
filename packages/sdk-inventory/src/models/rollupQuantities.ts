@@ -9,6 +9,9 @@
  */
 
 
+/**
+ * On-hand, allocated and available quantity triple used at every rollup node
+ */
 export interface RollupQuantities { 
     /**
      * On-hand quantity

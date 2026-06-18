@@ -16,23 +16,23 @@ export interface EligibilityRuleResponse {
     /**
      * Eligibility rule identifier
      */
-    ruleId?: string;
+    ruleId: string;
     /**
      * Promotion identifier to which this rule belongs
      */
-    promotionId?: string;
+    promotionId: string;
     /**
      * Rule condition type
      */
-    conditionType?: EligibilityRuleResponseConditionTypeEnum;
+    conditionType: EligibilityRuleResponseConditionTypeEnum;
     /**
      * Comparison operator
      */
-    operator?: EligibilityRuleResponseOperatorEnum;
+    operator: EligibilityRuleResponseOperatorEnum;
     /**
      * Rule threshold or value
      */
-    value?: string;
+    value: string;
 }
 export enum EligibilityRuleResponseConditionTypeEnum {
     AccountIdList = 'ACCOUNT_ID_LIST',
@@ -86,7 +86,7 @@ export function instanceOfEligibilityRuleResponse(value: object): value is Eligi
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createEligibilityRuleResponsePropertyNames();
+    const requiredProperties = createEligibilityRuleResponsePropertyNames('ruleId', 'promotionId', 'conditionType', 'operator', 'value', );
     const optionalStringProperties = createEligibilityRuleResponseOptionalProperties({ name: 'ruleId', nullable: false }, { name: 'promotionId', nullable: false }, { name: 'conditionType', nullable: false }, { name: 'operator', nullable: false }, { name: 'value', nullable: false }, );
     const optionalNumberProperties = createEligibilityRuleResponseOptionalProperties();
     const optionalBooleanProperties = createEligibilityRuleResponseOptionalProperties();

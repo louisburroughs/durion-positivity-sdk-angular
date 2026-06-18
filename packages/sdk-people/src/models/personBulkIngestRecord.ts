@@ -9,12 +9,33 @@
  */
 
 
+/**
+ * Single person record within a bulk ingest payload
+ */
 export interface PersonBulkIngestRecord { 
+    /**
+     * Legal name of the person
+     */
     legalName: string;
+    /**
+     * Preferred name of the person
+     */
     preferredName?: string;
+    /**
+     * Unique employee number
+     */
     employeeNumber: string;
+    /**
+     * Date the person was hired (ISO 8601 date)
+     */
     hireDate: string;
+    /**
+     * Primary email address
+     */
     primaryEmail?: string;
+    /**
+     * Primary phone number
+     */
     primaryPhone?: string;
 }
 

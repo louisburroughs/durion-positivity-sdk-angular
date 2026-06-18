@@ -9,10 +9,25 @@
  */
 
 
+/**
+ * Single base-price record within a bulk ingest payload
+ */
 export interface BasePriceBulkIngestRecord { 
+    /**
+     * Product identifier the base price applies to
+     */
     productId: string;
+    /**
+     * Manufacturer suggested retail price
+     */
     msrp: string;
+    /**
+     * ISO-4217 currency code
+     */
     currency: string;
+    /**
+     * Date the base price becomes effective
+     */
     effectiveFrom: string;
 }
 

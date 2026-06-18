@@ -9,12 +9,33 @@
  */
 
 
+/**
+ * Request to update the MSRP for a product
+ */
 export interface UpdateMsrpRequestDto { 
+    /**
+     * MSRP amount
+     */
     amount: number;
+    /**
+     * ISO currency code for the amount
+     */
     currency: string;
+    /**
+     * Date the MSRP becomes effective
+     */
     effectiveStartDate: string;
+    /**
+     * Date the MSRP stops being effective (null means open-ended)
+     */
     effectiveEndDate?: string;
+    /**
+     * Identifier of the user creating this MSRP entry
+     */
     createdByUserId: string;
+    /**
+     * Version for optimistic locking
+     */
     version?: number;
 }
 

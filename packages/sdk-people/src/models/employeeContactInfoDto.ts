@@ -11,10 +11,25 @@ import { EmployeeEmergencyContactDto } from './employeeEmergencyContactDto';
 import { EmployeeAddressDto } from './employeeAddressDto';
 
 
+/**
+ * Contact information for an employee
+ */
 export interface EmployeeContactInfoDto { 
+    /**
+     * Primary email address
+     */
     primaryEmail?: string;
+    /**
+     * Primary phone number
+     */
     primaryPhone?: string;
+    /**
+     * Secondary email address
+     */
     secondaryEmail?: string;
+    /**
+     * Secondary phone number
+     */
     secondaryPhone?: string;
     address?: EmployeeAddressDto;
     emergencyContact?: EmployeeEmergencyContactDto;

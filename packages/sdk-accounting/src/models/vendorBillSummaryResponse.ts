@@ -16,11 +16,11 @@ export interface VendorBillSummaryResponse {
     /**
      * Vendor bill UUID
      */
-    vendorBillId?: string;
+    vendorBillId: string;
     /**
      * Vendor UUID
      */
-    vendorId?: string;
+    vendorId: string;
     /**
      * Vendor name
      */
@@ -28,7 +28,7 @@ export interface VendorBillSummaryResponse {
     /**
      * Bill number
      */
-    billNumber?: string;
+    billNumber: string;
     /**
      * Bill date
      */
@@ -40,7 +40,7 @@ export interface VendorBillSummaryResponse {
     /**
      * Total bill amount
      */
-    totalAmount?: number;
+    totalAmount: number;
     /**
      * Open/unpaid amount (eligible for payment)
      */
@@ -48,7 +48,7 @@ export interface VendorBillSummaryResponse {
     /**
      * Bill status
      */
-    status?: VendorBillSummaryResponseStatusEnum;
+    status: VendorBillSummaryResponseStatusEnum;
 }
 export enum VendorBillSummaryResponseStatusEnum {
     PendingReceiptMatch = 'PENDING_RECEIPT_MATCH',
@@ -99,7 +99,7 @@ export function instanceOfVendorBillSummaryResponse(value: object): value is Ven
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createVendorBillSummaryResponsePropertyNames();
+    const requiredProperties = createVendorBillSummaryResponsePropertyNames('vendorBillId', 'vendorId', 'billNumber', 'totalAmount', 'status', );
     const optionalStringProperties = createVendorBillSummaryResponseOptionalProperties({ name: 'vendorBillId', nullable: false }, { name: 'vendorId', nullable: false }, { name: 'vendorName', nullable: false }, { name: 'billNumber', nullable: false }, { name: 'status', nullable: false }, );
     const optionalNumberProperties = createVendorBillSummaryResponseOptionalProperties({ name: 'totalAmount', nullable: false }, { name: 'openAmount', nullable: false }, );
     const optionalBooleanProperties = createVendorBillSummaryResponseOptionalProperties();

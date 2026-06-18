@@ -9,10 +9,25 @@
  */
 
 
+/**
+ * Request payload for upserting a pricing guardrail policy
+ */
 export interface GuardrailPolicyUpsertRequestDto { 
+    /**
+     * Scope identifier the guardrail policy applies to
+     */
     scopeId: string;
+    /**
+     * Minimum allowed margin percent
+     */
     minMarginPercent: number;
+    /**
+     * Maximum allowed discount percent
+     */
     maxDiscountPercent: number;
+    /**
+     * Threshold percent below which overrides are auto-approved
+     */
     autoApprovalThresholdPercent: number;
 }
 

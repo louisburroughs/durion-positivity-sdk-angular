@@ -10,14 +10,41 @@
 import { ConflictDetails } from './conflictDetails';
 
 
+/**
+ * A single event displayed within a resource lane
+ */
 export interface ScheduleEventView { 
-    eventId?: string;
-    eventType?: string;
+    /**
+     * Event identifier
+     */
+    eventId: string;
+    /**
+     * Event type (e.g. APPOINTMENT, SHIFT, PTO)
+     */
+    eventType: string;
+    /**
+     * Event sub-type, when applicable
+     */
     subType?: string;
-    startTime?: string;
-    endTime?: string;
+    /**
+     * Event start instant in UTC (ISO-8601)
+     */
+    startTime: string;
+    /**
+     * Event end instant in UTC (ISO-8601)
+     */
+    endTime: string;
+    /**
+     * Event display title
+     */
     title?: string;
-    hasConflict?: boolean;
+    /**
+     * Whether this event has a scheduling conflict
+     */
+    hasConflict: boolean;
+    /**
+     * Conflict severity when hasConflict is true (HARD or SOFT)
+     */
     severity?: string;
     conflictDetails?: ConflictDetails;
 }
@@ -60,7 +87,7 @@ export function instanceOfScheduleEventView(value: object): value is ScheduleEve
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createScheduleEventViewPropertyNames();
+    const requiredProperties = createScheduleEventViewPropertyNames('eventId', 'eventType', 'startTime', 'endTime', 'hasConflict', );
     const optionalStringProperties = createScheduleEventViewOptionalProperties({ name: 'eventId', nullable: false }, { name: 'eventType', nullable: false }, { name: 'subType', nullable: false }, { name: 'title', nullable: false }, { name: 'severity', nullable: false }, );
     const optionalNumberProperties = createScheduleEventViewOptionalProperties();
     const optionalBooleanProperties = createScheduleEventViewOptionalProperties({ name: 'hasConflict', nullable: false }, );

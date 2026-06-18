@@ -9,9 +9,21 @@
  */
 
 
+/**
+ * Request to reallocate available-to-promise stock for a stock item
+ */
 export interface ReallocateRequest { 
+    /**
+     * Identifier of the stock item to reallocate
+     */
     stockItemId: string;
+    /**
+     * Type of event that triggered the reallocation
+     */
     triggerType?: string;
+    /**
+     * Identifier of the source record that triggered the reallocation
+     */
     triggerReferenceId?: string;
 }
 

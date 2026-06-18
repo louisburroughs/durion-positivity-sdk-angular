@@ -10,6 +10,9 @@
 import { RollupQuantities } from './rollupQuantities';
 
 
+/**
+ * One storage location node in the site rollup tree, with own and rolled-up quantities
+ */
 export interface StorageLocationRollupNode { 
     /**
      * Storage location identifier

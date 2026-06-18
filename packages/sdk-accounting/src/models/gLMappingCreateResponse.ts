@@ -10,8 +10,11 @@
 import { GLMappingResponse } from './gLMappingResponse';
 
 
+/**
+ * Wrapper response for GL mapping creation
+ */
 export interface GLMappingCreateResponse { 
-    mapping?: GLMappingResponse;
+    mapping: GLMappingResponse;
 }
 
 function isOptionalGLMappingCreateResponsePropertyOfType(
@@ -52,7 +55,7 @@ export function instanceOfGLMappingCreateResponse(value: object): value is GLMap
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createGLMappingCreateResponsePropertyNames();
+    const requiredProperties = createGLMappingCreateResponsePropertyNames('mapping', );
     const optionalStringProperties = createGLMappingCreateResponseOptionalProperties();
     const optionalNumberProperties = createGLMappingCreateResponseOptionalProperties();
     const optionalBooleanProperties = createGLMappingCreateResponseOptionalProperties();

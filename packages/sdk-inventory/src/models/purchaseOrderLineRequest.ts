@@ -9,13 +9,37 @@
  */
 
 
+/**
+ * A single line item on a purchase order request, identifying the SKU, quantity, and unit cost
+ */
 export interface PurchaseOrderLineRequest { 
+    /**
+     * Sequential line number identifying this line within the purchase order
+     */
     lineNumber: number;
+    /**
+     * Identifier of the SKU being ordered on this line
+     */
     skuId?: string;
+    /**
+     * Human-readable description of the item being ordered
+     */
     description: string;
+    /**
+     * Quantity of the item being ordered on this line
+     */
     quantity: number;
+    /**
+     * Unit cost of the item in the smallest currency unit (e.g. cents)
+     */
     unitCostMinor: number;
+    /**
+     * Identifier of the tax code applied to this line
+     */
     taxCodeId?: string;
+    /**
+     * Identifier of the general ledger account this line posts to
+     */
     glAccountId?: string;
 }
 

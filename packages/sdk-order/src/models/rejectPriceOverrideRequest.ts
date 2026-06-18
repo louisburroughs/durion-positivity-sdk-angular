@@ -9,8 +9,17 @@
  */
 
 
+/**
+ * Request payload for rejecting a pending price override
+ */
 export interface RejectPriceOverrideRequest { 
+    /**
+     * Reason explaining why the override is being rejected
+     */
     reason: string;
+    /**
+     * Optional reviewer comments recorded with the rejection
+     */
     comments?: string;
 }
 

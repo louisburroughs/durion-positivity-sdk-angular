@@ -9,12 +9,30 @@
  */
 
 
+/**
+ * Outcome of a person-link reconciliation pass against pos-people
+ */
 export interface PersonLinkReport { 
-    totalLinks?: number;
-    resolved?: number;
-    unresolvedPersonIds?: Array<string>;
-    posPeopleReachable?: boolean;
-    healthy?: boolean;
+    /**
+     * Count of distinct linked person ids checked
+     */
+    totalLinks: number;
+    /**
+     * Count of linked ids that exist in pos-people
+     */
+    resolved: number;
+    /**
+     * Linked person ids with no matching pos-people person (orphans)
+     */
+    unresolvedPersonIds: Array<string>;
+    /**
+     * False if pos-people could not be reached, in which case resolved/unresolved counts are not meaningful
+     */
+    posPeopleReachable: boolean;
+    /**
+     * Whether reconciliation is healthy: pos-people reachable and no unresolved orphan links
+     */
+    healthy: boolean;
 }
 
 function isOptionalPersonLinkReportPropertyOfType(
@@ -55,7 +73,7 @@ export function instanceOfPersonLinkReport(value: object): value is PersonLinkRe
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createPersonLinkReportPropertyNames();
+    const requiredProperties = createPersonLinkReportPropertyNames('totalLinks', 'resolved', 'unresolvedPersonIds', 'posPeopleReachable', 'healthy', );
     const optionalStringProperties = createPersonLinkReportOptionalProperties();
     const optionalNumberProperties = createPersonLinkReportOptionalProperties({ name: 'totalLinks', nullable: false }, { name: 'resolved', nullable: false }, );
     const optionalBooleanProperties = createPersonLinkReportOptionalProperties({ name: 'posPeopleReachable', nullable: false }, { name: 'healthy', nullable: false }, );

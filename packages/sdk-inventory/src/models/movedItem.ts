@@ -9,9 +9,18 @@
  */
 
 
+/**
+ * A single inventory item moved during location deactivation
+ */
 export interface MovedItem { 
-    itemId?: string;
-    quantity?: number;
+    /**
+     * Identifier of the moved inventory item
+     */
+    itemId: string;
+    /**
+     * Quantity of the item moved
+     */
+    quantity: number;
 }
 
 function isOptionalMovedItemPropertyOfType(
@@ -52,7 +61,7 @@ export function instanceOfMovedItem(value: object): value is MovedItem {
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createMovedItemPropertyNames();
+    const requiredProperties = createMovedItemPropertyNames('itemId', 'quantity', );
     const optionalStringProperties = createMovedItemOptionalProperties({ name: 'itemId', nullable: false }, );
     const optionalNumberProperties = createMovedItemOptionalProperties();
     const optionalBooleanProperties = createMovedItemOptionalProperties();

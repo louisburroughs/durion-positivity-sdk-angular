@@ -10,15 +10,42 @@
 import { ScheduleResourceView } from './scheduleResourceView';
 
 
+/**
+ * Schedule view for a location and date, grouped by resource with their events
+ */
 export interface ScheduleViewResponse { 
-    locationId?: string;
-    date?: string;
-    viewGeneratedAt?: string;
-    dayStartAt?: string;
-    dayEndAt?: string;
+    /**
+     * Location identifier the schedule belongs to
+     */
+    locationId: string;
+    /**
+     * Calendar date of the schedule view (ISO-8601)
+     */
+    date: string;
+    /**
+     * Instant the view was generated in UTC (ISO-8601)
+     */
+    viewGeneratedAt: string;
+    /**
+     * Start of the displayed day window in UTC (ISO-8601)
+     */
+    dayStartAt: string;
+    /**
+     * End of the displayed day window in UTC (ISO-8601)
+     */
+    dayEndAt: string;
+    /**
+     * Status of the availability overlay (e.g. AVAILABLE, UNAVAILABLE, SKIPPED)
+     */
     availabilityOverlayStatus?: string;
+    /**
+     * Non-fatal warnings generated while assembling the view
+     */
     warnings?: Array<string>;
-    resources?: Array<ScheduleResourceView>;
+    /**
+     * Resources and their scheduled events
+     */
+    resources: Array<ScheduleResourceView>;
 }
 
 function isOptionalScheduleViewResponsePropertyOfType(
@@ -59,7 +86,7 @@ export function instanceOfScheduleViewResponse(value: object): value is Schedule
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createScheduleViewResponsePropertyNames();
+    const requiredProperties = createScheduleViewResponsePropertyNames('locationId', 'date', 'viewGeneratedAt', 'dayStartAt', 'dayEndAt', 'resources', );
     const optionalStringProperties = createScheduleViewResponseOptionalProperties({ name: 'locationId', nullable: false }, { name: 'availabilityOverlayStatus', nullable: false }, );
     const optionalNumberProperties = createScheduleViewResponseOptionalProperties();
     const optionalBooleanProperties = createScheduleViewResponseOptionalProperties();

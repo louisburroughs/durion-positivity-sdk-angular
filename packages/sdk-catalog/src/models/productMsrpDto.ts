@@ -9,17 +9,50 @@
  */
 
 
+/**
+ * Product MSRP detail
+ */
 export interface ProductMsrpDto { 
-    msrpId?: string;
-    productId?: string;
-    amount?: string;
-    currency?: string;
-    effectiveStartDate?: string;
+    /**
+     * MSRP identifier
+     */
+    msrpId: string;
+    /**
+     * Product identifier the MSRP applies to
+     */
+    productId: string;
+    /**
+     * MSRP amount
+     */
+    amount: string;
+    /**
+     * ISO 4217 currency code
+     */
+    currency: string;
+    /**
+     * Date the MSRP becomes effective
+     */
+    effectiveStartDate: string;
+    /**
+     * Date the MSRP stops being effective
+     */
     effectiveEndDate?: string;
-    createdAt?: string;
+    /**
+     * Timestamp the MSRP was created
+     */
+    createdAt: string;
+    /**
+     * Timestamp the MSRP was last updated
+     */
     updatedAt?: string;
+    /**
+     * Identifier of the user that last updated the MSRP
+     */
     updatedBy?: string;
-    version?: number;
+    /**
+     * Version for optimistic locking
+     */
+    version: number;
 }
 
 function isOptionalProductMsrpDtoPropertyOfType(
@@ -60,7 +93,7 @@ export function instanceOfProductMsrpDto(value: object): value is ProductMsrpDto
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createProductMsrpDtoPropertyNames();
+    const requiredProperties = createProductMsrpDtoPropertyNames('msrpId', 'productId', 'amount', 'currency', 'effectiveStartDate', 'createdAt', 'version', );
     const optionalStringProperties = createProductMsrpDtoOptionalProperties({ name: 'msrpId', nullable: false }, { name: 'productId', nullable: false }, { name: 'amount', nullable: false }, { name: 'currency', nullable: false }, { name: 'updatedBy', nullable: false }, );
     const optionalNumberProperties = createProductMsrpDtoOptionalProperties({ name: 'version', nullable: false }, );
     const optionalBooleanProperties = createProductMsrpDtoOptionalProperties();

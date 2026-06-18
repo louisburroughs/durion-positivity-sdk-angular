@@ -9,13 +9,37 @@
  */
 
 
+/**
+ * Drilldown of an individual journal line affecting an account
+ */
 export interface JournalLineDrilldownResponse { 
-    journalEntryId?: string;
-    transactionDate?: string;
+    /**
+     * Journal entry UUID
+     */
+    journalEntryId: string;
+    /**
+     * Transaction date
+     */
+    transactionDate: string;
+    /**
+     * Description/narrative for the journal line
+     */
     description?: string;
+    /**
+     * Debit amount (null if credit)
+     */
     debitAmount?: number;
+    /**
+     * Credit amount (null if debit)
+     */
     creditAmount?: number;
+    /**
+     * Source event UUID that triggered this journal entry
+     */
     sourceEventId?: string;
+    /**
+     * Source event type
+     */
     sourceEventType?: string;
 }
 
@@ -57,7 +81,7 @@ export function instanceOfJournalLineDrilldownResponse(value: object): value is 
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createJournalLineDrilldownResponsePropertyNames();
+    const requiredProperties = createJournalLineDrilldownResponsePropertyNames('journalEntryId', 'transactionDate', );
     const optionalStringProperties = createJournalLineDrilldownResponseOptionalProperties({ name: 'journalEntryId', nullable: false }, { name: 'description', nullable: false }, { name: 'sourceEventId', nullable: false }, { name: 'sourceEventType', nullable: false }, );
     const optionalNumberProperties = createJournalLineDrilldownResponseOptionalProperties({ name: 'debitAmount', nullable: false }, { name: 'creditAmount', nullable: false }, );
     const optionalBooleanProperties = createJournalLineDrilldownResponseOptionalProperties();

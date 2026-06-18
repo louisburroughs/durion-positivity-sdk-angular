@@ -10,16 +10,46 @@
 import { EmployeeContactInfoDto } from './employeeContactInfoDto';
 
 
+/**
+ * Employee profile returned by employee read and write operations
+ */
 export interface EmployeeProfileDto { 
-    id?: string;
-    legalName?: string;
+    /**
+     * Employee identifier
+     */
+    id: string;
+    /**
+     * Legal name of the employee
+     */
+    legalName: string;
+    /**
+     * Preferred name of the employee
+     */
     preferredName?: string;
-    employeeNumber?: string;
-    status?: EmployeeProfileDtoStatusEnum;
-    hireDate?: string;
+    /**
+     * Unique employee number
+     */
+    employeeNumber: string;
+    /**
+     * Employment status of the employee
+     */
+    status: EmployeeProfileDtoStatusEnum;
+    /**
+     * Date the employee was hired
+     */
+    hireDate: string;
+    /**
+     * Date the employee was terminated, if applicable
+     */
     terminationDate?: string;
     contactInfo?: EmployeeContactInfoDto;
+    /**
+     * Timestamp the current status became effective
+     */
     statusEffectiveAt?: string;
+    /**
+     * Non-fatal warnings raised while resolving the profile
+     */
     warnings?: Array<string>;
 }
 export enum EmployeeProfileDtoStatusEnum {
@@ -70,7 +100,7 @@ export function instanceOfEmployeeProfileDto(value: object): value is EmployeePr
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createEmployeeProfileDtoPropertyNames();
+    const requiredProperties = createEmployeeProfileDtoPropertyNames('id', 'legalName', 'employeeNumber', 'status', 'hireDate', );
     const optionalStringProperties = createEmployeeProfileDtoOptionalProperties({ name: 'id', nullable: false }, { name: 'legalName', nullable: false }, { name: 'preferredName', nullable: false }, { name: 'employeeNumber', nullable: false }, { name: 'status', nullable: false }, );
     const optionalNumberProperties = createEmployeeProfileDtoOptionalProperties();
     const optionalBooleanProperties = createEmployeeProfileDtoOptionalProperties();

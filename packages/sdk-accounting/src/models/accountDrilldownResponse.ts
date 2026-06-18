@@ -9,11 +9,26 @@
  */
 
 
+/**
+ * GL account contribution to a financial statement line
+ */
 export interface AccountDrilldownResponse { 
-    accountId?: string;
-    accountName?: string;
-    balance?: number;
-    statementLineCode?: string;
+    /**
+     * Identifier of the GL account
+     */
+    accountId: string;
+    /**
+     * Name of the GL account
+     */
+    accountName: string;
+    /**
+     * Account balance for the period (sum of POSTED journal lines within the date range)
+     */
+    balance: number;
+    /**
+     * Statement line code this account contributes to
+     */
+    statementLineCode: string;
 }
 
 function isOptionalAccountDrilldownResponsePropertyOfType(
@@ -54,7 +69,7 @@ export function instanceOfAccountDrilldownResponse(value: object): value is Acco
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createAccountDrilldownResponsePropertyNames();
+    const requiredProperties = createAccountDrilldownResponsePropertyNames('accountId', 'accountName', 'balance', 'statementLineCode', );
     const optionalStringProperties = createAccountDrilldownResponseOptionalProperties({ name: 'accountId', nullable: false }, { name: 'accountName', nullable: false }, { name: 'statementLineCode', nullable: false }, );
     const optionalNumberProperties = createAccountDrilldownResponseOptionalProperties({ name: 'balance', nullable: false }, );
     const optionalBooleanProperties = createAccountDrilldownResponseOptionalProperties();

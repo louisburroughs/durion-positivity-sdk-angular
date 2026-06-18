@@ -9,13 +9,37 @@
  */
 
 
+/**
+ * Request payload to override a sale-restriction rule for a transaction
+ */
 export interface RestrictionOverrideRequest { 
+    /**
+     * Restriction rule being overridden
+     */
     ruleId: string;
+    /**
+     * Transaction the override applies to
+     */
     transactionId: string;
+    /**
+     * Product the override applies to
+     */
     productId: string;
+    /**
+     * Transaction lifecycle context for the override
+     */
     overrideContext: RestrictionOverrideRequestOverrideContextEnum;
+    /**
+     * Reason code justifying the override
+     */
     reasonCode: string;
+    /**
+     * Optional free-text notes for the override
+     */
     notes?: string;
+    /**
+     * Optional identifier of the approver who authorized the override
+     */
     approvedBy?: string;
 }
 export enum RestrictionOverrideRequestOverrideContextEnum {

@@ -9,9 +9,21 @@
  */
 
 
+/**
+ * Customer credit created from an overpayment
+ */
 export interface CustomerCreditInfo { 
+    /**
+     * Identifier of the customer credit record
+     */
     creditId?: string;
+    /**
+     * Credit amount created from overpayment
+     */
     amount?: number;
+    /**
+     * Timestamp when the credit was created (ISO 8601)
+     */
     createdAt?: string;
 }
 

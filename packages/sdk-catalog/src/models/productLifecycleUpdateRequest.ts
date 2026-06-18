@@ -16,7 +16,7 @@ export interface ProductLifecycleUpdateRequest {
     /**
      * Target lifecycle state
      */
-    lifecycleState?: ProductLifecycleUpdateRequestLifecycleStateEnum;
+    lifecycleState: ProductLifecycleUpdateRequestLifecycleStateEnum;
     /**
      * Effective instant for lifecycle change
      */
@@ -80,7 +80,7 @@ export function instanceOfProductLifecycleUpdateRequest(value: object): value is
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createProductLifecycleUpdateRequestPropertyNames();
+    const requiredProperties = createProductLifecycleUpdateRequestPropertyNames('lifecycleState', );
     const optionalStringProperties = createProductLifecycleUpdateRequestOptionalProperties({ name: 'lifecycleState', nullable: false }, { name: 'changedBy', nullable: false }, { name: 'overrideReason', nullable: false }, );
     const optionalNumberProperties = createProductLifecycleUpdateRequestOptionalProperties();
     const optionalBooleanProperties = createProductLifecycleUpdateRequestOptionalProperties();

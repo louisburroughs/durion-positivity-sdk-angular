@@ -9,9 +9,18 @@
  */
 
 
+/**
+ * Request to decode encoded permission bits into permission code strings
+ */
 export interface PermissionDecodeRequest { 
+    /**
+     * Base64URL-encoded BitSet of permission bits taken from an access token
+     */
     perm_bits: string;
-    perm_ver?: number;
+    /**
+     * Catalog version that was in effect when permBits was encoded
+     */
+    perm_ver: number;
 }
 
 function isOptionalPermissionDecodeRequestPropertyOfType(
@@ -52,7 +61,7 @@ export function instanceOfPermissionDecodeRequest(value: object): value is Permi
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createPermissionDecodeRequestPropertyNames('perm_bits', );
+    const requiredProperties = createPermissionDecodeRequestPropertyNames('perm_bits', 'perm_ver', );
     const optionalStringProperties = createPermissionDecodeRequestOptionalProperties({ name: 'perm_bits', nullable: false }, );
     const optionalNumberProperties = createPermissionDecodeRequestOptionalProperties({ name: 'perm_ver', nullable: false }, );
     const optionalBooleanProperties = createPermissionDecodeRequestOptionalProperties();

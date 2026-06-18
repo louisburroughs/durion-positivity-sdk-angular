@@ -17,11 +17,11 @@ export interface EventEnvelopeContract {
     /**
      * Contract schema version
      */
-    version?: string;
+    version: string;
     /**
      * Field definitions in the event envelope
      */
-    fields?: Array<ContractField>;
+    fields: Array<ContractField>;
     /**
      * Example event payloads
      */
@@ -66,7 +66,7 @@ export function instanceOfEventEnvelopeContract(value: object): value is EventEn
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createEventEnvelopeContractPropertyNames();
+    const requiredProperties = createEventEnvelopeContractPropertyNames('version', 'fields', );
     const optionalStringProperties = createEventEnvelopeContractOptionalProperties({ name: 'version', nullable: false }, );
     const optionalNumberProperties = createEventEnvelopeContractOptionalProperties();
     const optionalBooleanProperties = createEventEnvelopeContractOptionalProperties();

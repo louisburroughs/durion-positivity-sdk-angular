@@ -9,12 +9,33 @@
  */
 
 
+/**
+ * Timekeeping entry summarizing a worked session pending or resolved for approval
+ */
 export interface TimekeepingEntryDto { 
-    timekeepingEntryId?: string;
-    employeeId?: string;
-    sessionStartTime?: string;
+    /**
+     * Timekeeping entry identifier
+     */
+    timekeepingEntryId: string;
+    /**
+     * Employee identifier
+     */
+    employeeId: string;
+    /**
+     * Session start timestamp
+     */
+    sessionStartTime: string;
+    /**
+     * Session end timestamp
+     */
     sessionEndTime?: string;
-    approvalStatus?: TimekeepingEntryDtoApprovalStatusEnum;
+    /**
+     * Approval status of the entry
+     */
+    approvalStatus: TimekeepingEntryDtoApprovalStatusEnum;
+    /**
+     * Associated workorder identifier
+     */
     associatedWorkOrderId?: string;
 }
 export enum TimekeepingEntryDtoApprovalStatusEnum {
@@ -63,7 +84,7 @@ export function instanceOfTimekeepingEntryDto(value: object): value is Timekeepi
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createTimekeepingEntryDtoPropertyNames();
+    const requiredProperties = createTimekeepingEntryDtoPropertyNames('timekeepingEntryId', 'employeeId', 'sessionStartTime', 'approvalStatus', );
     const optionalStringProperties = createTimekeepingEntryDtoOptionalProperties({ name: 'timekeepingEntryId', nullable: false }, { name: 'employeeId', nullable: false }, { name: 'approvalStatus', nullable: false }, { name: 'associatedWorkOrderId', nullable: false }, );
     const optionalNumberProperties = createTimekeepingEntryDtoOptionalProperties();
     const optionalBooleanProperties = createTimekeepingEntryDtoOptionalProperties();

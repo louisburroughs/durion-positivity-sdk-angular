@@ -10,9 +10,21 @@
 import { ConsumeItemLine } from './consumeItemLine';
 
 
+/**
+ * Request payload to consume inventory items against a workorder, optionally drawn from a specific pick list
+ */
 export interface ConsumeItemsRequest { 
+    /**
+     * Identifier of the workorder the items are consumed for
+     */
     workorderId: string;
+    /**
+     * Identifier of the pick list the consumed items are drawn from, if applicable
+     */
     pickListId?: string;
+    /**
+     * Line items identifying the SKUs and quantities to consume
+     */
     items?: Array<ConsumeItemLine>;
 }
 

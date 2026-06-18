@@ -9,13 +9,37 @@
  */
 
 
+/**
+ * Response describing a link between a user account and a person record
+ */
 export interface UserPersonLinkResponse { 
-    linkId?: string;
-    userId?: string;
-    personId?: string;
+    /**
+     * Link identifier
+     */
+    linkId: string;
+    /**
+     * User account identifier
+     */
+    userId: string;
+    /**
+     * Person identifier
+     */
+    personId: string;
+    /**
+     * Type of link between user and person
+     */
     linkType?: string;
+    /**
+     * Creation timestamp in UTC
+     */
     createdAt?: string;
+    /**
+     * Identifier of the actor that created the link
+     */
     createdBy?: string;
+    /**
+     * Optional notes describing the link
+     */
     notes?: string;
 }
 
@@ -57,7 +81,7 @@ export function instanceOfUserPersonLinkResponse(value: object): value is UserPe
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createUserPersonLinkResponsePropertyNames();
+    const requiredProperties = createUserPersonLinkResponsePropertyNames('linkId', 'userId', 'personId', );
     const optionalStringProperties = createUserPersonLinkResponseOptionalProperties({ name: 'linkId', nullable: false }, { name: 'userId', nullable: false }, { name: 'personId', nullable: false }, { name: 'linkType', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'notes', nullable: false }, );
     const optionalNumberProperties = createUserPersonLinkResponseOptionalProperties();
     const optionalBooleanProperties = createUserPersonLinkResponseOptionalProperties();

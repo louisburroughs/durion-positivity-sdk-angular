@@ -9,14 +9,38 @@
  */
 
 
+/**
+ * Income statement (Profit & Loss) report built from POSTED journal entries
+ */
 export interface IncomeStatementReport { 
-    startDate?: string;
-    endDate?: string;
-    generatedAt?: string;
-    lineItems?: { [key: string]: number; };
-    totalRevenue?: number;
-    totalExpenses?: number;
-    netIncome?: number;
+    /**
+     * Report period start date (inclusive)
+     */
+    startDate: string;
+    /**
+     * Report period end date (inclusive)
+     */
+    endDate: string;
+    /**
+     * Timestamp when the report was generated
+     */
+    generatedAt: string;
+    /**
+     * Map of statement line codes to amounts (e.g. PL_REVENUE_SALES, PL_EXPENSE_SALARIES)
+     */
+    lineItems: { [key: string]: number; };
+    /**
+     * Total revenue (sum of all revenue accounts)
+     */
+    totalRevenue: number;
+    /**
+     * Total expenses (sum of all expense accounts)
+     */
+    totalExpenses: number;
+    /**
+     * Net income (total revenue minus total expenses); positive is profit, negative is loss
+     */
+    netIncome: number;
 }
 
 function isOptionalIncomeStatementReportPropertyOfType(
@@ -57,7 +81,7 @@ export function instanceOfIncomeStatementReport(value: object): value is IncomeS
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createIncomeStatementReportPropertyNames();
+    const requiredProperties = createIncomeStatementReportPropertyNames('startDate', 'endDate', 'generatedAt', 'lineItems', 'totalRevenue', 'totalExpenses', 'netIncome', );
     const optionalStringProperties = createIncomeStatementReportOptionalProperties();
     const optionalNumberProperties = createIncomeStatementReportOptionalProperties({ name: 'totalRevenue', nullable: false }, { name: 'totalExpenses', nullable: false }, { name: 'netIncome', nullable: false }, );
     const optionalBooleanProperties = createIncomeStatementReportOptionalProperties();

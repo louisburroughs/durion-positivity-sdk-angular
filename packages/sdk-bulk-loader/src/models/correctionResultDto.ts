@@ -16,11 +16,11 @@ export interface CorrectionResultDto {
     /**
      * ID of the audit record that was corrected
      */
-    auditRecordId?: string;
+    auditRecordId: string;
     /**
      * Whether the correction was accepted or rejected
      */
-    status?: CorrectionResultDtoStatusEnum;
+    status: CorrectionResultDtoStatusEnum;
     /**
      * Reason for rejection if status is REJECTED
      */
@@ -71,7 +71,7 @@ export function instanceOfCorrectionResultDto(value: object): value is Correctio
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createCorrectionResultDtoPropertyNames();
+    const requiredProperties = createCorrectionResultDtoPropertyNames('auditRecordId', 'status', );
     const optionalStringProperties = createCorrectionResultDtoOptionalProperties({ name: 'auditRecordId', nullable: false }, { name: 'status', nullable: false }, { name: 'rejectionReason', nullable: true }, );
     const optionalNumberProperties = createCorrectionResultDtoOptionalProperties();
     const optionalBooleanProperties = createCorrectionResultDtoOptionalProperties();

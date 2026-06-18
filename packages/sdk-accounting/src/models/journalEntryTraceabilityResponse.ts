@@ -10,12 +10,24 @@
 import { JournalEntryResponse } from './journalEntryResponse';
 
 
+/**
+ * Traceability response linking a journal entry to its source and related entries
+ */
 export interface JournalEntryTraceabilityResponse { 
-    journalEntryId?: string;
+    /**
+     * Journal entry UUID
+     */
+    journalEntryId: string;
+    /**
+     * Source event UUID that triggered the journal entry
+     */
     sourceEventId?: string;
     journalEntry?: JournalEntryResponse;
     originalJournalEntry?: JournalEntryResponse;
     reversalJournalEntry?: JournalEntryResponse;
+    /**
+     * Other journal entries related to the same source event
+     */
     relatedJournalEntries?: Array<JournalEntryResponse>;
 }
 
@@ -57,7 +69,7 @@ export function instanceOfJournalEntryTraceabilityResponse(value: object): value
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createJournalEntryTraceabilityResponsePropertyNames();
+    const requiredProperties = createJournalEntryTraceabilityResponsePropertyNames('journalEntryId', );
     const optionalStringProperties = createJournalEntryTraceabilityResponseOptionalProperties({ name: 'journalEntryId', nullable: false }, { name: 'sourceEventId', nullable: false }, );
     const optionalNumberProperties = createJournalEntryTraceabilityResponseOptionalProperties();
     const optionalBooleanProperties = createJournalEntryTraceabilityResponseOptionalProperties();

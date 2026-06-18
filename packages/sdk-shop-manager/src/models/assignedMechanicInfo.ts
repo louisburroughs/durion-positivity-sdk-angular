@@ -9,9 +9,18 @@
  */
 
 
+/**
+ * Summary of one mechanic included in an assignment response
+ */
 export interface AssignedMechanicInfo { 
-    mechanicId?: string;
-    role?: AssignedMechanicInfoRoleEnum;
+    /**
+     * Mechanic identifier
+     */
+    mechanicId: string;
+    /**
+     * Role of the mechanic in the assignment
+     */
+    role: AssignedMechanicInfoRoleEnum;
 }
 export enum AssignedMechanicInfoRoleEnum {
     Lead = 'LEAD',
@@ -58,7 +67,7 @@ export function instanceOfAssignedMechanicInfo(value: object): value is Assigned
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createAssignedMechanicInfoPropertyNames();
+    const requiredProperties = createAssignedMechanicInfoPropertyNames('mechanicId', 'role', );
     const optionalStringProperties = createAssignedMechanicInfoOptionalProperties({ name: 'mechanicId', nullable: false }, { name: 'role', nullable: false }, );
     const optionalNumberProperties = createAssignedMechanicInfoOptionalProperties();
     const optionalBooleanProperties = createAssignedMechanicInfoOptionalProperties();

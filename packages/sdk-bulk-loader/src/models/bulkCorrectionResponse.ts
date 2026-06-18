@@ -16,19 +16,19 @@ export interface BulkCorrectionResponse {
     /**
      * The bulk load job ID
      */
-    jobId?: string;
+    jobId: string;
     /**
      * Total number of corrections submitted
      */
-    submittedCount?: number;
+    submittedCount: number;
     /**
      * Number of corrections accepted for processing
      */
-    acceptedCount?: number;
+    acceptedCount: number;
     /**
      * Number of corrections rejected
      */
-    rejectedCount?: number;
+    rejectedCount: number;
     /**
      * Rejection detail messages for each rejected correction, if any
      */
@@ -73,7 +73,7 @@ export function instanceOfBulkCorrectionResponse(value: object): value is BulkCo
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createBulkCorrectionResponsePropertyNames();
+    const requiredProperties = createBulkCorrectionResponsePropertyNames('jobId', 'submittedCount', 'acceptedCount', 'rejectedCount', );
     const optionalStringProperties = createBulkCorrectionResponseOptionalProperties({ name: 'jobId', nullable: false }, );
     const optionalNumberProperties = createBulkCorrectionResponseOptionalProperties({ name: 'submittedCount', nullable: false }, { name: 'acceptedCount', nullable: false }, { name: 'rejectedCount', nullable: false }, );
     const optionalBooleanProperties = createBulkCorrectionResponseOptionalProperties();

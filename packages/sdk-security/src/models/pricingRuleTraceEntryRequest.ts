@@ -9,9 +9,20 @@
  */
 
 
+/**
+ * A rule-evaluation step submitted while creating a pricing snapshot
+ */
 export interface PricingRuleTraceEntryRequest { 
-    ruleId?: string;
-    status?: string;
+    /**
+     * Identifier of the evaluated rule
+     */
+    ruleId: string;
+    /**
+     * Evaluation status of the rule
+     */
+    status: string;
+    inputs?: any | null;
+    outputs?: any | null;
 }
 
 function isOptionalPricingRuleTraceEntryRequestPropertyOfType(
@@ -52,7 +63,7 @@ export function instanceOfPricingRuleTraceEntryRequest(value: object): value is 
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createPricingRuleTraceEntryRequestPropertyNames();
+    const requiredProperties = createPricingRuleTraceEntryRequestPropertyNames('ruleId', 'status', );
     const optionalStringProperties = createPricingRuleTraceEntryRequestOptionalProperties({ name: 'ruleId', nullable: false }, { name: 'status', nullable: false }, );
     const optionalNumberProperties = createPricingRuleTraceEntryRequestOptionalProperties();
     const optionalBooleanProperties = createPricingRuleTraceEntryRequestOptionalProperties();

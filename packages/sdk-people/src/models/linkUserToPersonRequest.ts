@@ -9,10 +9,25 @@
  */
 
 
+/**
+ * Request to link a user account to a person record
+ */
 export interface LinkUserToPersonRequest { 
+    /**
+     * User account identifier
+     */
     userId: string;
+    /**
+     * Person identifier
+     */
     personId: string;
+    /**
+     * Type of link between user and person
+     */
     linkType?: string;
+    /**
+     * Optional notes describing the link
+     */
     notes?: string;
 }
 

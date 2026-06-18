@@ -10,15 +10,45 @@
 import { AsnLineResponse } from './asnLineResponse';
 
 
+/**
+ * Advance shipping notice (ASN) representing an inbound shipment from a vendor, including its line items and lifecycle status
+ */
 export interface AsnResponse { 
-    asnId?: string;
-    asnReferenceNumber?: string;
-    vendorId?: string;
-    status?: AsnResponseStatusEnum;
+    /**
+     * Unique identifier of the ASN
+     */
+    asnId: string;
+    /**
+     * Human-readable reference number assigned to the ASN
+     */
+    asnReferenceNumber: string;
+    /**
+     * Identifier of the vendor that issued the shipment
+     */
+    vendorId: string;
+    /**
+     * Current lifecycle status of the ASN
+     */
+    status: AsnResponseStatusEnum;
+    /**
+     * Date the shipment left the vendor
+     */
     shipDate?: string;
+    /**
+     * Expected arrival date of the shipment at the destination
+     */
     expectedArrivalDate?: string;
+    /**
+     * Identifier of the user who created the ASN
+     */
     createdBy?: string;
-    createdAt?: string;
+    /**
+     * Timestamp when the ASN was created
+     */
+    createdAt: string;
+    /**
+     * Line items detailing the SKUs and quantities included in this ASN
+     */
     lineItems?: Array<AsnLineResponse>;
 }
 export enum AsnResponseStatusEnum {
@@ -69,7 +99,7 @@ export function instanceOfAsnResponse(value: object): value is AsnResponse {
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createAsnResponsePropertyNames();
+    const requiredProperties = createAsnResponsePropertyNames('asnId', 'asnReferenceNumber', 'vendorId', 'status', 'createdAt', );
     const optionalStringProperties = createAsnResponseOptionalProperties({ name: 'asnId', nullable: false }, { name: 'asnReferenceNumber', nullable: false }, { name: 'vendorId', nullable: false }, { name: 'status', nullable: false }, { name: 'createdBy', nullable: false }, );
     const optionalNumberProperties = createAsnResponseOptionalProperties();
     const optionalBooleanProperties = createAsnResponseOptionalProperties();

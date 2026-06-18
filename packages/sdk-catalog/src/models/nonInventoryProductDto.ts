@@ -16,11 +16,11 @@ export interface NonInventoryProductDto {
     /**
      * Non-inventory identifier
      */
-    id?: string;
+    id: string;
     /**
      * Name
      */
-    name?: string;
+    name: string;
     /**
      * Long description
      */
@@ -69,7 +69,7 @@ export function instanceOfNonInventoryProductDto(value: object): value is NonInv
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createNonInventoryProductDtoPropertyNames();
+    const requiredProperties = createNonInventoryProductDtoPropertyNames('id', 'name', );
     const optionalStringProperties = createNonInventoryProductDtoOptionalProperties({ name: 'id', nullable: false }, { name: 'name', nullable: false }, { name: 'longDescription', nullable: false }, { name: 'shortDescription', nullable: false }, );
     const optionalNumberProperties = createNonInventoryProductDtoOptionalProperties();
     const optionalBooleanProperties = createNonInventoryProductDtoOptionalProperties();

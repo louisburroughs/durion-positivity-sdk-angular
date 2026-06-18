@@ -9,13 +9,34 @@
  */
 
 
+/**
+ * A candidate option for resolving an inventory shortage on an allocation
+ */
 export interface ShortageOptionDto { 
-    allocationId?: string;
+    /**
+     * Identifier of the allocation the option applies to
+     */
+    allocationId: string;
+    /**
+     * Identifier of the specific allocation line, when the option is line-scoped
+     */
     allocationLineId?: string;
-    resolution?: string;
-    description?: string;
+    /**
+     * Resolution strategy offered for the shortage
+     */
+    resolution: string;
+    /**
+     * Human-readable description of the resolution option
+     */
+    description: string;
+    /**
+     * Substitute stock-keeping unit offered, when the resolution is a substitution
+     */
     substituteSku?: string;
-    estimatedDays?: number;
+    /**
+     * Estimated number of days to fulfill using this option
+     */
+    estimatedDays: number;
 }
 
 function isOptionalShortageOptionDtoPropertyOfType(
@@ -56,7 +77,7 @@ export function instanceOfShortageOptionDto(value: object): value is ShortageOpt
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createShortageOptionDtoPropertyNames();
+    const requiredProperties = createShortageOptionDtoPropertyNames('allocationId', 'resolution', 'description', 'estimatedDays', );
     const optionalStringProperties = createShortageOptionDtoOptionalProperties({ name: 'allocationId', nullable: false }, { name: 'allocationLineId', nullable: false }, { name: 'resolution', nullable: false }, { name: 'description', nullable: false }, { name: 'substituteSku', nullable: false }, );
     const optionalNumberProperties = createShortageOptionDtoOptionalProperties({ name: 'estimatedDays', nullable: false }, );
     const optionalBooleanProperties = createShortageOptionDtoOptionalProperties();

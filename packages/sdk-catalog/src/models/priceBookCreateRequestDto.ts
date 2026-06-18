@@ -9,11 +9,29 @@
  */
 
 
+/**
+ * Request payload for creating a price book
+ */
 export interface PriceBookCreateRequestDto { 
+    /**
+     * Price book name
+     */
     name: string;
+    /**
+     * Scope the price book applies to
+     */
     scope: PriceBookCreateRequestDtoScopeEnum;
+    /**
+     * Identifier of the scoped entity (location or customer tier)
+     */
     scopeId?: string;
+    /**
+     * Whether this is the default price book for the scope
+     */
     isDefault?: boolean;
+    /**
+     * Initial status of the price book
+     */
     status?: PriceBookCreateRequestDtoStatusEnum;
 }
 export enum PriceBookCreateRequestDtoScopeEnum {

@@ -9,12 +9,33 @@
  */
 
 
+/**
+ * Request to resolve the effective price for a product in a given context
+ */
 export interface ResolvePriceRequestDto { 
+    /**
+     * Identifier of the product to price
+     */
     productId: string;
+    /**
+     * Identifier of a specific price book to resolve against (optional)
+     */
     priceBookId?: string;
+    /**
+     * Identifier of the location used to scope price book selection
+     */
     locationId?: string;
+    /**
+     * Customer tier used to scope price book selection
+     */
     customerTier?: string;
+    /**
+     * ISO currency code for the resolved price
+     */
     currency?: string;
+    /**
+     * Date for which the price should be resolved (defaults to today when omitted)
+     */
     asOf?: string;
 }
 

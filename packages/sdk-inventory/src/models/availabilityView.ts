@@ -9,14 +9,38 @@
  */
 
 
+/**
+ * Read-only view of on-hand and available-to-promise quantities for a product at a specific location scope
+ */
 export interface AvailabilityView { 
-    productSku?: string;
-    locationId?: string;
+    /**
+     * Stock-keeping unit identifier of the product
+     */
+    productSku: string;
+    /**
+     * Location identifier for the scope of this availability view
+     */
+    locationId: string;
+    /**
+     * Optional storage sub-location identifier; null when scoped to the full location
+     */
     storageLocationId?: string;
-    onHandQuantity?: number;
-    allocatedQuantity?: number;
-    availableToPromiseQuantity?: number;
-    unitOfMeasure?: string;
+    /**
+     * Net on-hand quantity (sum of affectsOnHand ledger entries)
+     */
+    onHandQuantity: number;
+    /**
+     * Net allocated quantity (ALLOCATION_CREATED minus ALLOCATION_RELEASED)
+     */
+    allocatedQuantity: number;
+    /**
+     * Available-to-promise quantity, equal to onHandQuantity minus allocatedQuantity
+     */
+    availableToPromiseQuantity: number;
+    /**
+     * Unit of measure code for the quantities (e.g. EACH, KG)
+     */
+    unitOfMeasure: string;
 }
 
 function isOptionalAvailabilityViewPropertyOfType(
@@ -57,7 +81,7 @@ export function instanceOfAvailabilityView(value: object): value is Availability
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createAvailabilityViewPropertyNames();
+    const requiredProperties = createAvailabilityViewPropertyNames('productSku', 'locationId', 'onHandQuantity', 'allocatedQuantity', 'availableToPromiseQuantity', 'unitOfMeasure', );
     const optionalStringProperties = createAvailabilityViewOptionalProperties({ name: 'productSku', nullable: false }, { name: 'locationId', nullable: false }, { name: 'storageLocationId', nullable: false }, { name: 'unitOfMeasure', nullable: false }, );
     const optionalNumberProperties = createAvailabilityViewOptionalProperties({ name: 'onHandQuantity', nullable: false }, { name: 'allocatedQuantity', nullable: false }, { name: 'availableToPromiseQuantity', nullable: false }, );
     const optionalBooleanProperties = createAvailabilityViewOptionalProperties();

@@ -10,7 +10,7 @@
 
 
 /**
- * Filter criteria for audit event search
+ * Filter criteria for audit event search; all fields are optional
  */
 export interface AuditEventSearchFilter { 
     /**

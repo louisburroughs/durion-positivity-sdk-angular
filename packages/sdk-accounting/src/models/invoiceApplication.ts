@@ -9,8 +9,17 @@
  */
 
 
+/**
+ * Single invoice application within a payment application request
+ */
 export interface InvoiceApplication { 
+    /**
+     * Identifier of the invoice the payment is applied to
+     */
     invoiceId: string;
+    /**
+     * Amount of the payment to apply to this invoice
+     */
     amountToApply: number;
 }
 

@@ -9,10 +9,22 @@
  */
 
 
+/**
+ * Request to create an inventory reservation against a workorder line for a stock item
+ */
 export interface CreateReservationRequest { 
+    /**
+     * Identifier of the workorder line the reservation fulfils
+     */
     workorderLineId: string;
+    /**
+     * Identifier of the stock item being reserved
+     */
     stockItemId: string;
-    requiredQuantity?: number;
+    /**
+     * Quantity of the stock item required by the reservation
+     */
+    requiredQuantity: number;
 }
 
 function isOptionalCreateReservationRequestPropertyOfType(
@@ -53,7 +65,7 @@ export function instanceOfCreateReservationRequest(value: object): value is Crea
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createCreateReservationRequestPropertyNames('workorderLineId', 'stockItemId', );
+    const requiredProperties = createCreateReservationRequestPropertyNames('workorderLineId', 'stockItemId', 'requiredQuantity', );
     const optionalStringProperties = createCreateReservationRequestOptionalProperties({ name: 'workorderLineId', nullable: false }, { name: 'stockItemId', nullable: false }, );
     const optionalNumberProperties = createCreateReservationRequestOptionalProperties({ name: 'requiredQuantity', nullable: false }, );
     const optionalBooleanProperties = createCreateReservationRequestOptionalProperties();

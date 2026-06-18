@@ -9,10 +9,25 @@
  */
 
 
+/**
+ * Request payload for creating a new mapping key
+ */
 export interface MappingKeyCreateRequest { 
+    /**
+     * Identifier of the posting category this mapping key belongs to
+     */
     postingCategoryId: string;
+    /**
+     * Name of the mapping key
+     */
     keyName: string;
+    /**
+     * Optional description of the mapping key
+     */
     description?: string;
+    /**
+     * Identifier of the user creating the mapping key
+     */
     createdBy: string;
 }
 

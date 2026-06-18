@@ -9,13 +9,34 @@
  */
 
 
+/**
+ * Summary of a quantity variance detected on a single receiving line
+ */
 export interface VarianceSummaryResponse { 
-    lineId?: string;
-    productId?: string;
-    varianceType?: string;
-    varianceQuantity?: number;
-    expectedQuantity?: number;
-    receivedQuantity?: number;
+    /**
+     * Identifier of the receiving line that had a variance
+     */
+    lineId: string;
+    /**
+     * Identifier of the product on the receiving line
+     */
+    productId: string;
+    /**
+     * Type of variance detected, such as OVER or SHORT
+     */
+    varianceType: string;
+    /**
+     * Difference between received and expected quantity for the line
+     */
+    varianceQuantity: number;
+    /**
+     * Quantity originally expected on the receiving line
+     */
+    expectedQuantity: number;
+    /**
+     * Quantity actually received on the line
+     */
+    receivedQuantity: number;
 }
 
 function isOptionalVarianceSummaryResponsePropertyOfType(
@@ -56,7 +77,7 @@ export function instanceOfVarianceSummaryResponse(value: object): value is Varia
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createVarianceSummaryResponsePropertyNames();
+    const requiredProperties = createVarianceSummaryResponsePropertyNames('lineId', 'productId', 'varianceType', 'varianceQuantity', 'expectedQuantity', 'receivedQuantity', );
     const optionalStringProperties = createVarianceSummaryResponseOptionalProperties({ name: 'lineId', nullable: false }, { name: 'productId', nullable: false }, { name: 'varianceType', nullable: false }, );
     const optionalNumberProperties = createVarianceSummaryResponseOptionalProperties({ name: 'varianceQuantity', nullable: false }, { name: 'expectedQuantity', nullable: false }, { name: 'receivedQuantity', nullable: false }, );
     const optionalBooleanProperties = createVarianceSummaryResponseOptionalProperties();

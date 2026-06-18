@@ -9,7 +9,13 @@
  */
 
 
+/**
+ * Details about a conflict associated with a schedule event
+ */
 export interface ConflictDetails { 
+    /**
+     * Identifiers of events that conflict with this event
+     */
     conflictingEventIds?: Array<string>;
 }
 

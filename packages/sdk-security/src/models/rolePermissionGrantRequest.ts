@@ -9,8 +9,14 @@
  */
 
 
+/**
+ * Request to grant or revoke a single permission on a role
+ */
 export interface RolePermissionGrantRequest { 
-    permission?: string;
+    /**
+     * Permission key in format domain:resource:action
+     */
+    permission: string;
 }
 
 function isOptionalRolePermissionGrantRequestPropertyOfType(
@@ -51,7 +57,7 @@ export function instanceOfRolePermissionGrantRequest(value: object): value is Ro
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createRolePermissionGrantRequestPropertyNames();
+    const requiredProperties = createRolePermissionGrantRequestPropertyNames('permission', );
     const optionalStringProperties = createRolePermissionGrantRequestOptionalProperties({ name: 'permission', nullable: false }, );
     const optionalNumberProperties = createRolePermissionGrantRequestOptionalProperties();
     const optionalBooleanProperties = createRolePermissionGrantRequestOptionalProperties();

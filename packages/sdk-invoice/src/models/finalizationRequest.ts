@@ -9,8 +9,17 @@
  */
 
 
+/**
+ * Request payload for finalizing an invoice
+ */
 export interface FinalizationRequest { 
+    /**
+     * Manager approval code, required when approval threshold is exceeded
+     */
     managerApprovalCode?: string;
+    /**
+     * Free-text reason for overriding the amount limit
+     */
     overrideReason?: string;
 }
 

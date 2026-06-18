@@ -10,8 +10,17 @@
 import { InvoiceApplication } from './invoiceApplication';
 
 
+/**
+ * Request payload for applying a payment to one or more invoices
+ */
 export interface PaymentApplicationRequest { 
+    /**
+     * Idempotency key for this application request; retries with the same key must not duplicate
+     */
     applicationRequestId: string;
+    /**
+     * Invoice applications allocating the payment amount to each invoice
+     */
     applications: Array<InvoiceApplication>;
 }
 

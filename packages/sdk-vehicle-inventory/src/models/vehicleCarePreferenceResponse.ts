@@ -9,16 +9,46 @@
  */
 
 
+/**
+ * Vehicle care preferences record
+ */
 export interface VehicleCarePreferenceResponse { 
-    id?: string;
-    vehicleId?: string;
-    preferences?: object;
+    /**
+     * Unique identifier of the preference record
+     */
+    id: string;
+    /**
+     * Identifier of the vehicle the preferences apply to
+     */
+    vehicleId: string;
+    /**
+     * Preferences payload stored as flexible key/value JSON
+     */
+    preferences: object;
+    /**
+     * Service notes for technicians
+     */
     serviceNotes?: string;
+    /**
+     * User identifier that created the preference record
+     */
     createdByUserId?: string;
+    /**
+     * User identifier that last updated the preference record
+     */
     updatedByUserId?: string;
-    createdAt?: string;
-    updatedAt?: string;
-    version?: number;
+    /**
+     * Timestamp when the preference record was created
+     */
+    createdAt: string;
+    /**
+     * Timestamp when the preference record was last updated
+     */
+    updatedAt: string;
+    /**
+     * Optimistic-locking version of the preference record
+     */
+    version: number;
 }
 
 function isOptionalVehicleCarePreferenceResponsePropertyOfType(
@@ -59,7 +89,7 @@ export function instanceOfVehicleCarePreferenceResponse(value: object): value is
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createVehicleCarePreferenceResponsePropertyNames();
+    const requiredProperties = createVehicleCarePreferenceResponsePropertyNames('id', 'vehicleId', 'preferences', 'createdAt', 'updatedAt', 'version', );
     const optionalStringProperties = createVehicleCarePreferenceResponseOptionalProperties({ name: 'id', nullable: false }, { name: 'vehicleId', nullable: false }, { name: 'serviceNotes', nullable: false }, { name: 'createdByUserId', nullable: false }, { name: 'updatedByUserId', nullable: false }, );
     const optionalNumberProperties = createVehicleCarePreferenceResponseOptionalProperties({ name: 'version', nullable: false }, );
     const optionalBooleanProperties = createVehicleCarePreferenceResponseOptionalProperties();

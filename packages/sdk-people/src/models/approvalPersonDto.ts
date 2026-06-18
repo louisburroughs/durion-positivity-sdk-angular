@@ -9,9 +9,21 @@
  */
 
 
+/**
+ * Person summary shown in timekeeping approval workflows
+ */
 export interface ApprovalPersonDto { 
-    personId?: string;
-    displayName?: string;
+    /**
+     * Person identifier
+     */
+    personId: string;
+    /**
+     * Person display name
+     */
+    displayName: string;
+    /**
+     * Employee number
+     */
     employeeNumber?: string;
 }
 
@@ -53,7 +65,7 @@ export function instanceOfApprovalPersonDto(value: object): value is ApprovalPer
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createApprovalPersonDtoPropertyNames();
+    const requiredProperties = createApprovalPersonDtoPropertyNames('personId', 'displayName', );
     const optionalStringProperties = createApprovalPersonDtoOptionalProperties({ name: 'personId', nullable: false }, { name: 'displayName', nullable: false }, { name: 'employeeNumber', nullable: false }, );
     const optionalNumberProperties = createApprovalPersonDtoOptionalProperties();
     const optionalBooleanProperties = createApprovalPersonDtoOptionalProperties();

@@ -9,18 +9,54 @@
  */
 
 
+/**
+ * A cycle count task describing an item to be counted at a location and its current state
+ */
 export interface CycleCountTaskResponse { 
-    taskId?: string;
-    binLocation?: string;
-    itemSku?: string;
+    /**
+     * Unique identifier of the cycle count task
+     */
+    taskId: string;
+    /**
+     * Bin or location code where the item is stored
+     */
+    binLocation: string;
+    /**
+     * Stock keeping unit of the item to count
+     */
+    itemSku: string;
+    /**
+     * Human-readable description of the item
+     */
     itemDescription?: string;
-    expectedQuantity?: number;
+    /**
+     * Quantity expected on hand for the item
+     */
+    expectedQuantity: number;
+    /**
+     * Identifier of the auditor assigned to the task, if assigned
+     */
     auditorId?: string;
-    status?: CycleCountTaskResponseStatusEnum;
+    /**
+     * Current status of the cycle count task
+     */
+    status: CycleCountTaskResponseStatusEnum;
+    /**
+     * Identifier of the most recent count entry recorded for the task, if any
+     */
     latestCountEntryId?: string;
-    countEntriesCount?: number;
-    createdAt?: string;
-    updatedAt?: string;
+    /**
+     * Total number of count entries recorded for the task
+     */
+    countEntriesCount: number;
+    /**
+     * Timestamp when the task was created
+     */
+    createdAt: string;
+    /**
+     * Timestamp when the task was last updated
+     */
+    updatedAt: string;
 }
 export enum CycleCountTaskResponseStatusEnum {
     Assigned = 'ASSIGNED',
@@ -70,7 +106,7 @@ export function instanceOfCycleCountTaskResponse(value: object): value is CycleC
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createCycleCountTaskResponsePropertyNames();
+    const requiredProperties = createCycleCountTaskResponsePropertyNames('taskId', 'binLocation', 'itemSku', 'expectedQuantity', 'status', 'countEntriesCount', 'createdAt', 'updatedAt', );
     const optionalStringProperties = createCycleCountTaskResponseOptionalProperties({ name: 'taskId', nullable: false }, { name: 'binLocation', nullable: false }, { name: 'itemSku', nullable: false }, { name: 'itemDescription', nullable: false }, { name: 'auditorId', nullable: false }, { name: 'status', nullable: false }, { name: 'latestCountEntryId', nullable: false }, );
     const optionalNumberProperties = createCycleCountTaskResponseOptionalProperties({ name: 'expectedQuantity', nullable: false }, { name: 'countEntriesCount', nullable: false }, );
     const optionalBooleanProperties = createCycleCountTaskResponseOptionalProperties();

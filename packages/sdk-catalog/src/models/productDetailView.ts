@@ -20,7 +20,7 @@ export interface ProductDetailView {
     /**
      * Unique product identifier
      */
-    productId?: string;
+    productId: string;
     /**
      * Product description
      */
@@ -38,11 +38,11 @@ export interface ProductDetailView {
     /**
      * Timestamp when this response was generated
      */
-    generatedAt?: string;
+    generatedAt: string;
     /**
      * Overall confidence in the data completeness
      */
-    confidence?: ProductDetailViewConfidenceEnum;
+    confidence: ProductDetailViewConfidenceEnum;
 }
 export enum ProductDetailViewConfidenceEnum {
     Low = 'LOW',
@@ -90,7 +90,7 @@ export function instanceOfProductDetailView(value: object): value is ProductDeta
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createProductDetailViewPropertyNames();
+    const requiredProperties = createProductDetailViewPropertyNames('productId', 'generatedAt', 'confidence', );
     const optionalStringProperties = createProductDetailViewOptionalProperties({ name: 'productId', nullable: false }, { name: 'description', nullable: false }, { name: 'confidence', nullable: false }, );
     const optionalNumberProperties = createProductDetailViewOptionalProperties();
     const optionalBooleanProperties = createProductDetailViewOptionalProperties();

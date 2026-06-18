@@ -10,15 +10,45 @@
 import { GoodsReceiptLineResponse } from './goodsReceiptLineResponse';
 
 
+/**
+ * Goods receipt representing inventory received against a purchase order, including its received line items and accrued totals
+ */
 export interface GoodsReceiptResponse { 
-    receiptId?: string;
-    receiptNumber?: string;
-    poId?: string;
+    /**
+     * Unique identifier of the goods receipt
+     */
+    receiptId: string;
+    /**
+     * Human-readable reference number assigned to the goods receipt
+     */
+    receiptNumber: string;
+    /**
+     * Identifier of the purchase order the goods were received against
+     */
+    poId: string;
+    /**
+     * Identifier of the advance shipping notice (ASN) this receipt fulfilled, if applicable
+     */
     asnId?: string;
-    locationId?: string;
+    /**
+     * Identifier of the location where the goods were received into inventory
+     */
+    locationId: string;
+    /**
+     * Total accrued cost for the goods receipt expressed in minor currency units (e.g. cents)
+     */
     totalAccruedAmountMinor?: number;
+    /**
+     * Identifier of the user who recorded the goods receipt
+     */
     createdBy?: string;
-    createdAt?: string;
+    /**
+     * Timestamp when the goods receipt was created
+     */
+    createdAt: string;
+    /**
+     * Received line items detailing the SKUs and quantities in this goods receipt
+     */
     lines?: Array<GoodsReceiptLineResponse>;
 }
 
@@ -60,7 +90,7 @@ export function instanceOfGoodsReceiptResponse(value: object): value is GoodsRec
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createGoodsReceiptResponsePropertyNames();
+    const requiredProperties = createGoodsReceiptResponsePropertyNames('receiptId', 'receiptNumber', 'poId', 'locationId', 'createdAt', );
     const optionalStringProperties = createGoodsReceiptResponseOptionalProperties({ name: 'receiptId', nullable: false }, { name: 'receiptNumber', nullable: false }, { name: 'poId', nullable: false }, { name: 'asnId', nullable: false }, { name: 'locationId', nullable: false }, { name: 'createdBy', nullable: false }, );
     const optionalNumberProperties = createGoodsReceiptResponseOptionalProperties({ name: 'totalAccruedAmountMinor', nullable: false }, );
     const optionalBooleanProperties = createGoodsReceiptResponseOptionalProperties();

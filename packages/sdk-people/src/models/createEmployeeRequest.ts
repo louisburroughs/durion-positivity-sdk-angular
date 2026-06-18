@@ -10,14 +10,38 @@
 import { EmployeeContactInfoDto } from './employeeContactInfoDto';
 
 
+/**
+ * Request to create an employee record
+ */
 export interface CreateEmployeeRequest { 
+    /**
+     * Legal name of the employee
+     */
     legalName: string;
+    /**
+     * Preferred name of the employee
+     */
     preferredName?: string;
+    /**
+     * Unique employee number
+     */
     employeeNumber: string;
+    /**
+     * Employment status of the employee
+     */
     status: CreateEmployeeRequestStatusEnum;
+    /**
+     * Date the employee was hired
+     */
     hireDate: string;
+    /**
+     * Date the employee was terminated, if applicable
+     */
     terminationDate?: string;
     contactInfo?: EmployeeContactInfoDto;
+    /**
+     * Policy controlling how potential duplicate employee records are handled during creation
+     */
     duplicatePolicy?: CreateEmployeeRequestDuplicatePolicyEnum;
 }
 export enum CreateEmployeeRequestStatusEnum {

@@ -10,8 +10,17 @@
 import { MovedItem } from './movedItem';
 
 
+/**
+ * Details of inventory moved from the deactivated location to the destination location
+ */
 export interface Transfer { 
+    /**
+     * Items moved as part of the transfer
+     */
     movedItems?: Array<MovedItem>;
+    /**
+     * Timestamp when the inventory was moved
+     */
     movedAt?: string;
 }
 

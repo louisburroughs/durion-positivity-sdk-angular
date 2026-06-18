@@ -9,8 +9,17 @@
  */
 
 
+/**
+ * Request to link a user account to a person record
+ */
 export interface CreateUserLinkRequest { 
+    /**
+     * User account identifier
+     */
     userId: string;
+    /**
+     * Person identifier
+     */
     personId: string;
 }
 

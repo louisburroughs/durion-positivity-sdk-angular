@@ -9,14 +9,41 @@
  */
 
 
+/**
+ * Posting category details
+ */
 export interface PostingCategoryResponse { 
-    postingCategoryId?: string;
-    categoryName?: string;
+    /**
+     * Unique identifier of the posting category
+     */
+    postingCategoryId: string;
+    /**
+     * Name of the posting category
+     */
+    categoryName: string;
+    /**
+     * Description of the posting category
+     */
     description?: string;
+    /**
+     * Whether the posting category is active
+     */
     isActive?: boolean;
+    /**
+     * Timestamp when the posting category was created (ISO 8601)
+     */
     createdAt?: string;
+    /**
+     * Identifier of the user who created the posting category
+     */
     createdBy?: string;
+    /**
+     * Timestamp when the posting category was last modified (ISO 8601)
+     */
     modifiedAt?: string;
+    /**
+     * Identifier of the user who last modified the posting category
+     */
     modifiedBy?: string;
 }
 
@@ -58,7 +85,7 @@ export function instanceOfPostingCategoryResponse(value: object): value is Posti
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createPostingCategoryResponsePropertyNames();
+    const requiredProperties = createPostingCategoryResponsePropertyNames('postingCategoryId', 'categoryName', );
     const optionalStringProperties = createPostingCategoryResponseOptionalProperties({ name: 'postingCategoryId', nullable: false }, { name: 'categoryName', nullable: false }, { name: 'description', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'modifiedBy', nullable: false }, );
     const optionalNumberProperties = createPostingCategoryResponseOptionalProperties();
     const optionalBooleanProperties = createPostingCategoryResponseOptionalProperties({ name: 'isActive', nullable: false }, );

@@ -9,11 +9,29 @@
  */
 
 
+/**
+ * A single rule-evaluation step recorded in a pricing snapshot trace
+ */
 export interface PricingRuleTraceEntryDto { 
-    id?: string;
-    ruleId?: string;
-    status?: string;
+    /**
+     * Trace entry identifier
+     */
+    id: string;
+    /**
+     * Identifier of the evaluated rule
+     */
+    ruleId: string;
+    /**
+     * Evaluation status of the rule
+     */
+    status: string;
+    /**
+     * Serialized inputs supplied to the rule
+     */
     inputs?: string;
+    /**
+     * Serialized outputs produced by the rule
+     */
     outputs?: string;
 }
 
@@ -55,7 +73,7 @@ export function instanceOfPricingRuleTraceEntryDto(value: object): value is Pric
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createPricingRuleTraceEntryDtoPropertyNames();
+    const requiredProperties = createPricingRuleTraceEntryDtoPropertyNames('id', 'ruleId', 'status', );
     const optionalStringProperties = createPricingRuleTraceEntryDtoOptionalProperties({ name: 'id', nullable: false }, { name: 'ruleId', nullable: false }, { name: 'status', nullable: false }, { name: 'inputs', nullable: false }, { name: 'outputs', nullable: false }, );
     const optionalNumberProperties = createPricingRuleTraceEntryDtoOptionalProperties();
     const optionalBooleanProperties = createPricingRuleTraceEntryDtoOptionalProperties();

@@ -9,9 +9,21 @@
  */
 
 
+/**
+ * Request to submit the initial physical count for a cycle count task
+ */
 export interface SubmitCountRequest { 
+    /**
+     * Identifier of the cycle count task being counted
+     */
     taskId: string;
+    /**
+     * Identifier of the auditor submitting the count
+     */
     auditorId: string;
+    /**
+     * Quantity physically counted by the auditor
+     */
     actualQuantity: number;
 }
 

@@ -9,8 +9,14 @@
  */
 
 
+/**
+ * Decoded permission code strings
+ */
 export interface PermissionDecodeResponse { 
-    permissions?: Array<string>;
+    /**
+     * List of decoded permission code strings
+     */
+    permissions: Array<string>;
 }
 
 function isOptionalPermissionDecodeResponsePropertyOfType(
@@ -51,7 +57,7 @@ export function instanceOfPermissionDecodeResponse(value: object): value is Perm
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createPermissionDecodeResponsePropertyNames();
+    const requiredProperties = createPermissionDecodeResponsePropertyNames('permissions', );
     const optionalStringProperties = createPermissionDecodeResponseOptionalProperties();
     const optionalNumberProperties = createPermissionDecodeResponseOptionalProperties();
     const optionalBooleanProperties = createPermissionDecodeResponseOptionalProperties();

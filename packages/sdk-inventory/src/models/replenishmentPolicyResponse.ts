@@ -9,13 +9,34 @@
  */
 
 
+/**
+ * Representation of a replenishment policy defining min/max stock thresholds for an item at a location
+ */
 export interface ReplenishmentPolicyResponse { 
-    policyId?: string;
-    locationId?: string;
-    itemSKU?: string;
-    minimumQuantity?: number;
-    maximumQuantity?: number;
-    createdAt?: string;
+    /**
+     * Unique identifier of the replenishment policy
+     */
+    policyId: string;
+    /**
+     * Identifier of the location the replenishment policy applies to
+     */
+    locationId: string;
+    /**
+     * SKU of the item the replenishment policy applies to
+     */
+    itemSKU: string;
+    /**
+     * Minimum on-hand quantity that triggers replenishment when reached
+     */
+    minimumQuantity: number;
+    /**
+     * Maximum on-hand quantity replenishment aims to restock up to
+     */
+    maximumQuantity: number;
+    /**
+     * Timestamp at which the replenishment policy was created
+     */
+    createdAt: string;
 }
 
 function isOptionalReplenishmentPolicyResponsePropertyOfType(
@@ -56,7 +77,7 @@ export function instanceOfReplenishmentPolicyResponse(value: object): value is R
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createReplenishmentPolicyResponsePropertyNames();
+    const requiredProperties = createReplenishmentPolicyResponsePropertyNames('policyId', 'locationId', 'itemSKU', 'minimumQuantity', 'maximumQuantity', 'createdAt', );
     const optionalStringProperties = createReplenishmentPolicyResponseOptionalProperties({ name: 'policyId', nullable: false }, { name: 'locationId', nullable: false }, { name: 'itemSKU', nullable: false }, { name: 'createdAt', nullable: false }, );
     const optionalNumberProperties = createReplenishmentPolicyResponseOptionalProperties({ name: 'minimumQuantity', nullable: false }, { name: 'maximumQuantity', nullable: false }, );
     const optionalBooleanProperties = createReplenishmentPolicyResponseOptionalProperties();

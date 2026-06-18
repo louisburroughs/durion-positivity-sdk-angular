@@ -9,10 +9,25 @@
  */
 
 
+/**
+ * Request payload for adding an item line to a cart
+ */
 export interface AddItemRequest { 
+    /**
+     * Stock keeping unit identifying the item to add
+     */
     itemSku: string;
-    quantity?: number;
+    /**
+     * Quantity of the item to add to the cart
+     */
+    quantity: number;
+    /**
+     * Reason code justifying a manual price or special handling
+     */
     reasonCode?: string;
+    /**
+     * Manual unit price override for the item, when applicable
+     */
     manualPrice?: number;
 }
 
@@ -54,7 +69,7 @@ export function instanceOfAddItemRequest(value: object): value is AddItemRequest
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createAddItemRequestPropertyNames('itemSku', );
+    const requiredProperties = createAddItemRequestPropertyNames('itemSku', 'quantity', );
     const optionalStringProperties = createAddItemRequestOptionalProperties({ name: 'itemSku', nullable: false }, { name: 'reasonCode', nullable: false }, );
     const optionalNumberProperties = createAddItemRequestOptionalProperties({ name: 'quantity', nullable: false }, { name: 'manualPrice', nullable: false }, );
     const optionalBooleanProperties = createAddItemRequestOptionalProperties();

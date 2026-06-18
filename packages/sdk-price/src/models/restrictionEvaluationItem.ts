@@ -9,10 +9,25 @@
  */
 
 
+/**
+ * Single product/context entry to evaluate against sale-restriction rules
+ */
 export interface RestrictionEvaluationItem { 
+    /**
+     * Product to evaluate restrictions for
+     */
     productId: string;
+    /**
+     * Location scope tag for the evaluation
+     */
     locationTag: RestrictionEvaluationItemLocationTagEnum;
+    /**
+     * Service channel scope tag for the evaluation
+     */
     serviceTag: RestrictionEvaluationItemServiceTagEnum;
+    /**
+     * Transaction lifecycle context for the evaluation
+     */
     context: RestrictionEvaluationItemContextEnum;
 }
 export enum RestrictionEvaluationItemLocationTagEnum {

@@ -9,8 +9,17 @@
  */
 
 
+/**
+ * Request to cancel an existing appointment with a mandatory reason code
+ */
 export interface CancelAppointmentRequest { 
+    /**
+     * Mandatory cancellation reason code
+     */
     cancellationReason: CancelAppointmentRequestCancellationReasonEnum;
+    /**
+     * Optional free-text notes explaining the cancellation
+     */
     notes?: string;
 }
 export enum CancelAppointmentRequestCancellationReasonEnum {

@@ -16,7 +16,7 @@ export interface ApprovalConfigurationResponse {
     /**
      * Unique identifier for the configuration
      */
-    id?: string;
+    id: string;
     /**
      * Location ID for this configuration (null = applies to all locations)
      */
@@ -81,7 +81,7 @@ export function instanceOfApprovalConfigurationResponse(value: object): value is
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createApprovalConfigurationResponsePropertyNames();
+    const requiredProperties = createApprovalConfigurationResponsePropertyNames('id', );
     const optionalStringProperties = createApprovalConfigurationResponseOptionalProperties({ name: 'id', nullable: false }, { name: 'locationId', nullable: false }, { name: 'customerId', nullable: false }, { name: 'approvalMethod', nullable: false }, );
     const optionalNumberProperties = createApprovalConfigurationResponseOptionalProperties({ name: 'declineExpiryDays', nullable: false }, { name: 'priority', nullable: false }, );
     const optionalBooleanProperties = createApprovalConfigurationResponseOptionalProperties({ name: 'requireSignature', nullable: false }, );

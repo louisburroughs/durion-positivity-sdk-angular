@@ -17,13 +17,13 @@ export interface PricingBreakdownEntry {
     /**
      * Rule name
      */
-    ruleName?: string;
+    ruleName: string;
     /**
      * Rule category/type
      */
-    ruleType?: string;
-    adjustment?: MoneyAmount;
-    resultingValue?: MoneyAmount;
+    ruleType: string;
+    adjustment: MoneyAmount;
+    resultingValue: MoneyAmount;
 }
 
 function isOptionalPricingBreakdownEntryPropertyOfType(
@@ -64,7 +64,7 @@ export function instanceOfPricingBreakdownEntry(value: object): value is Pricing
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createPricingBreakdownEntryPropertyNames();
+    const requiredProperties = createPricingBreakdownEntryPropertyNames('ruleName', 'ruleType', 'adjustment', 'resultingValue', );
     const optionalStringProperties = createPricingBreakdownEntryOptionalProperties({ name: 'ruleName', nullable: false }, { name: 'ruleType', nullable: false }, );
     const optionalNumberProperties = createPricingBreakdownEntryOptionalProperties();
     const optionalBooleanProperties = createPricingBreakdownEntryOptionalProperties();

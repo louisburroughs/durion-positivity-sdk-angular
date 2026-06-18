@@ -9,11 +9,29 @@
  */
 
 
+/**
+ * Request payload for creating a new posting rule set
+ */
 export interface PostingRuleSetCreateRequest { 
+    /**
+     * Display name of the posting rule set
+     */
     name: string;
+    /**
+     * Accounting event type the rule set applies to
+     */
     eventType: string;
+    /**
+     * Optional human-readable description of the rule set
+     */
     description?: string;
+    /**
+     * Serialized rules definition (JSON) describing GL mapping logic
+     */
     rulesDefinition: string;
+    /**
+     * Identifier of the user creating the rule set
+     */
     createdBy: string;
 }
 

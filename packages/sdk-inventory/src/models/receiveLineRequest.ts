@@ -9,8 +9,17 @@
  */
 
 
+/**
+ * Received quantity recorded against a single receiving session line
+ */
 export interface ReceiveLineRequest { 
+    /**
+     * Identifier of the receiving line being recorded
+     */
     lineId: string;
+    /**
+     * Quantity actually received for the line; may be zero
+     */
     receivedQuantity: number;
 }
 

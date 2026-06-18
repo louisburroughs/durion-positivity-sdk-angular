@@ -48,7 +48,7 @@ export interface OperationalContextResponse {
     /**
      * Whether context is locked after work start
      */
-    locked?: boolean;
+    locked: boolean;
 }
 
 function isOptionalOperationalContextResponsePropertyOfType(
@@ -89,7 +89,7 @@ export function instanceOfOperationalContextResponse(value: object): value is Op
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createOperationalContextResponsePropertyNames();
+    const requiredProperties = createOperationalContextResponsePropertyNames('locked', );
     const optionalStringProperties = createOperationalContextResponseOptionalProperties({ name: 'version', nullable: false }, { name: 'locationId', nullable: false }, { name: 'bayId', nullable: false }, );
     const optionalNumberProperties = createOperationalContextResponseOptionalProperties();
     const optionalBooleanProperties = createOperationalContextResponseOptionalProperties({ name: 'locked', nullable: false }, );

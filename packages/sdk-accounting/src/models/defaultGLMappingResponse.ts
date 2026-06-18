@@ -9,21 +9,69 @@
  */
 
 
+/**
+ * Response describing a default GL account mapping
+ */
 export interface DefaultGLMappingResponse { 
-    mappingId?: string;
-    eventType?: string;
+    /**
+     * Unique identifier of the mapping
+     */
+    mappingId: string;
+    /**
+     * Accounting event type the mapping applies to
+     */
+    eventType: string;
+    /**
+     * Organization scope for the mapping; null for the global default
+     */
     organizationId?: string;
-    debitAccountId?: string;
+    /**
+     * Identifier of the GL account to debit
+     */
+    debitAccountId: string;
+    /**
+     * Account code of the debit GL account
+     */
     debitAccountCode?: string;
+    /**
+     * Account name of the debit GL account
+     */
     debitAccountName?: string;
-    creditAccountId?: string;
+    /**
+     * Identifier of the GL account to credit
+     */
+    creditAccountId: string;
+    /**
+     * Account code of the credit GL account
+     */
     creditAccountCode?: string;
+    /**
+     * Account name of the credit GL account
+     */
     creditAccountName?: string;
+    /**
+     * Optional description of the mapping
+     */
     description?: string;
+    /**
+     * Whether the mapping is active
+     */
     active?: boolean;
+    /**
+     * Timestamp when the mapping was created (ISO 8601)
+     */
     createdAt?: string;
+    /**
+     * Identifier of the user who created the mapping
+     */
     createdBy?: string;
+    /**
+     * Timestamp when the mapping was last modified (ISO 8601)
+     */
     modifiedAt?: string;
+    /**
+     * Identifier of the user who last modified the mapping
+     */
     modifiedBy?: string;
 }
 
@@ -65,7 +113,7 @@ export function instanceOfDefaultGLMappingResponse(value: object): value is Defa
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createDefaultGLMappingResponsePropertyNames();
+    const requiredProperties = createDefaultGLMappingResponsePropertyNames('mappingId', 'eventType', 'debitAccountId', 'creditAccountId', );
     const optionalStringProperties = createDefaultGLMappingResponseOptionalProperties({ name: 'mappingId', nullable: false }, { name: 'eventType', nullable: false }, { name: 'organizationId', nullable: false }, { name: 'debitAccountId', nullable: false }, { name: 'debitAccountCode', nullable: false }, { name: 'debitAccountName', nullable: false }, { name: 'creditAccountId', nullable: false }, { name: 'creditAccountCode', nullable: false }, { name: 'creditAccountName', nullable: false }, { name: 'description', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'modifiedBy', nullable: false }, );
     const optionalNumberProperties = createDefaultGLMappingResponseOptionalProperties();
     const optionalBooleanProperties = createDefaultGLMappingResponseOptionalProperties({ name: 'active', nullable: false }, );

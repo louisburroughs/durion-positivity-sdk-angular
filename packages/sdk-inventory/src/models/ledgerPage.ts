@@ -9,8 +9,17 @@
  */
 
 
+/**
+ * A single page of ledger entries with an optional cursor to the next page
+ */
 export interface LedgerPage { 
-    entries?: Array<any>;
+    /**
+     * Ledger entries contained in this page
+     */
+    entries: Array<any>;
+    /**
+     * Opaque cursor for the next page; null when there are no more entries
+     */
     nextPageToken?: string;
 }
 
@@ -52,7 +61,7 @@ export function instanceOfLedgerPage(value: object): value is LedgerPage {
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createLedgerPagePropertyNames();
+    const requiredProperties = createLedgerPagePropertyNames('entries', );
     const optionalStringProperties = createLedgerPageOptionalProperties({ name: 'nextPageToken', nullable: false }, );
     const optionalNumberProperties = createLedgerPageOptionalProperties();
     const optionalBooleanProperties = createLedgerPageOptionalProperties();

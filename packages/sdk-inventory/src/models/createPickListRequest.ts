@@ -9,10 +9,25 @@
  */
 
 
+/**
+ * Request to create a pick list for a workorder, optionally linked to a parts reservation
+ */
 export interface CreatePickListRequest { 
+    /**
+     * Identifier of the workorder the pick list fulfills
+     */
     workorderId: string;
+    /**
+     * Timestamp by which the pick list should be completed
+     */
     dueAt?: string;
+    /**
+     * Relative priority of the pick list; higher values are picked sooner
+     */
     priority?: number;
+    /**
+     * Identifier of the reservation backing the pick list, when applicable
+     */
     reservationId?: string;
 }
 

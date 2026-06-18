@@ -26,7 +26,7 @@ export interface AvailabilityInfo {
     /**
      * Availability data status
      */
-    status?: AvailabilityInfoStatusEnum;
+    status: AvailabilityInfoStatusEnum;
     /**
      * Timestamp of availability data
      */
@@ -34,7 +34,7 @@ export interface AvailabilityInfo {
     /**
      * Confidence level in availability data
      */
-    confidence?: AvailabilityInfoConfidenceEnum;
+    confidence: AvailabilityInfoConfidenceEnum;
 }
 export enum AvailabilityInfoStatusEnum {
     Ok = 'OK',
@@ -88,7 +88,7 @@ export function instanceOfAvailabilityInfo(value: object): value is Availability
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createAvailabilityInfoPropertyNames();
+    const requiredProperties = createAvailabilityInfoPropertyNames('status', 'confidence', );
     const optionalStringProperties = createAvailabilityInfoOptionalProperties({ name: 'status', nullable: false }, { name: 'confidence', nullable: false }, );
     const optionalNumberProperties = createAvailabilityInfoOptionalProperties({ name: 'onHandQuantity', nullable: false }, { name: 'availableToPromiseQuantity', nullable: false }, );
     const optionalBooleanProperties = createAvailabilityInfoOptionalProperties();

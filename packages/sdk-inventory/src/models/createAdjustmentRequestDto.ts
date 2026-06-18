@@ -9,11 +9,29 @@
  */
 
 
+/**
+ * Request body for creating a draft inventory adjustment request
+ */
 export interface CreateAdjustmentRequestDto { 
+    /**
+     * Stock-keeping unit of the product to adjust
+     */
     productSku: string;
+    /**
+     * Identifier of the location where the adjustment applies
+     */
     locationId: string;
+    /**
+     * Adjustment quantity (positive to add stock, negative to remove)
+     */
     quantity: number;
+    /**
+     * Mandatory reason code explaining the adjustment
+     */
     reasonCode: string;
+    /**
+     * Optional unit of measure code for the quantity (e.g. EACH, KG)
+     */
     unitOfMeasure?: string;
 }
 

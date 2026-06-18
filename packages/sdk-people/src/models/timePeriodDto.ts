@@ -9,12 +9,30 @@
  */
 
 
+/**
+ * Timekeeping time period bounding a payroll or submission cycle
+ */
 export interface TimePeriodDto { 
-    timePeriodId?: string;
-    tenantId?: string;
-    startDate?: string;
-    endDate?: string;
-    status?: TimePeriodDtoStatusEnum;
+    /**
+     * Time period identifier
+     */
+    timePeriodId: string;
+    /**
+     * Tenant identifier the period belongs to
+     */
+    tenantId: string;
+    /**
+     * First date of the period
+     */
+    startDate: string;
+    /**
+     * Last date of the period
+     */
+    endDate: string;
+    /**
+     * Lifecycle status of the period
+     */
+    status: TimePeriodDtoStatusEnum;
 }
 export enum TimePeriodDtoStatusEnum {
     Open = 'OPEN',
@@ -62,7 +80,7 @@ export function instanceOfTimePeriodDto(value: object): value is TimePeriodDto {
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createTimePeriodDtoPropertyNames();
+    const requiredProperties = createTimePeriodDtoPropertyNames('timePeriodId', 'tenantId', 'startDate', 'endDate', 'status', );
     const optionalStringProperties = createTimePeriodDtoOptionalProperties({ name: 'timePeriodId', nullable: false }, { name: 'tenantId', nullable: false }, { name: 'status', nullable: false }, );
     const optionalNumberProperties = createTimePeriodDtoOptionalProperties();
     const optionalBooleanProperties = createTimePeriodDtoOptionalProperties();

@@ -10,12 +10,30 @@
 import { GLAccountResponse } from './gLAccountResponse';
 
 
+/**
+ * Paginated list of GL accounts
+ */
 export interface GLAccountListResponse { 
-    pageNumber?: number;
-    pageSize?: number;
-    totalPages?: number;
-    glAccounts?: Array<GLAccountResponse>;
-    totalElements?: number;
+    /**
+     * Zero-based page index
+     */
+    pageNumber: number;
+    /**
+     * Page size
+     */
+    pageSize: number;
+    /**
+     * Total number of pages
+     */
+    totalPages: number;
+    /**
+     * GL accounts on the current page
+     */
+    glAccounts: Array<GLAccountResponse>;
+    /**
+     * Total number of matching GL accounts
+     */
+    totalElements: number;
 }
 
 function isOptionalGLAccountListResponsePropertyOfType(
@@ -56,7 +74,7 @@ export function instanceOfGLAccountListResponse(value: object): value is GLAccou
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createGLAccountListResponsePropertyNames();
+    const requiredProperties = createGLAccountListResponsePropertyNames('pageNumber', 'pageSize', 'totalPages', 'glAccounts', 'totalElements', );
     const optionalStringProperties = createGLAccountListResponseOptionalProperties();
     const optionalNumberProperties = createGLAccountListResponseOptionalProperties({ name: 'pageNumber', nullable: false }, { name: 'pageSize', nullable: false }, { name: 'totalPages', nullable: false }, { name: 'totalElements', nullable: false }, );
     const optionalBooleanProperties = createGLAccountListResponseOptionalProperties();

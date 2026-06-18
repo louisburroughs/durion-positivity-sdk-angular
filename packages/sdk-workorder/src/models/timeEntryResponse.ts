@@ -13,18 +13,54 @@
  * Response representation of a time entry
  */
 export interface TimeEntryResponse { 
-    timeEntryId?: string;
-    personId?: string;
-    workOrderId?: string;
-    startAt?: string;
+    /**
+     * Unique identifier of the time entry
+     */
+    timeEntryId: string;
+    /**
+     * Identifier of the person the time entry belongs to
+     */
+    personId: string;
+    /**
+     * Identifier of the workorder associated with the time entry
+     */
+    workOrderId: string;
+    /**
+     * Timestamp when the time entry started
+     */
+    startAt: string;
+    /**
+     * Timestamp when the time entry ended
+     */
     endAt?: string;
-    status?: TimeEntryResponseStatusEnum;
+    /**
+     * Current status of the time entry
+     */
+    status: TimeEntryResponseStatusEnum;
+    /**
+     * Timestamp when the time entry was submitted
+     */
     submittedAt?: string;
+    /**
+     * Identifier of the user who approved or rejected the entry
+     */
     decisionByUserId?: string;
+    /**
+     * UTC timestamp when the approval decision was made
+     */
     decisionAtUtc?: string;
+    /**
+     * Reason supplied when the time entry was rejected
+     */
     rejectionReason?: string;
-    createdAt?: string;
-    updatedAt?: string;
+    /**
+     * Timestamp when the time entry was created
+     */
+    createdAt: string;
+    /**
+     * Timestamp when the time entry was last updated
+     */
+    updatedAt: string;
 }
 export enum TimeEntryResponseStatusEnum {
     Draft = 'DRAFT',
@@ -73,7 +109,7 @@ export function instanceOfTimeEntryResponse(value: object): value is TimeEntryRe
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createTimeEntryResponsePropertyNames();
+    const requiredProperties = createTimeEntryResponsePropertyNames('timeEntryId', 'personId', 'workOrderId', 'startAt', 'status', 'createdAt', 'updatedAt', );
     const optionalStringProperties = createTimeEntryResponseOptionalProperties({ name: 'timeEntryId', nullable: false }, { name: 'personId', nullable: false }, { name: 'workOrderId', nullable: false }, { name: 'status', nullable: false }, { name: 'decisionByUserId', nullable: false }, { name: 'rejectionReason', nullable: false }, );
     const optionalNumberProperties = createTimeEntryResponseOptionalProperties();
     const optionalBooleanProperties = createTimeEntryResponseOptionalProperties();

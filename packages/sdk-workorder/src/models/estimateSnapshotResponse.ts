@@ -16,15 +16,15 @@ export interface EstimateSnapshotResponse {
     /**
      * Snapshot identifier
      */
-    id?: string;
+    id: string;
     /**
      * Estimate identifier
      */
-    estimateId?: string;
+    estimateId: string;
     /**
      * Estimate status at capture time
      */
-    status?: EstimateSnapshotResponseStatusEnum;
+    status: EstimateSnapshotResponseStatusEnum;
     /**
      * Serialized snapshot content
      */
@@ -96,7 +96,7 @@ export function instanceOfEstimateSnapshotResponse(value: object): value is Esti
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createEstimateSnapshotResponsePropertyNames();
+    const requiredProperties = createEstimateSnapshotResponsePropertyNames('id', 'estimateId', 'status', );
     const optionalStringProperties = createEstimateSnapshotResponseOptionalProperties({ name: 'id', nullable: false }, { name: 'estimateId', nullable: false }, { name: 'status', nullable: false }, { name: 'snapshotData', nullable: false }, { name: 'capturedById', nullable: false }, { name: 'notes', nullable: false }, );
     const optionalNumberProperties = createEstimateSnapshotResponseOptionalProperties();
     const optionalBooleanProperties = createEstimateSnapshotResponseOptionalProperties();

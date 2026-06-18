@@ -9,9 +9,18 @@
  */
 
 
+/**
+ * Current permission catalog version and size
+ */
 export interface CatalogVersionResponse { 
-    version?: number;
-    permissionCount?: number;
+    /**
+     * Current catalog version integer
+     */
+    version: number;
+    /**
+     * Total number of permissions in the catalog
+     */
+    permissionCount: number;
 }
 
 function isOptionalCatalogVersionResponsePropertyOfType(
@@ -52,7 +61,7 @@ export function instanceOfCatalogVersionResponse(value: object): value is Catalo
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createCatalogVersionResponsePropertyNames();
+    const requiredProperties = createCatalogVersionResponsePropertyNames('version', 'permissionCount', );
     const optionalStringProperties = createCatalogVersionResponseOptionalProperties();
     const optionalNumberProperties = createCatalogVersionResponseOptionalProperties({ name: 'version', nullable: false }, { name: 'permissionCount', nullable: false }, );
     const optionalBooleanProperties = createCatalogVersionResponseOptionalProperties();

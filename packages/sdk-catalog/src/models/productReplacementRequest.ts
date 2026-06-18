@@ -16,7 +16,7 @@ export interface ProductReplacementRequest {
     /**
      * Replacement product identifier
      */
-    replacementProductId?: string;
+    replacementProductId: string;
     /**
      * Display priority order
      */
@@ -69,7 +69,7 @@ export function instanceOfProductReplacementRequest(value: object): value is Pro
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createProductReplacementRequestPropertyNames();
+    const requiredProperties = createProductReplacementRequestPropertyNames('replacementProductId', );
     const optionalStringProperties = createProductReplacementRequestOptionalProperties({ name: 'replacementProductId', nullable: false }, { name: 'notes', nullable: false }, );
     const optionalNumberProperties = createProductReplacementRequestOptionalProperties({ name: 'priorityOrder', nullable: false }, );
     const optionalBooleanProperties = createProductReplacementRequestOptionalProperties();

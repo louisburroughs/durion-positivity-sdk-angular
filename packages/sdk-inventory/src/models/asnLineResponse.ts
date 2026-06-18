@@ -9,13 +9,37 @@
  */
 
 
+/**
+ * A single line item on an advance shipping notice (ASN) response, describing one SKU and its shipped/received quantities
+ */
 export interface AsnLineResponse { 
-    asnLineId?: string;
-    poId?: string;
-    sku?: string;
-    quantityShipped?: number;
+    /**
+     * Unique identifier of the ASN line item
+     */
+    asnLineId: string;
+    /**
+     * Identifier of the purchase order this ASN line is associated with
+     */
+    poId: string;
+    /**
+     * Stock keeping unit identifier for the shipped product
+     */
+    sku: string;
+    /**
+     * Quantity of the SKU declared as shipped on the ASN
+     */
+    quantityShipped: number;
+    /**
+     * Quantity of the SKU received against this ASN line so far
+     */
     quantityReceived?: number;
+    /**
+     * Unit of measure for the shipped and received quantities
+     */
     unitOfMeasure?: string;
+    /**
+     * Lot or batch number associated with the shipped product
+     */
     lotNumber?: string;
 }
 
@@ -57,7 +81,7 @@ export function instanceOfAsnLineResponse(value: object): value is AsnLineRespon
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createAsnLineResponsePropertyNames();
+    const requiredProperties = createAsnLineResponsePropertyNames('asnLineId', 'poId', 'sku', 'quantityShipped', );
     const optionalStringProperties = createAsnLineResponseOptionalProperties({ name: 'asnLineId', nullable: false }, { name: 'poId', nullable: false }, { name: 'sku', nullable: false }, { name: 'unitOfMeasure', nullable: false }, { name: 'lotNumber', nullable: false }, );
     const optionalNumberProperties = createAsnLineResponseOptionalProperties({ name: 'quantityShipped', nullable: false }, { name: 'quantityReceived', nullable: false }, );
     const optionalBooleanProperties = createAsnLineResponseOptionalProperties();

@@ -9,10 +9,25 @@
  */
 
 
+/**
+ * Request to create or fully replace vehicle care preferences
+ */
 export interface PreferencesUpsertDto { 
-    preferences?: object;
+    /**
+     * Complete preference map to store for the vehicle
+     */
+    preferences: object;
+    /**
+     * Optional free-text service notes
+     */
     serviceNotes?: string;
+    /**
+     * Identifier of the user creating the preferences
+     */
     createdByUserId?: string;
+    /**
+     * Identifier of the user updating the preferences
+     */
     updatedByUserId?: string;
 }
 
@@ -54,7 +69,7 @@ export function instanceOfPreferencesUpsertDto(value: object): value is Preferen
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createPreferencesUpsertDtoPropertyNames();
+    const requiredProperties = createPreferencesUpsertDtoPropertyNames('preferences', );
     const optionalStringProperties = createPreferencesUpsertDtoOptionalProperties({ name: 'serviceNotes', nullable: false }, { name: 'createdByUserId', nullable: false }, { name: 'updatedByUserId', nullable: false }, );
     const optionalNumberProperties = createPreferencesUpsertDtoOptionalProperties();
     const optionalBooleanProperties = createPreferencesUpsertDtoOptionalProperties();

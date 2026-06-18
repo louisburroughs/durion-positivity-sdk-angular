@@ -9,14 +9,38 @@
  */
 
 
+/**
+ * Aggregated approval state for a person within a time period
+ */
 export interface TimePeriodApprovalDto { 
-    personId?: string;
-    timePeriodId?: string;
-    totalCount?: number;
-    pendingCount?: number;
-    approvedCount?: number;
-    rejectedCount?: number;
-    overallStatus?: TimePeriodApprovalDtoOverallStatusEnum;
+    /**
+     * Person identifier
+     */
+    personId: string;
+    /**
+     * Time period identifier
+     */
+    timePeriodId: string;
+    /**
+     * Total number of entries in the period
+     */
+    totalCount: number;
+    /**
+     * Number of entries still pending approval
+     */
+    pendingCount: number;
+    /**
+     * Number of approved entries
+     */
+    approvedCount: number;
+    /**
+     * Number of rejected entries
+     */
+    rejectedCount: number;
+    /**
+     * Overall approval status for the person in the period
+     */
+    overallStatus: TimePeriodApprovalDtoOverallStatusEnum;
 }
 export enum TimePeriodApprovalDtoOverallStatusEnum {
     PendingApproval = 'PENDING_APPROVAL',
@@ -64,7 +88,7 @@ export function instanceOfTimePeriodApprovalDto(value: object): value is TimePer
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createTimePeriodApprovalDtoPropertyNames();
+    const requiredProperties = createTimePeriodApprovalDtoPropertyNames('personId', 'timePeriodId', 'totalCount', 'pendingCount', 'approvedCount', 'rejectedCount', 'overallStatus', );
     const optionalStringProperties = createTimePeriodApprovalDtoOptionalProperties({ name: 'personId', nullable: false }, { name: 'timePeriodId', nullable: false }, { name: 'overallStatus', nullable: false }, );
     const optionalNumberProperties = createTimePeriodApprovalDtoOptionalProperties({ name: 'totalCount', nullable: false }, { name: 'pendingCount', nullable: false }, { name: 'approvedCount', nullable: false }, { name: 'rejectedCount', nullable: false }, );
     const optionalBooleanProperties = createTimePeriodApprovalDtoOptionalProperties();

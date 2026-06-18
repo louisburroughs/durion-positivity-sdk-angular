@@ -16,11 +16,11 @@ export interface VendorBillResponse {
     /**
      * Vendor bill UUID
      */
-    vendorBillId?: string;
+    vendorBillId: string;
     /**
      * Vendor UUID
      */
-    vendorId?: string;
+    vendorId: string;
     /**
      * Vendor name
      */
@@ -28,7 +28,7 @@ export interface VendorBillResponse {
     /**
      * Bill number
      */
-    billNumber?: string;
+    billNumber: string;
     /**
      * Bill date
      */
@@ -40,11 +40,11 @@ export interface VendorBillResponse {
     /**
      * Total bill amount
      */
-    totalAmount?: number;
+    totalAmount: number;
     /**
      * Bill status
      */
-    status?: VendorBillResponseStatusEnum;
+    status: VendorBillResponseStatusEnum;
     /**
      * Origin event ID (for traceability)
      */
@@ -64,7 +64,7 @@ export interface VendorBillResponse {
     /**
      * Created timestamp
      */
-    createdAt?: string;
+    createdAt: string;
     /**
      * Created by user
      */
@@ -127,7 +127,7 @@ export function instanceOfVendorBillResponse(value: object): value is VendorBill
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createVendorBillResponsePropertyNames();
+    const requiredProperties = createVendorBillResponsePropertyNames('vendorBillId', 'vendorId', 'billNumber', 'totalAmount', 'status', 'createdAt', );
     const optionalStringProperties = createVendorBillResponseOptionalProperties({ name: 'vendorBillId', nullable: false }, { name: 'vendorId', nullable: false }, { name: 'vendorName', nullable: false }, { name: 'billNumber', nullable: false }, { name: 'status', nullable: false }, { name: 'originEventId', nullable: false }, { name: 'originEventType', nullable: false }, { name: 'journalEntryId', nullable: false }, { name: 'paymentTransactionId', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'approvalJustification', nullable: false }, { name: 'rejectionReason', nullable: false }, );
     const optionalNumberProperties = createVendorBillResponseOptionalProperties({ name: 'totalAmount', nullable: false }, );
     const optionalBooleanProperties = createVendorBillResponseOptionalProperties();

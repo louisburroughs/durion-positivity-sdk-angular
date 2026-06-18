@@ -9,9 +9,21 @@
  */
 
 
+/**
+ * Request payload to adjust a travel segment\'s recorded times
+ */
 export interface CreateTravelSegmentAdjustmentRequest { 
+    /**
+     * Adjusted travel segment start timestamp
+     */
     adjustedStartAt?: string;
+    /**
+     * Adjusted travel segment end timestamp
+     */
     adjustedEndAt?: string;
+    /**
+     * Reason justifying the travel segment time adjustment
+     */
     adjustmentReason: string;
 }
 

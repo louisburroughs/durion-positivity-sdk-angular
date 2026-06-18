@@ -10,11 +10,26 @@
 import { ScheduleEventView } from './scheduleEventView';
 
 
+/**
+ * A single resource lane within the schedule view
+ */
 export interface ScheduleResourceView { 
-    resourceId?: string;
-    resourceType?: string;
+    /**
+     * Resource identifier
+     */
+    resourceId: string;
+    /**
+     * Resource type (e.g. MECHANIC or BAY)
+     */
+    resourceType: string;
+    /**
+     * Display name of the resource
+     */
     resourceName?: string;
-    events?: Array<ScheduleEventView>;
+    /**
+     * Events scheduled for this resource
+     */
+    events: Array<ScheduleEventView>;
 }
 
 function isOptionalScheduleResourceViewPropertyOfType(
@@ -55,7 +70,7 @@ export function instanceOfScheduleResourceView(value: object): value is Schedule
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createScheduleResourceViewPropertyNames();
+    const requiredProperties = createScheduleResourceViewPropertyNames('resourceId', 'resourceType', 'events', );
     const optionalStringProperties = createScheduleResourceViewOptionalProperties({ name: 'resourceId', nullable: false }, { name: 'resourceType', nullable: false }, { name: 'resourceName', nullable: false }, );
     const optionalNumberProperties = createScheduleResourceViewOptionalProperties();
     const optionalBooleanProperties = createScheduleResourceViewOptionalProperties();

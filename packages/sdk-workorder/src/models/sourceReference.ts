@@ -9,8 +9,17 @@
  */
 
 
+/**
+ * External source system reference metadata
+ */
 export interface SourceReference { 
+    /**
+     * Identifier of the originating external system
+     */
     system: string;
+    /**
+     * Reference identifier of the record in the source system
+     */
     sourceReferenceId: string;
 }
 

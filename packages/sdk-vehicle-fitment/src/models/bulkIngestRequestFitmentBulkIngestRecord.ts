@@ -10,10 +10,25 @@
 import { FitmentBulkIngestRecord } from './fitmentBulkIngestRecord';
 
 
+/**
+ * Generic bulk ingest request: a batch of records for a job scoped to a location
+ */
 export interface BulkIngestRequestFitmentBulkIngestRecord { 
+    /**
+     * Identifier of the bulk ingest job
+     */
     jobId: string;
+    /**
+     * Location the records are ingested for
+     */
     locationId: string;
+    /**
+     * The records to ingest (at least one); shape depends on the target domain
+     */
     records: Array<FitmentBulkIngestRecord>;
+    /**
+     * Identifier of the operator submitting the batch
+     */
     operatorId?: string;
 }
 

@@ -9,19 +9,52 @@
  */
 
 
+/**
+ * A substitute-part link associating a product with an approved substitute
+ */
 export interface SubstituteLinkResponse { 
-    id?: string;
-    productId?: string;
-    substitutePartId?: string;
-    substituteType?: SubstituteLinkResponseSubstituteTypeEnum;
-    priority?: number;
-    version?: number;
+    /**
+     * Identifier of the substitute link
+     */
+    id: string;
+    /**
+     * Identifier of the product the substitute applies to
+     */
+    productId: string;
+    /**
+     * Identifier of the substitute part
+     */
+    substitutePartId: string;
+    /**
+     * Type of substitution relationship
+     */
+    substituteType: SubstituteLinkResponseSubstituteTypeEnum;
+    /**
+     * Ordering priority of this substitute among alternatives (lower is preferred)
+     */
+    priority: number;
+    /**
+     * Version for optimistic locking
+     */
+    version: number;
+    /**
+     * Identifier of the user who created the link
+     */
     createdBy?: string;
+    /**
+     * Identifier of the user who last updated the link
+     */
     updatedBy?: string;
     active?: boolean;
     autoSuggest?: boolean;
-    isAutoSuggest?: boolean;
-    isActive?: boolean;
+    /**
+     * Whether this substitute is automatically suggested during picking
+     */
+    isAutoSuggest: boolean;
+    /**
+     * Whether this substitute link is currently active
+     */
+    isActive: boolean;
 }
 export enum SubstituteLinkResponseSubstituteTypeEnum {
     Equivalent = 'EQUIVALENT',
@@ -70,7 +103,7 @@ export function instanceOfSubstituteLinkResponse(value: object): value is Substi
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createSubstituteLinkResponsePropertyNames();
+    const requiredProperties = createSubstituteLinkResponsePropertyNames('id', 'productId', 'substitutePartId', 'substituteType', 'priority', 'version', 'isAutoSuggest', 'isActive', );
     const optionalStringProperties = createSubstituteLinkResponseOptionalProperties({ name: 'id', nullable: false }, { name: 'productId', nullable: false }, { name: 'substitutePartId', nullable: false }, { name: 'substituteType', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'updatedBy', nullable: false }, );
     const optionalNumberProperties = createSubstituteLinkResponseOptionalProperties({ name: 'priority', nullable: false }, { name: 'version', nullable: false }, );
     const optionalBooleanProperties = createSubstituteLinkResponseOptionalProperties({ name: 'active', nullable: false }, { name: 'autoSuggest', nullable: false }, { name: 'isAutoSuggest', nullable: false }, { name: 'isActive', nullable: false }, );

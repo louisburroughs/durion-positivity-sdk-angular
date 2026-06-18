@@ -9,8 +9,17 @@
  */
 
 
+/**
+ * Request to partially merge fields into existing vehicle care preferences
+ */
 export interface PreferencesMergeDto { 
+    /**
+     * Subset of preference fields to merge into existing preferences
+     */
     partialPreferences?: object;
+    /**
+     * Identifier of the user updating the preferences
+     */
     updatedByUserId?: string;
 }
 

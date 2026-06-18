@@ -10,11 +10,29 @@
 import { ReceivePurchaseOrderLineDetail } from './receivePurchaseOrderLineDetail';
 
 
+/**
+ * Result of receiving goods against a purchase order, including updated status and open balances
+ */
 export interface ReceivePurchaseOrderResponse { 
-    poId?: string;
-    status?: ReceivePurchaseOrderResponseStatusEnum;
+    /**
+     * Identifier of the purchase order that was received against
+     */
+    poId: string;
+    /**
+     * Updated lifecycle status of the purchase order after the receipt
+     */
+    status: ReceivePurchaseOrderResponseStatusEnum;
+    /**
+     * Remaining open balance in the smallest currency unit (e.g. cents) after the receipt
+     */
     openBalanceMinor?: number;
+    /**
+     * Human-readable message summarising the outcome of the receipt
+     */
     message?: string;
+    /**
+     * Per-line detail of remaining open quantities after the receipt
+     */
     lines?: Array<ReceivePurchaseOrderLineDetail>;
 }
 export enum ReceivePurchaseOrderResponseStatusEnum {
@@ -66,7 +84,7 @@ export function instanceOfReceivePurchaseOrderResponse(value: object): value is 
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createReceivePurchaseOrderResponsePropertyNames();
+    const requiredProperties = createReceivePurchaseOrderResponsePropertyNames('poId', 'status', );
     const optionalStringProperties = createReceivePurchaseOrderResponseOptionalProperties({ name: 'poId', nullable: false }, { name: 'status', nullable: false }, { name: 'message', nullable: false }, );
     const optionalNumberProperties = createReceivePurchaseOrderResponseOptionalProperties({ name: 'openBalanceMinor', nullable: false }, );
     const optionalBooleanProperties = createReceivePurchaseOrderResponseOptionalProperties();

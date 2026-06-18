@@ -9,14 +9,38 @@
  */
 
 
+/**
+ * Response describing a workorder pick list
+ */
 export interface WorkorderPickListResponse { 
-    pickListId?: string;
-    workorderId?: string;
-    status?: string;
-    priority?: number;
-    dueAt?: string;
-    createdAt?: string;
-    updatedAt?: string;
+    /**
+     * Pick list identifier
+     */
+    pickListId: string;
+    /**
+     * Identifier of the workorder the pick list belongs to
+     */
+    workorderId: string;
+    /**
+     * Status of the pick list
+     */
+    status: string;
+    /**
+     * Priority ordering of the pick list
+     */
+    priority: number;
+    /**
+     * Timestamp the pick list is due
+     */
+    dueAt: string;
+    /**
+     * Timestamp the pick list was created
+     */
+    createdAt: string;
+    /**
+     * Timestamp the pick list was last updated
+     */
+    updatedAt: string;
 }
 
 function isOptionalWorkorderPickListResponsePropertyOfType(
@@ -57,7 +81,7 @@ export function instanceOfWorkorderPickListResponse(value: object): value is Wor
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createWorkorderPickListResponsePropertyNames();
+    const requiredProperties = createWorkorderPickListResponsePropertyNames('pickListId', 'workorderId', 'status', 'priority', 'dueAt', 'createdAt', 'updatedAt', );
     const optionalStringProperties = createWorkorderPickListResponseOptionalProperties({ name: 'pickListId', nullable: false }, { name: 'workorderId', nullable: false }, { name: 'status', nullable: false }, );
     const optionalNumberProperties = createWorkorderPickListResponseOptionalProperties({ name: 'priority', nullable: false }, );
     const optionalBooleanProperties = createWorkorderPickListResponseOptionalProperties();

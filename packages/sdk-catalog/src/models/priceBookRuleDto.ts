@@ -9,22 +9,70 @@
  */
 
 
+/**
+ * Price book rule detail
+ */
 export interface PriceBookRuleDto { 
-    ruleId?: string;
-    priceBookId?: string;
-    targetType?: PriceBookRuleDtoTargetTypeEnum;
+    /**
+     * Rule identifier
+     */
+    ruleId: string;
+    /**
+     * Identifier of the owning price book
+     */
+    priceBookId: string;
+    /**
+     * Target type the rule applies to
+     */
+    targetType: PriceBookRuleDtoTargetTypeEnum;
+    /**
+     * Identifier of the targeted entity (SKU or category)
+     */
     targetId?: string;
-    pricingLogic?: string;
+    /**
+     * Pricing logic expression applied by the rule
+     */
+    pricingLogic: string;
+    /**
+     * Condition type gating the rule
+     */
     conditionType?: PriceBookRuleDtoConditionTypeEnum;
+    /**
+     * Value evaluated against the condition type
+     */
     conditionValue?: string;
+    /**
+     * Evaluation priority; lower wins
+     */
     priority?: number;
-    effectiveStartAt?: string;
+    /**
+     * Instant the rule becomes effective
+     */
+    effectiveStartAt: string;
+    /**
+     * Instant the rule stops being effective
+     */
     effectiveEndAt?: string;
-    status?: PriceBookRuleDtoStatusEnum;
-    createdByUserId?: string;
-    createdAt?: string;
+    /**
+     * Current status of the rule
+     */
+    status: PriceBookRuleDtoStatusEnum;
+    /**
+     * Identifier of the user that created the rule
+     */
+    createdByUserId: string;
+    /**
+     * Timestamp the rule was created
+     */
+    createdAt: string;
+    /**
+     * Timestamp the rule was last updated
+     */
     updatedAt?: string;
-    version?: number;
+    /**
+     * Version for optimistic locking
+     */
+    version: number;
 }
 export enum PriceBookRuleDtoTargetTypeEnum {
     Sku = 'SKU',
@@ -82,7 +130,7 @@ export function instanceOfPriceBookRuleDto(value: object): value is PriceBookRul
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createPriceBookRuleDtoPropertyNames();
+    const requiredProperties = createPriceBookRuleDtoPropertyNames('ruleId', 'priceBookId', 'targetType', 'pricingLogic', 'effectiveStartAt', 'status', 'createdByUserId', 'createdAt', 'version', );
     const optionalStringProperties = createPriceBookRuleDtoOptionalProperties({ name: 'ruleId', nullable: false }, { name: 'priceBookId', nullable: false }, { name: 'targetType', nullable: false }, { name: 'targetId', nullable: false }, { name: 'pricingLogic', nullable: false }, { name: 'conditionType', nullable: false }, { name: 'conditionValue', nullable: false }, { name: 'status', nullable: false }, { name: 'createdByUserId', nullable: false }, );
     const optionalNumberProperties = createPriceBookRuleDtoOptionalProperties({ name: 'priority', nullable: false }, { name: 'version', nullable: false }, );
     const optionalBooleanProperties = createPriceBookRuleDtoOptionalProperties();

@@ -9,18 +9,54 @@
  */
 
 
+/**
+ * A replenishment task describing a recommended or in-progress stock movement between locations
+ */
 export interface ReplenishmentTaskResponse { 
-    taskId?: string;
-    itemSKU?: string;
-    quantity?: number;
+    /**
+     * Unique identifier of the replenishment task
+     */
+    taskId: string;
+    /**
+     * SKU of the item to be replenished
+     */
+    itemSKU: string;
+    /**
+     * Quantity of the item to be moved by this replenishment task
+     */
+    quantity: number;
+    /**
+     * Identifier of the location stock is sourced from
+     */
     sourceLocationId?: string;
-    destinationLocationId?: string;
-    status?: string;
+    /**
+     * Identifier of the location stock is moved to
+     */
+    destinationLocationId: string;
+    /**
+     * Current status of the replenishment task
+     */
+    status: string;
+    /**
+     * Mechanism that triggered the task, such as a manual request or automatic threshold breach
+     */
     triggerType?: string;
+    /**
+     * Explanation of why this replenishment was decided
+     */
     decisionReason?: string;
+    /**
+     * Explanation of why the chosen source location was selected to supply the stock
+     */
     sourcingReason?: string;
+    /**
+     * Identifier or name of the user the replenishment task is assigned to
+     */
     assignedTo?: string;
-    createdAt?: string;
+    /**
+     * Timestamp at which the replenishment task was created
+     */
+    createdAt: string;
 }
 
 function isOptionalReplenishmentTaskResponsePropertyOfType(
@@ -61,7 +97,7 @@ export function instanceOfReplenishmentTaskResponse(value: object): value is Rep
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createReplenishmentTaskResponsePropertyNames();
+    const requiredProperties = createReplenishmentTaskResponsePropertyNames('taskId', 'itemSKU', 'quantity', 'destinationLocationId', 'status', 'createdAt', );
     const optionalStringProperties = createReplenishmentTaskResponseOptionalProperties({ name: 'taskId', nullable: false }, { name: 'itemSKU', nullable: false }, { name: 'sourceLocationId', nullable: false }, { name: 'destinationLocationId', nullable: false }, { name: 'status', nullable: false }, { name: 'triggerType', nullable: false }, { name: 'decisionReason', nullable: false }, { name: 'sourcingReason', nullable: false }, { name: 'assignedTo', nullable: false }, { name: 'createdAt', nullable: false }, );
     const optionalNumberProperties = createReplenishmentTaskResponseOptionalProperties({ name: 'quantity', nullable: false }, );
     const optionalBooleanProperties = createReplenishmentTaskResponseOptionalProperties();

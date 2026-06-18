@@ -10,12 +10,30 @@
 import { DefaultGLMappingResponse } from './defaultGLMappingResponse';
 
 
+/**
+ * Paginated list of default GL account mappings
+ */
 export interface DefaultGLMappingListResponse { 
-    mappings?: Array<DefaultGLMappingResponse>;
-    page?: number;
-    size?: number;
-    totalElements?: number;
-    totalPages?: number;
+    /**
+     * Default GL mappings on the current page
+     */
+    mappings: Array<DefaultGLMappingResponse>;
+    /**
+     * Zero-based page index
+     */
+    page: number;
+    /**
+     * Page size
+     */
+    size: number;
+    /**
+     * Total number of matching mappings
+     */
+    totalElements: number;
+    /**
+     * Total number of pages
+     */
+    totalPages: number;
 }
 
 function isOptionalDefaultGLMappingListResponsePropertyOfType(
@@ -56,7 +74,7 @@ export function instanceOfDefaultGLMappingListResponse(value: object): value is 
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createDefaultGLMappingListResponsePropertyNames();
+    const requiredProperties = createDefaultGLMappingListResponsePropertyNames('mappings', 'page', 'size', 'totalElements', 'totalPages', );
     const optionalStringProperties = createDefaultGLMappingListResponseOptionalProperties();
     const optionalNumberProperties = createDefaultGLMappingListResponseOptionalProperties({ name: 'page', nullable: false }, { name: 'size', nullable: false }, { name: 'totalElements', nullable: false }, { name: 'totalPages', nullable: false }, );
     const optionalBooleanProperties = createDefaultGLMappingListResponseOptionalProperties();

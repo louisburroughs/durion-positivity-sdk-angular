@@ -13,7 +13,13 @@
  * Request body for stopping an in-progress travel segment
  */
 export interface StopTravelSegmentRequest { 
+    /**
+     * Identifier of the location reached when the travel segment stops
+     */
     toLocationId?: string;
+    /**
+     * Optional notes recorded when stopping the travel segment
+     */
     notes?: string;
 }
 

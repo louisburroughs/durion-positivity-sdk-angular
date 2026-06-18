@@ -9,9 +9,21 @@
  */
 
 
+/**
+ * Request to render document content into a target output format
+ */
 export interface RenderRequest { 
+    /**
+     * Target output format for the rendered document
+     */
     format: RenderRequestFormatEnum;
+    /**
+     * Optional identifier of the template to apply when rendering
+     */
     templateId?: string;
+    /**
+     * Raw content to be rendered into the target format
+     */
     content: string;
 }
 export enum RenderRequestFormatEnum {

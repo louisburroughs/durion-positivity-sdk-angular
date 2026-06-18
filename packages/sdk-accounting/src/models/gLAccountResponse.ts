@@ -9,20 +9,65 @@
  */
 
 
+/**
+ * GL account response with computed status
+ */
 export interface GLAccountResponse { 
-    glAccountId?: string;
+    /**
+     * GL account UUID
+     */
+    glAccountId: string;
+    /**
+     * GL account code
+     */
     accountCode?: string;
+    /**
+     * GL account display name
+     */
     accountName?: string;
+    /**
+     * Account classification
+     */
     accountType?: GLAccountResponseAccountTypeEnum;
+    /**
+     * GL account description
+     */
     description?: string;
+    /**
+     * Parent GL account UUID for hierarchical accounts
+     */
     parentAccountId?: string;
+    /**
+     * Date the account becomes active
+     */
     activationDate?: string;
+    /**
+     * Date the account becomes inactive
+     */
     deactivationDate?: string;
+    /**
+     * Derived account status (ACTIVE, INACTIVE, NOT_YET_ACTIVE)
+     */
     status?: GLAccountResponseStatusEnum;
+    /**
+     * Created timestamp
+     */
     createdAt?: string;
+    /**
+     * Created by username
+     */
     createdBy?: string;
+    /**
+     * Last modified timestamp
+     */
     modifiedAt?: string;
+    /**
+     * Last modified by username
+     */
     modifiedBy?: string;
+    /**
+     * Optimistic locking version
+     */
     version?: number;
 }
 export enum GLAccountResponseAccountTypeEnum {
@@ -78,7 +123,7 @@ export function instanceOfGLAccountResponse(value: object): value is GLAccountRe
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createGLAccountResponsePropertyNames();
+    const requiredProperties = createGLAccountResponsePropertyNames('glAccountId', );
     const optionalStringProperties = createGLAccountResponseOptionalProperties({ name: 'glAccountId', nullable: false }, { name: 'accountCode', nullable: false }, { name: 'accountName', nullable: false }, { name: 'accountType', nullable: false }, { name: 'description', nullable: false }, { name: 'parentAccountId', nullable: false }, { name: 'status', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'modifiedBy', nullable: false }, );
     const optionalNumberProperties = createGLAccountResponseOptionalProperties({ name: 'version', nullable: false }, );
     const optionalBooleanProperties = createGLAccountResponseOptionalProperties();

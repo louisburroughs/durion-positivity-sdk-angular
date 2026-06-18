@@ -9,12 +9,33 @@
  */
 
 
+/**
+ * Request payload for creating a location price override
+ */
 export interface LocationPriceOverrideCreateRequestDto { 
+    /**
+     * Location identifier the override applies to
+     */
     locationId: string;
+    /**
+     * Product identifier the override applies to
+     */
     productId: string;
+    /**
+     * Base price before override
+     */
     basePrice: number;
+    /**
+     * Item cost used for margin calculation
+     */
     cost?: number;
+    /**
+     * Requested override price
+     */
     overridePrice: number;
+    /**
+     * Identifier of the user creating the override
+     */
     createdByUserId: string;
 }
 

@@ -9,16 +9,37 @@
  */
 
 
+/**
+ * Request payload for applying a price override to an order line
+ */
 export interface ApplyPriceOverrideRequest { 
+    /**
+     * Identifier of the order whose line is being overridden
+     */
     orderId: string;
+    /**
+     * Identifier of the order line receiving the price override
+     */
     orderLineId: string;
+    /**
+     * Identifier of the product on the order line
+     */
     productId: string;
+    /**
+     * Original price of the line before the override
+     */
     originalPrice: number;
+    /**
+     * Overridden price to apply to the line
+     */
     overridePrice: number;
     /**
      * Reason code for the price override
      */
     reasonCode: string;
+    /**
+     * Free-text justification supporting the price override
+     */
     justification?: string;
     /**
      * Optional idempotency key for duplicate prevention

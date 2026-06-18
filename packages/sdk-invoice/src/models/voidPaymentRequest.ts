@@ -9,8 +9,17 @@
  */
 
 
+/**
+ * Request to void an authorized payment before capture
+ */
 export interface VoidPaymentRequest { 
+    /**
+     * Reason the payment is being voided
+     */
     reason: VoidPaymentRequestReasonEnum;
+    /**
+     * Optional free-text notes explaining the void
+     */
     notes?: string;
 }
 export enum VoidPaymentRequestReasonEnum {

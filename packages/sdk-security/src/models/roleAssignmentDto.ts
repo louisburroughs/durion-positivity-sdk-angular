@@ -9,18 +9,57 @@
  */
 
 
+/**
+ * A role assignment binding a user to a role within a scope
+ */
 export interface RoleAssignmentDto { 
-    id?: string;
-    userId?: string;
-    roleId?: string;
-    scopeType?: RoleAssignmentDtoScopeTypeEnum;
+    /**
+     * Role assignment identifier
+     */
+    id: string;
+    /**
+     * Identifier of the user the role is assigned to
+     */
+    userId: string;
+    /**
+     * Identifier of the assigned role
+     */
+    roleId: string;
+    /**
+     * Scope type that constrains the assignment
+     */
+    scopeType: RoleAssignmentDtoScopeTypeEnum;
+    /**
+     * Location identifiers the assignment applies to when scopeType is LOCATION
+     */
     scopeLocationIds?: Set<string>;
+    /**
+     * Inclusive start of the effective window
+     */
     effectiveStartDate?: string;
+    /**
+     * Exclusive end of the effective window
+     */
     effectiveEndDate?: string;
+    /**
+     * Timestamp at which the assignment was revoked
+     */
     revokedAt?: string;
+    /**
+     * Creation timestamp
+     */
     createdAt?: string;
+    /**
+     * Actor that created the assignment
+     */
     createdBy?: string;
+    /**
+     * Last-modified timestamp
+     */
     lastModifiedAt?: string;
+    /**
+     * Actor that last modified the assignment
+     */
     lastModifiedBy?: string;
 }
 export enum RoleAssignmentDtoScopeTypeEnum {
@@ -68,7 +107,7 @@ export function instanceOfRoleAssignmentDto(value: object): value is RoleAssignm
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createRoleAssignmentDtoPropertyNames();
+    const requiredProperties = createRoleAssignmentDtoPropertyNames('id', 'userId', 'roleId', 'scopeType', );
     const optionalStringProperties = createRoleAssignmentDtoOptionalProperties({ name: 'id', nullable: false }, { name: 'userId', nullable: false }, { name: 'roleId', nullable: false }, { name: 'scopeType', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'lastModifiedBy', nullable: false }, );
     const optionalNumberProperties = createRoleAssignmentDtoOptionalProperties();
     const optionalBooleanProperties = createRoleAssignmentDtoOptionalProperties();

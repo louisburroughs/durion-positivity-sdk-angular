@@ -9,17 +9,53 @@
  */
 
 
+/**
+ * Vendor bill match candidate presented for manual selection during ambiguous matching
+ */
 export interface VendorBillMatchCandidateResponse { 
-    candidateId?: string;
-    invoiceEventId?: string;
-    vendorBillId?: string;
+    /**
+     * Candidate record identifier (used for selection)
+     */
+    candidateId: string;
+    /**
+     * Identifier of the invoice event that triggered the ambiguous match
+     */
+    invoiceEventId: string;
+    /**
+     * Identifier of the candidate vendor bill
+     */
+    vendorBillId: string;
+    /**
+     * Identifier of the vendor
+     */
     vendorId?: string;
+    /**
+     * Bill number for display
+     */
     billNumber?: string;
+    /**
+     * Total amount of the candidate bill
+     */
     billTotalAmount?: number;
+    /**
+     * Composite match score (0-100)
+     */
     matchScore?: number;
+    /**
+     * Human-readable breakdown of the match score
+     */
     scoreBreakdown?: string;
+    /**
+     * Whether this candidate has been resolved
+     */
     resolved?: boolean;
+    /**
+     * Whether this candidate was the selected one
+     */
     selected?: boolean;
+    /**
+     * Timestamp when the candidate record was created (ISO 8601)
+     */
     createdAt?: string;
 }
 
@@ -61,7 +97,7 @@ export function instanceOfVendorBillMatchCandidateResponse(value: object): value
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createVendorBillMatchCandidateResponsePropertyNames();
+    const requiredProperties = createVendorBillMatchCandidateResponsePropertyNames('candidateId', 'invoiceEventId', 'vendorBillId', );
     const optionalStringProperties = createVendorBillMatchCandidateResponseOptionalProperties({ name: 'candidateId', nullable: false }, { name: 'invoiceEventId', nullable: false }, { name: 'vendorBillId', nullable: false }, { name: 'vendorId', nullable: false }, { name: 'billNumber', nullable: false }, { name: 'scoreBreakdown', nullable: false }, );
     const optionalNumberProperties = createVendorBillMatchCandidateResponseOptionalProperties({ name: 'billTotalAmount', nullable: false }, { name: 'matchScore', nullable: false }, );
     const optionalBooleanProperties = createVendorBillMatchCandidateResponseOptionalProperties({ name: 'resolved', nullable: false }, { name: 'selected', nullable: false }, );

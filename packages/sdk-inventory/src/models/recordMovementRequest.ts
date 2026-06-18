@@ -9,16 +9,37 @@
  */
 
 
+/**
+ * Request body for recording a directional stock movement in the inventory ledger
+ */
 export interface RecordMovementRequest { 
+    /**
+     * Stock keeping unit code of the product being moved
+     */
     productSku: string;
+    /**
+     * Identifier of the location the stock moves from
+     */
     fromLocationId: string;
+    /**
+     * Identifier of the destination location; required for TRANSFER movements
+     */
     toLocationId?: string;
     /**
      * Direct ledger movement type. ADJUST is workflow-only and must use /v1/inventory/adjustments endpoints.
      */
     movementType: RecordMovementRequestMovementTypeEnum;
+    /**
+     * Quantity of units being moved
+     */
     quantity: number;
+    /**
+     * Unit of measure for the quantity
+     */
     unitOfMeasure?: string;
+    /**
+     * Reference to the originating system transaction that caused the movement
+     */
     sourceTransactionId?: string;
 }
 export enum RecordMovementRequestMovementTypeEnum {

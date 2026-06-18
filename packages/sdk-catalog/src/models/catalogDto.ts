@@ -16,11 +16,11 @@ export interface CatalogDto {
     /**
      * Catalog identifier
      */
-    id?: string;
+    id: string;
     /**
      * Catalog name
      */
-    name?: string;
+    name: string;
     /**
      * Catalog description
      */
@@ -77,7 +77,7 @@ export function instanceOfCatalogDto(value: object): value is CatalogDto {
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createCatalogDtoPropertyNames();
+    const requiredProperties = createCatalogDtoPropertyNames('id', 'name', );
     const optionalStringProperties = createCatalogDtoOptionalProperties({ name: 'id', nullable: false }, { name: 'name', nullable: false }, { name: 'description', nullable: false }, );
     const optionalNumberProperties = createCatalogDtoOptionalProperties();
     const optionalBooleanProperties = createCatalogDtoOptionalProperties();

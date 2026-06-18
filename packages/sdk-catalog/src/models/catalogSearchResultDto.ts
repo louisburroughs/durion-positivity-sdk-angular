@@ -17,7 +17,7 @@ export interface CatalogSearchResultDto {
     /**
      * Page of matching product summaries
      */
-    data?: Array<ProductSummary>;
+    data: Array<ProductSummary>;
     /**
      * Opaque cursor for the next page; null if no more results
      */
@@ -25,7 +25,7 @@ export interface CatalogSearchResultDto {
     /**
      * Number of items requested (limit)
      */
-    limit?: number;
+    limit: number;
 }
 
 function isOptionalCatalogSearchResultDtoPropertyOfType(
@@ -66,7 +66,7 @@ export function instanceOfCatalogSearchResultDto(value: object): value is Catalo
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createCatalogSearchResultDtoPropertyNames();
+    const requiredProperties = createCatalogSearchResultDtoPropertyNames('data', 'limit', );
     const optionalStringProperties = createCatalogSearchResultDtoOptionalProperties({ name: 'nextCursor', nullable: false }, );
     const optionalNumberProperties = createCatalogSearchResultDtoOptionalProperties({ name: 'limit', nullable: false }, );
     const optionalBooleanProperties = createCatalogSearchResultDtoOptionalProperties();

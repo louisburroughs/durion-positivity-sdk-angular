@@ -10,11 +10,29 @@
 import { PostingCategoryResponse } from './postingCategoryResponse';
 
 
+/**
+ * Paginated list of posting categories
+ */
 export interface PostingCategoryListResponse { 
-    results?: Array<PostingCategoryResponse>;
+    /**
+     * Posting categories on the current page
+     */
+    results: Array<PostingCategoryResponse>;
+    /**
+     * Total number of posting categories matching the query
+     */
     totalCount?: number;
+    /**
+     * Zero-based index of the current page
+     */
     pageNumber?: number;
+    /**
+     * Number of items per page
+     */
     pageSize?: number;
+    /**
+     * Total number of pages available
+     */
     totalPages?: number;
 }
 
@@ -56,7 +74,7 @@ export function instanceOfPostingCategoryListResponse(value: object): value is P
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createPostingCategoryListResponsePropertyNames();
+    const requiredProperties = createPostingCategoryListResponsePropertyNames('results', );
     const optionalStringProperties = createPostingCategoryListResponseOptionalProperties();
     const optionalNumberProperties = createPostingCategoryListResponseOptionalProperties({ name: 'totalCount', nullable: false }, { name: 'pageNumber', nullable: false }, { name: 'pageSize', nullable: false }, { name: 'totalPages', nullable: false }, );
     const optionalBooleanProperties = createPostingCategoryListResponseOptionalProperties();

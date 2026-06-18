@@ -9,10 +9,25 @@
  */
 
 
+/**
+ * Request payload for cancelling an order
+ */
 export interface CancelOrderRequest { 
+    /**
+     * Reason explaining why the order is being cancelled
+     */
     cancellationReason: string;
+    /**
+     * Identifier of the associated workorder, when applicable
+     */
     workOrderId?: string;
+    /**
+     * Identifier of the associated payment, when applicable
+     */
     paymentId?: string;
+    /**
+     * Optional idempotency key for duplicate cancellation prevention
+     */
     idempotencyKey?: string;
 }
 

@@ -9,11 +9,29 @@
  */
 
 
+/**
+ * Request to resolve an inventory shortage on an allocation
+ */
 export interface ShortageResolveRequest { 
+    /**
+     * Identifier of the allocation to resolve
+     */
     allocationId: string;
+    /**
+     * Identifier of the specific allocation line to resolve, when line-scoped
+     */
     allocationLineId?: string;
+    /**
+     * Resolution strategy to apply to the shortage
+     */
     resolution: string;
+    /**
+     * Substitute stock-keeping unit to use, when the resolution is a substitution
+     */
     substituteSku?: string;
+    /**
+     * Optional free-text notes explaining the resolution
+     */
     notes?: string;
 }
 

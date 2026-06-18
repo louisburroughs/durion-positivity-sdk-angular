@@ -9,10 +9,25 @@
  */
 
 
+/**
+ * Request to create a unit-of-measure conversion
+ */
 export interface UomConversionCreateRequestDto { 
+    /**
+     * Source unit-of-measure code
+     */
     fromUomCode: string;
+    /**
+     * Target unit-of-measure code
+     */
     toUomCode: string;
+    /**
+     * Multiplier to convert one unit of the source UOM into the target UOM
+     */
     conversionFactor: number;
+    /**
+     * Identifier of the user creating the conversion
+     */
     createdBy?: string;
 }
 
