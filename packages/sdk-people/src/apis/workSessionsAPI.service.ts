@@ -22,6 +22,8 @@ import { BreakDto } from '../src/models/breakDto';
 import { WorkSessionDto } from '../src/models/workSessionDto';
 // @ts-ignore
 import { WorkSessionRequest } from '../src/models/workSessionRequest';
+// @ts-ignore
+import { WorkSessionSubmitRequest } from '../src/models/workSessionSubmitRequest';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
@@ -289,6 +291,80 @@ export class WorkSessionsAPIService extends BaseService {
         return this.httpClient.request<BreakDto>('post', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Submit work session
+     * Submit an ended work session with its billable and break totals for approval.
+     * @endpoint post /v1/people/workSessions/{id}/submit
+     * @param id Work session ID
+     * @param workSessionSubmitRequest 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public submitWorkSession(id: string, workSessionSubmitRequest: WorkSessionSubmitRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<WorkSessionDto>;
+    public submitWorkSession(id: string, workSessionSubmitRequest: WorkSessionSubmitRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<WorkSessionDto>>;
+    public submitWorkSession(id: string, workSessionSubmitRequest: WorkSessionSubmitRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<WorkSessionDto>>;
+    public submitWorkSession(id: string, workSessionSubmitRequest: WorkSessionSubmitRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (id === null || id === undefined) {
+            throw new Error('Required parameter id was null or undefined when calling submitWorkSession.');
+        }
+        if (workSessionSubmitRequest === null || workSessionSubmitRequest === undefined) {
+            throw new Error('Required parameter workSessionSubmitRequest was null or undefined when calling submitWorkSession.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/people/workSessions/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/submit`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<WorkSessionDto>('post', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                body: workSessionSubmitRequest,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,

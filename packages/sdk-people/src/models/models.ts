@@ -47,3 +47,4 @@ export * from './userPersonLinkResponse';
 export * from './userRoleDto';
 export * from './workSessionDto';
 export * from './workSessionRequest';
+export * from './workSessionSubmitRequest';

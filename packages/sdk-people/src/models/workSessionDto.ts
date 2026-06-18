@@ -15,6 +15,9 @@ export interface WorkSessionDto {
     status?: string;
     startedAt?: string;
     endedAt?: string;
+    billableMinutes?: number;
+    breakMinutes?: number;
+    submittedAt?: string;
 }
 
 function isOptionalWorkSessionDtoPropertyOfType(
@@ -57,7 +60,7 @@ export function instanceOfWorkSessionDto(value: object): value is WorkSessionDto
 
     const requiredProperties = createWorkSessionDtoPropertyNames();
     const optionalStringProperties = createWorkSessionDtoOptionalProperties({ name: 'sessionId', nullable: false }, { name: 'personId', nullable: false }, { name: 'status', nullable: false }, );
-    const optionalNumberProperties = createWorkSessionDtoOptionalProperties();
+    const optionalNumberProperties = createWorkSessionDtoOptionalProperties({ name: 'billableMinutes', nullable: false }, { name: 'breakMinutes', nullable: false }, );
     const optionalBooleanProperties = createWorkSessionDtoOptionalProperties();
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
