@@ -78,14 +78,20 @@ export class CRMAccountsService extends BaseService {
      * Browse parties with paging and sorting. The service sorts by legalName ascending by default, appends partyId ascending as a stable tie-breaker whenever the requested sort list does not explicitly include partyId, and applies case-insensitive legalName sorting.
      * @endpoint get /v1/crm/accounts/parties
      * @param pageable Pagination parameters (page, size, sort). The service uses legalName,asc by default and appends partyId,asc as a stable tie-breaker whenever the requested sort list does not explicitly include partyId; legalName sorting is case-insensitive.
+     * @param name Filter by name (case-insensitive contains on legal/display name)
+     * @param status Filter by account status (ACTIVE|PENDING|SUSPENDED|INACTIVE)
+     * @param partyType Filter by party type (ORGANIZATION|INDIVIDUAL)
+     * @param customerNumber Filter by customer number (case-insensitive contains)
+     * @param sortField Sort field: name (default) or customerNumber
+     * @param sortOrder Sort order: asc (default) or desc
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public browseParties(pageable: Pageable, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<SearchPartiesResponse>;
-    public browseParties(pageable: Pageable, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<SearchPartiesResponse>>;
-    public browseParties(pageable: Pageable, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<SearchPartiesResponse>>;
-    public browseParties(pageable: Pageable, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public browseParties(pageable: Pageable, name?: string, status?: string, partyType?: string, customerNumber?: string, sortField?: string, sortOrder?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<SearchPartiesResponse>;
+    public browseParties(pageable: Pageable, name?: string, status?: string, partyType?: string, customerNumber?: string, sortField?: string, sortOrder?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<SearchPartiesResponse>>;
+    public browseParties(pageable: Pageable, name?: string, status?: string, partyType?: string, customerNumber?: string, sortField?: string, sortOrder?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<SearchPartiesResponse>>;
+    public browseParties(pageable: Pageable, name?: string, status?: string, partyType?: string, customerNumber?: string, sortField?: string, sortOrder?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (pageable === null || pageable === undefined) {
             throw new Error('Required parameter pageable was null or undefined when calling browseParties.');
         }
@@ -96,6 +102,60 @@ export class CRMAccountsService extends BaseService {
             localVarQueryParameters,
             'pageable',
             <any>pageable,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'name',
+            <any>name,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'status',
+            <any>status,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'partyType',
+            <any>partyType,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'customerNumber',
+            <any>customerNumber,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'sortField',
+            <any>sortField,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'sortOrder',
+            <any>sortOrder,
             QueryParamStyle.Form,
             true,
         );
