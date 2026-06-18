@@ -31,6 +31,10 @@ export interface PartySummary {
      */
     partyType?: string;
     /**
+     * Human-readable customer/account number for display and lookup
+     */
+    customerNumber?: string;
+    /**
      * Party status (ACTIVE|PENDING|SUSPENDED|INACTIVE)
      */
     status?: string;
@@ -84,7 +88,7 @@ export function instanceOfPartySummary(value: object): value is PartySummary {
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createPartySummaryPropertyNames('partyId', );
-    const optionalStringProperties = createPartySummaryOptionalProperties({ name: 'partyId', nullable: false }, { name: 'legalName', nullable: false }, { name: 'displayName', nullable: false }, { name: 'partyType', nullable: false }, { name: 'status', nullable: false }, { name: 'createdAt', nullable: false }, );
+    const optionalStringProperties = createPartySummaryOptionalProperties({ name: 'partyId', nullable: false }, { name: 'legalName', nullable: false }, { name: 'displayName', nullable: false }, { name: 'partyType', nullable: false }, { name: 'customerNumber', nullable: false }, { name: 'status', nullable: false }, { name: 'createdAt', nullable: false }, );
     const optionalNumberProperties = createPartySummaryOptionalProperties({ name: 'vehicleCount', nullable: false }, );
     const optionalBooleanProperties = createPartySummaryOptionalProperties();
 
