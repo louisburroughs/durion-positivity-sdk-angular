@@ -16,27 +16,27 @@ export interface CreatePersonResponse {
     /**
      * Unique identifier of the created person
      */
-    personId?: string;
+    personId: string;
     /**
      * First name
      */
-    firstName?: string;
+    firstName: string;
     /**
      * Last name
      */
-    lastName?: string;
+    lastName: string;
     /**
      * Preferred contact method
      */
-    preferredContactMethod?: CreatePersonResponsePreferredContactMethodEnum;
+    preferredContactMethod: CreatePersonResponsePreferredContactMethodEnum;
     /**
      * Number of contact points created
      */
-    contactPointsCreated?: number;
+    contactPointsCreated: number;
     /**
      * Timestamp when the person was created
      */
-    createdAt?: string;
+    createdAt: string;
 }
 export enum CreatePersonResponsePreferredContactMethodEnum {
     Email = 'EMAIL',
@@ -85,7 +85,7 @@ export function instanceOfCreatePersonResponse(value: object): value is CreatePe
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createCreatePersonResponsePropertyNames();
+    const requiredProperties = createCreatePersonResponsePropertyNames('personId', 'firstName', 'lastName', 'preferredContactMethod', 'contactPointsCreated', 'createdAt', );
     const optionalStringProperties = createCreatePersonResponseOptionalProperties({ name: 'personId', nullable: false }, { name: 'firstName', nullable: false }, { name: 'lastName', nullable: false }, { name: 'preferredContactMethod', nullable: false }, );
     const optionalNumberProperties = createCreatePersonResponseOptionalProperties({ name: 'contactPointsCreated', nullable: false }, );
     const optionalBooleanProperties = createCreatePersonResponseOptionalProperties();

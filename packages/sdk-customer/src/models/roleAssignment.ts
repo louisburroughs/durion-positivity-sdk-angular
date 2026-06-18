@@ -9,8 +9,17 @@
  */
 
 
+/**
+ * Single role assignment detail
+ */
 export interface RoleAssignment { 
-    roleCode?: string;
+    /**
+     * Role code (BILLING|APPROVER|DRIVER)
+     */
+    roleCode: string;
+    /**
+     * Flag: set this contact as primary for this role
+     */
     isPrimary?: boolean;
 }
 
@@ -52,7 +61,7 @@ export function instanceOfRoleAssignment(value: object): value is RoleAssignment
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createRoleAssignmentPropertyNames();
+    const requiredProperties = createRoleAssignmentPropertyNames('roleCode', );
     const optionalStringProperties = createRoleAssignmentOptionalProperties({ name: 'roleCode', nullable: false }, );
     const optionalNumberProperties = createRoleAssignmentOptionalProperties();
     const optionalBooleanProperties = createRoleAssignmentOptionalProperties({ name: 'isPrimary', nullable: false }, );

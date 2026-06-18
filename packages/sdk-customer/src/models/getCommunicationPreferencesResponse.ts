@@ -9,18 +9,78 @@
  */
 
 
+/**
+ * Communication preferences and consent flags for a party
+ */
 export interface GetCommunicationPreferencesResponse { 
-    partyId?: string;
+    /**
+     * Party identifier the preferences belong to
+     */
+    partyId: string;
+    /**
+     * Optimistic locking version token for concurrent updates
+     */
     version?: string;
-    emailPreference?: string;
-    smsPreference?: string;
-    phonePreference?: string;
-    marketingPreference?: string;
+    /**
+     * Email communication preference
+     */
+    emailPreference?: GetCommunicationPreferencesResponseEmailPreferenceEnum;
+    /**
+     * SMS communication preference
+     */
+    smsPreference?: GetCommunicationPreferencesResponseSmsPreferenceEnum;
+    /**
+     * Phone communication preference
+     */
+    phonePreference?: GetCommunicationPreferencesResponsePhonePreferenceEnum;
+    /**
+     * Marketing communications preference
+     */
+    marketingPreference?: GetCommunicationPreferencesResponseMarketingPreferenceEnum;
+    /**
+     * Consent flags keyed by consent type
+     */
     consentFlags?: { [key: string]: boolean; };
+    /**
+     * User-provided note or preferences summary
+     */
     preferencesNote?: string;
+    /**
+     * Last update timestamp (ISO 8601)
+     */
     updatedAt?: string;
-    updateSource?: string;
+    /**
+     * Source of the last update
+     */
+    updateSource?: GetCommunicationPreferencesResponseUpdateSourceEnum;
 }
+export enum GetCommunicationPreferencesResponseEmailPreferenceEnum {
+    OptIn = 'OPT_IN',
+    OptOut = 'OPT_OUT',
+    NotApplicable = 'NOT_APPLICABLE'
+};
+export enum GetCommunicationPreferencesResponseSmsPreferenceEnum {
+    OptIn = 'OPT_IN',
+    OptOut = 'OPT_OUT',
+    NotApplicable = 'NOT_APPLICABLE'
+};
+export enum GetCommunicationPreferencesResponsePhonePreferenceEnum {
+    OptIn = 'OPT_IN',
+    OptOut = 'OPT_OUT',
+    NotApplicable = 'NOT_APPLICABLE'
+};
+export enum GetCommunicationPreferencesResponseMarketingPreferenceEnum {
+    OptIn = 'OPT_IN',
+    OptOut = 'OPT_OUT'
+};
+export enum GetCommunicationPreferencesResponseUpdateSourceEnum {
+    App = 'APP',
+    Api = 'API',
+    Admin = 'ADMIN',
+    Import = 'IMPORT'
+};
+
+
 
 function isOptionalGetCommunicationPreferencesResponsePropertyOfType(
     value: Record<string, unknown>,
@@ -60,7 +120,7 @@ export function instanceOfGetCommunicationPreferencesResponse(value: object): va
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createGetCommunicationPreferencesResponsePropertyNames();
+    const requiredProperties = createGetCommunicationPreferencesResponsePropertyNames('partyId', );
     const optionalStringProperties = createGetCommunicationPreferencesResponseOptionalProperties({ name: 'partyId', nullable: false }, { name: 'version', nullable: false }, { name: 'emailPreference', nullable: false }, { name: 'smsPreference', nullable: false }, { name: 'phonePreference', nullable: false }, { name: 'marketingPreference', nullable: false }, { name: 'preferencesNote', nullable: false }, { name: 'updatedAt', nullable: false }, { name: 'updateSource', nullable: false }, );
     const optionalNumberProperties = createGetCommunicationPreferencesResponseOptionalProperties();
     const optionalBooleanProperties = createGetCommunicationPreferencesResponseOptionalProperties();

@@ -17,7 +17,7 @@ export interface DuplicateCheckResponse {
     /**
      * Whether any duplicate matches were found
      */
-    duplicatesFound?: boolean;
+    duplicatesFound: boolean;
     /**
      * ID of exact-match party, if any
      */
@@ -25,7 +25,7 @@ export interface DuplicateCheckResponse {
     /**
      * List of potential duplicate matches
      */
-    potentialDuplicates?: Array<PartyMatch>;
+    potentialDuplicates: Array<PartyMatch>;
 }
 
 function isOptionalDuplicateCheckResponsePropertyOfType(
@@ -66,7 +66,7 @@ export function instanceOfDuplicateCheckResponse(value: object): value is Duplic
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createDuplicateCheckResponsePropertyNames();
+    const requiredProperties = createDuplicateCheckResponsePropertyNames('duplicatesFound', 'potentialDuplicates', );
     const optionalStringProperties = createDuplicateCheckResponseOptionalProperties({ name: 'exactMatchPartyId', nullable: false }, );
     const optionalNumberProperties = createDuplicateCheckResponseOptionalProperties();
     const optionalBooleanProperties = createDuplicateCheckResponseOptionalProperties({ name: 'duplicatesFound', nullable: false }, );

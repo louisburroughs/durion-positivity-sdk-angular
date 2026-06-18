@@ -13,15 +13,45 @@
  * Commercial account creation request
  */
 export interface CreateCommercialAccountRequest { 
-    legalName?: string;
+    /**
+     * Legal business name
+     */
+    legalName: string;
+    /**
+     * Display/trading name
+     */
     displayName?: string;
+    /**
+     * Tax identification number (required for certain jurisdictions)
+     */
     taxId?: string;
+    /**
+     * Party type (ORGANIZATION|INDIVIDUAL; default ORGANIZATION for commercial accounts)
+     */
     partyType?: string;
+    /**
+     * Billing terms ID (foreign key to Billing domain)
+     */
     billingTermsId?: string;
+    /**
+     * External identifiers (system-specific IDs from upstream systems)
+     */
     externalIdentifiers?: { [key: string]: string; };
+    /**
+     * Primary contact first name
+     */
     contactFirstName?: string;
+    /**
+     * Primary contact last name
+     */
     contactLastName?: string;
+    /**
+     * Contact email
+     */
     email?: string;
+    /**
+     * Contact phone
+     */
     phone?: string;
 }
 
@@ -63,7 +93,7 @@ export function instanceOfCreateCommercialAccountRequest(value: object): value i
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createCreateCommercialAccountRequestPropertyNames();
+    const requiredProperties = createCreateCommercialAccountRequestPropertyNames('legalName', );
     const optionalStringProperties = createCreateCommercialAccountRequestOptionalProperties({ name: 'legalName', nullable: false }, { name: 'displayName', nullable: false }, { name: 'taxId', nullable: false }, { name: 'partyType', nullable: false }, { name: 'billingTermsId', nullable: false }, { name: 'contactFirstName', nullable: false }, { name: 'contactLastName', nullable: false }, { name: 'email', nullable: false }, { name: 'phone', nullable: false }, );
     const optionalNumberProperties = createCreateCommercialAccountRequestOptionalProperties();
     const optionalBooleanProperties = createCreateCommercialAccountRequestOptionalProperties();

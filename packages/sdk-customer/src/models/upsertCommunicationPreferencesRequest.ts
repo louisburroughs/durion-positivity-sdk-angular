@@ -13,13 +13,37 @@
  * Communication preferences to set
  */
 export interface UpsertCommunicationPreferencesRequest { 
+    /**
+     * Optimistic locking version; required for updates, omitted for creates
+     */
     version?: string;
+    /**
+     * Email preference (OPT_IN|OPT_OUT|NOT_APPLICABLE)
+     */
     emailPreference?: string;
+    /**
+     * SMS preference (OPT_IN|OPT_OUT|NOT_APPLICABLE)
+     */
     smsPreference?: string;
+    /**
+     * Phone preference (OPT_IN|OPT_OUT|NOT_APPLICABLE)
+     */
     phonePreference?: string;
+    /**
+     * Marketing communications preference (OPT_IN|OPT_OUT)
+     */
     marketingPreference?: string;
+    /**
+     * Consent flags keyed by consent type; field names depend on legal requirements
+     */
     consentFlags?: { [key: string]: boolean; };
+    /**
+     * User-provided note or preferences summary
+     */
     preferencesNote?: string;
+    /**
+     * Source of update (APP|API|ADMIN)
+     */
     updateSource?: string;
 }
 

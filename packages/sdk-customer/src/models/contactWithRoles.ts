@@ -10,15 +10,46 @@
 import { AssignedRole } from './assignedRole';
 
 
+/**
+ * A single contact with its assigned roles
+ */
 export interface ContactWithRoles { 
-    contactId?: string;
-    contactName?: string;
+    /**
+     * Contact point identifier (person/contact)
+     */
+    contactId: string;
+    /**
+     * Contact name
+     */
+    contactName: string;
+    /**
+     * Email address
+     */
     email?: string;
+    /**
+     * Phone number
+     */
     phone?: string;
+    /**
+     * Whether the contact has at least one primary email on file
+     */
     hasPrimaryEmail?: boolean;
+    /**
+     * Assigned roles for this contact
+     */
     roles?: Array<AssignedRole>;
-    invoiceDeliveryMethod?: string;
+    /**
+     * Invoice delivery method for this contact
+     */
+    invoiceDeliveryMethod?: ContactWithRolesInvoiceDeliveryMethodEnum;
 }
+export enum ContactWithRolesInvoiceDeliveryMethodEnum {
+    Email = 'EMAIL',
+    Phone = 'PHONE',
+    None = 'NONE'
+};
+
+
 
 function isOptionalContactWithRolesPropertyOfType(
     value: Record<string, unknown>,
@@ -58,7 +89,7 @@ export function instanceOfContactWithRoles(value: object): value is ContactWithR
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createContactWithRolesPropertyNames();
+    const requiredProperties = createContactWithRolesPropertyNames('contactId', 'contactName', );
     const optionalStringProperties = createContactWithRolesOptionalProperties({ name: 'contactId', nullable: false }, { name: 'contactName', nullable: false }, { name: 'email', nullable: false }, { name: 'phone', nullable: false }, { name: 'invoiceDeliveryMethod', nullable: false }, );
     const optionalNumberProperties = createContactWithRolesOptionalProperties();
     const optionalBooleanProperties = createContactWithRolesOptionalProperties({ name: 'hasPrimaryEmail', nullable: false }, );

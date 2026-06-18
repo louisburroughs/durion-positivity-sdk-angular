@@ -17,11 +17,11 @@ export interface ContactWithRole {
     /**
      * Relationship ID
      */
-    relationshipId?: string;
+    relationshipId: string;
     /**
      * Individual person ID
      */
-    individualId?: string;
+    individualId: string;
     /**
      * Roles assigned to this contact
      */
@@ -29,7 +29,7 @@ export interface ContactWithRole {
     /**
      * Status of the relationship
      */
-    status?: string;
+    status: string;
     /**
      * Effective start date
      */
@@ -89,7 +89,7 @@ export function instanceOfContactWithRole(value: object): value is ContactWithRo
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createContactWithRolePropertyNames();
+    const requiredProperties = createContactWithRolePropertyNames('relationshipId', 'individualId', 'status', );
     const optionalStringProperties = createContactWithRoleOptionalProperties({ name: 'relationshipId', nullable: false }, { name: 'individualId', nullable: false }, { name: 'status', nullable: false }, );
     const optionalNumberProperties = createContactWithRoleOptionalProperties();
     const optionalBooleanProperties = createContactWithRoleOptionalProperties({ name: 'primaryBilling', nullable: false }, );

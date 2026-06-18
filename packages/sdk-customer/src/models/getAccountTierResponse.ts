@@ -16,15 +16,15 @@ export interface GetAccountTierResponse {
     /**
      * Account/party identifier
      */
-    accountId?: string;
+    accountId: string;
     /**
      * Current tier level
      */
-    tier?: GetAccountTierResponseTierEnum;
+    tier: GetAccountTierResponseTierEnum;
     /**
      * Display name of the tier
      */
-    tierDisplayName?: string;
+    tierDisplayName: string;
     /**
      * When the tier was last assigned or updated
      */
@@ -40,7 +40,7 @@ export interface GetAccountTierResponse {
     /**
      * Whether tier was manually assigned or auto-calculated
      */
-    manualOverride?: boolean;
+    manualOverride: boolean;
 }
 export enum GetAccountTierResponseTierEnum {
     Standard = 'STANDARD',
@@ -91,7 +91,7 @@ export function instanceOfGetAccountTierResponse(value: object): value is GetAcc
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createGetAccountTierResponsePropertyNames();
+    const requiredProperties = createGetAccountTierResponsePropertyNames('accountId', 'tier', 'tierDisplayName', 'manualOverride', );
     const optionalStringProperties = createGetAccountTierResponseOptionalProperties({ name: 'accountId', nullable: false }, { name: 'tier', nullable: false }, { name: 'tierDisplayName', nullable: false }, { name: 'tierAssignedBy', nullable: false }, { name: 'notes', nullable: false }, );
     const optionalNumberProperties = createGetAccountTierResponseOptionalProperties();
     const optionalBooleanProperties = createGetAccountTierResponseOptionalProperties({ name: 'manualOverride', nullable: false }, );

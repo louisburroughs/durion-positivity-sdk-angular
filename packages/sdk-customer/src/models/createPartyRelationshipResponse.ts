@@ -16,23 +16,23 @@ export interface CreatePartyRelationshipResponse {
     /**
      * Unique identifier of the relationship
      */
-    relationshipId?: string;
+    relationshipId: string;
     /**
      * ID of the commercial account
      */
-    partyId?: string;
+    partyId: string;
     /**
      * ID of the individual person
      */
-    personId?: string;
+    personId: string;
     /**
      * Roles assigned to this relationship
      */
-    roles?: Set<CreatePartyRelationshipResponseRolesEnum>;
+    roles: Set<CreatePartyRelationshipResponseRolesEnum>;
     /**
      * Effective start date
      */
-    effectiveStartDate?: string;
+    effectiveStartDate: string;
     /**
      * Effective end date (null if active)
      */
@@ -40,11 +40,11 @@ export interface CreatePartyRelationshipResponse {
     /**
      * Timestamp when the relationship was created
      */
-    createdAt?: string;
+    createdAt: string;
     /**
      * Whether a previous primary billing contact was demoted
      */
-    previousPrimaryDemoted?: boolean;
+    previousPrimaryDemoted: boolean;
     primaryBillingContact?: boolean;
 }
 export enum CreatePartyRelationshipResponseRolesEnum {
@@ -95,7 +95,7 @@ export function instanceOfCreatePartyRelationshipResponse(value: object): value 
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createCreatePartyRelationshipResponsePropertyNames();
+    const requiredProperties = createCreatePartyRelationshipResponsePropertyNames('relationshipId', 'partyId', 'personId', 'roles', 'effectiveStartDate', 'createdAt', 'previousPrimaryDemoted', );
     const optionalStringProperties = createCreatePartyRelationshipResponseOptionalProperties({ name: 'relationshipId', nullable: false }, { name: 'partyId', nullable: false }, { name: 'personId', nullable: false }, );
     const optionalNumberProperties = createCreatePartyRelationshipResponseOptionalProperties();
     const optionalBooleanProperties = createCreatePartyRelationshipResponseOptionalProperties({ name: 'previousPrimaryDemoted', nullable: false }, { name: 'primaryBillingContact', nullable: false }, );

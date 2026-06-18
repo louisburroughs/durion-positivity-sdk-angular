@@ -16,23 +16,23 @@ export interface ResolveAccountTierResponse {
     /**
      * Account/party identifier
      */
-    accountId?: string;
+    accountId: string;
     /**
      * Currently assigned tier (before resolution)
      */
-    currentTier?: ResolveAccountTierResponseCurrentTierEnum;
+    currentTier: ResolveAccountTierResponseCurrentTierEnum;
     /**
      * Recommended/resolved tier based on business rules
      */
-    recommendedTier?: ResolveAccountTierResponseRecommendedTierEnum;
+    recommendedTier: ResolveAccountTierResponseRecommendedTierEnum;
     /**
      * Whether the tier was applied to the account
      */
-    tierApplied?: boolean;
+    tierApplied: boolean;
     /**
      * Whether the current tier was manually set and blocked auto-update
      */
-    manualOverrideActive?: boolean;
+    manualOverrideActive: boolean;
     /**
      * Explanation of why this tier was recommended
      */
@@ -99,7 +99,7 @@ export function instanceOfResolveAccountTierResponse(value: object): value is Re
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createResolveAccountTierResponsePropertyNames();
+    const requiredProperties = createResolveAccountTierResponsePropertyNames('accountId', 'currentTier', 'recommendedTier', 'tierApplied', 'manualOverrideActive', );
     const optionalStringProperties = createResolveAccountTierResponseOptionalProperties({ name: 'accountId', nullable: false }, { name: 'currentTier', nullable: false }, { name: 'recommendedTier', nullable: false }, { name: 'resolutionReason', nullable: false }, );
     const optionalNumberProperties = createResolveAccountTierResponseOptionalProperties({ name: 'tierScore', nullable: false }, );
     const optionalBooleanProperties = createResolveAccountTierResponseOptionalProperties({ name: 'tierApplied', nullable: false }, { name: 'manualOverrideActive', nullable: false }, );

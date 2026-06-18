@@ -9,11 +9,30 @@
  */
 
 
+/**
+ * An assigned role with its primary flag
+ */
 export interface AssignedRole { 
-    roleCode?: string;
+    /**
+     * Role code
+     */
+    roleCode: AssignedRoleRoleCodeEnum;
+    /**
+     * Role display label
+     */
     roleLabel?: string;
+    /**
+     * Whether this contact is primary for this role
+     */
     isPrimary?: boolean;
 }
+export enum AssignedRoleRoleCodeEnum {
+    Billing = 'BILLING',
+    Approver = 'APPROVER',
+    Driver = 'DRIVER'
+};
+
+
 
 function isOptionalAssignedRolePropertyOfType(
     value: Record<string, unknown>,
@@ -53,7 +72,7 @@ export function instanceOfAssignedRole(value: object): value is AssignedRole {
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createAssignedRolePropertyNames();
+    const requiredProperties = createAssignedRolePropertyNames('roleCode', );
     const optionalStringProperties = createAssignedRoleOptionalProperties({ name: 'roleCode', nullable: false }, { name: 'roleLabel', nullable: false }, );
     const optionalNumberProperties = createAssignedRoleOptionalProperties();
     const optionalBooleanProperties = createAssignedRoleOptionalProperties({ name: 'isPrimary', nullable: false }, );

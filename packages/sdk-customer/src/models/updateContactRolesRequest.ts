@@ -14,8 +14,14 @@ import { RoleAssignment } from './roleAssignment';
  * Role assignment request
  */
 export interface UpdateContactRolesRequest { 
+    /**
+     * Optimistic locking version; required when the backend enforces optimistic locking
+     */
     version?: string;
-    roles?: Array<RoleAssignment>;
+    /**
+     * List of roles to assign to this contact
+     */
+    roles: Array<RoleAssignment>;
 }
 
 function isOptionalUpdateContactRolesRequestPropertyOfType(
@@ -56,7 +62,7 @@ export function instanceOfUpdateContactRolesRequest(value: object): value is Upd
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createUpdateContactRolesRequestPropertyNames();
+    const requiredProperties = createUpdateContactRolesRequestPropertyNames('roles', );
     const optionalStringProperties = createUpdateContactRolesRequestOptionalProperties({ name: 'version', nullable: false }, );
     const optionalNumberProperties = createUpdateContactRolesRequestOptionalProperties();
     const optionalBooleanProperties = createUpdateContactRolesRequestOptionalProperties();

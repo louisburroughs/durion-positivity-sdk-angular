@@ -17,15 +17,15 @@ export interface GetPersonResponse {
     /**
      * Unique identifier of the person
      */
-    personId?: string;
+    personId: string;
     /**
      * First name
      */
-    firstName?: string;
+    firstName: string;
     /**
      * Last name
      */
-    lastName?: string;
+    lastName: string;
     /**
      * Display name
      */
@@ -41,19 +41,19 @@ export interface GetPersonResponse {
     /**
      * Whether this CRM record represents an individual customer
      */
-    individualCustomer?: boolean;
+    individualCustomer: boolean;
     /**
      * Whether this person is an active contact on one or more commercial accounts
      */
-    commercialContact?: boolean;
+    commercialContact: boolean;
     /**
      * Number of active commercial accounts where this person is a contact
      */
-    commercialAccountCount?: number;
+    commercialAccountCount: number;
     /**
      * Timestamp when the person was created
      */
-    createdAt?: string;
+    createdAt: string;
     /**
      * Timestamp when the person was last updated
      */
@@ -106,7 +106,7 @@ export function instanceOfGetPersonResponse(value: object): value is GetPersonRe
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createGetPersonResponsePropertyNames();
+    const requiredProperties = createGetPersonResponsePropertyNames('personId', 'firstName', 'lastName', 'individualCustomer', 'commercialContact', 'commercialAccountCount', 'createdAt', );
     const optionalStringProperties = createGetPersonResponseOptionalProperties({ name: 'personId', nullable: false }, { name: 'firstName', nullable: false }, { name: 'lastName', nullable: false }, { name: 'displayName', nullable: false }, { name: 'preferredContactMethod', nullable: false }, );
     const optionalNumberProperties = createGetPersonResponseOptionalProperties({ name: 'commercialAccountCount', nullable: false }, );
     const optionalBooleanProperties = createGetPersonResponseOptionalProperties({ name: 'individualCustomer', nullable: false }, { name: 'commercialContact', nullable: false }, );
