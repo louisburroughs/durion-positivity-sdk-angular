@@ -9,11 +9,29 @@
  */
 
 
+/**
+ * Response after upserting communication preferences
+ */
 export interface UpsertCommunicationPreferencesResponse { 
-    partyId?: string;
+    /**
+     * Identifier of the party that was updated
+     */
+    partyId: string;
+    /**
+     * Updated version for optimistic locking
+     */
     version?: string;
-    operationType?: string;
-    status?: string;
+    /**
+     * Operation type (CREATED|UPDATED)
+     */
+    operationType: string;
+    /**
+     * Update status (SUCCESS|CONFLICT)
+     */
+    status: string;
+    /**
+     * Timestamp of update (ISO 8601)
+     */
     updatedAt?: string;
 }
 
@@ -55,7 +73,7 @@ export function instanceOfUpsertCommunicationPreferencesResponse(value: object):
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createUpsertCommunicationPreferencesResponsePropertyNames();
+    const requiredProperties = createUpsertCommunicationPreferencesResponsePropertyNames('partyId', 'operationType', 'status', );
     const optionalStringProperties = createUpsertCommunicationPreferencesResponseOptionalProperties({ name: 'partyId', nullable: false }, { name: 'version', nullable: false }, { name: 'operationType', nullable: false }, { name: 'status', nullable: false }, { name: 'updatedAt', nullable: false }, );
     const optionalNumberProperties = createUpsertCommunicationPreferencesResponseOptionalProperties();
     const optionalBooleanProperties = createUpsertCommunicationPreferencesResponseOptionalProperties();

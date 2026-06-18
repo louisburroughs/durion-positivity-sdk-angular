@@ -9,9 +9,21 @@
  */
 
 
+/**
+ * Lightweight primary-contact projection for directory rows
+ */
 export interface PrimaryContact { 
+    /**
+     * Contact name
+     */
     name?: string;
+    /**
+     * Contact email address
+     */
     email?: string;
+    /**
+     * Contact phone number
+     */
     phone?: string;
 }
 

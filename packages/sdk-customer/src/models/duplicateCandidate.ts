@@ -9,10 +9,22 @@
  */
 
 
+/**
+ * Duplicate candidate summary returned on 409 or as advisory in 201
+ */
 export interface DuplicateCandidate { 
-    partyId?: string;
-    legalName?: string;
-    matchReason?: string;
+    /**
+     * Candidate party ID
+     */
+    partyId: string;
+    /**
+     * Candidate legal name
+     */
+    legalName: string;
+    /**
+     * Reason this candidate matched
+     */
+    matchReason: string;
 }
 
 function isOptionalDuplicateCandidatePropertyOfType(
@@ -53,7 +65,7 @@ export function instanceOfDuplicateCandidate(value: object): value is DuplicateC
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createDuplicateCandidatePropertyNames();
+    const requiredProperties = createDuplicateCandidatePropertyNames('partyId', 'legalName', 'matchReason', );
     const optionalStringProperties = createDuplicateCandidateOptionalProperties({ name: 'partyId', nullable: false }, { name: 'legalName', nullable: false }, { name: 'matchReason', nullable: false }, );
     const optionalNumberProperties = createDuplicateCandidateOptionalProperties();
     const optionalBooleanProperties = createDuplicateCandidateOptionalProperties();

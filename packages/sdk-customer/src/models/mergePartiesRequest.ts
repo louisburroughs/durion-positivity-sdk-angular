@@ -13,9 +13,18 @@
  * Merge request with source party IDs
  */
 export interface MergePartiesRequest { 
+    /**
+     * ID of the party to merge into (survivor party). Sourced from the URL path.
+     */
     survivorPartyId?: string;
-    losingPartyId?: string;
-    justification?: string;
+    /**
+     * ID of the party to be merged away (losing party)
+     */
+    losingPartyId: string;
+    /**
+     * Justification for the merge
+     */
+    justification: string;
 }
 
 function isOptionalMergePartiesRequestPropertyOfType(
@@ -56,7 +65,7 @@ export function instanceOfMergePartiesRequest(value: object): value is MergePart
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createMergePartiesRequestPropertyNames();
+    const requiredProperties = createMergePartiesRequestPropertyNames('losingPartyId', 'justification', );
     const optionalStringProperties = createMergePartiesRequestOptionalProperties({ name: 'survivorPartyId', nullable: false }, { name: 'losingPartyId', nullable: false }, { name: 'justification', nullable: false }, );
     const optionalNumberProperties = createMergePartiesRequestOptionalProperties();
     const optionalBooleanProperties = createMergePartiesRequestOptionalProperties();

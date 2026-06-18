@@ -9,12 +9,33 @@
  */
 
 
+/**
+ * A single customer record submitted as part of a bulk ingest request
+ */
 export interface CustomerBulkIngestRecord { 
+    /**
+     * First name of the customer
+     */
     firstName: string;
+    /**
+     * Last name of the customer
+     */
     lastName: string;
+    /**
+     * Email address of the customer
+     */
     email?: string;
+    /**
+     * Phone number of the customer
+     */
     phoneNumber?: string;
+    /**
+     * Primary address of the customer
+     */
     primaryAddress?: string;
+    /**
+     * Existing customer number, if known
+     */
     customerNumber?: string;
 }
 

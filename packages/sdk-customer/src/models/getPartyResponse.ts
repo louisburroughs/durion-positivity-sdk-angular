@@ -9,15 +9,45 @@
  */
 
 
+/**
+ * Party details for a commercial account or individual party
+ */
 export interface GetPartyResponse { 
-    partyId?: string;
-    partyType?: string;
-    legalName?: string;
+    /**
+     * Party ID (canonical CRM identifier)
+     */
+    partyId: string;
+    /**
+     * Party type discriminator
+     */
+    partyType: string;
+    /**
+     * Legal name of the party
+     */
+    legalName: string;
+    /**
+     * Display/trading name
+     */
     displayName?: string;
+    /**
+     * Tax identification number
+     */
     taxId?: string;
-    status?: string;
+    /**
+     * Current status of the party
+     */
+    status: string;
+    /**
+     * Billing terms ID
+     */
     billingTermsId?: string;
-    createdAt?: string;
+    /**
+     * Party creation timestamp (ISO 8601)
+     */
+    createdAt: string;
+    /**
+     * Last modification timestamp (ISO 8601)
+     */
     modifiedAt?: string;
 }
 
@@ -59,7 +89,7 @@ export function instanceOfGetPartyResponse(value: object): value is GetPartyResp
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createGetPartyResponsePropertyNames();
+    const requiredProperties = createGetPartyResponsePropertyNames('partyId', 'partyType', 'legalName', 'status', 'createdAt', );
     const optionalStringProperties = createGetPartyResponseOptionalProperties({ name: 'partyId', nullable: false }, { name: 'partyType', nullable: false }, { name: 'legalName', nullable: false }, { name: 'displayName', nullable: false }, { name: 'taxId', nullable: false }, { name: 'status', nullable: false }, { name: 'billingTermsId', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'modifiedAt', nullable: false }, );
     const optionalNumberProperties = createGetPartyResponseOptionalProperties();
     const optionalBooleanProperties = createGetPartyResponseOptionalProperties();

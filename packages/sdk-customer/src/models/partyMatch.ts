@@ -16,19 +16,19 @@ export interface PartyMatch {
     /**
      * Party ID
      */
-    partyId?: string;
+    partyId: string;
     /**
      * Legal name of the party
      */
-    legalName?: string;
+    legalName: string;
     /**
      * Match confidence score (0.0-1.0)
      */
-    score?: number;
+    score: number;
     /**
      * Type of match
      */
-    matchType?: PartyMatchMatchTypeEnum;
+    matchType: PartyMatchMatchTypeEnum;
 }
 export enum PartyMatchMatchTypeEnum {
     Exact = 'EXACT',
@@ -75,7 +75,7 @@ export function instanceOfPartyMatch(value: object): value is PartyMatch {
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createPartyMatchPropertyNames();
+    const requiredProperties = createPartyMatchPropertyNames('partyId', 'legalName', 'score', 'matchType', );
     const optionalStringProperties = createPartyMatchOptionalProperties({ name: 'partyId', nullable: false }, { name: 'legalName', nullable: false }, { name: 'matchType', nullable: false }, );
     const optionalNumberProperties = createPartyMatchOptionalProperties();
     const optionalBooleanProperties = createPartyMatchOptionalProperties();

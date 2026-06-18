@@ -10,11 +10,26 @@
 import { PartySummary } from './partySummary';
 
 
+/**
+ * Paged response of matching party summaries
+ */
 export interface SearchPartiesResponse { 
-    results?: Array<PartySummary>;
-    totalCount?: number;
-    pageNumber?: number;
-    pageSize?: number;
+    /**
+     * List of party summary records
+     */
+    results: Array<PartySummary>;
+    /**
+     * Total number of matching records
+     */
+    totalCount: number;
+    /**
+     * Current page number
+     */
+    pageNumber: number;
+    /**
+     * Items per page
+     */
+    pageSize: number;
 }
 
 function isOptionalSearchPartiesResponsePropertyOfType(
@@ -55,7 +70,7 @@ export function instanceOfSearchPartiesResponse(value: object): value is SearchP
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createSearchPartiesResponsePropertyNames();
+    const requiredProperties = createSearchPartiesResponsePropertyNames('results', 'totalCount', 'pageNumber', 'pageSize', );
     const optionalStringProperties = createSearchPartiesResponseOptionalProperties();
     const optionalNumberProperties = createSearchPartiesResponseOptionalProperties({ name: 'totalCount', nullable: false }, { name: 'pageNumber', nullable: false }, { name: 'pageSize', nullable: false }, );
     const optionalBooleanProperties = createSearchPartiesResponseOptionalProperties();

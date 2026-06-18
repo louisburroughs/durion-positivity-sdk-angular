@@ -16,7 +16,7 @@ export interface ResolveAccountTierRequest {
     /**
      * Account/party identifier
      */
-    accountId?: string;
+    accountId: string;
     /**
      * Annual revenue or spending for tier calculation
      */
@@ -77,7 +77,7 @@ export function instanceOfResolveAccountTierRequest(value: object): value is Res
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createResolveAccountTierRequestPropertyNames();
+    const requiredProperties = createResolveAccountTierRequestPropertyNames('accountId', );
     const optionalStringProperties = createResolveAccountTierRequestOptionalProperties({ name: 'accountId', nullable: false }, );
     const optionalNumberProperties = createResolveAccountTierRequestOptionalProperties({ name: 'annualRevenue', nullable: false }, { name: 'activeContractCount', nullable: false }, { name: 'accountAgeMonths', nullable: false }, );
     const optionalBooleanProperties = createResolveAccountTierRequestOptionalProperties({ name: 'applyTier', nullable: false }, { name: 'forceRecalculation', nullable: false }, );

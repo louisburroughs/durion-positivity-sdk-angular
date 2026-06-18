@@ -9,16 +9,49 @@
  */
 
 
+/**
+ * Response returned after creating a vehicle record for a party
+ */
 export interface CreateVehicleForPartyResponse { 
-    vehicleId?: string;
-    partyId?: string;
+    /**
+     * Newly created vehicle identifier
+     */
+    vehicleId: string;
+    /**
+     * Party identifier of the vehicle owner
+     */
+    partyId: string;
+    /**
+     * Vehicle Identification Number
+     */
     vinNumber?: string;
+    /**
+     * Unit number or internal reference
+     */
     unitNumber?: string;
+    /**
+     * Human-readable vehicle description
+     */
     description?: string;
+    /**
+     * License plate
+     */
     licensePlate?: string;
-    status?: string;
+    /**
+     * Vehicle status
+     */
+    status: CreateVehicleForPartyResponseStatusEnum;
+    /**
+     * Timestamp of creation (ISO 8601)
+     */
     createdAt?: string;
 }
+export enum CreateVehicleForPartyResponseStatusEnum {
+    Active = 'ACTIVE',
+    Inactive = 'INACTIVE'
+};
+
+
 
 function isOptionalCreateVehicleForPartyResponsePropertyOfType(
     value: Record<string, unknown>,
@@ -58,7 +91,7 @@ export function instanceOfCreateVehicleForPartyResponse(value: object): value is
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createCreateVehicleForPartyResponsePropertyNames();
+    const requiredProperties = createCreateVehicleForPartyResponsePropertyNames('vehicleId', 'partyId', 'status', );
     const optionalStringProperties = createCreateVehicleForPartyResponseOptionalProperties({ name: 'vehicleId', nullable: false }, { name: 'partyId', nullable: false }, { name: 'vinNumber', nullable: false }, { name: 'unitNumber', nullable: false }, { name: 'description', nullable: false }, { name: 'licensePlate', nullable: false }, { name: 'status', nullable: false }, { name: 'createdAt', nullable: false }, );
     const optionalNumberProperties = createCreateVehicleForPartyResponseOptionalProperties();
     const optionalBooleanProperties = createCreateVehicleForPartyResponseOptionalProperties();

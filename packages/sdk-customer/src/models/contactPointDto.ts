@@ -16,15 +16,15 @@ export interface ContactPointDto {
     /**
      * Contact point ID
      */
-    contactPointId?: string;
+    contactPointId: string;
     /**
      * Type of contact point
      */
-    contactType?: ContactPointDtoContactTypeEnum;
+    contactType: ContactPointDtoContactTypeEnum;
     /**
      * Contact value
      */
-    value?: string;
+    value: string;
     primary?: boolean;
 }
 export enum ContactPointDtoContactTypeEnum {
@@ -75,7 +75,7 @@ export function instanceOfContactPointDto(value: object): value is ContactPointD
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createContactPointDtoPropertyNames();
+    const requiredProperties = createContactPointDtoPropertyNames('contactPointId', 'contactType', 'value', );
     const optionalStringProperties = createContactPointDtoOptionalProperties({ name: 'contactPointId', nullable: false }, { name: 'contactType', nullable: false }, { name: 'value', nullable: false }, );
     const optionalNumberProperties = createContactPointDtoOptionalProperties();
     const optionalBooleanProperties = createContactPointDtoOptionalProperties({ name: 'primary', nullable: false }, );

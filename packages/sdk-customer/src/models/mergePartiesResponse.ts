@@ -9,12 +9,33 @@
  */
 
 
+/**
+ * Result of a party merge operation
+ */
 export interface MergePartiesResponse { 
-    mergeAuditId?: string;
-    survivorPartyId?: string;
-    losingPartyId?: string;
+    /**
+     * Merge audit record ID (for traceability)
+     */
+    mergeAuditId: string;
+    /**
+     * Survivor party ID (canonical identifier for merged entity)
+     */
+    survivorPartyId: string;
+    /**
+     * Losing party ID (now merged away)
+     */
+    losingPartyId: string;
+    /**
+     * Alias/redirect ID for the losing party, pointing to the survivor
+     */
     mergedPartyAlias?: string;
-    status?: string;
+    /**
+     * Merge status
+     */
+    status: string;
+    /**
+     * Timestamp of merge completion (ISO 8601)
+     */
     completedAt?: string;
 }
 
@@ -56,7 +77,7 @@ export function instanceOfMergePartiesResponse(value: object): value is MergePar
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createMergePartiesResponsePropertyNames();
+    const requiredProperties = createMergePartiesResponsePropertyNames('mergeAuditId', 'survivorPartyId', 'losingPartyId', 'status', );
     const optionalStringProperties = createMergePartiesResponseOptionalProperties({ name: 'mergeAuditId', nullable: false }, { name: 'survivorPartyId', nullable: false }, { name: 'losingPartyId', nullable: false }, { name: 'mergedPartyAlias', nullable: false }, { name: 'status', nullable: false }, { name: 'completedAt', nullable: false }, );
     const optionalNumberProperties = createMergePartiesResponseOptionalProperties();
     const optionalBooleanProperties = createMergePartiesResponseOptionalProperties();

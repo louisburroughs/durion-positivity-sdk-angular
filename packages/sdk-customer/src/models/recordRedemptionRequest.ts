@@ -9,15 +9,45 @@
  */
 
 
+/**
+ * Request to record a promotion redemption for a customer
+ */
 export interface RecordRedemptionRequest { 
+    /**
+     * Identifier of the promotion being redeemed
+     */
     promotionId: string;
+    /**
+     * Identifier of the customer redeeming the promotion
+     */
     customerId: string;
+    /**
+     * Identifier of the workorder the redemption applies to
+     */
     workorderId: string;
+    /**
+     * Identifier of the invoice the redemption applies to, if any
+     */
     invoiceId?: string;
+    /**
+     * Discount amount to record for the redemption
+     */
     discountAmount: number;
+    /**
+     * Type of discount being recorded
+     */
     discountType: string;
+    /**
+     * Promotion code being redeemed
+     */
     promotionCode: string;
+    /**
+     * Whether the redemption is being recorded over the configured usage limit
+     */
     recordedOverLimit?: boolean;
+    /**
+     * Timestamp when the redemption occurred
+     */
     redemptionTimestamp?: string;
 }
 

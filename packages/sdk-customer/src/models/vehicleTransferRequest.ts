@@ -13,7 +13,13 @@
  * Transfer request with target customer
  */
 export interface VehicleTransferRequest { 
-    targetCustomerId?: string;
+    /**
+     * Target customer ID to transfer the vehicle to
+     */
+    targetCustomerId: string;
+    /**
+     * Optional notes about the transfer
+     */
     notes?: string;
 }
 
@@ -55,7 +61,7 @@ export function instanceOfVehicleTransferRequest(value: object): value is Vehicl
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createVehicleTransferRequestPropertyNames();
+    const requiredProperties = createVehicleTransferRequestPropertyNames('targetCustomerId', );
     const optionalStringProperties = createVehicleTransferRequestOptionalProperties({ name: 'targetCustomerId', nullable: false }, { name: 'notes', nullable: false }, );
     const optionalNumberProperties = createVehicleTransferRequestOptionalProperties();
     const optionalBooleanProperties = createVehicleTransferRequestOptionalProperties();

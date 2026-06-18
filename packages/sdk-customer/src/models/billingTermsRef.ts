@@ -16,15 +16,15 @@ export interface BillingTermsRef {
     /**
      * Billing term code identifier
      */
-    code?: string;
+    code: string;
     /**
      * Human-readable label
      */
-    label?: string;
+    label: string;
     /**
      * Net payment days. Negative values indicate prepayment is required.
      */
-    netDays?: number;
+    netDays: number;
 }
 
 function isOptionalBillingTermsRefPropertyOfType(
@@ -65,7 +65,7 @@ export function instanceOfBillingTermsRef(value: object): value is BillingTermsR
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createBillingTermsRefPropertyNames();
+    const requiredProperties = createBillingTermsRefPropertyNames('code', 'label', 'netDays', );
     const optionalStringProperties = createBillingTermsRefOptionalProperties({ name: 'code', nullable: false }, { name: 'label', nullable: false }, );
     const optionalNumberProperties = createBillingTermsRefOptionalProperties({ name: 'netDays', nullable: false }, );
     const optionalBooleanProperties = createBillingTermsRefOptionalProperties();

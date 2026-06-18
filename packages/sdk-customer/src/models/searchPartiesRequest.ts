@@ -13,16 +13,49 @@
  * Search criteria
  */
 export interface SearchPartiesRequest { 
+    /**
+     * Party name search term (matches legalName or displayName)
+     */
     name?: string;
+    /**
+     * Search by email address
+     */
     email?: string;
+    /**
+     * Search by phone number
+     */
     phone?: string;
+    /**
+     * Search by tax ID
+     */
     taxId?: string;
+    /**
+     * Filter by party type (ORGANIZATION|INDIVIDUAL)
+     */
     partyType?: string;
+    /**
+     * Filter by status (ACTIVE|PENDING|SUSPENDED|INACTIVE)
+     */
     status?: string;
+    /**
+     * Include merged parties in results (default false); admin-only troubleshooting toggle
+     */
     includeMerged?: boolean;
+    /**
+     * Pagination: page number (1-indexed, default 1)
+     */
     pageNumber?: number;
+    /**
+     * Pagination: items per page (default 20, max 100)
+     */
     pageSize?: number;
+    /**
+     * Sort field (legalName|createdAt|modifiedAt)
+     */
     sortField?: string;
+    /**
+     * Sort order (ASC|DESC)
+     */
     sortOrder?: string;
 }
 

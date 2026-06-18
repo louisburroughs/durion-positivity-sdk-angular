@@ -16,7 +16,7 @@ export interface IndividualDetails {
     /**
      * Display name
      */
-    displayName?: string;
+    displayName: string;
     /**
      * Primary email address
      */
@@ -65,7 +65,7 @@ export function instanceOfIndividualDetails(value: object): value is IndividualD
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createIndividualDetailsPropertyNames();
+    const requiredProperties = createIndividualDetailsPropertyNames('displayName', );
     const optionalStringProperties = createIndividualDetailsOptionalProperties({ name: 'displayName', nullable: false }, { name: 'email', nullable: false }, { name: 'phone', nullable: false }, );
     const optionalNumberProperties = createIndividualDetailsOptionalProperties();
     const optionalBooleanProperties = createIndividualDetailsOptionalProperties();

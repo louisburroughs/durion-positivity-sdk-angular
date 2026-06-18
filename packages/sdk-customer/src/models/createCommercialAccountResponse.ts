@@ -10,11 +10,53 @@
 import { DuplicateCandidate } from './duplicateCandidate';
 
 
+/**
+ * Response after creating a commercial account
+ */
 export interface CreateCommercialAccountResponse { 
-    partyId?: string;
-    legalName?: string;
-    status?: string;
-    createdAt?: string;
+    /**
+     * Newly created party ID (canonical CRM identifier)
+     */
+    partyId: string;
+    /**
+     * Legal name of created party
+     */
+    legalName: string;
+    /**
+     * Status (ACTIVE|PENDING|SUSPENDED)
+     */
+    status: string;
+    /**
+     * Human-readable customer/account number (party number) for display and lookup
+     */
+    customerNumber: string;
+    /**
+     * Display name of the account, if provided (falls back to legal name in UI)
+     */
+    displayName?: string;
+    /**
+     * Party type discriminator
+     */
+    partyType?: string;
+    /**
+     * Tax identifier, if provided
+     */
+    taxId?: string;
+    /**
+     * Billing terms identifier associated with the account, if set
+     */
+    billingTermsId?: string;
+    /**
+     * Primary address for display, if available
+     */
+    primaryAddress?: string;
+    /**
+     * Timestamp of creation
+     */
+    createdAt: string;
+    /**
+     * List of duplicate candidates found during creation. If present, frontend should prompt user for confirmation. Contains summary fields only (partyId, legalName, matchReason).
+     */
     duplicateCandidates?: Array<DuplicateCandidate>;
 }
 
@@ -56,8 +98,8 @@ export function instanceOfCreateCommercialAccountResponse(value: object): value 
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createCreateCommercialAccountResponsePropertyNames();
-    const optionalStringProperties = createCreateCommercialAccountResponseOptionalProperties({ name: 'partyId', nullable: false }, { name: 'legalName', nullable: false }, { name: 'status', nullable: false }, );
+    const requiredProperties = createCreateCommercialAccountResponsePropertyNames('partyId', 'legalName', 'status', 'customerNumber', 'createdAt', );
+    const optionalStringProperties = createCreateCommercialAccountResponseOptionalProperties({ name: 'partyId', nullable: false }, { name: 'legalName', nullable: false }, { name: 'status', nullable: false }, { name: 'customerNumber', nullable: false }, { name: 'displayName', nullable: false }, { name: 'partyType', nullable: false }, { name: 'taxId', nullable: false }, { name: 'billingTermsId', nullable: false }, { name: 'primaryAddress', nullable: false }, );
     const optionalNumberProperties = createCreateCommercialAccountResponseOptionalProperties();
     const optionalBooleanProperties = createCreateCommercialAccountResponseOptionalProperties();
 

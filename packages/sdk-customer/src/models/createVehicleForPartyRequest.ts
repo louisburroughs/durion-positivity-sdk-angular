@@ -13,10 +13,25 @@
  * Vehicle creation request
  */
 export interface CreateVehicleForPartyRequest { 
-    vinNumber?: string;
+    /**
+     * Vehicle Identification Number (uniqueness scope global or per-party)
+     */
+    vinNumber: string;
+    /**
+     * Unit number or internal reference
+     */
     unitNumber?: string;
+    /**
+     * Vehicle description
+     */
     description?: string;
+    /**
+     * License plate (single string or plate plus region)
+     */
     licensePlate?: string;
+    /**
+     * License plate region/state
+     */
     licensePlateRegion?: string;
 }
 
@@ -58,7 +73,7 @@ export function instanceOfCreateVehicleForPartyRequest(value: object): value is 
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createCreateVehicleForPartyRequestPropertyNames();
+    const requiredProperties = createCreateVehicleForPartyRequestPropertyNames('vinNumber', );
     const optionalStringProperties = createCreateVehicleForPartyRequestOptionalProperties({ name: 'vinNumber', nullable: false }, { name: 'unitNumber', nullable: false }, { name: 'description', nullable: false }, { name: 'licensePlate', nullable: false }, { name: 'licensePlateRegion', nullable: false }, );
     const optionalNumberProperties = createCreateVehicleForPartyRequestOptionalProperties();
     const optionalBooleanProperties = createCreateVehicleForPartyRequestOptionalProperties();

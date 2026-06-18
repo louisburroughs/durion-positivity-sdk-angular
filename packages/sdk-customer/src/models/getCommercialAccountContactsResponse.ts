@@ -17,11 +17,11 @@ export interface GetCommercialAccountContactsResponse {
     /**
      * ID of the commercial account
      */
-    commercialAccountId?: string;
+    commercialAccountId: string;
     /**
      * List of contacts with their roles
      */
-    contacts?: Array<ContactWithRole>;
+    contacts: Array<ContactWithRole>;
 }
 
 function isOptionalGetCommercialAccountContactsResponsePropertyOfType(
@@ -62,7 +62,7 @@ export function instanceOfGetCommercialAccountContactsResponse(value: object): v
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createGetCommercialAccountContactsResponsePropertyNames();
+    const requiredProperties = createGetCommercialAccountContactsResponsePropertyNames('commercialAccountId', 'contacts', );
     const optionalStringProperties = createGetCommercialAccountContactsResponseOptionalProperties({ name: 'commercialAccountId', nullable: false }, );
     const optionalNumberProperties = createGetCommercialAccountContactsResponseOptionalProperties();
     const optionalBooleanProperties = createGetCommercialAccountContactsResponseOptionalProperties();
