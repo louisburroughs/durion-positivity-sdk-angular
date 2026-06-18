@@ -9,16 +9,46 @@
  */
 
 
+/**
+ * Summary of CRM person-search candidates evaluated during registration
+ */
 export interface CrmMatchSummaryDto { 
-    candidateCount?: number;
-    anyMatches?: boolean;
-    individualCustomerCandidateCount?: number;
-    commercialContactCandidateCount?: number;
-    sharedIdentityCandidateCount?: number;
-    exactEmailMatch?: boolean;
-    exactPhoneMatch?: boolean;
-    exactNameMatch?: boolean;
-    reviewRequired?: boolean;
+    /**
+     * Total number of candidate persons returned
+     */
+    candidateCount: number;
+    /**
+     * True when any candidate matched
+     */
+    anyMatches: boolean;
+    /**
+     * Number of individual-customer candidates
+     */
+    individualCustomerCandidateCount: number;
+    /**
+     * Number of commercial-contact candidates
+     */
+    commercialContactCandidateCount: number;
+    /**
+     * Number of shared-identity candidates
+     */
+    sharedIdentityCandidateCount: number;
+    /**
+     * True when a candidate exactly matched the email
+     */
+    exactEmailMatch: boolean;
+    /**
+     * True when a candidate exactly matched the phone
+     */
+    exactPhoneMatch: boolean;
+    /**
+     * True when a candidate exactly matched the name
+     */
+    exactNameMatch: boolean;
+    /**
+     * True when manual review is required before completing registration
+     */
+    reviewRequired: boolean;
 }
 
 function isOptionalCrmMatchSummaryDtoPropertyOfType(
@@ -59,7 +89,7 @@ export function instanceOfCrmMatchSummaryDto(value: object): value is CrmMatchSu
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createCrmMatchSummaryDtoPropertyNames();
+    const requiredProperties = createCrmMatchSummaryDtoPropertyNames('candidateCount', 'anyMatches', 'individualCustomerCandidateCount', 'commercialContactCandidateCount', 'sharedIdentityCandidateCount', 'exactEmailMatch', 'exactPhoneMatch', 'exactNameMatch', 'reviewRequired', );
     const optionalStringProperties = createCrmMatchSummaryDtoOptionalProperties();
     const optionalNumberProperties = createCrmMatchSummaryDtoOptionalProperties({ name: 'candidateCount', nullable: false }, { name: 'individualCustomerCandidateCount', nullable: false }, { name: 'commercialContactCandidateCount', nullable: false }, { name: 'sharedIdentityCandidateCount', nullable: false }, );
     const optionalBooleanProperties = createCrmMatchSummaryDtoOptionalProperties({ name: 'anyMatches', nullable: false }, { name: 'exactEmailMatch', nullable: false }, { name: 'exactPhoneMatch', nullable: false }, { name: 'exactNameMatch', nullable: false }, { name: 'reviewRequired', nullable: false }, );

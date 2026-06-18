@@ -9,11 +9,29 @@
  */
 
 
+/**
+ * Per-record outcome of a bulk ingest submission
+ */
 export interface BulkIngestResult { 
-    rowIndex?: number;
+    /**
+     * Zero-based index of the record within the submitted batch
+     */
+    rowIndex: number;
+    /**
+     * Identifier of the entity created/updated for this record, when successful
+     */
     entityId?: string;
-    success?: boolean;
+    /**
+     * Whether this record was ingested successfully
+     */
+    success: boolean;
+    /**
+     * Machine-readable error code when the record failed
+     */
     errorCode?: string;
+    /**
+     * Human-readable error detail when the record failed
+     */
     errorMessage?: string;
 }
 
@@ -55,7 +73,7 @@ export function instanceOfBulkIngestResult(value: object): value is BulkIngestRe
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createBulkIngestResultPropertyNames();
+    const requiredProperties = createBulkIngestResultPropertyNames('rowIndex', 'success', );
     const optionalStringProperties = createBulkIngestResultOptionalProperties({ name: 'entityId', nullable: false }, { name: 'errorCode', nullable: false }, { name: 'errorMessage', nullable: false }, );
     const optionalNumberProperties = createBulkIngestResultOptionalProperties({ name: 'rowIndex', nullable: false }, );
     const optionalBooleanProperties = createBulkIngestResultOptionalProperties({ name: 'success', nullable: false }, );

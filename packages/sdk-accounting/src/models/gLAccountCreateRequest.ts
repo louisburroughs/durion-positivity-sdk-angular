@@ -9,12 +9,33 @@
  */
 
 
+/**
+ * Request to create a new GL account
+ */
 export interface GLAccountCreateRequest { 
+    /**
+     * Account code in #### or ####-### format
+     */
     accountCode: string;
+    /**
+     * Display name of the GL account
+     */
     accountName: string;
+    /**
+     * Type of the GL account
+     */
     accountType: GLAccountCreateRequestAccountTypeEnum;
+    /**
+     * Optional description of the account
+     */
     description?: string;
+    /**
+     * Identifier of the parent account, if any
+     */
     parentAccountId?: string;
+    /**
+     * Date and time the account becomes active (ISO 8601)
+     */
     activationDate: string;
 }
 export enum GLAccountCreateRequestAccountTypeEnum {

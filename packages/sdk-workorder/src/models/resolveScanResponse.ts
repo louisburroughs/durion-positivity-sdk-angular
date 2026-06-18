@@ -9,12 +9,33 @@
  */
 
 
+/**
+ * Result of resolving a scanned SKU and location against a pick task
+ */
 export interface ResolveScanResponse { 
-    pickTaskId?: string;
-    pickListId?: string;
+    /**
+     * Identifier of the pick task the scan resolved against
+     */
+    pickTaskId: string;
+    /**
+     * Identifier of the pick list containing the resolved task
+     */
+    pickListId: string;
+    /**
+     * Identifier of the SKU resolved for the scan (may differ from scanned SKU after substitution)
+     */
     resolvedSkuId?: string;
+    /**
+     * Identifier of the location resolved for the scan
+     */
     resolvedLocationId?: string;
-    matched?: boolean;
+    /**
+     * Whether the scan matched the expected SKU and location for the pick task
+     */
+    matched: boolean;
+    /**
+     * Human-readable status describing the match outcome
+     */
     matchStatus?: string;
 }
 
@@ -56,7 +77,7 @@ export function instanceOfResolveScanResponse(value: object): value is ResolveSc
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createResolveScanResponsePropertyNames();
+    const requiredProperties = createResolveScanResponsePropertyNames('pickTaskId', 'pickListId', 'matched', );
     const optionalStringProperties = createResolveScanResponseOptionalProperties({ name: 'pickTaskId', nullable: false }, { name: 'pickListId', nullable: false }, { name: 'resolvedSkuId', nullable: false }, { name: 'resolvedLocationId', nullable: false }, { name: 'matchStatus', nullable: false }, );
     const optionalNumberProperties = createResolveScanResponseOptionalProperties();
     const optionalBooleanProperties = createResolveScanResponseOptionalProperties({ name: 'matched', nullable: false }, );

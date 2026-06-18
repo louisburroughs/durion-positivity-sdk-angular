@@ -9,8 +9,17 @@
  */
 
 
+/**
+ * A single mechanic entry within an assignment request
+ */
 export interface MechanicAssignmentItem { 
-    mechanicPersonId?: string;
+    /**
+     * Person identifier of the mechanic being assigned
+     */
+    mechanicPersonId: string;
+    /**
+     * Role of the mechanic; defaults to LEAD for single-mechanic assignments when null
+     */
     role?: MechanicAssignmentItemRoleEnum;
 }
 export enum MechanicAssignmentItemRoleEnum {
@@ -58,7 +67,7 @@ export function instanceOfMechanicAssignmentItem(value: object): value is Mechan
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createMechanicAssignmentItemPropertyNames();
+    const requiredProperties = createMechanicAssignmentItemPropertyNames('mechanicPersonId', );
     const optionalStringProperties = createMechanicAssignmentItemOptionalProperties({ name: 'mechanicPersonId', nullable: false }, { name: 'role', nullable: false }, );
     const optionalNumberProperties = createMechanicAssignmentItemOptionalProperties();
     const optionalBooleanProperties = createMechanicAssignmentItemOptionalProperties();

@@ -9,15 +9,45 @@
  */
 
 
+/**
+ * Immutable audit event record
+ */
 export interface AuditLogEventDto { 
-    eventId?: string;
-    timestamp?: string;
-    eventType?: string;
+    /**
+     * Audit event identifier
+     */
+    eventId: string;
+    /**
+     * Timestamp recorded for the event
+     */
+    timestamp: string;
+    /**
+     * Event type code
+     */
+    eventType: string;
+    /**
+     * Actor that triggered the event
+     */
     actorId?: string;
+    /**
+     * Identifier of the affected entity
+     */
     entityId?: string;
+    /**
+     * Type of the affected entity
+     */
     entityType?: string;
+    /**
+     * Serialized value before the change
+     */
     oldValue?: string;
+    /**
+     * Serialized value after the change
+     */
     newValue?: string;
+    /**
+     * Additional contextual metadata
+     */
     context?: string;
 }
 
@@ -59,7 +89,7 @@ export function instanceOfAuditLogEventDto(value: object): value is AuditLogEven
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createAuditLogEventDtoPropertyNames();
+    const requiredProperties = createAuditLogEventDtoPropertyNames('eventId', 'timestamp', 'eventType', );
     const optionalStringProperties = createAuditLogEventDtoOptionalProperties({ name: 'eventId', nullable: false }, { name: 'eventType', nullable: false }, { name: 'actorId', nullable: false }, { name: 'entityId', nullable: false }, { name: 'entityType', nullable: false }, { name: 'oldValue', nullable: false }, { name: 'newValue', nullable: false }, { name: 'context', nullable: false }, );
     const optionalNumberProperties = createAuditLogEventDtoOptionalProperties();
     const optionalBooleanProperties = createAuditLogEventDtoOptionalProperties();

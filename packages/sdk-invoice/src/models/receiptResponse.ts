@@ -9,10 +9,22 @@
  */
 
 
+/**
+ * Result of generating a payment receipt
+ */
 export interface ReceiptResponse { 
-    receiptId?: string;
+    /**
+     * Unique identifier of the generated receipt
+     */
+    receiptId: string;
+    /**
+     * Human-readable receipt reference
+     */
     reference?: string;
-    status?: ReceiptResponseStatusEnum;
+    /**
+     * Current status of the receipt
+     */
+    status: ReceiptResponseStatusEnum;
 }
 export enum ReceiptResponseStatusEnum {
     Generated = 'GENERATED'
@@ -58,7 +70,7 @@ export function instanceOfReceiptResponse(value: object): value is ReceiptRespon
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createReceiptResponsePropertyNames();
+    const requiredProperties = createReceiptResponsePropertyNames('receiptId', 'status', );
     const optionalStringProperties = createReceiptResponseOptionalProperties({ name: 'receiptId', nullable: false }, { name: 'reference', nullable: false }, { name: 'status', nullable: false }, );
     const optionalNumberProperties = createReceiptResponseOptionalProperties();
     const optionalBooleanProperties = createReceiptResponseOptionalProperties();

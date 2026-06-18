@@ -10,10 +10,25 @@
 import { PutawayLineItemRequest } from './putawayLineItemRequest';
 
 
+/**
+ * Request to generate putaway tasks for goods received against a source receipt
+ */
 export interface GeneratePutawayTasksRequest { 
+    /**
+     * Identifier of the receipt the received goods belong to
+     */
     sourceReceiptId: string;
+    /**
+     * Legacy single-line product identifier; prefer lineItems for new integrations
+     */
     productId?: string;
+    /**
+     * Legacy single-line quantity received; prefer lineItems for new integrations
+     */
     quantity?: number;
+    /**
+     * Line items describing the products and quantities to be put away
+     */
     lineItems?: Array<PutawayLineItemRequest>;
 }
 

@@ -9,10 +9,25 @@
  */
 
 
+/**
+ * Request payload for searching vehicles by free-text query with optional pagination
+ */
 export interface SearchVehiclesRequest { 
-    query?: string;
+    /**
+     * Free-text search query matched against VIN, unit number, plate, and description
+     */
+    query: string;
+    /**
+     * Maximum number of results to return; defaults to 25 when omitted
+     */
     limit?: number;
+    /**
+     * Opaque pagination cursor for retrieving subsequent result pages (reserved for future use)
+     */
     cursor?: string;
+    /**
+     * When true, enables substring (contains) matching; defaults to false for strict matching
+     */
     enableContainsMatching?: boolean;
 }
 
@@ -54,7 +69,7 @@ export function instanceOfSearchVehiclesRequest(value: object): value is SearchV
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createSearchVehiclesRequestPropertyNames();
+    const requiredProperties = createSearchVehiclesRequestPropertyNames('query', );
     const optionalStringProperties = createSearchVehiclesRequestOptionalProperties({ name: 'query', nullable: false }, { name: 'cursor', nullable: false }, );
     const optionalNumberProperties = createSearchVehiclesRequestOptionalProperties({ name: 'limit', nullable: false }, );
     const optionalBooleanProperties = createSearchVehiclesRequestOptionalProperties({ name: 'enableContainsMatching', nullable: false }, );

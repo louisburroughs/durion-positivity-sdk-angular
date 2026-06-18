@@ -9,12 +9,33 @@
  */
 
 
+/**
+ * A monetary adjustment applied to an invoice
+ */
 export interface InvoiceAdjustmentResponse { 
+    /**
+     * Unique identifier of the adjustment entry
+     */
     id?: string;
+    /**
+     * Type of adjustment applied
+     */
     type?: InvoiceAdjustmentResponseTypeEnum;
+    /**
+     * Adjustment amount
+     */
     amount?: number;
+    /**
+     * Business reason justifying the adjustment
+     */
     reason?: string;
+    /**
+     * Identifier of the actor who authorized the adjustment
+     */
     authorizedBy?: string;
+    /**
+     * Timestamp when the adjustment was created
+     */
     createdAt?: string;
 }
 export enum InvoiceAdjustmentResponseTypeEnum {

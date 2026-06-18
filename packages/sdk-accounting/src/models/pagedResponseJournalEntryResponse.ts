@@ -10,11 +10,29 @@
 import { JournalEntryResponse } from './journalEntryResponse';
 
 
+/**
+ * Generic paginated list response wrapper
+ */
 export interface PagedResponseJournalEntryResponse { 
-    items?: Array<JournalEntryResponse>;
+    /**
+     * Items on the current page
+     */
+    items: Array<JournalEntryResponse>;
+    /**
+     * Zero-based index of the current page
+     */
     pageNumber?: number;
+    /**
+     * Number of items per page
+     */
     pageSize?: number;
+    /**
+     * Total number of items matching the query
+     */
     totalCount?: number;
+    /**
+     * Total number of pages available
+     */
     totalPages?: number;
     content?: Array<JournalEntryResponse>;
     totalElements?: number;
@@ -58,7 +76,7 @@ export function instanceOfPagedResponseJournalEntryResponse(value: object): valu
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createPagedResponseJournalEntryResponsePropertyNames();
+    const requiredProperties = createPagedResponseJournalEntryResponsePropertyNames('items', );
     const optionalStringProperties = createPagedResponseJournalEntryResponseOptionalProperties();
     const optionalNumberProperties = createPagedResponseJournalEntryResponseOptionalProperties({ name: 'pageNumber', nullable: false }, { name: 'pageSize', nullable: false }, { name: 'totalCount', nullable: false }, { name: 'totalPages', nullable: false }, { name: 'totalElements', nullable: false }, );
     const optionalBooleanProperties = createPagedResponseJournalEntryResponseOptionalProperties();

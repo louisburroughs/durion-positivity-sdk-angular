@@ -21,7 +21,7 @@ export interface EligibilityDecisionResponse {
     /**
      * Whether the promotion is eligible for the provided context
      */
-    isEligible?: boolean;
+    isEligible: boolean;
 }
 export enum EligibilityDecisionResponseReasonCodeEnum {
     Eligible = 'ELIGIBLE',
@@ -75,7 +75,7 @@ export function instanceOfEligibilityDecisionResponse(value: object): value is E
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createEligibilityDecisionResponsePropertyNames();
+    const requiredProperties = createEligibilityDecisionResponsePropertyNames('isEligible', );
     const optionalStringProperties = createEligibilityDecisionResponseOptionalProperties({ name: 'reasonCode', nullable: false }, );
     const optionalNumberProperties = createEligibilityDecisionResponseOptionalProperties();
     const optionalBooleanProperties = createEligibilityDecisionResponseOptionalProperties({ name: 'eligible', nullable: false }, { name: 'isEligible', nullable: false }, );

@@ -9,10 +9,25 @@
  */
 
 
+/**
+ * Request to apply a monetary adjustment to an invoice
+ */
 export interface AdjustmentRequest { 
+    /**
+     * Type of adjustment applied to the invoice
+     */
     type: AdjustmentRequestTypeEnum;
+    /**
+     * Adjustment amount (must be greater than zero)
+     */
     amount: number;
+    /**
+     * Business reason justifying the adjustment
+     */
     reason: string;
+    /**
+     * Identifier of the actor who authorized the adjustment
+     */
     authorizedBy: string;
 }
 export enum AdjustmentRequestTypeEnum {

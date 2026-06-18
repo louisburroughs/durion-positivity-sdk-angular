@@ -21,7 +21,7 @@ export interface ReopenWorkorderRequest {
     /**
      * Mandatory reason for reopening completed workorder
      */
-    reopenReason?: string;
+    reopenReason: string;
 }
 
 function isOptionalReopenWorkorderRequestPropertyOfType(
@@ -62,7 +62,7 @@ export function instanceOfReopenWorkorderRequest(value: object): value is Reopen
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createReopenWorkorderRequestPropertyNames();
+    const requiredProperties = createReopenWorkorderRequestPropertyNames('reopenReason', );
     const optionalStringProperties = createReopenWorkorderRequestOptionalProperties({ name: 'userId', nullable: false }, { name: 'reopenReason', nullable: false }, );
     const optionalNumberProperties = createReopenWorkorderRequestOptionalProperties();
     const optionalBooleanProperties = createReopenWorkorderRequestOptionalProperties();

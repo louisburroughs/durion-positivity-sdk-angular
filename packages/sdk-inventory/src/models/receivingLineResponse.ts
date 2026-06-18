@@ -9,13 +9,37 @@
  */
 
 
+/**
+ * A single line within a receiving session, with expected and received quantities
+ */
 export interface ReceivingLineResponse { 
-    lineId?: string;
-    productId?: string;
+    /**
+     * Identifier of the receiving line
+     */
+    lineId: string;
+    /**
+     * Identifier of the product on the receiving line
+     */
+    productId: string;
+    /**
+     * Quantity expected to be received on the line
+     */
     expectedQuantity?: number;
+    /**
+     * Quantity received so far on the line
+     */
     receivedQuantity?: number;
-    status?: string;
+    /**
+     * Status of the receiving line, such as PENDING or RECEIVED
+     */
+    status: string;
+    /**
+     * Identifier of the workorder the line is associated with, when applicable
+     */
     workorderId?: string;
+    /**
+     * Identifier of the workorder line the receiving line fulfils, when applicable
+     */
     workorderLineId?: string;
 }
 
@@ -57,7 +81,7 @@ export function instanceOfReceivingLineResponse(value: object): value is Receivi
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createReceivingLineResponsePropertyNames();
+    const requiredProperties = createReceivingLineResponsePropertyNames('lineId', 'productId', 'status', );
     const optionalStringProperties = createReceivingLineResponseOptionalProperties({ name: 'lineId', nullable: false }, { name: 'productId', nullable: false }, { name: 'status', nullable: false }, { name: 'workorderId', nullable: false }, { name: 'workorderLineId', nullable: false }, );
     const optionalNumberProperties = createReceivingLineResponseOptionalProperties({ name: 'expectedQuantity', nullable: false }, { name: 'receivedQuantity', nullable: false }, );
     const optionalBooleanProperties = createReceivingLineResponseOptionalProperties();

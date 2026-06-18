@@ -9,12 +9,30 @@
  */
 
 
+/**
+ * Response returned after a successful scheduling conflict override
+ */
 export interface ConflictOverrideResponse { 
-    overrideId?: string;
-    appointmentId?: string;
-    overriddenByUserId?: string;
-    overrideTimestamp?: string;
-    overrideReason?: string;
+    /**
+     * Unique override record identifier
+     */
+    overrideId: string;
+    /**
+     * Appointment identifier whose conflict was overridden
+     */
+    appointmentId: string;
+    /**
+     * User identifier of the manager who performed the override
+     */
+    overriddenByUserId: string;
+    /**
+     * Instant the override was performed in UTC (ISO-8601)
+     */
+    overrideTimestamp: string;
+    /**
+     * Reason recorded for the override
+     */
+    overrideReason: string;
 }
 
 function isOptionalConflictOverrideResponsePropertyOfType(
@@ -55,7 +73,7 @@ export function instanceOfConflictOverrideResponse(value: object): value is Conf
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createConflictOverrideResponsePropertyNames();
+    const requiredProperties = createConflictOverrideResponsePropertyNames('overrideId', 'appointmentId', 'overriddenByUserId', 'overrideTimestamp', 'overrideReason', );
     const optionalStringProperties = createConflictOverrideResponseOptionalProperties({ name: 'overrideId', nullable: false }, { name: 'appointmentId', nullable: false }, { name: 'overriddenByUserId', nullable: false }, { name: 'overrideReason', nullable: false }, );
     const optionalNumberProperties = createConflictOverrideResponseOptionalProperties();
     const optionalBooleanProperties = createConflictOverrideResponseOptionalProperties();

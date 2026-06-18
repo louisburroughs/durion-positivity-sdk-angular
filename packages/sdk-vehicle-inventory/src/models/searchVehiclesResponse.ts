@@ -10,11 +10,26 @@
 import { VehicleSummary } from './vehicleSummary';
 
 
+/**
+ * Paginated vehicle search results
+ */
 export interface SearchVehiclesResponse { 
-    results?: Array<VehicleSummary>;
-    totalCount?: number;
-    hasMore?: boolean;
-    query?: string;
+    /**
+     * Vehicle summaries matching the search query
+     */
+    results: Array<VehicleSummary>;
+    /**
+     * Total number of vehicles matching the query
+     */
+    totalCount: number;
+    /**
+     * Whether additional result pages are available beyond the current page
+     */
+    hasMore: boolean;
+    /**
+     * Echo of the originating search query
+     */
+    query: string;
 }
 
 function isOptionalSearchVehiclesResponsePropertyOfType(
@@ -55,7 +70,7 @@ export function instanceOfSearchVehiclesResponse(value: object): value is Search
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createSearchVehiclesResponsePropertyNames();
+    const requiredProperties = createSearchVehiclesResponsePropertyNames('results', 'totalCount', 'hasMore', 'query', );
     const optionalStringProperties = createSearchVehiclesResponseOptionalProperties({ name: 'query', nullable: false }, );
     const optionalNumberProperties = createSearchVehiclesResponseOptionalProperties({ name: 'totalCount', nullable: false }, );
     const optionalBooleanProperties = createSearchVehiclesResponseOptionalProperties({ name: 'hasMore', nullable: false }, );

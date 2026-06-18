@@ -9,12 +9,33 @@
  */
 
 
+/**
+ * Details of a single invoice application
+ */
 export interface ApplicationDetail { 
+    /**
+     * Identifier of the payment application record
+     */
     paymentApplicationId?: string;
+    /**
+     * Identifier of the invoice the payment was applied to
+     */
     invoiceId?: string;
+    /**
+     * Amount applied to this invoice
+     */
     appliedAmount?: number;
+    /**
+     * Invoice balance before this application
+     */
     invoiceBalanceBefore?: number;
+    /**
+     * Invoice balance after this application
+     */
     invoiceBalanceAfter?: number;
+    /**
+     * Invoice status after this application
+     */
     invoiceStatus?: ApplicationDetailInvoiceStatusEnum;
 }
 export enum ApplicationDetailInvoiceStatusEnum {

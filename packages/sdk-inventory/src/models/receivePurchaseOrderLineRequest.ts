@@ -9,9 +9,21 @@
  */
 
 
+/**
+ * Receipt detail for a single purchase order line
+ */
 export interface ReceivePurchaseOrderLineRequest { 
+    /**
+     * Identifier of the purchase order line being received
+     */
     lineId: string;
+    /**
+     * Quantity received for this line
+     */
     quantityReceived: number;
+    /**
+     * Actual unit cost of the received goods in the smallest currency unit (e.g. cents)
+     */
     unitCostMinor?: number;
 }
 

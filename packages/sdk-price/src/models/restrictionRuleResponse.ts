@@ -9,13 +9,37 @@
  */
 
 
+/**
+ * Response payload representing a stored sale-restriction rule
+ */
 export interface RestrictionRuleResponse { 
-    ruleId?: string;
-    productId?: string;
-    locationTag?: RestrictionRuleResponseLocationTagEnum;
-    serviceTag?: RestrictionRuleResponseServiceTagEnum;
-    active?: boolean;
-    effectiveFrom?: string;
+    /**
+     * Restriction rule identifier
+     */
+    ruleId: string;
+    /**
+     * Product the restriction rule applies to
+     */
+    productId: string;
+    /**
+     * Location scope tag for the restriction
+     */
+    locationTag: RestrictionRuleResponseLocationTagEnum;
+    /**
+     * Service channel scope tag for the restriction
+     */
+    serviceTag: RestrictionRuleResponseServiceTagEnum;
+    /**
+     * Whether the restriction rule is currently active
+     */
+    active: boolean;
+    /**
+     * Date the restriction rule becomes effective
+     */
+    effectiveFrom: string;
+    /**
+     * Optional date the restriction rule stops being effective
+     */
     effectiveTo?: string;
 }
 export enum RestrictionRuleResponseLocationTagEnum {
@@ -74,7 +98,7 @@ export function instanceOfRestrictionRuleResponse(value: object): value is Restr
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createRestrictionRuleResponsePropertyNames();
+    const requiredProperties = createRestrictionRuleResponsePropertyNames('ruleId', 'productId', 'locationTag', 'serviceTag', 'active', 'effectiveFrom', );
     const optionalStringProperties = createRestrictionRuleResponseOptionalProperties({ name: 'ruleId', nullable: false }, { name: 'productId', nullable: false }, { name: 'locationTag', nullable: false }, { name: 'serviceTag', nullable: false }, );
     const optionalNumberProperties = createRestrictionRuleResponseOptionalProperties();
     const optionalBooleanProperties = createRestrictionRuleResponseOptionalProperties({ name: 'active', nullable: false }, );

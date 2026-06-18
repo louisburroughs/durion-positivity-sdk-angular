@@ -16,23 +16,23 @@ export interface ReopenWorkorderResponse {
     /**
      * Workorder identifier
      */
-    workorderId?: string;
+    workorderId: string;
     /**
      * Current lifecycle status
      */
-    currentStatus?: string;
+    currentStatus: string;
     /**
      * Whether the workorder is reopened for controlled edits
      */
-    isReopened?: boolean;
+    isReopened: boolean;
     /**
      * Reopen timestamp
      */
-    reopenedAt?: string;
+    reopenedAt: string;
     /**
      * Operation message
      */
-    message?: string;
+    message: string;
 }
 
 function isOptionalReopenWorkorderResponsePropertyOfType(
@@ -73,7 +73,7 @@ export function instanceOfReopenWorkorderResponse(value: object): value is Reope
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createReopenWorkorderResponsePropertyNames();
+    const requiredProperties = createReopenWorkorderResponsePropertyNames('workorderId', 'currentStatus', 'isReopened', 'reopenedAt', 'message', );
     const optionalStringProperties = createReopenWorkorderResponseOptionalProperties({ name: 'workorderId', nullable: false }, { name: 'currentStatus', nullable: false }, { name: 'message', nullable: false }, );
     const optionalNumberProperties = createReopenWorkorderResponseOptionalProperties();
     const optionalBooleanProperties = createReopenWorkorderResponseOptionalProperties({ name: 'isReopened', nullable: false }, );

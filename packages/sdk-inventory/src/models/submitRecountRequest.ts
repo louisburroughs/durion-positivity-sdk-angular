@@ -9,10 +9,25 @@
  */
 
 
+/**
+ * Request to submit a recount for a cycle count task, including the caller\'s permission context
+ */
 export interface SubmitRecountRequest { 
+    /**
+     * Identifier of the cycle count task being recounted
+     */
     taskId: string;
+    /**
+     * Identifier of the auditor submitting the recount
+     */
     auditorId: string;
+    /**
+     * Quantity physically counted by the auditor on the recount
+     */
     actualQuantity: number;
+    /**
+     * Permission context authorizing the recount; one of TRIGGER_RECOUNT_SELF or TRIGGER_RECOUNT_ANY
+     */
     permission: string;
 }
 

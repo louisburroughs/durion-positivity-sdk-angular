@@ -16,7 +16,7 @@ export interface LeadTimeInfo {
     /**
      * Source of lead time data
      */
-    source?: LeadTimeInfoSourceEnum;
+    source: LeadTimeInfoSourceEnum;
     /**
      * Minimum days for delivery
      */
@@ -36,7 +36,7 @@ export interface LeadTimeInfo {
     /**
      * Confidence in lead time estimate
      */
-    confidence?: LeadTimeInfoConfidenceEnum;
+    confidence: LeadTimeInfoConfidenceEnum;
 }
 export enum LeadTimeInfoSourceEnum {
     Catalog = 'CATALOG',
@@ -89,7 +89,7 @@ export function instanceOfLeadTimeInfo(value: object): value is LeadTimeInfo {
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createLeadTimeInfoPropertyNames();
+    const requiredProperties = createLeadTimeInfoPropertyNames('source', 'confidence', );
     const optionalStringProperties = createLeadTimeInfoOptionalProperties({ name: 'source', nullable: false }, { name: 'displayText', nullable: false }, { name: 'confidence', nullable: false }, );
     const optionalNumberProperties = createLeadTimeInfoOptionalProperties({ name: 'minDays', nullable: false }, { name: 'maxDays', nullable: false }, );
     const optionalBooleanProperties = createLeadTimeInfoOptionalProperties();

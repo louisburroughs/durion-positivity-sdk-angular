@@ -16,7 +16,7 @@ export interface TokenResponse {
     /**
      * JWT token (Bearer token for Authorization header)
      */
-    token?: string;
+    token: string;
 }
 
 function isOptionalTokenResponsePropertyOfType(
@@ -57,7 +57,7 @@ export function instanceOfTokenResponse(value: object): value is TokenResponse {
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createTokenResponsePropertyNames();
+    const requiredProperties = createTokenResponsePropertyNames('token', );
     const optionalStringProperties = createTokenResponseOptionalProperties({ name: 'token', nullable: false }, );
     const optionalNumberProperties = createTokenResponseOptionalProperties();
     const optionalBooleanProperties = createTokenResponseOptionalProperties();

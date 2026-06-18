@@ -13,27 +13,90 @@
  * Response representation of a travel segment
  */
 export interface TravelSegmentResponse { 
-    travelSegmentId?: string;
-    mobileWorkAssignmentId?: string;
-    technicianId?: string;
-    segmentType?: TravelSegmentResponseSegmentTypeEnum;
+    /**
+     * Unique identifier of the travel segment
+     */
+    travelSegmentId: string;
+    /**
+     * Identifier of the mobile work assignment this segment belongs to
+     */
+    mobileWorkAssignmentId: string;
+    /**
+     * Identifier of the technician who performed the travel
+     */
+    technicianId: string;
+    /**
+     * Direction or purpose of the travel leg
+     */
+    segmentType: TravelSegmentResponseSegmentTypeEnum;
+    /**
+     * Timestamp when the travel segment started
+     */
     startAt?: string;
+    /**
+     * Timestamp when the travel segment ended
+     */
     endAt?: string;
+    /**
+     * Identifier of the origin location
+     */
     fromLocationId?: string;
+    /**
+     * Identifier of the destination location
+     */
     toLocationId?: string;
+    /**
+     * Identifier of the workorder associated with the travel
+     */
     workOrderId?: string;
+    /**
+     * Effective travel duration in minutes
+     */
     durationMinutes?: number;
+    /**
+     * Raw recorded travel minutes before buffering
+     */
     rawMinutes?: number;
+    /**
+     * Buffered travel minutes applied by policy
+     */
     bufferedMinutes?: number;
-    status?: TravelSegmentResponseStatusEnum;
+    /**
+     * Current status of the travel segment
+     */
+    status: TravelSegmentResponseStatusEnum;
+    /**
+     * Identifier of the user who created the segment
+     */
     createdBy?: string;
+    /**
+     * Identifier of the user who last modified the segment
+     */
     lastModifiedBy?: string;
+    /**
+     * Timestamp when the segment was last modified
+     */
     lastModifiedAt?: string;
+    /**
+     * Identifier of the user who acted to record the segment
+     */
     actedByUserId?: string;
+    /**
+     * Identifier of the person the segment was recorded on behalf of
+     */
     actedForPersonId?: string;
+    /**
+     * Reason code when the segment was entered on behalf of another person
+     */
     onBehalfReasonCode?: TravelSegmentResponseOnBehalfReasonCodeEnum;
-    createdAt?: string;
-    updatedAt?: string;
+    /**
+     * Timestamp when the segment was created
+     */
+    createdAt: string;
+    /**
+     * Timestamp when the segment was last updated
+     */
+    updatedAt: string;
 }
 export enum TravelSegmentResponseSegmentTypeEnum {
     DepartShop = 'DEPART_SHOP',
@@ -97,7 +160,7 @@ export function instanceOfTravelSegmentResponse(value: object): value is TravelS
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createTravelSegmentResponsePropertyNames();
+    const requiredProperties = createTravelSegmentResponsePropertyNames('travelSegmentId', 'mobileWorkAssignmentId', 'technicianId', 'segmentType', 'status', 'createdAt', 'updatedAt', );
     const optionalStringProperties = createTravelSegmentResponseOptionalProperties({ name: 'travelSegmentId', nullable: false }, { name: 'mobileWorkAssignmentId', nullable: false }, { name: 'technicianId', nullable: false }, { name: 'segmentType', nullable: false }, { name: 'fromLocationId', nullable: false }, { name: 'toLocationId', nullable: false }, { name: 'workOrderId', nullable: false }, { name: 'status', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'lastModifiedBy', nullable: false }, { name: 'actedByUserId', nullable: false }, { name: 'actedForPersonId', nullable: false }, { name: 'onBehalfReasonCode', nullable: false }, );
     const optionalNumberProperties = createTravelSegmentResponseOptionalProperties({ name: 'durationMinutes', nullable: false }, { name: 'rawMinutes', nullable: false }, { name: 'bufferedMinutes', nullable: false }, );
     const optionalBooleanProperties = createTravelSegmentResponseOptionalProperties();

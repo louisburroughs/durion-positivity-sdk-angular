@@ -9,9 +9,21 @@
  */
 
 
+/**
+ * Reference entry describing a valid reason a returned item can be assigned
+ */
 export interface ReasonCodeDto { 
-    code?: string;
-    description?: string;
+    /**
+     * Machine-readable reason code
+     */
+    code: string;
+    /**
+     * Human-readable explanation of the reason code
+     */
+    description: string;
+    /**
+     * Grouping category the reason code belongs to
+     */
     category?: string;
 }
 
@@ -53,7 +65,7 @@ export function instanceOfReasonCodeDto(value: object): value is ReasonCodeDto {
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createReasonCodeDtoPropertyNames();
+    const requiredProperties = createReasonCodeDtoPropertyNames('code', 'description', );
     const optionalStringProperties = createReasonCodeDtoOptionalProperties({ name: 'code', nullable: false }, { name: 'description', nullable: false }, { name: 'category', nullable: false }, );
     const optionalNumberProperties = createReasonCodeDtoOptionalProperties();
     const optionalBooleanProperties = createReasonCodeDtoOptionalProperties();

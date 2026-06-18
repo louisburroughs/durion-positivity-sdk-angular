@@ -9,13 +9,37 @@
  */
 
 
+/**
+ * Single line item to be evaluated for tax calculation
+ */
 export interface TaxLineItem { 
+    /**
+     * Unique identifier for the line item (e.g., estimate item ID, invoice line ID)
+     */
     lineItemId: string;
+    /**
+     * Description of the item being taxed
+     */
     description: string;
+    /**
+     * Quantity of the item
+     */
     quantity: number;
+    /**
+     * Unit price of the item before tax
+     */
     unitPrice: number;
+    /**
+     * Total amount before tax (quantity x unitPrice); calculated when omitted
+     */
     subtotal?: number;
+    /**
+     * Optional tax category code (e.g., GOODS, SERVICES, LABOR)
+     */
     taxCategory?: string;
+    /**
+     * Whether this item is tax-exempt
+     */
     taxExempt?: boolean;
 }
 

@@ -9,9 +9,21 @@
  */
 
 
+/**
+ * Break taken within a work session
+ */
 export interface BreakDto { 
-    sessionId?: string;
-    startedAt?: string;
+    /**
+     * Work session the break belongs to
+     */
+    sessionId: string;
+    /**
+     * Timestamp the break started
+     */
+    startedAt: string;
+    /**
+     * Timestamp the break ended
+     */
     endedAt?: string;
 }
 
@@ -53,7 +65,7 @@ export function instanceOfBreakDto(value: object): value is BreakDto {
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createBreakDtoPropertyNames();
+    const requiredProperties = createBreakDtoPropertyNames('sessionId', 'startedAt', );
     const optionalStringProperties = createBreakDtoOptionalProperties({ name: 'sessionId', nullable: false }, );
     const optionalNumberProperties = createBreakDtoOptionalProperties();
     const optionalBooleanProperties = createBreakDtoOptionalProperties();

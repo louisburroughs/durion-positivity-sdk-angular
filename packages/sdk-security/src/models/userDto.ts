@@ -9,10 +9,25 @@
  */
 
 
+/**
+ * User account view returned by user-management endpoints
+ */
 export interface UserDto { 
-    id?: string;
-    username?: string;
-    roles?: Set<string>;
+    /**
+     * User identifier
+     */
+    id: string;
+    /**
+     * Login username
+     */
+    username: string;
+    /**
+     * Role names assigned to the user
+     */
+    roles: Set<string>;
+    /**
+     * Linked person identifier, when the account is linked to a person record
+     */
     personId?: string;
 }
 
@@ -54,7 +69,7 @@ export function instanceOfUserDto(value: object): value is UserDto {
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createUserDtoPropertyNames();
+    const requiredProperties = createUserDtoPropertyNames('id', 'username', 'roles', );
     const optionalStringProperties = createUserDtoOptionalProperties({ name: 'id', nullable: false }, { name: 'username', nullable: false }, { name: 'personId', nullable: false }, );
     const optionalNumberProperties = createUserDtoOptionalProperties();
     const optionalBooleanProperties = createUserDtoOptionalProperties();

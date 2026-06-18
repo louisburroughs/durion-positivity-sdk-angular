@@ -26,9 +26,21 @@ export interface Person {
      * Last name of the person
      */
     lastName: string;
+    /**
+     * Primary email address
+     */
     primaryEmail?: string;
+    /**
+     * Secondary email address
+     */
     secondaryEmail?: string;
+    /**
+     * Phone numbers on record
+     */
     phoneNumbers?: Array<string>;
+    /**
+     * Linked username, if any
+     */
     username?: string;
     /**
      * Employee status. Null if the person has no employee record.

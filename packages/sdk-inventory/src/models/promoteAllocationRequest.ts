@@ -9,6 +9,9 @@
  */
 
 
+/**
+ * Request to promote a soft allocation to a hardened, location-pinned allocation
+ */
 export interface PromoteAllocationRequest { 
     /**
      * Storage location identifier where the hardened allocation pins stock

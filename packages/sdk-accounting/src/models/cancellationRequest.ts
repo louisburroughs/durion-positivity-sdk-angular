@@ -9,15 +9,45 @@
  */
 
 
+/**
+ * Request to record a cancellation audit event
+ */
 export interface CancellationRequest { 
+    /**
+     * Identifier of the order being cancelled
+     */
     orderId?: string;
+    /**
+     * Identifier of the invoice being cancelled
+     */
     invoiceId?: string;
+    /**
+     * Type of cancellation being recorded
+     */
     cancellationType: CancellationRequestCancellationTypeEnum;
+    /**
+     * Snapshot of state before the cancellation (JSON)
+     */
     beforeSnapshot: string;
+    /**
+     * Snapshot of state after the cancellation (JSON)
+     */
     afterSnapshot: string;
+    /**
+     * Partial payment details captured at cancellation (JSON)
+     */
     partialPaymentInfo?: string;
+    /**
+     * Legacy client-provided actor identifier; service resolves authoritative actor from security context
+     */
     actorId?: string;
+    /**
+     * Role of the actor performing the cancellation
+     */
     actorRole: string;
+    /**
+     * Reason for the cancellation
+     */
     reason: string;
 }
 export enum CancellationRequestCancellationTypeEnum {

@@ -16,27 +16,27 @@ export interface SelfRegistrationReviewCaseResponse {
     /**
      * Review case identifier
      */
-    caseId?: string;
+    caseId: string;
     /**
      * Case type
      */
-    caseType?: SelfRegistrationReviewCaseResponseCaseTypeEnum;
+    caseType: SelfRegistrationReviewCaseResponseCaseTypeEnum;
     /**
      * Case status
      */
-    status?: SelfRegistrationReviewCaseResponseStatusEnum;
+    status: SelfRegistrationReviewCaseResponseStatusEnum;
     /**
      * Reason code that created the case
      */
-    reasonCode?: string;
+    reasonCode: string;
     /**
      * Reason message recorded for the case
      */
-    reasonMessage?: string;
+    reasonMessage: string;
     /**
      * Submitted email address
      */
-    email?: string;
+    email: string;
     /**
      * Requested username, when available
      */
@@ -76,11 +76,11 @@ export interface SelfRegistrationReviewCaseResponse {
     /**
      * Case creation timestamp
      */
-    createdAt?: string;
+    createdAt: string;
     /**
      * Case last-updated timestamp
      */
-    updatedAt?: string;
+    updatedAt: string;
     /**
      * Resolution timestamp, when resolved
      */
@@ -143,7 +143,7 @@ export function instanceOfSelfRegistrationReviewCaseResponse(value: object): val
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createSelfRegistrationReviewCaseResponsePropertyNames();
+    const requiredProperties = createSelfRegistrationReviewCaseResponsePropertyNames('caseId', 'caseType', 'status', 'reasonCode', 'reasonMessage', 'email', 'createdAt', 'updatedAt', );
     const optionalStringProperties = createSelfRegistrationReviewCaseResponseOptionalProperties({ name: 'caseId', nullable: false }, { name: 'caseType', nullable: false }, { name: 'status', nullable: false }, { name: 'reasonCode', nullable: false }, { name: 'reasonMessage', nullable: false }, { name: 'email', nullable: false }, { name: 'requestedUsername', nullable: false }, { name: 'personId', nullable: false }, { name: 'linkedUserId', nullable: false }, { name: 'notes', nullable: false }, { name: 'resolvedBy', nullable: false }, { name: 'resolutionNotes', nullable: false }, );
     const optionalNumberProperties = createSelfRegistrationReviewCaseResponseOptionalProperties({ name: 'crmCandidateCount', nullable: false }, { name: 'crmSharedIdentityCandidateCount', nullable: false }, );
     const optionalBooleanProperties = createSelfRegistrationReviewCaseResponseOptionalProperties({ name: 'crmExactEmailMatch', nullable: false }, { name: 'crmExactPhoneMatch', nullable: false }, { name: 'crmExactNameMatch', nullable: false }, );

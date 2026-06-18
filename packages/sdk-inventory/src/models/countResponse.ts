@@ -9,16 +9,49 @@
  */
 
 
+/**
+ * Result of submitting a count or recount for a cycle count task
+ */
 export interface CountResponse { 
-    countEntryId?: string;
-    taskId?: string;
-    actualQuantity?: number;
-    expectedQuantity?: number;
-    variance?: number;
-    recountSequenceNumber?: number;
-    taskStatus?: CountResponseTaskStatusEnum;
-    countedAt?: string;
-    limitExceeded?: boolean;
+    /**
+     * Unique identifier of the recorded count entry
+     */
+    countEntryId: string;
+    /**
+     * Identifier of the cycle count task the count was submitted against
+     */
+    taskId: string;
+    /**
+     * Quantity physically counted by the auditor
+     */
+    actualQuantity: number;
+    /**
+     * Quantity expected on hand at the time of the count
+     */
+    expectedQuantity: number;
+    /**
+     * Difference between counted and expected quantity (actual minus expected)
+     */
+    variance: number;
+    /**
+     * Sequence number of this count within the recount chain; 0 for the initial count
+     */
+    recountSequenceNumber: number;
+    /**
+     * Resulting status of the cycle count task after the submission
+     */
+    taskStatus: CountResponseTaskStatusEnum;
+    /**
+     * Timestamp when the count was recorded
+     */
+    countedAt: string;
+    /**
+     * Whether the maximum allowed number of recounts has been exceeded
+     */
+    limitExceeded: boolean;
+    /**
+     * Human-readable message describing the outcome of the submission
+     */
     message?: string;
 }
 export enum CountResponseTaskStatusEnum {
@@ -69,7 +102,7 @@ export function instanceOfCountResponse(value: object): value is CountResponse {
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createCountResponsePropertyNames();
+    const requiredProperties = createCountResponsePropertyNames('countEntryId', 'taskId', 'actualQuantity', 'expectedQuantity', 'variance', 'recountSequenceNumber', 'taskStatus', 'countedAt', 'limitExceeded', );
     const optionalStringProperties = createCountResponseOptionalProperties({ name: 'countEntryId', nullable: false }, { name: 'taskId', nullable: false }, { name: 'taskStatus', nullable: false }, { name: 'message', nullable: false }, );
     const optionalNumberProperties = createCountResponseOptionalProperties({ name: 'actualQuantity', nullable: false }, { name: 'expectedQuantity', nullable: false }, { name: 'variance', nullable: false }, { name: 'recountSequenceNumber', nullable: false }, );
     const optionalBooleanProperties = createCountResponseOptionalProperties({ name: 'limitExceeded', nullable: false }, );

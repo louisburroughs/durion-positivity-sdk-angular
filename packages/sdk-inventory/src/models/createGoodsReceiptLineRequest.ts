@@ -9,11 +9,29 @@
  */
 
 
+/**
+ * Request payload describing a single received line item when recording a goods receipt against a purchase order
+ */
 export interface CreateGoodsReceiptLineRequest { 
+    /**
+     * Identifier of the specific purchase order line this receipt line fulfills
+     */
     poLineId?: string;
+    /**
+     * Stock keeping unit identifier for the received product
+     */
     sku: string;
+    /**
+     * Whole-unit quantity of the SKU received in this goods receipt
+     */
     quantityReceived: number;
+    /**
+     * Unit cost of the received product expressed in minor currency units (e.g. cents)
+     */
     unitCostMinor: number;
+    /**
+     * Lot or batch number associated with the received product
+     */
     lotNumber?: string;
 }
 

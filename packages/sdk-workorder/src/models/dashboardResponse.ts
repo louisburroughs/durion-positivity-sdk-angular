@@ -20,15 +20,15 @@ export interface DashboardResponse {
     /**
      * The date this dashboard is for
      */
-    date?: string;
+    date: string;
     /**
      * Location identifier
      */
-    locationId?: string;
+    locationId: string;
     /**
      * Workorder summaries for the day
      */
-    workorders?: Array<WorkorderSummary>;
+    workorders: Array<WorkorderSummary>;
     /**
      * Mechanic statuses
      */
@@ -44,7 +44,7 @@ export interface DashboardResponse {
     /**
      * Timestamp when data was last refreshed
      */
-    lastRefreshed?: string;
+    lastRefreshed: string;
     /**
      * True when one or more upstream data sources were unavailable during aggregation; data may be incomplete
      */
@@ -89,7 +89,7 @@ export function instanceOfDashboardResponse(value: object): value is DashboardRe
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createDashboardResponsePropertyNames();
+    const requiredProperties = createDashboardResponsePropertyNames('date', 'locationId', 'workorders', 'lastRefreshed', );
     const optionalStringProperties = createDashboardResponseOptionalProperties({ name: 'locationId', nullable: false }, );
     const optionalNumberProperties = createDashboardResponseOptionalProperties();
     const optionalBooleanProperties = createDashboardResponseOptionalProperties({ name: 'dataQualityWarning', nullable: false }, );

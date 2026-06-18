@@ -13,14 +13,41 @@
  * Putaway execution request payload
  */
 export interface PutawayExecutionRequest { 
-    skuId?: string;
-    sourceLocationId?: string;
-    destinationLocationId?: string;
-    quantity?: number;
+    /**
+     * Identifier of the SKU being moved
+     */
+    skuId: string;
+    /**
+     * Identifier of the staging location the goods are moved from
+     */
+    sourceLocationId: string;
+    /**
+     * Identifier of the storage location the goods are moved to
+     */
+    destinationLocationId: string;
+    /**
+     * Quantity of units to move
+     */
+    quantity: number;
+    /**
+     * When true, bypasses the location compatibility check for this move
+     */
     overrideLocationCompatibility?: boolean;
+    /**
+     * When true, bypasses the destination capacity check for this move
+     */
     overrideCapacity?: boolean;
+    /**
+     * Audit reason code justifying any applied override
+     */
     overrideReasonCode?: PutawayExecutionRequestOverrideReasonCodeEnum;
+    /**
+     * Free-text justification supporting the override
+     */
     overrideJustification?: string;
+    /**
+     * Identifier of the supervisor who approved the override
+     */
     approvedBy?: string;
 }
 export enum PutawayExecutionRequestOverrideReasonCodeEnum {
@@ -71,7 +98,7 @@ export function instanceOfPutawayExecutionRequest(value: object): value is Putaw
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createPutawayExecutionRequestPropertyNames();
+    const requiredProperties = createPutawayExecutionRequestPropertyNames('skuId', 'sourceLocationId', 'destinationLocationId', 'quantity', );
     const optionalStringProperties = createPutawayExecutionRequestOptionalProperties({ name: 'skuId', nullable: false }, { name: 'sourceLocationId', nullable: false }, { name: 'destinationLocationId', nullable: false }, { name: 'overrideReasonCode', nullable: false }, { name: 'overrideJustification', nullable: false }, { name: 'approvedBy', nullable: false }, );
     const optionalNumberProperties = createPutawayExecutionRequestOptionalProperties({ name: 'quantity', nullable: false }, );
     const optionalBooleanProperties = createPutawayExecutionRequestOptionalProperties({ name: 'overrideLocationCompatibility', nullable: false }, { name: 'overrideCapacity', nullable: false }, );

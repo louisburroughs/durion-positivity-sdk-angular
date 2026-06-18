@@ -9,10 +9,25 @@
  */
 
 
+/**
+ * Response returned after cancelling an order
+ */
 export interface CancellationResponse { 
-    orderId?: string;
-    status?: string;
+    /**
+     * Identifier of the cancelled order
+     */
+    orderId: string;
+    /**
+     * Resulting status of the order after cancellation
+     */
+    status: string;
+    /**
+     * Human-readable message describing the cancellation outcome
+     */
     message?: string;
+    /**
+     * Idempotency key associated with the cancellation request
+     */
     cancellationIdempotencyKey?: string;
 }
 
@@ -54,7 +69,7 @@ export function instanceOfCancellationResponse(value: object): value is Cancella
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createCancellationResponsePropertyNames();
+    const requiredProperties = createCancellationResponsePropertyNames('orderId', 'status', );
     const optionalStringProperties = createCancellationResponseOptionalProperties({ name: 'orderId', nullable: false }, { name: 'status', nullable: false }, { name: 'message', nullable: false }, { name: 'cancellationIdempotencyKey', nullable: false }, );
     const optionalNumberProperties = createCancellationResponseOptionalProperties();
     const optionalBooleanProperties = createCancellationResponseOptionalProperties();

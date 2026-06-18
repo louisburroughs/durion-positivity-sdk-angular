@@ -9,14 +9,41 @@
  */
 
 
+/**
+ * Work session representing a tracked period of work for a person
+ */
 export interface WorkSessionDto { 
-    sessionId?: string;
-    personId?: string;
-    status?: string;
+    /**
+     * Work session identifier
+     */
+    sessionId: string;
+    /**
+     * Person the session belongs to
+     */
+    personId: string;
+    /**
+     * Lifecycle status of the session
+     */
+    status: string;
+    /**
+     * Timestamp the session started
+     */
     startedAt?: string;
+    /**
+     * Timestamp the session ended
+     */
     endedAt?: string;
+    /**
+     * Total billable minutes for the session
+     */
     billableMinutes?: number;
+    /**
+     * Total break minutes for the session
+     */
     breakMinutes?: number;
+    /**
+     * Timestamp the session was submitted
+     */
     submittedAt?: string;
 }
 
@@ -58,7 +85,7 @@ export function instanceOfWorkSessionDto(value: object): value is WorkSessionDto
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createWorkSessionDtoPropertyNames();
+    const requiredProperties = createWorkSessionDtoPropertyNames('sessionId', 'personId', 'status', );
     const optionalStringProperties = createWorkSessionDtoOptionalProperties({ name: 'sessionId', nullable: false }, { name: 'personId', nullable: false }, { name: 'status', nullable: false }, );
     const optionalNumberProperties = createWorkSessionDtoOptionalProperties({ name: 'billableMinutes', nullable: false }, { name: 'breakMinutes', nullable: false }, );
     const optionalBooleanProperties = createWorkSessionDtoOptionalProperties();

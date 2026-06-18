@@ -9,26 +9,89 @@
  */
 
 
+/**
+ * Location price override detail
+ */
 export interface LocationPriceOverrideResponseDto { 
-    overrideId?: string;
-    version?: number;
-    locationId?: string;
-    productId?: string;
-    basePrice?: number;
+    /**
+     * Override identifier
+     */
+    overrideId: string;
+    /**
+     * Version for optimistic locking
+     */
+    version: number;
+    /**
+     * Location identifier the override applies to
+     */
+    locationId: string;
+    /**
+     * Product identifier the override applies to
+     */
+    productId: string;
+    /**
+     * Base price before override
+     */
+    basePrice: number;
+    /**
+     * Item cost used for margin calculation
+     */
     cost?: number;
-    overridePrice?: number;
+    /**
+     * Override price
+     */
+    overridePrice: number;
+    /**
+     * Computed discount percent versus base price
+     */
     discountPercent?: number;
+    /**
+     * Computed margin percent versus cost
+     */
     marginPercent?: number;
-    status?: LocationPriceOverrideResponseDtoStatusEnum;
-    createdByUserId?: string;
-    createdAt?: string;
+    /**
+     * Current override status
+     */
+    status: LocationPriceOverrideResponseDtoStatusEnum;
+    /**
+     * Identifier of the user that created the override
+     */
+    createdByUserId: string;
+    /**
+     * Timestamp the override was created
+     */
+    createdAt: string;
+    /**
+     * Identifier of the assigned approver
+     */
     assignedApproverId?: string;
+    /**
+     * Strategy used to assign the approver
+     */
     assignmentStrategy?: string;
+    /**
+     * Identifier of the user that approved the override
+     */
     approvedByUserId?: string;
+    /**
+     * Timestamp the override was approved
+     */
     approvedAt?: string;
+    /**
+     * Identifier of the user that rejected the override
+     */
     rejectedBy?: string;
+    /**
+     * Timestamp the override was rejected
+     */
     rejectedAt?: string;
+    /**
+     * Reason code for rejection
+     */
     rejectionReasonCode?: string;
+    /**
+     * Free-text notes for rejection
+     */
     rejectionNotes?: string;
 }
 export enum LocationPriceOverrideResponseDtoStatusEnum {
@@ -78,7 +141,7 @@ export function instanceOfLocationPriceOverrideResponseDto(value: object): value
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createLocationPriceOverrideResponseDtoPropertyNames();
+    const requiredProperties = createLocationPriceOverrideResponseDtoPropertyNames('overrideId', 'version', 'locationId', 'productId', 'basePrice', 'overridePrice', 'status', 'createdByUserId', 'createdAt', );
     const optionalStringProperties = createLocationPriceOverrideResponseDtoOptionalProperties({ name: 'overrideId', nullable: false }, { name: 'locationId', nullable: false }, { name: 'productId', nullable: false }, { name: 'status', nullable: false }, { name: 'createdByUserId', nullable: false }, { name: 'assignedApproverId', nullable: false }, { name: 'assignmentStrategy', nullable: false }, { name: 'approvedByUserId', nullable: false }, { name: 'rejectedBy', nullable: false }, { name: 'rejectionReasonCode', nullable: false }, { name: 'rejectionNotes', nullable: false }, );
     const optionalNumberProperties = createLocationPriceOverrideResponseDtoOptionalProperties({ name: 'version', nullable: false }, { name: 'basePrice', nullable: false }, { name: 'cost', nullable: false }, { name: 'overridePrice', nullable: false }, { name: 'discountPercent', nullable: false }, { name: 'marginPercent', nullable: false }, );
     const optionalBooleanProperties = createLocationPriceOverrideResponseDtoOptionalProperties();

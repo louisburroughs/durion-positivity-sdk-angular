@@ -9,9 +9,21 @@
  */
 
 
+/**
+ * Request to disable an employee and govern handling of their staffing assignments
+ */
 export interface DisableEmployeeRequestDto { 
+    /**
+     * Reason the employee is being disabled
+     */
     disableReason?: string;
+    /**
+     * Policy controlling how active staffing assignments are terminated
+     */
     assignmentPolicy?: DisableEmployeeRequestDtoAssignmentPolicyEnum;
+    /**
+     * End date to apply to assignments when the policy is GRACE_PERIOD
+     */
     assignmentEndDate?: string;
 }
 export enum DisableEmployeeRequestDtoAssignmentPolicyEnum {

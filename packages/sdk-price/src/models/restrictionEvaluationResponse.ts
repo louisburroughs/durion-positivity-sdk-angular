@@ -10,8 +10,14 @@
 import { RestrictionEvaluationResult } from './restrictionEvaluationResult';
 
 
+/**
+ * Batch response containing one restriction-evaluation result per requested item
+ */
 export interface RestrictionEvaluationResponse { 
-    results?: Array<RestrictionEvaluationResult>;
+    /**
+     * Per-item restriction evaluation results
+     */
+    results: Array<RestrictionEvaluationResult>;
 }
 
 function isOptionalRestrictionEvaluationResponsePropertyOfType(
@@ -52,7 +58,7 @@ export function instanceOfRestrictionEvaluationResponse(value: object): value is
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createRestrictionEvaluationResponsePropertyNames();
+    const requiredProperties = createRestrictionEvaluationResponsePropertyNames('results', );
     const optionalStringProperties = createRestrictionEvaluationResponseOptionalProperties();
     const optionalNumberProperties = createRestrictionEvaluationResponseOptionalProperties();
     const optionalBooleanProperties = createRestrictionEvaluationResponseOptionalProperties();

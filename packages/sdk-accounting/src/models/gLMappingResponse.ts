@@ -9,18 +9,57 @@
  */
 
 
+/**
+ * GL mapping response payload
+ */
 export interface GLMappingResponse { 
-    glMappingId?: string;
+    /**
+     * GL mapping UUID
+     */
+    glMappingId: string;
+    /**
+     * Source system identifier
+     */
     sourceSystem?: string;
+    /**
+     * External code from the source system
+     */
     externalCode?: string;
+    /**
+     * GL account UUID this code maps to
+     */
     glAccountId?: string;
+    /**
+     * GL account code
+     */
     accountCode?: string;
+    /**
+     * GL account name
+     */
     accountName?: string;
+    /**
+     * Inclusive start of the mapping\'s temporal validity
+     */
     effectiveStartDate?: string;
+    /**
+     * Exclusive end of the mapping\'s temporal validity (open-ended when null)
+     */
     effectiveEndDate?: string;
+    /**
+     * Dimensional context for this mapping
+     */
     dimensions?: { [key: string]: string; };
+    /**
+     * Mapping resolution priority
+     */
     priority?: number;
+    /**
+     * Created timestamp
+     */
     createdAt?: string;
+    /**
+     * Created by username
+     */
     createdBy?: string;
 }
 
@@ -62,7 +101,7 @@ export function instanceOfGLMappingResponse(value: object): value is GLMappingRe
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createGLMappingResponsePropertyNames();
+    const requiredProperties = createGLMappingResponsePropertyNames('glMappingId', );
     const optionalStringProperties = createGLMappingResponseOptionalProperties({ name: 'glMappingId', nullable: false }, { name: 'sourceSystem', nullable: false }, { name: 'externalCode', nullable: false }, { name: 'glAccountId', nullable: false }, { name: 'accountCode', nullable: false }, { name: 'accountName', nullable: false }, { name: 'createdBy', nullable: false }, );
     const optionalNumberProperties = createGLMappingResponseOptionalProperties({ name: 'priority', nullable: false }, );
     const optionalBooleanProperties = createGLMappingResponseOptionalProperties();

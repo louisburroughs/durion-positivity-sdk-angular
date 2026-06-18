@@ -16,11 +16,11 @@ export interface WorkorderLaborEntryResponse {
     /**
      * Unique ID of the labor entry
      */
-    id?: string;
+    id: string;
     /**
      * Workorder ID
      */
-    workorderId?: string;
+    workorderId: string;
     /**
      * Service line item ID
      */
@@ -52,7 +52,7 @@ export interface WorkorderLaborEntryResponse {
     /**
      * Whether this session is still active (not stopped)
      */
-    active?: boolean;
+    active: boolean;
     /**
      * User who created this entry
      */
@@ -101,7 +101,7 @@ export function instanceOfWorkorderLaborEntryResponse(value: object): value is W
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createWorkorderLaborEntryResponsePropertyNames();
+    const requiredProperties = createWorkorderLaborEntryResponsePropertyNames('id', 'workorderId', 'active', );
     const optionalStringProperties = createWorkorderLaborEntryResponseOptionalProperties({ name: 'id', nullable: false }, { name: 'workorderId', nullable: false }, { name: 'workorderServiceId', nullable: false }, { name: 'technicianId', nullable: false }, { name: 'notes', nullable: false }, { name: 'adjustmentReason', nullable: false }, { name: 'createdBy', nullable: false }, );
     const optionalNumberProperties = createWorkorderLaborEntryResponseOptionalProperties({ name: 'hoursWorked', nullable: false }, );
     const optionalBooleanProperties = createWorkorderLaborEntryResponseOptionalProperties({ name: 'active', nullable: false }, );

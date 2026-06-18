@@ -10,11 +10,29 @@
 import { PostingRuleSetResponse } from './postingRuleSetResponse';
 
 
+/**
+ * Paginated list of posting rule sets
+ */
 export interface PostingRuleSetListResponse { 
+    /**
+     * Posting rule sets on the current page
+     */
     ruleSets?: Array<PostingRuleSetResponse>;
+    /**
+     * Total number of posting rule sets across all pages
+     */
     totalElements?: number;
+    /**
+     * Total number of pages available
+     */
     totalPages?: number;
+    /**
+     * Zero-based index of the current page
+     */
     currentPage?: number;
+    /**
+     * Number of items per page
+     */
     pageSize?: number;
 }
 

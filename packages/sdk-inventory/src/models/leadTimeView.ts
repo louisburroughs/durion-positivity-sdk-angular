@@ -9,15 +9,18 @@
  */
 
 
+/**
+ * Lead-time view returned by inventory for product detail aggregation
+ */
 export interface LeadTimeView { 
     /**
      * Product identifier
      */
-    productId?: string;
+    productId: string;
     /**
      * Location identifier
      */
-    locationId?: string;
+    locationId: string;
     /**
      * Source of lead-time data
      */
@@ -82,7 +85,7 @@ export function instanceOfLeadTimeView(value: object): value is LeadTimeView {
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createLeadTimeViewPropertyNames();
+    const requiredProperties = createLeadTimeViewPropertyNames('productId', 'locationId', );
     const optionalStringProperties = createLeadTimeViewOptionalProperties({ name: 'productId', nullable: false }, { name: 'locationId', nullable: false }, { name: 'source', nullable: false }, { name: 'displayText', nullable: false }, { name: 'confidence', nullable: false }, );
     const optionalNumberProperties = createLeadTimeViewOptionalProperties({ name: 'minDays', nullable: false }, { name: 'maxDays', nullable: false }, );
     const optionalBooleanProperties = createLeadTimeViewOptionalProperties();

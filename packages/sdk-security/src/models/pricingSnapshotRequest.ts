@@ -10,8 +10,18 @@
 import { PricingRuleTraceEntryRequest } from './pricingRuleTraceEntryRequest';
 
 
+/**
+ * Request to create a pricing snapshot with its rule-evaluation trace
+ */
 export interface PricingSnapshotRequest { 
-    finalPrice?: number;
+    quoteContext?: any | null;
+    /**
+     * Final computed price
+     */
+    finalPrice: number;
+    /**
+     * Ordered rule-evaluation steps that produced the price
+     */
     evaluationSteps?: Array<PricingRuleTraceEntryRequest>;
 }
 
@@ -53,7 +63,7 @@ export function instanceOfPricingSnapshotRequest(value: object): value is Pricin
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createPricingSnapshotRequestPropertyNames();
+    const requiredProperties = createPricingSnapshotRequestPropertyNames('finalPrice', );
     const optionalStringProperties = createPricingSnapshotRequestOptionalProperties();
     const optionalNumberProperties = createPricingSnapshotRequestOptionalProperties({ name: 'finalPrice', nullable: false }, );
     const optionalBooleanProperties = createPricingSnapshotRequestOptionalProperties();

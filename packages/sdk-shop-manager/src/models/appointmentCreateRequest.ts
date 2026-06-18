@@ -13,15 +13,45 @@
  * Appointment creation request body
  */
 export interface AppointmentCreateRequest { 
+    /**
+     * CRM customer identifier the appointment is booked for
+     */
     crmCustomerId: string;
+    /**
+     * CRM vehicle identifier the appointment services
+     */
     crmVehicleId: string;
+    /**
+     * Facility/location identifier where the appointment is scheduled
+     */
     locationId: string;
+    /**
+     * Optional resource (bay or mobile unit) reserved for the appointment
+     */
     resourceId?: string;
+    /**
+     * Appointment start instant in UTC (ISO-8601)
+     */
     startAt: string;
+    /**
+     * Appointment end instant in UTC (ISO-8601); must be after startAt
+     */
     endAt: string;
+    /**
+     * Service request identifiers included in this appointment (at least one required)
+     */
     serviceRequestIds: Array<string>;
+    /**
+     * Optional reference linking the appointment to a workorder
+     */
     workorderLinkRef?: string;
+    /**
+     * Originating workexec source type; when set, sourceId must also be provided
+     */
     sourceType?: AppointmentCreateRequestSourceTypeEnum;
+    /**
+     * External identifier of the originating estimate or workorder; required when sourceType is set
+     */
     sourceId?: string;
 }
 export enum AppointmentCreateRequestSourceTypeEnum {

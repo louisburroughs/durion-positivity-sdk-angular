@@ -9,17 +9,53 @@
  */
 
 
+/**
+ * Response representing a single line on a sales order
+ */
 export interface SalesOrderLineResponse { 
-    orderLineId?: string;
-    itemSku?: string;
+    /**
+     * Unique identifier of the order line
+     */
+    orderLineId: string;
+    /**
+     * Stock keeping unit identifying the line item
+     */
+    itemSku: string;
+    /**
+     * Human-readable description of the line item
+     */
     itemDescription?: string;
-    quantity?: number;
+    /**
+     * Quantity of the item on the line
+     */
+    quantity: number;
+    /**
+     * Unit price applied to the line
+     */
     unitPrice?: number;
+    /**
+     * Fulfillment status of the line
+     */
     fulfillmentStatus?: string;
+    /**
+     * Source of the line price (e.g. CATALOG, MANUAL, OVERRIDE)
+     */
     priceSource?: string;
+    /**
+     * Reason code associated with a manual price or special handling
+     */
     reasonCode?: string;
+    /**
+     * Type classification of the line\'s originating source
+     */
     sourceType?: string;
+    /**
+     * Identifier of the originating source record
+     */
     sourceId?: string;
+    /**
+     * Identifier of the originating source line
+     */
     sourceLineId?: string;
 }
 
@@ -61,7 +97,7 @@ export function instanceOfSalesOrderLineResponse(value: object): value is SalesO
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createSalesOrderLineResponsePropertyNames();
+    const requiredProperties = createSalesOrderLineResponsePropertyNames('orderLineId', 'itemSku', 'quantity', );
     const optionalStringProperties = createSalesOrderLineResponseOptionalProperties({ name: 'orderLineId', nullable: false }, { name: 'itemSku', nullable: false }, { name: 'itemDescription', nullable: false }, { name: 'fulfillmentStatus', nullable: false }, { name: 'priceSource', nullable: false }, { name: 'reasonCode', nullable: false }, { name: 'sourceType', nullable: false }, { name: 'sourceId', nullable: false }, { name: 'sourceLineId', nullable: false }, );
     const optionalNumberProperties = createSalesOrderLineResponseOptionalProperties({ name: 'quantity', nullable: false }, { name: 'unitPrice', nullable: false }, );
     const optionalBooleanProperties = createSalesOrderLineResponseOptionalProperties();

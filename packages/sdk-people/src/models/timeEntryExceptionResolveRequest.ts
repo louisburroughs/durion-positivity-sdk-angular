@@ -9,6 +9,9 @@
  */
 
 
+/**
+ * Request to resolve a time entry exception
+ */
 export interface TimeEntryExceptionResolveRequest { 
     /**
      * Notes explaining the resolution

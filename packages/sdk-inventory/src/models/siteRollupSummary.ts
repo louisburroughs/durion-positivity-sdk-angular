@@ -11,6 +11,9 @@ import { StorageLocationRollupNode } from './storageLocationRollupNode';
 import { RollupQuantities } from './rollupQuantities';
 
 
+/**
+ * Per-site entry of a parent-location rollup, optionally including the storage-location tree
+ */
 export interface SiteRollupSummary { 
     /**
      * Site (Location) identifier

@@ -9,8 +9,14 @@
  */
 
 
+/**
+ * Minimal acknowledgement returned after creating a pricing snapshot
+ */
 export interface PricingSnapshotCreatedResponse { 
-    snapshotId?: string;
+    /**
+     * Identifier of the created pricing snapshot
+     */
+    snapshotId: string;
 }
 
 function isOptionalPricingSnapshotCreatedResponsePropertyOfType(
@@ -51,7 +57,7 @@ export function instanceOfPricingSnapshotCreatedResponse(value: object): value i
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createPricingSnapshotCreatedResponsePropertyNames();
+    const requiredProperties = createPricingSnapshotCreatedResponsePropertyNames('snapshotId', );
     const optionalStringProperties = createPricingSnapshotCreatedResponseOptionalProperties({ name: 'snapshotId', nullable: false }, );
     const optionalNumberProperties = createPricingSnapshotCreatedResponseOptionalProperties();
     const optionalBooleanProperties = createPricingSnapshotCreatedResponseOptionalProperties();

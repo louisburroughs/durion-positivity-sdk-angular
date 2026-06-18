@@ -16,11 +16,11 @@ export interface TokenPairResponse {
     /**
      * Short-lived JWT access token (1 hour expiration)
      */
-    accessToken?: string;
+    accessToken: string;
     /**
      * Long-lived JWT refresh token (7 days expiration)
      */
-    refreshToken?: string;
+    refreshToken: string;
 }
 
 function isOptionalTokenPairResponsePropertyOfType(
@@ -61,7 +61,7 @@ export function instanceOfTokenPairResponse(value: object): value is TokenPairRe
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createTokenPairResponsePropertyNames();
+    const requiredProperties = createTokenPairResponsePropertyNames('accessToken', 'refreshToken', );
     const optionalStringProperties = createTokenPairResponseOptionalProperties({ name: 'accessToken', nullable: false }, { name: 'refreshToken', nullable: false }, );
     const optionalNumberProperties = createTokenPairResponseOptionalProperties();
     const optionalBooleanProperties = createTokenPairResponseOptionalProperties();

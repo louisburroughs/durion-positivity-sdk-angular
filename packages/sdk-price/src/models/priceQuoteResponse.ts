@@ -18,26 +18,26 @@ export interface PriceQuoteResponse {
     /**
      * Product identifier
      */
-    productId?: string;
+    productId: string;
     /**
      * Quoted quantity
      */
-    quantity?: number;
-    msrp?: MoneyAmount;
-    unitPrice?: MoneyAmount;
-    extendedPrice?: MoneyAmount;
+    quantity: number;
+    msrp: MoneyAmount;
+    unitPrice: MoneyAmount;
+    extendedPrice: MoneyAmount;
     /**
      * Source from which the final price was resolved
      */
-    priceSource?: string;
+    priceSource: string;
     /**
      * Per-rule pricing breakdown entries
      */
-    pricingBreakdown?: Array<PricingBreakdownEntry>;
+    pricingBreakdown: Array<PricingBreakdownEntry>;
     /**
      * Non-fatal warnings generated during quote calculation
      */
-    warnings?: Array<string>;
+    warnings: Array<string>;
 }
 
 function isOptionalPriceQuoteResponsePropertyOfType(
@@ -78,7 +78,7 @@ export function instanceOfPriceQuoteResponse(value: object): value is PriceQuote
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createPriceQuoteResponsePropertyNames();
+    const requiredProperties = createPriceQuoteResponsePropertyNames('productId', 'quantity', 'msrp', 'unitPrice', 'extendedPrice', 'priceSource', 'pricingBreakdown', 'warnings', );
     const optionalStringProperties = createPriceQuoteResponseOptionalProperties({ name: 'productId', nullable: false }, { name: 'priceSource', nullable: false }, );
     const optionalNumberProperties = createPriceQuoteResponseOptionalProperties({ name: 'quantity', nullable: false }, );
     const optionalBooleanProperties = createPriceQuoteResponseOptionalProperties();

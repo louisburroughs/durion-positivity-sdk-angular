@@ -9,20 +9,65 @@
  */
 
 
+/**
+ * Bulk load job state and progress counters
+ */
 export interface BulkLoadJobResponse { 
-    id?: string;
+    /**
+     * Unique identifier of the bulk load job
+     */
+    id: string;
+    /**
+     * Identifier of the operator who created the job
+     */
     operatorId?: string;
+    /**
+     * Identifier of the location the job targets, if scoped to one
+     */
     locationId?: string;
-    fileName?: string;
-    domainType?: BulkLoadJobResponseDomainTypeEnum;
-    status?: BulkLoadJobResponseStatusEnum;
+    /**
+     * Original name of the uploaded source file
+     */
+    fileName: string;
+    /**
+     * Detected or selected target domain for the load
+     */
+    domainType: BulkLoadJobResponseDomainTypeEnum;
+    /**
+     * Current lifecycle status of the job
+     */
+    status: BulkLoadJobResponseStatusEnum;
+    /**
+     * Total number of data rows detected in the source file
+     */
     totalRows?: number;
+    /**
+     * Number of rows processed so far
+     */
     processedRows?: number;
+    /**
+     * Number of rows successfully loaded
+     */
     successCount?: number;
+    /**
+     * Number of rows that failed processing
+     */
     failureCount?: number;
+    /**
+     * Timestamp when processing started (ISO 8601)
+     */
     startedAt?: string;
+    /**
+     * Timestamp when processing completed (ISO 8601)
+     */
     completedAt?: string;
-    createdAt?: string;
+    /**
+     * Timestamp when the job was created (ISO 8601)
+     */
+    createdAt: string;
+    /**
+     * Timestamp when the job was last updated (ISO 8601)
+     */
     updatedAt?: string;
 }
 export enum BulkLoadJobResponseDomainTypeEnum {
@@ -87,7 +132,7 @@ export function instanceOfBulkLoadJobResponse(value: object): value is BulkLoadJ
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createBulkLoadJobResponsePropertyNames();
+    const requiredProperties = createBulkLoadJobResponsePropertyNames('id', 'fileName', 'domainType', 'status', 'createdAt', );
     const optionalStringProperties = createBulkLoadJobResponseOptionalProperties({ name: 'id', nullable: false }, { name: 'operatorId', nullable: false }, { name: 'locationId', nullable: false }, { name: 'fileName', nullable: false }, { name: 'domainType', nullable: false }, { name: 'status', nullable: false }, );
     const optionalNumberProperties = createBulkLoadJobResponseOptionalProperties({ name: 'totalRows', nullable: false }, { name: 'processedRows', nullable: false }, { name: 'successCount', nullable: false }, { name: 'failureCount', nullable: false }, );
     const optionalBooleanProperties = createBulkLoadJobResponseOptionalProperties();

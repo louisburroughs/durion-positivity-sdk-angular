@@ -16,35 +16,35 @@ export interface WorkorderCapabilities {
     /**
      * User can start workorder
      */
-    canStart?: boolean;
+    canStart: boolean;
     /**
      * User can approve workorder
      */
-    canApprove?: boolean;
+    canApprove: boolean;
     /**
      * User can assign/reassign technicians
      */
-    canAssignTechnician?: boolean;
+    canAssignTechnician: boolean;
     /**
      * User can record labor entries
      */
-    canRecordLabor?: boolean;
+    canRecordLabor: boolean;
     /**
      * User can record parts usage
      */
-    canRecordPartsUsage?: boolean;
+    canRecordPartsUsage: boolean;
     /**
      * User can view financial data
      */
-    canViewFinancials?: boolean;
+    canViewFinancials: boolean;
     /**
      * User can edit workorder
      */
-    canEditWorkorder?: boolean;
+    canEditWorkorder: boolean;
     /**
      * User can delete workorder
      */
-    canDeleteWorkorder?: boolean;
+    canDeleteWorkorder: boolean;
 }
 
 function isOptionalWorkorderCapabilitiesPropertyOfType(
@@ -85,7 +85,7 @@ export function instanceOfWorkorderCapabilities(value: object): value is Workord
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createWorkorderCapabilitiesPropertyNames();
+    const requiredProperties = createWorkorderCapabilitiesPropertyNames('canStart', 'canApprove', 'canAssignTechnician', 'canRecordLabor', 'canRecordPartsUsage', 'canViewFinancials', 'canEditWorkorder', 'canDeleteWorkorder', );
     const optionalStringProperties = createWorkorderCapabilitiesOptionalProperties();
     const optionalNumberProperties = createWorkorderCapabilitiesOptionalProperties();
     const optionalBooleanProperties = createWorkorderCapabilitiesOptionalProperties({ name: 'canStart', nullable: false }, { name: 'canApprove', nullable: false }, { name: 'canAssignTechnician', nullable: false }, { name: 'canRecordLabor', nullable: false }, { name: 'canRecordPartsUsage', nullable: false }, { name: 'canViewFinancials', nullable: false }, { name: 'canEditWorkorder', nullable: false }, { name: 'canDeleteWorkorder', nullable: false }, );

@@ -9,11 +9,29 @@
  */
 
 
+/**
+ * A detected scheduling or resource conflict on the dispatch board
+ */
 export interface ConflictEntry { 
-    conflictType?: string;
-    severity?: string;
-    message?: string;
+    /**
+     * Type of conflict detected
+     */
+    conflictType: string;
+    /**
+     * Severity of the conflict
+     */
+    severity: string;
+    /**
+     * Human-readable conflict message
+     */
+    message: string;
+    /**
+     * Identifier of the affected resource (mechanic or bay)
+     */
     affectedResourceId?: string;
+    /**
+     * Identifier of the affected workorder
+     */
     affectedWorkorderId?: string;
 }
 
@@ -55,7 +73,7 @@ export function instanceOfConflictEntry(value: object): value is ConflictEntry {
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createConflictEntryPropertyNames();
+    const requiredProperties = createConflictEntryPropertyNames('conflictType', 'severity', 'message', );
     const optionalStringProperties = createConflictEntryOptionalProperties({ name: 'conflictType', nullable: false }, { name: 'severity', nullable: false }, { name: 'message', nullable: false }, { name: 'affectedResourceId', nullable: false }, { name: 'affectedWorkorderId', nullable: false }, );
     const optionalNumberProperties = createConflictEntryOptionalProperties();
     const optionalBooleanProperties = createConflictEntryOptionalProperties();

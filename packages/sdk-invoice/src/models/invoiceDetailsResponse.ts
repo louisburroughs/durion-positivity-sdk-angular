@@ -11,27 +11,90 @@ import { InvoiceAdjustmentResponse } from './invoiceAdjustmentResponse';
 import { InvoiceItemResponse } from './invoiceItemResponse';
 
 
+/**
+ * Full details of an invoice including line items and adjustments
+ */
 export interface InvoiceDetailsResponse { 
+    /**
+     * Unique identifier of the invoice
+     */
     invoiceId?: string;
+    /**
+     * Human-readable invoice number
+     */
     invoiceNumber?: string;
+    /**
+     * Identifier of the associated workorder
+     */
     workorderId?: string;
+    /**
+     * Identifier of the source estimate
+     */
     estimateId?: string;
+    /**
+     * Identifier of the approval record
+     */
     approvalId?: string;
+    /**
+     * Identifier of the billed party
+     */
     partyId?: string;
+    /**
+     * Current lifecycle status of the invoice
+     */
     status?: InvoiceDetailsResponseStatusEnum;
+    /**
+     * Sum of line items before tax and adjustments
+     */
     subtotal?: number;
+    /**
+     * Total tax applied to the invoice
+     */
     tax?: number;
+    /**
+     * Grand total payable on the invoice
+     */
     total?: number;
+    /**
+     * Net total of all monetary adjustments
+     */
     adjustments?: number;
+    /**
+     * Timestamp when the invoice was created
+     */
     createdAt?: string;
+    /**
+     * Timestamp when the invoice was last updated
+     */
     updatedAt?: string;
+    /**
+     * Timestamp when the invoice was finalized
+     */
     finalizedAt?: string;
+    /**
+     * Identifier of the actor who finalized the invoice
+     */
     finalizedBy?: string;
+    /**
+     * Timestamp when the invoice was reverted to draft
+     */
     revertedAt?: string;
+    /**
+     * Reason the invoice was reverted
+     */
     reversionReason?: string;
+    /**
+     * Identifier of the actor who reverted the invoice
+     */
     revertedBy?: string;
-    items?: Array<InvoiceItemResponse>;
-    adjustmentEntries?: Array<InvoiceAdjustmentResponse>;
+    /**
+     * Line items belonging to the invoice
+     */
+    items: Array<InvoiceItemResponse>;
+    /**
+     * Monetary adjustment entries applied to the invoice
+     */
+    adjustmentEntries: Array<InvoiceAdjustmentResponse>;
 }
 export enum InvoiceDetailsResponseStatusEnum {
     Draft = 'DRAFT',
@@ -80,7 +143,7 @@ export function instanceOfInvoiceDetailsResponse(value: object): value is Invoic
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createInvoiceDetailsResponsePropertyNames();
+    const requiredProperties = createInvoiceDetailsResponsePropertyNames('items', 'adjustmentEntries', );
     const optionalStringProperties = createInvoiceDetailsResponseOptionalProperties({ name: 'invoiceId', nullable: false }, { name: 'invoiceNumber', nullable: false }, { name: 'workorderId', nullable: false }, { name: 'estimateId', nullable: false }, { name: 'approvalId', nullable: false }, { name: 'partyId', nullable: false }, { name: 'status', nullable: false }, { name: 'finalizedBy', nullable: false }, { name: 'reversionReason', nullable: false }, { name: 'revertedBy', nullable: false }, );
     const optionalNumberProperties = createInvoiceDetailsResponseOptionalProperties({ name: 'subtotal', nullable: false }, { name: 'tax', nullable: false }, { name: 'total', nullable: false }, { name: 'adjustments', nullable: false }, );
     const optionalBooleanProperties = createInvoiceDetailsResponseOptionalProperties();

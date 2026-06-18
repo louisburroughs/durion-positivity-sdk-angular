@@ -9,8 +9,17 @@
  */
 
 
+/**
+ * Request to email a receipt and record the delivery status
+ */
 export interface EmailDeliveryRequest { 
+    /**
+     * Recipient email address for the receipt
+     */
     emailAddress: string;
+    /**
+     * Email delivery outcome status
+     */
     status: EmailDeliveryRequestStatusEnum;
 }
 export enum EmailDeliveryRequestStatusEnum {

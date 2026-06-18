@@ -9,13 +9,37 @@
  */
 
 
+/**
+ * Request payload describing a single line item to include when creating an advance shipping notice (ASN)
+ */
 export interface CreateAsnLineRequest { 
+    /**
+     * Identifier of the purchase order this ASN line is associated with
+     */
     poId: string;
+    /**
+     * Identifier of the specific purchase order line this ASN line fulfills
+     */
     poLineId?: string;
+    /**
+     * Stock keeping unit identifier for the shipped product
+     */
     sku: string;
+    /**
+     * Quantity of the SKU declared as shipped on the ASN
+     */
     quantityShipped: number;
+    /**
+     * Unit of measure for the shipped quantity
+     */
     unitOfMeasure?: string;
+    /**
+     * Unit cost of the product expressed in minor currency units (e.g. cents)
+     */
     unitCostMinor?: number;
+    /**
+     * Lot or batch number associated with the shipped product
+     */
     lotNumber?: string;
 }
 

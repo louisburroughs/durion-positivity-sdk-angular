@@ -9,17 +9,53 @@
  */
 
 
+/**
+ * Billing rules snapshot returned by pos-customer for a customer account
+ */
 export interface BillingRuleRefResponse { 
-    poRequired?: boolean;
-    taxExempt?: boolean;
+    /**
+     * Whether a purchase order is required for billing
+     */
+    poRequired: boolean;
+    /**
+     * Whether the customer is tax exempt
+     */
+    taxExempt: boolean;
+    /**
+     * Agreed payment terms
+     */
     paymentTerms?: string;
+    /**
+     * Credit limit extended to the customer
+     */
     creditLimit?: number;
-    creditHold?: boolean;
+    /**
+     * Whether the customer is currently on credit hold
+     */
+    creditHold: boolean;
+    /**
+     * Method used to deliver invoices
+     */
     invoiceDeliveryMethod?: string;
+    /**
+     * Identifier of the billing address
+     */
     billingAddressId?: string;
-    autoPayEnabled?: boolean;
+    /**
+     * Whether automatic payment is enabled
+     */
+    autoPayEnabled: boolean;
+    /**
+     * Reference to the applicable discount policy
+     */
     discountPolicyRef?: string;
+    /**
+     * ISO 4217 currency code
+     */
     currency?: string;
+    /**
+     * Additional extension attributes keyed by name
+     */
     extensions?: object;
 }
 
@@ -61,7 +97,7 @@ export function instanceOfBillingRuleRefResponse(value: object): value is Billin
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createBillingRuleRefResponsePropertyNames();
+    const requiredProperties = createBillingRuleRefResponsePropertyNames('poRequired', 'taxExempt', 'creditHold', 'autoPayEnabled', );
     const optionalStringProperties = createBillingRuleRefResponseOptionalProperties({ name: 'paymentTerms', nullable: false }, { name: 'invoiceDeliveryMethod', nullable: false }, { name: 'billingAddressId', nullable: false }, { name: 'discountPolicyRef', nullable: false }, { name: 'currency', nullable: false }, );
     const optionalNumberProperties = createBillingRuleRefResponseOptionalProperties({ name: 'creditLimit', nullable: false }, );
     const optionalBooleanProperties = createBillingRuleRefResponseOptionalProperties({ name: 'poRequired', nullable: false }, { name: 'taxExempt', nullable: false }, { name: 'creditHold', nullable: false }, { name: 'autoPayEnabled', nullable: false }, );

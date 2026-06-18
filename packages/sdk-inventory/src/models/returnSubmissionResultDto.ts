@@ -9,12 +9,30 @@
  */
 
 
+/**
+ * Outcome of a return submission, summarizing how many lines were processed
+ */
 export interface ReturnSubmissionResultDto { 
-    returnId?: string;
-    workorderId?: string;
-    processedLines?: number;
-    status?: string;
-    processedAt?: string;
+    /**
+     * Identifier of the created return record
+     */
+    returnId: string;
+    /**
+     * Identifier of the workorder the return was submitted against
+     */
+    workorderId: string;
+    /**
+     * Number of return lines that were processed
+     */
+    processedLines: number;
+    /**
+     * Status of the return submission
+     */
+    status: string;
+    /**
+     * Timestamp when the return was processed
+     */
+    processedAt: string;
 }
 
 function isOptionalReturnSubmissionResultDtoPropertyOfType(
@@ -55,7 +73,7 @@ export function instanceOfReturnSubmissionResultDto(value: object): value is Ret
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createReturnSubmissionResultDtoPropertyNames();
+    const requiredProperties = createReturnSubmissionResultDtoPropertyNames('returnId', 'workorderId', 'processedLines', 'status', 'processedAt', );
     const optionalStringProperties = createReturnSubmissionResultDtoOptionalProperties({ name: 'returnId', nullable: false }, { name: 'workorderId', nullable: false }, { name: 'status', nullable: false }, );
     const optionalNumberProperties = createReturnSubmissionResultDtoOptionalProperties({ name: 'processedLines', nullable: false }, );
     const optionalBooleanProperties = createReturnSubmissionResultDtoOptionalProperties();

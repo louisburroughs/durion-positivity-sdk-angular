@@ -9,7 +9,13 @@
  */
 
 
+/**
+ * Request to activate a GL account
+ */
 export interface GLAccountActivateRequest { 
+    /**
+     * Date the activation takes effect (ISO 8601 date)
+     */
     effectiveDate: string;
 }
 

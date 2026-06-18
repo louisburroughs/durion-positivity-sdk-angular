@@ -9,15 +9,45 @@
  */
 
 
+/**
+ * A single version of a posting rule set
+ */
 export interface PostingRuleVersionResponse { 
-    versionId?: string;
-    postingRuleSetId?: string;
+    /**
+     * Unique identifier of the rule version
+     */
+    versionId: string;
+    /**
+     * Identifier of the owning posting rule set
+     */
+    postingRuleSetId: string;
+    /**
+     * Sequential version number within the rule set
+     */
     versionNumber?: number;
+    /**
+     * Lifecycle state of the version
+     */
     state?: PostingRuleVersionResponseStateEnum;
+    /**
+     * Serialized rules definition (JSON) for this version
+     */
     rulesDefinition?: string;
+    /**
+     * Timestamp when the version was created (ISO 8601)
+     */
     createdAt?: string;
+    /**
+     * Identifier of the user who created the version
+     */
     createdBy?: string;
+    /**
+     * Timestamp when the version was last modified (ISO 8601)
+     */
     modifiedAt?: string;
+    /**
+     * Identifier of the user who last modified the version
+     */
     modifiedBy?: string;
 }
 export enum PostingRuleVersionResponseStateEnum {
@@ -66,7 +96,7 @@ export function instanceOfPostingRuleVersionResponse(value: object): value is Po
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createPostingRuleVersionResponsePropertyNames();
+    const requiredProperties = createPostingRuleVersionResponsePropertyNames('versionId', 'postingRuleSetId', );
     const optionalStringProperties = createPostingRuleVersionResponseOptionalProperties({ name: 'versionId', nullable: false }, { name: 'postingRuleSetId', nullable: false }, { name: 'state', nullable: false }, { name: 'rulesDefinition', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'modifiedBy', nullable: false }, );
     const optionalNumberProperties = createPostingRuleVersionResponseOptionalProperties({ name: 'versionNumber', nullable: false }, );
     const optionalBooleanProperties = createPostingRuleVersionResponseOptionalProperties();

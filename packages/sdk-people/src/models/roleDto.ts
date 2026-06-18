@@ -9,11 +9,29 @@
  */
 
 
+/**
+ * Role definition as exposed by the security service
+ */
 export interface RoleDto { 
+    /**
+     * Stable role code
+     */
     code?: string;
+    /**
+     * Human-readable role name
+     */
     name?: string;
+    /**
+     * Description of the role
+     */
     description?: string;
+    /**
+     * Scope at which the role applies
+     */
     scopeType?: string;
+    /**
+     * Whether the role is active
+     */
     active?: boolean;
 }
 

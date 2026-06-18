@@ -10,14 +10,41 @@
 import { PermissionDto } from './permissionDto';
 
 
+/**
+ * Role definition including its granted permissions and audit metadata
+ */
 export interface RoleDto { 
-    id?: string;
-    name?: string;
+    /**
+     * Role identifier
+     */
+    id: string;
+    /**
+     * Role name
+     */
+    name: string;
+    /**
+     * Human-readable description of the role
+     */
     description?: string;
+    /**
+     * Permissions granted to the role
+     */
     permissions?: Set<PermissionDto>;
+    /**
+     * Creation timestamp
+     */
     createdAt?: string;
+    /**
+     * Actor that created the role
+     */
     createdBy?: string;
+    /**
+     * Last-modified timestamp
+     */
     lastModifiedAt?: string;
+    /**
+     * Actor that last modified the role
+     */
     lastModifiedBy?: string;
 }
 
@@ -59,7 +86,7 @@ export function instanceOfRoleDto(value: object): value is RoleDto {
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createRoleDtoPropertyNames();
+    const requiredProperties = createRoleDtoPropertyNames('id', 'name', );
     const optionalStringProperties = createRoleDtoOptionalProperties({ name: 'id', nullable: false }, { name: 'name', nullable: false }, { name: 'description', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'lastModifiedBy', nullable: false }, );
     const optionalNumberProperties = createRoleDtoOptionalProperties();
     const optionalBooleanProperties = createRoleDtoOptionalProperties();

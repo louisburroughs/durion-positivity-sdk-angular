@@ -9,15 +9,42 @@
  */
 
 
+/**
+ * Pick task details describing a single SKU-and-location pick within a pick list
+ */
 export interface PickTaskResponse { 
-    pickTaskId?: string;
-    pickListId?: string;
-    skuId?: string;
-    locationId?: string;
-    quantityRequired?: number;
-    quantityPicked?: number;
-    status?: PickTaskResponseStatusEnum;
-    sortOrder?: number;
+    /**
+     * Unique identifier of the pick task
+     */
+    pickTaskId: string;
+    /**
+     * Identifier of the pick list this task belongs to
+     */
+    pickListId: string;
+    /**
+     * Identifier of the SKU to be picked
+     */
+    skuId: string;
+    /**
+     * Identifier of the location the SKU is picked from
+     */
+    locationId: string;
+    /**
+     * Quantity required to satisfy this pick task
+     */
+    quantityRequired: number;
+    /**
+     * Quantity already picked against this task
+     */
+    quantityPicked: number;
+    /**
+     * Current status of the pick task
+     */
+    status: PickTaskResponseStatusEnum;
+    /**
+     * Ordinal position of this task in the pick sequence
+     */
+    sortOrder: number;
 }
 export enum PickTaskResponseStatusEnum {
     Pending = 'PENDING',
@@ -66,7 +93,7 @@ export function instanceOfPickTaskResponse(value: object): value is PickTaskResp
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createPickTaskResponsePropertyNames();
+    const requiredProperties = createPickTaskResponsePropertyNames('pickTaskId', 'pickListId', 'skuId', 'locationId', 'quantityRequired', 'quantityPicked', 'status', 'sortOrder', );
     const optionalStringProperties = createPickTaskResponseOptionalProperties({ name: 'pickTaskId', nullable: false }, { name: 'pickListId', nullable: false }, { name: 'skuId', nullable: false }, { name: 'locationId', nullable: false }, { name: 'status', nullable: false }, );
     const optionalNumberProperties = createPickTaskResponseOptionalProperties({ name: 'quantityRequired', nullable: false }, { name: 'quantityPicked', nullable: false }, { name: 'sortOrder', nullable: false }, );
     const optionalBooleanProperties = createPickTaskResponseOptionalProperties();

@@ -10,11 +10,26 @@
 import { BulkIngestResult } from './bulkIngestResult';
 
 
+/**
+ * Summary outcome of a bulk ingest job: per-record results plus aggregate counts
+ */
 export interface BulkIngestResponse { 
-    totalSubmitted?: number;
-    successCount?: number;
-    failureCount?: number;
-    results?: Array<BulkIngestResult>;
+    /**
+     * Total number of records submitted in the batch
+     */
+    totalSubmitted: number;
+    /**
+     * Number of records ingested successfully
+     */
+    successCount: number;
+    /**
+     * Number of records that failed ingest
+     */
+    failureCount: number;
+    /**
+     * Per-record outcomes in submission order
+     */
+    results: Array<BulkIngestResult>;
 }
 
 function isOptionalBulkIngestResponsePropertyOfType(
@@ -55,7 +70,7 @@ export function instanceOfBulkIngestResponse(value: object): value is BulkIngest
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createBulkIngestResponsePropertyNames();
+    const requiredProperties = createBulkIngestResponsePropertyNames('totalSubmitted', 'successCount', 'failureCount', 'results', );
     const optionalStringProperties = createBulkIngestResponseOptionalProperties();
     const optionalNumberProperties = createBulkIngestResponseOptionalProperties({ name: 'totalSubmitted', nullable: false }, { name: 'successCount', nullable: false }, { name: 'failureCount', nullable: false }, );
     const optionalBooleanProperties = createBulkIngestResponseOptionalProperties();

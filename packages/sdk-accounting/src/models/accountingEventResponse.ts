@@ -9,28 +9,97 @@
  */
 
 
+/**
+ * Accounting event ingestion record and its processing outcome
+ */
 export interface AccountingEventResponse { 
-    eventId?: string;
-    organizationId?: string;
-    eventType?: string;
+    /**
+     * Unique identifier of the accounting event
+     */
+    eventId: string;
+    /**
+     * Identifier of the owning organization
+     */
+    organizationId: string;
+    /**
+     * Event type identifier
+     */
+    eventType: string;
+    /**
+     * Source system that emitted the event
+     */
     sourceSystem?: string;
+    /**
+     * Business transaction timestamp
+     */
     transactionDate?: string;
+    /**
+     * Event-specific payload content
+     */
     payload?: object;
-    status?: AccountingEventResponseStatusEnum;
+    /**
+     * Processing status of the event
+     */
+    status: AccountingEventResponseStatusEnum;
+    /**
+     * Identifier of the journal entry produced, if any
+     */
     journalEntryId?: string;
+    /**
+     * Error message when processing failed
+     */
     errorMessage?: string;
-    receivedAt?: string;
+    /**
+     * Timestamp when the event was received (ISO 8601)
+     */
+    receivedAt: string;
+    /**
+     * Timestamp when the event was processed (ISO 8601)
+     */
     processedAt?: string;
+    /**
+     * Monotonic sequence number assigned to the event
+     */
     sequenceNumber?: number;
+    /**
+     * Code categorizing the failure reason
+     */
     failureReasonCode?: string;
+    /**
+     * Detailed failure description
+     */
     failureDetails?: string;
+    /**
+     * Number of processing attempts made
+     */
     attemptCount?: number;
+    /**
+     * Posting reference assigned on final resolution
+     */
     finalPostingReferenceId?: string;
+    /**
+     * Identifier of the user who resolved the event
+     */
     resolvedByUserId?: string;
+    /**
+     * Mapping version attempted during processing
+     */
     mappingVersionAttempted?: string;
+    /**
+     * Idempotency outcome of ingestion
+     */
     idempotencyOutcome?: string;
+    /**
+     * Identifier of the ingestion batch
+     */
     ingestionId?: string;
+    /**
+     * Domain key associated with the event
+     */
     domainKeyId?: string;
+    /**
+     * Identifier of the related invoice, if any
+     */
     invoiceId?: string;
 }
 export enum AccountingEventResponseStatusEnum {
@@ -81,7 +150,7 @@ export function instanceOfAccountingEventResponse(value: object): value is Accou
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createAccountingEventResponsePropertyNames();
+    const requiredProperties = createAccountingEventResponsePropertyNames('eventId', 'organizationId', 'eventType', 'status', 'receivedAt', );
     const optionalStringProperties = createAccountingEventResponseOptionalProperties({ name: 'eventId', nullable: false }, { name: 'organizationId', nullable: false }, { name: 'eventType', nullable: false }, { name: 'sourceSystem', nullable: false }, { name: 'status', nullable: false }, { name: 'journalEntryId', nullable: false }, { name: 'errorMessage', nullable: false }, { name: 'failureReasonCode', nullable: false }, { name: 'failureDetails', nullable: false }, { name: 'finalPostingReferenceId', nullable: false }, { name: 'resolvedByUserId', nullable: false }, { name: 'mappingVersionAttempted', nullable: false }, { name: 'idempotencyOutcome', nullable: false }, { name: 'ingestionId', nullable: false }, { name: 'domainKeyId', nullable: false }, { name: 'invoiceId', nullable: false }, );
     const optionalNumberProperties = createAccountingEventResponseOptionalProperties({ name: 'sequenceNumber', nullable: false }, { name: 'attemptCount', nullable: false }, );
     const optionalBooleanProperties = createAccountingEventResponseOptionalProperties();

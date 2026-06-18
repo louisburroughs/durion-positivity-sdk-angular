@@ -10,16 +10,49 @@
 import { AssignedMechanicInfo } from './assignedMechanicInfo';
 
 
+/**
+ * Representation of a mechanic assignment returned from the API
+ */
 export interface AssignmentResponse { 
-    assignmentId?: string;
-    appointmentId?: string;
-    mechanics?: Array<AssignedMechanicInfo>;
+    /**
+     * Unique assignment identifier
+     */
+    assignmentId: string;
+    /**
+     * Appointment identifier the assignment belongs to
+     */
+    appointmentId: string;
+    /**
+     * Mechanics assigned to the appointment
+     */
+    mechanics: Array<AssignedMechanicInfo>;
+    /**
+     * Associated resource (bay or mobile unit) identifier
+     */
     resourceId?: string;
+    /**
+     * Type of the associated resource
+     */
     resourceType?: string;
-    status?: AssignmentResponseStatusEnum;
-    override?: boolean;
+    /**
+     * Current assignment status
+     */
+    status: AssignmentResponseStatusEnum;
+    /**
+     * Whether the assignment was created with a conflict override
+     */
+    override: boolean;
+    /**
+     * Optional notes for this assignment (max 500 chars)
+     */
     assignmentNotes?: string;
-    assignedAt?: string;
+    /**
+     * Instant the assignment was first created/confirmed in UTC (ISO-8601)
+     */
+    assignedAt: string;
+    /**
+     * Instant the assignment was last modified in UTC (ISO-8601)
+     */
     lastUpdatedAt?: string;
 }
 export enum AssignmentResponseStatusEnum {
@@ -69,7 +102,7 @@ export function instanceOfAssignmentResponse(value: object): value is Assignment
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createAssignmentResponsePropertyNames();
+    const requiredProperties = createAssignmentResponsePropertyNames('assignmentId', 'appointmentId', 'mechanics', 'status', 'override', 'assignedAt', );
     const optionalStringProperties = createAssignmentResponseOptionalProperties({ name: 'assignmentId', nullable: false }, { name: 'appointmentId', nullable: false }, { name: 'resourceId', nullable: false }, { name: 'resourceType', nullable: false }, { name: 'status', nullable: false }, { name: 'assignmentNotes', nullable: false }, );
     const optionalNumberProperties = createAssignmentResponseOptionalProperties();
     const optionalBooleanProperties = createAssignmentResponseOptionalProperties({ name: 'override', nullable: false }, );

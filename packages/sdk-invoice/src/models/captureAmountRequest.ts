@@ -9,8 +9,17 @@
  */
 
 
+/**
+ * Request to capture all or part of an authorized payment hold
+ */
 export interface CaptureAmountRequest { 
+    /**
+     * Amount to capture from the authorized hold
+     */
     amount: number;
+    /**
+     * Idempotency key ensuring the capture is processed at most once
+     */
     captureIdempotencyKey: string;
 }
 

@@ -9,9 +9,21 @@
  */
 
 
+/**
+ * Request to resolve an external code to a GL account at a point in time
+ */
 export interface GLMappingResolveRequest { 
+    /**
+     * Source system identifier
+     */
     sourceSystem: string;
+    /**
+     * External code from the source system
+     */
     externalCode: string;
+    /**
+     * Transaction date used for temporal mapping resolution
+     */
     transactionDate: string;
 }
 

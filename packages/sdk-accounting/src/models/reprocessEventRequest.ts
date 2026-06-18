@@ -9,9 +9,21 @@
  */
 
 
+/**
+ * Request to reprocess a suspended accounting event
+ */
 export interface ReprocessEventRequest { 
+    /**
+     * Identifier of the user triggering the reprocessing (required for audit trail)
+     */
     triggeredByUserId: string;
+    /**
+     * Specific mapping version to use; defaults to latest when omitted
+     */
     mappingVersionToUse?: string;
+    /**
+     * Optional notes about why reprocessing is being triggered
+     */
     reprocessingNotes?: string;
 }
 

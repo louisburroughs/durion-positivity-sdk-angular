@@ -9,12 +9,30 @@
  */
 
 
+/**
+ * A permission entry exposed by user-facing RBAC endpoints
+ */
 export interface PermissionDto { 
-    id?: string;
-    name?: string;
-    domain?: string;
+    /**
+     * Permission identifier
+     */
+    id: string;
+    /**
+     * Permission name in format domain:resource:action
+     */
+    name: string;
+    /**
+     * Domain that owns the permission
+     */
+    domain: string;
+    /**
+     * Human-readable description of the permission
+     */
     description?: string;
-    deprecated?: boolean;
+    /**
+     * True when the permission is deprecated
+     */
+    deprecated: boolean;
 }
 
 function isOptionalPermissionDtoPropertyOfType(
@@ -55,7 +73,7 @@ export function instanceOfPermissionDto(value: object): value is PermissionDto {
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createPermissionDtoPropertyNames();
+    const requiredProperties = createPermissionDtoPropertyNames('id', 'name', 'domain', 'deprecated', );
     const optionalStringProperties = createPermissionDtoOptionalProperties({ name: 'id', nullable: false }, { name: 'name', nullable: false }, { name: 'domain', nullable: false }, { name: 'description', nullable: false }, );
     const optionalNumberProperties = createPermissionDtoOptionalProperties();
     const optionalBooleanProperties = createPermissionDtoOptionalProperties({ name: 'deprecated', nullable: false }, );

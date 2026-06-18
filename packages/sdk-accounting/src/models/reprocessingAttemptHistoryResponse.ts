@@ -9,13 +9,37 @@
  */
 
 
+/**
+ * Historical record of a single reprocessing attempt
+ */
 export interface ReprocessingAttemptHistoryResponse { 
-    attemptId?: string;
-    eventId?: string;
+    /**
+     * Unique identifier of the reprocessing attempt
+     */
+    attemptId: string;
+    /**
+     * Identifier of the event that was reprocessed
+     */
+    eventId: string;
+    /**
+     * Timestamp when the reprocessing was attempted (ISO 8601)
+     */
     attemptedAt?: string;
+    /**
+     * Identifier of the user who triggered the attempt
+     */
     triggeredByUserId?: string;
+    /**
+     * Outcome of the reprocessing attempt
+     */
     outcome?: ReprocessingAttemptHistoryResponseOutcomeEnum;
+    /**
+     * Additional detail about the outcome
+     */
     outcomeDetails?: string;
+    /**
+     * Mapping version used for the attempt
+     */
     mappingVersionUsed?: string;
 }
 export enum ReprocessingAttemptHistoryResponseOutcomeEnum {
@@ -63,7 +87,7 @@ export function instanceOfReprocessingAttemptHistoryResponse(value: object): val
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createReprocessingAttemptHistoryResponsePropertyNames();
+    const requiredProperties = createReprocessingAttemptHistoryResponsePropertyNames('attemptId', 'eventId', );
     const optionalStringProperties = createReprocessingAttemptHistoryResponseOptionalProperties({ name: 'attemptId', nullable: false }, { name: 'eventId', nullable: false }, { name: 'triggeredByUserId', nullable: false }, { name: 'outcome', nullable: false }, { name: 'outcomeDetails', nullable: false }, { name: 'mappingVersionUsed', nullable: false }, );
     const optionalNumberProperties = createReprocessingAttemptHistoryResponseOptionalProperties();
     const optionalBooleanProperties = createReprocessingAttemptHistoryResponseOptionalProperties();

@@ -16,11 +16,11 @@ export interface InitiatePaymentResponse {
     /**
      * Payment intent identifier
      */
-    paymentIntentId?: string;
+    paymentIntentId: string;
     /**
      * Current lifecycle status of the payment intent
      */
-    status?: InitiatePaymentResponseStatusEnum;
+    status: InitiatePaymentResponseStatusEnum;
     /**
      * Amount authorized on the card
      */
@@ -91,7 +91,7 @@ export function instanceOfInitiatePaymentResponse(value: object): value is Initi
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createInitiatePaymentResponsePropertyNames();
+    const requiredProperties = createInitiatePaymentResponsePropertyNames('paymentIntentId', 'status', );
     const optionalStringProperties = createInitiatePaymentResponseOptionalProperties({ name: 'paymentIntentId', nullable: false }, { name: 'status', nullable: false }, { name: 'gatewayProvider', nullable: false }, { name: 'gatewayResponse', nullable: false }, );
     const optionalNumberProperties = createInitiatePaymentResponseOptionalProperties({ name: 'authorizedAmount', nullable: false }, { name: 'capturedAmount', nullable: false }, { name: 'voidedRemainderAmount', nullable: false }, );
     const optionalBooleanProperties = createInitiatePaymentResponseOptionalProperties();

@@ -9,8 +9,14 @@
  */
 
 
+/**
+ * Request payload for updating an existing cart item line
+ */
 export interface UpdateItemRequest { 
-    quantity?: number;
+    /**
+     * Updated quantity for the item line
+     */
+    quantity: number;
 }
 
 function isOptionalUpdateItemRequestPropertyOfType(
@@ -51,7 +57,7 @@ export function instanceOfUpdateItemRequest(value: object): value is UpdateItemR
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createUpdateItemRequestPropertyNames();
+    const requiredProperties = createUpdateItemRequestPropertyNames('quantity', );
     const optionalStringProperties = createUpdateItemRequestOptionalProperties();
     const optionalNumberProperties = createUpdateItemRequestOptionalProperties({ name: 'quantity', nullable: false }, );
     const optionalBooleanProperties = createUpdateItemRequestOptionalProperties();

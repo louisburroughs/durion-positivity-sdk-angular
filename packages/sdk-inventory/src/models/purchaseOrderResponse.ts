@@ -10,31 +10,109 @@
 import { PurchaseOrderLineResponse } from './purchaseOrderLineResponse';
 
 
+/**
+ * Full representation of a purchase order, including header totals and line items
+ */
 export interface PurchaseOrderResponse { 
-    purchaseOrderId?: string;
-    vendorId?: string;
-    poNumber?: string;
-    status?: PurchaseOrderResponseStatusEnum;
-    versionNumber?: number;
-    currency?: string;
+    /**
+     * Unique identifier of the purchase order
+     */
+    purchaseOrderId: string;
+    /**
+     * Identifier of the vendor the purchase order is placed with
+     */
+    vendorId: string;
+    /**
+     * Human-readable purchase order number
+     */
+    poNumber: string;
+    /**
+     * Current lifecycle status of the purchase order
+     */
+    status: PurchaseOrderResponseStatusEnum;
+    /**
+     * Revision/version number of the purchase order, incremented on each revision
+     */
+    versionNumber: number;
+    /**
+     * ISO 4217 currency code the purchase order is denominated in
+     */
+    currency: string;
+    /**
+     * Sum of line totals before tax in the smallest currency unit (e.g. cents)
+     */
     subtotalMinor?: number;
+    /**
+     * Total tax amount in the smallest currency unit (e.g. cents)
+     */
     taxMinor?: number;
+    /**
+     * Grand total including tax in the smallest currency unit (e.g. cents)
+     */
     grandTotalMinor?: number;
+    /**
+     * Remaining unpaid/unreceived balance in the smallest currency unit (e.g. cents)
+     */
     openBalanceMinor?: number;
+    /**
+     * Identifier of the location the goods are shipped to
+     */
     shipToLocationId?: string;
+    /**
+     * Identifier of the payment terms applied to this purchase order
+     */
     paymentTermsId?: string;
+    /**
+     * Date the purchase order was issued
+     */
     poDate?: string;
+    /**
+     * Date the ordered goods are expected to be delivered
+     */
     expectedDeliveryDate?: string;
+    /**
+     * Identifier or name of the person who requested the purchase order
+     */
     requestedBy?: string;
+    /**
+     * Free-text comment providing additional context for the purchase order
+     */
     comment?: string;
+    /**
+     * Identifier of the person who approved the purchase order
+     */
     approverId?: string;
+    /**
+     * Timestamp at which the purchase order was approved
+     */
     approvalTimestamp?: string;
+    /**
+     * Notes recorded by the approver explaining the approval decision
+     */
     approvalNotes?: string;
+    /**
+     * Reference to the financial encumbrance reserved for this purchase order
+     */
     encumbranceRef?: string;
+    /**
+     * Identifier of the user who created the purchase order
+     */
     createdBy?: string;
+    /**
+     * Identifier of the user who last updated the purchase order
+     */
     updatedBy?: string;
-    createdAt?: string;
-    updatedAt?: string;
+    /**
+     * Timestamp at which the purchase order was created
+     */
+    createdAt: string;
+    /**
+     * Timestamp at which the purchase order was last updated
+     */
+    updatedAt: string;
+    /**
+     * Line items belonging to this purchase order
+     */
     lines?: Array<PurchaseOrderLineResponse>;
 }
 export enum PurchaseOrderResponseStatusEnum {
@@ -86,7 +164,7 @@ export function instanceOfPurchaseOrderResponse(value: object): value is Purchas
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createPurchaseOrderResponsePropertyNames();
+    const requiredProperties = createPurchaseOrderResponsePropertyNames('purchaseOrderId', 'vendorId', 'poNumber', 'status', 'versionNumber', 'currency', 'createdAt', 'updatedAt', );
     const optionalStringProperties = createPurchaseOrderResponseOptionalProperties({ name: 'purchaseOrderId', nullable: false }, { name: 'vendorId', nullable: false }, { name: 'poNumber', nullable: false }, { name: 'status', nullable: false }, { name: 'currency', nullable: false }, { name: 'shipToLocationId', nullable: false }, { name: 'paymentTermsId', nullable: false }, { name: 'requestedBy', nullable: false }, { name: 'comment', nullable: false }, { name: 'approverId', nullable: false }, { name: 'approvalNotes', nullable: false }, { name: 'encumbranceRef', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'updatedBy', nullable: false }, );
     const optionalNumberProperties = createPurchaseOrderResponseOptionalProperties({ name: 'versionNumber', nullable: false }, { name: 'subtotalMinor', nullable: false }, { name: 'taxMinor', nullable: false }, { name: 'grandTotalMinor', nullable: false }, { name: 'openBalanceMinor', nullable: false }, );
     const optionalBooleanProperties = createPurchaseOrderResponseOptionalProperties();

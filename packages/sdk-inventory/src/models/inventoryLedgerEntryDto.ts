@@ -9,24 +9,81 @@
  */
 
 
+/**
+ * Inventory ledger entry record capturing a single stock movement or allocation event
+ */
 export interface InventoryLedgerEntryDto { 
-    ledgerEntryId?: string;
-    stockItemId?: string;
+    /**
+     * Unique identifier of the ledger entry
+     */
+    ledgerEntryId: string;
+    /**
+     * Identifier of the stock item the entry applies to
+     */
+    stockItemId: string;
+    /**
+     * Identifier of the adjustment that produced this entry, if any
+     */
     adjustmentId?: string;
-    eventType?: InventoryLedgerEntryDtoEventTypeEnum;
-    changeInQuantity?: number;
-    quantityAfter?: number;
+    /**
+     * Type of inventory ledger event recorded
+     */
+    eventType: InventoryLedgerEntryDtoEventTypeEnum;
+    /**
+     * Signed change in quantity applied by this entry (positive inbound, negative outbound)
+     */
+    changeInQuantity: number;
+    /**
+     * Running quantity after this entry was applied
+     */
+    quantityAfter: number;
+    /**
+     * Unit cost associated with this movement, if recorded
+     */
     unitCost?: number;
+    /**
+     * Identifier of the user who initiated the transaction
+     */
     transactionUserId?: string;
-    timestamp?: string;
+    /**
+     * Business timestamp of the inventory event
+     */
+    timestamp: string;
+    /**
+     * Location the entry applies to
+     */
     locationId?: string;
+    /**
+     * Source location for transfer events
+     */
     fromLocationId?: string;
+    /**
+     * Destination location for transfer events
+     */
     toLocationId?: string;
+    /**
+     * Reason code explaining the entry
+     */
     reasonCode?: string;
+    /**
+     * Identifier of the originating source transaction
+     */
     sourceTransactionId?: string;
+    /**
+     * Unit of measure code for the quantities (e.g. EACH, KG)
+     */
     unitOfMeasure?: string;
+    /**
+     * Free-text notes attached to the entry
+     */
     notes?: string;
+    /**
+     * Timestamp when the entry record was created
+     */
     createdAt?: string;
+    /**
+     * Timestamp when the entry record was last updated
+     */
     updatedAt?: string;
 }
 export enum InventoryLedgerEntryDtoEventTypeEnum {
@@ -93,7 +150,7 @@ export function instanceOfInventoryLedgerEntryDto(value: object): value is Inven
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createInventoryLedgerEntryDtoPropertyNames();
+    const requiredProperties = createInventoryLedgerEntryDtoPropertyNames('ledgerEntryId', 'stockItemId', 'eventType', 'changeInQuantity', 'quantityAfter', 'timestamp', );
     const optionalStringProperties = createInventoryLedgerEntryDtoOptionalProperties({ name: 'ledgerEntryId', nullable: false }, { name: 'stockItemId', nullable: false }, { name: 'adjustmentId', nullable: false }, { name: 'eventType', nullable: false }, { name: 'transactionUserId', nullable: false }, { name: 'locationId', nullable: false }, { name: 'fromLocationId', nullable: false }, { name: 'toLocationId', nullable: false }, { name: 'reasonCode', nullable: false }, { name: 'sourceTransactionId', nullable: false }, { name: 'unitOfMeasure', nullable: false }, { name: 'notes', nullable: false }, );
     const optionalNumberProperties = createInventoryLedgerEntryDtoOptionalProperties({ name: 'changeInQuantity', nullable: false }, { name: 'quantityAfter', nullable: false }, { name: 'unitCost', nullable: false }, );
     const optionalBooleanProperties = createInventoryLedgerEntryDtoOptionalProperties();

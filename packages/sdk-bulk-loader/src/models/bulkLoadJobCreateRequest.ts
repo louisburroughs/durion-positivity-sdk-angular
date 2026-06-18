@@ -9,9 +9,21 @@
  */
 
 
+/**
+ * Request to create a new bulk load job
+ */
 export interface BulkLoadJobCreateRequest { 
+    /**
+     * Name of the source file to be uploaded for this job
+     */
     fileName: string;
+    /**
+     * Target domain for the bulk load
+     */
     domainType: BulkLoadJobCreateRequestDomainTypeEnum;
+    /**
+     * Identifier of the location to scope the load to, if applicable
+     */
     locationId?: string;
 }
 export enum BulkLoadJobCreateRequestDomainTypeEnum {

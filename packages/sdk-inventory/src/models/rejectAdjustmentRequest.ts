@@ -9,8 +9,17 @@
  */
 
 
+/**
+ * Request to reject a pending cycle count adjustment
+ */
 export interface RejectAdjustmentRequest { 
+    /**
+     * Identifier of the user rejecting the adjustment
+     */
     rejectorUserId: string;
+    /**
+     * Reason explaining why the adjustment is being rejected
+     */
     rejectionReason: string;
 }
 

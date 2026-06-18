@@ -13,9 +13,21 @@
  * Current item costs
  */
 export interface ItemCostsDto { 
-    itemId?: string;
+    /**
+     * Item identifier
+     */
+    itemId: string;
+    /**
+     * Current standard cost
+     */
     standardCost?: number;
+    /**
+     * Most recent purchase cost
+     */
     lastCost?: number;
+    /**
+     * Weighted average cost
+     */
     averageCost?: number;
 }
 
@@ -57,7 +69,7 @@ export function instanceOfItemCostsDto(value: object): value is ItemCostsDto {
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createItemCostsDtoPropertyNames();
+    const requiredProperties = createItemCostsDtoPropertyNames('itemId', );
     const optionalStringProperties = createItemCostsDtoOptionalProperties({ name: 'itemId', nullable: false }, );
     const optionalNumberProperties = createItemCostsDtoOptionalProperties({ name: 'standardCost', nullable: false }, { name: 'lastCost', nullable: false }, { name: 'averageCost', nullable: false }, );
     const optionalBooleanProperties = createItemCostsDtoOptionalProperties();

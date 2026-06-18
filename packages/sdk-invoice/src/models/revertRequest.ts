@@ -9,8 +9,17 @@
  */
 
 
+/**
+ * Request payload for reverting a finalized invoice back to DRAFT
+ */
 export interface RevertRequest { 
+    /**
+     * Manager approval code authorizing the reversion
+     */
     managerApprovalCode: string;
+    /**
+     * Reason the invoice is being reverted
+     */
     reason: string;
 }
 

@@ -39,10 +39,8 @@ export interface TimeEntryExceptionRequest {
     detectedAt?: string;
 }
 export enum TimeEntryExceptionRequestSeverityEnum {
-    Low = 'LOW',
-    Medium = 'MEDIUM',
-    High = 'HIGH',
-    Critical = 'CRITICAL'
+    Warning = 'WARNING',
+    Blocking = 'BLOCKING'
 };
 
 

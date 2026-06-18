@@ -9,9 +9,21 @@
  */
 
 
+/**
+ * Service catalog entry resolved from pos-catalog
+ */
 export interface ServiceEntityDTO { 
-    id?: number;
+    /**
+     * Internal service identifier
+     */
+    id: number;
+    /**
+     * Service display name
+     */
     name?: string;
+    /**
+     * Service description
+     */
     description?: string;
 }
 
@@ -53,7 +65,7 @@ export function instanceOfServiceEntityDTO(value: object): value is ServiceEntit
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createServiceEntityDTOPropertyNames();
+    const requiredProperties = createServiceEntityDTOPropertyNames('id', );
     const optionalStringProperties = createServiceEntityDTOOptionalProperties({ name: 'name', nullable: false }, { name: 'description', nullable: false }, );
     const optionalNumberProperties = createServiceEntityDTOOptionalProperties({ name: 'id', nullable: false }, );
     const optionalBooleanProperties = createServiceEntityDTOOptionalProperties();

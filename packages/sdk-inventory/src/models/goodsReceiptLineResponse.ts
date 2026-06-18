@@ -9,12 +9,33 @@
  */
 
 
+/**
+ * A single received line item on a goods receipt response, describing one SKU, its received quantity, and accrued cost
+ */
 export interface GoodsReceiptLineResponse { 
-    receiptLineId?: string;
+    /**
+     * Unique identifier of the goods receipt line
+     */
+    receiptLineId: string;
+    /**
+     * Identifier of the purchase order line this receipt line fulfills
+     */
     poLineId?: string;
-    sku?: string;
-    quantityReceived?: number;
+    /**
+     * Stock keeping unit identifier for the received product
+     */
+    sku: string;
+    /**
+     * Quantity of the SKU received in this goods receipt
+     */
+    quantityReceived: number;
+    /**
+     * Unit cost of the received product expressed in minor currency units (e.g. cents)
+     */
     unitCostMinor?: number;
+    /**
+     * Total accrued cost for this line expressed in minor currency units (quantity multiplied by unit cost)
+     */
     lineAccruedAmountMinor?: number;
 }
 
@@ -56,7 +77,7 @@ export function instanceOfGoodsReceiptLineResponse(value: object): value is Good
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createGoodsReceiptLineResponsePropertyNames();
+    const requiredProperties = createGoodsReceiptLineResponsePropertyNames('receiptLineId', 'sku', 'quantityReceived', );
     const optionalStringProperties = createGoodsReceiptLineResponseOptionalProperties({ name: 'receiptLineId', nullable: false }, { name: 'poLineId', nullable: false }, { name: 'sku', nullable: false }, );
     const optionalNumberProperties = createGoodsReceiptLineResponseOptionalProperties({ name: 'quantityReceived', nullable: false }, { name: 'unitCostMinor', nullable: false }, { name: 'lineAccruedAmountMinor', nullable: false }, );
     const optionalBooleanProperties = createGoodsReceiptLineResponseOptionalProperties();

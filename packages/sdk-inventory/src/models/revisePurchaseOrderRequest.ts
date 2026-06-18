@@ -10,14 +10,41 @@
 import { PurchaseOrderLineRequest } from './purchaseOrderLineRequest';
 
 
+/**
+ * Request to revise an existing purchase order, replacing its lines and recording a revision reason
+ */
 export interface RevisePurchaseOrderRequest { 
+    /**
+     * Date the revised purchase order is issued
+     */
     poDate: string;
+    /**
+     * Identifier of the payment terms applied to the revised purchase order
+     */
     paymentTermsId?: string;
+    /**
+     * Date the ordered goods are expected to be delivered
+     */
     expectedDeliveryDate?: string;
+    /**
+     * Identifier of the location the goods should be shipped to
+     */
     shipToLocationId?: string;
+    /**
+     * Identifier or name of the person who requested the revision
+     */
     requestedBy?: string;
+    /**
+     * Free-text comment providing additional context for the revised purchase order
+     */
     comment?: string;
+    /**
+     * Order lines replacing the existing purchase order lines
+     */
     lines: Array<PurchaseOrderLineRequest>;
+    /**
+     * Reason explaining why the purchase order is being revised
+     */
     revisionReason: string;
 }
 

@@ -16,31 +16,31 @@ export interface WorkorderPartUsageEventResponse {
     /**
      * Usage event identifier
      */
-    id?: string;
+    id: string;
     /**
      * Workorder part identifier
      */
-    workorderPartId?: string;
+    workorderPartId: string;
     /**
      * Workorder identifier
      */
-    workorderId?: string;
+    workorderId: string;
     /**
      * Event type
      */
-    eventType?: string;
+    eventType: string;
     /**
      * Quantity associated with event
      */
-    quantity?: number;
+    quantity: number;
     /**
      * Actor identifier who performed event
      */
-    performedBy?: string;
+    performedBy: string;
     /**
      * Event timestamp
      */
-    performedAt?: string;
+    performedAt: string;
     /**
      * Optional event notes
      */
@@ -89,7 +89,7 @@ export function instanceOfWorkorderPartUsageEventResponse(value: object): value 
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createWorkorderPartUsageEventResponsePropertyNames();
+    const requiredProperties = createWorkorderPartUsageEventResponsePropertyNames('id', 'workorderPartId', 'workorderId', 'eventType', 'quantity', 'performedBy', 'performedAt', );
     const optionalStringProperties = createWorkorderPartUsageEventResponseOptionalProperties({ name: 'id', nullable: false }, { name: 'workorderPartId', nullable: false }, { name: 'workorderId', nullable: false }, { name: 'eventType', nullable: false }, { name: 'performedBy', nullable: false }, { name: 'notes', nullable: false }, { name: 'partDescription', nullable: false }, );
     const optionalNumberProperties = createWorkorderPartUsageEventResponseOptionalProperties({ name: 'quantity', nullable: false }, );
     const optionalBooleanProperties = createWorkorderPartUsageEventResponseOptionalProperties();

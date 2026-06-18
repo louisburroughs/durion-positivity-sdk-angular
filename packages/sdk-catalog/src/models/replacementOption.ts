@@ -16,11 +16,11 @@ export interface ReplacementOption {
     /**
      * Replacement option identifier
      */
-    replacementId?: string;
+    replacementId: string;
     /**
      * Replacement product identifier
      */
-    replacementProductId?: string;
+    replacementProductId: string;
     /**
      * Display priority order
      */
@@ -73,7 +73,7 @@ export function instanceOfReplacementOption(value: object): value is Replacement
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createReplacementOptionPropertyNames();
+    const requiredProperties = createReplacementOptionPropertyNames('replacementId', 'replacementProductId', );
     const optionalStringProperties = createReplacementOptionOptionalProperties({ name: 'replacementId', nullable: false }, { name: 'replacementProductId', nullable: false }, { name: 'notes', nullable: false }, );
     const optionalNumberProperties = createReplacementOptionOptionalProperties({ name: 'priorityOrder', nullable: false }, );
     const optionalBooleanProperties = createReplacementOptionOptionalProperties();

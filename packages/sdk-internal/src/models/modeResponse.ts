@@ -9,9 +9,18 @@
  */
 
 
+/**
+ * Current tax service operating mode
+ */
 export interface ModeResponse { 
-    mode?: string;
-    testMode?: boolean;
+    /**
+     * Human-readable tax service mode label
+     */
+    mode: string;
+    /**
+     * Whether the tax service is running in test mode
+     */
+    testMode: boolean;
 }
 
 function isOptionalModeResponsePropertyOfType(
@@ -52,7 +61,7 @@ export function instanceOfModeResponse(value: object): value is ModeResponse {
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createModeResponsePropertyNames();
+    const requiredProperties = createModeResponsePropertyNames('mode', 'testMode', );
     const optionalStringProperties = createModeResponseOptionalProperties({ name: 'mode', nullable: false }, );
     const optionalNumberProperties = createModeResponseOptionalProperties();
     const optionalBooleanProperties = createModeResponseOptionalProperties({ name: 'testMode', nullable: false }, );

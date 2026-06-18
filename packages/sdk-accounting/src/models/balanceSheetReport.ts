@@ -9,14 +9,38 @@
  */
 
 
+/**
+ * Balance Sheet report response with assets, liabilities, and equity totals derived from POSTED journal entries
+ */
 export interface BalanceSheetReport { 
-    asOfDate?: string;
-    generatedAt?: string;
-    lineItems?: { [key: string]: number; };
-    totalAssets?: number;
-    totalLiabilities?: number;
-    totalEquity?: number;
-    balanced?: boolean;
+    /**
+     * Date the balance sheet is reported as of
+     */
+    asOfDate: string;
+    /**
+     * Timestamp when the report was generated (ISO 8601)
+     */
+    generatedAt: string;
+    /**
+     * Map of balance sheet line codes to their amounts (e.g. BS_ASSETS_CURRENT_CASH)
+     */
+    lineItems: { [key: string]: number; };
+    /**
+     * Total assets (sum of all asset accounts)
+     */
+    totalAssets: number;
+    /**
+     * Total liabilities (sum of all liability accounts)
+     */
+    totalLiabilities: number;
+    /**
+     * Total equity (sum of all equity accounts)
+     */
+    totalEquity: number;
+    /**
+     * Whether the accounting equation balances (assets == liabilities + equity within tolerance)
+     */
+    balanced: boolean;
 }
 
 function isOptionalBalanceSheetReportPropertyOfType(
@@ -57,7 +81,7 @@ export function instanceOfBalanceSheetReport(value: object): value is BalanceShe
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createBalanceSheetReportPropertyNames();
+    const requiredProperties = createBalanceSheetReportPropertyNames('asOfDate', 'generatedAt', 'lineItems', 'totalAssets', 'totalLiabilities', 'totalEquity', 'balanced', );
     const optionalStringProperties = createBalanceSheetReportOptionalProperties();
     const optionalNumberProperties = createBalanceSheetReportOptionalProperties({ name: 'totalAssets', nullable: false }, { name: 'totalLiabilities', nullable: false }, { name: 'totalEquity', nullable: false }, );
     const optionalBooleanProperties = createBalanceSheetReportOptionalProperties({ name: 'balanced', nullable: false }, );

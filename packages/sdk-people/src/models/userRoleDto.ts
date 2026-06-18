@@ -9,12 +9,33 @@
  */
 
 
+/**
+ * User role assignment as exposed by the security service
+ */
 export interface UserRoleDto { 
+    /**
+     * User identifier
+     */
     userId?: string;
+    /**
+     * Stable role code
+     */
     roleCode?: string;
+    /**
+     * Location identifier the role is scoped to
+     */
     locationId?: string;
+    /**
+     * Date the assignment becomes effective
+     */
     startDate?: string;
+    /**
+     * Date the assignment ends
+     */
     endDate?: string;
+    /**
+     * Whether the assignment is active
+     */
     active?: boolean;
 }
 

@@ -16,11 +16,11 @@ export interface PricingSnapshotResponse {
     /**
      * Snapshot identifier
      */
-    snapshotId?: string;
+    snapshotId: string;
     /**
      * Snapshot creation timestamp
      */
-    createdAt?: string;
+    createdAt: string;
     /**
      * Optional source context
      */
@@ -28,15 +28,15 @@ export interface PricingSnapshotResponse {
     /**
      * Identifier of the quoted item
      */
-    itemIdentifier?: string;
+    itemIdentifier: string;
     /**
      * Quoted quantity
      */
-    quantity?: number;
+    quantity: number;
     /**
      * Serialized prices payload
      */
-    prices?: string;
+    prices: string;
     /**
      * Serialized applied-rule details
      */
@@ -44,7 +44,7 @@ export interface PricingSnapshotResponse {
     /**
      * Pricing policy version used
      */
-    policyVersion?: string;
+    policyVersion: string;
 }
 
 function isOptionalPricingSnapshotResponsePropertyOfType(
@@ -85,7 +85,7 @@ export function instanceOfPricingSnapshotResponse(value: object): value is Prici
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createPricingSnapshotResponsePropertyNames();
+    const requiredProperties = createPricingSnapshotResponsePropertyNames('snapshotId', 'createdAt', 'itemIdentifier', 'quantity', 'prices', 'policyVersion', );
     const optionalStringProperties = createPricingSnapshotResponseOptionalProperties({ name: 'snapshotId', nullable: false }, { name: 'sourceContext', nullable: true }, { name: 'itemIdentifier', nullable: false }, { name: 'prices', nullable: false }, { name: 'appliedRules', nullable: true }, { name: 'policyVersion', nullable: false }, );
     const optionalNumberProperties = createPricingSnapshotResponseOptionalProperties({ name: 'quantity', nullable: false }, );
     const optionalBooleanProperties = createPricingSnapshotResponseOptionalProperties();

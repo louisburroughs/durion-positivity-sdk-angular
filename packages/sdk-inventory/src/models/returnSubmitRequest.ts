@@ -10,8 +10,17 @@
 import { ReturnLineDto } from './returnLineDto';
 
 
+/**
+ * Request to submit a set of return lines against a workorder
+ */
 export interface ReturnSubmitRequest { 
+    /**
+     * Identifier of the workorder the return is submitted against
+     */
     workorderId: string;
+    /**
+     * Return lines describing each item, quantity and reason
+     */
     lines: Array<ReturnLineDto>;
 }
 

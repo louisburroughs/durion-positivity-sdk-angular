@@ -9,11 +9,29 @@
  */
 
 
+/**
+ * Single record within a bulk inventory ingest request
+ */
 export interface InventoryBulkIngestRecord { 
+    /**
+     * Stock-keeping unit of the product being ingested
+     */
     sku: string;
+    /**
+     * Identifier of the location the quantity applies to
+     */
     locationId?: string;
+    /**
+     * Quantity to ingest for the product (non-negative)
+     */
     quantity: number;
+    /**
+     * Optional reason code explaining the ingest
+     */
     reasonCode?: string;
+    /**
+     * Optional unit of measure code for the quantity (e.g. EACH, KG)
+     */
     unitOfMeasure?: string;
 }
 

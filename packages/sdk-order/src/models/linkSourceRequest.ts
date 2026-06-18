@@ -9,8 +9,17 @@
  */
 
 
+/**
+ * Request payload for linking an order to an originating source
+ */
 export interface LinkSourceRequest { 
+    /**
+     * Type classification of the originating source
+     */
     sourceType: string;
+    /**
+     * Identifier of the originating source record
+     */
     sourceId: string;
 }
 

@@ -17,15 +17,15 @@ export interface ApplyPromotionResponse {
     /**
      * Original estimate subtotal before promotions
      */
-    subtotal?: number;
+    subtotal: number;
     /**
      * Final estimate total after applying adjustments
      */
-    total?: number;
+    total: number;
     /**
      * Adjustments applied during promotion evaluation
      */
-    appliedAdjustments?: Array<PricingAdjustment>;
+    appliedAdjustments: Array<PricingAdjustment>;
 }
 
 function isOptionalApplyPromotionResponsePropertyOfType(
@@ -66,7 +66,7 @@ export function instanceOfApplyPromotionResponse(value: object): value is ApplyP
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createApplyPromotionResponsePropertyNames();
+    const requiredProperties = createApplyPromotionResponsePropertyNames('subtotal', 'total', 'appliedAdjustments', );
     const optionalStringProperties = createApplyPromotionResponseOptionalProperties();
     const optionalNumberProperties = createApplyPromotionResponseOptionalProperties({ name: 'subtotal', nullable: false }, { name: 'total', nullable: false }, );
     const optionalBooleanProperties = createApplyPromotionResponseOptionalProperties();

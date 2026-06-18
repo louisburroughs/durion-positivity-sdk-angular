@@ -9,18 +9,57 @@
  */
 
 
+/**
+ * Lifecycle and lock state of a user account
+ */
 export interface AccountStateResponse { 
-    userId?: string;
-    enabled?: boolean;
-    accountNonLocked?: boolean;
-    accountNonExpired?: boolean;
-    credentialsNonExpired?: boolean;
-    failedLoginAttempts?: number;
+    /**
+     * User identifier
+     */
+    userId: string;
+    /**
+     * True when the account is enabled
+     */
+    enabled: boolean;
+    /**
+     * True when the account is not locked
+     */
+    accountNonLocked: boolean;
+    /**
+     * True when the account has not expired
+     */
+    accountNonExpired: boolean;
+    /**
+     * True when the credentials have not expired
+     */
+    credentialsNonExpired: boolean;
+    /**
+     * Number of consecutive failed login attempts
+     */
+    failedLoginAttempts: number;
+    /**
+     * Timestamp at which the account was locked
+     */
     lockedAt?: string;
+    /**
+     * Timestamp until which the account remains locked
+     */
     lockedUntil?: string;
+    /**
+     * Timestamp at which the account was disabled
+     */
     disabledAt?: string;
+    /**
+     * Actor that disabled the account
+     */
     disabledBy?: string;
+    /**
+     * Timestamp at which the account expires
+     */
     accountExpiresAt?: string;
+    /**
+     * Timestamp at which the credentials expire
+     */
     credentialsExpireAt?: string;
 }
 
@@ -62,7 +101,7 @@ export function instanceOfAccountStateResponse(value: object): value is AccountS
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createAccountStateResponsePropertyNames();
+    const requiredProperties = createAccountStateResponsePropertyNames('userId', 'enabled', 'accountNonLocked', 'accountNonExpired', 'credentialsNonExpired', 'failedLoginAttempts', );
     const optionalStringProperties = createAccountStateResponseOptionalProperties({ name: 'userId', nullable: false }, { name: 'disabledBy', nullable: false }, );
     const optionalNumberProperties = createAccountStateResponseOptionalProperties({ name: 'failedLoginAttempts', nullable: false }, );
     const optionalBooleanProperties = createAccountStateResponseOptionalProperties({ name: 'enabled', nullable: false }, { name: 'accountNonLocked', nullable: false }, { name: 'accountNonExpired', nullable: false }, { name: 'credentialsNonExpired', nullable: false }, );

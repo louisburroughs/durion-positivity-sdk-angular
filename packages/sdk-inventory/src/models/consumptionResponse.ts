@@ -9,12 +9,33 @@
  */
 
 
+/**
+ * Response describing the outcome of consuming inventory items against a workorder, including the ledger entries created
+ */
 export interface ConsumptionResponse { 
-    consumptionId?: string;
-    workorderId?: string;
+    /**
+     * Unique identifier of the consumption record
+     */
+    consumptionId: string;
+    /**
+     * Identifier of the workorder the items were consumed for
+     */
+    workorderId: string;
+    /**
+     * Identifier of the pick list the consumed items were drawn from, if applicable
+     */
     pickListId?: string;
-    totalItemsConsumed?: number;
-    createdAt?: string;
+    /**
+     * Total number of items consumed in this operation
+     */
+    totalItemsConsumed: number;
+    /**
+     * Timestamp when the consumption was recorded
+     */
+    createdAt: string;
+    /**
+     * Identifiers of the inventory ledger entries created by this consumption
+     */
     ledgerEntryIds?: Array<string>;
 }
 
@@ -56,7 +77,7 @@ export function instanceOfConsumptionResponse(value: object): value is Consumpti
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createConsumptionResponsePropertyNames();
+    const requiredProperties = createConsumptionResponsePropertyNames('consumptionId', 'workorderId', 'totalItemsConsumed', 'createdAt', );
     const optionalStringProperties = createConsumptionResponseOptionalProperties({ name: 'consumptionId', nullable: false }, { name: 'workorderId', nullable: false }, { name: 'pickListId', nullable: false }, );
     const optionalNumberProperties = createConsumptionResponseOptionalProperties({ name: 'totalItemsConsumed', nullable: false }, );
     const optionalBooleanProperties = createConsumptionResponseOptionalProperties();

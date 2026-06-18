@@ -16,11 +16,11 @@ export interface ReportExportResponse {
     /**
      * Unique export job identifier
      */
-    exportId?: string;
+    exportId: string;
     /**
      * Current export status
      */
-    status?: ReportExportResponseStatusEnum;
+    status: ReportExportResponseStatusEnum;
     /**
      * ISO-8601 timestamp when the export was requested
      */
@@ -95,7 +95,7 @@ export function instanceOfReportExportResponse(value: object): value is ReportEx
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createReportExportResponsePropertyNames();
+    const requiredProperties = createReportExportResponsePropertyNames('exportId', 'status', );
     const optionalStringProperties = createReportExportResponseOptionalProperties({ name: 'exportId', nullable: false }, { name: 'status', nullable: false }, { name: 'downloadUrl', nullable: false }, { name: 'format', nullable: false }, { name: 'reportType', nullable: false }, );
     const optionalNumberProperties = createReportExportResponseOptionalProperties();
     const optionalBooleanProperties = createReportExportResponseOptionalProperties();

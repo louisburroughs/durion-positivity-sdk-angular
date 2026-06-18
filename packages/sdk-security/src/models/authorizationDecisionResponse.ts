@@ -9,8 +9,14 @@
  */
 
 
+/**
+ * Result of an authorization decision check
+ */
 export interface AuthorizationDecisionResponse { 
-    decision?: string;
+    /**
+     * Authorization decision (PERMIT|DENY)
+     */
+    decision: string;
 }
 
 function isOptionalAuthorizationDecisionResponsePropertyOfType(
@@ -51,7 +57,7 @@ export function instanceOfAuthorizationDecisionResponse(value: object): value is
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createAuthorizationDecisionResponsePropertyNames();
+    const requiredProperties = createAuthorizationDecisionResponsePropertyNames('decision', );
     const optionalStringProperties = createAuthorizationDecisionResponseOptionalProperties({ name: 'decision', nullable: false }, );
     const optionalNumberProperties = createAuthorizationDecisionResponseOptionalProperties();
     const optionalBooleanProperties = createAuthorizationDecisionResponseOptionalProperties();

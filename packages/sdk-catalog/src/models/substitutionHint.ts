@@ -16,7 +16,7 @@ export interface SubstitutionHint {
     /**
      * Substitute product ID
      */
-    productId?: string;
+    productId: string;
     /**
      * Reason for substitution
      */
@@ -61,7 +61,7 @@ export function instanceOfSubstitutionHint(value: object): value is Substitution
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createSubstitutionHintPropertyNames();
+    const requiredProperties = createSubstitutionHintPropertyNames('productId', );
     const optionalStringProperties = createSubstitutionHintOptionalProperties({ name: 'productId', nullable: false }, { name: 'reason', nullable: false }, );
     const optionalNumberProperties = createSubstitutionHintOptionalProperties();
     const optionalBooleanProperties = createSubstitutionHintOptionalProperties();

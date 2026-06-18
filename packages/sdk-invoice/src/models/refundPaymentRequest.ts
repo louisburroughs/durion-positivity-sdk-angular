@@ -9,9 +9,21 @@
  */
 
 
+/**
+ * Request to refund a captured payment
+ */
 export interface RefundPaymentRequest { 
+    /**
+     * Amount to refund from the captured payment
+     */
     amount: number;
+    /**
+     * Reason the payment is being refunded
+     */
     reason: RefundPaymentRequestReasonEnum;
+    /**
+     * Optional free-text notes explaining the refund
+     */
     notes?: string;
 }
 export enum RefundPaymentRequestReasonEnum {

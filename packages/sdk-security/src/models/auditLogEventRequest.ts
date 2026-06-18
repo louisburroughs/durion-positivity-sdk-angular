@@ -9,11 +9,29 @@
  */
 
 
+/**
+ * Request to record an immutable audit event
+ */
 export interface AuditLogEventRequest { 
-    eventType?: string;
+    /**
+     * Event type code
+     */
+    eventType: string;
+    /**
+     * Ignored; actor is resolved server-side from the security context per ADR-0018
+     */
     actorId?: string;
+    /**
+     * Identifier of the affected entity
+     */
     entityId?: string;
+    /**
+     * Type of the affected entity
+     */
     entityType?: string;
+    oldValue?: any | null;
+    newValue?: any | null;
+    context?: any | null;
 }
 
 function isOptionalAuditLogEventRequestPropertyOfType(
@@ -54,7 +72,7 @@ export function instanceOfAuditLogEventRequest(value: object): value is AuditLog
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createAuditLogEventRequestPropertyNames();
+    const requiredProperties = createAuditLogEventRequestPropertyNames('eventType', );
     const optionalStringProperties = createAuditLogEventRequestOptionalProperties({ name: 'eventType', nullable: false }, { name: 'actorId', nullable: false }, { name: 'entityId', nullable: false }, { name: 'entityType', nullable: false }, );
     const optionalNumberProperties = createAuditLogEventRequestOptionalProperties();
     const optionalBooleanProperties = createAuditLogEventRequestOptionalProperties();

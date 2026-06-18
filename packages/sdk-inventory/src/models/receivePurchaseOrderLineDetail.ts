@@ -9,8 +9,17 @@
  */
 
 
+/**
+ * Open-quantity detail for a single purchase order line after a receipt
+ */
 export interface ReceivePurchaseOrderLineDetail { 
-    lineId?: string;
+    /**
+     * Identifier of the purchase order line
+     */
+    lineId: string;
+    /**
+     * Quantity on this line still awaiting receipt
+     */
     openQuantityDecimal?: number;
 }
 
@@ -52,7 +61,7 @@ export function instanceOfReceivePurchaseOrderLineDetail(value: object): value i
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createReceivePurchaseOrderLineDetailPropertyNames();
+    const requiredProperties = createReceivePurchaseOrderLineDetailPropertyNames('lineId', );
     const optionalStringProperties = createReceivePurchaseOrderLineDetailOptionalProperties({ name: 'lineId', nullable: false }, );
     const optionalNumberProperties = createReceivePurchaseOrderLineDetailOptionalProperties({ name: 'openQuantityDecimal', nullable: false }, );
     const optionalBooleanProperties = createReceivePurchaseOrderLineDetailOptionalProperties();

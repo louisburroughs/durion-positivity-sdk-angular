@@ -9,12 +9,33 @@
  */
 
 
+/**
+ * A single line item on an invoice
+ */
 export interface InvoiceItemResponse { 
+    /**
+     * Unique identifier of the invoice line item
+     */
     id?: string;
+    /**
+     * Description of the line item
+     */
     description?: string;
+    /**
+     * Quantity billed
+     */
     quantity?: number;
+    /**
+     * Price per unit
+     */
     unitPrice?: number;
+    /**
+     * Extended amount (quantity x unit price)
+     */
     amount?: number;
+    /**
+     * Identifier of the source workorder item
+     */
     workorderItemId?: string;
 }
 

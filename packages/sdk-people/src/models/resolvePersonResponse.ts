@@ -16,19 +16,19 @@ export interface ResolvePersonResponse {
     /**
      * Canonical person ID
      */
-    personId?: string;
+    personId: string;
     /**
      * True when an existing person matched threshold
      */
-    matchedExisting?: boolean;
+    matchedExisting: boolean;
     /**
      * Score of selected match (0 when created)
      */
-    score?: number;
+    score: number;
     /**
      * Threshold used for decision
      */
-    thresholdApplied?: number;
+    thresholdApplied: number;
     /**
      * Which fields contributed to the winning match
      */
@@ -89,7 +89,7 @@ export function instanceOfResolvePersonResponse(value: object): value is Resolve
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createResolvePersonResponsePropertyNames();
+    const requiredProperties = createResolvePersonResponsePropertyNames('personId', 'matchedExisting', 'score', 'thresholdApplied', );
     const optionalStringProperties = createResolvePersonResponseOptionalProperties({ name: 'personId', nullable: false }, { name: 'firstName', nullable: false }, { name: 'lastName', nullable: false }, { name: 'primaryEmail', nullable: false }, );
     const optionalNumberProperties = createResolvePersonResponseOptionalProperties({ name: 'score', nullable: false }, { name: 'thresholdApplied', nullable: false }, );
     const optionalBooleanProperties = createResolvePersonResponseOptionalProperties({ name: 'matchedExisting', nullable: false }, );

@@ -9,9 +9,21 @@
  */
 
 
+/**
+ * Request payload for creating a new posting category
+ */
 export interface PostingCategoryCreateRequest { 
+    /**
+     * Name of the posting category
+     */
     categoryName: string;
+    /**
+     * Optional description of the posting category
+     */
     description?: string;
+    /**
+     * Identifier of the user creating the posting category
+     */
     createdBy: string;
 }
 

@@ -13,13 +13,37 @@
  * Request body for starting a travel segment
  */
 export interface StartTravelSegmentRequest { 
+    /**
+     * Identifier of the mobile work assignment the travel segment belongs to
+     */
     mobileWorkAssignmentId: string;
+    /**
+     * Identifier of the technician performing the travel
+     */
     technicianId: string;
+    /**
+     * Direction or purpose of this travel leg
+     */
     segmentType: StartTravelSegmentRequestSegmentTypeEnum;
+    /**
+     * Identifier of the origin location for the travel leg
+     */
     fromLocationId?: string;
+    /**
+     * Identifier of the destination location for the travel leg
+     */
     toLocationId?: string;
+    /**
+     * Identifier of the workorder associated with the travel
+     */
     workOrderId?: string;
+    /**
+     * Identifier of the person on whose behalf this segment is entered, if applicable
+     */
     actedForPersonId?: string;
+    /**
+     * Reason code when the segment is entered on behalf of another person
+     */
     onBehalfReasonCode?: StartTravelSegmentRequestOnBehalfReasonCodeEnum;
 }
 export enum StartTravelSegmentRequestSegmentTypeEnum {

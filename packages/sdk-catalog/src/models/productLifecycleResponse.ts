@@ -17,11 +17,11 @@ export interface ProductLifecycleResponse {
     /**
      * Product identifier
      */
-    productId?: string;
+    productId: string;
     /**
      * Current lifecycle state
      */
-    lifecycleState?: ProductLifecycleResponseLifecycleStateEnum;
+    lifecycleState: ProductLifecycleResponseLifecycleStateEnum;
     /**
      * Lifecycle state effective instant
      */
@@ -89,7 +89,7 @@ export function instanceOfProductLifecycleResponse(value: object): value is Prod
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createProductLifecycleResponsePropertyNames();
+    const requiredProperties = createProductLifecycleResponsePropertyNames('productId', 'lifecycleState', );
     const optionalStringProperties = createProductLifecycleResponseOptionalProperties({ name: 'productId', nullable: false }, { name: 'lifecycleState', nullable: false }, { name: 'lastStateChangedBy', nullable: false }, { name: 'lifecycleOverrideReason', nullable: false }, );
     const optionalNumberProperties = createProductLifecycleResponseOptionalProperties();
     const optionalBooleanProperties = createProductLifecycleResponseOptionalProperties();

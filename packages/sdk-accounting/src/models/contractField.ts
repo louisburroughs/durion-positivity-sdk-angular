@@ -13,11 +13,29 @@
  * A single field definition in an event envelope contract
  */
 export interface ContractField { 
-    name?: string;
-    jsonPath?: string;
-    type?: string;
-    required?: boolean;
+    /**
+     * Name of the field
+     */
+    name: string;
+    /**
+     * JSON path locating the field within the envelope
+     */
+    jsonPath: string;
+    /**
+     * Data type of the field
+     */
+    type: string;
+    /**
+     * Whether the field is required in the envelope
+     */
+    required: boolean;
+    /**
+     * Human-readable description of the field
+     */
     description?: string;
+    /**
+     * Allowed enum values for the field, if constrained
+     */
     enumValues?: Array<string> | null;
 }
 
@@ -59,7 +77,7 @@ export function instanceOfContractField(value: object): value is ContractField {
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createContractFieldPropertyNames();
+    const requiredProperties = createContractFieldPropertyNames('name', 'jsonPath', 'type', 'required', );
     const optionalStringProperties = createContractFieldOptionalProperties({ name: 'name', nullable: false }, { name: 'jsonPath', nullable: false }, { name: 'type', nullable: false }, { name: 'description', nullable: false }, );
     const optionalNumberProperties = createContractFieldOptionalProperties();
     const optionalBooleanProperties = createContractFieldOptionalProperties({ name: 'required', nullable: false }, );

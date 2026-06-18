@@ -13,8 +13,17 @@
  * Conflict override request payload
  */
 export interface ConflictOverrideRequest { 
-    appointmentId?: string;
-    overrideReason?: string;
+    /**
+     * Appointment identifier whose conflict is being overridden
+     */
+    appointmentId: string;
+    /**
+     * Non-blank reason justifying the override
+     */
+    overrideReason: string;
+    /**
+     * Optional JSON string describing the conflict being overridden
+     */
     conflictDetails?: string;
 }
 
@@ -56,7 +65,7 @@ export function instanceOfConflictOverrideRequest(value: object): value is Confl
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createConflictOverrideRequestPropertyNames();
+    const requiredProperties = createConflictOverrideRequestPropertyNames('appointmentId', 'overrideReason', );
     const optionalStringProperties = createConflictOverrideRequestOptionalProperties({ name: 'appointmentId', nullable: false }, { name: 'overrideReason', nullable: false }, { name: 'conflictDetails', nullable: false }, );
     const optionalNumberProperties = createConflictOverrideRequestOptionalProperties();
     const optionalBooleanProperties = createConflictOverrideRequestOptionalProperties();

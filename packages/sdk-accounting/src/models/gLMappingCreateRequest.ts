@@ -9,12 +9,33 @@
  */
 
 
+/**
+ * Request payload for creating a GL mapping
+ */
 export interface GLMappingCreateRequest { 
+    /**
+     * Source system identifier
+     */
     sourceSystem: string;
+    /**
+     * External code from the source system
+     */
     externalCode: string;
+    /**
+     * GL account UUID this code maps to
+     */
     glAccountId: string;
+    /**
+     * Inclusive start of the mapping\'s temporal validity
+     */
     effectiveStartDate: string;
+    /**
+     * Exclusive end of the mapping\'s temporal validity (open-ended when null)
+     */
     effectiveEndDate?: string;
+    /**
+     * Dimensional context for this mapping (businessUnitId, locationId, etc.)
+     */
     dimensions?: { [key: string]: string; };
 }
 

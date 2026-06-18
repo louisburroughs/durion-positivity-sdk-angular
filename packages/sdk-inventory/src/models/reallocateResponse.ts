@@ -9,11 +9,26 @@
  */
 
 
+/**
+ * Result of a stock reallocation, summarizing reallocated quantities and resulting availability
+ */
 export interface ReallocateResponse { 
-    stockItemId?: string;
-    totalReallocated?: number;
-    auditRecordsCreated?: number;
-    atpAfterReallocation?: number;
+    /**
+     * Identifier of the stock item that was reallocated
+     */
+    stockItemId: string;
+    /**
+     * Total quantity reallocated across all affected reservations
+     */
+    totalReallocated: number;
+    /**
+     * Number of audit records created during the reallocation
+     */
+    auditRecordsCreated: number;
+    /**
+     * Available-to-promise quantity for the stock item after reallocation
+     */
+    atpAfterReallocation: number;
 }
 
 function isOptionalReallocateResponsePropertyOfType(
@@ -54,7 +69,7 @@ export function instanceOfReallocateResponse(value: object): value is Reallocate
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createReallocateResponsePropertyNames();
+    const requiredProperties = createReallocateResponsePropertyNames('stockItemId', 'totalReallocated', 'auditRecordsCreated', 'atpAfterReallocation', );
     const optionalStringProperties = createReallocateResponseOptionalProperties({ name: 'stockItemId', nullable: false }, );
     const optionalNumberProperties = createReallocateResponseOptionalProperties({ name: 'totalReallocated', nullable: false }, { name: 'auditRecordsCreated', nullable: false }, { name: 'atpAfterReallocation', nullable: false }, );
     const optionalBooleanProperties = createReallocateResponseOptionalProperties();

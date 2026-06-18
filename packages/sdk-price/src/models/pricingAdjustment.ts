@@ -16,7 +16,7 @@ export interface PricingAdjustment {
     /**
      * Adjustment type
      */
-    type?: string;
+    type: string;
     /**
      * Source identifier that produced this adjustment
      */
@@ -24,11 +24,11 @@ export interface PricingAdjustment {
     /**
      * Human-readable adjustment label
      */
-    label?: string;
+    label: string;
     /**
      * Adjustment amount; negative values reduce total
      */
-    amount?: number;
+    amount: number;
     metadata?: any | null;
 }
 
@@ -70,7 +70,7 @@ export function instanceOfPricingAdjustment(value: object): value is PricingAdju
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createPricingAdjustmentPropertyNames();
+    const requiredProperties = createPricingAdjustmentPropertyNames('type', 'label', 'amount', );
     const optionalStringProperties = createPricingAdjustmentOptionalProperties({ name: 'type', nullable: false }, { name: 'sourceId', nullable: false }, { name: 'label', nullable: false }, );
     const optionalNumberProperties = createPricingAdjustmentOptionalProperties({ name: 'amount', nullable: false }, );
     const optionalBooleanProperties = createPricingAdjustmentOptionalProperties();

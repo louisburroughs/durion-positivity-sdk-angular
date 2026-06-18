@@ -9,17 +9,53 @@
  */
 
 
+/**
+ * Read-only billing rule reference surfaced in a CRM snapshot
+ */
 export interface BillingRuleRef { 
-    poRequired?: boolean;
-    taxExempt?: boolean;
+    /**
+     * Whether a PO number is required before an order can be finalized
+     */
+    poRequired: boolean;
+    /**
+     * Whether the customer is tax-exempt
+     */
+    taxExempt: boolean;
+    /**
+     * Payment terms string
+     */
     paymentTerms?: string;
+    /**
+     * Maximum credit limit available; null means no configured limit
+     */
     creditLimit?: number;
-    creditHold?: boolean;
+    /**
+     * Whether the account is on a credit hold
+     */
+    creditHold: boolean;
+    /**
+     * Preferred invoice delivery method
+     */
     invoiceDeliveryMethod?: BillingRuleRefInvoiceDeliveryMethodEnum;
+    /**
+     * Billing address ID; null if not configured
+     */
     billingAddressId?: string;
-    autoPayEnabled?: boolean;
+    /**
+     * Whether auto-pay is enabled for this account
+     */
+    autoPayEnabled: boolean;
+    /**
+     * Optional reference to a discount policy
+     */
     discountPolicyRef?: string;
+    /**
+     * ISO-4217 currency code; null if not configured
+     */
     currency?: string;
+    /**
+     * Extension map for future fields; consumers must ignore unknown keys
+     */
     extensions?: object;
 }
 export enum BillingRuleRefInvoiceDeliveryMethodEnum {
@@ -69,7 +105,7 @@ export function instanceOfBillingRuleRef(value: object): value is BillingRuleRef
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createBillingRuleRefPropertyNames();
+    const requiredProperties = createBillingRuleRefPropertyNames('poRequired', 'taxExempt', 'creditHold', 'autoPayEnabled', );
     const optionalStringProperties = createBillingRuleRefOptionalProperties({ name: 'paymentTerms', nullable: false }, { name: 'invoiceDeliveryMethod', nullable: false }, { name: 'billingAddressId', nullable: false }, { name: 'discountPolicyRef', nullable: false }, { name: 'currency', nullable: false }, );
     const optionalNumberProperties = createBillingRuleRefOptionalProperties({ name: 'creditLimit', nullable: false }, );
     const optionalBooleanProperties = createBillingRuleRefOptionalProperties({ name: 'poRequired', nullable: false }, { name: 'taxExempt', nullable: false }, { name: 'creditHold', nullable: false }, { name: 'autoPayEnabled', nullable: false }, );

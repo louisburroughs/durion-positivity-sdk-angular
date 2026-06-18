@@ -9,10 +9,25 @@
  */
 
 
+/**
+ * Optional filter criteria for listing purchase orders
+ */
 export interface ListPurchaseOrdersRequest { 
+    /**
+     * Filter to purchase orders placed with this vendor
+     */
     vendorId?: string;
+    /**
+     * Filter to purchase orders in this lifecycle status
+     */
     status?: ListPurchaseOrdersRequestStatusEnum;
+    /**
+     * Filter to purchase orders denominated in this ISO 4217 currency code
+     */
     currency?: string;
+    /**
+     * Filter to purchase orders shipping to this location
+     */
     locationId?: string;
 }
 export enum ListPurchaseOrdersRequestStatusEnum {

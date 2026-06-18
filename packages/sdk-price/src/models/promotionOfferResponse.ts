@@ -16,15 +16,15 @@ export interface PromotionOfferResponse {
     /**
      * Promotion offer identifier
      */
-    promotionOfferId?: string;
+    promotionOfferId: string;
     /**
      * Unique promotion code
      */
-    promoCode?: string;
+    promoCode: string;
     /**
      * Promotion display name
      */
-    name?: string;
+    name: string;
     /**
      * Optional promotion description
      */
@@ -32,19 +32,19 @@ export interface PromotionOfferResponse {
     /**
      * Discount strategy
      */
-    discountType?: PromotionOfferResponseDiscountTypeEnum;
+    discountType: PromotionOfferResponseDiscountTypeEnum;
     /**
      * Discount value based on discount type
      */
-    discountValue?: number;
+    discountValue: number;
     /**
      * Promotion validity start date
      */
-    startDate?: string;
+    startDate: string;
     /**
      * Promotion validity end date
      */
-    endDate?: string;
+    endDate: string;
     /**
      * Optional usage limit
      */
@@ -52,11 +52,11 @@ export interface PromotionOfferResponse {
     /**
      * Number of times the promotion has been applied
      */
-    usageCount?: number;
+    usageCount: number;
     /**
      * Current promotion status
      */
-    status?: PromotionOfferResponseStatusEnum;
+    status: PromotionOfferResponseStatusEnum;
     /**
      * Optional store code scope
      */
@@ -126,7 +126,7 @@ export function instanceOfPromotionOfferResponse(value: object): value is Promot
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createPromotionOfferResponsePropertyNames();
+    const requiredProperties = createPromotionOfferResponsePropertyNames('promotionOfferId', 'promoCode', 'name', 'discountType', 'discountValue', 'startDate', 'endDate', 'usageCount', 'status', );
     const optionalStringProperties = createPromotionOfferResponseOptionalProperties({ name: 'promotionOfferId', nullable: false }, { name: 'promoCode', nullable: false }, { name: 'name', nullable: false }, { name: 'description', nullable: true }, { name: 'discountType', nullable: false }, { name: 'status', nullable: false }, { name: 'storeCode', nullable: true }, { name: 'createdBy', nullable: true }, );
     const optionalNumberProperties = createPromotionOfferResponseOptionalProperties({ name: 'discountValue', nullable: false }, { name: 'usageLimit', nullable: true }, { name: 'usageCount', nullable: false }, );
     const optionalBooleanProperties = createPromotionOfferResponseOptionalProperties();

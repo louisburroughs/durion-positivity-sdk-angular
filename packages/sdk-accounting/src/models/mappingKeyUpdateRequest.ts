@@ -9,9 +9,21 @@
  */
 
 
+/**
+ * Request payload for updating an existing mapping key
+ */
 export interface MappingKeyUpdateRequest { 
+    /**
+     * Name of the mapping key
+     */
     keyName: string;
+    /**
+     * Optional description of the mapping key
+     */
     description?: string;
+    /**
+     * Identifier of the user modifying the mapping key
+     */
     modifiedBy: string;
 }
 

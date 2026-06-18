@@ -10,10 +10,25 @@
 import { PermissionDefinition } from './permissionDefinition';
 
 
+/**
+ * Request to register the permission catalog published by a domain service
+ */
 export interface PermissionRegistrationRequest { 
-    domain?: string;
-    serviceName?: string;
-    permissions?: Array<PermissionDefinition>;
+    /**
+     * Domain that owns the permissions being registered
+     */
+    domain: string;
+    /**
+     * Service identifier registering the permissions
+     */
+    serviceName: string;
+    /**
+     * Permission definitions to register or update
+     */
+    permissions: Array<PermissionDefinition>;
+    /**
+     * Manifest schema version
+     */
     version?: string;
 }
 
@@ -55,7 +70,7 @@ export function instanceOfPermissionRegistrationRequest(value: object): value is
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createPermissionRegistrationRequestPropertyNames();
+    const requiredProperties = createPermissionRegistrationRequestPropertyNames('domain', 'serviceName', 'permissions', );
     const optionalStringProperties = createPermissionRegistrationRequestOptionalProperties({ name: 'domain', nullable: false }, { name: 'serviceName', nullable: false }, { name: 'version', nullable: false }, );
     const optionalNumberProperties = createPermissionRegistrationRequestOptionalProperties();
     const optionalBooleanProperties = createPermissionRegistrationRequestOptionalProperties();

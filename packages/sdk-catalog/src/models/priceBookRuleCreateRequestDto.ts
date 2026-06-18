@@ -9,16 +9,49 @@
  */
 
 
+/**
+ * Request payload for creating a price book rule
+ */
 export interface PriceBookRuleCreateRequestDto { 
+    /**
+     * Target type the rule applies to
+     */
     targetType: PriceBookRuleCreateRequestDtoTargetTypeEnum;
+    /**
+     * Identifier of the targeted entity (SKU or category)
+     */
     targetId?: string;
+    /**
+     * Pricing logic expression applied by the rule
+     */
     pricingLogic: string;
+    /**
+     * Condition type gating the rule
+     */
     conditionType?: PriceBookRuleCreateRequestDtoConditionTypeEnum;
+    /**
+     * Value evaluated against the condition type
+     */
     conditionValue?: string;
+    /**
+     * Evaluation priority; lower wins
+     */
     priority?: number;
+    /**
+     * Instant the rule becomes effective
+     */
     effectiveStartAt: string;
+    /**
+     * Instant the rule stops being effective
+     */
     effectiveEndAt?: string;
+    /**
+     * Identifier of the user creating the rule
+     */
     createdByUserId: string;
+    /**
+     * Version for optimistic locking
+     */
     version?: number;
 }
 export enum PriceBookRuleCreateRequestDtoTargetTypeEnum {

@@ -16,11 +16,11 @@ export interface WorkorderPartAdjustmentEventResponse {
     /**
      * Adjustment event identifier
      */
-    id?: string;
+    id: string;
     /**
      * Original part identifier
      */
-    originalPartId?: string;
+    originalPartId: string;
     /**
      * Original part description
      */
@@ -28,11 +28,11 @@ export interface WorkorderPartAdjustmentEventResponse {
     /**
      * Workorder identifier
      */
-    workorderId?: string;
+    workorderId: string;
     /**
      * Adjustment type
      */
-    adjustmentType?: string;
+    adjustmentType: string;
     /**
      * Substitute part identifier for substitution adjustments
      */
@@ -44,7 +44,7 @@ export interface WorkorderPartAdjustmentEventResponse {
     /**
      * Signed quantity adjustment
      */
-    quantityAdjustment?: number;
+    quantityAdjustment: number;
     /**
      * Adjustment reason
      */
@@ -52,11 +52,11 @@ export interface WorkorderPartAdjustmentEventResponse {
     /**
      * Actor identifier who performed adjustment
      */
-    performedBy?: string;
+    performedBy: string;
     /**
      * Adjustment timestamp
      */
-    performedAt?: string;
+    performedAt: string;
     /**
      * Optional additional notes
      */
@@ -101,7 +101,7 @@ export function instanceOfWorkorderPartAdjustmentEventResponse(value: object): v
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createWorkorderPartAdjustmentEventResponsePropertyNames();
+    const requiredProperties = createWorkorderPartAdjustmentEventResponsePropertyNames('id', 'originalPartId', 'workorderId', 'adjustmentType', 'quantityAdjustment', 'performedBy', 'performedAt', );
     const optionalStringProperties = createWorkorderPartAdjustmentEventResponseOptionalProperties({ name: 'id', nullable: false }, { name: 'originalPartId', nullable: false }, { name: 'originalPartDescription', nullable: false }, { name: 'workorderId', nullable: false }, { name: 'adjustmentType', nullable: false }, { name: 'substitutedWithPartId', nullable: false }, { name: 'substitutedWithPartDescription', nullable: false }, { name: 'reason', nullable: false }, { name: 'performedBy', nullable: false }, { name: 'notes', nullable: false }, );
     const optionalNumberProperties = createWorkorderPartAdjustmentEventResponseOptionalProperties({ name: 'quantityAdjustment', nullable: false }, );
     const optionalBooleanProperties = createWorkorderPartAdjustmentEventResponseOptionalProperties();

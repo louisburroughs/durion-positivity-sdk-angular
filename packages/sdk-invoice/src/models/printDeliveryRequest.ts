@@ -9,7 +9,13 @@
  */
 
 
+/**
+ * Request to record the delivery status of a printed receipt
+ */
 export interface PrintDeliveryRequest { 
+    /**
+     * Print delivery outcome status
+     */
     status: PrintDeliveryRequestStatusEnum;
 }
 export enum PrintDeliveryRequestStatusEnum {

@@ -9,17 +9,50 @@
  */
 
 
+/**
+ * A single recorded count entry in a cycle count task\'s history
+ */
 export interface CountEntryResponse { 
-    countEntryId?: string;
-    cycleCountTaskId?: string;
-    auditorId?: string;
-    actualQuantity?: number;
-    expectedQuantity?: number;
-    variance?: number;
-    recountSequenceNumber?: number;
+    /**
+     * Unique identifier of the count entry
+     */
+    countEntryId: string;
+    /**
+     * Identifier of the cycle count task this entry belongs to
+     */
+    cycleCountTaskId: string;
+    /**
+     * Identifier of the auditor who recorded the count
+     */
+    auditorId: string;
+    /**
+     * Quantity physically counted by the auditor
+     */
+    actualQuantity: number;
+    /**
+     * Quantity expected on hand at the time of the count
+     */
+    expectedQuantity: number;
+    /**
+     * Difference between counted and expected quantity (actual minus expected)
+     */
+    variance: number;
+    /**
+     * Sequence number of this count within the recount chain; 0 for the initial count
+     */
+    recountSequenceNumber: number;
+    /**
+     * Identifier of the count entry this entry is a recount of, if any
+     */
     recountOfCountEntryId?: string;
-    countedAt?: string;
-    recount?: boolean;
+    /**
+     * Timestamp when the count was recorded
+     */
+    countedAt: string;
+    /**
+     * Whether this entry is a recount of a prior count
+     */
+    recount: boolean;
 }
 
 function isOptionalCountEntryResponsePropertyOfType(
@@ -60,7 +93,7 @@ export function instanceOfCountEntryResponse(value: object): value is CountEntry
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createCountEntryResponsePropertyNames();
+    const requiredProperties = createCountEntryResponsePropertyNames('countEntryId', 'cycleCountTaskId', 'auditorId', 'actualQuantity', 'expectedQuantity', 'variance', 'recountSequenceNumber', 'countedAt', 'recount', );
     const optionalStringProperties = createCountEntryResponseOptionalProperties({ name: 'countEntryId', nullable: false }, { name: 'cycleCountTaskId', nullable: false }, { name: 'auditorId', nullable: false }, { name: 'recountOfCountEntryId', nullable: false }, );
     const optionalNumberProperties = createCountEntryResponseOptionalProperties({ name: 'actualQuantity', nullable: false }, { name: 'expectedQuantity', nullable: false }, { name: 'variance', nullable: false }, { name: 'recountSequenceNumber', nullable: false }, );
     const optionalBooleanProperties = createCountEntryResponseOptionalProperties({ name: 'recount', nullable: false }, );

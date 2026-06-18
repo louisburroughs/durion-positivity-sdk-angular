@@ -9,7 +9,13 @@
  */
 
 
+/**
+ * Request payload for approving a pending price override
+ */
 export interface ApprovePriceOverrideRequest { 
+    /**
+     * Optional approver comments recorded with the approval
+     */
     comments?: string;
 }
 

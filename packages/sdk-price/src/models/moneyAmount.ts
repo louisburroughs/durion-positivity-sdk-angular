@@ -16,11 +16,11 @@ export interface MoneyAmount {
     /**
      * Numeric monetary amount
      */
-    amount?: number;
+    amount: number;
     /**
      * ISO-4217 currency code
      */
-    currency?: string;
+    currency: string;
 }
 
 function isOptionalMoneyAmountPropertyOfType(
@@ -61,7 +61,7 @@ export function instanceOfMoneyAmount(value: object): value is MoneyAmount {
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createMoneyAmountPropertyNames();
+    const requiredProperties = createMoneyAmountPropertyNames('amount', 'currency', );
     const optionalStringProperties = createMoneyAmountOptionalProperties({ name: 'currency', nullable: false }, );
     const optionalNumberProperties = createMoneyAmountOptionalProperties({ name: 'amount', nullable: false }, );
     const optionalBooleanProperties = createMoneyAmountOptionalProperties();

@@ -9,10 +9,22 @@
  */
 
 
+/**
+ * Typed contact point (email, phone) for a person
+ */
 export interface ContactPointDto { 
-    contactType?: ContactPointDtoContactTypeEnum;
-    value?: string;
-    primary?: boolean;
+    /**
+     * Type of contact point
+     */
+    contactType: ContactPointDtoContactTypeEnum;
+    /**
+     * Contact point value
+     */
+    value: string;
+    /**
+     * Whether this is the primary contact point of its type
+     */
+    primary: boolean;
 }
 export enum ContactPointDtoContactTypeEnum {
     Email = 'EMAIL',
@@ -61,7 +73,7 @@ export function instanceOfContactPointDto(value: object): value is ContactPointD
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createContactPointDtoPropertyNames();
+    const requiredProperties = createContactPointDtoPropertyNames('contactType', 'value', 'primary', );
     const optionalStringProperties = createContactPointDtoOptionalProperties({ name: 'contactType', nullable: false }, { name: 'value', nullable: false }, );
     const optionalNumberProperties = createContactPointDtoOptionalProperties();
     const optionalBooleanProperties = createContactPointDtoOptionalProperties({ name: 'primary', nullable: false }, );

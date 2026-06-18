@@ -9,16 +9,46 @@
  */
 
 
+/**
+ * Audit record for a single row processed during a bulk load job
+ */
 export interface AuditRecordResponse { 
-    id?: string;
-    jobId?: string;
+    /**
+     * Unique identifier of the audit record
+     */
+    id: string;
+    /**
+     * Identifier of the bulk load job this audit record belongs to
+     */
+    jobId: string;
+    /**
+     * Type of the target entity for the processed row
+     */
     entityType?: string;
+    /**
+     * Identifier of the entity created or updated from the row, if any
+     */
     entityId?: string;
+    /**
+     * One-based row number within the source file
+     */
     rowNumber?: number;
-    reviewStatus?: AuditRecordResponseReviewStatusEnum;
+    /**
+     * Review status of the audit record
+     */
+    reviewStatus: AuditRecordResponseReviewStatusEnum;
+    /**
+     * Machine-readable reason codes describing why the row needs review
+     */
     reasonCodes?: string;
+    /**
+     * Serialized original values from the source row
+     */
     originalValues?: string;
-    createdAt?: string;
+    /**
+     * Timestamp when the audit record was created (ISO 8601)
+     */
+    createdAt: string;
 }
 export enum AuditRecordResponseReviewStatusEnum {
     Pending = 'PENDING',
@@ -67,7 +97,7 @@ export function instanceOfAuditRecordResponse(value: object): value is AuditReco
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createAuditRecordResponsePropertyNames();
+    const requiredProperties = createAuditRecordResponsePropertyNames('id', 'jobId', 'reviewStatus', 'createdAt', );
     const optionalStringProperties = createAuditRecordResponseOptionalProperties({ name: 'id', nullable: false }, { name: 'jobId', nullable: false }, { name: 'entityType', nullable: false }, { name: 'entityId', nullable: false }, { name: 'reviewStatus', nullable: false }, { name: 'reasonCodes', nullable: false }, { name: 'originalValues', nullable: false }, );
     const optionalNumberProperties = createAuditRecordResponseOptionalProperties({ name: 'rowNumber', nullable: false }, );
     const optionalBooleanProperties = createAuditRecordResponseOptionalProperties();

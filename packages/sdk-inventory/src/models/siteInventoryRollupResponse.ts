@@ -11,6 +11,9 @@ import { StorageLocationRollupNode } from './storageLocationRollupNode';
 import { RollupQuantities } from './rollupQuantities';
 
 
+/**
+ * Site inventory rollup with quantities subtotaled along the storage-location hierarchy
+ */
 export interface SiteInventoryRollupResponse { 
     /**
      * Site (Location) identifier

@@ -9,10 +9,25 @@
  */
 
 
+/**
+ * Request payload for approving or rejecting a location price override
+ */
 export interface LocationPriceOverrideDecisionRequestDto { 
+    /**
+     * Expected version for optimistic locking
+     */
     version: number;
+    /**
+     * Identifier of the user making the decision
+     */
     actorUserId: string;
+    /**
+     * Reason code when rejecting the override
+     */
     rejectionReasonCode?: string;
+    /**
+     * Free-text notes when rejecting the override
+     */
     rejectionNotes?: string;
 }
 

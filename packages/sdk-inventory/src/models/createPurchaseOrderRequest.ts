@@ -10,15 +10,45 @@
 import { PurchaseOrderLineRequest } from './purchaseOrderLineRequest';
 
 
+/**
+ * Request to create a new purchase order for a vendor with one or more order lines
+ */
 export interface CreatePurchaseOrderRequest { 
+    /**
+     * Identifier of the vendor the purchase order is placed with
+     */
     vendorId: string;
+    /**
+     * Date the purchase order is issued
+     */
     poDate: string;
+    /**
+     * ISO 4217 currency code the purchase order is denominated in
+     */
     currency: string;
+    /**
+     * Identifier of the payment terms applied to this purchase order
+     */
     paymentTermsId?: string;
+    /**
+     * Date the ordered goods are expected to be delivered
+     */
     expectedDeliveryDate?: string;
+    /**
+     * Identifier of the location the goods should be shipped to
+     */
     shipToLocationId?: string;
+    /**
+     * Identifier or name of the person who requested the purchase order
+     */
     requestedBy?: string;
+    /**
+     * Free-text comment providing additional context for the purchase order
+     */
     comment?: string;
+    /**
+     * Order lines detailing the SKUs, quantities, and costs being purchased
+     */
     lines: Array<PurchaseOrderLineRequest>;
 }
 

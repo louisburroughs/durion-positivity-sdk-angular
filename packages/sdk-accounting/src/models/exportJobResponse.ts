@@ -16,17 +16,17 @@ export interface ExportJobResponse {
     /**
      * Unique job identifier
      */
-    jobId?: string;
+    jobId: string;
     /**
      * Current job status
      */
-    status?: string;
+    status: string;
     /**
-     * When the export was requested
+     * When the export was requested (ISO 8601)
      */
-    requestedAt?: string;
+    requestedAt: string;
     /**
-     * When the export completed
+     * When the export completed (ISO 8601)
      */
     completedAt?: string | null;
     /**
@@ -77,7 +77,7 @@ export function instanceOfExportJobResponse(value: object): value is ExportJobRe
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createExportJobResponsePropertyNames();
+    const requiredProperties = createExportJobResponsePropertyNames('jobId', 'status', 'requestedAt', );
     const optionalStringProperties = createExportJobResponseOptionalProperties({ name: 'jobId', nullable: false }, { name: 'status', nullable: false }, { name: 'downloadUrl', nullable: true }, { name: 'errorMessage', nullable: true }, );
     const optionalNumberProperties = createExportJobResponseOptionalProperties();
     const optionalBooleanProperties = createExportJobResponseOptionalProperties();

@@ -9,8 +9,17 @@
  */
 
 
+/**
+ * Labor quantity and unit of measure
+ */
 export interface LaborQuantity { 
+    /**
+     * Amount of labor performed
+     */
     quantity: number;
+    /**
+     * Unit of measure for the labor quantity
+     */
     unit: string;
 }
 

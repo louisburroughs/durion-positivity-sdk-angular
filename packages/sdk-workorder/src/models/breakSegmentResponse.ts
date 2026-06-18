@@ -16,15 +16,15 @@ export interface BreakSegmentResponse {
     /**
      * Unique identifier of the break segment
      */
-    breakSegmentId?: string;
+    breakSegmentId: string;
     /**
      * ID of the parent work session
      */
-    workSessionId?: string;
+    workSessionId: string;
     /**
      * Break start timestamp
      */
-    breakStartAt?: string;
+    breakStartAt: string;
     /**
      * Break end timestamp
      */
@@ -84,7 +84,7 @@ export function instanceOfBreakSegmentResponse(value: object): value is BreakSeg
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createBreakSegmentResponsePropertyNames();
+    const requiredProperties = createBreakSegmentResponsePropertyNames('breakSegmentId', 'workSessionId', 'breakStartAt', );
     const optionalStringProperties = createBreakSegmentResponseOptionalProperties({ name: 'breakSegmentId', nullable: false }, { name: 'workSessionId', nullable: false }, { name: 'breakType', nullable: false }, { name: 'notes', nullable: false }, );
     const optionalNumberProperties = createBreakSegmentResponseOptionalProperties();
     const optionalBooleanProperties = createBreakSegmentResponseOptionalProperties();

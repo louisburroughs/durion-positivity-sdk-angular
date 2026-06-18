@@ -9,10 +9,25 @@
  */
 
 
+/**
+ * Request to generate a receipt for an invoice payment
+ */
 export interface GenerateReceiptRequest { 
+    /**
+     * Payment intent the receipt is generated for
+     */
     paymentIntentId: string;
+    /**
+     * Identifier of the terminal producing the receipt
+     */
     terminalId: string;
+    /**
+     * Receipt template identifier
+     */
     templateId: string;
+    /**
+     * Receipt template version
+     */
     templateVersion: string;
 }
 

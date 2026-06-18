@@ -9,13 +9,37 @@
  */
 
 
+/**
+ * Response returned after starting work on a workorder
+ */
 export interface WorkorderStartResponse { 
-    workorderId?: string;
+    /**
+     * Unique identifier of the workorder that was started
+     */
+    workorderId: string;
+    /**
+     * Operational context version for optimistic concurrency
+     */
     operationalContextVersion?: string;
+    /**
+     * Timestamp when work was started on the workorder
+     */
     workStartedAt?: string;
+    /**
+     * Workorder status prior to the start transition
+     */
     previousStatus?: string;
-    currentStatus?: string;
+    /**
+     * Workorder status after the start transition
+     */
+    currentStatus: string;
+    /**
+     * Timestamp when the status transition occurred
+     */
     transitionedAt?: string;
+    /**
+     * Human-readable message describing the start outcome
+     */
     message?: string;
 }
 
@@ -57,7 +81,7 @@ export function instanceOfWorkorderStartResponse(value: object): value is Workor
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createWorkorderStartResponsePropertyNames();
+    const requiredProperties = createWorkorderStartResponsePropertyNames('workorderId', 'currentStatus', );
     const optionalStringProperties = createWorkorderStartResponseOptionalProperties({ name: 'workorderId', nullable: false }, { name: 'operationalContextVersion', nullable: false }, { name: 'previousStatus', nullable: false }, { name: 'currentStatus', nullable: false }, { name: 'message', nullable: false }, );
     const optionalNumberProperties = createWorkorderStartResponseOptionalProperties();
     const optionalBooleanProperties = createWorkorderStartResponseOptionalProperties();

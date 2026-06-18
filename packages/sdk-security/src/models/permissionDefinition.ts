@@ -9,8 +9,17 @@
  */
 
 
+/**
+ * A single permission definition within a registration manifest
+ */
 export interface PermissionDefinition { 
-    name?: string;
+    /**
+     * Permission name in format domain:resource:action
+     */
+    name: string;
+    /**
+     * Human-readable description of the permission
+     */
     description?: string;
 }
 
@@ -52,7 +61,7 @@ export function instanceOfPermissionDefinition(value: object): value is Permissi
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createPermissionDefinitionPropertyNames();
+    const requiredProperties = createPermissionDefinitionPropertyNames('name', );
     const optionalStringProperties = createPermissionDefinitionOptionalProperties({ name: 'name', nullable: false }, { name: 'description', nullable: false }, );
     const optionalNumberProperties = createPermissionDefinitionOptionalProperties();
     const optionalBooleanProperties = createPermissionDefinitionOptionalProperties();

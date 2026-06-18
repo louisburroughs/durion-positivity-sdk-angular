@@ -10,12 +10,33 @@
 import { CreateAsnLineRequest } from './createAsnLineRequest';
 
 
+/**
+ * Request payload to create an advance shipping notice (ASN) for an inbound vendor shipment
+ */
 export interface CreateAsnRequest { 
+    /**
+     * Identifier of the vendor that issued the shipment
+     */
     vendorId: string;
+    /**
+     * Human-readable reference number assigned to the ASN by the vendor
+     */
     asnReferenceNumber: string;
+    /**
+     * Identifiers of the purchase orders this shipment relates to
+     */
     relatedPoIds: Array<string>;
+    /**
+     * Date the shipment left the vendor
+     */
     shipDate?: string;
+    /**
+     * Expected arrival date of the shipment at the destination
+     */
     expectedArrivalDate?: string;
+    /**
+     * Line items detailing the SKUs and quantities included in this ASN
+     */
     lineItems: Array<CreateAsnLineRequest>;
 }
 

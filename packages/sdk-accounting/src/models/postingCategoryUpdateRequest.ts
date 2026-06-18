@@ -9,9 +9,21 @@
  */
 
 
+/**
+ * Request payload for updating an existing posting category
+ */
 export interface PostingCategoryUpdateRequest { 
+    /**
+     * Name of the posting category
+     */
     categoryName: string;
+    /**
+     * Optional description of the posting category
+     */
     description?: string;
+    /**
+     * Identifier of the user modifying the posting category
+     */
     modifiedBy: string;
 }
 

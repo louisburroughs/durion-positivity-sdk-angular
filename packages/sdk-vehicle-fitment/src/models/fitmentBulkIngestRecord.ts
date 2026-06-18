@@ -9,15 +9,45 @@
  */
 
 
+/**
+ * Single fitment record consumed during bulk part fitment ingest
+ */
 export interface FitmentBulkIngestRecord { 
+    /**
+     * Part number identifier the fitment record applies to
+     */
     partNumberId: number;
+    /**
+     * Manufacturer name for the vehicle
+     */
     manufacturerName?: string;
+    /**
+     * Make name for the vehicle
+     */
     makeName?: string;
+    /**
+     * Model name for the vehicle
+     */
     modelName?: string;
+    /**
+     * Vehicle type name
+     */
     vehicleTypeName?: string;
+    /**
+     * Vehicle year or year range
+     */
     vehicleYear?: string;
+    /**
+     * Engine type for the vehicle
+     */
     engineType?: string;
+    /**
+     * Vehicle submodel or trim
+     */
     submodel?: string;
+    /**
+     * Free-form notes about the fitment
+     */
     notes?: string;
 }
 

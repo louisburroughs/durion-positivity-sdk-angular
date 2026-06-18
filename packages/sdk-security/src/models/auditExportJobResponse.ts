@@ -16,15 +16,15 @@ export interface AuditExportJobResponse {
     /**
      * Export job UUID
      */
-    jobId?: string;
+    jobId: string;
     /**
      * Current status of the export job
      */
-    status?: AuditExportJobResponseStatusEnum;
+    status: AuditExportJobResponseStatusEnum;
     /**
      * Timestamp when the export was requested
      */
-    requestedAt?: string;
+    requestedAt: string;
     /**
      * Timestamp when the export completed (null if not yet complete)
      */
@@ -85,7 +85,7 @@ export function instanceOfAuditExportJobResponse(value: object): value is AuditE
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createAuditExportJobResponsePropertyNames();
+    const requiredProperties = createAuditExportJobResponsePropertyNames('jobId', 'status', 'requestedAt', );
     const optionalStringProperties = createAuditExportJobResponseOptionalProperties({ name: 'jobId', nullable: false }, { name: 'status', nullable: false }, { name: 'downloadUrl', nullable: false }, { name: 'errorMessage', nullable: false }, );
     const optionalNumberProperties = createAuditExportJobResponseOptionalProperties();
     const optionalBooleanProperties = createAuditExportJobResponseOptionalProperties();

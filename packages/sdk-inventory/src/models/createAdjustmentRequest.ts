@@ -9,12 +9,33 @@
  */
 
 
+/**
+ * Request to create a new inventory adjustment from a cycle count variance
+ */
 export interface CreateAdjustmentRequest { 
+    /**
+     * Identifier of the stock item being adjusted
+     */
     stockItemId: string;
+    /**
+     * Reason code explaining why the adjustment is being made
+     */
     reasonCode: string;
+    /**
+     * Quantity physically counted by the auditor
+     */
     countedQuantity: number;
+    /**
+     * Quantity on hand recorded before the count was applied
+     */
     quantityOnHandBefore: number;
+    /**
+     * Unit cost to capture at the time of the adjustment
+     */
     costAtTimeOfAdjustment: number;
+    /**
+     * Identifier of the user creating the adjustment
+     */
     createdByUserId: string;
 }
 

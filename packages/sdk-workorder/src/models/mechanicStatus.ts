@@ -10,14 +10,41 @@
 import { PtoEntry } from './ptoEntry';
 
 
+/**
+ * Current availability and status of a mechanic
+ */
 export interface MechanicStatus { 
-    personId?: string;
+    /**
+     * Identifier of the mechanic person
+     */
+    personId: string;
+    /**
+     * Mechanic first name
+     */
     firstName?: string;
+    /**
+     * Mechanic last name
+     */
     lastName?: string;
+    /**
+     * Current work status of the mechanic
+     */
     currentStatus?: string;
+    /**
+     * Identifier of the workorder the mechanic is currently assigned to
+     */
     assignedWorkorderId?: string;
+    /**
+     * Whether the mechanic is currently on break
+     */
     onBreak?: boolean;
+    /**
+     * Expected return time when the mechanic is on break
+     */
     breakExpectedReturn?: string;
+    /**
+     * Paid time-off entries for the mechanic
+     */
     ptoEntries?: Array<PtoEntry>;
 }
 
@@ -59,7 +86,7 @@ export function instanceOfMechanicStatus(value: object): value is MechanicStatus
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createMechanicStatusPropertyNames();
+    const requiredProperties = createMechanicStatusPropertyNames('personId', );
     const optionalStringProperties = createMechanicStatusOptionalProperties({ name: 'personId', nullable: false }, { name: 'firstName', nullable: false }, { name: 'lastName', nullable: false }, { name: 'currentStatus', nullable: false }, { name: 'assignedWorkorderId', nullable: false }, );
     const optionalNumberProperties = createMechanicStatusOptionalProperties();
     const optionalBooleanProperties = createMechanicStatusOptionalProperties({ name: 'onBreak', nullable: false }, );

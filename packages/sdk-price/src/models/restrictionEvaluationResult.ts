@@ -9,11 +9,26 @@
  */
 
 
+/**
+ * Restriction-evaluation outcome for a single product context
+ */
 export interface RestrictionEvaluationResult { 
-    productId?: string;
-    decision?: RestrictionEvaluationResultDecisionEnum;
-    ruleIds?: Array<string>;
-    reasonCodes?: Array<string>;
+    /**
+     * Product the evaluation applies to
+     */
+    productId: string;
+    /**
+     * Restriction decision for the product context
+     */
+    decision: RestrictionEvaluationResultDecisionEnum;
+    /**
+     * Identifiers of rules that contributed to the decision
+     */
+    ruleIds: Array<string>;
+    /**
+     * Reason codes explaining the decision
+     */
+    reasonCodes: Array<string>;
 }
 export enum RestrictionEvaluationResultDecisionEnum {
     Allow = 'ALLOW',
@@ -62,7 +77,7 @@ export function instanceOfRestrictionEvaluationResult(value: object): value is R
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createRestrictionEvaluationResultPropertyNames();
+    const requiredProperties = createRestrictionEvaluationResultPropertyNames('productId', 'decision', 'ruleIds', 'reasonCodes', );
     const optionalStringProperties = createRestrictionEvaluationResultOptionalProperties({ name: 'productId', nullable: false }, { name: 'decision', nullable: false }, );
     const optionalNumberProperties = createRestrictionEvaluationResultOptionalProperties();
     const optionalBooleanProperties = createRestrictionEvaluationResultOptionalProperties();

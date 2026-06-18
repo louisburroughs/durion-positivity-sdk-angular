@@ -9,8 +9,17 @@
  */
 
 
+/**
+ * Request to regenerate an invoice from a completed workorder
+ */
 export interface RegenerateInvoiceFromWorkorderRequest { 
+    /**
+     * Identifier of the workorder to regenerate the invoice from
+     */
     workorderId: string;
+    /**
+     * Optional idempotency key to safely retry regeneration
+     */
     idempotencyKey?: string;
 }
 

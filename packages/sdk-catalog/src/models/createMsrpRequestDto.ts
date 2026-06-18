@@ -9,11 +9,29 @@
  */
 
 
+/**
+ * Request payload for creating a product MSRP
+ */
 export interface CreateMsrpRequestDto { 
+    /**
+     * MSRP amount
+     */
     amount: number;
+    /**
+     * ISO 4217 currency code
+     */
     currency: string;
+    /**
+     * Date the MSRP becomes effective
+     */
     effectiveStartDate: string;
+    /**
+     * Date the MSRP stops being effective
+     */
     effectiveEndDate?: string;
+    /**
+     * Identifier of the user creating the MSRP
+     */
     createdByUserId: string;
 }
 

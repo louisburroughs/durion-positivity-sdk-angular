@@ -16,7 +16,7 @@ export interface WorkorderPartResponse {
     /**
      * Part line item ID
      */
-    id?: string;
+    id: string;
     /**
      * Product entity ID from catalog
      */
@@ -107,7 +107,7 @@ export function instanceOfWorkorderPartResponse(value: object): value is Workord
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createWorkorderPartResponsePropertyNames();
+    const requiredProperties = createWorkorderPartResponsePropertyNames('id', );
     const optionalStringProperties = createWorkorderPartResponseOptionalProperties({ name: 'id', nullable: false }, { name: 'productEntityId', nullable: false }, { name: 'description', nullable: false }, { name: 'status', nullable: false }, );
     const optionalNumberProperties = createWorkorderPartResponseOptionalProperties({ name: 'quantity', nullable: false }, { name: 'unitPrice', nullable: false }, { name: 'quantityIssued', nullable: false }, { name: 'quantityConsumed', nullable: false }, { name: 'quantityReturned', nullable: false }, { name: 'partCost', nullable: false }, { name: 'lineTotal', nullable: false }, );
     const optionalBooleanProperties = createWorkorderPartResponseOptionalProperties();

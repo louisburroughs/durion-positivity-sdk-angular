@@ -9,14 +9,38 @@
  */
 
 
+/**
+ * Result of cross-docking received stock against a workorder line
+ */
 export interface CrossDockResponse { 
-    lineId?: string;
-    workorderId?: string;
-    workorderLineId?: string;
-    crossDockedQuantity?: number;
+    /**
+     * Identifier of the receiving line that was cross-docked
+     */
+    lineId: string;
+    /**
+     * Identifier of the workorder the stock was cross-docked to
+     */
+    workorderId: string;
+    /**
+     * Identifier of the workorder line the stock fulfilled
+     */
+    workorderLineId: string;
+    /**
+     * Quantity of stock that was cross-docked
+     */
+    crossDockedQuantity: number;
+    /**
+     * Identifiers of the inventory ledger entries created by the cross-dock
+     */
     ledgerEntryIds?: Array<string>;
-    sessionStatus?: string;
-    lineStatus?: string;
+    /**
+     * Status of the receiving session after the cross-dock
+     */
+    sessionStatus: string;
+    /**
+     * Status of the receiving line after the cross-dock
+     */
+    lineStatus: string;
 }
 
 function isOptionalCrossDockResponsePropertyOfType(
@@ -57,7 +81,7 @@ export function instanceOfCrossDockResponse(value: object): value is CrossDockRe
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createCrossDockResponsePropertyNames();
+    const requiredProperties = createCrossDockResponsePropertyNames('lineId', 'workorderId', 'workorderLineId', 'crossDockedQuantity', 'sessionStatus', 'lineStatus', );
     const optionalStringProperties = createCrossDockResponseOptionalProperties({ name: 'lineId', nullable: false }, { name: 'workorderId', nullable: false }, { name: 'workorderLineId', nullable: false }, { name: 'sessionStatus', nullable: false }, { name: 'lineStatus', nullable: false }, );
     const optionalNumberProperties = createCrossDockResponseOptionalProperties({ name: 'crossDockedQuantity', nullable: false }, );
     const optionalBooleanProperties = createCrossDockResponseOptionalProperties();

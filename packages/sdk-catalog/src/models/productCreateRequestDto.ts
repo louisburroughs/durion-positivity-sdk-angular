@@ -13,13 +13,37 @@
  * Create product request
  */
 export interface ProductCreateRequestDto { 
+    /**
+     * Product name
+     */
     name: string;
+    /**
+     * Product description
+     */
     description: string;
+    /**
+     * Unit of measure
+     */
     unitOfMeasure: string;
+    /**
+     * Manufacturer identifier
+     */
     manufacturerId?: string;
+    /**
+     * Category identifier
+     */
     categoryId?: string;
+    /**
+     * Stock keeping unit
+     */
     sku: string;
+    /**
+     * Manufacturer part number
+     */
     mpn: string;
+    /**
+     * Universal product code
+     */
     upc?: string;
     /**
      * JSON object represented as string

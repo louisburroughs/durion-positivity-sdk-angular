@@ -10,9 +10,21 @@
 import { ConsumedItemResult } from './consumedItemResult';
 
 
+/**
+ * Result of consuming picked items into a workorder
+ */
 export interface ConsumePickedItemsResponse { 
-    workorderId?: string;
-    totalItemsConsumed?: number;
+    /**
+     * Identifier of the workorder the items were consumed into
+     */
+    workorderId: string;
+    /**
+     * Total number of items consumed
+     */
+    totalItemsConsumed: number;
+    /**
+     * Per-item consumption results
+     */
     results?: Array<ConsumedItemResult>;
 }
 
@@ -54,7 +66,7 @@ export function instanceOfConsumePickedItemsResponse(value: object): value is Co
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createConsumePickedItemsResponsePropertyNames();
+    const requiredProperties = createConsumePickedItemsResponsePropertyNames('workorderId', 'totalItemsConsumed', );
     const optionalStringProperties = createConsumePickedItemsResponseOptionalProperties({ name: 'workorderId', nullable: false }, );
     const optionalNumberProperties = createConsumePickedItemsResponseOptionalProperties({ name: 'totalItemsConsumed', nullable: false }, );
     const optionalBooleanProperties = createConsumePickedItemsResponseOptionalProperties();

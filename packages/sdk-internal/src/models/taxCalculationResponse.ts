@@ -42,7 +42,7 @@ export interface TaxCalculationResponse {
     /**
      * Whether calculation was performed in test mode
      */
-    testMode?: boolean;
+    testMode: boolean;
     /**
      * Timestamp when calculation completed
      */
@@ -109,7 +109,7 @@ export function instanceOfTaxCalculationResponse(value: object): value is TaxCal
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createTaxCalculationResponsePropertyNames('subtotal', 'totalTax', 'total', 'effectiveTaxRate', 'jurisdictions', 'lineItemTaxes', 'calculatedAt', );
+    const requiredProperties = createTaxCalculationResponsePropertyNames('subtotal', 'totalTax', 'total', 'effectiveTaxRate', 'jurisdictions', 'lineItemTaxes', 'testMode', 'calculatedAt', );
     const optionalStringProperties = createTaxCalculationResponseOptionalProperties({ name: 'referenceId', nullable: false }, { name: 'referenceType', nullable: false }, { name: 'externalTransactionId', nullable: false }, );
     const optionalNumberProperties = createTaxCalculationResponseOptionalProperties({ name: 'subtotal', nullable: false }, { name: 'totalTax', nullable: false }, { name: 'total', nullable: false }, { name: 'effectiveTaxRate', nullable: false }, );
     const optionalBooleanProperties = createTaxCalculationResponseOptionalProperties({ name: 'testMode', nullable: false }, );

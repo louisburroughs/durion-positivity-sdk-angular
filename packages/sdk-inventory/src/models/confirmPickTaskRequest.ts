@@ -9,9 +9,21 @@
  */
 
 
+/**
+ * Request to confirm a pick task by recording the scanned SKU, scanned location, and quantity picked
+ */
 export interface ConfirmPickTaskRequest { 
+    /**
+     * Identifier of the SKU scanned by the picker
+     */
     scannedSkuId: string;
+    /**
+     * Identifier of the bin or shelf location scanned during the pick
+     */
     scannedLocationId: string;
+    /**
+     * Quantity of units actually picked at the scanned location
+     */
     quantityPicked: number;
 }
 

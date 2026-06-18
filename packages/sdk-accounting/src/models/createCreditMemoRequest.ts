@@ -9,10 +9,25 @@
  */
 
 
+/**
+ * Request to create a credit memo against a finalized invoice
+ */
 export interface CreateCreditMemoRequest { 
+    /**
+     * Identifier of the finalized invoice the credit memo references
+     */
     originalInvoiceId: string;
+    /**
+     * Credit amount; must not exceed the invoice outstanding balance
+     */
     creditAmount: number;
+    /**
+     * Reason code for the credit memo (mandatory for audit)
+     */
     reasonCode: string;
+    /**
+     * Optional justification note explaining the credit
+     */
     justificationNote?: string;
 }
 

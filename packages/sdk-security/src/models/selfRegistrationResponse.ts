@@ -17,23 +17,23 @@ export interface SelfRegistrationResponse {
     /**
      * Created user identifier
      */
-    userId?: string;
+    userId: string;
     /**
      * Resolved or created person identifier
      */
-    personId?: string;
+    personId: string;
     /**
      * Canonical username assigned to the account
      */
-    username?: string;
+    username: string;
     /**
      * User-person link status
      */
-    linkStatus?: string;
+    linkStatus: string;
     /**
      * True when an existing person was reused
      */
-    matchedExistingPerson?: boolean;
+    matchedExistingPerson: boolean;
     crmMatchSummary?: CrmMatchSummaryDto;
     /**
      * Idempotency key echoed back when the caller supplied one
@@ -42,7 +42,7 @@ export interface SelfRegistrationResponse {
     /**
      * False for Phase 1 because follow-up login is required
      */
-    issuedTokens?: boolean;
+    issuedTokens: boolean;
 }
 
 function isOptionalSelfRegistrationResponsePropertyOfType(
@@ -83,7 +83,7 @@ export function instanceOfSelfRegistrationResponse(value: object): value is Self
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createSelfRegistrationResponsePropertyNames();
+    const requiredProperties = createSelfRegistrationResponsePropertyNames('userId', 'personId', 'username', 'linkStatus', 'matchedExistingPerson', 'issuedTokens', );
     const optionalStringProperties = createSelfRegistrationResponseOptionalProperties({ name: 'userId', nullable: false }, { name: 'personId', nullable: false }, { name: 'username', nullable: false }, { name: 'linkStatus', nullable: false }, { name: 'idempotencyKey', nullable: false }, );
     const optionalNumberProperties = createSelfRegistrationResponseOptionalProperties();
     const optionalBooleanProperties = createSelfRegistrationResponseOptionalProperties({ name: 'matchedExistingPerson', nullable: false }, { name: 'issuedTokens', nullable: false }, );

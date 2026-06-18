@@ -9,7 +9,13 @@
  */
 
 
+/**
+ * Request payload for reversing a journal entry
+ */
 export interface JournalEntryReversalRequest { 
+    /**
+     * Reason for reversing the journal entry
+     */
     reason: string;
 }
 

@@ -10,7 +10,13 @@
 import { RestrictionEvaluationItem } from './restrictionEvaluationItem';
 
 
+/**
+ * Batch request to evaluate sale-restriction rules for one or more product contexts
+ */
 export interface RestrictionEvaluationRequest { 
+    /**
+     * Product/context entries to evaluate; must contain at least one item
+     */
     items: Array<RestrictionEvaluationItem>;
 }
 

@@ -9,16 +9,49 @@
  */
 
 
+/**
+ * Availability of a person at a location for a given date based on staffing assignments
+ */
 export interface PeopleAvailabilityResponse { 
-    personId?: string;
+    /**
+     * Person identifier
+     */
+    personId: string;
+    /**
+     * First name of the person
+     */
     firstName?: string;
+    /**
+     * Last name of the person
+     */
     lastName?: string;
-    locationId?: string;
+    /**
+     * Location identifier
+     */
+    locationId: string;
+    /**
+     * Assignment role at the location
+     */
     role?: string;
-    primary?: boolean;
-    assignmentStatus?: PeopleAvailabilityResponseAssignmentStatusEnum;
+    /**
+     * Whether this is the person\'s primary assignment
+     */
+    primary: boolean;
+    /**
+     * Lifecycle status of the assignment
+     */
+    assignmentStatus: PeopleAvailabilityResponseAssignmentStatusEnum;
+    /**
+     * Date the assignment becomes effective
+     */
     effectiveFrom?: string;
+    /**
+     * Date the assignment ends
+     */
     effectiveTo?: string;
+    /**
+     * Date the availability was evaluated for
+     */
     availableOn?: string;
 }
 export enum PeopleAvailabilityResponseAssignmentStatusEnum {
@@ -66,7 +99,7 @@ export function instanceOfPeopleAvailabilityResponse(value: object): value is Pe
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createPeopleAvailabilityResponsePropertyNames();
+    const requiredProperties = createPeopleAvailabilityResponsePropertyNames('personId', 'locationId', 'primary', 'assignmentStatus', );
     const optionalStringProperties = createPeopleAvailabilityResponseOptionalProperties({ name: 'personId', nullable: false }, { name: 'firstName', nullable: false }, { name: 'lastName', nullable: false }, { name: 'locationId', nullable: false }, { name: 'role', nullable: false }, { name: 'assignmentStatus', nullable: false }, );
     const optionalNumberProperties = createPeopleAvailabilityResponseOptionalProperties();
     const optionalBooleanProperties = createPeopleAvailabilityResponseOptionalProperties({ name: 'primary', nullable: false }, );

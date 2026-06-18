@@ -16,11 +16,11 @@ export interface CatalogItemResponseDto {
     /**
      * Item identifier
      */
-    id?: string;
+    id: string;
     /**
      * Item type
      */
-    itemType?: string;
+    itemType: string;
     /**
      * Item name
      */
@@ -73,7 +73,7 @@ export function instanceOfCatalogItemResponseDto(value: object): value is Catalo
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createCatalogItemResponseDtoPropertyNames();
+    const requiredProperties = createCatalogItemResponseDtoPropertyNames('id', 'itemType', );
     const optionalStringProperties = createCatalogItemResponseDtoOptionalProperties({ name: 'id', nullable: false }, { name: 'itemType', nullable: false }, { name: 'name', nullable: false }, { name: 'shortDescription', nullable: false }, { name: 'longDescription', nullable: false }, );
     const optionalNumberProperties = createCatalogItemResponseDtoOptionalProperties();
     const optionalBooleanProperties = createCatalogItemResponseDtoOptionalProperties();

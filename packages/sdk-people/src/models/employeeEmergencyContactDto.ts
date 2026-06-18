@@ -9,10 +9,25 @@
  */
 
 
+/**
+ * Emergency contact details for an employee
+ */
 export interface EmployeeEmergencyContactDto { 
+    /**
+     * Name of the emergency contact
+     */
     name?: string;
+    /**
+     * Relationship to the employee
+     */
     relationship?: string;
+    /**
+     * Phone number of the emergency contact
+     */
     phone?: string;
+    /**
+     * Email address of the emergency contact
+     */
     email?: string;
 }
 

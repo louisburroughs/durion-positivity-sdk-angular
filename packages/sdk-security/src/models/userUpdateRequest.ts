@@ -13,8 +13,17 @@
  * Updated user object
  */
 export interface UserUpdateRequest { 
+    /**
+     * New login username
+     */
     username?: string;
+    /**
+     * New password for the account
+     */
     password?: string;
+    /**
+     * Replacement set of role names
+     */
     roles?: Set<string>;
 }
 

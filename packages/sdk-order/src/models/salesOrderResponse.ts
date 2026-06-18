@@ -10,18 +10,57 @@
 import { SalesOrderLineResponse } from './salesOrderLineResponse';
 
 
+/**
+ * Response representing a sales order and its lines
+ */
 export interface SalesOrderResponse { 
-    orderId?: string;
+    /**
+     * Unique identifier of the order
+     */
+    orderId: string;
+    /**
+     * Identifier of the customer associated with the order
+     */
     customerId?: string;
+    /**
+     * Identifier of the vehicle associated with the order
+     */
     vehicleId?: string;
+    /**
+     * Identifier of the clerk who owns the order
+     */
     clerkId?: string;
+    /**
+     * Identifier of the terminal where the order was created
+     */
     terminalId?: string;
-    status?: string;
+    /**
+     * Current status of the order
+     */
+    status: string;
+    /**
+     * Subtotal of all order lines before taxes and fees
+     */
     subtotal?: number;
+    /**
+     * Timestamp when the order was created (ISO 8601)
+     */
     createdAt?: string;
+    /**
+     * Timestamp when the order was last updated (ISO 8601)
+     */
     updatedAt?: string;
+    /**
+     * Identifier of the user who created the order
+     */
     createdBy?: string;
+    /**
+     * Identifier of the user who last updated the order
+     */
     updatedBy?: string;
+    /**
+     * Lines belonging to the order
+     */
     lines?: Array<SalesOrderLineResponse>;
 }
 
@@ -63,7 +102,7 @@ export function instanceOfSalesOrderResponse(value: object): value is SalesOrder
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createSalesOrderResponsePropertyNames();
+    const requiredProperties = createSalesOrderResponsePropertyNames('orderId', 'status', );
     const optionalStringProperties = createSalesOrderResponseOptionalProperties({ name: 'orderId', nullable: false }, { name: 'customerId', nullable: false }, { name: 'vehicleId', nullable: false }, { name: 'clerkId', nullable: false }, { name: 'terminalId', nullable: false }, { name: 'status', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'updatedBy', nullable: false }, );
     const optionalNumberProperties = createSalesOrderResponseOptionalProperties({ name: 'subtotal', nullable: false }, );
     const optionalBooleanProperties = createSalesOrderResponseOptionalProperties();

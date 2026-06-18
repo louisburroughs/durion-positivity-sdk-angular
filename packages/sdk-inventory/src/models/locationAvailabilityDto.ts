@@ -9,11 +9,26 @@
  */
 
 
+/**
+ * Per-location availability projection for inventory availability queries
+ */
 export interface LocationAvailabilityDto { 
-    locationId?: string;
-    locationName?: string;
-    onHandQuantity?: number;
-    availableToPromiseQuantity?: number;
+    /**
+     * Identifier of the location
+     */
+    locationId: string;
+    /**
+     * Human-readable name of the location
+     */
+    locationName: string;
+    /**
+     * On-hand quantity at the location
+     */
+    onHandQuantity: number;
+    /**
+     * Available-to-promise quantity at the location
+     */
+    availableToPromiseQuantity: number;
 }
 
 function isOptionalLocationAvailabilityDtoPropertyOfType(
@@ -54,7 +69,7 @@ export function instanceOfLocationAvailabilityDto(value: object): value is Locat
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createLocationAvailabilityDtoPropertyNames();
+    const requiredProperties = createLocationAvailabilityDtoPropertyNames('locationId', 'locationName', 'onHandQuantity', 'availableToPromiseQuantity', );
     const optionalStringProperties = createLocationAvailabilityDtoOptionalProperties({ name: 'locationId', nullable: false }, { name: 'locationName', nullable: false }, );
     const optionalNumberProperties = createLocationAvailabilityDtoOptionalProperties({ name: 'onHandQuantity', nullable: false }, { name: 'availableToPromiseQuantity', nullable: false }, );
     const optionalBooleanProperties = createLocationAvailabilityDtoOptionalProperties();

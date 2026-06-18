@@ -9,10 +9,22 @@
  */
 
 
+/**
+ * Outcome of consuming a single picked item
+ */
 export interface ConsumedItemResult { 
-    pickTaskId?: string;
-    quantityConsumed?: number;
-    status?: ConsumedItemResultStatusEnum;
+    /**
+     * Identifier of the pick task consumed
+     */
+    pickTaskId: string;
+    /**
+     * Quantity actually consumed
+     */
+    quantityConsumed: number;
+    /**
+     * Outcome status for the item
+     */
+    status: ConsumedItemResultStatusEnum;
 }
 export enum ConsumedItemResultStatusEnum {
     Success = 'SUCCESS',
@@ -60,7 +72,7 @@ export function instanceOfConsumedItemResult(value: object): value is ConsumedIt
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createConsumedItemResultPropertyNames();
+    const requiredProperties = createConsumedItemResultPropertyNames('pickTaskId', 'quantityConsumed', 'status', );
     const optionalStringProperties = createConsumedItemResultOptionalProperties({ name: 'pickTaskId', nullable: false }, { name: 'status', nullable: false }, );
     const optionalNumberProperties = createConsumedItemResultOptionalProperties({ name: 'quantityConsumed', nullable: false }, );
     const optionalBooleanProperties = createConsumedItemResultOptionalProperties();

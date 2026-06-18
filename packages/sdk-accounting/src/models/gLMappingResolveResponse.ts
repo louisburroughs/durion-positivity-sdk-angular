@@ -9,8 +9,14 @@
  */
 
 
+/**
+ * Response from GL mapping resolution
+ */
 export interface GLMappingResolveResponse { 
-    glAccountId?: string;
+    /**
+     * Resolved GL account UUID for the requested external code
+     */
+    glAccountId: string;
 }
 
 function isOptionalGLMappingResolveResponsePropertyOfType(
@@ -51,7 +57,7 @@ export function instanceOfGLMappingResolveResponse(value: object): value is GLMa
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createGLMappingResolveResponsePropertyNames();
+    const requiredProperties = createGLMappingResolveResponsePropertyNames('glAccountId', );
     const optionalStringProperties = createGLMappingResolveResponseOptionalProperties({ name: 'glAccountId', nullable: false }, );
     const optionalNumberProperties = createGLMappingResolveResponseOptionalProperties();
     const optionalBooleanProperties = createGLMappingResolveResponseOptionalProperties();

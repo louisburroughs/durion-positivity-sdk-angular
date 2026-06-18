@@ -9,20 +9,65 @@
  */
 
 
+/**
+ * Response describing a created or retrieved appointment
+ */
 export interface AppointmentResponse { 
-    appointmentId?: string;
-    status?: string;
-    locationId?: string;
+    /**
+     * Unique appointment identifier
+     */
+    appointmentId: string;
+    /**
+     * Current appointment status
+     */
+    status: string;
+    /**
+     * Facility/location identifier of the appointment
+     */
+    locationId: string;
+    /**
+     * Resource (bay or mobile unit) reserved, if any
+     */
     resourceId?: string;
-    crmCustomerId?: string;
-    crmVehicleId?: string;
-    startAt?: string;
-    endAt?: string;
-    createdAt?: string;
+    /**
+     * CRM customer identifier the appointment is booked for
+     */
+    crmCustomerId: string;
+    /**
+     * CRM vehicle identifier the appointment services
+     */
+    crmVehicleId: string;
+    /**
+     * Appointment start instant in UTC (ISO-8601)
+     */
+    startAt: string;
+    /**
+     * Appointment end instant in UTC (ISO-8601)
+     */
+    endAt: string;
+    /**
+     * Timestamp the appointment was created in UTC (ISO-8601)
+     */
+    createdAt: string;
+    /**
+     * Cancellation reason code when the appointment has been cancelled
+     */
     cancellationReason?: string;
+    /**
+     * Free-text cancellation notes when the appointment has been cancelled
+     */
     cancellationNotes?: string;
+    /**
+     * Service request identifiers included in this appointment
+     */
     serviceRequestIds?: Array<string>;
+    /**
+     * Snapshot of customer attributes captured at booking time
+     */
     customerSnapshot?: object;
+    /**
+     * Snapshot of vehicle attributes captured at booking time
+     */
     vehicleSnapshot?: object;
 }
 
@@ -64,7 +109,7 @@ export function instanceOfAppointmentResponse(value: object): value is Appointme
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createAppointmentResponsePropertyNames();
+    const requiredProperties = createAppointmentResponsePropertyNames('appointmentId', 'status', 'locationId', 'crmCustomerId', 'crmVehicleId', 'startAt', 'endAt', 'createdAt', );
     const optionalStringProperties = createAppointmentResponseOptionalProperties({ name: 'appointmentId', nullable: false }, { name: 'status', nullable: false }, { name: 'locationId', nullable: false }, { name: 'resourceId', nullable: false }, { name: 'crmCustomerId', nullable: false }, { name: 'crmVehicleId', nullable: false }, { name: 'cancellationReason', nullable: false }, { name: 'cancellationNotes', nullable: false }, );
     const optionalNumberProperties = createAppointmentResponseOptionalProperties();
     const optionalBooleanProperties = createAppointmentResponseOptionalProperties();

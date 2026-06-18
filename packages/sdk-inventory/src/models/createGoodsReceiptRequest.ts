@@ -10,10 +10,25 @@
 import { CreateGoodsReceiptLineRequest } from './createGoodsReceiptLineRequest';
 
 
+/**
+ * Request payload to record a goods receipt for inventory received against a purchase order, optionally linked to an ASN
+ */
 export interface CreateGoodsReceiptRequest { 
+    /**
+     * Identifier of the purchase order the goods are received against
+     */
     poId: string;
+    /**
+     * Identifier of the advance shipping notice (ASN) this receipt fulfills, if applicable
+     */
     asnId?: string;
+    /**
+     * Identifier of the location where the goods are received into inventory
+     */
     locationId: string;
+    /**
+     * Received line items detailing the SKUs and quantities in this goods receipt
+     */
     lines: Array<CreateGoodsReceiptLineRequest>;
 }
 
