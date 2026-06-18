@@ -9,12 +9,33 @@
  */
 
 
+/**
+ * Request payload defining a coverage rule for a mobile unit
+ */
 export interface CoverageRuleRequest { 
-    serviceAreaId?: string;
-    ruleType?: string;
+    /**
+     * Identifier of the service area this rule applies to
+     */
+    serviceAreaId: string;
+    /**
+     * Type of coverage rule
+     */
+    ruleType: string;
+    /**
+     * Evaluation priority of the rule (lower is evaluated first)
+     */
     priority?: number;
+    /**
+     * Date from which the rule is effective
+     */
     validFrom?: string;
+    /**
+     * Date until which the rule is effective
+     */
     validTo?: string;
+    /**
+     * Maximum service distance in kilometres covered by the rule
+     */
     maxDistance?: number;
 }
 
@@ -56,7 +77,7 @@ export function instanceOfCoverageRuleRequest(value: object): value is CoverageR
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createCoverageRuleRequestPropertyNames();
+    const requiredProperties = createCoverageRuleRequestPropertyNames('serviceAreaId', 'ruleType', );
     const optionalStringProperties = createCoverageRuleRequestOptionalProperties({ name: 'serviceAreaId', nullable: false }, { name: 'ruleType', nullable: false }, );
     const optionalNumberProperties = createCoverageRuleRequestOptionalProperties({ name: 'priority', nullable: false }, { name: 'maxDistance', nullable: false }, );
     const optionalBooleanProperties = createCoverageRuleRequestOptionalProperties();

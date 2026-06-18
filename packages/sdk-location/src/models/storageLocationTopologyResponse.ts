@@ -9,11 +9,29 @@
  */
 
 
+/**
+ * Lightweight flat projection of a storage location for topology consumers
+ */
 export interface StorageLocationTopologyResponse { 
-    id?: string;
+    /**
+     * Unique identifier of the storage location
+     */
+    id: string;
+    /**
+     * Display name of the storage location
+     */
     name?: string;
+    /**
+     * Type classification of the storage location
+     */
     type?: StorageLocationTopologyResponseTypeEnum;
+    /**
+     * Operational status of the storage location
+     */
     status?: string;
+    /**
+     * Identifier of the parent storage location
+     */
     parentStorageLocationId?: string;
 }
 export enum StorageLocationTopologyResponseTypeEnum {
@@ -64,7 +82,7 @@ export function instanceOfStorageLocationTopologyResponse(value: object): value 
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createStorageLocationTopologyResponsePropertyNames();
+    const requiredProperties = createStorageLocationTopologyResponsePropertyNames('id', );
     const optionalStringProperties = createStorageLocationTopologyResponseOptionalProperties({ name: 'id', nullable: false }, { name: 'name', nullable: false }, { name: 'type', nullable: false }, { name: 'status', nullable: false }, { name: 'parentStorageLocationId', nullable: false }, );
     const optionalNumberProperties = createStorageLocationTopologyResponseOptionalProperties();
     const optionalBooleanProperties = createStorageLocationTopologyResponseOptionalProperties();

@@ -9,10 +9,25 @@
  */
 
 
+/**
+ * Response payload describing a mobile unit eligible to cover a request
+ */
 export interface EligibleMobileUnitResponse { 
-    id?: string;
+    /**
+     * Unique identifier of the mobile unit
+     */
+    id: string;
+    /**
+     * Display name of the mobile unit
+     */
     name?: string;
+    /**
+     * Identifier of the base location the mobile unit operates from
+     */
     baseLocationId?: string;
+    /**
+     * Coverage priority of the mobile unit for the requested area (lower is preferred)
+     */
     priority?: number;
 }
 
@@ -54,7 +69,7 @@ export function instanceOfEligibleMobileUnitResponse(value: object): value is El
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createEligibleMobileUnitResponsePropertyNames();
+    const requiredProperties = createEligibleMobileUnitResponsePropertyNames('id', );
     const optionalStringProperties = createEligibleMobileUnitResponseOptionalProperties({ name: 'id', nullable: false }, { name: 'name', nullable: false }, { name: 'baseLocationId', nullable: false }, );
     const optionalNumberProperties = createEligibleMobileUnitResponseOptionalProperties({ name: 'priority', nullable: false }, );
     const optionalBooleanProperties = createEligibleMobileUnitResponseOptionalProperties();

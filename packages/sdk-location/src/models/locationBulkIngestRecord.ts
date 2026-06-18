@@ -9,17 +9,53 @@
  */
 
 
+/**
+ * A single location record within a bulk ingest request
+ */
 export interface LocationBulkIngestRecord { 
+    /**
+     * Display name of the location
+     */
     name: string;
+    /**
+     * Unique business code of the location
+     */
     code: string;
+    /**
+     * First line of the street address
+     */
     addressLine1?: string;
+    /**
+     * Second line of the street address
+     */
     addressLine2?: string;
+    /**
+     * City of the location
+     */
     city?: string;
+    /**
+     * State or province of the location
+     */
     stateOrProvince?: string;
+    /**
+     * Postal or ZIP code of the location
+     */
     postalCode?: string;
+    /**
+     * ISO 3166-1 alpha-2 country code
+     */
     countryCode?: string;
+    /**
+     * Primary phone number for the location
+     */
     phoneNumber?: string;
+    /**
+     * Whether the location is active
+     */
     active?: boolean;
+    /**
+     * Name of the location type to resolve during ingest
+     */
     locationTypeName?: string;
 }
 

@@ -14,12 +14,30 @@ import { BayCapacityRequest } from './bayCapacityRequest';
  * Bay creation request body
  */
 export interface BayRequest { 
+    /**
+     * Display name of the bay
+     */
     name: string;
+    /**
+     * Type classification of the bay
+     */
     bayType: string;
     capacity: BayCapacityRequest;
+    /**
+     * Maximum number of vehicles that can be serviced concurrently in the bay
+     */
     maxConcurrentVehicles?: number;
+    /**
+     * Identifiers of service capabilities supported by the bay
+     */
     serviceCapabilityIds?: Array<string>;
+    /**
+     * Identifiers of skills required to operate the bay
+     */
     skillRequirementIds?: Array<string>;
+    /**
+     * Operational status of the bay
+     */
     status?: string;
 }
 

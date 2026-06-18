@@ -10,10 +10,25 @@
 import { PostalCodeEntry } from './postalCodeEntry';
 
 
+/**
+ * Request payload for creating or updating a service area
+ */
 export interface ServiceAreaRequest { 
-    name?: string;
+    /**
+     * Display name of the service area
+     */
+    name: string;
+    /**
+     * Description of the service area
+     */
     description?: string;
+    /**
+     * Whether the service area is active
+     */
     active?: boolean;
+    /**
+     * Postal codes included in the service area
+     */
     postalCodes?: Array<PostalCodeEntry>;
 }
 
@@ -55,7 +70,7 @@ export function instanceOfServiceAreaRequest(value: object): value is ServiceAre
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createServiceAreaRequestPropertyNames();
+    const requiredProperties = createServiceAreaRequestPropertyNames('name', );
     const optionalStringProperties = createServiceAreaRequestOptionalProperties({ name: 'name', nullable: false }, { name: 'description', nullable: false }, );
     const optionalNumberProperties = createServiceAreaRequestOptionalProperties();
     const optionalBooleanProperties = createServiceAreaRequestOptionalProperties({ name: 'active', nullable: false }, );

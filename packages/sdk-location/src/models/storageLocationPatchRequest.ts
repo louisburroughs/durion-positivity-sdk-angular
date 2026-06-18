@@ -9,13 +9,37 @@
  */
 
 
+/**
+ * Partial update payload for a storage location; null fields are left unchanged
+ */
 export interface StorageLocationPatchRequest { 
+    /**
+     * Display name of the storage location
+     */
     name?: string;
+    /**
+     * Barcode identifying the storage location
+     */
     barcode?: string;
+    /**
+     * Operational status of the storage location
+     */
     status?: StorageLocationPatchRequestStatusEnum;
+    /**
+     * Identifier of the parent storage location
+     */
     parentStorageLocationId?: string;
+    /**
+     * Identifier of the destination storage location for relocation operations
+     */
     destinationStorageLocationId?: string;
+    /**
+     * Capacity attributes of the storage location
+     */
     capacity?: object;
+    /**
+     * Temperature attributes of the storage location
+     */
     temperature?: object;
 }
 export enum StorageLocationPatchRequestStatusEnum {

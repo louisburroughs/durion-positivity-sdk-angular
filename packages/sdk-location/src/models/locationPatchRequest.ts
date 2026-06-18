@@ -15,12 +15,33 @@ import { HolidayClosureRequest } from './holidayClosureRequest';
  * Partial location payload
  */
 export interface LocationPatchRequest { 
+    /**
+     * Display name of the location
+     */
     name?: string;
+    /**
+     * Operational status of the location
+     */
     status?: string;
+    /**
+     * IANA timezone identifier for the location
+     */
     timezone?: string;
+    /**
+     * Weekly operating hours for the location
+     */
     operatingHours?: Array<OperatingHoursRequest>;
+    /**
+     * Holiday closures for the location
+     */
     holidayClosures?: Array<HolidayClosureRequest>;
+    /**
+     * Buffer minutes reserved before appointments for check-in
+     */
     checkInBufferMinutes?: number;
+    /**
+     * Buffer minutes reserved after appointments for cleanup
+     */
     cleanupBufferMinutes?: number;
 }
 

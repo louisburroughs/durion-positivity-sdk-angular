@@ -9,13 +9,37 @@
  */
 
 
+/**
+ * Response payload describing a travel buffer policy
+ */
 export interface TravelBufferPolicyResponse { 
-    id?: string;
+    /**
+     * Unique identifier of the travel buffer policy
+     */
+    id: string;
+    /**
+     * Display name of the travel buffer policy
+     */
     name?: string;
+    /**
+     * Type of buffer the policy applies
+     */
     bufferType?: string;
+    /**
+     * Numeric value of the buffer (interpretation depends on buffer type)
+     */
     bufferValue?: number;
+    /**
+     * Free-text notes about the policy
+     */
     notes?: string;
+    /**
+     * Timestamp when the policy was created (ISO 8601)
+     */
     createdAt?: string;
+    /**
+     * Timestamp when the policy was last updated (ISO 8601)
+     */
     updatedAt?: string;
 }
 
@@ -57,7 +81,7 @@ export function instanceOfTravelBufferPolicyResponse(value: object): value is Tr
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createTravelBufferPolicyResponsePropertyNames();
+    const requiredProperties = createTravelBufferPolicyResponsePropertyNames('id', );
     const optionalStringProperties = createTravelBufferPolicyResponseOptionalProperties({ name: 'id', nullable: false }, { name: 'name', nullable: false }, { name: 'bufferType', nullable: false }, { name: 'notes', nullable: false }, );
     const optionalNumberProperties = createTravelBufferPolicyResponseOptionalProperties({ name: 'bufferValue', nullable: false }, );
     const optionalBooleanProperties = createTravelBufferPolicyResponseOptionalProperties();

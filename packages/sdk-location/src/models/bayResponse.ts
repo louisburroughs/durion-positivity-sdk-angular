@@ -9,16 +9,49 @@
  */
 
 
+/**
+ * Response payload describing a service bay
+ */
 export interface BayResponse { 
-    id?: string;
-    locationId?: string;
-    name?: string;
+    /**
+     * Unique identifier of the bay
+     */
+    id: string;
+    /**
+     * Identifier of the location that owns the bay
+     */
+    locationId: string;
+    /**
+     * Display name of the bay
+     */
+    name: string;
+    /**
+     * Type classification of the bay
+     */
     bayType?: string;
+    /**
+     * Operational status of the bay
+     */
     status?: string;
+    /**
+     * Maximum number of vehicles that can be serviced concurrently in the bay
+     */
     maxConcurrentVehicles?: number;
+    /**
+     * Identifiers of service capabilities supported by the bay
+     */
     serviceCapabilityIds?: Array<string>;
+    /**
+     * Identifiers of skills required to operate the bay
+     */
     skillRequirementIds?: Array<string>;
+    /**
+     * Timestamp when the bay was created (ISO 8601)
+     */
     createdAt?: string;
+    /**
+     * Timestamp when the bay was last modified (ISO 8601)
+     */
     lastModifiedAt?: string;
 }
 
@@ -60,7 +93,7 @@ export function instanceOfBayResponse(value: object): value is BayResponse {
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createBayResponsePropertyNames();
+    const requiredProperties = createBayResponsePropertyNames('id', 'locationId', 'name', );
     const optionalStringProperties = createBayResponseOptionalProperties({ name: 'id', nullable: false }, { name: 'locationId', nullable: false }, { name: 'name', nullable: false }, { name: 'bayType', nullable: false }, { name: 'status', nullable: false }, );
     const optionalNumberProperties = createBayResponseOptionalProperties({ name: 'maxConcurrentVehicles', nullable: false }, );
     const optionalBooleanProperties = createBayResponseOptionalProperties();

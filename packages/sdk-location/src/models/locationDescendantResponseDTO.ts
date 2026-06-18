@@ -9,13 +9,34 @@
  */
 
 
+/**
+ * Flat projection of a descendant location within a hierarchy traversal
+ */
 export interface LocationDescendantResponseDTO { 
-    id?: string;
-    name?: string;
+    /**
+     * Unique identifier of the descendant location
+     */
+    id: string;
+    /**
+     * Display name of the location
+     */
+    name: string;
+    /**
+     * Unique business code of the location
+     */
     code?: string;
+    /**
+     * Operational status of the location
+     */
     status?: string;
+    /**
+     * Identifier of the immediate parent of this location within the traversed chain
+     */
     parentId?: string;
-    depth?: number;
+    /**
+     * Distance from the requested root location (1 = direct child)
+     */
+    depth: number;
 }
 
 function isOptionalLocationDescendantResponseDTOPropertyOfType(
@@ -56,7 +77,7 @@ export function instanceOfLocationDescendantResponseDTO(value: object): value is
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createLocationDescendantResponseDTOPropertyNames();
+    const requiredProperties = createLocationDescendantResponseDTOPropertyNames('id', 'name', 'depth', );
     const optionalStringProperties = createLocationDescendantResponseDTOOptionalProperties({ name: 'id', nullable: false }, { name: 'name', nullable: false }, { name: 'code', nullable: false }, { name: 'status', nullable: false }, { name: 'parentId', nullable: false }, );
     const optionalNumberProperties = createLocationDescendantResponseDTOOptionalProperties({ name: 'depth', nullable: false }, );
     const optionalBooleanProperties = createLocationDescendantResponseDTOOptionalProperties();

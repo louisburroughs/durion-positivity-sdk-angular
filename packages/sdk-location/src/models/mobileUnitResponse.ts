@@ -9,15 +9,45 @@
  */
 
 
+/**
+ * Response payload describing a mobile unit
+ */
 export interface MobileUnitResponse { 
-    id?: string;
+    /**
+     * Unique identifier of the mobile unit
+     */
+    id: string;
+    /**
+     * Display name of the mobile unit
+     */
     name?: string;
+    /**
+     * Identifier of the base location the mobile unit operates from
+     */
     baseLocationId?: string;
+    /**
+     * Operational status of the mobile unit
+     */
     status?: string;
+    /**
+     * Identifier of the travel buffer policy applied to the mobile unit
+     */
     travelBufferPolicyId?: string;
+    /**
+     * Free-text notes about the mobile unit
+     */
     notes?: string;
+    /**
+     * Identifiers of capabilities the mobile unit can perform
+     */
     capabilityIds?: Array<string>;
+    /**
+     * Timestamp when the mobile unit was created (ISO 8601)
+     */
     createdAt?: string;
+    /**
+     * Timestamp when the mobile unit was last updated (ISO 8601)
+     */
     updatedAt?: string;
 }
 
@@ -59,7 +89,7 @@ export function instanceOfMobileUnitResponse(value: object): value is MobileUnit
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createMobileUnitResponsePropertyNames();
+    const requiredProperties = createMobileUnitResponsePropertyNames('id', );
     const optionalStringProperties = createMobileUnitResponseOptionalProperties({ name: 'id', nullable: false }, { name: 'name', nullable: false }, { name: 'baseLocationId', nullable: false }, { name: 'status', nullable: false }, { name: 'travelBufferPolicyId', nullable: false }, { name: 'notes', nullable: false }, );
     const optionalNumberProperties = createMobileUnitResponseOptionalProperties();
     const optionalBooleanProperties = createMobileUnitResponseOptionalProperties();

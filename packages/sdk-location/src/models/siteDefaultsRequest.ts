@@ -9,8 +9,17 @@
  */
 
 
+/**
+ * Request payload for configuring default storage locations for a site
+ */
 export interface SiteDefaultsRequest { 
+    /**
+     * Identifier of the default staging storage location
+     */
     defaultStagingLocationId?: string;
+    /**
+     * Identifier of the default quarantine storage location
+     */
     defaultQuarantineLocationId?: string;
 }
 

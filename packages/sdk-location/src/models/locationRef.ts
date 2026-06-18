@@ -9,12 +9,33 @@
  */
 
 
+/**
+ * Lightweight location reference for reconciliation roster consumers
+ */
 export interface LocationRef { 
-    id?: string;
+    /**
+     * Unique identifier of the location
+     */
+    id: string;
+    /**
+     * Display name of the location
+     */
     name?: string;
+    /**
+     * Unique business code of the location
+     */
     code?: string;
+    /**
+     * Operational status of the location
+     */
     status?: string;
+    /**
+     * Identifier of the location in the HR system of record
+     */
     hrLocationId?: string;
+    /**
+     * Timestamp when the location was last updated (ISO 8601)
+     */
     updatedAt?: string;
 }
 
@@ -56,7 +77,7 @@ export function instanceOfLocationRef(value: object): value is LocationRef {
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createLocationRefPropertyNames();
+    const requiredProperties = createLocationRefPropertyNames('id', );
     const optionalStringProperties = createLocationRefOptionalProperties({ name: 'id', nullable: false }, { name: 'name', nullable: false }, { name: 'code', nullable: false }, { name: 'status', nullable: false }, { name: 'hrLocationId', nullable: false }, );
     const optionalNumberProperties = createLocationRefOptionalProperties();
     const optionalBooleanProperties = createLocationRefOptionalProperties();

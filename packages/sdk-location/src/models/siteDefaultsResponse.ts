@@ -9,9 +9,21 @@
  */
 
 
+/**
+ * Response payload describing default storage location configuration for a site
+ */
 export interface SiteDefaultsResponse { 
-    siteId?: string;
+    /**
+     * Identifier of the site
+     */
+    siteId: string;
+    /**
+     * Identifier of the default staging storage location
+     */
     defaultStagingLocationId?: string;
+    /**
+     * Identifier of the default quarantine storage location
+     */
     defaultQuarantineLocationId?: string;
 }
 
@@ -53,7 +65,7 @@ export function instanceOfSiteDefaultsResponse(value: object): value is SiteDefa
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createSiteDefaultsResponsePropertyNames();
+    const requiredProperties = createSiteDefaultsResponsePropertyNames('siteId', );
     const optionalStringProperties = createSiteDefaultsResponseOptionalProperties({ name: 'siteId', nullable: false }, { name: 'defaultStagingLocationId', nullable: false }, { name: 'defaultQuarantineLocationId', nullable: false }, );
     const optionalNumberProperties = createSiteDefaultsResponseOptionalProperties();
     const optionalBooleanProperties = createSiteDefaultsResponseOptionalProperties();

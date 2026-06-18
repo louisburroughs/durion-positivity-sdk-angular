@@ -9,11 +9,29 @@
  */
 
 
+/**
+ * Validation result for a storage location lookup
+ */
 export interface StorageLocationValidationResponseDTO { 
-    storageLocationId?: string;
+    /**
+     * Identifier of the storage location that was validated
+     */
+    storageLocationId: string;
+    /**
+     * Identifier of the site that owns the storage location
+     */
     siteId?: string;
-    exists?: boolean;
-    active?: boolean;
+    /**
+     * Whether the storage location exists
+     */
+    exists: boolean;
+    /**
+     * Whether the storage location is active
+     */
+    active: boolean;
+    /**
+     * Maximum unit capacity of the storage location
+     */
     maxUnitCapacity?: number;
 }
 
@@ -55,7 +73,7 @@ export function instanceOfStorageLocationValidationResponseDTO(value: object): v
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createStorageLocationValidationResponseDTOPropertyNames();
+    const requiredProperties = createStorageLocationValidationResponseDTOPropertyNames('storageLocationId', 'exists', 'active', );
     const optionalStringProperties = createStorageLocationValidationResponseDTOOptionalProperties({ name: 'storageLocationId', nullable: false }, { name: 'siteId', nullable: false }, );
     const optionalNumberProperties = createStorageLocationValidationResponseDTOOptionalProperties({ name: 'maxUnitCapacity', nullable: false }, );
     const optionalBooleanProperties = createStorageLocationValidationResponseDTOOptionalProperties({ name: 'exists', nullable: false }, { name: 'active', nullable: false }, );

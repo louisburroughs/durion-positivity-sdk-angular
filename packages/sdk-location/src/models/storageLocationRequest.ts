@@ -9,12 +9,33 @@
  */
 
 
+/**
+ * Request payload for creating a storage location
+ */
 export interface StorageLocationRequest { 
-    name?: string;
+    /**
+     * Display name of the storage location
+     */
+    name: string;
+    /**
+     * Barcode identifying the storage location
+     */
     barcode?: string;
-    type?: StorageLocationRequestTypeEnum;
+    /**
+     * Type classification of the storage location
+     */
+    type: StorageLocationRequestTypeEnum;
+    /**
+     * Identifier of the parent storage location
+     */
     parentStorageLocationId?: string;
+    /**
+     * Capacity attributes of the storage location
+     */
     capacity?: object;
+    /**
+     * Temperature attributes of the storage location
+     */
     temperature?: object;
 }
 export enum StorageLocationRequestTypeEnum {
@@ -65,7 +86,7 @@ export function instanceOfStorageLocationRequest(value: object): value is Storag
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createStorageLocationRequestPropertyNames();
+    const requiredProperties = createStorageLocationRequestPropertyNames('name', 'type', );
     const optionalStringProperties = createStorageLocationRequestOptionalProperties({ name: 'name', nullable: false }, { name: 'barcode', nullable: false }, { name: 'type', nullable: false }, { name: 'parentStorageLocationId', nullable: false }, );
     const optionalNumberProperties = createStorageLocationRequestOptionalProperties();
     const optionalBooleanProperties = createStorageLocationRequestOptionalProperties();

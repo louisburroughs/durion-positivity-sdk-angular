@@ -9,8 +9,17 @@
  */
 
 
+/**
+ * A single holiday closure entry for a location
+ */
 export interface HolidayClosureRequest { 
-    date?: string;
+    /**
+     * Date on which the location is closed
+     */
+    date: string;
+    /**
+     * Human-readable reason for the closure
+     */
     reason?: string;
 }
 
@@ -52,7 +61,7 @@ export function instanceOfHolidayClosureRequest(value: object): value is Holiday
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createHolidayClosureRequestPropertyNames();
+    const requiredProperties = createHolidayClosureRequestPropertyNames('date', );
     const optionalStringProperties = createHolidayClosureRequestOptionalProperties({ name: 'reason', nullable: false }, );
     const optionalNumberProperties = createHolidayClosureRequestOptionalProperties();
     const optionalBooleanProperties = createHolidayClosureRequestOptionalProperties();

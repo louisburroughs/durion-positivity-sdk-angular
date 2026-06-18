@@ -9,9 +9,21 @@
  */
 
 
+/**
+ * Location type classification reference
+ */
 export interface LocationTypeDTO { 
+    /**
+     * Unique identifier of the location type
+     */
     id?: string;
+    /**
+     * Name of the location type
+     */
     name?: string;
+    /**
+     * Description of the location type
+     */
     description?: string;
 }
 
