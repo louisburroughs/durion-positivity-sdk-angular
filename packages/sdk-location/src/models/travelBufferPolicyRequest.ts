@@ -9,10 +9,25 @@
  */
 
 
+/**
+ * Request payload for creating or updating a travel buffer policy
+ */
 export interface TravelBufferPolicyRequest { 
-    name?: string;
-    bufferType?: string;
+    /**
+     * Display name of the travel buffer policy
+     */
+    name: string;
+    /**
+     * Type of buffer the policy applies
+     */
+    bufferType: string;
+    /**
+     * Numeric value of the buffer (interpretation depends on buffer type)
+     */
     bufferValue?: number;
+    /**
+     * Free-text notes about the policy
+     */
     notes?: string;
 }
 
@@ -54,7 +69,7 @@ export function instanceOfTravelBufferPolicyRequest(value: object): value is Tra
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createTravelBufferPolicyRequestPropertyNames();
+    const requiredProperties = createTravelBufferPolicyRequestPropertyNames('name', 'bufferType', );
     const optionalStringProperties = createTravelBufferPolicyRequestOptionalProperties({ name: 'name', nullable: false }, { name: 'bufferType', nullable: false }, { name: 'notes', nullable: false }, );
     const optionalNumberProperties = createTravelBufferPolicyRequestOptionalProperties({ name: 'bufferValue', nullable: false }, );
     const optionalBooleanProperties = createTravelBufferPolicyRequestOptionalProperties();

@@ -9,17 +9,50 @@
  */
 
 
+/**
+ * Response payload describing a storage location
+ */
 export interface StorageLocationResponse { 
-    id?: string;
+    /**
+     * Unique identifier of the storage location
+     */
+    id: string;
+    /**
+     * Display name of the storage location
+     */
     name?: string;
+    /**
+     * Barcode identifying the storage location
+     */
     barcode?: string;
+    /**
+     * Type classification of the storage location
+     */
     type?: StorageLocationResponseTypeEnum;
+    /**
+     * Operational status of the storage location
+     */
     status?: string;
+    /**
+     * Identifier of the site that owns the storage location
+     */
     siteId?: string;
+    /**
+     * Identifier of the parent storage location
+     */
     parentStorageLocationId?: string;
+    /**
+     * Capacity attributes of the storage location
+     */
     capacity?: object;
+    /**
+     * Temperature attributes of the storage location
+     */
     temperature?: object;
-    inventoryCount?: number;
+    /**
+     * Count of inventory items stored at the location
+     */
+    inventoryCount: number;
 }
 export enum StorageLocationResponseTypeEnum {
     Floor = 'FLOOR',
@@ -69,7 +102,7 @@ export function instanceOfStorageLocationResponse(value: object): value is Stora
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createStorageLocationResponsePropertyNames();
+    const requiredProperties = createStorageLocationResponsePropertyNames('id', 'inventoryCount', );
     const optionalStringProperties = createStorageLocationResponseOptionalProperties({ name: 'id', nullable: false }, { name: 'name', nullable: false }, { name: 'barcode', nullable: false }, { name: 'type', nullable: false }, { name: 'status', nullable: false }, { name: 'siteId', nullable: false }, { name: 'parentStorageLocationId', nullable: false }, );
     const optionalNumberProperties = createStorageLocationResponseOptionalProperties({ name: 'inventoryCount', nullable: false }, );
     const optionalBooleanProperties = createStorageLocationResponseOptionalProperties();

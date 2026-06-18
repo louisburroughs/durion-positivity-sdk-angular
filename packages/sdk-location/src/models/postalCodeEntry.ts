@@ -9,8 +9,17 @@
  */
 
 
+/**
+ * A postal code entry within a service area
+ */
 export interface PostalCodeEntry { 
-    postalCode?: string;
+    /**
+     * Postal or ZIP code
+     */
+    postalCode: string;
+    /**
+     * ISO 3166-1 alpha-2 country code
+     */
     countryCode?: string;
 }
 
@@ -52,7 +61,7 @@ export function instanceOfPostalCodeEntry(value: object): value is PostalCodeEnt
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createPostalCodeEntryPropertyNames();
+    const requiredProperties = createPostalCodeEntryPropertyNames('postalCode', );
     const optionalStringProperties = createPostalCodeEntryOptionalProperties({ name: 'postalCode', nullable: false }, { name: 'countryCode', nullable: false }, );
     const optionalNumberProperties = createPostalCodeEntryOptionalProperties();
     const optionalBooleanProperties = createPostalCodeEntryOptionalProperties();

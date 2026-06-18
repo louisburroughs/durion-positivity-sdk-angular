@@ -16,24 +16,78 @@ import { LocationTypeDTO } from './locationTypeDTO';
  * Location object to be created
  */
 export interface LocationRequestDTO { 
+    /**
+     * Display name of the location
+     */
     name: string;
+    /**
+     * Unique business code of the location
+     */
     code: string;
+    /**
+     * Identifier of the associated geographical location
+     */
     geographicalLocationId?: string;
+    /**
+     * First line of the street address
+     */
     addressLine1?: string;
+    /**
+     * Second line of the street address
+     */
     addressLine2?: string;
+    /**
+     * City of the location
+     */
     city?: string;
+    /**
+     * State or province of the location
+     */
     state?: string;
+    /**
+     * Postal or ZIP code of the location
+     */
     postalCode?: string;
+    /**
+     * Country of the location
+     */
     country?: string;
+    /**
+     * Mailing address of the location
+     */
     mailingAddress?: string;
+    /**
+     * Whether the location is active
+     */
     active?: boolean;
+    /**
+     * Identifier of the person responsible for the location
+     */
     responsiblePersonId?: number;
+    /**
+     * IANA timezone identifier for the location
+     */
     timezone?: string;
+    /**
+     * Weekly operating hours for the location
+     */
     operatingHours?: Array<OperatingHoursRequest>;
+    /**
+     * Holiday closures for the location
+     */
     holidayClosures?: Array<HolidayClosureRequest>;
+    /**
+     * Buffer minutes reserved before appointments for check-in
+     */
     checkInBufferMinutes?: number;
+    /**
+     * Buffer minutes reserved after appointments for cleanup
+     */
     cleanupBufferMinutes?: number;
     type: LocationTypeDTO;
+    /**
+     * Map of parent relationships keyed by relationship type
+     */
     parents?: object;
 }
 

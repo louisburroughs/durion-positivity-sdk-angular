@@ -10,13 +10,34 @@
 import { BayCapacityRequest } from './bayCapacityRequest';
 
 
+/**
+ * Partial update payload for a service bay; null fields are left unchanged
+ */
 export interface BayPatchRequest { 
+    /**
+     * Display name of the bay
+     */
     name?: string;
+    /**
+     * Type classification of the bay
+     */
     bayType?: string;
+    /**
+     * Operational status of the bay
+     */
     status?: string;
+    /**
+     * Maximum number of vehicles that can be serviced concurrently in the bay
+     */
     maxConcurrentVehicles?: number;
     capacity?: BayCapacityRequest;
+    /**
+     * Identifiers of service capabilities supported by the bay
+     */
     serviceCapabilityIds?: Array<string>;
+    /**
+     * Identifiers of skills required to operate the bay
+     */
     skillRequirementIds?: Array<string>;
 }
 

@@ -9,14 +9,41 @@
  */
 
 
+/**
+ * Response payload describing a mobile unit coverage rule
+ */
 export interface CoverageRuleResponse { 
-    id?: string;
-    mobileUnitId?: string;
-    serviceAreaId?: string;
+    /**
+     * Unique identifier of the coverage rule
+     */
+    id: string;
+    /**
+     * Identifier of the mobile unit this rule belongs to
+     */
+    mobileUnitId: string;
+    /**
+     * Identifier of the service area this rule applies to
+     */
+    serviceAreaId: string;
+    /**
+     * Type of coverage rule
+     */
     ruleType?: string;
+    /**
+     * Evaluation priority of the rule (lower is evaluated first)
+     */
     priority?: number;
+    /**
+     * Date from which the rule is effective
+     */
     validFrom?: string;
+    /**
+     * Date until which the rule is effective
+     */
     validTo?: string;
+    /**
+     * Maximum service distance in kilometres covered by the rule
+     */
     maxDistance?: number;
 }
 
@@ -58,7 +85,7 @@ export function instanceOfCoverageRuleResponse(value: object): value is Coverage
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createCoverageRuleResponsePropertyNames();
+    const requiredProperties = createCoverageRuleResponsePropertyNames('id', 'mobileUnitId', 'serviceAreaId', );
     const optionalStringProperties = createCoverageRuleResponseOptionalProperties({ name: 'id', nullable: false }, { name: 'mobileUnitId', nullable: false }, { name: 'serviceAreaId', nullable: false }, { name: 'ruleType', nullable: false }, );
     const optionalNumberProperties = createCoverageRuleResponseOptionalProperties({ name: 'priority', nullable: false }, { name: 'maxDistance', nullable: false }, );
     const optionalBooleanProperties = createCoverageRuleResponseOptionalProperties();

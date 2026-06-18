@@ -14,12 +14,33 @@ import { CoverageRuleRequest } from './coverageRuleRequest';
  * Mobile unit creation request body
  */
 export interface MobileUnitRequest { 
-    name?: string;
+    /**
+     * Display name of the mobile unit
+     */
+    name: string;
+    /**
+     * Identifier of the base location the mobile unit operates from
+     */
     baseLocationId?: string;
+    /**
+     * Operational status of the mobile unit
+     */
     status?: string;
+    /**
+     * Identifier of the travel buffer policy applied to the mobile unit
+     */
     travelBufferPolicyId?: string;
+    /**
+     * Free-text notes about the mobile unit
+     */
     notes?: string;
+    /**
+     * Identifiers of capabilities the mobile unit can perform
+     */
     capabilityIds?: Array<string>;
+    /**
+     * Coverage rules defining where the mobile unit can operate
+     */
     coverageRules?: Array<CoverageRuleRequest>;
 }
 
@@ -61,7 +82,7 @@ export function instanceOfMobileUnitRequest(value: object): value is MobileUnitR
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createMobileUnitRequestPropertyNames();
+    const requiredProperties = createMobileUnitRequestPropertyNames('name', );
     const optionalStringProperties = createMobileUnitRequestOptionalProperties({ name: 'name', nullable: false }, { name: 'baseLocationId', nullable: false }, { name: 'status', nullable: false }, { name: 'travelBufferPolicyId', nullable: false }, { name: 'notes', nullable: false }, );
     const optionalNumberProperties = createMobileUnitRequestOptionalProperties();
     const optionalBooleanProperties = createMobileUnitRequestOptionalProperties();

@@ -9,7 +9,13 @@
  */
 
 
+/**
+ * Capacity configuration for a service bay
+ */
 export interface BayCapacityRequest { 
+    /**
+     * Maximum number of vehicles that can be serviced concurrently in the bay
+     */
     maxConcurrentVehicles: number;
 }
 

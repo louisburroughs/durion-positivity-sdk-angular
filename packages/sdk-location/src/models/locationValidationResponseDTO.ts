@@ -9,10 +9,22 @@
  */
 
 
+/**
+ * Validation result for a location lookup
+ */
 export interface LocationValidationResponseDTO { 
-    locationId?: string;
-    exists?: boolean;
-    active?: boolean;
+    /**
+     * Identifier of the location that was validated
+     */
+    locationId: string;
+    /**
+     * Whether the location exists
+     */
+    exists: boolean;
+    /**
+     * Whether the location is active
+     */
+    active: boolean;
 }
 
 function isOptionalLocationValidationResponseDTOPropertyOfType(
@@ -53,7 +65,7 @@ export function instanceOfLocationValidationResponseDTO(value: object): value is
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createLocationValidationResponseDTOPropertyNames();
+    const requiredProperties = createLocationValidationResponseDTOPropertyNames('locationId', 'exists', 'active', );
     const optionalStringProperties = createLocationValidationResponseDTOOptionalProperties({ name: 'locationId', nullable: false }, );
     const optionalNumberProperties = createLocationValidationResponseDTOOptionalProperties();
     const optionalBooleanProperties = createLocationValidationResponseDTOOptionalProperties({ name: 'exists', nullable: false }, { name: 'active', nullable: false }, );

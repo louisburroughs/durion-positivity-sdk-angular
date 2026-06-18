@@ -9,13 +9,37 @@
  */
 
 
+/**
+ * Person reference associated with a location
+ */
 export interface PersonDTO { 
+    /**
+     * Unique identifier of the person
+     */
     id?: number;
+    /**
+     * First name of the person
+     */
     firstName?: string;
+    /**
+     * Last name of the person
+     */
     lastName?: string;
+    /**
+     * Primary email address of the person
+     */
     primaryEmail?: string;
+    /**
+     * Secondary email address of the person
+     */
     secondaryEmail?: string;
+    /**
+     * Phone numbers associated with the person
+     */
     phoneNumbers?: Array<string>;
+    /**
+     * Login username of the person
+     */
     username?: string;
 }
 
