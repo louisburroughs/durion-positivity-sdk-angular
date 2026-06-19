@@ -21,6 +21,8 @@ import { CreateVehicleForPartyRequest } from '../src/models/createVehicleForPart
 // @ts-ignore
 import { VehicleResponse } from '../src/models/vehicleResponse';
 // @ts-ignore
+import { VehicleSummary } from '../src/models/vehicleSummary';
+// @ts-ignore
 import { VehicleTransferRequest } from '../src/models/vehicleTransferRequest';
 
 // @ts-ignore
@@ -228,6 +230,66 @@ export class CRMVehiclesService extends BaseService {
         let localVarPath = `/v1/crm/${this.configuration.encodeParam({name: "customerId", value: customerId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/vehicles/${this.configuration.encodeParam({name: "vehicleId", value: vehicleId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<VehicleResponse>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * List vehicles for customer
+     * Retrieve all vehicle summaries (vehicleId, VIN, make/model/year) associated with a customer. Returns the vehicle UUIDs the frontend needs to build estimates for a given Durion customer.
+     * @endpoint get /v1/crm/{customerId}/vehicles
+     * @param customerId Customer ID
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public listVehiclesForCustomer(customerId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<VehicleSummary>>;
+    public listVehiclesForCustomer(customerId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<VehicleSummary>>>;
+    public listVehiclesForCustomer(customerId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<VehicleSummary>>>;
+    public listVehiclesForCustomer(customerId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (customerId === null || customerId === undefined) {
+            throw new Error('Required parameter customerId was null or undefined when calling listVehiclesForCustomer.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/crm/${this.configuration.encodeParam({name: "customerId", value: customerId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/vehicles`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<Array<VehicleSummary>>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,

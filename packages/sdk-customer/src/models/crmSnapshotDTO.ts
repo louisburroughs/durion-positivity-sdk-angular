@@ -15,11 +15,20 @@ import { BillingRuleRef } from './billingRuleRef';
 import { VehicleSummary } from './vehicleSummary';
 
 
+/**
+ * Read-only CRM snapshot of an account, its contacts, vehicles, and billing configuration
+ */
 export interface CrmSnapshotDTO { 
-    snapshotMetadata?: SnapshotMetadata;
-    account?: AccountSummary;
-    contacts?: Array<ContactSummary>;
-    vehicles?: Array<VehicleSummary>;
+    snapshotMetadata: SnapshotMetadata;
+    account: AccountSummary;
+    /**
+     * Contacts associated with the account
+     */
+    contacts: Array<ContactSummary>;
+    /**
+     * Vehicles associated with the account
+     */
+    vehicles: Array<VehicleSummary>;
     preferences?: BillingPreferences;
     billingRules?: BillingRuleRef;
 }
@@ -62,7 +71,7 @@ export function instanceOfCrmSnapshotDTO(value: object): value is CrmSnapshotDTO
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createCrmSnapshotDTOPropertyNames();
+    const requiredProperties = createCrmSnapshotDTOPropertyNames('snapshotMetadata', 'account', 'contacts', 'vehicles', );
     const optionalStringProperties = createCrmSnapshotDTOOptionalProperties();
     const optionalNumberProperties = createCrmSnapshotDTOOptionalProperties();
     const optionalBooleanProperties = createCrmSnapshotDTOOptionalProperties();

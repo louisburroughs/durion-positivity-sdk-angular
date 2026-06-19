@@ -9,12 +9,33 @@
  */
 
 
+/**
+ * Communication preferences for a contact
+ */
 export interface ContactPreferences { 
-    emailOptIn?: boolean;
-    smsOptIn?: boolean;
-    phoneOptIn?: boolean;
-    doNotContact?: boolean;
+    /**
+     * Whether the contact has opted in to email communications
+     */
+    emailOptIn: boolean;
+    /**
+     * Whether the contact has opted in to SMS communications
+     */
+    smsOptIn: boolean;
+    /**
+     * Whether the contact has opted in to phone communications
+     */
+    phoneOptIn: boolean;
+    /**
+     * Whether the contact should not be contacted at all
+     */
+    doNotContact: boolean;
+    /**
+     * Preferred method of contact
+     */
     preferredContactMethod?: string;
+    /**
+     * Preferred language for communications
+     */
     preferredLanguage?: string;
 }
 
@@ -56,7 +77,7 @@ export function instanceOfContactPreferences(value: object): value is ContactPre
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createContactPreferencesPropertyNames();
+    const requiredProperties = createContactPreferencesPropertyNames('emailOptIn', 'smsOptIn', 'phoneOptIn', 'doNotContact', );
     const optionalStringProperties = createContactPreferencesOptionalProperties({ name: 'preferredContactMethod', nullable: false }, { name: 'preferredLanguage', nullable: false }, );
     const optionalNumberProperties = createContactPreferencesOptionalProperties();
     const optionalBooleanProperties = createContactPreferencesOptionalProperties({ name: 'emailOptIn', nullable: false }, { name: 'smsOptIn', nullable: false }, { name: 'phoneOptIn', nullable: false }, { name: 'doNotContact', nullable: false }, );

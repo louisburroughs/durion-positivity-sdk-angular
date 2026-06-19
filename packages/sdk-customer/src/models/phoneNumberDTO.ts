@@ -9,9 +9,18 @@
  */
 
 
+/**
+ * A phone number for a contact
+ */
 export interface PhoneNumberDTO { 
-    type?: string;
-    number?: string;
+    /**
+     * Phone number type
+     */
+    type: string;
+    /**
+     * Phone number value
+     */
+    number: string;
 }
 
 function isOptionalPhoneNumberDTOPropertyOfType(
@@ -52,7 +61,7 @@ export function instanceOfPhoneNumberDTO(value: object): value is PhoneNumberDTO
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createPhoneNumberDTOPropertyNames();
+    const requiredProperties = createPhoneNumberDTOPropertyNames('type', 'number', );
     const optionalStringProperties = createPhoneNumberDTOOptionalProperties({ name: 'type', nullable: false }, { name: 'number', nullable: false }, );
     const optionalNumberProperties = createPhoneNumberDTOOptionalProperties();
     const optionalBooleanProperties = createPhoneNumberDTOOptionalProperties();

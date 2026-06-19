@@ -18,6 +18,10 @@ export interface CustomerDTO {
      */
     id?: string;
     /**
+     * CRM party identifier. Equal to id; exposed explicitly so callers can pass it to the CRM snapshot endpoints (GET /v1/crm/snapshot/party/{partyId}) without assuming the id mapping.
+     */
+    partyId?: string;
+    /**
      * Unique customer number
      */
     customerNumber?: string;
@@ -82,7 +86,7 @@ export function instanceOfCustomerDTO(value: object): value is CustomerDTO {
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createCustomerDTOPropertyNames('lastName', 'firstName', );
-    const optionalStringProperties = createCustomerDTOOptionalProperties({ name: 'id', nullable: false }, { name: 'customerNumber', nullable: false }, { name: 'lastName', nullable: false }, { name: 'firstName', nullable: false }, { name: 'primaryAddress', nullable: false }, { name: 'customerType', nullable: false }, );
+    const optionalStringProperties = createCustomerDTOOptionalProperties({ name: 'id', nullable: false }, { name: 'partyId', nullable: false }, { name: 'customerNumber', nullable: false }, { name: 'lastName', nullable: false }, { name: 'firstName', nullable: false }, { name: 'primaryAddress', nullable: false }, { name: 'customerType', nullable: false }, );
     const optionalNumberProperties = createCustomerDTOOptionalProperties();
     const optionalBooleanProperties = createCustomerDTOOptionalProperties();
 

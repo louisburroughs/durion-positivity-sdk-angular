@@ -9,11 +9,26 @@
  */
 
 
+/**
+ * Account summary surfaced in a CRM snapshot
+ */
 export interface AccountSummary { 
-    partyId?: string;
-    accountNumber?: string;
-    accountName?: string;
-    accountType?: string;
+    /**
+     * Canonical party identifier of the account
+     */
+    partyId: string;
+    /**
+     * Human-readable account/customer number
+     */
+    accountNumber: string;
+    /**
+     * Account display name
+     */
+    accountName: string;
+    /**
+     * Account type discriminator
+     */
+    accountType: string;
 }
 
 function isOptionalAccountSummaryPropertyOfType(
@@ -54,7 +69,7 @@ export function instanceOfAccountSummary(value: object): value is AccountSummary
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createAccountSummaryPropertyNames();
+    const requiredProperties = createAccountSummaryPropertyNames('partyId', 'accountNumber', 'accountName', 'accountType', );
     const optionalStringProperties = createAccountSummaryOptionalProperties({ name: 'partyId', nullable: false }, { name: 'accountNumber', nullable: false }, { name: 'accountName', nullable: false }, { name: 'accountType', nullable: false }, );
     const optionalNumberProperties = createAccountSummaryOptionalProperties();
     const optionalBooleanProperties = createAccountSummaryOptionalProperties();

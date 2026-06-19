@@ -12,12 +12,30 @@ import { EmailAddressDTO } from './emailAddressDTO';
 import { ContactPreferences } from './contactPreferences';
 
 
+/**
+ * Contact summary surfaced in a CRM snapshot
+ */
 export interface ContactSummary { 
-    contactId?: string;
-    name?: string;
-    roles?: Array<string>;
-    phoneNumbers?: Array<PhoneNumberDTO>;
-    emailAddresses?: Array<EmailAddressDTO>;
+    /**
+     * Identifier of the contact
+     */
+    contactId: string;
+    /**
+     * Contact display name
+     */
+    name: string;
+    /**
+     * Roles assigned to this contact
+     */
+    roles: Array<string>;
+    /**
+     * Phone numbers for this contact
+     */
+    phoneNumbers: Array<PhoneNumberDTO>;
+    /**
+     * Email addresses for this contact
+     */
+    emailAddresses: Array<EmailAddressDTO>;
     preferences?: ContactPreferences;
     primary?: boolean;
 }
@@ -60,7 +78,7 @@ export function instanceOfContactSummary(value: object): value is ContactSummary
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createContactSummaryPropertyNames();
+    const requiredProperties = createContactSummaryPropertyNames('contactId', 'name', 'roles', 'phoneNumbers', 'emailAddresses', );
     const optionalStringProperties = createContactSummaryOptionalProperties({ name: 'contactId', nullable: false }, { name: 'name', nullable: false }, );
     const optionalNumberProperties = createContactSummaryOptionalProperties();
     const optionalBooleanProperties = createContactSummaryOptionalProperties({ name: 'primary', nullable: false }, );

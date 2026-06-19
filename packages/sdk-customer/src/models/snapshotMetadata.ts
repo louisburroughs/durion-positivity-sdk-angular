@@ -9,14 +9,41 @@
  */
 
 
+/**
+ * Metadata describing a CRM snapshot, including freshness and version
+ */
 export interface SnapshotMetadata { 
-    snapshotId?: string;
-    createdAt?: string;
-    version?: string;
-    source?: string;
-    stale?: boolean;
+    /**
+     * Unique identifier of the snapshot
+     */
+    snapshotId: string;
+    /**
+     * Timestamp when the snapshot was created (ISO 8601)
+     */
+    createdAt: string;
+    /**
+     * Snapshot schema/content version
+     */
+    version: string;
+    /**
+     * Data source the snapshot was served from
+     */
+    source?: SnapshotMetadataSourceEnum;
+    /**
+     * Whether this snapshot was served from a stale (expired) cache entry
+     */
+    stale: boolean;
+    /**
+     * Timestamp when the cache entry went stale; only present when stale is true
+     */
     staleSince?: string;
 }
+export enum SnapshotMetadataSourceEnum {
+    Cache = 'CACHE',
+    CrmApi = 'CRM_API'
+};
+
+
 
 function isOptionalSnapshotMetadataPropertyOfType(
     value: Record<string, unknown>,
@@ -56,7 +83,7 @@ export function instanceOfSnapshotMetadata(value: object): value is SnapshotMeta
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createSnapshotMetadataPropertyNames();
+    const requiredProperties = createSnapshotMetadataPropertyNames('snapshotId', 'createdAt', 'version', 'stale', );
     const optionalStringProperties = createSnapshotMetadataOptionalProperties({ name: 'snapshotId', nullable: false }, { name: 'version', nullable: false }, { name: 'source', nullable: false }, );
     const optionalNumberProperties = createSnapshotMetadataOptionalProperties();
     const optionalBooleanProperties = createSnapshotMetadataOptionalProperties({ name: 'stale', nullable: false }, );

@@ -9,12 +9,33 @@
  */
 
 
+/**
+ * Vehicle summary within a CRM snapshot
+ */
 export interface VehicleSummary { 
-    vehicleId?: string;
+    /**
+     * Identifier of the vehicle
+     */
+    vehicleId: string;
+    /**
+     * Vehicle Identification Number
+     */
     vin?: string;
+    /**
+     * License plate
+     */
     licensePlate?: string;
+    /**
+     * Vehicle make
+     */
     make?: string;
+    /**
+     * Vehicle model
+     */
     model?: string;
+    /**
+     * Model year
+     */
     year?: number;
 }
 
@@ -56,7 +77,7 @@ export function instanceOfVehicleSummary(value: object): value is VehicleSummary
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createVehicleSummaryPropertyNames();
+    const requiredProperties = createVehicleSummaryPropertyNames('vehicleId', );
     const optionalStringProperties = createVehicleSummaryOptionalProperties({ name: 'vehicleId', nullable: false }, { name: 'vin', nullable: false }, { name: 'licensePlate', nullable: false }, { name: 'make', nullable: false }, { name: 'model', nullable: false }, );
     const optionalNumberProperties = createVehicleSummaryOptionalProperties({ name: 'year', nullable: false }, );
     const optionalBooleanProperties = createVehicleSummaryOptionalProperties();
