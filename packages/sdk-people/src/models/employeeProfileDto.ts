@@ -48,6 +48,14 @@ export interface EmployeeProfileDto {
      */
     statusEffectiveAt?: string;
     /**
+     * Timestamp the employee record was created
+     */
+    createdAt?: string;
+    /**
+     * Timestamp the employee record was last updated
+     */
+    updatedAt?: string;
+    /**
      * Non-fatal warnings raised while resolving the profile
      */
     warnings?: Array<string>;
