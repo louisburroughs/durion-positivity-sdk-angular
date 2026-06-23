@@ -47,6 +47,8 @@ export * from './journalEntryResponse';
 export * from './journalEntryReversalRequest';
 export * from './journalEntryTraceabilityResponse';
 export * from './journalLineDrilldownResponse';
+export * from './laborOverheadCostReport';
+export * from './laborOverheadReportLine';
 export * from './mappingKeyCreateRequest';
 export * from './mappingKeyListResponse';
 export * from './mappingKeyResponse';
