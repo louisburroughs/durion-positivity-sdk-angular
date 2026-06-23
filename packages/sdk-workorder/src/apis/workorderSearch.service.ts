@@ -17,7 +17,7 @@ import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
 // @ts-ignore
-import { PageEstimateSummaryResponse } from '../src/models/pageEstimateSummaryResponse';
+import { PageWorkorderSearchResult } from '../src/models/pageWorkorderSearchResult';
 // @ts-ignore
 import { Pageable } from '../src/models/pageable';
 
@@ -31,30 +31,28 @@ import { BaseService } from '../api.base.service';
 @Injectable({
   providedIn: 'root'
 })
-export class EstimateSearchService extends BaseService {
+export class WorkorderSearchService extends BaseService {
 
     constructor(protected httpClient: HttpClient, @Optional() @Inject(BASE_PATH) basePath: string|string[], @Optional() configuration?: Configuration) {
         super(basePath, configuration);
     }
 
     /**
-     * Search estimates
-     * Paginated search for estimates filtered by optional customerId and/or vehicleId.
-     * @endpoint get /v1/workexec/estimates/search
+     * Search workorders
+     * Paginated free-text search for workorders matching customer name or workorder id.
+     * @endpoint get /v1/workorders/search
      * @param pageable 
-     * @param q Free-text query matching estimate number, customer name, or estimate id (optional)
-     * @param customerId Filter by customer UUID (optional)
-     * @param vehicleId Filter by vehicle UUID (optional)
+     * @param q Free-text query matching customer name or workorder id (optional)
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public searchEstimates(pageable: Pageable, q?: string, customerId?: string, vehicleId?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PageEstimateSummaryResponse>;
-    public searchEstimates(pageable: Pageable, q?: string, customerId?: string, vehicleId?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PageEstimateSummaryResponse>>;
-    public searchEstimates(pageable: Pageable, q?: string, customerId?: string, vehicleId?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PageEstimateSummaryResponse>>;
-    public searchEstimates(pageable: Pageable, q?: string, customerId?: string, vehicleId?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public searchWorkorders(pageable: Pageable, q?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PageWorkorderSearchResult>;
+    public searchWorkorders(pageable: Pageable, q?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PageWorkorderSearchResult>>;
+    public searchWorkorders(pageable: Pageable, q?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PageWorkorderSearchResult>>;
+    public searchWorkorders(pageable: Pageable, q?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (pageable === null || pageable === undefined) {
-            throw new Error('Required parameter pageable was null or undefined when calling searchEstimates.');
+            throw new Error('Required parameter pageable was null or undefined when calling searchWorkorders.');
         }
 
         let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
@@ -63,24 +61,6 @@ export class EstimateSearchService extends BaseService {
             localVarQueryParameters,
             'q',
             <any>q,
-            QueryParamStyle.Form,
-            true,
-        );
-
-
-        localVarQueryParameters = this.addToHttpParams(
-            localVarQueryParameters,
-            'customerId',
-            <any>customerId,
-            QueryParamStyle.Form,
-            true,
-        );
-
-
-        localVarQueryParameters = this.addToHttpParams(
-            localVarQueryParameters,
-            'vehicleId',
-            <any>vehicleId,
             QueryParamStyle.Form,
             true,
         );
@@ -123,9 +103,9 @@ export class EstimateSearchService extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/workexec/estimates/search`;
+        let localVarPath = `/v1/workorders/search`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<PageEstimateSummaryResponse>('get', `${basePath}${localVarPath}`,
+        return this.httpClient.request<PageWorkorderSearchResult>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 params: localVarQueryParameters.toHttpParams(),

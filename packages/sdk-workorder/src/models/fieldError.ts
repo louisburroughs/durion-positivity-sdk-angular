@@ -16,11 +16,11 @@ export interface FieldError {
     /**
      * Field name
      */
-    field?: string;
+    field: string;
     /**
      * Validation failure message
      */
-    message?: string;
+    message: string;
 }
 
 function isOptionalFieldErrorPropertyOfType(
@@ -61,7 +61,7 @@ export function instanceOfFieldError(value: object): value is FieldError {
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createFieldErrorPropertyNames();
+    const requiredProperties = createFieldErrorPropertyNames('field', 'message', );
     const optionalStringProperties = createFieldErrorOptionalProperties({ name: 'field', nullable: false }, { name: 'message', nullable: false }, );
     const optionalNumberProperties = createFieldErrorOptionalProperties();
     const optionalBooleanProperties = createFieldErrorOptionalProperties();

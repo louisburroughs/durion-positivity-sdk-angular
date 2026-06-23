@@ -40,4 +40,6 @@ export * from './workorderPickFacade.service';
 import { WorkorderPickFacadeService } from './workorderPickFacade.service';
 export * from './workorderPickedItems.service';
 import { WorkorderPickedItemsService } from './workorderPickedItems.service';
-export const APIS = [ApprovalConfigurationAPIService, ChangeRequestAPIService, DailyDispatchBoardDashboardService, EstimateAPIService, EstimateSearchService, EstimatesFromAppointmentsService, OperationalContextService, SubstituteLinkAPIService, TechnicianAssignmentAPIService, TimeEntryAPIService, TravelSegmentAPIService, WIPDashboardService, WorkOrderAPIService, WorkSessionAPIService, WorkexecTimeTrackingAPIService, WorkorderDetailService, WorkorderLaborAPIService, WorkorderPartAdjustmentsService, WorkorderPartsUsageService, WorkorderPickFacadeService, WorkorderPickedItemsService];
+export * from './workorderSearch.service';
+import { WorkorderSearchService } from './workorderSearch.service';
+export const APIS = [ApprovalConfigurationAPIService, ChangeRequestAPIService, DailyDispatchBoardDashboardService, EstimateAPIService, EstimateSearchService, EstimatesFromAppointmentsService, OperationalContextService, SubstituteLinkAPIService, TechnicianAssignmentAPIService, TimeEntryAPIService, TravelSegmentAPIService, WIPDashboardService, WorkOrderAPIService, WorkSessionAPIService, WorkexecTimeTrackingAPIService, WorkorderDetailService, WorkorderLaborAPIService, WorkorderPartAdjustmentsService, WorkorderPartsUsageService, WorkorderPickFacadeService, WorkorderPickedItemsService, WorkorderSearchService];
