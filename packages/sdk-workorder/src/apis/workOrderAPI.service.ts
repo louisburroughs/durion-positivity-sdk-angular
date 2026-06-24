@@ -33,6 +33,8 @@ import { ReopenWorkorderRequest } from '../src/models/reopenWorkorderRequest';
 // @ts-ignore
 import { ReopenWorkorderResponse } from '../src/models/reopenWorkorderResponse';
 // @ts-ignore
+import { WorkorderItemCompletionResponse } from '../src/models/workorderItemCompletionResponse';
+// @ts-ignore
 import { WorkorderResponse } from '../src/models/workorderResponse';
 // @ts-ignore
 import { WorkorderSnapshotResponse } from '../src/models/workorderSnapshotResponse';
@@ -119,6 +121,134 @@ export class WorkOrderAPIService extends BaseService {
             {
                 context: localVarHttpContext,
                 body: approveWorkorderRequest,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Complete a workorder part
+     * Mark a single part as COMPLETED. Allowed from OPEN/READY_TO_EXECUTE/IN_PROGRESS; rejected for CANCELLED or PENDING_APPROVAL items.
+     * @endpoint post /v1/workorders/{workorderId}/parts/{partId}/complete
+     * @param workorderId Workorder ID
+     * @param partId Part ID
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public completePartItem(workorderId: string, partId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<WorkorderItemCompletionResponse>;
+    public completePartItem(workorderId: string, partId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<WorkorderItemCompletionResponse>>;
+    public completePartItem(workorderId: string, partId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<WorkorderItemCompletionResponse>>;
+    public completePartItem(workorderId: string, partId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (workorderId === null || workorderId === undefined) {
+            throw new Error('Required parameter workorderId was null or undefined when calling completePartItem.');
+        }
+        if (partId === null || partId === undefined) {
+            throw new Error('Required parameter partId was null or undefined when calling completePartItem.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/workorders/${this.configuration.encodeParam({name: "workorderId", value: workorderId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/parts/${this.configuration.encodeParam({name: "partId", value: partId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/complete`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<WorkorderItemCompletionResponse>('post', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Complete a workorder service line
+     * Mark a single service line as COMPLETED. Allowed from OPEN/READY_TO_EXECUTE/IN_PROGRESS; rejected for CANCELLED or PENDING_APPROVAL items.
+     * @endpoint post /v1/workorders/{workorderId}/services/{serviceLineId}/complete
+     * @param workorderId Workorder ID
+     * @param serviceLineId Service line ID
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public completeServiceItem(workorderId: string, serviceLineId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<WorkorderItemCompletionResponse>;
+    public completeServiceItem(workorderId: string, serviceLineId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<WorkorderItemCompletionResponse>>;
+    public completeServiceItem(workorderId: string, serviceLineId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<WorkorderItemCompletionResponse>>;
+    public completeServiceItem(workorderId: string, serviceLineId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (workorderId === null || workorderId === undefined) {
+            throw new Error('Required parameter workorderId was null or undefined when calling completeServiceItem.');
+        }
+        if (serviceLineId === null || serviceLineId === undefined) {
+            throw new Error('Required parameter serviceLineId was null or undefined when calling completeServiceItem.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/workorders/${this.configuration.encodeParam({name: "workorderId", value: workorderId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/services/${this.configuration.encodeParam({name: "serviceLineId", value: serviceLineId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/complete`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<WorkorderItemCompletionResponse>('post', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,
