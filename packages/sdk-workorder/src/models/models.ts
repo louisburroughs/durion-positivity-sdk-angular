@@ -83,6 +83,7 @@ export * from './workexecTimerStartRequest';
 export * from './workexecTimerStopResponse';
 export * from './workorderCapabilities';
 export * from './workorderDetailResponse';
+export * from './workorderItemCompletionResponse';
 export * from './workorderItemDTO';
 export * from './workorderLaborEntryResponse';
 export * from './workorderPartAdjustmentEventResponse';
