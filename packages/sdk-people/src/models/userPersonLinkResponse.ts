@@ -18,9 +18,9 @@ export interface UserPersonLinkResponse {
      */
     linkId: string;
     /**
-     * User account identifier
+     * Username of the security user account
      */
-    userId: string;
+    username: string;
     /**
      * Person identifier
      */
@@ -81,8 +81,8 @@ export function instanceOfUserPersonLinkResponse(value: object): value is UserPe
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createUserPersonLinkResponsePropertyNames('linkId', 'userId', 'personId', );
-    const optionalStringProperties = createUserPersonLinkResponseOptionalProperties({ name: 'linkId', nullable: false }, { name: 'userId', nullable: false }, { name: 'personId', nullable: false }, { name: 'linkType', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'notes', nullable: false }, );
+    const requiredProperties = createUserPersonLinkResponsePropertyNames('linkId', 'username', 'personId', );
+    const optionalStringProperties = createUserPersonLinkResponseOptionalProperties({ name: 'linkId', nullable: false }, { name: 'username', nullable: false }, { name: 'personId', nullable: false }, { name: 'linkType', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'notes', nullable: false }, );
     const optionalNumberProperties = createUserPersonLinkResponseOptionalProperties();
     const optionalBooleanProperties = createUserPersonLinkResponseOptionalProperties();
 

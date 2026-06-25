@@ -14,9 +14,9 @@
  */
 export interface CreateUserLinkRequest { 
     /**
-     * User account identifier
+     * Username of the security user account
      */
-    userId: string;
+    username: string;
     /**
      * Person identifier
      */
@@ -61,8 +61,8 @@ export function instanceOfCreateUserLinkRequest(value: object): value is CreateU
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createCreateUserLinkRequestPropertyNames('userId', 'personId', );
-    const optionalStringProperties = createCreateUserLinkRequestOptionalProperties({ name: 'userId', nullable: false }, { name: 'personId', nullable: false }, );
+    const requiredProperties = createCreateUserLinkRequestPropertyNames('username', 'personId', );
+    const optionalStringProperties = createCreateUserLinkRequestOptionalProperties({ name: 'username', nullable: false }, { name: 'personId', nullable: false }, );
     const optionalNumberProperties = createCreateUserLinkRequestOptionalProperties();
     const optionalBooleanProperties = createCreateUserLinkRequestOptionalProperties();
 

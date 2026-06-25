@@ -18,9 +18,9 @@ export interface InactivePersonActiveUserResponse {
      */
     linkId: string;
     /**
-     * User account identifier with the still-active link
+     * Username of the security user account with the still-active link
      */
-    userId: string;
+    username: string;
     /**
      * Person identifier in an inactive status
      */
@@ -82,8 +82,8 @@ export function instanceOfInactivePersonActiveUserResponse(value: object): value
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createInactivePersonActiveUserResponsePropertyNames('linkId', 'userId', 'personId', 'personStatus', );
-    const optionalStringProperties = createInactivePersonActiveUserResponseOptionalProperties({ name: 'linkId', nullable: false }, { name: 'userId', nullable: false }, { name: 'personId', nullable: false }, { name: 'personStatus', nullable: false }, );
+    const requiredProperties = createInactivePersonActiveUserResponsePropertyNames('linkId', 'username', 'personId', 'personStatus', );
+    const optionalStringProperties = createInactivePersonActiveUserResponseOptionalProperties({ name: 'linkId', nullable: false }, { name: 'username', nullable: false }, { name: 'personId', nullable: false }, { name: 'personStatus', nullable: false }, );
     const optionalNumberProperties = createInactivePersonActiveUserResponseOptionalProperties();
     const optionalBooleanProperties = createInactivePersonActiveUserResponseOptionalProperties();
 

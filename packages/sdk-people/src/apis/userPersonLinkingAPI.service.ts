@@ -230,20 +230,20 @@ export class UserPersonLinkingAPIService extends BaseService {
     }
 
     /**
-     * Get person by user ID
+     * Get person by username
      * Retrieve the person record linked to a user
-     * @endpoint get /v1/people/users/{userId}/person
-     * @param userId User ID
+     * @endpoint get /v1/people/users/{username}/person
+     * @param username Username
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public getPersonByUserId(userId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PersonResponse>;
-    public getPersonByUserId(userId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PersonResponse>>;
-    public getPersonByUserId(userId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PersonResponse>>;
-    public getPersonByUserId(userId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
-        if (userId === null || userId === undefined) {
-            throw new Error('Required parameter userId was null or undefined when calling getPersonByUserId.');
+    public getPersonByUsername(username: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PersonResponse>;
+    public getPersonByUsername(username: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PersonResponse>>;
+    public getPersonByUsername(username: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PersonResponse>>;
+    public getPersonByUsername(username: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (username === null || username === undefined) {
+            throw new Error('Required parameter username was null or undefined when calling getPersonByUsername.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -274,7 +274,7 @@ export class UserPersonLinkingAPIService extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/people/users/${this.configuration.encodeParam({name: "userId", value: userId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/person`;
+        let localVarPath = `/v1/people/users/${this.configuration.encodeParam({name: "username", value: username, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/person`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<PersonResponse>('get', `${basePath}${localVarPath}`,
             {
@@ -291,19 +291,19 @@ export class UserPersonLinkingAPIService extends BaseService {
 
     /**
      * Get users linked to person
-     * Retrieve all user IDs linked to a person record
+     * Retrieve all usernames linked to a person record
      * @endpoint get /v1/people/{personId}/users
      * @param personId Person ID
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public getUserIdsByPersonId(personId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<string>>;
-    public getUserIdsByPersonId(personId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<string>>>;
-    public getUserIdsByPersonId(personId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<string>>>;
-    public getUserIdsByPersonId(personId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getUsernamesByPersonId(personId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<string>>;
+    public getUsernamesByPersonId(personId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<string>>>;
+    public getUsernamesByPersonId(personId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<string>>>;
+    public getUsernamesByPersonId(personId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (personId === null || personId === undefined) {
-            throw new Error('Required parameter personId was null or undefined when calling getUserIdsByPersonId.');
+            throw new Error('Required parameter personId was null or undefined when calling getUsernamesByPersonId.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -422,18 +422,18 @@ export class UserPersonLinkingAPIService extends BaseService {
     /**
      * Unlink user from person
      * Remove the link between a user and person
-     * @endpoint delete /v1/people/users/{userId}/link
-     * @param userId User ID
+     * @endpoint delete /v1/people/users/{username}/link
+     * @param username Username
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public unlinkUserFromPerson(userId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public unlinkUserFromPerson(userId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public unlinkUserFromPerson(userId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public unlinkUserFromPerson(userId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
-        if (userId === null || userId === undefined) {
-            throw new Error('Required parameter userId was null or undefined when calling unlinkUserFromPerson.');
+    public unlinkUserFromPerson(username: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
+    public unlinkUserFromPerson(username: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
+    public unlinkUserFromPerson(username: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
+    public unlinkUserFromPerson(username: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (username === null || username === undefined) {
+            throw new Error('Required parameter username was null or undefined when calling unlinkUserFromPerson.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -463,7 +463,7 @@ export class UserPersonLinkingAPIService extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/people/users/${this.configuration.encodeParam({name: "userId", value: userId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/link`;
+        let localVarPath = `/v1/people/users/${this.configuration.encodeParam({name: "username", value: username, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/link`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<any>('delete', `${basePath}${localVarPath}`,
             {
