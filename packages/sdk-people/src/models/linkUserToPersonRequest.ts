@@ -14,9 +14,9 @@
  */
 export interface LinkUserToPersonRequest { 
     /**
-     * User account identifier
+     * Username of the security user account
      */
-    userId: string;
+    username: string;
     /**
      * Person identifier
      */
@@ -69,8 +69,8 @@ export function instanceOfLinkUserToPersonRequest(value: object): value is LinkU
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createLinkUserToPersonRequestPropertyNames('userId', 'personId', );
-    const optionalStringProperties = createLinkUserToPersonRequestOptionalProperties({ name: 'userId', nullable: false }, { name: 'personId', nullable: false }, { name: 'linkType', nullable: false }, { name: 'notes', nullable: false }, );
+    const requiredProperties = createLinkUserToPersonRequestPropertyNames('username', 'personId', );
+    const optionalStringProperties = createLinkUserToPersonRequestOptionalProperties({ name: 'username', nullable: false }, { name: 'personId', nullable: false }, { name: 'linkType', nullable: false }, { name: 'notes', nullable: false }, );
     const optionalNumberProperties = createLinkUserToPersonRequestOptionalProperties();
     const optionalBooleanProperties = createLinkUserToPersonRequestOptionalProperties();
 
