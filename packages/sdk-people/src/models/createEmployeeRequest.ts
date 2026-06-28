@@ -15,9 +15,13 @@ import { EmployeeContactInfoDto } from './employeeContactInfoDto';
  */
 export interface CreateEmployeeRequest { 
     /**
-     * Legal name of the employee
+     * First (given) name of the employee
      */
-    legalName: string;
+    firstName: string;
+    /**
+     * Last (family) name of the employee
+     */
+    lastName: string;
     /**
      * Preferred name of the employee
      */
@@ -96,8 +100,8 @@ export function instanceOfCreateEmployeeRequest(value: object): value is CreateE
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createCreateEmployeeRequestPropertyNames('legalName', 'employeeNumber', 'status', 'hireDate', );
-    const optionalStringProperties = createCreateEmployeeRequestOptionalProperties({ name: 'legalName', nullable: false }, { name: 'preferredName', nullable: false }, { name: 'employeeNumber', nullable: false }, { name: 'status', nullable: false }, { name: 'duplicatePolicy', nullable: false }, );
+    const requiredProperties = createCreateEmployeeRequestPropertyNames('firstName', 'lastName', 'employeeNumber', 'status', 'hireDate', );
+    const optionalStringProperties = createCreateEmployeeRequestOptionalProperties({ name: 'firstName', nullable: false }, { name: 'lastName', nullable: false }, { name: 'preferredName', nullable: false }, { name: 'employeeNumber', nullable: false }, { name: 'status', nullable: false }, { name: 'duplicatePolicy', nullable: false }, );
     const optionalNumberProperties = createCreateEmployeeRequestOptionalProperties();
     const optionalBooleanProperties = createCreateEmployeeRequestOptionalProperties();
 
