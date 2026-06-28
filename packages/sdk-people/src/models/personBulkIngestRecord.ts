@@ -14,9 +14,13 @@
  */
 export interface PersonBulkIngestRecord { 
     /**
-     * Legal name of the person
+     * First (given) name of the person
      */
-    legalName: string;
+    firstName: string;
+    /**
+     * Last (family) name of the person
+     */
+    lastName: string;
     /**
      * Preferred name of the person
      */
@@ -77,8 +81,8 @@ export function instanceOfPersonBulkIngestRecord(value: object): value is Person
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createPersonBulkIngestRecordPropertyNames('legalName', 'employeeNumber', 'hireDate', );
-    const optionalStringProperties = createPersonBulkIngestRecordOptionalProperties({ name: 'legalName', nullable: false }, { name: 'preferredName', nullable: false }, { name: 'employeeNumber', nullable: false }, { name: 'hireDate', nullable: false }, { name: 'primaryEmail', nullable: false }, { name: 'primaryPhone', nullable: false }, );
+    const requiredProperties = createPersonBulkIngestRecordPropertyNames('firstName', 'lastName', 'employeeNumber', 'hireDate', );
+    const optionalStringProperties = createPersonBulkIngestRecordOptionalProperties({ name: 'firstName', nullable: false }, { name: 'lastName', nullable: false }, { name: 'preferredName', nullable: false }, { name: 'employeeNumber', nullable: false }, { name: 'hireDate', nullable: false }, { name: 'primaryEmail', nullable: false }, { name: 'primaryPhone', nullable: false }, );
     const optionalNumberProperties = createPersonBulkIngestRecordOptionalProperties();
     const optionalBooleanProperties = createPersonBulkIngestRecordOptionalProperties();
 
