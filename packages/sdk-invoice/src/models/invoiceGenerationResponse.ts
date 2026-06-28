@@ -16,15 +16,15 @@ export interface InvoiceGenerationResponse {
     /**
      * Generated invoice identifier.
      */
-    invoiceId?: string;
+    invoiceId: string;
     /**
      * Invoice status.
      */
-    status?: string;
+    status: string;
     /**
      * Source workorder identifier.
      */
-    workorderId?: string;
+    workorderId: string;
     /**
      * Source estimate identifier.
      */
@@ -36,19 +36,19 @@ export interface InvoiceGenerationResponse {
     /**
      * Subtotal amount before tax.
      */
-    subtotal?: number;
+    subtotal: number;
     /**
      * Tax amount.
      */
-    taxAmount?: number;
+    taxAmount: number;
     /**
      * Total amount after tax.
      */
-    totalAmount?: number;
+    totalAmount: number;
     /**
      * Creation timestamp (UTC).
      */
-    createdAt?: string;
+    createdAt: string;
 }
 
 function isOptionalInvoiceGenerationResponsePropertyOfType(
@@ -89,7 +89,7 @@ export function instanceOfInvoiceGenerationResponse(value: object): value is Inv
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createInvoiceGenerationResponsePropertyNames();
+    const requiredProperties = createInvoiceGenerationResponsePropertyNames('invoiceId', 'status', 'workorderId', 'subtotal', 'taxAmount', 'totalAmount', 'createdAt', );
     const optionalStringProperties = createInvoiceGenerationResponseOptionalProperties({ name: 'invoiceId', nullable: false }, { name: 'status', nullable: false }, { name: 'workorderId', nullable: false }, { name: 'estimateId', nullable: false }, { name: 'approvalId', nullable: false }, );
     const optionalNumberProperties = createInvoiceGenerationResponseOptionalProperties({ name: 'subtotal', nullable: false }, { name: 'taxAmount', nullable: false }, { name: 'totalAmount', nullable: false }, );
     const optionalBooleanProperties = createInvoiceGenerationResponseOptionalProperties();
