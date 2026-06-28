@@ -86,8 +86,6 @@ export * from './workorderDetailResponse';
 export * from './workorderItemCompletionResponse';
 export * from './workorderItemDTO';
 export * from './workorderLaborEntryResponse';
-export * from './workorderNumberRef';
-export * from './workorderNumberResolveRequest';
 export * from './workorderPartAdjustmentEventResponse';
 export * from './workorderPartResponse';
 export * from './workorderPartUsageEventResponse';

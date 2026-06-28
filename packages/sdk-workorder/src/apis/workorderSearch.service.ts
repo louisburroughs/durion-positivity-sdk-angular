@@ -20,10 +20,6 @@ import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 import { PageWorkorderSearchResult } from '../src/models/pageWorkorderSearchResult';
 // @ts-ignore
 import { Pageable } from '../src/models/pageable';
-// @ts-ignore
-import { WorkorderNumberRef } from '../src/models/workorderNumberRef';
-// @ts-ignore
-import { WorkorderNumberResolveRequest } from '../src/models/workorderNumberResolveRequest';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
@@ -39,76 +35,6 @@ export class WorkorderSearchService extends BaseService {
 
     constructor(protected httpClient: HttpClient, @Optional() @Inject(BASE_PATH) basePath: string|string[], @Optional() configuration?: Configuration) {
         super(basePath, configuration);
-    }
-
-    /**
-     * Resolve workorder numbers
-     * Batch-resolves a set of workorder ids to their human workorder numbers. Consumed server-side by sibling services that store only the workorder id and need the human number for finder/search enrichment.
-     * @endpoint post /v1/workorders/numbers:resolve
-     * @param workorderNumberResolveRequest 
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     * @param options additional options
-     */
-    public resolveNumbers(workorderNumberResolveRequest: WorkorderNumberResolveRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<WorkorderNumberRef>>;
-    public resolveNumbers(workorderNumberResolveRequest: WorkorderNumberResolveRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<WorkorderNumberRef>>>;
-    public resolveNumbers(workorderNumberResolveRequest: WorkorderNumberResolveRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<WorkorderNumberRef>>>;
-    public resolveNumbers(workorderNumberResolveRequest: WorkorderNumberResolveRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
-        if (workorderNumberResolveRequest === null || workorderNumberResolveRequest === undefined) {
-            throw new Error('Required parameter workorderNumberResolveRequest was null or undefined when calling resolveNumbers.');
-        }
-
-        let localVarHeaders = this.defaultHeaders;
-
-        // authentication (bearerAuth) required
-        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
-
-        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
-            'application/json'
-        ]);
-        if (localVarHttpHeaderAcceptSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
-        }
-
-        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
-
-        const localVarTransferCache: boolean = options?.transferCache ?? true;
-
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-            'application/json'
-        ];
-        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
-        if (httpContentTypeSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
-        }
-
-        let responseType_: 'text' | 'json' | 'blob' = 'json';
-        if (localVarHttpHeaderAcceptSelected) {
-            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
-                responseType_ = 'text';
-            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
-                responseType_ = 'json';
-            } else {
-                responseType_ = 'blob';
-            }
-        }
-
-        let localVarPath = `/v1/workorders/numbers:resolve`;
-        const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<Array<WorkorderNumberRef>>('post', `${basePath}${localVarPath}`,
-            {
-                context: localVarHttpContext,
-                body: workorderNumberResolveRequest,
-                responseType: <any>responseType_,
-                ...(withCredentials ? { withCredentials } : {}),
-                headers: localVarHeaders,
-                observe: observe,
-                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
-                reportProgress: reportProgress
-            }
-        );
     }
 
     /**

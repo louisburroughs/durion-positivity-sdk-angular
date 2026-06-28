@@ -73,6 +73,10 @@ export interface WorkorderDetailResponse {
      */
     assignedTechnicianId?: string;
     /**
+     * Assigned technician name
+     */
+    assignedTechnicianName?: string;
+    /**
      * Service line items with labor totals
      */
     services?: Array<WorkorderServiceResponse>;
@@ -151,7 +155,7 @@ export function instanceOfWorkorderDetailResponse(value: object): value is Worko
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createWorkorderDetailResponsePropertyNames('workorderId', 'status', 'customerId', 'vehicleId', 'createdAt', 'createdBy', 'capabilities', );
-    const optionalStringProperties = createWorkorderDetailResponseOptionalProperties({ name: 'workorderId', nullable: false }, { name: 'workorderNumber', nullable: false }, { name: 'status', nullable: false }, { name: 'customerId', nullable: false }, { name: 'customerName', nullable: false }, { name: 'vehicleId', nullable: false }, { name: 'vehicleDescription', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'isStarted', nullable: false }, { name: 'isInProgress', nullable: false }, { name: 'isCompleted', nullable: false }, { name: 'assignedTechnicianId', nullable: false }, );
+    const optionalStringProperties = createWorkorderDetailResponseOptionalProperties({ name: 'workorderId', nullable: false }, { name: 'workorderNumber', nullable: false }, { name: 'status', nullable: false }, { name: 'customerId', nullable: false }, { name: 'customerName', nullable: false }, { name: 'vehicleId', nullable: false }, { name: 'vehicleDescription', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'isStarted', nullable: false }, { name: 'isInProgress', nullable: false }, { name: 'isCompleted', nullable: false }, { name: 'assignedTechnicianId', nullable: false }, { name: 'assignedTechnicianName', nullable: false }, );
     const optionalNumberProperties = createWorkorderDetailResponseOptionalProperties({ name: 'estimatedTotal', nullable: false }, { name: 'laborTotal', nullable: false }, { name: 'partsTotal', nullable: false }, { name: 'taxTotal', nullable: false }, );
     const optionalBooleanProperties = createWorkorderDetailResponseOptionalProperties();
 
