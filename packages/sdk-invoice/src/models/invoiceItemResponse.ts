@@ -37,6 +37,10 @@ export interface InvoiceItemResponse {
      * Identifier of the source workorder item
      */
     workorderItemId?: string;
+    /**
+     * Line item type (e.g. PART, LABOR, FEE, TAX)
+     */
+    type?: string;
 }
 
 function isOptionalInvoiceItemResponsePropertyOfType(
@@ -78,7 +82,7 @@ export function instanceOfInvoiceItemResponse(value: object): value is InvoiceIt
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createInvoiceItemResponsePropertyNames();
-    const optionalStringProperties = createInvoiceItemResponseOptionalProperties({ name: 'id', nullable: false }, { name: 'description', nullable: false }, { name: 'workorderItemId', nullable: false }, );
+    const optionalStringProperties = createInvoiceItemResponseOptionalProperties({ name: 'id', nullable: false }, { name: 'description', nullable: false }, { name: 'workorderItemId', nullable: false }, { name: 'type', nullable: false }, );
     const optionalNumberProperties = createInvoiceItemResponseOptionalProperties({ name: 'quantity', nullable: false }, { name: 'unitPrice', nullable: false }, { name: 'amount', nullable: false }, );
     const optionalBooleanProperties = createInvoiceItemResponseOptionalProperties();
 
