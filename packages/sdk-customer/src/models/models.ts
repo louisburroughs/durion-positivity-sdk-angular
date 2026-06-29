@@ -39,6 +39,8 @@ export * from './pageCustomerDTO';
 export * from './pageable';
 export * from './pageableObject';
 export * from './partyMatch';
+export * from './partyNameRef';
+export * from './partyNameResolveRequest';
 export * from './partySummary';
 export * from './personLinkReport';
 export * from './phoneInput';
