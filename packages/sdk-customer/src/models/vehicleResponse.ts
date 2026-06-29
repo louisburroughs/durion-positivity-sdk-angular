@@ -16,27 +16,27 @@ export interface VehicleResponse {
     /**
      * Vehicle identifier.
      */
-    vehicleId?: string;
+    vehicleId: string;
     /**
      * Owning account identifier.
      */
-    accountId?: string;
+    accountId: string;
     /**
      * Vehicle VIN.
      */
-    vin?: string;
+    vin: string;
     /**
      * Normalized VIN used for lookup and uniqueness.
      */
-    vinNormalized?: string;
+    vinNormalized: string;
     /**
      * Fleet/unit number.
      */
-    unitNumber?: string;
+    unitNumber: string;
     /**
      * Human-readable vehicle description.
      */
-    description?: string;
+    description: string;
     /**
      * License plate value.
      */
@@ -64,15 +64,15 @@ export interface VehicleResponse {
     /**
      * Whether vehicle is active.
      */
-    isActive?: boolean;
+    isActive: boolean;
     /**
      * Record creation timestamp (UTC).
      */
-    createdAt?: string;
+    createdAt: string;
     /**
      * Last update timestamp (UTC).
      */
-    updatedAt?: string;
+    updatedAt: string;
     /**
      * Username of the actor who created this record.
      */
@@ -84,7 +84,7 @@ export interface VehicleResponse {
     /**
      * Optimistic lock version.
      */
-    version?: number;
+    version: number;
 }
 
 function isOptionalVehicleResponsePropertyOfType(
@@ -125,7 +125,7 @@ export function instanceOfVehicleResponse(value: object): value is VehicleRespon
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createVehicleResponsePropertyNames();
+    const requiredProperties = createVehicleResponsePropertyNames('vehicleId', 'accountId', 'vin', 'vinNormalized', 'unitNumber', 'description', 'isActive', 'createdAt', 'updatedAt', 'version', );
     const optionalStringProperties = createVehicleResponseOptionalProperties({ name: 'vehicleId', nullable: false }, { name: 'accountId', nullable: false }, { name: 'vin', nullable: false }, { name: 'vinNormalized', nullable: false }, { name: 'unitNumber', nullable: false }, { name: 'description', nullable: false }, { name: 'licensePlate', nullable: false }, { name: 'licensePlateJurisdiction', nullable: false }, { name: 'make', nullable: false }, { name: 'model', nullable: false }, { name: 'trim', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'updatedBy', nullable: false }, );
     const optionalNumberProperties = createVehicleResponseOptionalProperties({ name: 'year', nullable: false }, { name: 'version', nullable: false }, );
     const optionalBooleanProperties = createVehicleResponseOptionalProperties({ name: 'isActive', nullable: false }, );

@@ -43,6 +43,10 @@ import { MergePartiesResponse } from '../src/models/mergePartiesResponse';
 // @ts-ignore
 import { Pageable } from '../src/models/pageable';
 // @ts-ignore
+import { PartyNameRef } from '../src/models/partyNameRef';
+// @ts-ignore
+import { PartyNameResolveRequest } from '../src/models/partyNameResolveRequest';
+// @ts-ignore
 import { ResolveAccountTierRequest } from '../src/models/resolveAccountTierRequest';
 // @ts-ignore
 import { ResolveAccountTierResponse } from '../src/models/resolveAccountTierResponse';
@@ -782,6 +786,76 @@ export class CRMAccountsService extends BaseService {
             {
                 context: localVarHttpContext,
                 body: resolveAccountTierRequest,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Resolve party display names
+     * Batch-resolve party ids to display names. Consumed server-side by sibling services (e.g. pos-invoice) that store only the party id and need the display name to enrich finder/search rows. Unknown or unresolvable ids are omitted from the response.
+     * @endpoint post /v1/crm/accounts/parties:resolve
+     * @param partyNameResolveRequest 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public resolvePartyNames(partyNameResolveRequest: PartyNameResolveRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<PartyNameRef>>;
+    public resolvePartyNames(partyNameResolveRequest: PartyNameResolveRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<PartyNameRef>>>;
+    public resolvePartyNames(partyNameResolveRequest: PartyNameResolveRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<PartyNameRef>>>;
+    public resolvePartyNames(partyNameResolveRequest: PartyNameResolveRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (partyNameResolveRequest === null || partyNameResolveRequest === undefined) {
+            throw new Error('Required parameter partyNameResolveRequest was null or undefined when calling resolvePartyNames.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/crm/accounts/parties:resolve`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<Array<PartyNameRef>>('post', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                body: partyNameResolveRequest,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,
