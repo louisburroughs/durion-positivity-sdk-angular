@@ -28,6 +28,10 @@ export interface InvoiceDetailsResponse {
      */
     workorderId?: string;
     /**
+     * Human-readable number of the associated workorder
+     */
+    workorderNumber?: string;
+    /**
      * Identifier of the source estimate
      */
     estimateId?: string;
@@ -88,6 +92,10 @@ export interface InvoiceDetailsResponse {
      */
     revertedBy?: string;
     /**
+     * Whether finalizing this invoice requires a manager approval code (DRAFT total exceeds the service-advisor threshold)
+     */
+    requiresManagerApproval?: boolean;
+    /**
      * Line items belonging to the invoice
      */
     items: Array<InvoiceItemResponse>;
@@ -144,9 +152,9 @@ export function instanceOfInvoiceDetailsResponse(value: object): value is Invoic
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createInvoiceDetailsResponsePropertyNames('items', 'adjustmentEntries', );
-    const optionalStringProperties = createInvoiceDetailsResponseOptionalProperties({ name: 'invoiceId', nullable: false }, { name: 'invoiceNumber', nullable: false }, { name: 'workorderId', nullable: false }, { name: 'estimateId', nullable: false }, { name: 'approvalId', nullable: false }, { name: 'partyId', nullable: false }, { name: 'status', nullable: false }, { name: 'finalizedBy', nullable: false }, { name: 'reversionReason', nullable: false }, { name: 'revertedBy', nullable: false }, );
+    const optionalStringProperties = createInvoiceDetailsResponseOptionalProperties({ name: 'invoiceId', nullable: false }, { name: 'invoiceNumber', nullable: false }, { name: 'workorderId', nullable: false }, { name: 'workorderNumber', nullable: false }, { name: 'estimateId', nullable: false }, { name: 'approvalId', nullable: false }, { name: 'partyId', nullable: false }, { name: 'status', nullable: false }, { name: 'finalizedBy', nullable: false }, { name: 'reversionReason', nullable: false }, { name: 'revertedBy', nullable: false }, );
     const optionalNumberProperties = createInvoiceDetailsResponseOptionalProperties({ name: 'subtotal', nullable: false }, { name: 'tax', nullable: false }, { name: 'total', nullable: false }, { name: 'adjustments', nullable: false }, );
-    const optionalBooleanProperties = createInvoiceDetailsResponseOptionalProperties();
+    const optionalBooleanProperties = createInvoiceDetailsResponseOptionalProperties({ name: 'requiresManagerApproval', nullable: false }, );
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
         && optionalStringProperties.every((property) => isOptionalInvoiceDetailsResponsePropertyOfType(_v, property.name, 'string', property.nullable))

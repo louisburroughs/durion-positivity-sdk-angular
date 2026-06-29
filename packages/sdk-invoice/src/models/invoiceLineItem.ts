@@ -29,6 +29,10 @@ export interface InvoiceLineItem {
      * Line amount (quantity x unit price).
      */
     amount: number;
+    /**
+     * Line item type (e.g. PART, LABOR, FEE, TAX).
+     */
+    type?: string;
 }
 
 function isOptionalInvoiceLineItemPropertyOfType(
@@ -70,7 +74,7 @@ export function instanceOfInvoiceLineItem(value: object): value is InvoiceLineIt
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createInvoiceLineItemPropertyNames('description', 'quantity', 'unitPrice', 'amount', );
-    const optionalStringProperties = createInvoiceLineItemOptionalProperties({ name: 'description', nullable: false }, );
+    const optionalStringProperties = createInvoiceLineItemOptionalProperties({ name: 'description', nullable: false }, { name: 'type', nullable: false }, );
     const optionalNumberProperties = createInvoiceLineItemOptionalProperties({ name: 'quantity', nullable: false }, { name: 'unitPrice', nullable: false }, { name: 'amount', nullable: false }, );
     const optionalBooleanProperties = createInvoiceLineItemOptionalProperties();
 
