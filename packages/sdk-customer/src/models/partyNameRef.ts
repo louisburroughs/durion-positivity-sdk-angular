@@ -10,7 +10,7 @@
 
 
 /**
- * Party id resolved to its display name
+ * Party id resolved to its display name and best-effort phone
  */
 export interface PartyNameRef { 
     /**
@@ -21,6 +21,10 @@ export interface PartyNameRef {
      * Resolved display name (commercial display/legal name or person full name)
      */
     displayName?: string;
+    /**
+     * Best-effort phone (person primary phone contact-point; null for commercial parties)
+     */
+    phoneNumber?: string;
 }
 
 function isOptionalPartyNameRefPropertyOfType(
@@ -62,7 +66,7 @@ export function instanceOfPartyNameRef(value: object): value is PartyNameRef {
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createPartyNameRefPropertyNames('partyId', );
-    const optionalStringProperties = createPartyNameRefOptionalProperties({ name: 'partyId', nullable: false }, { name: 'displayName', nullable: false }, );
+    const optionalStringProperties = createPartyNameRefOptionalProperties({ name: 'partyId', nullable: false }, { name: 'displayName', nullable: false }, { name: 'phoneNumber', nullable: false }, );
     const optionalNumberProperties = createPartyNameRefOptionalProperties();
     const optionalBooleanProperties = createPartyNameRefOptionalProperties();
 
