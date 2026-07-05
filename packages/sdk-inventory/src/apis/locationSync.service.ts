@@ -17,9 +17,11 @@ import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
 // @ts-ignore
-import { CreateCycleCountPlanRequest } from '../src/models/createCycleCountPlanRequest';
+import { ApiError } from '../src/models/apiError';
 // @ts-ignore
-import { CycleCountPlanResponse } from '../src/models/cycleCountPlanResponse';
+import { LocationSyncRunResponse } from '../src/models/locationSyncRunResponse';
+// @ts-ignore
+import { SyncLogResponse } from '../src/models/syncLogResponse';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
@@ -31,97 +33,27 @@ import { BaseService } from '../api.base.service';
 @Injectable({
   providedIn: 'root'
 })
-export class CycleCountPlansService extends BaseService {
+export class LocationSyncService extends BaseService {
 
     constructor(protected httpClient: HttpClient, @Optional() @Inject(BASE_PATH) basePath: string|string[], @Optional() configuration?: Configuration) {
         super(basePath, configuration);
     }
 
     /**
-     * Create cycle count plan
-     * Creates a cycle count plan and returns its configuration details.
-     * @endpoint post /v1/inventory/cycleCountPlans
-     * @param createCycleCountPlanRequest 
+     * Get a location sync log entry
+     * Returns one location sync audit entry by identifier.
+     * @endpoint get /v1/inventory/sync-logs/{syncLogId}
+     * @param syncLogId Sync log identifier
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public createPlan(createCycleCountPlanRequest: CreateCycleCountPlanRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<CycleCountPlanResponse>;
-    public createPlan(createCycleCountPlanRequest: CreateCycleCountPlanRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<CycleCountPlanResponse>>;
-    public createPlan(createCycleCountPlanRequest: CreateCycleCountPlanRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<CycleCountPlanResponse>>;
-    public createPlan(createCycleCountPlanRequest: CreateCycleCountPlanRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
-        if (createCycleCountPlanRequest === null || createCycleCountPlanRequest === undefined) {
-            throw new Error('Required parameter createCycleCountPlanRequest was null or undefined when calling createPlan.');
-        }
-
-        let localVarHeaders = this.defaultHeaders;
-
-        // authentication (bearerAuth) required
-        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
-
-        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
-            'application/json'
-        ]);
-        if (localVarHttpHeaderAcceptSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
-        }
-
-        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
-
-        const localVarTransferCache: boolean = options?.transferCache ?? true;
-
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-            'application/json'
-        ];
-        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
-        if (httpContentTypeSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
-        }
-
-        let responseType_: 'text' | 'json' | 'blob' = 'json';
-        if (localVarHttpHeaderAcceptSelected) {
-            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
-                responseType_ = 'text';
-            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
-                responseType_ = 'json';
-            } else {
-                responseType_ = 'blob';
-            }
-        }
-
-        let localVarPath = `/v1/inventory/cycleCountPlans`;
-        const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<CycleCountPlanResponse>('post', `${basePath}${localVarPath}`,
-            {
-                context: localVarHttpContext,
-                body: createCycleCountPlanRequest,
-                responseType: <any>responseType_,
-                ...(withCredentials ? { withCredentials } : {}),
-                headers: localVarHeaders,
-                observe: observe,
-                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * Get cycle count plan
-     * Returns a cycle count plan by identifier.
-     * @endpoint get /v1/inventory/cycleCountPlans/{planId}
-     * @param planId Cycle count plan identifier
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     * @param options additional options
-     */
-    public getPlan(planId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<CycleCountPlanResponse>;
-    public getPlan(planId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<CycleCountPlanResponse>>;
-    public getPlan(planId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<CycleCountPlanResponse>>;
-    public getPlan(planId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
-        if (planId === null || planId === undefined) {
-            throw new Error('Required parameter planId was null or undefined when calling getPlan.');
+    public getSyncLog(syncLogId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<SyncLogResponse>;
+    public getSyncLog(syncLogId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<SyncLogResponse>>;
+    public getSyncLog(syncLogId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<SyncLogResponse>>;
+    public getSyncLog(syncLogId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (syncLogId === null || syncLogId === undefined) {
+            throw new Error('Required parameter syncLogId was null or undefined when calling getSyncLog.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -152,9 +84,9 @@ export class CycleCountPlansService extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/inventory/cycleCountPlans/${this.configuration.encodeParam({name: "planId", value: planId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+        let localVarPath = `/v1/inventory/sync-logs/${this.configuration.encodeParam({name: "syncLogId", value: syncLogId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<CycleCountPlanResponse>('get', `${basePath}${localVarPath}`,
+        return this.httpClient.request<SyncLogResponse>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,
@@ -168,37 +100,29 @@ export class CycleCountPlansService extends BaseService {
     }
 
     /**
-     * List cycle count plans
-     * Lists one page of cycle count plans, newest first, optionally filtered by location and/or status. Bounded by page/size (default size 50).
-     * @endpoint get /v1/inventory/cycleCountPlans
-     * @param locationId Filter by location identifier
-     * @param status Filter by plan status
+     * List location sync logs
+     * Lists one page of location sync audit entries, newest first, optionally filtered by outcome. Accepts page/size or the pageIndex/pageSize aliases; response is a plain array.
+     * @endpoint get /v1/inventory/sync-logs
+     * @param outcome Filter by outcome
      * @param page Page index (0-based)
      * @param size Page size
+     * @param pageIndex Alias of page used by SDK clients
+     * @param pageSize Alias of size used by SDK clients
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public listPlans(locationId?: string, status?: 'PLANNED' | 'STARTED' | 'COMPLETED_PENDING_APPROVAL' | 'APPROVED' | 'REJECTED' | 'CANCELLED', page?: number, size?: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<CycleCountPlanResponse>>;
-    public listPlans(locationId?: string, status?: 'PLANNED' | 'STARTED' | 'COMPLETED_PENDING_APPROVAL' | 'APPROVED' | 'REJECTED' | 'CANCELLED', page?: number, size?: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<CycleCountPlanResponse>>>;
-    public listPlans(locationId?: string, status?: 'PLANNED' | 'STARTED' | 'COMPLETED_PENDING_APPROVAL' | 'APPROVED' | 'REJECTED' | 'CANCELLED', page?: number, size?: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<CycleCountPlanResponse>>>;
-    public listPlans(locationId?: string, status?: 'PLANNED' | 'STARTED' | 'COMPLETED_PENDING_APPROVAL' | 'APPROVED' | 'REJECTED' | 'CANCELLED', page?: number, size?: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public listSyncLogs(outcome?: 'OK' | 'PARTIAL' | 'FAILED' | 'INVALID_PAYLOAD', page?: number, size?: number, pageIndex?: number, pageSize?: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<SyncLogResponse>>;
+    public listSyncLogs(outcome?: 'OK' | 'PARTIAL' | 'FAILED' | 'INVALID_PAYLOAD', page?: number, size?: number, pageIndex?: number, pageSize?: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<SyncLogResponse>>>;
+    public listSyncLogs(outcome?: 'OK' | 'PARTIAL' | 'FAILED' | 'INVALID_PAYLOAD', page?: number, size?: number, pageIndex?: number, pageSize?: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<SyncLogResponse>>>;
+    public listSyncLogs(outcome?: 'OK' | 'PARTIAL' | 'FAILED' | 'INVALID_PAYLOAD', page?: number, size?: number, pageIndex?: number, pageSize?: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
 
         localVarQueryParameters = this.addToHttpParams(
             localVarQueryParameters,
-            'locationId',
-            <any>locationId,
-            QueryParamStyle.Form,
-            true,
-        );
-
-
-        localVarQueryParameters = this.addToHttpParams(
-            localVarQueryParameters,
-            'status',
-            <any>status,
+            'outcome',
+            <any>outcome,
             QueryParamStyle.Form,
             true,
         );
@@ -222,6 +146,24 @@ export class CycleCountPlansService extends BaseService {
         );
 
 
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'pageIndex',
+            <any>pageIndex,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'pageSize',
+            <any>pageSize,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
         let localVarHeaders = this.defaultHeaders;
 
         // authentication (bearerAuth) required
@@ -250,12 +192,76 @@ export class CycleCountPlansService extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/inventory/cycleCountPlans`;
+        let localVarPath = `/v1/inventory/sync-logs`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<Array<CycleCountPlanResponse>>('get', `${basePath}${localVarPath}`,
+        return this.httpClient.request<Array<SyncLogResponse>>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 params: localVarQueryParameters.toHttpParams(),
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Trigger a location roster sync
+     * Runs one bulk sync of the location roster from pos-location into the local reference table. Re-sending the same Idempotency-Key returns the original run instead of syncing again.
+     * @endpoint post /v1/inventory/locations/sync
+     * @param idempotencyKey Client-generated key that makes retries idempotent
+     * @param xCorrelationId 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public triggerLocationSync(idempotencyKey?: string, xCorrelationId?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<LocationSyncRunResponse>;
+    public triggerLocationSync(idempotencyKey?: string, xCorrelationId?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<LocationSyncRunResponse>>;
+    public triggerLocationSync(idempotencyKey?: string, xCorrelationId?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<LocationSyncRunResponse>>;
+    public triggerLocationSync(idempotencyKey?: string, xCorrelationId?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+
+        let localVarHeaders = this.defaultHeaders;
+        if (idempotencyKey !== undefined && idempotencyKey !== null) {
+            localVarHeaders = localVarHeaders.set('Idempotency-Key', String(idempotencyKey));
+        }
+        if (xCorrelationId !== undefined && xCorrelationId !== null) {
+            localVarHeaders = localVarHeaders.set('X-Correlation-Id', String(xCorrelationId));
+        }
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/inventory/locations/sync`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<LocationSyncRunResponse>('post', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,

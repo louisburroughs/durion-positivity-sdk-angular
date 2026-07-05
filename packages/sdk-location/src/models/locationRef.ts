@@ -34,6 +34,10 @@ export interface LocationRef {
      */
     hrLocationId?: string;
     /**
+     * IANA timezone identifier of the location
+     */
+    timezone?: string;
+    /**
      * Timestamp when the location was last updated (ISO 8601)
      */
     updatedAt?: string;
@@ -78,7 +82,7 @@ export function instanceOfLocationRef(value: object): value is LocationRef {
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createLocationRefPropertyNames('id', );
-    const optionalStringProperties = createLocationRefOptionalProperties({ name: 'id', nullable: false }, { name: 'name', nullable: false }, { name: 'code', nullable: false }, { name: 'status', nullable: false }, { name: 'hrLocationId', nullable: false }, );
+    const optionalStringProperties = createLocationRefOptionalProperties({ name: 'id', nullable: false }, { name: 'name', nullable: false }, { name: 'code', nullable: false }, { name: 'status', nullable: false }, { name: 'hrLocationId', nullable: false }, { name: 'timezone', nullable: false }, );
     const optionalNumberProperties = createLocationRefOptionalProperties();
     const optionalBooleanProperties = createLocationRefOptionalProperties();
 
