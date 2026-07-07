@@ -1109,7 +1109,7 @@ export class ProductsAPIService extends BaseService {
 
     /**
      * Search catalog products
-     * Cursor-based product search with optional free-text query and exact filters for brand, category, and SKU.
+     * Cursor-based product search with optional free-text query and exact filters for brand, category, and SKU. Pass detailed&#x3D;true to enrich each row inline with lifecycle state + effective instant and the product\&#39;s active MSRP (amount, currency, effective window), resolved server-side in a single request. Products without an active MSRP return null price fields.
      * @endpoint get /v1/products/search
      * @param q Free-text search query (matches product name and description)
      * @param brand Filter by manufacturer brand (exact, case-insensitive)
@@ -1117,14 +1117,15 @@ export class ProductsAPIService extends BaseService {
      * @param sku Filter by SKU (exact match, case-insensitive)
      * @param cursor Pagination cursor from previous response
      * @param limit Maximum number of results (1–100)
+     * @param detailed When true, enrich each row with lifecycle state, effective instant, and active MSRP
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public searchProducts(q?: string, brand?: string, category?: string, sku?: string, cursor?: string, limit?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<CatalogSearchResultDto>;
-    public searchProducts(q?: string, brand?: string, category?: string, sku?: string, cursor?: string, limit?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<CatalogSearchResultDto>>;
-    public searchProducts(q?: string, brand?: string, category?: string, sku?: string, cursor?: string, limit?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<CatalogSearchResultDto>>;
-    public searchProducts(q?: string, brand?: string, category?: string, sku?: string, cursor?: string, limit?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public searchProducts(q?: string, brand?: string, category?: string, sku?: string, cursor?: string, limit?: string, detailed?: boolean, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<CatalogSearchResultDto>;
+    public searchProducts(q?: string, brand?: string, category?: string, sku?: string, cursor?: string, limit?: string, detailed?: boolean, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<CatalogSearchResultDto>>;
+    public searchProducts(q?: string, brand?: string, category?: string, sku?: string, cursor?: string, limit?: string, detailed?: boolean, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<CatalogSearchResultDto>>;
+    public searchProducts(q?: string, brand?: string, category?: string, sku?: string, cursor?: string, limit?: string, detailed?: boolean, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
 
@@ -1177,6 +1178,15 @@ export class ProductsAPIService extends BaseService {
             localVarQueryParameters,
             'limit',
             <any>limit,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'detailed',
+            <any>detailed,
             QueryParamStyle.Form,
             true,
         );

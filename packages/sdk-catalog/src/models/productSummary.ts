@@ -37,7 +37,38 @@ export interface ProductSummary {
      * Manufacturer brand name
      */
     manufacturerBrand?: string;
+    /**
+     * Lifecycle state; only populated for detailed search
+     */
+    lifecycleState?: ProductSummaryLifecycleStateEnum;
+    /**
+     * UTC instant the current lifecycle state took effect; only populated for detailed search
+     */
+    lifecycleStateEffectiveAt?: string;
+    /**
+     * Active MSRP amount; null when the product has no active MSRP or for lean search
+     */
+    msrpAmount?: string;
+    /**
+     * Active MSRP ISO 4217 currency code; null when no active MSRP or for lean search
+     */
+    msrpCurrency?: string;
+    /**
+     * Start of the active MSRP effective window; null when no active MSRP or for lean search
+     */
+    msrpEffectiveStartDate?: string;
+    /**
+     * End of the active MSRP effective window; null for open-ended, no active MSRP, or lean search
+     */
+    msrpEffectiveEndDate?: string;
 }
+export enum ProductSummaryLifecycleStateEnum {
+    Active = 'ACTIVE',
+    Inactive = 'INACTIVE',
+    Discontinued = 'DISCONTINUED'
+};
+
+
 
 function isOptionalProductSummaryPropertyOfType(
     value: Record<string, unknown>,
@@ -78,7 +109,7 @@ export function instanceOfProductSummary(value: object): value is ProductSummary
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createProductSummaryPropertyNames();
-    const optionalStringProperties = createProductSummaryOptionalProperties({ name: 'productId', nullable: false }, { name: 'name', nullable: false }, { name: 'sku', nullable: false }, { name: 'category', nullable: false }, { name: 'thumbnailUrl', nullable: false }, { name: 'manufacturerBrand', nullable: false }, );
+    const optionalStringProperties = createProductSummaryOptionalProperties({ name: 'productId', nullable: false }, { name: 'name', nullable: false }, { name: 'sku', nullable: false }, { name: 'category', nullable: false }, { name: 'thumbnailUrl', nullable: false }, { name: 'manufacturerBrand', nullable: false }, { name: 'lifecycleState', nullable: false }, { name: 'msrpAmount', nullable: false }, { name: 'msrpCurrency', nullable: false }, );
     const optionalNumberProperties = createProductSummaryOptionalProperties();
     const optionalBooleanProperties = createProductSummaryOptionalProperties();
 
