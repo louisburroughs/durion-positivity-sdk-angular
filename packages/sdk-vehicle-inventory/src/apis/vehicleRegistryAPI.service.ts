@@ -48,12 +48,12 @@ export class VehicleRegistryAPIService extends BaseService {
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public createVehicle1(createVehicleRequest: CreateVehicleRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<VehicleResponse>;
-    public createVehicle1(createVehicleRequest: CreateVehicleRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<VehicleResponse>>;
-    public createVehicle1(createVehicleRequest: CreateVehicleRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<VehicleResponse>>;
-    public createVehicle1(createVehicleRequest: CreateVehicleRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public createVehicle(createVehicleRequest: CreateVehicleRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<VehicleResponse>;
+    public createVehicle(createVehicleRequest: CreateVehicleRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<VehicleResponse>>;
+    public createVehicle(createVehicleRequest: CreateVehicleRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<VehicleResponse>>;
+    public createVehicle(createVehicleRequest: CreateVehicleRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (createVehicleRequest === null || createVehicleRequest === undefined) {
-            throw new Error('Required parameter createVehicleRequest was null or undefined when calling createVehicle1.');
+            throw new Error('Required parameter createVehicleRequest was null or undefined when calling createVehicle.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -118,12 +118,12 @@ export class VehicleRegistryAPIService extends BaseService {
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public deleteVehicle1(vehicleId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public deleteVehicle1(vehicleId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public deleteVehicle1(vehicleId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public deleteVehicle1(vehicleId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public deleteVehicle(vehicleId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
+    public deleteVehicle(vehicleId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
+    public deleteVehicle(vehicleId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
+    public deleteVehicle(vehicleId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (vehicleId === null || vehicleId === undefined) {
-            throw new Error('Required parameter vehicleId was null or undefined when calling deleteVehicle1.');
+            throw new Error('Required parameter vehicleId was null or undefined when calling deleteVehicle.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -177,12 +177,12 @@ export class VehicleRegistryAPIService extends BaseService {
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public getVehicle1(vehicleId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<VehicleResponse>;
-    public getVehicle1(vehicleId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<VehicleResponse>>;
-    public getVehicle1(vehicleId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<VehicleResponse>>;
-    public getVehicle1(vehicleId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getVehicle(vehicleId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<VehicleResponse>;
+    public getVehicle(vehicleId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<VehicleResponse>>;
+    public getVehicle(vehicleId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<VehicleResponse>>;
+    public getVehicle(vehicleId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (vehicleId === null || vehicleId === undefined) {
-            throw new Error('Required parameter vehicleId was null or undefined when calling getVehicle1.');
+            throw new Error('Required parameter vehicleId was null or undefined when calling getVehicle.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -298,15 +298,15 @@ export class VehicleRegistryAPIService extends BaseService {
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public updateVehicle1(vehicleId: string, updateVehicleRequest: UpdateVehicleRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<VehicleResponse>;
-    public updateVehicle1(vehicleId: string, updateVehicleRequest: UpdateVehicleRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<VehicleResponse>>;
-    public updateVehicle1(vehicleId: string, updateVehicleRequest: UpdateVehicleRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<VehicleResponse>>;
-    public updateVehicle1(vehicleId: string, updateVehicleRequest: UpdateVehicleRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public updateVehicle(vehicleId: string, updateVehicleRequest: UpdateVehicleRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<VehicleResponse>;
+    public updateVehicle(vehicleId: string, updateVehicleRequest: UpdateVehicleRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<VehicleResponse>>;
+    public updateVehicle(vehicleId: string, updateVehicleRequest: UpdateVehicleRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<VehicleResponse>>;
+    public updateVehicle(vehicleId: string, updateVehicleRequest: UpdateVehicleRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (vehicleId === null || vehicleId === undefined) {
-            throw new Error('Required parameter vehicleId was null or undefined when calling updateVehicle1.');
+            throw new Error('Required parameter vehicleId was null or undefined when calling updateVehicle.');
         }
         if (updateVehicleRequest === null || updateVehicleRequest === undefined) {
-            throw new Error('Required parameter updateVehicleRequest was null or undefined when calling updateVehicle1.');
+            throw new Error('Required parameter updateVehicleRequest was null or undefined when calling updateVehicle.');
         }
 
         let localVarHeaders = this.defaultHeaders;
