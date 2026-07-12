@@ -14,6 +14,10 @@
  */
 export interface UpdateVehicleRequest { 
     /**
+     * Owning party (account) id. Providing a different accountId transfers the vehicle to that party; the vehicle-party association follows via vehicle.events.v1 (ADR-0044 §6).
+     */
+    accountId?: string;
+    /**
      * Fleet/unit number.
      */
     unitNumber?: string;
@@ -86,7 +90,7 @@ export function instanceOfUpdateVehicleRequest(value: object): value is UpdateVe
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createUpdateVehicleRequestPropertyNames();
-    const optionalStringProperties = createUpdateVehicleRequestOptionalProperties({ name: 'unitNumber', nullable: false }, { name: 'description', nullable: false }, { name: 'licensePlate', nullable: false }, { name: 'licensePlateJurisdiction', nullable: false }, { name: 'make', nullable: false }, { name: 'model', nullable: false }, { name: 'trim', nullable: false }, );
+    const optionalStringProperties = createUpdateVehicleRequestOptionalProperties({ name: 'accountId', nullable: false }, { name: 'unitNumber', nullable: false }, { name: 'description', nullable: false }, { name: 'licensePlate', nullable: false }, { name: 'licensePlateJurisdiction', nullable: false }, { name: 'make', nullable: false }, { name: 'model', nullable: false }, { name: 'trim', nullable: false }, );
     const optionalNumberProperties = createUpdateVehicleRequestOptionalProperties({ name: 'year', nullable: false }, );
     const optionalBooleanProperties = createUpdateVehicleRequestOptionalProperties();
 

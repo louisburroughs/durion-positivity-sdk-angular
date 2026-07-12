@@ -62,4 +62,3 @@ export * from './upsertCommunicationPreferencesRequest';
 export * from './upsertCommunicationPreferencesResponse';
 export * from './vehicleResponse';
 export * from './vehicleSummary';
-export * from './vehicleTransferRequest';

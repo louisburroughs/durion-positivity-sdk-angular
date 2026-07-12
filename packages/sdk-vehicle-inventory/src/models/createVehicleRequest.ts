@@ -22,13 +22,13 @@ export interface CreateVehicleRequest {
      */
     vin: string;
     /**
-     * Fleet/unit number.
+     * Fleet/unit number. Optional; stored as empty when omitted.
      */
-    unitNumber: string;
+    unitNumber?: string;
     /**
-     * Human-readable vehicle description.
+     * Human-readable vehicle description. Optional; stored as empty when omitted.
      */
-    description: string;
+    description?: string;
     /**
      * License plate value.
      */
@@ -93,7 +93,7 @@ export function instanceOfCreateVehicleRequest(value: object): value is CreateVe
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createCreateVehicleRequestPropertyNames('accountId', 'vin', 'unitNumber', 'description', );
+    const requiredProperties = createCreateVehicleRequestPropertyNames('accountId', 'vin', );
     const optionalStringProperties = createCreateVehicleRequestOptionalProperties({ name: 'accountId', nullable: false }, { name: 'vin', nullable: false }, { name: 'unitNumber', nullable: false }, { name: 'description', nullable: false }, { name: 'licensePlate', nullable: false }, { name: 'licensePlateJurisdiction', nullable: false }, { name: 'make', nullable: false }, { name: 'model', nullable: false }, { name: 'trim', nullable: false }, );
     const optionalNumberProperties = createCreateVehicleRequestOptionalProperties({ name: 'year', nullable: false }, );
     const optionalBooleanProperties = createCreateVehicleRequestOptionalProperties();
