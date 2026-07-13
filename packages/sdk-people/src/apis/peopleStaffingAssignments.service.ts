@@ -48,12 +48,12 @@ export class PeopleStaffingAssignmentsService extends BaseService {
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public createAssignment1(createStaffingAssignmentRequest: CreateStaffingAssignmentRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<StaffingAssignmentResponse>;
-    public createAssignment1(createStaffingAssignmentRequest: CreateStaffingAssignmentRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<StaffingAssignmentResponse>>;
-    public createAssignment1(createStaffingAssignmentRequest: CreateStaffingAssignmentRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<StaffingAssignmentResponse>>;
-    public createAssignment1(createStaffingAssignmentRequest: CreateStaffingAssignmentRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public createAssignment(createStaffingAssignmentRequest: CreateStaffingAssignmentRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<StaffingAssignmentResponse>;
+    public createAssignment(createStaffingAssignmentRequest: CreateStaffingAssignmentRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<StaffingAssignmentResponse>>;
+    public createAssignment(createStaffingAssignmentRequest: CreateStaffingAssignmentRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<StaffingAssignmentResponse>>;
+    public createAssignment(createStaffingAssignmentRequest: CreateStaffingAssignmentRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (createStaffingAssignmentRequest === null || createStaffingAssignmentRequest === undefined) {
-            throw new Error('Required parameter createStaffingAssignmentRequest was null or undefined when calling createAssignment1.');
+            throw new Error('Required parameter createStaffingAssignmentRequest was null or undefined when calling createAssignment.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -237,12 +237,12 @@ export class PeopleStaffingAssignmentsService extends BaseService {
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public getAssignments1(personId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<StaffingAssignmentResponse>>;
-    public getAssignments1(personId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<StaffingAssignmentResponse>>>;
-    public getAssignments1(personId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<StaffingAssignmentResponse>>>;
-    public getAssignments1(personId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getAssignments(personId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<StaffingAssignmentResponse>>;
+    public getAssignments(personId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<StaffingAssignmentResponse>>>;
+    public getAssignments(personId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<StaffingAssignmentResponse>>>;
+    public getAssignments(personId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (personId === null || personId === undefined) {
-            throw new Error('Required parameter personId was null or undefined when calling getAssignments1.');
+            throw new Error('Required parameter personId was null or undefined when calling getAssignments.');
         }
 
         let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
@@ -290,6 +290,66 @@ export class PeopleStaffingAssignmentsService extends BaseService {
             {
                 context: localVarHttpContext,
                 params: localVarQueryParameters.toHttpParams(),
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * List assignments for person (path variant)
+     * Returns all staffing assignments for the person given in the path. Same contract as GET /v1/people/staffing/assignments?personId&#x3D;{personId}.
+     * @endpoint get /v1/people/{personId}/staffing/assignments
+     * @param personId 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public getAssignmentsByPath(personId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<StaffingAssignmentResponse>>;
+    public getAssignmentsByPath(personId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<StaffingAssignmentResponse>>>;
+    public getAssignmentsByPath(personId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<StaffingAssignmentResponse>>>;
+    public getAssignmentsByPath(personId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (personId === null || personId === undefined) {
+            throw new Error('Required parameter personId was null or undefined when calling getAssignmentsByPath.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/people/${this.configuration.encodeParam({name: "personId", value: personId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/staffing/assignments`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<Array<StaffingAssignmentResponse>>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,

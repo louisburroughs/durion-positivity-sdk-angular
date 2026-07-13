@@ -21,6 +21,8 @@ import { CreateEmployeeRequest } from '../src/models/createEmployeeRequest';
 // @ts-ignore
 import { DisableEmployeeRequestDto } from '../src/models/disableEmployeeRequestDto';
 // @ts-ignore
+import { EmployeeIdentityDto } from '../src/models/employeeIdentityDto';
+// @ts-ignore
 import { EmployeeProfileDto } from '../src/models/employeeProfileDto';
 // @ts-ignore
 import { UpdateEmployeeRequest } from '../src/models/updateEmployeeRequest';
@@ -230,6 +232,66 @@ export class EmployeeAPIService extends BaseService {
         let localVarPath = `/v1/people/employees/${this.configuration.encodeParam({name: "employeeId", value: employeeId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<EmployeeProfileDto>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Resolve employee by employee number
+     * Resolves an employee number to a slim identity projection (person id + employment status). Used for service-to-service approver resolution, such as manager-approval-by-employee-number.
+     * @endpoint get /v1/people/employees/by-number/{employeeNumber}
+     * @param employeeNumber 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public resolveByNumber(employeeNumber: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<EmployeeIdentityDto>;
+    public resolveByNumber(employeeNumber: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<EmployeeIdentityDto>>;
+    public resolveByNumber(employeeNumber: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<EmployeeIdentityDto>>;
+    public resolveByNumber(employeeNumber: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (employeeNumber === null || employeeNumber === undefined) {
+            throw new Error('Required parameter employeeNumber was null or undefined when calling resolveByNumber.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/people/employees/by-number/${this.configuration.encodeParam({name: "employeeNumber", value: employeeNumber, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<EmployeeIdentityDto>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,

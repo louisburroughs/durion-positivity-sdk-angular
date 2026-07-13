@@ -1,5 +1,5 @@
 /**
- * POS Human Resources Service API
+ * POS People Contact Service API
  *
  * Contact: louis.burroughs@gmail.com
  *
@@ -18,8 +18,6 @@ import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
 // @ts-ignore
 import { CreateUserLinkRequest } from '../src/models/createUserLinkRequest';
-// @ts-ignore
-import { InactivePersonActiveUserResponse } from '../src/models/inactivePersonActiveUserResponse';
 // @ts-ignore
 import { LinkUserToPersonRequest } from '../src/models/linkUserToPersonRequest';
 // @ts-ignore
@@ -114,62 +112,6 @@ export class UserPersonLinkingAPIService extends BaseService {
     }
 
     /**
-     * List active users linked to inactive persons
-     * Compliance check (ADR-0015 §4): returns every ACTIVE user-person link whose linked person is in an inactive status (SUSPENDED, TERMINATED, DISABLED). Each row is a user that should have been disabled when the person was disabled/archived. Returns an empty list when none.
-     * @endpoint get /v1/people/user-links/inactive-person-active-user
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     * @param options additional options
-     */
-    public findActiveUsersForInactivePersons(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<InactivePersonActiveUserResponse>;
-    public findActiveUsersForInactivePersons(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<InactivePersonActiveUserResponse>>;
-    public findActiveUsersForInactivePersons(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<InactivePersonActiveUserResponse>>;
-    public findActiveUsersForInactivePersons(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
-
-        let localVarHeaders = this.defaultHeaders;
-
-        // authentication (bearerAuth) required
-        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
-
-        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
-            'application/json'
-        ]);
-        if (localVarHttpHeaderAcceptSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
-        }
-
-        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
-
-        const localVarTransferCache: boolean = options?.transferCache ?? true;
-
-
-        let responseType_: 'text' | 'json' | 'blob' = 'json';
-        if (localVarHttpHeaderAcceptSelected) {
-            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
-                responseType_ = 'text';
-            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
-                responseType_ = 'json';
-            } else {
-                responseType_ = 'blob';
-            }
-        }
-
-        let localVarPath = `/v1/people/user-links/inactive-person-active-user`;
-        const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<InactivePersonActiveUserResponse>('get', `${basePath}${localVarPath}`,
-            {
-                context: localVarHttpContext,
-                responseType: <any>responseType_,
-                ...(withCredentials ? { withCredentials } : {}),
-                headers: localVarHeaders,
-                observe: observe,
-                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
      * Get links by person ID
      * Retrieve user-person links for person
      * @endpoint get /v1/people/user-links/{personId}
@@ -178,12 +120,12 @@ export class UserPersonLinkingAPIService extends BaseService {
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public getLinkByPersonId(personId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<UserPersonLinkResponse>;
-    public getLinkByPersonId(personId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<UserPersonLinkResponse>>;
-    public getLinkByPersonId(personId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<UserPersonLinkResponse>>;
-    public getLinkByPersonId(personId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getLinksByPersonId(personId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<UserPersonLinkResponse>;
+    public getLinksByPersonId(personId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<UserPersonLinkResponse>>;
+    public getLinksByPersonId(personId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<UserPersonLinkResponse>>;
+    public getLinksByPersonId(personId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (personId === null || personId === undefined) {
-            throw new Error('Required parameter personId was null or undefined when calling getLinkByPersonId.');
+            throw new Error('Required parameter personId was null or undefined when calling getLinksByPersonId.');
         }
 
         let localVarHeaders = this.defaultHeaders;
