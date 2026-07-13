@@ -1,5 +1,5 @@
 /**
- * POS Human Resources Service API
+ * POS People Contact Service API
  *
  * Contact: louis.burroughs@gmail.com
  *
@@ -43,23 +43,10 @@ export interface Person {
      */
     username?: string;
     /**
-     * Employee status. Null if the person has no employee record.
-     */
-    employeeStatus?: PersonEmployeeStatusEnum;
-    /**
      * Typed contact points (email, phone). Populated on batch by-id lookups.
      */
     contactPoints?: Array<ContactPointDto>;
 }
-export enum PersonEmployeeStatusEnum {
-    Active = 'ACTIVE',
-    OnLeave = 'ON_LEAVE',
-    Suspended = 'SUSPENDED',
-    Terminated = 'TERMINATED',
-    Disabled = 'DISABLED'
-};
-
-
 
 function isOptionalPersonPropertyOfType(
     value: Record<string, unknown>,
@@ -100,7 +87,7 @@ export function instanceOfPerson(value: object): value is Person {
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createPersonPropertyNames('firstName', 'lastName', );
-    const optionalStringProperties = createPersonOptionalProperties({ name: 'id', nullable: false }, { name: 'firstName', nullable: false }, { name: 'lastName', nullable: false }, { name: 'primaryEmail', nullable: false }, { name: 'secondaryEmail', nullable: false }, { name: 'username', nullable: false }, { name: 'employeeStatus', nullable: false }, );
+    const optionalStringProperties = createPersonOptionalProperties({ name: 'id', nullable: false }, { name: 'firstName', nullable: false }, { name: 'lastName', nullable: false }, { name: 'primaryEmail', nullable: false }, { name: 'secondaryEmail', nullable: false }, { name: 'username', nullable: false }, );
     const optionalNumberProperties = createPersonOptionalProperties();
     const optionalBooleanProperties = createPersonOptionalProperties();
 

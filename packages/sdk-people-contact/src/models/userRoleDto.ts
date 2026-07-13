@@ -1,5 +1,5 @@
 /**
- * POS Human Resources Service API
+ * POS People Contact Service API
  *
  * Contact: louis.burroughs@gmail.com
  *

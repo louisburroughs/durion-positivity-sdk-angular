@@ -9,7 +9,7 @@ set -euo pipefail
 #   ./scripts/generate-openapi.sh                    # Generate all SDK modules
 #   ./scripts/generate-openapi.sh --module security  # Generate only the specified module
 #
-# Valid module names: security, order, inventory, workorder, accounting, catalog, customer, invoice, location, people, price, shop-manager, image, event-receiver, vehicle-fitment, vehicle-inventory, internal, documents, inquiry, bulk-loader
+# Valid module names: security, order, inventory, workorder, accounting, catalog, customer, invoice, location, people, people-contact, price, shop-manager, image, event-receiver, vehicle-fitment, vehicle-inventory, internal, documents, inquiry, bulk-loader
 
 module=""
 
@@ -26,7 +26,7 @@ while [[ $# -gt 0 ]]; do
 	esac
 done
 
-MODULES=(security order inventory workorder accounting catalog customer invoice location people price shop-manager image event-receiver vehicle-fitment vehicle-inventory internal documents inquiry bulk-loader)
+MODULES=(security order inventory workorder accounting catalog customer invoice location people people-contact price shop-manager image event-receiver vehicle-fitment vehicle-inventory internal documents inquiry bulk-loader)
 
 patch_package_tsconfig() {
 	# The custom tsconfig.mustache (templates/typescript-angular/tsconfig.mustache) now
@@ -230,6 +230,7 @@ gateway_base_path_for_module() {
 		location) echo "http://api-gateway.local/location" ;;
 		order) echo "http://api-gateway.local/order" ;;
 		people) echo "http://api-gateway.local/people" ;;
+		people-contact) echo "http://api-gateway.local/people-contact" ;;
 		price) echo "http://api-gateway.local/price" ;;
 		security) echo "http://api-gateway.local/security-service" ;;
 		shop-manager) echo "http://api-gateway.local/shop-manager" ;;
