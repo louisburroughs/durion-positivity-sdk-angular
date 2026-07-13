@@ -112,10 +112,10 @@ export class LocationSyncService extends BaseService {
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public listSyncLogs(outcome?: 'OK' | 'PARTIAL' | 'FAILED' | 'INVALID_PAYLOAD', page?: number, size?: number, pageIndex?: number, pageSize?: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<SyncLogResponse>>;
-    public listSyncLogs(outcome?: 'OK' | 'PARTIAL' | 'FAILED' | 'INVALID_PAYLOAD', page?: number, size?: number, pageIndex?: number, pageSize?: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<SyncLogResponse>>>;
-    public listSyncLogs(outcome?: 'OK' | 'PARTIAL' | 'FAILED' | 'INVALID_PAYLOAD', page?: number, size?: number, pageIndex?: number, pageSize?: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<SyncLogResponse>>>;
-    public listSyncLogs(outcome?: 'OK' | 'PARTIAL' | 'FAILED' | 'INVALID_PAYLOAD', page?: number, size?: number, pageIndex?: number, pageSize?: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public listSyncLogs(outcome?: 'OK' | 'PARTIAL' | 'FAILED' | 'INVALID_PAYLOAD' | 'REQUESTED', page?: number, size?: number, pageIndex?: number, pageSize?: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<SyncLogResponse>>;
+    public listSyncLogs(outcome?: 'OK' | 'PARTIAL' | 'FAILED' | 'INVALID_PAYLOAD' | 'REQUESTED', page?: number, size?: number, pageIndex?: number, pageSize?: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<SyncLogResponse>>>;
+    public listSyncLogs(outcome?: 'OK' | 'PARTIAL' | 'FAILED' | 'INVALID_PAYLOAD' | 'REQUESTED', page?: number, size?: number, pageIndex?: number, pageSize?: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<SyncLogResponse>>>;
+    public listSyncLogs(outcome?: 'OK' | 'PARTIAL' | 'FAILED' | 'INVALID_PAYLOAD' | 'REQUESTED', page?: number, size?: number, pageIndex?: number, pageSize?: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
 
@@ -209,8 +209,8 @@ export class LocationSyncService extends BaseService {
     }
 
     /**
-     * Trigger a location roster sync
-     * Runs one bulk sync of the location roster from pos-location into the local reference table. Re-sending the same Idempotency-Key returns the original run instead of syncing again.
+     * Trigger a location roster re-sync
+     * Requests an administrative re-emit of pos-location\&#39;s outbox on location.commands.v1 (ADR-0044 #892); the location.events.v1 consumer then idempotently repairs the local reference table, so the run completes asynchronously with outcome REQUESTED. Re-sending the same Idempotency-Key returns the original run instead of requesting again.
      * @endpoint post /v1/inventory/locations/sync
      * @param idempotencyKey Client-generated key that makes retries idempotent
      * @param xCorrelationId 

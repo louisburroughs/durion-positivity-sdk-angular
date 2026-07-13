@@ -17,23 +17,23 @@ export interface ApiError {
     /**
      * Machine-readable error code
      */
-    code?: string;
+    code: string;
     /**
      * Human-readable error message
      */
-    message?: string;
+    message: string;
     /**
      * HTTP status code
      */
-    status?: number;
+    status: number;
     /**
      * ISO 8601 UTC timestamp of the error
      */
-    timestamp?: string;
+    timestamp: string;
     /**
      * Unique correlation ID for distributed request tracing
      */
-    correlationId?: string;
+    correlationId: string;
     /**
      * Field-level validation errors; present (non-null) for validation-related errors such as VALIDATION_ERROR or VALIDATION_FAILED; omitted for all other error types
      */
@@ -90,7 +90,7 @@ export function instanceOfApiError(value: object): value is ApiError {
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createApiErrorPropertyNames();
+    const requiredProperties = createApiErrorPropertyNames('code', 'message', 'status', 'timestamp', 'correlationId', );
     const optionalStringProperties = createApiErrorOptionalProperties({ name: 'code', nullable: false }, { name: 'message', nullable: false }, { name: 'timestamp', nullable: false }, { name: 'correlationId', nullable: false }, { name: 'referenceId', nullable: false }, { name: 'nextAction', nullable: false }, { name: 'supportAction', nullable: false }, );
     const optionalNumberProperties = createApiErrorOptionalProperties({ name: 'status', nullable: false }, );
     const optionalBooleanProperties = createApiErrorOptionalProperties();
