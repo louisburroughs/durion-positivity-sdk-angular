@@ -10,6 +10,4 @@ export * from './shopAPI.service';
 import { ShopAPIService } from './shopAPI.service';
 export * from './shopAudit.service';
 import { ShopAuditService } from './shopAudit.service';
-export * from './workorderOperationalContextAPI.service';
-import { WorkorderOperationalContextAPIService } from './workorderOperationalContextAPI.service';
-export const APIS = [AppointmentAssignmentsService, AppointmentsAPIService, ConflictOverrideAPIService, ScheduleAPIService, ShopAPIService, ShopAuditService, WorkorderOperationalContextAPIService];
+export const APIS = [AppointmentAssignmentsService, AppointmentsAPIService, ConflictOverrideAPIService, ScheduleAPIService, ShopAPIService, ShopAuditService];
