@@ -27,6 +27,7 @@ export interface ConsumedItemResult {
     status: ConsumedItemResultStatusEnum;
 }
 export enum ConsumedItemResultStatusEnum {
+    Pending = 'PENDING',
     Success = 'SUCCESS',
     Partial = 'PARTIAL',
     Failed = 'FAILED'

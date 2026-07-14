@@ -49,7 +49,7 @@ export class WorkorderPickFacadeService extends BaseService {
 
     /**
      * Complete pick task
-     * Complete a workorder pick task after all of its pick lines are confirmed
+     * Queues asynchronous completion of a workorder pick task (ADR-0044 #901). Returns 202 with status PENDING while the command is in flight; an already-complete task is returned as-is with 200.
      * @endpoint post /v1/workorders/{workorderId}/pick-tasks/{pickTaskId}:complete
      * @param workorderId Workorder ID
      * @param pickTaskId Pick task ID
@@ -124,7 +124,7 @@ export class WorkorderPickFacadeService extends BaseService {
 
     /**
      * Confirm pick line quantity
-     * Confirm the picked quantity for a workorder pick line after scan resolution
+     * Queues asynchronous pick confirmation (ADR-0044 #901): the response is 202 with status PENDING; the inventory.pick-task.updated fact updates the pick replica and subsequent reads observe the confirmed quantity.
      * @endpoint post /v1/workorders/{workorderId}/pick-tasks/{pickTaskId}/lines/{pickLineId}:confirm
      * @param workorderId Workorder ID
      * @param pickTaskId Pick task ID
