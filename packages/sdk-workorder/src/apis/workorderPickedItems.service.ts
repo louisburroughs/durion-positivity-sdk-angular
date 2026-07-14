@@ -43,7 +43,7 @@ export class WorkorderPickedItemsService extends BaseService {
 
     /**
      * Consume picked items into workorder
-     * Consume the picked items for a workorder so parts usage is recorded against the job
+     * Queues asynchronous consumption of picked items (ADR-0044 #901): the response is 202 with per-item status PENDING; the inventory.consumption.recorded fact updates the pick replicas and subsequent picked-items reads observe the consumed quantities.
      * @endpoint post /v1/workorders/{workorderId}/picked-items:consume
      * @param workorderId Workorder ID
      * @param consumePickedItemsRequest 

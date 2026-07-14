@@ -18,6 +18,8 @@ import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
 // @ts-ignore
 import { SubstituteLinkResponse } from '../src/models/substituteLinkResponse';
+// @ts-ignore
+import { SuggestSubstitutesRequest } from '../src/models/suggestSubstitutesRequest';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
@@ -37,17 +39,18 @@ export class SubstituteLinkAPIService extends BaseService {
 
     /**
      * Suggest workorder substitutes
-     * Suggest substitute parts for a workorder based on the parts currently required
+     * Suggest substitute parts for a workorder based on the parts currently required. An optional request body scopes the suggestions to a single part.
      * @endpoint post /v1/workorders/{workorderId}/suggestSubstitutes
      * @param workorderId 
+     * @param suggestSubstitutesRequest 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public suggestSubstitutes(workorderId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<SubstituteLinkResponse>>;
-    public suggestSubstitutes(workorderId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<SubstituteLinkResponse>>>;
-    public suggestSubstitutes(workorderId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<SubstituteLinkResponse>>>;
-    public suggestSubstitutes(workorderId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public suggestSubstitutes(workorderId: string, suggestSubstitutesRequest?: SuggestSubstitutesRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<SubstituteLinkResponse>>;
+    public suggestSubstitutes(workorderId: string, suggestSubstitutesRequest?: SuggestSubstitutesRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<SubstituteLinkResponse>>>;
+    public suggestSubstitutes(workorderId: string, suggestSubstitutesRequest?: SuggestSubstitutesRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<SubstituteLinkResponse>>>;
+    public suggestSubstitutes(workorderId: string, suggestSubstitutesRequest?: SuggestSubstitutesRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (workorderId === null || workorderId === undefined) {
             throw new Error('Required parameter workorderId was null or undefined when calling suggestSubstitutes.');
         }
@@ -69,6 +72,15 @@ export class SubstituteLinkAPIService extends BaseService {
         const localVarTransferCache: boolean = options?.transferCache ?? true;
 
 
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+
         let responseType_: 'text' | 'json' | 'blob' = 'json';
         if (localVarHttpHeaderAcceptSelected) {
             if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
@@ -85,6 +97,7 @@ export class SubstituteLinkAPIService extends BaseService {
         return this.httpClient.request<Array<SubstituteLinkResponse>>('post', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
+                body: suggestSubstitutesRequest,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,

@@ -467,8 +467,8 @@ export class WorkOrderAPIService extends BaseService {
     }
 
     /**
-     * Generate invoice draft from completed workorder
-     * Generate an invoice draft from a completed workorder with optional idempotency key.
+     * Request invoice generation from a completed workorder
+     * Queues asynchronous invoice generation (ADR-0044 #900): the response is 202 with status PENDING and the invoiceId appears on the workorder once the invoice.events.v1 fact links it. Re-sending the same Idempotency-Key collapses to one generation. When the workorder is already invoiced, the linked invoice is returned with 200.
      * @endpoint post /v1/workorders/{workorderId}/generate-invoice
      * @param workorderId ID of the completed work order
      * @param idempotencyKey Optional idempotency key to prevent duplicate invoice generation (recommended for retries)
