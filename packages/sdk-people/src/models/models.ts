@@ -14,6 +14,7 @@ export * from './employeeContactInfoDto';
 export * from './employeeEmergencyContactDto';
 export * from './employeeIdentityDto';
 export * from './employeeProfileDto';
+export * from './inactivePersonActiveUserResponse';
 export * from './peopleAvailabilityResponse';
 export * from './personBulkIngestRecord';
 export * from './primaryLocationResponse';
