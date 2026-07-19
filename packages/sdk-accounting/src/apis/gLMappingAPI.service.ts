@@ -17,6 +17,8 @@ import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
 // @ts-ignore
+import { ApiError } from '../src/models/apiError';
+// @ts-ignore
 import { GLMappingCreateRequest } from '../src/models/gLMappingCreateRequest';
 // @ts-ignore
 import { GLMappingCreateResponse } from '../src/models/gLMappingCreateResponse';

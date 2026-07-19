@@ -19,6 +19,8 @@ import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 // @ts-ignore
 import { AccountDrilldownResponse } from '../src/models/accountDrilldownResponse';
 // @ts-ignore
+import { ApiError } from '../src/models/apiError';
+// @ts-ignore
 import { BalanceSheetReport } from '../src/models/balanceSheetReport';
 // @ts-ignore
 import { IncomeStatementReport } from '../src/models/incomeStatementReport';
