@@ -17,6 +17,14 @@ export interface JournalEntryReversalRequest {
      * Reason for reversing the journal entry
      */
     reason: string;
+    /**
+     * Optional transaction date for the reversal entry. When omitted or null, the date defaults to the original entry\'s transaction date if that date\'s accounting period is OPEN, otherwise to today\'s date. Whether explicit or defaulted, the resolved date must fall in an OPEN accounting period; a date in a CLOSED period is rejected with 422 PERIOD_CLOSED.
+     */
+    reversalDate?: string;
+    /**
+     * Optional justification for reversing into a CLOSED accounting period (story B2). When the resolved reversal date falls in a CLOSED period, supplying a non-blank justification together with the accounting:period:override permission allows the reversal to post into that period (audit-logged); without it the reversal is rejected with 422 PERIOD_CLOSED. Has no effect for dates in OPEN periods and can never bypass the hard lock (422 PERIOD_HARD_LOCKED).
+     */
+    overrideJustification?: string;
 }
 
 function isOptionalJournalEntryReversalRequestPropertyOfType(
@@ -58,7 +66,7 @@ export function instanceOfJournalEntryReversalRequest(value: object): value is J
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createJournalEntryReversalRequestPropertyNames('reason', );
-    const optionalStringProperties = createJournalEntryReversalRequestOptionalProperties({ name: 'reason', nullable: false }, );
+    const optionalStringProperties = createJournalEntryReversalRequestOptionalProperties({ name: 'reason', nullable: false }, { name: 'overrideJustification', nullable: false }, );
     const optionalNumberProperties = createJournalEntryReversalRequestOptionalProperties();
     const optionalBooleanProperties = createJournalEntryReversalRequestOptionalProperties();
 

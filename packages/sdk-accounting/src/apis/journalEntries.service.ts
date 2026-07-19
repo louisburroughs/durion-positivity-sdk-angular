@@ -17,7 +17,11 @@ import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
 // @ts-ignore
+import { ApiError } from '../src/models/apiError';
+// @ts-ignore
 import { JournalEntryCreateRequest } from '../src/models/journalEntryCreateRequest';
+// @ts-ignore
+import { JournalEntryPostRequest } from '../src/models/journalEntryPostRequest';
 // @ts-ignore
 import { JournalEntryResponse } from '../src/models/journalEntryResponse';
 // @ts-ignore
@@ -235,19 +239,20 @@ export class JournalEntriesService extends BaseService {
 
     /**
      * List journal entries
-     * Retrieve paginated journal entries.
+     * Retrieve paginated journal entries, optionally filtered by exact posted-entry number.
      * @endpoint get /v1/accounting/journal-entries
-     * @param sort Sort field
+     * @param sort Sort field with optional direction, e.g. \&#39;modifiedAt,desc\&#39;. Supported fields: createdAt, modifiedAt, updatedAt, transactionDate, postedAt, status, entryType, description, createdBy, journalEntryId. Direction defaults to desc.
      * @param page Page index (0-based)
      * @param size Page size
+     * @param entryNumber Optional exact-match filter on the posted-entry number (format JE-{YYYYMM}-{seq}, sequential within the entry\&#39;s transaction month, assigned at posting time). Entries not yet posted have no entry number and never match.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public listJournalEntries(sort: string, page?: number, size?: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PagedResponseJournalEntryResponse>;
-    public listJournalEntries(sort: string, page?: number, size?: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PagedResponseJournalEntryResponse>>;
-    public listJournalEntries(sort: string, page?: number, size?: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PagedResponseJournalEntryResponse>>;
-    public listJournalEntries(sort: string, page?: number, size?: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public listJournalEntries(sort: string, page?: number, size?: number, entryNumber?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PagedResponseJournalEntryResponse>;
+    public listJournalEntries(sort: string, page?: number, size?: number, entryNumber?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PagedResponseJournalEntryResponse>>;
+    public listJournalEntries(sort: string, page?: number, size?: number, entryNumber?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PagedResponseJournalEntryResponse>>;
+    public listJournalEntries(sort: string, page?: number, size?: number, entryNumber?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (sort === null || sort === undefined) {
             throw new Error('Required parameter sort was null or undefined when calling listJournalEntries.');
         }
@@ -276,6 +281,15 @@ export class JournalEntriesService extends BaseService {
             localVarQueryParameters,
             'sort',
             <any>sort,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'entryNumber',
+            <any>entryNumber,
             QueryParamStyle.Form,
             true,
         );
@@ -327,18 +341,18 @@ export class JournalEntriesService extends BaseService {
 
     /**
      * Post journal entry
-     * Post a draft journal entry to the ledger.
+     * Posts a DRAFT journal entry to the general ledger (DRAFT → POSTED), assigning its entryNumber and updating GL balances; the entry is immutable afterwards — use reverseJournalEntry to back it out. Preconditions: the entry must exist, be in DRAFT status, and be balanced. The request body is OPTIONAL: omit it entirely for a normal post. The entry\&#39;s transaction date is checked against the accounting-period gate (story B2): a date strictly before the org-level hard-lock date is rejected unconditionally with 422 PERIOD_HARD_LOCKED (never overridable); a date in a CLOSED period is rejected with 422 PERIOD_CLOSED unless the caller holds accounting:period:override AND supplies a non-blank overrideJustification in the body, in which case the posting proceeds and the override is audit-logged. Emits ACCOUNTING_JOURNAL_ENTRY_POST and returns the posted entry. Returns 409 ENTRY_ALREADY_POSTED if the entry is already POSTED or REVERSED, and 422 UNBALANCED_ENTRY if debits do not equal credits.
      * @endpoint post /v1/accounting/journal-entries/{journalEntryId}/post
      * @param journalEntryId Journal entry identifier
-     * @param body 
+     * @param journalEntryPostRequest 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public postJournalEntry(journalEntryId: string, body?: object, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<JournalEntryResponse>;
-    public postJournalEntry(journalEntryId: string, body?: object, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<JournalEntryResponse>>;
-    public postJournalEntry(journalEntryId: string, body?: object, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<JournalEntryResponse>>;
-    public postJournalEntry(journalEntryId: string, body?: object, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public postJournalEntry(journalEntryId: string, journalEntryPostRequest?: JournalEntryPostRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<JournalEntryResponse>;
+    public postJournalEntry(journalEntryId: string, journalEntryPostRequest?: JournalEntryPostRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<JournalEntryResponse>>;
+    public postJournalEntry(journalEntryId: string, journalEntryPostRequest?: JournalEntryPostRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<JournalEntryResponse>>;
+    public postJournalEntry(journalEntryId: string, journalEntryPostRequest?: JournalEntryPostRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (journalEntryId === null || journalEntryId === undefined) {
             throw new Error('Required parameter journalEntryId was null or undefined when calling postJournalEntry.');
         }
@@ -385,7 +399,7 @@ export class JournalEntriesService extends BaseService {
         return this.httpClient.request<JournalEntryResponse>('post', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
-                body: body,
+                body: journalEntryPostRequest,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,
@@ -398,7 +412,7 @@ export class JournalEntriesService extends BaseService {
 
     /**
      * Reverse journal entry
-     * Reverse a posted journal entry.
+     * Reverses a POSTED journal entry by creating and immediately posting an inverse entry (debits and credits swapped) with its own entryNumber, and transitioning the original POSTED → REVERSED. Use this tool to back out an incorrect posted entry; do NOT use it on DRAFT entries — delete or edit those instead. Preconditions: the entry must exist and be in POSTED status. Required input: a non-blank reason, recorded on the reversal entry and in the audit trail. Optional input: reversalDate — when omitted, it defaults to the original entry\&#39;s transaction date if that period is OPEN, otherwise to today; the resolved date must fall in an OPEN accounting period. Period gate (story B2): a resolved date strictly before the org-level hard-lock date is rejected unconditionally with 422 PERIOD_HARD_LOCKED (never overridable); a date in a CLOSED period is rejected with 422 PERIOD_CLOSED unless the caller holds accounting:period:override AND supplies a non-blank overrideJustification, in which case the reversal posts into the closed period and the override is audit-logged. Emits ACCOUNTING_JOURNAL_ENTRY_REVERSE and returns the reversal entry. Returns 409 JE_ALREADY_REVERSED if the entry was already reversed (including a lost concurrent-reversal race), 409 JE_NOT_POSTED if it is DRAFT/PENDING, and 422 PERIOD_CLOSED if the reversal date falls in a CLOSED period without a valid override — pick an open-period date, supply an override, or reopen the period before retrying.
      * @endpoint post /v1/accounting/journal-entries/{journalEntryId}/reverse
      * @param journalEntryId Journal entry identifier
      * @param journalEntryReversalRequest 

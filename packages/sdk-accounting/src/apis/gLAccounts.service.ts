@@ -455,7 +455,7 @@ export class GLAccountsService extends BaseService {
      * List GL accounts
      * Retrieve paginated GL accounts filtered by status and sorted by a field.
      * @endpoint get /v1/accounting/gl-accounts
-     * @param sort Sort field
+     * @param sort Sort field with optional direction, e.g. \&#39;modifiedAt,desc\&#39;. Supported fields: accountCode, accountName, accountType, description, activationDate, deactivationDate, createdAt, modifiedAt, updatedAt, glAccountId. Direction defaults to asc.
      * @param page Page index (0-based)
      * @param size Page size
      * @param status Filter by account status

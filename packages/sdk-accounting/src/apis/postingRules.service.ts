@@ -235,7 +235,7 @@ export class PostingRulesService extends BaseService {
      * List posting rule sets
      * Retrieve paginated posting rule sets.
      * @endpoint get /v1/accounting/posting-rules
-     * @param sort Sort field
+     * @param sort Sort field with optional direction, e.g. \&#39;modifiedAt,desc\&#39;. Supported fields: createdAt, modifiedAt, updatedAt, name, eventType. Direction defaults to desc.
      * @param page Page index (0-based)
      * @param size Page size
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.

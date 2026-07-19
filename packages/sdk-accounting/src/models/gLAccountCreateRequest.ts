@@ -26,6 +26,14 @@ export interface GLAccountCreateRequest {
      */
     accountType: GLAccountCreateRequestAccountTypeEnum;
     /**
+     * Optional subtype refining accountType for report grouping and posting-config plausibility checks (e.g. UNDEPOSITED_FUNDS for the cash-receipt clearing account). Null when no refinement applies.
+     */
+    accountSubtype?: GLAccountCreateRequestAccountSubtypeEnum;
+    /**
+     * Whether journal entry lines on this account participate in reconciliation (e.g. settlement/bank reconciliation). Defaults to false when omitted.
+     */
+    reconcilable?: boolean;
+    /**
      * Optional description of the account
      */
     description?: string;
@@ -44,6 +52,20 @@ export enum GLAccountCreateRequestAccountTypeEnum {
     Equity = 'EQUITY',
     Revenue = 'REVENUE',
     Expense = 'EXPENSE'
+};
+export enum GLAccountCreateRequestAccountSubtypeEnum {
+    Receivable = 'RECEIVABLE',
+    Payable = 'PAYABLE',
+    BankCash = 'BANK_CASH',
+    UndepositedFunds = 'UNDEPOSITED_FUNDS',
+    TaxPayable = 'TAX_PAYABLE',
+    CurrentAsset = 'CURRENT_ASSET',
+    FixedAsset = 'FIXED_ASSET',
+    CurrentLiability = 'CURRENT_LIABILITY',
+    Sales = 'SALES',
+    CostOfSales = 'COST_OF_SALES',
+    OperatingExpense = 'OPERATING_EXPENSE',
+    Other = 'OTHER'
 };
 
 
@@ -87,9 +109,9 @@ export function instanceOfGLAccountCreateRequest(value: object): value is GLAcco
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createGLAccountCreateRequestPropertyNames('accountCode', 'accountName', 'accountType', 'activationDate', );
-    const optionalStringProperties = createGLAccountCreateRequestOptionalProperties({ name: 'accountCode', nullable: false }, { name: 'accountName', nullable: false }, { name: 'accountType', nullable: false }, { name: 'description', nullable: false }, { name: 'parentAccountId', nullable: false }, );
+    const optionalStringProperties = createGLAccountCreateRequestOptionalProperties({ name: 'accountCode', nullable: false }, { name: 'accountName', nullable: false }, { name: 'accountType', nullable: false }, { name: 'accountSubtype', nullable: false }, { name: 'description', nullable: false }, { name: 'parentAccountId', nullable: false }, );
     const optionalNumberProperties = createGLAccountCreateRequestOptionalProperties();
-    const optionalBooleanProperties = createGLAccountCreateRequestOptionalProperties();
+    const optionalBooleanProperties = createGLAccountCreateRequestOptionalProperties({ name: 'reconcilable', nullable: false }, );
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
         && optionalStringProperties.every((property) => isOptionalGLAccountCreateRequestPropertyOfType(_v, property.name, 'string', property.nullable))

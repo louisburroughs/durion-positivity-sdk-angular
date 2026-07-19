@@ -41,7 +41,7 @@ export class PaymentApplicationsService extends BaseService {
 
     /**
      * Apply payment
-     * Apply a payment to an invoice and update its status.
+     * Apply a payment to one or more invoices and update their status. The optional allocationStrategy field controls allocation order: CALLER_ORDER (default when omitted) honors the caller-supplied order; OLDEST_FIRST allocates by ascending invoice date.
      * @endpoint post /v1/accounting/payments/{paymentId}/applications
      * @param paymentId Payment identifier
      * @param paymentApplicationRequest 

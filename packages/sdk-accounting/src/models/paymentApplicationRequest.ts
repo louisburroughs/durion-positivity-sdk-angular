@@ -22,7 +22,17 @@ export interface PaymentApplicationRequest {
      * Invoice applications allocating the payment amount to each invoice
      */
     applications: Array<InvoiceApplication>;
+    /**
+     * Optional allocation strategy. CALLER_ORDER (default when absent) applies amounts in the order supplied by the caller; OLDEST_FIRST allocates by ascending invoice date. Omitting this field is equivalent to CALLER_ORDER.
+     */
+    allocationStrategy?: PaymentApplicationRequestAllocationStrategyEnum | null;
 }
+export enum PaymentApplicationRequestAllocationStrategyEnum {
+    CallerOrder = 'CALLER_ORDER',
+    OldestFirst = 'OLDEST_FIRST'
+};
+
+
 
 function isOptionalPaymentApplicationRequestPropertyOfType(
     value: Record<string, unknown>,
@@ -63,7 +73,7 @@ export function instanceOfPaymentApplicationRequest(value: object): value is Pay
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createPaymentApplicationRequestPropertyNames('applicationRequestId', 'applications', );
-    const optionalStringProperties = createPaymentApplicationRequestOptionalProperties({ name: 'applicationRequestId', nullable: false }, );
+    const optionalStringProperties = createPaymentApplicationRequestOptionalProperties({ name: 'applicationRequestId', nullable: false }, { name: 'allocationStrategy', nullable: true }, );
     const optionalNumberProperties = createPaymentApplicationRequestOptionalProperties();
     const optionalBooleanProperties = createPaymentApplicationRequestOptionalProperties();
 

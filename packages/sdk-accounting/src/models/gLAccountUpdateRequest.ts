@@ -21,7 +21,31 @@ export interface GLAccountUpdateRequest {
      * Updated account description
      */
     description?: string;
+    /**
+     * Updated account subtype refining the immutable accountType for report grouping and posting-config plausibility checks. Left unchanged when omitted.
+     */
+    accountSubtype?: GLAccountUpdateRequestAccountSubtypeEnum;
+    /**
+     * Whether journal entry lines on this account participate in reconciliation (e.g. settlement/bank reconciliation). Left unchanged when omitted.
+     */
+    reconcilable?: boolean;
 }
+export enum GLAccountUpdateRequestAccountSubtypeEnum {
+    Receivable = 'RECEIVABLE',
+    Payable = 'PAYABLE',
+    BankCash = 'BANK_CASH',
+    UndepositedFunds = 'UNDEPOSITED_FUNDS',
+    TaxPayable = 'TAX_PAYABLE',
+    CurrentAsset = 'CURRENT_ASSET',
+    FixedAsset = 'FIXED_ASSET',
+    CurrentLiability = 'CURRENT_LIABILITY',
+    Sales = 'SALES',
+    CostOfSales = 'COST_OF_SALES',
+    OperatingExpense = 'OPERATING_EXPENSE',
+    Other = 'OTHER'
+};
+
+
 
 function isOptionalGLAccountUpdateRequestPropertyOfType(
     value: Record<string, unknown>,
@@ -62,9 +86,9 @@ export function instanceOfGLAccountUpdateRequest(value: object): value is GLAcco
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createGLAccountUpdateRequestPropertyNames();
-    const optionalStringProperties = createGLAccountUpdateRequestOptionalProperties({ name: 'accountName', nullable: false }, { name: 'description', nullable: false }, );
+    const optionalStringProperties = createGLAccountUpdateRequestOptionalProperties({ name: 'accountName', nullable: false }, { name: 'description', nullable: false }, { name: 'accountSubtype', nullable: false }, );
     const optionalNumberProperties = createGLAccountUpdateRequestOptionalProperties();
-    const optionalBooleanProperties = createGLAccountUpdateRequestOptionalProperties();
+    const optionalBooleanProperties = createGLAccountUpdateRequestOptionalProperties({ name: 'reconcilable', nullable: false }, );
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
         && optionalStringProperties.every((property) => isOptionalGLAccountUpdateRequestPropertyOfType(_v, property.name, 'string', property.nullable))

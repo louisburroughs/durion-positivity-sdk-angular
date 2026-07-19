@@ -24,6 +24,10 @@ import { GLMappingCreateResponse } from '../src/models/gLMappingCreateResponse';
 import { GLMappingResolveRequest } from '../src/models/gLMappingResolveRequest';
 // @ts-ignore
 import { GLMappingResolveResponse } from '../src/models/gLMappingResolveResponse';
+// @ts-ignore
+import { MappingResolutionTestRequest } from '../src/models/mappingResolutionTestRequest';
+// @ts-ignore
+import { MappingResolutionTestResponse } from '../src/models/mappingResolutionTestResponse';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
@@ -171,6 +175,76 @@ export class GLMappingAPIService extends BaseService {
             {
                 context: localVarHttpContext,
                 body: gLMappingResolveRequest,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Dry-run mapping/rule resolution
+     * Resolves a hypothetical accounting event against the published posting rules and GL mappings, returning the matched rule (id/name/version), mapping details, the exact journal entry lines the evaluator would post (including E1 proportional split-line shares and residual distribution), and per-predicate evaluation outcomes (E2 condition grammar). This is a read-only inspection tool: NOTHING is persisted — no accounting event, journal entry, or outbox record is created. A no-match outcome is a normal 200 response with matched&#x3D;false (not a 404).
+     * @endpoint post /v1/accounting/mappings/resolve-test
+     * @param mappingResolutionTestRequest Dry-run mapping/rule resolution request
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public resolveTestMapping(mappingResolutionTestRequest: MappingResolutionTestRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<MappingResolutionTestResponse>;
+    public resolveTestMapping(mappingResolutionTestRequest: MappingResolutionTestRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<MappingResolutionTestResponse>>;
+    public resolveTestMapping(mappingResolutionTestRequest: MappingResolutionTestRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<MappingResolutionTestResponse>>;
+    public resolveTestMapping(mappingResolutionTestRequest: MappingResolutionTestRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (mappingResolutionTestRequest === null || mappingResolutionTestRequest === undefined) {
+            throw new Error('Required parameter mappingResolutionTestRequest was null or undefined when calling resolveTestMapping.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/accounting/mappings/resolve-test`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<MappingResolutionTestResponse>('post', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                body: mappingResolutionTestRequest,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,

@@ -19,6 +19,10 @@ export interface JournalEntryResponse {
      */
     journalEntryId?: string;
     /**
+     * Human-readable posted-entry number in the format JE-{YYYYMM}-{seq}, sequential within the entry\'s transaction month and assigned at posting time. Null for DRAFT and PENDING entries and for entries posted before numbering existed.
+     */
+    entryNumber?: string | null;
+    /**
      * Journal entry status
      */
     status?: JournalEntryResponseStatusEnum;
@@ -147,7 +151,7 @@ export function instanceOfJournalEntryResponse(value: object): value is JournalE
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createJournalEntryResponsePropertyNames();
-    const optionalStringProperties = createJournalEntryResponseOptionalProperties({ name: 'journalEntryId', nullable: false }, { name: 'status', nullable: false }, { name: 'description', nullable: false }, { name: 'sourceEventId', nullable: false }, { name: 'sourceEventType', nullable: false }, { name: 'postingRuleSetId', nullable: false }, { name: 'postingRuleVersionId', nullable: false }, { name: 'reversalJournalEntryId', nullable: false }, { name: 'reversedByJournalEntryId', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'modifiedBy', nullable: false }, { name: 'postedBy', nullable: false }, );
+    const optionalStringProperties = createJournalEntryResponseOptionalProperties({ name: 'journalEntryId', nullable: false }, { name: 'entryNumber', nullable: true }, { name: 'status', nullable: false }, { name: 'description', nullable: false }, { name: 'sourceEventId', nullable: false }, { name: 'sourceEventType', nullable: false }, { name: 'postingRuleSetId', nullable: false }, { name: 'postingRuleVersionId', nullable: false }, { name: 'reversalJournalEntryId', nullable: false }, { name: 'reversedByJournalEntryId', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'modifiedBy', nullable: false }, { name: 'postedBy', nullable: false }, );
     const optionalNumberProperties = createJournalEntryResponseOptionalProperties({ name: 'totalDebits', nullable: false }, { name: 'totalCredits', nullable: false }, );
     const optionalBooleanProperties = createJournalEntryResponseOptionalProperties({ name: 'isBalanced', nullable: false }, );
 

@@ -30,6 +30,14 @@ export interface GLAccountResponse {
      */
     accountType?: GLAccountResponseAccountTypeEnum;
     /**
+     * Optional subtype refining accountType for report grouping and posting-config plausibility checks. Null when no refinement applies.
+     */
+    accountSubtype?: GLAccountResponseAccountSubtypeEnum;
+    /**
+     * Whether journal entry lines on this account participate in reconciliation (e.g. settlement/bank reconciliation).
+     */
+    reconcilable: boolean;
+    /**
      * GL account description
      */
     description?: string;
@@ -77,6 +85,20 @@ export enum GLAccountResponseAccountTypeEnum {
     Revenue = 'REVENUE',
     Expense = 'EXPENSE'
 };
+export enum GLAccountResponseAccountSubtypeEnum {
+    Receivable = 'RECEIVABLE',
+    Payable = 'PAYABLE',
+    BankCash = 'BANK_CASH',
+    UndepositedFunds = 'UNDEPOSITED_FUNDS',
+    TaxPayable = 'TAX_PAYABLE',
+    CurrentAsset = 'CURRENT_ASSET',
+    FixedAsset = 'FIXED_ASSET',
+    CurrentLiability = 'CURRENT_LIABILITY',
+    Sales = 'SALES',
+    CostOfSales = 'COST_OF_SALES',
+    OperatingExpense = 'OPERATING_EXPENSE',
+    Other = 'OTHER'
+};
 export enum GLAccountResponseStatusEnum {
     Active = 'ACTIVE',
     Inactive = 'INACTIVE',
@@ -123,10 +145,10 @@ export function instanceOfGLAccountResponse(value: object): value is GLAccountRe
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createGLAccountResponsePropertyNames('glAccountId', );
-    const optionalStringProperties = createGLAccountResponseOptionalProperties({ name: 'glAccountId', nullable: false }, { name: 'accountCode', nullable: false }, { name: 'accountName', nullable: false }, { name: 'accountType', nullable: false }, { name: 'description', nullable: false }, { name: 'parentAccountId', nullable: false }, { name: 'status', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'modifiedBy', nullable: false }, );
+    const requiredProperties = createGLAccountResponsePropertyNames('glAccountId', 'reconcilable', );
+    const optionalStringProperties = createGLAccountResponseOptionalProperties({ name: 'glAccountId', nullable: false }, { name: 'accountCode', nullable: false }, { name: 'accountName', nullable: false }, { name: 'accountType', nullable: false }, { name: 'accountSubtype', nullable: false }, { name: 'description', nullable: false }, { name: 'parentAccountId', nullable: false }, { name: 'status', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'modifiedBy', nullable: false }, );
     const optionalNumberProperties = createGLAccountResponseOptionalProperties({ name: 'version', nullable: false }, );
-    const optionalBooleanProperties = createGLAccountResponseOptionalProperties();
+    const optionalBooleanProperties = createGLAccountResponseOptionalProperties({ name: 'reconcilable', nullable: false }, );
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
         && optionalStringProperties.every((property) => isOptionalGLAccountResponsePropertyOfType(_v, property.name, 'string', property.nullable))
