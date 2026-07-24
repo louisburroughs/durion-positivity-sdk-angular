@@ -49,6 +49,18 @@ export interface PurchaseOrderLineResponse {
      * Quantity on this line not yet received
      */
     openQuantityDecimal?: number;
+    /**
+     * UoM the line was keyed in when it differed from the product\'s base UoM
+     */
+    documentUom?: string;
+    /**
+     * Quantity as keyed in documentUom; quantityDecimal holds the derived base quantity
+     */
+    documentQuantity?: number;
+    /**
+     * Effective base-per-document-unit conversion factor applied at derivation time
+     */
+    conversionFactor?: number;
 }
 
 function isOptionalPurchaseOrderLineResponsePropertyOfType(
@@ -90,8 +102,8 @@ export function instanceOfPurchaseOrderLineResponse(value: object): value is Pur
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createPurchaseOrderLineResponsePropertyNames('lineId', 'lineNumber', );
-    const optionalStringProperties = createPurchaseOrderLineResponseOptionalProperties({ name: 'lineId', nullable: false }, { name: 'skuId', nullable: false }, { name: 'description', nullable: false }, );
-    const optionalNumberProperties = createPurchaseOrderLineResponseOptionalProperties({ name: 'lineNumber', nullable: false }, { name: 'quantityDecimal', nullable: false }, { name: 'unitCostMinor', nullable: false }, { name: 'lineTotalMinor', nullable: false }, { name: 'taxMinor', nullable: false }, { name: 'openQuantityDecimal', nullable: false }, );
+    const optionalStringProperties = createPurchaseOrderLineResponseOptionalProperties({ name: 'lineId', nullable: false }, { name: 'skuId', nullable: false }, { name: 'description', nullable: false }, { name: 'documentUom', nullable: false }, );
+    const optionalNumberProperties = createPurchaseOrderLineResponseOptionalProperties({ name: 'lineNumber', nullable: false }, { name: 'quantityDecimal', nullable: false }, { name: 'unitCostMinor', nullable: false }, { name: 'lineTotalMinor', nullable: false }, { name: 'taxMinor', nullable: false }, { name: 'openQuantityDecimal', nullable: false }, { name: 'documentQuantity', nullable: false }, { name: 'conversionFactor', nullable: false }, );
     const optionalBooleanProperties = createPurchaseOrderLineResponseOptionalProperties();
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

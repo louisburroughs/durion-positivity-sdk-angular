@@ -1,3 +1,7 @@
+export * from './customerExemption';
+export * from './exemptionCertificateRequest';
+export * from './exemptionCertificateResponse';
+export * from './jurisdictionTax';
 export * from './lineItemTax';
 export * from './modeResponse';
 export * from './taxAddress';
@@ -5,3 +9,4 @@ export * from './taxCalculationRequest';
 export * from './taxCalculationResponse';
 export * from './taxJurisdiction';
 export * from './taxLineItem';
+export * from './taxProviderTransactionResult';

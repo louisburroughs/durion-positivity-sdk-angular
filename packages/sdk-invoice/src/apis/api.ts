@@ -1,5 +1,9 @@
+export * from './billingAuthorization.service';
+import { BillingAuthorizationService } from './billingAuthorization.service';
 export * from './billingRules.service';
 import { BillingRulesService } from './billingRules.service';
+export * from './depositCredits.service';
+import { DepositCreditsService } from './depositCredits.service';
 export * from './invoice.service';
 import { InvoiceService } from './invoice.service';
 export * from './invoiceArtifactController.service';
@@ -14,4 +18,6 @@ export * from './paymentReversal.service';
 import { PaymentReversalService } from './paymentReversal.service';
 export * from './receipt.service';
 import { ReceiptService } from './receipt.service';
-export const APIS = [BillingRulesService, InvoiceService, InvoiceArtifactControllerService, InvoiceArtifactDownloadControllerService, InvoiceSearchService, PaymentService, PaymentReversalService, ReceiptService];
+export * from './standaloneRefund.service';
+import { StandaloneRefundService } from './standaloneRefund.service';
+export const APIS = [BillingAuthorizationService, BillingRulesService, DepositCreditsService, InvoiceService, InvoiceArtifactControllerService, InvoiceArtifactDownloadControllerService, InvoiceSearchService, PaymentService, PaymentReversalService, ReceiptService, StandaloneRefundService];

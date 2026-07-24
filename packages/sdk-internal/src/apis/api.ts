@@ -1,3 +1,5 @@
 export * from './tax.service';
 import { TaxService } from './tax.service';
-export const APIS = [TaxService];
+export * from './taxExemptionCertificates.service';
+import { TaxExemptionCertificatesService } from './taxExemptionCertificates.service';
+export const APIS = [TaxService, TaxExemptionCertificatesService];

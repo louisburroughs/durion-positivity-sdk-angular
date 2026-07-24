@@ -29,6 +29,22 @@ export interface AddItemRequest {
      * Manual unit price override for the item, when applicable
      */
     manualPrice?: number;
+    /**
+     * Client-supplied stable line identity; a replayed add with a known lineUuid updates the existing line instead of duplicating it
+     */
+    lineUuid?: string;
+    /**
+     * Customer-visible line note
+     */
+    customerNote?: string;
+    /**
+     * Shop-internal line note
+     */
+    internalNote?: string;
+    /**
+     * Captured lot/serial numbers for tracked products (count must not exceed quantity; SERIAL-tracked products require one per unit at checkout, LOT-tracked at least one)
+     */
+    serialNumbers?: Array<string>;
 }
 
 function isOptionalAddItemRequestPropertyOfType(
@@ -70,7 +86,7 @@ export function instanceOfAddItemRequest(value: object): value is AddItemRequest
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createAddItemRequestPropertyNames('itemSku', 'quantity', );
-    const optionalStringProperties = createAddItemRequestOptionalProperties({ name: 'itemSku', nullable: false }, { name: 'reasonCode', nullable: false }, );
+    const optionalStringProperties = createAddItemRequestOptionalProperties({ name: 'itemSku', nullable: false }, { name: 'reasonCode', nullable: false }, { name: 'lineUuid', nullable: false }, { name: 'customerNote', nullable: false }, { name: 'internalNote', nullable: false }, );
     const optionalNumberProperties = createAddItemRequestOptionalProperties({ name: 'quantity', nullable: false }, { name: 'manualPrice', nullable: false }, );
     const optionalBooleanProperties = createAddItemRequestOptionalProperties();
 

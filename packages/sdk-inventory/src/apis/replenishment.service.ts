@@ -21,9 +21,17 @@ import { CreateReplenishmentPolicyRequest } from '../src/models/createReplenishm
 // @ts-ignore
 import { Pageable } from '../src/models/pageable';
 // @ts-ignore
+import { ReplenishmentNeedResponse } from '../src/models/replenishmentNeedResponse';
+// @ts-ignore
 import { ReplenishmentPolicyResponse } from '../src/models/replenishmentPolicyResponse';
 // @ts-ignore
+import { ReplenishmentScanResultResponse } from '../src/models/replenishmentScanResultResponse';
+// @ts-ignore
 import { ReplenishmentTaskResponse } from '../src/models/replenishmentTaskResponse';
+// @ts-ignore
+import { SnoozeReplenishmentPolicyRequest } from '../src/models/snoozeReplenishmentPolicyRequest';
+// @ts-ignore
+import { UpdateReplenishmentPolicyRequest } from '../src/models/updateReplenishmentPolicyRequest';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
@@ -101,6 +109,62 @@ export class ReplenishmentService extends BaseService {
             {
                 context: localVarHttpContext,
                 body: createReplenishmentPolicyRequest,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Replenishment needs report
+     * Side-effect-free orderpoint evaluation of every active, non-snoozed replenishment policy: projected availability at the lead-time horizon, whether a scan would trigger, the multiple-rounded suggested quantity, and the projected stock-out deadline. Never creates or refreshes tasks — ops review before running the scan.
+     * @endpoint get /v1/inventory/replenishment/needs
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public listReplenishmentNeeds(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<ReplenishmentNeedResponse>>;
+    public listReplenishmentNeeds(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<ReplenishmentNeedResponse>>>;
+    public listReplenishmentNeeds(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<ReplenishmentNeedResponse>>>;
+    public listReplenishmentNeeds(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/inventory/replenishment/needs`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<Array<ReplenishmentNeedResponse>>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,
@@ -239,6 +303,210 @@ export class ReplenishmentService extends BaseService {
         return this.httpClient.request<Array<ReplenishmentTaskResponse>>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Run the batch replenishment scan
+     * Evaluates every replenishment policy against current on-hand and creates or refreshes batch-triggered replenishment tasks for below-minimum pick faces. Idempotent per (policy, day): repeated runs on the same day never create duplicate open tasks. Returns a summary of the scan run.
+     * @endpoint post /v1/inventory/replenishment/scan
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public runReplenishmentScan(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ReplenishmentScanResultResponse>;
+    public runReplenishmentScan(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ReplenishmentScanResultResponse>>;
+    public runReplenishmentScan(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ReplenishmentScanResultResponse>>;
+    public runReplenishmentScan(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/inventory/replenishment/scan`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<ReplenishmentScanResultResponse>('post', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Snooze or unsnooze a replenishment policy
+     * Excludes the policy from scan, event, and needs evaluation until the given future instant (Odoo orderpoint snooze). A null snoozedUntil clears an existing snooze — there is no separate unsnooze endpoint. A non-null instant that is not in the future is rejected with 422.
+     * @endpoint post /v1/inventory/replenishment/policies/{policyId}/snooze
+     * @param policyId Replenishment policy identifier
+     * @param snoozeReplenishmentPolicyRequest 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public snoozeReplenishmentPolicy(policyId: string, snoozeReplenishmentPolicyRequest: SnoozeReplenishmentPolicyRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ReplenishmentPolicyResponse>;
+    public snoozeReplenishmentPolicy(policyId: string, snoozeReplenishmentPolicyRequest: SnoozeReplenishmentPolicyRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ReplenishmentPolicyResponse>>;
+    public snoozeReplenishmentPolicy(policyId: string, snoozeReplenishmentPolicyRequest: SnoozeReplenishmentPolicyRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ReplenishmentPolicyResponse>>;
+    public snoozeReplenishmentPolicy(policyId: string, snoozeReplenishmentPolicyRequest: SnoozeReplenishmentPolicyRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (policyId === null || policyId === undefined) {
+            throw new Error('Required parameter policyId was null or undefined when calling snoozeReplenishmentPolicy.');
+        }
+        if (snoozeReplenishmentPolicyRequest === null || snoozeReplenishmentPolicyRequest === undefined) {
+            throw new Error('Required parameter snoozeReplenishmentPolicyRequest was null or undefined when calling snoozeReplenishmentPolicy.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/inventory/replenishment/policies/${this.configuration.encodeParam({name: "policyId", value: policyId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/snooze`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<ReplenishmentPolicyResponse>('post', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                body: snoozeReplenishmentPolicyRequest,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Update replenishment policy
+     * Full-replace update of a policy\&#39;s min/max thresholds and tuning fields (order multiple, lead-time override, preferred source type, active flag). Omitted optional fields are cleared or reset to defaults. Location, SKU, and snooze state are not updatable here; snooze is managed by the snooze endpoint.
+     * @endpoint put /v1/inventory/replenishment/policies/{policyId}
+     * @param policyId Replenishment policy identifier
+     * @param updateReplenishmentPolicyRequest 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public updateReplenishmentPolicy(policyId: string, updateReplenishmentPolicyRequest: UpdateReplenishmentPolicyRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ReplenishmentPolicyResponse>;
+    public updateReplenishmentPolicy(policyId: string, updateReplenishmentPolicyRequest: UpdateReplenishmentPolicyRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ReplenishmentPolicyResponse>>;
+    public updateReplenishmentPolicy(policyId: string, updateReplenishmentPolicyRequest: UpdateReplenishmentPolicyRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ReplenishmentPolicyResponse>>;
+    public updateReplenishmentPolicy(policyId: string, updateReplenishmentPolicyRequest: UpdateReplenishmentPolicyRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (policyId === null || policyId === undefined) {
+            throw new Error('Required parameter policyId was null or undefined when calling updateReplenishmentPolicy.');
+        }
+        if (updateReplenishmentPolicyRequest === null || updateReplenishmentPolicyRequest === undefined) {
+            throw new Error('Required parameter updateReplenishmentPolicyRequest was null or undefined when calling updateReplenishmentPolicy.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/inventory/replenishment/policies/${this.configuration.encodeParam({name: "policyId", value: policyId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<ReplenishmentPolicyResponse>('put', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                body: updateReplenishmentPolicyRequest,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,

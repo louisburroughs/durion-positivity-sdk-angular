@@ -31,6 +31,10 @@ export interface InvoiceCreationRequest {
      */
     locationId?: string;
     /**
+     * Customer party owning the workorder; stored on the invoice for party-scoped lookups (e.g. warranty origin-line search).
+     */
+    customerId?: string;
+    /**
      * Idempotency key to prevent duplicate invoice creation.
      */
     idempotencyKey?: string;
@@ -79,7 +83,7 @@ export function instanceOfInvoiceCreationRequest(value: object): value is Invoic
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createInvoiceCreationRequestPropertyNames();
-    const optionalStringProperties = createInvoiceCreationRequestOptionalProperties({ name: 'workorderId', nullable: false }, { name: 'estimateId', nullable: false }, { name: 'approvalId', nullable: false }, { name: 'locationId', nullable: false }, { name: 'idempotencyKey', nullable: false }, );
+    const optionalStringProperties = createInvoiceCreationRequestOptionalProperties({ name: 'workorderId', nullable: false }, { name: 'estimateId', nullable: false }, { name: 'approvalId', nullable: false }, { name: 'locationId', nullable: false }, { name: 'customerId', nullable: false }, { name: 'idempotencyKey', nullable: false }, );
     const optionalNumberProperties = createInvoiceCreationRequestOptionalProperties();
     const optionalBooleanProperties = createInvoiceCreationRequestOptionalProperties();
 

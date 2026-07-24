@@ -39,7 +39,7 @@ export class SubstituteLinkAPIService extends BaseService {
 
     /**
      * Suggest workorder substitutes
-     * Suggest substitute parts for a workorder based on the parts currently required. An optional request body scopes the suggestions to a single part.
+     * Suggest substitute parts for a workorder. Provide a request body with partId to scope suggestions to that part\&#39;s active substitute links. Without a part scope this currently returns an empty list; workorder-wide suggestions are not yet implemented.
      * @endpoint post /v1/workorders/{workorderId}/suggestSubstitutes
      * @param workorderId 
      * @param suggestSubstitutesRequest 

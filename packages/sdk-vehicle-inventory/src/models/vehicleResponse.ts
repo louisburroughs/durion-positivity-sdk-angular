@@ -62,6 +62,14 @@ export interface VehicleResponse {
      */
     trim?: string;
     /**
+     * Last recorded odometer reading value.
+     */
+    odometerValue?: number;
+    /**
+     * Unit of the odometer reading (MILES or KILOMETERS).
+     */
+    odometerUnit?: VehicleResponseOdometerUnitEnum;
+    /**
      * Whether vehicle is active.
      */
     isActive: boolean;
@@ -86,6 +94,12 @@ export interface VehicleResponse {
      */
     version: number;
 }
+export enum VehicleResponseOdometerUnitEnum {
+    Miles = 'MILES',
+    Kilometers = 'KILOMETERS'
+};
+
+
 
 function isOptionalVehicleResponsePropertyOfType(
     value: Record<string, unknown>,
@@ -126,8 +140,8 @@ export function instanceOfVehicleResponse(value: object): value is VehicleRespon
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createVehicleResponsePropertyNames('vehicleId', 'accountId', 'vin', 'vinNormalized', 'unitNumber', 'description', 'isActive', 'createdAt', 'updatedAt', 'version', );
-    const optionalStringProperties = createVehicleResponseOptionalProperties({ name: 'vehicleId', nullable: false }, { name: 'accountId', nullable: false }, { name: 'vin', nullable: false }, { name: 'vinNormalized', nullable: false }, { name: 'unitNumber', nullable: false }, { name: 'description', nullable: false }, { name: 'licensePlate', nullable: false }, { name: 'licensePlateJurisdiction', nullable: false }, { name: 'make', nullable: false }, { name: 'model', nullable: false }, { name: 'trim', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'updatedBy', nullable: false }, );
-    const optionalNumberProperties = createVehicleResponseOptionalProperties({ name: 'year', nullable: false }, { name: 'version', nullable: false }, );
+    const optionalStringProperties = createVehicleResponseOptionalProperties({ name: 'vehicleId', nullable: false }, { name: 'accountId', nullable: false }, { name: 'vin', nullable: false }, { name: 'vinNormalized', nullable: false }, { name: 'unitNumber', nullable: false }, { name: 'description', nullable: false }, { name: 'licensePlate', nullable: false }, { name: 'licensePlateJurisdiction', nullable: false }, { name: 'make', nullable: false }, { name: 'model', nullable: false }, { name: 'trim', nullable: false }, { name: 'odometerUnit', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'updatedBy', nullable: false }, );
+    const optionalNumberProperties = createVehicleResponseOptionalProperties({ name: 'year', nullable: false }, { name: 'odometerValue', nullable: false }, { name: 'version', nullable: false }, );
     const optionalBooleanProperties = createVehicleResponseOptionalProperties({ name: 'isActive', nullable: false }, );
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

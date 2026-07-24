@@ -41,6 +41,22 @@ export interface ReceivingLineResponse {
      * Identifier of the workorder line the receiving line fulfils, when applicable
      */
     workorderLineId?: string;
+    /**
+     * Lot or batch number recorded on receipt; linked to the lot master for LOT-tracked products
+     */
+    lotNumber?: string;
+    /**
+     * UoM the line was keyed in when it differed from the product\'s base UoM
+     */
+    documentUom?: string;
+    /**
+     * Quantity as keyed in documentUom; receivedQuantity holds the derived base quantity
+     */
+    documentQuantity?: number;
+    /**
+     * Effective base-per-document-unit conversion factor applied at posting time
+     */
+    conversionFactor?: number;
 }
 
 function isOptionalReceivingLineResponsePropertyOfType(
@@ -82,8 +98,8 @@ export function instanceOfReceivingLineResponse(value: object): value is Receivi
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createReceivingLineResponsePropertyNames('lineId', 'productId', 'status', );
-    const optionalStringProperties = createReceivingLineResponseOptionalProperties({ name: 'lineId', nullable: false }, { name: 'productId', nullable: false }, { name: 'status', nullable: false }, { name: 'workorderId', nullable: false }, { name: 'workorderLineId', nullable: false }, );
-    const optionalNumberProperties = createReceivingLineResponseOptionalProperties({ name: 'expectedQuantity', nullable: false }, { name: 'receivedQuantity', nullable: false }, );
+    const optionalStringProperties = createReceivingLineResponseOptionalProperties({ name: 'lineId', nullable: false }, { name: 'productId', nullable: false }, { name: 'status', nullable: false }, { name: 'workorderId', nullable: false }, { name: 'workorderLineId', nullable: false }, { name: 'lotNumber', nullable: false }, { name: 'documentUom', nullable: false }, );
+    const optionalNumberProperties = createReceivingLineResponseOptionalProperties({ name: 'expectedQuantity', nullable: false }, { name: 'receivedQuantity', nullable: false }, { name: 'documentQuantity', nullable: false }, { name: 'conversionFactor', nullable: false }, );
     const optionalBooleanProperties = createReceivingLineResponseOptionalProperties();
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

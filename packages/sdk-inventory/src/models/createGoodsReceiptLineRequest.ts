@@ -22,9 +22,9 @@ export interface CreateGoodsReceiptLineRequest {
      */
     sku: string;
     /**
-     * Whole-unit quantity of the SKU received in this goods receipt
+     * Whole-unit quantity of the SKU received, in the product\'s base UoM. Required unless documentUom/documentQuantity are supplied, in which case the base quantity is derived and this field is ignored
      */
-    quantityReceived: number;
+    quantityReceived?: number;
     /**
      * Unit cost of the received product expressed in minor currency units (e.g. cents)
      */
@@ -33,6 +33,18 @@ export interface CreateGoodsReceiptLineRequest {
      * Lot or batch number associated with the received product
      */
     lotNumber?: string;
+    /**
+     * Optional UoM the receipt line is keyed in (e.g. CASE). When present, documentQuantity is converted to the product\'s base UoM at posting time and the ledger posts the base quantity; unitCostMinor then refers to one documentUom unit. A UoM with no conversion path is rejected with 422 UOM_CONVERSION_UNDEFINED
+     */
+    documentUom?: string;
+    /**
+     * Quantity received expressed in documentUom; must be supplied together with documentUom
+     */
+    documentQuantity?: number;
+    /**
+     * Serial numbers of the received units (odoo-parity E4). Required for SERIAL-tracked products: the list size must equal the received base quantity (422 SERIAL_COUNT_MISMATCH otherwise), and each serial is enumerated as an in-stock unit. Ignored for untracked and LOT-tracked products
+     */
+    serialNumbers?: Array<string>;
 }
 
 function isOptionalCreateGoodsReceiptLineRequestPropertyOfType(
@@ -73,9 +85,9 @@ export function instanceOfCreateGoodsReceiptLineRequest(value: object): value is
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createCreateGoodsReceiptLineRequestPropertyNames('sku', 'quantityReceived', 'unitCostMinor', );
-    const optionalStringProperties = createCreateGoodsReceiptLineRequestOptionalProperties({ name: 'poLineId', nullable: false }, { name: 'sku', nullable: false }, { name: 'lotNumber', nullable: false }, );
-    const optionalNumberProperties = createCreateGoodsReceiptLineRequestOptionalProperties({ name: 'quantityReceived', nullable: false }, { name: 'unitCostMinor', nullable: false }, );
+    const requiredProperties = createCreateGoodsReceiptLineRequestPropertyNames('sku', 'unitCostMinor', );
+    const optionalStringProperties = createCreateGoodsReceiptLineRequestOptionalProperties({ name: 'poLineId', nullable: false }, { name: 'sku', nullable: false }, { name: 'lotNumber', nullable: false }, { name: 'documentUom', nullable: false }, );
+    const optionalNumberProperties = createCreateGoodsReceiptLineRequestOptionalProperties({ name: 'quantityReceived', nullable: false }, { name: 'unitCostMinor', nullable: false }, { name: 'documentQuantity', nullable: false }, );
     const optionalBooleanProperties = createCreateGoodsReceiptLineRequestOptionalProperties();
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

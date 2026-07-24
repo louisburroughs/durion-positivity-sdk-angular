@@ -41,6 +41,18 @@ export interface AsnLineResponse {
      * Lot or batch number associated with the shipped product
      */
     lotNumber?: string;
+    /**
+     * UoM the line was keyed in when it differed from the product\'s base UoM
+     */
+    documentUom?: string;
+    /**
+     * Quantity as keyed in documentUom; quantityShipped holds the derived base quantity
+     */
+    documentQuantity?: number;
+    /**
+     * Effective base-per-document-unit conversion factor applied at derivation time
+     */
+    conversionFactor?: number;
 }
 
 function isOptionalAsnLineResponsePropertyOfType(
@@ -82,8 +94,8 @@ export function instanceOfAsnLineResponse(value: object): value is AsnLineRespon
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createAsnLineResponsePropertyNames('asnLineId', 'poId', 'sku', 'quantityShipped', );
-    const optionalStringProperties = createAsnLineResponseOptionalProperties({ name: 'asnLineId', nullable: false }, { name: 'poId', nullable: false }, { name: 'sku', nullable: false }, { name: 'unitOfMeasure', nullable: false }, { name: 'lotNumber', nullable: false }, );
-    const optionalNumberProperties = createAsnLineResponseOptionalProperties({ name: 'quantityShipped', nullable: false }, { name: 'quantityReceived', nullable: false }, );
+    const optionalStringProperties = createAsnLineResponseOptionalProperties({ name: 'asnLineId', nullable: false }, { name: 'poId', nullable: false }, { name: 'sku', nullable: false }, { name: 'unitOfMeasure', nullable: false }, { name: 'lotNumber', nullable: false }, { name: 'documentUom', nullable: false }, );
+    const optionalNumberProperties = createAsnLineResponseOptionalProperties({ name: 'quantityShipped', nullable: false }, { name: 'quantityReceived', nullable: false }, { name: 'documentQuantity', nullable: false }, { name: 'conversionFactor', nullable: false }, );
     const optionalBooleanProperties = createAsnLineResponseOptionalProperties();
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

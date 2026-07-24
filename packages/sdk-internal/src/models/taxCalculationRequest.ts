@@ -8,6 +8,7 @@
  * Do not edit the class manually.
  */
 import { TaxLineItem } from './taxLineItem';
+import { CustomerExemption } from './customerExemption';
 import { TaxAddress } from './taxAddress';
 
 
@@ -32,6 +33,15 @@ export interface TaxCalculationRequest {
      * Optional customer identifier for exemption and tax profile lookups
      */
     customerId?: string;
+    customerExemption?: CustomerExemption;
+    /**
+     * Calculation direction: SALE (default) or REFUND. REFUND amounts are positive and priced at the supplied transactionDate (the original sale date); callers negate at posting. Finalized-invoice credits must use the stored breakdown, not REFUND recompute.
+     */
+    calculationType?: TaxCalculationRequestCalculationTypeEnum;
+    /**
+     * Optional reference to the original sale transaction being refunded
+     */
+    originalReferenceId?: string;
     /**
      * Optional transaction date/time in ISO 8601 format
      */
@@ -44,12 +54,20 @@ export interface TaxCalculationRequest {
      * Optional source transaction type associated with referenceId
      */
     referenceType?: TaxCalculationRequestReferenceTypeEnum;
+    /**
+     * True when this calculation will be finalized (committed) rather than a throwaway estimate; requires referenceId to be present
+     */
+    committable?: boolean;
     address?: string;
-    countryCode?: string;
-    postalCode?: string;
     stateCode?: string;
     city?: string;
+    postalCode?: string;
+    countryCode?: string;
 }
+export enum TaxCalculationRequestCalculationTypeEnum {
+    Sale = 'SALE',
+    Refund = 'REFUND'
+};
 export enum TaxCalculationRequestReferenceTypeEnum {
     Estimate = 'ESTIMATE',
     Invoice = 'INVOICE',
@@ -100,9 +118,9 @@ export function instanceOfTaxCalculationRequest(value: object): value is TaxCalc
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createTaxCalculationRequestPropertyNames('lineItems', 'destinationAddress', );
-    const optionalStringProperties = createTaxCalculationRequestOptionalProperties({ name: 'currencyCode', nullable: false }, { name: 'locale', nullable: false }, { name: 'customerId', nullable: false }, { name: 'transactionDate', nullable: false }, { name: 'referenceId', nullable: false }, { name: 'referenceType', nullable: false }, { name: 'address', nullable: false }, { name: 'countryCode', nullable: false }, { name: 'postalCode', nullable: false }, { name: 'stateCode', nullable: false }, { name: 'city', nullable: false }, );
+    const optionalStringProperties = createTaxCalculationRequestOptionalProperties({ name: 'currencyCode', nullable: false }, { name: 'locale', nullable: false }, { name: 'customerId', nullable: false }, { name: 'calculationType', nullable: false }, { name: 'originalReferenceId', nullable: false }, { name: 'transactionDate', nullable: false }, { name: 'referenceId', nullable: false }, { name: 'referenceType', nullable: false }, { name: 'address', nullable: false }, { name: 'stateCode', nullable: false }, { name: 'city', nullable: false }, { name: 'postalCode', nullable: false }, { name: 'countryCode', nullable: false }, );
     const optionalNumberProperties = createTaxCalculationRequestOptionalProperties();
-    const optionalBooleanProperties = createTaxCalculationRequestOptionalProperties();
+    const optionalBooleanProperties = createTaxCalculationRequestOptionalProperties({ name: 'committable', nullable: false }, );
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
         && optionalStringProperties.every((property) => isOptionalTaxCalculationRequestPropertyOfType(_v, property.name, 'string', property.nullable))

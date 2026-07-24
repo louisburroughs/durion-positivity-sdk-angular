@@ -29,6 +29,10 @@ export interface CrossDockRequest {
      * Optional free-text note describing the cross-dock action
      */
     notes?: string;
+    /**
+     * Lot or batch number of the cross-docked stock. Required (422 LOT_NUMBER_REQUIRED) when the product is LOT-tracked (falls back to the lot number already keyed on the receiving line); the lot is found-or-created like any receipt and stamped on BOTH paired ledger entries. Ignored for untracked products
+     */
+    lotNumber?: string;
 }
 
 function isOptionalCrossDockRequestPropertyOfType(
@@ -70,7 +74,7 @@ export function instanceOfCrossDockRequest(value: object): value is CrossDockReq
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createCrossDockRequestPropertyNames('workorderId', 'workorderLineId', 'quantity', );
-    const optionalStringProperties = createCrossDockRequestOptionalProperties({ name: 'workorderId', nullable: false }, { name: 'workorderLineId', nullable: false }, { name: 'notes', nullable: false }, );
+    const optionalStringProperties = createCrossDockRequestOptionalProperties({ name: 'workorderId', nullable: false }, { name: 'workorderLineId', nullable: false }, { name: 'notes', nullable: false }, { name: 'lotNumber', nullable: false }, );
     const optionalNumberProperties = createCrossDockRequestOptionalProperties({ name: 'quantity', nullable: false }, );
     const optionalBooleanProperties = createCrossDockRequestOptionalProperties();
 

@@ -10,30 +10,59 @@
 
 
 /**
- * Request to resolve an inventory shortage on an allocation
+ * Request to resolve an inventory shortage by executing a chosen option
  */
 export interface ShortageResolveRequest { 
+    /**
+     * Retry-safe idempotency key; a replay with the same key returns the original result
+     */
+    idempotencyKey: string;
     /**
      * Identifier of the allocation to resolve
      */
     allocationId: string;
     /**
-     * Identifier of the specific allocation line to resolve, when line-scoped
+     * The resolution option to execute
      */
-    allocationLineId?: string;
+    optionType: ShortageResolveRequestOptionTypeEnum;
     /**
-     * Resolution strategy to apply to the shortage
+     * SKU / stock-item identifier that is short
      */
-    resolution: string;
+    sku: string;
     /**
-     * Substitute stock-keeping unit to use, when the resolution is a substitution
+     * Quantity that is short and to be resolved
+     */
+    shortQuantity: number;
+    /**
+     * Site the demand is short at (required for BACKORDER / TRANSFER_IN)
+     */
+    locationId?: string;
+    /**
+     * Workorder line whose demand was short (required for BACKORDER / SUBSTITUTE / CANCEL_LINE)
+     */
+    workorderLineId?: string;
+    /**
+     * Substitute SKU to reserve; required when optionType is SUBSTITUTE
      */
     substituteSku?: string;
+    /**
+     * Source site to pull surplus from; required when optionType is TRANSFER_IN
+     */
+    sourceLocationId?: string;
     /**
      * Optional free-text notes explaining the resolution
      */
     notes?: string;
 }
+export enum ShortageResolveRequestOptionTypeEnum {
+    Backorder = 'BACKORDER',
+    Substitute = 'SUBSTITUTE',
+    TransferIn = 'TRANSFER_IN',
+    EmergencyPurchase = 'EMERGENCY_PURCHASE',
+    CancelLine = 'CANCEL_LINE'
+};
+
+
 
 function isOptionalShortageResolveRequestPropertyOfType(
     value: Record<string, unknown>,
@@ -73,9 +102,9 @@ export function instanceOfShortageResolveRequest(value: object): value is Shorta
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createShortageResolveRequestPropertyNames('allocationId', 'resolution', );
-    const optionalStringProperties = createShortageResolveRequestOptionalProperties({ name: 'allocationId', nullable: false }, { name: 'allocationLineId', nullable: false }, { name: 'resolution', nullable: false }, { name: 'substituteSku', nullable: false }, { name: 'notes', nullable: false }, );
-    const optionalNumberProperties = createShortageResolveRequestOptionalProperties();
+    const requiredProperties = createShortageResolveRequestPropertyNames('idempotencyKey', 'allocationId', 'optionType', 'sku', 'shortQuantity', );
+    const optionalStringProperties = createShortageResolveRequestOptionalProperties({ name: 'idempotencyKey', nullable: false }, { name: 'allocationId', nullable: false }, { name: 'optionType', nullable: false }, { name: 'sku', nullable: false }, { name: 'locationId', nullable: false }, { name: 'workorderLineId', nullable: false }, { name: 'substituteSku', nullable: false }, { name: 'sourceLocationId', nullable: false }, { name: 'notes', nullable: false }, );
+    const optionalNumberProperties = createShortageResolveRequestOptionalProperties({ name: 'shortQuantity', nullable: false }, );
     const optionalBooleanProperties = createShortageResolveRequestOptionalProperties();
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

@@ -38,6 +38,14 @@ export interface CycleCountPlanResponse {
      */
     status: string;
     /**
+     * Identifier of the recurring schedule that created this plan (null for manual plans)
+     */
+    scheduleId?: string;
+    /**
+     * Due date this schedule-created plan covers (null for manual plans)
+     */
+    dueDate?: string;
+    /**
      * Identifier of the user who created the plan
      */
     createdBy: string;
@@ -90,7 +98,7 @@ export function instanceOfCycleCountPlanResponse(value: object): value is CycleC
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createCycleCountPlanResponsePropertyNames('planId', 'locationId', 'planName', 'scheduledDate', 'status', 'createdBy', 'createdAt', 'updatedAt', );
-    const optionalStringProperties = createCycleCountPlanResponseOptionalProperties({ name: 'planId', nullable: false }, { name: 'locationId', nullable: false }, { name: 'planName', nullable: false }, { name: 'status', nullable: false }, { name: 'createdBy', nullable: false }, );
+    const optionalStringProperties = createCycleCountPlanResponseOptionalProperties({ name: 'planId', nullable: false }, { name: 'locationId', nullable: false }, { name: 'planName', nullable: false }, { name: 'status', nullable: false }, { name: 'scheduleId', nullable: false }, { name: 'createdBy', nullable: false }, );
     const optionalNumberProperties = createCycleCountPlanResponseOptionalProperties();
     const optionalBooleanProperties = createCycleCountPlanResponseOptionalProperties();
 

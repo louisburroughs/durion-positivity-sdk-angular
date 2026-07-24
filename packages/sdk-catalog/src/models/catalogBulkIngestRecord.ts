@@ -41,6 +41,14 @@ export interface CatalogBulkIngestRecord {
      * List price for the item
      */
     price?: number;
+    /**
+     * Manufacturer part number; falls back to the SKU when absent
+     */
+    mpn?: string;
+    /**
+     * Unit of measure for the item; defaults to EA when absent
+     */
+    unitOfMeasure?: string;
 }
 
 function isOptionalCatalogBulkIngestRecordPropertyOfType(
@@ -82,7 +90,7 @@ export function instanceOfCatalogBulkIngestRecord(value: object): value is Catal
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createCatalogBulkIngestRecordPropertyNames('sku', 'name', );
-    const optionalStringProperties = createCatalogBulkIngestRecordOptionalProperties({ name: 'sku', nullable: false }, { name: 'upc', nullable: false }, { name: 'name', nullable: false }, { name: 'description', nullable: false }, { name: 'categoryName', nullable: false }, { name: 'subcategoryName', nullable: false }, );
+    const optionalStringProperties = createCatalogBulkIngestRecordOptionalProperties({ name: 'sku', nullable: false }, { name: 'upc', nullable: false }, { name: 'name', nullable: false }, { name: 'description', nullable: false }, { name: 'categoryName', nullable: false }, { name: 'subcategoryName', nullable: false }, { name: 'mpn', nullable: false }, { name: 'unitOfMeasure', nullable: false }, );
     const optionalNumberProperties = createCatalogBulkIngestRecordOptionalProperties({ name: 'price', nullable: false }, );
     const optionalBooleanProperties = createCatalogBulkIngestRecordOptionalProperties();
 

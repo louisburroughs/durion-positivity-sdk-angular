@@ -63,9 +63,9 @@ export interface LocationResponseDTO {
      */
     active: boolean;
     /**
-     * Identifier of the person responsible for the location
+     * People-contact person identifier of the person responsible for the location
      */
-    responsiblePersonId?: number;
+    responsiblePersonId?: string;
     type?: LocationTypeDTO;
 }
 
@@ -108,8 +108,8 @@ export function instanceOfLocationResponseDTO(value: object): value is LocationR
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createLocationResponseDTOPropertyNames('id', 'name', 'active', );
-    const optionalStringProperties = createLocationResponseDTOOptionalProperties({ name: 'id', nullable: false }, { name: 'name', nullable: false }, { name: 'code', nullable: false }, { name: 'geographicalLocationId', nullable: false }, { name: 'addressLine1', nullable: false }, { name: 'addressLine2', nullable: false }, { name: 'city', nullable: false }, { name: 'state', nullable: false }, { name: 'postalCode', nullable: false }, { name: 'country', nullable: false }, { name: 'mailingAddress', nullable: false }, );
-    const optionalNumberProperties = createLocationResponseDTOOptionalProperties({ name: 'responsiblePersonId', nullable: false }, );
+    const optionalStringProperties = createLocationResponseDTOOptionalProperties({ name: 'id', nullable: false }, { name: 'name', nullable: false }, { name: 'code', nullable: false }, { name: 'geographicalLocationId', nullable: false }, { name: 'addressLine1', nullable: false }, { name: 'addressLine2', nullable: false }, { name: 'city', nullable: false }, { name: 'state', nullable: false }, { name: 'postalCode', nullable: false }, { name: 'country', nullable: false }, { name: 'mailingAddress', nullable: false }, { name: 'responsiblePersonId', nullable: false }, );
+    const optionalNumberProperties = createLocationResponseDTOOptionalProperties();
     const optionalBooleanProperties = createLocationResponseDTOOptionalProperties({ name: 'active', nullable: false }, );
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

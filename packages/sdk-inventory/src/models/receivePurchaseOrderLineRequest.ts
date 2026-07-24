@@ -18,13 +18,25 @@ export interface ReceivePurchaseOrderLineRequest {
      */
     lineId: string;
     /**
-     * Quantity received for this line
+     * Quantity received for this line, in the product\'s base UoM. Required unless documentUom/documentQuantity are supplied, in which case the base quantity is derived and this field is ignored
      */
-    quantityReceived: number;
+    quantityReceived?: number;
     /**
-     * Actual unit cost of the received goods in the smallest currency unit (e.g. cents)
+     * Actual unit cost of the received goods in the smallest currency unit (e.g. cents). When documentUom is present this refers to one documentUom unit
      */
     unitCostMinor?: number;
+    /**
+     * Optional UoM the receipt is keyed in (e.g. CASE). When present, documentQuantity is converted to the product\'s base UoM at posting time; a UoM with no conversion path is rejected with 422 UOM_CONVERSION_UNDEFINED
+     */
+    documentUom?: string;
+    /**
+     * Quantity received expressed in documentUom; must be supplied together with documentUom
+     */
+    documentQuantity?: number;
+    /**
+     * Lot or batch number of the received stock. Required (422 LOT_NUMBER_REQUIRED) when the line\'s product is LOT-tracked per the catalog replica; ignored for tracking purposes otherwise
+     */
+    lotNumber?: string;
 }
 
 function isOptionalReceivePurchaseOrderLineRequestPropertyOfType(
@@ -65,9 +77,9 @@ export function instanceOfReceivePurchaseOrderLineRequest(value: object): value 
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createReceivePurchaseOrderLineRequestPropertyNames('lineId', 'quantityReceived', );
-    const optionalStringProperties = createReceivePurchaseOrderLineRequestOptionalProperties({ name: 'lineId', nullable: false }, );
-    const optionalNumberProperties = createReceivePurchaseOrderLineRequestOptionalProperties({ name: 'quantityReceived', nullable: false }, { name: 'unitCostMinor', nullable: false }, );
+    const requiredProperties = createReceivePurchaseOrderLineRequestPropertyNames('lineId', );
+    const optionalStringProperties = createReceivePurchaseOrderLineRequestOptionalProperties({ name: 'lineId', nullable: false }, { name: 'documentUom', nullable: false }, { name: 'lotNumber', nullable: false }, );
+    const optionalNumberProperties = createReceivePurchaseOrderLineRequestOptionalProperties({ name: 'quantityReceived', nullable: false }, { name: 'unitCostMinor', nullable: false }, { name: 'documentQuantity', nullable: false }, );
     const optionalBooleanProperties = createReceivePurchaseOrderLineRequestOptionalProperties();
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

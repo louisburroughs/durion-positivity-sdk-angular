@@ -113,18 +113,20 @@ export class WorkorderSearchService extends BaseService {
 
     /**
      * Search workorders
-     * Paginated free-text search for workorders matching customer name or workorder id.
+     * Paginated free-text search for workorders matching customer name or workorder id, optionally filtered by exact customer and/or vehicle.
      * @endpoint get /v1/workorders/search
      * @param pageable 
      * @param q Free-text query matching customer name or workorder id (optional)
+     * @param customerId Exact customer id filter, combinable with q (optional)
+     * @param vehicleId Exact vehicle id filter, combinable with q (optional)
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public searchWorkorders(pageable: Pageable, q?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PageWorkorderSearchResult>;
-    public searchWorkorders(pageable: Pageable, q?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PageWorkorderSearchResult>>;
-    public searchWorkorders(pageable: Pageable, q?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PageWorkorderSearchResult>>;
-    public searchWorkorders(pageable: Pageable, q?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public searchWorkorders(pageable: Pageable, q?: string, customerId?: string, vehicleId?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PageWorkorderSearchResult>;
+    public searchWorkorders(pageable: Pageable, q?: string, customerId?: string, vehicleId?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PageWorkorderSearchResult>>;
+    public searchWorkorders(pageable: Pageable, q?: string, customerId?: string, vehicleId?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PageWorkorderSearchResult>>;
+    public searchWorkorders(pageable: Pageable, q?: string, customerId?: string, vehicleId?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (pageable === null || pageable === undefined) {
             throw new Error('Required parameter pageable was null or undefined when calling searchWorkorders.');
         }
@@ -135,6 +137,24 @@ export class WorkorderSearchService extends BaseService {
             localVarQueryParameters,
             'q',
             <any>q,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'customerId',
+            <any>customerId,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'vehicleId',
+            <any>vehicleId,
             QueryParamStyle.Form,
             true,
         );

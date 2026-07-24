@@ -61,9 +61,9 @@ export interface LocationRequestDTO {
      */
     active?: boolean;
     /**
-     * Identifier of the person responsible for the location
+     * People-contact person identifier of the person responsible for the location
      */
-    responsiblePersonId?: number;
+    responsiblePersonId?: string;
     /**
      * IANA timezone identifier for the location
      */
@@ -130,8 +130,8 @@ export function instanceOfLocationRequestDTO(value: object): value is LocationRe
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createLocationRequestDTOPropertyNames('name', 'code', 'type', );
-    const optionalStringProperties = createLocationRequestDTOOptionalProperties({ name: 'name', nullable: false }, { name: 'code', nullable: false }, { name: 'geographicalLocationId', nullable: false }, { name: 'addressLine1', nullable: false }, { name: 'addressLine2', nullable: false }, { name: 'city', nullable: false }, { name: 'state', nullable: false }, { name: 'postalCode', nullable: false }, { name: 'country', nullable: false }, { name: 'mailingAddress', nullable: false }, { name: 'timezone', nullable: false }, );
-    const optionalNumberProperties = createLocationRequestDTOOptionalProperties({ name: 'responsiblePersonId', nullable: false }, { name: 'checkInBufferMinutes', nullable: false }, { name: 'cleanupBufferMinutes', nullable: false }, );
+    const optionalStringProperties = createLocationRequestDTOOptionalProperties({ name: 'name', nullable: false }, { name: 'code', nullable: false }, { name: 'geographicalLocationId', nullable: false }, { name: 'addressLine1', nullable: false }, { name: 'addressLine2', nullable: false }, { name: 'city', nullable: false }, { name: 'state', nullable: false }, { name: 'postalCode', nullable: false }, { name: 'country', nullable: false }, { name: 'mailingAddress', nullable: false }, { name: 'responsiblePersonId', nullable: false }, { name: 'timezone', nullable: false }, );
+    const optionalNumberProperties = createLocationRequestDTOOptionalProperties({ name: 'checkInBufferMinutes', nullable: false }, { name: 'cleanupBufferMinutes', nullable: false }, );
     const optionalBooleanProperties = createLocationRequestDTOOptionalProperties({ name: 'active', nullable: false }, );
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

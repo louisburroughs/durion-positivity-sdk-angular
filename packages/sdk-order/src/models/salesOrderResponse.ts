@@ -19,6 +19,22 @@ export interface SalesOrderResponse {
      */
     orderId: string;
     /**
+     * Human-facing order number assigned at creation
+     */
+    orderNumber?: string;
+    /**
+     * Shop location the order belongs to
+     */
+    locationId?: string;
+    /**
+     * Parking label for resumable drafts
+     */
+    label?: string;
+    /**
+     * CRM validation state of the customer/vehicle references (VALIDATED or PENDING)
+     */
+    customerValidationStatus?: string;
+    /**
      * Identifier of the customer associated with the order
      */
     customerId?: string;
@@ -39,9 +55,61 @@ export interface SalesOrderResponse {
      */
     status: string;
     /**
-     * Subtotal of all order lines before taxes and fees
+     * Σ line subtotals: post-line-discount, pre-order-discount, pre-tax
      */
     subtotal?: number;
+    /**
+     * Σ line discounts + allocated order discount
+     */
+    discountTotal?: number;
+    /**
+     * Total tax (pos-tax authoritative)
+     */
+    taxTotal?: number;
+    /**
+     * subtotal − order discount + taxTotal
+     */
+    grandTotal?: number;
+    /**
+     * True when mutations invalidated taxTotal; cleared by quote/checkout tax recompute
+     */
+    taxStale?: boolean;
+    /**
+     * Order discount flavor (PERCENT or AMOUNT)
+     */
+    orderDiscountType?: string;
+    /**
+     * Order discount value per type
+     */
+    orderDiscountValue?: number;
+    /**
+     * Order discount reason code
+     */
+    orderDiscountReasonCode?: string;
+    /**
+     * Order-level note
+     */
+    generalNote?: string;
+    /**
+     * Quote validity horizon (QUOTED orders)
+     */
+    quoteExpiresAt?: string;
+    /**
+     * Invoice fronting this order, set at checkout
+     */
+    invoiceId?: string;
+    /**
+     * Human-facing invoice number
+     */
+    invoiceNumber?: string;
+    /**
+     * Net settled amount (checkout onward)
+     */
+    amountPaid?: number;
+    /**
+     * Outstanding balance (checkout onward)
+     */
+    balanceDue?: number;
     /**
      * Timestamp when the order was created (ISO 8601)
      */
@@ -103,9 +171,9 @@ export function instanceOfSalesOrderResponse(value: object): value is SalesOrder
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createSalesOrderResponsePropertyNames('orderId', 'status', );
-    const optionalStringProperties = createSalesOrderResponseOptionalProperties({ name: 'orderId', nullable: false }, { name: 'customerId', nullable: false }, { name: 'vehicleId', nullable: false }, { name: 'clerkId', nullable: false }, { name: 'terminalId', nullable: false }, { name: 'status', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'updatedBy', nullable: false }, );
-    const optionalNumberProperties = createSalesOrderResponseOptionalProperties({ name: 'subtotal', nullable: false }, );
-    const optionalBooleanProperties = createSalesOrderResponseOptionalProperties();
+    const optionalStringProperties = createSalesOrderResponseOptionalProperties({ name: 'orderId', nullable: false }, { name: 'orderNumber', nullable: false }, { name: 'locationId', nullable: false }, { name: 'label', nullable: false }, { name: 'customerValidationStatus', nullable: false }, { name: 'customerId', nullable: false }, { name: 'vehicleId', nullable: false }, { name: 'clerkId', nullable: false }, { name: 'terminalId', nullable: false }, { name: 'status', nullable: false }, { name: 'orderDiscountType', nullable: false }, { name: 'orderDiscountReasonCode', nullable: false }, { name: 'generalNote', nullable: false }, { name: 'invoiceId', nullable: false }, { name: 'invoiceNumber', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'updatedBy', nullable: false }, );
+    const optionalNumberProperties = createSalesOrderResponseOptionalProperties({ name: 'subtotal', nullable: false }, { name: 'discountTotal', nullable: false }, { name: 'taxTotal', nullable: false }, { name: 'grandTotal', nullable: false }, { name: 'orderDiscountValue', nullable: false }, { name: 'amountPaid', nullable: false }, { name: 'balanceDue', nullable: false }, );
+    const optionalBooleanProperties = createSalesOrderResponseOptionalProperties({ name: 'taxStale', nullable: false }, );
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
         && optionalStringProperties.every((property) => isOptionalSalesOrderResponsePropertyOfType(_v, property.name, 'string', property.nullable))

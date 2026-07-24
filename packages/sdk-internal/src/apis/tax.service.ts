@@ -22,6 +22,8 @@ import { ModeResponse } from '../src/models/modeResponse';
 import { TaxCalculationRequest } from '../src/models/taxCalculationRequest';
 // @ts-ignore
 import { TaxCalculationResponse } from '../src/models/taxCalculationResponse';
+// @ts-ignore
+import { TaxProviderTransactionResult } from '../src/models/taxProviderTransactionResult';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
@@ -110,6 +112,79 @@ export class TaxService extends BaseService {
     }
 
     /**
+     * Commit tax document
+     * Commit the provider tax document for a finalized invoice. Idempotent; never blocks on provider outage (records PENDING_COMMIT for the re-commit job).
+     * @endpoint post /v1/tax/transactions/{referenceId}/commit
+     * @param referenceId 
+     * @param referenceType 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public commit(referenceId: string, referenceType?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<TaxProviderTransactionResult>;
+    public commit(referenceId: string, referenceType?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<TaxProviderTransactionResult>>;
+    public commit(referenceId: string, referenceType?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<TaxProviderTransactionResult>>;
+    public commit(referenceId: string, referenceType?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (referenceId === null || referenceId === undefined) {
+            throw new Error('Required parameter referenceId was null or undefined when calling commit.');
+        }
+
+        let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'referenceType',
+            <any>referenceType,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/tax/transactions/${this.configuration.encodeParam({name: "referenceId", value: referenceId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/commit`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<TaxProviderTransactionResult>('post', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                params: localVarQueryParameters.toHttpParams(),
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
      * Get tax service mode
      * Check if the tax service is currently in test mode or production mode
      * @endpoint get /v1/tax/mode
@@ -153,6 +228,66 @@ export class TaxService extends BaseService {
         let localVarPath = `/v1/tax/mode`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<ModeResponse>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Void tax document
+     * Void the provider tax document when its invoice reverts to DRAFT (InvoiceStatus has no CANCELLED/VOIDED; void hooks the revert transition).
+     * @endpoint post /v1/tax/transactions/{referenceId}/void
+     * @param referenceId 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public voidTransaction(referenceId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<TaxProviderTransactionResult>;
+    public voidTransaction(referenceId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<TaxProviderTransactionResult>>;
+    public voidTransaction(referenceId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<TaxProviderTransactionResult>>;
+    public voidTransaction(referenceId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (referenceId === null || referenceId === undefined) {
+            throw new Error('Required parameter referenceId was null or undefined when calling voidTransaction.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/tax/transactions/${this.configuration.encodeParam({name: "referenceId", value: referenceId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/void`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<TaxProviderTransactionResult>('post', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,

@@ -18,6 +18,10 @@ export interface CreateAdjustmentRequest {
      */
     stockItemId: string;
     /**
+     * Cycle count task this adjustment settles, if created from a task. Enables approval-time conflict detection and variance recomputation against current on-hand.
+     */
+    taskId?: string;
+    /**
      * Reason code explaining why the adjustment is being made
      */
     reasonCode: string;
@@ -78,7 +82,7 @@ export function instanceOfCreateAdjustmentRequest(value: object): value is Creat
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createCreateAdjustmentRequestPropertyNames('stockItemId', 'reasonCode', 'countedQuantity', 'quantityOnHandBefore', 'costAtTimeOfAdjustment', 'createdByUserId', );
-    const optionalStringProperties = createCreateAdjustmentRequestOptionalProperties({ name: 'stockItemId', nullable: false }, { name: 'reasonCode', nullable: false }, { name: 'createdByUserId', nullable: false }, );
+    const optionalStringProperties = createCreateAdjustmentRequestOptionalProperties({ name: 'stockItemId', nullable: false }, { name: 'taskId', nullable: false }, { name: 'reasonCode', nullable: false }, { name: 'createdByUserId', nullable: false }, );
     const optionalNumberProperties = createCreateAdjustmentRequestOptionalProperties({ name: 'countedQuantity', nullable: false }, { name: 'quantityOnHandBefore', nullable: false }, { name: 'costAtTimeOfAdjustment', nullable: false }, );
     const optionalBooleanProperties = createCreateAdjustmentRequestOptionalProperties();
 

@@ -30,6 +30,7 @@ export * from './refreshTokenRequest';
 export * from './resolveSelfRegistrationReviewCaseRequest';
 export * from './roleAssignmentDto';
 export * from './roleAssignmentRequest';
+export * from './roleDefaultPermissionsResponse';
 export * from './roleDto';
 export * from './rolePermissionGrantRequest';
 export * from './rolePermissionsRequest';

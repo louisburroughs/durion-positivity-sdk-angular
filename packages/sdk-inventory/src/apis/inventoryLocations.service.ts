@@ -41,18 +41,19 @@ export class InventoryLocationsService extends BaseService {
 
     /**
      * Get location inventory summary
-     * Returns on-hand quantity aggregated for a storage location.
+     * Returns on-hand quantity aggregated for a storage location. With \&#39;asOf\&#39;, returns historical on-hand as of that instant by direct ledger aggregation; availableToPromiseQuantity is null because historical allocation state is not reliably reconstructable from ATP-neutral ledger events. As-of requests additionally require the \&#39;inventory:ledger:view\&#39; authority and reject future instants with 422.
      * @endpoint get /v1/inventory/locations/{locationId}/inventory-inquiry
      * @param locationId Storage location identifier
      * @param sku Product SKU filter
+     * @param asOf Optional historical instant (ISO-8601). Returns on-hand as of this instant by direct ledger aggregation; availableToPromiseQuantity is null. Requires \&#39;inventory:ledger:view\&#39;; future instants are rejected (422).
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public getLocationInventory(locationId: string, sku?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<LocationInventoryInquiryResponse>;
-    public getLocationInventory(locationId: string, sku?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<LocationInventoryInquiryResponse>>;
-    public getLocationInventory(locationId: string, sku?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<LocationInventoryInquiryResponse>>;
-    public getLocationInventory(locationId: string, sku?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getLocationInventory(locationId: string, sku?: string, asOf?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<LocationInventoryInquiryResponse>;
+    public getLocationInventory(locationId: string, sku?: string, asOf?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<LocationInventoryInquiryResponse>>;
+    public getLocationInventory(locationId: string, sku?: string, asOf?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<LocationInventoryInquiryResponse>>;
+    public getLocationInventory(locationId: string, sku?: string, asOf?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (locationId === null || locationId === undefined) {
             throw new Error('Required parameter locationId was null or undefined when calling getLocationInventory.');
         }
@@ -63,6 +64,15 @@ export class InventoryLocationsService extends BaseService {
             localVarQueryParameters,
             'sku',
             <any>sku,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'asOf',
+            <any>asOf,
             QueryParamStyle.Form,
             true,
         );
@@ -114,20 +124,32 @@ export class InventoryLocationsService extends BaseService {
 
     /**
      * List location inventory contents
-     * Returns the on-hand stock items (positive quantity) at a storage location.
+     * Returns the on-hand stock items (positive quantity) at a storage location. With \&#39;asOf\&#39;, returns the historical contents as of that instant by direct ledger aggregation. As-of requests additionally require the \&#39;inventory:ledger:view\&#39; authority and reject future instants with 422.
      * @endpoint get /v1/inventory/locations/{locationId}/inventory-items
      * @param locationId Storage location identifier
+     * @param asOf Optional historical instant (ISO-8601). Returns the location contents as of this instant by direct ledger aggregation. Requires \&#39;inventory:ledger:view\&#39;; future instants are rejected (422).
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public listLocationInventoryItems(locationId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<LocationInventoryItemsResponse>;
-    public listLocationInventoryItems(locationId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<LocationInventoryItemsResponse>>;
-    public listLocationInventoryItems(locationId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<LocationInventoryItemsResponse>>;
-    public listLocationInventoryItems(locationId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public listLocationInventoryItems(locationId: string, asOf?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<LocationInventoryItemsResponse>;
+    public listLocationInventoryItems(locationId: string, asOf?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<LocationInventoryItemsResponse>>;
+    public listLocationInventoryItems(locationId: string, asOf?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<LocationInventoryItemsResponse>>;
+    public listLocationInventoryItems(locationId: string, asOf?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (locationId === null || locationId === undefined) {
             throw new Error('Required parameter locationId was null or undefined when calling listLocationInventoryItems.');
         }
+
+        let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'asOf',
+            <any>asOf,
+            QueryParamStyle.Form,
+            true,
+        );
+
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -162,6 +184,7 @@ export class InventoryLocationsService extends BaseService {
         return this.httpClient.request<LocationInventoryItemsResponse>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
+                params: localVarQueryParameters.toHttpParams(),
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,

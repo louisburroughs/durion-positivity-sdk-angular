@@ -25,6 +25,8 @@ import { RoleAssignmentDto } from '../src/models/roleAssignmentDto';
 // @ts-ignore
 import { RoleAssignmentRequest } from '../src/models/roleAssignmentRequest';
 // @ts-ignore
+import { RoleDefaultPermissionsResponse } from '../src/models/roleDefaultPermissionsResponse';
+// @ts-ignore
 import { RoleDto } from '../src/models/roleDto';
 // @ts-ignore
 import { RolePermissionGrantRequest } from '../src/models/rolePermissionGrantRequest';
@@ -1105,6 +1107,126 @@ export class RoleManagementService extends BaseService {
         let localVarPath = `/v1/roles/by-name/${this.configuration.encodeParam({name: "name", value: name, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<RoleDto>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Get a role\&#39;s default permissions
+     * Returns the authority codes (ROLE_* plus domain permission codes) that the given role expands to, used by clients to prebuild per-role tool/permission caches.
+     * @endpoint get /v1/users/roles/{role}/default-permissions
+     * @param role 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public getRoleDefaultPermissions(role: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<RoleDefaultPermissionsResponse>;
+    public getRoleDefaultPermissions(role: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<RoleDefaultPermissionsResponse>>;
+    public getRoleDefaultPermissions(role: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<RoleDefaultPermissionsResponse>>;
+    public getRoleDefaultPermissions(role: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (role === null || role === undefined) {
+            throw new Error('Required parameter role was null or undefined when calling getRoleDefaultPermissions.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/users/roles/${this.configuration.encodeParam({name: "role", value: role, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/default-permissions`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<RoleDefaultPermissionsResponse>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Get a role\&#39;s default permissions
+     * Returns the authority codes (ROLE_* plus domain permission codes) that the given role expands to, used by clients to prebuild per-role tool/permission caches.
+     * @endpoint get /v1/roles/{role}/default-permissions
+     * @param role 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public getRoleDefaultPermissions1(role: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<RoleDefaultPermissionsResponse>;
+    public getRoleDefaultPermissions1(role: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<RoleDefaultPermissionsResponse>>;
+    public getRoleDefaultPermissions1(role: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<RoleDefaultPermissionsResponse>>;
+    public getRoleDefaultPermissions1(role: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (role === null || role === undefined) {
+            throw new Error('Required parameter role was null or undefined when calling getRoleDefaultPermissions1.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/roles/${this.configuration.encodeParam({name: "role", value: role, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/default-permissions`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<RoleDefaultPermissionsResponse>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,

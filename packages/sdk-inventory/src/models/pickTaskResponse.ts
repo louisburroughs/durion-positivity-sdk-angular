@@ -45,6 +45,14 @@ export interface PickTaskResponse {
      * Ordinal position of this task in the pick sequence
      */
     sortOrder: number;
+    /**
+     * Advisory lot suggestion for LOT-tracked SKUs (FIFO by lot receivedAt at the suggested location; FEFO once expiry data exists). Null for untracked SKUs or when no lot has stock
+     */
+    suggestedLotNumber?: string;
+    /**
+     * Identifier of the lot actually keyed at pick confirmation for LOT-tracked SKUs; null for untracked SKUs and before confirmation
+     */
+    pickedLotId?: string;
 }
 export enum PickTaskResponseStatusEnum {
     Pending = 'PENDING',
@@ -94,7 +102,7 @@ export function instanceOfPickTaskResponse(value: object): value is PickTaskResp
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createPickTaskResponsePropertyNames('pickTaskId', 'pickListId', 'skuId', 'locationId', 'quantityRequired', 'quantityPicked', 'status', 'sortOrder', );
-    const optionalStringProperties = createPickTaskResponseOptionalProperties({ name: 'pickTaskId', nullable: false }, { name: 'pickListId', nullable: false }, { name: 'skuId', nullable: false }, { name: 'locationId', nullable: false }, { name: 'status', nullable: false }, );
+    const optionalStringProperties = createPickTaskResponseOptionalProperties({ name: 'pickTaskId', nullable: false }, { name: 'pickListId', nullable: false }, { name: 'skuId', nullable: false }, { name: 'locationId', nullable: false }, { name: 'status', nullable: false }, { name: 'suggestedLotNumber', nullable: false }, { name: 'pickedLotId', nullable: false }, );
     const optionalNumberProperties = createPickTaskResponseOptionalProperties({ name: 'quantityRequired', nullable: false }, { name: 'quantityPicked', nullable: false }, { name: 'sortOrder', nullable: false }, );
     const optionalBooleanProperties = createPickTaskResponseOptionalProperties();
 

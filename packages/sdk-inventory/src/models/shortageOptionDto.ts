@@ -10,7 +10,7 @@
 
 
 /**
- * A candidate option for resolving an inventory shortage on an allocation
+ * A computed option for resolving an inventory shortage on an allocation
  */
 export interface ShortageOptionDto { 
     /**
@@ -18,26 +18,43 @@ export interface ShortageOptionDto {
      */
     allocationId: string;
     /**
-     * Identifier of the specific allocation line, when the option is line-scoped
+     * The computed resolution strategy
      */
-    allocationLineId?: string;
-    /**
-     * Resolution strategy offered for the shortage
-     */
-    resolution: string;
+    optionType: ShortageOptionDtoOptionTypeEnum;
     /**
      * Human-readable description of the resolution option
      */
     description: string;
     /**
-     * Substitute stock-keeping unit offered, when the resolution is a substitution
+     * Substitute stock-keeping unit offered, when the option is SUBSTITUTE
      */
     substituteSku?: string;
     /**
-     * Estimated number of days to fulfill using this option
+     * Source site surplus can be pulled from, when the option is TRANSFER_IN
      */
-    estimatedDays: number;
+    sourceLocationId?: string;
+    /**
+     * Quantity available toward the shortage for SUBSTITUTE / TRANSFER_IN options
+     */
+    availableQuantity?: number;
+    /**
+     * Estimated date the shortage would be resolved via this option
+     */
+    expectedResolutionDate?: string;
+    /**
+     * Per-unit cost delta versus the original SKU, when computable (positive = costs more)
+     */
+    costDelta?: number;
 }
+export enum ShortageOptionDtoOptionTypeEnum {
+    Backorder = 'BACKORDER',
+    Substitute = 'SUBSTITUTE',
+    TransferIn = 'TRANSFER_IN',
+    EmergencyPurchase = 'EMERGENCY_PURCHASE',
+    CancelLine = 'CANCEL_LINE'
+};
+
+
 
 function isOptionalShortageOptionDtoPropertyOfType(
     value: Record<string, unknown>,
@@ -77,9 +94,9 @@ export function instanceOfShortageOptionDto(value: object): value is ShortageOpt
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createShortageOptionDtoPropertyNames('allocationId', 'resolution', 'description', 'estimatedDays', );
-    const optionalStringProperties = createShortageOptionDtoOptionalProperties({ name: 'allocationId', nullable: false }, { name: 'allocationLineId', nullable: false }, { name: 'resolution', nullable: false }, { name: 'description', nullable: false }, { name: 'substituteSku', nullable: false }, );
-    const optionalNumberProperties = createShortageOptionDtoOptionalProperties({ name: 'estimatedDays', nullable: false }, );
+    const requiredProperties = createShortageOptionDtoPropertyNames('allocationId', 'optionType', 'description', );
+    const optionalStringProperties = createShortageOptionDtoOptionalProperties({ name: 'allocationId', nullable: false }, { name: 'optionType', nullable: false }, { name: 'description', nullable: false }, { name: 'substituteSku', nullable: false }, { name: 'sourceLocationId', nullable: false }, );
+    const optionalNumberProperties = createShortageOptionDtoOptionalProperties({ name: 'availableQuantity', nullable: false }, { name: 'costDelta', nullable: false }, );
     const optionalBooleanProperties = createShortageOptionDtoOptionalProperties();
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

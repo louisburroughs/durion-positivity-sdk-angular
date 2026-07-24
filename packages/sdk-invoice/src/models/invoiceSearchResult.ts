@@ -50,7 +50,8 @@ export enum InvoiceSearchResultStatusEnum {
     Draft = 'DRAFT',
     Finalized = 'FINALIZED',
     Posted = 'POSTED',
-    Error = 'ERROR'
+    Error = 'ERROR',
+    Cancelled = 'CANCELLED'
 };
 
 

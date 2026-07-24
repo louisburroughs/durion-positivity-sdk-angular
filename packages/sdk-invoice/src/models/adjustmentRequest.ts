@@ -29,11 +29,16 @@ export interface AdjustmentRequest {
      * Identifier of the actor who authorized the adjustment
      */
     authorizedBy: string;
+    /**
+     * Optional correlation id to an external record (e.g. a warranty claim code)
+     */
+    externalReference?: string;
 }
 export enum AdjustmentRequestTypeEnum {
     Discount = 'DISCOUNT',
     Fee = 'FEE',
-    Correction = 'CORRECTION'
+    Correction = 'CORRECTION',
+    Warranty = 'WARRANTY'
 };
 
 
@@ -77,7 +82,7 @@ export function instanceOfAdjustmentRequest(value: object): value is AdjustmentR
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createAdjustmentRequestPropertyNames('type', 'amount', 'reason', 'authorizedBy', );
-    const optionalStringProperties = createAdjustmentRequestOptionalProperties({ name: 'type', nullable: false }, { name: 'reason', nullable: false }, { name: 'authorizedBy', nullable: false }, );
+    const optionalStringProperties = createAdjustmentRequestOptionalProperties({ name: 'type', nullable: false }, { name: 'reason', nullable: false }, { name: 'authorizedBy', nullable: false }, { name: 'externalReference', nullable: false }, );
     const optionalNumberProperties = createAdjustmentRequestOptionalProperties({ name: 'amount', nullable: false }, );
     const optionalBooleanProperties = createAdjustmentRequestOptionalProperties();
 

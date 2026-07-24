@@ -25,6 +25,10 @@ export interface ConsumeItemLine {
      * Quantity of the SKU to consume
      */
     quantity: number;
+    /**
+     * Optional lot override for LOT-tracked SKUs: must reference an existing (422 LOT_UNKNOWN) ACTIVE (422 LOT_NOT_AVAILABLE) lot. When absent, the lot recorded at pick confirmation is used; a LOT-tracked SKU with neither is rejected (422 LOT_NUMBER_REQUIRED). Ignored for untracked SKUs
+     */
+    lotNumber?: string;
 }
 
 function isOptionalConsumeItemLinePropertyOfType(
@@ -66,7 +70,7 @@ export function instanceOfConsumeItemLine(value: object): value is ConsumeItemLi
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createConsumeItemLinePropertyNames('pickTaskId', 'skuId', 'quantity', );
-    const optionalStringProperties = createConsumeItemLineOptionalProperties({ name: 'pickTaskId', nullable: false }, { name: 'skuId', nullable: false }, );
+    const optionalStringProperties = createConsumeItemLineOptionalProperties({ name: 'pickTaskId', nullable: false }, { name: 'skuId', nullable: false }, { name: 'lotNumber', nullable: false }, );
     const optionalNumberProperties = createConsumeItemLineOptionalProperties({ name: 'quantity', nullable: false }, );
     const optionalBooleanProperties = createConsumeItemLineOptionalProperties();
 

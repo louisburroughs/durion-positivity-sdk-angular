@@ -18,13 +18,17 @@ export interface RefundPaymentResponse {
      */
     refundId: string;
     /**
-     * Identifier of the invoice being refunded
+     * Identifier of the invoice being refunded; absent for party-anchored standalone refunds
      */
-    invoiceId: string;
+    invoiceId?: string;
     /**
-     * Identifier of the originating payment intent
+     * Identifier of the originating payment intent; absent for standalone refunds
      */
     paymentIntentId?: string;
+    /**
+     * Customer party associated with the refund — the anchor for standalone refunds, derived from the invoice for invoice- and payment-anchored refunds
+     */
+    partyId?: string;
     /**
      * Refunded amount
      */
@@ -45,6 +49,10 @@ export interface RefundPaymentResponse {
      * Gateway reference identifier for the refund
      */
     gatewayReference?: string;
+    /**
+     * Optional correlation id to an external record (e.g. a warranty claim settlement)
+     */
+    externalReference?: string;
     /**
      * Timestamp when the refund completed
      */
@@ -107,8 +115,8 @@ export function instanceOfRefundPaymentResponse(value: object): value is RefundP
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createRefundPaymentResponsePropertyNames('refundId', 'invoiceId', 'status', );
-    const optionalStringProperties = createRefundPaymentResponseOptionalProperties({ name: 'refundId', nullable: false }, { name: 'invoiceId', nullable: false }, { name: 'paymentIntentId', nullable: false }, { name: 'reason', nullable: false }, { name: 'notes', nullable: false }, { name: 'status', nullable: false }, { name: 'gatewayReference', nullable: false }, );
+    const requiredProperties = createRefundPaymentResponsePropertyNames('refundId', 'status', );
+    const optionalStringProperties = createRefundPaymentResponseOptionalProperties({ name: 'refundId', nullable: false }, { name: 'invoiceId', nullable: false }, { name: 'paymentIntentId', nullable: false }, { name: 'partyId', nullable: false }, { name: 'reason', nullable: false }, { name: 'notes', nullable: false }, { name: 'status', nullable: false }, { name: 'gatewayReference', nullable: false }, { name: 'externalReference', nullable: false }, );
     const optionalNumberProperties = createRefundPaymentResponseOptionalProperties({ name: 'amount', nullable: false }, );
     const optionalBooleanProperties = createRefundPaymentResponseOptionalProperties();
 

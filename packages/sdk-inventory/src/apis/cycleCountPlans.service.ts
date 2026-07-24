@@ -20,6 +20,8 @@ import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 import { CreateCycleCountPlanRequest } from '../src/models/createCycleCountPlanRequest';
 // @ts-ignore
 import { CycleCountPlanResponse } from '../src/models/cycleCountPlanResponse';
+// @ts-ignore
+import { UpdateCycleCountPlanStatusRequest } from '../src/models/updateCycleCountPlanStatusRequest';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
@@ -256,6 +258,80 @@ export class CycleCountPlansService extends BaseService {
             {
                 context: localVarHttpContext,
                 params: localVarQueryParameters.toHttpParams(),
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Transition cycle count plan status
+     * Moves a plan through its lifecycle (PLANNED → STARTED → COMPLETED_PENDING_APPROVAL → APPROVED/REJECTED; PLANNED/STARTED may be CANCELLED). Approving a schedule-created plan restamps the originating schedule\&#39;s next due date (odoo-parity I1, #1031).
+     * @endpoint put /v1/inventory/cycleCountPlans/{planId}/status
+     * @param planId Cycle count plan identifier
+     * @param updateCycleCountPlanStatusRequest 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public updatePlanStatus(planId: string, updateCycleCountPlanStatusRequest: UpdateCycleCountPlanStatusRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<CycleCountPlanResponse>;
+    public updatePlanStatus(planId: string, updateCycleCountPlanStatusRequest: UpdateCycleCountPlanStatusRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<CycleCountPlanResponse>>;
+    public updatePlanStatus(planId: string, updateCycleCountPlanStatusRequest: UpdateCycleCountPlanStatusRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<CycleCountPlanResponse>>;
+    public updatePlanStatus(planId: string, updateCycleCountPlanStatusRequest: UpdateCycleCountPlanStatusRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (planId === null || planId === undefined) {
+            throw new Error('Required parameter planId was null or undefined when calling updatePlanStatus.');
+        }
+        if (updateCycleCountPlanStatusRequest === null || updateCycleCountPlanStatusRequest === undefined) {
+            throw new Error('Required parameter updateCycleCountPlanStatusRequest was null or undefined when calling updatePlanStatus.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/inventory/cycleCountPlans/${this.configuration.encodeParam({name: "planId", value: planId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/status`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<CycleCountPlanResponse>('put', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                body: updateCycleCountPlanStatusRequest,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,

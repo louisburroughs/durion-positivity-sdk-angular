@@ -38,9 +38,9 @@ export interface EstimateResponse {
      */
     currencyUomId?: string;
     /**
-     * Tax region ID
+     * Whether tax is pending because the tax service was unavailable at calculation time (degraded estimate; no rate invented). Cleared by a successful recalculation.
      */
-    taxRegionId?: string;
+    taxPending?: boolean;
     /**
      * Estimate status
      */
@@ -162,9 +162,9 @@ export function instanceOfEstimateResponse(value: object): value is EstimateResp
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createEstimateResponsePropertyNames('id', 'estimateNumber', 'status', );
-    const optionalStringProperties = createEstimateResponseOptionalProperties({ name: 'id', nullable: false }, { name: 'estimateNumber', nullable: false }, { name: 'customerId', nullable: false }, { name: 'vehicleId', nullable: false }, { name: 'locationId', nullable: false }, { name: 'currencyUomId', nullable: false }, { name: 'taxRegionId', nullable: false }, { name: 'status', nullable: false }, { name: 'createdByUserId', nullable: false }, { name: 'submittedBy', nullable: false }, { name: 'approvedBy', nullable: false }, { name: 'signatureData', nullable: false }, { name: 'signatureMimeType', nullable: false }, { name: 'signerName', nullable: false }, { name: 'approvalNotes', nullable: false }, { name: 'purchaseOrderNumber', nullable: false }, { name: 'crmPartyId', nullable: false }, { name: 'crmVehicleId', nullable: false }, );
+    const optionalStringProperties = createEstimateResponseOptionalProperties({ name: 'id', nullable: false }, { name: 'estimateNumber', nullable: false }, { name: 'customerId', nullable: false }, { name: 'vehicleId', nullable: false }, { name: 'locationId', nullable: false }, { name: 'currencyUomId', nullable: false }, { name: 'status', nullable: false }, { name: 'createdByUserId', nullable: false }, { name: 'submittedBy', nullable: false }, { name: 'approvedBy', nullable: false }, { name: 'signatureData', nullable: false }, { name: 'signatureMimeType', nullable: false }, { name: 'signerName', nullable: false }, { name: 'approvalNotes', nullable: false }, { name: 'purchaseOrderNumber', nullable: false }, { name: 'crmPartyId', nullable: false }, { name: 'crmVehicleId', nullable: false }, );
     const optionalNumberProperties = createEstimateResponseOptionalProperties({ name: 'subtotal', nullable: false }, { name: 'taxAmount', nullable: false }, { name: 'total', nullable: false }, { name: 'version', nullable: false }, );
-    const optionalBooleanProperties = createEstimateResponseOptionalProperties();
+    const optionalBooleanProperties = createEstimateResponseOptionalProperties({ name: 'taxPending', nullable: false }, );
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
         && optionalStringProperties.every((property) => isOptionalEstimateResponsePropertyOfType(_v, property.name, 'string', property.nullable))

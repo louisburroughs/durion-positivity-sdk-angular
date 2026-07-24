@@ -14,6 +14,10 @@
  */
 export interface AdjustmentResponse { 
     /**
+     * Cycle count task this adjustment settles, if created from a task
+     */
+    taskId?: string;
+    /**
      * Unique identifier of the adjustment record
      */
     adjustmentId: string;
@@ -156,7 +160,7 @@ export function instanceOfAdjustmentResponse(value: object): value is Adjustment
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createAdjustmentResponsePropertyNames('adjustmentId', 'stockItemId', 'reasonCode', 'quantityChange', 'costAtTimeOfAdjustment', 'quantityOnHandBefore', 'countedQuantity', 'status', 'createdByUserId', 'createdAt', 'updatedAt', );
-    const optionalStringProperties = createAdjustmentResponseOptionalProperties({ name: 'adjustmentId', nullable: false }, { name: 'stockItemId', nullable: false }, { name: 'reasonCode', nullable: false }, { name: 'status', nullable: false }, { name: 'requiredApprovalTier', nullable: false }, { name: 'createdByUserId', nullable: false }, { name: 'approvedByUserId', nullable: false }, { name: 'rejectedByUserId', nullable: false }, { name: 'rejectionReason', nullable: false }, { name: 'ledgerEntryId', nullable: false }, { name: 'errorMessage', nullable: false }, );
+    const optionalStringProperties = createAdjustmentResponseOptionalProperties({ name: 'taskId', nullable: false }, { name: 'adjustmentId', nullable: false }, { name: 'stockItemId', nullable: false }, { name: 'reasonCode', nullable: false }, { name: 'status', nullable: false }, { name: 'requiredApprovalTier', nullable: false }, { name: 'createdByUserId', nullable: false }, { name: 'approvedByUserId', nullable: false }, { name: 'rejectedByUserId', nullable: false }, { name: 'rejectionReason', nullable: false }, { name: 'ledgerEntryId', nullable: false }, { name: 'errorMessage', nullable: false }, );
     const optionalNumberProperties = createAdjustmentResponseOptionalProperties({ name: 'quantityChange', nullable: false }, { name: 'costAtTimeOfAdjustment', nullable: false }, { name: 'quantityOnHandBefore', nullable: false }, { name: 'countedQuantity', nullable: false }, { name: 'varianceValue', nullable: false }, { name: 'variancePercentage', nullable: false }, );
     const optionalBooleanProperties = createAdjustmentResponseOptionalProperties();
 

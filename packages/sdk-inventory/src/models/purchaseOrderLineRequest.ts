@@ -26,9 +26,9 @@ export interface PurchaseOrderLineRequest {
      */
     description: string;
     /**
-     * Quantity of the item being ordered on this line
+     * Quantity of the item being ordered on this line, in the product\'s base UoM. Required unless documentUom/documentQuantity are supplied, in which case the base quantity is derived and this field is ignored
      */
-    quantity: number;
+    quantity?: number;
     /**
      * Unit cost of the item in the smallest currency unit (e.g. cents)
      */
@@ -41,6 +41,14 @@ export interface PurchaseOrderLineRequest {
      * Identifier of the general ledger account this line posts to
      */
     glAccountId?: string;
+    /**
+     * Optional UoM the line is keyed in (e.g. CASE). When present, documentQuantity is converted to the product\'s base UoM at derivation time via the catalog conversion factors; unitCostMinor then refers to one documentUom unit. A UoM with no conversion path is rejected with 422 UOM_CONVERSION_UNDEFINED
+     */
+    documentUom?: string;
+    /**
+     * Quantity ordered expressed in documentUom; must be supplied together with documentUom
+     */
+    documentQuantity?: number;
 }
 
 function isOptionalPurchaseOrderLineRequestPropertyOfType(
@@ -81,9 +89,9 @@ export function instanceOfPurchaseOrderLineRequest(value: object): value is Purc
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createPurchaseOrderLineRequestPropertyNames('lineNumber', 'description', 'quantity', 'unitCostMinor', );
-    const optionalStringProperties = createPurchaseOrderLineRequestOptionalProperties({ name: 'skuId', nullable: false }, { name: 'description', nullable: false }, { name: 'taxCodeId', nullable: false }, { name: 'glAccountId', nullable: false }, );
-    const optionalNumberProperties = createPurchaseOrderLineRequestOptionalProperties({ name: 'lineNumber', nullable: false }, { name: 'quantity', nullable: false }, { name: 'unitCostMinor', nullable: false }, );
+    const requiredProperties = createPurchaseOrderLineRequestPropertyNames('lineNumber', 'description', 'unitCostMinor', );
+    const optionalStringProperties = createPurchaseOrderLineRequestOptionalProperties({ name: 'skuId', nullable: false }, { name: 'description', nullable: false }, { name: 'taxCodeId', nullable: false }, { name: 'glAccountId', nullable: false }, { name: 'documentUom', nullable: false }, );
+    const optionalNumberProperties = createPurchaseOrderLineRequestOptionalProperties({ name: 'lineNumber', nullable: false }, { name: 'quantity', nullable: false }, { name: 'unitCostMinor', nullable: false }, { name: 'documentQuantity', nullable: false }, );
     const optionalBooleanProperties = createPurchaseOrderLineRequestOptionalProperties();
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

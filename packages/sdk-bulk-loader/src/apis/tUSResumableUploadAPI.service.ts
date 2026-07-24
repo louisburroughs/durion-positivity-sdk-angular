@@ -35,7 +35,7 @@ export class TUSResumableUploadAPIService extends BaseService {
 
     /**
      * Create a resumable upload
-     * Creates a new TUS upload scoped to a bulk load job. Returns a Location header with the upload URL for subsequent HEAD and PATCH requests.
+     * Creates a new TUS upload scoped to a bulk load job. Returns a Location header with the absolute upload URL for subsequent HEAD and PATCH requests. The URL is reconstructed from the X-Forwarded-Proto/Host/Port/Prefix headers supplied by the API gateway / reverse-proxy chain, so it reflects the public address (including any proxy path prefix) rather than this service\&#39;s internal one.
      * @endpoint post /v1/bulk-jobs/{jobId}/tus
      * @param jobId 
      * @param uploadLength 

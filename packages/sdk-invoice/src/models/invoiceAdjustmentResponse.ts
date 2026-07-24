@@ -34,6 +34,10 @@ export interface InvoiceAdjustmentResponse {
      */
     authorizedBy?: string;
     /**
+     * Optional correlation id to an external record (e.g. a warranty claim code)
+     */
+    externalReference?: string;
+    /**
      * Timestamp when the adjustment was created
      */
     createdAt?: string;
@@ -41,7 +45,8 @@ export interface InvoiceAdjustmentResponse {
 export enum InvoiceAdjustmentResponseTypeEnum {
     Discount = 'DISCOUNT',
     Fee = 'FEE',
-    Correction = 'CORRECTION'
+    Correction = 'CORRECTION',
+    Warranty = 'WARRANTY'
 };
 
 
@@ -85,7 +90,7 @@ export function instanceOfInvoiceAdjustmentResponse(value: object): value is Inv
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createInvoiceAdjustmentResponsePropertyNames();
-    const optionalStringProperties = createInvoiceAdjustmentResponseOptionalProperties({ name: 'id', nullable: false }, { name: 'type', nullable: false }, { name: 'reason', nullable: false }, { name: 'authorizedBy', nullable: false }, );
+    const optionalStringProperties = createInvoiceAdjustmentResponseOptionalProperties({ name: 'id', nullable: false }, { name: 'type', nullable: false }, { name: 'reason', nullable: false }, { name: 'authorizedBy', nullable: false }, { name: 'externalReference', nullable: false }, );
     const optionalNumberProperties = createInvoiceAdjustmentResponseOptionalProperties({ name: 'amount', nullable: false }, );
     const optionalBooleanProperties = createInvoiceAdjustmentResponseOptionalProperties();
 

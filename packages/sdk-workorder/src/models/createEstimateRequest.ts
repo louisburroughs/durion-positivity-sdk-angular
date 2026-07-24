@@ -30,10 +30,6 @@ export interface CreateEstimateRequest {
      */
     currencyUomId?: string;
     /**
-     * Optional tax region identifier; defaults when omitted
-     */
-    taxRegionId?: string;
-    /**
      * Optional subtotal amount before tax
      */
     subtotal?: number;
@@ -98,7 +94,7 @@ export function instanceOfCreateEstimateRequest(value: object): value is CreateE
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createCreateEstimateRequestPropertyNames('customerId', 'vehicleId', 'crmPartyId', 'crmVehicleId', 'crmContactIds', );
-    const optionalStringProperties = createCreateEstimateRequestOptionalProperties({ name: 'customerId', nullable: false }, { name: 'vehicleId', nullable: false }, { name: 'locationId', nullable: false }, { name: 'currencyUomId', nullable: false }, { name: 'taxRegionId', nullable: false }, { name: 'crmPartyId', nullable: false }, { name: 'crmVehicleId', nullable: false }, );
+    const optionalStringProperties = createCreateEstimateRequestOptionalProperties({ name: 'customerId', nullable: false }, { name: 'vehicleId', nullable: false }, { name: 'locationId', nullable: false }, { name: 'currencyUomId', nullable: false }, { name: 'crmPartyId', nullable: false }, { name: 'crmVehicleId', nullable: false }, );
     const optionalNumberProperties = createCreateEstimateRequestOptionalProperties({ name: 'subtotal', nullable: false }, { name: 'taxAmount', nullable: false }, { name: 'total', nullable: false }, );
     const optionalBooleanProperties = createCreateEstimateRequestOptionalProperties();
 

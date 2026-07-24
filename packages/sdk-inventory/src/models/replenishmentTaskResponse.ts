@@ -54,6 +54,10 @@ export interface ReplenishmentTaskResponse {
      */
     assignedTo?: string;
     /**
+     * Earliest date at which the projected available quantity goes below zero (stock-out deadline used for prioritization); absent when no stock-out is projected within the lead-time horizon
+     */
+    deadlineDate?: string;
+    /**
      * Timestamp at which the replenishment task was created
      */
     createdAt: string;
@@ -98,7 +102,7 @@ export function instanceOfReplenishmentTaskResponse(value: object): value is Rep
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createReplenishmentTaskResponsePropertyNames('taskId', 'itemSKU', 'quantity', 'destinationLocationId', 'status', 'createdAt', );
-    const optionalStringProperties = createReplenishmentTaskResponseOptionalProperties({ name: 'taskId', nullable: false }, { name: 'itemSKU', nullable: false }, { name: 'sourceLocationId', nullable: false }, { name: 'destinationLocationId', nullable: false }, { name: 'status', nullable: false }, { name: 'triggerType', nullable: false }, { name: 'decisionReason', nullable: false }, { name: 'sourcingReason', nullable: false }, { name: 'assignedTo', nullable: false }, { name: 'createdAt', nullable: false }, );
+    const optionalStringProperties = createReplenishmentTaskResponseOptionalProperties({ name: 'taskId', nullable: false }, { name: 'itemSKU', nullable: false }, { name: 'sourceLocationId', nullable: false }, { name: 'destinationLocationId', nullable: false }, { name: 'status', nullable: false }, { name: 'triggerType', nullable: false }, { name: 'decisionReason', nullable: false }, { name: 'sourcingReason', nullable: false }, { name: 'assignedTo', nullable: false }, { name: 'deadlineDate', nullable: false }, { name: 'createdAt', nullable: false }, );
     const optionalNumberProperties = createReplenishmentTaskResponseOptionalProperties({ name: 'quantity', nullable: false }, );
     const optionalBooleanProperties = createReplenishmentTaskResponseOptionalProperties();
 

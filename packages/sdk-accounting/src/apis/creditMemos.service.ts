@@ -17,6 +17,8 @@ import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
 // @ts-ignore
+import { ApiError } from '../src/models/apiError';
+// @ts-ignore
 import { CreateCreditMemoRequest } from '../src/models/createCreditMemoRequest';
 // @ts-ignore
 import { CreditMemoResponse } from '../src/models/creditMemoResponse';
@@ -24,6 +26,8 @@ import { CreditMemoResponse } from '../src/models/creditMemoResponse';
 import { PageCreditMemoResponse } from '../src/models/pageCreditMemoResponse';
 // @ts-ignore
 import { Pageable } from '../src/models/pageable';
+// @ts-ignore
+import { VoidCreditMemoRequest } from '../src/models/voidCreditMemoRequest';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
@@ -263,6 +267,80 @@ export class CreditMemosService extends BaseService {
             {
                 context: localVarHttpContext,
                 params: localVarQueryParameters.toHttpParams(),
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Void a posted credit memo
+     * Void a POSTED Credit Memo: posts the mirror GL entry (Dr AR / Cr Revenue + Cr Sales-Tax Payable) dated at void time and restores the invoice\&#39;s outstanding balance. The memo\&#39;s original posting-period figures are never restated; the tax-liability report restores the reversed tax in the void\&#39;s period. Only POSTED memos are voidable — APPLIED memos have been consumed and VOIDED is terminal.
+     * @endpoint post /v1/accounting/credit-memos/{creditMemoId}/void
+     * @param creditMemoId Credit Memo id
+     * @param voidCreditMemoRequest 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public voidCreditMemo(creditMemoId: string, voidCreditMemoRequest: VoidCreditMemoRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<CreditMemoResponse>;
+    public voidCreditMemo(creditMemoId: string, voidCreditMemoRequest: VoidCreditMemoRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<CreditMemoResponse>>;
+    public voidCreditMemo(creditMemoId: string, voidCreditMemoRequest: VoidCreditMemoRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<CreditMemoResponse>>;
+    public voidCreditMemo(creditMemoId: string, voidCreditMemoRequest: VoidCreditMemoRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (creditMemoId === null || creditMemoId === undefined) {
+            throw new Error('Required parameter creditMemoId was null or undefined when calling voidCreditMemo.');
+        }
+        if (voidCreditMemoRequest === null || voidCreditMemoRequest === undefined) {
+            throw new Error('Required parameter voidCreditMemoRequest was null or undefined when calling voidCreditMemo.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/accounting/credit-memos/${this.configuration.encodeParam({name: "creditMemoId", value: creditMemoId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/void`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<CreditMemoResponse>('post', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                body: voidCreditMemoRequest,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,

@@ -18,6 +18,18 @@ export interface CreateCartRequest {
      */
     clerkId: string;
     /**
+     * Shop location the cart is created at; drives order-number assignment. Optional when the terminal has an open register session (the session supplies the location); required otherwise.
+     */
+    locationId?: string;
+    /**
+     * Optional parking label for resumable drafts
+     */
+    label?: string;
+    /**
+     * Optional order-level note
+     */
+    generalNote?: string;
+    /**
      * Identifier of the terminal where the cart is created
      */
     terminalId: string;
@@ -29,7 +41,22 @@ export interface CreateCartRequest {
      * Identifier of the vehicle associated with the cart, when applicable
      */
     vehicleId?: string;
+    /**
+     * When this cart takes a deposit / down payment (odoo-parity story E4), the source document type it is held against; pos-invoice registers a deposit credit at checkout.
+     */
+    depositSourceType?: CreateCartRequestDepositSourceTypeEnum;
+    /**
+     * Source document id the deposit is held against (required with depositSourceType).
+     */
+    depositSourceId?: string;
 }
+export enum CreateCartRequestDepositSourceTypeEnum {
+    Estimate = 'ESTIMATE',
+    Workorder = 'WORKORDER',
+    Order = 'ORDER'
+};
+
+
 
 function isOptionalCreateCartRequestPropertyOfType(
     value: Record<string, unknown>,
@@ -70,7 +97,7 @@ export function instanceOfCreateCartRequest(value: object): value is CreateCartR
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createCreateCartRequestPropertyNames('clerkId', 'terminalId', );
-    const optionalStringProperties = createCreateCartRequestOptionalProperties({ name: 'clerkId', nullable: false }, { name: 'terminalId', nullable: false }, { name: 'customerId', nullable: false }, { name: 'vehicleId', nullable: false }, );
+    const optionalStringProperties = createCreateCartRequestOptionalProperties({ name: 'clerkId', nullable: false }, { name: 'locationId', nullable: false }, { name: 'label', nullable: false }, { name: 'generalNote', nullable: false }, { name: 'terminalId', nullable: false }, { name: 'customerId', nullable: false }, { name: 'vehicleId', nullable: false }, { name: 'depositSourceType', nullable: false }, { name: 'depositSourceId', nullable: false }, );
     const optionalNumberProperties = createCreateCartRequestOptionalProperties();
     const optionalBooleanProperties = createCreateCartRequestOptionalProperties();
 

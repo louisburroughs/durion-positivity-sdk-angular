@@ -41,7 +41,24 @@ export interface TaxLineItem {
      * Whether this item is tax-exempt
      */
     taxExempt?: boolean;
+    /**
+     * Optional certificate-backed exemption reason for this line (RESALE, GOVERNMENT, NONPROFIT, AGRICULTURAL, OTHER)
+     */
+    exemptionReasonCode?: TaxLineItemExemptionReasonCodeEnum;
+    /**
+     * Optional exemption-certificate identifier backing this line\'s exemption claim
+     */
+    exemptionCertificateId?: string;
 }
+export enum TaxLineItemExemptionReasonCodeEnum {
+    Resale = 'RESALE',
+    Government = 'GOVERNMENT',
+    Nonprofit = 'NONPROFIT',
+    Agricultural = 'AGRICULTURAL',
+    Other = 'OTHER'
+};
+
+
 
 function isOptionalTaxLineItemPropertyOfType(
     value: Record<string, unknown>,
@@ -82,7 +99,7 @@ export function instanceOfTaxLineItem(value: object): value is TaxLineItem {
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createTaxLineItemPropertyNames('lineItemId', 'description', 'quantity', 'unitPrice', );
-    const optionalStringProperties = createTaxLineItemOptionalProperties({ name: 'lineItemId', nullable: false }, { name: 'description', nullable: false }, { name: 'taxCategory', nullable: false }, );
+    const optionalStringProperties = createTaxLineItemOptionalProperties({ name: 'lineItemId', nullable: false }, { name: 'description', nullable: false }, { name: 'taxCategory', nullable: false }, { name: 'exemptionReasonCode', nullable: false }, { name: 'exemptionCertificateId', nullable: false }, );
     const optionalNumberProperties = createTaxLineItemOptionalProperties({ name: 'quantity', nullable: false }, { name: 'unitPrice', nullable: false }, { name: 'subtotal', nullable: false }, );
     const optionalBooleanProperties = createTaxLineItemOptionalProperties({ name: 'taxExempt', nullable: false }, );
 

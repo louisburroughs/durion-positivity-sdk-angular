@@ -26,9 +26,21 @@ export interface LocationAvailabilityDto {
      */
     onHandQuantity: number;
     /**
-     * Available-to-promise quantity at the location
+     * Available-to-promise quantity at the location. Null for as-of (historical) requests: historical allocation state is not reliably reconstructable from ATP-neutral ledger events, so as-of responses carry on-hand only.
      */
-    availableToPromiseQuantity: number;
+    availableToPromiseQuantity?: number;
+    /**
+     * Open expected supply at the site: approved purchase-order open line quantity plus un-received ASN remainder. Bounded by the \'horizon\' query parameter when present (documents without an expected date are excluded from horizon-bounded results). Omitted for as-of requests.
+     */
+    incomingQty?: number;
+    /**
+     * Open expected demand not yet decremented from on-hand: unallocated reservation remainders plus released-not-picked pick-task remainders. Reservation demand carries no site and is included in every site row. Omitted for as-of requests.
+     */
+    outgoingQty?: number;
+    /**
+     * Projected availability: onHandQuantity + incomingQty - outgoingQty (Odoo virtual_available). Omitted for as-of requests.
+     */
+    projectedAvailable?: number;
 }
 
 function isOptionalLocationAvailabilityDtoPropertyOfType(
@@ -69,9 +81,9 @@ export function instanceOfLocationAvailabilityDto(value: object): value is Locat
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createLocationAvailabilityDtoPropertyNames('locationId', 'locationName', 'onHandQuantity', 'availableToPromiseQuantity', );
+    const requiredProperties = createLocationAvailabilityDtoPropertyNames('locationId', 'locationName', 'onHandQuantity', );
     const optionalStringProperties = createLocationAvailabilityDtoOptionalProperties({ name: 'locationId', nullable: false }, { name: 'locationName', nullable: false }, );
-    const optionalNumberProperties = createLocationAvailabilityDtoOptionalProperties({ name: 'onHandQuantity', nullable: false }, { name: 'availableToPromiseQuantity', nullable: false }, );
+    const optionalNumberProperties = createLocationAvailabilityDtoOptionalProperties({ name: 'onHandQuantity', nullable: false }, { name: 'availableToPromiseQuantity', nullable: false }, { name: 'incomingQty', nullable: false }, { name: 'outgoingQty', nullable: false }, { name: 'projectedAvailable', nullable: false }, );
     const optionalBooleanProperties = createLocationAvailabilityDtoOptionalProperties();
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

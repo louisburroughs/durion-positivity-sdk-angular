@@ -10,37 +10,33 @@
 
 
 /**
- * Person details resolved from the people system
+ * Person details for a technician
  */
 export interface PersonDTO { 
     /**
-     * Internal person identifier
+     * People-contact person identifier
      */
-    id: number;
+    id?: string;
     /**
-     * Person first name
+     * First name of the person
      */
     firstName?: string;
     /**
-     * Person last name
+     * Last name of the person
      */
     lastName?: string;
     /**
-     * Primary email address
+     * Primary email address of the person
      */
     primaryEmail?: string;
     /**
-     * Secondary email address
+     * Secondary email address of the person
      */
     secondaryEmail?: string;
     /**
-     * Associated phone numbers
+     * Phone numbers associated with the person
      */
     phoneNumbers?: Array<string>;
-    /**
-     * Login username
-     */
-    username?: string;
 }
 
 function isOptionalPersonDTOPropertyOfType(
@@ -81,9 +77,9 @@ export function instanceOfPersonDTO(value: object): value is PersonDTO {
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createPersonDTOPropertyNames('id', );
-    const optionalStringProperties = createPersonDTOOptionalProperties({ name: 'firstName', nullable: false }, { name: 'lastName', nullable: false }, { name: 'primaryEmail', nullable: false }, { name: 'secondaryEmail', nullable: false }, { name: 'username', nullable: false }, );
-    const optionalNumberProperties = createPersonDTOOptionalProperties({ name: 'id', nullable: false }, );
+    const requiredProperties = createPersonDTOPropertyNames();
+    const optionalStringProperties = createPersonDTOOptionalProperties({ name: 'id', nullable: false }, { name: 'firstName', nullable: false }, { name: 'lastName', nullable: false }, { name: 'primaryEmail', nullable: false }, { name: 'secondaryEmail', nullable: false }, );
+    const optionalNumberProperties = createPersonDTOOptionalProperties();
     const optionalBooleanProperties = createPersonDTOOptionalProperties();
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

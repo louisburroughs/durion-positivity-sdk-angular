@@ -42,20 +42,30 @@ export class ShortageResolutionService extends BaseService {
     }
 
     /**
-     * List shortage options
-     * Returns available shortage resolution options for an allocation.
+     * List computed shortage options
+     * Computes the resolution options (backorder, substitute, transfer-in, emergency purchase, cancel) for a shortage, each with an expected-resolution date and a cost delta where computable.
      * @endpoint get /v1/inventory/shortage/options
-     * @param allocationId 
+     * @param allocationId Allocation experiencing the shortage
+     * @param sku SKU / stock-item identifier that is short
+     * @param shortQuantity Quantity that is short
+     * @param workorderLineId Workorder line whose demand is short
+     * @param locationId Site the demand is short at
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public listShortageOptions(allocationId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<ShortageOptionDto>>;
-    public listShortageOptions(allocationId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<ShortageOptionDto>>>;
-    public listShortageOptions(allocationId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<ShortageOptionDto>>>;
-    public listShortageOptions(allocationId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public listShortageOptions(allocationId: string, sku: string, shortQuantity: number, workorderLineId?: string, locationId?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<ShortageOptionDto>>;
+    public listShortageOptions(allocationId: string, sku: string, shortQuantity: number, workorderLineId?: string, locationId?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<ShortageOptionDto>>>;
+    public listShortageOptions(allocationId: string, sku: string, shortQuantity: number, workorderLineId?: string, locationId?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<ShortageOptionDto>>>;
+    public listShortageOptions(allocationId: string, sku: string, shortQuantity: number, workorderLineId?: string, locationId?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (allocationId === null || allocationId === undefined) {
             throw new Error('Required parameter allocationId was null or undefined when calling listShortageOptions.');
+        }
+        if (sku === null || sku === undefined) {
+            throw new Error('Required parameter sku was null or undefined when calling listShortageOptions.');
+        }
+        if (shortQuantity === null || shortQuantity === undefined) {
+            throw new Error('Required parameter shortQuantity was null or undefined when calling listShortageOptions.');
         }
 
         let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
@@ -64,6 +74,42 @@ export class ShortageResolutionService extends BaseService {
             localVarQueryParameters,
             'allocationId',
             <any>allocationId,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'sku',
+            <any>sku,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'shortQuantity',
+            <any>shortQuantity,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'workorderLineId',
+            <any>workorderLineId,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'locationId',
+            <any>locationId,
             QueryParamStyle.Form,
             true,
         );

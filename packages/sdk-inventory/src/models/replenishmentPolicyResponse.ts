@@ -34,6 +34,26 @@ export interface ReplenishmentPolicyResponse {
      */
     maximumQuantity: number;
     /**
+     * Round the computed replenishment quantity up to the nearest multiple of this value; absent means no rounding
+     */
+    orderMultiple?: number;
+    /**
+     * Per-policy lead-time override in days; absent means vendor-feed/default lead time applies
+     */
+    leadTimeDaysOverride?: number;
+    /**
+     * Preferred sourcing channel for replenishing this policy\'s pick face
+     */
+    preferredSourceType: string;
+    /**
+     * Instant until which the policy is snoozed (excluded from replenishment evaluation); absent or past means the policy is evaluated normally
+     */
+    snoozedUntil?: string;
+    /**
+     * Whether the policy participates in replenishment evaluation
+     */
+    active: boolean;
+    /**
      * Timestamp at which the replenishment policy was created
      */
     createdAt: string;
@@ -77,10 +97,10 @@ export function instanceOfReplenishmentPolicyResponse(value: object): value is R
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createReplenishmentPolicyResponsePropertyNames('policyId', 'locationId', 'itemSKU', 'minimumQuantity', 'maximumQuantity', 'createdAt', );
-    const optionalStringProperties = createReplenishmentPolicyResponseOptionalProperties({ name: 'policyId', nullable: false }, { name: 'locationId', nullable: false }, { name: 'itemSKU', nullable: false }, { name: 'createdAt', nullable: false }, );
-    const optionalNumberProperties = createReplenishmentPolicyResponseOptionalProperties({ name: 'minimumQuantity', nullable: false }, { name: 'maximumQuantity', nullable: false }, );
-    const optionalBooleanProperties = createReplenishmentPolicyResponseOptionalProperties();
+    const requiredProperties = createReplenishmentPolicyResponsePropertyNames('policyId', 'locationId', 'itemSKU', 'minimumQuantity', 'maximumQuantity', 'preferredSourceType', 'active', 'createdAt', );
+    const optionalStringProperties = createReplenishmentPolicyResponseOptionalProperties({ name: 'policyId', nullable: false }, { name: 'locationId', nullable: false }, { name: 'itemSKU', nullable: false }, { name: 'preferredSourceType', nullable: false }, { name: 'snoozedUntil', nullable: false }, { name: 'createdAt', nullable: false }, );
+    const optionalNumberProperties = createReplenishmentPolicyResponseOptionalProperties({ name: 'minimumQuantity', nullable: false }, { name: 'maximumQuantity', nullable: false }, { name: 'orderMultiple', nullable: false }, { name: 'leadTimeDaysOverride', nullable: false }, );
+    const optionalBooleanProperties = createReplenishmentPolicyResponseOptionalProperties({ name: 'active', nullable: false }, );
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
         && optionalStringProperties.every((property) => isOptionalReplenishmentPolicyResponsePropertyOfType(_v, property.name, 'string', property.nullable))

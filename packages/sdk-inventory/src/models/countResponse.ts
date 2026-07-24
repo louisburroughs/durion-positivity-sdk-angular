@@ -57,6 +57,7 @@ export interface CountResponse {
 export enum CountResponseTaskStatusEnum {
     Assigned = 'ASSIGNED',
     CountedPendingReview = 'COUNTED_PENDING_REVIEW',
+    Conflict = 'CONFLICT',
     RequiresInvestigation = 'REQUIRES_INVESTIGATION',
     Approved = 'APPROVED',
     Rejected = 'REJECTED'

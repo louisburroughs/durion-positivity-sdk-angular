@@ -22,10 +22,6 @@ export interface CancelOrderRequest {
      */
     workOrderId?: string;
     /**
-     * Identifier of the associated payment, when applicable
-     */
-    paymentId?: string;
-    /**
      * Optional idempotency key for duplicate cancellation prevention
      */
     idempotencyKey?: string;
@@ -70,7 +66,7 @@ export function instanceOfCancelOrderRequest(value: object): value is CancelOrde
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createCancelOrderRequestPropertyNames('cancellationReason', );
-    const optionalStringProperties = createCancelOrderRequestOptionalProperties({ name: 'cancellationReason', nullable: false }, { name: 'workOrderId', nullable: false }, { name: 'paymentId', nullable: false }, { name: 'idempotencyKey', nullable: false }, );
+    const optionalStringProperties = createCancelOrderRequestOptionalProperties({ name: 'cancellationReason', nullable: false }, { name: 'workOrderId', nullable: false }, { name: 'idempotencyKey', nullable: false }, );
     const optionalNumberProperties = createCancelOrderRequestOptionalProperties();
     const optionalBooleanProperties = createCancelOrderRequestOptionalProperties();
 

@@ -74,6 +74,18 @@ export interface CreditMemoResponse {
      */
     currency?: string;
     /**
+     * When the memo was voided; null unless status is VOIDED
+     */
+    voidedTimestamp?: string;
+    /**
+     * User who voided the memo; null unless status is VOIDED
+     */
+    voidedByUserId?: string;
+    /**
+     * Reason the memo was voided; null unless status is VOIDED
+     */
+    voidReason?: string;
+    /**
      * Invoice outstanding balance after the credit was applied
      */
     invoiceBalanceAfter?: number;
@@ -126,7 +138,7 @@ export function instanceOfCreditMemoResponse(value: object): value is CreditMemo
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createCreditMemoResponsePropertyNames('creditMemoId', 'originalInvoiceId', 'creditAmount', 'status', 'creationTimestamp', );
-    const optionalStringProperties = createCreditMemoResponseOptionalProperties({ name: 'creditMemoId', nullable: false }, { name: 'originalInvoiceId', nullable: false }, { name: 'customerId', nullable: false }, { name: 'reasonCode', nullable: false }, { name: 'justificationNote', nullable: false }, { name: 'status', nullable: false }, { name: 'createdByUserId', nullable: false }, { name: 'originalPeriodId', nullable: false }, { name: 'currency', nullable: false }, );
+    const optionalStringProperties = createCreditMemoResponseOptionalProperties({ name: 'creditMemoId', nullable: false }, { name: 'originalInvoiceId', nullable: false }, { name: 'customerId', nullable: false }, { name: 'reasonCode', nullable: false }, { name: 'justificationNote', nullable: false }, { name: 'status', nullable: false }, { name: 'createdByUserId', nullable: false }, { name: 'originalPeriodId', nullable: false }, { name: 'currency', nullable: false }, { name: 'voidedByUserId', nullable: false }, { name: 'voidReason', nullable: false }, );
     const optionalNumberProperties = createCreditMemoResponseOptionalProperties({ name: 'creditAmount', nullable: false }, { name: 'taxAmountReversed', nullable: false }, { name: 'totalAmount', nullable: false }, { name: 'invoiceBalanceAfter', nullable: false }, );
     const optionalBooleanProperties = createCreditMemoResponseOptionalProperties({ name: 'priorPeriodAdjustment', nullable: false }, );
 

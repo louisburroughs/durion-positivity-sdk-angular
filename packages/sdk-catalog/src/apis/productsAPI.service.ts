@@ -43,6 +43,8 @@ import { ProductLifecycleUpdateRequest } from '../src/models/productLifecycleUpd
 // @ts-ignore
 import { ProductReplacementRequest } from '../src/models/productReplacementRequest';
 // @ts-ignore
+import { ProductTrackingLevelUpdateRequestDto } from '../src/models/productTrackingLevelUpdateRequestDto';
+// @ts-ignore
 import { ProductUpdateRequestDto } from '../src/models/productUpdateRequestDto';
 // @ts-ignore
 import { ReplacementOption } from '../src/models/replacementOption';
@@ -1122,10 +1124,10 @@ export class ProductsAPIService extends BaseService {
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public searchProducts(q?: string, brand?: string, category?: string, sku?: string, cursor?: string, limit?: string, detailed?: boolean, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<CatalogSearchResultDto>;
-    public searchProducts(q?: string, brand?: string, category?: string, sku?: string, cursor?: string, limit?: string, detailed?: boolean, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<CatalogSearchResultDto>>;
-    public searchProducts(q?: string, brand?: string, category?: string, sku?: string, cursor?: string, limit?: string, detailed?: boolean, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<CatalogSearchResultDto>>;
-    public searchProducts(q?: string, brand?: string, category?: string, sku?: string, cursor?: string, limit?: string, detailed?: boolean, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public searchProducts(q?: string, brand?: string, category?: string, sku?: string, cursor?: string, limit?: string, detailed?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<CatalogSearchResultDto>;
+    public searchProducts(q?: string, brand?: string, category?: string, sku?: string, cursor?: string, limit?: string, detailed?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<CatalogSearchResultDto>>;
+    public searchProducts(q?: string, brand?: string, category?: string, sku?: string, cursor?: string, limit?: string, detailed?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<CatalogSearchResultDto>>;
+    public searchProducts(q?: string, brand?: string, category?: string, sku?: string, cursor?: string, limit?: string, detailed?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
 
@@ -1453,6 +1455,80 @@ export class ProductsAPIService extends BaseService {
             {
                 context: localVarHttpContext,
                 body: productUpdateRequestDto,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Set product tracking level
+     * Sets the product\&#39;s stock tracking level (NONE, LOT, or SERIAL; default NONE) and re-emits the product contract event for downstream replicas.
+     * @endpoint put /v1/products/{productId}/tracking-level
+     * @param productId ID of the product
+     * @param productTrackingLevelUpdateRequestDto 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public updateTrackingLevel(productId: string, productTrackingLevelUpdateRequestDto: ProductTrackingLevelUpdateRequestDto, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ProductDto>;
+    public updateTrackingLevel(productId: string, productTrackingLevelUpdateRequestDto: ProductTrackingLevelUpdateRequestDto, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ProductDto>>;
+    public updateTrackingLevel(productId: string, productTrackingLevelUpdateRequestDto: ProductTrackingLevelUpdateRequestDto, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ProductDto>>;
+    public updateTrackingLevel(productId: string, productTrackingLevelUpdateRequestDto: ProductTrackingLevelUpdateRequestDto, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (productId === null || productId === undefined) {
+            throw new Error('Required parameter productId was null or undefined when calling updateTrackingLevel.');
+        }
+        if (productTrackingLevelUpdateRequestDto === null || productTrackingLevelUpdateRequestDto === undefined) {
+            throw new Error('Required parameter productTrackingLevelUpdateRequestDto was null or undefined when calling updateTrackingLevel.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/products/${this.configuration.encodeParam({name: "productId", value: productId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/tracking-level`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<ProductDto>('put', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                body: productTrackingLevelUpdateRequestDto,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,

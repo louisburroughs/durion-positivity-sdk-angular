@@ -22,9 +22,9 @@ export interface LocationInventoryInquiryResponse {
      */
     onHandQuantity: number;
     /**
-     * Quantity available to promise after pending allocations. Note: reservation events are not yet factored in.
+     * Quantity available to promise after pending allocations. Note: reservation events are not yet factored in. Null for as-of (historical) requests: historical allocation state is not reliably reconstructable from ATP-neutral ledger events, so as-of responses carry on-hand only.
      */
-    availableToPromiseQuantity: number;
+    availableToPromiseQuantity?: number;
 }
 
 function isOptionalLocationInventoryInquiryResponsePropertyOfType(
@@ -65,7 +65,7 @@ export function instanceOfLocationInventoryInquiryResponse(value: object): value
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createLocationInventoryInquiryResponsePropertyNames('locationId', 'onHandQuantity', 'availableToPromiseQuantity', );
+    const requiredProperties = createLocationInventoryInquiryResponsePropertyNames('locationId', 'onHandQuantity', );
     const optionalStringProperties = createLocationInventoryInquiryResponseOptionalProperties({ name: 'locationId', nullable: false }, );
     const optionalNumberProperties = createLocationInventoryInquiryResponseOptionalProperties({ name: 'onHandQuantity', nullable: false }, { name: 'availableToPromiseQuantity', nullable: false }, );
     const optionalBooleanProperties = createLocationInventoryInquiryResponseOptionalProperties();

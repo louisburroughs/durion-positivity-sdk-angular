@@ -37,6 +37,18 @@ export interface GoodsReceiptLineResponse {
      * Total accrued cost for this line expressed in minor currency units (quantity multiplied by unit cost)
      */
     lineAccruedAmountMinor?: number;
+    /**
+     * UoM the line was keyed in when it differed from the product\'s base UoM
+     */
+    documentUom?: string;
+    /**
+     * Quantity as keyed in documentUom; quantityReceived holds the derived base quantity
+     */
+    documentQuantity?: number;
+    /**
+     * Effective base-per-document-unit conversion factor applied at posting time
+     */
+    conversionFactor?: number;
 }
 
 function isOptionalGoodsReceiptLineResponsePropertyOfType(
@@ -78,8 +90,8 @@ export function instanceOfGoodsReceiptLineResponse(value: object): value is Good
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createGoodsReceiptLineResponsePropertyNames('receiptLineId', 'sku', 'quantityReceived', );
-    const optionalStringProperties = createGoodsReceiptLineResponseOptionalProperties({ name: 'receiptLineId', nullable: false }, { name: 'poLineId', nullable: false }, { name: 'sku', nullable: false }, );
-    const optionalNumberProperties = createGoodsReceiptLineResponseOptionalProperties({ name: 'quantityReceived', nullable: false }, { name: 'unitCostMinor', nullable: false }, { name: 'lineAccruedAmountMinor', nullable: false }, );
+    const optionalStringProperties = createGoodsReceiptLineResponseOptionalProperties({ name: 'receiptLineId', nullable: false }, { name: 'poLineId', nullable: false }, { name: 'sku', nullable: false }, { name: 'documentUom', nullable: false }, );
+    const optionalNumberProperties = createGoodsReceiptLineResponseOptionalProperties({ name: 'quantityReceived', nullable: false }, { name: 'unitCostMinor', nullable: false }, { name: 'lineAccruedAmountMinor', nullable: false }, { name: 'documentQuantity', nullable: false }, { name: 'conversionFactor', nullable: false }, );
     const optionalBooleanProperties = createGoodsReceiptLineResponseOptionalProperties();
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

@@ -27,6 +27,10 @@ import { InvoiceDetailsResponse } from '../src/models/invoiceDetailsResponse';
 // @ts-ignore
 import { InvoiceGenerationResponse } from '../src/models/invoiceGenerationResponse';
 // @ts-ignore
+import { OrderInvoiceCreationRequest } from '../src/models/orderInvoiceCreationRequest';
+// @ts-ignore
+import { OrderInvoiceResponse } from '../src/models/orderInvoiceResponse';
+// @ts-ignore
 import { RevertRequest } from '../src/models/revertRequest';
 
 // @ts-ignore
@@ -47,7 +51,7 @@ export class InvoiceService extends BaseService {
 
     /**
      * Apply invoice adjustment
-     * Apply discount, fee, or correction to a draft invoice
+     * Apply discount, fee, correction, or warranty credit to a draft invoice
      * @endpoint post /v1/invoices/{invoiceId}/adjustments
      * @param invoiceId 
      * @param adjustmentRequest 
@@ -120,6 +124,66 @@ export class InvoiceService extends BaseService {
     }
 
     /**
+     * Cancel a draft invoice
+     * Terminal cancel of a DRAFT invoice before any money moved (order-void path). Rejected with 409 when the invoice has left DRAFT or carries an authorized/captured payment. Idempotent — cancelling a CANCELLED invoice returns 200.
+     * @endpoint post /v1/invoices/{invoiceId}/cancel
+     * @param invoiceId 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public cancelInvoice(invoiceId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<OrderInvoiceResponse>;
+    public cancelInvoice(invoiceId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<OrderInvoiceResponse>>;
+    public cancelInvoice(invoiceId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<OrderInvoiceResponse>>;
+    public cancelInvoice(invoiceId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (invoiceId === null || invoiceId === undefined) {
+            throw new Error('Required parameter invoiceId was null or undefined when calling cancelInvoice.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/invoices/${this.configuration.encodeParam({name: "invoiceId", value: invoiceId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/cancel`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<OrderInvoiceResponse>('post', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
      * Create invoice
      * Create invoice draft from completed workorder data
      * @endpoint post /v1/invoices
@@ -179,6 +243,76 @@ export class InvoiceService extends BaseService {
             {
                 context: localVarHttpContext,
                 body: invoiceCreationRequest,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Create invoice from a sales order
+     * Create the invoice fronting a sales order at checkout (counter sale). Idempotent on orderId — a replay returns the existing invoice with 200. When workorderId is present and a workorder invoice already exists, that invoice is returned for tender instead of creating a duplicate.
+     * @endpoint post /v1/invoices/from-order
+     * @param orderInvoiceCreationRequest 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public createInvoiceFromOrder(orderInvoiceCreationRequest: OrderInvoiceCreationRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<OrderInvoiceResponse>;
+    public createInvoiceFromOrder(orderInvoiceCreationRequest: OrderInvoiceCreationRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<OrderInvoiceResponse>>;
+    public createInvoiceFromOrder(orderInvoiceCreationRequest: OrderInvoiceCreationRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<OrderInvoiceResponse>>;
+    public createInvoiceFromOrder(orderInvoiceCreationRequest: OrderInvoiceCreationRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (orderInvoiceCreationRequest === null || orderInvoiceCreationRequest === undefined) {
+            throw new Error('Required parameter orderInvoiceCreationRequest was null or undefined when calling createInvoiceFromOrder.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/invoices/from-order`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<OrderInvoiceResponse>('post', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                body: orderInvoiceCreationRequest,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,

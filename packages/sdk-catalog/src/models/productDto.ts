@@ -89,6 +89,10 @@ export interface ProductDto {
      */
     status?: ProductDtoStatusEnum;
     /**
+     * Stock tracking level
+     */
+    trackingLevel?: ProductDtoTrackingLevelEnum;
+    /**
      * Product code
      */
     productCode?: string;
@@ -155,6 +159,11 @@ export enum ProductDtoStatusEnum {
     Active = 'ACTIVE',
     Inactive = 'INACTIVE'
 };
+export enum ProductDtoTrackingLevelEnum {
+    None = 'NONE',
+    Lot = 'LOT',
+    Serial = 'SERIAL'
+};
 export enum ProductDtoProductCodeTypeEnum {
     Upc = 'UPC',
     Ean = 'EAN'
@@ -206,7 +215,7 @@ export function instanceOfProductDto(value: object): value is ProductDto {
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createProductDtoPropertyNames('id', 'name', );
-    const optionalStringProperties = createProductDtoOptionalProperties({ name: 'id', nullable: false }, { name: 'name', nullable: false }, { name: 'shortDescription', nullable: false }, { name: 'longDescription', nullable: false }, { name: 'description', nullable: false }, { name: 'manufacturerPartNumber', nullable: false }, { name: 'manufacturerId', nullable: false }, { name: 'manufacturerName', nullable: false }, { name: 'manufacturerWarranty', nullable: false }, { name: 'manufacturerBrand', nullable: false }, { name: 'countryOfOrigin', nullable: false }, { name: 'sku', nullable: false }, { name: 'mpn', nullable: false }, { name: 'upc', nullable: false }, { name: 'attributes', nullable: false }, { name: 'unitOfMeasure', nullable: false }, { name: 'status', nullable: false }, { name: 'productCode', nullable: false }, { name: 'productCodeType', nullable: false }, { name: 'type', nullable: false }, { name: 'material', nullable: false }, { name: 'color', nullable: false }, { name: 'warranty', nullable: false }, { name: 'specifications', nullable: false }, { name: 'lifecycleState', nullable: false }, { name: 'lastStateChangedBy', nullable: false }, { name: 'lifecycleOverrideReason', nullable: false }, );
+    const optionalStringProperties = createProductDtoOptionalProperties({ name: 'id', nullable: false }, { name: 'name', nullable: false }, { name: 'shortDescription', nullable: false }, { name: 'longDescription', nullable: false }, { name: 'description', nullable: false }, { name: 'manufacturerPartNumber', nullable: false }, { name: 'manufacturerId', nullable: false }, { name: 'manufacturerName', nullable: false }, { name: 'manufacturerWarranty', nullable: false }, { name: 'manufacturerBrand', nullable: false }, { name: 'countryOfOrigin', nullable: false }, { name: 'sku', nullable: false }, { name: 'mpn', nullable: false }, { name: 'upc', nullable: false }, { name: 'attributes', nullable: false }, { name: 'unitOfMeasure', nullable: false }, { name: 'status', nullable: false }, { name: 'trackingLevel', nullable: false }, { name: 'productCode', nullable: false }, { name: 'productCodeType', nullable: false }, { name: 'type', nullable: false }, { name: 'material', nullable: false }, { name: 'color', nullable: false }, { name: 'warranty', nullable: false }, { name: 'specifications', nullable: false }, { name: 'lifecycleState', nullable: false }, { name: 'lastStateChangedBy', nullable: false }, { name: 'lifecycleOverrideReason', nullable: false }, );
     const optionalNumberProperties = createProductDtoOptionalProperties();
     const optionalBooleanProperties = createProductDtoOptionalProperties();
 

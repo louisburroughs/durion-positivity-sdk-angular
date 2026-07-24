@@ -14,9 +14,9 @@
  */
 export interface PersonDTO { 
     /**
-     * Unique identifier of the person
+     * People-contact person identifier
      */
-    id?: number;
+    id?: string;
     /**
      * First name of the person
      */
@@ -37,10 +37,6 @@ export interface PersonDTO {
      * Phone numbers associated with the person
      */
     phoneNumbers?: Array<string>;
-    /**
-     * Login username of the person
-     */
-    username?: string;
 }
 
 function isOptionalPersonDTOPropertyOfType(
@@ -82,8 +78,8 @@ export function instanceOfPersonDTO(value: object): value is PersonDTO {
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createPersonDTOPropertyNames();
-    const optionalStringProperties = createPersonDTOOptionalProperties({ name: 'firstName', nullable: false }, { name: 'lastName', nullable: false }, { name: 'primaryEmail', nullable: false }, { name: 'secondaryEmail', nullable: false }, { name: 'username', nullable: false }, );
-    const optionalNumberProperties = createPersonDTOOptionalProperties({ name: 'id', nullable: false }, );
+    const optionalStringProperties = createPersonDTOOptionalProperties({ name: 'id', nullable: false }, { name: 'firstName', nullable: false }, { name: 'lastName', nullable: false }, { name: 'primaryEmail', nullable: false }, { name: 'secondaryEmail', nullable: false }, );
+    const optionalNumberProperties = createPersonDTOOptionalProperties();
     const optionalBooleanProperties = createPersonDTOOptionalProperties();
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

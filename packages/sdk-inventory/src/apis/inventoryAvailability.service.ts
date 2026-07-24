@@ -45,20 +45,42 @@ export class InventoryAvailabilityService extends BaseService {
 
     /**
      * Query inventory availability
-     * Returns per-location availability for a product.
+     * Returns per-location availability for a product, including forecast quantities (incomingQty, outgoingQty, projectedAvailable) computed from open purchase orders, ASNs, reservations, and released pick tasks (odoo-parity A2). With \&#39;asOf\&#39;, returns historical on-hand per location computed by direct ledger aggregation (timestamp &lt;&#x3D; asOf) instead: availableToPromiseQuantity and the forecast fields are null, because historical allocation state is not reliably reconstructable from ATP-neutral ledger events. As-of requests additionally require the \&#39;inventory:ledger:view\&#39; authority (history exposure) and reject future instants with 422; \&#39;asOf\&#39; cannot be combined with \&#39;horizon\&#39;.
      * @endpoint get /v1/inventory/availability/{productId}
      * @param productId Product identifier
+     * @param horizon Optional forecast horizon (ISO-8601 instant). Bounds incomingQty to supply expected on or before this instant and outgoingQty to reservations due by it; documents without an expected date are excluded from horizon-bounded results.
+     * @param asOf Optional historical instant (ISO-8601). Returns on-hand as of this instant by direct ledger aggregation; ATP and forecast fields are null. Requires \&#39;inventory:ledger:view\&#39;; future instants are rejected (422). Cannot be combined with \&#39;horizon\&#39;.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public getInventoryAvailability(productId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<LocationAvailabilityDto>>;
-    public getInventoryAvailability(productId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<LocationAvailabilityDto>>>;
-    public getInventoryAvailability(productId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<LocationAvailabilityDto>>>;
-    public getInventoryAvailability(productId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getInventoryAvailability(productId: string, horizon?: string, asOf?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<LocationAvailabilityDto>>;
+    public getInventoryAvailability(productId: string, horizon?: string, asOf?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<LocationAvailabilityDto>>>;
+    public getInventoryAvailability(productId: string, horizon?: string, asOf?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<LocationAvailabilityDto>>>;
+    public getInventoryAvailability(productId: string, horizon?: string, asOf?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (productId === null || productId === undefined) {
             throw new Error('Required parameter productId was null or undefined when calling getInventoryAvailability.');
         }
+
+        let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'horizon',
+            <any>horizon,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'asOf',
+            <any>asOf,
+            QueryParamStyle.Form,
+            true,
+        );
+
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -93,6 +115,7 @@ export class InventoryAvailabilityService extends BaseService {
         return this.httpClient.request<Array<LocationAvailabilityDto>>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
+                params: localVarQueryParameters.toHttpParams(),
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,
@@ -213,14 +236,15 @@ export class InventoryAvailabilityService extends BaseService {
      * @param locationId Location identifier
      * @param storageLocationId Storage location identifier (optional; narrows to sub-location)
      * @param sourceType Inventory lookup strategy. WAREHOUSE &#x3D; from physical location stock, SUPPLIER &#x3D; from supplier lead time, TRANSIT &#x3D; from in-transit supply. When sourceType is WAREHOUSE, locationId narrows to a specific location.
+     * @param horizon Optional forecast horizon (ISO-8601 instant) bounding incomingQty/outgoingQty; documents without an expected date are excluded from horizon-bounded results.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public listAvailabilityBySku(productSku: string, locationId?: string, storageLocationId?: string, sourceType?: 'WAREHOUSE' | 'SUPPLIER' | 'TRANSIT', observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<AvailabilityView>;
-    public listAvailabilityBySku(productSku: string, locationId?: string, storageLocationId?: string, sourceType?: 'WAREHOUSE' | 'SUPPLIER' | 'TRANSIT', observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<AvailabilityView>>;
-    public listAvailabilityBySku(productSku: string, locationId?: string, storageLocationId?: string, sourceType?: 'WAREHOUSE' | 'SUPPLIER' | 'TRANSIT', observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<AvailabilityView>>;
-    public listAvailabilityBySku(productSku: string, locationId?: string, storageLocationId?: string, sourceType?: 'WAREHOUSE' | 'SUPPLIER' | 'TRANSIT', observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public listAvailabilityBySku(productSku: string, locationId?: string, storageLocationId?: string, sourceType?: 'WAREHOUSE' | 'SUPPLIER' | 'TRANSIT', horizon?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<AvailabilityView>;
+    public listAvailabilityBySku(productSku: string, locationId?: string, storageLocationId?: string, sourceType?: 'WAREHOUSE' | 'SUPPLIER' | 'TRANSIT', horizon?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<AvailabilityView>>;
+    public listAvailabilityBySku(productSku: string, locationId?: string, storageLocationId?: string, sourceType?: 'WAREHOUSE' | 'SUPPLIER' | 'TRANSIT', horizon?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<AvailabilityView>>;
+    public listAvailabilityBySku(productSku: string, locationId?: string, storageLocationId?: string, sourceType?: 'WAREHOUSE' | 'SUPPLIER' | 'TRANSIT', horizon?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (productSku === null || productSku === undefined) {
             throw new Error('Required parameter productSku was null or undefined when calling listAvailabilityBySku.');
         }
@@ -258,6 +282,15 @@ export class InventoryAvailabilityService extends BaseService {
             localVarQueryParameters,
             'sourceType',
             <any>sourceType,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'horizon',
+            <any>horizon,
             QueryParamStyle.Form,
             true,
         );
@@ -315,14 +348,15 @@ export class InventoryAvailabilityService extends BaseService {
      * @param locationId Location identifier
      * @param storageLocationId Storage location identifier (optional; narrows to sub-location)
      * @param sourceType Inventory lookup strategy
+     * @param horizon Optional forecast horizon (ISO-8601 instant) bounding incomingQty/outgoingQty; documents without an expected date are excluded from horizon-bounded results.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public queryAvailabilityBySkuList(sku: string, locationId?: string, storageLocationId?: string, sourceType?: 'WAREHOUSE' | 'SUPPLIER' | 'TRANSIT', observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<AvailabilityView>>;
-    public queryAvailabilityBySkuList(sku: string, locationId?: string, storageLocationId?: string, sourceType?: 'WAREHOUSE' | 'SUPPLIER' | 'TRANSIT', observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<AvailabilityView>>>;
-    public queryAvailabilityBySkuList(sku: string, locationId?: string, storageLocationId?: string, sourceType?: 'WAREHOUSE' | 'SUPPLIER' | 'TRANSIT', observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<AvailabilityView>>>;
-    public queryAvailabilityBySkuList(sku: string, locationId?: string, storageLocationId?: string, sourceType?: 'WAREHOUSE' | 'SUPPLIER' | 'TRANSIT', observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public queryAvailabilityBySkuList(sku: string, locationId?: string, storageLocationId?: string, sourceType?: 'WAREHOUSE' | 'SUPPLIER' | 'TRANSIT', horizon?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<AvailabilityView>>;
+    public queryAvailabilityBySkuList(sku: string, locationId?: string, storageLocationId?: string, sourceType?: 'WAREHOUSE' | 'SUPPLIER' | 'TRANSIT', horizon?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<AvailabilityView>>>;
+    public queryAvailabilityBySkuList(sku: string, locationId?: string, storageLocationId?: string, sourceType?: 'WAREHOUSE' | 'SUPPLIER' | 'TRANSIT', horizon?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<AvailabilityView>>>;
+    public queryAvailabilityBySkuList(sku: string, locationId?: string, storageLocationId?: string, sourceType?: 'WAREHOUSE' | 'SUPPLIER' | 'TRANSIT', horizon?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (sku === null || sku === undefined) {
             throw new Error('Required parameter sku was null or undefined when calling queryAvailabilityBySkuList.');
         }
@@ -360,6 +394,15 @@ export class InventoryAvailabilityService extends BaseService {
             localVarQueryParameters,
             'sourceType',
             <any>sourceType,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'horizon',
+            <any>horizon,
             QueryParamStyle.Form,
             true,
         );

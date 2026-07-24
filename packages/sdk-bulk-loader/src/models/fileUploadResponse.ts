@@ -7,6 +7,7 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { ContentDetectionResult } from './contentDetectionResult';
 
 
 /**
@@ -29,6 +30,7 @@ export interface FileUploadResponse {
      * Size of the uploaded file in bytes
      */
     sizeBytes: number;
+    detection?: ContentDetectionResult;
 }
 
 function isOptionalFileUploadResponsePropertyOfType(

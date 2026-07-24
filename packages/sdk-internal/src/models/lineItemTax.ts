@@ -7,6 +7,7 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { JurisdictionTax } from './jurisdictionTax';
 
 
 /**
@@ -30,10 +31,31 @@ export interface LineItemTax {
      */
     total: number;
     /**
-     * Whether this line item is tax exempt
+     * Whether this line item is tax exempt (resolved exemption produced zero-rate rows)
      */
     taxExempt: boolean;
+    /**
+     * Resolved exemption reason echoed onto this line (honored or denied)
+     */
+    exemptionReasonCode?: LineItemTaxExemptionReasonCodeEnum;
+    /**
+     * Whether a claimed exemption was denied (unbacked by a valid certificate) and the line taxed anyway
+     */
+    exemptionDenied?: boolean;
+    /**
+     * Per-jurisdiction tax breakdown for this line item; rows sum to taxAmount
+     */
+    jurisdictions?: Array<JurisdictionTax>;
 }
+export enum LineItemTaxExemptionReasonCodeEnum {
+    Resale = 'RESALE',
+    Government = 'GOVERNMENT',
+    Nonprofit = 'NONPROFIT',
+    Agricultural = 'AGRICULTURAL',
+    Other = 'OTHER'
+};
+
+
 
 function isOptionalLineItemTaxPropertyOfType(
     value: Record<string, unknown>,
@@ -74,9 +96,9 @@ export function instanceOfLineItemTax(value: object): value is LineItemTax {
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createLineItemTaxPropertyNames('lineItemId', 'subtotal', 'taxAmount', 'total', 'taxExempt', );
-    const optionalStringProperties = createLineItemTaxOptionalProperties({ name: 'lineItemId', nullable: false }, );
+    const optionalStringProperties = createLineItemTaxOptionalProperties({ name: 'lineItemId', nullable: false }, { name: 'exemptionReasonCode', nullable: false }, );
     const optionalNumberProperties = createLineItemTaxOptionalProperties({ name: 'subtotal', nullable: false }, { name: 'taxAmount', nullable: false }, { name: 'total', nullable: false }, );
-    const optionalBooleanProperties = createLineItemTaxOptionalProperties({ name: 'taxExempt', nullable: false }, );
+    const optionalBooleanProperties = createLineItemTaxOptionalProperties({ name: 'taxExempt', nullable: false }, { name: 'exemptionDenied', nullable: false }, );
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
         && optionalStringProperties.every((property) => isOptionalLineItemTaxPropertyOfType(_v, property.name, 'string', property.nullable))
