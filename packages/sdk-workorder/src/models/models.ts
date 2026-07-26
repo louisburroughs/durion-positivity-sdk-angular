@@ -24,6 +24,8 @@ export * from './consumePickedItemsRequest';
 export * from './consumePickedItemsResponse';
 export * from './consumedItemResult';
 export * from './correctPartQuantityRequest';
+export * from './countGroup';
+export * from './countResponse';
 export * from './createChangeRequestDTO';
 export * from './createEstimateFromAppointmentRequest';
 export * from './createEstimateFromAppointmentResponse';
