@@ -345,10 +345,10 @@ export class WorkOrderAPIService extends BaseService {
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public countWorkorders(openOnly?: boolean, status?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<CountResponse>;
-    public countWorkorders(openOnly?: boolean, status?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<CountResponse>>;
-    public countWorkorders(openOnly?: boolean, status?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<CountResponse>>;
-    public countWorkorders(openOnly?: boolean, status?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public countWorkorders(openOnly?: boolean, status?: Array<'DRAFT' | 'APPROVED' | 'ASSIGNED' | 'WORK_IN_PROGRESS' | 'AWAITING_PARTS' | 'AWAITING_APPROVAL' | 'READY_FOR_PICKUP' | 'COMPLETED' | 'CANCELLED'>, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<CountResponse>;
+    public countWorkorders(openOnly?: boolean, status?: Array<'DRAFT' | 'APPROVED' | 'ASSIGNED' | 'WORK_IN_PROGRESS' | 'AWAITING_PARTS' | 'AWAITING_APPROVAL' | 'READY_FOR_PICKUP' | 'COMPLETED' | 'CANCELLED'>, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<CountResponse>>;
+    public countWorkorders(openOnly?: boolean, status?: Array<'DRAFT' | 'APPROVED' | 'ASSIGNED' | 'WORK_IN_PROGRESS' | 'AWAITING_PARTS' | 'AWAITING_APPROVAL' | 'READY_FOR_PICKUP' | 'COMPLETED' | 'CANCELLED'>, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<CountResponse>>;
+    public countWorkorders(openOnly?: boolean, status?: Array<'DRAFT' | 'APPROVED' | 'ASSIGNED' | 'WORK_IN_PROGRESS' | 'AWAITING_PARTS' | 'AWAITING_APPROVAL' | 'READY_FOR_PICKUP' | 'COMPLETED' | 'CANCELLED'>, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
 
