@@ -1124,10 +1124,10 @@ export class ProductsAPIService extends BaseService {
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public searchProducts(q?: string, brand?: string, category?: string, sku?: string, cursor?: string, limit?: string, detailed?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<CatalogSearchResultDto>;
-    public searchProducts(q?: string, brand?: string, category?: string, sku?: string, cursor?: string, limit?: string, detailed?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<CatalogSearchResultDto>>;
-    public searchProducts(q?: string, brand?: string, category?: string, sku?: string, cursor?: string, limit?: string, detailed?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<CatalogSearchResultDto>>;
-    public searchProducts(q?: string, brand?: string, category?: string, sku?: string, cursor?: string, limit?: string, detailed?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public searchProducts(q?: string, brand?: string, category?: string, sku?: string, cursor?: string, limit?: number, detailed?: boolean, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<CatalogSearchResultDto>;
+    public searchProducts(q?: string, brand?: string, category?: string, sku?: string, cursor?: string, limit?: number, detailed?: boolean, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<CatalogSearchResultDto>>;
+    public searchProducts(q?: string, brand?: string, category?: string, sku?: string, cursor?: string, limit?: number, detailed?: boolean, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<CatalogSearchResultDto>>;
+    public searchProducts(q?: string, brand?: string, category?: string, sku?: string, cursor?: string, limit?: number, detailed?: boolean, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
 
@@ -1248,10 +1248,10 @@ export class ProductsAPIService extends BaseService {
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public searchServices(q?: string, limit?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<ServiceDto>>;
-    public searchServices(q?: string, limit?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<ServiceDto>>>;
-    public searchServices(q?: string, limit?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<ServiceDto>>>;
-    public searchServices(q?: string, limit?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public searchServices(q?: string, limit?: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<ServiceDto>>;
+    public searchServices(q?: string, limit?: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<ServiceDto>>>;
+    public searchServices(q?: string, limit?: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<ServiceDto>>>;
+    public searchServices(q?: string, limit?: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
 

@@ -25,6 +25,8 @@ import { CompleteWorkorderResponse } from '../src/models/completeWorkorderRespon
 // @ts-ignore
 import { CompletionPreconditionsResponse } from '../src/models/completionPreconditionsResponse';
 // @ts-ignore
+import { CountResponse } from '../src/models/countResponse';
+// @ts-ignore
 import { CreateWorkorderRequest } from '../src/models/createWorkorderRequest';
 // @ts-ignore
 import { InvoiceGenerationResponse } from '../src/models/invoiceGenerationResponse';
@@ -323,6 +325,85 @@ export class WorkOrderAPIService extends BaseService {
             {
                 context: localVarHttpContext,
                 body: completeWorkorderRequest,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Count work orders by status
+     * Count work orders, optionally restricted to specific statuses or to open (non-terminal) work orders only. \&quot;Open\&quot; means any status except COMPLETED or CANCELLED. Returns a grand total plus a per-status breakdown, computed server-side without listing the work orders.
+     * @endpoint get /v1/workorders/count
+     * @param openOnly Count only open (non-terminal) work orders. Ignored when \&#39;status\&#39; is supplied. Defaults to false (count all statuses).
+     * @param status Exact statuses to count; repeatable. Takes precedence over \&#39;openOnly\&#39;.
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public countWorkorders(openOnly?: boolean, status?: Array<'DRAFT' | 'APPROVED' | 'ASSIGNED' | 'WORK_IN_PROGRESS' | 'AWAITING_PARTS' | 'AWAITING_APPROVAL' | 'READY_FOR_PICKUP' | 'COMPLETED' | 'CANCELLED'>, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<CountResponse>;
+    public countWorkorders(openOnly?: boolean, status?: Array<'DRAFT' | 'APPROVED' | 'ASSIGNED' | 'WORK_IN_PROGRESS' | 'AWAITING_PARTS' | 'AWAITING_APPROVAL' | 'READY_FOR_PICKUP' | 'COMPLETED' | 'CANCELLED'>, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<CountResponse>>;
+    public countWorkorders(openOnly?: boolean, status?: Array<'DRAFT' | 'APPROVED' | 'ASSIGNED' | 'WORK_IN_PROGRESS' | 'AWAITING_PARTS' | 'AWAITING_APPROVAL' | 'READY_FOR_PICKUP' | 'COMPLETED' | 'CANCELLED'>, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<CountResponse>>;
+    public countWorkorders(openOnly?: boolean, status?: Array<'DRAFT' | 'APPROVED' | 'ASSIGNED' | 'WORK_IN_PROGRESS' | 'AWAITING_PARTS' | 'AWAITING_APPROVAL' | 'READY_FOR_PICKUP' | 'COMPLETED' | 'CANCELLED'>, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+
+        let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'openOnly',
+            <any>openOnly,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'status',
+            <any>status,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/workorders/count`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<CountResponse>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                params: localVarQueryParameters.toHttpParams(),
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,
