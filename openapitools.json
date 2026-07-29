@@ -384,6 +384,44 @@
         },
         "templateDir": "templates/typescript-angular"
       },
+      "sdk-warranty": {
+        "generatorName": "typescript-angular",
+        "output": "packages/sdk-warranty",
+        "inputSpec": "../durion-positivity-backend/pos-warranty/openapi.yaml",
+        "additionalProperties": {
+          "npmName": "@durion-sdk/warranty",
+          "npmVersion": "0.1.0-alpha",
+          "ngVersion": "21",
+          "providedIn": "root",
+          "supportsES6": true,
+          "stringEnums": true,
+          "withSeparateModelsAndApi": true,
+          "modelPackage": "src/models",
+          "apiPackage": "src/apis",
+          "gitUserId": "louisburroughs",
+          "gitRepoId": "durion-positivity-sdk-angular"
+        },
+        "templateDir": "templates/typescript-angular"
+      },
+      "sdk-marketing": {
+        "generatorName": "typescript-angular",
+        "output": "packages/sdk-marketing",
+        "inputSpec": "../durion-positivity-backend/pos-marketing/openapi.yaml",
+        "additionalProperties": {
+          "npmName": "@durion-sdk/marketing",
+          "npmVersion": "0.1.0-alpha",
+          "ngVersion": "21",
+          "providedIn": "root",
+          "supportsES6": true,
+          "stringEnums": true,
+          "withSeparateModelsAndApi": true,
+          "modelPackage": "src/models",
+          "apiPackage": "src/apis",
+          "gitUserId": "louisburroughs",
+          "gitRepoId": "durion-positivity-sdk-angular"
+        },
+        "templateDir": "templates/typescript-angular"
+      },
       "sdk-bulk-loader": {
         "generatorName": "typescript-angular",
         "output": "packages/sdk-bulk-loader",
