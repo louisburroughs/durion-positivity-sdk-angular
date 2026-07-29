@@ -59,10 +59,10 @@ export interface TaxCalculationRequest {
      */
     committable?: boolean;
     address?: string;
-    stateCode?: string;
-    city?: string;
-    postalCode?: string;
     countryCode?: string;
+    postalCode?: string;
+    city?: string;
+    stateCode?: string;
 }
 export enum TaxCalculationRequestCalculationTypeEnum {
     Sale = 'SALE',
@@ -118,7 +118,7 @@ export function instanceOfTaxCalculationRequest(value: object): value is TaxCalc
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createTaxCalculationRequestPropertyNames('lineItems', 'destinationAddress', );
-    const optionalStringProperties = createTaxCalculationRequestOptionalProperties({ name: 'currencyCode', nullable: false }, { name: 'locale', nullable: false }, { name: 'customerId', nullable: false }, { name: 'calculationType', nullable: false }, { name: 'originalReferenceId', nullable: false }, { name: 'transactionDate', nullable: false }, { name: 'referenceId', nullable: false }, { name: 'referenceType', nullable: false }, { name: 'address', nullable: false }, { name: 'stateCode', nullable: false }, { name: 'city', nullable: false }, { name: 'postalCode', nullable: false }, { name: 'countryCode', nullable: false }, );
+    const optionalStringProperties = createTaxCalculationRequestOptionalProperties({ name: 'currencyCode', nullable: false }, { name: 'locale', nullable: false }, { name: 'customerId', nullable: false }, { name: 'calculationType', nullable: false }, { name: 'originalReferenceId', nullable: false }, { name: 'transactionDate', nullable: false }, { name: 'referenceId', nullable: false }, { name: 'referenceType', nullable: false }, { name: 'address', nullable: false }, { name: 'countryCode', nullable: false }, { name: 'postalCode', nullable: false }, { name: 'city', nullable: false }, { name: 'stateCode', nullable: false }, );
     const optionalNumberProperties = createTaxCalculationRequestOptionalProperties();
     const optionalBooleanProperties = createTaxCalculationRequestOptionalProperties({ name: 'committable', nullable: false }, );
 

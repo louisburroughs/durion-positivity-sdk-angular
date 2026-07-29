@@ -13,13 +13,13 @@ import { CustomerDTO } from './customerDTO';
 
 
 export interface PageCustomerDTO { 
-    totalElements?: number;
     totalPages?: number;
+    totalElements?: number;
     size?: number;
     content?: Array<CustomerDTO>;
     number?: number;
-    sort?: SortObject;
     pageable?: PageableObject;
+    sort?: SortObject;
     first?: boolean;
     last?: boolean;
     numberOfElements?: number;
@@ -66,7 +66,7 @@ export function instanceOfPageCustomerDTO(value: object): value is PageCustomerD
 
     const requiredProperties = createPageCustomerDTOPropertyNames();
     const optionalStringProperties = createPageCustomerDTOOptionalProperties();
-    const optionalNumberProperties = createPageCustomerDTOOptionalProperties({ name: 'totalElements', nullable: false }, { name: 'totalPages', nullable: false }, { name: 'size', nullable: false }, { name: 'number', nullable: false }, { name: 'numberOfElements', nullable: false }, );
+    const optionalNumberProperties = createPageCustomerDTOOptionalProperties({ name: 'totalPages', nullable: false }, { name: 'totalElements', nullable: false }, { name: 'size', nullable: false }, { name: 'number', nullable: false }, { name: 'numberOfElements', nullable: false }, );
     const optionalBooleanProperties = createPageCustomerDTOOptionalProperties({ name: 'first', nullable: false }, { name: 'last', nullable: false }, { name: 'empty', nullable: false }, );
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

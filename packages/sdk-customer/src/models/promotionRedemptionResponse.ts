@@ -46,6 +46,10 @@ export interface PromotionRedemptionResponse {
      */
     promotionCode: string;
     /**
+     * Campaign code the redemption is attributed to, if any
+     */
+    campaignCode?: string;
+    /**
      * Identifier of the actor who recorded the redemption
      */
     recordedBy?: string;
@@ -112,7 +116,7 @@ export function instanceOfPromotionRedemptionResponse(value: object): value is P
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createPromotionRedemptionResponsePropertyNames('promotionRedemptionId', 'promotionId', 'customerId', 'workorderId', 'discountAmount', 'discountType', 'promotionCode', 'status', 'createdAt', );
-    const optionalStringProperties = createPromotionRedemptionResponseOptionalProperties({ name: 'promotionRedemptionId', nullable: false }, { name: 'promotionId', nullable: false }, { name: 'customerId', nullable: false }, { name: 'workorderId', nullable: false }, { name: 'invoiceId', nullable: false }, { name: 'discountType', nullable: false }, { name: 'promotionCode', nullable: false }, { name: 'recordedBy', nullable: false }, { name: 'status', nullable: false }, );
+    const optionalStringProperties = createPromotionRedemptionResponseOptionalProperties({ name: 'promotionRedemptionId', nullable: false }, { name: 'promotionId', nullable: false }, { name: 'customerId', nullable: false }, { name: 'workorderId', nullable: false }, { name: 'invoiceId', nullable: false }, { name: 'discountType', nullable: false }, { name: 'promotionCode', nullable: false }, { name: 'campaignCode', nullable: false }, { name: 'recordedBy', nullable: false }, { name: 'status', nullable: false }, );
     const optionalNumberProperties = createPromotionRedemptionResponseOptionalProperties({ name: 'discountAmount', nullable: false }, );
     const optionalBooleanProperties = createPromotionRedemptionResponseOptionalProperties({ name: 'recordedOverLimit', nullable: false }, );
 

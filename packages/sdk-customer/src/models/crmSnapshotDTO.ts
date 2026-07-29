@@ -9,8 +9,10 @@
  */
 import { AccountSummary } from './accountSummary';
 import { ContactSummary } from './contactSummary';
+import { MarketingConsentSummaryResponse } from './marketingConsentSummaryResponse';
 import { SnapshotMetadata } from './snapshotMetadata';
 import { BillingPreferences } from './billingPreferences';
+import { CustomerInteractionResponse } from './customerInteractionResponse';
 import { BillingRuleRef } from './billingRuleRef';
 import { VehicleSummary } from './vehicleSummary';
 
@@ -31,6 +33,11 @@ export interface CrmSnapshotDTO {
     vehicles: Array<VehicleSummary>;
     preferences?: BillingPreferences;
     billingRules?: BillingRuleRef;
+    marketingConsent?: MarketingConsentSummaryResponse;
+    /**
+     * Most recent touches on the party\'s interaction timeline
+     */
+    recentInteractions?: Array<CustomerInteractionResponse>;
 }
 
 function isOptionalCrmSnapshotDTOPropertyOfType(
