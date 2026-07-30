@@ -4,6 +4,7 @@ export * from './linkUserToPersonRequest';
 export * from './person';
 export * from './personResponse';
 export * from './personRoleAssignmentRequest';
+export * from './postalAddressDto';
 export * from './problemDetail';
 export * from './resolvePersonRequest';
 export * from './resolvePersonResponse';

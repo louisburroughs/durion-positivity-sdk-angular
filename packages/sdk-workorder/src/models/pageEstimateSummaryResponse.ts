@@ -18,8 +18,8 @@ export interface PageEstimateSummaryResponse {
     size?: number;
     content?: Array<EstimateSummaryResponse>;
     number?: number;
-    pageable?: PageableObject;
     sort?: SortObject;
+    pageable?: PageableObject;
     first?: boolean;
     last?: boolean;
     numberOfElements?: number;

@@ -47,7 +47,8 @@ export interface CreateCommercialAccountResponse {
      */
     billingTermsId?: string;
     /**
-     * Primary address for display, if available
+     * Legacy free-text address for display, if available. Superseded by the structured postal address in pos-people-contact (FI-4).
+     * @deprecated
      */
     primaryAddress?: string;
     /**

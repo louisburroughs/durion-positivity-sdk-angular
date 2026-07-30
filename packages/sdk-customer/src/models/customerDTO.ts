@@ -34,7 +34,8 @@ export interface CustomerDTO {
      */
     firstName: string;
     /**
-     * Primary address label or identifier for the customer
+     * Legacy free-text address label. Superseded by the structured postal address in pos-people-contact (FI-4); retained for display compatibility.
+     * @deprecated
      */
     primaryAddress?: string;
     /**
