@@ -18,8 +18,8 @@ export interface PageWorkorderSearchResult {
     size?: number;
     content?: Array<WorkorderSearchResult>;
     number?: number;
-    sort?: SortObject;
     pageable?: PageableObject;
+    sort?: SortObject;
     first?: boolean;
     last?: boolean;
     numberOfElements?: number;

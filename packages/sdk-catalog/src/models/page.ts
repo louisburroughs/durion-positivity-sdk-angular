@@ -17,8 +17,8 @@ export interface Page {
     size?: number;
     content?: Array<any>;
     number?: number;
-    sort?: SortObject;
     pageable?: PageableObject;
+    sort?: SortObject;
     first?: boolean;
     last?: boolean;
     numberOfElements?: number;

@@ -18,8 +18,8 @@ export interface PageSupplierItemCostDto {
     size?: number;
     content?: Array<SupplierItemCostDto>;
     number?: number;
-    sort?: SortObject;
     pageable?: PageableObject;
+    sort?: SortObject;
     first?: boolean;
     last?: boolean;
     numberOfElements?: number;

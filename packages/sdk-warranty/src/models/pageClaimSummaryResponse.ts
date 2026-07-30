@@ -18,8 +18,8 @@ export interface PageClaimSummaryResponse {
     size?: number;
     content?: Array<ClaimSummaryResponse>;
     number?: number;
-    sort?: SortObject;
     pageable?: PageableObject;
+    sort?: SortObject;
     first?: boolean;
     last?: boolean;
     numberOfElements?: number;

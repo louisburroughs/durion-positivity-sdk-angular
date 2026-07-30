@@ -73,6 +73,7 @@ export * from './resolveAccountTierResponse';
 export * from './roleAssignment';
 export * from './searchPartiesRequest';
 export * from './searchPartiesResponse';
+export * from './segmentAttributeResponse';
 export * from './segmentMembersRequest';
 export * from './segmentPredicate';
 export * from './segmentResolutionResponse';

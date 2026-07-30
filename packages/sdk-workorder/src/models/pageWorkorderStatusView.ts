@@ -18,8 +18,8 @@ export interface PageWorkorderStatusView {
     size?: number;
     content?: Array<WorkorderStatusView>;
     number?: number;
-    sort?: SortObject;
     pageable?: PageableObject;
+    sort?: SortObject;
     first?: boolean;
     last?: boolean;
     numberOfElements?: number;
