@@ -153,7 +153,7 @@ export class UOMConversionAPIService extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/products/uom-conversions/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
+        let localVarPath = `/v1/products/uom-conversions/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<any>('delete', `${basePath}${localVarPath}`,
             {
@@ -213,7 +213,7 @@ export class UOMConversionAPIService extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/products/uom-conversions/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
+        let localVarPath = `/v1/products/uom-conversions/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<UomConversionDto>('get', `${basePath}${localVarPath}`,
             {
@@ -342,7 +342,7 @@ export class UOMConversionAPIService extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/products/uom-conversions/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
+        let localVarPath = `/v1/products/uom-conversions/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<UomConversionDto>('put', `${basePath}${localVarPath}`,
             {

@@ -26,7 +26,11 @@ export interface ResolvePriceRequestDto {
      */
     locationId?: string;
     /**
-     * Customer tier used to scope price book selection
+     * Identifier of the customer tier used to select a CUSTOMER_TIER reference price book (matches the book\'s scopeId). Selects tier list/reference prices only — transactional customer-tier discounting is owned by pos-price (ADR-0054)
+     */
+    customerTierId?: string;
+    /**
+     * Customer tier label matched against rule-level CUSTOMER_TIER conditions within the selected price book
      */
     customerTier?: string;
     /**
@@ -78,7 +82,7 @@ export function instanceOfResolvePriceRequestDto(value: object): value is Resolv
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createResolvePriceRequestDtoPropertyNames('productId', );
-    const optionalStringProperties = createResolvePriceRequestDtoOptionalProperties({ name: 'productId', nullable: false }, { name: 'priceBookId', nullable: false }, { name: 'locationId', nullable: false }, { name: 'customerTier', nullable: false }, { name: 'currency', nullable: false }, );
+    const optionalStringProperties = createResolvePriceRequestDtoOptionalProperties({ name: 'productId', nullable: false }, { name: 'priceBookId', nullable: false }, { name: 'locationId', nullable: false }, { name: 'customerTierId', nullable: false }, { name: 'customerTier', nullable: false }, { name: 'currency', nullable: false }, );
     const optionalNumberProperties = createResolvePriceRequestDtoOptionalProperties();
     const optionalBooleanProperties = createResolvePriceRequestDtoOptionalProperties();
 

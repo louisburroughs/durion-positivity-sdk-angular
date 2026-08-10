@@ -84,7 +84,7 @@ export class ItemCostAPIService extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/products/items/${this.configuration.encodeParam({name: "itemId", value: itemId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/costs/audit`;
+        let localVarPath = `/v1/products/items/${this.configuration.encodeParam({name: "itemId", value: itemId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/costs/audit`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<ItemCostAuditDto>('get', `${basePath}${localVarPath}`,
             {
@@ -144,7 +144,7 @@ export class ItemCostAPIService extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/products/items/${this.configuration.encodeParam({name: "itemId", value: itemId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/costs`;
+        let localVarPath = `/v1/products/items/${this.configuration.encodeParam({name: "itemId", value: itemId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/costs`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<ItemCostsDto>('get', `${basePath}${localVarPath}`,
             {
@@ -217,7 +217,7 @@ export class ItemCostAPIService extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/products/items/${this.configuration.encodeParam({name: "itemId", value: itemId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/standard-cost`;
+        let localVarPath = `/v1/products/items/${this.configuration.encodeParam({name: "itemId", value: itemId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/standard-cost`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<ItemCostsDto>('put', `${basePath}${localVarPath}`,
             {

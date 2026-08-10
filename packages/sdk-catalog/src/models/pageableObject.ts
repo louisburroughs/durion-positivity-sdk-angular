@@ -14,8 +14,8 @@ export interface PageableObject {
     offset?: number;
     sort?: SortObject;
     paged?: boolean;
-    pageSize?: number;
     pageNumber?: number;
+    pageSize?: number;
     unpaged?: boolean;
 }
 
@@ -59,7 +59,7 @@ export function instanceOfPageableObject(value: object): value is PageableObject
 
     const requiredProperties = createPageableObjectPropertyNames();
     const optionalStringProperties = createPageableObjectOptionalProperties();
-    const optionalNumberProperties = createPageableObjectOptionalProperties({ name: 'offset', nullable: false }, { name: 'pageSize', nullable: false }, { name: 'pageNumber', nullable: false }, );
+    const optionalNumberProperties = createPageableObjectOptionalProperties({ name: 'offset', nullable: false }, { name: 'pageNumber', nullable: false }, { name: 'pageSize', nullable: false }, );
     const optionalBooleanProperties = createPageableObjectOptionalProperties({ name: 'paged', nullable: false }, { name: 'unpaged', nullable: false }, );
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
