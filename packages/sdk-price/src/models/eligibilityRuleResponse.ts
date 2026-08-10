@@ -37,7 +37,9 @@ export interface EligibilityRuleResponse {
 export enum EligibilityRuleResponseConditionTypeEnum {
     AccountIdList = 'ACCOUNT_ID_LIST',
     VehicleTag = 'VEHICLE_TAG',
-    AccountFleetSize = 'ACCOUNT_FLEET_SIZE'
+    AccountFleetSize = 'ACCOUNT_FLEET_SIZE',
+    AudienceType = 'AUDIENCE_TYPE',
+    CampaignCode = 'CAMPAIGN_CODE'
 };
 export enum EligibilityRuleResponseOperatorEnum {
     In = 'IN',

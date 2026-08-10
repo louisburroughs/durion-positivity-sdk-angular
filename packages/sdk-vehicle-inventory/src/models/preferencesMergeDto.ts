@@ -18,6 +18,10 @@ export interface PreferencesMergeDto {
      */
     partialPreferences?: object;
     /**
+     * Structured service interval in whole months; null leaves the current value unchanged (#1175)
+     */
+    serviceIntervalMonths?: number;
+    /**
      * Identifier of the user updating the preferences
      */
     updatedByUserId?: string;
@@ -63,7 +67,7 @@ export function instanceOfPreferencesMergeDto(value: object): value is Preferenc
 
     const requiredProperties = createPreferencesMergeDtoPropertyNames();
     const optionalStringProperties = createPreferencesMergeDtoOptionalProperties({ name: 'updatedByUserId', nullable: false }, );
-    const optionalNumberProperties = createPreferencesMergeDtoOptionalProperties();
+    const optionalNumberProperties = createPreferencesMergeDtoOptionalProperties({ name: 'serviceIntervalMonths', nullable: false }, );
     const optionalBooleanProperties = createPreferencesMergeDtoOptionalProperties();
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

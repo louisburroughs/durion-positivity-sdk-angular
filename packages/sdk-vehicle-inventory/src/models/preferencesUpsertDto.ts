@@ -18,6 +18,10 @@ export interface PreferencesUpsertDto {
      */
     preferences: object;
     /**
+     * Structured service interval in whole months; null clears the per-vehicle override so CRM falls back to its default (#1175)
+     */
+    serviceIntervalMonths?: number;
+    /**
      * Optional free-text service notes
      */
     serviceNotes?: string;
@@ -71,7 +75,7 @@ export function instanceOfPreferencesUpsertDto(value: object): value is Preferen
 
     const requiredProperties = createPreferencesUpsertDtoPropertyNames('preferences', );
     const optionalStringProperties = createPreferencesUpsertDtoOptionalProperties({ name: 'serviceNotes', nullable: false }, { name: 'createdByUserId', nullable: false }, { name: 'updatedByUserId', nullable: false }, );
-    const optionalNumberProperties = createPreferencesUpsertDtoOptionalProperties();
+    const optionalNumberProperties = createPreferencesUpsertDtoOptionalProperties({ name: 'serviceIntervalMonths', nullable: false }, );
     const optionalBooleanProperties = createPreferencesUpsertDtoOptionalProperties();
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

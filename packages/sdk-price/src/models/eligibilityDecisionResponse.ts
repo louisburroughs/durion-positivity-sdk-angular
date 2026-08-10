@@ -30,7 +30,13 @@ export enum EligibilityDecisionResponseReasonCodeEnum {
     VehicleTagNotPresent = 'VEHICLE_TAG_NOT_PRESENT',
     VehicleTagExcluded = 'VEHICLE_TAG_EXCLUDED',
     FleetSizeTooSmall = 'FLEET_SIZE_TOO_SMALL',
+    AudienceTypeNotMatched = 'AUDIENCE_TYPE_NOT_MATCHED',
+    AudienceTypeExcluded = 'AUDIENCE_TYPE_EXCLUDED',
+    CampaignCodeNotMatched = 'CAMPAIGN_CODE_NOT_MATCHED',
+    CampaignCodeExcluded = 'CAMPAIGN_CODE_EXCLUDED',
     MissingAccountContext = 'MISSING_ACCOUNT_CONTEXT',
+    MissingAudienceContext = 'MISSING_AUDIENCE_CONTEXT',
+    MissingCampaignContext = 'MISSING_CAMPAIGN_CONTEXT',
     MissingVehicleContext = 'MISSING_VEHICLE_CONTEXT',
     EvaluationError = 'EVALUATION_ERROR'
 };

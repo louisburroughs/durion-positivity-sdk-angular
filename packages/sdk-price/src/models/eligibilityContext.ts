@@ -10,7 +10,7 @@
 
 
 /**
- * Optional account/vehicle context used to evaluate promotion eligibility
+ * Optional account/vehicle/campaign context used to evaluate promotion eligibility
  */
 export interface EligibilityContext { 
     /**
@@ -21,6 +21,14 @@ export interface EligibilityContext {
      * Vehicle identifier used for vehicle-based eligibility rules
      */
     vehicleId?: string | null;
+    /**
+     * Campaign audience type used for audience-based eligibility rules; compared case-insensitively
+     */
+    audienceType?: string | null;
+    /**
+     * Marketing campaign code used for campaign-based eligibility rules
+     */
+    campaignCode?: string | null;
 }
 
 function isOptionalEligibilityContextPropertyOfType(
@@ -62,7 +70,7 @@ export function instanceOfEligibilityContext(value: object): value is Eligibilit
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createEligibilityContextPropertyNames();
-    const optionalStringProperties = createEligibilityContextOptionalProperties({ name: 'accountId', nullable: true }, { name: 'vehicleId', nullable: true }, );
+    const optionalStringProperties = createEligibilityContextOptionalProperties({ name: 'accountId', nullable: true }, { name: 'vehicleId', nullable: true }, { name: 'audienceType', nullable: true }, { name: 'campaignCode', nullable: true }, );
     const optionalNumberProperties = createEligibilityContextOptionalProperties();
     const optionalBooleanProperties = createEligibilityContextOptionalProperties();
 

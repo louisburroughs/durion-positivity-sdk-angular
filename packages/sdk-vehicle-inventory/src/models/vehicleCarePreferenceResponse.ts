@@ -26,6 +26,10 @@ export interface VehicleCarePreferenceResponse {
      */
     preferences: object;
     /**
+     * Structured service interval in whole months; null means use the CRM default (#1175)
+     */
+    serviceIntervalMonths?: number;
+    /**
      * Service notes for technicians
      */
     serviceNotes?: string;
@@ -91,7 +95,7 @@ export function instanceOfVehicleCarePreferenceResponse(value: object): value is
 
     const requiredProperties = createVehicleCarePreferenceResponsePropertyNames('id', 'vehicleId', 'preferences', 'createdAt', 'updatedAt', 'version', );
     const optionalStringProperties = createVehicleCarePreferenceResponseOptionalProperties({ name: 'id', nullable: false }, { name: 'vehicleId', nullable: false }, { name: 'serviceNotes', nullable: false }, { name: 'createdByUserId', nullable: false }, { name: 'updatedByUserId', nullable: false }, );
-    const optionalNumberProperties = createVehicleCarePreferenceResponseOptionalProperties({ name: 'version', nullable: false }, );
+    const optionalNumberProperties = createVehicleCarePreferenceResponseOptionalProperties({ name: 'serviceIntervalMonths', nullable: false }, { name: 'version', nullable: false }, );
     const optionalBooleanProperties = createVehicleCarePreferenceResponseOptionalProperties();
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
