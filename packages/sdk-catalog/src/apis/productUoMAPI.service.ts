@@ -97,7 +97,7 @@ export class ProductUoMAPIService extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/products/${this.configuration.encodeParam({name: "productId", value: productId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/uoms`;
+        let localVarPath = `/v1/products/${this.configuration.encodeParam({name: "productId", value: productId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/uoms`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<ProductUomDto>('post', `${basePath}${localVarPath}`,
             {
@@ -161,7 +161,7 @@ export class ProductUoMAPIService extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/products/${this.configuration.encodeParam({name: "productId", value: productId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/uoms/${this.configuration.encodeParam({name: "uomId", value: uomId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
+        let localVarPath = `/v1/products/${this.configuration.encodeParam({name: "productId", value: productId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/uoms/${this.configuration.encodeParam({name: "uomId", value: uomId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<any>('delete', `${basePath}${localVarPath}`,
             {
@@ -221,7 +221,7 @@ export class ProductUoMAPIService extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/products/${this.configuration.encodeParam({name: "productId", value: productId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/uoms`;
+        let localVarPath = `/v1/products/${this.configuration.encodeParam({name: "productId", value: productId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/uoms`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<Array<ProductUomDto>>('get', `${basePath}${localVarPath}`,
             {
@@ -298,7 +298,7 @@ export class ProductUoMAPIService extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/products/${this.configuration.encodeParam({name: "productId", value: productId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/uoms/${this.configuration.encodeParam({name: "uomId", value: uomId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
+        let localVarPath = `/v1/products/${this.configuration.encodeParam({name: "productId", value: productId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/uoms/${this.configuration.encodeParam({name: "uomId", value: uomId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<ProductUomDto>('put', `${basePath}${localVarPath}`,
             {

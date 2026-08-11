@@ -173,7 +173,7 @@ export class PriceBookAPIService extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/products/price-books/${this.configuration.encodeParam({name: "priceBookId", value: priceBookId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/rules`;
+        let localVarPath = `/v1/products/price-books/${this.configuration.encodeParam({name: "priceBookId", value: priceBookId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/rules`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<PriceBookRuleDto>('post', `${basePath}${localVarPath}`,
             {
@@ -237,7 +237,7 @@ export class PriceBookAPIService extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/products/price-books/${this.configuration.encodeParam({name: "priceBookId", value: priceBookId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/rules/${this.configuration.encodeParam({name: "ruleId", value: ruleId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
+        let localVarPath = `/v1/products/price-books/${this.configuration.encodeParam({name: "priceBookId", value: priceBookId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/rules/${this.configuration.encodeParam({name: "ruleId", value: ruleId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<any>('delete', `${basePath}${localVarPath}`,
             {
@@ -297,7 +297,7 @@ export class PriceBookAPIService extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/products/price-books/${this.configuration.encodeParam({name: "priceBookId", value: priceBookId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
+        let localVarPath = `/v1/products/price-books/${this.configuration.encodeParam({name: "priceBookId", value: priceBookId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<PriceBookDto>('get', `${basePath}${localVarPath}`,
             {
@@ -357,7 +357,7 @@ export class PriceBookAPIService extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/products/price-books/${this.configuration.encodeParam({name: "priceBookId", value: priceBookId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/rules`;
+        let localVarPath = `/v1/products/price-books/${this.configuration.encodeParam({name: "priceBookId", value: priceBookId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/rules`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<PriceBookRuleDto>('get', `${basePath}${localVarPath}`,
             {
@@ -373,8 +373,8 @@ export class PriceBookAPIService extends BaseService {
     }
 
     /**
-     * Resolve effective product price
-     * Calculates the effective price for a product using applicable price books and rules.
+     * Resolve reference/list product price
+     * Resolves the reference/list price for a product using applicable price books and rules. Candidate book precedence: explicit priceBookId, then active LOCATION book, then active CUSTOMER_TIER book (customerTierId), then COMPANY_DEFAULT. The result is catalog reference data (ADR-0054) — transactional sell prices are resolved by pos-price, never by this endpoint.
      * @endpoint post /v1/products/price-books/resolve-price
      * @param resolvePriceRequestDto 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -500,7 +500,7 @@ export class PriceBookAPIService extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/products/price-books/${this.configuration.encodeParam({name: "priceBookId", value: priceBookId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
+        let localVarPath = `/v1/products/price-books/${this.configuration.encodeParam({name: "priceBookId", value: priceBookId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<PriceBookDto>('put', `${basePath}${localVarPath}`,
             {
@@ -578,7 +578,7 @@ export class PriceBookAPIService extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/products/price-books/${this.configuration.encodeParam({name: "priceBookId", value: priceBookId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/rules/${this.configuration.encodeParam({name: "ruleId", value: ruleId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
+        let localVarPath = `/v1/products/price-books/${this.configuration.encodeParam({name: "priceBookId", value: priceBookId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/rules/${this.configuration.encodeParam({name: "ruleId", value: ruleId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<PriceBookRuleDto>('put', `${basePath}${localVarPath}`,
             {

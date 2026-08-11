@@ -125,7 +125,7 @@ export class ProductsAPIService extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/products/${this.configuration.encodeParam({name: "productId", value: productId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/replacements`;
+        let localVarPath = `/v1/products/${this.configuration.encodeParam({name: "productId", value: productId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/replacements`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<ReplacementOption>('post', `${basePath}${localVarPath}`,
             {
@@ -199,7 +199,7 @@ export class ProductsAPIService extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/products/pricing/location-overrides/${this.configuration.encodeParam({name: "overrideId", value: overrideId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/approve`;
+        let localVarPath = `/v1/products/pricing/location-overrides/${this.configuration.encodeParam({name: "overrideId", value: overrideId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/approve`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<LocationPriceOverrideResponseDto>('post', `${basePath}${localVarPath}`,
             {
@@ -404,7 +404,7 @@ export class ProductsAPIService extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/products/pricing/effective-price/${this.configuration.encodeParam({name: "locationId", value: locationId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/${this.configuration.encodeParam({name: "productId", value: productId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
+        let localVarPath = `/v1/products/pricing/effective-price/${this.configuration.encodeParam({name: "locationId", value: locationId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/${this.configuration.encodeParam({name: "productId", value: productId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<EffectiveLocationPriceResponseDto>('get', `${basePath}${localVarPath}`,
             {
@@ -464,7 +464,7 @@ export class ProductsAPIService extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/products/noninventory/${this.configuration.encodeParam({name: "productId", value: productId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
+        let localVarPath = `/v1/products/noninventory/${this.configuration.encodeParam({name: "productId", value: productId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<NonInventoryProductDto>('get', `${basePath}${localVarPath}`,
             {
@@ -584,7 +584,7 @@ export class ProductsAPIService extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/products/${this.configuration.encodeParam({name: "productId", value: productId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/substitutes`;
+        let localVarPath = `/v1/products/${this.configuration.encodeParam({name: "productId", value: productId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/substitutes`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<ProductDto>('get', `${basePath}${localVarPath}`,
             {
@@ -644,7 +644,7 @@ export class ProductsAPIService extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/products/${this.configuration.encodeParam({name: "productId", value: productId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
+        let localVarPath = `/v1/products/${this.configuration.encodeParam({name: "productId", value: productId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<ProductDto>('get', `${basePath}${localVarPath}`,
             {
@@ -779,7 +779,7 @@ export class ProductsAPIService extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/products/${this.configuration.encodeParam({name: "productId", value: productId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/detail`;
+        let localVarPath = `/v1/products/${this.configuration.encodeParam({name: "productId", value: productId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/detail`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<ProductDetailView>('get', `${basePath}${localVarPath}`,
             {
@@ -840,7 +840,7 @@ export class ProductsAPIService extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/products/${this.configuration.encodeParam({name: "productId", value: productId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/lifecycle`;
+        let localVarPath = `/v1/products/${this.configuration.encodeParam({name: "productId", value: productId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/lifecycle`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<ProductLifecycleResponse>('get', `${basePath}${localVarPath}`,
             {
@@ -900,7 +900,7 @@ export class ProductsAPIService extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/products/${this.configuration.encodeParam({name: "productId", value: productId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/replacements`;
+        let localVarPath = `/v1/products/${this.configuration.encodeParam({name: "productId", value: productId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/replacements`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<Array<ReplacementOption>>('get', `${basePath}${localVarPath}`,
             {
@@ -960,7 +960,7 @@ export class ProductsAPIService extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/products/services/${this.configuration.encodeParam({name: "serviceId", value: serviceId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
+        let localVarPath = `/v1/products/services/${this.configuration.encodeParam({name: "serviceId", value: serviceId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<ServiceDto>('get', `${basePath}${localVarPath}`,
             {
@@ -1093,7 +1093,7 @@ export class ProductsAPIService extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/products/pricing/location-overrides/${this.configuration.encodeParam({name: "overrideId", value: overrideId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/reject`;
+        let localVarPath = `/v1/products/pricing/location-overrides/${this.configuration.encodeParam({name: "overrideId", value: overrideId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/reject`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<LocationPriceOverrideResponseDto>('post', `${basePath}${localVarPath}`,
             {
@@ -1375,7 +1375,7 @@ export class ProductsAPIService extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/products/${this.configuration.encodeParam({name: "productId", value: productId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/lifecycle`;
+        let localVarPath = `/v1/products/${this.configuration.encodeParam({name: "productId", value: productId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/lifecycle`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<ProductLifecycleResponse>('put', `${basePath}${localVarPath}`,
             {
@@ -1449,7 +1449,7 @@ export class ProductsAPIService extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/products/${this.configuration.encodeParam({name: "productId", value: productId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
+        let localVarPath = `/v1/products/${this.configuration.encodeParam({name: "productId", value: productId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<ProductDto>('put', `${basePath}${localVarPath}`,
             {
@@ -1523,7 +1523,7 @@ export class ProductsAPIService extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/products/${this.configuration.encodeParam({name: "productId", value: productId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/tracking-level`;
+        let localVarPath = `/v1/products/${this.configuration.encodeParam({name: "productId", value: productId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/tracking-level`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<ProductDto>('put', `${basePath}${localVarPath}`,
             {

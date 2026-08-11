@@ -97,7 +97,7 @@ export class SubstitutionGroupAPIService extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/products/substitution-groups/${this.configuration.encodeParam({name: "groupId", value: groupId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/members`;
+        let localVarPath = `/v1/products/substitution-groups/${this.configuration.encodeParam({name: "groupId", value: groupId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/members`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<SubstitutionGroupDto>('post', `${basePath}${localVarPath}`,
             {
@@ -227,7 +227,7 @@ export class SubstitutionGroupAPIService extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/products/substitution-groups/${this.configuration.encodeParam({name: "groupId", value: groupId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
+        let localVarPath = `/v1/products/substitution-groups/${this.configuration.encodeParam({name: "groupId", value: groupId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<any>('delete', `${basePath}${localVarPath}`,
             {
@@ -287,7 +287,7 @@ export class SubstitutionGroupAPIService extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/products/substitution-groups/${this.configuration.encodeParam({name: "groupId", value: groupId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
+        let localVarPath = `/v1/products/substitution-groups/${this.configuration.encodeParam({name: "groupId", value: groupId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<SubstitutionGroupDto>('get', `${basePath}${localVarPath}`,
             {
@@ -407,7 +407,7 @@ export class SubstitutionGroupAPIService extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/products/substitution-groups/${this.configuration.encodeParam({name: "groupId", value: groupId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/members/${this.configuration.encodeParam({name: "productId", value: productId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
+        let localVarPath = `/v1/products/substitution-groups/${this.configuration.encodeParam({name: "groupId", value: groupId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/members/${this.configuration.encodeParam({name: "productId", value: productId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<SubstitutionGroupDto>('delete', `${basePath}${localVarPath}`,
             {

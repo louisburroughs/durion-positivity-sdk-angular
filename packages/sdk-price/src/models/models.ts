@@ -1,4 +1,5 @@
 export * from './addEligibilityRuleRequest';
+export * from './apiError';
 export * from './applyPromotionRequest';
 export * from './applyPromotionResponse';
 export * from './basePriceBulkIngestRecord';
@@ -11,6 +12,7 @@ export * from './eligibilityContext';
 export * from './eligibilityDecisionResponse';
 export * from './eligibilityRuleResponse';
 export * from './estimateContext';
+export * from './fieldError';
 export * from './lineItemContext';
 export * from './moneyAmount';
 export * from './priceQuoteRequest';

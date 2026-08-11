@@ -149,7 +149,7 @@ export class CatalogAPIService extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/catalogs/${this.configuration.encodeParam({name: "catalogId", value: catalogId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
+        let localVarPath = `/v1/catalogs/${this.configuration.encodeParam({name: "catalogId", value: catalogId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<any>('delete', `${basePath}${localVarPath}`,
             {
@@ -209,7 +209,7 @@ export class CatalogAPIService extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/catalogs/${this.configuration.encodeParam({name: "catalogId", value: catalogId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
+        let localVarPath = `/v1/catalogs/${this.configuration.encodeParam({name: "catalogId", value: catalogId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<CatalogDto>('get', `${basePath}${localVarPath}`,
             {
@@ -342,7 +342,7 @@ export class CatalogAPIService extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/catalogs/${this.configuration.encodeParam({name: "catalogId", value: catalogId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
+        let localVarPath = `/v1/catalogs/${this.configuration.encodeParam({name: "catalogId", value: catalogId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<CatalogDto>('put', `${basePath}${localVarPath}`,
             {

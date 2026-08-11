@@ -153,7 +153,7 @@ export class SupplierItemCostAPIService extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/products/supplier-costs/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
+        let localVarPath = `/v1/products/supplier-costs/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<any>('delete', `${basePath}${localVarPath}`,
             {
@@ -213,7 +213,7 @@ export class SupplierItemCostAPIService extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/products/supplier-costs/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
+        let localVarPath = `/v1/products/supplier-costs/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<SupplierItemCostDto>('get', `${basePath}${localVarPath}`,
             {
@@ -286,7 +286,7 @@ export class SupplierItemCostAPIService extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/products/supplier-costs/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
+        let localVarPath = `/v1/products/supplier-costs/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<SupplierItemCostDto>('put', `${basePath}${localVarPath}`,
             {

@@ -13,16 +13,16 @@ import { SortObject } from './sortObject';
 
 
 export interface PageSupplierItemCostDto { 
-    totalElements?: number;
     totalPages?: number;
+    totalElements?: number;
     size?: number;
     content?: Array<SupplierItemCostDto>;
     number?: number;
     sort?: SortObject;
     pageable?: PageableObject;
+    numberOfElements?: number;
     first?: boolean;
     last?: boolean;
-    numberOfElements?: number;
     empty?: boolean;
 }
 
@@ -66,7 +66,7 @@ export function instanceOfPageSupplierItemCostDto(value: object): value is PageS
 
     const requiredProperties = createPageSupplierItemCostDtoPropertyNames();
     const optionalStringProperties = createPageSupplierItemCostDtoOptionalProperties();
-    const optionalNumberProperties = createPageSupplierItemCostDtoOptionalProperties({ name: 'totalElements', nullable: false }, { name: 'totalPages', nullable: false }, { name: 'size', nullable: false }, { name: 'number', nullable: false }, { name: 'numberOfElements', nullable: false }, );
+    const optionalNumberProperties = createPageSupplierItemCostDtoOptionalProperties({ name: 'totalPages', nullable: false }, { name: 'totalElements', nullable: false }, { name: 'size', nullable: false }, { name: 'number', nullable: false }, { name: 'numberOfElements', nullable: false }, );
     const optionalBooleanProperties = createPageSupplierItemCostDtoOptionalProperties({ name: 'first', nullable: false }, { name: 'last', nullable: false }, { name: 'empty', nullable: false }, );
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

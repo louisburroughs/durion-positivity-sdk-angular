@@ -12,16 +12,16 @@ import { SortObject } from './sortObject';
 
 
 export interface Page { 
-    totalElements?: number;
     totalPages?: number;
+    totalElements?: number;
     size?: number;
     content?: Array<any>;
     number?: number;
     sort?: SortObject;
     pageable?: PageableObject;
+    numberOfElements?: number;
     first?: boolean;
     last?: boolean;
-    numberOfElements?: number;
     empty?: boolean;
 }
 
@@ -65,7 +65,7 @@ export function instanceOfPage(value: object): value is Page {
 
     const requiredProperties = createPagePropertyNames();
     const optionalStringProperties = createPageOptionalProperties();
-    const optionalNumberProperties = createPageOptionalProperties({ name: 'totalElements', nullable: false }, { name: 'totalPages', nullable: false }, { name: 'size', nullable: false }, { name: 'number', nullable: false }, { name: 'numberOfElements', nullable: false }, );
+    const optionalNumberProperties = createPageOptionalProperties({ name: 'totalPages', nullable: false }, { name: 'totalElements', nullable: false }, { name: 'size', nullable: false }, { name: 'number', nullable: false }, { name: 'numberOfElements', nullable: false }, );
     const optionalBooleanProperties = createPageOptionalProperties({ name: 'first', nullable: false }, { name: 'last', nullable: false }, { name: 'empty', nullable: false }, );
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
