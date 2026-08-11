@@ -108,7 +108,7 @@ export function instanceOfRoleAssignmentDto(value: object): value is RoleAssignm
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createRoleAssignmentDtoPropertyNames('id', 'userId', 'roleId', 'scopeType', );
-    const optionalStringProperties = createRoleAssignmentDtoOptionalProperties({ name: 'id', nullable: false }, { name: 'userId', nullable: false }, { name: 'roleId', nullable: false }, { name: 'scopeType', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'lastModifiedBy', nullable: false }, );
+    const optionalStringProperties = createRoleAssignmentDtoOptionalProperties({ name: 'id', nullable: false }, { name: 'userId', nullable: false }, { name: 'roleId', nullable: false }, { name: 'scopeType', nullable: false }, { name: 'effectiveStartDate', nullable: false }, { name: 'effectiveEndDate', nullable: false }, { name: 'revokedAt', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'lastModifiedAt', nullable: false }, { name: 'lastModifiedBy', nullable: false }, );
     const optionalNumberProperties = createRoleAssignmentDtoOptionalProperties();
     const optionalBooleanProperties = createRoleAssignmentDtoOptionalProperties();
 

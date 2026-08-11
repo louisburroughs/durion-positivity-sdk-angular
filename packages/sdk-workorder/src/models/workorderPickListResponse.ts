@@ -82,7 +82,7 @@ export function instanceOfWorkorderPickListResponse(value: object): value is Wor
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createWorkorderPickListResponsePropertyNames('pickListId', 'workorderId', 'status', 'priority', 'dueAt', 'createdAt', 'updatedAt', );
-    const optionalStringProperties = createWorkorderPickListResponseOptionalProperties({ name: 'pickListId', nullable: false }, { name: 'workorderId', nullable: false }, { name: 'status', nullable: false }, );
+    const optionalStringProperties = createWorkorderPickListResponseOptionalProperties({ name: 'pickListId', nullable: false }, { name: 'workorderId', nullable: false }, { name: 'status', nullable: false }, { name: 'dueAt', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'updatedAt', nullable: false }, );
     const optionalNumberProperties = createWorkorderPickListResponseOptionalProperties({ name: 'priority', nullable: false }, );
     const optionalBooleanProperties = createWorkorderPickListResponseOptionalProperties();
 

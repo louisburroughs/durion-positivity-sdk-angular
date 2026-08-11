@@ -98,7 +98,7 @@ export function instanceOfRegistrationRequest(value: object): value is Registrat
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createRegistrationRequestPropertyNames('policyId', 'customerId', 'purchaseDate', );
-    const optionalStringProperties = createRegistrationRequestOptionalProperties({ name: 'policyId', nullable: false }, { name: 'customerId', nullable: false }, { name: 'vehicleId', nullable: false }, { name: 'sourceInvoiceId', nullable: false }, { name: 'sourceInvoiceLineId', nullable: false }, { name: 'contractNumber', nullable: false }, { name: 'status', nullable: false }, );
+    const optionalStringProperties = createRegistrationRequestOptionalProperties({ name: 'policyId', nullable: false }, { name: 'customerId', nullable: false }, { name: 'vehicleId', nullable: false }, { name: 'sourceInvoiceId', nullable: false }, { name: 'sourceInvoiceLineId', nullable: false }, { name: 'contractNumber', nullable: false }, { name: 'purchaseDate', nullable: false }, { name: 'expiresAt', nullable: false }, { name: 'status', nullable: false }, );
     const optionalNumberProperties = createRegistrationRequestOptionalProperties();
     const optionalBooleanProperties = createRegistrationRequestOptionalProperties();
 

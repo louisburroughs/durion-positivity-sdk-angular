@@ -91,7 +91,7 @@ export function instanceOfCreatePurchaseOrderRequest(value: object): value is Cr
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createCreatePurchaseOrderRequestPropertyNames('vendorId', 'poDate', 'currency', 'lines', );
-    const optionalStringProperties = createCreatePurchaseOrderRequestOptionalProperties({ name: 'vendorId', nullable: false }, { name: 'currency', nullable: false }, { name: 'paymentTermsId', nullable: false }, { name: 'shipToLocationId', nullable: false }, { name: 'requestedBy', nullable: false }, { name: 'comment', nullable: false }, );
+    const optionalStringProperties = createCreatePurchaseOrderRequestOptionalProperties({ name: 'vendorId', nullable: false }, { name: 'poDate', nullable: false }, { name: 'currency', nullable: false }, { name: 'paymentTermsId', nullable: false }, { name: 'expectedDeliveryDate', nullable: false }, { name: 'shipToLocationId', nullable: false }, { name: 'requestedBy', nullable: false }, { name: 'comment', nullable: false }, );
     const optionalNumberProperties = createCreatePurchaseOrderRequestOptionalProperties();
     const optionalBooleanProperties = createCreatePurchaseOrderRequestOptionalProperties();
 

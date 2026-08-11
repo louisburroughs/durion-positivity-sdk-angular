@@ -78,7 +78,7 @@ export function instanceOfPriceQuoteRequest(value: object): value is PriceQuoteR
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createPriceQuoteRequestPropertyNames('productId', 'quantity', 'locationId', 'customerTierId', );
-    const optionalStringProperties = createPriceQuoteRequestOptionalProperties({ name: 'productId', nullable: false }, { name: 'locationId', nullable: false }, { name: 'customerTierId', nullable: false }, { name: 'currency', nullable: true }, );
+    const optionalStringProperties = createPriceQuoteRequestOptionalProperties({ name: 'productId', nullable: false }, { name: 'locationId', nullable: false }, { name: 'customerTierId', nullable: false }, { name: 'effectiveTimestamp', nullable: true }, { name: 'currency', nullable: true }, );
     const optionalNumberProperties = createPriceQuoteRequestOptionalProperties({ name: 'quantity', nullable: false }, );
     const optionalBooleanProperties = createPriceQuoteRequestOptionalProperties();
 

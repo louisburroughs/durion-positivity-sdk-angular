@@ -83,7 +83,7 @@ export function instanceOfGeneralLedgerReport(value: object): value is GeneralLe
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createGeneralLedgerReportPropertyNames('startDate', 'endDate', 'generatedAt', 'accounts', 'totalDebit', 'totalCredit', );
-    const optionalStringProperties = createGeneralLedgerReportOptionalProperties({ name: 'accountId', nullable: false }, );
+    const optionalStringProperties = createGeneralLedgerReportOptionalProperties({ name: 'accountId', nullable: false }, { name: 'startDate', nullable: false }, { name: 'endDate', nullable: false }, { name: 'generatedAt', nullable: false }, );
     const optionalNumberProperties = createGeneralLedgerReportOptionalProperties({ name: 'totalDebit', nullable: false }, { name: 'totalCredit', nullable: false }, );
     const optionalBooleanProperties = createGeneralLedgerReportOptionalProperties();
 

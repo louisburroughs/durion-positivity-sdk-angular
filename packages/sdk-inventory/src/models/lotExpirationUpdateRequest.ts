@@ -62,7 +62,7 @@ export function instanceOfLotExpirationUpdateRequest(value: object): value is Lo
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createLotExpirationUpdateRequestPropertyNames();
-    const optionalStringProperties = createLotExpirationUpdateRequestOptionalProperties();
+    const optionalStringProperties = createLotExpirationUpdateRequestOptionalProperties({ name: 'expirationDate', nullable: false }, { name: 'alertDate', nullable: false }, );
     const optionalNumberProperties = createLotExpirationUpdateRequestOptionalProperties();
     const optionalBooleanProperties = createLotExpirationUpdateRequestOptionalProperties();
 

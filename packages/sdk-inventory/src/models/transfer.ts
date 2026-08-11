@@ -63,7 +63,7 @@ export function instanceOfTransfer(value: object): value is Transfer {
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createTransferPropertyNames();
-    const optionalStringProperties = createTransferOptionalProperties();
+    const optionalStringProperties = createTransferOptionalProperties({ name: 'movedAt', nullable: false }, );
     const optionalNumberProperties = createTransferOptionalProperties();
     const optionalBooleanProperties = createTransferOptionalProperties();
 

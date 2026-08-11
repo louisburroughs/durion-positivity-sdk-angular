@@ -127,7 +127,7 @@ export function instanceOfPromotionOfferResponse(value: object): value is Promot
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createPromotionOfferResponsePropertyNames('promotionOfferId', 'promoCode', 'name', 'discountType', 'discountValue', 'startDate', 'endDate', 'usageCount', 'status', );
-    const optionalStringProperties = createPromotionOfferResponseOptionalProperties({ name: 'promotionOfferId', nullable: false }, { name: 'promoCode', nullable: false }, { name: 'name', nullable: false }, { name: 'description', nullable: true }, { name: 'discountType', nullable: false }, { name: 'status', nullable: false }, { name: 'storeCode', nullable: true }, { name: 'createdBy', nullable: true }, );
+    const optionalStringProperties = createPromotionOfferResponseOptionalProperties({ name: 'promotionOfferId', nullable: false }, { name: 'promoCode', nullable: false }, { name: 'name', nullable: false }, { name: 'description', nullable: true }, { name: 'discountType', nullable: false }, { name: 'startDate', nullable: false }, { name: 'endDate', nullable: false }, { name: 'status', nullable: false }, { name: 'storeCode', nullable: true }, { name: 'createdAt', nullable: true }, { name: 'updatedAt', nullable: true }, { name: 'createdBy', nullable: true }, );
     const optionalNumberProperties = createPromotionOfferResponseOptionalProperties({ name: 'discountValue', nullable: false }, { name: 'usageLimit', nullable: true }, { name: 'usageCount', nullable: false }, );
     const optionalBooleanProperties = createPromotionOfferResponseOptionalProperties();
 

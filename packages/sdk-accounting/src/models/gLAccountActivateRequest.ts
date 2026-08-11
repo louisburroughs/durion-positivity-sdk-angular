@@ -58,7 +58,7 @@ export function instanceOfGLAccountActivateRequest(value: object): value is GLAc
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createGLAccountActivateRequestPropertyNames('effectiveDate', );
-    const optionalStringProperties = createGLAccountActivateRequestOptionalProperties();
+    const optionalStringProperties = createGLAccountActivateRequestOptionalProperties({ name: 'effectiveDate', nullable: false }, );
     const optionalNumberProperties = createGLAccountActivateRequestOptionalProperties();
     const optionalBooleanProperties = createGLAccountActivateRequestOptionalProperties();
 

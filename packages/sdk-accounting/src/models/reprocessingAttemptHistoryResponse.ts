@@ -88,7 +88,7 @@ export function instanceOfReprocessingAttemptHistoryResponse(value: object): val
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createReprocessingAttemptHistoryResponsePropertyNames('attemptId', 'eventId', );
-    const optionalStringProperties = createReprocessingAttemptHistoryResponseOptionalProperties({ name: 'attemptId', nullable: false }, { name: 'eventId', nullable: false }, { name: 'triggeredByUserId', nullable: false }, { name: 'outcome', nullable: false }, { name: 'outcomeDetails', nullable: false }, { name: 'mappingVersionUsed', nullable: false }, );
+    const optionalStringProperties = createReprocessingAttemptHistoryResponseOptionalProperties({ name: 'attemptId', nullable: false }, { name: 'eventId', nullable: false }, { name: 'attemptedAt', nullable: false }, { name: 'triggeredByUserId', nullable: false }, { name: 'outcome', nullable: false }, { name: 'outcomeDetails', nullable: false }, { name: 'mappingVersionUsed', nullable: false }, );
     const optionalNumberProperties = createReprocessingAttemptHistoryResponseOptionalProperties();
     const optionalBooleanProperties = createReprocessingAttemptHistoryResponseOptionalProperties();
 

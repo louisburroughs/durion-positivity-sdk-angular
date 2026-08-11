@@ -94,7 +94,7 @@ export function instanceOfTravelSegmentAdjustmentResponse(value: object): value 
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createTravelSegmentAdjustmentResponsePropertyNames('adjustmentId', 'travelSegmentId', 'createdAt', );
-    const optionalStringProperties = createTravelSegmentAdjustmentResponseOptionalProperties({ name: 'adjustmentId', nullable: false }, { name: 'travelSegmentId', nullable: false }, { name: 'adjustmentReason', nullable: false }, { name: 'adjustedByUserId', nullable: false }, { name: 'approvalStatus', nullable: false }, { name: 'approvedByUserId', nullable: false }, );
+    const optionalStringProperties = createTravelSegmentAdjustmentResponseOptionalProperties({ name: 'adjustmentId', nullable: false }, { name: 'travelSegmentId', nullable: false }, { name: 'adjustedStartAt', nullable: false }, { name: 'adjustedEndAt', nullable: false }, { name: 'adjustmentReason', nullable: false }, { name: 'adjustedByUserId', nullable: false }, { name: 'approvalStatus', nullable: false }, { name: 'approvedByUserId', nullable: false }, { name: 'approvedAt', nullable: false }, { name: 'createdAt', nullable: false }, );
     const optionalNumberProperties = createTravelSegmentAdjustmentResponseOptionalProperties();
     const optionalBooleanProperties = createTravelSegmentAdjustmentResponseOptionalProperties();
 

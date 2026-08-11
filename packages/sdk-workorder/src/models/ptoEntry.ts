@@ -70,7 +70,7 @@ export function instanceOfPtoEntry(value: object): value is PtoEntry {
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createPtoEntryPropertyNames('ptoId', 'start', 'end', 'ptoType', );
-    const optionalStringProperties = createPtoEntryOptionalProperties({ name: 'ptoId', nullable: false }, { name: 'ptoType', nullable: false }, );
+    const optionalStringProperties = createPtoEntryOptionalProperties({ name: 'ptoId', nullable: false }, { name: 'start', nullable: false }, { name: 'end', nullable: false }, { name: 'ptoType', nullable: false }, );
     const optionalNumberProperties = createPtoEntryOptionalProperties();
     const optionalBooleanProperties = createPtoEntryOptionalProperties();
 

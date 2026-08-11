@@ -102,7 +102,7 @@ export function instanceOfWorkorderLaborEntryResponse(value: object): value is W
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createWorkorderLaborEntryResponsePropertyNames('id', 'workorderId', 'active', );
-    const optionalStringProperties = createWorkorderLaborEntryResponseOptionalProperties({ name: 'id', nullable: false }, { name: 'workorderId', nullable: false }, { name: 'workorderServiceId', nullable: false }, { name: 'technicianId', nullable: false }, { name: 'notes', nullable: false }, { name: 'adjustmentReason', nullable: false }, { name: 'createdBy', nullable: false }, );
+    const optionalStringProperties = createWorkorderLaborEntryResponseOptionalProperties({ name: 'id', nullable: false }, { name: 'workorderId', nullable: false }, { name: 'workorderServiceId', nullable: false }, { name: 'technicianId', nullable: false }, { name: 'startTime', nullable: false }, { name: 'endTime', nullable: false }, { name: 'notes', nullable: false }, { name: 'adjustmentReason', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'createdAt', nullable: false }, );
     const optionalNumberProperties = createWorkorderLaborEntryResponseOptionalProperties({ name: 'hoursWorked', nullable: false }, );
     const optionalBooleanProperties = createWorkorderLaborEntryResponseOptionalProperties({ name: 'active', nullable: false }, );
 

@@ -100,7 +100,7 @@ export function instanceOfAsnResponse(value: object): value is AsnResponse {
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createAsnResponsePropertyNames('asnId', 'asnReferenceNumber', 'vendorId', 'status', 'createdAt', );
-    const optionalStringProperties = createAsnResponseOptionalProperties({ name: 'asnId', nullable: false }, { name: 'asnReferenceNumber', nullable: false }, { name: 'vendorId', nullable: false }, { name: 'status', nullable: false }, { name: 'createdBy', nullable: false }, );
+    const optionalStringProperties = createAsnResponseOptionalProperties({ name: 'asnId', nullable: false }, { name: 'asnReferenceNumber', nullable: false }, { name: 'vendorId', nullable: false }, { name: 'status', nullable: false }, { name: 'shipDate', nullable: false }, { name: 'expectedArrivalDate', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'createdAt', nullable: false }, );
     const optionalNumberProperties = createAsnResponseOptionalProperties();
     const optionalBooleanProperties = createAsnResponseOptionalProperties();
 

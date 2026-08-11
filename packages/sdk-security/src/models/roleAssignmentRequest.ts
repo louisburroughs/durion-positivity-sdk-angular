@@ -84,7 +84,7 @@ export function instanceOfRoleAssignmentRequest(value: object): value is RoleAss
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createRoleAssignmentRequestPropertyNames('userId', 'roleId', );
-    const optionalStringProperties = createRoleAssignmentRequestOptionalProperties({ name: 'userId', nullable: false }, { name: 'roleId', nullable: false }, { name: 'scopeType', nullable: false }, );
+    const optionalStringProperties = createRoleAssignmentRequestOptionalProperties({ name: 'userId', nullable: false }, { name: 'roleId', nullable: false }, { name: 'scopeType', nullable: false }, { name: 'effectiveStartDate', nullable: false }, { name: 'effectiveEndDate', nullable: false }, );
     const optionalNumberProperties = createRoleAssignmentRequestOptionalProperties();
     const optionalBooleanProperties = createRoleAssignmentRequestOptionalProperties();
 

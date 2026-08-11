@@ -86,7 +86,7 @@ export function instanceOfVehicleLegacyResponse(value: object): value is Vehicle
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createVehicleLegacyResponsePropertyNames('id', 'make', 'model', 'year', 'vin', 'vehicleType', );
-    const optionalStringProperties = createVehicleLegacyResponseOptionalProperties({ name: 'id', nullable: false }, { name: 'make', nullable: false }, { name: 'model', nullable: false }, { name: 'vin', nullable: false }, { name: 'vehicleType', nullable: false }, );
+    const optionalStringProperties = createVehicleLegacyResponseOptionalProperties({ name: 'id', nullable: false }, { name: 'make', nullable: false }, { name: 'model', nullable: false }, { name: 'vin', nullable: false }, { name: 'vehicleType', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'updatedAt', nullable: false }, );
     const optionalNumberProperties = createVehicleLegacyResponseOptionalProperties({ name: 'year', nullable: false }, );
     const optionalBooleanProperties = createVehicleLegacyResponseOptionalProperties();
 

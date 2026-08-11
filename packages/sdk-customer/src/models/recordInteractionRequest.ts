@@ -105,7 +105,7 @@ export function instanceOfRecordInteractionRequest(value: object): value is Reco
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createRecordInteractionRequestPropertyNames('type', );
-    const optionalStringProperties = createRecordInteractionRequestOptionalProperties({ name: 'type', nullable: false }, { name: 'contactId', nullable: false }, { name: 'channel', nullable: false }, { name: 'direction', nullable: false }, { name: 'subject', nullable: false }, { name: 'summary', nullable: false }, { name: 'body', nullable: false }, );
+    const optionalStringProperties = createRecordInteractionRequestOptionalProperties({ name: 'type', nullable: false }, { name: 'contactId', nullable: false }, { name: 'channel', nullable: false }, { name: 'direction', nullable: false }, { name: 'subject', nullable: false }, { name: 'summary', nullable: false }, { name: 'body', nullable: false }, { name: 'occurredAt', nullable: false }, );
     const optionalNumberProperties = createRecordInteractionRequestOptionalProperties();
     const optionalBooleanProperties = createRecordInteractionRequestOptionalProperties();
 

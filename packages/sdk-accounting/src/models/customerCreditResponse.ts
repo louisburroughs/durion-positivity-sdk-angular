@@ -101,7 +101,7 @@ export function instanceOfCustomerCreditResponse(value: object): value is Custom
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createCustomerCreditResponsePropertyNames();
-    const optionalStringProperties = createCustomerCreditResponseOptionalProperties({ name: 'creditId', nullable: false }, { name: 'customerId', nullable: false }, { name: 'currency', nullable: false }, { name: 'status', nullable: false }, { name: 'sourcePaymentId', nullable: false }, );
+    const optionalStringProperties = createCustomerCreditResponseOptionalProperties({ name: 'creditId', nullable: false }, { name: 'customerId', nullable: false }, { name: 'currency', nullable: false }, { name: 'status', nullable: false }, { name: 'sourcePaymentId', nullable: false }, { name: 'createdAt', nullable: false }, );
     const optionalNumberProperties = createCustomerCreditResponseOptionalProperties({ name: 'amount', nullable: false }, { name: 'appliedAmount', nullable: false }, { name: 'refundedAmount', nullable: false }, { name: 'openAmount', nullable: false }, );
     const optionalBooleanProperties = createCustomerCreditResponseOptionalProperties();
 

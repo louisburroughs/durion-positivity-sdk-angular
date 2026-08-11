@@ -90,7 +90,7 @@ export function instanceOfMobileUnitResponse(value: object): value is MobileUnit
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createMobileUnitResponsePropertyNames('id', );
-    const optionalStringProperties = createMobileUnitResponseOptionalProperties({ name: 'id', nullable: false }, { name: 'name', nullable: false }, { name: 'baseLocationId', nullable: false }, { name: 'status', nullable: false }, { name: 'travelBufferPolicyId', nullable: false }, { name: 'notes', nullable: false }, );
+    const optionalStringProperties = createMobileUnitResponseOptionalProperties({ name: 'id', nullable: false }, { name: 'name', nullable: false }, { name: 'baseLocationId', nullable: false }, { name: 'status', nullable: false }, { name: 'travelBufferPolicyId', nullable: false }, { name: 'notes', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'updatedAt', nullable: false }, );
     const optionalNumberProperties = createMobileUnitResponseOptionalProperties();
     const optionalBooleanProperties = createMobileUnitResponseOptionalProperties();
 

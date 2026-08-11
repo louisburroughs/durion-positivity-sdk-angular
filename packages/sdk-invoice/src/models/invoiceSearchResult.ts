@@ -95,7 +95,7 @@ export function instanceOfInvoiceSearchResult(value: object): value is InvoiceSe
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createInvoiceSearchResultPropertyNames('invoiceId', 'status', );
-    const optionalStringProperties = createInvoiceSearchResultOptionalProperties({ name: 'invoiceId', nullable: false }, { name: 'invoiceNumber', nullable: false }, { name: 'customerName', nullable: false }, { name: 'workorderId', nullable: false }, { name: 'workorderNumber', nullable: false }, { name: 'status', nullable: false }, );
+    const optionalStringProperties = createInvoiceSearchResultOptionalProperties({ name: 'invoiceId', nullable: false }, { name: 'invoiceNumber', nullable: false }, { name: 'customerName', nullable: false }, { name: 'workorderId', nullable: false }, { name: 'workorderNumber', nullable: false }, { name: 'status', nullable: false }, { name: 'createdAt', nullable: false }, );
     const optionalNumberProperties = createInvoiceSearchResultOptionalProperties({ name: 'total', nullable: false }, );
     const optionalBooleanProperties = createInvoiceSearchResultOptionalProperties();
 

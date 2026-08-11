@@ -62,7 +62,7 @@ export function instanceOfHardLockDateUpdateRequest(value: object): value is Har
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createHardLockDateUpdateRequestPropertyNames('hardLockDate', 'justification', );
-    const optionalStringProperties = createHardLockDateUpdateRequestOptionalProperties({ name: 'justification', nullable: false }, );
+    const optionalStringProperties = createHardLockDateUpdateRequestOptionalProperties({ name: 'hardLockDate', nullable: false }, { name: 'justification', nullable: false }, );
     const optionalNumberProperties = createHardLockDateUpdateRequestOptionalProperties();
     const optionalBooleanProperties = createHardLockDateUpdateRequestOptionalProperties();
 

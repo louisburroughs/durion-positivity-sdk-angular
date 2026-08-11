@@ -82,7 +82,7 @@ export function instanceOfTimeEntryAdjustmentRequest(value: object): value is Ti
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createTimeEntryAdjustmentRequestPropertyNames('timeEntryId', 'reasonCode', );
-    const optionalStringProperties = createTimeEntryAdjustmentRequestOptionalProperties({ name: 'timeEntryId', nullable: false }, { name: 'reasonCode', nullable: false }, { name: 'notes', nullable: false }, { name: 'createdBy', nullable: false }, );
+    const optionalStringProperties = createTimeEntryAdjustmentRequestOptionalProperties({ name: 'timeEntryId', nullable: false }, { name: 'reasonCode', nullable: false }, { name: 'notes', nullable: false }, { name: 'proposedStartAt', nullable: false }, { name: 'proposedEndAt', nullable: false }, { name: 'createdBy', nullable: false }, );
     const optionalNumberProperties = createTimeEntryAdjustmentRequestOptionalProperties({ name: 'minutesDelta', nullable: false }, );
     const optionalBooleanProperties = createTimeEntryAdjustmentRequestOptionalProperties();
 

@@ -68,7 +68,7 @@ export function instanceOfReturnOrderResponse(value: object): value is ReturnOrd
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createReturnOrderResponsePropertyNames();
-    const optionalStringProperties = createReturnOrderResponseOptionalProperties({ name: 'returnOrderId', nullable: false }, { name: 'originalOrderId', nullable: false }, { name: 'originalOrderNumber', nullable: false }, { name: 'locationId', nullable: false }, { name: 'customerId', nullable: false }, { name: 'refundMethod', nullable: false }, { name: 'status', nullable: false }, { name: 'reasonCode', nullable: false }, { name: 'failureReason', nullable: false }, );
+    const optionalStringProperties = createReturnOrderResponseOptionalProperties({ name: 'returnOrderId', nullable: false }, { name: 'originalOrderId', nullable: false }, { name: 'originalOrderNumber', nullable: false }, { name: 'locationId', nullable: false }, { name: 'customerId', nullable: false }, { name: 'refundMethod', nullable: false }, { name: 'status', nullable: false }, { name: 'reasonCode', nullable: false }, { name: 'failureReason', nullable: false }, { name: 'returnedAt', nullable: false }, { name: 'createdAt', nullable: false }, );
     const optionalNumberProperties = createReturnOrderResponseOptionalProperties({ name: 'totalRefund', nullable: false }, );
     const optionalBooleanProperties = createReturnOrderResponseOptionalProperties();
 

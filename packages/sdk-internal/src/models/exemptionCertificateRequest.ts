@@ -96,7 +96,7 @@ export function instanceOfExemptionCertificateRequest(value: object): value is E
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createExemptionCertificateRequestPropertyNames('customerId', 'reasonCode', 'effectiveFrom', );
-    const optionalStringProperties = createExemptionCertificateRequestOptionalProperties({ name: 'customerId', nullable: false }, { name: 'stateScope', nullable: false }, { name: 'reasonCode', nullable: false }, { name: 'certificateNumber', nullable: false }, { name: 'status', nullable: false }, );
+    const optionalStringProperties = createExemptionCertificateRequestOptionalProperties({ name: 'customerId', nullable: false }, { name: 'stateScope', nullable: false }, { name: 'reasonCode', nullable: false }, { name: 'certificateNumber', nullable: false }, { name: 'effectiveFrom', nullable: false }, { name: 'expiresAt', nullable: false }, { name: 'status', nullable: false }, );
     const optionalNumberProperties = createExemptionCertificateRequestOptionalProperties();
     const optionalBooleanProperties = createExemptionCertificateRequestOptionalProperties();
 

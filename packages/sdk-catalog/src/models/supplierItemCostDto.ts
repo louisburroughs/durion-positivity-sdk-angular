@@ -87,7 +87,7 @@ export function instanceOfSupplierItemCostDto(value: object): value is SupplierI
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createSupplierItemCostDtoPropertyNames();
-    const optionalStringProperties = createSupplierItemCostDtoOptionalProperties({ name: 'id', nullable: false }, { name: 'supplierId', nullable: false }, { name: 'itemId', nullable: false }, { name: 'currencyCode', nullable: false }, );
+    const optionalStringProperties = createSupplierItemCostDtoOptionalProperties({ name: 'id', nullable: false }, { name: 'supplierId', nullable: false }, { name: 'itemId', nullable: false }, { name: 'currencyCode', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'updatedAt', nullable: false }, );
     const optionalNumberProperties = createSupplierItemCostDtoOptionalProperties({ name: 'baseCost', nullable: false }, );
     const optionalBooleanProperties = createSupplierItemCostDtoOptionalProperties();
 

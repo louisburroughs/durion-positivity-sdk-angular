@@ -69,7 +69,7 @@ export function instanceOfAgedReceivablesReport(value: object): value is AgedRec
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createAgedReceivablesReportPropertyNames('asOfDate', 'generatedAt', 'rows', 'totals', );
-    const optionalStringProperties = createAgedReceivablesReportOptionalProperties();
+    const optionalStringProperties = createAgedReceivablesReportOptionalProperties({ name: 'asOfDate', nullable: false }, { name: 'generatedAt', nullable: false }, );
     const optionalNumberProperties = createAgedReceivablesReportOptionalProperties();
     const optionalBooleanProperties = createAgedReceivablesReportOptionalProperties();
 

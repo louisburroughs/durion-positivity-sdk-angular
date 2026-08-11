@@ -87,7 +87,7 @@ export function instanceOfRoleDto(value: object): value is RoleDto {
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createRoleDtoPropertyNames('id', 'name', );
-    const optionalStringProperties = createRoleDtoOptionalProperties({ name: 'id', nullable: false }, { name: 'name', nullable: false }, { name: 'description', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'lastModifiedBy', nullable: false }, );
+    const optionalStringProperties = createRoleDtoOptionalProperties({ name: 'id', nullable: false }, { name: 'name', nullable: false }, { name: 'description', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'lastModifiedAt', nullable: false }, { name: 'lastModifiedBy', nullable: false }, );
     const optionalNumberProperties = createRoleDtoOptionalProperties();
     const optionalBooleanProperties = createRoleDtoOptionalProperties();
 

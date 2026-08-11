@@ -78,7 +78,7 @@ export function instanceOfSubstitutionGroupDto(value: object): value is Substitu
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createSubstitutionGroupDtoPropertyNames('id', 'name', 'productIds', );
-    const optionalStringProperties = createSubstitutionGroupDtoOptionalProperties({ name: 'id', nullable: false }, { name: 'name', nullable: false }, { name: 'notes', nullable: false }, );
+    const optionalStringProperties = createSubstitutionGroupDtoOptionalProperties({ name: 'id', nullable: false }, { name: 'name', nullable: false }, { name: 'notes', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'updatedAt', nullable: false }, );
     const optionalNumberProperties = createSubstitutionGroupDtoOptionalProperties();
     const optionalBooleanProperties = createSubstitutionGroupDtoOptionalProperties();
 

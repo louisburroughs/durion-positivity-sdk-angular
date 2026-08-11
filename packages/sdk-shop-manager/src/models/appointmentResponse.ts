@@ -110,7 +110,7 @@ export function instanceOfAppointmentResponse(value: object): value is Appointme
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createAppointmentResponsePropertyNames('appointmentId', 'status', 'locationId', 'crmCustomerId', 'crmVehicleId', 'startAt', 'endAt', 'createdAt', );
-    const optionalStringProperties = createAppointmentResponseOptionalProperties({ name: 'appointmentId', nullable: false }, { name: 'status', nullable: false }, { name: 'locationId', nullable: false }, { name: 'resourceId', nullable: false }, { name: 'crmCustomerId', nullable: false }, { name: 'crmVehicleId', nullable: false }, { name: 'cancellationReason', nullable: false }, { name: 'cancellationNotes', nullable: false }, );
+    const optionalStringProperties = createAppointmentResponseOptionalProperties({ name: 'appointmentId', nullable: false }, { name: 'status', nullable: false }, { name: 'locationId', nullable: false }, { name: 'resourceId', nullable: false }, { name: 'crmCustomerId', nullable: false }, { name: 'crmVehicleId', nullable: false }, { name: 'startAt', nullable: false }, { name: 'endAt', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'cancellationReason', nullable: false }, { name: 'cancellationNotes', nullable: false }, );
     const optionalNumberProperties = createAppointmentResponseOptionalProperties();
     const optionalBooleanProperties = createAppointmentResponseOptionalProperties();
 

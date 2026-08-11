@@ -86,7 +86,7 @@ export function instanceOfInventoryAvailabilityResponse(value: object): value is
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createInventoryAvailabilityResponsePropertyNames('productId', 'locationId', 'onHandQty', 'allocatedQty', 'atpQty', 'uom', 'asOfTimestamp', );
-    const optionalStringProperties = createInventoryAvailabilityResponseOptionalProperties({ name: 'productId', nullable: false }, { name: 'locationId', nullable: false }, { name: 'uom', nullable: false }, );
+    const optionalStringProperties = createInventoryAvailabilityResponseOptionalProperties({ name: 'productId', nullable: false }, { name: 'locationId', nullable: false }, { name: 'uom', nullable: false }, { name: 'asOfTimestamp', nullable: false }, );
     const optionalNumberProperties = createInventoryAvailabilityResponseOptionalProperties({ name: 'onHandQty', nullable: false }, { name: 'allocatedQty', nullable: false }, { name: 'atpQty', nullable: false }, { name: 'expectedReceiptsQty', nullable: true }, );
     const optionalBooleanProperties = createInventoryAvailabilityResponseOptionalProperties();
 

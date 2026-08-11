@@ -95,7 +95,7 @@ export function instanceOfSourcingStrategyConfigResponse(value: object): value i
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createSourcingStrategyConfigResponsePropertyNames('configId', 'scopeType', 'strategy', 'active', 'createdAt', 'updatedAt', );
-    const optionalStringProperties = createSourcingStrategyConfigResponseOptionalProperties({ name: 'configId', nullable: false }, { name: 'scopeType', nullable: false }, { name: 'scopeValue', nullable: false }, { name: 'strategy', nullable: false }, );
+    const optionalStringProperties = createSourcingStrategyConfigResponseOptionalProperties({ name: 'configId', nullable: false }, { name: 'scopeType', nullable: false }, { name: 'scopeValue', nullable: false }, { name: 'strategy', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'updatedAt', nullable: false }, );
     const optionalNumberProperties = createSourcingStrategyConfigResponseOptionalProperties();
     const optionalBooleanProperties = createSourcingStrategyConfigResponseOptionalProperties({ name: 'active', nullable: false }, );
 

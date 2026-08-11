@@ -82,7 +82,7 @@ export function instanceOfPartReturnResponse(value: object): value is PartReturn
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createPartReturnResponsePropertyNames();
-    const optionalStringProperties = createPartReturnResponseOptionalProperties({ name: 'id', nullable: false }, { name: 'claimId', nullable: false }, { name: 'claimLineId', nullable: false }, { name: 'rmaNumber', nullable: false }, { name: 'disposition', nullable: false }, { name: 'status', nullable: false }, { name: 'carrier', nullable: false }, { name: 'trackingNumber', nullable: false }, { name: 'holdLocationNote', nullable: false }, );
+    const optionalStringProperties = createPartReturnResponseOptionalProperties({ name: 'id', nullable: false }, { name: 'claimId', nullable: false }, { name: 'claimLineId', nullable: false }, { name: 'rmaNumber', nullable: false }, { name: 'disposition', nullable: false }, { name: 'status', nullable: false }, { name: 'carrier', nullable: false }, { name: 'trackingNumber', nullable: false }, { name: 'shippedAt', nullable: false }, { name: 'holdLocationNote', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'updatedAt', nullable: false }, );
     const optionalNumberProperties = createPartReturnResponseOptionalProperties();
     const optionalBooleanProperties = createPartReturnResponseOptionalProperties();
 

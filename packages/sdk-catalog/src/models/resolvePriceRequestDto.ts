@@ -82,7 +82,7 @@ export function instanceOfResolvePriceRequestDto(value: object): value is Resolv
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createResolvePriceRequestDtoPropertyNames('productId', );
-    const optionalStringProperties = createResolvePriceRequestDtoOptionalProperties({ name: 'productId', nullable: false }, { name: 'priceBookId', nullable: false }, { name: 'locationId', nullable: false }, { name: 'customerTierId', nullable: false }, { name: 'customerTier', nullable: false }, { name: 'currency', nullable: false }, );
+    const optionalStringProperties = createResolvePriceRequestDtoOptionalProperties({ name: 'productId', nullable: false }, { name: 'priceBookId', nullable: false }, { name: 'locationId', nullable: false }, { name: 'customerTierId', nullable: false }, { name: 'customerTier', nullable: false }, { name: 'currency', nullable: false }, { name: 'asOf', nullable: false }, );
     const optionalNumberProperties = createResolvePriceRequestDtoOptionalProperties();
     const optionalBooleanProperties = createResolvePriceRequestDtoOptionalProperties();
 

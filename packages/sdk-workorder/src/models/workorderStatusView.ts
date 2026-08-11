@@ -99,7 +99,7 @@ export function instanceOfWorkorderStatusView(value: object): value is Workorder
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createWorkorderStatusViewPropertyNames();
-    const optionalStringProperties = createWorkorderStatusViewOptionalProperties({ name: 'workorderId', nullable: false }, { name: 'status', nullable: false }, { name: 'assignedTechnicianId', nullable: false }, { name: 'locationId', nullable: false }, { name: 'customerName', nullable: false }, { name: 'vehicleInfo', nullable: false }, );
+    const optionalStringProperties = createWorkorderStatusViewOptionalProperties({ name: 'workorderId', nullable: false }, { name: 'status', nullable: false }, { name: 'assignedTechnicianId', nullable: false }, { name: 'locationId', nullable: false }, { name: 'estimatedCompletionTime', nullable: false }, { name: 'customerName', nullable: false }, { name: 'vehicleInfo', nullable: false }, { name: 'lastUpdatedAt', nullable: false }, );
     const optionalNumberProperties = createWorkorderStatusViewOptionalProperties();
     const optionalBooleanProperties = createWorkorderStatusViewOptionalProperties();
 

@@ -74,7 +74,7 @@ export function instanceOfConflictOverrideResponse(value: object): value is Conf
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createConflictOverrideResponsePropertyNames('overrideId', 'appointmentId', 'overriddenByUserId', 'overrideTimestamp', 'overrideReason', );
-    const optionalStringProperties = createConflictOverrideResponseOptionalProperties({ name: 'overrideId', nullable: false }, { name: 'appointmentId', nullable: false }, { name: 'overriddenByUserId', nullable: false }, { name: 'overrideReason', nullable: false }, );
+    const optionalStringProperties = createConflictOverrideResponseOptionalProperties({ name: 'overrideId', nullable: false }, { name: 'appointmentId', nullable: false }, { name: 'overriddenByUserId', nullable: false }, { name: 'overrideTimestamp', nullable: false }, { name: 'overrideReason', nullable: false }, );
     const optionalNumberProperties = createConflictOverrideResponseOptionalProperties();
     const optionalBooleanProperties = createConflictOverrideResponseOptionalProperties();
 

@@ -78,7 +78,7 @@ export function instanceOfInvoiceRefundResponse(value: object): value is Invoice
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createInvoiceRefundResponsePropertyNames();
-    const optionalStringProperties = createInvoiceRefundResponseOptionalProperties({ name: 'id', nullable: false }, { name: 'paymentIntentId', nullable: false }, { name: 'status', nullable: false }, { name: 'reason', nullable: false }, { name: 'externalReference', nullable: false }, { name: 'gatewayReference', nullable: false }, );
+    const optionalStringProperties = createInvoiceRefundResponseOptionalProperties({ name: 'id', nullable: false }, { name: 'paymentIntentId', nullable: false }, { name: 'status', nullable: false }, { name: 'reason', nullable: false }, { name: 'externalReference', nullable: false }, { name: 'gatewayReference', nullable: false }, { name: 'requestedAt', nullable: false }, { name: 'completedAt', nullable: false }, );
     const optionalNumberProperties = createInvoiceRefundResponseOptionalProperties({ name: 'amount', nullable: false }, );
     const optionalBooleanProperties = createInvoiceRefundResponseOptionalProperties();
 

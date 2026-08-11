@@ -82,7 +82,7 @@ export function instanceOfPartyTagResponse(value: object): value is PartyTagResp
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createPartyTagResponsePropertyNames('tagId', 'name', 'active', 'assignmentCount', );
-    const optionalStringProperties = createPartyTagResponseOptionalProperties({ name: 'tagId', nullable: false }, { name: 'name', nullable: false }, { name: 'category', nullable: false }, { name: 'color', nullable: false }, );
+    const optionalStringProperties = createPartyTagResponseOptionalProperties({ name: 'tagId', nullable: false }, { name: 'name', nullable: false }, { name: 'category', nullable: false }, { name: 'color', nullable: false }, { name: 'createdAt', nullable: false }, );
     const optionalNumberProperties = createPartyTagResponseOptionalProperties({ name: 'assignmentCount', nullable: false }, );
     const optionalBooleanProperties = createPartyTagResponseOptionalProperties({ name: 'active', nullable: false }, );
 

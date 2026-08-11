@@ -78,7 +78,7 @@ export function instanceOfUpdateMsrpRequestDto(value: object): value is UpdateMs
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createUpdateMsrpRequestDtoPropertyNames('amount', 'currency', 'effectiveStartDate', 'createdByUserId', );
-    const optionalStringProperties = createUpdateMsrpRequestDtoOptionalProperties({ name: 'currency', nullable: false }, { name: 'createdByUserId', nullable: false }, );
+    const optionalStringProperties = createUpdateMsrpRequestDtoOptionalProperties({ name: 'currency', nullable: false }, { name: 'effectiveStartDate', nullable: false }, { name: 'effectiveEndDate', nullable: false }, { name: 'createdByUserId', nullable: false }, );
     const optionalNumberProperties = createUpdateMsrpRequestDtoOptionalProperties({ name: 'amount', nullable: false }, { name: 'version', nullable: false }, );
     const optionalBooleanProperties = createUpdateMsrpRequestDtoOptionalProperties();
 

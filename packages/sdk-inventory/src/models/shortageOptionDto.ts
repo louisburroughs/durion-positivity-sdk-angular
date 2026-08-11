@@ -95,7 +95,7 @@ export function instanceOfShortageOptionDto(value: object): value is ShortageOpt
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createShortageOptionDtoPropertyNames('allocationId', 'optionType', 'description', );
-    const optionalStringProperties = createShortageOptionDtoOptionalProperties({ name: 'allocationId', nullable: false }, { name: 'optionType', nullable: false }, { name: 'description', nullable: false }, { name: 'substituteSku', nullable: false }, { name: 'sourceLocationId', nullable: false }, );
+    const optionalStringProperties = createShortageOptionDtoOptionalProperties({ name: 'allocationId', nullable: false }, { name: 'optionType', nullable: false }, { name: 'description', nullable: false }, { name: 'substituteSku', nullable: false }, { name: 'sourceLocationId', nullable: false }, { name: 'expectedResolutionDate', nullable: false }, );
     const optionalNumberProperties = createShortageOptionDtoOptionalProperties({ name: 'availableQuantity', nullable: false }, { name: 'costDelta', nullable: false }, );
     const optionalBooleanProperties = createShortageOptionDtoOptionalProperties();
 

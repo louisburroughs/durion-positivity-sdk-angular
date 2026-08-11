@@ -90,7 +90,7 @@ export function instanceOfApprovedTimeExportResponse(value: object): value is Ap
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createApprovedTimeExportResponsePropertyNames('timeEntryId', 'employeeId', 'employeeName', 'locationId', 'locationName', 'entryDate', 'hoursWorked', 'approvedAt', 'approvedBy', );
-    const optionalStringProperties = createApprovedTimeExportResponseOptionalProperties({ name: 'timeEntryId', nullable: false }, { name: 'employeeId', nullable: false }, { name: 'employeeName', nullable: false }, { name: 'locationId', nullable: false }, { name: 'locationName', nullable: false }, { name: 'approvedBy', nullable: false }, );
+    const optionalStringProperties = createApprovedTimeExportResponseOptionalProperties({ name: 'timeEntryId', nullable: false }, { name: 'employeeId', nullable: false }, { name: 'employeeName', nullable: false }, { name: 'locationId', nullable: false }, { name: 'locationName', nullable: false }, { name: 'entryDate', nullable: false }, { name: 'approvedAt', nullable: false }, { name: 'approvedBy', nullable: false }, );
     const optionalNumberProperties = createApprovedTimeExportResponseOptionalProperties({ name: 'hoursWorked', nullable: false }, );
     const optionalBooleanProperties = createApprovedTimeExportResponseOptionalProperties();
 

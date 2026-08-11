@@ -86,7 +86,7 @@ export function instanceOfWorkSessionDto(value: object): value is WorkSessionDto
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createWorkSessionDtoPropertyNames('sessionId', 'personId', 'status', );
-    const optionalStringProperties = createWorkSessionDtoOptionalProperties({ name: 'sessionId', nullable: false }, { name: 'personId', nullable: false }, { name: 'status', nullable: false }, );
+    const optionalStringProperties = createWorkSessionDtoOptionalProperties({ name: 'sessionId', nullable: false }, { name: 'personId', nullable: false }, { name: 'status', nullable: false }, { name: 'startedAt', nullable: false }, { name: 'endedAt', nullable: false }, { name: 'submittedAt', nullable: false }, );
     const optionalNumberProperties = createWorkSessionDtoOptionalProperties({ name: 'billableMinutes', nullable: false }, { name: 'breakMinutes', nullable: false }, );
     const optionalBooleanProperties = createWorkSessionDtoOptionalProperties();
 

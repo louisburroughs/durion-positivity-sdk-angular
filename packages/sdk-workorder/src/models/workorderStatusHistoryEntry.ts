@@ -83,7 +83,7 @@ export function instanceOfWorkorderStatusHistoryEntry(value: object): value is W
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createWorkorderStatusHistoryEntryPropertyNames();
-    const optionalStringProperties = createWorkorderStatusHistoryEntryOptionalProperties({ name: 'status', nullable: false }, { name: 'changedBy', nullable: false }, { name: 'reason', nullable: false }, );
+    const optionalStringProperties = createWorkorderStatusHistoryEntryOptionalProperties({ name: 'status', nullable: false }, { name: 'changedAt', nullable: false }, { name: 'changedBy', nullable: false }, { name: 'reason', nullable: false }, );
     const optionalNumberProperties = createWorkorderStatusHistoryEntryOptionalProperties();
     const optionalBooleanProperties = createWorkorderStatusHistoryEntryOptionalProperties();
 

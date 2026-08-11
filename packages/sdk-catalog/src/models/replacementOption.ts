@@ -74,7 +74,7 @@ export function instanceOfReplacementOption(value: object): value is Replacement
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createReplacementOptionPropertyNames('replacementId', 'replacementProductId', );
-    const optionalStringProperties = createReplacementOptionOptionalProperties({ name: 'replacementId', nullable: false }, { name: 'replacementProductId', nullable: false }, { name: 'notes', nullable: false }, );
+    const optionalStringProperties = createReplacementOptionOptionalProperties({ name: 'replacementId', nullable: false }, { name: 'replacementProductId', nullable: false }, { name: 'notes', nullable: false }, { name: 'effectiveAt', nullable: false }, );
     const optionalNumberProperties = createReplacementOptionOptionalProperties({ name: 'priorityOrder', nullable: false }, );
     const optionalBooleanProperties = createReplacementOptionOptionalProperties();
 

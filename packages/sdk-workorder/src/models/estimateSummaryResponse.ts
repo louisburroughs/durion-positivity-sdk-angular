@@ -138,7 +138,7 @@ export function instanceOfEstimateSummaryResponse(value: object): value is Estim
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createEstimateSummaryResponsePropertyNames('id', 'estimateNumber', 'status', );
-    const optionalStringProperties = createEstimateSummaryResponseOptionalProperties({ name: 'id', nullable: false }, { name: 'estimateNumber', nullable: false }, { name: 'customerId', nullable: false }, { name: 'customerName', nullable: false }, { name: 'vehicleLabel', nullable: false }, { name: 'vin', nullable: false }, { name: 'vehicleId', nullable: false }, { name: 'locationId', nullable: false }, { name: 'status', nullable: false }, { name: 'currencyUomId', nullable: false }, );
+    const optionalStringProperties = createEstimateSummaryResponseOptionalProperties({ name: 'id', nullable: false }, { name: 'estimateNumber', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'expiresAt', nullable: false }, { name: 'customerId', nullable: false }, { name: 'customerName', nullable: false }, { name: 'vehicleLabel', nullable: false }, { name: 'vin', nullable: false }, { name: 'vehicleId', nullable: false }, { name: 'locationId', nullable: false }, { name: 'status', nullable: false }, { name: 'currencyUomId', nullable: false }, );
     const optionalNumberProperties = createEstimateSummaryResponseOptionalProperties({ name: 'subtotal', nullable: false }, { name: 'taxAmount', nullable: false }, { name: 'total', nullable: false }, );
     const optionalBooleanProperties = createEstimateSummaryResponseOptionalProperties();
 

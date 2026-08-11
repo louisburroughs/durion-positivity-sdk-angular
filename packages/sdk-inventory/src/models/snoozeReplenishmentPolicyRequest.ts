@@ -58,7 +58,7 @@ export function instanceOfSnoozeReplenishmentPolicyRequest(value: object): value
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createSnoozeReplenishmentPolicyRequestPropertyNames();
-    const optionalStringProperties = createSnoozeReplenishmentPolicyRequestOptionalProperties();
+    const optionalStringProperties = createSnoozeReplenishmentPolicyRequestOptionalProperties({ name: 'snoozedUntil', nullable: false }, );
     const optionalNumberProperties = createSnoozeReplenishmentPolicyRequestOptionalProperties();
     const optionalBooleanProperties = createSnoozeReplenishmentPolicyRequestOptionalProperties();
 

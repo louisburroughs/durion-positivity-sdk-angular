@@ -62,7 +62,7 @@ export function instanceOfHolidayClosureRequest(value: object): value is Holiday
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createHolidayClosureRequestPropertyNames('date', );
-    const optionalStringProperties = createHolidayClosureRequestOptionalProperties({ name: 'reason', nullable: false }, );
+    const optionalStringProperties = createHolidayClosureRequestOptionalProperties({ name: 'date', nullable: false }, { name: 'reason', nullable: false }, );
     const optionalNumberProperties = createHolidayClosureRequestOptionalProperties();
     const optionalBooleanProperties = createHolidayClosureRequestOptionalProperties();
 

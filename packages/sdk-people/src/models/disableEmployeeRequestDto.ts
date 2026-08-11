@@ -72,7 +72,7 @@ export function instanceOfDisableEmployeeRequestDto(value: object): value is Dis
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createDisableEmployeeRequestDtoPropertyNames();
-    const optionalStringProperties = createDisableEmployeeRequestDtoOptionalProperties({ name: 'disableReason', nullable: false }, { name: 'assignmentPolicy', nullable: false }, );
+    const optionalStringProperties = createDisableEmployeeRequestDtoOptionalProperties({ name: 'disableReason', nullable: false }, { name: 'assignmentPolicy', nullable: false }, { name: 'assignmentEndDate', nullable: false }, );
     const optionalNumberProperties = createDisableEmployeeRequestDtoOptionalProperties();
     const optionalBooleanProperties = createDisableEmployeeRequestDtoOptionalProperties();
 

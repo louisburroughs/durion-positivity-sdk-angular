@@ -94,7 +94,7 @@ export function instanceOfBayResponse(value: object): value is BayResponse {
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createBayResponsePropertyNames('id', 'locationId', 'name', );
-    const optionalStringProperties = createBayResponseOptionalProperties({ name: 'id', nullable: false }, { name: 'locationId', nullable: false }, { name: 'name', nullable: false }, { name: 'bayType', nullable: false }, { name: 'status', nullable: false }, );
+    const optionalStringProperties = createBayResponseOptionalProperties({ name: 'id', nullable: false }, { name: 'locationId', nullable: false }, { name: 'name', nullable: false }, { name: 'bayType', nullable: false }, { name: 'status', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'lastModifiedAt', nullable: false }, );
     const optionalNumberProperties = createBayResponseOptionalProperties({ name: 'maxConcurrentVehicles', nullable: false }, );
     const optionalBooleanProperties = createBayResponseOptionalProperties();
 

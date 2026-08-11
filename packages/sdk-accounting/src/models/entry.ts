@@ -70,7 +70,7 @@ export function instanceOfEntry(value: object): value is Entry {
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createEntryPropertyNames();
-    const optionalStringProperties = createEntryOptionalProperties({ name: 'action', nullable: false }, { name: 'by', nullable: false }, { name: 'detail', nullable: false }, );
+    const optionalStringProperties = createEntryOptionalProperties({ name: 'action', nullable: false }, { name: 'at', nullable: false }, { name: 'by', nullable: false }, { name: 'detail', nullable: false }, );
     const optionalNumberProperties = createEntryOptionalProperties();
     const optionalBooleanProperties = createEntryOptionalProperties();
 

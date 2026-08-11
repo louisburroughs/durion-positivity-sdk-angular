@@ -70,7 +70,7 @@ export function instanceOfCreateCycleCountPlanRequest(value: object): value is C
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createCreateCycleCountPlanRequestPropertyNames('locationId', 'planName', 'scheduledDate', );
-    const optionalStringProperties = createCreateCycleCountPlanRequestOptionalProperties({ name: 'locationId', nullable: false }, { name: 'planName', nullable: false }, );
+    const optionalStringProperties = createCreateCycleCountPlanRequestOptionalProperties({ name: 'locationId', nullable: false }, { name: 'planName', nullable: false }, { name: 'scheduledDate', nullable: false }, );
     const optionalNumberProperties = createCreateCycleCountPlanRequestOptionalProperties();
     const optionalBooleanProperties = createCreateCycleCountPlanRequestOptionalProperties();
 

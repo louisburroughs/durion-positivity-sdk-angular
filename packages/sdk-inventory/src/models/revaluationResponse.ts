@@ -142,7 +142,7 @@ export function instanceOfRevaluationResponse(value: object): value is Revaluati
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createRevaluationResponsePropertyNames();
-    const optionalStringProperties = createRevaluationResponseOptionalProperties({ name: 'revaluationId', nullable: false }, { name: 'stockItemId', nullable: false }, { name: 'costingMethod', nullable: false }, { name: 'reason', nullable: false }, { name: 'status', nullable: false }, { name: 'requiredApprovalTier', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'approvedBy', nullable: false }, { name: 'rejectedBy', nullable: false }, { name: 'rejectionReason', nullable: false }, );
+    const optionalStringProperties = createRevaluationResponseOptionalProperties({ name: 'revaluationId', nullable: false }, { name: 'stockItemId', nullable: false }, { name: 'costingMethod', nullable: false }, { name: 'reason', nullable: false }, { name: 'status', nullable: false }, { name: 'requiredApprovalTier', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'approvedBy', nullable: false }, { name: 'rejectedBy', nullable: false }, { name: 'rejectionReason', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'updatedAt', nullable: false }, { name: 'appliedAt', nullable: false }, { name: 'rejectedAt', nullable: false }, );
     const optionalNumberProperties = createRevaluationResponseOptionalProperties({ name: 'previousUnitCost', nullable: false }, { name: 'newUnitCost', nullable: false }, { name: 'onHandQuantity', nullable: false }, { name: 'valueDelta', nullable: false }, );
     const optionalBooleanProperties = createRevaluationResponseOptionalProperties();
 

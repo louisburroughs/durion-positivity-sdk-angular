@@ -86,7 +86,7 @@ export function instanceOfCoverageRuleResponse(value: object): value is Coverage
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createCoverageRuleResponsePropertyNames('id', 'mobileUnitId', 'serviceAreaId', );
-    const optionalStringProperties = createCoverageRuleResponseOptionalProperties({ name: 'id', nullable: false }, { name: 'mobileUnitId', nullable: false }, { name: 'serviceAreaId', nullable: false }, { name: 'ruleType', nullable: false }, );
+    const optionalStringProperties = createCoverageRuleResponseOptionalProperties({ name: 'id', nullable: false }, { name: 'mobileUnitId', nullable: false }, { name: 'serviceAreaId', nullable: false }, { name: 'ruleType', nullable: false }, { name: 'validFrom', nullable: false }, { name: 'validTo', nullable: false }, );
     const optionalNumberProperties = createCoverageRuleResponseOptionalProperties({ name: 'priority', nullable: false }, { name: 'maxDistance', nullable: false }, );
     const optionalBooleanProperties = createCoverageRuleResponseOptionalProperties();
 

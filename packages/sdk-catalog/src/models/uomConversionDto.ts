@@ -86,7 +86,7 @@ export function instanceOfUomConversionDto(value: object): value is UomConversio
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createUomConversionDtoPropertyNames('id', 'fromUomCode', 'toUomCode', 'conversionFactor', 'active', 'createdAt', );
-    const optionalStringProperties = createUomConversionDtoOptionalProperties({ name: 'id', nullable: false }, { name: 'fromUomCode', nullable: false }, { name: 'toUomCode', nullable: false }, { name: 'createdBy', nullable: false }, );
+    const optionalStringProperties = createUomConversionDtoOptionalProperties({ name: 'id', nullable: false }, { name: 'fromUomCode', nullable: false }, { name: 'toUomCode', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'updatedAt', nullable: false }, { name: 'createdBy', nullable: false }, );
     const optionalNumberProperties = createUomConversionDtoOptionalProperties({ name: 'conversionFactor', nullable: false }, );
     const optionalBooleanProperties = createUomConversionDtoOptionalProperties({ name: 'active', nullable: false }, );
 

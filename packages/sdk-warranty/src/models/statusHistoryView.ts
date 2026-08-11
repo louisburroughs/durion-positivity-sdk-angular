@@ -84,7 +84,7 @@ export function instanceOfStatusHistoryView(value: object): value is StatusHisto
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createStatusHistoryViewPropertyNames();
-    const optionalStringProperties = createStatusHistoryViewOptionalProperties({ name: 'id', nullable: false }, { name: 'fromStatus', nullable: false }, { name: 'toStatus', nullable: false }, { name: 'actor', nullable: false }, { name: 'reason', nullable: false }, );
+    const optionalStringProperties = createStatusHistoryViewOptionalProperties({ name: 'id', nullable: false }, { name: 'fromStatus', nullable: false }, { name: 'toStatus', nullable: false }, { name: 'actor', nullable: false }, { name: 'reason', nullable: false }, { name: 'createdAt', nullable: false }, );
     const optionalNumberProperties = createStatusHistoryViewOptionalProperties();
     const optionalBooleanProperties = createStatusHistoryViewOptionalProperties();
 

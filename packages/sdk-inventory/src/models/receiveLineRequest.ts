@@ -82,7 +82,7 @@ export function instanceOfReceiveLineRequest(value: object): value is ReceiveLin
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createReceiveLineRequestPropertyNames('lineId', );
-    const optionalStringProperties = createReceiveLineRequestOptionalProperties({ name: 'lineId', nullable: false }, { name: 'lotNumber', nullable: false }, { name: 'documentUom', nullable: false }, );
+    const optionalStringProperties = createReceiveLineRequestOptionalProperties({ name: 'lineId', nullable: false }, { name: 'lotNumber', nullable: false }, { name: 'documentUom', nullable: false }, { name: 'expirationDate', nullable: false }, );
     const optionalNumberProperties = createReceiveLineRequestOptionalProperties({ name: 'receivedQuantity', nullable: false }, { name: 'documentQuantity', nullable: false }, );
     const optionalBooleanProperties = createReceiveLineRequestOptionalProperties();
 

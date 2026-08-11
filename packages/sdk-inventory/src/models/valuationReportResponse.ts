@@ -71,7 +71,7 @@ export function instanceOfValuationReportResponse(value: object): value is Valua
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createValuationReportResponsePropertyNames('rows', 'totalOnHandValue', );
-    const optionalStringProperties = createValuationReportResponseOptionalProperties({ name: 'locationId', nullable: false }, );
+    const optionalStringProperties = createValuationReportResponseOptionalProperties({ name: 'locationId', nullable: false }, { name: 'asOf', nullable: false }, );
     const optionalNumberProperties = createValuationReportResponseOptionalProperties({ name: 'totalOnHandValue', nullable: false }, );
     const optionalBooleanProperties = createValuationReportResponseOptionalProperties();
 

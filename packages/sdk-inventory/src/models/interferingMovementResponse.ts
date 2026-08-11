@@ -111,7 +111,7 @@ export function instanceOfInterferingMovementResponse(value: object): value is I
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createInterferingMovementResponsePropertyNames('ledgerEntryId', 'eventType', 'changeInQuantity', 'timestamp', );
-    const optionalStringProperties = createInterferingMovementResponseOptionalProperties({ name: 'ledgerEntryId', nullable: false }, { name: 'eventType', nullable: false }, { name: 'locationId', nullable: false }, { name: 'transactionUserId', nullable: false }, { name: 'notes', nullable: false }, );
+    const optionalStringProperties = createInterferingMovementResponseOptionalProperties({ name: 'ledgerEntryId', nullable: false }, { name: 'eventType', nullable: false }, { name: 'locationId', nullable: false }, { name: 'timestamp', nullable: false }, { name: 'transactionUserId', nullable: false }, { name: 'notes', nullable: false }, );
     const optionalNumberProperties = createInterferingMovementResponseOptionalProperties({ name: 'changeInQuantity', nullable: false }, { name: 'quantityAfter', nullable: false }, );
     const optionalBooleanProperties = createInterferingMovementResponseOptionalProperties();
 

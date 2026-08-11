@@ -102,7 +102,7 @@ export function instanceOfGLMappingResponse(value: object): value is GLMappingRe
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createGLMappingResponsePropertyNames('glMappingId', );
-    const optionalStringProperties = createGLMappingResponseOptionalProperties({ name: 'glMappingId', nullable: false }, { name: 'sourceSystem', nullable: false }, { name: 'externalCode', nullable: false }, { name: 'glAccountId', nullable: false }, { name: 'accountCode', nullable: false }, { name: 'accountName', nullable: false }, { name: 'createdBy', nullable: false }, );
+    const optionalStringProperties = createGLMappingResponseOptionalProperties({ name: 'glMappingId', nullable: false }, { name: 'sourceSystem', nullable: false }, { name: 'externalCode', nullable: false }, { name: 'glAccountId', nullable: false }, { name: 'accountCode', nullable: false }, { name: 'accountName', nullable: false }, { name: 'effectiveStartDate', nullable: false }, { name: 'effectiveEndDate', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'createdBy', nullable: false }, );
     const optionalNumberProperties = createGLMappingResponseOptionalProperties({ name: 'priority', nullable: false }, );
     const optionalBooleanProperties = createGLMappingResponseOptionalProperties();
 

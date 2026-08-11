@@ -110,7 +110,7 @@ export function instanceOfTimeEntryResponse(value: object): value is TimeEntryRe
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createTimeEntryResponsePropertyNames('timeEntryId', 'personId', 'workOrderId', 'startAt', 'status', 'createdAt', 'updatedAt', );
-    const optionalStringProperties = createTimeEntryResponseOptionalProperties({ name: 'timeEntryId', nullable: false }, { name: 'personId', nullable: false }, { name: 'workOrderId', nullable: false }, { name: 'status', nullable: false }, { name: 'decisionByUserId', nullable: false }, { name: 'rejectionReason', nullable: false }, );
+    const optionalStringProperties = createTimeEntryResponseOptionalProperties({ name: 'timeEntryId', nullable: false }, { name: 'personId', nullable: false }, { name: 'workOrderId', nullable: false }, { name: 'startAt', nullable: false }, { name: 'endAt', nullable: false }, { name: 'status', nullable: false }, { name: 'submittedAt', nullable: false }, { name: 'decisionByUserId', nullable: false }, { name: 'decisionAtUtc', nullable: false }, { name: 'rejectionReason', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'updatedAt', nullable: false }, );
     const optionalNumberProperties = createTimeEntryResponseOptionalProperties();
     const optionalBooleanProperties = createTimeEntryResponseOptionalProperties();
 

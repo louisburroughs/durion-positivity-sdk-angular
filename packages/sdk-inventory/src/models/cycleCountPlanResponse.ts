@@ -98,7 +98,7 @@ export function instanceOfCycleCountPlanResponse(value: object): value is CycleC
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createCycleCountPlanResponsePropertyNames('planId', 'locationId', 'planName', 'scheduledDate', 'status', 'createdBy', 'createdAt', 'updatedAt', );
-    const optionalStringProperties = createCycleCountPlanResponseOptionalProperties({ name: 'planId', nullable: false }, { name: 'locationId', nullable: false }, { name: 'planName', nullable: false }, { name: 'status', nullable: false }, { name: 'scheduleId', nullable: false }, { name: 'createdBy', nullable: false }, );
+    const optionalStringProperties = createCycleCountPlanResponseOptionalProperties({ name: 'planId', nullable: false }, { name: 'locationId', nullable: false }, { name: 'planName', nullable: false }, { name: 'scheduledDate', nullable: false }, { name: 'status', nullable: false }, { name: 'scheduleId', nullable: false }, { name: 'dueDate', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'updatedAt', nullable: false }, );
     const optionalNumberProperties = createCycleCountPlanResponseOptionalProperties();
     const optionalBooleanProperties = createCycleCountPlanResponseOptionalProperties();
 

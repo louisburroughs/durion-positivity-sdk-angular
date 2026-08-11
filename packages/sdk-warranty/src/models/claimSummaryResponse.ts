@@ -90,7 +90,7 @@ export function instanceOfClaimSummaryResponse(value: object): value is ClaimSum
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createClaimSummaryResponsePropertyNames();
-    const optionalStringProperties = createClaimSummaryResponseOptionalProperties({ name: 'id', nullable: false }, { name: 'claimCode', nullable: false }, { name: 'claimType', nullable: false }, { name: 'status', nullable: false }, { name: 'customerId', nullable: false }, { name: 'vehicleId', nullable: false }, { name: 'vin', nullable: false }, { name: 'locationId', nullable: false }, { name: 'eligibilityResult', nullable: false }, );
+    const optionalStringProperties = createClaimSummaryResponseOptionalProperties({ name: 'id', nullable: false }, { name: 'claimCode', nullable: false }, { name: 'claimType', nullable: false }, { name: 'status', nullable: false }, { name: 'customerId', nullable: false }, { name: 'vehicleId', nullable: false }, { name: 'vin', nullable: false }, { name: 'locationId', nullable: false }, { name: 'failureDate', nullable: false }, { name: 'eligibilityResult', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'updatedAt', nullable: false }, );
     const optionalNumberProperties = createClaimSummaryResponseOptionalProperties();
     const optionalBooleanProperties = createClaimSummaryResponseOptionalProperties();
 

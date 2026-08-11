@@ -109,7 +109,7 @@ export function instanceOfGLAccountCreateRequest(value: object): value is GLAcco
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createGLAccountCreateRequestPropertyNames('accountCode', 'accountName', 'accountType', 'activationDate', );
-    const optionalStringProperties = createGLAccountCreateRequestOptionalProperties({ name: 'accountCode', nullable: false }, { name: 'accountName', nullable: false }, { name: 'accountType', nullable: false }, { name: 'accountSubtype', nullable: false }, { name: 'description', nullable: false }, { name: 'parentAccountId', nullable: false }, );
+    const optionalStringProperties = createGLAccountCreateRequestOptionalProperties({ name: 'accountCode', nullable: false }, { name: 'accountName', nullable: false }, { name: 'accountType', nullable: false }, { name: 'accountSubtype', nullable: false }, { name: 'description', nullable: false }, { name: 'parentAccountId', nullable: false }, { name: 'activationDate', nullable: false }, );
     const optionalNumberProperties = createGLAccountCreateRequestOptionalProperties();
     const optionalBooleanProperties = createGLAccountCreateRequestOptionalProperties({ name: 'reconcilable', nullable: false }, );
 

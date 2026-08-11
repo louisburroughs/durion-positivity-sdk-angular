@@ -62,7 +62,7 @@ export function instanceOfElevateResponse(value: object): value is ElevateRespon
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createElevateResponsePropertyNames('elevationToken', 'expiresAt', );
-    const optionalStringProperties = createElevateResponseOptionalProperties({ name: 'elevationToken', nullable: false }, );
+    const optionalStringProperties = createElevateResponseOptionalProperties({ name: 'elevationToken', nullable: false }, { name: 'expiresAt', nullable: false }, );
     const optionalNumberProperties = createElevateResponseOptionalProperties();
     const optionalBooleanProperties = createElevateResponseOptionalProperties();
 

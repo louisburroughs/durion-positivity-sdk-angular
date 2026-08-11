@@ -124,7 +124,7 @@ export function instanceOfWorkorderStatusDetail(value: object): value is Workord
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createWorkorderStatusDetailPropertyNames();
-    const optionalStringProperties = createWorkorderStatusDetailOptionalProperties({ name: 'workorderId', nullable: false }, { name: 'status', nullable: false }, { name: 'assignedTechnicianId', nullable: false }, { name: 'locationId', nullable: false }, { name: 'customerName', nullable: false }, { name: 'vehicleInfo', nullable: false }, { name: 'phoneNumber', nullable: false }, { name: 'vehicleVin', nullable: false }, { name: 'serviceDescription', nullable: false }, { name: 'internalNotes', nullable: false }, );
+    const optionalStringProperties = createWorkorderStatusDetailOptionalProperties({ name: 'workorderId', nullable: false }, { name: 'status', nullable: false }, { name: 'assignedTechnicianId', nullable: false }, { name: 'locationId', nullable: false }, { name: 'estimatedCompletionTime', nullable: false }, { name: 'customerName', nullable: false }, { name: 'vehicleInfo', nullable: false }, { name: 'lastUpdatedAt', nullable: false }, { name: 'phoneNumber', nullable: false }, { name: 'vehicleVin', nullable: false }, { name: 'serviceDescription', nullable: false }, { name: 'internalNotes', nullable: false }, );
     const optionalNumberProperties = createWorkorderStatusDetailOptionalProperties();
     const optionalBooleanProperties = createWorkorderStatusDetailOptionalProperties();
 

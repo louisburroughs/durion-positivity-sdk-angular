@@ -83,7 +83,7 @@ export function instanceOfVendorInvoiceReceivedEvent(value: object): value is Ve
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createVendorInvoiceReceivedEventPropertyNames('eventId', 'organizationId', 'vendorId', 'invoiceReference', 'invoiceDate', 'lineItems', );
-    const optionalStringProperties = createVendorInvoiceReceivedEventOptionalProperties({ name: 'eventId', nullable: false }, { name: 'organizationId', nullable: false }, { name: 'vendorId', nullable: false }, { name: 'invoiceReference', nullable: false }, );
+    const optionalStringProperties = createVendorInvoiceReceivedEventOptionalProperties({ name: 'eventId', nullable: false }, { name: 'organizationId', nullable: false }, { name: 'vendorId', nullable: false }, { name: 'invoiceReference', nullable: false }, { name: 'invoiceDate', nullable: false }, { name: 'dueDate', nullable: false }, );
     const optionalNumberProperties = createVendorInvoiceReceivedEventOptionalProperties();
     const optionalBooleanProperties = createVendorInvoiceReceivedEventOptionalProperties();
 

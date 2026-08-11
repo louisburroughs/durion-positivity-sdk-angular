@@ -74,7 +74,7 @@ export function instanceOfEmitEventRequest(value: object): value is EmitEventReq
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createEmitEventRequestPropertyNames('id', 'apiVersion', 'timestamp', 'elapsedMs', 'publishedAt', );
-    const optionalStringProperties = createEmitEventRequestOptionalProperties({ name: 'id', nullable: false }, { name: 'apiVersion', nullable: false }, );
+    const optionalStringProperties = createEmitEventRequestOptionalProperties({ name: 'id', nullable: false }, { name: 'apiVersion', nullable: false }, { name: 'publishedAt', nullable: false }, );
     const optionalNumberProperties = createEmitEventRequestOptionalProperties({ name: 'timestamp', nullable: false }, { name: 'elapsedMs', nullable: false }, );
     const optionalBooleanProperties = createEmitEventRequestOptionalProperties();
 

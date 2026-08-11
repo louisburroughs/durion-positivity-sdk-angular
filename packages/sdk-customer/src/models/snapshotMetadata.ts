@@ -84,7 +84,7 @@ export function instanceOfSnapshotMetadata(value: object): value is SnapshotMeta
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createSnapshotMetadataPropertyNames('snapshotId', 'createdAt', 'version', 'stale', );
-    const optionalStringProperties = createSnapshotMetadataOptionalProperties({ name: 'snapshotId', nullable: false }, { name: 'version', nullable: false }, { name: 'source', nullable: false }, );
+    const optionalStringProperties = createSnapshotMetadataOptionalProperties({ name: 'snapshotId', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'version', nullable: false }, { name: 'source', nullable: false }, { name: 'staleSince', nullable: false }, );
     const optionalNumberProperties = createSnapshotMetadataOptionalProperties();
     const optionalBooleanProperties = createSnapshotMetadataOptionalProperties({ name: 'stale', nullable: false }, );
 

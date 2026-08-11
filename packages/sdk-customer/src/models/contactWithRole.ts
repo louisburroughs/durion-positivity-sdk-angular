@@ -90,7 +90,7 @@ export function instanceOfContactWithRole(value: object): value is ContactWithRo
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createContactWithRolePropertyNames('relationshipId', 'individualId', 'status', );
-    const optionalStringProperties = createContactWithRoleOptionalProperties({ name: 'relationshipId', nullable: false }, { name: 'individualId', nullable: false }, { name: 'status', nullable: false }, );
+    const optionalStringProperties = createContactWithRoleOptionalProperties({ name: 'relationshipId', nullable: false }, { name: 'individualId', nullable: false }, { name: 'status', nullable: false }, { name: 'effectiveFrom', nullable: false }, { name: 'effectiveTo', nullable: false }, );
     const optionalNumberProperties = createContactWithRoleOptionalProperties();
     const optionalBooleanProperties = createContactWithRoleOptionalProperties({ name: 'primaryBilling', nullable: false }, );
 

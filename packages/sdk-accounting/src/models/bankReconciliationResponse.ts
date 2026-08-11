@@ -135,7 +135,7 @@ export function instanceOfBankReconciliationResponse(value: object): value is Ba
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createBankReconciliationResponsePropertyNames();
-    const optionalStringProperties = createBankReconciliationResponseOptionalProperties({ name: 'reconciliationId', nullable: false }, { name: 'glAccountId', nullable: false }, { name: 'accountCode', nullable: false }, { name: 'accountName', nullable: false }, { name: 'currency', nullable: false }, { name: 'status', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'finalizedBy', nullable: false }, );
+    const optionalStringProperties = createBankReconciliationResponseOptionalProperties({ name: 'reconciliationId', nullable: false }, { name: 'glAccountId', nullable: false }, { name: 'accountCode', nullable: false }, { name: 'accountName', nullable: false }, { name: 'periodStartDate', nullable: false }, { name: 'periodEndDate', nullable: false }, { name: 'statementDate', nullable: false }, { name: 'currency', nullable: false }, { name: 'status', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'finalizedAt', nullable: false }, { name: 'finalizedBy', nullable: false }, );
     const optionalNumberProperties = createBankReconciliationResponseOptionalProperties({ name: 'statementEndingBalance', nullable: false }, { name: 'glEndingBalance', nullable: false }, { name: 'difference', nullable: false }, );
     const optionalBooleanProperties = createBankReconciliationResponseOptionalProperties();
 

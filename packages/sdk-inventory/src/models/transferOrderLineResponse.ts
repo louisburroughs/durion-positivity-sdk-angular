@@ -94,7 +94,7 @@ export function instanceOfTransferOrderLineResponse(value: object): value is Tra
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createTransferOrderLineResponsePropertyNames();
-    const optionalStringProperties = createTransferOrderLineResponseOptionalProperties({ name: 'lineId', nullable: false }, { name: 'sku', nullable: false }, { name: 'lotId', nullable: false }, { name: 'lotNumber', nullable: false }, );
+    const optionalStringProperties = createTransferOrderLineResponseOptionalProperties({ name: 'lineId', nullable: false }, { name: 'sku', nullable: false }, { name: 'lotId', nullable: false }, { name: 'lotNumber', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'updatedAt', nullable: false }, );
     const optionalNumberProperties = createTransferOrderLineResponseOptionalProperties({ name: 'lineNumber', nullable: false }, { name: 'requestedQty', nullable: false }, { name: 'dispatchedQty', nullable: false }, { name: 'receivedQty', nullable: false }, );
     const optionalBooleanProperties = createTransferOrderLineResponseOptionalProperties();
 

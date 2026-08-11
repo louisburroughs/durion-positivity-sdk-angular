@@ -58,7 +58,7 @@ export function instanceOfNoteView(value: object): value is NoteView {
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createNoteViewPropertyNames();
-    const optionalStringProperties = createNoteViewOptionalProperties({ name: 'id', nullable: false }, { name: 'note', nullable: false }, { name: 'createdBy', nullable: false }, );
+    const optionalStringProperties = createNoteViewOptionalProperties({ name: 'id', nullable: false }, { name: 'note', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'createdAt', nullable: false }, );
     const optionalNumberProperties = createNoteViewOptionalProperties();
     const optionalBooleanProperties = createNoteViewOptionalProperties();
 

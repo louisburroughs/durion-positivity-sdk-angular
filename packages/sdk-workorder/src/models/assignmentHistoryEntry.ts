@@ -82,7 +82,7 @@ export function instanceOfAssignmentHistoryEntry(value: object): value is Assign
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createAssignmentHistoryEntryPropertyNames();
-    const optionalStringProperties = createAssignmentHistoryEntryOptionalProperties({ name: 'technicianId', nullable: false }, { name: 'technicianName', nullable: false }, { name: 'assignedBy', nullable: false }, { name: 'reason', nullable: false }, { name: 'notes', nullable: false }, );
+    const optionalStringProperties = createAssignmentHistoryEntryOptionalProperties({ name: 'technicianId', nullable: false }, { name: 'technicianName', nullable: false }, { name: 'assignedAt', nullable: false }, { name: 'assignedBy', nullable: false }, { name: 'unassignedAt', nullable: false }, { name: 'reason', nullable: false }, { name: 'notes', nullable: false }, );
     const optionalNumberProperties = createAssignmentHistoryEntryOptionalProperties();
     const optionalBooleanProperties = createAssignmentHistoryEntryOptionalProperties();
 

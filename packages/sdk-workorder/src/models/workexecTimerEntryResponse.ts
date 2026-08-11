@@ -90,7 +90,7 @@ export function instanceOfWorkexecTimerEntryResponse(value: object): value is Wo
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createWorkexecTimerEntryResponsePropertyNames();
-    const optionalStringProperties = createWorkexecTimerEntryResponseOptionalProperties({ name: 'timeEntryId', nullable: false }, { name: 'mechanicId', nullable: false }, { name: 'workorderId', nullable: false }, { name: 'workorderItemId', nullable: false }, { name: 'laborCode', nullable: false }, { name: 'status', nullable: false }, );
+    const optionalStringProperties = createWorkexecTimerEntryResponseOptionalProperties({ name: 'timeEntryId', nullable: false }, { name: 'mechanicId', nullable: false }, { name: 'workorderId', nullable: false }, { name: 'workorderItemId', nullable: false }, { name: 'laborCode', nullable: false }, { name: 'startTime', nullable: false }, { name: 'endTime', nullable: false }, { name: 'status', nullable: false }, );
     const optionalNumberProperties = createWorkexecTimerEntryResponseOptionalProperties({ name: 'durationInSeconds', nullable: false }, );
     const optionalBooleanProperties = createWorkexecTimerEntryResponseOptionalProperties();
 

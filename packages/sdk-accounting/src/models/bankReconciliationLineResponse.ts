@@ -92,7 +92,7 @@ export function instanceOfBankReconciliationLineResponse(value: object): value i
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createBankReconciliationLineResponsePropertyNames();
-    const optionalStringProperties = createBankReconciliationLineResponseOptionalProperties({ name: 'lineId', nullable: false }, { name: 'description', nullable: false }, { name: 'reference', nullable: false }, { name: 'status', nullable: false }, { name: 'matchId', nullable: false }, );
+    const optionalStringProperties = createBankReconciliationLineResponseOptionalProperties({ name: 'lineId', nullable: false }, { name: 'lineDate', nullable: false }, { name: 'description', nullable: false }, { name: 'reference', nullable: false }, { name: 'status', nullable: false }, { name: 'matchId', nullable: false }, );
     const optionalNumberProperties = createBankReconciliationLineResponseOptionalProperties({ name: 'lineNumber', nullable: false }, { name: 'amount', nullable: false }, );
     const optionalBooleanProperties = createBankReconciliationLineResponseOptionalProperties();
 

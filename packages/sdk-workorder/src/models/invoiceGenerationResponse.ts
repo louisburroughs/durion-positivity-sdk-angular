@@ -90,7 +90,7 @@ export function instanceOfInvoiceGenerationResponse(value: object): value is Inv
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createInvoiceGenerationResponsePropertyNames('invoiceId', 'status', 'workorderId', 'subtotal', 'taxAmount', 'totalAmount', 'createdAt', );
-    const optionalStringProperties = createInvoiceGenerationResponseOptionalProperties({ name: 'invoiceId', nullable: false }, { name: 'status', nullable: false }, { name: 'workorderId', nullable: false }, { name: 'estimateId', nullable: false }, { name: 'approvalId', nullable: false }, );
+    const optionalStringProperties = createInvoiceGenerationResponseOptionalProperties({ name: 'invoiceId', nullable: false }, { name: 'status', nullable: false }, { name: 'workorderId', nullable: false }, { name: 'estimateId', nullable: false }, { name: 'approvalId', nullable: false }, { name: 'createdAt', nullable: false }, );
     const optionalNumberProperties = createInvoiceGenerationResponseOptionalProperties({ name: 'subtotal', nullable: false }, { name: 'taxAmount', nullable: false }, { name: 'totalAmount', nullable: false }, );
     const optionalBooleanProperties = createInvoiceGenerationResponseOptionalProperties();
 

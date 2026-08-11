@@ -95,7 +95,7 @@ export function instanceOfReceivingSessionResponse(value: object): value is Rece
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createReceivingSessionResponsePropertyNames('sessionId', 'sourceDocumentId', 'status', 'createdAt', );
-    const optionalStringProperties = createReceivingSessionResponseOptionalProperties({ name: 'sessionId', nullable: false }, { name: 'sourceDocumentId', nullable: false }, { name: 'sourceDocumentType', nullable: false }, { name: 'supplierId', nullable: false }, { name: 'shipmentReference', nullable: false }, { name: 'status', nullable: false }, { name: 'entryMethod', nullable: false }, { name: 'createdByUserId', nullable: false }, );
+    const optionalStringProperties = createReceivingSessionResponseOptionalProperties({ name: 'sessionId', nullable: false }, { name: 'sourceDocumentId', nullable: false }, { name: 'sourceDocumentType', nullable: false }, { name: 'supplierId', nullable: false }, { name: 'shipmentReference', nullable: false }, { name: 'status', nullable: false }, { name: 'entryMethod', nullable: false }, { name: 'createdByUserId', nullable: false }, { name: 'createdAt', nullable: false }, );
     const optionalNumberProperties = createReceivingSessionResponseOptionalProperties();
     const optionalBooleanProperties = createReceivingSessionResponseOptionalProperties();
 

@@ -126,7 +126,7 @@ export function instanceOfSyncLogResponse(value: object): value is SyncLogRespon
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createSyncLogResponsePropertyNames('syncLogId', 'syncRunId', 'scope', 'outcome', 'createdAt', );
-    const optionalStringProperties = createSyncLogResponseOptionalProperties({ name: 'syncLogId', nullable: false }, { name: 'syncRunId', nullable: false }, { name: 'scope', nullable: false }, { name: 'outcome', nullable: false }, { name: 'correlationId', nullable: false }, { name: 'triggeredBy', nullable: false }, { name: 'locationId', nullable: false }, { name: 'hrLocationId', nullable: false }, { name: 'payload', nullable: false }, { name: 'errorMessage', nullable: false }, );
+    const optionalStringProperties = createSyncLogResponseOptionalProperties({ name: 'syncLogId', nullable: false }, { name: 'syncRunId', nullable: false }, { name: 'scope', nullable: false }, { name: 'outcome', nullable: false }, { name: 'correlationId', nullable: false }, { name: 'triggeredBy', nullable: false }, { name: 'locationId', nullable: false }, { name: 'hrLocationId', nullable: false }, { name: 'payload', nullable: false }, { name: 'errorMessage', nullable: false }, { name: 'startedAt', nullable: false }, { name: 'completedAt', nullable: false }, { name: 'createdAt', nullable: false }, );
     const optionalNumberProperties = createSyncLogResponseOptionalProperties({ name: 'locationsProcessed', nullable: false }, { name: 'locationsCreated', nullable: false }, { name: 'locationsUpdated', nullable: false }, { name: 'locationsUnchanged', nullable: false }, { name: 'locationsFailed', nullable: false }, );
     const optionalBooleanProperties = createSyncLogResponseOptionalProperties();
 

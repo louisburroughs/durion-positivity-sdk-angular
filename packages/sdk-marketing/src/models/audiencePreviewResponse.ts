@@ -93,7 +93,7 @@ export function instanceOfAudiencePreviewResponse(value: object): value is Audie
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createAudiencePreviewResponsePropertyNames('campaignId', 'audienceType', 'segmentMatched', 'truncated', 'channels', 'warnings', );
-    const optionalStringProperties = createAudiencePreviewResponseOptionalProperties({ name: 'campaignId', nullable: false }, { name: 'segmentId', nullable: false }, { name: 'audienceType', nullable: false }, );
+    const optionalStringProperties = createAudiencePreviewResponseOptionalProperties({ name: 'campaignId', nullable: false }, { name: 'segmentId', nullable: false }, { name: 'audienceType', nullable: false }, { name: 'resolvedAt', nullable: false }, );
     const optionalNumberProperties = createAudiencePreviewResponseOptionalProperties({ name: 'segmentMatched', nullable: false }, );
     const optionalBooleanProperties = createAudiencePreviewResponseOptionalProperties({ name: 'truncated', nullable: false }, );
 

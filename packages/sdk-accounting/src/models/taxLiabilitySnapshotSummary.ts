@@ -86,7 +86,7 @@ export function instanceOfTaxLiabilitySnapshotSummary(value: object): value is T
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createTaxLiabilitySnapshotSummaryPropertyNames('snapshotId', 'periodCode', 'status', 'frozenAt', 'frozenBy', 'totalNetTax', 'reconciled', 'contentHash', );
-    const optionalStringProperties = createTaxLiabilitySnapshotSummaryOptionalProperties({ name: 'snapshotId', nullable: false }, { name: 'periodCode', nullable: false }, { name: 'status', nullable: false }, { name: 'frozenBy', nullable: false }, { name: 'contentHash', nullable: false }, );
+    const optionalStringProperties = createTaxLiabilitySnapshotSummaryOptionalProperties({ name: 'snapshotId', nullable: false }, { name: 'periodCode', nullable: false }, { name: 'status', nullable: false }, { name: 'frozenAt', nullable: false }, { name: 'frozenBy', nullable: false }, { name: 'contentHash', nullable: false }, );
     const optionalNumberProperties = createTaxLiabilitySnapshotSummaryOptionalProperties({ name: 'totalNetTax', nullable: false }, );
     const optionalBooleanProperties = createTaxLiabilitySnapshotSummaryOptionalProperties({ name: 'reconciled', nullable: false }, );
 

@@ -83,7 +83,7 @@ export function instanceOfInactivePersonActiveUserResponse(value: object): value
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createInactivePersonActiveUserResponsePropertyNames('linkId', 'username', 'personId', );
-    const optionalStringProperties = createInactivePersonActiveUserResponseOptionalProperties({ name: 'linkId', nullable: false }, { name: 'username', nullable: false }, { name: 'personId', nullable: false }, { name: 'personStatus', nullable: false }, );
+    const optionalStringProperties = createInactivePersonActiveUserResponseOptionalProperties({ name: 'linkId', nullable: false }, { name: 'username', nullable: false }, { name: 'personId', nullable: false }, { name: 'personStatus', nullable: false }, { name: 'personStatusEffectiveAt', nullable: false }, );
     const optionalNumberProperties = createInactivePersonActiveUserResponseOptionalProperties();
     const optionalBooleanProperties = createInactivePersonActiveUserResponseOptionalProperties();
 

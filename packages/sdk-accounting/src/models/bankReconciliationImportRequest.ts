@@ -82,7 +82,7 @@ export function instanceOfBankReconciliationImportRequest(value: object): value 
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createBankReconciliationImportRequestPropertyNames('glAccountId', 'periodStartDate', 'periodEndDate', 'statementDate', 'statementEndingBalance', 'currency', 'csv', );
-    const optionalStringProperties = createBankReconciliationImportRequestOptionalProperties({ name: 'glAccountId', nullable: false }, { name: 'currency', nullable: false }, { name: 'csv', nullable: false }, );
+    const optionalStringProperties = createBankReconciliationImportRequestOptionalProperties({ name: 'glAccountId', nullable: false }, { name: 'periodStartDate', nullable: false }, { name: 'periodEndDate', nullable: false }, { name: 'statementDate', nullable: false }, { name: 'currency', nullable: false }, { name: 'csv', nullable: false }, );
     const optionalNumberProperties = createBankReconciliationImportRequestOptionalProperties({ name: 'statementEndingBalance', nullable: false }, );
     const optionalBooleanProperties = createBankReconciliationImportRequestOptionalProperties();
 

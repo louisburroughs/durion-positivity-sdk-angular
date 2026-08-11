@@ -76,7 +76,7 @@ export function instanceOfProviderResponse(value: object): value is ProviderResp
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createProviderResponsePropertyNames();
-    const optionalStringProperties = createProviderResponseOptionalProperties({ name: 'id', nullable: false }, { name: 'name', nullable: false }, { name: 'status', nullable: false }, { name: 'providerType', nullable: false }, { name: 'apVendorId', nullable: false }, { name: 'manufacturerId', nullable: false }, { name: 'claimSubmissionMethod', nullable: false }, { name: 'portalUrl', nullable: false }, { name: 'contactName', nullable: false }, { name: 'contactPhone', nullable: false }, { name: 'contactEmail', nullable: false }, );
+    const optionalStringProperties = createProviderResponseOptionalProperties({ name: 'id', nullable: false }, { name: 'name', nullable: false }, { name: 'status', nullable: false }, { name: 'providerType', nullable: false }, { name: 'apVendorId', nullable: false }, { name: 'manufacturerId', nullable: false }, { name: 'claimSubmissionMethod', nullable: false }, { name: 'portalUrl', nullable: false }, { name: 'contactName', nullable: false }, { name: 'contactPhone', nullable: false }, { name: 'contactEmail', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'updatedAt', nullable: false }, );
     const optionalNumberProperties = createProviderResponseOptionalProperties({ name: 'version', nullable: false }, );
     const optionalBooleanProperties = createProviderResponseOptionalProperties();
 

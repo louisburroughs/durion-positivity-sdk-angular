@@ -99,7 +99,7 @@ export function instanceOfCreateRestrictionRuleRequest(value: object): value is 
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createCreateRestrictionRuleRequestPropertyNames('productId', 'locationTag', 'serviceTag', 'effectiveFrom', 'overrideable', );
-    const optionalStringProperties = createCreateRestrictionRuleRequestOptionalProperties({ name: 'productId', nullable: false }, { name: 'locationTag', nullable: false }, { name: 'serviceTag', nullable: false }, );
+    const optionalStringProperties = createCreateRestrictionRuleRequestOptionalProperties({ name: 'productId', nullable: false }, { name: 'locationTag', nullable: false }, { name: 'serviceTag', nullable: false }, { name: 'effectiveFrom', nullable: false }, { name: 'effectiveTo', nullable: false }, );
     const optionalNumberProperties = createCreateRestrictionRuleRequestOptionalProperties({ name: 'policyVersion', nullable: false }, );
     const optionalBooleanProperties = createCreateRestrictionRuleRequestOptionalProperties({ name: 'overrideable', nullable: false }, );
 

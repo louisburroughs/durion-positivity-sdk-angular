@@ -108,7 +108,7 @@ export function instanceOfExemptionCertificateResponse(value: object): value is 
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createExemptionCertificateResponsePropertyNames();
-    const optionalStringProperties = createExemptionCertificateResponseOptionalProperties({ name: 'id', nullable: false }, { name: 'customerId', nullable: false }, { name: 'stateScope', nullable: false }, { name: 'reasonCode', nullable: false }, { name: 'certificateNumber', nullable: false }, { name: 'status', nullable: false }, );
+    const optionalStringProperties = createExemptionCertificateResponseOptionalProperties({ name: 'id', nullable: false }, { name: 'customerId', nullable: false }, { name: 'stateScope', nullable: false }, { name: 'reasonCode', nullable: false }, { name: 'certificateNumber', nullable: false }, { name: 'effectiveFrom', nullable: false }, { name: 'expiresAt', nullable: false }, { name: 'status', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'updatedAt', nullable: false }, );
     const optionalNumberProperties = createExemptionCertificateResponseOptionalProperties();
     const optionalBooleanProperties = createExemptionCertificateResponseOptionalProperties();
 

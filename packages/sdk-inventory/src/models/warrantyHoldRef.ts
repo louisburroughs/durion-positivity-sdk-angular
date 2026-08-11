@@ -78,7 +78,7 @@ export function instanceOfWarrantyHoldRef(value: object): value is WarrantyHoldR
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createWarrantyHoldRefPropertyNames('partReturnId', 'status', );
-    const optionalStringProperties = createWarrantyHoldRefOptionalProperties({ name: 'partReturnId', nullable: false }, { name: 'claimId', nullable: false }, { name: 'status', nullable: false }, { name: 'disposition', nullable: false }, );
+    const optionalStringProperties = createWarrantyHoldRefOptionalProperties({ name: 'partReturnId', nullable: false }, { name: 'claimId', nullable: false }, { name: 'status', nullable: false }, { name: 'disposition', nullable: false }, { name: 'requestedAt', nullable: false }, { name: 'shippedAt', nullable: false }, );
     const optionalNumberProperties = createWarrantyHoldRefOptionalProperties();
     const optionalBooleanProperties = createWarrantyHoldRefOptionalProperties();
 

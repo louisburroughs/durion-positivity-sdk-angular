@@ -87,7 +87,7 @@ export function instanceOfScheduleViewResponse(value: object): value is Schedule
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createScheduleViewResponsePropertyNames('locationId', 'date', 'viewGeneratedAt', 'dayStartAt', 'dayEndAt', 'resources', );
-    const optionalStringProperties = createScheduleViewResponseOptionalProperties({ name: 'locationId', nullable: false }, { name: 'availabilityOverlayStatus', nullable: false }, );
+    const optionalStringProperties = createScheduleViewResponseOptionalProperties({ name: 'locationId', nullable: false }, { name: 'date', nullable: false }, { name: 'viewGeneratedAt', nullable: false }, { name: 'dayStartAt', nullable: false }, { name: 'dayEndAt', nullable: false }, { name: 'availabilityOverlayStatus', nullable: false }, );
     const optionalNumberProperties = createScheduleViewResponseOptionalProperties();
     const optionalBooleanProperties = createScheduleViewResponseOptionalProperties();
 

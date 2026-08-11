@@ -62,7 +62,7 @@ export function instanceOfRestrictionOverrideResponse(value: object): value is R
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createRestrictionOverrideResponsePropertyNames('overrideId', 'expiresAt', );
-    const optionalStringProperties = createRestrictionOverrideResponseOptionalProperties({ name: 'overrideId', nullable: false }, );
+    const optionalStringProperties = createRestrictionOverrideResponseOptionalProperties({ name: 'overrideId', nullable: false }, { name: 'expiresAt', nullable: false }, );
     const optionalNumberProperties = createRestrictionOverrideResponseOptionalProperties();
     const optionalBooleanProperties = createRestrictionOverrideResponseOptionalProperties();
 

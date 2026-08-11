@@ -78,7 +78,7 @@ export function instanceOfAccountingEventSubmitRequest(value: object): value is 
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createAccountingEventSubmitRequestPropertyNames('eventType', 'organizationId', 'payload', );
-    const optionalStringProperties = createAccountingEventSubmitRequestOptionalProperties({ name: 'eventId', nullable: false }, { name: 'eventType', nullable: false }, { name: 'organizationId', nullable: false }, { name: 'sourceSystem', nullable: false }, );
+    const optionalStringProperties = createAccountingEventSubmitRequestOptionalProperties({ name: 'eventId', nullable: false }, { name: 'eventType', nullable: false }, { name: 'organizationId', nullable: false }, { name: 'sourceSystem', nullable: false }, { name: 'transactionDate', nullable: false }, );
     const optionalNumberProperties = createAccountingEventSubmitRequestOptionalProperties();
     const optionalBooleanProperties = createAccountingEventSubmitRequestOptionalProperties();
 

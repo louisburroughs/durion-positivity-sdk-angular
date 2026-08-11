@@ -97,7 +97,7 @@ export function instanceOfCreatePromotionOfferRequest(value: object): value is C
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createCreatePromotionOfferRequestPropertyNames('promoCode', 'name', 'discountType', 'discountValue', 'startDate', 'endDate', );
-    const optionalStringProperties = createCreatePromotionOfferRequestOptionalProperties({ name: 'promoCode', nullable: false }, { name: 'name', nullable: false }, { name: 'description', nullable: true }, { name: 'discountType', nullable: false }, { name: 'storeCode', nullable: true }, );
+    const optionalStringProperties = createCreatePromotionOfferRequestOptionalProperties({ name: 'promoCode', nullable: false }, { name: 'name', nullable: false }, { name: 'description', nullable: true }, { name: 'discountType', nullable: false }, { name: 'startDate', nullable: false }, { name: 'endDate', nullable: false }, { name: 'storeCode', nullable: true }, );
     const optionalNumberProperties = createCreatePromotionOfferRequestOptionalProperties({ name: 'discountValue', nullable: false }, { name: 'usageLimit', nullable: true }, );
     const optionalBooleanProperties = createCreatePromotionOfferRequestOptionalProperties();
 

@@ -123,7 +123,7 @@ export function instanceOfTraceabilityMovement(value: object): value is Traceabi
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createTraceabilityMovementPropertyNames('ledgerEntryId', 'eventType', 'timestamp', 'changeInQuantity', );
-    const optionalStringProperties = createTraceabilityMovementOptionalProperties({ name: 'ledgerEntryId', nullable: false }, { name: 'eventType', nullable: false }, { name: 'locationId', nullable: false }, { name: 'fromLocationId', nullable: false }, { name: 'toLocationId', nullable: false }, { name: 'lotId', nullable: false }, { name: 'sourceTransactionId', nullable: false }, { name: 'notes', nullable: false }, );
+    const optionalStringProperties = createTraceabilityMovementOptionalProperties({ name: 'ledgerEntryId', nullable: false }, { name: 'eventType', nullable: false }, { name: 'timestamp', nullable: false }, { name: 'locationId', nullable: false }, { name: 'fromLocationId', nullable: false }, { name: 'toLocationId', nullable: false }, { name: 'lotId', nullable: false }, { name: 'sourceTransactionId', nullable: false }, { name: 'notes', nullable: false }, );
     const optionalNumberProperties = createTraceabilityMovementOptionalProperties({ name: 'changeInQuantity', nullable: false }, { name: 'quantityAfter', nullable: false }, );
     const optionalBooleanProperties = createTraceabilityMovementOptionalProperties();
 

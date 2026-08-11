@@ -91,7 +91,7 @@ export function instanceOfInvoiceStatusResponse(value: object): value is Invoice
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createInvoiceStatusResponsePropertyNames('invoiceId', 'status', );
-    const optionalStringProperties = createInvoiceStatusResponseOptionalProperties({ name: 'invoiceId', nullable: false }, { name: 'status', nullable: false }, { name: 'latestTransactionReference', nullable: false }, );
+    const optionalStringProperties = createInvoiceStatusResponseOptionalProperties({ name: 'invoiceId', nullable: false }, { name: 'status', nullable: false }, { name: 'latestTransactionReference', nullable: false }, { name: 'lastUpdated', nullable: false }, );
     const optionalNumberProperties = createInvoiceStatusResponseOptionalProperties({ name: 'totalPaid', nullable: false }, { name: 'invoiceTotal', nullable: false }, { name: 'remainingBalance', nullable: false }, );
     const optionalBooleanProperties = createInvoiceStatusResponseOptionalProperties();
 

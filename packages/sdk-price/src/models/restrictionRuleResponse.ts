@@ -99,7 +99,7 @@ export function instanceOfRestrictionRuleResponse(value: object): value is Restr
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createRestrictionRuleResponsePropertyNames('ruleId', 'productId', 'locationTag', 'serviceTag', 'active', 'effectiveFrom', );
-    const optionalStringProperties = createRestrictionRuleResponseOptionalProperties({ name: 'ruleId', nullable: false }, { name: 'productId', nullable: false }, { name: 'locationTag', nullable: false }, { name: 'serviceTag', nullable: false }, );
+    const optionalStringProperties = createRestrictionRuleResponseOptionalProperties({ name: 'ruleId', nullable: false }, { name: 'productId', nullable: false }, { name: 'locationTag', nullable: false }, { name: 'serviceTag', nullable: false }, { name: 'effectiveFrom', nullable: false }, { name: 'effectiveTo', nullable: false }, );
     const optionalNumberProperties = createRestrictionRuleResponseOptionalProperties();
     const optionalBooleanProperties = createRestrictionRuleResponseOptionalProperties({ name: 'active', nullable: false }, );
 

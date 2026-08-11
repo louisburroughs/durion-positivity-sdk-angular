@@ -70,7 +70,7 @@ export function instanceOfPersonRoleAssignmentRequest(value: object): value is P
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createPersonRoleAssignmentRequestPropertyNames('roleCode', );
-    const optionalStringProperties = createPersonRoleAssignmentRequestOptionalProperties({ name: 'roleCode', nullable: false }, { name: 'locationId', nullable: false }, );
+    const optionalStringProperties = createPersonRoleAssignmentRequestOptionalProperties({ name: 'roleCode', nullable: false }, { name: 'locationId', nullable: false }, { name: 'startDate', nullable: false }, { name: 'endDate', nullable: false }, );
     const optionalNumberProperties = createPersonRoleAssignmentRequestOptionalProperties();
     const optionalBooleanProperties = createPersonRoleAssignmentRequestOptionalProperties();
 

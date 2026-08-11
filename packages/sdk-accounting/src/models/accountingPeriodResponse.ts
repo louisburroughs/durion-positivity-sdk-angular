@@ -100,7 +100,7 @@ export function instanceOfAccountingPeriodResponse(value: object): value is Acco
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createAccountingPeriodResponsePropertyNames();
-    const optionalStringProperties = createAccountingPeriodResponseOptionalProperties({ name: 'periodId', nullable: false }, { name: 'periodCode', nullable: false }, { name: 'status', nullable: false }, { name: 'closedBy', nullable: false }, { name: 'reopenedBy', nullable: false }, { name: 'reopenJustification', nullable: false }, );
+    const optionalStringProperties = createAccountingPeriodResponseOptionalProperties({ name: 'periodId', nullable: false }, { name: 'periodCode', nullable: false }, { name: 'startDate', nullable: false }, { name: 'endDate', nullable: false }, { name: 'status', nullable: false }, { name: 'closedAt', nullable: false }, { name: 'closedBy', nullable: false }, { name: 'reopenedAt', nullable: false }, { name: 'reopenedBy', nullable: false }, { name: 'reopenJustification', nullable: false }, );
     const optionalNumberProperties = createAccountingPeriodResponseOptionalProperties();
     const optionalBooleanProperties = createAccountingPeriodResponseOptionalProperties();
 

@@ -82,7 +82,7 @@ export function instanceOfBalanceSheetReport(value: object): value is BalanceShe
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createBalanceSheetReportPropertyNames('asOfDate', 'generatedAt', 'lineItems', 'totalAssets', 'totalLiabilities', 'totalEquity', 'balanced', );
-    const optionalStringProperties = createBalanceSheetReportOptionalProperties();
+    const optionalStringProperties = createBalanceSheetReportOptionalProperties({ name: 'asOfDate', nullable: false }, { name: 'generatedAt', nullable: false }, );
     const optionalNumberProperties = createBalanceSheetReportOptionalProperties({ name: 'totalAssets', nullable: false }, { name: 'totalLiabilities', nullable: false }, { name: 'totalEquity', nullable: false }, );
     const optionalBooleanProperties = createBalanceSheetReportOptionalProperties({ name: 'balanced', nullable: false }, );
 

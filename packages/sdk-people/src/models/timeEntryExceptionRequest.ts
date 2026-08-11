@@ -84,7 +84,7 @@ export function instanceOfTimeEntryExceptionRequest(value: object): value is Tim
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createTimeEntryExceptionRequestPropertyNames('employeeId', 'exceptionCode', );
-    const optionalStringProperties = createTimeEntryExceptionRequestOptionalProperties({ name: 'employeeId', nullable: false }, { name: 'exceptionCode', nullable: false }, { name: 'severity', nullable: false }, { name: 'timeEntryId', nullable: false }, { name: 'resolutionNotes', nullable: false }, );
+    const optionalStringProperties = createTimeEntryExceptionRequestOptionalProperties({ name: 'employeeId', nullable: false }, { name: 'exceptionCode', nullable: false }, { name: 'severity', nullable: false }, { name: 'timeEntryId', nullable: false }, { name: 'resolutionNotes', nullable: false }, { name: 'detectedAt', nullable: false }, );
     const optionalNumberProperties = createTimeEntryExceptionRequestOptionalProperties();
     const optionalBooleanProperties = createTimeEntryExceptionRequestOptionalProperties();
 

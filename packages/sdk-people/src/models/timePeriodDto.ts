@@ -81,7 +81,7 @@ export function instanceOfTimePeriodDto(value: object): value is TimePeriodDto {
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createTimePeriodDtoPropertyNames('timePeriodId', 'tenantId', 'startDate', 'endDate', 'status', );
-    const optionalStringProperties = createTimePeriodDtoOptionalProperties({ name: 'timePeriodId', nullable: false }, { name: 'tenantId', nullable: false }, { name: 'status', nullable: false }, );
+    const optionalStringProperties = createTimePeriodDtoOptionalProperties({ name: 'timePeriodId', nullable: false }, { name: 'tenantId', nullable: false }, { name: 'startDate', nullable: false }, { name: 'endDate', nullable: false }, { name: 'status', nullable: false }, );
     const optionalNumberProperties = createTimePeriodDtoOptionalProperties();
     const optionalBooleanProperties = createTimePeriodDtoOptionalProperties();
 

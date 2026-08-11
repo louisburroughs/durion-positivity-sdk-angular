@@ -79,7 +79,7 @@ export function instanceOfCreateAsnRequest(value: object): value is CreateAsnReq
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createCreateAsnRequestPropertyNames('vendorId', 'asnReferenceNumber', 'relatedPoIds', 'lineItems', );
-    const optionalStringProperties = createCreateAsnRequestOptionalProperties({ name: 'vendorId', nullable: false }, { name: 'asnReferenceNumber', nullable: false }, );
+    const optionalStringProperties = createCreateAsnRequestOptionalProperties({ name: 'vendorId', nullable: false }, { name: 'asnReferenceNumber', nullable: false }, { name: 'shipDate', nullable: false }, { name: 'expectedArrivalDate', nullable: false }, );
     const optionalNumberProperties = createCreateAsnRequestOptionalProperties();
     const optionalBooleanProperties = createCreateAsnRequestOptionalProperties();
 

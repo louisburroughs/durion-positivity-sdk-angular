@@ -79,7 +79,7 @@ export function instanceOfSettlementView(value: object): value is SettlementView
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createSettlementViewPropertyNames();
-    const optionalStringProperties = createSettlementViewOptionalProperties({ name: 'id', nullable: false }, { name: 'settlementType', nullable: false }, { name: 'status', nullable: false }, { name: 'replacementWorkorderId', nullable: false }, { name: 'invoiceId', nullable: false }, { name: 'invoiceAdjustmentId', nullable: false }, { name: 'refundRecordId', nullable: false }, );
+    const optionalStringProperties = createSettlementViewOptionalProperties({ name: 'id', nullable: false }, { name: 'settlementType', nullable: false }, { name: 'status', nullable: false }, { name: 'replacementWorkorderId', nullable: false }, { name: 'invoiceId', nullable: false }, { name: 'invoiceAdjustmentId', nullable: false }, { name: 'refundRecordId', nullable: false }, { name: 'createdAt', nullable: false }, );
     const optionalNumberProperties = createSettlementViewOptionalProperties({ name: 'coveredAmount', nullable: false }, { name: 'customerAmount', nullable: false }, );
     const optionalBooleanProperties = createSettlementViewOptionalProperties();
 

@@ -106,7 +106,7 @@ export function instanceOfAuditEventSearchFilter(value: object): value is AuditE
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createAuditEventSearchFilterPropertyNames();
-    const optionalStringProperties = createAuditEventSearchFilterOptionalProperties({ name: 'actorId', nullable: false }, { name: 'workorderId', nullable: false }, { name: 'movementId', nullable: false }, { name: 'productId', nullable: false }, { name: 'sku', nullable: false }, { name: 'eventType', nullable: false }, { name: 'aggregateId', nullable: false }, { name: 'correlationId', nullable: false }, { name: 'reasonCode', nullable: false }, { name: 'pageToken', nullable: false }, );
+    const optionalStringProperties = createAuditEventSearchFilterOptionalProperties({ name: 'fromDate', nullable: false }, { name: 'toDate', nullable: false }, { name: 'actorId', nullable: false }, { name: 'workorderId', nullable: false }, { name: 'movementId', nullable: false }, { name: 'productId', nullable: false }, { name: 'sku', nullable: false }, { name: 'eventType', nullable: false }, { name: 'aggregateId', nullable: false }, { name: 'correlationId', nullable: false }, { name: 'reasonCode', nullable: false }, { name: 'pageToken', nullable: false }, );
     const optionalNumberProperties = createAuditEventSearchFilterOptionalProperties();
     const optionalBooleanProperties = createAuditEventSearchFilterOptionalProperties();
 

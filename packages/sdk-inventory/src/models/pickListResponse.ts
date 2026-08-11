@@ -91,7 +91,7 @@ export function instanceOfPickListResponse(value: object): value is PickListResp
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createPickListResponsePropertyNames('pickListId', 'workorderId', 'status', 'priority', 'createdAt', 'updatedAt', );
-    const optionalStringProperties = createPickListResponseOptionalProperties({ name: 'pickListId', nullable: false }, { name: 'workorderId', nullable: false }, { name: 'status', nullable: false }, );
+    const optionalStringProperties = createPickListResponseOptionalProperties({ name: 'pickListId', nullable: false }, { name: 'workorderId', nullable: false }, { name: 'status', nullable: false }, { name: 'dueAt', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'updatedAt', nullable: false }, );
     const optionalNumberProperties = createPickListResponseOptionalProperties({ name: 'priority', nullable: false }, );
     const optionalBooleanProperties = createPickListResponseOptionalProperties();
 

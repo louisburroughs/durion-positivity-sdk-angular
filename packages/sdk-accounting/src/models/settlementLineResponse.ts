@@ -135,7 +135,7 @@ export function instanceOfSettlementLineResponse(value: object): value is Settle
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createSettlementLineResponsePropertyNames();
-    const optionalStringProperties = createSettlementLineResponseOptionalProperties({ name: 'lineId', nullable: false }, { name: 'settlementId', nullable: false }, { name: 'providerLineRef', nullable: false }, { name: 'lineType', nullable: false }, { name: 'paymentReference', nullable: false }, { name: 'matchStatus', nullable: false }, { name: 'matchedPaymentId', nullable: false }, { name: 'matchedPaymentType', nullable: false }, { name: 'writeoffReason', nullable: false }, { name: 'writeoffJournalEntryId', nullable: false }, );
+    const optionalStringProperties = createSettlementLineResponseOptionalProperties({ name: 'lineId', nullable: false }, { name: 'settlementId', nullable: false }, { name: 'providerLineRef', nullable: false }, { name: 'lineType', nullable: false }, { name: 'paymentReference', nullable: false }, { name: 'matchStatus', nullable: false }, { name: 'matchedPaymentId', nullable: false }, { name: 'matchedPaymentType', nullable: false }, { name: 'writeoffReason', nullable: false }, { name: 'writeoffJournalEntryId', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'updatedAt', nullable: false }, );
     const optionalNumberProperties = createSettlementLineResponseOptionalProperties({ name: 'grossAmount', nullable: false }, { name: 'feeAmount', nullable: false }, { name: 'netAmount', nullable: false }, );
     const optionalBooleanProperties = createSettlementLineResponseOptionalProperties();
 

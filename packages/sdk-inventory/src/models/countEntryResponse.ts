@@ -94,7 +94,7 @@ export function instanceOfCountEntryResponse(value: object): value is CountEntry
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createCountEntryResponsePropertyNames('countEntryId', 'cycleCountTaskId', 'auditorId', 'actualQuantity', 'expectedQuantity', 'variance', 'recountSequenceNumber', 'countedAt', 'recount', );
-    const optionalStringProperties = createCountEntryResponseOptionalProperties({ name: 'countEntryId', nullable: false }, { name: 'cycleCountTaskId', nullable: false }, { name: 'auditorId', nullable: false }, { name: 'recountOfCountEntryId', nullable: false }, );
+    const optionalStringProperties = createCountEntryResponseOptionalProperties({ name: 'countEntryId', nullable: false }, { name: 'cycleCountTaskId', nullable: false }, { name: 'auditorId', nullable: false }, { name: 'recountOfCountEntryId', nullable: false }, { name: 'countedAt', nullable: false }, );
     const optionalNumberProperties = createCountEntryResponseOptionalProperties({ name: 'actualQuantity', nullable: false }, { name: 'expectedQuantity', nullable: false }, { name: 'variance', nullable: false }, { name: 'recountSequenceNumber', nullable: false }, );
     const optionalBooleanProperties = createCountEntryResponseOptionalProperties({ name: 'recount', nullable: false }, );
 

@@ -84,7 +84,7 @@ export function instanceOfTrialBalanceReport(value: object): value is TrialBalan
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createTrialBalanceReportPropertyNames('asOfDate', 'generatedAt', 'rows', 'totalDebit', 'totalCredit', 'balanced', 'entryNumberGaps', );
-    const optionalStringProperties = createTrialBalanceReportOptionalProperties();
+    const optionalStringProperties = createTrialBalanceReportOptionalProperties({ name: 'asOfDate', nullable: false }, { name: 'generatedAt', nullable: false }, );
     const optionalNumberProperties = createTrialBalanceReportOptionalProperties({ name: 'totalDebit', nullable: false }, { name: 'totalCredit', nullable: false }, );
     const optionalBooleanProperties = createTrialBalanceReportOptionalProperties({ name: 'balanced', nullable: false }, );
 

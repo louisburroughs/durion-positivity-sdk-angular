@@ -107,7 +107,7 @@ export function instanceOfGetPersonResponse(value: object): value is GetPersonRe
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createGetPersonResponsePropertyNames('personId', 'firstName', 'lastName', 'individualCustomer', 'commercialContact', 'commercialAccountCount', 'createdAt', );
-    const optionalStringProperties = createGetPersonResponseOptionalProperties({ name: 'personId', nullable: false }, { name: 'firstName', nullable: false }, { name: 'lastName', nullable: false }, { name: 'displayName', nullable: false }, { name: 'preferredContactMethod', nullable: false }, );
+    const optionalStringProperties = createGetPersonResponseOptionalProperties({ name: 'personId', nullable: false }, { name: 'firstName', nullable: false }, { name: 'lastName', nullable: false }, { name: 'displayName', nullable: false }, { name: 'preferredContactMethod', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'updatedAt', nullable: false }, );
     const optionalNumberProperties = createGetPersonResponseOptionalProperties({ name: 'commercialAccountCount', nullable: false }, );
     const optionalBooleanProperties = createGetPersonResponseOptionalProperties({ name: 'individualCustomer', nullable: false }, { name: 'commercialContact', nullable: false }, );
 

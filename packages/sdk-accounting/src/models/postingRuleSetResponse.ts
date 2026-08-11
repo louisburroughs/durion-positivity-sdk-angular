@@ -91,7 +91,7 @@ export function instanceOfPostingRuleSetResponse(value: object): value is Postin
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createPostingRuleSetResponsePropertyNames('postingRuleSetId', );
-    const optionalStringProperties = createPostingRuleSetResponseOptionalProperties({ name: 'postingRuleSetId', nullable: false }, { name: 'name', nullable: false }, { name: 'eventType', nullable: false }, { name: 'description', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'modifiedBy', nullable: false }, );
+    const optionalStringProperties = createPostingRuleSetResponseOptionalProperties({ name: 'postingRuleSetId', nullable: false }, { name: 'name', nullable: false }, { name: 'eventType', nullable: false }, { name: 'description', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'modifiedAt', nullable: false }, { name: 'modifiedBy', nullable: false }, );
     const optionalNumberProperties = createPostingRuleSetResponseOptionalProperties();
     const optionalBooleanProperties = createPostingRuleSetResponseOptionalProperties();
 

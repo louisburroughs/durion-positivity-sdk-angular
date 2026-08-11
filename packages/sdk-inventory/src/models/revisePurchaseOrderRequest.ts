@@ -87,7 +87,7 @@ export function instanceOfRevisePurchaseOrderRequest(value: object): value is Re
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createRevisePurchaseOrderRequestPropertyNames('poDate', 'lines', 'revisionReason', );
-    const optionalStringProperties = createRevisePurchaseOrderRequestOptionalProperties({ name: 'paymentTermsId', nullable: false }, { name: 'shipToLocationId', nullable: false }, { name: 'requestedBy', nullable: false }, { name: 'comment', nullable: false }, { name: 'revisionReason', nullable: false }, );
+    const optionalStringProperties = createRevisePurchaseOrderRequestOptionalProperties({ name: 'poDate', nullable: false }, { name: 'paymentTermsId', nullable: false }, { name: 'expectedDeliveryDate', nullable: false }, { name: 'shipToLocationId', nullable: false }, { name: 'requestedBy', nullable: false }, { name: 'comment', nullable: false }, { name: 'revisionReason', nullable: false }, );
     const optionalNumberProperties = createRevisePurchaseOrderRequestOptionalProperties();
     const optionalBooleanProperties = createRevisePurchaseOrderRequestOptionalProperties();
 

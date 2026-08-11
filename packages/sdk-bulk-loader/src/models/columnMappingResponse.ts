@@ -82,7 +82,7 @@ export function instanceOfColumnMappingResponse(value: object): value is ColumnM
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createColumnMappingResponsePropertyNames('id', 'jobId', 'sourceColumn', 'targetField', 'createdAt', );
-    const optionalStringProperties = createColumnMappingResponseOptionalProperties({ name: 'id', nullable: false }, { name: 'jobId', nullable: false }, { name: 'sourceColumn', nullable: false }, { name: 'targetField', nullable: false }, );
+    const optionalStringProperties = createColumnMappingResponseOptionalProperties({ name: 'id', nullable: false }, { name: 'jobId', nullable: false }, { name: 'sourceColumn', nullable: false }, { name: 'targetField', nullable: false }, { name: 'createdAt', nullable: false }, );
     const optionalNumberProperties = createColumnMappingResponseOptionalProperties();
     const optionalBooleanProperties = createColumnMappingResponseOptionalProperties({ name: 'overriddenByUser', nullable: false }, );
 

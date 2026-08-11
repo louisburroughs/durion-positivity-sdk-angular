@@ -102,7 +102,7 @@ export function instanceOfAccountStateResponse(value: object): value is AccountS
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createAccountStateResponsePropertyNames('userId', 'enabled', 'accountNonLocked', 'accountNonExpired', 'credentialsNonExpired', 'failedLoginAttempts', );
-    const optionalStringProperties = createAccountStateResponseOptionalProperties({ name: 'userId', nullable: false }, { name: 'disabledBy', nullable: false }, );
+    const optionalStringProperties = createAccountStateResponseOptionalProperties({ name: 'userId', nullable: false }, { name: 'lockedAt', nullable: false }, { name: 'lockedUntil', nullable: false }, { name: 'disabledAt', nullable: false }, { name: 'disabledBy', nullable: false }, { name: 'accountExpiresAt', nullable: false }, { name: 'credentialsExpireAt', nullable: false }, );
     const optionalNumberProperties = createAccountStateResponseOptionalProperties({ name: 'failedLoginAttempts', nullable: false }, );
     const optionalBooleanProperties = createAccountStateResponseOptionalProperties({ name: 'enabled', nullable: false }, { name: 'accountNonLocked', nullable: false }, { name: 'accountNonExpired', nullable: false }, { name: 'credentialsNonExpired', nullable: false }, );
 

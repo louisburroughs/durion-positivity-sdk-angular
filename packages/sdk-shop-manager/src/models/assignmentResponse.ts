@@ -103,7 +103,7 @@ export function instanceOfAssignmentResponse(value: object): value is Assignment
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createAssignmentResponsePropertyNames('assignmentId', 'appointmentId', 'mechanics', 'status', 'override', 'assignedAt', );
-    const optionalStringProperties = createAssignmentResponseOptionalProperties({ name: 'assignmentId', nullable: false }, { name: 'appointmentId', nullable: false }, { name: 'resourceId', nullable: false }, { name: 'resourceType', nullable: false }, { name: 'status', nullable: false }, { name: 'assignmentNotes', nullable: false }, );
+    const optionalStringProperties = createAssignmentResponseOptionalProperties({ name: 'assignmentId', nullable: false }, { name: 'appointmentId', nullable: false }, { name: 'resourceId', nullable: false }, { name: 'resourceType', nullable: false }, { name: 'status', nullable: false }, { name: 'assignmentNotes', nullable: false }, { name: 'assignedAt', nullable: false }, { name: 'lastUpdatedAt', nullable: false }, );
     const optionalNumberProperties = createAssignmentResponseOptionalProperties();
     const optionalBooleanProperties = createAssignmentResponseOptionalProperties({ name: 'override', nullable: false }, );
 

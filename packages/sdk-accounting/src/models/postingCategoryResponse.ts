@@ -86,7 +86,7 @@ export function instanceOfPostingCategoryResponse(value: object): value is Posti
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createPostingCategoryResponsePropertyNames('postingCategoryId', 'categoryName', );
-    const optionalStringProperties = createPostingCategoryResponseOptionalProperties({ name: 'postingCategoryId', nullable: false }, { name: 'categoryName', nullable: false }, { name: 'description', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'modifiedBy', nullable: false }, );
+    const optionalStringProperties = createPostingCategoryResponseOptionalProperties({ name: 'postingCategoryId', nullable: false }, { name: 'categoryName', nullable: false }, { name: 'description', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'modifiedAt', nullable: false }, { name: 'modifiedBy', nullable: false }, );
     const optionalNumberProperties = createPostingCategoryResponseOptionalProperties();
     const optionalBooleanProperties = createPostingCategoryResponseOptionalProperties({ name: 'isActive', nullable: false }, );
 

@@ -74,7 +74,7 @@ export function instanceOfEventProcessingLogEntry(value: object): value is Event
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createEventProcessingLogEntryPropertyNames('entryId', 'occurredAt', 'severity', 'message', );
-    const optionalStringProperties = createEventProcessingLogEntryOptionalProperties({ name: 'entryId', nullable: false }, { name: 'severity', nullable: false }, { name: 'message', nullable: false }, { name: 'contextJson', nullable: true }, );
+    const optionalStringProperties = createEventProcessingLogEntryOptionalProperties({ name: 'entryId', nullable: false }, { name: 'occurredAt', nullable: false }, { name: 'severity', nullable: false }, { name: 'message', nullable: false }, { name: 'contextJson', nullable: true }, );
     const optionalNumberProperties = createEventProcessingLogEntryOptionalProperties();
     const optionalBooleanProperties = createEventProcessingLogEntryOptionalProperties();
 

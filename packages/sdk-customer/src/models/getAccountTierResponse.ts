@@ -92,7 +92,7 @@ export function instanceOfGetAccountTierResponse(value: object): value is GetAcc
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createGetAccountTierResponsePropertyNames('accountId', 'tier', 'tierDisplayName', 'manualOverride', );
-    const optionalStringProperties = createGetAccountTierResponseOptionalProperties({ name: 'accountId', nullable: false }, { name: 'tier', nullable: false }, { name: 'tierDisplayName', nullable: false }, { name: 'tierAssignedBy', nullable: false }, { name: 'notes', nullable: false }, );
+    const optionalStringProperties = createGetAccountTierResponseOptionalProperties({ name: 'accountId', nullable: false }, { name: 'tier', nullable: false }, { name: 'tierDisplayName', nullable: false }, { name: 'tierAssignedAt', nullable: false }, { name: 'tierAssignedBy', nullable: false }, { name: 'notes', nullable: false }, );
     const optionalNumberProperties = createGetAccountTierResponseOptionalProperties();
     const optionalBooleanProperties = createGetAccountTierResponseOptionalProperties({ name: 'manualOverride', nullable: false }, );
 

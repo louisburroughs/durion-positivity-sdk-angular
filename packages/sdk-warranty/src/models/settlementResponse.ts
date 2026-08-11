@@ -96,7 +96,7 @@ export function instanceOfSettlementResponse(value: object): value is Settlement
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createSettlementResponsePropertyNames();
-    const optionalStringProperties = createSettlementResponseOptionalProperties({ name: 'id', nullable: false }, { name: 'claimId', nullable: false }, { name: 'settlementType', nullable: false }, { name: 'status', nullable: false }, { name: 'replacementWorkorderId', nullable: false }, { name: 'invoiceId', nullable: false }, { name: 'invoiceAdjustmentId', nullable: false }, { name: 'refundRecordId', nullable: false }, { name: 'claimStatus', nullable: false }, );
+    const optionalStringProperties = createSettlementResponseOptionalProperties({ name: 'id', nullable: false }, { name: 'claimId', nullable: false }, { name: 'settlementType', nullable: false }, { name: 'status', nullable: false }, { name: 'replacementWorkorderId', nullable: false }, { name: 'invoiceId', nullable: false }, { name: 'invoiceAdjustmentId', nullable: false }, { name: 'refundRecordId', nullable: false }, { name: 'claimStatus', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'updatedAt', nullable: false }, );
     const optionalNumberProperties = createSettlementResponseOptionalProperties({ name: 'coveredAmount', nullable: false }, { name: 'customerAmount', nullable: false }, );
     const optionalBooleanProperties = createSettlementResponseOptionalProperties();
 

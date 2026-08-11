@@ -128,7 +128,7 @@ export function instanceOfUpsertCampaignRequest(value: object): value is UpsertC
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createUpsertCampaignRequestPropertyNames('code', 'name', 'audienceType', 'channels', );
-    const optionalStringProperties = createUpsertCampaignRequestOptionalProperties({ name: 'code', nullable: false }, { name: 'name', nullable: false }, { name: 'description', nullable: false }, { name: 'audienceType', nullable: false }, { name: 'campaignProgramId', nullable: false }, { name: 'segmentId', nullable: false }, { name: 'promotionOfferId', nullable: false }, { name: 'catalogFocusRef', nullable: false }, { name: 'scheduleType', nullable: false }, { name: 'emailTemplateId', nullable: false }, { name: 'smsTemplateId', nullable: false }, );
+    const optionalStringProperties = createUpsertCampaignRequestOptionalProperties({ name: 'code', nullable: false }, { name: 'name', nullable: false }, { name: 'description', nullable: false }, { name: 'audienceType', nullable: false }, { name: 'campaignProgramId', nullable: false }, { name: 'segmentId', nullable: false }, { name: 'promotionOfferId', nullable: false }, { name: 'catalogFocusRef', nullable: false }, { name: 'windowStart', nullable: false }, { name: 'windowEnd', nullable: false }, { name: 'scheduleType', nullable: false }, { name: 'scheduledAt', nullable: false }, { name: 'emailTemplateId', nullable: false }, { name: 'smsTemplateId', nullable: false }, );
     const optionalNumberProperties = createUpsertCampaignRequestOptionalProperties();
     const optionalBooleanProperties = createUpsertCampaignRequestOptionalProperties();
 

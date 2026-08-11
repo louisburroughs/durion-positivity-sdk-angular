@@ -78,7 +78,7 @@ export function instanceOfUpdateCycleCountScheduleRequest(value: object): value 
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createUpdateCycleCountScheduleRequestPropertyNames();
-    const optionalStringProperties = createUpdateCycleCountScheduleRequestOptionalProperties({ name: 'zoneId', nullable: false }, { name: 'skuCategory', nullable: false }, );
+    const optionalStringProperties = createUpdateCycleCountScheduleRequestOptionalProperties({ name: 'zoneId', nullable: false }, { name: 'skuCategory', nullable: false }, { name: 'nextDueDate', nullable: false }, );
     const optionalNumberProperties = createUpdateCycleCountScheduleRequestOptionalProperties({ name: 'frequencyDays', nullable: false }, );
     const optionalBooleanProperties = createUpdateCycleCountScheduleRequestOptionalProperties({ name: 'autoCreatePlan', nullable: false }, { name: 'active', nullable: false }, );
 

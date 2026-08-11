@@ -106,7 +106,7 @@ export function instanceOfBillingRulesDTO(value: object): value is BillingRulesD
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createBillingRulesDTOPropertyNames('partyId', 'purchaseOrderRequired', 'paymentTermsCode', 'invoiceDeliveryMethod', 'invoiceGroupingStrategy', 'version', 'createdAt', 'updatedAt', 'updatedBy', );
-    const optionalStringProperties = createBillingRulesDTOOptionalProperties({ name: 'id', nullable: false }, { name: 'partyId', nullable: false }, { name: 'paymentTermsCode', nullable: false }, { name: 'invoiceDeliveryMethod', nullable: false }, { name: 'invoiceGroupingStrategy', nullable: false }, { name: 'updatedBy', nullable: false }, );
+    const optionalStringProperties = createBillingRulesDTOOptionalProperties({ name: 'id', nullable: false }, { name: 'partyId', nullable: false }, { name: 'paymentTermsCode', nullable: false }, { name: 'invoiceDeliveryMethod', nullable: false }, { name: 'invoiceGroupingStrategy', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'updatedAt', nullable: false }, { name: 'updatedBy', nullable: false }, );
     const optionalNumberProperties = createBillingRulesDTOOptionalProperties({ name: 'version', nullable: false }, );
     const optionalBooleanProperties = createBillingRulesDTOOptionalProperties({ name: 'purchaseOrderRequired', nullable: false }, );
 

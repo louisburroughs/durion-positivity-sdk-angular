@@ -78,7 +78,7 @@ export function instanceOfConsumptionResponse(value: object): value is Consumpti
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createConsumptionResponsePropertyNames('consumptionId', 'workorderId', 'totalItemsConsumed', 'createdAt', );
-    const optionalStringProperties = createConsumptionResponseOptionalProperties({ name: 'consumptionId', nullable: false }, { name: 'workorderId', nullable: false }, { name: 'pickListId', nullable: false }, );
+    const optionalStringProperties = createConsumptionResponseOptionalProperties({ name: 'consumptionId', nullable: false }, { name: 'workorderId', nullable: false }, { name: 'pickListId', nullable: false }, { name: 'createdAt', nullable: false }, );
     const optionalNumberProperties = createConsumptionResponseOptionalProperties({ name: 'totalItemsConsumed', nullable: false }, );
     const optionalBooleanProperties = createConsumptionResponseOptionalProperties();
 

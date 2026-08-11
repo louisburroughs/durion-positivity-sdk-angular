@@ -116,7 +116,7 @@ export function instanceOfReconciliationReportResponse(value: object): value is 
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createReconciliationReportResponsePropertyNames();
-    const optionalStringProperties = createReconciliationReportResponseOptionalProperties({ name: 'reconciliationId', nullable: false }, { name: 'accountCode', nullable: false }, { name: 'accountName', nullable: false }, { name: 'currency', nullable: false }, );
+    const optionalStringProperties = createReconciliationReportResponseOptionalProperties({ name: 'reconciliationId', nullable: false }, { name: 'accountCode', nullable: false }, { name: 'accountName', nullable: false }, { name: 'currency', nullable: false }, { name: 'statementDate', nullable: false }, );
     const optionalNumberProperties = createReconciliationReportResponseOptionalProperties({ name: 'glEndingBalance', nullable: false }, { name: 'statementEndingBalance', nullable: false }, { name: 'totalMatched', nullable: false }, { name: 'totalAdjustments', nullable: false }, { name: 'totalOutstanding', nullable: false }, { name: 'matchedLineCount', nullable: false }, { name: 'outstandingLineCount', nullable: false }, { name: 'difference', nullable: false }, );
     const optionalBooleanProperties = createReconciliationReportResponseOptionalProperties();
 

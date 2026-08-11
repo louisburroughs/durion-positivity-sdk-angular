@@ -90,7 +90,7 @@ export function instanceOfTaxLiabilitySnapshotVerification(value: object): value
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createTaxLiabilitySnapshotVerificationPropertyNames('snapshotId', 'periodCode', 'verifiedAt', 'snapshotContentHash', 'recomputedContentHash', 'consistent', 'frozenTotalNetTax', 'recomputedTotalNetTax', 'netTaxDelta', );
-    const optionalStringProperties = createTaxLiabilitySnapshotVerificationOptionalProperties({ name: 'snapshotId', nullable: false }, { name: 'periodCode', nullable: false }, { name: 'snapshotContentHash', nullable: false }, { name: 'recomputedContentHash', nullable: false }, );
+    const optionalStringProperties = createTaxLiabilitySnapshotVerificationOptionalProperties({ name: 'snapshotId', nullable: false }, { name: 'periodCode', nullable: false }, { name: 'verifiedAt', nullable: false }, { name: 'snapshotContentHash', nullable: false }, { name: 'recomputedContentHash', nullable: false }, );
     const optionalNumberProperties = createTaxLiabilitySnapshotVerificationOptionalProperties({ name: 'frozenTotalNetTax', nullable: false }, { name: 'recomputedTotalNetTax', nullable: false }, { name: 'netTaxDelta', nullable: false }, );
     const optionalBooleanProperties = createTaxLiabilitySnapshotVerificationOptionalProperties({ name: 'consistent', nullable: false }, );
 

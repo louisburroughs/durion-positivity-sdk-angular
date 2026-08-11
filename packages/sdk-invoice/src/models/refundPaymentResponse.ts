@@ -116,7 +116,7 @@ export function instanceOfRefundPaymentResponse(value: object): value is RefundP
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createRefundPaymentResponsePropertyNames('refundId', 'status', );
-    const optionalStringProperties = createRefundPaymentResponseOptionalProperties({ name: 'refundId', nullable: false }, { name: 'invoiceId', nullable: false }, { name: 'paymentIntentId', nullable: false }, { name: 'partyId', nullable: false }, { name: 'reason', nullable: false }, { name: 'notes', nullable: false }, { name: 'status', nullable: false }, { name: 'gatewayReference', nullable: false }, { name: 'externalReference', nullable: false }, );
+    const optionalStringProperties = createRefundPaymentResponseOptionalProperties({ name: 'refundId', nullable: false }, { name: 'invoiceId', nullable: false }, { name: 'paymentIntentId', nullable: false }, { name: 'partyId', nullable: false }, { name: 'reason', nullable: false }, { name: 'notes', nullable: false }, { name: 'status', nullable: false }, { name: 'gatewayReference', nullable: false }, { name: 'externalReference', nullable: false }, { name: 'completedAt', nullable: false }, );
     const optionalNumberProperties = createRefundPaymentResponseOptionalProperties({ name: 'amount', nullable: false }, );
     const optionalBooleanProperties = createRefundPaymentResponseOptionalProperties();
 

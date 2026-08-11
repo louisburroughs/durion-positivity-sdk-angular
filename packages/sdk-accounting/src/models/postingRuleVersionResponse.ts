@@ -97,7 +97,7 @@ export function instanceOfPostingRuleVersionResponse(value: object): value is Po
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createPostingRuleVersionResponsePropertyNames('versionId', 'postingRuleSetId', );
-    const optionalStringProperties = createPostingRuleVersionResponseOptionalProperties({ name: 'versionId', nullable: false }, { name: 'postingRuleSetId', nullable: false }, { name: 'state', nullable: false }, { name: 'rulesDefinition', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'modifiedBy', nullable: false }, );
+    const optionalStringProperties = createPostingRuleVersionResponseOptionalProperties({ name: 'versionId', nullable: false }, { name: 'postingRuleSetId', nullable: false }, { name: 'state', nullable: false }, { name: 'rulesDefinition', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'modifiedAt', nullable: false }, { name: 'modifiedBy', nullable: false }, );
     const optionalNumberProperties = createPostingRuleVersionResponseOptionalProperties({ name: 'versionNumber', nullable: false }, );
     const optionalBooleanProperties = createPostingRuleVersionResponseOptionalProperties();
 

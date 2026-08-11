@@ -90,7 +90,7 @@ export function instanceOfWorkorderSummary(value: object): value is WorkorderSum
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createWorkorderSummaryPropertyNames('workorderId', );
-    const optionalStringProperties = createWorkorderSummaryOptionalProperties({ name: 'workorderId', nullable: false }, { name: 'workorderNumber', nullable: false }, { name: 'status', nullable: false }, { name: 'customerName', nullable: false }, { name: 'vehicleDescription', nullable: false }, { name: 'assignedMechanicId', nullable: false }, { name: 'assignedBayId', nullable: false }, );
+    const optionalStringProperties = createWorkorderSummaryOptionalProperties({ name: 'workorderId', nullable: false }, { name: 'workorderNumber', nullable: false }, { name: 'status', nullable: false }, { name: 'customerName', nullable: false }, { name: 'vehicleDescription', nullable: false }, { name: 'scheduledDate', nullable: false }, { name: 'assignedMechanicId', nullable: false }, { name: 'assignedBayId', nullable: false }, );
     const optionalNumberProperties = createWorkorderSummaryOptionalProperties({ name: 'estimatedLaborHours', nullable: false }, );
     const optionalBooleanProperties = createWorkorderSummaryOptionalProperties();
 

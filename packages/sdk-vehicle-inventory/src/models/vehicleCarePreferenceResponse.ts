@@ -94,7 +94,7 @@ export function instanceOfVehicleCarePreferenceResponse(value: object): value is
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createVehicleCarePreferenceResponsePropertyNames('id', 'vehicleId', 'preferences', 'createdAt', 'updatedAt', 'version', );
-    const optionalStringProperties = createVehicleCarePreferenceResponseOptionalProperties({ name: 'id', nullable: false }, { name: 'vehicleId', nullable: false }, { name: 'serviceNotes', nullable: false }, { name: 'createdByUserId', nullable: false }, { name: 'updatedByUserId', nullable: false }, );
+    const optionalStringProperties = createVehicleCarePreferenceResponseOptionalProperties({ name: 'id', nullable: false }, { name: 'vehicleId', nullable: false }, { name: 'serviceNotes', nullable: false }, { name: 'createdByUserId', nullable: false }, { name: 'updatedByUserId', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'updatedAt', nullable: false }, );
     const optionalNumberProperties = createVehicleCarePreferenceResponseOptionalProperties({ name: 'serviceIntervalMonths', nullable: false }, { name: 'version', nullable: false }, );
     const optionalBooleanProperties = createVehicleCarePreferenceResponseOptionalProperties();
 

@@ -70,7 +70,7 @@ export function instanceOfWorkexecLaborPerformedRequest(value: object): value is
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createWorkexecLaborPerformedRequestPropertyNames('workorderId', 'technicianId', 'performedAt', 'labor', 'source', );
-    const optionalStringProperties = createWorkexecLaborPerformedRequestOptionalProperties({ name: 'workorderId', nullable: false }, { name: 'technicianId', nullable: false }, );
+    const optionalStringProperties = createWorkexecLaborPerformedRequestOptionalProperties({ name: 'workorderId', nullable: false }, { name: 'technicianId', nullable: false }, { name: 'performedAt', nullable: false }, );
     const optionalNumberProperties = createWorkexecLaborPerformedRequestOptionalProperties();
     const optionalBooleanProperties = createWorkexecLaborPerformedRequestOptionalProperties();
 

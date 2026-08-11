@@ -133,7 +133,7 @@ export function instanceOfBulkLoadJobResponse(value: object): value is BulkLoadJ
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createBulkLoadJobResponsePropertyNames('id', 'fileName', 'domainType', 'status', 'createdAt', );
-    const optionalStringProperties = createBulkLoadJobResponseOptionalProperties({ name: 'id', nullable: false }, { name: 'operatorId', nullable: false }, { name: 'locationId', nullable: false }, { name: 'fileName', nullable: false }, { name: 'domainType', nullable: false }, { name: 'status', nullable: false }, );
+    const optionalStringProperties = createBulkLoadJobResponseOptionalProperties({ name: 'id', nullable: false }, { name: 'operatorId', nullable: false }, { name: 'locationId', nullable: false }, { name: 'fileName', nullable: false }, { name: 'domainType', nullable: false }, { name: 'status', nullable: false }, { name: 'startedAt', nullable: false }, { name: 'completedAt', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'updatedAt', nullable: false }, );
     const optionalNumberProperties = createBulkLoadJobResponseOptionalProperties({ name: 'totalRows', nullable: false }, { name: 'processedRows', nullable: false }, { name: 'successCount', nullable: false }, { name: 'failureCount', nullable: false }, );
     const optionalBooleanProperties = createBulkLoadJobResponseOptionalProperties();
 

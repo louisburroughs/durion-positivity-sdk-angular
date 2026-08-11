@@ -95,7 +95,7 @@ export function instanceOfShopAuditFilter(value: object): value is ShopAuditFilt
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createShopAuditFilterPropertyNames();
-    const optionalStringProperties = createShopAuditFilterOptionalProperties({ name: 'workorderId', nullable: false }, { name: 'appointmentId', nullable: false }, { name: 'mechanicId', nullable: false }, { name: 'actorUserId', nullable: false }, { name: 'eventType', nullable: false }, { name: 'locationId', nullable: false }, );
+    const optionalStringProperties = createShopAuditFilterOptionalProperties({ name: 'workorderId', nullable: false }, { name: 'appointmentId', nullable: false }, { name: 'mechanicId', nullable: false }, { name: 'actorUserId', nullable: false }, { name: 'eventType', nullable: false }, { name: 'locationId', nullable: false }, { name: 'fromDateTime', nullable: false }, { name: 'toDateTime', nullable: false }, );
     const optionalNumberProperties = createShopAuditFilterOptionalProperties();
     const optionalBooleanProperties = createShopAuditFilterOptionalProperties();
 
