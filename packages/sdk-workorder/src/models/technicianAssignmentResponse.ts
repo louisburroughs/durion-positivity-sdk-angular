@@ -119,7 +119,7 @@ export function instanceOfTechnicianAssignmentResponse(value: object): value is 
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createTechnicianAssignmentResponsePropertyNames();
-    const optionalStringProperties = createTechnicianAssignmentResponseOptionalProperties({ name: 'workorderId', nullable: false }, { name: 'technicianId', nullable: false }, { name: 'technicianName', nullable: false }, { name: 'assignedBy', nullable: false }, { name: 'previousTechnicianId', nullable: false }, { name: 'previousTechnicianName', nullable: false }, { name: 'status', nullable: false }, { name: 'message', nullable: false }, { name: 'notes', nullable: false }, { name: 'reassignmentReason', nullable: false }, { name: 'reassignedBy', nullable: false }, { name: 'currentStatus', nullable: false }, );
+    const optionalStringProperties = createTechnicianAssignmentResponseOptionalProperties({ name: 'workorderId', nullable: false }, { name: 'technicianId', nullable: false }, { name: 'technicianName', nullable: false }, { name: 'assignedAt', nullable: false }, { name: 'assignedBy', nullable: false }, { name: 'previousTechnicianId', nullable: false }, { name: 'previousTechnicianName', nullable: false }, { name: 'status', nullable: false }, { name: 'message', nullable: false }, { name: 'notes', nullable: false }, { name: 'reassignmentReason', nullable: false }, { name: 'reassignedAt', nullable: false }, { name: 'reassignedBy', nullable: false }, { name: 'currentStatus', nullable: false }, );
     const optionalNumberProperties = createTechnicianAssignmentResponseOptionalProperties();
     const optionalBooleanProperties = createTechnicianAssignmentResponseOptionalProperties();
 

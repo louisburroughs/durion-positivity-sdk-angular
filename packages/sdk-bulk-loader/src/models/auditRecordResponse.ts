@@ -98,7 +98,7 @@ export function instanceOfAuditRecordResponse(value: object): value is AuditReco
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createAuditRecordResponsePropertyNames('id', 'jobId', 'reviewStatus', 'createdAt', );
-    const optionalStringProperties = createAuditRecordResponseOptionalProperties({ name: 'id', nullable: false }, { name: 'jobId', nullable: false }, { name: 'entityType', nullable: false }, { name: 'entityId', nullable: false }, { name: 'reviewStatus', nullable: false }, { name: 'reasonCodes', nullable: false }, { name: 'originalValues', nullable: false }, );
+    const optionalStringProperties = createAuditRecordResponseOptionalProperties({ name: 'id', nullable: false }, { name: 'jobId', nullable: false }, { name: 'entityType', nullable: false }, { name: 'entityId', nullable: false }, { name: 'reviewStatus', nullable: false }, { name: 'reasonCodes', nullable: false }, { name: 'originalValues', nullable: false }, { name: 'createdAt', nullable: false }, );
     const optionalNumberProperties = createAuditRecordResponseOptionalProperties({ name: 'rowNumber', nullable: false }, );
     const optionalBooleanProperties = createAuditRecordResponseOptionalProperties();
 

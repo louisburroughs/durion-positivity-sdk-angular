@@ -70,7 +70,7 @@ export function instanceOfInvoiceArtifact(value: object): value is InvoiceArtifa
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createInvoiceArtifactPropertyNames();
-    const optionalStringProperties = createInvoiceArtifactOptionalProperties({ name: 'artifactRefId', nullable: false }, { name: 'fileName', nullable: false }, { name: 'mimeType', nullable: false }, );
+    const optionalStringProperties = createInvoiceArtifactOptionalProperties({ name: 'artifactRefId', nullable: false }, { name: 'fileName', nullable: false }, { name: 'mimeType', nullable: false }, { name: 'createdAt', nullable: false }, );
     const optionalNumberProperties = createInvoiceArtifactOptionalProperties();
     const optionalBooleanProperties = createInvoiceArtifactOptionalProperties();
 

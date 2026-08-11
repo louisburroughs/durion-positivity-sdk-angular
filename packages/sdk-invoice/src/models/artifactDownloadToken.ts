@@ -62,7 +62,7 @@ export function instanceOfArtifactDownloadToken(value: object): value is Artifac
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createArtifactDownloadTokenPropertyNames();
-    const optionalStringProperties = createArtifactDownloadTokenOptionalProperties({ name: 'downloadToken', nullable: false }, );
+    const optionalStringProperties = createArtifactDownloadTokenOptionalProperties({ name: 'downloadToken', nullable: false }, { name: 'expiresAt', nullable: false }, );
     const optionalNumberProperties = createArtifactDownloadTokenOptionalProperties();
     const optionalBooleanProperties = createArtifactDownloadTokenOptionalProperties();
 

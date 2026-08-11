@@ -129,7 +129,7 @@ export function instanceOfCustomerInteractionResponse(value: object): value is C
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createCustomerInteractionResponsePropertyNames('interactionId', 'partyId', 'type', 'direction', 'occurredAt', );
-    const optionalStringProperties = createCustomerInteractionResponseOptionalProperties({ name: 'interactionId', nullable: false }, { name: 'partyId', nullable: false }, { name: 'contactId', nullable: false }, { name: 'type', nullable: false }, { name: 'channel', nullable: false }, { name: 'direction', nullable: false }, { name: 'campaignId', nullable: false }, { name: 'campaignCode', nullable: false }, { name: 'subject', nullable: false }, { name: 'summary', nullable: false }, { name: 'body', nullable: false }, { name: 'actor', nullable: false }, { name: 'sourceWorkorderId', nullable: false }, );
+    const optionalStringProperties = createCustomerInteractionResponseOptionalProperties({ name: 'interactionId', nullable: false }, { name: 'partyId', nullable: false }, { name: 'contactId', nullable: false }, { name: 'type', nullable: false }, { name: 'channel', nullable: false }, { name: 'direction', nullable: false }, { name: 'campaignId', nullable: false }, { name: 'campaignCode', nullable: false }, { name: 'subject', nullable: false }, { name: 'summary', nullable: false }, { name: 'body', nullable: false }, { name: 'actor', nullable: false }, { name: 'sourceWorkorderId', nullable: false }, { name: 'occurredAt', nullable: false }, );
     const optionalNumberProperties = createCustomerInteractionResponseOptionalProperties();
     const optionalBooleanProperties = createCustomerInteractionResponseOptionalProperties();
 

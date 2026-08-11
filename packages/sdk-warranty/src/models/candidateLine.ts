@@ -71,7 +71,7 @@ export function instanceOfCandidateLine(value: object): value is CandidateLine {
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createCandidateLinePropertyNames();
-    const optionalStringProperties = createCandidateLineOptionalProperties({ name: 'sourceType', nullable: false }, { name: 'sourceId', nullable: false }, { name: 'sourceLineId', nullable: false }, { name: 'sourceReference', nullable: false }, { name: 'productEntityId', nullable: false }, { name: 'sku', nullable: false }, { name: 'description', nullable: false }, { name: 'photoEvidenceUrl', nullable: false }, );
+    const optionalStringProperties = createCandidateLineOptionalProperties({ name: 'sourceType', nullable: false }, { name: 'sourceId', nullable: false }, { name: 'sourceLineId', nullable: false }, { name: 'sourceReference', nullable: false }, { name: 'productEntityId', nullable: false }, { name: 'sku', nullable: false }, { name: 'description', nullable: false }, { name: 'sourceCreatedAt', nullable: false }, { name: 'photoEvidenceUrl', nullable: false }, );
     const optionalNumberProperties = createCandidateLineOptionalProperties({ name: 'quantity', nullable: false }, { name: 'unitPrice', nullable: false }, { name: 'lineTotal', nullable: false }, );
     const optionalBooleanProperties = createCandidateLineOptionalProperties();
 

@@ -68,7 +68,7 @@ export function instanceOfRegisterSessionResponse(value: object): value is Regis
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createRegisterSessionResponsePropertyNames();
-    const optionalStringProperties = createRegisterSessionResponseOptionalProperties({ name: 'sessionId', nullable: false }, { name: 'terminalId', nullable: false }, { name: 'locationId', nullable: false }, { name: 'openedByClerkId', nullable: false }, { name: 'status', nullable: false }, { name: 'closedByClerkId', nullable: false }, );
+    const optionalStringProperties = createRegisterSessionResponseOptionalProperties({ name: 'sessionId', nullable: false }, { name: 'terminalId', nullable: false }, { name: 'locationId', nullable: false }, { name: 'openedByClerkId', nullable: false }, { name: 'status', nullable: false }, { name: 'closedByClerkId', nullable: false }, { name: 'openedAt', nullable: false }, { name: 'closingStartedAt', nullable: false }, { name: 'closedAt', nullable: false }, );
     const optionalNumberProperties = createRegisterSessionResponseOptionalProperties({ name: 'openingFloat', nullable: false }, { name: 'countedCash', nullable: false }, { name: 'theoreticalCash', nullable: false }, { name: 'overShort', nullable: false }, );
     const optionalBooleanProperties = createRegisterSessionResponseOptionalProperties({ name: 'varianceApproved', nullable: false }, );
 

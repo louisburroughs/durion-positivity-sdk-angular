@@ -100,7 +100,7 @@ export function instanceOfVendorBillSummaryResponse(value: object): value is Ven
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createVendorBillSummaryResponsePropertyNames('vendorBillId', 'vendorId', 'billNumber', 'totalAmount', 'status', );
-    const optionalStringProperties = createVendorBillSummaryResponseOptionalProperties({ name: 'vendorBillId', nullable: false }, { name: 'vendorId', nullable: false }, { name: 'vendorName', nullable: false }, { name: 'billNumber', nullable: false }, { name: 'status', nullable: false }, );
+    const optionalStringProperties = createVendorBillSummaryResponseOptionalProperties({ name: 'vendorBillId', nullable: false }, { name: 'vendorId', nullable: false }, { name: 'vendorName', nullable: false }, { name: 'billNumber', nullable: false }, { name: 'billDate', nullable: false }, { name: 'dueDate', nullable: false }, { name: 'status', nullable: false }, );
     const optionalNumberProperties = createVendorBillSummaryResponseOptionalProperties({ name: 'totalAmount', nullable: false }, { name: 'openAmount', nullable: false }, );
     const optionalBooleanProperties = createVendorBillSummaryResponseOptionalProperties();
 

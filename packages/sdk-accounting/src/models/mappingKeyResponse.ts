@@ -94,7 +94,7 @@ export function instanceOfMappingKeyResponse(value: object): value is MappingKey
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createMappingKeyResponsePropertyNames('mappingKeyId', 'postingCategoryId', 'keyName', );
-    const optionalStringProperties = createMappingKeyResponseOptionalProperties({ name: 'mappingKeyId', nullable: false }, { name: 'postingCategoryId', nullable: false }, { name: 'postingCategoryName', nullable: false }, { name: 'keyName', nullable: false }, { name: 'description', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'modifiedBy', nullable: false }, );
+    const optionalStringProperties = createMappingKeyResponseOptionalProperties({ name: 'mappingKeyId', nullable: false }, { name: 'postingCategoryId', nullable: false }, { name: 'postingCategoryName', nullable: false }, { name: 'keyName', nullable: false }, { name: 'description', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'modifiedAt', nullable: false }, { name: 'modifiedBy', nullable: false }, );
     const optionalNumberProperties = createMappingKeyResponseOptionalProperties();
     const optionalBooleanProperties = createMappingKeyResponseOptionalProperties({ name: 'isActive', nullable: false }, );
 

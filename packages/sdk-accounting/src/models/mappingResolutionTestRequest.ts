@@ -66,7 +66,7 @@ export function instanceOfMappingResolutionTestRequest(value: object): value is 
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createMappingResolutionTestRequestPropertyNames('eventType', 'transactionDate', );
-    const optionalStringProperties = createMappingResolutionTestRequestOptionalProperties({ name: 'eventType', nullable: false }, );
+    const optionalStringProperties = createMappingResolutionTestRequestOptionalProperties({ name: 'eventType', nullable: false }, { name: 'transactionDate', nullable: false }, );
     const optionalNumberProperties = createMappingResolutionTestRequestOptionalProperties();
     const optionalBooleanProperties = createMappingResolutionTestRequestOptionalProperties();
 

@@ -146,7 +146,7 @@ export function instanceOfGLAccountResponse(value: object): value is GLAccountRe
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createGLAccountResponsePropertyNames('glAccountId', 'reconcilable', );
-    const optionalStringProperties = createGLAccountResponseOptionalProperties({ name: 'glAccountId', nullable: false }, { name: 'accountCode', nullable: false }, { name: 'accountName', nullable: false }, { name: 'accountType', nullable: false }, { name: 'accountSubtype', nullable: false }, { name: 'description', nullable: false }, { name: 'parentAccountId', nullable: false }, { name: 'status', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'modifiedBy', nullable: false }, );
+    const optionalStringProperties = createGLAccountResponseOptionalProperties({ name: 'glAccountId', nullable: false }, { name: 'accountCode', nullable: false }, { name: 'accountName', nullable: false }, { name: 'accountType', nullable: false }, { name: 'accountSubtype', nullable: false }, { name: 'description', nullable: false }, { name: 'parentAccountId', nullable: false }, { name: 'activationDate', nullable: false }, { name: 'deactivationDate', nullable: false }, { name: 'status', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'modifiedAt', nullable: false }, { name: 'modifiedBy', nullable: false }, );
     const optionalNumberProperties = createGLAccountResponseOptionalProperties({ name: 'version', nullable: false }, );
     const optionalBooleanProperties = createGLAccountResponseOptionalProperties({ name: 'reconcilable', nullable: false }, );
 

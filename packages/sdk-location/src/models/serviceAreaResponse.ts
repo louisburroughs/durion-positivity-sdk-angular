@@ -83,7 +83,7 @@ export function instanceOfServiceAreaResponse(value: object): value is ServiceAr
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createServiceAreaResponsePropertyNames('id', );
-    const optionalStringProperties = createServiceAreaResponseOptionalProperties({ name: 'id', nullable: false }, { name: 'name', nullable: false }, { name: 'description', nullable: false }, );
+    const optionalStringProperties = createServiceAreaResponseOptionalProperties({ name: 'id', nullable: false }, { name: 'name', nullable: false }, { name: 'description', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'updatedAt', nullable: false }, );
     const optionalNumberProperties = createServiceAreaResponseOptionalProperties();
     const optionalBooleanProperties = createServiceAreaResponseOptionalProperties({ name: 'active', nullable: false }, );
 

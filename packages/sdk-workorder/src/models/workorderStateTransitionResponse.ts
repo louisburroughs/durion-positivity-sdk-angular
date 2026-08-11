@@ -86,7 +86,7 @@ export function instanceOfWorkorderStateTransitionResponse(value: object): value
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createWorkorderStateTransitionResponsePropertyNames();
-    const optionalStringProperties = createWorkorderStateTransitionResponseOptionalProperties({ name: 'id', nullable: false }, { name: 'workorderId', nullable: false }, { name: 'fromStatus', nullable: false }, { name: 'toStatus', nullable: false }, { name: 'transitionedBy', nullable: false }, { name: 'reason', nullable: false }, { name: 'metadata', nullable: false }, );
+    const optionalStringProperties = createWorkorderStateTransitionResponseOptionalProperties({ name: 'id', nullable: false }, { name: 'workorderId', nullable: false }, { name: 'fromStatus', nullable: false }, { name: 'toStatus', nullable: false }, { name: 'transitionedAt', nullable: false }, { name: 'transitionedBy', nullable: false }, { name: 'reason', nullable: false }, { name: 'metadata', nullable: false }, );
     const optionalNumberProperties = createWorkorderStateTransitionResponseOptionalProperties();
     const optionalBooleanProperties = createWorkorderStateTransitionResponseOptionalProperties();
 

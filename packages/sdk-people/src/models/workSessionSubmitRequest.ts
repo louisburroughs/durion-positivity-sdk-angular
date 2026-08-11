@@ -66,7 +66,7 @@ export function instanceOfWorkSessionSubmitRequest(value: object): value is Work
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createWorkSessionSubmitRequestPropertyNames('billableMinutes', 'breakMinutes', 'submittedAt', );
-    const optionalStringProperties = createWorkSessionSubmitRequestOptionalProperties();
+    const optionalStringProperties = createWorkSessionSubmitRequestOptionalProperties({ name: 'submittedAt', nullable: false }, );
     const optionalNumberProperties = createWorkSessionSubmitRequestOptionalProperties({ name: 'billableMinutes', nullable: false }, { name: 'breakMinutes', nullable: false }, );
     const optionalBooleanProperties = createWorkSessionSubmitRequestOptionalProperties();
 

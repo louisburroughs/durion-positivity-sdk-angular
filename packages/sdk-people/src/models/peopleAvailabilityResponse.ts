@@ -100,7 +100,7 @@ export function instanceOfPeopleAvailabilityResponse(value: object): value is Pe
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createPeopleAvailabilityResponsePropertyNames('personId', 'locationId', 'primary', 'assignmentStatus', );
-    const optionalStringProperties = createPeopleAvailabilityResponseOptionalProperties({ name: 'personId', nullable: false }, { name: 'firstName', nullable: false }, { name: 'lastName', nullable: false }, { name: 'locationId', nullable: false }, { name: 'role', nullable: false }, { name: 'assignmentStatus', nullable: false }, );
+    const optionalStringProperties = createPeopleAvailabilityResponseOptionalProperties({ name: 'personId', nullable: false }, { name: 'firstName', nullable: false }, { name: 'lastName', nullable: false }, { name: 'locationId', nullable: false }, { name: 'role', nullable: false }, { name: 'assignmentStatus', nullable: false }, { name: 'effectiveFrom', nullable: false }, { name: 'effectiveTo', nullable: false }, { name: 'availableOn', nullable: false }, );
     const optionalNumberProperties = createPeopleAvailabilityResponseOptionalProperties();
     const optionalBooleanProperties = createPeopleAvailabilityResponseOptionalProperties({ name: 'primary', nullable: false }, );
 

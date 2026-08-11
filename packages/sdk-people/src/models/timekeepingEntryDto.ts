@@ -85,7 +85,7 @@ export function instanceOfTimekeepingEntryDto(value: object): value is Timekeepi
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createTimekeepingEntryDtoPropertyNames('timekeepingEntryId', 'employeeId', 'sessionStartTime', 'approvalStatus', );
-    const optionalStringProperties = createTimekeepingEntryDtoOptionalProperties({ name: 'timekeepingEntryId', nullable: false }, { name: 'employeeId', nullable: false }, { name: 'approvalStatus', nullable: false }, { name: 'associatedWorkOrderId', nullable: false }, );
+    const optionalStringProperties = createTimekeepingEntryDtoOptionalProperties({ name: 'timekeepingEntryId', nullable: false }, { name: 'employeeId', nullable: false }, { name: 'sessionStartTime', nullable: false }, { name: 'sessionEndTime', nullable: false }, { name: 'approvalStatus', nullable: false }, { name: 'associatedWorkOrderId', nullable: false }, );
     const optionalNumberProperties = createTimekeepingEntryDtoOptionalProperties();
     const optionalBooleanProperties = createTimekeepingEntryDtoOptionalProperties();
 

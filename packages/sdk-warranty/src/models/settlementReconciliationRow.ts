@@ -97,7 +97,7 @@ export function instanceOfSettlementReconciliationRow(value: object): value is S
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createSettlementReconciliationRowPropertyNames();
-    const optionalStringProperties = createSettlementReconciliationRowOptionalProperties({ name: 'settlementId', nullable: false }, { name: 'claimId', nullable: false }, { name: 'settlementType', nullable: false }, { name: 'settlementStatus', nullable: false }, { name: 'invoiceId', nullable: false }, { name: 'externalReference', nullable: false }, { name: 'matchedAdjustmentId', nullable: false }, { name: 'matchedRefundId', nullable: false }, { name: 'checkStatus', nullable: false }, );
+    const optionalStringProperties = createSettlementReconciliationRowOptionalProperties({ name: 'settlementId', nullable: false }, { name: 'claimId', nullable: false }, { name: 'settlementType', nullable: false }, { name: 'settlementStatus', nullable: false }, { name: 'invoiceId', nullable: false }, { name: 'externalReference', nullable: false }, { name: 'matchedAdjustmentId', nullable: false }, { name: 'matchedRefundId', nullable: false }, { name: 'checkStatus', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'updatedAt', nullable: false }, );
     const optionalNumberProperties = createSettlementReconciliationRowOptionalProperties({ name: 'coveredAmount', nullable: false }, { name: 'customerAmount', nullable: false }, );
     const optionalBooleanProperties = createSettlementReconciliationRowOptionalProperties({ name: 'committedOnInvoice', nullable: false }, );
 

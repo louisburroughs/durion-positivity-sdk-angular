@@ -98,7 +98,7 @@ export function instanceOfPartReturnUpdateRequest(value: object): value is PartR
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createPartReturnUpdateRequestPropertyNames();
-    const optionalStringProperties = createPartReturnUpdateRequestOptionalProperties({ name: 'status', nullable: false }, { name: 'disposition', nullable: false }, { name: 'carrier', nullable: false }, { name: 'trackingNumber', nullable: false }, { name: 'rmaNumber', nullable: false }, { name: 'holdLocationNote', nullable: false }, );
+    const optionalStringProperties = createPartReturnUpdateRequestOptionalProperties({ name: 'status', nullable: false }, { name: 'disposition', nullable: false }, { name: 'carrier', nullable: false }, { name: 'trackingNumber', nullable: false }, { name: 'shippedAt', nullable: false }, { name: 'rmaNumber', nullable: false }, { name: 'holdLocationNote', nullable: false }, );
     const optionalNumberProperties = createPartReturnUpdateRequestOptionalProperties();
     const optionalBooleanProperties = createPartReturnUpdateRequestOptionalProperties();
 

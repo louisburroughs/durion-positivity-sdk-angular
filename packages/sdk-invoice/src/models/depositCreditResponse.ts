@@ -66,7 +66,7 @@ export function instanceOfDepositCreditResponse(value: object): value is Deposit
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createDepositCreditResponsePropertyNames();
-    const optionalStringProperties = createDepositCreditResponseOptionalProperties({ name: 'depositCreditId', nullable: false }, { name: 'sourceType', nullable: false }, { name: 'sourceId', nullable: false }, { name: 'orderId', nullable: false }, { name: 'partyId', nullable: false }, { name: 'currencyCode', nullable: false }, { name: 'status', nullable: false }, );
+    const optionalStringProperties = createDepositCreditResponseOptionalProperties({ name: 'depositCreditId', nullable: false }, { name: 'sourceType', nullable: false }, { name: 'sourceId', nullable: false }, { name: 'orderId', nullable: false }, { name: 'partyId', nullable: false }, { name: 'currencyCode', nullable: false }, { name: 'status', nullable: false }, { name: 'createdAt', nullable: false }, );
     const optionalNumberProperties = createDepositCreditResponseOptionalProperties({ name: 'originalAmount', nullable: false }, { name: 'remainingBalance', nullable: false }, );
     const optionalBooleanProperties = createDepositCreditResponseOptionalProperties();
 

@@ -74,7 +74,7 @@ export function instanceOfCompleteWorkorderResponse(value: object): value is Com
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createCompleteWorkorderResponsePropertyNames('workorderId', 'previousStatus', 'currentStatus', 'completedAt', );
-    const optionalStringProperties = createCompleteWorkorderResponseOptionalProperties({ name: 'workorderId', nullable: false }, { name: 'previousStatus', nullable: false }, { name: 'currentStatus', nullable: false }, { name: 'message', nullable: false }, );
+    const optionalStringProperties = createCompleteWorkorderResponseOptionalProperties({ name: 'workorderId', nullable: false }, { name: 'previousStatus', nullable: false }, { name: 'currentStatus', nullable: false }, { name: 'completedAt', nullable: false }, { name: 'message', nullable: false }, );
     const optionalNumberProperties = createCompleteWorkorderResponseOptionalProperties();
     const optionalBooleanProperties = createCompleteWorkorderResponseOptionalProperties();
 

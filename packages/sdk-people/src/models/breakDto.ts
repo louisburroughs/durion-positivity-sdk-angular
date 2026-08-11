@@ -66,7 +66,7 @@ export function instanceOfBreakDto(value: object): value is BreakDto {
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createBreakDtoPropertyNames('sessionId', 'startedAt', );
-    const optionalStringProperties = createBreakDtoOptionalProperties({ name: 'sessionId', nullable: false }, );
+    const optionalStringProperties = createBreakDtoOptionalProperties({ name: 'sessionId', nullable: false }, { name: 'startedAt', nullable: false }, { name: 'endedAt', nullable: false }, );
     const optionalNumberProperties = createBreakDtoOptionalProperties();
     const optionalBooleanProperties = createBreakDtoOptionalProperties();
 

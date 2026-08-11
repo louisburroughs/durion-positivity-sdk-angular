@@ -88,7 +88,7 @@ export function instanceOfScheduleEventView(value: object): value is ScheduleEve
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createScheduleEventViewPropertyNames('eventId', 'eventType', 'startTime', 'endTime', 'hasConflict', );
-    const optionalStringProperties = createScheduleEventViewOptionalProperties({ name: 'eventId', nullable: false }, { name: 'eventType', nullable: false }, { name: 'subType', nullable: false }, { name: 'title', nullable: false }, { name: 'severity', nullable: false }, );
+    const optionalStringProperties = createScheduleEventViewOptionalProperties({ name: 'eventId', nullable: false }, { name: 'eventType', nullable: false }, { name: 'subType', nullable: false }, { name: 'startTime', nullable: false }, { name: 'endTime', nullable: false }, { name: 'title', nullable: false }, { name: 'severity', nullable: false }, );
     const optionalNumberProperties = createScheduleEventViewOptionalProperties();
     const optionalBooleanProperties = createScheduleEventViewOptionalProperties({ name: 'hasConflict', nullable: false }, );
 

@@ -62,7 +62,7 @@ export function instanceOfSubmitTravelSegmentsRequest(value: object): value is S
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createSubmitTravelSegmentsRequestPropertyNames('workDate', );
-    const optionalStringProperties = createSubmitTravelSegmentsRequestOptionalProperties({ name: 'notes', nullable: false }, );
+    const optionalStringProperties = createSubmitTravelSegmentsRequestOptionalProperties({ name: 'workDate', nullable: false }, { name: 'notes', nullable: false }, );
     const optionalNumberProperties = createSubmitTravelSegmentsRequestOptionalProperties();
     const optionalBooleanProperties = createSubmitTravelSegmentsRequestOptionalProperties();
 

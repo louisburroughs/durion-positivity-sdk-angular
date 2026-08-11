@@ -108,7 +108,7 @@ export function instanceOfEstimateItemResponse(value: object): value is Estimate
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createEstimateItemResponsePropertyNames();
-    const optionalStringProperties = createEstimateItemResponseOptionalProperties({ name: 'id', nullable: false }, { name: 'estimateId', nullable: false }, { name: 'itemType', nullable: false }, { name: 'description', nullable: false }, { name: 'taxCode', nullable: false }, { name: 'productId', nullable: false }, { name: 'serviceId', nullable: false }, );
+    const optionalStringProperties = createEstimateItemResponseOptionalProperties({ name: 'id', nullable: false }, { name: 'estimateId', nullable: false }, { name: 'itemType', nullable: false }, { name: 'description', nullable: false }, { name: 'taxCode', nullable: false }, { name: 'productId', nullable: false }, { name: 'serviceId', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'updatedAt', nullable: false }, );
     const optionalNumberProperties = createEstimateItemResponseOptionalProperties({ name: 'quantity', nullable: false }, { name: 'unitPrice', nullable: false }, { name: 'lineTotal', nullable: false }, );
     const optionalBooleanProperties = createEstimateItemResponseOptionalProperties();
 

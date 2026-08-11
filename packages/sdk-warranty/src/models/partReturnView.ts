@@ -79,7 +79,7 @@ export function instanceOfPartReturnView(value: object): value is PartReturnView
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createPartReturnViewPropertyNames();
-    const optionalStringProperties = createPartReturnViewOptionalProperties({ name: 'id', nullable: false }, { name: 'claimLineId', nullable: false }, { name: 'rmaNumber', nullable: false }, { name: 'disposition', nullable: false }, { name: 'status', nullable: false }, { name: 'carrier', nullable: false }, { name: 'trackingNumber', nullable: false }, { name: 'holdLocationNote', nullable: false }, );
+    const optionalStringProperties = createPartReturnViewOptionalProperties({ name: 'id', nullable: false }, { name: 'claimLineId', nullable: false }, { name: 'rmaNumber', nullable: false }, { name: 'disposition', nullable: false }, { name: 'status', nullable: false }, { name: 'carrier', nullable: false }, { name: 'trackingNumber', nullable: false }, { name: 'shippedAt', nullable: false }, { name: 'holdLocationNote', nullable: false }, );
     const optionalNumberProperties = createPartReturnViewOptionalProperties();
     const optionalBooleanProperties = createPartReturnViewOptionalProperties();
 

@@ -111,7 +111,7 @@ export function instanceOfClaimCreateRequest(value: object): value is ClaimCreat
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createClaimCreateRequestPropertyNames('claimType', 'customerId', 'vehicleId', );
-    const optionalStringProperties = createClaimCreateRequestOptionalProperties({ name: 'claimType', nullable: false }, { name: 'customerId', nullable: false }, { name: 'vehicleId', nullable: false }, { name: 'locationId', nullable: false }, { name: 'originWorkorderId', nullable: false }, { name: 'originInvoiceId', nullable: false }, { name: 'registrationId', nullable: false }, { name: 'failureDescription', nullable: false }, );
+    const optionalStringProperties = createClaimCreateRequestOptionalProperties({ name: 'claimType', nullable: false }, { name: 'customerId', nullable: false }, { name: 'vehicleId', nullable: false }, { name: 'locationId', nullable: false }, { name: 'originWorkorderId', nullable: false }, { name: 'originInvoiceId', nullable: false }, { name: 'originSaleDate', nullable: false }, { name: 'registrationId', nullable: false }, { name: 'failureDescription', nullable: false }, { name: 'failureDate', nullable: false }, );
     const optionalNumberProperties = createClaimCreateRequestOptionalProperties();
     const optionalBooleanProperties = createClaimCreateRequestOptionalProperties();
 

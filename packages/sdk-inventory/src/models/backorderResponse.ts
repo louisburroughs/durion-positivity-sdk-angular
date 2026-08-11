@@ -110,7 +110,7 @@ export function instanceOfBackorderResponse(value: object): value is BackorderRe
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createBackorderResponsePropertyNames();
-    const optionalStringProperties = createBackorderResponseOptionalProperties({ name: 'backorderId', nullable: false }, { name: 'workorderLineId', nullable: false }, { name: 'sku', nullable: false }, { name: 'locationId', nullable: false }, { name: 'status', nullable: false }, { name: 'resolutionSource', nullable: false }, { name: 'createdBy', nullable: false }, );
+    const optionalStringProperties = createBackorderResponseOptionalProperties({ name: 'backorderId', nullable: false }, { name: 'workorderLineId', nullable: false }, { name: 'sku', nullable: false }, { name: 'locationId', nullable: false }, { name: 'status', nullable: false }, { name: 'resolutionSource', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'updatedAt', nullable: false }, { name: 'resolvedAt', nullable: false }, );
     const optionalNumberProperties = createBackorderResponseOptionalProperties({ name: 'quantityShort', nullable: false }, );
     const optionalBooleanProperties = createBackorderResponseOptionalProperties();
 

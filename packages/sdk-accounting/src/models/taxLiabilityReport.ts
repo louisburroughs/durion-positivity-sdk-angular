@@ -93,7 +93,7 @@ export function instanceOfTaxLiabilityReport(value: object): value is TaxLiabili
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createTaxLiabilityReportPropertyNames('startDate', 'endDate', 'generatedAt', 'rows', 'totalTaxableBase', 'totalExemptBase', 'totalTaxCollectedGross', 'totalCreditsNetted', 'totalNetTax', 'reconciliation', );
-    const optionalStringProperties = createTaxLiabilityReportOptionalProperties();
+    const optionalStringProperties = createTaxLiabilityReportOptionalProperties({ name: 'startDate', nullable: false }, { name: 'endDate', nullable: false }, { name: 'generatedAt', nullable: false }, );
     const optionalNumberProperties = createTaxLiabilityReportOptionalProperties({ name: 'totalTaxableBase', nullable: false }, { name: 'totalExemptBase', nullable: false }, { name: 'totalTaxCollectedGross', nullable: false }, { name: 'totalCreditsNetted', nullable: false }, { name: 'totalNetTax', nullable: false }, );
     const optionalBooleanProperties = createTaxLiabilityReportOptionalProperties();
 

@@ -79,7 +79,7 @@ export function instanceOfCreateStaffingAssignmentRequest(value: object): value 
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createCreateStaffingAssignmentRequestPropertyNames('personId', 'locationId', 'role', 'effectiveFrom', 'isPrimary', );
-    const optionalStringProperties = createCreateStaffingAssignmentRequestOptionalProperties({ name: 'personId', nullable: false }, { name: 'locationId', nullable: false }, { name: 'role', nullable: false }, );
+    const optionalStringProperties = createCreateStaffingAssignmentRequestOptionalProperties({ name: 'personId', nullable: false }, { name: 'locationId', nullable: false }, { name: 'role', nullable: false }, { name: 'effectiveFrom', nullable: false }, { name: 'effectiveTo', nullable: false }, );
     const optionalNumberProperties = createCreateStaffingAssignmentRequestOptionalProperties();
     const optionalBooleanProperties = createCreateStaffingAssignmentRequestOptionalProperties({ name: 'effectiveDateRangeValid', nullable: false }, { name: 'isPrimary', nullable: false }, );
 

@@ -107,7 +107,7 @@ export function instanceOfWorkorderSearchResult(value: object): value is Workord
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createWorkorderSearchResultPropertyNames('workorderId', 'status', );
-    const optionalStringProperties = createWorkorderSearchResultOptionalProperties({ name: 'workorderId', nullable: false }, { name: 'workorderNumber', nullable: false }, { name: 'estimateNumber', nullable: false }, { name: 'status', nullable: false }, { name: 'customerId', nullable: false }, { name: 'customerName', nullable: false }, { name: 'vehicleId', nullable: false }, { name: 'vehicleLabel', nullable: false }, { name: 'vin', nullable: false }, );
+    const optionalStringProperties = createWorkorderSearchResultOptionalProperties({ name: 'workorderId', nullable: false }, { name: 'workorderNumber', nullable: false }, { name: 'estimateNumber', nullable: false }, { name: 'status', nullable: false }, { name: 'customerId', nullable: false }, { name: 'customerName', nullable: false }, { name: 'vehicleId', nullable: false }, { name: 'vehicleLabel', nullable: false }, { name: 'vin', nullable: false }, { name: 'createdAt', nullable: false }, );
     const optionalNumberProperties = createWorkorderSearchResultOptionalProperties();
     const optionalBooleanProperties = createWorkorderSearchResultOptionalProperties();
 

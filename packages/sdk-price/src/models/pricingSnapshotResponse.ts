@@ -86,7 +86,7 @@ export function instanceOfPricingSnapshotResponse(value: object): value is Prici
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createPricingSnapshotResponsePropertyNames('snapshotId', 'createdAt', 'itemIdentifier', 'quantity', 'prices', 'policyVersion', );
-    const optionalStringProperties = createPricingSnapshotResponseOptionalProperties({ name: 'snapshotId', nullable: false }, { name: 'sourceContext', nullable: true }, { name: 'itemIdentifier', nullable: false }, { name: 'prices', nullable: false }, { name: 'appliedRules', nullable: true }, { name: 'policyVersion', nullable: false }, );
+    const optionalStringProperties = createPricingSnapshotResponseOptionalProperties({ name: 'snapshotId', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'sourceContext', nullable: true }, { name: 'itemIdentifier', nullable: false }, { name: 'prices', nullable: false }, { name: 'appliedRules', nullable: true }, { name: 'policyVersion', nullable: false }, );
     const optionalNumberProperties = createPricingSnapshotResponseOptionalProperties({ name: 'quantity', nullable: false }, );
     const optionalBooleanProperties = createPricingSnapshotResponseOptionalProperties();
 

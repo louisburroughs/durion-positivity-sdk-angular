@@ -82,7 +82,7 @@ export function instanceOfUserPersonLinkResponse(value: object): value is UserPe
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createUserPersonLinkResponsePropertyNames('linkId', 'username', 'personId', );
-    const optionalStringProperties = createUserPersonLinkResponseOptionalProperties({ name: 'linkId', nullable: false }, { name: 'username', nullable: false }, { name: 'personId', nullable: false }, { name: 'linkType', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'notes', nullable: false }, );
+    const optionalStringProperties = createUserPersonLinkResponseOptionalProperties({ name: 'linkId', nullable: false }, { name: 'username', nullable: false }, { name: 'personId', nullable: false }, { name: 'linkType', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'notes', nullable: false }, );
     const optionalNumberProperties = createUserPersonLinkResponseOptionalProperties();
     const optionalBooleanProperties = createUserPersonLinkResponseOptionalProperties();
 

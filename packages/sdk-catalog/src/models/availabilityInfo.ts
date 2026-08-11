@@ -89,7 +89,7 @@ export function instanceOfAvailabilityInfo(value: object): value is Availability
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createAvailabilityInfoPropertyNames('status', 'confidence', );
-    const optionalStringProperties = createAvailabilityInfoOptionalProperties({ name: 'status', nullable: false }, { name: 'confidence', nullable: false }, );
+    const optionalStringProperties = createAvailabilityInfoOptionalProperties({ name: 'status', nullable: false }, { name: 'asOf', nullable: false }, { name: 'confidence', nullable: false }, );
     const optionalNumberProperties = createAvailabilityInfoOptionalProperties({ name: 'onHandQuantity', nullable: false }, { name: 'availableToPromiseQuantity', nullable: false }, );
     const optionalBooleanProperties = createAvailabilityInfoOptionalProperties();
 

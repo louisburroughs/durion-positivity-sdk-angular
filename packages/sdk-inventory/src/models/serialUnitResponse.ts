@@ -114,7 +114,7 @@ export function instanceOfSerialUnitResponse(value: object): value is SerialUnit
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createSerialUnitResponsePropertyNames('serialUnitId', 'stockItemId', 'serialNumber', 'status', );
-    const optionalStringProperties = createSerialUnitResponseOptionalProperties({ name: 'serialUnitId', nullable: false }, { name: 'stockItemId', nullable: false }, { name: 'serialNumber', nullable: false }, { name: 'status', nullable: false }, { name: 'locationId', nullable: false }, { name: 'lotId', nullable: false }, { name: 'workorderId', nullable: false }, { name: 'receiptLedgerEntryId', nullable: false }, { name: 'consumptionLedgerEntryId', nullable: false }, );
+    const optionalStringProperties = createSerialUnitResponseOptionalProperties({ name: 'serialUnitId', nullable: false }, { name: 'stockItemId', nullable: false }, { name: 'serialNumber', nullable: false }, { name: 'status', nullable: false }, { name: 'locationId', nullable: false }, { name: 'lotId', nullable: false }, { name: 'workorderId', nullable: false }, { name: 'receiptLedgerEntryId', nullable: false }, { name: 'consumptionLedgerEntryId', nullable: false }, { name: 'receivedAt', nullable: false }, { name: 'consumedAt', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'updatedAt', nullable: false }, );
     const optionalNumberProperties = createSerialUnitResponseOptionalProperties();
     const optionalBooleanProperties = createSerialUnitResponseOptionalProperties();
 

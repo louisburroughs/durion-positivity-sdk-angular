@@ -92,7 +92,7 @@ export function instanceOfSuppressionEntryResponse(value: object): value is Supp
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createSuppressionEntryResponsePropertyNames('suppressionId', 'channel', 'reason', 'source', 'createdAt', );
-    const optionalStringProperties = createSuppressionEntryResponseOptionalProperties({ name: 'suppressionId', nullable: false }, { name: 'channel', nullable: false }, { name: 'addressHint', nullable: false }, { name: 'partyId', nullable: false }, { name: 'reason', nullable: false }, { name: 'source', nullable: false }, { name: 'createdBy', nullable: false }, );
+    const optionalStringProperties = createSuppressionEntryResponseOptionalProperties({ name: 'suppressionId', nullable: false }, { name: 'channel', nullable: false }, { name: 'addressHint', nullable: false }, { name: 'partyId', nullable: false }, { name: 'reason', nullable: false }, { name: 'source', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'createdAt', nullable: false }, );
     const optionalNumberProperties = createSuppressionEntryResponseOptionalProperties();
     const optionalBooleanProperties = createSuppressionEntryResponseOptionalProperties();
 

@@ -90,7 +90,7 @@ export function instanceOfDashboardResponse(value: object): value is DashboardRe
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createDashboardResponsePropertyNames('date', 'locationId', 'workorders', 'lastRefreshed', );
-    const optionalStringProperties = createDashboardResponseOptionalProperties({ name: 'locationId', nullable: false }, );
+    const optionalStringProperties = createDashboardResponseOptionalProperties({ name: 'date', nullable: false }, { name: 'locationId', nullable: false }, { name: 'lastRefreshed', nullable: false }, );
     const optionalNumberProperties = createDashboardResponseOptionalProperties();
     const optionalBooleanProperties = createDashboardResponseOptionalProperties({ name: 'dataQualityWarning', nullable: false }, );
 

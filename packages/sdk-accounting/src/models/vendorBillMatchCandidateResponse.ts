@@ -98,7 +98,7 @@ export function instanceOfVendorBillMatchCandidateResponse(value: object): value
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createVendorBillMatchCandidateResponsePropertyNames('candidateId', 'invoiceEventId', 'vendorBillId', );
-    const optionalStringProperties = createVendorBillMatchCandidateResponseOptionalProperties({ name: 'candidateId', nullable: false }, { name: 'invoiceEventId', nullable: false }, { name: 'vendorBillId', nullable: false }, { name: 'vendorId', nullable: false }, { name: 'billNumber', nullable: false }, { name: 'scoreBreakdown', nullable: false }, );
+    const optionalStringProperties = createVendorBillMatchCandidateResponseOptionalProperties({ name: 'candidateId', nullable: false }, { name: 'invoiceEventId', nullable: false }, { name: 'vendorBillId', nullable: false }, { name: 'vendorId', nullable: false }, { name: 'billNumber', nullable: false }, { name: 'scoreBreakdown', nullable: false }, { name: 'createdAt', nullable: false }, );
     const optionalNumberProperties = createVendorBillMatchCandidateResponseOptionalProperties({ name: 'billTotalAmount', nullable: false }, { name: 'matchScore', nullable: false }, );
     const optionalBooleanProperties = createVendorBillMatchCandidateResponseOptionalProperties({ name: 'resolved', nullable: false }, { name: 'selected', nullable: false }, );
 

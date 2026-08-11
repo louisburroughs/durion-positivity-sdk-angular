@@ -82,7 +82,7 @@ export function instanceOfIncomeStatementReport(value: object): value is IncomeS
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createIncomeStatementReportPropertyNames('startDate', 'endDate', 'generatedAt', 'lineItems', 'totalRevenue', 'totalExpenses', 'netIncome', );
-    const optionalStringProperties = createIncomeStatementReportOptionalProperties();
+    const optionalStringProperties = createIncomeStatementReportOptionalProperties({ name: 'startDate', nullable: false }, { name: 'endDate', nullable: false }, { name: 'generatedAt', nullable: false }, );
     const optionalNumberProperties = createIncomeStatementReportOptionalProperties({ name: 'totalRevenue', nullable: false }, { name: 'totalExpenses', nullable: false }, { name: 'netIncome', nullable: false }, );
     const optionalBooleanProperties = createIncomeStatementReportOptionalProperties();
 

@@ -105,7 +105,7 @@ export function instanceOfItemCostAuditDto(value: object): value is ItemCostAudi
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createItemCostAuditDtoPropertyNames('auditId', 'itemId', 'timestamp', 'costTypeChanged', 'changeSourceType', );
-    const optionalStringProperties = createItemCostAuditDtoOptionalProperties({ name: 'auditId', nullable: false }, { name: 'itemId', nullable: false }, { name: 'costTypeChanged', nullable: false }, { name: 'changeSourceType', nullable: false }, { name: 'changeSourceId', nullable: false }, { name: 'actor', nullable: false }, { name: 'reasonCode', nullable: false }, );
+    const optionalStringProperties = createItemCostAuditDtoOptionalProperties({ name: 'auditId', nullable: false }, { name: 'itemId', nullable: false }, { name: 'timestamp', nullable: false }, { name: 'costTypeChanged', nullable: false }, { name: 'changeSourceType', nullable: false }, { name: 'changeSourceId', nullable: false }, { name: 'actor', nullable: false }, { name: 'reasonCode', nullable: false }, );
     const optionalNumberProperties = createItemCostAuditDtoOptionalProperties({ name: 'oldValue', nullable: false }, { name: 'newValue', nullable: false }, );
     const optionalBooleanProperties = createItemCostAuditDtoOptionalProperties();
 

@@ -90,7 +90,7 @@ export function instanceOfWorkorderPartUsageEventResponse(value: object): value 
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createWorkorderPartUsageEventResponsePropertyNames('id', 'workorderPartId', 'workorderId', 'eventType', 'quantity', 'performedBy', 'performedAt', );
-    const optionalStringProperties = createWorkorderPartUsageEventResponseOptionalProperties({ name: 'id', nullable: false }, { name: 'workorderPartId', nullable: false }, { name: 'workorderId', nullable: false }, { name: 'eventType', nullable: false }, { name: 'performedBy', nullable: false }, { name: 'notes', nullable: false }, { name: 'partDescription', nullable: false }, );
+    const optionalStringProperties = createWorkorderPartUsageEventResponseOptionalProperties({ name: 'id', nullable: false }, { name: 'workorderPartId', nullable: false }, { name: 'workorderId', nullable: false }, { name: 'eventType', nullable: false }, { name: 'performedBy', nullable: false }, { name: 'performedAt', nullable: false }, { name: 'notes', nullable: false }, { name: 'partDescription', nullable: false }, );
     const optionalNumberProperties = createWorkorderPartUsageEventResponseOptionalProperties({ name: 'quantity', nullable: false }, );
     const optionalBooleanProperties = createWorkorderPartUsageEventResponseOptionalProperties();
 

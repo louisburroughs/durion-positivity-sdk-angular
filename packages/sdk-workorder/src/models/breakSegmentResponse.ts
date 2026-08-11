@@ -85,7 +85,7 @@ export function instanceOfBreakSegmentResponse(value: object): value is BreakSeg
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createBreakSegmentResponsePropertyNames('breakSegmentId', 'workSessionId', 'breakStartAt', );
-    const optionalStringProperties = createBreakSegmentResponseOptionalProperties({ name: 'breakSegmentId', nullable: false }, { name: 'workSessionId', nullable: false }, { name: 'breakType', nullable: false }, { name: 'notes', nullable: false }, );
+    const optionalStringProperties = createBreakSegmentResponseOptionalProperties({ name: 'breakSegmentId', nullable: false }, { name: 'workSessionId', nullable: false }, { name: 'breakStartAt', nullable: false }, { name: 'breakEndAt', nullable: false }, { name: 'breakType', nullable: false }, { name: 'notes', nullable: false }, );
     const optionalNumberProperties = createBreakSegmentResponseOptionalProperties();
     const optionalBooleanProperties = createBreakSegmentResponseOptionalProperties();
 

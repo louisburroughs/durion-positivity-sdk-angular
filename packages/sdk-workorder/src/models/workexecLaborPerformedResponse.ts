@@ -86,7 +86,7 @@ export function instanceOfWorkexecLaborPerformedResponse(value: object): value i
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createWorkexecLaborPerformedResponsePropertyNames('laborPerformedId', 'workorderId', 'technicianId', 'performedAt', 'quantity', 'unit', 'sourceSystem', 'sourceReferenceId', );
-    const optionalStringProperties = createWorkexecLaborPerformedResponseOptionalProperties({ name: 'laborPerformedId', nullable: false }, { name: 'workorderId', nullable: false }, { name: 'technicianId', nullable: false }, { name: 'unit', nullable: false }, { name: 'sourceSystem', nullable: false }, { name: 'sourceReferenceId', nullable: false }, );
+    const optionalStringProperties = createWorkexecLaborPerformedResponseOptionalProperties({ name: 'laborPerformedId', nullable: false }, { name: 'workorderId', nullable: false }, { name: 'technicianId', nullable: false }, { name: 'performedAt', nullable: false }, { name: 'unit', nullable: false }, { name: 'sourceSystem', nullable: false }, { name: 'sourceReferenceId', nullable: false }, );
     const optionalNumberProperties = createWorkexecLaborPerformedResponseOptionalProperties({ name: 'quantity', nullable: false }, );
     const optionalBooleanProperties = createWorkexecLaborPerformedResponseOptionalProperties();
 

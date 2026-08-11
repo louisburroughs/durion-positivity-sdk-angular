@@ -86,7 +86,7 @@ export function instanceOfAuditExportJobResponse(value: object): value is AuditE
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createAuditExportJobResponsePropertyNames('jobId', 'status', 'requestedAt', );
-    const optionalStringProperties = createAuditExportJobResponseOptionalProperties({ name: 'jobId', nullable: false }, { name: 'status', nullable: false }, { name: 'downloadUrl', nullable: false }, { name: 'errorMessage', nullable: false }, );
+    const optionalStringProperties = createAuditExportJobResponseOptionalProperties({ name: 'jobId', nullable: false }, { name: 'status', nullable: false }, { name: 'requestedAt', nullable: false }, { name: 'completedAt', nullable: false }, { name: 'downloadUrl', nullable: false }, { name: 'errorMessage', nullable: false }, );
     const optionalNumberProperties = createAuditExportJobResponseOptionalProperties();
     const optionalBooleanProperties = createAuditExportJobResponseOptionalProperties();
 

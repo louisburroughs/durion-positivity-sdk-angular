@@ -105,7 +105,7 @@ export function instanceOfMarketingConsentSummaryResponse(value: object): value 
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createMarketingConsentSummaryResponsePropertyNames('partyId', 'marketingEmailConsent', 'marketingSmsConsent', 'emailEligibility', 'smsEligibility', );
-    const optionalStringProperties = createMarketingConsentSummaryResponseOptionalProperties({ name: 'partyId', nullable: false }, { name: 'marketingEmailConsent', nullable: false }, { name: 'marketingSmsConsent', nullable: false }, { name: 'optOutReason', nullable: false }, { name: 'quietHoursStart', nullable: false }, { name: 'quietHoursEnd', nullable: false }, );
+    const optionalStringProperties = createMarketingConsentSummaryResponseOptionalProperties({ name: 'partyId', nullable: false }, { name: 'marketingEmailConsent', nullable: false }, { name: 'marketingSmsConsent', nullable: false }, { name: 'optOutReason', nullable: false }, { name: 'optOutAt', nullable: false }, { name: 'quietHoursStart', nullable: false }, { name: 'quietHoursEnd', nullable: false }, );
     const optionalNumberProperties = createMarketingConsentSummaryResponseOptionalProperties({ name: 'maxMarketingSendsPerMonth', nullable: false }, );
     const optionalBooleanProperties = createMarketingConsentSummaryResponseOptionalProperties({ name: 'accountMarketingOptOut', nullable: false }, );
 

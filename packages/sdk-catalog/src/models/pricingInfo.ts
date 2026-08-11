@@ -91,7 +91,7 @@ export function instanceOfPricingInfo(value: object): value is PricingInfo {
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createPricingInfoPropertyNames('status', 'confidence', );
-    const optionalStringProperties = createPricingInfoOptionalProperties({ name: 'currency', nullable: false }, { name: 'status', nullable: false }, { name: 'confidence', nullable: false }, );
+    const optionalStringProperties = createPricingInfoOptionalProperties({ name: 'currency', nullable: false }, { name: 'status', nullable: false }, { name: 'asOf', nullable: false }, { name: 'confidence', nullable: false }, );
     const optionalNumberProperties = createPricingInfoOptionalProperties();
     const optionalBooleanProperties = createPricingInfoOptionalProperties();
 

@@ -82,7 +82,7 @@ export function instanceOfWorkorderStartResponse(value: object): value is Workor
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createWorkorderStartResponsePropertyNames('workorderId', 'currentStatus', );
-    const optionalStringProperties = createWorkorderStartResponseOptionalProperties({ name: 'workorderId', nullable: false }, { name: 'operationalContextVersion', nullable: false }, { name: 'previousStatus', nullable: false }, { name: 'currentStatus', nullable: false }, { name: 'message', nullable: false }, );
+    const optionalStringProperties = createWorkorderStartResponseOptionalProperties({ name: 'workorderId', nullable: false }, { name: 'operationalContextVersion', nullable: false }, { name: 'workStartedAt', nullable: false }, { name: 'previousStatus', nullable: false }, { name: 'currentStatus', nullable: false }, { name: 'transitionedAt', nullable: false }, { name: 'message', nullable: false }, );
     const optionalNumberProperties = createWorkorderStartResponseOptionalProperties();
     const optionalBooleanProperties = createWorkorderStartResponseOptionalProperties();
 

@@ -111,7 +111,7 @@ export function instanceOfShopAuditEntryResponse(value: object): value is ShopAu
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createShopAuditEntryResponsePropertyNames('id', 'eventType', 'actorUserId', 'retentionYears', 'recordedAt', );
-    const optionalStringProperties = createShopAuditEntryResponseOptionalProperties({ name: 'id', nullable: false }, { name: 'eventType', nullable: false }, { name: 'workorderId', nullable: false }, { name: 'appointmentId', nullable: false }, { name: 'mechanicId', nullable: false }, { name: 'locationId', nullable: false }, { name: 'actorUserId', nullable: false }, { name: 'changeSummaryText', nullable: false }, { name: 'changePatch', nullable: false }, { name: 'reasonCode', nullable: false }, );
+    const optionalStringProperties = createShopAuditEntryResponseOptionalProperties({ name: 'id', nullable: false }, { name: 'eventType', nullable: false }, { name: 'workorderId', nullable: false }, { name: 'appointmentId', nullable: false }, { name: 'mechanicId', nullable: false }, { name: 'locationId', nullable: false }, { name: 'actorUserId', nullable: false }, { name: 'changeSummaryText', nullable: false }, { name: 'changePatch', nullable: false }, { name: 'reasonCode', nullable: false }, { name: 'recordedAt', nullable: false }, );
     const optionalNumberProperties = createShopAuditEntryResponseOptionalProperties({ name: 'retentionYears', nullable: false }, );
     const optionalBooleanProperties = createShopAuditEntryResponseOptionalProperties();
 

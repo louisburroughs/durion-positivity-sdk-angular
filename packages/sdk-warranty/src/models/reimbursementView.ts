@@ -78,7 +78,7 @@ export function instanceOfReimbursementView(value: object): value is Reimburseme
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createReimbursementViewPropertyNames();
-    const optionalStringProperties = createReimbursementViewOptionalProperties({ name: 'id', nullable: false }, { name: 'providerId', nullable: false }, { name: 'status', nullable: false }, { name: 'vendorClaimReference', nullable: false }, { name: 'submittedBy', nullable: false }, { name: 'creditReference', nullable: false }, { name: 'notes', nullable: false }, );
+    const optionalStringProperties = createReimbursementViewOptionalProperties({ name: 'id', nullable: false }, { name: 'providerId', nullable: false }, { name: 'status', nullable: false }, { name: 'vendorClaimReference', nullable: false }, { name: 'submittedAt', nullable: false }, { name: 'submittedBy', nullable: false }, { name: 'resolvedAt', nullable: false }, { name: 'creditReference', nullable: false }, { name: 'creditReceivedAt', nullable: false }, { name: 'notes', nullable: false }, );
     const optionalNumberProperties = createReimbursementViewOptionalProperties({ name: 'amountRequested', nullable: false }, { name: 'amountApproved', nullable: false }, );
     const optionalBooleanProperties = createReimbursementViewOptionalProperties();
 

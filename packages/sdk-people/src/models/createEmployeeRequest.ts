@@ -101,7 +101,7 @@ export function instanceOfCreateEmployeeRequest(value: object): value is CreateE
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createCreateEmployeeRequestPropertyNames('firstName', 'lastName', 'employeeNumber', 'status', 'hireDate', );
-    const optionalStringProperties = createCreateEmployeeRequestOptionalProperties({ name: 'firstName', nullable: false }, { name: 'lastName', nullable: false }, { name: 'preferredName', nullable: false }, { name: 'employeeNumber', nullable: false }, { name: 'status', nullable: false }, { name: 'duplicatePolicy', nullable: false }, );
+    const optionalStringProperties = createCreateEmployeeRequestOptionalProperties({ name: 'firstName', nullable: false }, { name: 'lastName', nullable: false }, { name: 'preferredName', nullable: false }, { name: 'employeeNumber', nullable: false }, { name: 'status', nullable: false }, { name: 'hireDate', nullable: false }, { name: 'terminationDate', nullable: false }, { name: 'duplicatePolicy', nullable: false }, );
     const optionalNumberProperties = createCreateEmployeeRequestOptionalProperties();
     const optionalBooleanProperties = createCreateEmployeeRequestOptionalProperties();
 

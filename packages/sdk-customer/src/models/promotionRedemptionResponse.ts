@@ -116,7 +116,7 @@ export function instanceOfPromotionRedemptionResponse(value: object): value is P
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createPromotionRedemptionResponsePropertyNames('promotionRedemptionId', 'promotionId', 'customerId', 'workorderId', 'discountAmount', 'discountType', 'promotionCode', 'status', 'createdAt', );
-    const optionalStringProperties = createPromotionRedemptionResponseOptionalProperties({ name: 'promotionRedemptionId', nullable: false }, { name: 'promotionId', nullable: false }, { name: 'customerId', nullable: false }, { name: 'workorderId', nullable: false }, { name: 'invoiceId', nullable: false }, { name: 'discountType', nullable: false }, { name: 'promotionCode', nullable: false }, { name: 'campaignCode', nullable: false }, { name: 'recordedBy', nullable: false }, { name: 'status', nullable: false }, );
+    const optionalStringProperties = createPromotionRedemptionResponseOptionalProperties({ name: 'promotionRedemptionId', nullable: false }, { name: 'promotionId', nullable: false }, { name: 'customerId', nullable: false }, { name: 'workorderId', nullable: false }, { name: 'invoiceId', nullable: false }, { name: 'discountType', nullable: false }, { name: 'promotionCode', nullable: false }, { name: 'campaignCode', nullable: false }, { name: 'recordedBy', nullable: false }, { name: 'status', nullable: false }, { name: 'redemptionTimestamp', nullable: false }, { name: 'createdAt', nullable: false }, );
     const optionalNumberProperties = createPromotionRedemptionResponseOptionalProperties({ name: 'discountAmount', nullable: false }, );
     const optionalBooleanProperties = createPromotionRedemptionResponseOptionalProperties({ name: 'recordedOverLimit', nullable: false }, );
 

@@ -61,7 +61,7 @@ export function instanceOf{{classname}}(value: object): value is {{classname}} {
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = create{{classname}}PropertyNames({{#vars}}{{#required}}'{{name}}', {{/required}}{{/vars}});
-    const optionalStringProperties = create{{classname}}OptionalProperties({{#vars}}{{#isString}}{ name: '{{name}}', nullable: {{#isNullable}}true{{/isNullable}}{{^isNullable}}false{{/isNullable}} }, {{/isString}}{{/vars}});
+    const optionalStringProperties = create{{classname}}OptionalProperties({{#vars}}{{#isString}}{ name: '{{name}}', nullable: {{#isNullable}}true{{/isNullable}}{{^isNullable}}false{{/isNullable}} }, {{/isString}}{{#isDate}}{ name: '{{name}}', nullable: {{#isNullable}}true{{/isNullable}}{{^isNullable}}false{{/isNullable}} }, {{/isDate}}{{#isDateTime}}{ name: '{{name}}', nullable: {{#isNullable}}true{{/isNullable}}{{^isNullable}}false{{/isNullable}} }, {{/isDateTime}}{{/vars}});
     const optionalNumberProperties = create{{classname}}OptionalProperties({{#vars}}{{#isInteger}}{ name: '{{name}}', nullable: {{#isNullable}}true{{/isNullable}}{{^isNullable}}false{{/isNullable}} }, {{/isInteger}}{{#isLong}}{ name: '{{name}}', nullable: {{#isNullable}}true{{/isNullable}}{{^isNullable}}false{{/isNullable}} }, {{/isLong}}{{#isNumber}}{ name: '{{name}}', nullable: {{#isNullable}}true{{/isNullable}}{{^isNullable}}false{{/isNullable}} }, {{/isNumber}}{{/vars}});
     const optionalBooleanProperties = create{{classname}}OptionalProperties({{#vars}}{{#isBoolean}}{ name: '{{name}}', nullable: {{#isNullable}}true{{/isNullable}}{{^isNullable}}false{{/isNullable}} }, {{/isBoolean}}{{/vars}});
 

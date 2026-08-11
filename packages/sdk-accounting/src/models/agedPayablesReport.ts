@@ -69,7 +69,7 @@ export function instanceOfAgedPayablesReport(value: object): value is AgedPayabl
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createAgedPayablesReportPropertyNames('asOfDate', 'generatedAt', 'rows', 'totals', );
-    const optionalStringProperties = createAgedPayablesReportOptionalProperties();
+    const optionalStringProperties = createAgedPayablesReportOptionalProperties({ name: 'asOfDate', nullable: false }, { name: 'generatedAt', nullable: false }, );
     const optionalNumberProperties = createAgedPayablesReportOptionalProperties();
     const optionalBooleanProperties = createAgedPayablesReportOptionalProperties();
 

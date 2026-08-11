@@ -113,7 +113,7 @@ export function instanceOfEmployeeProfileDto(value: object): value is EmployeePr
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createEmployeeProfileDtoPropertyNames('id', 'firstName', 'lastName', 'employeeNumber', 'status', 'hireDate', );
-    const optionalStringProperties = createEmployeeProfileDtoOptionalProperties({ name: 'id', nullable: false }, { name: 'firstName', nullable: false }, { name: 'lastName', nullable: false }, { name: 'preferredName', nullable: false }, { name: 'employeeNumber', nullable: false }, { name: 'status', nullable: false }, );
+    const optionalStringProperties = createEmployeeProfileDtoOptionalProperties({ name: 'id', nullable: false }, { name: 'firstName', nullable: false }, { name: 'lastName', nullable: false }, { name: 'preferredName', nullable: false }, { name: 'employeeNumber', nullable: false }, { name: 'status', nullable: false }, { name: 'hireDate', nullable: false }, { name: 'terminationDate', nullable: false }, { name: 'statusEffectiveAt', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'updatedAt', nullable: false }, );
     const optionalNumberProperties = createEmployeeProfileDtoOptionalProperties();
     const optionalBooleanProperties = createEmployeeProfileDtoOptionalProperties();
 

@@ -94,7 +94,7 @@ export function instanceOfPartyTagAssignmentResponse(value: object): value is Pa
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createPartyTagAssignmentResponsePropertyNames('assignmentId', 'partyId', 'tagId', 'name', 'source', 'assignedAt', );
-    const optionalStringProperties = createPartyTagAssignmentResponseOptionalProperties({ name: 'assignmentId', nullable: false }, { name: 'partyId', nullable: false }, { name: 'tagId', nullable: false }, { name: 'name', nullable: false }, { name: 'category', nullable: false }, { name: 'source', nullable: false }, { name: 'assignedBy', nullable: false }, );
+    const optionalStringProperties = createPartyTagAssignmentResponseOptionalProperties({ name: 'assignmentId', nullable: false }, { name: 'partyId', nullable: false }, { name: 'tagId', nullable: false }, { name: 'name', nullable: false }, { name: 'category', nullable: false }, { name: 'source', nullable: false }, { name: 'assignedBy', nullable: false }, { name: 'assignedAt', nullable: false }, );
     const optionalNumberProperties = createPartyTagAssignmentResponseOptionalProperties();
     const optionalBooleanProperties = createPartyTagAssignmentResponseOptionalProperties();
 

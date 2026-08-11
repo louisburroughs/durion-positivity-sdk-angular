@@ -106,7 +106,7 @@ export function instanceOfChangeRequestResponse(value: object): value is ChangeR
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createChangeRequestResponsePropertyNames();
-    const optionalStringProperties = createChangeRequestResponseOptionalProperties({ name: 'id', nullable: false }, { name: 'workorderId', nullable: false }, { name: 'requestedByUserId', nullable: false }, { name: 'status', nullable: false }, { name: 'description', nullable: false }, { name: 'exceptionReason', nullable: false }, { name: 'approvalNote', nullable: false }, { name: 'approvedBy', nullable: false }, );
+    const optionalStringProperties = createChangeRequestResponseOptionalProperties({ name: 'id', nullable: false }, { name: 'workorderId', nullable: false }, { name: 'requestedByUserId', nullable: false }, { name: 'requestedAt', nullable: false }, { name: 'status', nullable: false }, { name: 'description', nullable: false }, { name: 'exceptionReason', nullable: false }, { name: 'approvalNote', nullable: false }, { name: 'approvedAt', nullable: false }, { name: 'approvedBy', nullable: false }, { name: 'declinedAt', nullable: false }, );
     const optionalNumberProperties = createChangeRequestResponseOptionalProperties();
     const optionalBooleanProperties = createChangeRequestResponseOptionalProperties({ name: 'isEmergencyException', nullable: false }, { name: 'isApprovalGated', nullable: false }, );
 

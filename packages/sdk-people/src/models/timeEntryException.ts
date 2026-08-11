@@ -110,7 +110,7 @@ export function instanceOfTimeEntryException(value: object): value is TimeEntryE
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createTimeEntryExceptionPropertyNames('employeeId', 'workDate', 'exceptionCode', 'severity', 'status', );
-    const optionalStringProperties = createTimeEntryExceptionOptionalProperties({ name: 'exceptionId', nullable: false }, { name: 'employeeId', nullable: false }, { name: 'exceptionCode', nullable: false }, { name: 'severity', nullable: false }, { name: 'status', nullable: false }, { name: 'timeEntryId', nullable: false }, { name: 'resolutionNotes', nullable: false }, { name: 'resolvedBy', nullable: false }, );
+    const optionalStringProperties = createTimeEntryExceptionOptionalProperties({ name: 'exceptionId', nullable: false }, { name: 'employeeId', nullable: false }, { name: 'workDate', nullable: false }, { name: 'exceptionCode', nullable: false }, { name: 'severity', nullable: false }, { name: 'status', nullable: false }, { name: 'timeEntryId', nullable: false }, { name: 'resolutionNotes', nullable: false }, { name: 'detectedAt', nullable: false }, { name: 'resolvedBy', nullable: false }, { name: 'resolvedAt', nullable: false }, );
     const optionalNumberProperties = createTimeEntryExceptionOptionalProperties();
     const optionalBooleanProperties = createTimeEntryExceptionOptionalProperties();
 

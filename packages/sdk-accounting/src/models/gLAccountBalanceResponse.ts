@@ -74,7 +74,7 @@ export function instanceOfGLAccountBalanceResponse(value: object): value is GLAc
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createGLAccountBalanceResponsePropertyNames('glAccountId', 'balance', 'asOfDate', );
-    const optionalStringProperties = createGLAccountBalanceResponseOptionalProperties({ name: 'glAccountId', nullable: false }, { name: 'accountCode', nullable: false }, { name: 'accountName', nullable: false }, );
+    const optionalStringProperties = createGLAccountBalanceResponseOptionalProperties({ name: 'glAccountId', nullable: false }, { name: 'accountCode', nullable: false }, { name: 'accountName', nullable: false }, { name: 'asOfDate', nullable: false }, );
     const optionalNumberProperties = createGLAccountBalanceResponseOptionalProperties({ name: 'balance', nullable: false }, );
     const optionalBooleanProperties = createGLAccountBalanceResponseOptionalProperties();
 

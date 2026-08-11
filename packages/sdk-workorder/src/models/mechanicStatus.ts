@@ -87,7 +87,7 @@ export function instanceOfMechanicStatus(value: object): value is MechanicStatus
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createMechanicStatusPropertyNames('personId', );
-    const optionalStringProperties = createMechanicStatusOptionalProperties({ name: 'personId', nullable: false }, { name: 'firstName', nullable: false }, { name: 'lastName', nullable: false }, { name: 'currentStatus', nullable: false }, { name: 'assignedWorkorderId', nullable: false }, );
+    const optionalStringProperties = createMechanicStatusOptionalProperties({ name: 'personId', nullable: false }, { name: 'firstName', nullable: false }, { name: 'lastName', nullable: false }, { name: 'currentStatus', nullable: false }, { name: 'assignedWorkorderId', nullable: false }, { name: 'breakExpectedReturn', nullable: false }, );
     const optionalNumberProperties = createMechanicStatusOptionalProperties();
     const optionalBooleanProperties = createMechanicStatusOptionalProperties({ name: 'onBreak', nullable: false }, );
 

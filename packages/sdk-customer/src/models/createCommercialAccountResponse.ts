@@ -100,7 +100,7 @@ export function instanceOfCreateCommercialAccountResponse(value: object): value 
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createCreateCommercialAccountResponsePropertyNames('partyId', 'legalName', 'status', 'customerNumber', 'createdAt', );
-    const optionalStringProperties = createCreateCommercialAccountResponseOptionalProperties({ name: 'partyId', nullable: false }, { name: 'legalName', nullable: false }, { name: 'status', nullable: false }, { name: 'customerNumber', nullable: false }, { name: 'displayName', nullable: false }, { name: 'partyType', nullable: false }, { name: 'taxId', nullable: false }, { name: 'billingTermsId', nullable: false }, { name: 'primaryAddress', nullable: false }, );
+    const optionalStringProperties = createCreateCommercialAccountResponseOptionalProperties({ name: 'partyId', nullable: false }, { name: 'legalName', nullable: false }, { name: 'status', nullable: false }, { name: 'customerNumber', nullable: false }, { name: 'displayName', nullable: false }, { name: 'partyType', nullable: false }, { name: 'taxId', nullable: false }, { name: 'billingTermsId', nullable: false }, { name: 'primaryAddress', nullable: false }, { name: 'createdAt', nullable: false }, );
     const optionalNumberProperties = createCreateCommercialAccountResponseOptionalProperties();
     const optionalBooleanProperties = createCreateCommercialAccountResponseOptionalProperties();
 

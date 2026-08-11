@@ -98,7 +98,7 @@ export function instanceOfLotResponse(value: object): value is LotResponse {
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createLotResponsePropertyNames('lotId', 'stockItemId', 'lotNumber', 'receivedAt', 'status', );
-    const optionalStringProperties = createLotResponseOptionalProperties({ name: 'lotId', nullable: false }, { name: 'stockItemId', nullable: false }, { name: 'lotNumber', nullable: false }, { name: 'vendorId', nullable: false }, { name: 'status', nullable: false }, );
+    const optionalStringProperties = createLotResponseOptionalProperties({ name: 'lotId', nullable: false }, { name: 'stockItemId', nullable: false }, { name: 'lotNumber', nullable: false }, { name: 'receivedAt', nullable: false }, { name: 'vendorId', nullable: false }, { name: 'expirationDate', nullable: false }, { name: 'status', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'updatedAt', nullable: false }, );
     const optionalNumberProperties = createLotResponseOptionalProperties();
     const optionalBooleanProperties = createLotResponseOptionalProperties();
 

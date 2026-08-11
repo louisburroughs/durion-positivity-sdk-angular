@@ -91,7 +91,7 @@ export function instanceOfCreateFollowUpTaskRequest(value: object): value is Cre
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createCreateFollowUpTaskRequestPropertyNames('type', );
-    const optionalStringProperties = createCreateFollowUpTaskRequestOptionalProperties({ name: 'type', nullable: false }, { name: 'vehicleId', nullable: false }, { name: 'assignedTo', nullable: false }, { name: 'reason', nullable: false }, { name: 'sourceWorkorderId', nullable: false }, { name: 'notes', nullable: false }, );
+    const optionalStringProperties = createCreateFollowUpTaskRequestOptionalProperties({ name: 'type', nullable: false }, { name: 'vehicleId', nullable: false }, { name: 'dueDate', nullable: false }, { name: 'assignedTo', nullable: false }, { name: 'reason', nullable: false }, { name: 'sourceWorkorderId', nullable: false }, { name: 'notes', nullable: false }, );
     const optionalNumberProperties = createCreateFollowUpTaskRequestOptionalProperties();
     const optionalBooleanProperties = createCreateFollowUpTaskRequestOptionalProperties();
 

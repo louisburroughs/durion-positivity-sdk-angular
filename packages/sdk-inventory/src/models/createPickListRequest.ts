@@ -70,7 +70,7 @@ export function instanceOfCreatePickListRequest(value: object): value is CreateP
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createCreatePickListRequestPropertyNames('workorderId', );
-    const optionalStringProperties = createCreatePickListRequestOptionalProperties({ name: 'workorderId', nullable: false }, { name: 'reservationId', nullable: false }, );
+    const optionalStringProperties = createCreatePickListRequestOptionalProperties({ name: 'workorderId', nullable: false }, { name: 'dueAt', nullable: false }, { name: 'reservationId', nullable: false }, );
     const optionalNumberProperties = createCreatePickListRequestOptionalProperties({ name: 'priority', nullable: false }, );
     const optionalBooleanProperties = createCreatePickListRequestOptionalProperties();
 

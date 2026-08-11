@@ -94,7 +94,7 @@ export function instanceOfLocationSyncRunResponse(value: object): value is Locat
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createLocationSyncRunResponsePropertyNames('syncRunId', 'outcome', 'locationsProcessed', 'locationsCreated', 'locationsUpdated', 'locationsUnchanged', 'locationsFailed', );
-    const optionalStringProperties = createLocationSyncRunResponseOptionalProperties({ name: 'syncRunId', nullable: false }, { name: 'outcome', nullable: false }, { name: 'correlationId', nullable: false }, );
+    const optionalStringProperties = createLocationSyncRunResponseOptionalProperties({ name: 'syncRunId', nullable: false }, { name: 'outcome', nullable: false }, { name: 'startedAt', nullable: false }, { name: 'completedAt', nullable: false }, { name: 'correlationId', nullable: false }, );
     const optionalNumberProperties = createLocationSyncRunResponseOptionalProperties({ name: 'locationsProcessed', nullable: false }, { name: 'locationsCreated', nullable: false }, { name: 'locationsUpdated', nullable: false }, { name: 'locationsUnchanged', nullable: false }, { name: 'locationsFailed', nullable: false }, );
     const optionalBooleanProperties = createLocationSyncRunResponseOptionalProperties();
 

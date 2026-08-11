@@ -78,7 +78,7 @@ export function instanceOfExportJobResponse(value: object): value is ExportJobRe
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createExportJobResponsePropertyNames('jobId', 'status', 'requestedAt', );
-    const optionalStringProperties = createExportJobResponseOptionalProperties({ name: 'jobId', nullable: false }, { name: 'status', nullable: false }, { name: 'downloadUrl', nullable: true }, { name: 'errorMessage', nullable: true }, );
+    const optionalStringProperties = createExportJobResponseOptionalProperties({ name: 'jobId', nullable: false }, { name: 'status', nullable: false }, { name: 'requestedAt', nullable: false }, { name: 'completedAt', nullable: true }, { name: 'downloadUrl', nullable: true }, { name: 'errorMessage', nullable: true }, );
     const optionalNumberProperties = createExportJobResponseOptionalProperties();
     const optionalBooleanProperties = createExportJobResponseOptionalProperties();
 

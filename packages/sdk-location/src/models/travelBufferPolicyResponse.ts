@@ -82,7 +82,7 @@ export function instanceOfTravelBufferPolicyResponse(value: object): value is Tr
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createTravelBufferPolicyResponsePropertyNames('id', );
-    const optionalStringProperties = createTravelBufferPolicyResponseOptionalProperties({ name: 'id', nullable: false }, { name: 'name', nullable: false }, { name: 'bufferType', nullable: false }, { name: 'notes', nullable: false }, );
+    const optionalStringProperties = createTravelBufferPolicyResponseOptionalProperties({ name: 'id', nullable: false }, { name: 'name', nullable: false }, { name: 'bufferType', nullable: false }, { name: 'notes', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'updatedAt', nullable: false }, );
     const optionalNumberProperties = createTravelBufferPolicyResponseOptionalProperties({ name: 'bufferValue', nullable: false }, );
     const optionalBooleanProperties = createTravelBufferPolicyResponseOptionalProperties();
 

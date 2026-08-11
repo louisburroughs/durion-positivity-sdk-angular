@@ -86,7 +86,7 @@ export function instanceOfGeneralLedgerLine(value: object): value is GeneralLedg
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createGeneralLedgerLinePropertyNames('journalEntryId', 'transactionDate', 'runningBalance', );
-    const optionalStringProperties = createGeneralLedgerLineOptionalProperties({ name: 'journalEntryId', nullable: false }, { name: 'entryNumber', nullable: false }, { name: 'description', nullable: false }, { name: 'sourceEventType', nullable: false }, );
+    const optionalStringProperties = createGeneralLedgerLineOptionalProperties({ name: 'journalEntryId', nullable: false }, { name: 'entryNumber', nullable: false }, { name: 'transactionDate', nullable: false }, { name: 'description', nullable: false }, { name: 'sourceEventType', nullable: false }, );
     const optionalNumberProperties = createGeneralLedgerLineOptionalProperties({ name: 'debitAmount', nullable: false }, { name: 'creditAmount', nullable: false }, { name: 'runningBalance', nullable: false }, );
     const optionalBooleanProperties = createGeneralLedgerLineOptionalProperties();
 

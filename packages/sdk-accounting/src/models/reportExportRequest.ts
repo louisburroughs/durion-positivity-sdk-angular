@@ -90,7 +90,7 @@ export function instanceOfReportExportRequest(value: object): value is ReportExp
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createReportExportRequestPropertyNames('format', 'reportType', 'startDate', 'endDate', 'organizationId', );
-    const optionalStringProperties = createReportExportRequestOptionalProperties({ name: 'format', nullable: false }, { name: 'reportType', nullable: false }, { name: 'organizationId', nullable: false }, { name: 'accountId', nullable: false }, { name: 'filename', nullable: false }, );
+    const optionalStringProperties = createReportExportRequestOptionalProperties({ name: 'format', nullable: false }, { name: 'reportType', nullable: false }, { name: 'startDate', nullable: false }, { name: 'endDate', nullable: false }, { name: 'organizationId', nullable: false }, { name: 'accountId', nullable: false }, { name: 'filename', nullable: false }, );
     const optionalNumberProperties = createReportExportRequestOptionalProperties();
     const optionalBooleanProperties = createReportExportRequestOptionalProperties();
 

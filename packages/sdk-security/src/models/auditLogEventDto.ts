@@ -90,7 +90,7 @@ export function instanceOfAuditLogEventDto(value: object): value is AuditLogEven
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createAuditLogEventDtoPropertyNames('eventId', 'timestamp', 'eventType', );
-    const optionalStringProperties = createAuditLogEventDtoOptionalProperties({ name: 'eventId', nullable: false }, { name: 'eventType', nullable: false }, { name: 'actorId', nullable: false }, { name: 'entityId', nullable: false }, { name: 'entityType', nullable: false }, { name: 'oldValue', nullable: false }, { name: 'newValue', nullable: false }, { name: 'context', nullable: false }, );
+    const optionalStringProperties = createAuditLogEventDtoOptionalProperties({ name: 'eventId', nullable: false }, { name: 'timestamp', nullable: false }, { name: 'eventType', nullable: false }, { name: 'actorId', nullable: false }, { name: 'entityId', nullable: false }, { name: 'entityType', nullable: false }, { name: 'oldValue', nullable: false }, { name: 'newValue', nullable: false }, { name: 'context', nullable: false }, );
     const optionalNumberProperties = createAuditLogEventDtoOptionalProperties();
     const optionalBooleanProperties = createAuditLogEventDtoOptionalProperties();
 

@@ -94,7 +94,7 @@ export function instanceOfProductUomDto(value: object): value is ProductUomDto {
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createProductUomDtoPropertyNames('id', 'productId', 'uomCode', 'uomType', 'factorToBase', 'precisionScale', );
-    const optionalStringProperties = createProductUomDtoOptionalProperties({ name: 'id', nullable: false }, { name: 'productId', nullable: false }, { name: 'uomCode', nullable: false }, { name: 'uomType', nullable: false }, );
+    const optionalStringProperties = createProductUomDtoOptionalProperties({ name: 'id', nullable: false }, { name: 'productId', nullable: false }, { name: 'uomCode', nullable: false }, { name: 'uomType', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'updatedAt', nullable: false }, );
     const optionalNumberProperties = createProductUomDtoOptionalProperties({ name: 'factorToBase', nullable: false }, { name: 'precisionScale', nullable: false }, );
     const optionalBooleanProperties = createProductUomDtoOptionalProperties();
 

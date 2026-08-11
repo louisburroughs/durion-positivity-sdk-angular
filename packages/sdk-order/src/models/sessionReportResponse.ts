@@ -72,7 +72,7 @@ export function instanceOfSessionReportResponse(value: object): value is Session
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createSessionReportResponsePropertyNames();
-    const optionalStringProperties = createSessionReportResponseOptionalProperties({ name: 'sessionId', nullable: false }, { name: 'terminalId', nullable: false }, { name: 'locationId', nullable: false }, { name: 'status', nullable: false }, { name: 'reportType', nullable: false }, );
+    const optionalStringProperties = createSessionReportResponseOptionalProperties({ name: 'sessionId', nullable: false }, { name: 'terminalId', nullable: false }, { name: 'locationId', nullable: false }, { name: 'status', nullable: false }, { name: 'reportType', nullable: false }, { name: 'openedAt', nullable: false }, { name: 'generatedAt', nullable: false }, );
     const optionalNumberProperties = createSessionReportResponseOptionalProperties({ name: 'openingFloat', nullable: false }, { name: 'cashSettlements', nullable: false }, { name: 'cashMovements', nullable: false }, { name: 'theoreticalCash', nullable: false }, { name: 'countedCash', nullable: false }, { name: 'overShort', nullable: false }, { name: 'orderCount', nullable: false }, );
     const optionalBooleanProperties = createSessionReportResponseOptionalProperties();
 

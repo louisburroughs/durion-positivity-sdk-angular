@@ -91,7 +91,7 @@ export function instanceOfGoodsReceiptResponse(value: object): value is GoodsRec
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createGoodsReceiptResponsePropertyNames('receiptId', 'receiptNumber', 'poId', 'locationId', 'createdAt', );
-    const optionalStringProperties = createGoodsReceiptResponseOptionalProperties({ name: 'receiptId', nullable: false }, { name: 'receiptNumber', nullable: false }, { name: 'poId', nullable: false }, { name: 'asnId', nullable: false }, { name: 'locationId', nullable: false }, { name: 'createdBy', nullable: false }, );
+    const optionalStringProperties = createGoodsReceiptResponseOptionalProperties({ name: 'receiptId', nullable: false }, { name: 'receiptNumber', nullable: false }, { name: 'poId', nullable: false }, { name: 'asnId', nullable: false }, { name: 'locationId', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'createdAt', nullable: false }, );
     const optionalNumberProperties = createGoodsReceiptResponseOptionalProperties({ name: 'totalAccruedAmountMinor', nullable: false }, );
     const optionalBooleanProperties = createGoodsReceiptResponseOptionalProperties();
 

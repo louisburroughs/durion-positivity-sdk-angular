@@ -75,7 +75,7 @@ export function instanceOfPricingSnapshotDto(value: object): value is PricingSna
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createPricingSnapshotDtoPropertyNames('snapshotId', 'timestamp', 'finalPrice', );
-    const optionalStringProperties = createPricingSnapshotDtoOptionalProperties({ name: 'snapshotId', nullable: false }, { name: 'quoteContext', nullable: false }, );
+    const optionalStringProperties = createPricingSnapshotDtoOptionalProperties({ name: 'snapshotId', nullable: false }, { name: 'timestamp', nullable: false }, { name: 'quoteContext', nullable: false }, );
     const optionalNumberProperties = createPricingSnapshotDtoOptionalProperties({ name: 'finalPrice', nullable: false }, );
     const optionalBooleanProperties = createPricingSnapshotDtoOptionalProperties();
 

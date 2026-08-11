@@ -100,7 +100,7 @@ export function instanceOfAppointmentCreateRequest(value: object): value is Appo
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createAppointmentCreateRequestPropertyNames('crmCustomerId', 'crmVehicleId', 'locationId', 'startAt', 'endAt', 'serviceRequestIds', );
-    const optionalStringProperties = createAppointmentCreateRequestOptionalProperties({ name: 'crmCustomerId', nullable: false }, { name: 'crmVehicleId', nullable: false }, { name: 'locationId', nullable: false }, { name: 'resourceId', nullable: false }, { name: 'workorderLinkRef', nullable: false }, { name: 'sourceType', nullable: false }, { name: 'sourceId', nullable: false }, );
+    const optionalStringProperties = createAppointmentCreateRequestOptionalProperties({ name: 'crmCustomerId', nullable: false }, { name: 'crmVehicleId', nullable: false }, { name: 'locationId', nullable: false }, { name: 'resourceId', nullable: false }, { name: 'startAt', nullable: false }, { name: 'endAt', nullable: false }, { name: 'workorderLinkRef', nullable: false }, { name: 'sourceType', nullable: false }, { name: 'sourceId', nullable: false }, );
     const optionalNumberProperties = createAppointmentCreateRequestOptionalProperties();
     const optionalBooleanProperties = createAppointmentCreateRequestOptionalProperties();
 

@@ -90,7 +90,7 @@ export function instanceOfLeadTimeInfo(value: object): value is LeadTimeInfo {
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createLeadTimeInfoPropertyNames('source', 'confidence', );
-    const optionalStringProperties = createLeadTimeInfoOptionalProperties({ name: 'source', nullable: false }, { name: 'displayText', nullable: false }, { name: 'confidence', nullable: false }, );
+    const optionalStringProperties = createLeadTimeInfoOptionalProperties({ name: 'source', nullable: false }, { name: 'displayText', nullable: false }, { name: 'asOf', nullable: false }, { name: 'confidence', nullable: false }, );
     const optionalNumberProperties = createLeadTimeInfoOptionalProperties({ name: 'minDays', nullable: false }, { name: 'maxDays', nullable: false }, );
     const optionalBooleanProperties = createLeadTimeInfoOptionalProperties();
 

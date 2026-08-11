@@ -81,7 +81,7 @@ export function instanceOfReimbursementResponse(value: object): value is Reimbur
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createReimbursementResponsePropertyNames();
-    const optionalStringProperties = createReimbursementResponseOptionalProperties({ name: 'id', nullable: false }, { name: 'claimId', nullable: false }, { name: 'providerId', nullable: false }, { name: 'status', nullable: false }, { name: 'vendorClaimReference', nullable: false }, { name: 'submittedBy', nullable: false }, { name: 'creditReference', nullable: false }, { name: 'notes', nullable: false }, );
+    const optionalStringProperties = createReimbursementResponseOptionalProperties({ name: 'id', nullable: false }, { name: 'claimId', nullable: false }, { name: 'providerId', nullable: false }, { name: 'status', nullable: false }, { name: 'vendorClaimReference', nullable: false }, { name: 'submittedAt', nullable: false }, { name: 'submittedBy', nullable: false }, { name: 'resolvedAt', nullable: false }, { name: 'creditReference', nullable: false }, { name: 'creditReceivedAt', nullable: false }, { name: 'notes', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'updatedAt', nullable: false }, );
     const optionalNumberProperties = createReimbursementResponseOptionalProperties({ name: 'amountRequested', nullable: false }, { name: 'amountApproved', nullable: false }, );
     const optionalBooleanProperties = createReimbursementResponseOptionalProperties();
 

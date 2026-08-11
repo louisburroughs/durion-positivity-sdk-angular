@@ -86,7 +86,7 @@ export function instanceOfWorkorderSnapshotResponse(value: object): value is Wor
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createWorkorderSnapshotResponsePropertyNames();
-    const optionalStringProperties = createWorkorderSnapshotResponseOptionalProperties({ name: 'id', nullable: false }, { name: 'workorderId', nullable: false }, { name: 'status', nullable: false }, { name: 'capturedBy', nullable: false }, { name: 'snapshotType', nullable: false }, { name: 'snapshotData', nullable: false }, { name: 'reason', nullable: false }, );
+    const optionalStringProperties = createWorkorderSnapshotResponseOptionalProperties({ name: 'id', nullable: false }, { name: 'workorderId', nullable: false }, { name: 'status', nullable: false }, { name: 'capturedAt', nullable: false }, { name: 'capturedBy', nullable: false }, { name: 'snapshotType', nullable: false }, { name: 'snapshotData', nullable: false }, { name: 'reason', nullable: false }, );
     const optionalNumberProperties = createWorkorderSnapshotResponseOptionalProperties();
     const optionalBooleanProperties = createWorkorderSnapshotResponseOptionalProperties();
 

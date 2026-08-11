@@ -83,7 +83,7 @@ export function instanceOfHintResponse(value: object): value is HintResponse {
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createHintResponsePropertyNames('hintId', 'productId', 'fitmentTags', 'createdAt', 'updatedAt', );
-    const optionalStringProperties = createHintResponseOptionalProperties({ name: 'hintId', nullable: false }, { name: 'productId', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'updatedBy', nullable: false }, );
+    const optionalStringProperties = createHintResponseOptionalProperties({ name: 'hintId', nullable: false }, { name: 'productId', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'updatedAt', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'updatedBy', nullable: false }, );
     const optionalNumberProperties = createHintResponseOptionalProperties();
     const optionalBooleanProperties = createHintResponseOptionalProperties();
 

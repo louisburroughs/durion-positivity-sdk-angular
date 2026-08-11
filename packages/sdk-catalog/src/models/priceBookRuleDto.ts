@@ -131,7 +131,7 @@ export function instanceOfPriceBookRuleDto(value: object): value is PriceBookRul
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createPriceBookRuleDtoPropertyNames('ruleId', 'priceBookId', 'targetType', 'pricingLogic', 'effectiveStartAt', 'status', 'createdByUserId', 'createdAt', 'version', );
-    const optionalStringProperties = createPriceBookRuleDtoOptionalProperties({ name: 'ruleId', nullable: false }, { name: 'priceBookId', nullable: false }, { name: 'targetType', nullable: false }, { name: 'targetId', nullable: false }, { name: 'pricingLogic', nullable: false }, { name: 'conditionType', nullable: false }, { name: 'conditionValue', nullable: false }, { name: 'status', nullable: false }, { name: 'createdByUserId', nullable: false }, );
+    const optionalStringProperties = createPriceBookRuleDtoOptionalProperties({ name: 'ruleId', nullable: false }, { name: 'priceBookId', nullable: false }, { name: 'targetType', nullable: false }, { name: 'targetId', nullable: false }, { name: 'pricingLogic', nullable: false }, { name: 'conditionType', nullable: false }, { name: 'conditionValue', nullable: false }, { name: 'effectiveStartAt', nullable: false }, { name: 'effectiveEndAt', nullable: false }, { name: 'status', nullable: false }, { name: 'createdByUserId', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'updatedAt', nullable: false }, );
     const optionalNumberProperties = createPriceBookRuleDtoOptionalProperties({ name: 'priority', nullable: false }, { name: 'version', nullable: false }, );
     const optionalBooleanProperties = createPriceBookRuleDtoOptionalProperties();
 

@@ -102,7 +102,7 @@ export function instanceOfSegmentResponse(value: object): value is SegmentRespon
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createSegmentResponsePropertyNames('segmentId', 'name', 'audienceType', 'type', 'active', );
-    const optionalStringProperties = createSegmentResponseOptionalProperties({ name: 'segmentId', nullable: false }, { name: 'name', nullable: false }, { name: 'description', nullable: false }, { name: 'audienceType', nullable: false }, { name: 'type', nullable: false }, );
+    const optionalStringProperties = createSegmentResponseOptionalProperties({ name: 'segmentId', nullable: false }, { name: 'name', nullable: false }, { name: 'description', nullable: false }, { name: 'audienceType', nullable: false }, { name: 'type', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'updatedAt', nullable: false }, );
     const optionalNumberProperties = createSegmentResponseOptionalProperties({ name: 'memberCount', nullable: false }, );
     const optionalBooleanProperties = createSegmentResponseOptionalProperties({ name: 'active', nullable: false }, );
 

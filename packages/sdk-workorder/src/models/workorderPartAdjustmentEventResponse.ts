@@ -102,7 +102,7 @@ export function instanceOfWorkorderPartAdjustmentEventResponse(value: object): v
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createWorkorderPartAdjustmentEventResponsePropertyNames('id', 'originalPartId', 'workorderId', 'adjustmentType', 'quantityAdjustment', 'performedBy', 'performedAt', );
-    const optionalStringProperties = createWorkorderPartAdjustmentEventResponseOptionalProperties({ name: 'id', nullable: false }, { name: 'originalPartId', nullable: false }, { name: 'originalPartDescription', nullable: false }, { name: 'workorderId', nullable: false }, { name: 'adjustmentType', nullable: false }, { name: 'substitutedWithPartId', nullable: false }, { name: 'substitutedWithPartDescription', nullable: false }, { name: 'reason', nullable: false }, { name: 'performedBy', nullable: false }, { name: 'notes', nullable: false }, );
+    const optionalStringProperties = createWorkorderPartAdjustmentEventResponseOptionalProperties({ name: 'id', nullable: false }, { name: 'originalPartId', nullable: false }, { name: 'originalPartDescription', nullable: false }, { name: 'workorderId', nullable: false }, { name: 'adjustmentType', nullable: false }, { name: 'substitutedWithPartId', nullable: false }, { name: 'substitutedWithPartDescription', nullable: false }, { name: 'reason', nullable: false }, { name: 'performedBy', nullable: false }, { name: 'performedAt', nullable: false }, { name: 'notes', nullable: false }, );
     const optionalNumberProperties = createWorkorderPartAdjustmentEventResponseOptionalProperties({ name: 'quantityAdjustment', nullable: false }, );
     const optionalBooleanProperties = createWorkorderPartAdjustmentEventResponseOptionalProperties();
 

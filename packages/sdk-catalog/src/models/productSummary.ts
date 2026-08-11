@@ -109,7 +109,7 @@ export function instanceOfProductSummary(value: object): value is ProductSummary
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createProductSummaryPropertyNames();
-    const optionalStringProperties = createProductSummaryOptionalProperties({ name: 'productId', nullable: false }, { name: 'name', nullable: false }, { name: 'sku', nullable: false }, { name: 'category', nullable: false }, { name: 'thumbnailUrl', nullable: false }, { name: 'manufacturerBrand', nullable: false }, { name: 'lifecycleState', nullable: true }, { name: 'msrpAmount', nullable: true }, { name: 'msrpCurrency', nullable: true }, );
+    const optionalStringProperties = createProductSummaryOptionalProperties({ name: 'productId', nullable: false }, { name: 'name', nullable: false }, { name: 'sku', nullable: false }, { name: 'category', nullable: false }, { name: 'thumbnailUrl', nullable: false }, { name: 'manufacturerBrand', nullable: false }, { name: 'lifecycleState', nullable: true }, { name: 'lifecycleStateEffectiveAt', nullable: true }, { name: 'msrpAmount', nullable: true }, { name: 'msrpCurrency', nullable: true }, { name: 'msrpEffectiveStartDate', nullable: true }, { name: 'msrpEffectiveEndDate', nullable: true }, );
     const optionalNumberProperties = createProductSummaryOptionalProperties();
     const optionalBooleanProperties = createProductSummaryOptionalProperties();
 

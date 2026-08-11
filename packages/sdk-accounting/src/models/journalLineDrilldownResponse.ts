@@ -82,7 +82,7 @@ export function instanceOfJournalLineDrilldownResponse(value: object): value is 
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createJournalLineDrilldownResponsePropertyNames('journalEntryId', 'transactionDate', );
-    const optionalStringProperties = createJournalLineDrilldownResponseOptionalProperties({ name: 'journalEntryId', nullable: false }, { name: 'description', nullable: false }, { name: 'sourceEventId', nullable: false }, { name: 'sourceEventType', nullable: false }, );
+    const optionalStringProperties = createJournalLineDrilldownResponseOptionalProperties({ name: 'journalEntryId', nullable: false }, { name: 'transactionDate', nullable: false }, { name: 'description', nullable: false }, { name: 'sourceEventId', nullable: false }, { name: 'sourceEventType', nullable: false }, );
     const optionalNumberProperties = createJournalLineDrilldownResponseOptionalProperties({ name: 'debitAmount', nullable: false }, { name: 'creditAmount', nullable: false }, );
     const optionalBooleanProperties = createJournalLineDrilldownResponseOptionalProperties();
 

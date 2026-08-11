@@ -100,7 +100,7 @@ export function instanceOfReportExportResponse(value: object): value is ReportEx
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createReportExportResponsePropertyNames('exportId', 'status', );
-    const optionalStringProperties = createReportExportResponseOptionalProperties({ name: 'exportId', nullable: false }, { name: 'status', nullable: false }, { name: 'downloadUrl', nullable: false }, { name: 'format', nullable: false }, { name: 'failureReason', nullable: false }, { name: 'reportType', nullable: false }, );
+    const optionalStringProperties = createReportExportResponseOptionalProperties({ name: 'exportId', nullable: false }, { name: 'status', nullable: false }, { name: 'requestedAt', nullable: false }, { name: 'completedAt', nullable: false }, { name: 'downloadUrl', nullable: false }, { name: 'format', nullable: false }, { name: 'failureReason', nullable: false }, { name: 'reportType', nullable: false }, );
     const optionalNumberProperties = createReportExportResponseOptionalProperties();
     const optionalBooleanProperties = createReportExportResponseOptionalProperties();
 

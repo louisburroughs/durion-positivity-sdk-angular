@@ -130,7 +130,7 @@ export function instanceOfWorkSessionResponse(value: object): value is WorkSessi
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createWorkSessionResponsePropertyNames();
-    const optionalStringProperties = createWorkSessionResponseOptionalProperties({ name: 'workSessionId', nullable: false }, { name: 'mechanicId', nullable: false }, { name: 'workOrderId', nullable: false }, { name: 'workOrderTaskId', nullable: false }, { name: 'locationId', nullable: false }, { name: 'resourceId', nullable: false }, { name: 'status', nullable: false }, { name: 'approvedByUserId', nullable: false }, { name: 'approvalNotes', nullable: false }, { name: 'overrideReason', nullable: false }, );
+    const optionalStringProperties = createWorkSessionResponseOptionalProperties({ name: 'workSessionId', nullable: false }, { name: 'mechanicId', nullable: false }, { name: 'workOrderId', nullable: false }, { name: 'workOrderTaskId', nullable: false }, { name: 'locationId', nullable: false }, { name: 'resourceId', nullable: false }, { name: 'startAt', nullable: false }, { name: 'endAt', nullable: false }, { name: 'status', nullable: false }, { name: 'approvedAt', nullable: false }, { name: 'approvedByUserId', nullable: false }, { name: 'approvalNotes', nullable: false }, { name: 'lockedAt', nullable: false }, { name: 'overrideReason', nullable: false }, );
     const optionalNumberProperties = createWorkSessionResponseOptionalProperties({ name: 'totalDurationSeconds', nullable: false }, );
     const optionalBooleanProperties = createWorkSessionResponseOptionalProperties({ name: 'locked', nullable: false }, { name: 'overlapOverrideUsed', nullable: false }, );
 

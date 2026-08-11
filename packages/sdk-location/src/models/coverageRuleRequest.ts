@@ -78,7 +78,7 @@ export function instanceOfCoverageRuleRequest(value: object): value is CoverageR
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createCoverageRuleRequestPropertyNames('serviceAreaId', 'ruleType', );
-    const optionalStringProperties = createCoverageRuleRequestOptionalProperties({ name: 'serviceAreaId', nullable: false }, { name: 'ruleType', nullable: false }, );
+    const optionalStringProperties = createCoverageRuleRequestOptionalProperties({ name: 'serviceAreaId', nullable: false }, { name: 'ruleType', nullable: false }, { name: 'validFrom', nullable: false }, { name: 'validTo', nullable: false }, );
     const optionalNumberProperties = createCoverageRuleRequestOptionalProperties({ name: 'priority', nullable: false }, { name: 'maxDistance', nullable: false }, );
     const optionalBooleanProperties = createCoverageRuleRequestOptionalProperties();
 

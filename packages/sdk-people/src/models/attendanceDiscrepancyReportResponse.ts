@@ -90,7 +90,7 @@ export function instanceOfAttendanceDiscrepancyReportResponse(value: object): va
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createAttendanceDiscrepancyReportResponsePropertyNames('technicianId', 'technicianName', 'locationId', 'reportDate', 'totalAttendanceHours', 'totalJobHours', 'discrepancyHours', 'thresholdApplied', 'isFlagged', );
-    const optionalStringProperties = createAttendanceDiscrepancyReportResponseOptionalProperties({ name: 'technicianId', nullable: false }, { name: 'technicianName', nullable: false }, { name: 'locationId', nullable: false }, );
+    const optionalStringProperties = createAttendanceDiscrepancyReportResponseOptionalProperties({ name: 'technicianId', nullable: false }, { name: 'technicianName', nullable: false }, { name: 'locationId', nullable: false }, { name: 'reportDate', nullable: false }, );
     const optionalNumberProperties = createAttendanceDiscrepancyReportResponseOptionalProperties({ name: 'thresholdApplied', nullable: false }, );
     const optionalBooleanProperties = createAttendanceDiscrepancyReportResponseOptionalProperties({ name: 'isFlagged', nullable: false }, );
 

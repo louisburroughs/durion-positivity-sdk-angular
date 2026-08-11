@@ -78,7 +78,7 @@ export function instanceOfGLMappingCreateRequest(value: object): value is GLMapp
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createGLMappingCreateRequestPropertyNames('sourceSystem', 'externalCode', 'glAccountId', 'effectiveStartDate', );
-    const optionalStringProperties = createGLMappingCreateRequestOptionalProperties({ name: 'sourceSystem', nullable: false }, { name: 'externalCode', nullable: false }, { name: 'glAccountId', nullable: false }, );
+    const optionalStringProperties = createGLMappingCreateRequestOptionalProperties({ name: 'sourceSystem', nullable: false }, { name: 'externalCode', nullable: false }, { name: 'glAccountId', nullable: false }, { name: 'effectiveStartDate', nullable: false }, { name: 'effectiveEndDate', nullable: false }, );
     const optionalNumberProperties = createGLMappingCreateRequestOptionalProperties();
     const optionalBooleanProperties = createGLMappingCreateRequestOptionalProperties();
 

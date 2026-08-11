@@ -106,7 +106,7 @@ export function instanceOfPriceBookRuleCreateRequestDto(value: object): value is
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createPriceBookRuleCreateRequestDtoPropertyNames('targetType', 'pricingLogic', 'effectiveStartAt', 'createdByUserId', );
-    const optionalStringProperties = createPriceBookRuleCreateRequestDtoOptionalProperties({ name: 'targetType', nullable: false }, { name: 'targetId', nullable: false }, { name: 'pricingLogic', nullable: false }, { name: 'conditionType', nullable: false }, { name: 'conditionValue', nullable: false }, { name: 'createdByUserId', nullable: false }, );
+    const optionalStringProperties = createPriceBookRuleCreateRequestDtoOptionalProperties({ name: 'targetType', nullable: false }, { name: 'targetId', nullable: false }, { name: 'pricingLogic', nullable: false }, { name: 'conditionType', nullable: false }, { name: 'conditionValue', nullable: false }, { name: 'effectiveStartAt', nullable: false }, { name: 'effectiveEndAt', nullable: false }, { name: 'createdByUserId', nullable: false }, );
     const optionalNumberProperties = createPriceBookRuleCreateRequestDtoOptionalProperties({ name: 'priority', nullable: false }, { name: 'version', nullable: false }, );
     const optionalBooleanProperties = createPriceBookRuleCreateRequestDtoOptionalProperties();
 

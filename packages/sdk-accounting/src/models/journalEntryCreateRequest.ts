@@ -87,7 +87,7 @@ export function instanceOfJournalEntryCreateRequest(value: object): value is Jou
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createJournalEntryCreateRequestPropertyNames('transactionDate', 'lines', );
-    const optionalStringProperties = createJournalEntryCreateRequestOptionalProperties({ name: 'organizationId', nullable: false }, { name: 'description', nullable: false }, { name: 'sourceEventId', nullable: false }, { name: 'sourceEventType', nullable: false }, { name: 'postingRuleSetId', nullable: false }, { name: 'postingRuleVersionId', nullable: false }, );
+    const optionalStringProperties = createJournalEntryCreateRequestOptionalProperties({ name: 'organizationId', nullable: false }, { name: 'transactionDate', nullable: false }, { name: 'description', nullable: false }, { name: 'sourceEventId', nullable: false }, { name: 'sourceEventType', nullable: false }, { name: 'postingRuleSetId', nullable: false }, { name: 'postingRuleVersionId', nullable: false }, );
     const optionalNumberProperties = createJournalEntryCreateRequestOptionalProperties();
     const optionalBooleanProperties = createJournalEntryCreateRequestOptionalProperties();
 

@@ -74,7 +74,7 @@ export function instanceOfReturnSubmissionResultDto(value: object): value is Ret
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createReturnSubmissionResultDtoPropertyNames('returnId', 'workorderId', 'processedLines', 'status', 'processedAt', );
-    const optionalStringProperties = createReturnSubmissionResultDtoOptionalProperties({ name: 'returnId', nullable: false }, { name: 'workorderId', nullable: false }, { name: 'status', nullable: false }, );
+    const optionalStringProperties = createReturnSubmissionResultDtoOptionalProperties({ name: 'returnId', nullable: false }, { name: 'workorderId', nullable: false }, { name: 'status', nullable: false }, { name: 'processedAt', nullable: false }, );
     const optionalNumberProperties = createReturnSubmissionResultDtoOptionalProperties({ name: 'processedLines', nullable: false }, );
     const optionalBooleanProperties = createReturnSubmissionResultDtoOptionalProperties();
 

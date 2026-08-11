@@ -57,7 +57,7 @@ export function instanceOfApplication(value: object): value is Application {
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createApplicationPropertyNames();
-    const optionalStringProperties = createApplicationOptionalProperties({ name: 'invoiceId', nullable: false }, );
+    const optionalStringProperties = createApplicationOptionalProperties({ name: 'invoiceId', nullable: false }, { name: 'appliedAt', nullable: false }, );
     const optionalNumberProperties = createApplicationOptionalProperties({ name: 'amountApplied', nullable: false }, );
     const optionalBooleanProperties = createApplicationOptionalProperties();
 

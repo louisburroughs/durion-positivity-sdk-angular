@@ -104,7 +104,7 @@ export function instanceOfStaffingAssignmentResponse(value: object): value is St
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createStaffingAssignmentResponsePropertyNames('assignmentId', 'personId', 'locationId', 'role', 'status', 'effectiveFrom', 'isPrimary', );
-    const optionalStringProperties = createStaffingAssignmentResponseOptionalProperties({ name: 'assignmentId', nullable: false }, { name: 'personId', nullable: false }, { name: 'locationId', nullable: false }, { name: 'role', nullable: false }, { name: 'status', nullable: false }, { name: 'createdBy', nullable: false }, );
+    const optionalStringProperties = createStaffingAssignmentResponseOptionalProperties({ name: 'assignmentId', nullable: false }, { name: 'personId', nullable: false }, { name: 'locationId', nullable: false }, { name: 'role', nullable: false }, { name: 'status', nullable: false }, { name: 'effectiveFrom', nullable: false }, { name: 'effectiveTo', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'updatedAt', nullable: false }, { name: 'createdBy', nullable: false }, );
     const optionalNumberProperties = createStaffingAssignmentResponseOptionalProperties();
     const optionalBooleanProperties = createStaffingAssignmentResponseOptionalProperties({ name: 'isPrimary', nullable: false }, );
 

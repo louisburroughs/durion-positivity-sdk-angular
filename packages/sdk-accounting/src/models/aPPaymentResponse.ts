@@ -142,7 +142,7 @@ export function instanceOfAPPaymentResponse(value: object): value is APPaymentRe
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createAPPaymentResponsePropertyNames();
-    const optionalStringProperties = createAPPaymentResponseOptionalProperties({ name: 'paymentId', nullable: false }, { name: 'paymentRef', nullable: false }, { name: 'vendorId', nullable: false }, { name: 'vendorName', nullable: false }, { name: 'currency', nullable: false }, { name: 'status', nullable: false }, { name: 'gatewayTransactionId', nullable: false }, { name: 'glJournalEntryId', nullable: false }, { name: 'glPostError', nullable: false }, { name: 'memo', nullable: false }, { name: 'createdBy', nullable: false }, );
+    const optionalStringProperties = createAPPaymentResponseOptionalProperties({ name: 'paymentId', nullable: false }, { name: 'paymentRef', nullable: false }, { name: 'vendorId', nullable: false }, { name: 'vendorName', nullable: false }, { name: 'currency', nullable: false }, { name: 'status', nullable: false }, { name: 'gatewayTransactionId', nullable: false }, { name: 'gatewayTimestamp', nullable: false }, { name: 'glJournalEntryId', nullable: false }, { name: 'glPostedAt', nullable: false }, { name: 'glPostError', nullable: false }, { name: 'memo', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'createdBy', nullable: false }, );
     const optionalNumberProperties = createAPPaymentResponseOptionalProperties({ name: 'grossAmount', nullable: false }, { name: 'feeAmount', nullable: false }, { name: 'netAmount', nullable: false }, { name: 'unappliedAmount', nullable: false }, );
     const optionalBooleanProperties = createAPPaymentResponseOptionalProperties();
 

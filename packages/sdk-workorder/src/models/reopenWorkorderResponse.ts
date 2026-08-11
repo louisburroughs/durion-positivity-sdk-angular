@@ -74,7 +74,7 @@ export function instanceOfReopenWorkorderResponse(value: object): value is Reope
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createReopenWorkorderResponsePropertyNames('workorderId', 'currentStatus', 'isReopened', 'reopenedAt', 'message', );
-    const optionalStringProperties = createReopenWorkorderResponseOptionalProperties({ name: 'workorderId', nullable: false }, { name: 'currentStatus', nullable: false }, { name: 'message', nullable: false }, );
+    const optionalStringProperties = createReopenWorkorderResponseOptionalProperties({ name: 'workorderId', nullable: false }, { name: 'currentStatus', nullable: false }, { name: 'reopenedAt', nullable: false }, { name: 'message', nullable: false }, );
     const optionalNumberProperties = createReopenWorkorderResponseOptionalProperties();
     const optionalBooleanProperties = createReopenWorkorderResponseOptionalProperties({ name: 'isReopened', nullable: false }, );
 

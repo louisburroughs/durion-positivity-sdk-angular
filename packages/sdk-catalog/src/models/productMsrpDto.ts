@@ -94,7 +94,7 @@ export function instanceOfProductMsrpDto(value: object): value is ProductMsrpDto
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createProductMsrpDtoPropertyNames('msrpId', 'productId', 'amount', 'currency', 'effectiveStartDate', 'createdAt', 'version', );
-    const optionalStringProperties = createProductMsrpDtoOptionalProperties({ name: 'msrpId', nullable: false }, { name: 'productId', nullable: false }, { name: 'amount', nullable: false }, { name: 'currency', nullable: false }, { name: 'updatedBy', nullable: false }, );
+    const optionalStringProperties = createProductMsrpDtoOptionalProperties({ name: 'msrpId', nullable: false }, { name: 'productId', nullable: false }, { name: 'amount', nullable: false }, { name: 'currency', nullable: false }, { name: 'effectiveStartDate', nullable: false }, { name: 'effectiveEndDate', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'updatedAt', nullable: false }, { name: 'updatedBy', nullable: false }, );
     const optionalNumberProperties = createProductMsrpDtoOptionalProperties({ name: 'version', nullable: false }, );
     const optionalBooleanProperties = createProductMsrpDtoOptionalProperties();
 

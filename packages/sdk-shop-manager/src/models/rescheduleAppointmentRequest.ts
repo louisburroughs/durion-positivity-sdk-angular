@@ -87,7 +87,7 @@ export function instanceOfRescheduleAppointmentRequest(value: object): value is 
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createRescheduleAppointmentRequestPropertyNames('newStartAt', 'newEndAt', 'reason', );
-    const optionalStringProperties = createRescheduleAppointmentRequestOptionalProperties({ name: 'reason', nullable: false }, { name: 'rescheduleReasonNotes', nullable: false }, );
+    const optionalStringProperties = createRescheduleAppointmentRequestOptionalProperties({ name: 'newStartAt', nullable: false }, { name: 'newEndAt', nullable: false }, { name: 'reason', nullable: false }, { name: 'rescheduleReasonNotes', nullable: false }, );
     const optionalNumberProperties = createRescheduleAppointmentRequestOptionalProperties();
     const optionalBooleanProperties = createRescheduleAppointmentRequestOptionalProperties({ name: 'notifyCustomer', nullable: false }, );
 

@@ -66,7 +66,7 @@ export function instanceOfCustomerCreditInfo(value: object): value is CustomerCr
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createCustomerCreditInfoPropertyNames();
-    const optionalStringProperties = createCustomerCreditInfoOptionalProperties({ name: 'creditId', nullable: false }, );
+    const optionalStringProperties = createCustomerCreditInfoOptionalProperties({ name: 'creditId', nullable: false }, { name: 'createdAt', nullable: false }, );
     const optionalNumberProperties = createCustomerCreditInfoOptionalProperties({ name: 'amount', nullable: false }, );
     const optionalBooleanProperties = createCustomerCreditInfoOptionalProperties();
 

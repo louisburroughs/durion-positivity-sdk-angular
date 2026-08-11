@@ -91,7 +91,7 @@ export function instanceOfShortageResolutionResultDto(value: object): value is S
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createShortageResolutionResultDtoPropertyNames('allocationId', 'optionType', 'idempotencyKey', 'artifactType', 'resolvedAt', 'status', );
-    const optionalStringProperties = createShortageResolutionResultDtoOptionalProperties({ name: 'allocationId', nullable: false }, { name: 'optionType', nullable: false }, { name: 'idempotencyKey', nullable: false }, { name: 'artifactType', nullable: false }, { name: 'artifactId', nullable: false }, { name: 'status', nullable: false }, );
+    const optionalStringProperties = createShortageResolutionResultDtoOptionalProperties({ name: 'allocationId', nullable: false }, { name: 'optionType', nullable: false }, { name: 'idempotencyKey', nullable: false }, { name: 'artifactType', nullable: false }, { name: 'artifactId', nullable: false }, { name: 'resolvedAt', nullable: false }, { name: 'status', nullable: false }, );
     const optionalNumberProperties = createShortageResolutionResultDtoOptionalProperties();
     const optionalBooleanProperties = createShortageResolutionResultDtoOptionalProperties();
 

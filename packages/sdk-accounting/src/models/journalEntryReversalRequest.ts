@@ -66,7 +66,7 @@ export function instanceOfJournalEntryReversalRequest(value: object): value is J
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createJournalEntryReversalRequestPropertyNames('reason', );
-    const optionalStringProperties = createJournalEntryReversalRequestOptionalProperties({ name: 'reason', nullable: false }, { name: 'overrideJustification', nullable: false }, );
+    const optionalStringProperties = createJournalEntryReversalRequestOptionalProperties({ name: 'reason', nullable: false }, { name: 'reversalDate', nullable: false }, { name: 'overrideJustification', nullable: false }, );
     const optionalNumberProperties = createJournalEntryReversalRequestOptionalProperties();
     const optionalBooleanProperties = createJournalEntryReversalRequestOptionalProperties();
 

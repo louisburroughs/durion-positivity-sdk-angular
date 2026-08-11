@@ -61,7 +61,7 @@ export function instanceOfCashMovementResponse(value: object): value is CashMove
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createCashMovementResponsePropertyNames();
-    const optionalStringProperties = createCashMovementResponseOptionalProperties({ name: 'movementId', nullable: false }, { name: 'sessionId', nullable: false }, { name: 'movementType', nullable: false }, { name: 'reason', nullable: false }, { name: 'clerkId', nullable: false }, );
+    const optionalStringProperties = createCashMovementResponseOptionalProperties({ name: 'movementId', nullable: false }, { name: 'sessionId', nullable: false }, { name: 'movementType', nullable: false }, { name: 'reason', nullable: false }, { name: 'clerkId', nullable: false }, { name: 'occurredAt', nullable: false }, );
     const optionalNumberProperties = createCashMovementResponseOptionalProperties({ name: 'amount', nullable: false }, );
     const optionalBooleanProperties = createCashMovementResponseOptionalProperties();
 

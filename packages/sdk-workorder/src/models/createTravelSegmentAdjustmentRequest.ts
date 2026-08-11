@@ -66,7 +66,7 @@ export function instanceOfCreateTravelSegmentAdjustmentRequest(value: object): v
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createCreateTravelSegmentAdjustmentRequestPropertyNames('adjustmentReason', );
-    const optionalStringProperties = createCreateTravelSegmentAdjustmentRequestOptionalProperties({ name: 'adjustmentReason', nullable: false }, );
+    const optionalStringProperties = createCreateTravelSegmentAdjustmentRequestOptionalProperties({ name: 'adjustedStartAt', nullable: false }, { name: 'adjustedEndAt', nullable: false }, { name: 'adjustmentReason', nullable: false }, );
     const optionalNumberProperties = createCreateTravelSegmentAdjustmentRequestOptionalProperties();
     const optionalBooleanProperties = createCreateTravelSegmentAdjustmentRequestOptionalProperties();
 

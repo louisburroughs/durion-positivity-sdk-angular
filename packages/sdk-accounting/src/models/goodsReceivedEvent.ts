@@ -87,7 +87,7 @@ export function instanceOfGoodsReceivedEvent(value: object): value is GoodsRecei
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createGoodsReceivedEventPropertyNames('eventId', 'organizationId', 'purchaseOrderId', 'vendorId', 'receivedDate', 'lineItems', );
-    const optionalStringProperties = createGoodsReceivedEventOptionalProperties({ name: 'eventId', nullable: false }, { name: 'organizationId', nullable: false }, { name: 'purchaseOrderId', nullable: false }, { name: 'vendorId', nullable: false }, { name: 'vendorName', nullable: false }, );
+    const optionalStringProperties = createGoodsReceivedEventOptionalProperties({ name: 'eventId', nullable: false }, { name: 'organizationId', nullable: false }, { name: 'purchaseOrderId', nullable: false }, { name: 'vendorId', nullable: false }, { name: 'vendorName', nullable: false }, { name: 'receivedDate', nullable: false }, );
     const optionalNumberProperties = createGoodsReceivedEventOptionalProperties();
     const optionalBooleanProperties = createGoodsReceivedEventOptionalProperties();
 

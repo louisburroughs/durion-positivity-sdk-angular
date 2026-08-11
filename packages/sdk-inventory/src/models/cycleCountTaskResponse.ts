@@ -108,7 +108,7 @@ export function instanceOfCycleCountTaskResponse(value: object): value is CycleC
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createCycleCountTaskResponsePropertyNames('taskId', 'binLocation', 'itemSku', 'expectedQuantity', 'status', 'countEntriesCount', 'createdAt', 'updatedAt', );
-    const optionalStringProperties = createCycleCountTaskResponseOptionalProperties({ name: 'taskId', nullable: false }, { name: 'binLocation', nullable: false }, { name: 'itemSku', nullable: false }, { name: 'itemDescription', nullable: false }, { name: 'auditorId', nullable: false }, { name: 'status', nullable: false }, { name: 'latestCountEntryId', nullable: false }, );
+    const optionalStringProperties = createCycleCountTaskResponseOptionalProperties({ name: 'taskId', nullable: false }, { name: 'binLocation', nullable: false }, { name: 'itemSku', nullable: false }, { name: 'itemDescription', nullable: false }, { name: 'auditorId', nullable: false }, { name: 'status', nullable: false }, { name: 'latestCountEntryId', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'updatedAt', nullable: false }, );
     const optionalNumberProperties = createCycleCountTaskResponseOptionalProperties({ name: 'expectedQuantity', nullable: false }, { name: 'countEntriesCount', nullable: false }, );
     const optionalBooleanProperties = createCycleCountTaskResponseOptionalProperties();
 

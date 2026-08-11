@@ -90,7 +90,7 @@ export function instanceOfBankReconciliationAdjustmentResponse(value: object): v
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createBankReconciliationAdjustmentResponsePropertyNames();
-    const optionalStringProperties = createBankReconciliationAdjustmentResponseOptionalProperties({ name: 'adjustmentId', nullable: false }, { name: 'type', nullable: false }, { name: 'description', nullable: false }, { name: 'journalEntryId', nullable: false }, { name: 'createdBy', nullable: false }, );
+    const optionalStringProperties = createBankReconciliationAdjustmentResponseOptionalProperties({ name: 'adjustmentId', nullable: false }, { name: 'type', nullable: false }, { name: 'description', nullable: false }, { name: 'journalEntryId', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'createdBy', nullable: false }, );
     const optionalNumberProperties = createBankReconciliationAdjustmentResponseOptionalProperties({ name: 'amount', nullable: false }, );
     const optionalBooleanProperties = createBankReconciliationAdjustmentResponseOptionalProperties();
 

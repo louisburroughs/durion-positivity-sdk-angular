@@ -122,7 +122,7 @@ export function instanceOfTaxCalculationResponse(value: object): value is TaxCal
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createTaxCalculationResponsePropertyNames('subtotal', 'totalTax', 'total', 'effectiveTaxRate', 'jurisdictions', 'lineItemTaxes', 'testMode', 'calculatedAt', );
-    const optionalStringProperties = createTaxCalculationResponseOptionalProperties({ name: 'referenceId', nullable: false }, { name: 'referenceType', nullable: false }, { name: 'externalTransactionId', nullable: false }, { name: 'calculationType', nullable: false }, { name: 'originalReferenceId', nullable: false }, );
+    const optionalStringProperties = createTaxCalculationResponseOptionalProperties({ name: 'calculatedAt', nullable: false }, { name: 'referenceId', nullable: false }, { name: 'referenceType', nullable: false }, { name: 'externalTransactionId', nullable: false }, { name: 'calculationType', nullable: false }, { name: 'originalReferenceId', nullable: false }, );
     const optionalNumberProperties = createTaxCalculationResponseOptionalProperties({ name: 'subtotal', nullable: false }, { name: 'totalTax', nullable: false }, { name: 'total', nullable: false }, { name: 'effectiveTaxRate', nullable: false }, );
     const optionalBooleanProperties = createTaxCalculationResponseOptionalProperties({ name: 'testMode', nullable: false }, );
 

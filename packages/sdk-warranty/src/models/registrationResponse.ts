@@ -75,7 +75,7 @@ export function instanceOfRegistrationResponse(value: object): value is Registra
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createRegistrationResponsePropertyNames();
-    const optionalStringProperties = createRegistrationResponseOptionalProperties({ name: 'id', nullable: false }, { name: 'policyId', nullable: false }, { name: 'customerId', nullable: false }, { name: 'vehicleId', nullable: false }, { name: 'sourceInvoiceId', nullable: false }, { name: 'sourceInvoiceLineId', nullable: false }, { name: 'contractNumber', nullable: false }, { name: 'status', nullable: false }, );
+    const optionalStringProperties = createRegistrationResponseOptionalProperties({ name: 'id', nullable: false }, { name: 'policyId', nullable: false }, { name: 'customerId', nullable: false }, { name: 'vehicleId', nullable: false }, { name: 'sourceInvoiceId', nullable: false }, { name: 'sourceInvoiceLineId', nullable: false }, { name: 'contractNumber', nullable: false }, { name: 'purchaseDate', nullable: false }, { name: 'expiresAt', nullable: false }, { name: 'status', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'updatedAt', nullable: false }, );
     const optionalNumberProperties = createRegistrationResponseOptionalProperties({ name: 'version', nullable: false }, );
     const optionalBooleanProperties = createRegistrationResponseOptionalProperties();
 

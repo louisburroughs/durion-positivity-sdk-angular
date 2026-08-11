@@ -100,7 +100,7 @@ export function instanceOfMessageTemplateResponse(value: object): value is Messa
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createMessageTemplateResponsePropertyNames('templateId', 'name', 'channel', 'audienceType', 'body', 'availableTokens', );
-    const optionalStringProperties = createMessageTemplateResponseOptionalProperties({ name: 'templateId', nullable: false }, { name: 'name', nullable: false }, { name: 'channel', nullable: false }, { name: 'audienceType', nullable: false }, { name: 'subject', nullable: false }, { name: 'body', nullable: false }, );
+    const optionalStringProperties = createMessageTemplateResponseOptionalProperties({ name: 'templateId', nullable: false }, { name: 'name', nullable: false }, { name: 'channel', nullable: false }, { name: 'audienceType', nullable: false }, { name: 'subject', nullable: false }, { name: 'body', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'updatedAt', nullable: false }, );
     const optionalNumberProperties = createMessageTemplateResponseOptionalProperties();
     const optionalBooleanProperties = createMessageTemplateResponseOptionalProperties();
 

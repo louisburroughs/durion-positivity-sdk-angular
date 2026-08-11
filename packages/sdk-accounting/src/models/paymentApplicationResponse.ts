@@ -93,7 +93,7 @@ export function instanceOfPaymentApplicationResponse(value: object): value is Pa
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createPaymentApplicationResponsePropertyNames('paymentId', );
-    const optionalStringProperties = createPaymentApplicationResponseOptionalProperties({ name: 'paymentId', nullable: false }, { name: 'customerId', nullable: false }, { name: 'currency', nullable: false }, { name: 'applicationRequestId', nullable: false }, );
+    const optionalStringProperties = createPaymentApplicationResponseOptionalProperties({ name: 'paymentId', nullable: false }, { name: 'customerId', nullable: false }, { name: 'currency', nullable: false }, { name: 'applicationTimestamp', nullable: false }, { name: 'applicationRequestId', nullable: false }, );
     const optionalNumberProperties = createPaymentApplicationResponseOptionalProperties({ name: 'totalAmount', nullable: false }, { name: 'appliedAmount', nullable: false }, { name: 'remainingAmount', nullable: false }, );
     const optionalBooleanProperties = createPaymentApplicationResponseOptionalProperties();
 

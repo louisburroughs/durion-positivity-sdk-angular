@@ -93,7 +93,7 @@ export function instanceOfCostingMethodConfigResponse(value: object): value is C
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createCostingMethodConfigResponsePropertyNames('configId', 'scopeType', 'method', 'active', 'createdAt', 'updatedAt', );
-    const optionalStringProperties = createCostingMethodConfigResponseOptionalProperties({ name: 'configId', nullable: false }, { name: 'scopeType', nullable: false }, { name: 'scopeValue', nullable: false }, { name: 'method', nullable: false }, );
+    const optionalStringProperties = createCostingMethodConfigResponseOptionalProperties({ name: 'configId', nullable: false }, { name: 'scopeType', nullable: false }, { name: 'scopeValue', nullable: false }, { name: 'method', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'updatedAt', nullable: false }, );
     const optionalNumberProperties = createCostingMethodConfigResponseOptionalProperties();
     const optionalBooleanProperties = createCostingMethodConfigResponseOptionalProperties({ name: 'active', nullable: false }, );
 

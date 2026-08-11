@@ -91,7 +91,7 @@ export function instanceOfProductDetailView(value: object): value is ProductDeta
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createProductDetailViewPropertyNames('productId', 'generatedAt', 'confidence', );
-    const optionalStringProperties = createProductDetailViewOptionalProperties({ name: 'productId', nullable: false }, { name: 'description', nullable: false }, { name: 'confidence', nullable: false }, );
+    const optionalStringProperties = createProductDetailViewOptionalProperties({ name: 'productId', nullable: false }, { name: 'description', nullable: false }, { name: 'generatedAt', nullable: false }, { name: 'confidence', nullable: false }, );
     const optionalNumberProperties = createProductDetailViewOptionalProperties();
     const optionalBooleanProperties = createProductDetailViewOptionalProperties();
 

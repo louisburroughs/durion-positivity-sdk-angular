@@ -106,7 +106,7 @@ export function instanceOfWorkorderResponse(value: object): value is WorkorderRe
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createWorkorderResponsePropertyNames();
-    const optionalStringProperties = createWorkorderResponseOptionalProperties({ name: 'id', nullable: false }, { name: 'estimateId', nullable: false }, { name: 'customerId', nullable: false }, { name: 'shopId', nullable: false }, { name: 'vehicleId', nullable: false }, { name: 'status', nullable: false }, { name: 'crmPartyId', nullable: false }, { name: 'crmVehicleId', nullable: false }, );
+    const optionalStringProperties = createWorkorderResponseOptionalProperties({ name: 'id', nullable: false }, { name: 'estimateId', nullable: false }, { name: 'customerId', nullable: false }, { name: 'shopId', nullable: false }, { name: 'vehicleId', nullable: false }, { name: 'status', nullable: false }, { name: 'approvedAt', nullable: false }, { name: 'completedAt', nullable: false }, { name: 'reopenedAt', nullable: false }, { name: 'crmPartyId', nullable: false }, { name: 'crmVehicleId', nullable: false }, );
     const optionalNumberProperties = createWorkorderResponseOptionalProperties();
     const optionalBooleanProperties = createWorkorderResponseOptionalProperties({ name: 'isReopened', nullable: false }, );
 

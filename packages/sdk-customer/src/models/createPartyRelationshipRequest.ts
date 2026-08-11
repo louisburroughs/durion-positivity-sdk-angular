@@ -80,7 +80,7 @@ export function instanceOfCreatePartyRelationshipRequest(value: object): value i
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createCreatePartyRelationshipRequestPropertyNames('personId', 'roles', 'effectiveStartDate', );
-    const optionalStringProperties = createCreatePartyRelationshipRequestOptionalProperties({ name: 'personId', nullable: false }, );
+    const optionalStringProperties = createCreatePartyRelationshipRequestOptionalProperties({ name: 'personId', nullable: false }, { name: 'effectiveStartDate', nullable: false }, { name: 'effectiveEndDate', nullable: false }, );
     const optionalNumberProperties = createCreatePartyRelationshipRequestOptionalProperties();
     const optionalBooleanProperties = createCreatePartyRelationshipRequestOptionalProperties({ name: 'primaryBillingContact', nullable: false }, );
 

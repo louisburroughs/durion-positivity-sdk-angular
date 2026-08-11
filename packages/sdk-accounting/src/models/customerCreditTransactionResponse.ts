@@ -104,7 +104,7 @@ export function instanceOfCustomerCreditTransactionResponse(value: object): valu
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createCustomerCreditTransactionResponsePropertyNames();
-    const optionalStringProperties = createCustomerCreditTransactionResponseOptionalProperties({ name: 'creditTransactionId', nullable: false }, { name: 'creditId', nullable: false }, { name: 'transactionType', nullable: false }, { name: 'invoiceId', nullable: false }, { name: 'currency', nullable: false }, { name: 'requestId', nullable: false }, );
+    const optionalStringProperties = createCustomerCreditTransactionResponseOptionalProperties({ name: 'creditTransactionId', nullable: false }, { name: 'creditId', nullable: false }, { name: 'transactionType', nullable: false }, { name: 'invoiceId', nullable: false }, { name: 'currency', nullable: false }, { name: 'requestId', nullable: false }, { name: 'createdAt', nullable: false }, );
     const optionalNumberProperties = createCustomerCreditTransactionResponseOptionalProperties({ name: 'amount', nullable: false }, { name: 'creditOpenAmountAfter', nullable: false }, { name: 'invoiceBalanceAfter', nullable: false }, );
     const optionalBooleanProperties = createCustomerCreditTransactionResponseOptionalProperties({ name: 'replayed', nullable: false }, );
 

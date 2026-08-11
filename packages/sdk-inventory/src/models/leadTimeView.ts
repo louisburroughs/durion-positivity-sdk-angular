@@ -86,7 +86,7 @@ export function instanceOfLeadTimeView(value: object): value is LeadTimeView {
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createLeadTimeViewPropertyNames('productId', 'locationId', );
-    const optionalStringProperties = createLeadTimeViewOptionalProperties({ name: 'productId', nullable: false }, { name: 'locationId', nullable: false }, { name: 'source', nullable: false }, { name: 'displayText', nullable: false }, { name: 'confidence', nullable: false }, );
+    const optionalStringProperties = createLeadTimeViewOptionalProperties({ name: 'productId', nullable: false }, { name: 'locationId', nullable: false }, { name: 'source', nullable: false }, { name: 'displayText', nullable: false }, { name: 'confidence', nullable: false }, { name: 'asOf', nullable: false }, );
     const optionalNumberProperties = createLeadTimeViewOptionalProperties({ name: 'minDays', nullable: false }, { name: 'maxDays', nullable: false }, );
     const optionalBooleanProperties = createLeadTimeViewOptionalProperties();
 

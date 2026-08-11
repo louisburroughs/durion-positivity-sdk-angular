@@ -62,7 +62,7 @@ export function instanceOfAuditEventCreatedResponse(value: object): value is Aud
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createAuditEventCreatedResponsePropertyNames('eventId', 'timestamp', );
-    const optionalStringProperties = createAuditEventCreatedResponseOptionalProperties({ name: 'eventId', nullable: false }, );
+    const optionalStringProperties = createAuditEventCreatedResponseOptionalProperties({ name: 'eventId', nullable: false }, { name: 'timestamp', nullable: false }, );
     const optionalNumberProperties = createAuditEventCreatedResponseOptionalProperties();
     const optionalBooleanProperties = createAuditEventCreatedResponseOptionalProperties();
 

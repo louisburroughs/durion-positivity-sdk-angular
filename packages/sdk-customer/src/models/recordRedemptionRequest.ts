@@ -94,7 +94,7 @@ export function instanceOfRecordRedemptionRequest(value: object): value is Recor
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createRecordRedemptionRequestPropertyNames('promotionId', 'customerId', 'workorderId', 'discountAmount', 'discountType', 'promotionCode', );
-    const optionalStringProperties = createRecordRedemptionRequestOptionalProperties({ name: 'promotionId', nullable: false }, { name: 'customerId', nullable: false }, { name: 'workorderId', nullable: false }, { name: 'invoiceId', nullable: false }, { name: 'discountType', nullable: false }, { name: 'promotionCode', nullable: false }, { name: 'campaignCode', nullable: false }, );
+    const optionalStringProperties = createRecordRedemptionRequestOptionalProperties({ name: 'promotionId', nullable: false }, { name: 'customerId', nullable: false }, { name: 'workorderId', nullable: false }, { name: 'invoiceId', nullable: false }, { name: 'discountType', nullable: false }, { name: 'promotionCode', nullable: false }, { name: 'campaignCode', nullable: false }, { name: 'redemptionTimestamp', nullable: false }, );
     const optionalNumberProperties = createRecordRedemptionRequestOptionalProperties({ name: 'discountAmount', nullable: false }, );
     const optionalBooleanProperties = createRecordRedemptionRequestOptionalProperties({ name: 'recordedOverLimit', nullable: false }, );
 

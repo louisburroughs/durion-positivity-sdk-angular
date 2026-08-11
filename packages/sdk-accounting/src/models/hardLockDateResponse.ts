@@ -58,7 +58,7 @@ export function instanceOfHardLockDateResponse(value: object): value is HardLock
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createHardLockDateResponsePropertyNames();
-    const optionalStringProperties = createHardLockDateResponseOptionalProperties();
+    const optionalStringProperties = createHardLockDateResponseOptionalProperties({ name: 'hardLockDate', nullable: true }, );
     const optionalNumberProperties = createHardLockDateResponseOptionalProperties();
     const optionalBooleanProperties = createHardLockDateResponseOptionalProperties();
 

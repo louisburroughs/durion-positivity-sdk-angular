@@ -98,7 +98,7 @@ export function instanceOfCycleCountScheduleResponse(value: object): value is Cy
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createCycleCountScheduleResponsePropertyNames('scheduleId', 'locationId', 'frequencyDays', 'nextDueDate', 'autoCreatePlan', 'active', 'createdBy', 'createdAt', 'updatedAt', );
-    const optionalStringProperties = createCycleCountScheduleResponseOptionalProperties({ name: 'scheduleId', nullable: false }, { name: 'locationId', nullable: false }, { name: 'zoneId', nullable: false }, { name: 'skuCategory', nullable: false }, { name: 'createdBy', nullable: false }, );
+    const optionalStringProperties = createCycleCountScheduleResponseOptionalProperties({ name: 'scheduleId', nullable: false }, { name: 'locationId', nullable: false }, { name: 'zoneId', nullable: false }, { name: 'skuCategory', nullable: false }, { name: 'nextDueDate', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'updatedAt', nullable: false }, );
     const optionalNumberProperties = createCycleCountScheduleResponseOptionalProperties({ name: 'frequencyDays', nullable: false }, );
     const optionalBooleanProperties = createCycleCountScheduleResponseOptionalProperties({ name: 'autoCreatePlan', nullable: false }, { name: 'active', nullable: false }, );
 

@@ -98,7 +98,7 @@ export function instanceOfClaimUpdateRequest(value: object): value is ClaimUpdat
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createClaimUpdateRequestPropertyNames();
-    const optionalStringProperties = createClaimUpdateRequestOptionalProperties({ name: 'claimType', nullable: false }, { name: 'locationId', nullable: false }, { name: 'originWorkorderId', nullable: false }, { name: 'originInvoiceId', nullable: false }, { name: 'registrationId', nullable: false }, { name: 'failureDescription', nullable: false }, );
+    const optionalStringProperties = createClaimUpdateRequestOptionalProperties({ name: 'claimType', nullable: false }, { name: 'locationId', nullable: false }, { name: 'originWorkorderId', nullable: false }, { name: 'originInvoiceId', nullable: false }, { name: 'originSaleDate', nullable: false }, { name: 'registrationId', nullable: false }, { name: 'failureDescription', nullable: false }, { name: 'failureDate', nullable: false }, );
     const optionalNumberProperties = createClaimUpdateRequestOptionalProperties();
     const optionalBooleanProperties = createClaimUpdateRequestOptionalProperties();
 

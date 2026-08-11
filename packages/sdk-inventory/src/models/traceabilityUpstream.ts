@@ -67,7 +67,7 @@ export function instanceOfTraceabilityUpstream(value: object): value is Traceabi
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createTraceabilityUpstreamPropertyNames('documents', );
-    const optionalStringProperties = createTraceabilityUpstreamOptionalProperties({ name: 'vendorId', nullable: false }, );
+    const optionalStringProperties = createTraceabilityUpstreamOptionalProperties({ name: 'vendorId', nullable: false }, { name: 'receivedAt', nullable: false }, );
     const optionalNumberProperties = createTraceabilityUpstreamOptionalProperties();
     const optionalBooleanProperties = createTraceabilityUpstreamOptionalProperties();
 

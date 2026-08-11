@@ -132,7 +132,7 @@ export function instanceOfFollowUpTaskResponse(value: object): value is FollowUp
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createFollowUpTaskResponsePropertyNames('taskId', 'partyId', 'type', 'status', );
-    const optionalStringProperties = createFollowUpTaskResponseOptionalProperties({ name: 'taskId', nullable: false }, { name: 'partyId', nullable: false }, { name: 'vehicleId', nullable: false }, { name: 'type', nullable: false }, { name: 'assignedTo', nullable: false }, { name: 'status', nullable: false }, { name: 'sourceWorkorderId', nullable: false }, { name: 'reason', nullable: false }, { name: 'outcome', nullable: false }, { name: 'notes', nullable: false }, { name: 'bookedWorkorderId', nullable: false }, { name: 'bookedAppointmentId', nullable: false }, { name: 'closedBy', nullable: false }, );
+    const optionalStringProperties = createFollowUpTaskResponseOptionalProperties({ name: 'taskId', nullable: false }, { name: 'partyId', nullable: false }, { name: 'vehicleId', nullable: false }, { name: 'type', nullable: false }, { name: 'dueDate', nullable: false }, { name: 'assignedTo', nullable: false }, { name: 'status', nullable: false }, { name: 'sourceWorkorderId', nullable: false }, { name: 'reason', nullable: false }, { name: 'outcome', nullable: false }, { name: 'notes', nullable: false }, { name: 'bookedWorkorderId', nullable: false }, { name: 'bookedAppointmentId', nullable: false }, { name: 'closedAt', nullable: false }, { name: 'closedBy', nullable: false }, { name: 'createdAt', nullable: false }, );
     const optionalNumberProperties = createFollowUpTaskResponseOptionalProperties();
     const optionalBooleanProperties = createFollowUpTaskResponseOptionalProperties();
 
