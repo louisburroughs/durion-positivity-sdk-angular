@@ -33,6 +33,10 @@ export interface PriceQuoteRequest {
      * Optional timestamp for effective pricing lookup; defaults to current time if omitted
      */
     effectiveTimestamp?: string | null;
+    /**
+     * Optional ISO 4217 currency code for the quote; defaults to the company default currency (pos.price.default-currency) when omitted. Base price and location override selection are filtered to this currency
+     */
+    currency?: string | null;
 }
 
 function isOptionalPriceQuoteRequestPropertyOfType(
@@ -74,7 +78,7 @@ export function instanceOfPriceQuoteRequest(value: object): value is PriceQuoteR
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createPriceQuoteRequestPropertyNames('productId', 'quantity', 'locationId', 'customerTierId', );
-    const optionalStringProperties = createPriceQuoteRequestOptionalProperties({ name: 'productId', nullable: false }, { name: 'locationId', nullable: false }, { name: 'customerTierId', nullable: false }, );
+    const optionalStringProperties = createPriceQuoteRequestOptionalProperties({ name: 'productId', nullable: false }, { name: 'locationId', nullable: false }, { name: 'customerTierId', nullable: false }, { name: 'currency', nullable: true }, );
     const optionalNumberProperties = createPriceQuoteRequestOptionalProperties({ name: 'quantity', nullable: false }, );
     const optionalBooleanProperties = createPriceQuoteRequestOptionalProperties();
 
