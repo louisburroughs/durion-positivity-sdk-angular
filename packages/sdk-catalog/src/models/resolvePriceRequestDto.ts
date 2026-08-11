@@ -10,7 +10,7 @@
 
 
 /**
- * Request to resolve the effective price for a product in a given context
+ * Request to resolve the reference/list price for a product in a given context (catalog reference role per ADR-0054; transactional sell prices are resolved by pos-price)
  */
 export interface ResolvePriceRequestDto { 
     /**
@@ -26,7 +26,7 @@ export interface ResolvePriceRequestDto {
      */
     locationId?: string;
     /**
-     * Identifier of the customer tier used to select a CUSTOMER_TIER reference price book (matches the book\'s scopeId). Selects tier list/reference prices only — transactional customer-tier discounting is owned by pos-price (ADR-0054)
+     * Identifier of the customer tier used to select a CUSTOMER_TIER reference price book (matches the scopeId of the book). Selects tier list/reference prices only — transactional customer-tier discounting is owned by pos-price (ADR-0054)
      */
     customerTierId?: string;
     /**
