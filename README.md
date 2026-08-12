@@ -1188,5 +1188,8 @@ durion-positivity-sdk/
 6. **Tests required** — coverage threshold is 80%; new workflow methods need a corresponding test in `sdk-008-workflow-helpers.test.ts` or a domain-specific test file.
 7. **Lint** — `npm run lint` must pass before opening a PR.
 
+(cd /home/n541342/IdeaProjects/durion-positivity-sdk-angular && npm run generate && npm run build) && \
+(cd /home/n541342/IdeaProjects/durion-positivity-frontend && npm run sdk:install)
+
 (cd /home/louis-burroughs/IdeaProjects/durion-positivity-sdk-angular && npm run generate && npm run build) && \
 (cd /home/louis-burroughs/IdeaProjects/durion-positivity-frontend && npm run sdk:install)

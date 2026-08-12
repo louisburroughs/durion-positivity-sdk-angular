@@ -96,7 +96,7 @@ export function instanceOfExchangeAuditAccessView(value: object): value is Excha
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createExchangeAuditAccessViewPropertyNames();
-    const optionalStringProperties = createExchangeAuditAccessViewOptionalProperties({ name: 'auditAccessId', nullable: false }, { name: 'exchangeAuditId', nullable: false }, { name: 'vendorProfileId', nullable: false }, { name: 'capability', nullable: false }, { name: 'accessedBy', nullable: false }, { name: 'accessKind', nullable: false }, { name: 'payloadOutcome', nullable: false }, );
+    const optionalStringProperties = createExchangeAuditAccessViewOptionalProperties({ name: 'auditAccessId', nullable: false }, { name: 'exchangeAuditId', nullable: false }, { name: 'vendorProfileId', nullable: false }, { name: 'capability', nullable: false }, { name: 'accessedBy', nullable: false }, { name: 'accessedAt', nullable: false }, { name: 'accessKind', nullable: false }, { name: 'payloadOutcome', nullable: false }, );
     const optionalNumberProperties = createExchangeAuditAccessViewOptionalProperties();
     const optionalBooleanProperties = createExchangeAuditAccessViewOptionalProperties();
 
