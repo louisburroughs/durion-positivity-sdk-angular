@@ -1,11 +1,5 @@
 export * from './supplierAuthConfigs.service';
-import { SupplierAuthConfigsService } from './supplierAuthConfigs.service';
 export * from './supplierCommercialAccounts.service';
-import { SupplierCommercialAccountsService } from './supplierCommercialAccounts.service';
 export * from './supplierEndpointBindings.service';
-import { SupplierEndpointBindingsService } from './supplierEndpointBindings.service';
 export * from './supplierExchangeAudit.service';
-import { SupplierExchangeAuditService } from './supplierExchangeAudit.service';
 export * from './supplierVendorProfiles.service';
-import { SupplierVendorProfilesService } from './supplierVendorProfiles.service';
-export const APIS = [SupplierAuthConfigsService, SupplierCommercialAccountsService, SupplierEndpointBindingsService, SupplierExchangeAuditService, SupplierVendorProfilesService];

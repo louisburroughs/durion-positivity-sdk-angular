@@ -1,11 +1,5 @@
 export * from './orderCancellation.service';
-import { OrderCancellationService } from './orderCancellation.service';
 export * from './priceOverrides.service';
-import { PriceOverridesService } from './priceOverrides.service';
 export * from './registerSessions.service';
-import { RegisterSessionsService } from './registerSessions.service';
 export * from './returns.service';
-import { ReturnsService } from './returns.service';
 export * from './salesOrders.service';
-import { SalesOrdersService } from './salesOrders.service';
-export const APIS = [OrderCancellationService, PriceOverridesService, RegisterSessionsService, ReturnsService, SalesOrdersService];

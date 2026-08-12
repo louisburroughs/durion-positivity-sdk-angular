@@ -10,8 +10,34 @@
     "prepare": "npm run build"
   },
   "peerDependencies": {
-    "@angular/core": "^21.0.0",
     "@angular/common": "^21.0.0",
+    "@angular/core": "^21.0.0",
     "rxjs": "^7.4.0"
+  },
+  "sideEffects": false,
+  "exports": {
+    ".": {
+      "types": "./index.ts",
+      "default": "./index.ts"
+    },
+    "./configuration": {
+      "types": "./configuration.ts",
+      "default": "./configuration.ts"
+    },
+    "./variables": {
+      "types": "./variables.ts",
+      "default": "./variables.ts"
+    },
+    "./api.module": {
+      "types": "./api.module.ts",
+      "default": "./api.module.ts"
+    },
+    "./provide-api": {
+      "types": "./provide-api.ts",
+      "default": "./provide-api.ts"
+    },
+    "./package.json": {
+      "default": "./package.json"
+    }
   }
 }

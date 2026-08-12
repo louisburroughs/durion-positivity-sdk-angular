@@ -1,13 +1,6 @@
 export * from './appointmentAssignments.service';
-import { AppointmentAssignmentsService } from './appointmentAssignments.service';
 export * from './appointmentsAPI.service';
-import { AppointmentsAPIService } from './appointmentsAPI.service';
 export * from './conflictOverrideAPI.service';
-import { ConflictOverrideAPIService } from './conflictOverrideAPI.service';
 export * from './scheduleAPI.service';
-import { ScheduleAPIService } from './scheduleAPI.service';
 export * from './shopAudit.service';
-import { ShopAuditService } from './shopAudit.service';
 export * from './technicianAPI.service';
-import { TechnicianAPIService } from './technicianAPI.service';
-export const APIS = [AppointmentAssignmentsService, AppointmentsAPIService, ConflictOverrideAPIService, ScheduleAPIService, ShopAuditService, TechnicianAPIService];

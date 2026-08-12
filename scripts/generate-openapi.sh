@@ -111,6 +111,29 @@ cleanup_legacy_fetch_apis() {
 	fi
 }
 
+optimize_api_aggregator_for_treeshaking() {
+	# OpenAPI's default api.ts aggregator imports every generated service to build an
+	# APIS array. Those eager value imports make Configuration-only consumers pay for
+	# all service classes. Keep only re-exports so bundlers can prune unused services.
+	local module_name="$1"
+	local api_file="packages/sdk-${module_name}/src/apis/api.ts"
+	local tmp_file
+
+	if [[ ! -f "${api_file}" ]]; then
+		return 0
+	fi
+
+	tmp_file="$(mktemp)"
+	grep "^export \* from './.*';$" "${api_file}" > "${tmp_file}" || true
+
+	if [[ -s "${tmp_file}" ]]; then
+		mv "${tmp_file}" "${api_file}"
+	else
+		rm -f "${tmp_file}"
+		echo "export {};" > "${api_file}"
+	fi
+}
+
 cleanup_orphan_js() {
 	local module_name="$1"
 	local package_dir="packages/sdk-${module_name}"
@@ -180,6 +203,18 @@ patch_package_dependencies() {
 			cd "${package_dir}"
 			npm pkg delete 'dependencies.@durion-sdk/transport' >/dev/null 2>&1 || true
 			npm pkg set 'peerDependencies.@durion-sdk/transport=*' >/dev/null
+		)
+	fi
+}
+
+patch_package_side_effects() {
+	local module_name="$1"
+	local package_dir="packages/sdk-${module_name}"
+
+	if [[ -f "${package_dir}/package.json" ]]; then
+		(
+			cd "${package_dir}"
+			npm pkg set --json 'sideEffects=false' >/dev/null
 		)
 	fi
 }
@@ -290,11 +325,13 @@ if [[ -n "$module" ]]; then
 	fi
 	cleanup_legacy_null_models "$module"
 	cleanup_legacy_fetch_apis "$module"
+	optimize_api_aggregator_for_treeshaking "$module"
 	cleanup_orphan_js "$module"
 	ensure_models_are_modules "$module"
 	apply_gateway_base_path_default "$module"
 	write_src_index "$module"
 	patch_package_dependencies "$module"
+	patch_package_side_effects "$module"
 else
 	# Generate all SDK modules in deterministic order
 	for m in "${MODULES[@]}"; do
@@ -312,11 +349,13 @@ else
 		fi
 		cleanup_legacy_null_models "$m"
 		cleanup_legacy_fetch_apis "$m"
+		optimize_api_aggregator_for_treeshaking "$m"
 		cleanup_orphan_js "$m"
 		ensure_models_are_modules "$m"
 		apply_gateway_base_path_default "$m"
 		write_src_index "$m"
 		patch_package_dependencies "$m"
+		patch_package_side_effects "$m"
 	done
 fi
 

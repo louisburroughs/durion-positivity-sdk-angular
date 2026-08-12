@@ -209,8 +209,8 @@ Configure each generated package with the API gateway route prefix from your app
 For the Angular frontend, this should match the gateway-backed environment value used in `durion-positivity-frontend`:
 
 ```typescript
-import { Configuration as AccountingConfiguration } from "@durion-sdk/accounting";
-import { Configuration as SecurityConfiguration } from "@durion-sdk/security";
+import { Configuration as AccountingConfiguration } from "@durion-sdk/accounting/configuration";
+import { Configuration as SecurityConfiguration } from "@durion-sdk/security/configuration";
 import { environment } from "../environments/environment";
 
 export const appConfig: ApplicationConfig = {

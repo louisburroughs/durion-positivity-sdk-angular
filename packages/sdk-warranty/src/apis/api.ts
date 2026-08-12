@@ -1,15 +1,7 @@
 export * from './warrantyClaims.service';
-import { WarrantyClaimsService } from './warrantyClaims.service';
 export * from './warrantyPartReturns.service';
-import { WarrantyPartReturnsService } from './warrantyPartReturns.service';
 export * from './warrantyPolicies.service';
-import { WarrantyPoliciesService } from './warrantyPolicies.service';
 export * from './warrantyProviders.service';
-import { WarrantyProvidersService } from './warrantyProviders.service';
 export * from './warrantyRegistrations.service';
-import { WarrantyRegistrationsService } from './warrantyRegistrations.service';
 export * from './warrantyReimbursements.service';
-import { WarrantyReimbursementsService } from './warrantyReimbursements.service';
 export * from './warrantySettlements.service';
-import { WarrantySettlementsService } from './warrantySettlements.service';
-export const APIS = [WarrantyClaimsService, WarrantyPartReturnsService, WarrantyPoliciesService, WarrantyProvidersService, WarrantyRegistrationsService, WarrantyReimbursementsService, WarrantySettlementsService];
