@@ -23,6 +23,7 @@ const EXPECTED_GATEWAY_BASE_PATHS: Record<string, string> = {
   'sdk-people': 'http://api-gateway.local/people',
   'sdk-price': 'http://api-gateway.local/price',
   'sdk-security': 'http://api-gateway.local/security-service',
+  'sdk-supplier': 'http://api-gateway.local/supplier',
   'sdk-shop-manager': 'http://api-gateway.local/shop-manager',
   'sdk-vehicle-fitment': 'http://api-gateway.local/vehicle-fitment',
   'sdk-vehicle-inventory': 'http://api-gateway.local/vehicle-inventory',

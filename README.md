@@ -101,6 +101,7 @@ All packages are versioned together at `0.1.0-alpha` and scoped under `@durion-s
 | `@durion-sdk/order`             | Sales orders, price overrides, cancellations               |
 | `@durion-sdk/inventory`         | Stock movements, returns, reservations                     |
 | `@durion-sdk/workorder`         | Work orders, estimates, change requests                    |
+| `@durion-sdk/supplier`          | Supplier profiles, auth configs, bindings, audit trail     |
 | `@durion-sdk/accounting`        | GL, journal entries, payments, Stripe, financial reporting |
 | `@durion-sdk/catalog`           | Product catalog management                                 |
 | `@durion-sdk/customer`          | CRM: accounts, contacts, vehicles, promotions              |
