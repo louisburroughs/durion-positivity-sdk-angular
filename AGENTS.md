@@ -2,7 +2,7 @@
 
 ## Project Overview
 
-Angular-native TypeScript SDK for Durion Positivity backend services. This repo generates Angular 21 `typescript-angular` clients from the sibling `durion-positivity-backend` OpenAPI specs and layers a small amount of hand-written transport and workflow code on top.
+Angular-native TypeScript SDK for Durion Positivity backend services. This repo generates Angular 22 `typescript-angular` clients from the sibling `durion-positivity-backend` OpenAPI specs and layers a small amount of hand-written transport and workflow code on top.
 
 This is a workspace/package repo, not an Angular application:
 
@@ -32,9 +32,9 @@ If you change package usage, generation flow, or developer setup, update the nea
 
 ## Quick Prerequisites
 
-- Node.js 18+
+- Node ^22.22.3 or ^24.15.0
 - npm workspaces
-- Angular 21 peer compatibility
+- Angular 22 peer compatibility
 - Sibling checkout of `../durion-positivity-backend` for OpenAPI generation
 
 Install dependencies from the repo root:
@@ -161,7 +161,7 @@ If a change affects multiple packages uniformly, prefer fixing templates or gene
 
 ## Known Generation Rules
 
-- The repo uses the `typescript-angular` OpenAPI generator with Angular 21 settings
+- The repo uses the `typescript-angular` OpenAPI generator with Angular 22 settings
 - `scripts/generate-openapi.sh` includes post-generation cleanup for `sdk-inventory` and `sdk-vehicle-inventory`
 - Keep those cleanups intact unless the underlying generator or backend spec change makes them obsolete
 - If you remove a cleanup, prove it by regenerating and running the affected tests/build
