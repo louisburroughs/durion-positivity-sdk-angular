@@ -13,8 +13,11 @@
     "generate": "bash scripts/generate-openapi.sh"
   },
   "devDependencies": {
-    "@angular/common": "^21.1.0",
-    "@angular/core": "^21.1.0",
+    "@angular/common": "^22.0.0",
+    "@angular/compiler": "^22.0.0",
+    "@angular/compiler-cli": "^22.0.0",
+    "@angular/core": "^22.0.0",
+    "@angular/platform-browser": "^22.0.0",
     "@openapitools/openapi-generator-cli": "^2.30.0",
     "@types/jest": "^30.0.0",
     "@types/node": "^22.0.0",
@@ -22,9 +25,9 @@
     "@typescript-eslint/parser": "^7.0.0",
     "eslint": "^8.57.0",
     "jest": "^30.3.0",
-    "jest-preset-angular": "^16.1.4",
+    "jest-preset-angular": "^17.0.0",
     "rxjs": "^7.8.0",
     "ts-jest": "^29.4.9",
-    "typescript": ">=5.9.0 <6.0.0"
+    "typescript": ">=6.0.0 <6.1.0"
   }
 }

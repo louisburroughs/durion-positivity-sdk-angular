@@ -15,6 +15,7 @@
     "outDir": "dist",
     "rootDir": ".",
     "baseUrl": ".",
+    "ignoreDeprecations": "6.0",
     "paths": {
       "@durion-sdk/*": [
         "packages/sdk-*/src/index.ts"
