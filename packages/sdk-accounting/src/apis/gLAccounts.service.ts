@@ -46,11 +46,11 @@ export class GLAccountsService extends BaseService {
     }
 
     /**
-     * Activate GL account
-     * Mark a GL account as active.
+     * Activate GL Account
+     * Activates a GL account for posting by setting its activation date to the start of the supplied effective date and clearing any deactivation date. Use this tool when re-enabling an inactive account or bringing a not-yet-active account into service; do not use deactivateGLAccount, which does the reverse. Preconditions: the GL account must exist; activation is idempotent and simply resets the effective dates. Required inputs: glAccountId (UUID) as a path parameter and effectiveDate (ISO date) in the body; the account becomes ACTIVE at start of day on that date. Emits an ACCOUNTING_GL_ACCOUNT_ACTIVATE event; no journal entries are created or altered. Returns 404 when no GL account exists for the supplied id. 
      * @endpoint post /v1/accounting/gl-accounts/{glAccountId}/activate
      * @param glAccountId GL account identifier
-     * @param gLAccountActivateRequest 
+     * @param gLAccountActivateRequest Effective date on which the account becomes active for posting.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -120,11 +120,11 @@ export class GLAccountsService extends BaseService {
     }
 
     /**
-     * Archive GL account
-     * Archive a GL account and remove it from active use.
+     * Archive GL Account
+     * Archives an inactive GL account as a soft delete, tagging it [ARCHIVED] while keeping the record and its posting history. Use this tool only after deactivateGLAccount has succeeded; do not use it on an ACTIVE account, which must be deactivated to zero balance first. Preconditions: the GL account must exist and its derived status must be INACTIVE. Required inputs: glAccountId (UUID) as a path parameter; the request body is optional and ignored. Emits an ACCOUNTING_GL_ACCOUNT_ARCHIVE event; the row is never physically deleted. Returns 404 when no GL account exists for the supplied id, and 400 when the account is not INACTIVE. 
      * @endpoint post /v1/accounting/gl-accounts/{glAccountId}/archive
      * @param glAccountId GL account identifier
-     * @param body 
+     * @param body Optional and ignored; send an empty object or omit the body entirely.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -191,10 +191,10 @@ export class GLAccountsService extends BaseService {
     }
 
     /**
-     * Create GL account
-     * Create a new GL account.
+     * Create GL Account
+     * Creates a GL account in the chart of accounts with a unique account code, classification and activation date. Use this tool when adding a new account to the chart; do not use updateGLAccount, which edits the mutable fields of an account that already exists. Preconditions: no account may already exist with the same accountCode; a parentAccountId, when supplied, must reference an existing account. Required inputs: accountCode (pattern #### or ####-###), accountName, accountType (ASSET, LIABILITY, EQUITY, REVENUE or EXPENSE) and activationDate; accountSubtype, description and parentAccountId are optional, and reconcilable defaults to false. Emits an ACCOUNTING_GL_ACCOUNT_CREATE event; the account code and type are immutable after creation. Returns 409 when the account code already exists, and 400 when the parent account cannot be resolved. 
      * @endpoint post /v1/accounting/gl-accounts
-     * @param gLAccountCreateRequest 
+     * @param gLAccountCreateRequest GL account definition to add to the chart of accounts.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -261,11 +261,11 @@ export class GLAccountsService extends BaseService {
     }
 
     /**
-     * Deactivate GL account
-     * Mark a GL account as inactive.
+     * Deactivate GL Account
+     * Deactivates a GL account by stamping its deactivation date now, preventing future postings to it. Use this tool when retiring an account from active use; do not use archiveGLAccount, which additionally flags an already-INACTIVE account as archived, and do not use it while the account still carries a balance. Preconditions: the GL account must exist and its posted balance must be exactly zero. Required inputs: glAccountId (UUID) as a path parameter; the request body is optional and ignored. Emits an ACCOUNTING_GL_ACCOUNT_DEACTIVATE event; historical journal entries remain intact. Returns 404 when no GL account exists for the supplied id, and 400 when the account balance is not zero. 
      * @endpoint post /v1/accounting/gl-accounts/{glAccountId}/deactivate
      * @param glAccountId GL account identifier
-     * @param body 
+     * @param body Optional and ignored; send an empty object or omit the body entirely.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -332,68 +332,8 @@ export class GLAccountsService extends BaseService {
     }
 
     /**
-     * Get GL account balance
-     * Retrieve the current balance for a GL account.
-     * @endpoint get /v1/accounting/gl-accounts/{glAccountId}/balance
-     * @param glAccountId GL account identifier
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     * @param options additional options
-     */
-    public getAccountBalance(glAccountId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<GLAccountBalanceResponse>;
-    public getAccountBalance(glAccountId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<GLAccountBalanceResponse>>;
-    public getAccountBalance(glAccountId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<GLAccountBalanceResponse>>;
-    public getAccountBalance(glAccountId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
-        if (glAccountId === null || glAccountId === undefined) {
-            throw new Error('Required parameter glAccountId was null or undefined when calling getAccountBalance.');
-        }
-
-        let localVarHeaders = this.defaultHeaders;
-
-        // authentication (bearerAuth) required
-        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
-
-        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
-            'application/json'
-        ]);
-        if (localVarHttpHeaderAcceptSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
-        }
-
-        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
-
-        const localVarTransferCache: boolean = options?.transferCache ?? true;
-
-
-        let responseType_: 'text' | 'json' | 'blob' = 'json';
-        if (localVarHttpHeaderAcceptSelected) {
-            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
-                responseType_ = 'text';
-            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
-                responseType_ = 'json';
-            } else {
-                responseType_ = 'blob';
-            }
-        }
-
-        let localVarPath = `/v1/accounting/gl-accounts/${this.configuration.encodeParam({name: "glAccountId", value: glAccountId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/balance`;
-        const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<GLAccountBalanceResponse>('get', `${basePath}${localVarPath}`,
-            {
-                context: localVarHttpContext,
-                responseType: <any>responseType_,
-                ...(withCredentials ? { withCredentials } : {}),
-                headers: localVarHeaders,
-                observe: observe,
-                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * Get GL account
-     * Retrieve a GL account by identifier.
+     * Get GL Account
+     * Returns one GL account with its code, name, type, subtype, reconcilable flag and derived lifecycle status. Use this tool when the GL account id is already known; use listGLAccounts instead when searching by code, name or status. Preconditions: the GL account must exist. Required inputs: glAccountId (UUID) as a path parameter; there is no request body. No events are emitted and no state changes; this is a read-only projection. Returns 404 when no GL account exists for the supplied id. 
      * @endpoint get /v1/accounting/gl-accounts/{glAccountId}
      * @param glAccountId GL account identifier
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -452,8 +392,68 @@ export class GLAccountsService extends BaseService {
     }
 
     /**
-     * List GL accounts
-     * Retrieve paginated GL accounts filtered by status and sorted by a field.
+     * Get GL Account Balance
+     * Returns the current posted balance of one GL account, computed from its journal entry lines. Use this tool for a single account\&#39;s balance; use the trial balance report in financial reporting instead when balances for the whole chart are needed. Preconditions: the GL account must exist; an account with no postings reports a zero balance. Required inputs: glAccountId (UUID) as a path parameter; there is no request body. No events are emitted and no state changes; this is a read-only projection. Returns 404 when no GL account exists for the supplied id. 
+     * @endpoint get /v1/accounting/gl-accounts/{glAccountId}/balance
+     * @param glAccountId GL account identifier
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public getGLAccountBalance(glAccountId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<GLAccountBalanceResponse>;
+    public getGLAccountBalance(glAccountId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<GLAccountBalanceResponse>>;
+    public getGLAccountBalance(glAccountId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<GLAccountBalanceResponse>>;
+    public getGLAccountBalance(glAccountId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (glAccountId === null || glAccountId === undefined) {
+            throw new Error('Required parameter glAccountId was null or undefined when calling getGLAccountBalance.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/accounting/gl-accounts/${this.configuration.encodeParam({name: "glAccountId", value: glAccountId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/balance`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<GLAccountBalanceResponse>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * List GL Accounts
+     * Lists the chart of accounts as a paginated projection, optionally filtered by derived lifecycle status and sorted by a named field. Use this tool when browsing or searching the chart of accounts; do not use getGLAccount, which retrieves one account by its known id. Preconditions: none beyond the caller holding accounting:coa:view; an empty chart returns an empty page rather than an error. Required inputs: none; page defaults to 0, size to 20, sort to accountCode ascending (format \&#39;field,direction\&#39;), and status optionally filters by ACTIVE, INACTIVE or NOT_YET_ACTIVE. Emits an ACCOUNTING_GL_ACCOUNT_LIST audit event; no accounting state changes. Returns 400 when the sort property is not one of the supported fields. 
      * @endpoint get /v1/accounting/gl-accounts
      * @param sort Sort field with optional direction, e.g. \&#39;modifiedAt,desc\&#39;. Supported fields: accountCode, accountName, accountType, description, activationDate, deactivationDate, createdAt, modifiedAt, updatedAt, glAccountId. Direction defaults to asc.
      * @param page Page index (0-based)
@@ -554,11 +554,11 @@ export class GLAccountsService extends BaseService {
     }
 
     /**
-     * Update GL account
-     * Update details for an existing GL account.
+     * Update GL Account
+     * Updates the mutable descriptive fields of an existing GL account: name, description, subtype and the reconcilable flag. Use this tool when correcting or enriching an account\&#39;s metadata; do not use createGLAccount, which adds a new account, and note that accountCode and accountType are immutable and cannot be changed by any operation. Preconditions: the GL account must exist. Required inputs: glAccountId (UUID) as a path parameter; all body fields are optional and only supplied fields are changed (accountName max 100 chars, description max 500). Emits an ACCOUNTING_GL_ACCOUNT_UPDATE event; posted journal entries referencing the account are unaffected. Returns 404 when no GL account exists for the supplied id. 
      * @endpoint put /v1/accounting/gl-accounts/{glAccountId}
      * @param glAccountId GL account identifier
-     * @param gLAccountUpdateRequest 
+     * @param gLAccountUpdateRequest Mutable GL account fields to change; omitted fields keep their current values.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options

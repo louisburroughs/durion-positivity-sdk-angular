@@ -14,14 +14,6 @@
  */
 export interface LinkUserToPersonRequest { 
     /**
-     * Username of the security user account
-     */
-    username: string;
-    /**
-     * Person identifier
-     */
-    personId: string;
-    /**
      * Type of link between user and person
      */
     linkType?: string;
@@ -29,6 +21,14 @@ export interface LinkUserToPersonRequest {
      * Optional notes describing the link
      */
     notes?: string;
+    /**
+     * Person identifier
+     */
+    personId: string;
+    /**
+     * Username of the security user account
+     */
+    username: string;
 }
 
 function isOptionalLinkUserToPersonRequestPropertyOfType(
@@ -69,8 +69,8 @@ export function instanceOfLinkUserToPersonRequest(value: object): value is LinkU
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createLinkUserToPersonRequestPropertyNames('username', 'personId', );
-    const optionalStringProperties = createLinkUserToPersonRequestOptionalProperties({ name: 'username', nullable: false }, { name: 'personId', nullable: false }, { name: 'linkType', nullable: false }, { name: 'notes', nullable: false }, );
+    const requiredProperties = createLinkUserToPersonRequestPropertyNames('personId', 'username', );
+    const optionalStringProperties = createLinkUserToPersonRequestOptionalProperties({ name: 'linkType', nullable: false }, { name: 'notes', nullable: false }, { name: 'personId', nullable: false }, { name: 'username', nullable: false }, );
     const optionalNumberProperties = createLinkUserToPersonRequestOptionalProperties();
     const optionalBooleanProperties = createLinkUserToPersonRequestOptionalProperties();
 

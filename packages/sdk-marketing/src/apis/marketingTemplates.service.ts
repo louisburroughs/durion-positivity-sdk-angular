@@ -17,6 +17,8 @@ import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
 // @ts-ignore
+import { ApiError } from '../src/models/apiError';
+// @ts-ignore
 import { MessageTemplateResponse } from '../src/models/messageTemplateResponse';
 // @ts-ignore
 import { UpsertMessageTemplateRequest } from '../src/models/upsertMessageTemplateRequest';
@@ -38,79 +40,20 @@ export class MarketingTemplatesService extends BaseService {
     }
 
     /**
-     * Delete template
-     * Delete a template that no campaign is using
-     * @endpoint delete /v1/marketing/templates/{templateId}
-     * @param templateId 
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     * @param options additional options
-     */
-    public _delete(templateId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public _delete(templateId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public _delete(templateId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public _delete(templateId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
-        if (templateId === null || templateId === undefined) {
-            throw new Error('Required parameter templateId was null or undefined when calling _delete.');
-        }
-
-        let localVarHeaders = this.defaultHeaders;
-
-        // authentication (bearerAuth) required
-        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
-
-        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
-        ]);
-        if (localVarHttpHeaderAcceptSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
-        }
-
-        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
-
-        const localVarTransferCache: boolean = options?.transferCache ?? true;
-
-
-        let responseType_: 'text' | 'json' | 'blob' = 'json';
-        if (localVarHttpHeaderAcceptSelected) {
-            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
-                responseType_ = 'text';
-            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
-                responseType_ = 'json';
-            } else {
-                responseType_ = 'blob';
-            }
-        }
-
-        let localVarPath = `/v1/marketing/templates/${this.configuration.encodeParam({name: "templateId", value: templateId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
-        const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<any>('delete', `${basePath}${localVarPath}`,
-            {
-                context: localVarHttpContext,
-                responseType: <any>responseType_,
-                ...(withCredentials ? { withCredentials } : {}),
-                headers: localVarHeaders,
-                observe: observe,
-                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * Create template
-     * Create a template. Unknown tokens and tokens outside the audience\&#39;s vocabulary are rejected.
+     * Create Message Template
+     * Creates a channel-specific message template whose {{token}} placeholders are validated against the closed vocabulary for its audience at save time, so a typo costs a validation error rather than a batch of broken messages. Use this tool when authoring a new template; do not use updateMessageTemplate, which revises an existing template and cannot change its channel or audienceType. Preconditions: no template may already use the same name (compared case-insensitively); commercial-only tokens such as accountName are rejected for INDIVIDUAL audiences and vehicle tokens for COMMERCIAL ones. Required inputs: name, channel (EMAIL or SMS), audienceType (COMMERCIAL or INDIVIDUAL) and body; subject is required for EMAIL, and for SMS it must be absent and any supplied value is discarded. Emits a MARKETING_TEMPLATE_CREATE event; no campaign is affected until the template is attached to one. Returns 409 when the name is already in use, and 422 when a token is unknown or outside the audience\&#39;s vocabulary, an email template lacks a subject, an SMS template has one, or an SMS body exceeds 320 characters. 
      * @endpoint post /v1/marketing/templates
-     * @param upsertMessageTemplateRequest 
+     * @param upsertMessageTemplateRequest Template to create: name, channel, audience, subject (EMAIL only) and a body whose {{token}} placeholders must belong to the audience\&#39;s vocabulary.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public create(upsertMessageTemplateRequest: UpsertMessageTemplateRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<MessageTemplateResponse>;
-    public create(upsertMessageTemplateRequest: UpsertMessageTemplateRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<MessageTemplateResponse>>;
-    public create(upsertMessageTemplateRequest: UpsertMessageTemplateRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<MessageTemplateResponse>>;
-    public create(upsertMessageTemplateRequest: UpsertMessageTemplateRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public createMessageTemplate(upsertMessageTemplateRequest: UpsertMessageTemplateRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<MessageTemplateResponse>;
+    public createMessageTemplate(upsertMessageTemplateRequest: UpsertMessageTemplateRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<MessageTemplateResponse>>;
+    public createMessageTemplate(upsertMessageTemplateRequest: UpsertMessageTemplateRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<MessageTemplateResponse>>;
+    public createMessageTemplate(upsertMessageTemplateRequest: UpsertMessageTemplateRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (upsertMessageTemplateRequest === null || upsertMessageTemplateRequest === undefined) {
-            throw new Error('Required parameter upsertMessageTemplateRequest was null or undefined when calling create.');
+            throw new Error('Required parameter upsertMessageTemplateRequest was null or undefined when calling createMessageTemplate.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -167,20 +110,80 @@ export class MarketingTemplatesService extends BaseService {
     }
 
     /**
-     * Get template
-     * Retrieve a template and its available tokens
+     * Delete Unused Message Template
+     * Permanently deletes a message template that no campaign references. Use this tool to retire an unused template; detach it from every campaign first via updateCampaign rather than expecting the delete to cascade. Preconditions: the template must exist and must not be referenced as the email or SMS template of any campaign, because a campaign whose template vanished would fail at dispatch across its whole audience. Required inputs: templateId (UUID) as a path parameter; there is no request body and no confirmation flag. Emits a MARKETING_TEMPLATE_DELETE event; the deletion is irreversible. Returns 404 when the template does not exist, and 422 when it is still attached to at least one campaign. 
+     * @endpoint delete /v1/marketing/templates/{templateId}
+     * @param templateId 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public deleteMessageTemplate(templateId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any>;
+    public deleteMessageTemplate(templateId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
+    public deleteMessageTemplate(templateId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
+    public deleteMessageTemplate(templateId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (templateId === null || templateId === undefined) {
+            throw new Error('Required parameter templateId was null or undefined when calling deleteMessageTemplate.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/marketing/templates/${this.configuration.encodeParam({name: "templateId", value: templateId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<any>('delete', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Get Message Template By Id
+     * Returns one message template with its name, channel, audience type, subject, body, and the substitution tokens available to its audience. Use this tool when the template id is already known; use listMessageTemplates instead when searching by channel or audience. Preconditions: the template must exist. Required inputs: templateId (UUID) as a path parameter; there is no request body. Emits a MARKETING_TEMPLATE_GET audit event; no marketing state is changed and this is a read-only projection. Returns 404 when no template exists for the supplied id. 
      * @endpoint get /v1/marketing/templates/{templateId}
      * @param templateId 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public get(templateId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<MessageTemplateResponse>;
-    public get(templateId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<MessageTemplateResponse>>;
-    public get(templateId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<MessageTemplateResponse>>;
-    public get(templateId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getMessageTemplateById(templateId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<MessageTemplateResponse>;
+    public getMessageTemplateById(templateId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<MessageTemplateResponse>>;
+    public getMessageTemplateById(templateId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<MessageTemplateResponse>>;
+    public getMessageTemplateById(templateId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (templateId === null || templateId === undefined) {
-            throw new Error('Required parameter templateId was null or undefined when calling get.');
+            throw new Error('Required parameter templateId was null or undefined when calling getMessageTemplateById.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -227,8 +230,8 @@ export class MarketingTemplatesService extends BaseService {
     }
 
     /**
-     * List templates
-     * List templates, optionally filtered by channel and audience
+     * List Message Templates
+     * Lists message templates ordered by name, optionally filtered by delivery channel and audience type. Use this tool when browsing templates or finding one to attach to a campaign; do not use getMessageTemplateById, which requires a known template id and returns exactly one template. Preconditions: none; an empty result simply means no template matches the filters. Required inputs: none; channel (EMAIL or SMS) and audienceType (COMMERCIAL or INDIVIDUAL) are optional query filters that combine when both are supplied. Emits a MARKETING_TEMPLATE_LIST audit event; no marketing state is changed. Returns 200 with an empty array when nothing matches, so an empty result is not an error condition. 
      * @endpoint get /v1/marketing/templates
      * @param channel 
      * @param audienceType 
@@ -236,10 +239,10 @@ export class MarketingTemplatesService extends BaseService {
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public list(channel?: 'EMAIL' | 'SMS', audienceType?: 'COMMERCIAL' | 'INDIVIDUAL', observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<MessageTemplateResponse>>;
-    public list(channel?: 'EMAIL' | 'SMS', audienceType?: 'COMMERCIAL' | 'INDIVIDUAL', observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<MessageTemplateResponse>>>;
-    public list(channel?: 'EMAIL' | 'SMS', audienceType?: 'COMMERCIAL' | 'INDIVIDUAL', observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<MessageTemplateResponse>>>;
-    public list(channel?: 'EMAIL' | 'SMS', audienceType?: 'COMMERCIAL' | 'INDIVIDUAL', observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public listMessageTemplates(channel?: 'EMAIL' | 'SMS', audienceType?: 'COMMERCIAL' | 'INDIVIDUAL', observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<MessageTemplateResponse>>;
+    public listMessageTemplates(channel?: 'EMAIL' | 'SMS', audienceType?: 'COMMERCIAL' | 'INDIVIDUAL', observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<MessageTemplateResponse>>>;
+    public listMessageTemplates(channel?: 'EMAIL' | 'SMS', audienceType?: 'COMMERCIAL' | 'INDIVIDUAL', observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<MessageTemplateResponse>>>;
+    public listMessageTemplates(channel?: 'EMAIL' | 'SMS', audienceType?: 'COMMERCIAL' | 'INDIVIDUAL', observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
 
@@ -306,24 +309,24 @@ export class MarketingTemplatesService extends BaseService {
     }
 
     /**
-     * Update template
-     * Update a template\&#39;s name, subject, or body
+     * Update Message Template
+     * Updates a template\&#39;s name, subject and body, re-validating every {{token}} against the audience\&#39;s vocabulary. Use this tool to revise wording; do not use createMessageTemplate for a different channel or audience, because channel and audienceType are immutable and changing either requires a new template. Preconditions: the template must exist, the channel and audienceType in the body must equal the stored values, and no other template may hold the new name. Required inputs: templateId (UUID) path parameter plus the full body (name, channel, audienceType, body); subject is required for EMAIL and discarded for SMS. Emits a MARKETING_TEMPLATE_UPDATE event; campaigns already bound to the template pick up the new wording at their next dispatch. Returns 404 when the template does not exist, 409 when the name belongs to another template, and 422 when channel or audienceType is changed or the token, subject or SMS length rules fail. 
      * @endpoint put /v1/marketing/templates/{templateId}
      * @param templateId 
-     * @param upsertMessageTemplateRequest 
+     * @param upsertMessageTemplateRequest Full replacement template; channel and audienceType must match the stored values because both are immutable.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public update(templateId: string, upsertMessageTemplateRequest: UpsertMessageTemplateRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<MessageTemplateResponse>;
-    public update(templateId: string, upsertMessageTemplateRequest: UpsertMessageTemplateRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<MessageTemplateResponse>>;
-    public update(templateId: string, upsertMessageTemplateRequest: UpsertMessageTemplateRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<MessageTemplateResponse>>;
-    public update(templateId: string, upsertMessageTemplateRequest: UpsertMessageTemplateRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public updateMessageTemplate(templateId: string, upsertMessageTemplateRequest: UpsertMessageTemplateRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<MessageTemplateResponse>;
+    public updateMessageTemplate(templateId: string, upsertMessageTemplateRequest: UpsertMessageTemplateRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<MessageTemplateResponse>>;
+    public updateMessageTemplate(templateId: string, upsertMessageTemplateRequest: UpsertMessageTemplateRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<MessageTemplateResponse>>;
+    public updateMessageTemplate(templateId: string, upsertMessageTemplateRequest: UpsertMessageTemplateRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (templateId === null || templateId === undefined) {
-            throw new Error('Required parameter templateId was null or undefined when calling update.');
+            throw new Error('Required parameter templateId was null or undefined when calling updateMessageTemplate.');
         }
         if (upsertMessageTemplateRequest === null || upsertMessageTemplateRequest === undefined) {
-            throw new Error('Required parameter upsertMessageTemplateRequest was null or undefined when calling update.');
+            throw new Error('Required parameter upsertMessageTemplateRequest was null or undefined when calling updateMessageTemplate.');
         }
 
         let localVarHeaders = this.defaultHeaders;

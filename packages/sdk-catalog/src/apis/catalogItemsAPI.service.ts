@@ -38,24 +38,24 @@ export class CatalogItemsAPIService extends BaseService {
     }
 
     /**
-     * Add a new catalog item
-     * Adds a new product, service, or non-inventory product to the catalog.
+     * Add a New Catalog Item
+     * Creates a catalog item of the given type: a product, a service, or a non-inventory product. Use this tool for quick item entry across the three item types; do not use createProduct, which is the richer product-master path that enforces SKU and manufacturer-part uniqueness — this endpoint performs no duplicate checks. Preconditions: none; for type service and noninventory only name, shortDescription and longDescription are persisted, while type product also stores manufacturer, SKU, productCode, material, color, warranty and specifications fields. Required inputs: type path parameter, one of product, service or noninventory (case-insensitive), plus a body with at least name. Emits a CATALOG_ITEM_CREATE event; no catalog groupings are touched. Returns 400 when the type path parameter is not one of the three supported values. 
      * @endpoint post /v1/catalog-items/{type}
      * @param type Type of catalog item (product, service, noninventory)
-     * @param catalogItemRequestDto 
+     * @param catalogItemRequestDto Item to create; only name, shortDescription and longDescription are stored for services and non-inventory products, products store the full field set.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public addCatalogItem(type: string, catalogItemRequestDto: CatalogItemRequestDto, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<CatalogItemResponseDto>;
-    public addCatalogItem(type: string, catalogItemRequestDto: CatalogItemRequestDto, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<CatalogItemResponseDto>>;
-    public addCatalogItem(type: string, catalogItemRequestDto: CatalogItemRequestDto, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<CatalogItemResponseDto>>;
-    public addCatalogItem(type: string, catalogItemRequestDto: CatalogItemRequestDto, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public createCatalogItem(type: string, catalogItemRequestDto: CatalogItemRequestDto, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<CatalogItemResponseDto>;
+    public createCatalogItem(type: string, catalogItemRequestDto: CatalogItemRequestDto, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<CatalogItemResponseDto>>;
+    public createCatalogItem(type: string, catalogItemRequestDto: CatalogItemRequestDto, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<CatalogItemResponseDto>>;
+    public createCatalogItem(type: string, catalogItemRequestDto: CatalogItemRequestDto, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (type === null || type === undefined) {
-            throw new Error('Required parameter type was null or undefined when calling addCatalogItem.');
+            throw new Error('Required parameter type was null or undefined when calling createCatalogItem.');
         }
         if (catalogItemRequestDto === null || catalogItemRequestDto === undefined) {
-            throw new Error('Required parameter catalogItemRequestDto was null or undefined when calling addCatalogItem.');
+            throw new Error('Required parameter catalogItemRequestDto was null or undefined when calling createCatalogItem.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -112,8 +112,8 @@ export class CatalogItemsAPIService extends BaseService {
     }
 
     /**
-     * Delete a catalog item
-     * Deletes a product, service, or non-inventory product from the catalog by its ID.
+     * Delete a Catalog Item
+     * Permanently deletes a product, service or non-inventory product row by id; this is a hard delete with no archive state. Use this tool to remove an item outright; use updateProductLifecycle instead when a product should stop selling but keep its history, and use deleteCatalog to remove a grouping rather than its items. Preconditions: an item of the given type must exist under the supplied id. Required inputs: type (product, service or noninventory, case-insensitive) and catalogId (UUID) as path parameters; there is no request body. Emits a CATALOG_ITEM_DELETE event; catalogs that referenced the item are not rewritten by this call. Returns 204 when the item is removed, 404 when no item of that type exists for the supplied id, and 400 when the type is not one of the three supported values. 
      * @endpoint delete /v1/catalog-items/{type}/{catalogId}
      * @param type Type of catalog item (product, service, noninventory)
      * @param catalogId ID of the catalog item to delete
@@ -175,12 +175,12 @@ export class CatalogItemsAPIService extends BaseService {
     }
 
     /**
-     * Update an existing catalog item
-     * Updates an existing product, service, or non-inventory product in the catalog.
+     * Update an Existing Catalog Item
+     * Replaces a catalog item of the given type with the supplied state; fields omitted from the body are overwritten with null, so this is a full replacement, not a patch. Use this tool to edit an item created through createCatalogItem; do not use updateProduct, which is the product-master path that protects SKU immutability — this endpoint applies no such guard. Preconditions: an item of the given type must exist under the supplied id; the type determines which repository is consulted, so a product id passed with type service resolves to 404. Required inputs: type (product, service or noninventory, case-insensitive), catalogId (UUID) and the complete replacement body. Emits a CATALOG_ITEM_UPDATE event; no catalog groupings are touched. Returns 404 when no item of that type exists for the supplied id, and 400 when the type is not one of the three supported values. 
      * @endpoint put /v1/catalog-items/{type}/{catalogId}
      * @param type Type of catalog item (product, service, noninventory)
      * @param catalogId ID of the catalog item to update
-     * @param catalogItemRequestDto 
+     * @param catalogItemRequestDto Complete replacement state for the item; omitted fields are cleared because the update overwrites the whole row.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options

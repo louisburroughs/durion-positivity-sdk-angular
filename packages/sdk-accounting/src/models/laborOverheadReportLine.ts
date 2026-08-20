@@ -18,18 +18,6 @@ export interface LaborOverheadReportLine {
      */
     code: string;
     /**
-     * Display label
-     */
-    label: string;
-    /**
-     * Parent line code, if any
-     */
-    parentCode?: string;
-    /**
-     * Hierarchy depth (totals = 1, N.M = 2, N.M.K = 3)
-     */
-    level: number;
-    /**
      * Fixed/Variable classification; absent when the source shows none
      */
     costType?: LaborOverheadReportLineCostTypeEnum;
@@ -38,22 +26,34 @@ export interface LaborOverheadReportLine {
      */
     definition?: string;
     /**
-     * 12 monthly amounts in canonical order (index 0 = January)
-     */
-    monthly: Array<number>;
-    /**
-     * Year-to-date total over elapsed months
-     */
-    ytd: number;
-    subtotal?: boolean;
-    /**
      * True for computed roll-up rows; false for GL-mapped leaf lines
      */
     isSubtotal: boolean;
     /**
+     * Display label
+     */
+    label: string;
+    /**
+     * Hierarchy depth (totals = 1, N.M = 2, N.M.K = 3)
+     */
+    level: number;
+    /**
+     * 12 monthly amounts in canonical order (index 0 = January)
+     */
+    monthly: Array<number>;
+    /**
+     * Parent line code, if any
+     */
+    parentCode?: string;
+    subtotal?: boolean;
+    /**
      * True for line 2.11.4, which is reported in USD even on local-currency plants
      */
     usdOnly: boolean;
+    /**
+     * Year-to-date total over elapsed months
+     */
+    ytd: number;
 }
 export enum LaborOverheadReportLineCostTypeEnum {
     Fixed = 'FIXED',
@@ -101,10 +101,10 @@ export function instanceOfLaborOverheadReportLine(value: object): value is Labor
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createLaborOverheadReportLinePropertyNames('code', 'label', 'level', 'monthly', 'ytd', 'isSubtotal', 'usdOnly', );
-    const optionalStringProperties = createLaborOverheadReportLineOptionalProperties({ name: 'code', nullable: false }, { name: 'label', nullable: false }, { name: 'parentCode', nullable: false }, { name: 'costType', nullable: false }, { name: 'definition', nullable: false }, );
+    const requiredProperties = createLaborOverheadReportLinePropertyNames('code', 'isSubtotal', 'label', 'level', 'monthly', 'usdOnly', 'ytd', );
+    const optionalStringProperties = createLaborOverheadReportLineOptionalProperties({ name: 'code', nullable: false }, { name: 'costType', nullable: false }, { name: 'definition', nullable: false }, { name: 'label', nullable: false }, { name: 'parentCode', nullable: false }, );
     const optionalNumberProperties = createLaborOverheadReportLineOptionalProperties({ name: 'level', nullable: false }, { name: 'ytd', nullable: false }, );
-    const optionalBooleanProperties = createLaborOverheadReportLineOptionalProperties({ name: 'subtotal', nullable: false }, { name: 'isSubtotal', nullable: false }, { name: 'usdOnly', nullable: false }, );
+    const optionalBooleanProperties = createLaborOverheadReportLineOptionalProperties({ name: 'isSubtotal', nullable: false }, { name: 'subtotal', nullable: false }, { name: 'usdOnly', nullable: false }, );
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
         && optionalStringProperties.every((property) => isOptionalLaborOverheadReportLinePropertyOfType(_v, property.name, 'string', property.nullable))

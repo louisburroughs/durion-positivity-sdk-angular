@@ -14,21 +14,21 @@
  */
 export interface LocationPriceOverrideDecisionRequestDto { 
     /**
-     * Expected version for optimistic locking
-     */
-    version: number;
-    /**
      * Identifier of the user making the decision
      */
     actorUserId: string;
+    /**
+     * Free-text notes when rejecting the override
+     */
+    rejectionNotes?: string;
     /**
      * Reason code when rejecting the override
      */
     rejectionReasonCode?: string;
     /**
-     * Free-text notes when rejecting the override
+     * Expected version for optimistic locking
      */
-    rejectionNotes?: string;
+    version: number;
 }
 
 function isOptionalLocationPriceOverrideDecisionRequestDtoPropertyOfType(
@@ -69,8 +69,8 @@ export function instanceOfLocationPriceOverrideDecisionRequestDto(value: object)
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createLocationPriceOverrideDecisionRequestDtoPropertyNames('version', 'actorUserId', );
-    const optionalStringProperties = createLocationPriceOverrideDecisionRequestDtoOptionalProperties({ name: 'actorUserId', nullable: false }, { name: 'rejectionReasonCode', nullable: false }, { name: 'rejectionNotes', nullable: false }, );
+    const requiredProperties = createLocationPriceOverrideDecisionRequestDtoPropertyNames('actorUserId', 'version', );
+    const optionalStringProperties = createLocationPriceOverrideDecisionRequestDtoOptionalProperties({ name: 'actorUserId', nullable: false }, { name: 'rejectionNotes', nullable: false }, { name: 'rejectionReasonCode', nullable: false }, );
     const optionalNumberProperties = createLocationPriceOverrideDecisionRequestDtoOptionalProperties({ name: 'version', nullable: false }, );
     const optionalBooleanProperties = createLocationPriceOverrideDecisionRequestDtoOptionalProperties();
 

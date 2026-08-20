@@ -14,21 +14,21 @@
  */
 export interface CreateRevaluationRequest { 
     /**
-     * SKU / stock item identifier to revalue
+     * Signed adjustment applied to the SKU\'s current cost (may be negative for a write-down). Supply exactly one of newUnitCost or costDelta
      */
-    stockItemId: string;
+    costDelta?: number;
     /**
      * Absolute corrected unit cost. Supply exactly one of newUnitCost or costDelta. Must be zero or positive
      */
     newUnitCost?: number;
     /**
-     * Signed adjustment applied to the SKU\'s current cost (may be negative for a write-down). Supply exactly one of newUnitCost or costDelta
-     */
-    costDelta?: number;
-    /**
      * Justification for the correction; recorded in the audit log
      */
     reason: string;
+    /**
+     * SKU / stock item identifier to revalue
+     */
+    stockItemId: string;
 }
 
 function isOptionalCreateRevaluationRequestPropertyOfType(
@@ -69,9 +69,9 @@ export function instanceOfCreateRevaluationRequest(value: object): value is Crea
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createCreateRevaluationRequestPropertyNames('stockItemId', 'reason', );
-    const optionalStringProperties = createCreateRevaluationRequestOptionalProperties({ name: 'stockItemId', nullable: false }, { name: 'reason', nullable: false }, );
-    const optionalNumberProperties = createCreateRevaluationRequestOptionalProperties({ name: 'newUnitCost', nullable: false }, { name: 'costDelta', nullable: false }, );
+    const requiredProperties = createCreateRevaluationRequestPropertyNames('reason', 'stockItemId', );
+    const optionalStringProperties = createCreateRevaluationRequestOptionalProperties({ name: 'reason', nullable: false }, { name: 'stockItemId', nullable: false }, );
+    const optionalNumberProperties = createCreateRevaluationRequestOptionalProperties({ name: 'costDelta', nullable: false }, { name: 'newUnitCost', nullable: false }, );
     const optionalBooleanProperties = createCreateRevaluationRequestOptionalProperties();
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

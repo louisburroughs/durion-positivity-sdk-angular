@@ -15,22 +15,6 @@ import { IndividualDetails } from './individualDetails';
  */
 export interface ContactWithRole { 
     /**
-     * Relationship ID
-     */
-    relationshipId: string;
-    /**
-     * Individual person ID
-     */
-    individualId: string;
-    /**
-     * Roles assigned to this contact
-     */
-    roles?: Set<ContactWithRoleRolesEnum>;
-    /**
-     * Status of the relationship
-     */
-    status: string;
-    /**
      * Effective start date
      */
     effectiveFrom?: string;
@@ -39,7 +23,23 @@ export interface ContactWithRole {
      */
     effectiveTo?: string;
     individual?: IndividualDetails;
+    /**
+     * Individual person ID
+     */
+    individualId: string;
     primaryBilling?: boolean;
+    /**
+     * Relationship ID
+     */
+    relationshipId: string;
+    /**
+     * Roles assigned to this contact
+     */
+    roles?: Set<ContactWithRoleRolesEnum>;
+    /**
+     * Status of the relationship
+     */
+    status: string;
 }
 export enum ContactWithRoleRolesEnum {
     Approver = 'APPROVER',
@@ -89,8 +89,8 @@ export function instanceOfContactWithRole(value: object): value is ContactWithRo
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createContactWithRolePropertyNames('relationshipId', 'individualId', 'status', );
-    const optionalStringProperties = createContactWithRoleOptionalProperties({ name: 'relationshipId', nullable: false }, { name: 'individualId', nullable: false }, { name: 'status', nullable: false }, { name: 'effectiveFrom', nullable: false }, { name: 'effectiveTo', nullable: false }, );
+    const requiredProperties = createContactWithRolePropertyNames('individualId', 'relationshipId', 'status', );
+    const optionalStringProperties = createContactWithRoleOptionalProperties({ name: 'effectiveFrom', nullable: false }, { name: 'effectiveTo', nullable: false }, { name: 'individualId', nullable: false }, { name: 'relationshipId', nullable: false }, { name: 'status', nullable: false }, );
     const optionalNumberProperties = createContactWithRoleOptionalProperties();
     const optionalBooleanProperties = createContactWithRoleOptionalProperties({ name: 'primaryBilling', nullable: false }, );
 

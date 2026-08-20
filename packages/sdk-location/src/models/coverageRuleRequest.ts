@@ -14,17 +14,21 @@
  */
 export interface CoverageRuleRequest { 
     /**
-     * Identifier of the service area this rule applies to
+     * Maximum service distance in kilometres covered by the rule
      */
-    serviceAreaId: string;
+    maxDistance?: number;
+    /**
+     * Evaluation priority of the rule (lower is evaluated first)
+     */
+    priority?: number;
     /**
      * Type of coverage rule
      */
     ruleType: string;
     /**
-     * Evaluation priority of the rule (lower is evaluated first)
+     * Identifier of the service area this rule applies to
      */
-    priority?: number;
+    serviceAreaId: string;
     /**
      * Date from which the rule is effective
      */
@@ -33,10 +37,6 @@ export interface CoverageRuleRequest {
      * Date until which the rule is effective
      */
     validTo?: string;
-    /**
-     * Maximum service distance in kilometres covered by the rule
-     */
-    maxDistance?: number;
 }
 
 function isOptionalCoverageRuleRequestPropertyOfType(
@@ -77,9 +77,9 @@ export function instanceOfCoverageRuleRequest(value: object): value is CoverageR
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createCoverageRuleRequestPropertyNames('serviceAreaId', 'ruleType', );
-    const optionalStringProperties = createCoverageRuleRequestOptionalProperties({ name: 'serviceAreaId', nullable: false }, { name: 'ruleType', nullable: false }, { name: 'validFrom', nullable: false }, { name: 'validTo', nullable: false }, );
-    const optionalNumberProperties = createCoverageRuleRequestOptionalProperties({ name: 'priority', nullable: false }, { name: 'maxDistance', nullable: false }, );
+    const requiredProperties = createCoverageRuleRequestPropertyNames('ruleType', 'serviceAreaId', );
+    const optionalStringProperties = createCoverageRuleRequestOptionalProperties({ name: 'ruleType', nullable: false }, { name: 'serviceAreaId', nullable: false }, { name: 'validFrom', nullable: false }, { name: 'validTo', nullable: false }, );
+    const optionalNumberProperties = createCoverageRuleRequestOptionalProperties({ name: 'maxDistance', nullable: false }, { name: 'priority', nullable: false }, );
     const optionalBooleanProperties = createCoverageRuleRequestOptionalProperties();
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

@@ -14,6 +14,18 @@
  */
 export interface ReplacementOption { 
     /**
+     * Replacement option effective instant
+     */
+    effectiveAt?: string;
+    /**
+     * Replacement notes
+     */
+    notes?: string;
+    /**
+     * Display priority order
+     */
+    priorityOrder?: number;
+    /**
      * Replacement option identifier
      */
     replacementId: string;
@@ -21,18 +33,6 @@ export interface ReplacementOption {
      * Replacement product identifier
      */
     replacementProductId: string;
-    /**
-     * Display priority order
-     */
-    priorityOrder?: number;
-    /**
-     * Replacement notes
-     */
-    notes?: string;
-    /**
-     * Replacement option effective instant
-     */
-    effectiveAt?: string;
 }
 
 function isOptionalReplacementOptionPropertyOfType(
@@ -74,7 +74,7 @@ export function instanceOfReplacementOption(value: object): value is Replacement
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createReplacementOptionPropertyNames('replacementId', 'replacementProductId', );
-    const optionalStringProperties = createReplacementOptionOptionalProperties({ name: 'replacementId', nullable: false }, { name: 'replacementProductId', nullable: false }, { name: 'notes', nullable: false }, { name: 'effectiveAt', nullable: false }, );
+    const optionalStringProperties = createReplacementOptionOptionalProperties({ name: 'effectiveAt', nullable: false }, { name: 'notes', nullable: false }, { name: 'replacementId', nullable: false }, { name: 'replacementProductId', nullable: false }, );
     const optionalNumberProperties = createReplacementOptionOptionalProperties({ name: 'priorityOrder', nullable: false }, );
     const optionalBooleanProperties = createReplacementOptionOptionalProperties();
 

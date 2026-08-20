@@ -14,13 +14,13 @@
  */
 export interface CreateTravelSegmentAdjustmentRequest { 
     /**
-     * Adjusted travel segment start timestamp
-     */
-    adjustedStartAt?: string;
-    /**
      * Adjusted travel segment end timestamp
      */
     adjustedEndAt?: string;
+    /**
+     * Adjusted travel segment start timestamp
+     */
+    adjustedStartAt?: string;
     /**
      * Reason justifying the travel segment time adjustment
      */
@@ -66,7 +66,7 @@ export function instanceOfCreateTravelSegmentAdjustmentRequest(value: object): v
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createCreateTravelSegmentAdjustmentRequestPropertyNames('adjustmentReason', );
-    const optionalStringProperties = createCreateTravelSegmentAdjustmentRequestOptionalProperties({ name: 'adjustedStartAt', nullable: false }, { name: 'adjustedEndAt', nullable: false }, { name: 'adjustmentReason', nullable: false }, );
+    const optionalStringProperties = createCreateTravelSegmentAdjustmentRequestOptionalProperties({ name: 'adjustedEndAt', nullable: false }, { name: 'adjustedStartAt', nullable: false }, { name: 'adjustmentReason', nullable: false }, );
     const optionalNumberProperties = createCreateTravelSegmentAdjustmentRequestOptionalProperties();
     const optionalBooleanProperties = createCreateTravelSegmentAdjustmentRequestOptionalProperties();
 

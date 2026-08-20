@@ -38,8 +38,8 @@ export class UserRoleManagementService extends BaseService {
     }
 
     /**
-     * Assign a role to a user
-     * Creates an effective role assignment linking the specified user to the specified role.
+     * Assign a Role to a User
+     * Creates a GLOBAL-scoped role assignment linking a user to a role, effective immediately with no end date. Use this tool for the common unscoped grant; do not use createRoleAssignment, which supports LOCATION scope and effective date windows, and do not use assignPrincipalRole, which targets the string-keyed RBAC principal matrix. Preconditions: the caller must hold security:role:assign and both the user and role must exist; no overlap check is performed here, so repeated calls create duplicate assignments. Required inputs: userId and roleId (UUIDs) as path parameters; there is no request body. Emits a SECURITY_USER_ROLE_ASSIGN event and writes a RoleAssignedToUser audit record. Returns 404 when the user or role does not exist. 
      * @endpoint put /v1/users/{userId}/roles/{roleId}
      * @param userId 
      * @param roleId 
@@ -47,15 +47,15 @@ export class UserRoleManagementService extends BaseService {
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public assignRoleToUser(userId: string, roleId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public assignRoleToUser(userId: string, roleId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public assignRoleToUser(userId: string, roleId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public assignRoleToUser(userId: string, roleId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public assignUserRole(userId: string, roleId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any>;
+    public assignUserRole(userId: string, roleId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
+    public assignUserRole(userId: string, roleId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
+    public assignUserRole(userId: string, roleId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (userId === null || userId === undefined) {
-            throw new Error('Required parameter userId was null or undefined when calling assignRoleToUser.');
+            throw new Error('Required parameter userId was null or undefined when calling assignUserRole.');
         }
         if (roleId === null || roleId === undefined) {
-            throw new Error('Required parameter roleId was null or undefined when calling assignRoleToUser.');
+            throw new Error('Required parameter roleId was null or undefined when calling assignUserRole.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -102,8 +102,8 @@ export class UserRoleManagementService extends BaseService {
     }
 
     /**
-     * Get user permissions
-     * Returns all effective permissions for a user
+     * Get a User\&#39;s Effective Permissions
+     * Returns the union of permissions granted through a user\&#39;s currently effective role assignments. Use this tool for a user\&#39;s flattened effective permission set; use listUserRoleAssignments instead to see the assignments and scopes behind it. Preconditions: the caller must hold security:permission:view and the user must exist. Required inputs: userId (UUID) as a path parameter. No events are emitted and no state changes; this is a read-only projection. Returns 404 when the user does not exist. 
      * @endpoint get /v1/users/{userId}/permissions
      * @param userId 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -162,8 +162,8 @@ export class UserRoleManagementService extends BaseService {
     }
 
     /**
-     * Revoke a role from a user
-     * Removes the effective assignment of the specified role from the specified user.
+     * Revoke a Role From a User
+     * Ends the first currently effective assignment of a role for a user by setting its end date to now, preserving the row for history. Use this tool for the common immediate revocation; do not use revokeRoleAssignment, which targets a specific assignment id and supports past or future end dates. Preconditions: the caller must hold security:role:assign, the user and role must exist, and at least one effective assignment must link them. Required inputs: userId and roleId (UUIDs) as path parameters; there is no request body. Emits a SECURITY_USER_ROLE_REVOKE event and writes a RoleRevokedFromUser audit record. Returns 404 when the user or role does not exist, or when no active assignment links them. 
      * @endpoint delete /v1/users/{userId}/roles/{roleId}
      * @param userId 
      * @param roleId 
@@ -171,15 +171,15 @@ export class UserRoleManagementService extends BaseService {
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public revokeRoleFromUser(userId: string, roleId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public revokeRoleFromUser(userId: string, roleId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public revokeRoleFromUser(userId: string, roleId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public revokeRoleFromUser(userId: string, roleId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public revokeUserRole(userId: string, roleId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any>;
+    public revokeUserRole(userId: string, roleId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
+    public revokeUserRole(userId: string, roleId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
+    public revokeUserRole(userId: string, roleId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (userId === null || userId === undefined) {
-            throw new Error('Required parameter userId was null or undefined when calling revokeRoleFromUser.');
+            throw new Error('Required parameter userId was null or undefined when calling revokeUserRole.');
         }
         if (roleId === null || roleId === undefined) {
-            throw new Error('Required parameter roleId was null or undefined when calling revokeRoleFromUser.');
+            throw new Error('Required parameter roleId was null or undefined when calling revokeUserRole.');
         }
 
         let localVarHeaders = this.defaultHeaders;

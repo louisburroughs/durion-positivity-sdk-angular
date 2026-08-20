@@ -14,37 +14,37 @@
  */
 export interface LeadTimeView { 
     /**
-     * Product identifier
+     * Timestamp when lead-time data was last refreshed
      */
-    productId: string;
-    /**
-     * Location identifier
-     */
-    locationId: string;
-    /**
-     * Source of lead-time data
-     */
-    source?: string;
-    /**
-     * Minimum lead-time in days
-     */
-    minDays?: number;
-    /**
-     * Maximum lead-time in days
-     */
-    maxDays?: number;
-    /**
-     * Human-readable lead-time text
-     */
-    displayText?: string;
+    asOf?: string;
     /**
      * Confidence level for this estimate
      */
     confidence?: string;
     /**
-     * Timestamp when lead-time data was last refreshed
+     * Human-readable lead-time text
      */
-    asOf?: string;
+    displayText?: string;
+    /**
+     * Location identifier
+     */
+    locationId: string;
+    /**
+     * Maximum lead-time in days
+     */
+    maxDays?: number;
+    /**
+     * Minimum lead-time in days
+     */
+    minDays?: number;
+    /**
+     * Product identifier
+     */
+    productId: string;
+    /**
+     * Source of lead-time data
+     */
+    source?: string;
 }
 
 function isOptionalLeadTimeViewPropertyOfType(
@@ -85,9 +85,9 @@ export function instanceOfLeadTimeView(value: object): value is LeadTimeView {
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createLeadTimeViewPropertyNames('productId', 'locationId', );
-    const optionalStringProperties = createLeadTimeViewOptionalProperties({ name: 'productId', nullable: false }, { name: 'locationId', nullable: false }, { name: 'source', nullable: false }, { name: 'displayText', nullable: false }, { name: 'confidence', nullable: false }, { name: 'asOf', nullable: false }, );
-    const optionalNumberProperties = createLeadTimeViewOptionalProperties({ name: 'minDays', nullable: false }, { name: 'maxDays', nullable: false }, );
+    const requiredProperties = createLeadTimeViewPropertyNames('locationId', 'productId', );
+    const optionalStringProperties = createLeadTimeViewOptionalProperties({ name: 'asOf', nullable: false }, { name: 'confidence', nullable: false }, { name: 'displayText', nullable: false }, { name: 'locationId', nullable: false }, { name: 'productId', nullable: false }, { name: 'source', nullable: false }, );
+    const optionalNumberProperties = createLeadTimeViewOptionalProperties({ name: 'maxDays', nullable: false }, { name: 'minDays', nullable: false }, );
     const optionalBooleanProperties = createLeadTimeViewOptionalProperties();
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

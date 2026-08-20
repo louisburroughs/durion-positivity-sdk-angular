@@ -14,37 +14,49 @@
  */
 export interface CustomerInteractionResponse { 
     /**
-     * Interaction identifier
+     * Actor that recorded the touch
      */
-    interactionId: string;
+    actor?: string;
     /**
-     * Party the touch belongs to
+     * Body text, redacted before it leaves the service
      */
-    partyId: string;
+    body?: string;
     /**
-     * Contact reached, when the touch targeted one
+     * Campaign code
      */
-    contactId?: string;
-    /**
-     * Kind of touch
-     */
-    type: CustomerInteractionResponseTypeEnum;
-    /**
-     * Channel used
-     */
-    channel?: CustomerInteractionResponseChannelEnum;
-    /**
-     * Who initiated the touch
-     */
-    direction: CustomerInteractionResponseDirectionEnum;
+    campaignCode?: string;
     /**
      * Campaign the touch belongs to
      */
     campaignId?: string;
     /**
-     * Campaign code
+     * Channel used
      */
-    campaignCode?: string;
+    channel?: CustomerInteractionResponseChannelEnum;
+    /**
+     * Contact reached, when the touch targeted one
+     */
+    contactId?: string;
+    /**
+     * Who initiated the touch
+     */
+    direction: CustomerInteractionResponseDirectionEnum;
+    /**
+     * Interaction identifier
+     */
+    interactionId: string;
+    /**
+     * When the touch occurred
+     */
+    occurredAt: string;
+    /**
+     * Party the touch belongs to
+     */
+    partyId: string;
+    /**
+     * Workorder the touch originated from
+     */
+    sourceWorkorderId?: string;
     /**
      * Short subject line
      */
@@ -54,22 +66,18 @@ export interface CustomerInteractionResponse {
      */
     summary?: string;
     /**
-     * Body text, redacted before it leaves the service
+     * Kind of touch
      */
-    body?: string;
-    /**
-     * Actor that recorded the touch
-     */
-    actor?: string;
-    /**
-     * Workorder the touch originated from
-     */
-    sourceWorkorderId?: string;
-    /**
-     * When the touch occurred
-     */
-    occurredAt: string;
+    type: CustomerInteractionResponseTypeEnum;
 }
+export enum CustomerInteractionResponseChannelEnum {
+    Email = 'EMAIL',
+    Sms = 'SMS'
+};
+export enum CustomerInteractionResponseDirectionEnum {
+    Outbound = 'OUTBOUND',
+    Inbound = 'INBOUND'
+};
 export enum CustomerInteractionResponseTypeEnum {
     CampaignSend = 'CAMPAIGN_SEND',
     Email = 'EMAIL',
@@ -78,14 +86,6 @@ export enum CustomerInteractionResponseTypeEnum {
     FollowUp = 'FOLLOW_UP',
     Note = 'NOTE',
     WorkorderNote = 'WORKORDER_NOTE'
-};
-export enum CustomerInteractionResponseChannelEnum {
-    Email = 'EMAIL',
-    Sms = 'SMS'
-};
-export enum CustomerInteractionResponseDirectionEnum {
-    Outbound = 'OUTBOUND',
-    Inbound = 'INBOUND'
 };
 
 
@@ -128,8 +128,8 @@ export function instanceOfCustomerInteractionResponse(value: object): value is C
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createCustomerInteractionResponsePropertyNames('interactionId', 'partyId', 'type', 'direction', 'occurredAt', );
-    const optionalStringProperties = createCustomerInteractionResponseOptionalProperties({ name: 'interactionId', nullable: false }, { name: 'partyId', nullable: false }, { name: 'contactId', nullable: false }, { name: 'type', nullable: false }, { name: 'channel', nullable: false }, { name: 'direction', nullable: false }, { name: 'campaignId', nullable: false }, { name: 'campaignCode', nullable: false }, { name: 'subject', nullable: false }, { name: 'summary', nullable: false }, { name: 'body', nullable: false }, { name: 'actor', nullable: false }, { name: 'sourceWorkorderId', nullable: false }, { name: 'occurredAt', nullable: false }, );
+    const requiredProperties = createCustomerInteractionResponsePropertyNames('direction', 'interactionId', 'occurredAt', 'partyId', 'type', );
+    const optionalStringProperties = createCustomerInteractionResponseOptionalProperties({ name: 'actor', nullable: false }, { name: 'body', nullable: false }, { name: 'campaignCode', nullable: false }, { name: 'campaignId', nullable: false }, { name: 'channel', nullable: false }, { name: 'contactId', nullable: false }, { name: 'direction', nullable: false }, { name: 'interactionId', nullable: false }, { name: 'occurredAt', nullable: false }, { name: 'partyId', nullable: false }, { name: 'sourceWorkorderId', nullable: false }, { name: 'subject', nullable: false }, { name: 'summary', nullable: false }, { name: 'type', nullable: false }, );
     const optionalNumberProperties = createCustomerInteractionResponseOptionalProperties();
     const optionalBooleanProperties = createCustomerInteractionResponseOptionalProperties();
 

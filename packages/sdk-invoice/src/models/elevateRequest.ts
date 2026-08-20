@@ -14,13 +14,13 @@
  */
 export interface ElevateRequest { 
     /**
-     * Employee number of the approving manager
-     */
-    managerEmployeeNumber: string;
-    /**
      * Invoice the elevation token will authorise
      */
     invoiceId: string;
+    /**
+     * Employee number of the approving manager
+     */
+    managerEmployeeNumber: string;
 }
 
 function isOptionalElevateRequestPropertyOfType(
@@ -61,8 +61,8 @@ export function instanceOfElevateRequest(value: object): value is ElevateRequest
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createElevateRequestPropertyNames('managerEmployeeNumber', 'invoiceId', );
-    const optionalStringProperties = createElevateRequestOptionalProperties({ name: 'managerEmployeeNumber', nullable: false }, { name: 'invoiceId', nullable: false }, );
+    const requiredProperties = createElevateRequestPropertyNames('invoiceId', 'managerEmployeeNumber', );
+    const optionalStringProperties = createElevateRequestOptionalProperties({ name: 'invoiceId', nullable: false }, { name: 'managerEmployeeNumber', nullable: false }, );
     const optionalNumberProperties = createElevateRequestOptionalProperties();
     const optionalBooleanProperties = createElevateRequestOptionalProperties();
 

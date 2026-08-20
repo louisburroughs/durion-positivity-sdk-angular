@@ -39,19 +39,19 @@ export class TaxExemptionCertificatesService extends BaseService {
 
     /**
      * Create an exemption certificate
-     * Register a new certificate
+     * Registers a tax exemption certificate for a customer so that later calculations can treat their line items as exempt. Use this tool when a customer supplies a new certificate; do not use it to correct an existing registration, which is updateExemptionCertificate. Preconditions: none are enforced against other services, so the customerId is accepted as an opaque identifier and is not verified against the customer registry. Required inputs: customerId, reasonCode (RESALE, GOVERNMENT, NONPROFIT, AGRICULTURAL or OTHER) and effectiveFrom; stateScope null means every state, expiresAt null means no expiry, and status defaults to ACTIVE. Emits a TAX_EXEMPTION_CERT_CREATE approval-preset audit event; no existing certificate is superseded, so overlapping certificates for the same customer can coexist. Returns 400 when customerId, reasonCode or effectiveFrom are missing or the reason code is not a recognised value. 
      * @endpoint post /v1/tax/exemption-certificates
-     * @param exemptionCertificateRequest 
+     * @param exemptionCertificateRequest Exemption certificate to register for a customer.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public create(exemptionCertificateRequest: ExemptionCertificateRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ExemptionCertificateResponse>;
-    public create(exemptionCertificateRequest: ExemptionCertificateRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ExemptionCertificateResponse>>;
-    public create(exemptionCertificateRequest: ExemptionCertificateRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ExemptionCertificateResponse>>;
-    public create(exemptionCertificateRequest: ExemptionCertificateRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public createExemptionCertificate(exemptionCertificateRequest: ExemptionCertificateRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ExemptionCertificateResponse>;
+    public createExemptionCertificate(exemptionCertificateRequest: ExemptionCertificateRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ExemptionCertificateResponse>>;
+    public createExemptionCertificate(exemptionCertificateRequest: ExemptionCertificateRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ExemptionCertificateResponse>>;
+    public createExemptionCertificate(exemptionCertificateRequest: ExemptionCertificateRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (exemptionCertificateRequest === null || exemptionCertificateRequest === undefined) {
-            throw new Error('Required parameter exemptionCertificateRequest was null or undefined when calling create.');
+            throw new Error('Required parameter exemptionCertificateRequest was null or undefined when calling createExemptionCertificate.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -109,19 +109,19 @@ export class TaxExemptionCertificatesService extends BaseService {
 
     /**
      * Get an exemption certificate
-     * Fetch a single certificate by id
+     * Returns a single tax exemption certificate, including its scope, reason code and validity window. Use this tool when the certificate id is already known; use listExemptionCertificates instead when searching by customer. Preconditions: the certificate must exist in the registry. Required inputs: id (UUID) path parameter; there is no request body and no filtering. No events are emitted and no state changes; this is a read-only registry projection. Returns 404 when no certificate exists for the supplied id. 
      * @endpoint get /v1/tax/exemption-certificates/{id}
      * @param id 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public get(id: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ExemptionCertificateResponse>;
-    public get(id: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ExemptionCertificateResponse>>;
-    public get(id: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ExemptionCertificateResponse>>;
-    public get(id: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getExemptionCertificateById(id: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ExemptionCertificateResponse>;
+    public getExemptionCertificateById(id: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ExemptionCertificateResponse>>;
+    public getExemptionCertificateById(id: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ExemptionCertificateResponse>>;
+    public getExemptionCertificateById(id: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (id === null || id === undefined) {
-            throw new Error('Required parameter id was null or undefined when calling get.');
+            throw new Error('Required parameter id was null or undefined when calling getExemptionCertificateById.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -169,17 +169,17 @@ export class TaxExemptionCertificatesService extends BaseService {
 
     /**
      * List exemption certificates
-     * List certificates, optionally by customer
+     * Returns the registered tax exemption certificates, newest effective date first, optionally narrowed to a single customer. Use this tool to discover a certificate id before calculating tax with an exemption; do not use it to test whether an exemption applies on a given date, which calculateTax resolves itself. Preconditions: none; an unknown or unmatched customerId yields an empty list rather than an error. Required inputs: none, and customerId is an optional query parameter matched exactly, not as a substring. No events are emitted and no state changes; this is a read-only registry projection. Returns 200 with an empty array when no certificate matches, so an empty result is not an error condition. 
      * @endpoint get /v1/tax/exemption-certificates
      * @param customerId 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public list(customerId?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<ExemptionCertificateResponse>>;
-    public list(customerId?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<ExemptionCertificateResponse>>>;
-    public list(customerId?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<ExemptionCertificateResponse>>>;
-    public list(customerId?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public listExemptionCertificates(customerId?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<ExemptionCertificateResponse>>;
+    public listExemptionCertificates(customerId?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<ExemptionCertificateResponse>>>;
+    public listExemptionCertificates(customerId?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<ExemptionCertificateResponse>>>;
+    public listExemptionCertificates(customerId?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
 
@@ -238,23 +238,23 @@ export class TaxExemptionCertificatesService extends BaseService {
 
     /**
      * Update an exemption certificate
-     * Update an existing certificate
+     * Replaces the stored details of an exemption certificate, including its customer, scope, reason code and validity window. Use this tool to correct or expire an existing registration; do not use it to register a further certificate for the same customer, which is createExemptionCertificate. Preconditions: the certificate must exist; expiring a certificate is done by setting expiresAt or moving status to INACTIVE or REVOKED rather than by deleting it, because there is no delete endpoint. Required inputs: id (UUID) path parameter plus the full body, since every supplied field replaces the stored value; an omitted status leaves the current status unchanged. Emits a TAX_EXEMPTION_CERT_UPDATE approval-preset audit event; tax already calculated against the old values is not recalculated. Returns 404 when no certificate exists for the supplied id, and 400 when customerId, reasonCode or effectiveFrom are missing from the body. 
      * @endpoint put /v1/tax/exemption-certificates/{id}
      * @param id 
-     * @param exemptionCertificateRequest 
+     * @param exemptionCertificateRequest Replacement details for the exemption certificate.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public update(id: string, exemptionCertificateRequest: ExemptionCertificateRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ExemptionCertificateResponse>;
-    public update(id: string, exemptionCertificateRequest: ExemptionCertificateRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ExemptionCertificateResponse>>;
-    public update(id: string, exemptionCertificateRequest: ExemptionCertificateRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ExemptionCertificateResponse>>;
-    public update(id: string, exemptionCertificateRequest: ExemptionCertificateRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public updateExemptionCertificate(id: string, exemptionCertificateRequest: ExemptionCertificateRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ExemptionCertificateResponse>;
+    public updateExemptionCertificate(id: string, exemptionCertificateRequest: ExemptionCertificateRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ExemptionCertificateResponse>>;
+    public updateExemptionCertificate(id: string, exemptionCertificateRequest: ExemptionCertificateRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ExemptionCertificateResponse>>;
+    public updateExemptionCertificate(id: string, exemptionCertificateRequest: ExemptionCertificateRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (id === null || id === undefined) {
-            throw new Error('Required parameter id was null or undefined when calling update.');
+            throw new Error('Required parameter id was null or undefined when calling updateExemptionCertificate.');
         }
         if (exemptionCertificateRequest === null || exemptionCertificateRequest === undefined) {
-            throw new Error('Required parameter exemptionCertificateRequest was null or undefined when calling update.');
+            throw new Error('Required parameter exemptionCertificateRequest was null or undefined when calling updateExemptionCertificate.');
         }
 
         let localVarHeaders = this.defaultHeaders;

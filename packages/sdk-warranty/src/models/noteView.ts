@@ -13,10 +13,10 @@
  * Staff note
  */
 export interface NoteView { 
+    createdAt?: string;
+    createdBy?: string;
     id?: string;
     note?: string;
-    createdBy?: string;
-    createdAt?: string;
 }
 
 function isOptionalNoteViewPropertyOfType(
@@ -58,7 +58,7 @@ export function instanceOfNoteView(value: object): value is NoteView {
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createNoteViewPropertyNames();
-    const optionalStringProperties = createNoteViewOptionalProperties({ name: 'id', nullable: false }, { name: 'note', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'createdAt', nullable: false }, );
+    const optionalStringProperties = createNoteViewOptionalProperties({ name: 'createdAt', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'id', nullable: false }, { name: 'note', nullable: false }, );
     const optionalNumberProperties = createNoteViewOptionalProperties();
     const optionalBooleanProperties = createNoteViewOptionalProperties();
 

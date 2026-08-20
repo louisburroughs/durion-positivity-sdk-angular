@@ -18,13 +18,13 @@ export interface PostingCategoryCreateRequest {
      */
     categoryName: string;
     /**
-     * Optional description of the posting category
-     */
-    description?: string;
-    /**
      * Identifier of the user creating the posting category
      */
     createdBy: string;
+    /**
+     * Optional description of the posting category
+     */
+    description?: string;
 }
 
 function isOptionalPostingCategoryCreateRequestPropertyOfType(
@@ -66,7 +66,7 @@ export function instanceOfPostingCategoryCreateRequest(value: object): value is 
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createPostingCategoryCreateRequestPropertyNames('categoryName', 'createdBy', );
-    const optionalStringProperties = createPostingCategoryCreateRequestOptionalProperties({ name: 'categoryName', nullable: false }, { name: 'description', nullable: false }, { name: 'createdBy', nullable: false }, );
+    const optionalStringProperties = createPostingCategoryCreateRequestOptionalProperties({ name: 'categoryName', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'description', nullable: false }, );
     const optionalNumberProperties = createPostingCategoryCreateRequestOptionalProperties();
     const optionalBooleanProperties = createPostingCategoryCreateRequestOptionalProperties();
 

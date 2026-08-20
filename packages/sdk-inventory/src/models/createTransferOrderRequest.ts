@@ -15,14 +15,6 @@ import { TransferOrderLineRequest } from './transferOrderLineRequest';
  */
 export interface CreateTransferOrderRequest { 
     /**
-     * Source site the transfer ships from
-     */
-    sourceLocationId: string;
-    /**
-     * Optional bin-level source storage location under the source site
-     */
-    sourceStorageLocationId?: string;
-    /**
      * Destination site the transfer ships to
      */
     destinationLocationId: string;
@@ -38,6 +30,14 @@ export interface CreateTransferOrderRequest {
      * Free-text notes
      */
     notes?: string;
+    /**
+     * Source site the transfer ships from
+     */
+    sourceLocationId: string;
+    /**
+     * Optional bin-level source storage location under the source site
+     */
+    sourceStorageLocationId?: string;
 }
 
 function isOptionalCreateTransferOrderRequestPropertyOfType(
@@ -78,8 +78,8 @@ export function instanceOfCreateTransferOrderRequest(value: object): value is Cr
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createCreateTransferOrderRequestPropertyNames('sourceLocationId', 'destinationLocationId', 'lines', );
-    const optionalStringProperties = createCreateTransferOrderRequestOptionalProperties({ name: 'sourceLocationId', nullable: false }, { name: 'sourceStorageLocationId', nullable: false }, { name: 'destinationLocationId', nullable: false }, { name: 'destinationStorageLocationId', nullable: false }, { name: 'notes', nullable: false }, );
+    const requiredProperties = createCreateTransferOrderRequestPropertyNames('destinationLocationId', 'lines', 'sourceLocationId', );
+    const optionalStringProperties = createCreateTransferOrderRequestOptionalProperties({ name: 'destinationLocationId', nullable: false }, { name: 'destinationStorageLocationId', nullable: false }, { name: 'notes', nullable: false }, { name: 'sourceLocationId', nullable: false }, { name: 'sourceStorageLocationId', nullable: false }, );
     const optionalNumberProperties = createCreateTransferOrderRequestOptionalProperties();
     const optionalBooleanProperties = createCreateTransferOrderRequestOptionalProperties();
 

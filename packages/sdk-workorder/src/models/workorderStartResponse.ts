@@ -14,33 +14,33 @@
  */
 export interface WorkorderStartResponse { 
     /**
-     * Unique identifier of the workorder that was started
+     * Workorder status after the start transition
      */
-    workorderId: string;
+    currentStatus: string;
+    /**
+     * Human-readable message describing the start outcome
+     */
+    message?: string;
     /**
      * Operational context version for optimistic concurrency
      */
     operationalContextVersion?: string;
     /**
-     * Timestamp when work was started on the workorder
-     */
-    workStartedAt?: string;
-    /**
      * Workorder status prior to the start transition
      */
     previousStatus?: string;
-    /**
-     * Workorder status after the start transition
-     */
-    currentStatus: string;
     /**
      * Timestamp when the status transition occurred
      */
     transitionedAt?: string;
     /**
-     * Human-readable message describing the start outcome
+     * Timestamp when work was started on the workorder
      */
-    message?: string;
+    workStartedAt?: string;
+    /**
+     * Unique identifier of the workorder that was started
+     */
+    workorderId: string;
 }
 
 function isOptionalWorkorderStartResponsePropertyOfType(
@@ -81,8 +81,8 @@ export function instanceOfWorkorderStartResponse(value: object): value is Workor
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createWorkorderStartResponsePropertyNames('workorderId', 'currentStatus', );
-    const optionalStringProperties = createWorkorderStartResponseOptionalProperties({ name: 'workorderId', nullable: false }, { name: 'operationalContextVersion', nullable: false }, { name: 'workStartedAt', nullable: false }, { name: 'previousStatus', nullable: false }, { name: 'currentStatus', nullable: false }, { name: 'transitionedAt', nullable: false }, { name: 'message', nullable: false }, );
+    const requiredProperties = createWorkorderStartResponsePropertyNames('currentStatus', 'workorderId', );
+    const optionalStringProperties = createWorkorderStartResponseOptionalProperties({ name: 'currentStatus', nullable: false }, { name: 'message', nullable: false }, { name: 'operationalContextVersion', nullable: false }, { name: 'previousStatus', nullable: false }, { name: 'transitionedAt', nullable: false }, { name: 'workStartedAt', nullable: false }, { name: 'workorderId', nullable: false }, );
     const optionalNumberProperties = createWorkorderStartResponseOptionalProperties();
     const optionalBooleanProperties = createWorkorderStartResponseOptionalProperties();
 

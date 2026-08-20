@@ -18,14 +18,6 @@ export interface PricingRuleTraceEntryDto {
      */
     id: string;
     /**
-     * Identifier of the evaluated rule
-     */
-    ruleId: string;
-    /**
-     * Evaluation status of the rule
-     */
-    status: string;
-    /**
      * Serialized inputs supplied to the rule
      */
     inputs?: string;
@@ -33,6 +25,14 @@ export interface PricingRuleTraceEntryDto {
      * Serialized outputs produced by the rule
      */
     outputs?: string;
+    /**
+     * Identifier of the evaluated rule
+     */
+    ruleId: string;
+    /**
+     * Evaluation status of the rule
+     */
+    status: string;
 }
 
 function isOptionalPricingRuleTraceEntryDtoPropertyOfType(
@@ -74,7 +74,7 @@ export function instanceOfPricingRuleTraceEntryDto(value: object): value is Pric
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createPricingRuleTraceEntryDtoPropertyNames('id', 'ruleId', 'status', );
-    const optionalStringProperties = createPricingRuleTraceEntryDtoOptionalProperties({ name: 'id', nullable: false }, { name: 'ruleId', nullable: false }, { name: 'status', nullable: false }, { name: 'inputs', nullable: false }, { name: 'outputs', nullable: false }, );
+    const optionalStringProperties = createPricingRuleTraceEntryDtoOptionalProperties({ name: 'id', nullable: false }, { name: 'inputs', nullable: false }, { name: 'outputs', nullable: false }, { name: 'ruleId', nullable: false }, { name: 'status', nullable: false }, );
     const optionalNumberProperties = createPricingRuleTraceEntryDtoOptionalProperties();
     const optionalBooleanProperties = createPricingRuleTraceEntryDtoOptionalProperties();
 

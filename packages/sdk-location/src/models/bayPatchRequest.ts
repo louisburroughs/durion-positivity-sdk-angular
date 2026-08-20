@@ -15,22 +15,18 @@ import { BayCapacityRequest } from './bayCapacityRequest';
  */
 export interface BayPatchRequest { 
     /**
-     * Display name of the bay
-     */
-    name?: string;
-    /**
-     * Type classification of the bay
+     * Type classification of the bay; must be a BayType value
      */
     bayType?: string;
-    /**
-     * Operational status of the bay
-     */
-    status?: string;
+    capacity?: BayCapacityRequest;
     /**
      * Maximum number of vehicles that can be serviced concurrently in the bay
      */
     maxConcurrentVehicles?: number;
-    capacity?: BayCapacityRequest;
+    /**
+     * Display name of the bay
+     */
+    name?: string;
     /**
      * Identifiers of service capabilities supported by the bay
      */
@@ -39,6 +35,10 @@ export interface BayPatchRequest {
      * Identifiers of skills required to operate the bay
      */
     skillRequirementIds?: Array<string>;
+    /**
+     * Operational status of the bay
+     */
+    status?: string;
 }
 
 function isOptionalBayPatchRequestPropertyOfType(
@@ -80,7 +80,7 @@ export function instanceOfBayPatchRequest(value: object): value is BayPatchReque
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createBayPatchRequestPropertyNames();
-    const optionalStringProperties = createBayPatchRequestOptionalProperties({ name: 'name', nullable: false }, { name: 'bayType', nullable: false }, { name: 'status', nullable: false }, );
+    const optionalStringProperties = createBayPatchRequestOptionalProperties({ name: 'bayType', nullable: false }, { name: 'name', nullable: false }, { name: 'status', nullable: false }, );
     const optionalNumberProperties = createBayPatchRequestOptionalProperties({ name: 'maxConcurrentVehicles', nullable: false }, );
     const optionalBooleanProperties = createBayPatchRequestOptionalProperties();
 

@@ -13,6 +13,8 @@
  * A rule-evaluation step submitted while creating a pricing snapshot
  */
 export interface PricingRuleTraceEntryRequest { 
+    inputs?: any | null;
+    outputs?: any | null;
     /**
      * Identifier of the evaluated rule
      */
@@ -21,8 +23,6 @@ export interface PricingRuleTraceEntryRequest {
      * Evaluation status of the rule
      */
     status: string;
-    inputs?: any | null;
-    outputs?: any | null;
 }
 
 function isOptionalPricingRuleTraceEntryRequestPropertyOfType(

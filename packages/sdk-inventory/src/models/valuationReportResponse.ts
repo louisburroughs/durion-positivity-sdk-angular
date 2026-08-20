@@ -15,13 +15,13 @@ import { ValuationRow } from './valuationRow';
  */
 export interface ValuationReportResponse { 
     /**
-     * Location filter applied, or null for all sites
-     */
-    locationId?: string;
-    /**
      * Historical instant the valuation was reconstructed at, or null for current state
      */
     asOf?: string;
+    /**
+     * Location filter applied, or null for all sites
+     */
+    locationId?: string;
     /**
      * SKU-level valuation rows
      */
@@ -71,7 +71,7 @@ export function instanceOfValuationReportResponse(value: object): value is Valua
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createValuationReportResponsePropertyNames('rows', 'totalOnHandValue', );
-    const optionalStringProperties = createValuationReportResponseOptionalProperties({ name: 'locationId', nullable: false }, { name: 'asOf', nullable: false }, );
+    const optionalStringProperties = createValuationReportResponseOptionalProperties({ name: 'asOf', nullable: false }, { name: 'locationId', nullable: false }, );
     const optionalNumberProperties = createValuationReportResponseOptionalProperties({ name: 'totalOnHandValue', nullable: false }, );
     const optionalBooleanProperties = createValuationReportResponseOptionalProperties();
 

@@ -13,17 +13,17 @@ import { SortObject } from './sortObject';
 
 
 export interface PageCustomerCreditResponse { 
-    totalElements?: number;
-    totalPages?: number;
-    size?: number;
     content?: Array<CustomerCreditResponse>;
-    number?: number;
-    pageable?: PageableObject;
-    sort?: SortObject;
+    empty?: boolean;
     first?: boolean;
     last?: boolean;
+    number?: number;
     numberOfElements?: number;
-    empty?: boolean;
+    pageable?: PageableObject;
+    size?: number;
+    sort?: SortObject;
+    totalElements?: number;
+    totalPages?: number;
 }
 
 function isOptionalPageCustomerCreditResponsePropertyOfType(
@@ -66,8 +66,8 @@ export function instanceOfPageCustomerCreditResponse(value: object): value is Pa
 
     const requiredProperties = createPageCustomerCreditResponsePropertyNames();
     const optionalStringProperties = createPageCustomerCreditResponseOptionalProperties();
-    const optionalNumberProperties = createPageCustomerCreditResponseOptionalProperties({ name: 'totalElements', nullable: false }, { name: 'totalPages', nullable: false }, { name: 'size', nullable: false }, { name: 'number', nullable: false }, { name: 'numberOfElements', nullable: false }, );
-    const optionalBooleanProperties = createPageCustomerCreditResponseOptionalProperties({ name: 'first', nullable: false }, { name: 'last', nullable: false }, { name: 'empty', nullable: false }, );
+    const optionalNumberProperties = createPageCustomerCreditResponseOptionalProperties({ name: 'number', nullable: false }, { name: 'numberOfElements', nullable: false }, { name: 'size', nullable: false }, { name: 'totalElements', nullable: false }, { name: 'totalPages', nullable: false }, );
+    const optionalBooleanProperties = createPageCustomerCreditResponseOptionalProperties({ name: 'empty', nullable: false }, { name: 'first', nullable: false }, { name: 'last', nullable: false }, );
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
         && optionalStringProperties.every((property) => isOptionalPageCustomerCreditResponsePropertyOfType(_v, property.name, 'string', property.nullable))

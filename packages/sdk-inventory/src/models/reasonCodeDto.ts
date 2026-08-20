@@ -14,6 +14,10 @@
  */
 export interface ReasonCodeDto { 
     /**
+     * Grouping category the reason code belongs to
+     */
+    category?: string;
+    /**
      * Machine-readable reason code
      */
     code: string;
@@ -21,10 +25,6 @@ export interface ReasonCodeDto {
      * Human-readable explanation of the reason code
      */
     description: string;
-    /**
-     * Grouping category the reason code belongs to
-     */
-    category?: string;
 }
 
 function isOptionalReasonCodeDtoPropertyOfType(
@@ -66,7 +66,7 @@ export function instanceOfReasonCodeDto(value: object): value is ReasonCodeDto {
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createReasonCodeDtoPropertyNames('code', 'description', );
-    const optionalStringProperties = createReasonCodeDtoOptionalProperties({ name: 'code', nullable: false }, { name: 'description', nullable: false }, { name: 'category', nullable: false }, );
+    const optionalStringProperties = createReasonCodeDtoOptionalProperties({ name: 'category', nullable: false }, { name: 'code', nullable: false }, { name: 'description', nullable: false }, );
     const optionalNumberProperties = createReasonCodeDtoOptionalProperties();
     const optionalBooleanProperties = createReasonCodeDtoOptionalProperties();
 

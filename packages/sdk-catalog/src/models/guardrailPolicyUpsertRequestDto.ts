@@ -14,21 +14,21 @@
  */
 export interface GuardrailPolicyUpsertRequestDto { 
     /**
-     * Scope identifier the guardrail policy applies to
+     * Threshold percent below which overrides are auto-approved
      */
-    scopeId: string;
-    /**
-     * Minimum allowed margin percent
-     */
-    minMarginPercent: number;
+    autoApprovalThresholdPercent: number;
     /**
      * Maximum allowed discount percent
      */
     maxDiscountPercent: number;
     /**
-     * Threshold percent below which overrides are auto-approved
+     * Minimum allowed margin percent
      */
-    autoApprovalThresholdPercent: number;
+    minMarginPercent: number;
+    /**
+     * Scope identifier the guardrail policy applies to
+     */
+    scopeId: string;
 }
 
 function isOptionalGuardrailPolicyUpsertRequestDtoPropertyOfType(
@@ -69,9 +69,9 @@ export function instanceOfGuardrailPolicyUpsertRequestDto(value: object): value 
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createGuardrailPolicyUpsertRequestDtoPropertyNames('scopeId', 'minMarginPercent', 'maxDiscountPercent', 'autoApprovalThresholdPercent', );
+    const requiredProperties = createGuardrailPolicyUpsertRequestDtoPropertyNames('autoApprovalThresholdPercent', 'maxDiscountPercent', 'minMarginPercent', 'scopeId', );
     const optionalStringProperties = createGuardrailPolicyUpsertRequestDtoOptionalProperties({ name: 'scopeId', nullable: false }, );
-    const optionalNumberProperties = createGuardrailPolicyUpsertRequestDtoOptionalProperties({ name: 'minMarginPercent', nullable: false }, { name: 'maxDiscountPercent', nullable: false }, { name: 'autoApprovalThresholdPercent', nullable: false }, );
+    const optionalNumberProperties = createGuardrailPolicyUpsertRequestDtoOptionalProperties({ name: 'autoApprovalThresholdPercent', nullable: false }, { name: 'maxDiscountPercent', nullable: false }, { name: 'minMarginPercent', nullable: false }, );
     const optionalBooleanProperties = createGuardrailPolicyUpsertRequestDtoOptionalProperties();
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

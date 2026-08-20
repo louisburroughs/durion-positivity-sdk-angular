@@ -42,24 +42,24 @@ export class WorkorderPickedItemsService extends BaseService {
     }
 
     /**
-     * Consume picked items into workorder
-     * Queues asynchronous consumption of picked items (ADR-0044 #901): the response is 202 with per-item status PENDING; the inventory.consumption.recorded fact updates the pick replicas and subsequent picked-items reads observe the consumed quantities.
+     * Consume Picked Items into Workorder
+     * Queues asynchronous consumption of picked items into the workorder over the Kafka command feed per ADR-0044; each item is acknowledged with status PENDING, and the inventory consumption-recorded fact later updates the pick replicas. Use this tool when staged picked parts are installed on the job; do not use consumeParts, which operates on workorder part lines outside the pick flow. Preconditions: a pick list replica must exist for the workorder and every referenced pickTaskId must belong to it. Required inputs: workorderId (UUID) as a path parameter and a non-empty items list, each entry carrying pickTaskId (UUID) and quantityToConsume (integer). Emits a WORKORDER_PICKED_ITEMS_CONSUME event and publishes a consume command; callers must poll getPickedItems to observe the consumed quantities. Returns 202 with per-item PENDING results, 404 when the pick list or a referenced pick task is missing, and 503 when the command feed is unavailable. 
      * @endpoint post /v1/workorders/{workorderId}/picked-items:consume
      * @param workorderId Workorder ID
-     * @param consumePickedItemsRequest 
+     * @param consumePickedItemsRequest Picked pick-task quantities to consume into the workorder.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public consumePickedItems(workorderId: string, consumePickedItemsRequest: ConsumePickedItemsRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ConsumePickedItemsResponse>;
-    public consumePickedItems(workorderId: string, consumePickedItemsRequest: ConsumePickedItemsRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ConsumePickedItemsResponse>>;
-    public consumePickedItems(workorderId: string, consumePickedItemsRequest: ConsumePickedItemsRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ConsumePickedItemsResponse>>;
-    public consumePickedItems(workorderId: string, consumePickedItemsRequest: ConsumePickedItemsRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public consumeWorkorderPickedItems(workorderId: string, consumePickedItemsRequest: ConsumePickedItemsRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ConsumePickedItemsResponse>;
+    public consumeWorkorderPickedItems(workorderId: string, consumePickedItemsRequest: ConsumePickedItemsRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ConsumePickedItemsResponse>>;
+    public consumeWorkorderPickedItems(workorderId: string, consumePickedItemsRequest: ConsumePickedItemsRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ConsumePickedItemsResponse>>;
+    public consumeWorkorderPickedItems(workorderId: string, consumePickedItemsRequest: ConsumePickedItemsRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (workorderId === null || workorderId === undefined) {
-            throw new Error('Required parameter workorderId was null or undefined when calling consumePickedItems.');
+            throw new Error('Required parameter workorderId was null or undefined when calling consumeWorkorderPickedItems.');
         }
         if (consumePickedItemsRequest === null || consumePickedItemsRequest === undefined) {
-            throw new Error('Required parameter consumePickedItemsRequest was null or undefined when calling consumePickedItems.');
+            throw new Error('Required parameter consumePickedItemsRequest was null or undefined when calling consumeWorkorderPickedItems.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -99,7 +99,7 @@ export class WorkorderPickedItemsService extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/workorders/${this.configuration.encodeParam({name: "workorderId", value: workorderId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/picked-items:consume`;
+        let localVarPath = `/v1/workorders/${this.configuration.encodeParam({name: "workorderId", value: workorderId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/picked-items:consume`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<ConsumePickedItemsResponse>('post', `${basePath}${localVarPath}`,
             {
@@ -116,8 +116,8 @@ export class WorkorderPickedItemsService extends BaseService {
     }
 
     /**
-     * Get picked items for workorder
-     * Retrieve the items already picked for a workorder before they are consumed
+     * Get Picked Items for Workorder
+     * Returns the items already picked for a workorder from the local pick replica, showing picked and consumed quantities before installation. Use this tool to see what is staged and available to consume; use consumeWorkorderPickedItems to actually record consumption, and getPickTasks for lines still being picked. Preconditions: none — a workorder without a pick list yields an empty list rather than an error. Required inputs: workorderId (UUID) as a path parameter. No events are emitted and no state changes; this is a read-only replica projection. Returns 200 with the picked items, possibly empty. 
      * @endpoint get /v1/workorders/{workorderId}/picked-items
      * @param workorderId Workorder ID
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -160,7 +160,7 @@ export class WorkorderPickedItemsService extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/workorders/${this.configuration.encodeParam({name: "workorderId", value: workorderId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/picked-items`;
+        let localVarPath = `/v1/workorders/${this.configuration.encodeParam({name: "workorderId", value: workorderId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/picked-items`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<Array<WorkorderPickedItemResponse>>('get', `${basePath}${localVarPath}`,
             {

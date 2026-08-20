@@ -14,13 +14,13 @@
  */
 export interface FilterProductsResponse { 
     /**
-     * List of matching product identifiers
-     */
-    productIds: Array<string>;
-    /**
      * Count of matching products
      */
     count: number;
+    /**
+     * List of matching product identifiers
+     */
+    productIds: Array<string>;
 }
 
 function isOptionalFilterProductsResponsePropertyOfType(
@@ -61,7 +61,7 @@ export function instanceOfFilterProductsResponse(value: object): value is Filter
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createFilterProductsResponsePropertyNames('productIds', 'count', );
+    const requiredProperties = createFilterProductsResponsePropertyNames('count', 'productIds', );
     const optionalStringProperties = createFilterProductsResponseOptionalProperties();
     const optionalNumberProperties = createFilterProductsResponseOptionalProperties({ name: 'count', nullable: false }, );
     const optionalBooleanProperties = createFilterProductsResponseOptionalProperties();

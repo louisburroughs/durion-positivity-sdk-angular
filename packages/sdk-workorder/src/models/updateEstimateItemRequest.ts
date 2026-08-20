@@ -10,7 +10,7 @@
 
 
 /**
- * Request payload for partial update of an estimate line item
+ * Updated item fields
  */
 export interface UpdateEstimateItemRequest { 
     /**
@@ -22,13 +22,17 @@ export interface UpdateEstimateItemRequest {
      */
     quantity?: number;
     /**
+     * Updated tax code
+     */
+    taxCode?: string;
+    /**
      * Updated unit price
      */
     unitPrice?: number;
     /**
-     * Updated tax code
+     * Updated unit quantity is expressed in, for PART items only. Omit to leave the item\'s unit unchanged, like every other field on this partial-update request. Rejected on a LABOR item.
      */
-    taxCode?: string;
+    uomCode?: string;
 }
 
 function isOptionalUpdateEstimateItemRequestPropertyOfType(
@@ -70,7 +74,7 @@ export function instanceOfUpdateEstimateItemRequest(value: object): value is Upd
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createUpdateEstimateItemRequestPropertyNames();
-    const optionalStringProperties = createUpdateEstimateItemRequestOptionalProperties({ name: 'description', nullable: false }, { name: 'taxCode', nullable: false }, );
+    const optionalStringProperties = createUpdateEstimateItemRequestOptionalProperties({ name: 'description', nullable: false }, { name: 'taxCode', nullable: false }, { name: 'uomCode', nullable: false }, );
     const optionalNumberProperties = createUpdateEstimateItemRequestOptionalProperties({ name: 'quantity', nullable: false }, { name: 'unitPrice', nullable: false }, );
     const optionalBooleanProperties = createUpdateEstimateItemRequestOptionalProperties();
 

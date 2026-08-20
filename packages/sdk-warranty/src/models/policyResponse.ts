@@ -13,44 +13,44 @@
  * Warranty policy — structured coverage terms
  */
 export interface PolicyResponse { 
-    id?: string;
-    providerId?: string;
-    name?: string;
-    coverageType?: PolicyResponseCoverageTypeEnum;
-    appliesToType?: PolicyResponseAppliesToTypeEnum;
-    appliesToProductEntityIds?: Array<string>;
     appliesToCategoryId?: string;
     appliesToManufacturerId?: string;
+    appliesToProductEntityIds?: Array<string>;
+    appliesToType?: PolicyResponseAppliesToTypeEnum;
+    autoRegister?: boolean;
+    coverageType?: PolicyResponseCoverageTypeEnum;
+    createdAt?: string;
+    documentUrls?: Array<string>;
+    durationMonths?: number;
     effectiveFrom?: string;
     effectiveTo?: string;
-    durationMonths?: number;
-    mileageLimit?: number;
-    treadPullPointThirtySeconds?: number;
+    id?: string;
     laborCovered?: boolean;
     laborHoursCap?: number;
     laborRateCap?: number;
+    mileageLimit?: number;
+    name?: string;
     prorationMethod?: PolicyResponseProrationMethodEnum;
+    providerId?: string;
     requiresPartReturn?: boolean;
     requiresPhotoEvidence?: boolean;
-    transferable?: boolean;
-    autoRegister?: boolean;
     termsText?: string;
-    documentUrls?: Array<string>;
-    createdAt?: string;
+    transferable?: boolean;
+    treadPullPointThirtySeconds?: number;
     updatedAt?: string;
     version?: number;
 }
-export enum PolicyResponseCoverageTypeEnum {
-    ManufacturerDefect = 'MANUFACTURER_DEFECT',
-    DealerWorkmanship = 'DEALER_WORKMANSHIP',
-    RoadHazard = 'ROAD_HAZARD',
-    ExtendedPlan = 'EXTENDED_PLAN'
-};
 export enum PolicyResponseAppliesToTypeEnum {
     ProductList = 'PRODUCT_LIST',
     Category = 'CATEGORY',
     Manufacturer = 'MANUFACTURER',
     All = 'ALL'
+};
+export enum PolicyResponseCoverageTypeEnum {
+    ManufacturerDefect = 'MANUFACTURER_DEFECT',
+    DealerWorkmanship = 'DEALER_WORKMANSHIP',
+    RoadHazard = 'ROAD_HAZARD',
+    ExtendedPlan = 'EXTENDED_PLAN'
 };
 export enum PolicyResponseProrationMethodEnum {
     None = 'NONE',
@@ -100,9 +100,9 @@ export function instanceOfPolicyResponse(value: object): value is PolicyResponse
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createPolicyResponsePropertyNames();
-    const optionalStringProperties = createPolicyResponseOptionalProperties({ name: 'id', nullable: false }, { name: 'providerId', nullable: false }, { name: 'name', nullable: false }, { name: 'coverageType', nullable: false }, { name: 'appliesToType', nullable: false }, { name: 'appliesToCategoryId', nullable: false }, { name: 'appliesToManufacturerId', nullable: false }, { name: 'effectiveFrom', nullable: false }, { name: 'effectiveTo', nullable: false }, { name: 'prorationMethod', nullable: false }, { name: 'termsText', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'updatedAt', nullable: false }, );
-    const optionalNumberProperties = createPolicyResponseOptionalProperties({ name: 'durationMonths', nullable: false }, { name: 'mileageLimit', nullable: false }, { name: 'treadPullPointThirtySeconds', nullable: false }, { name: 'laborHoursCap', nullable: false }, { name: 'laborRateCap', nullable: false }, { name: 'version', nullable: false }, );
-    const optionalBooleanProperties = createPolicyResponseOptionalProperties({ name: 'laborCovered', nullable: false }, { name: 'requiresPartReturn', nullable: false }, { name: 'requiresPhotoEvidence', nullable: false }, { name: 'transferable', nullable: false }, { name: 'autoRegister', nullable: false }, );
+    const optionalStringProperties = createPolicyResponseOptionalProperties({ name: 'appliesToCategoryId', nullable: false }, { name: 'appliesToManufacturerId', nullable: false }, { name: 'appliesToType', nullable: false }, { name: 'coverageType', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'effectiveFrom', nullable: false }, { name: 'effectiveTo', nullable: false }, { name: 'id', nullable: false }, { name: 'name', nullable: false }, { name: 'prorationMethod', nullable: false }, { name: 'providerId', nullable: false }, { name: 'termsText', nullable: false }, { name: 'updatedAt', nullable: false }, );
+    const optionalNumberProperties = createPolicyResponseOptionalProperties({ name: 'durationMonths', nullable: false }, { name: 'laborHoursCap', nullable: false }, { name: 'laborRateCap', nullable: false }, { name: 'mileageLimit', nullable: false }, { name: 'treadPullPointThirtySeconds', nullable: false }, { name: 'version', nullable: false }, );
+    const optionalBooleanProperties = createPolicyResponseOptionalProperties({ name: 'autoRegister', nullable: false }, { name: 'laborCovered', nullable: false }, { name: 'requiresPartReturn', nullable: false }, { name: 'requiresPhotoEvidence', nullable: false }, { name: 'transferable', nullable: false }, );
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
         && optionalStringProperties.every((property) => isOptionalPolicyResponsePropertyOfType(_v, property.name, 'string', property.nullable))

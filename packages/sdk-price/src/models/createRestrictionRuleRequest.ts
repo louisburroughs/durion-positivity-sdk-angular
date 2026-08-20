@@ -14,18 +14,6 @@
  */
 export interface CreateRestrictionRuleRequest { 
     /**
-     * Product the restriction rule applies to
-     */
-    productId: string;
-    /**
-     * Location scope tag for the restriction
-     */
-    locationTag: CreateRestrictionRuleRequestLocationTagEnum;
-    /**
-     * Service channel scope tag for the restriction
-     */
-    serviceTag: CreateRestrictionRuleRequestServiceTagEnum;
-    /**
      * Date the restriction rule becomes effective
      */
     effectiveFrom: string;
@@ -34,13 +22,25 @@ export interface CreateRestrictionRuleRequest {
      */
     effectiveTo?: string;
     /**
-     * Optional pricing policy version associated with the rule
+     * Location scope tag for the restriction
      */
-    policyVersion?: number;
+    locationTag: CreateRestrictionRuleRequestLocationTagEnum;
     /**
      * Whether the restriction can be overridden with authorization
      */
     overrideable: boolean;
+    /**
+     * Optional pricing policy version associated with the rule
+     */
+    policyVersion?: number;
+    /**
+     * Product the restriction rule applies to
+     */
+    productId: string;
+    /**
+     * Service channel scope tag for the restriction
+     */
+    serviceTag: CreateRestrictionRuleRequestServiceTagEnum;
 }
 export enum CreateRestrictionRuleRequestLocationTagEnum {
     AllLocations = 'ALL_LOCATIONS',
@@ -98,8 +98,8 @@ export function instanceOfCreateRestrictionRuleRequest(value: object): value is 
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createCreateRestrictionRuleRequestPropertyNames('productId', 'locationTag', 'serviceTag', 'effectiveFrom', 'overrideable', );
-    const optionalStringProperties = createCreateRestrictionRuleRequestOptionalProperties({ name: 'productId', nullable: false }, { name: 'locationTag', nullable: false }, { name: 'serviceTag', nullable: false }, { name: 'effectiveFrom', nullable: false }, { name: 'effectiveTo', nullable: false }, );
+    const requiredProperties = createCreateRestrictionRuleRequestPropertyNames('effectiveFrom', 'locationTag', 'overrideable', 'productId', 'serviceTag', );
+    const optionalStringProperties = createCreateRestrictionRuleRequestOptionalProperties({ name: 'effectiveFrom', nullable: false }, { name: 'effectiveTo', nullable: false }, { name: 'locationTag', nullable: false }, { name: 'productId', nullable: false }, { name: 'serviceTag', nullable: false }, );
     const optionalNumberProperties = createCreateRestrictionRuleRequestOptionalProperties({ name: 'policyVersion', nullable: false }, );
     const optionalBooleanProperties = createCreateRestrictionRuleRequestOptionalProperties({ name: 'overrideable', nullable: false }, );
 

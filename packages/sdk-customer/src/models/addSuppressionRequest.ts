@@ -14,13 +14,13 @@
  */
 export interface AddSuppressionRequest { 
     /**
-     * Channel the address belongs to
-     */
-    channel: AddSuppressionRequestChannelEnum;
-    /**
      * Raw address to suppress; stored only as a normalized hash plus a masked hint
      */
     address: string;
+    /**
+     * Channel the address belongs to
+     */
+    channel: AddSuppressionRequestChannelEnum;
     /**
      * Party the address belonged to, when known
      */
@@ -94,8 +94,8 @@ export function instanceOfAddSuppressionRequest(value: object): value is AddSupp
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createAddSuppressionRequestPropertyNames('channel', 'address', 'reason', );
-    const optionalStringProperties = createAddSuppressionRequestOptionalProperties({ name: 'channel', nullable: false }, { name: 'address', nullable: false }, { name: 'partyId', nullable: false }, { name: 'reason', nullable: false }, { name: 'source', nullable: false }, );
+    const requiredProperties = createAddSuppressionRequestPropertyNames('address', 'channel', 'reason', );
+    const optionalStringProperties = createAddSuppressionRequestOptionalProperties({ name: 'address', nullable: false }, { name: 'channel', nullable: false }, { name: 'partyId', nullable: false }, { name: 'reason', nullable: false }, { name: 'source', nullable: false }, );
     const optionalNumberProperties = createAddSuppressionRequestOptionalProperties();
     const optionalBooleanProperties = createAddSuppressionRequestOptionalProperties();
 

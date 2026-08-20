@@ -42,11 +42,11 @@ export class BayAPIService extends BaseService {
     }
 
     /**
-     * Create bay
-     * Create a new bay for a specific location.
+     * Create a Service Bay for Location
+     * Creates a service bay under a location with a type classification, concurrency capacity and optional capability and skill requirements. Use this tool when adding physical work capacity to a shop; do not use patchBay, which modifies a bay that already exists, and use createStorageLocation for inventory storage rather than vehicle bays. Preconditions: the location must exist, no bay of that location may already use the name (case-insensitive), and any serviceCapabilityIds must match registered service capability codes. Required inputs: name, bayType (one of GENERAL_SERVICE, ALIGNMENT, TIRE_SERVICE, HEAVY_DUTY, INSPECTION or WASH_DETAIL) and capacity.maxConcurrentVehicles of at least 1; status is optional, defaults to ACTIVE and only also accepts OUT_OF_SERVICE. Emits a LOCATION_BAY_CREATE event; no other records are touched. Returns 404 when the location does not exist and 409 when the bay name is already taken at that location. 
      * @endpoint post /v1/locations/{locationId}/bays
      * @param locationId Location ID
-     * @param bayRequest 
+     * @param bayRequest Service bay to create, with its type classification and concurrent vehicle capacity.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -116,8 +116,8 @@ export class BayAPIService extends BaseService {
     }
 
     /**
-     * Get bay
-     * Get a bay by location and bay id.
+     * Get a Service Bay by Identifier
+     * Returns a single service bay of a location, including its capacity, capability and skill requirement details. Use this tool when both the location id and bay id are known; use listBays instead to search or enumerate. Preconditions: the location must exist and the bay must belong to it. Required inputs: locationId and bayId (UUIDs) as path parameters. No events are emitted and no state changes; this is a read-only projection. Returns 404 when the location does not exist or the bay is not found under that location. 
      * @endpoint get /v1/locations/{locationId}/bays/{bayId}
      * @param locationId Location ID
      * @param bayId Bay ID
@@ -180,8 +180,8 @@ export class BayAPIService extends BaseService {
     }
 
     /**
-     * List bays
-     * List bays for a location with optional status and bayType filters.
+     * List Service Bays of a Location
+     * Lists the service bays of a location as a page, optionally filtered by status and bayType. Use this tool to see bay capacity and status for a shop; use getBay instead when the bay id is already known. Preconditions: the location must exist. Required inputs: locationId (UUID) as a path parameter; status (ACTIVE or OUT_OF_SERVICE) and bayType filters are optional, and page defaults to 0 with size 20. No events are emitted and no state changes; this is a read-only projection. Returns 404 when the location does not exist; an unrecognized status or bayType filter value fails the request rather than returning an empty page. 
      * @endpoint get /v1/locations/{locationId}/bays
      * @param locationId Location ID
      * @param status 
@@ -283,12 +283,12 @@ export class BayAPIService extends BaseService {
     }
 
     /**
-     * Patch bay
-     * Patch bay fields including status transition and capacity.
+     * Patch Fields of a Service Bay
+     * Applies a partial update to a bay, changing only the supplied fields: name, bayType, status, capacity and the capability or skill requirement lists. Use this tool for status transitions between ACTIVE and OUT_OF_SERVICE and for capacity changes; do not use createBay, which adds a new bay. Preconditions: the location must exist, the bay must belong to it, and a new name must not collide with another bay at the same location. Required inputs: locationId and bayId (UUIDs) as path parameters and a body with at least one field; capacity.maxConcurrentVehicles, when supplied, must be at least 1. Emits a LOCATION_BAY_UPDATE event; no other records are touched. Returns 404 when the location or bay does not exist and 409 when the new name is already taken at that location. 
      * @endpoint patch /v1/locations/{locationId}/bays/{bayId}
      * @param locationId 
      * @param bayId 
-     * @param bayPatchRequest 
+     * @param bayPatchRequest Partial bay payload; only non-null fields are applied and all others are left unchanged.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options

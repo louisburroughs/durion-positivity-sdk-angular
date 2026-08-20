@@ -14,38 +14,6 @@
  */
 export interface LocationSyncRunResponse { 
     /**
-     * Identifier of the sync run
-     */
-    syncRunId: string;
-    /**
-     * Overall outcome of the run
-     */
-    outcome: string;
-    /**
-     * Number of roster records processed
-     */
-    locationsProcessed: number;
-    /**
-     * Number of location refs created
-     */
-    locationsCreated: number;
-    /**
-     * Number of location refs updated
-     */
-    locationsUpdated: number;
-    /**
-     * Number of roster records already up to date
-     */
-    locationsUnchanged: number;
-    /**
-     * Number of roster records that failed to apply
-     */
-    locationsFailed: number;
-    /**
-     * When the run started
-     */
-    startedAt?: string;
-    /**
      * When the run completed
      */
     completedAt?: string;
@@ -53,6 +21,38 @@ export interface LocationSyncRunResponse {
      * Correlation id of the triggering request
      */
     correlationId?: string;
+    /**
+     * Number of location refs created
+     */
+    locationsCreated: number;
+    /**
+     * Number of roster records that failed to apply
+     */
+    locationsFailed: number;
+    /**
+     * Number of roster records processed
+     */
+    locationsProcessed: number;
+    /**
+     * Number of roster records already up to date
+     */
+    locationsUnchanged: number;
+    /**
+     * Number of location refs updated
+     */
+    locationsUpdated: number;
+    /**
+     * Overall outcome of the run
+     */
+    outcome: string;
+    /**
+     * When the run started
+     */
+    startedAt?: string;
+    /**
+     * Identifier of the sync run
+     */
+    syncRunId: string;
 }
 
 function isOptionalLocationSyncRunResponsePropertyOfType(
@@ -93,9 +93,9 @@ export function instanceOfLocationSyncRunResponse(value: object): value is Locat
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createLocationSyncRunResponsePropertyNames('syncRunId', 'outcome', 'locationsProcessed', 'locationsCreated', 'locationsUpdated', 'locationsUnchanged', 'locationsFailed', );
-    const optionalStringProperties = createLocationSyncRunResponseOptionalProperties({ name: 'syncRunId', nullable: false }, { name: 'outcome', nullable: false }, { name: 'startedAt', nullable: false }, { name: 'completedAt', nullable: false }, { name: 'correlationId', nullable: false }, );
-    const optionalNumberProperties = createLocationSyncRunResponseOptionalProperties({ name: 'locationsProcessed', nullable: false }, { name: 'locationsCreated', nullable: false }, { name: 'locationsUpdated', nullable: false }, { name: 'locationsUnchanged', nullable: false }, { name: 'locationsFailed', nullable: false }, );
+    const requiredProperties = createLocationSyncRunResponsePropertyNames('locationsCreated', 'locationsFailed', 'locationsProcessed', 'locationsUnchanged', 'locationsUpdated', 'outcome', 'syncRunId', );
+    const optionalStringProperties = createLocationSyncRunResponseOptionalProperties({ name: 'completedAt', nullable: false }, { name: 'correlationId', nullable: false }, { name: 'outcome', nullable: false }, { name: 'startedAt', nullable: false }, { name: 'syncRunId', nullable: false }, );
+    const optionalNumberProperties = createLocationSyncRunResponseOptionalProperties({ name: 'locationsCreated', nullable: false }, { name: 'locationsFailed', nullable: false }, { name: 'locationsProcessed', nullable: false }, { name: 'locationsUnchanged', nullable: false }, { name: 'locationsUpdated', nullable: false }, );
     const optionalBooleanProperties = createLocationSyncRunResponseOptionalProperties();
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

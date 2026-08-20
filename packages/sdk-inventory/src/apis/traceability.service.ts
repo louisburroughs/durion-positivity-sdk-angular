@@ -41,19 +41,19 @@ export class TraceabilityService extends BaseService {
 
     /**
      * Lot traceability
-     * Returns a lot\&#39;s upstream origin (PO / ASN / goods receipt, vendor, receipt date) and its downstream movement chain (putaway → pick → consumption → return → scrap → transfer), reconstructed from the lot-tagged ledger entries in chronological order
+     * Returns a lot\&#39;s upstream origin (purchase order, ASN, goods receipt, vendor and receipt date) and its downstream movement chain (putaway, pick, consumption, return, scrap, transfer), reconstructed chronologically from the lot-tagged append-only ledger entries. Use this tool for recall or quality investigations on a lot; use getInventoryLot instead for current per-location on-hand, and use traceSerialUnit for a single serialized unit\&#39;s chain. Preconditions: the lot must exist. Required inputs: lotId (UUID) as a path parameter; there is no request body. No events are emitted and no state changes; this is a read-only reconstruction from the ledger. Returns 404 when no lot exists for the supplied id. 
      * @endpoint get /v1/inventory/lots/{lotId}/traceability
      * @param lotId Lot ID
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public getLotTraceability(lotId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<LotTraceabilityResponse>;
-    public getLotTraceability(lotId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<LotTraceabilityResponse>>;
-    public getLotTraceability(lotId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<LotTraceabilityResponse>>;
-    public getLotTraceability(lotId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public traceInventoryLot(lotId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<LotTraceabilityResponse>;
+    public traceInventoryLot(lotId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<LotTraceabilityResponse>>;
+    public traceInventoryLot(lotId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<LotTraceabilityResponse>>;
+    public traceInventoryLot(lotId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (lotId === null || lotId === undefined) {
-            throw new Error('Required parameter lotId was null or undefined when calling getLotTraceability.');
+            throw new Error('Required parameter lotId was null or undefined when calling traceInventoryLot.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -101,19 +101,19 @@ export class TraceabilityService extends BaseService {
 
     /**
      * Serial traceability
-     * Returns a serial unit\&#39;s upstream origin (PO / ASN / goods receipt via its lot) and its downstream chain (receipt → issue → workorder → return/scrap) from the serial\&#39;s receipt and consumption ledger linkages, plus any warranty-hold linkage joined by serial number
+     * Returns a serial unit\&#39;s upstream origin (purchase order, ASN and goods receipt via its lot) and its downstream chain (receipt, issue, workorder, return, scrap) from the serial\&#39;s receipt and consumption ledger linkages, plus any warranty-hold linkage joined by serial number. Use this tool to investigate one serialized unit\&#39;s history; use traceInventoryLot instead for a whole lot\&#39;s chain, and use getSerialUnit for just the current status and location. Preconditions: the serial unit must exist. Required inputs: serialUnitId (UUID) as a path parameter; there is no request body. No events are emitted and no state changes; this is a read-only reconstruction from the ledger. Returns 404 when no serial unit exists for the supplied id. 
      * @endpoint get /v1/inventory/serial-units/{serialUnitId}/traceability
      * @param serialUnitId Serial unit ID
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public getSerialTraceability(serialUnitId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<SerialTraceabilityResponse>;
-    public getSerialTraceability(serialUnitId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<SerialTraceabilityResponse>>;
-    public getSerialTraceability(serialUnitId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<SerialTraceabilityResponse>>;
-    public getSerialTraceability(serialUnitId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public traceSerialUnit(serialUnitId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<SerialTraceabilityResponse>;
+    public traceSerialUnit(serialUnitId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<SerialTraceabilityResponse>>;
+    public traceSerialUnit(serialUnitId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<SerialTraceabilityResponse>>;
+    public traceSerialUnit(serialUnitId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (serialUnitId === null || serialUnitId === undefined) {
-            throw new Error('Required parameter serialUnitId was null or undefined when calling getSerialTraceability.');
+            throw new Error('Required parameter serialUnitId was null or undefined when calling traceSerialUnit.');
         }
 
         let localVarHeaders = this.defaultHeaders;

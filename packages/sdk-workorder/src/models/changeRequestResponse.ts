@@ -14,45 +14,9 @@
  */
 export interface ChangeRequestResponse { 
     /**
-     * Unique identifier for the change request
-     */
-    id?: string;
-    /**
-     * Workorder ID
-     */
-    workorderId?: string;
-    /**
-     * User ID who requested the change
-     */
-    requestedByUserId?: string;
-    /**
-     * Date and time the change was requested
-     */
-    requestedAt?: string;
-    /**
-     * Change request status
-     */
-    status?: string;
-    /**
-     * Description of the change request
-     */
-    description?: string;
-    /**
-     * Whether this is an emergency exception
-     */
-    isEmergencyException?: boolean;
-    /**
-     * Reason for the exception if applicable
-     */
-    exceptionReason?: string;
-    /**
      * Approval notes
      */
     approvalNote?: string;
-    /**
-     * Whether approval is gated
-     */
-    isApprovalGated?: boolean;
     /**
      * Date and time the change was approved
      */
@@ -65,6 +29,42 @@ export interface ChangeRequestResponse {
      * Date and time the change was declined
      */
     declinedAt?: string;
+    /**
+     * Description of the change request
+     */
+    description?: string;
+    /**
+     * Reason for the exception if applicable
+     */
+    exceptionReason?: string;
+    /**
+     * Unique identifier for the change request
+     */
+    id?: string;
+    /**
+     * Whether approval is gated
+     */
+    isApprovalGated?: boolean;
+    /**
+     * Whether this is an emergency exception
+     */
+    isEmergencyException?: boolean;
+    /**
+     * Date and time the change was requested
+     */
+    requestedAt?: string;
+    /**
+     * User ID who requested the change
+     */
+    requestedByUserId?: string;
+    /**
+     * Change request status
+     */
+    status?: string;
+    /**
+     * Workorder ID
+     */
+    workorderId?: string;
 }
 
 function isOptionalChangeRequestResponsePropertyOfType(
@@ -106,9 +106,9 @@ export function instanceOfChangeRequestResponse(value: object): value is ChangeR
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createChangeRequestResponsePropertyNames();
-    const optionalStringProperties = createChangeRequestResponseOptionalProperties({ name: 'id', nullable: false }, { name: 'workorderId', nullable: false }, { name: 'requestedByUserId', nullable: false }, { name: 'requestedAt', nullable: false }, { name: 'status', nullable: false }, { name: 'description', nullable: false }, { name: 'exceptionReason', nullable: false }, { name: 'approvalNote', nullable: false }, { name: 'approvedAt', nullable: false }, { name: 'approvedBy', nullable: false }, { name: 'declinedAt', nullable: false }, );
+    const optionalStringProperties = createChangeRequestResponseOptionalProperties({ name: 'approvalNote', nullable: false }, { name: 'approvedAt', nullable: false }, { name: 'approvedBy', nullable: false }, { name: 'declinedAt', nullable: false }, { name: 'description', nullable: false }, { name: 'exceptionReason', nullable: false }, { name: 'id', nullable: false }, { name: 'requestedAt', nullable: false }, { name: 'requestedByUserId', nullable: false }, { name: 'status', nullable: false }, { name: 'workorderId', nullable: false }, );
     const optionalNumberProperties = createChangeRequestResponseOptionalProperties();
-    const optionalBooleanProperties = createChangeRequestResponseOptionalProperties({ name: 'isEmergencyException', nullable: false }, { name: 'isApprovalGated', nullable: false }, );
+    const optionalBooleanProperties = createChangeRequestResponseOptionalProperties({ name: 'isApprovalGated', nullable: false }, { name: 'isEmergencyException', nullable: false }, );
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
         && optionalStringProperties.every((property) => isOptionalChangeRequestResponsePropertyOfType(_v, property.name, 'string', property.nullable))

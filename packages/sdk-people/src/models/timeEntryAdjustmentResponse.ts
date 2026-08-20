@@ -18,13 +18,13 @@ export interface TimeEntryAdjustmentResponse {
      */
     adjustmentId?: string;
     /**
-     * Indicates whether the operation was successful
-     */
-    success: boolean;
-    /**
      * Human-readable message describing the outcome
      */
     message?: string;
+    /**
+     * Indicates whether the operation was successful
+     */
+    success: boolean;
 }
 
 function isOptionalTimeEntryAdjustmentResponsePropertyOfType(

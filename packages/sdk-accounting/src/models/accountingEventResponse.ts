@@ -14,77 +14,37 @@
  */
 export interface AccountingEventResponse { 
     /**
-     * Unique identifier of the accounting event
+     * Number of processing attempts made
      */
-    eventId: string;
+    attemptCount?: number;
     /**
-     * Identifier of the owning organization
+     * Domain key associated with the event
      */
-    organizationId: string;
-    /**
-     * Event type identifier
-     */
-    eventType: string;
-    /**
-     * Source system that emitted the event
-     */
-    sourceSystem?: string;
-    /**
-     * Business transaction timestamp
-     */
-    transactionDate?: string;
-    /**
-     * Event-specific payload content
-     */
-    payload?: object;
-    /**
-     * Processing status of the event
-     */
-    status: AccountingEventResponseStatusEnum;
-    /**
-     * Identifier of the journal entry produced, if any
-     */
-    journalEntryId?: string;
+    domainKeyId?: string;
     /**
      * Error message when processing failed
      */
     errorMessage?: string;
     /**
-     * Timestamp when the event was received (ISO 8601)
+     * Unique identifier of the accounting event
      */
-    receivedAt: string;
+    eventId: string;
     /**
-     * Timestamp when the event was processed (ISO 8601)
+     * Event type identifier
      */
-    processedAt?: string;
-    /**
-     * Monotonic sequence number assigned to the event
-     */
-    sequenceNumber?: number;
-    /**
-     * Code categorizing the failure reason
-     */
-    failureReasonCode?: string;
+    eventType: string;
     /**
      * Detailed failure description
      */
     failureDetails?: string;
     /**
-     * Number of processing attempts made
+     * Code categorizing the failure reason
      */
-    attemptCount?: number;
+    failureReasonCode?: string;
     /**
      * Posting reference assigned on final resolution
      */
     finalPostingReferenceId?: string;
-    /**
-     * Identifier of the user who resolved the event
-     */
-    resolvedByUserId?: string;
-    /**
-     * Mapping version attempted during processing
-     */
-    mappingVersionAttempted?: string;
     /**
      * Idempotency outcome of ingestion
      */
@@ -94,13 +54,53 @@ export interface AccountingEventResponse {
      */
     ingestionId?: string;
     /**
-     * Domain key associated with the event
-     */
-    domainKeyId?: string;
-    /**
      * Identifier of the related invoice, if any
      */
     invoiceId?: string;
+    /**
+     * Identifier of the journal entry produced, if any
+     */
+    journalEntryId?: string;
+    /**
+     * Mapping version attempted during processing
+     */
+    mappingVersionAttempted?: string;
+    /**
+     * Identifier of the owning organization
+     */
+    organizationId: string;
+    /**
+     * Event-specific payload content
+     */
+    payload?: object;
+    /**
+     * Timestamp when the event was processed (ISO 8601)
+     */
+    processedAt?: string;
+    /**
+     * Timestamp when the event was received (ISO 8601)
+     */
+    receivedAt: string;
+    /**
+     * Identifier of the user who resolved the event
+     */
+    resolvedByUserId?: string;
+    /**
+     * Monotonic sequence number assigned to the event
+     */
+    sequenceNumber?: number;
+    /**
+     * Source system that emitted the event
+     */
+    sourceSystem?: string;
+    /**
+     * Processing status of the event
+     */
+    status: AccountingEventResponseStatusEnum;
+    /**
+     * Business transaction timestamp
+     */
+    transactionDate?: string;
 }
 export enum AccountingEventResponseStatusEnum {
     Received = 'RECEIVED',
@@ -150,9 +150,9 @@ export function instanceOfAccountingEventResponse(value: object): value is Accou
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createAccountingEventResponsePropertyNames('eventId', 'organizationId', 'eventType', 'status', 'receivedAt', );
-    const optionalStringProperties = createAccountingEventResponseOptionalProperties({ name: 'eventId', nullable: false }, { name: 'organizationId', nullable: false }, { name: 'eventType', nullable: false }, { name: 'sourceSystem', nullable: false }, { name: 'transactionDate', nullable: false }, { name: 'status', nullable: false }, { name: 'journalEntryId', nullable: false }, { name: 'errorMessage', nullable: false }, { name: 'receivedAt', nullable: false }, { name: 'processedAt', nullable: false }, { name: 'failureReasonCode', nullable: false }, { name: 'failureDetails', nullable: false }, { name: 'finalPostingReferenceId', nullable: false }, { name: 'resolvedByUserId', nullable: false }, { name: 'mappingVersionAttempted', nullable: false }, { name: 'idempotencyOutcome', nullable: false }, { name: 'ingestionId', nullable: false }, { name: 'domainKeyId', nullable: false }, { name: 'invoiceId', nullable: false }, );
-    const optionalNumberProperties = createAccountingEventResponseOptionalProperties({ name: 'sequenceNumber', nullable: false }, { name: 'attemptCount', nullable: false }, );
+    const requiredProperties = createAccountingEventResponsePropertyNames('eventId', 'eventType', 'organizationId', 'receivedAt', 'status', );
+    const optionalStringProperties = createAccountingEventResponseOptionalProperties({ name: 'domainKeyId', nullable: false }, { name: 'errorMessage', nullable: false }, { name: 'eventId', nullable: false }, { name: 'eventType', nullable: false }, { name: 'failureDetails', nullable: false }, { name: 'failureReasonCode', nullable: false }, { name: 'finalPostingReferenceId', nullable: false }, { name: 'idempotencyOutcome', nullable: false }, { name: 'ingestionId', nullable: false }, { name: 'invoiceId', nullable: false }, { name: 'journalEntryId', nullable: false }, { name: 'mappingVersionAttempted', nullable: false }, { name: 'organizationId', nullable: false }, { name: 'processedAt', nullable: false }, { name: 'receivedAt', nullable: false }, { name: 'resolvedByUserId', nullable: false }, { name: 'sourceSystem', nullable: false }, { name: 'status', nullable: false }, { name: 'transactionDate', nullable: false }, );
+    const optionalNumberProperties = createAccountingEventResponseOptionalProperties({ name: 'attemptCount', nullable: false }, { name: 'sequenceNumber', nullable: false }, );
     const optionalBooleanProperties = createAccountingEventResponseOptionalProperties();
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

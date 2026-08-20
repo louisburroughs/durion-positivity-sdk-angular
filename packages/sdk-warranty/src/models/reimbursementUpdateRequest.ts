@@ -14,10 +14,6 @@
  */
 export interface ReimbursementUpdateRequest { 
     /**
-     * Target status
-     */
-    status: ReimbursementUpdateRequestStatusEnum;
-    /**
      * Amount the vendor approved (required for APPROVED / PARTIALLY_APPROVED)
      */
     amountApproved?: number;
@@ -29,6 +25,10 @@ export interface ReimbursementUpdateRequest {
      * Back-office notes
      */
     notes?: string;
+    /**
+     * Target status
+     */
+    status: ReimbursementUpdateRequestStatusEnum;
 }
 export enum ReimbursementUpdateRequestStatusEnum {
     Approved = 'APPROVED',
@@ -79,7 +79,7 @@ export function instanceOfReimbursementUpdateRequest(value: object): value is Re
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createReimbursementUpdateRequestPropertyNames('status', );
-    const optionalStringProperties = createReimbursementUpdateRequestOptionalProperties({ name: 'status', nullable: false }, { name: 'creditReference', nullable: false }, { name: 'notes', nullable: false }, );
+    const optionalStringProperties = createReimbursementUpdateRequestOptionalProperties({ name: 'creditReference', nullable: false }, { name: 'notes', nullable: false }, { name: 'status', nullable: false }, );
     const optionalNumberProperties = createReimbursementUpdateRequestOptionalProperties({ name: 'amountApproved', nullable: false }, );
     const optionalBooleanProperties = createReimbursementUpdateRequestOptionalProperties();
 

@@ -14,13 +14,17 @@
  */
 export interface LotResponse { 
     /**
+     * Creation timestamp
+     */
+    createdAt?: string;
+    /**
+     * Expiration date; null until the expiry flows (E3) populate it
+     */
+    expirationDate?: string;
+    /**
      * Identifier of the lot
      */
     lotId: string;
-    /**
-     * Stock item (catalog product id) the lot belongs to
-     */
-    stockItemId: string;
     /**
      * Vendor/manufacturer lot or batch number
      */
@@ -30,25 +34,21 @@ export interface LotResponse {
      */
     receivedAt: string;
     /**
-     * Vendor the lot was first received from, when known
-     */
-    vendorId?: string;
-    /**
-     * Expiration date; null until the expiry flows (E3) populate it
-     */
-    expirationDate?: string;
-    /**
      * Lifecycle status of the lot
      */
     status: LotResponseStatusEnum;
     /**
-     * Creation timestamp
+     * Stock item (catalog product id) the lot belongs to
      */
-    createdAt?: string;
+    stockItemId: string;
     /**
      * Last modification timestamp
      */
     updatedAt?: string;
+    /**
+     * Vendor the lot was first received from, when known
+     */
+    vendorId?: string;
 }
 export enum LotResponseStatusEnum {
     Active = 'ACTIVE',
@@ -97,8 +97,8 @@ export function instanceOfLotResponse(value: object): value is LotResponse {
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createLotResponsePropertyNames('lotId', 'stockItemId', 'lotNumber', 'receivedAt', 'status', );
-    const optionalStringProperties = createLotResponseOptionalProperties({ name: 'lotId', nullable: false }, { name: 'stockItemId', nullable: false }, { name: 'lotNumber', nullable: false }, { name: 'receivedAt', nullable: false }, { name: 'vendorId', nullable: false }, { name: 'expirationDate', nullable: false }, { name: 'status', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'updatedAt', nullable: false }, );
+    const requiredProperties = createLotResponsePropertyNames('lotId', 'lotNumber', 'receivedAt', 'status', 'stockItemId', );
+    const optionalStringProperties = createLotResponseOptionalProperties({ name: 'createdAt', nullable: false }, { name: 'expirationDate', nullable: false }, { name: 'lotId', nullable: false }, { name: 'lotNumber', nullable: false }, { name: 'receivedAt', nullable: false }, { name: 'status', nullable: false }, { name: 'stockItemId', nullable: false }, { name: 'updatedAt', nullable: false }, { name: 'vendorId', nullable: false }, );
     const optionalNumberProperties = createLotResponseOptionalProperties();
     const optionalBooleanProperties = createLotResponseOptionalProperties();
 

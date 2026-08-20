@@ -15,17 +15,17 @@ import { TraceabilityDocumentRef } from './traceabilityDocumentRef';
  */
 export interface TraceabilityUpstream { 
     /**
-     * Vendor the lot/serial was first received from, when known
+     * Upstream source documents, PO first then ASN then goods receipt
      */
-    vendorId?: string;
+    documents: Array<TraceabilityDocumentRef>;
     /**
      * When the lot/serial was first received into stock
      */
     receivedAt?: string;
     /**
-     * Upstream source documents, PO first then ASN then goods receipt
+     * Vendor the lot/serial was first received from, when known
      */
-    documents: Array<TraceabilityDocumentRef>;
+    vendorId?: string;
 }
 
 function isOptionalTraceabilityUpstreamPropertyOfType(
@@ -67,7 +67,7 @@ export function instanceOfTraceabilityUpstream(value: object): value is Traceabi
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createTraceabilityUpstreamPropertyNames('documents', );
-    const optionalStringProperties = createTraceabilityUpstreamOptionalProperties({ name: 'vendorId', nullable: false }, { name: 'receivedAt', nullable: false }, );
+    const optionalStringProperties = createTraceabilityUpstreamOptionalProperties({ name: 'receivedAt', nullable: false }, { name: 'vendorId', nullable: false }, );
     const optionalNumberProperties = createTraceabilityUpstreamOptionalProperties();
     const optionalBooleanProperties = createTraceabilityUpstreamOptionalProperties();
 

@@ -14,17 +14,17 @@ import { Application } from './application';
  * A deposit / down-payment credit and its application-audit trail
  */
 export interface DepositCreditResponse { 
-    depositCreditId?: string;
-    sourceType?: string;
-    sourceId?: string;
-    orderId?: string;
-    partyId?: string;
-    currencyCode?: string;
-    originalAmount?: number;
-    remainingBalance?: number;
-    status?: string;
     applications?: Array<Application>;
     createdAt?: string;
+    currencyCode?: string;
+    depositCreditId?: string;
+    orderId?: string;
+    originalAmount?: number;
+    partyId?: string;
+    remainingBalance?: number;
+    sourceId?: string;
+    sourceType?: string;
+    status?: string;
 }
 
 function isOptionalDepositCreditResponsePropertyOfType(
@@ -66,7 +66,7 @@ export function instanceOfDepositCreditResponse(value: object): value is Deposit
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createDepositCreditResponsePropertyNames();
-    const optionalStringProperties = createDepositCreditResponseOptionalProperties({ name: 'depositCreditId', nullable: false }, { name: 'sourceType', nullable: false }, { name: 'sourceId', nullable: false }, { name: 'orderId', nullable: false }, { name: 'partyId', nullable: false }, { name: 'currencyCode', nullable: false }, { name: 'status', nullable: false }, { name: 'createdAt', nullable: false }, );
+    const optionalStringProperties = createDepositCreditResponseOptionalProperties({ name: 'createdAt', nullable: false }, { name: 'currencyCode', nullable: false }, { name: 'depositCreditId', nullable: false }, { name: 'orderId', nullable: false }, { name: 'partyId', nullable: false }, { name: 'sourceId', nullable: false }, { name: 'sourceType', nullable: false }, { name: 'status', nullable: false }, );
     const optionalNumberProperties = createDepositCreditResponseOptionalProperties({ name: 'originalAmount', nullable: false }, { name: 'remainingBalance', nullable: false }, );
     const optionalBooleanProperties = createDepositCreditResponseOptionalProperties();
 

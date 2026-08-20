@@ -15,17 +15,17 @@ import { TransferOrderLineResponse } from './transferOrderLineResponse';
  */
 export interface TransferOrderResponse { 
     /**
-     * Transfer order identifier
+     * User who approved the order, when the approval step is enabled
      */
-    transferOrderId?: string;
+    approvedBy?: string;
     /**
-     * Source site the transfer ships from
+     * Creation timestamp
      */
-    sourceLocationId?: string;
+    createdAt?: string;
     /**
-     * Bin-level source storage location, when bin-scoped
+     * User who created the order
      */
-    sourceStorageLocationId?: string;
+    createdBy?: string;
     /**
      * Destination site the transfer ships to
      */
@@ -35,9 +35,9 @@ export interface TransferOrderResponse {
      */
     destinationStorageLocationId?: string;
     /**
-     * Lifecycle status
+     * User who dispatched the order
      */
-    status?: TransferOrderResponseStatusEnum;
+    dispatchedBy?: string;
     /**
      * SKU lines
      */
@@ -47,46 +47,50 @@ export interface TransferOrderResponse {
      */
     notes?: string;
     /**
-     * User who created the order
-     */
-    createdBy?: string;
-    /**
-     * User who approved the order, when the approval step is enabled
-     */
-    approvedBy?: string;
-    /**
-     * User who dispatched the order
-     */
-    dispatchedBy?: string;
-    /**
      * Disposition of the undelivered remainder; set only when SHORT_CLOSED
      */
     shortCloseDisposition?: TransferOrderResponseShortCloseDispositionEnum;
-    /**
-     * Short-close reason; set only when SHORT_CLOSED
-     */
-    shortCloseReason?: string;
     /**
      * Short-close notes; set only when SHORT_CLOSED
      */
     shortCloseNotes?: string;
     /**
-     * User who short-closed the order; set only when SHORT_CLOSED
+     * Short-close reason; set only when SHORT_CLOSED
      */
-    shortClosedBy?: string;
+    shortCloseReason?: string;
     /**
      * When the order was short-closed; set only when SHORT_CLOSED
      */
     shortClosedAt?: string;
     /**
-     * Creation timestamp
+     * User who short-closed the order; set only when SHORT_CLOSED
      */
-    createdAt?: string;
+    shortClosedBy?: string;
+    /**
+     * Source site the transfer ships from
+     */
+    sourceLocationId?: string;
+    /**
+     * Bin-level source storage location, when bin-scoped
+     */
+    sourceStorageLocationId?: string;
+    /**
+     * Lifecycle status
+     */
+    status?: TransferOrderResponseStatusEnum;
+    /**
+     * Transfer order identifier
+     */
+    transferOrderId?: string;
     /**
      * Last update timestamp
      */
     updatedAt?: string;
 }
+export enum TransferOrderResponseShortCloseDispositionEnum {
+    LostInTransit = 'LOST_IN_TRANSIT',
+    ReturnedToSource = 'RETURNED_TO_SOURCE'
+};
 export enum TransferOrderResponseStatusEnum {
     Draft = 'DRAFT',
     Approved = 'APPROVED',
@@ -95,10 +99,6 @@ export enum TransferOrderResponseStatusEnum {
     Received = 'RECEIVED',
     ShortClosed = 'SHORT_CLOSED',
     Cancelled = 'CANCELLED'
-};
-export enum TransferOrderResponseShortCloseDispositionEnum {
-    LostInTransit = 'LOST_IN_TRANSIT',
-    ReturnedToSource = 'RETURNED_TO_SOURCE'
 };
 
 
@@ -142,7 +142,7 @@ export function instanceOfTransferOrderResponse(value: object): value is Transfe
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createTransferOrderResponsePropertyNames();
-    const optionalStringProperties = createTransferOrderResponseOptionalProperties({ name: 'transferOrderId', nullable: false }, { name: 'sourceLocationId', nullable: false }, { name: 'sourceStorageLocationId', nullable: false }, { name: 'destinationLocationId', nullable: false }, { name: 'destinationStorageLocationId', nullable: false }, { name: 'status', nullable: false }, { name: 'notes', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'approvedBy', nullable: false }, { name: 'dispatchedBy', nullable: false }, { name: 'shortCloseDisposition', nullable: false }, { name: 'shortCloseReason', nullable: false }, { name: 'shortCloseNotes', nullable: false }, { name: 'shortClosedBy', nullable: false }, { name: 'shortClosedAt', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'updatedAt', nullable: false }, );
+    const optionalStringProperties = createTransferOrderResponseOptionalProperties({ name: 'approvedBy', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'destinationLocationId', nullable: false }, { name: 'destinationStorageLocationId', nullable: false }, { name: 'dispatchedBy', nullable: false }, { name: 'notes', nullable: false }, { name: 'shortCloseDisposition', nullable: false }, { name: 'shortCloseNotes', nullable: false }, { name: 'shortCloseReason', nullable: false }, { name: 'shortClosedAt', nullable: false }, { name: 'shortClosedBy', nullable: false }, { name: 'sourceLocationId', nullable: false }, { name: 'sourceStorageLocationId', nullable: false }, { name: 'status', nullable: false }, { name: 'transferOrderId', nullable: false }, { name: 'updatedAt', nullable: false }, );
     const optionalNumberProperties = createTransferOrderResponseOptionalProperties();
     const optionalBooleanProperties = createTransferOrderResponseOptionalProperties();
 

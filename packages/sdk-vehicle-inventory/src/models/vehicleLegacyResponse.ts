@@ -14,6 +14,10 @@
  */
 export interface VehicleLegacyResponse { 
     /**
+     * Timestamp when the vehicle record was created
+     */
+    createdAt?: string;
+    /**
      * Unique identifier of the vehicle
      */
     id: string;
@@ -26,25 +30,21 @@ export interface VehicleLegacyResponse {
      */
     model: string;
     /**
-     * Model year of the vehicle
+     * Timestamp when the vehicle record was last updated
      */
-    year: number;
-    /**
-     * 17-character Vehicle Identification Number
-     */
-    vin: string;
+    updatedAt?: string;
     /**
      * Vehicle type classification (CAR, VAN, COMMERCIAL_TRUCK, PASSENGER_TRUCK)
      */
     vehicleType: string;
     /**
-     * Timestamp when the vehicle record was created
+     * 17-character Vehicle Identification Number
      */
-    createdAt?: string;
+    vin: string;
     /**
-     * Timestamp when the vehicle record was last updated
+     * Model year of the vehicle
      */
-    updatedAt?: string;
+    year: number;
 }
 
 function isOptionalVehicleLegacyResponsePropertyOfType(
@@ -85,8 +85,8 @@ export function instanceOfVehicleLegacyResponse(value: object): value is Vehicle
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createVehicleLegacyResponsePropertyNames('id', 'make', 'model', 'year', 'vin', 'vehicleType', );
-    const optionalStringProperties = createVehicleLegacyResponseOptionalProperties({ name: 'id', nullable: false }, { name: 'make', nullable: false }, { name: 'model', nullable: false }, { name: 'vin', nullable: false }, { name: 'vehicleType', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'updatedAt', nullable: false }, );
+    const requiredProperties = createVehicleLegacyResponsePropertyNames('id', 'make', 'model', 'vehicleType', 'vin', 'year', );
+    const optionalStringProperties = createVehicleLegacyResponseOptionalProperties({ name: 'createdAt', nullable: false }, { name: 'id', nullable: false }, { name: 'make', nullable: false }, { name: 'model', nullable: false }, { name: 'updatedAt', nullable: false }, { name: 'vehicleType', nullable: false }, { name: 'vin', nullable: false }, );
     const optionalNumberProperties = createVehicleLegacyResponseOptionalProperties({ name: 'year', nullable: false }, );
     const optionalBooleanProperties = createVehicleLegacyResponseOptionalProperties();
 

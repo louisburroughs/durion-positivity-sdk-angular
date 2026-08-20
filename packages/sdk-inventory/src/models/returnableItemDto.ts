@@ -14,21 +14,21 @@
  */
 export interface ReturnableItemDto { 
     /**
-     * Identifier of the returnable item
-     */
-    itemId: string;
-    /**
-     * Stock keeping unit of the item
-     */
-    sku: string;
-    /**
      * Human-readable description of the item
      */
     description?: string;
     /**
+     * Identifier of the returnable item
+     */
+    itemId: string;
+    /**
      * Quantity of the item that can still be returned
      */
     quantityReturnable: number;
+    /**
+     * Stock keeping unit of the item
+     */
+    sku: string;
     /**
      * Identifier of the workorder the item was issued against
      */
@@ -73,8 +73,8 @@ export function instanceOfReturnableItemDto(value: object): value is ReturnableI
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createReturnableItemDtoPropertyNames('itemId', 'sku', 'quantityReturnable', 'workorderId', );
-    const optionalStringProperties = createReturnableItemDtoOptionalProperties({ name: 'itemId', nullable: false }, { name: 'sku', nullable: false }, { name: 'description', nullable: false }, { name: 'workorderId', nullable: false }, );
+    const requiredProperties = createReturnableItemDtoPropertyNames('itemId', 'quantityReturnable', 'sku', 'workorderId', );
+    const optionalStringProperties = createReturnableItemDtoOptionalProperties({ name: 'description', nullable: false }, { name: 'itemId', nullable: false }, { name: 'sku', nullable: false }, { name: 'workorderId', nullable: false }, );
     const optionalNumberProperties = createReturnableItemDtoOptionalProperties({ name: 'quantityReturnable', nullable: false }, );
     const optionalBooleanProperties = createReturnableItemDtoOptionalProperties();
 

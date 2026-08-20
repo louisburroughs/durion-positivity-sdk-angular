@@ -14,14 +14,6 @@
  */
 export interface BasePriceBulkIngestRecord { 
     /**
-     * Product identifier the base price applies to
-     */
-    productId: string;
-    /**
-     * Manufacturer suggested retail price
-     */
-    msrp: string;
-    /**
      * ISO-4217 currency code
      */
     currency: string;
@@ -29,6 +21,14 @@ export interface BasePriceBulkIngestRecord {
      * Date the base price becomes effective
      */
     effectiveFrom: string;
+    /**
+     * Manufacturer suggested retail price
+     */
+    msrp: string;
+    /**
+     * Product identifier the base price applies to
+     */
+    productId: string;
 }
 
 function isOptionalBasePriceBulkIngestRecordPropertyOfType(
@@ -69,8 +69,8 @@ export function instanceOfBasePriceBulkIngestRecord(value: object): value is Bas
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createBasePriceBulkIngestRecordPropertyNames('productId', 'msrp', 'currency', 'effectiveFrom', );
-    const optionalStringProperties = createBasePriceBulkIngestRecordOptionalProperties({ name: 'productId', nullable: false }, { name: 'msrp', nullable: false }, { name: 'currency', nullable: false }, { name: 'effectiveFrom', nullable: false }, );
+    const requiredProperties = createBasePriceBulkIngestRecordPropertyNames('currency', 'effectiveFrom', 'msrp', 'productId', );
+    const optionalStringProperties = createBasePriceBulkIngestRecordOptionalProperties({ name: 'currency', nullable: false }, { name: 'effectiveFrom', nullable: false }, { name: 'msrp', nullable: false }, { name: 'productId', nullable: false }, );
     const optionalNumberProperties = createBasePriceBulkIngestRecordOptionalProperties();
     const optionalBooleanProperties = createBasePriceBulkIngestRecordOptionalProperties();
 

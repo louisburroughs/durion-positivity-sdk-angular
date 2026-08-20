@@ -27,21 +27,21 @@ export interface ContactWithRoles {
      */
     email?: string;
     /**
-     * Phone number
-     */
-    phone?: string;
-    /**
      * Whether the contact has at least one primary email on file
      */
     hasPrimaryEmail?: boolean;
     /**
-     * Assigned roles for this contact
-     */
-    roles?: Array<AssignedRole>;
-    /**
      * Invoice delivery method for this contact
      */
     invoiceDeliveryMethod?: ContactWithRolesInvoiceDeliveryMethodEnum;
+    /**
+     * Phone number
+     */
+    phone?: string;
+    /**
+     * Assigned roles for this contact
+     */
+    roles?: Array<AssignedRole>;
 }
 export enum ContactWithRolesInvoiceDeliveryMethodEnum {
     Email = 'EMAIL',
@@ -90,7 +90,7 @@ export function instanceOfContactWithRoles(value: object): value is ContactWithR
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createContactWithRolesPropertyNames('contactId', 'contactName', );
-    const optionalStringProperties = createContactWithRolesOptionalProperties({ name: 'contactId', nullable: false }, { name: 'contactName', nullable: false }, { name: 'email', nullable: false }, { name: 'phone', nullable: false }, { name: 'invoiceDeliveryMethod', nullable: false }, );
+    const optionalStringProperties = createContactWithRolesOptionalProperties({ name: 'contactId', nullable: false }, { name: 'contactName', nullable: false }, { name: 'email', nullable: false }, { name: 'invoiceDeliveryMethod', nullable: false }, { name: 'phone', nullable: false }, );
     const optionalNumberProperties = createContactWithRolesOptionalProperties();
     const optionalBooleanProperties = createContactWithRolesOptionalProperties({ name: 'hasPrimaryEmail', nullable: false }, );
 

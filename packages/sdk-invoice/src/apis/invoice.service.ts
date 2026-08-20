@@ -50,24 +50,24 @@ export class InvoiceService extends BaseService {
     }
 
     /**
-     * Apply invoice adjustment
-     * Apply discount, fee, correction, or warranty credit to a draft invoice
+     * Apply Adjustment to Draft Invoice
+     * Applies a monetary adjustment (DISCOUNT, FEE, CORRECTION, or WARRANTY credit) to a DRAFT invoice and recalculates its tax and total. Use this tool while the invoice is still DRAFT; do not use it after finalization — tax and totals freeze there, so revertInvoice must return the invoice to DRAFT first. Preconditions: the invoice must exist and be in DRAFT status; a retry supplying the same type and externalReference replays idempotently, returning the invoice without double-crediting. Required inputs: type, amount (greater than zero), reason, and authorizedBy; externalReference is optional and correlates the adjustment to an external record such as a warranty settlement. Emits an INVOICE_ADJUSTMENT_APPLY event, replaces the persisted per-line tax breakdown, and publishes an invoice-updated notification. Returns 200 with the recalculated invoice, 404 when the invoice does not exist, 409 when the invoice has left DRAFT, and 400 when the type, amount, reason, or authorizedBy is missing or the amount is not positive. 
      * @endpoint post /v1/invoices/{invoiceId}/adjustments
      * @param invoiceId 
-     * @param adjustmentRequest 
+     * @param adjustmentRequest Adjustment to add to the draft invoice, with its business justification.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public applyAdjustment(invoiceId: string, adjustmentRequest: AdjustmentRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<InvoiceDetailsResponse>;
-    public applyAdjustment(invoiceId: string, adjustmentRequest: AdjustmentRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<InvoiceDetailsResponse>>;
-    public applyAdjustment(invoiceId: string, adjustmentRequest: AdjustmentRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<InvoiceDetailsResponse>>;
-    public applyAdjustment(invoiceId: string, adjustmentRequest: AdjustmentRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public applyInvoiceAdjustment(invoiceId: string, adjustmentRequest: AdjustmentRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<InvoiceDetailsResponse>;
+    public applyInvoiceAdjustment(invoiceId: string, adjustmentRequest: AdjustmentRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<InvoiceDetailsResponse>>;
+    public applyInvoiceAdjustment(invoiceId: string, adjustmentRequest: AdjustmentRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<InvoiceDetailsResponse>>;
+    public applyInvoiceAdjustment(invoiceId: string, adjustmentRequest: AdjustmentRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (invoiceId === null || invoiceId === undefined) {
-            throw new Error('Required parameter invoiceId was null or undefined when calling applyAdjustment.');
+            throw new Error('Required parameter invoiceId was null or undefined when calling applyInvoiceAdjustment.');
         }
         if (adjustmentRequest === null || adjustmentRequest === undefined) {
-            throw new Error('Required parameter adjustmentRequest was null or undefined when calling applyAdjustment.');
+            throw new Error('Required parameter adjustmentRequest was null or undefined when calling applyInvoiceAdjustment.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -124,8 +124,8 @@ export class InvoiceService extends BaseService {
     }
 
     /**
-     * Cancel a draft invoice
-     * Terminal cancel of a DRAFT invoice before any money moved (order-void path). Rejected with 409 when the invoice has left DRAFT or carries an authorized/captured payment. Idempotent — cancelling a CANCELLED invoice returns 200.
+     * Cancel a Draft Invoice
+     * Cancels a DRAFT invoice terminally before any money has moved, the invoice-side effect of an order void. Use this tool when an order is voided before tender; do not use revertInvoice, which returns a FINALIZED invoice to DRAFT, and do not use it when payments exist — reverse those first through voidPayment or refundPayment (order cancellation saga). Preconditions: the invoice must still be DRAFT and must carry no AUTHORIZED or CAPTURED payment intent; cancelling an already CANCELLED invoice is an idempotent no-op. Required inputs: invoiceId (UUID) as a path parameter; there is no request body. Emits an INVOICE_CANCEL event and sets the invoice status to CANCELLED. Returns 200 when cancelled or already cancelled, 409 when the invoice has left DRAFT or carries an authorized/captured payment, and 404 when the invoice does not exist. 
      * @endpoint post /v1/invoices/{invoiceId}/cancel
      * @param invoiceId 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -184,10 +184,10 @@ export class InvoiceService extends BaseService {
     }
 
     /**
-     * Create invoice
-     * Create invoice draft from completed workorder data
+     * Create Invoice Draft from Workorder
+     * Creates a DRAFT invoice from completed workorder data, pricing the supplied line items, calculating draft tax against the shop location\&#39;s jurisdiction, and assigning the permanent invoice number immediately. Use this tool for workorder billing; do not use createInvoiceFromOrder, which fronts a sales order at counter-sale checkout with order-authoritative totals. Preconditions: the workorder must be complete enough to bill; the call is idempotent on workorderId — a replay returns the workorder\&#39;s existing invoice instead of creating a duplicate. Required inputs: workorderId (UUID); estimateId, approvalId, locationId, customerId, idempotencyKey and lineItems (description, quantity, unitPrice, amount, optional type) are optional, and a missing lineItems list produces an empty zero-subtotal draft. Emits an INVOICE_CREATE event, persists the per-line tax breakdown, and publishes an invoice-updated notification. Returns 201 with the invoice (existing or new), and 400 when workorderId is missing. 
      * @endpoint post /v1/invoices
-     * @param invoiceCreationRequest 
+     * @param invoiceCreationRequest Workorder billing data the invoice draft is built from.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -254,10 +254,10 @@ export class InvoiceService extends BaseService {
     }
 
     /**
-     * Create invoice from a sales order
-     * Create the invoice fronting a sales order at checkout (counter sale). Idempotent on orderId — a replay returns the existing invoice with 200. When workorderId is present and a workorder invoice already exists, that invoice is returned for tender instead of creating a duplicate.
+     * Create Invoice from Sales Order
+     * Creates the DRAFT invoice fronting a sales order at counter-sale checkout, recording the order\&#39;s already-priced subtotal, tax and total verbatim — pos-order and pos-tax are authoritative, so nothing is re-priced here. Use this tool at order checkout; do not use createInvoice, which builds and prices a draft from workorder data. Preconditions: the order must carry final totals and at least one line; the call is idempotent on orderId, and when workorderId is set an existing workorder invoice is returned for tender instead of creating a duplicate. Required inputs: orderId (UUID), subtotal, taxAmount, totalAmount (non-negative) and lines; customerId, locationId and the deposit fields are optional, but depositSourceType and depositSourceId become mandatory when depositAmount is set. Emits an INVOICE_CREATE_FROM_ORDER event; a deposit take also registers a deposit credit (idempotent on orderId), and a workorder settlement draws down available deposit credits, reported as depositApplied. Returns 201 when a new invoice is created, 200 when an existing invoice is returned (orderId replay or workorder dedupe), and 400 when totals are missing or negative, lines are empty, or deposit fields are inconsistent. 
      * @endpoint post /v1/invoices/from-order
-     * @param orderInvoiceCreationRequest 
+     * @param orderInvoiceCreationRequest Sales order snapshot — authoritative totals and sold lines — the invoice records.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -324,11 +324,11 @@ export class InvoiceService extends BaseService {
     }
 
     /**
-     * Finalize invoice
-     * Transition invoice from DRAFT to FINALIZED; enforces permission matrix and emits InvoiceFinalized event for async GL posting (Story #13)
+     * Finalize a Draft Invoice
+     * Transitions an invoice from DRAFT to FINALIZED: runs the committable tax calculation, freezes tax, totals, payment terms and due date, then commits the provider tax document. Use this tool when the sale is ready to issue; do not use revertInvoice, which undoes a finalization, and mint the managerApprovalCode with elevateManagerApproval when one is needed. Preconditions: the invoice must be DRAFT with tax already calculated; callers without invoice:finalize:override (or a manager/admin role) need a valid elevation token as managerApprovalCode when the stored total exceeds 500.00. Required inputs: invoiceId (UUID) as a path parameter; managerApprovalCode and overrideReason in the body are optional below the cap and for override holders. Emits an INVOICE_FINALIZED event and publishes the async accounting event that drives GL posting; the tax commit tolerates a provider outage by recording PENDING_COMMIT in pos-tax for the re-commit job, and is skipped entirely when nothing is taxable. Returns 200 with the finalized invoice, 404 when the invoice does not exist, 409 when the invoice is not DRAFT or tax has not been calculated, and 400 when a required managerApprovalCode is missing, invalid, or expired. 
      * @endpoint post /v1/invoices/{invoiceId}/finalize
      * @param invoiceId 
-     * @param finalizationRequest 
+     * @param finalizationRequest Optional manager-approval material for finalizations above the amount cap.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -398,8 +398,8 @@ export class InvoiceService extends BaseService {
     }
 
     /**
-     * Get invoice
-     * Get invoice details
+     * Get Invoice Details
+     * Returns the full invoice detail — status, line items, adjustments, totals, tax breakdown, due date and the resolved workorder number. Use this tool when the invoiceId is already known; use searchInvoices instead when locating an invoice by number, customer name or workorder number. Preconditions: the invoice must exist. Required inputs: invoiceId (UUID) as a path parameter; there is no request body. Emits an INVOICE_GET audit event; no state changes — this is a read-only projection. Returns 404 when no invoice exists for the supplied id. 
      * @endpoint get /v1/invoices/{invoiceId}
      * @param invoiceId 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -458,11 +458,11 @@ export class InvoiceService extends BaseService {
     }
 
     /**
-     * Revert finalized invoice
-     * Revert a FINALIZED invoice back to DRAFT within 24h of finalization and before GL posting (Story #13, AC6)
+     * Revert Finalized Invoice to Draft
+     * Reverts a FINALIZED invoice back to DRAFT within 24 hours of finalization, before GL posting has made it immutable, and voids the provider tax document committed at finalization. Use this tool to correct a wrongly finalized invoice; do not use cancelInvoice, which terminally cancels a DRAFT invoice on the order-void path. Preconditions: the invoice must be FINALIZED (POSTED is immutable), less than 24 hours must have elapsed since finalizedAt, and callers without invoice:finalize:override (or a manager/admin role) must supply a valid elevation token from elevateManagerApproval as managerApprovalCode. Required inputs: invoiceId (UUID) as a path parameter plus managerApprovalCode and a reason in the body; the reverting actor and approving manager are captured for audit. Emits an INVOICE_DRAFT_REVERT event, publishes an invoice-updated notification, and issues a tax void toward pos-tax for the reverted document. Returns 200 with the DRAFT invoice, 404 when the invoice does not exist, 409 when it is POSTED, not FINALIZED, or the 24-hour window has expired, and 400 when the approval code is blank, invalid, or expired. 
      * @endpoint post /v1/invoices/{invoiceId}/revert
      * @param invoiceId 
-     * @param revertRequest 
+     * @param revertRequest Manager approval and business reason authorizing the reversion.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options

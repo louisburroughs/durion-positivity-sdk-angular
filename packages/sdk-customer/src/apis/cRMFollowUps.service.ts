@@ -42,8 +42,8 @@ export class CRMFollowUpsService extends BaseService {
     }
 
     /**
-     * Assign follow-up
-     * Assign or unassign a follow-up task
+     * Assign Follow-Up Task
+     * Assigns an open follow-up task to a CSR, or returns it to the shared queue when assignedTo is omitted. Use this tool when routing queue work to a specific person; do not use completeFollowUpTask or dismissFollowUpTask, which close the task rather than route it. Preconditions: the task must exist and still be OPEN; closed tasks cannot be modified and a new follow-up must be raised instead. Required inputs: taskId (UUID) as a path parameter; assignedTo is an optional query parameter whose omission unassigns the task, and there is no request body. Emits a CRM_FOLLOWUP_ASSIGN event; only the task\&#39;s assignee changes. Returns 404 when the task does not exist, and 422 when the task is already DONE or DISMISSED. 
      * @endpoint put /v1/crm/follow-ups/{taskId}/assignee
      * @param taskId 
      * @param assignedTo 
@@ -51,12 +51,12 @@ export class CRMFollowUpsService extends BaseService {
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public assign1(taskId: string, assignedTo?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<FollowUpTaskResponse>;
-    public assign1(taskId: string, assignedTo?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<FollowUpTaskResponse>>;
-    public assign1(taskId: string, assignedTo?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<FollowUpTaskResponse>>;
-    public assign1(taskId: string, assignedTo?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public assignFollowUpTask(taskId: string, assignedTo?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<FollowUpTaskResponse>;
+    public assignFollowUpTask(taskId: string, assignedTo?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<FollowUpTaskResponse>>;
+    public assignFollowUpTask(taskId: string, assignedTo?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<FollowUpTaskResponse>>;
+    public assignFollowUpTask(taskId: string, assignedTo?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (taskId === null || taskId === undefined) {
-            throw new Error('Required parameter taskId was null or undefined when calling assign1.');
+            throw new Error('Required parameter taskId was null or undefined when calling assignFollowUpTask.');
         }
 
         let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
@@ -115,24 +115,24 @@ export class CRMFollowUpsService extends BaseService {
     }
 
     /**
-     * Complete follow-up
-     * Close a follow-up as worked, recording the outcome and any resulting booking
+     * Complete Follow-Up Task
+     * Closes an open follow-up task as DONE, recording the outcome and any workorder or appointment that resulted from the touch. Use this tool when the follow-up was actually worked; use dismissFollowUpTask instead when the task is being deliberately abandoned without contact. Preconditions: the task must exist and still be OPEN; a closed task cannot be reopened, so a new follow-up must be raised to try again. Required inputs: taskId (UUID) as a path parameter and outcome (non-blank, max 500) in the body; bookedWorkorderId and bookedAppointmentId are optional booking references. Emits a CRM_FOLLOWUP_COMPLETE event and stamps closedAt and closedBy on the task. Returns 404 when the task does not exist, 422 when it is already DONE or DISMISSED, and 400 when outcome is blank. 
      * @endpoint post /v1/crm/follow-ups/{taskId}/complete
      * @param taskId 
-     * @param closeFollowUpTaskRequest 
+     * @param closeFollowUpTaskRequest The worked outcome of the follow-up and any booking it produced.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public complete(taskId: string, closeFollowUpTaskRequest: CloseFollowUpTaskRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<FollowUpTaskResponse>;
-    public complete(taskId: string, closeFollowUpTaskRequest: CloseFollowUpTaskRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<FollowUpTaskResponse>>;
-    public complete(taskId: string, closeFollowUpTaskRequest: CloseFollowUpTaskRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<FollowUpTaskResponse>>;
-    public complete(taskId: string, closeFollowUpTaskRequest: CloseFollowUpTaskRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public completeFollowUpTask(taskId: string, closeFollowUpTaskRequest: CloseFollowUpTaskRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<FollowUpTaskResponse>;
+    public completeFollowUpTask(taskId: string, closeFollowUpTaskRequest: CloseFollowUpTaskRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<FollowUpTaskResponse>>;
+    public completeFollowUpTask(taskId: string, closeFollowUpTaskRequest: CloseFollowUpTaskRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<FollowUpTaskResponse>>;
+    public completeFollowUpTask(taskId: string, closeFollowUpTaskRequest: CloseFollowUpTaskRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (taskId === null || taskId === undefined) {
-            throw new Error('Required parameter taskId was null or undefined when calling complete.');
+            throw new Error('Required parameter taskId was null or undefined when calling completeFollowUpTask.');
         }
         if (closeFollowUpTaskRequest === null || closeFollowUpTaskRequest === undefined) {
-            throw new Error('Required parameter closeFollowUpTaskRequest was null or undefined when calling complete.');
+            throw new Error('Required parameter closeFollowUpTaskRequest was null or undefined when calling completeFollowUpTask.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -189,24 +189,24 @@ export class CRMFollowUpsService extends BaseService {
     }
 
     /**
-     * Raise follow-up task
-     * Raise a follow-up task against a party
+     * Raise Follow-Up Task
+     * Raises a new OPEN follow-up task against a party, recording the creating user from the security context. Use this tool when a customer needs a future touch such as a declined-service or service-due follow-up; do not use completeFollowUpTask or dismissFollowUpTask, which close an existing task. Preconditions: the party must exist as either a commercial or person party. Required inputs: partyId (UUID) as a path parameter and type in the body (DECLINED_SERVICE_FOLLOWUP, SERVICE_DUE_REMINDER, FLEET_CHECKIN, CAMPAIGN_RESPONSE, or GENERAL); vehicleId, dueDate, assignedTo, reason, sourceWorkorderId, and notes are optional, and an omitted assignedTo leaves the task in the shared queue. Emits a CRM_FOLLOWUP_CREATE event and persists the task with status OPEN. Returns 404 when no party exists for the supplied partyId, and 400 when type is missing. 
      * @endpoint post /v1/crm/parties/{partyId}/follow-ups
      * @param partyId 
-     * @param createFollowUpTaskRequest 
+     * @param createFollowUpTaskRequest The follow-up work to schedule against the party, typed by follow-up kind.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public create1(partyId: string, createFollowUpTaskRequest: CreateFollowUpTaskRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<FollowUpTaskResponse>;
-    public create1(partyId: string, createFollowUpTaskRequest: CreateFollowUpTaskRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<FollowUpTaskResponse>>;
-    public create1(partyId: string, createFollowUpTaskRequest: CreateFollowUpTaskRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<FollowUpTaskResponse>>;
-    public create1(partyId: string, createFollowUpTaskRequest: CreateFollowUpTaskRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public createFollowUpTask(partyId: string, createFollowUpTaskRequest: CreateFollowUpTaskRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<FollowUpTaskResponse>;
+    public createFollowUpTask(partyId: string, createFollowUpTaskRequest: CreateFollowUpTaskRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<FollowUpTaskResponse>>;
+    public createFollowUpTask(partyId: string, createFollowUpTaskRequest: CreateFollowUpTaskRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<FollowUpTaskResponse>>;
+    public createFollowUpTask(partyId: string, createFollowUpTaskRequest: CreateFollowUpTaskRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (partyId === null || partyId === undefined) {
-            throw new Error('Required parameter partyId was null or undefined when calling create1.');
+            throw new Error('Required parameter partyId was null or undefined when calling createFollowUpTask.');
         }
         if (createFollowUpTaskRequest === null || createFollowUpTaskRequest === undefined) {
-            throw new Error('Required parameter createFollowUpTaskRequest was null or undefined when calling create1.');
+            throw new Error('Required parameter createFollowUpTaskRequest was null or undefined when calling createFollowUpTask.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -263,24 +263,24 @@ export class CRMFollowUpsService extends BaseService {
     }
 
     /**
-     * Dismiss follow-up
-     * Close a follow-up as deliberately not pursued, recording why
+     * Dismiss Follow-Up Task
+     * Closes an open follow-up task as DISMISSED, recording why it is deliberately not being pursued. Use this tool when a follow-up should be abandoned, for example because the customer already returned; use completeFollowUpTask instead when the touch was actually made. Preconditions: the task must exist and still be OPEN; dismissal is final and a new task must be raised to revisit the customer. Required inputs: taskId (UUID) as a path parameter and outcome (non-blank, max 500) in the body explaining the dismissal; booking references are accepted but normally absent. Emits a CRM_FOLLOWUP_DISMISS event and stamps closedAt and closedBy on the task. Returns 404 when the task does not exist, 422 when it is already DONE or DISMISSED, and 400 when outcome is blank. 
      * @endpoint post /v1/crm/follow-ups/{taskId}/dismiss
      * @param taskId 
-     * @param closeFollowUpTaskRequest 
+     * @param closeFollowUpTaskRequest The reason this follow-up is being closed without being pursued.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public dismiss(taskId: string, closeFollowUpTaskRequest: CloseFollowUpTaskRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<FollowUpTaskResponse>;
-    public dismiss(taskId: string, closeFollowUpTaskRequest: CloseFollowUpTaskRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<FollowUpTaskResponse>>;
-    public dismiss(taskId: string, closeFollowUpTaskRequest: CloseFollowUpTaskRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<FollowUpTaskResponse>>;
-    public dismiss(taskId: string, closeFollowUpTaskRequest: CloseFollowUpTaskRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public dismissFollowUpTask(taskId: string, closeFollowUpTaskRequest: CloseFollowUpTaskRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<FollowUpTaskResponse>;
+    public dismissFollowUpTask(taskId: string, closeFollowUpTaskRequest: CloseFollowUpTaskRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<FollowUpTaskResponse>>;
+    public dismissFollowUpTask(taskId: string, closeFollowUpTaskRequest: CloseFollowUpTaskRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<FollowUpTaskResponse>>;
+    public dismissFollowUpTask(taskId: string, closeFollowUpTaskRequest: CloseFollowUpTaskRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (taskId === null || taskId === undefined) {
-            throw new Error('Required parameter taskId was null or undefined when calling dismiss.');
+            throw new Error('Required parameter taskId was null or undefined when calling dismissFollowUpTask.');
         }
         if (closeFollowUpTaskRequest === null || closeFollowUpTaskRequest === undefined) {
-            throw new Error('Required parameter closeFollowUpTaskRequest was null or undefined when calling dismiss.');
+            throw new Error('Required parameter closeFollowUpTaskRequest was null or undefined when calling dismissFollowUpTask.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -337,161 +337,8 @@ export class CRMFollowUpsService extends BaseService {
     }
 
     /**
-     * Get follow-up task
-     * Retrieve a single follow-up task
-     * @endpoint get /v1/crm/follow-ups/{taskId}
-     * @param taskId 
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     * @param options additional options
-     */
-    public get2(taskId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<FollowUpTaskResponse>;
-    public get2(taskId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<FollowUpTaskResponse>>;
-    public get2(taskId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<FollowUpTaskResponse>>;
-    public get2(taskId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
-        if (taskId === null || taskId === undefined) {
-            throw new Error('Required parameter taskId was null or undefined when calling get2.');
-        }
-
-        let localVarHeaders = this.defaultHeaders;
-
-        // authentication (bearerAuth) required
-        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
-
-        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
-            'application/json'
-        ]);
-        if (localVarHttpHeaderAcceptSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
-        }
-
-        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
-
-        const localVarTransferCache: boolean = options?.transferCache ?? true;
-
-
-        let responseType_: 'text' | 'json' | 'blob' = 'json';
-        if (localVarHttpHeaderAcceptSelected) {
-            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
-                responseType_ = 'text';
-            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
-                responseType_ = 'json';
-            } else {
-                responseType_ = 'blob';
-            }
-        }
-
-        let localVarPath = `/v1/crm/follow-ups/${this.configuration.encodeParam({name: "taskId", value: taskId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
-        const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<FollowUpTaskResponse>('get', `${basePath}${localVarPath}`,
-            {
-                context: localVarHttpContext,
-                responseType: <any>responseType_,
-                ...(withCredentials ? { withCredentials } : {}),
-                headers: localVarHeaders,
-                observe: observe,
-                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * List party follow-ups
-     * Follow-up tasks raised against a party
-     * @endpoint get /v1/crm/parties/{partyId}/follow-ups
-     * @param partyId 
-     * @param status 
-     * @param page 
-     * @param size 
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     * @param options additional options
-     */
-    public listForParty(partyId: string, status?: 'OPEN' | 'DONE' | 'DISMISSED', page?: number, size?: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PagedResponse>;
-    public listForParty(partyId: string, status?: 'OPEN' | 'DONE' | 'DISMISSED', page?: number, size?: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PagedResponse>>;
-    public listForParty(partyId: string, status?: 'OPEN' | 'DONE' | 'DISMISSED', page?: number, size?: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PagedResponse>>;
-    public listForParty(partyId: string, status?: 'OPEN' | 'DONE' | 'DISMISSED', page?: number, size?: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
-        if (partyId === null || partyId === undefined) {
-            throw new Error('Required parameter partyId was null or undefined when calling listForParty.');
-        }
-
-        let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
-
-        localVarQueryParameters = this.addToHttpParams(
-            localVarQueryParameters,
-            'status',
-            <any>status,
-            QueryParamStyle.Form,
-            true,
-        );
-
-
-        localVarQueryParameters = this.addToHttpParams(
-            localVarQueryParameters,
-            'page',
-            <any>page,
-            QueryParamStyle.Form,
-            true,
-        );
-
-
-        localVarQueryParameters = this.addToHttpParams(
-            localVarQueryParameters,
-            'size',
-            <any>size,
-            QueryParamStyle.Form,
-            true,
-        );
-
-
-        let localVarHeaders = this.defaultHeaders;
-
-        // authentication (bearerAuth) required
-        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
-
-        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
-            'application/json'
-        ]);
-        if (localVarHttpHeaderAcceptSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
-        }
-
-        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
-
-        const localVarTransferCache: boolean = options?.transferCache ?? true;
-
-
-        let responseType_: 'text' | 'json' | 'blob' = 'json';
-        if (localVarHttpHeaderAcceptSelected) {
-            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
-                responseType_ = 'text';
-            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
-                responseType_ = 'json';
-            } else {
-                responseType_ = 'blob';
-            }
-        }
-
-        let localVarPath = `/v1/crm/parties/${this.configuration.encodeParam({name: "partyId", value: partyId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/follow-ups`;
-        const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<PagedResponse>('get', `${basePath}${localVarPath}`,
-            {
-                context: localVarHttpContext,
-                params: localVarQueryParameters.toHttpParams(),
-                responseType: <any>responseType_,
-                ...(withCredentials ? { withCredentials } : {}),
-                headers: localVarHeaders,
-                observe: observe,
-                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * Follow-up queue
-     * The CSR work queue, ordered by due date. All filters are optional.
+     * Get Follow-Up Work Queue
+     * Returns the CSR follow-up work queue across all parties, ordered by due date, optionally filtered by status, assignee, and task type. Use this tool when working the shared queue of outstanding follow-ups; use listPartyFollowUps instead to see tasks raised against one specific party. Preconditions: none; an empty page is returned when no task matches the filters. Required inputs: none; status filters on OPEN, DONE, or DISMISSED, type filters on DECLINED_SERVICE_FOLLOWUP, SERVICE_DUE_REMINDER, FLEET_CHECKIN, CAMPAIGN_RESPONSE, or GENERAL, page defaults to 0, and size defaults to 50 clamped between 1 and 200. Emits a CRM_FOLLOWUP_QUEUE audit event; no state changes occur. Returns 200 with an empty page rather than an error when the queue is clear. 
      * @endpoint get /v1/crm/follow-ups
      * @param status 
      * @param assignedTo 
@@ -502,10 +349,10 @@ export class CRMFollowUpsService extends BaseService {
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public queue(status?: 'OPEN' | 'DONE' | 'DISMISSED', assignedTo?: string, type?: 'DECLINED_SERVICE_FOLLOWUP' | 'SERVICE_DUE_REMINDER' | 'FLEET_CHECKIN' | 'CAMPAIGN_RESPONSE' | 'GENERAL', page?: number, size?: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PagedResponse>;
-    public queue(status?: 'OPEN' | 'DONE' | 'DISMISSED', assignedTo?: string, type?: 'DECLINED_SERVICE_FOLLOWUP' | 'SERVICE_DUE_REMINDER' | 'FLEET_CHECKIN' | 'CAMPAIGN_RESPONSE' | 'GENERAL', page?: number, size?: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PagedResponse>>;
-    public queue(status?: 'OPEN' | 'DONE' | 'DISMISSED', assignedTo?: string, type?: 'DECLINED_SERVICE_FOLLOWUP' | 'SERVICE_DUE_REMINDER' | 'FLEET_CHECKIN' | 'CAMPAIGN_RESPONSE' | 'GENERAL', page?: number, size?: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PagedResponse>>;
-    public queue(status?: 'OPEN' | 'DONE' | 'DISMISSED', assignedTo?: string, type?: 'DECLINED_SERVICE_FOLLOWUP' | 'SERVICE_DUE_REMINDER' | 'FLEET_CHECKIN' | 'CAMPAIGN_RESPONSE' | 'GENERAL', page?: number, size?: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getFollowUpQueue(status?: 'OPEN' | 'DONE' | 'DISMISSED', assignedTo?: string, type?: 'DECLINED_SERVICE_FOLLOWUP' | 'SERVICE_DUE_REMINDER' | 'FLEET_CHECKIN' | 'CAMPAIGN_RESPONSE' | 'GENERAL', page?: number, size?: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PagedResponse>;
+    public getFollowUpQueue(status?: 'OPEN' | 'DONE' | 'DISMISSED', assignedTo?: string, type?: 'DECLINED_SERVICE_FOLLOWUP' | 'SERVICE_DUE_REMINDER' | 'FLEET_CHECKIN' | 'CAMPAIGN_RESPONSE' | 'GENERAL', page?: number, size?: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PagedResponse>>;
+    public getFollowUpQueue(status?: 'OPEN' | 'DONE' | 'DISMISSED', assignedTo?: string, type?: 'DECLINED_SERVICE_FOLLOWUP' | 'SERVICE_DUE_REMINDER' | 'FLEET_CHECKIN' | 'CAMPAIGN_RESPONSE' | 'GENERAL', page?: number, size?: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PagedResponse>>;
+    public getFollowUpQueue(status?: 'OPEN' | 'DONE' | 'DISMISSED', assignedTo?: string, type?: 'DECLINED_SERVICE_FOLLOWUP' | 'SERVICE_DUE_REMINDER' | 'FLEET_CHECKIN' | 'CAMPAIGN_RESPONSE' | 'GENERAL', page?: number, size?: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
 
@@ -583,6 +430,159 @@ export class CRMFollowUpsService extends BaseService {
         }
 
         let localVarPath = `/v1/crm/follow-ups`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<PagedResponse>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                params: localVarQueryParameters.toHttpParams(),
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Get Follow-Up Task
+     * Returns one follow-up task with its party, vehicle, type, due date, assignee, status, and any recorded outcome and booking references. Use this tool when the task id is already known; use getFollowUpQueue instead to discover tasks by status, assignee, or type. Preconditions: the follow-up task must exist. Required inputs: taskId (UUID) as a path parameter; there is no request body. Emits a CRM_FOLLOWUP_GET audit event; no state changes occur. Returns 404 when no follow-up task exists for the supplied taskId. 
+     * @endpoint get /v1/crm/follow-ups/{taskId}
+     * @param taskId 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public getFollowUpTask(taskId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<FollowUpTaskResponse>;
+    public getFollowUpTask(taskId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<FollowUpTaskResponse>>;
+    public getFollowUpTask(taskId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<FollowUpTaskResponse>>;
+    public getFollowUpTask(taskId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (taskId === null || taskId === undefined) {
+            throw new Error('Required parameter taskId was null or undefined when calling getFollowUpTask.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/crm/follow-ups/${this.configuration.encodeParam({name: "taskId", value: taskId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<FollowUpTaskResponse>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * List Party Follow-Up Tasks
+     * Returns the follow-up tasks raised against one party, ordered by due date then creation time, optionally filtered by status. Use this tool when reviewing outstanding work for a specific customer; use getFollowUpQueue instead for the cross-party CSR work queue. Preconditions: none; an unknown partyId yields an empty page rather than an error. Required inputs: partyId (UUID) as a path parameter; status optionally filters on OPEN, DONE, or DISMISSED, page defaults to 0, and size defaults to 50 clamped between 1 and 200. Emits a CRM_FOLLOWUP_LIST audit event; no state changes occur. Returns 200 with an empty page rather than an error when the party has no follow-ups. 
+     * @endpoint get /v1/crm/parties/{partyId}/follow-ups
+     * @param partyId 
+     * @param status 
+     * @param page 
+     * @param size 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public listPartyFollowUps(partyId: string, status?: 'OPEN' | 'DONE' | 'DISMISSED', page?: number, size?: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PagedResponse>;
+    public listPartyFollowUps(partyId: string, status?: 'OPEN' | 'DONE' | 'DISMISSED', page?: number, size?: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PagedResponse>>;
+    public listPartyFollowUps(partyId: string, status?: 'OPEN' | 'DONE' | 'DISMISSED', page?: number, size?: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PagedResponse>>;
+    public listPartyFollowUps(partyId: string, status?: 'OPEN' | 'DONE' | 'DISMISSED', page?: number, size?: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (partyId === null || partyId === undefined) {
+            throw new Error('Required parameter partyId was null or undefined when calling listPartyFollowUps.');
+        }
+
+        let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'status',
+            <any>status,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'page',
+            <any>page,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'size',
+            <any>size,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/crm/parties/${this.configuration.encodeParam({name: "partyId", value: partyId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/follow-ups`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<PagedResponse>('get', `${basePath}${localVarPath}`,
             {

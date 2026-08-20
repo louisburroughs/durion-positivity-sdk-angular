@@ -14,6 +14,14 @@
  */
 export interface CustomerBulkIngestRecord { 
     /**
+     * Existing customer number, if known
+     */
+    customerNumber?: string;
+    /**
+     * Email address of the customer
+     */
+    email?: string;
+    /**
      * First name of the customer
      */
     firstName: string;
@@ -22,10 +30,6 @@ export interface CustomerBulkIngestRecord {
      */
     lastName: string;
     /**
-     * Email address of the customer
-     */
-    email?: string;
-    /**
      * Phone number of the customer
      */
     phoneNumber?: string;
@@ -33,10 +37,6 @@ export interface CustomerBulkIngestRecord {
      * Primary address of the customer
      */
     primaryAddress?: string;
-    /**
-     * Existing customer number, if known
-     */
-    customerNumber?: string;
 }
 
 function isOptionalCustomerBulkIngestRecordPropertyOfType(
@@ -78,7 +78,7 @@ export function instanceOfCustomerBulkIngestRecord(value: object): value is Cust
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createCustomerBulkIngestRecordPropertyNames('firstName', 'lastName', );
-    const optionalStringProperties = createCustomerBulkIngestRecordOptionalProperties({ name: 'firstName', nullable: false }, { name: 'lastName', nullable: false }, { name: 'email', nullable: false }, { name: 'phoneNumber', nullable: false }, { name: 'primaryAddress', nullable: false }, { name: 'customerNumber', nullable: false }, );
+    const optionalStringProperties = createCustomerBulkIngestRecordOptionalProperties({ name: 'customerNumber', nullable: false }, { name: 'email', nullable: false }, { name: 'firstName', nullable: false }, { name: 'lastName', nullable: false }, { name: 'phoneNumber', nullable: false }, { name: 'primaryAddress', nullable: false }, );
     const optionalNumberProperties = createCustomerBulkIngestRecordOptionalProperties();
     const optionalBooleanProperties = createCustomerBulkIngestRecordOptionalProperties();
 

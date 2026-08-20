@@ -16,33 +16,13 @@ import { TaxLiabilityReconciliation } from './taxLiabilityReconciliation';
  */
 export interface TaxLiabilitySnapshotResponse { 
     /**
-     * Snapshot id
+     * SHA-256 (lowercase hex) over the canonical report serialization
      */
-    snapshotId: string;
-    /**
-     * Accounting period id the snapshot freezes
-     */
-    periodId: string;
-    /**
-     * Accounting period code (YYYY-MM)
-     */
-    periodCode: string;
-    /**
-     * Period start date (inclusive)
-     */
-    startDate: string;
+    contentHash: string;
     /**
      * Period end date (inclusive)
      */
     endDate: string;
-    /**
-     * Snapshot lifecycle status: ACTIVE or SUPERSEDED
-     */
-    status: string;
-    /**
-     * The period\'s closedAt at freeze time
-     */
-    periodClosedAt: string;
     /**
      * Freeze timestamp
      */
@@ -52,38 +32,34 @@ export interface TaxLiabilitySnapshotResponse {
      */
     frozenBy: string;
     /**
-     * SHA-256 (lowercase hex) over the canonical report serialization
+     * The period\'s closedAt at freeze time
      */
-    contentHash: string;
+    periodClosedAt: string;
+    /**
+     * Accounting period code (YYYY-MM)
+     */
+    periodCode: string;
+    /**
+     * Accounting period id the snapshot freezes
+     */
+    periodId: string;
+    reconciliation: TaxLiabilityReconciliation;
     /**
      * Frozen per-jurisdiction rows in report order
      */
     rows: Array<TaxLiabilityRow>;
     /**
-     * Grand total taxable base
+     * Snapshot id
      */
-    totalTaxableBase: number;
+    snapshotId: string;
     /**
-     * Grand total exempt base
+     * Period start date (inclusive)
      */
-    totalExemptBase: number;
+    startDate: string;
     /**
-     * Grand total gross tax collected
+     * Snapshot lifecycle status: ACTIVE or SUPERSEDED
      */
-    totalTaxCollectedGross: number;
-    /**
-     * Grand total credits netted
-     */
-    totalCreditsNetted: number;
-    /**
-     * Grand total net tax
-     */
-    totalNetTax: number;
-    reconciliation: TaxLiabilityReconciliation;
-    /**
-     * Id of the ACTIVE snapshot this one superseded at freeze time; null for a first freeze
-     */
-    supersedesSnapshotId?: string;
+    status: string;
     /**
      * When this snapshot was superseded; null while ACTIVE
      */
@@ -92,6 +68,30 @@ export interface TaxLiabilitySnapshotResponse {
      * User whose re-freeze superseded this snapshot; null while ACTIVE
      */
     supersededBy?: string;
+    /**
+     * Id of the ACTIVE snapshot this one superseded at freeze time; null for a first freeze
+     */
+    supersedesSnapshotId?: string;
+    /**
+     * Grand total credits netted
+     */
+    totalCreditsNetted: number;
+    /**
+     * Grand total exempt base
+     */
+    totalExemptBase: number;
+    /**
+     * Grand total net tax
+     */
+    totalNetTax: number;
+    /**
+     * Grand total gross tax collected
+     */
+    totalTaxCollectedGross: number;
+    /**
+     * Grand total taxable base
+     */
+    totalTaxableBase: number;
 }
 
 function isOptionalTaxLiabilitySnapshotResponsePropertyOfType(
@@ -132,9 +132,9 @@ export function instanceOfTaxLiabilitySnapshotResponse(value: object): value is 
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createTaxLiabilitySnapshotResponsePropertyNames('snapshotId', 'periodId', 'periodCode', 'startDate', 'endDate', 'status', 'periodClosedAt', 'frozenAt', 'frozenBy', 'contentHash', 'rows', 'totalTaxableBase', 'totalExemptBase', 'totalTaxCollectedGross', 'totalCreditsNetted', 'totalNetTax', 'reconciliation', );
-    const optionalStringProperties = createTaxLiabilitySnapshotResponseOptionalProperties({ name: 'snapshotId', nullable: false }, { name: 'periodId', nullable: false }, { name: 'periodCode', nullable: false }, { name: 'startDate', nullable: false }, { name: 'endDate', nullable: false }, { name: 'status', nullable: false }, { name: 'periodClosedAt', nullable: false }, { name: 'frozenAt', nullable: false }, { name: 'frozenBy', nullable: false }, { name: 'contentHash', nullable: false }, { name: 'supersedesSnapshotId', nullable: false }, { name: 'supersededAt', nullable: false }, { name: 'supersededBy', nullable: false }, );
-    const optionalNumberProperties = createTaxLiabilitySnapshotResponseOptionalProperties({ name: 'totalTaxableBase', nullable: false }, { name: 'totalExemptBase', nullable: false }, { name: 'totalTaxCollectedGross', nullable: false }, { name: 'totalCreditsNetted', nullable: false }, { name: 'totalNetTax', nullable: false }, );
+    const requiredProperties = createTaxLiabilitySnapshotResponsePropertyNames('contentHash', 'endDate', 'frozenAt', 'frozenBy', 'periodClosedAt', 'periodCode', 'periodId', 'reconciliation', 'rows', 'snapshotId', 'startDate', 'status', 'totalCreditsNetted', 'totalExemptBase', 'totalNetTax', 'totalTaxCollectedGross', 'totalTaxableBase', );
+    const optionalStringProperties = createTaxLiabilitySnapshotResponseOptionalProperties({ name: 'contentHash', nullable: false }, { name: 'endDate', nullable: false }, { name: 'frozenAt', nullable: false }, { name: 'frozenBy', nullable: false }, { name: 'periodClosedAt', nullable: false }, { name: 'periodCode', nullable: false }, { name: 'periodId', nullable: false }, { name: 'snapshotId', nullable: false }, { name: 'startDate', nullable: false }, { name: 'status', nullable: false }, { name: 'supersededAt', nullable: false }, { name: 'supersededBy', nullable: false }, { name: 'supersedesSnapshotId', nullable: false }, );
+    const optionalNumberProperties = createTaxLiabilitySnapshotResponseOptionalProperties({ name: 'totalCreditsNetted', nullable: false }, { name: 'totalExemptBase', nullable: false }, { name: 'totalNetTax', nullable: false }, { name: 'totalTaxCollectedGross', nullable: false }, { name: 'totalTaxableBase', nullable: false }, );
     const optionalBooleanProperties = createTaxLiabilitySnapshotResponseOptionalProperties();
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

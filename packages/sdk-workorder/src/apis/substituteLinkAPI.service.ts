@@ -38,21 +38,21 @@ export class SubstituteLinkAPIService extends BaseService {
     }
 
     /**
-     * Suggest workorder substitutes
-     * Suggest substitute parts for a workorder. Provide a request body with partId to scope suggestions to that part\&#39;s active substitute links. Without a part scope this currently returns an empty list; workorder-wide suggestions are not yet implemented.
+     * Suggest Substitute Parts for Workorder
+     * Suggests substitute parts for a workorder by returning the active substitute links of the part named in the request, ordered by ascending priority. Use this tool when a pick is short and a stand-in part is needed; do not use listSubstituteLinks, which is the catalog view keyed by product rather than a workorder suggestion. Preconditions: suggestions require a partId scope — without a body or partId the result is currently an empty list, because workorder-wide suggestions are not implemented. Required inputs: workorderId (UUID) as a path parameter; the body is optional and carries partId (UUID) to scope suggestions to that part\&#39;s links. Emits a WORKORDER_SUBSTITUTE_SUGGEST audit event; no substitution is applied and no state changes — this is a read-only suggestion. Returns 200 with the suggested links, empty when no partId is given or no active links exist. 
      * @endpoint post /v1/workorders/{workorderId}/suggestSubstitutes
      * @param workorderId 
-     * @param suggestSubstitutesRequest 
+     * @param suggestSubstitutesRequest Optional scope naming the workorder part to suggest substitutes for.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public suggestSubstitutes(workorderId: string, suggestSubstitutesRequest?: SuggestSubstitutesRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<SubstituteLinkResponse>>;
-    public suggestSubstitutes(workorderId: string, suggestSubstitutesRequest?: SuggestSubstitutesRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<SubstituteLinkResponse>>>;
-    public suggestSubstitutes(workorderId: string, suggestSubstitutesRequest?: SuggestSubstitutesRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<SubstituteLinkResponse>>>;
-    public suggestSubstitutes(workorderId: string, suggestSubstitutesRequest?: SuggestSubstitutesRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public suggestWorkorderSubstitutes(workorderId: string, suggestSubstitutesRequest?: SuggestSubstitutesRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<SubstituteLinkResponse>>;
+    public suggestWorkorderSubstitutes(workorderId: string, suggestSubstitutesRequest?: SuggestSubstitutesRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<SubstituteLinkResponse>>>;
+    public suggestWorkorderSubstitutes(workorderId: string, suggestSubstitutesRequest?: SuggestSubstitutesRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<SubstituteLinkResponse>>>;
+    public suggestWorkorderSubstitutes(workorderId: string, suggestSubstitutesRequest?: SuggestSubstitutesRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (workorderId === null || workorderId === undefined) {
-            throw new Error('Required parameter workorderId was null or undefined when calling suggestSubstitutes.');
+            throw new Error('Required parameter workorderId was null or undefined when calling suggestWorkorderSubstitutes.');
         }
 
         let localVarHeaders = this.defaultHeaders;

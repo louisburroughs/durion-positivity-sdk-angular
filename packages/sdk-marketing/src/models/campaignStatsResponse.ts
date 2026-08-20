@@ -15,17 +15,17 @@ import { ChannelFunnel } from './channelFunnel';
  */
 export interface CampaignStatsResponse { 
     /**
-     * Campaign
+     * Total discount value across attributed redemptions
      */
-    campaignId: string;
-    /**
-     * Campaign code
-     */
-    code: string;
+    attributedDiscount: number;
     /**
      * Targeted party kind
      */
     audienceType: CampaignStatsResponseAudienceTypeEnum;
+    /**
+     * Campaign
+     */
+    campaignId: string;
     /**
      * Program grouping this campaign\'s arm
      */
@@ -35,13 +35,13 @@ export interface CampaignStatsResponse {
      */
     channels: Array<ChannelFunnel>;
     /**
+     * Campaign code
+     */
+    code: string;
+    /**
      * Redemptions credited to this campaign
      */
     redeemed: number;
-    /**
-     * Total discount value across attributed redemptions
-     */
-    attributedDiscount: number;
 }
 export enum CampaignStatsResponseAudienceTypeEnum {
     Commercial = 'COMMERCIAL',
@@ -88,9 +88,9 @@ export function instanceOfCampaignStatsResponse(value: object): value is Campaig
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createCampaignStatsResponsePropertyNames('campaignId', 'code', 'audienceType', 'channels', 'redeemed', 'attributedDiscount', );
-    const optionalStringProperties = createCampaignStatsResponseOptionalProperties({ name: 'campaignId', nullable: false }, { name: 'code', nullable: false }, { name: 'audienceType', nullable: false }, { name: 'campaignProgramId', nullable: false }, );
-    const optionalNumberProperties = createCampaignStatsResponseOptionalProperties({ name: 'redeemed', nullable: false }, { name: 'attributedDiscount', nullable: false }, );
+    const requiredProperties = createCampaignStatsResponsePropertyNames('attributedDiscount', 'audienceType', 'campaignId', 'channels', 'code', 'redeemed', );
+    const optionalStringProperties = createCampaignStatsResponseOptionalProperties({ name: 'audienceType', nullable: false }, { name: 'campaignId', nullable: false }, { name: 'campaignProgramId', nullable: false }, { name: 'code', nullable: false }, );
+    const optionalNumberProperties = createCampaignStatsResponseOptionalProperties({ name: 'attributedDiscount', nullable: false }, { name: 'redeemed', nullable: false }, );
     const optionalBooleanProperties = createCampaignStatsResponseOptionalProperties();
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

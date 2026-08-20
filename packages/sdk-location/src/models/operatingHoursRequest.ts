@@ -14,6 +14,10 @@
  */
 export interface OperatingHoursRequest { 
     /**
+     * Closing time (local time)
+     */
+    closeTime?: string;
+    /**
      * Day of week the hours apply to
      */
     dayOfWeek: string;
@@ -21,10 +25,6 @@ export interface OperatingHoursRequest {
      * Opening time (local time)
      */
     openTime?: string;
-    /**
-     * Closing time (local time)
-     */
-    closeTime?: string;
 }
 
 function isOptionalOperatingHoursRequestPropertyOfType(
@@ -66,7 +66,7 @@ export function instanceOfOperatingHoursRequest(value: object): value is Operati
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createOperatingHoursRequestPropertyNames('dayOfWeek', );
-    const optionalStringProperties = createOperatingHoursRequestOptionalProperties({ name: 'dayOfWeek', nullable: false }, { name: 'openTime', nullable: false }, { name: 'closeTime', nullable: false }, );
+    const optionalStringProperties = createOperatingHoursRequestOptionalProperties({ name: 'closeTime', nullable: false }, { name: 'dayOfWeek', nullable: false }, { name: 'openTime', nullable: false }, );
     const optionalNumberProperties = createOperatingHoursRequestOptionalProperties();
     const optionalBooleanProperties = createOperatingHoursRequestOptionalProperties();
 

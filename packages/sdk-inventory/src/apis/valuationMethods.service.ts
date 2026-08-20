@@ -41,16 +41,16 @@ export class ValuationMethodsService extends BaseService {
 
     /**
      * List costing method configurations
-     * Lists all costing method configuration rows (active and inactive), ordered by scope. Resolution precedence at posting time is SKU, then SKU_CATEGORY, then DEFAULT, then the deployment default pos.inventory.valuation.default-method (AVERAGE).
+     * Returns every costing method configuration row, active and inactive, ordered by scope type and scope value. Use this tool to inspect which costing method each scope resolves to — precedence at posting time is SKU, then SKU_CATEGORY, then DEFAULT, then the deployment default pos.inventory.valuation.default-method (AVERAGE); do not use getInventoryValuation, which reports the values computed under those methods. Preconditions: none beyond the inventory:location:admin authority. Required inputs: none; there is no request body, paging or filtering. Emits an INVENTORY_VALUATION_METHOD_LIST audit event; no configuration changes. Returns 200 with an empty array when nothing is configured, meaning every SKU falls through to the deployment default. 
      * @endpoint get /v1/inventory/valuation/methods
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public listConfigs(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<CostingMethodConfigResponse>>;
-    public listConfigs(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<CostingMethodConfigResponse>>>;
-    public listConfigs(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<CostingMethodConfigResponse>>>;
-    public listConfigs(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public listCostingMethodConfigs(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<CostingMethodConfigResponse>>;
+    public listCostingMethodConfigs(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<CostingMethodConfigResponse>>>;
+    public listCostingMethodConfigs(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<CostingMethodConfigResponse>>>;
+    public listCostingMethodConfigs(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -97,19 +97,19 @@ export class ValuationMethodsService extends BaseService {
 
     /**
      * Upsert costing method configuration
-     * Creates or updates the costing method for one scope (SKU, SKU_CATEGORY, or DEFAULT) and reactivates it. A method change is recorded in the who/when/from/to change log. At most one row exists per scope. The new method applies going forward only; opening-value restatement is the J4 revaluation workflow.
+     * Creates or updates the costing method (STANDARD or AVERAGE) for one scope — SKU, SKU_CATEGORY or DEFAULT — reactivating the row and keeping at most one row per scope. Use this tool to switch which method a scope resolves to going forward only; do not use it expecting opening values to be restated — that cut-over is createRevaluation, which this call deliberately does not perform. Preconditions: none; note that SKU_CATEGORY rows are stored but unresolvable until the catalog replica carries a category, so resolution skips them to DEFAULT. Required inputs: scopeType, method, and scopeValue — the stock item id for SKU, the category string for SKU_CATEGORY, and omitted for DEFAULT. Emits an INVENTORY_VALUATION_METHOD_UPSERT event, and an effective method change is recorded as a who/when/from/to row in the cost method change log. Returns 400 when scopeValue is supplied for DEFAULT scope or missing for SKU or SKU_CATEGORY scope. 
      * @endpoint put /v1/inventory/valuation/methods
-     * @param costingMethodConfigRequest 
+     * @param costingMethodConfigRequest Costing method to apply at one scope; the scope key rules depend on scopeType.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public upsertConfig(costingMethodConfigRequest: CostingMethodConfigRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<CostingMethodConfigResponse>;
-    public upsertConfig(costingMethodConfigRequest: CostingMethodConfigRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<CostingMethodConfigResponse>>;
-    public upsertConfig(costingMethodConfigRequest: CostingMethodConfigRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<CostingMethodConfigResponse>>;
-    public upsertConfig(costingMethodConfigRequest: CostingMethodConfigRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public upsertCostingMethodConfig(costingMethodConfigRequest: CostingMethodConfigRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<CostingMethodConfigResponse>;
+    public upsertCostingMethodConfig(costingMethodConfigRequest: CostingMethodConfigRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<CostingMethodConfigResponse>>;
+    public upsertCostingMethodConfig(costingMethodConfigRequest: CostingMethodConfigRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<CostingMethodConfigResponse>>;
+    public upsertCostingMethodConfig(costingMethodConfigRequest: CostingMethodConfigRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (costingMethodConfigRequest === null || costingMethodConfigRequest === undefined) {
-            throw new Error('Required parameter costingMethodConfigRequest was null or undefined when calling upsertConfig.');
+            throw new Error('Required parameter costingMethodConfigRequest was null or undefined when calling upsertCostingMethodConfig.');
         }
 
         let localVarHeaders = this.defaultHeaders;

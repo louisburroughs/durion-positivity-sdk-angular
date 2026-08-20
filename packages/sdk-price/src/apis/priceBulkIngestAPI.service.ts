@@ -38,20 +38,20 @@ export class PriceBulkIngestAPIService extends BaseService {
     }
 
     /**
-     * Bulk ingest records
-     * Accepts a batch of domain records for bulk import. Returns per-record results.
+     * Bulk Import Base Price Records
+     * Bulk-imports base price (MSRP) records, appending an effective-dated price window per product and currency. Use this tool for batch price loads from an upstream catalog; use calculatePriceQuote instead to read the price effective at a pricing instant, since quoting resolves these windows. Preconditions: each record\&#39;s effectiveFrom must start after the product\&#39;s current window begins; re-submitting the current open window\&#39;s unchanged price is idempotent and returns the existing id. Required inputs: jobId and locationId (UUIDs) and records (at least one), each record carrying productId (UUID string), msrp (decimal string), currency (ISO 4217 code), and effectiveFrom as an ISO-8601 instant such as 2026-03-01T00:00:00Z; operatorId is optional. Emits a PRICE_BULK_INGEST event; a new window closes the previous open window at its effectiveFrom and rows are processed independently, so one bad row does not abort the batch. Returns 200 with per-row results even when rows fail, marking failed rows with errorCode PRICE_INGEST_FAILED (including overlapping-window conflicts and unparseable values), and 400 when the batch envelope itself is invalid. 
      * @endpoint post /v1/price/bulk-ingest
-     * @param bulkIngestRequestBasePriceBulkIngestRecord 
+     * @param bulkIngestRequestBasePriceBulkIngestRecord Batch envelope of base-price records to ingest, scoped to a job and location.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public bulkIngest(bulkIngestRequestBasePriceBulkIngestRecord: BulkIngestRequestBasePriceBulkIngestRecord, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<BulkIngestResponse>;
-    public bulkIngest(bulkIngestRequestBasePriceBulkIngestRecord: BulkIngestRequestBasePriceBulkIngestRecord, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<BulkIngestResponse>>;
-    public bulkIngest(bulkIngestRequestBasePriceBulkIngestRecord: BulkIngestRequestBasePriceBulkIngestRecord, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<BulkIngestResponse>>;
-    public bulkIngest(bulkIngestRequestBasePriceBulkIngestRecord: BulkIngestRequestBasePriceBulkIngestRecord, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public bulkIngestBasePrices(bulkIngestRequestBasePriceBulkIngestRecord: BulkIngestRequestBasePriceBulkIngestRecord, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<BulkIngestResponse>;
+    public bulkIngestBasePrices(bulkIngestRequestBasePriceBulkIngestRecord: BulkIngestRequestBasePriceBulkIngestRecord, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<BulkIngestResponse>>;
+    public bulkIngestBasePrices(bulkIngestRequestBasePriceBulkIngestRecord: BulkIngestRequestBasePriceBulkIngestRecord, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<BulkIngestResponse>>;
+    public bulkIngestBasePrices(bulkIngestRequestBasePriceBulkIngestRecord: BulkIngestRequestBasePriceBulkIngestRecord, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (bulkIngestRequestBasePriceBulkIngestRecord === null || bulkIngestRequestBasePriceBulkIngestRecord === undefined) {
-            throw new Error('Required parameter bulkIngestRequestBasePriceBulkIngestRecord was null or undefined when calling bulkIngest.');
+            throw new Error('Required parameter bulkIngestRequestBasePriceBulkIngestRecord was null or undefined when calling bulkIngestBasePrices.');
         }
 
         let localVarHeaders = this.defaultHeaders;

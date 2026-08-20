@@ -15,25 +15,17 @@ import { InvoiceLineItem } from './invoiceLineItem';
  */
 export interface InvoiceCreationRequest { 
     /**
-     * Workorder identifier backing the invoice draft.
-     */
-    workorderId?: string;
-    /**
-     * Source estimate identifier, when generated from estimate.
-     */
-    estimateId?: string;
-    /**
      * Approval identifier used for billing authorization.
      */
     approvalId?: string;
     /**
-     * Shop location where the sale is made; used to resolve the tax jurisdiction address.
-     */
-    locationId?: string;
-    /**
      * Customer party owning the workorder; stored on the invoice for party-scoped lookups (e.g. warranty origin-line search).
      */
     customerId?: string;
+    /**
+     * Source estimate identifier, when generated from estimate.
+     */
+    estimateId?: string;
     /**
      * Idempotency key to prevent duplicate invoice creation.
      */
@@ -42,6 +34,14 @@ export interface InvoiceCreationRequest {
      * Line items to include on the invoice.
      */
     lineItems?: Array<InvoiceLineItem>;
+    /**
+     * Shop location where the sale is made; used to resolve the tax jurisdiction address.
+     */
+    locationId?: string;
+    /**
+     * Workorder identifier backing the invoice draft.
+     */
+    workorderId?: string;
 }
 
 function isOptionalInvoiceCreationRequestPropertyOfType(
@@ -83,7 +83,7 @@ export function instanceOfInvoiceCreationRequest(value: object): value is Invoic
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createInvoiceCreationRequestPropertyNames();
-    const optionalStringProperties = createInvoiceCreationRequestOptionalProperties({ name: 'workorderId', nullable: false }, { name: 'estimateId', nullable: false }, { name: 'approvalId', nullable: false }, { name: 'locationId', nullable: false }, { name: 'customerId', nullable: false }, { name: 'idempotencyKey', nullable: false }, );
+    const optionalStringProperties = createInvoiceCreationRequestOptionalProperties({ name: 'approvalId', nullable: false }, { name: 'customerId', nullable: false }, { name: 'estimateId', nullable: false }, { name: 'idempotencyKey', nullable: false }, { name: 'locationId', nullable: false }, { name: 'workorderId', nullable: false }, );
     const optionalNumberProperties = createInvoiceCreationRequestOptionalProperties();
     const optionalBooleanProperties = createInvoiceCreationRequestOptionalProperties();
 

@@ -14,37 +14,37 @@
  */
 export interface WorkorderStatusView { 
     /**
-     * Workorder unique identifier
-     */
-    workorderId?: string;
-    /**
-     * Current workorder status
-     */
-    status?: WorkorderStatusViewStatusEnum;
-    /**
      * ID of the technician currently assigned (null if unassigned)
      */
     assignedTechnicianId?: string;
-    /**
-     * Location ID the workorder belongs to
-     */
-    locationId?: string;
-    /**
-     * Estimated time of completion (null if not set)
-     */
-    estimatedCompletionTime?: string;
     /**
      * Full name of the customer
      */
     customerName?: string;
     /**
-     * Human-readable vehicle description (year/make/model/trim)
+     * Estimated time of completion (null if not set)
      */
-    vehicleInfo?: string;
+    estimatedCompletionTime?: string;
     /**
      * Timestamp of the last status update
      */
     lastUpdatedAt?: string;
+    /**
+     * Location ID the workorder belongs to
+     */
+    locationId?: string;
+    /**
+     * Current workorder status
+     */
+    status?: WorkorderStatusViewStatusEnum;
+    /**
+     * Human-readable vehicle description (year/make/model/trim)
+     */
+    vehicleInfo?: string;
+    /**
+     * Workorder unique identifier
+     */
+    workorderId?: string;
 }
 export enum WorkorderStatusViewStatusEnum {
     Draft = 'DRAFT',
@@ -99,7 +99,7 @@ export function instanceOfWorkorderStatusView(value: object): value is Workorder
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createWorkorderStatusViewPropertyNames();
-    const optionalStringProperties = createWorkorderStatusViewOptionalProperties({ name: 'workorderId', nullable: false }, { name: 'status', nullable: false }, { name: 'assignedTechnicianId', nullable: false }, { name: 'locationId', nullable: false }, { name: 'estimatedCompletionTime', nullable: false }, { name: 'customerName', nullable: false }, { name: 'vehicleInfo', nullable: false }, { name: 'lastUpdatedAt', nullable: false }, );
+    const optionalStringProperties = createWorkorderStatusViewOptionalProperties({ name: 'assignedTechnicianId', nullable: false }, { name: 'customerName', nullable: false }, { name: 'estimatedCompletionTime', nullable: false }, { name: 'lastUpdatedAt', nullable: false }, { name: 'locationId', nullable: false }, { name: 'status', nullable: false }, { name: 'vehicleInfo', nullable: false }, { name: 'workorderId', nullable: false }, );
     const optionalNumberProperties = createWorkorderStatusViewOptionalProperties();
     const optionalBooleanProperties = createWorkorderStatusViewOptionalProperties();
 

@@ -15,9 +15,17 @@ import { ReplacementOption } from './replacementOption';
  */
 export interface ProductLifecycleResponse { 
     /**
-     * Product identifier
+     * Last lifecycle state change instant
      */
-    productId: string;
+    lastStateChangedAt?: string;
+    /**
+     * User that last changed lifecycle state
+     */
+    lastStateChangedBy?: string;
+    /**
+     * Lifecycle override reason
+     */
+    lifecycleOverrideReason?: string;
     /**
      * Current lifecycle state
      */
@@ -27,17 +35,9 @@ export interface ProductLifecycleResponse {
      */
     lifecycleStateEffectiveAt?: string;
     /**
-     * User that last changed lifecycle state
+     * Product identifier
      */
-    lastStateChangedBy?: string;
-    /**
-     * Last lifecycle state change instant
-     */
-    lastStateChangedAt?: string;
-    /**
-     * Lifecycle override reason
-     */
-    lifecycleOverrideReason?: string;
+    productId: string;
     /**
      * Replacement options for this product lifecycle state
      */
@@ -89,8 +89,8 @@ export function instanceOfProductLifecycleResponse(value: object): value is Prod
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createProductLifecycleResponsePropertyNames('productId', 'lifecycleState', );
-    const optionalStringProperties = createProductLifecycleResponseOptionalProperties({ name: 'productId', nullable: false }, { name: 'lifecycleState', nullable: false }, { name: 'lifecycleStateEffectiveAt', nullable: false }, { name: 'lastStateChangedBy', nullable: false }, { name: 'lastStateChangedAt', nullable: false }, { name: 'lifecycleOverrideReason', nullable: false }, );
+    const requiredProperties = createProductLifecycleResponsePropertyNames('lifecycleState', 'productId', );
+    const optionalStringProperties = createProductLifecycleResponseOptionalProperties({ name: 'lastStateChangedAt', nullable: false }, { name: 'lastStateChangedBy', nullable: false }, { name: 'lifecycleOverrideReason', nullable: false }, { name: 'lifecycleState', nullable: false }, { name: 'lifecycleStateEffectiveAt', nullable: false }, { name: 'productId', nullable: false }, );
     const optionalNumberProperties = createProductLifecycleResponseOptionalProperties();
     const optionalBooleanProperties = createProductLifecycleResponseOptionalProperties();
 

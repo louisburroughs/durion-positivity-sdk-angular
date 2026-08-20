@@ -14,13 +14,17 @@
  */
 export interface LocationInventoryItem { 
     /**
+     * On-hand quantity of this stock item at the location
+     */
+    onHandQuantity: number;
+    /**
      * Stock item identifier (product SKU)
      */
     stockItemId: string;
     /**
-     * On-hand quantity of this stock item at the location
+     * The stock item\'s base unit of measure, when stockItemId resolves to a catalog product with a declared UoM; null otherwise
      */
-    onHandQuantity: number;
+    unitOfMeasure?: string;
 }
 
 function isOptionalLocationInventoryItemPropertyOfType(
@@ -61,8 +65,8 @@ export function instanceOfLocationInventoryItem(value: object): value is Locatio
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createLocationInventoryItemPropertyNames('stockItemId', 'onHandQuantity', );
-    const optionalStringProperties = createLocationInventoryItemOptionalProperties({ name: 'stockItemId', nullable: false }, );
+    const requiredProperties = createLocationInventoryItemPropertyNames('onHandQuantity', 'stockItemId', );
+    const optionalStringProperties = createLocationInventoryItemOptionalProperties({ name: 'stockItemId', nullable: false }, { name: 'unitOfMeasure', nullable: false }, );
     const optionalNumberProperties = createLocationInventoryItemOptionalProperties({ name: 'onHandQuantity', nullable: false }, );
     const optionalBooleanProperties = createLocationInventoryItemOptionalProperties();
 

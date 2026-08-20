@@ -15,13 +15,13 @@ import { CampaignStatsResponse } from './campaignStatsResponse';
  */
 export interface ProgramStatsResponse { 
     /**
-     * Program identifier
-     */
-    campaignProgramId: string;
-    /**
      * One entry per campaign in the program
      */
     arms: Array<CampaignStatsResponse>;
+    /**
+     * Program identifier
+     */
+    campaignProgramId: string;
 }
 
 function isOptionalProgramStatsResponsePropertyOfType(
@@ -62,7 +62,7 @@ export function instanceOfProgramStatsResponse(value: object): value is ProgramS
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createProgramStatsResponsePropertyNames('campaignProgramId', 'arms', );
+    const requiredProperties = createProgramStatsResponsePropertyNames('arms', 'campaignProgramId', );
     const optionalStringProperties = createProgramStatsResponseOptionalProperties({ name: 'campaignProgramId', nullable: false }, );
     const optionalNumberProperties = createProgramStatsResponseOptionalProperties();
     const optionalBooleanProperties = createProgramStatsResponseOptionalProperties();

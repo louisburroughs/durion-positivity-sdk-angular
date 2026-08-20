@@ -15,13 +15,13 @@ import { FitmentTagDto } from './fitmentTagDto';
  */
 export interface CreateHintRequest { 
     /**
-     * Product identifier for the hint
-     */
-    productId: string;
-    /**
      * Fitment tags used to determine product applicability
      */
     fitmentTags: Array<FitmentTagDto>;
+    /**
+     * Product identifier for the hint
+     */
+    productId: string;
 }
 
 function isOptionalCreateHintRequestPropertyOfType(
@@ -62,7 +62,7 @@ export function instanceOfCreateHintRequest(value: object): value is CreateHintR
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createCreateHintRequestPropertyNames('productId', 'fitmentTags', );
+    const requiredProperties = createCreateHintRequestPropertyNames('fitmentTags', 'productId', );
     const optionalStringProperties = createCreateHintRequestOptionalProperties({ name: 'productId', nullable: false }, );
     const optionalNumberProperties = createCreateHintRequestOptionalProperties();
     const optionalBooleanProperties = createCreateHintRequestOptionalProperties();

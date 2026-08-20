@@ -13,17 +13,17 @@ import { ExportJobResponse } from './exportJobResponse';
 
 
 export interface PageExportJobResponse { 
-    totalElements?: number;
-    totalPages?: number;
-    size?: number;
     content?: Array<ExportJobResponse>;
-    number?: number;
-    pageable?: PageableObject;
-    sort?: SortObject;
+    empty?: boolean;
     first?: boolean;
     last?: boolean;
+    number?: number;
     numberOfElements?: number;
-    empty?: boolean;
+    pageable?: PageableObject;
+    size?: number;
+    sort?: SortObject;
+    totalElements?: number;
+    totalPages?: number;
 }
 
 function isOptionalPageExportJobResponsePropertyOfType(
@@ -66,8 +66,8 @@ export function instanceOfPageExportJobResponse(value: object): value is PageExp
 
     const requiredProperties = createPageExportJobResponsePropertyNames();
     const optionalStringProperties = createPageExportJobResponseOptionalProperties();
-    const optionalNumberProperties = createPageExportJobResponseOptionalProperties({ name: 'totalElements', nullable: false }, { name: 'totalPages', nullable: false }, { name: 'size', nullable: false }, { name: 'number', nullable: false }, { name: 'numberOfElements', nullable: false }, );
-    const optionalBooleanProperties = createPageExportJobResponseOptionalProperties({ name: 'first', nullable: false }, { name: 'last', nullable: false }, { name: 'empty', nullable: false }, );
+    const optionalNumberProperties = createPageExportJobResponseOptionalProperties({ name: 'number', nullable: false }, { name: 'numberOfElements', nullable: false }, { name: 'size', nullable: false }, { name: 'totalElements', nullable: false }, { name: 'totalPages', nullable: false }, );
+    const optionalBooleanProperties = createPageExportJobResponseOptionalProperties({ name: 'empty', nullable: false }, { name: 'first', nullable: false }, { name: 'last', nullable: false }, );
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
         && optionalStringProperties.every((property) => isOptionalPageExportJobResponsePropertyOfType(_v, property.name, 'string', property.nullable))

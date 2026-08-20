@@ -15,17 +15,13 @@ import { DuplicateCandidate } from './duplicateCandidate';
  */
 export interface CreateCommercialAccountResponse { 
     /**
-     * Newly created party ID (canonical CRM identifier)
+     * Billing terms identifier associated with the account, if set
      */
-    partyId: string;
+    billingTermsId?: string;
     /**
-     * Legal name of created party
+     * Timestamp of creation
      */
-    legalName: string;
-    /**
-     * Status (ACTIVE|PENDING|SUSPENDED)
-     */
-    status: string;
+    createdAt: string;
     /**
      * Human-readable customer/account number (party number) for display and lookup
      */
@@ -35,30 +31,34 @@ export interface CreateCommercialAccountResponse {
      */
     displayName?: string;
     /**
+     * List of duplicate candidates found during creation. If present, frontend should prompt user for confirmation. Contains summary fields only (partyId, legalName, matchReason).
+     */
+    duplicateCandidates?: Array<DuplicateCandidate>;
+    /**
+     * Legal name of created party
+     */
+    legalName: string;
+    /**
+     * Newly created party ID (canonical CRM identifier)
+     */
+    partyId: string;
+    /**
      * Party type discriminator
      */
     partyType?: string;
-    /**
-     * Tax identifier, if provided
-     */
-    taxId?: string;
-    /**
-     * Billing terms identifier associated with the account, if set
-     */
-    billingTermsId?: string;
     /**
      * Legacy free-text address for display, if available. Superseded by the structured postal address in pos-people-contact (FI-4).
      * @deprecated
      */
     primaryAddress?: string;
     /**
-     * Timestamp of creation
+     * Status (ACTIVE|PENDING|SUSPENDED)
      */
-    createdAt: string;
+    status: string;
     /**
-     * List of duplicate candidates found during creation. If present, frontend should prompt user for confirmation. Contains summary fields only (partyId, legalName, matchReason).
+     * Tax identifier, if provided
      */
-    duplicateCandidates?: Array<DuplicateCandidate>;
+    taxId?: string;
 }
 
 function isOptionalCreateCommercialAccountResponsePropertyOfType(
@@ -99,8 +99,8 @@ export function instanceOfCreateCommercialAccountResponse(value: object): value 
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createCreateCommercialAccountResponsePropertyNames('partyId', 'legalName', 'status', 'customerNumber', 'createdAt', );
-    const optionalStringProperties = createCreateCommercialAccountResponseOptionalProperties({ name: 'partyId', nullable: false }, { name: 'legalName', nullable: false }, { name: 'status', nullable: false }, { name: 'customerNumber', nullable: false }, { name: 'displayName', nullable: false }, { name: 'partyType', nullable: false }, { name: 'taxId', nullable: false }, { name: 'billingTermsId', nullable: false }, { name: 'primaryAddress', nullable: false }, { name: 'createdAt', nullable: false }, );
+    const requiredProperties = createCreateCommercialAccountResponsePropertyNames('createdAt', 'customerNumber', 'legalName', 'partyId', 'status', );
+    const optionalStringProperties = createCreateCommercialAccountResponseOptionalProperties({ name: 'billingTermsId', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'customerNumber', nullable: false }, { name: 'displayName', nullable: false }, { name: 'legalName', nullable: false }, { name: 'partyId', nullable: false }, { name: 'partyType', nullable: false }, { name: 'primaryAddress', nullable: false }, { name: 'status', nullable: false }, { name: 'taxId', nullable: false }, );
     const optionalNumberProperties = createCreateCommercialAccountResponseOptionalProperties();
     const optionalBooleanProperties = createCreateCommercialAccountResponseOptionalProperties();
 

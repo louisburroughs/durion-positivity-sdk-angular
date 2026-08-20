@@ -14,29 +14,29 @@
  */
 export interface ApplicationDetail { 
     /**
-     * Identifier of the payment application record
-     */
-    paymentApplicationId?: string;
-    /**
-     * Identifier of the invoice the payment was applied to
-     */
-    invoiceId?: string;
-    /**
      * Amount applied to this invoice
      */
     appliedAmount?: number;
-    /**
-     * Invoice balance before this application
-     */
-    invoiceBalanceBefore?: number;
     /**
      * Invoice balance after this application
      */
     invoiceBalanceAfter?: number;
     /**
+     * Invoice balance before this application
+     */
+    invoiceBalanceBefore?: number;
+    /**
+     * Identifier of the invoice the payment was applied to
+     */
+    invoiceId?: string;
+    /**
      * Invoice status after this application
      */
     invoiceStatus?: ApplicationDetailInvoiceStatusEnum;
+    /**
+     * Identifier of the payment application record
+     */
+    paymentApplicationId?: string;
 }
 export enum ApplicationDetailInvoiceStatusEnum {
     Open = 'OPEN',
@@ -88,8 +88,8 @@ export function instanceOfApplicationDetail(value: object): value is Application
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createApplicationDetailPropertyNames();
-    const optionalStringProperties = createApplicationDetailOptionalProperties({ name: 'paymentApplicationId', nullable: false }, { name: 'invoiceId', nullable: false }, { name: 'invoiceStatus', nullable: false }, );
-    const optionalNumberProperties = createApplicationDetailOptionalProperties({ name: 'appliedAmount', nullable: false }, { name: 'invoiceBalanceBefore', nullable: false }, { name: 'invoiceBalanceAfter', nullable: false }, );
+    const optionalStringProperties = createApplicationDetailOptionalProperties({ name: 'invoiceId', nullable: false }, { name: 'invoiceStatus', nullable: false }, { name: 'paymentApplicationId', nullable: false }, );
+    const optionalNumberProperties = createApplicationDetailOptionalProperties({ name: 'appliedAmount', nullable: false }, { name: 'invoiceBalanceAfter', nullable: false }, { name: 'invoiceBalanceBefore', nullable: false }, );
     const optionalBooleanProperties = createApplicationDetailOptionalProperties();
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

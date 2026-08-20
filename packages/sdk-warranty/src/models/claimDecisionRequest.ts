@@ -19,13 +19,13 @@ export interface ClaimDecisionRequest {
      */
     decision: ClaimDecisionRequestDecisionEnum;
     /**
-     * Reason — required for DENY, APPEAL, and any decision that contradicts the computed suggestion
-     */
-    reason?: string;
-    /**
      * Per-line adjudication (APPROVE/DENY only); omitted lines get defaults
      */
     lineDecisions?: Array<LineDecision>;
+    /**
+     * Reason — required for DENY, APPEAL, and any decision that contradicts the computed suggestion
+     */
+    reason?: string;
 }
 export enum ClaimDecisionRequestDecisionEnum {
     Approve = 'APPROVE',

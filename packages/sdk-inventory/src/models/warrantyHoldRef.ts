@@ -14,21 +14,17 @@
  */
 export interface WarrantyHoldRef { 
     /**
-     * Identifier of the warranty part-return hold
-     */
-    partReturnId: string;
-    /**
      * Warranty claim the part return belongs to
      */
     claimId?: string;
     /**
-     * Hold status
-     */
-    status: string;
-    /**
      * Disposition of the returned part, when known
      */
     disposition?: string;
+    /**
+     * Identifier of the warranty part-return hold
+     */
+    partReturnId: string;
     /**
      * When the part return was requested
      */
@@ -37,6 +33,10 @@ export interface WarrantyHoldRef {
      * When the part was shipped back to the provider
      */
     shippedAt?: string;
+    /**
+     * Hold status
+     */
+    status: string;
 }
 
 function isOptionalWarrantyHoldRefPropertyOfType(
@@ -78,7 +78,7 @@ export function instanceOfWarrantyHoldRef(value: object): value is WarrantyHoldR
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createWarrantyHoldRefPropertyNames('partReturnId', 'status', );
-    const optionalStringProperties = createWarrantyHoldRefOptionalProperties({ name: 'partReturnId', nullable: false }, { name: 'claimId', nullable: false }, { name: 'status', nullable: false }, { name: 'disposition', nullable: false }, { name: 'requestedAt', nullable: false }, { name: 'shippedAt', nullable: false }, );
+    const optionalStringProperties = createWarrantyHoldRefOptionalProperties({ name: 'claimId', nullable: false }, { name: 'disposition', nullable: false }, { name: 'partReturnId', nullable: false }, { name: 'requestedAt', nullable: false }, { name: 'shippedAt', nullable: false }, { name: 'status', nullable: false }, );
     const optionalNumberProperties = createWarrantyHoldRefOptionalProperties();
     const optionalBooleanProperties = createWarrantyHoldRefOptionalProperties();
 

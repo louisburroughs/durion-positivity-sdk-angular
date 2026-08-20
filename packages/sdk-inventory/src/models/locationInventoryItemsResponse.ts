@@ -15,13 +15,13 @@ import { LocationInventoryItem } from './locationInventoryItem';
  */
 export interface LocationInventoryItemsResponse { 
     /**
-     * Storage location identifier
-     */
-    locationId: string;
-    /**
      * Stock items currently on hand at the location
      */
     items: Array<LocationInventoryItem>;
+    /**
+     * Storage location identifier
+     */
+    locationId: string;
 }
 
 function isOptionalLocationInventoryItemsResponsePropertyOfType(
@@ -62,7 +62,7 @@ export function instanceOfLocationInventoryItemsResponse(value: object): value i
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createLocationInventoryItemsResponsePropertyNames('locationId', 'items', );
+    const requiredProperties = createLocationInventoryItemsResponsePropertyNames('items', 'locationId', );
     const optionalStringProperties = createLocationInventoryItemsResponseOptionalProperties({ name: 'locationId', nullable: false }, );
     const optionalNumberProperties = createLocationInventoryItemsResponseOptionalProperties();
     const optionalBooleanProperties = createLocationInventoryItemsResponseOptionalProperties();

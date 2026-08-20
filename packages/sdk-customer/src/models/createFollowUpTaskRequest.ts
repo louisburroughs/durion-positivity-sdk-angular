@@ -14,21 +14,17 @@
  */
 export interface CreateFollowUpTaskRequest { 
     /**
-     * Why the follow-up is needed
+     * CSR to own the task; unassigned tasks sit in the shared queue
      */
-    type: CreateFollowUpTaskRequestTypeEnum;
-    /**
-     * Vehicle the follow-up concerns, when vehicle-specific
-     */
-    vehicleId?: string;
+    assignedTo?: string;
     /**
      * When the follow-up should be worked by
      */
     dueDate?: string;
     /**
-     * CSR to own the task; unassigned tasks sit in the shared queue
+     * Free-text notes
      */
-    assignedTo?: string;
+    notes?: string;
     /**
      * Context for whoever works it
      */
@@ -38,9 +34,13 @@ export interface CreateFollowUpTaskRequest {
      */
     sourceWorkorderId?: string;
     /**
-     * Free-text notes
+     * Why the follow-up is needed
      */
-    notes?: string;
+    type: CreateFollowUpTaskRequestTypeEnum;
+    /**
+     * Vehicle the follow-up concerns, when vehicle-specific
+     */
+    vehicleId?: string;
 }
 export enum CreateFollowUpTaskRequestTypeEnum {
     DeclinedServiceFollowup = 'DECLINED_SERVICE_FOLLOWUP',
@@ -91,7 +91,7 @@ export function instanceOfCreateFollowUpTaskRequest(value: object): value is Cre
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createCreateFollowUpTaskRequestPropertyNames('type', );
-    const optionalStringProperties = createCreateFollowUpTaskRequestOptionalProperties({ name: 'type', nullable: false }, { name: 'vehicleId', nullable: false }, { name: 'dueDate', nullable: false }, { name: 'assignedTo', nullable: false }, { name: 'reason', nullable: false }, { name: 'sourceWorkorderId', nullable: false }, { name: 'notes', nullable: false }, );
+    const optionalStringProperties = createCreateFollowUpTaskRequestOptionalProperties({ name: 'assignedTo', nullable: false }, { name: 'dueDate', nullable: false }, { name: 'notes', nullable: false }, { name: 'reason', nullable: false }, { name: 'sourceWorkorderId', nullable: false }, { name: 'type', nullable: false }, { name: 'vehicleId', nullable: false }, );
     const optionalNumberProperties = createCreateFollowUpTaskRequestOptionalProperties();
     const optionalBooleanProperties = createCreateFollowUpTaskRequestOptionalProperties();
 

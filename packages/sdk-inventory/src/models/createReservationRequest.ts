@@ -10,21 +10,25 @@
 
 
 /**
- * Request to create an inventory reservation against a workorder line for a stock item
+ * Request to create an inventory reservation against a demand line (a workorder line or a sales-order line, CAP #1315) for a stock item. Exactly one of workorderLineId/salesOrderLineId must be set; the service rejects a request that sets both or neither.
  */
 export interface CreateReservationRequest { 
     /**
-     * Identifier of the workorder line the reservation fulfils
+     * Quantity of the stock item required by the reservation. Decimal-capable, and permitted decimals only to the precision_scale the product\'s catalog declaration allows (ADR-0055)
      */
-    workorderLineId: string;
+    requiredQuantity: number;
+    /**
+     * Identifier of the sales-order line the reservation fulfils, when demand is from a sales order (CAP #1315). Exactly one of this and workorderLineId must be set.
+     */
+    salesOrderLineId?: string;
     /**
      * Identifier of the stock item being reserved
      */
     stockItemId: string;
     /**
-     * Quantity of the stock item required by the reservation
+     * Identifier of the workorder line the reservation fulfils, when demand is from a workorder. Exactly one of this and salesOrderLineId must be set.
      */
-    requiredQuantity: number;
+    workorderLineId?: string;
 }
 
 function isOptionalCreateReservationRequestPropertyOfType(
@@ -65,8 +69,8 @@ export function instanceOfCreateReservationRequest(value: object): value is Crea
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createCreateReservationRequestPropertyNames('workorderLineId', 'stockItemId', 'requiredQuantity', );
-    const optionalStringProperties = createCreateReservationRequestOptionalProperties({ name: 'workorderLineId', nullable: false }, { name: 'stockItemId', nullable: false }, );
+    const requiredProperties = createCreateReservationRequestPropertyNames('requiredQuantity', 'stockItemId', );
+    const optionalStringProperties = createCreateReservationRequestOptionalProperties({ name: 'salesOrderLineId', nullable: false }, { name: 'stockItemId', nullable: false }, { name: 'workorderLineId', nullable: false }, );
     const optionalNumberProperties = createCreateReservationRequestOptionalProperties({ name: 'requiredQuantity', nullable: false }, );
     const optionalBooleanProperties = createCreateReservationRequestOptionalProperties();
 

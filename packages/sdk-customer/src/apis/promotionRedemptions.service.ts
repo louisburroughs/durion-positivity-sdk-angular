@@ -38,20 +38,20 @@ export class PromotionRedemptionsService extends BaseService {
     }
 
     /**
-     * Get redemptions by customer
-     * Retrieve all recorded redemptions for a customer
+     * List Customer Promotion Redemptions
+     * Returns every promotion redemption recorded for one customer, including discount amounts, codes, statuses, and timestamps. Use this tool when reviewing a customer\&#39;s redemption history, for example to enforce per-customer limits; use recordPromotionRedemption instead to record a new redemption. Preconditions: none; an unknown customerId yields an empty list rather than an error. Required inputs: customerId (UUID) as a path parameter; there is no request body. Emits a PROMOTION_REDEMPTION_LIST audit event; no state changes occur. Returns 200 with an empty list rather than an error when the customer has no redemptions. 
      * @endpoint get /v1/promotions/redemptions/by-customer/{customerId}
      * @param customerId 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public getRedemptionsByCustomer(customerId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<PromotionRedemptionResponse>>;
-    public getRedemptionsByCustomer(customerId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<PromotionRedemptionResponse>>>;
-    public getRedemptionsByCustomer(customerId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<PromotionRedemptionResponse>>>;
-    public getRedemptionsByCustomer(customerId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public listPromotionRedemptionsByCustomer(customerId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<PromotionRedemptionResponse>>;
+    public listPromotionRedemptionsByCustomer(customerId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<PromotionRedemptionResponse>>>;
+    public listPromotionRedemptionsByCustomer(customerId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<PromotionRedemptionResponse>>>;
+    public listPromotionRedemptionsByCustomer(customerId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (customerId === null || customerId === undefined) {
-            throw new Error('Required parameter customerId was null or undefined when calling getRedemptionsByCustomer.');
+            throw new Error('Required parameter customerId was null or undefined when calling listPromotionRedemptionsByCustomer.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -98,20 +98,20 @@ export class PromotionRedemptionsService extends BaseService {
     }
 
     /**
-     * Record promotion redemption
-     * Record a promotion redemption idempotently
+     * Record Promotion Redemption
+     * Records that a promotion was redeemed on a workorder, increments the promotion\&#39;s usage counter, and stamps the recording user; the pair of promotionId and workorderId is the idempotency key. Use this tool when a discount is actually applied at checkout or invoicing; use listPromotionRedemptionsByCustomer instead to read what a customer has redeemed. Preconditions: no redemption may already exist for the same promotionId and workorderId pair; the referenced promotion, customer, and workorder ids are recorded as supplied without cross-service validation. Required inputs: promotionId, customerId, and workorderId (UUIDs), discountAmount, discountType (max 50), and promotionCode (max 100); invoiceId, campaignCode, and redemptionTimestamp (defaulting to now) are optional, and recordedOverLimit defaults to false and switches the stored status to RECORDED_OVER_LIMIT. Emits a PROMOTION_REDEMPTION_RECORD event and publishes a redemption-recorded fact for every redemption so marketing keeps a non-attributed baseline. Returns 409 when the promotion has already been redeemed on that workorder, and 400 when a required field is missing. 
      * @endpoint post /v1/promotions/redemptions
-     * @param recordRedemptionRequest 
+     * @param recordRedemptionRequest The redemption to record, keyed for idempotency by promotionId and workorderId.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public recordRedemption(recordRedemptionRequest: RecordRedemptionRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PromotionRedemptionResponse>;
-    public recordRedemption(recordRedemptionRequest: RecordRedemptionRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PromotionRedemptionResponse>>;
-    public recordRedemption(recordRedemptionRequest: RecordRedemptionRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PromotionRedemptionResponse>>;
-    public recordRedemption(recordRedemptionRequest: RecordRedemptionRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public recordPromotionRedemption(recordRedemptionRequest: RecordRedemptionRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PromotionRedemptionResponse>;
+    public recordPromotionRedemption(recordRedemptionRequest: RecordRedemptionRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PromotionRedemptionResponse>>;
+    public recordPromotionRedemption(recordRedemptionRequest: RecordRedemptionRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PromotionRedemptionResponse>>;
+    public recordPromotionRedemption(recordRedemptionRequest: RecordRedemptionRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (recordRedemptionRequest === null || recordRedemptionRequest === undefined) {
-            throw new Error('Required parameter recordRedemptionRequest was null or undefined when calling recordRedemption.');
+            throw new Error('Required parameter recordRedemptionRequest was null or undefined when calling recordPromotionRedemption.');
         }
 
         let localVarHeaders = this.defaultHeaders;

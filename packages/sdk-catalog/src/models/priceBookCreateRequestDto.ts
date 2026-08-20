@@ -14,6 +14,10 @@
  */
 export interface PriceBookCreateRequestDto { 
     /**
+     * Whether this is the default price book for the scope
+     */
+    isDefault?: boolean;
+    /**
      * Price book name
      */
     name: string;
@@ -25,10 +29,6 @@ export interface PriceBookCreateRequestDto {
      * Identifier of the scoped entity (location or customer tier)
      */
     scopeId?: string;
-    /**
-     * Whether this is the default price book for the scope
-     */
-    isDefault?: boolean;
     /**
      * Initial status of the price book
      */

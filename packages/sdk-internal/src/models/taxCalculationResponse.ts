@@ -16,21 +16,21 @@ import { LineItemTax } from './lineItemTax';
  */
 export interface TaxCalculationResponse { 
     /**
-     * Total amount before tax
+     * Timestamp when calculation completed
      */
-    subtotal: number;
+    calculatedAt: string;
     /**
-     * Total tax amount
+     * Calculation direction echoed from the request: SALE or REFUND. REFUND amounts are positive; callers negate at posting.
      */
-    totalTax: number;
-    /**
-     * Total amount including tax
-     */
-    total: number;
+    calculationType?: TaxCalculationResponseCalculationTypeEnum;
     /**
      * Effective tax rate: total tax divided by the exempt-filtered taxable base (the taxable amount remaining after tax-exempt lines are excluded), expressed as percentage points. This is NOT total tax divided by the raw subtotal (ADR-0042).
      */
     effectiveTaxRate: number;
+    /**
+     * External tax provider transaction identifier
+     */
+    externalTransactionId?: string;
     /**
      * Applied tax jurisdictions with per-jurisdiction tax amounts
      */
@@ -40,13 +40,9 @@ export interface TaxCalculationResponse {
      */
     lineItemTaxes: Array<LineItemTax>;
     /**
-     * Whether calculation was performed in test mode
+     * Original sale reference echoed on REFUND calculations; null for SALE.
      */
-    testMode: boolean;
-    /**
-     * Timestamp when calculation completed
-     */
-    calculatedAt: string;
+    originalReferenceId?: string;
     /**
      * Reference ID echoed from request
      */
@@ -56,18 +52,26 @@ export interface TaxCalculationResponse {
      */
     referenceType?: TaxCalculationResponseReferenceTypeEnum;
     /**
-     * External tax provider transaction identifier
+     * Total amount before tax
      */
-    externalTransactionId?: string;
+    subtotal: number;
     /**
-     * Calculation direction echoed from the request: SALE or REFUND. REFUND amounts are positive; callers negate at posting.
+     * Whether calculation was performed in test mode
      */
-    calculationType?: TaxCalculationResponseCalculationTypeEnum;
+    testMode: boolean;
     /**
-     * Original sale reference echoed on REFUND calculations; null for SALE.
+     * Total amount including tax
      */
-    originalReferenceId?: string;
+    total: number;
+    /**
+     * Total tax amount
+     */
+    totalTax: number;
 }
+export enum TaxCalculationResponseCalculationTypeEnum {
+    Sale = 'SALE',
+    Refund = 'REFUND'
+};
 export enum TaxCalculationResponseReferenceTypeEnum {
     Estimate = 'ESTIMATE',
     Invoice = 'INVOICE',
@@ -75,10 +79,6 @@ export enum TaxCalculationResponseReferenceTypeEnum {
     Order = 'ORDER',
     PurchaseOrder = 'PURCHASE_ORDER',
     Other = 'OTHER'
-};
-export enum TaxCalculationResponseCalculationTypeEnum {
-    Sale = 'SALE',
-    Refund = 'REFUND'
 };
 
 
@@ -121,9 +121,9 @@ export function instanceOfTaxCalculationResponse(value: object): value is TaxCal
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createTaxCalculationResponsePropertyNames('subtotal', 'totalTax', 'total', 'effectiveTaxRate', 'jurisdictions', 'lineItemTaxes', 'testMode', 'calculatedAt', );
-    const optionalStringProperties = createTaxCalculationResponseOptionalProperties({ name: 'calculatedAt', nullable: false }, { name: 'referenceId', nullable: false }, { name: 'referenceType', nullable: false }, { name: 'externalTransactionId', nullable: false }, { name: 'calculationType', nullable: false }, { name: 'originalReferenceId', nullable: false }, );
-    const optionalNumberProperties = createTaxCalculationResponseOptionalProperties({ name: 'subtotal', nullable: false }, { name: 'totalTax', nullable: false }, { name: 'total', nullable: false }, { name: 'effectiveTaxRate', nullable: false }, );
+    const requiredProperties = createTaxCalculationResponsePropertyNames('calculatedAt', 'effectiveTaxRate', 'jurisdictions', 'lineItemTaxes', 'subtotal', 'testMode', 'total', 'totalTax', );
+    const optionalStringProperties = createTaxCalculationResponseOptionalProperties({ name: 'calculatedAt', nullable: false }, { name: 'calculationType', nullable: false }, { name: 'externalTransactionId', nullable: false }, { name: 'originalReferenceId', nullable: false }, { name: 'referenceId', nullable: false }, { name: 'referenceType', nullable: false }, );
+    const optionalNumberProperties = createTaxCalculationResponseOptionalProperties({ name: 'effectiveTaxRate', nullable: false }, { name: 'subtotal', nullable: false }, { name: 'total', nullable: false }, { name: 'totalTax', nullable: false }, );
     const optionalBooleanProperties = createTaxCalculationResponseOptionalProperties({ name: 'testMode', nullable: false }, );
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

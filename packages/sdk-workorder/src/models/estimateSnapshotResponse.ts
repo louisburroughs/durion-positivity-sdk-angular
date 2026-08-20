@@ -14,22 +14,6 @@
  */
 export interface EstimateSnapshotResponse { 
     /**
-     * Snapshot identifier
-     */
-    id: string;
-    /**
-     * Estimate identifier
-     */
-    estimateId: string;
-    /**
-     * Estimate status at capture time
-     */
-    status: EstimateSnapshotResponseStatusEnum;
-    /**
-     * Serialized snapshot content
-     */
-    snapshotData?: string;
-    /**
      * Snapshot capture timestamp
      */
     capturedAt?: string;
@@ -38,9 +22,25 @@ export interface EstimateSnapshotResponse {
      */
     capturedById?: string;
     /**
+     * Estimate identifier
+     */
+    estimateId: string;
+    /**
+     * Snapshot identifier
+     */
+    id: string;
+    /**
      * Optional snapshot notes
      */
     notes?: string;
+    /**
+     * Serialized snapshot content
+     */
+    snapshotData?: string;
+    /**
+     * Estimate status at capture time
+     */
+    status: EstimateSnapshotResponseStatusEnum;
 }
 export enum EstimateSnapshotResponseStatusEnum {
     Draft = 'DRAFT',
@@ -96,8 +96,8 @@ export function instanceOfEstimateSnapshotResponse(value: object): value is Esti
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createEstimateSnapshotResponsePropertyNames('id', 'estimateId', 'status', );
-    const optionalStringProperties = createEstimateSnapshotResponseOptionalProperties({ name: 'id', nullable: false }, { name: 'estimateId', nullable: false }, { name: 'status', nullable: false }, { name: 'snapshotData', nullable: false }, { name: 'capturedAt', nullable: false }, { name: 'capturedById', nullable: false }, { name: 'notes', nullable: false }, );
+    const requiredProperties = createEstimateSnapshotResponsePropertyNames('estimateId', 'id', 'status', );
+    const optionalStringProperties = createEstimateSnapshotResponseOptionalProperties({ name: 'capturedAt', nullable: false }, { name: 'capturedById', nullable: false }, { name: 'estimateId', nullable: false }, { name: 'id', nullable: false }, { name: 'notes', nullable: false }, { name: 'snapshotData', nullable: false }, { name: 'status', nullable: false }, );
     const optionalNumberProperties = createEstimateSnapshotResponseOptionalProperties();
     const optionalBooleanProperties = createEstimateSnapshotResponseOptionalProperties();
 

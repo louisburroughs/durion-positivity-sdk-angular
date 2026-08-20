@@ -14,21 +14,21 @@
  */
 export interface TaxJurisdiction { 
     /**
-     * Country code in ISO 3166-1 alpha-2 format
-     */
-    countryCode: string;
-    /**
-     * Region/subdivision code (ISO 3166-2 subdivision part)
-     */
-    regionCode?: string;
-    /**
      * Locality/city/municipality name
      */
     city?: string;
     /**
-     * Postal/ZIP code
+     * Country code in ISO 3166-1 alpha-2 format
      */
-    postalCode?: string;
+    countryCode: string;
+    /**
+     * Jurisdiction type
+     */
+    jurisdictionType: TaxJurisdictionJurisdictionTypeEnum;
+    /**
+     * I18n key for localized jurisdiction type labels
+     */
+    jurisdictionTypeI18nKey?: string;
     /**
      * Primary street address line
      */
@@ -38,21 +38,21 @@ export interface TaxJurisdiction {
      */
     line2?: string;
     /**
-     * Tax rate as percentage points
+     * Postal/ZIP code
      */
-    taxRate: number;
+    postalCode?: string;
     /**
-     * Jurisdiction type
+     * Region/subdivision code (ISO 3166-2 subdivision part)
      */
-    jurisdictionType: TaxJurisdictionJurisdictionTypeEnum;
+    regionCode?: string;
     /**
      * Calculated tax amount for this jurisdiction
      */
     taxAmount: number;
     /**
-     * I18n key for localized jurisdiction type labels
+     * Tax rate as percentage points
      */
-    jurisdictionTypeI18nKey?: string;
+    taxRate: number;
 }
 export enum TaxJurisdictionJurisdictionTypeEnum {
     Country = 'COUNTRY',
@@ -104,9 +104,9 @@ export function instanceOfTaxJurisdiction(value: object): value is TaxJurisdicti
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createTaxJurisdictionPropertyNames('countryCode', 'taxRate', 'jurisdictionType', 'taxAmount', );
-    const optionalStringProperties = createTaxJurisdictionOptionalProperties({ name: 'countryCode', nullable: false }, { name: 'regionCode', nullable: false }, { name: 'city', nullable: false }, { name: 'postalCode', nullable: false }, { name: 'line1', nullable: false }, { name: 'line2', nullable: false }, { name: 'jurisdictionType', nullable: false }, { name: 'jurisdictionTypeI18nKey', nullable: false }, );
-    const optionalNumberProperties = createTaxJurisdictionOptionalProperties({ name: 'taxRate', nullable: false }, { name: 'taxAmount', nullable: false }, );
+    const requiredProperties = createTaxJurisdictionPropertyNames('countryCode', 'jurisdictionType', 'taxAmount', 'taxRate', );
+    const optionalStringProperties = createTaxJurisdictionOptionalProperties({ name: 'city', nullable: false }, { name: 'countryCode', nullable: false }, { name: 'jurisdictionType', nullable: false }, { name: 'jurisdictionTypeI18nKey', nullable: false }, { name: 'line1', nullable: false }, { name: 'line2', nullable: false }, { name: 'postalCode', nullable: false }, { name: 'regionCode', nullable: false }, );
+    const optionalNumberProperties = createTaxJurisdictionOptionalProperties({ name: 'taxAmount', nullable: false }, { name: 'taxRate', nullable: false }, );
     const optionalBooleanProperties = createTaxJurisdictionOptionalProperties();
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

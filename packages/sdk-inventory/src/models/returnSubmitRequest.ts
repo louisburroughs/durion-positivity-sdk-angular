@@ -15,13 +15,13 @@ import { ReturnLineDto } from './returnLineDto';
  */
 export interface ReturnSubmitRequest { 
     /**
-     * Identifier of the workorder the return is submitted against
-     */
-    workorderId: string;
-    /**
      * Return lines describing each item, quantity and reason
      */
     lines: Array<ReturnLineDto>;
+    /**
+     * Identifier of the workorder the return is submitted against
+     */
+    workorderId: string;
 }
 
 function isOptionalReturnSubmitRequestPropertyOfType(
@@ -62,7 +62,7 @@ export function instanceOfReturnSubmitRequest(value: object): value is ReturnSub
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createReturnSubmitRequestPropertyNames('workorderId', 'lines', );
+    const requiredProperties = createReturnSubmitRequestPropertyNames('lines', 'workorderId', );
     const optionalStringProperties = createReturnSubmitRequestOptionalProperties({ name: 'workorderId', nullable: false }, );
     const optionalNumberProperties = createReturnSubmitRequestOptionalProperties();
     const optionalBooleanProperties = createReturnSubmitRequestOptionalProperties();

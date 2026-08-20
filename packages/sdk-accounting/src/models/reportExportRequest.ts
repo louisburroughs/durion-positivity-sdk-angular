@@ -14,9 +14,25 @@
  */
 export interface ReportExportRequest { 
     /**
+     * Optional GL account UUID filter, honored by GENERAL_LEDGER exports only; null spans all accounts
+     */
+    accountId?: string;
+    /**
+     * Period end date (inclusive, YYYY-MM-DD). For the as-of reports (BALANCE_SHEET, TRIAL_BALANCE, AGED_RECEIVABLES, AGED_PAYABLES) this date is used as the as-of date.
+     */
+    endDate: string;
+    /**
+     * Optional output filename without extension
+     */
+    filename?: string;
+    /**
      * Export format
      */
     format: ReportExportRequestFormatEnum;
+    /**
+     * Organization UUID to scope the export
+     */
+    organizationId: string;
     /**
      * Report type key. Renderable types: TAX_LIABILITY, INCOME_STATEMENT, BALANCE_SHEET, TRIAL_BALANCE, GENERAL_LEDGER, AGED_RECEIVABLES, AGED_PAYABLES.
      */
@@ -25,22 +41,6 @@ export interface ReportExportRequest {
      * Period start date (inclusive, YYYY-MM-DD)
      */
     startDate: string;
-    /**
-     * Period end date (inclusive, YYYY-MM-DD). For the as-of reports (BALANCE_SHEET, TRIAL_BALANCE, AGED_RECEIVABLES, AGED_PAYABLES) this date is used as the as-of date.
-     */
-    endDate: string;
-    /**
-     * Organization UUID to scope the export
-     */
-    organizationId: string;
-    /**
-     * Optional GL account UUID filter, honored by GENERAL_LEDGER exports only; null spans all accounts
-     */
-    accountId?: string;
-    /**
-     * Optional output filename without extension
-     */
-    filename?: string;
 }
 export enum ReportExportRequestFormatEnum {
     Pdf = 'PDF',
@@ -89,8 +89,8 @@ export function instanceOfReportExportRequest(value: object): value is ReportExp
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createReportExportRequestPropertyNames('format', 'reportType', 'startDate', 'endDate', 'organizationId', );
-    const optionalStringProperties = createReportExportRequestOptionalProperties({ name: 'format', nullable: false }, { name: 'reportType', nullable: false }, { name: 'startDate', nullable: false }, { name: 'endDate', nullable: false }, { name: 'organizationId', nullable: false }, { name: 'accountId', nullable: false }, { name: 'filename', nullable: false }, );
+    const requiredProperties = createReportExportRequestPropertyNames('endDate', 'format', 'organizationId', 'reportType', 'startDate', );
+    const optionalStringProperties = createReportExportRequestOptionalProperties({ name: 'accountId', nullable: false }, { name: 'endDate', nullable: false }, { name: 'filename', nullable: false }, { name: 'format', nullable: false }, { name: 'organizationId', nullable: false }, { name: 'reportType', nullable: false }, { name: 'startDate', nullable: false }, );
     const optionalNumberProperties = createReportExportRequestOptionalProperties();
     const optionalBooleanProperties = createReportExportRequestOptionalProperties();
 

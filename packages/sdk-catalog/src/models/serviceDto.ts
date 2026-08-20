@@ -18,13 +18,13 @@ export interface ServiceDto {
      */
     id?: string;
     /**
-     * Service name
-     */
-    name?: string;
-    /**
      * Long service description
      */
     longDescription?: string;
+    /**
+     * Service name
+     */
+    name?: string;
     /**
      * Short service description
      */
@@ -70,7 +70,7 @@ export function instanceOfServiceDto(value: object): value is ServiceDto {
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createServiceDtoPropertyNames();
-    const optionalStringProperties = createServiceDtoOptionalProperties({ name: 'id', nullable: false }, { name: 'name', nullable: false }, { name: 'longDescription', nullable: false }, { name: 'shortDescription', nullable: false }, );
+    const optionalStringProperties = createServiceDtoOptionalProperties({ name: 'id', nullable: false }, { name: 'longDescription', nullable: false }, { name: 'name', nullable: false }, { name: 'shortDescription', nullable: false }, );
     const optionalNumberProperties = createServiceDtoOptionalProperties();
     const optionalBooleanProperties = createServiceDtoOptionalProperties();
 

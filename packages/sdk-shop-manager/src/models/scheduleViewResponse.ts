@@ -15,37 +15,37 @@ import { ScheduleResourceView } from './scheduleResourceView';
  */
 export interface ScheduleViewResponse { 
     /**
-     * Location identifier the schedule belongs to
+     * Status of the availability overlay (e.g. AVAILABLE, UNAVAILABLE, SKIPPED)
      */
-    locationId: string;
+    availabilityOverlayStatus?: string;
     /**
      * Calendar date of the schedule view (ISO-8601)
      */
     date: string;
     /**
-     * Instant the view was generated in UTC (ISO-8601)
+     * End of the displayed day window in UTC (ISO-8601)
      */
-    viewGeneratedAt: string;
+    dayEndAt: string;
     /**
      * Start of the displayed day window in UTC (ISO-8601)
      */
     dayStartAt: string;
     /**
-     * End of the displayed day window in UTC (ISO-8601)
+     * Location identifier the schedule belongs to
      */
-    dayEndAt: string;
-    /**
-     * Status of the availability overlay (e.g. AVAILABLE, UNAVAILABLE, SKIPPED)
-     */
-    availabilityOverlayStatus?: string;
-    /**
-     * Non-fatal warnings generated while assembling the view
-     */
-    warnings?: Array<string>;
+    locationId: string;
     /**
      * Resources and their scheduled events
      */
     resources: Array<ScheduleResourceView>;
+    /**
+     * Instant the view was generated in UTC (ISO-8601)
+     */
+    viewGeneratedAt: string;
+    /**
+     * Non-fatal warnings generated while assembling the view
+     */
+    warnings?: Array<string>;
 }
 
 function isOptionalScheduleViewResponsePropertyOfType(
@@ -86,8 +86,8 @@ export function instanceOfScheduleViewResponse(value: object): value is Schedule
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createScheduleViewResponsePropertyNames('locationId', 'date', 'viewGeneratedAt', 'dayStartAt', 'dayEndAt', 'resources', );
-    const optionalStringProperties = createScheduleViewResponseOptionalProperties({ name: 'locationId', nullable: false }, { name: 'date', nullable: false }, { name: 'viewGeneratedAt', nullable: false }, { name: 'dayStartAt', nullable: false }, { name: 'dayEndAt', nullable: false }, { name: 'availabilityOverlayStatus', nullable: false }, );
+    const requiredProperties = createScheduleViewResponsePropertyNames('date', 'dayEndAt', 'dayStartAt', 'locationId', 'resources', 'viewGeneratedAt', );
+    const optionalStringProperties = createScheduleViewResponseOptionalProperties({ name: 'availabilityOverlayStatus', nullable: false }, { name: 'date', nullable: false }, { name: 'dayEndAt', nullable: false }, { name: 'dayStartAt', nullable: false }, { name: 'locationId', nullable: false }, { name: 'viewGeneratedAt', nullable: false }, );
     const optionalNumberProperties = createScheduleViewResponseOptionalProperties();
     const optionalBooleanProperties = createScheduleViewResponseOptionalProperties();
 

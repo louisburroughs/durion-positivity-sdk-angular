@@ -14,37 +14,21 @@
  */
 export interface CountResponse { 
     /**
+     * Quantity counted, converted to the product\'s base UoM
+     */
+    actualQuantity: number;
+    /**
      * Unique identifier of the recorded count entry
      */
     countEntryId: string;
     /**
-     * Identifier of the cycle count task the count was submitted against
-     */
-    taskId: string;
-    /**
-     * Quantity physically counted by the auditor
-     */
-    actualQuantity: number;
-    /**
-     * Quantity expected on hand at the time of the count
-     */
-    expectedQuantity: number;
-    /**
-     * Difference between counted and expected quantity (actual minus expected)
-     */
-    variance: number;
-    /**
-     * Sequence number of this count within the recount chain; 0 for the initial count
-     */
-    recountSequenceNumber: number;
-    /**
-     * Resulting status of the cycle count task after the submission
-     */
-    taskStatus: CountResponseTaskStatusEnum;
-    /**
      * Timestamp when the count was recorded
      */
     countedAt: string;
+    /**
+     * Book (expected) quantity at the time of the count, in base UoM
+     */
+    expectedQuantity: number;
     /**
      * Whether the maximum allowed number of recounts has been exceeded
      */
@@ -53,12 +37,33 @@ export interface CountResponse {
      * Human-readable message describing the outcome of the submission
      */
     message?: string;
+    /**
+     * Sequence number of this count within the recount chain; 0 for the initial count
+     */
+    recountSequenceNumber: number;
+    /**
+     * Identifier of the cycle count task the count was submitted against
+     */
+    taskId: string;
+    /**
+     * Resulting status of the cycle count task after the submission
+     */
+    taskStatus: CountResponseTaskStatusEnum;
+    /**
+     * Difference between counted and expected quantity, in base UoM (actual minus expected)
+     */
+    variance: number;
+    /**
+     * Whether the variance fell within the resolved tolerance; true means the count was reconciled with no adjustment created
+     */
+    withinTolerance: boolean;
 }
 export enum CountResponseTaskStatusEnum {
     Assigned = 'ASSIGNED',
     CountedPendingReview = 'COUNTED_PENDING_REVIEW',
     Conflict = 'CONFLICT',
     RequiresInvestigation = 'REQUIRES_INVESTIGATION',
+    AcceptedWithinTolerance = 'ACCEPTED_WITHIN_TOLERANCE',
     Approved = 'APPROVED',
     Rejected = 'REJECTED'
 };
@@ -103,10 +108,10 @@ export function instanceOfCountResponse(value: object): value is CountResponse {
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createCountResponsePropertyNames('countEntryId', 'taskId', 'actualQuantity', 'expectedQuantity', 'variance', 'recountSequenceNumber', 'taskStatus', 'countedAt', 'limitExceeded', );
-    const optionalStringProperties = createCountResponseOptionalProperties({ name: 'countEntryId', nullable: false }, { name: 'taskId', nullable: false }, { name: 'taskStatus', nullable: false }, { name: 'countedAt', nullable: false }, { name: 'message', nullable: false }, );
-    const optionalNumberProperties = createCountResponseOptionalProperties({ name: 'actualQuantity', nullable: false }, { name: 'expectedQuantity', nullable: false }, { name: 'variance', nullable: false }, { name: 'recountSequenceNumber', nullable: false }, );
-    const optionalBooleanProperties = createCountResponseOptionalProperties({ name: 'limitExceeded', nullable: false }, );
+    const requiredProperties = createCountResponsePropertyNames('actualQuantity', 'countEntryId', 'countedAt', 'expectedQuantity', 'limitExceeded', 'recountSequenceNumber', 'taskId', 'taskStatus', 'variance', 'withinTolerance', );
+    const optionalStringProperties = createCountResponseOptionalProperties({ name: 'countEntryId', nullable: false }, { name: 'countedAt', nullable: false }, { name: 'message', nullable: false }, { name: 'taskId', nullable: false }, { name: 'taskStatus', nullable: false }, );
+    const optionalNumberProperties = createCountResponseOptionalProperties({ name: 'actualQuantity', nullable: false }, { name: 'expectedQuantity', nullable: false }, { name: 'recountSequenceNumber', nullable: false }, { name: 'variance', nullable: false }, );
+    const optionalBooleanProperties = createCountResponseOptionalProperties({ name: 'limitExceeded', nullable: false }, { name: 'withinTolerance', nullable: false }, );
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
         && optionalStringProperties.every((property) => isOptionalCountResponsePropertyOfType(_v, property.name, 'string', property.nullable))

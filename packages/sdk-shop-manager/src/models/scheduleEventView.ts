@@ -14,6 +14,11 @@ import { ConflictDetails } from './conflictDetails';
  * A single event displayed within a resource lane
  */
 export interface ScheduleEventView { 
+    conflictDetails?: ConflictDetails;
+    /**
+     * Event end instant in UTC (ISO-8601)
+     */
+    endTime: string;
     /**
      * Event identifier
      */
@@ -23,22 +28,6 @@ export interface ScheduleEventView {
      */
     eventType: string;
     /**
-     * Event sub-type, when applicable
-     */
-    subType?: string;
-    /**
-     * Event start instant in UTC (ISO-8601)
-     */
-    startTime: string;
-    /**
-     * Event end instant in UTC (ISO-8601)
-     */
-    endTime: string;
-    /**
-     * Event display title
-     */
-    title?: string;
-    /**
      * Whether this event has a scheduling conflict
      */
     hasConflict: boolean;
@@ -46,7 +35,18 @@ export interface ScheduleEventView {
      * Conflict severity when hasConflict is true (HARD or SOFT)
      */
     severity?: string;
-    conflictDetails?: ConflictDetails;
+    /**
+     * Event start instant in UTC (ISO-8601)
+     */
+    startTime: string;
+    /**
+     * Event sub-type, when applicable
+     */
+    subType?: string;
+    /**
+     * Event display title
+     */
+    title?: string;
 }
 
 function isOptionalScheduleEventViewPropertyOfType(
@@ -87,8 +87,8 @@ export function instanceOfScheduleEventView(value: object): value is ScheduleEve
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createScheduleEventViewPropertyNames('eventId', 'eventType', 'startTime', 'endTime', 'hasConflict', );
-    const optionalStringProperties = createScheduleEventViewOptionalProperties({ name: 'eventId', nullable: false }, { name: 'eventType', nullable: false }, { name: 'subType', nullable: false }, { name: 'startTime', nullable: false }, { name: 'endTime', nullable: false }, { name: 'title', nullable: false }, { name: 'severity', nullable: false }, );
+    const requiredProperties = createScheduleEventViewPropertyNames('endTime', 'eventId', 'eventType', 'hasConflict', 'startTime', );
+    const optionalStringProperties = createScheduleEventViewOptionalProperties({ name: 'endTime', nullable: false }, { name: 'eventId', nullable: false }, { name: 'eventType', nullable: false }, { name: 'severity', nullable: false }, { name: 'startTime', nullable: false }, { name: 'subType', nullable: false }, { name: 'title', nullable: false }, );
     const optionalNumberProperties = createScheduleEventViewOptionalProperties();
     const optionalBooleanProperties = createScheduleEventViewOptionalProperties({ name: 'hasConflict', nullable: false }, );
 

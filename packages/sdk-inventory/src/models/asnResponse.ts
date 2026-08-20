@@ -23,33 +23,33 @@ export interface AsnResponse {
      */
     asnReferenceNumber: string;
     /**
-     * Identifier of the vendor that issued the shipment
+     * Timestamp when the ASN was created
      */
-    vendorId: string;
-    /**
-     * Current lifecycle status of the ASN
-     */
-    status: AsnResponseStatusEnum;
-    /**
-     * Date the shipment left the vendor
-     */
-    shipDate?: string;
-    /**
-     * Expected arrival date of the shipment at the destination
-     */
-    expectedArrivalDate?: string;
+    createdAt: string;
     /**
      * Identifier of the user who created the ASN
      */
     createdBy?: string;
     /**
-     * Timestamp when the ASN was created
+     * Expected arrival date of the shipment at the destination
      */
-    createdAt: string;
+    expectedArrivalDate?: string;
     /**
      * Line items detailing the SKUs and quantities included in this ASN
      */
     lineItems?: Array<AsnLineResponse>;
+    /**
+     * Date the shipment left the vendor
+     */
+    shipDate?: string;
+    /**
+     * Current lifecycle status of the ASN
+     */
+    status: AsnResponseStatusEnum;
+    /**
+     * Identifier of the vendor that issued the shipment
+     */
+    vendorId: string;
 }
 export enum AsnResponseStatusEnum {
     Loaded = 'LOADED',
@@ -99,8 +99,8 @@ export function instanceOfAsnResponse(value: object): value is AsnResponse {
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createAsnResponsePropertyNames('asnId', 'asnReferenceNumber', 'vendorId', 'status', 'createdAt', );
-    const optionalStringProperties = createAsnResponseOptionalProperties({ name: 'asnId', nullable: false }, { name: 'asnReferenceNumber', nullable: false }, { name: 'vendorId', nullable: false }, { name: 'status', nullable: false }, { name: 'shipDate', nullable: false }, { name: 'expectedArrivalDate', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'createdAt', nullable: false }, );
+    const requiredProperties = createAsnResponsePropertyNames('asnId', 'asnReferenceNumber', 'createdAt', 'status', 'vendorId', );
+    const optionalStringProperties = createAsnResponseOptionalProperties({ name: 'asnId', nullable: false }, { name: 'asnReferenceNumber', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'expectedArrivalDate', nullable: false }, { name: 'shipDate', nullable: false }, { name: 'status', nullable: false }, { name: 'vendorId', nullable: false }, );
     const optionalNumberProperties = createAsnResponseOptionalProperties();
     const optionalBooleanProperties = createAsnResponseOptionalProperties();
 

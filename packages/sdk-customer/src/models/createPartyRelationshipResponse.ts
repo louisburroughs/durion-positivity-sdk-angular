@@ -14,9 +14,17 @@
  */
 export interface CreatePartyRelationshipResponse { 
     /**
-     * Unique identifier of the relationship
+     * Timestamp when the relationship was created
      */
-    relationshipId: string;
+    createdAt: string;
+    /**
+     * Effective end date (null if active)
+     */
+    effectiveEndDate?: string;
+    /**
+     * Effective start date
+     */
+    effectiveStartDate: string;
     /**
      * ID of the commercial account
      */
@@ -26,26 +34,18 @@ export interface CreatePartyRelationshipResponse {
      */
     personId: string;
     /**
-     * Roles assigned to this relationship
-     */
-    roles: Set<CreatePartyRelationshipResponseRolesEnum>;
-    /**
-     * Effective start date
-     */
-    effectiveStartDate: string;
-    /**
-     * Effective end date (null if active)
-     */
-    effectiveEndDate?: string;
-    /**
-     * Timestamp when the relationship was created
-     */
-    createdAt: string;
-    /**
      * Whether a previous primary billing contact was demoted
      */
     previousPrimaryDemoted: boolean;
     primaryBillingContact?: boolean;
+    /**
+     * Unique identifier of the relationship
+     */
+    relationshipId: string;
+    /**
+     * Roles assigned to this relationship
+     */
+    roles: Set<CreatePartyRelationshipResponseRolesEnum>;
 }
 export enum CreatePartyRelationshipResponseRolesEnum {
     Approver = 'APPROVER',
@@ -95,8 +95,8 @@ export function instanceOfCreatePartyRelationshipResponse(value: object): value 
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createCreatePartyRelationshipResponsePropertyNames('relationshipId', 'partyId', 'personId', 'roles', 'effectiveStartDate', 'createdAt', 'previousPrimaryDemoted', );
-    const optionalStringProperties = createCreatePartyRelationshipResponseOptionalProperties({ name: 'relationshipId', nullable: false }, { name: 'partyId', nullable: false }, { name: 'personId', nullable: false }, { name: 'effectiveStartDate', nullable: false }, { name: 'effectiveEndDate', nullable: false }, { name: 'createdAt', nullable: false }, );
+    const requiredProperties = createCreatePartyRelationshipResponsePropertyNames('createdAt', 'effectiveStartDate', 'partyId', 'personId', 'previousPrimaryDemoted', 'relationshipId', 'roles', );
+    const optionalStringProperties = createCreatePartyRelationshipResponseOptionalProperties({ name: 'createdAt', nullable: false }, { name: 'effectiveEndDate', nullable: false }, { name: 'effectiveStartDate', nullable: false }, { name: 'partyId', nullable: false }, { name: 'personId', nullable: false }, { name: 'relationshipId', nullable: false }, );
     const optionalNumberProperties = createCreatePartyRelationshipResponseOptionalProperties();
     const optionalBooleanProperties = createCreatePartyRelationshipResponseOptionalProperties({ name: 'previousPrimaryDemoted', nullable: false }, { name: 'primaryBillingContact', nullable: false }, );
 

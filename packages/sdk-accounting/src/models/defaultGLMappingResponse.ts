@@ -14,46 +14,6 @@
  */
 export interface DefaultGLMappingResponse { 
     /**
-     * Unique identifier of the mapping
-     */
-    mappingId: string;
-    /**
-     * Accounting event type the mapping applies to
-     */
-    eventType: string;
-    /**
-     * Organization scope for the mapping; null for the global default
-     */
-    organizationId?: string;
-    /**
-     * Identifier of the GL account to debit
-     */
-    debitAccountId: string;
-    /**
-     * Account code of the debit GL account
-     */
-    debitAccountCode?: string;
-    /**
-     * Account name of the debit GL account
-     */
-    debitAccountName?: string;
-    /**
-     * Identifier of the GL account to credit
-     */
-    creditAccountId: string;
-    /**
-     * Account code of the credit GL account
-     */
-    creditAccountCode?: string;
-    /**
-     * Account name of the credit GL account
-     */
-    creditAccountName?: string;
-    /**
-     * Optional description of the mapping
-     */
-    description?: string;
-    /**
      * Whether the mapping is active
      */
     active?: boolean;
@@ -66,6 +26,42 @@ export interface DefaultGLMappingResponse {
      */
     createdBy?: string;
     /**
+     * Account code of the credit GL account
+     */
+    creditAccountCode?: string;
+    /**
+     * Identifier of the GL account to credit
+     */
+    creditAccountId: string;
+    /**
+     * Account name of the credit GL account
+     */
+    creditAccountName?: string;
+    /**
+     * Account code of the debit GL account
+     */
+    debitAccountCode?: string;
+    /**
+     * Identifier of the GL account to debit
+     */
+    debitAccountId: string;
+    /**
+     * Account name of the debit GL account
+     */
+    debitAccountName?: string;
+    /**
+     * Optional description of the mapping
+     */
+    description?: string;
+    /**
+     * Accounting event type the mapping applies to
+     */
+    eventType: string;
+    /**
+     * Unique identifier of the mapping
+     */
+    mappingId: string;
+    /**
      * Timestamp when the mapping was last modified (ISO 8601)
      */
     modifiedAt?: string;
@@ -73,6 +69,10 @@ export interface DefaultGLMappingResponse {
      * Identifier of the user who last modified the mapping
      */
     modifiedBy?: string;
+    /**
+     * Organization scope for the mapping; null for the global default
+     */
+    organizationId?: string;
 }
 
 function isOptionalDefaultGLMappingResponsePropertyOfType(
@@ -113,8 +113,8 @@ export function instanceOfDefaultGLMappingResponse(value: object): value is Defa
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createDefaultGLMappingResponsePropertyNames('mappingId', 'eventType', 'debitAccountId', 'creditAccountId', );
-    const optionalStringProperties = createDefaultGLMappingResponseOptionalProperties({ name: 'mappingId', nullable: false }, { name: 'eventType', nullable: false }, { name: 'organizationId', nullable: false }, { name: 'debitAccountId', nullable: false }, { name: 'debitAccountCode', nullable: false }, { name: 'debitAccountName', nullable: false }, { name: 'creditAccountId', nullable: false }, { name: 'creditAccountCode', nullable: false }, { name: 'creditAccountName', nullable: false }, { name: 'description', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'modifiedAt', nullable: false }, { name: 'modifiedBy', nullable: false }, );
+    const requiredProperties = createDefaultGLMappingResponsePropertyNames('creditAccountId', 'debitAccountId', 'eventType', 'mappingId', );
+    const optionalStringProperties = createDefaultGLMappingResponseOptionalProperties({ name: 'createdAt', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'creditAccountCode', nullable: false }, { name: 'creditAccountId', nullable: false }, { name: 'creditAccountName', nullable: false }, { name: 'debitAccountCode', nullable: false }, { name: 'debitAccountId', nullable: false }, { name: 'debitAccountName', nullable: false }, { name: 'description', nullable: false }, { name: 'eventType', nullable: false }, { name: 'mappingId', nullable: false }, { name: 'modifiedAt', nullable: false }, { name: 'modifiedBy', nullable: false }, { name: 'organizationId', nullable: false }, );
     const optionalNumberProperties = createDefaultGLMappingResponseOptionalProperties();
     const optionalBooleanProperties = createDefaultGLMappingResponseOptionalProperties({ name: 'active', nullable: false }, );
 

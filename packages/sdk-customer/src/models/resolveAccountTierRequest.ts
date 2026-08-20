@@ -10,25 +10,25 @@
 
 
 /**
- * Tier resolution request
+ * Request to compute account tier based on business rules
  */
 export interface ResolveAccountTierRequest { 
+    /**
+     * Account age in months
+     */
+    accountAgeMonths?: number;
     /**
      * Account/party identifier
      */
     accountId: string;
     /**
-     * Annual revenue or spending for tier calculation
-     */
-    annualRevenue?: number;
-    /**
      * Number of active contracts or subscriptions
      */
     activeContractCount?: number;
     /**
-     * Account age in months
+     * Annual revenue or spending for tier calculation
      */
-    accountAgeMonths?: number;
+    annualRevenue?: number;
     /**
      * Whether to apply the resolved tier or just return the recommendation
      */
@@ -79,7 +79,7 @@ export function instanceOfResolveAccountTierRequest(value: object): value is Res
 
     const requiredProperties = createResolveAccountTierRequestPropertyNames('accountId', );
     const optionalStringProperties = createResolveAccountTierRequestOptionalProperties({ name: 'accountId', nullable: false }, );
-    const optionalNumberProperties = createResolveAccountTierRequestOptionalProperties({ name: 'annualRevenue', nullable: false }, { name: 'activeContractCount', nullable: false }, { name: 'accountAgeMonths', nullable: false }, );
+    const optionalNumberProperties = createResolveAccountTierRequestOptionalProperties({ name: 'accountAgeMonths', nullable: false }, { name: 'activeContractCount', nullable: false }, { name: 'annualRevenue', nullable: false }, );
     const optionalBooleanProperties = createResolveAccountTierRequestOptionalProperties({ name: 'applyTier', nullable: false }, { name: 'forceRecalculation', nullable: false }, );
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

@@ -14,21 +14,21 @@
  */
 export interface RestrictionEvaluationResult { 
     /**
-     * Product the evaluation applies to
-     */
-    productId: string;
-    /**
      * Restriction decision for the product context
      */
     decision: RestrictionEvaluationResultDecisionEnum;
     /**
-     * Identifiers of rules that contributed to the decision
+     * Product the evaluation applies to
      */
-    ruleIds: Array<string>;
+    productId: string;
     /**
      * Reason codes explaining the decision
      */
     reasonCodes: Array<string>;
+    /**
+     * Identifiers of rules that contributed to the decision
+     */
+    ruleIds: Array<string>;
 }
 export enum RestrictionEvaluationResultDecisionEnum {
     Allow = 'ALLOW',
@@ -77,8 +77,8 @@ export function instanceOfRestrictionEvaluationResult(value: object): value is R
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createRestrictionEvaluationResultPropertyNames('productId', 'decision', 'ruleIds', 'reasonCodes', );
-    const optionalStringProperties = createRestrictionEvaluationResultOptionalProperties({ name: 'productId', nullable: false }, { name: 'decision', nullable: false }, );
+    const requiredProperties = createRestrictionEvaluationResultPropertyNames('decision', 'productId', 'reasonCodes', 'ruleIds', );
+    const optionalStringProperties = createRestrictionEvaluationResultOptionalProperties({ name: 'decision', nullable: false }, { name: 'productId', nullable: false }, );
     const optionalNumberProperties = createRestrictionEvaluationResultOptionalProperties();
     const optionalBooleanProperties = createRestrictionEvaluationResultOptionalProperties();
 

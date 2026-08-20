@@ -14,13 +14,13 @@
  */
 export interface ExchangeAuditPayloadView { 
     /**
-     * Identity of the exchange-audit row this content belongs to.
-     */
-    exchangeAuditId?: string;
-    /**
      * The payload capture level applied when this row was written. METADATA_ONLY rows carry no content at all.
      */
     captureLevel?: ExchangeAuditPayloadViewCaptureLevelEnum;
+    /**
+     * Identity of the exchange-audit row this content belongs to.
+     */
+    exchangeAuditId?: string;
     /**
      * Whether the content below was altered before storage. When true these are NOT the wire documents: sensitive fields were replaced with a redaction marker at capture time and the original values were never persisted, so they cannot be recovered from anywhere.
      */
@@ -81,7 +81,7 @@ export function instanceOfExchangeAuditPayloadView(value: object): value is Exch
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createExchangeAuditPayloadViewPropertyNames();
-    const optionalStringProperties = createExchangeAuditPayloadViewOptionalProperties({ name: 'exchangeAuditId', nullable: false }, { name: 'captureLevel', nullable: false }, { name: 'requestPayload', nullable: false }, { name: 'responsePayload', nullable: false }, );
+    const optionalStringProperties = createExchangeAuditPayloadViewOptionalProperties({ name: 'captureLevel', nullable: false }, { name: 'exchangeAuditId', nullable: false }, { name: 'requestPayload', nullable: false }, { name: 'responsePayload', nullable: false }, );
     const optionalNumberProperties = createExchangeAuditPayloadViewOptionalProperties();
     const optionalBooleanProperties = createExchangeAuditPayloadViewOptionalProperties({ name: 'redacted', nullable: false }, );
 

@@ -15,6 +15,18 @@ import { FitmentTagDto } from './fitmentTagDto';
  */
 export interface HintResponse { 
     /**
+     * Hint creation timestamp
+     */
+    createdAt: string;
+    /**
+     * User or system identity that created the hint
+     */
+    createdBy?: string;
+    /**
+     * Fitment tags for this hint
+     */
+    fitmentTags: Array<FitmentTagDto>;
+    /**
      * Hint identifier
      */
     hintId: string;
@@ -23,21 +35,9 @@ export interface HintResponse {
      */
     productId: string;
     /**
-     * Fitment tags for this hint
-     */
-    fitmentTags: Array<FitmentTagDto>;
-    /**
-     * Hint creation timestamp
-     */
-    createdAt: string;
-    /**
      * Hint last update timestamp
      */
     updatedAt: string;
-    /**
-     * User or system identity that created the hint
-     */
-    createdBy?: string;
     /**
      * User or system identity that last updated the hint
      */
@@ -82,8 +82,8 @@ export function instanceOfHintResponse(value: object): value is HintResponse {
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createHintResponsePropertyNames('hintId', 'productId', 'fitmentTags', 'createdAt', 'updatedAt', );
-    const optionalStringProperties = createHintResponseOptionalProperties({ name: 'hintId', nullable: false }, { name: 'productId', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'updatedAt', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'updatedBy', nullable: false }, );
+    const requiredProperties = createHintResponsePropertyNames('createdAt', 'fitmentTags', 'hintId', 'productId', 'updatedAt', );
+    const optionalStringProperties = createHintResponseOptionalProperties({ name: 'createdAt', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'hintId', nullable: false }, { name: 'productId', nullable: false }, { name: 'updatedAt', nullable: false }, { name: 'updatedBy', nullable: false }, );
     const optionalNumberProperties = createHintResponseOptionalProperties();
     const optionalBooleanProperties = createHintResponseOptionalProperties();
 

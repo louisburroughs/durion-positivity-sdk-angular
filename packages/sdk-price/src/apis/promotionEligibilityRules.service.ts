@@ -42,24 +42,24 @@ export class PromotionEligibilityRulesService extends BaseService {
     }
 
     /**
-     * Add eligibility rule to promotion offer
-     * Creates and attaches a new eligibility rule to the specified promotion offer.
+     * Add Eligibility Rule To Promotion Offer
+     * Creates an eligibility rule and attaches it to the promotion offer identified by promotionId, constraining who may receive the promotion. Use this tool when a promotion must be limited by account list, fleet size, vehicle tag, audience type, or campaign code; do not use evaluatePromotionEligibility, which tests a context against the existing rules without changing them. Preconditions: the promotion offer must exist; rules may be added regardless of the offer\&#39;s status. Required inputs: conditionType (ACCOUNT_ID_LIST, VEHICLE_TAG, ACCOUNT_FLEET_SIZE, AUDIENCE_TYPE, or CAMPAIGN_CODE), an operator supported by that type (IN, NOT_IN, EQUALS, GREATER_THAN_OR_EQUAL_TO), and value (max 255 characters; comma-separated for list types); ruleCombination is optional and defaults to AND, and at evaluation time the first rule\&#39;s combination governs all rules. Emits a PROMOTION_RULE_CREATE event and the rule takes effect on the next eligibility evaluation. Returns 404 when the promotion offer does not exist, and 400 when conditionType, operator, or value is missing or invalid. 
      * @endpoint post /v1/promotions/offers/{promotionId}/rules
      * @param promotionId 
-     * @param addEligibilityRuleRequest 
+     * @param addEligibilityRuleRequest Eligibility rule definition: the condition, operator, and comparison value to attach.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public addRule(promotionId: string, addEligibilityRuleRequest: AddEligibilityRuleRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<EligibilityRuleResponse>;
-    public addRule(promotionId: string, addEligibilityRuleRequest: AddEligibilityRuleRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<EligibilityRuleResponse>>;
-    public addRule(promotionId: string, addEligibilityRuleRequest: AddEligibilityRuleRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<EligibilityRuleResponse>>;
-    public addRule(promotionId: string, addEligibilityRuleRequest: AddEligibilityRuleRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public createPromotionEligibilityRule(promotionId: string, addEligibilityRuleRequest: AddEligibilityRuleRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<EligibilityRuleResponse>;
+    public createPromotionEligibilityRule(promotionId: string, addEligibilityRuleRequest: AddEligibilityRuleRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<EligibilityRuleResponse>>;
+    public createPromotionEligibilityRule(promotionId: string, addEligibilityRuleRequest: AddEligibilityRuleRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<EligibilityRuleResponse>>;
+    public createPromotionEligibilityRule(promotionId: string, addEligibilityRuleRequest: AddEligibilityRuleRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (promotionId === null || promotionId === undefined) {
-            throw new Error('Required parameter promotionId was null or undefined when calling addRule.');
+            throw new Error('Required parameter promotionId was null or undefined when calling createPromotionEligibilityRule.');
         }
         if (addEligibilityRuleRequest === null || addEligibilityRuleRequest === undefined) {
-            throw new Error('Required parameter addEligibilityRuleRequest was null or undefined when calling addRule.');
+            throw new Error('Required parameter addEligibilityRuleRequest was null or undefined when calling createPromotionEligibilityRule.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -116,8 +116,8 @@ export class PromotionEligibilityRulesService extends BaseService {
     }
 
     /**
-     * Delete eligibility rule
-     * Deletes an eligibility rule from the specified promotion offer.
+     * Delete Promotion Eligibility Rule
+     * Deletes a single eligibility rule from a promotion offer, widening the promotion\&#39;s audience from the next evaluation onward. Use this tool to remove one constraint while keeping the offer and its other rules; do not use deactivatePromotionOffer, which withdraws the entire offer rather than one rule. Preconditions: a rule with ruleId must exist and belong to the promotion identified by promotionId. Required inputs: promotionId (UUID) and ruleId (UUID) as path parameters; there is no request body. Emits a PROMOTION_RULE_DELETE event; the deletion is permanent and cannot be undone. Returns 404 when no rule with ruleId exists under that promotion, including when the rule belongs to a different offer. 
      * @endpoint delete /v1/promotions/offers/{promotionId}/rules/{ruleId}
      * @param promotionId 
      * @param ruleId 
@@ -125,15 +125,15 @@ export class PromotionEligibilityRulesService extends BaseService {
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public deleteRule(promotionId: string, ruleId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public deleteRule(promotionId: string, ruleId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public deleteRule(promotionId: string, ruleId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public deleteRule(promotionId: string, ruleId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public deletePromotionEligibilityRule(promotionId: string, ruleId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
+    public deletePromotionEligibilityRule(promotionId: string, ruleId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
+    public deletePromotionEligibilityRule(promotionId: string, ruleId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
+    public deletePromotionEligibilityRule(promotionId: string, ruleId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (promotionId === null || promotionId === undefined) {
-            throw new Error('Required parameter promotionId was null or undefined when calling deleteRule.');
+            throw new Error('Required parameter promotionId was null or undefined when calling deletePromotionEligibilityRule.');
         }
         if (ruleId === null || ruleId === undefined) {
-            throw new Error('Required parameter ruleId was null or undefined when calling deleteRule.');
+            throw new Error('Required parameter ruleId was null or undefined when calling deletePromotionEligibilityRule.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -179,24 +179,24 @@ export class PromotionEligibilityRulesService extends BaseService {
     }
 
     /**
-     * Evaluate promotion eligibility
-     * Evaluates whether a promotion offer is eligible for the provided evaluation context.
+     * Evaluate Promotion Eligibility
+     * Evaluates whether the supplied account, vehicle, audience, and campaign context passes the eligibility rules attached to a promotion offer, returning an eligible flag and a reason code. Use this tool to pre-check eligibility without consuming promotion usage; do not use applyPromotionOffer, which applies the discount and increments the offer\&#39;s usage count. Preconditions: the first rule\&#39;s ruleCombination governs the evaluation (AND requires every rule to pass, OR requires any one); a promotion with no rules, or an unknown promotionId, evaluates to eligible because only the stored rules are consulted. Required inputs: a context body whose fields are all optional; accountId and vehicleId (UUIDs), audienceType (compared case-insensitively), and campaignCode, where omitting a field that a rule needs fails that rule with a missing-context reason code such as MISSING_ACCOUNT_CONTEXT. Emits a PROMOTION_RULE_EVALUATE event; no promotion state or usage count changes. Returns 200 with eligible true or false and a reason code such as ELIGIBLE, ACCOUNT_NOT_IN_LIST, FLEET_SIZE_TOO_SMALL, or VEHICLE_TAG_NOT_PRESENT; 400 occurs only for an unparseable body. 
      * @endpoint post /v1/promotions/offers/{promotionId}/rules/evaluate
      * @param promotionId 
-     * @param eligibilityContext 
+     * @param eligibilityContext Account, vehicle, audience, and campaign context the promotion\&#39;s rules are evaluated against.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public evaluateEligibility(promotionId: string, eligibilityContext: EligibilityContext, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<EligibilityDecisionResponse>;
-    public evaluateEligibility(promotionId: string, eligibilityContext: EligibilityContext, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<EligibilityDecisionResponse>>;
-    public evaluateEligibility(promotionId: string, eligibilityContext: EligibilityContext, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<EligibilityDecisionResponse>>;
-    public evaluateEligibility(promotionId: string, eligibilityContext: EligibilityContext, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public evaluatePromotionEligibility(promotionId: string, eligibilityContext: EligibilityContext, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<EligibilityDecisionResponse>;
+    public evaluatePromotionEligibility(promotionId: string, eligibilityContext: EligibilityContext, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<EligibilityDecisionResponse>>;
+    public evaluatePromotionEligibility(promotionId: string, eligibilityContext: EligibilityContext, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<EligibilityDecisionResponse>>;
+    public evaluatePromotionEligibility(promotionId: string, eligibilityContext: EligibilityContext, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (promotionId === null || promotionId === undefined) {
-            throw new Error('Required parameter promotionId was null or undefined when calling evaluateEligibility.');
+            throw new Error('Required parameter promotionId was null or undefined when calling evaluatePromotionEligibility.');
         }
         if (eligibilityContext === null || eligibilityContext === undefined) {
-            throw new Error('Required parameter eligibilityContext was null or undefined when calling evaluateEligibility.');
+            throw new Error('Required parameter eligibilityContext was null or undefined when calling evaluatePromotionEligibility.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -253,20 +253,20 @@ export class PromotionEligibilityRulesService extends BaseService {
     }
 
     /**
-     * List eligibility rules for promotion offer
-     * Returns all eligibility rules configured for the specified promotion offer.
+     * List Eligibility Rules For Promotion Offer
+     * Lists every eligibility rule currently attached to the promotion offer identified by promotionId. Use this tool to inspect a promotion\&#39;s audience constraints before editing them; use evaluatePromotionEligibility instead to test whether a concrete account, vehicle, or campaign context passes those rules. Preconditions: none beyond the pricing:promotion:view authority; an unknown promotionId is not rejected. Required inputs: promotionId (UUID) as a path parameter; there is no request body, filtering, or paging. No events are emitted and no state changes; this is a read-only projection. Returns 200 with an empty array both when the promotion has no rules and when the promotionId matches no offer, so this operation cannot verify that a promotion exists. 
      * @endpoint get /v1/promotions/offers/{promotionId}/rules
      * @param promotionId 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public getRules(promotionId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<EligibilityRuleResponse>>;
-    public getRules(promotionId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<EligibilityRuleResponse>>>;
-    public getRules(promotionId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<EligibilityRuleResponse>>>;
-    public getRules(promotionId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public listPromotionEligibilityRules(promotionId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<EligibilityRuleResponse>>;
+    public listPromotionEligibilityRules(promotionId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<EligibilityRuleResponse>>>;
+    public listPromotionEligibilityRules(promotionId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<EligibilityRuleResponse>>>;
+    public listPromotionEligibilityRules(promotionId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (promotionId === null || promotionId === undefined) {
-            throw new Error('Required parameter promotionId was null or undefined when calling getRules.');
+            throw new Error('Required parameter promotionId was null or undefined when calling listPromotionEligibilityRules.');
         }
 
         let localVarHeaders = this.defaultHeaders;

@@ -14,6 +14,10 @@
  */
 export interface AuthConfigView { 
     /**
+     * Header NAME the API key is sent in — configuration data, not a secret reference. Omit to use the adapter default.
+     */
+    apiKeyHeader?: string;
+    /**
      * Identity of the auth config (UUIDv7).
      */
     authConfigId?: string;
@@ -25,10 +29,6 @@ export interface AuthConfigView {
      * Credential scheme this config describes. Determines exactly which secret reference fields are required and which must be absent (ADR-0050 §4).
      */
     type?: AuthConfigViewTypeEnum;
-    /**
-     * Header NAME the API key is sent in — configuration data, not a secret reference. Omit to use the adapter default.
-     */
-    apiKeyHeader?: string;
 }
 export enum AuthConfigViewTypeEnum {
     BasicPlusApikey = 'BASIC_PLUS_APIKEY',
@@ -77,7 +77,7 @@ export function instanceOfAuthConfigView(value: object): value is AuthConfigView
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createAuthConfigViewPropertyNames();
-    const optionalStringProperties = createAuthConfigViewOptionalProperties({ name: 'authConfigId', nullable: false }, { name: 'name', nullable: false }, { name: 'type', nullable: false }, { name: 'apiKeyHeader', nullable: false }, );
+    const optionalStringProperties = createAuthConfigViewOptionalProperties({ name: 'apiKeyHeader', nullable: false }, { name: 'authConfigId', nullable: false }, { name: 'name', nullable: false }, { name: 'type', nullable: false }, );
     const optionalNumberProperties = createAuthConfigViewOptionalProperties();
     const optionalBooleanProperties = createAuthConfigViewOptionalProperties();
 

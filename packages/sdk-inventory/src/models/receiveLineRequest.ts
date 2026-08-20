@@ -14,29 +14,29 @@
  */
 export interface ReceiveLineRequest { 
     /**
-     * Identifier of the receiving line being recorded
+     * Quantity received expressed in documentUom; must be supplied together with documentUom
      */
-    lineId: string;
-    /**
-     * Quantity actually received for the line, in the product\'s base UoM; may be zero. Required unless documentUom/documentQuantity are supplied, in which case the base quantity is derived and this field is ignored
-     */
-    receivedQuantity?: number;
-    /**
-     * Lot or batch number of the received stock. Required (422 LOT_NUMBER_REQUIRED) when the product is LOT-tracked per the catalog replica; ignored for tracking purposes otherwise
-     */
-    lotNumber?: string;
+    documentQuantity?: number;
     /**
      * Optional UoM the line is keyed in (e.g. CASE). When present, documentQuantity is converted to the product\'s base UoM at posting time; a UoM with no conversion path is rejected with 422 UOM_CONVERSION_UNDEFINED
      */
     documentUom?: string;
     /**
-     * Quantity received expressed in documentUom; must be supplied together with documentUom
-     */
-    documentQuantity?: number;
-    /**
      * Optional expiration date of the received lot (odoo-parity E3). Stamped on the lot on first receipt for LOT-tracked products; ignored for untracked products and for lots that already exist (correct an existing lot via the lot-management endpoint)
      */
     expirationDate?: string;
+    /**
+     * Identifier of the receiving line being recorded
+     */
+    lineId: string;
+    /**
+     * Lot or batch number of the received stock. Required (422 LOT_NUMBER_REQUIRED) when the product is LOT-tracked per the catalog replica; ignored for tracking purposes otherwise
+     */
+    lotNumber?: string;
+    /**
+     * Quantity actually received for the line, in the product\'s base UoM; may be zero. Required unless documentUom/documentQuantity are supplied, in which case the base quantity is derived and this field is ignored
+     */
+    receivedQuantity?: number;
     /**
      * Serial numbers of the received units (odoo-parity E4). Required for SERIAL-tracked products: the list size must equal the received base quantity (422 SERIAL_COUNT_MISMATCH otherwise), and each serial is enumerated as an in-stock unit. Ignored for untracked and LOT-tracked products
      */
@@ -82,8 +82,8 @@ export function instanceOfReceiveLineRequest(value: object): value is ReceiveLin
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createReceiveLineRequestPropertyNames('lineId', );
-    const optionalStringProperties = createReceiveLineRequestOptionalProperties({ name: 'lineId', nullable: false }, { name: 'lotNumber', nullable: false }, { name: 'documentUom', nullable: false }, { name: 'expirationDate', nullable: false }, );
-    const optionalNumberProperties = createReceiveLineRequestOptionalProperties({ name: 'receivedQuantity', nullable: false }, { name: 'documentQuantity', nullable: false }, );
+    const optionalStringProperties = createReceiveLineRequestOptionalProperties({ name: 'documentUom', nullable: false }, { name: 'expirationDate', nullable: false }, { name: 'lineId', nullable: false }, { name: 'lotNumber', nullable: false }, );
+    const optionalNumberProperties = createReceiveLineRequestOptionalProperties({ name: 'documentQuantity', nullable: false }, { name: 'receivedQuantity', nullable: false }, );
     const optionalBooleanProperties = createReceiveLineRequestOptionalProperties();
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

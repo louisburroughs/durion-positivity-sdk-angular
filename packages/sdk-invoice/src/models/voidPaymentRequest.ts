@@ -14,13 +14,13 @@
  */
 export interface VoidPaymentRequest { 
     /**
-     * Reason the payment is being voided
-     */
-    reason: VoidPaymentRequestReasonEnum;
-    /**
      * Optional free-text notes explaining the void
      */
     notes?: string;
+    /**
+     * Reason the payment is being voided
+     */
+    reason: VoidPaymentRequestReasonEnum;
 }
 export enum VoidPaymentRequestReasonEnum {
     CustomerRequest = 'CUSTOMER_REQUEST',
@@ -72,7 +72,7 @@ export function instanceOfVoidPaymentRequest(value: object): value is VoidPaymen
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createVoidPaymentRequestPropertyNames('reason', );
-    const optionalStringProperties = createVoidPaymentRequestOptionalProperties({ name: 'reason', nullable: false }, { name: 'notes', nullable: false }, );
+    const optionalStringProperties = createVoidPaymentRequestOptionalProperties({ name: 'notes', nullable: false }, { name: 'reason', nullable: false }, );
     const optionalNumberProperties = createVoidPaymentRequestOptionalProperties();
     const optionalBooleanProperties = createVoidPaymentRequestOptionalProperties();
 

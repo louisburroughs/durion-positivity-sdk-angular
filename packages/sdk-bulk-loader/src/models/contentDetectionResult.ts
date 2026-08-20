@@ -14,21 +14,21 @@
  */
 export interface ContentDetectionResult { 
     /**
-     * Domain detected from the file content
-     */
-    detectedDomain: ContentDetectionResultDetectedDomainEnum;
-    /**
      * Confidence score of the detection, between 0 and 1
      */
     confidence: number;
     /**
-     * Suggested mappings from source column names to target field names
+     * Domain detected from the file content
      */
-    suggestedColumnMappings?: { [key: string]: string; };
+    detectedDomain: ContentDetectionResultDetectedDomainEnum;
     /**
      * Whether an LLM fallback was used to perform the detection
      */
     llmFallbackUsed: boolean;
+    /**
+     * Suggested mappings from source column names to target field names
+     */
+    suggestedColumnMappings?: { [key: string]: string; };
 }
 export enum ContentDetectionResultDetectedDomainEnum {
     CatalogProduct = 'CATALOG_PRODUCT',
@@ -81,7 +81,7 @@ export function instanceOfContentDetectionResult(value: object): value is Conten
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createContentDetectionResultPropertyNames('detectedDomain', 'confidence', 'llmFallbackUsed', );
+    const requiredProperties = createContentDetectionResultPropertyNames('confidence', 'detectedDomain', 'llmFallbackUsed', );
     const optionalStringProperties = createContentDetectionResultOptionalProperties({ name: 'detectedDomain', nullable: false }, );
     const optionalNumberProperties = createContentDetectionResultOptionalProperties();
     const optionalBooleanProperties = createContentDetectionResultOptionalProperties({ name: 'llmFallbackUsed', nullable: false }, );

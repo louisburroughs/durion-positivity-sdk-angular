@@ -14,21 +14,33 @@
  */
 export interface TimeEntryException { 
     /**
-     * Unique identifier for the exception
+     * Timestamp when the exception was detected
      */
-    readonly exceptionId?: string;
+    detectedAt?: string;
     /**
      * Employee identifier associated with the exception
      */
     employeeId: string;
     /**
-     * Work date when the exception occurred
-     */
-    workDate: string;
-    /**
      * Exception code identifying the type of exception
      */
     exceptionCode: string;
+    /**
+     * Unique identifier for the exception
+     */
+    readonly exceptionId?: string;
+    /**
+     * Notes describing resolution or actions taken
+     */
+    resolutionNotes?: string;
+    /**
+     * Timestamp when the exception was resolved
+     */
+    resolvedAt?: string;
+    /**
+     * User who resolved the exception
+     */
+    resolvedBy?: string;
     /**
      * Severity level of the exception
      */
@@ -42,21 +54,9 @@ export interface TimeEntryException {
      */
     timeEntryId?: string;
     /**
-     * Notes describing resolution or actions taken
+     * Work date when the exception occurred
      */
-    resolutionNotes?: string;
-    /**
-     * Timestamp when the exception was detected
-     */
-    detectedAt?: string;
-    /**
-     * User who resolved the exception
-     */
-    resolvedBy?: string;
-    /**
-     * Timestamp when the exception was resolved
-     */
-    resolvedAt?: string;
+    workDate: string;
 }
 export enum TimeEntryExceptionSeverityEnum {
     Warning = 'WARNING',
@@ -109,8 +109,8 @@ export function instanceOfTimeEntryException(value: object): value is TimeEntryE
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createTimeEntryExceptionPropertyNames('employeeId', 'workDate', 'exceptionCode', 'severity', 'status', );
-    const optionalStringProperties = createTimeEntryExceptionOptionalProperties({ name: 'exceptionId', nullable: false }, { name: 'employeeId', nullable: false }, { name: 'workDate', nullable: false }, { name: 'exceptionCode', nullable: false }, { name: 'severity', nullable: false }, { name: 'status', nullable: false }, { name: 'timeEntryId', nullable: false }, { name: 'resolutionNotes', nullable: false }, { name: 'detectedAt', nullable: false }, { name: 'resolvedBy', nullable: false }, { name: 'resolvedAt', nullable: false }, );
+    const requiredProperties = createTimeEntryExceptionPropertyNames('employeeId', 'exceptionCode', 'severity', 'status', 'workDate', );
+    const optionalStringProperties = createTimeEntryExceptionOptionalProperties({ name: 'detectedAt', nullable: false }, { name: 'employeeId', nullable: false }, { name: 'exceptionCode', nullable: false }, { name: 'exceptionId', nullable: false }, { name: 'resolutionNotes', nullable: false }, { name: 'resolvedAt', nullable: false }, { name: 'resolvedBy', nullable: false }, { name: 'severity', nullable: false }, { name: 'status', nullable: false }, { name: 'timeEntryId', nullable: false }, { name: 'workDate', nullable: false }, );
     const optionalNumberProperties = createTimeEntryExceptionOptionalProperties();
     const optionalBooleanProperties = createTimeEntryExceptionOptionalProperties();
 

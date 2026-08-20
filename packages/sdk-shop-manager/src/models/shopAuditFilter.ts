@@ -14,37 +14,37 @@
  */
 export interface ShopAuditFilter { 
     /**
-     * Workorder UUID to filter by - one word per workspace naming policy
+     * Actor user ID to filter by
      */
-    workorderId?: string;
+    actorUserId?: string;
     /**
      * Appointment UUID to filter by
      */
     appointmentId?: string;
     /**
-     * Mechanic user ID to filter by
-     */
-    mechanicId?: string;
-    /**
-     * Actor user ID to filter by
-     */
-    actorUserId?: string;
-    /**
      * Specific audit event type to filter by
      */
     eventType?: ShopAuditFilterEventTypeEnum;
-    /**
-     * Location ID to filter by
-     */
-    locationId?: string;
     /**
      * Inclusive start timestamp for date-time range filter
      */
     fromDateTime?: string;
     /**
+     * Location ID to filter by
+     */
+    locationId?: string;
+    /**
+     * Mechanic user ID to filter by
+     */
+    mechanicId?: string;
+    /**
      * Inclusive end timestamp for date-time range filter
      */
     toDateTime?: string;
+    /**
+     * Workorder UUID to filter by - one word per workspace naming policy
+     */
+    workorderId?: string;
 }
 export enum ShopAuditFilterEventTypeEnum {
     ScheduleCreated = 'SCHEDULE_CREATED',
@@ -95,7 +95,7 @@ export function instanceOfShopAuditFilter(value: object): value is ShopAuditFilt
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createShopAuditFilterPropertyNames();
-    const optionalStringProperties = createShopAuditFilterOptionalProperties({ name: 'workorderId', nullable: false }, { name: 'appointmentId', nullable: false }, { name: 'mechanicId', nullable: false }, { name: 'actorUserId', nullable: false }, { name: 'eventType', nullable: false }, { name: 'locationId', nullable: false }, { name: 'fromDateTime', nullable: false }, { name: 'toDateTime', nullable: false }, );
+    const optionalStringProperties = createShopAuditFilterOptionalProperties({ name: 'actorUserId', nullable: false }, { name: 'appointmentId', nullable: false }, { name: 'eventType', nullable: false }, { name: 'fromDateTime', nullable: false }, { name: 'locationId', nullable: false }, { name: 'mechanicId', nullable: false }, { name: 'toDateTime', nullable: false }, { name: 'workorderId', nullable: false }, );
     const optionalNumberProperties = createShopAuditFilterOptionalProperties();
     const optionalBooleanProperties = createShopAuditFilterOptionalProperties();
 

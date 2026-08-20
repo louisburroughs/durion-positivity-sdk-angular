@@ -14,13 +14,13 @@
  */
 export interface RoleAssignment { 
     /**
-     * Role code (BILLING|APPROVER|DRIVER)
-     */
-    roleCode: string;
-    /**
      * Flag: set this contact as primary for this role
      */
     isPrimary?: boolean;
+    /**
+     * Role code (BILLING|APPROVER|DRIVER)
+     */
+    roleCode: string;
 }
 
 function isOptionalRoleAssignmentPropertyOfType(

@@ -14,33 +14,33 @@
  */
 export interface ResolvePriceRequestDto { 
     /**
-     * Identifier of the product to price
+     * Date for which the price should be resolved (defaults to today when omitted)
      */
-    productId: string;
-    /**
-     * Identifier of a specific price book to resolve against (optional)
-     */
-    priceBookId?: string;
-    /**
-     * Identifier of the location used to scope price book selection
-     */
-    locationId?: string;
-    /**
-     * Identifier of the customer tier used to select a CUSTOMER_TIER reference price book (matches the scopeId of the book). Selects tier list/reference prices only — transactional customer-tier discounting is owned by pos-price (ADR-0054)
-     */
-    customerTierId?: string;
-    /**
-     * Customer tier label matched against rule-level CUSTOMER_TIER conditions within the selected price book
-     */
-    customerTier?: string;
+    asOf?: string;
     /**
      * ISO currency code for the resolved price
      */
     currency?: string;
     /**
-     * Date for which the price should be resolved (defaults to today when omitted)
+     * Customer tier label matched against rule-level CUSTOMER_TIER conditions within the selected price book
      */
-    asOf?: string;
+    customerTier?: string;
+    /**
+     * Identifier of the customer tier used to select a CUSTOMER_TIER reference price book (matches the scopeId of the book). Selects tier list/reference prices only — transactional customer-tier discounting is owned by pos-price (ADR-0054)
+     */
+    customerTierId?: string;
+    /**
+     * Identifier of the location used to scope price book selection
+     */
+    locationId?: string;
+    /**
+     * Identifier of a specific price book to resolve against (optional)
+     */
+    priceBookId?: string;
+    /**
+     * Identifier of the product to price
+     */
+    productId: string;
 }
 
 function isOptionalResolvePriceRequestDtoPropertyOfType(
@@ -82,7 +82,7 @@ export function instanceOfResolvePriceRequestDto(value: object): value is Resolv
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createResolvePriceRequestDtoPropertyNames('productId', );
-    const optionalStringProperties = createResolvePriceRequestDtoOptionalProperties({ name: 'productId', nullable: false }, { name: 'priceBookId', nullable: false }, { name: 'locationId', nullable: false }, { name: 'customerTierId', nullable: false }, { name: 'customerTier', nullable: false }, { name: 'currency', nullable: false }, { name: 'asOf', nullable: false }, );
+    const optionalStringProperties = createResolvePriceRequestDtoOptionalProperties({ name: 'asOf', nullable: false }, { name: 'currency', nullable: false }, { name: 'customerTier', nullable: false }, { name: 'customerTierId', nullable: false }, { name: 'locationId', nullable: false }, { name: 'priceBookId', nullable: false }, { name: 'productId', nullable: false }, );
     const optionalNumberProperties = createResolvePriceRequestDtoOptionalProperties();
     const optionalBooleanProperties = createResolvePriceRequestDtoOptionalProperties();
 

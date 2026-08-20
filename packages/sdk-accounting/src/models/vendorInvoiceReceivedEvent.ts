@@ -15,9 +15,25 @@ import { InvoiceLineItem } from './invoiceLineItem';
  */
 export interface VendorInvoiceReceivedEvent { 
     /**
+     * Invoice due date
+     */
+    dueDate?: string;
+    /**
      * Event UUID (idempotency key)
      */
     eventId: string;
+    /**
+     * Invoice date
+     */
+    invoiceDate: string;
+    /**
+     * Vendor invoice number
+     */
+    invoiceReference: string;
+    /**
+     * Invoice line items
+     */
+    lineItems: Array<InvoiceLineItem>;
     /**
      * Organization UUID
      */
@@ -26,22 +42,6 @@ export interface VendorInvoiceReceivedEvent {
      * Vendor UUID
      */
     vendorId: string;
-    /**
-     * Vendor invoice number
-     */
-    invoiceReference: string;
-    /**
-     * Invoice date
-     */
-    invoiceDate: string;
-    /**
-     * Invoice due date
-     */
-    dueDate?: string;
-    /**
-     * Invoice line items
-     */
-    lineItems: Array<InvoiceLineItem>;
 }
 
 function isOptionalVendorInvoiceReceivedEventPropertyOfType(
@@ -82,8 +82,8 @@ export function instanceOfVendorInvoiceReceivedEvent(value: object): value is Ve
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createVendorInvoiceReceivedEventPropertyNames('eventId', 'organizationId', 'vendorId', 'invoiceReference', 'invoiceDate', 'lineItems', );
-    const optionalStringProperties = createVendorInvoiceReceivedEventOptionalProperties({ name: 'eventId', nullable: false }, { name: 'organizationId', nullable: false }, { name: 'vendorId', nullable: false }, { name: 'invoiceReference', nullable: false }, { name: 'invoiceDate', nullable: false }, { name: 'dueDate', nullable: false }, );
+    const requiredProperties = createVendorInvoiceReceivedEventPropertyNames('eventId', 'invoiceDate', 'invoiceReference', 'lineItems', 'organizationId', 'vendorId', );
+    const optionalStringProperties = createVendorInvoiceReceivedEventOptionalProperties({ name: 'dueDate', nullable: false }, { name: 'eventId', nullable: false }, { name: 'invoiceDate', nullable: false }, { name: 'invoiceReference', nullable: false }, { name: 'organizationId', nullable: false }, { name: 'vendorId', nullable: false }, );
     const optionalNumberProperties = createVendorInvoiceReceivedEventOptionalProperties();
     const optionalBooleanProperties = createVendorInvoiceReceivedEventOptionalProperties();
 

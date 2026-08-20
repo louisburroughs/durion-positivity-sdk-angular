@@ -14,25 +14,25 @@
  */
 export interface MarketingConsentDecision { 
     /**
-     * Party the decision is about
+     * Whether a marketing send is permitted
      */
-    partyId: string;
+    allowed: boolean;
     /**
      * Channel evaluated
      */
     channel: MarketingConsentDecisionChannelEnum;
     /**
-     * Whether a marketing send is permitted
+     * Party whose personal consent governed the decision — the primary business contact for a commercial account, the party itself for an individual
      */
-    allowed: boolean;
+    governingPartyId?: string;
+    /**
+     * Party the decision is about
+     */
+    partyId: string;
     /**
      * Machine-readable decision reason
      */
     reason: MarketingConsentDecisionReasonEnum;
-    /**
-     * Party whose personal consent governed the decision — the primary business contact for a commercial account, the party itself for an individual
-     */
-    governingPartyId?: string;
 }
 export enum MarketingConsentDecisionChannelEnum {
     Email = 'EMAIL',
@@ -88,8 +88,8 @@ export function instanceOfMarketingConsentDecision(value: object): value is Mark
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createMarketingConsentDecisionPropertyNames('partyId', 'channel', 'allowed', 'reason', );
-    const optionalStringProperties = createMarketingConsentDecisionOptionalProperties({ name: 'partyId', nullable: false }, { name: 'channel', nullable: false }, { name: 'reason', nullable: false }, { name: 'governingPartyId', nullable: false }, );
+    const requiredProperties = createMarketingConsentDecisionPropertyNames('allowed', 'channel', 'partyId', 'reason', );
+    const optionalStringProperties = createMarketingConsentDecisionOptionalProperties({ name: 'channel', nullable: false }, { name: 'governingPartyId', nullable: false }, { name: 'partyId', nullable: false }, { name: 'reason', nullable: false }, );
     const optionalNumberProperties = createMarketingConsentDecisionOptionalProperties();
     const optionalBooleanProperties = createMarketingConsentDecisionOptionalProperties({ name: 'allowed', nullable: false }, );
 

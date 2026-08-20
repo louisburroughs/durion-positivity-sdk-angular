@@ -14,10 +14,6 @@
  */
 export interface CreateEstimateFromAppointmentRequest { 
     /**
-     * Idempotency key to prevent duplicate estimate creation
-     */
-    idempotencyKey: string;
-    /**
      * Appointment identifier
      */
     appointmentId: string;
@@ -26,9 +22,9 @@ export interface CreateEstimateFromAppointmentRequest {
      */
     customerId: string;
     /**
-     * Vehicle identifier
+     * Idempotency key to prevent duplicate estimate creation
      */
-    vehicleId: string;
+    idempotencyKey: string;
     /**
      * Location identifier
      */
@@ -37,6 +33,10 @@ export interface CreateEstimateFromAppointmentRequest {
      * Requested services captured from appointment context
      */
     requestedServices?: Array<string>;
+    /**
+     * Vehicle identifier
+     */
+    vehicleId: string;
 }
 
 function isOptionalCreateEstimateFromAppointmentRequestPropertyOfType(
@@ -77,8 +77,8 @@ export function instanceOfCreateEstimateFromAppointmentRequest(value: object): v
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createCreateEstimateFromAppointmentRequestPropertyNames('idempotencyKey', 'appointmentId', 'customerId', 'vehicleId', 'locationId', );
-    const optionalStringProperties = createCreateEstimateFromAppointmentRequestOptionalProperties({ name: 'idempotencyKey', nullable: false }, { name: 'appointmentId', nullable: false }, { name: 'customerId', nullable: false }, { name: 'vehicleId', nullable: false }, { name: 'locationId', nullable: false }, );
+    const requiredProperties = createCreateEstimateFromAppointmentRequestPropertyNames('appointmentId', 'customerId', 'idempotencyKey', 'locationId', 'vehicleId', );
+    const optionalStringProperties = createCreateEstimateFromAppointmentRequestOptionalProperties({ name: 'appointmentId', nullable: false }, { name: 'customerId', nullable: false }, { name: 'idempotencyKey', nullable: false }, { name: 'locationId', nullable: false }, { name: 'vehicleId', nullable: false }, );
     const optionalNumberProperties = createCreateEstimateFromAppointmentRequestOptionalProperties();
     const optionalBooleanProperties = createCreateEstimateFromAppointmentRequestOptionalProperties();
 

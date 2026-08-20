@@ -14,13 +14,13 @@
  */
 export interface RoleDefaultPermissionsResponse { 
     /**
-     * Role name as requested (with or without the ROLE_ prefix)
-     */
-    role: string;
-    /**
      * Sorted authority codes the role expands to (ROLE_* plus domain permission codes)
      */
     permissions: Array<string>;
+    /**
+     * Role name as requested (with or without the ROLE_ prefix)
+     */
+    role: string;
 }
 
 function isOptionalRoleDefaultPermissionsResponsePropertyOfType(
@@ -61,7 +61,7 @@ export function instanceOfRoleDefaultPermissionsResponse(value: object): value i
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createRoleDefaultPermissionsResponsePropertyNames('role', 'permissions', );
+    const requiredProperties = createRoleDefaultPermissionsResponsePropertyNames('permissions', 'role', );
     const optionalStringProperties = createRoleDefaultPermissionsResponseOptionalProperties({ name: 'role', nullable: false }, );
     const optionalNumberProperties = createRoleDefaultPermissionsResponseOptionalProperties();
     const optionalBooleanProperties = createRoleDefaultPermissionsResponseOptionalProperties();

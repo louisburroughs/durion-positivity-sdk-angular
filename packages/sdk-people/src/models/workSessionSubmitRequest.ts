@@ -10,7 +10,7 @@
 
 
 /**
- * Work session submit request body
+ * Request to submit a completed work session for review
  */
 export interface WorkSessionSubmitRequest { 
     /**

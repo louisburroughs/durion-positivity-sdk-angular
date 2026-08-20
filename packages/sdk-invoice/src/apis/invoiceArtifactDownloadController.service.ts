@@ -34,8 +34,8 @@ export class InvoiceArtifactDownloadControllerService extends BaseService {
     }
 
     /**
-     * Download an invoice artifact as PDF using a signed download token
-     * Streams the artifact as application/pdf. Public endpoint authorized solely by the signed download token (query parameter); intended for browser direct-download links.
+     * Download Invoice Artifact as PDF
+     * Streams an invoice or receipt artifact as an application/pdf attachment, rendering it on demand through the document service. Use this tool (or a browser direct link) with a token minted by createArtifactDownloadToken; do not call it with a bearer token alone — the endpoint is public and authorized solely by the signed download token. Preconditions: a valid unexpired download token bound to exactly this invoiceId and artifactRefId, and the artifact must still belong to the invoice. Required inputs: invoiceId (UUID) and artifactRefId as path parameters plus the token query parameter; there is no request body. No events are emitted and no state changes; this is a read-only render of the stored document data. Returns 403 when the token is missing, malformed, expired, or bound to a different artifact, and 404 when the invoice or artifact cannot be resolved. 
      * @endpoint get /v1/invoices/{invoiceId}/artifacts/{artifactRefId}/download
      * @param invoiceId 
      * @param artifactRefId 
@@ -44,18 +44,18 @@ export class InvoiceArtifactDownloadControllerService extends BaseService {
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public download(invoiceId: string, artifactRefId: string, token: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<string>;
-    public download(invoiceId: string, artifactRefId: string, token: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<string>>;
-    public download(invoiceId: string, artifactRefId: string, token: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<string>>;
-    public download(invoiceId: string, artifactRefId: string, token: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public downloadInvoiceArtifact(invoiceId: string, artifactRefId: string, token: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<string>;
+    public downloadInvoiceArtifact(invoiceId: string, artifactRefId: string, token: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<string>>;
+    public downloadInvoiceArtifact(invoiceId: string, artifactRefId: string, token: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<string>>;
+    public downloadInvoiceArtifact(invoiceId: string, artifactRefId: string, token: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (invoiceId === null || invoiceId === undefined) {
-            throw new Error('Required parameter invoiceId was null or undefined when calling download.');
+            throw new Error('Required parameter invoiceId was null or undefined when calling downloadInvoiceArtifact.');
         }
         if (artifactRefId === null || artifactRefId === undefined) {
-            throw new Error('Required parameter artifactRefId was null or undefined when calling download.');
+            throw new Error('Required parameter artifactRefId was null or undefined when calling downloadInvoiceArtifact.');
         }
         if (token === null || token === undefined) {
-            throw new Error('Required parameter token was null or undefined when calling download.');
+            throw new Error('Required parameter token was null or undefined when calling downloadInvoiceArtifact.');
         }
 
         let localVarQueryParameters = new OpenApiHttpParams(this.encoder);

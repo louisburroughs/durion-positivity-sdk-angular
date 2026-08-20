@@ -13,17 +13,17 @@ import { SortObject } from './sortObject';
 
 
 export interface PageCreditMemoResponse { 
-    totalElements?: number;
-    totalPages?: number;
-    size?: number;
     content?: Array<CreditMemoResponse>;
-    number?: number;
-    pageable?: PageableObject;
-    sort?: SortObject;
+    empty?: boolean;
     first?: boolean;
     last?: boolean;
+    number?: number;
     numberOfElements?: number;
-    empty?: boolean;
+    pageable?: PageableObject;
+    size?: number;
+    sort?: SortObject;
+    totalElements?: number;
+    totalPages?: number;
 }
 
 function isOptionalPageCreditMemoResponsePropertyOfType(
@@ -66,8 +66,8 @@ export function instanceOfPageCreditMemoResponse(value: object): value is PageCr
 
     const requiredProperties = createPageCreditMemoResponsePropertyNames();
     const optionalStringProperties = createPageCreditMemoResponseOptionalProperties();
-    const optionalNumberProperties = createPageCreditMemoResponseOptionalProperties({ name: 'totalElements', nullable: false }, { name: 'totalPages', nullable: false }, { name: 'size', nullable: false }, { name: 'number', nullable: false }, { name: 'numberOfElements', nullable: false }, );
-    const optionalBooleanProperties = createPageCreditMemoResponseOptionalProperties({ name: 'first', nullable: false }, { name: 'last', nullable: false }, { name: 'empty', nullable: false }, );
+    const optionalNumberProperties = createPageCreditMemoResponseOptionalProperties({ name: 'number', nullable: false }, { name: 'numberOfElements', nullable: false }, { name: 'size', nullable: false }, { name: 'totalElements', nullable: false }, { name: 'totalPages', nullable: false }, );
+    const optionalBooleanProperties = createPageCreditMemoResponseOptionalProperties({ name: 'empty', nullable: false }, { name: 'first', nullable: false }, { name: 'last', nullable: false }, );
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
         && optionalStringProperties.every((property) => isOptionalPageCreditMemoResponsePropertyOfType(_v, property.name, 'string', property.nullable))

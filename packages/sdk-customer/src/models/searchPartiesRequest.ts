@@ -10,37 +10,21 @@
 
 
 /**
- * Search criteria
+ * Request to search parties with optional filters and pagination
  */
 export interface SearchPartiesRequest { 
-    /**
-     * Party name search term (matches legalName or displayName)
-     */
-    name?: string;
     /**
      * Search by email address
      */
     email?: string;
     /**
-     * Search by phone number
-     */
-    phone?: string;
-    /**
-     * Search by tax ID
-     */
-    taxId?: string;
-    /**
-     * Filter by party type (ORGANIZATION|INDIVIDUAL)
-     */
-    partyType?: string;
-    /**
-     * Filter by status (ACTIVE|PENDING|SUSPENDED|INACTIVE)
-     */
-    status?: string;
-    /**
      * Include merged parties in results (default false); admin-only troubleshooting toggle
      */
     includeMerged?: boolean;
+    /**
+     * Party name search term (matches legalName or displayName)
+     */
+    name?: string;
     /**
      * Pagination: page number (1-indexed, default 1)
      */
@@ -50,6 +34,14 @@ export interface SearchPartiesRequest {
      */
     pageSize?: number;
     /**
+     * Filter by party type (ORGANIZATION|INDIVIDUAL)
+     */
+    partyType?: string;
+    /**
+     * Search by phone number
+     */
+    phone?: string;
+    /**
      * Sort field (legalName|createdAt|modifiedAt)
      */
     sortField?: string;
@@ -57,6 +49,14 @@ export interface SearchPartiesRequest {
      * Sort order (ASC|DESC)
      */
     sortOrder?: string;
+    /**
+     * Filter by status (ACTIVE|PENDING|SUSPENDED|INACTIVE)
+     */
+    status?: string;
+    /**
+     * Search by tax ID
+     */
+    taxId?: string;
 }
 
 function isOptionalSearchPartiesRequestPropertyOfType(
@@ -98,7 +98,7 @@ export function instanceOfSearchPartiesRequest(value: object): value is SearchPa
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createSearchPartiesRequestPropertyNames();
-    const optionalStringProperties = createSearchPartiesRequestOptionalProperties({ name: 'name', nullable: false }, { name: 'email', nullable: false }, { name: 'phone', nullable: false }, { name: 'taxId', nullable: false }, { name: 'partyType', nullable: false }, { name: 'status', nullable: false }, { name: 'sortField', nullable: false }, { name: 'sortOrder', nullable: false }, );
+    const optionalStringProperties = createSearchPartiesRequestOptionalProperties({ name: 'email', nullable: false }, { name: 'name', nullable: false }, { name: 'partyType', nullable: false }, { name: 'phone', nullable: false }, { name: 'sortField', nullable: false }, { name: 'sortOrder', nullable: false }, { name: 'status', nullable: false }, { name: 'taxId', nullable: false }, );
     const optionalNumberProperties = createSearchPartiesRequestOptionalProperties({ name: 'pageNumber', nullable: false }, { name: 'pageSize', nullable: false }, );
     const optionalBooleanProperties = createSearchPartiesRequestOptionalProperties({ name: 'includeMerged', nullable: false }, );
 

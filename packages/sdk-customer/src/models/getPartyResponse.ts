@@ -14,30 +14,6 @@
  */
 export interface GetPartyResponse { 
     /**
-     * Party ID (canonical CRM identifier)
-     */
-    partyId: string;
-    /**
-     * Party type discriminator
-     */
-    partyType: string;
-    /**
-     * Legal name of the party
-     */
-    legalName: string;
-    /**
-     * Display/trading name
-     */
-    displayName?: string;
-    /**
-     * Tax identification number
-     */
-    taxId?: string;
-    /**
-     * Current status of the party
-     */
-    status: string;
-    /**
      * Billing terms ID
      */
     billingTermsId?: string;
@@ -46,9 +22,33 @@ export interface GetPartyResponse {
      */
     createdAt: string;
     /**
+     * Display/trading name
+     */
+    displayName?: string;
+    /**
+     * Legal name of the party
+     */
+    legalName: string;
+    /**
      * Last modification timestamp (ISO 8601)
      */
     modifiedAt?: string;
+    /**
+     * Party ID (canonical CRM identifier)
+     */
+    partyId: string;
+    /**
+     * Party type discriminator
+     */
+    partyType: string;
+    /**
+     * Current status of the party
+     */
+    status: string;
+    /**
+     * Tax identification number
+     */
+    taxId?: string;
 }
 
 function isOptionalGetPartyResponsePropertyOfType(
@@ -89,8 +89,8 @@ export function instanceOfGetPartyResponse(value: object): value is GetPartyResp
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createGetPartyResponsePropertyNames('partyId', 'partyType', 'legalName', 'status', 'createdAt', );
-    const optionalStringProperties = createGetPartyResponseOptionalProperties({ name: 'partyId', nullable: false }, { name: 'partyType', nullable: false }, { name: 'legalName', nullable: false }, { name: 'displayName', nullable: false }, { name: 'taxId', nullable: false }, { name: 'status', nullable: false }, { name: 'billingTermsId', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'modifiedAt', nullable: false }, );
+    const requiredProperties = createGetPartyResponsePropertyNames('createdAt', 'legalName', 'partyId', 'partyType', 'status', );
+    const optionalStringProperties = createGetPartyResponseOptionalProperties({ name: 'billingTermsId', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'displayName', nullable: false }, { name: 'legalName', nullable: false }, { name: 'modifiedAt', nullable: false }, { name: 'partyId', nullable: false }, { name: 'partyType', nullable: false }, { name: 'status', nullable: false }, { name: 'taxId', nullable: false }, );
     const optionalNumberProperties = createGetPartyResponseOptionalProperties();
     const optionalBooleanProperties = createGetPartyResponseOptionalProperties();
 

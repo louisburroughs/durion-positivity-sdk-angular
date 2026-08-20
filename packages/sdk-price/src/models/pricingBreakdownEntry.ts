@@ -14,6 +14,8 @@ import { MoneyAmount } from './moneyAmount';
  * Single pricing-rule application entry within a quote breakdown
  */
 export interface PricingBreakdownEntry { 
+    adjustment: MoneyAmount;
+    resultingValue: MoneyAmount;
     /**
      * Rule name
      */
@@ -22,8 +24,6 @@ export interface PricingBreakdownEntry {
      * Rule category/type
      */
     ruleType: string;
-    adjustment: MoneyAmount;
-    resultingValue: MoneyAmount;
 }
 
 function isOptionalPricingBreakdownEntryPropertyOfType(
@@ -64,7 +64,7 @@ export function instanceOfPricingBreakdownEntry(value: object): value is Pricing
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createPricingBreakdownEntryPropertyNames('ruleName', 'ruleType', 'adjustment', 'resultingValue', );
+    const requiredProperties = createPricingBreakdownEntryPropertyNames('adjustment', 'resultingValue', 'ruleName', 'ruleType', );
     const optionalStringProperties = createPricingBreakdownEntryOptionalProperties({ name: 'ruleName', nullable: false }, { name: 'ruleType', nullable: false }, );
     const optionalNumberProperties = createPricingBreakdownEntryOptionalProperties();
     const optionalBooleanProperties = createPricingBreakdownEntryOptionalProperties();

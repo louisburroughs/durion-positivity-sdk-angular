@@ -14,6 +14,14 @@
  */
 export interface TransferOrderLineResponse { 
     /**
+     * Creation timestamp
+     */
+    createdAt?: string;
+    /**
+     * Quantity dispatched from the source so far
+     */
+    dispatchedQty?: number;
+    /**
      * Line identifier
      */
     lineId?: string;
@@ -21,22 +29,6 @@ export interface TransferOrderLineResponse {
      * Position of the line within the order (1-based)
      */
     lineNumber?: number;
-    /**
-     * SKU / stock item identifier
-     */
-    sku?: string;
-    /**
-     * Quantity requested for transfer
-     */
-    requestedQty?: number;
-    /**
-     * Quantity dispatched from the source so far
-     */
-    dispatchedQty?: number;
-    /**
-     * Quantity received at the destination so far
-     */
-    receivedQty?: number;
     /**
      * Lot the dispatched units were drawn from (LOT-tracked SKUs, pinned at dispatch)
      */
@@ -46,9 +38,17 @@ export interface TransferOrderLineResponse {
      */
     lotNumber?: string;
     /**
-     * Creation timestamp
+     * Quantity received at the destination so far
      */
-    createdAt?: string;
+    receivedQty?: number;
+    /**
+     * Quantity requested for transfer
+     */
+    requestedQty?: number;
+    /**
+     * SKU / stock item identifier
+     */
+    sku?: string;
     /**
      * Last update timestamp
      */
@@ -94,8 +94,8 @@ export function instanceOfTransferOrderLineResponse(value: object): value is Tra
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createTransferOrderLineResponsePropertyNames();
-    const optionalStringProperties = createTransferOrderLineResponseOptionalProperties({ name: 'lineId', nullable: false }, { name: 'sku', nullable: false }, { name: 'lotId', nullable: false }, { name: 'lotNumber', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'updatedAt', nullable: false }, );
-    const optionalNumberProperties = createTransferOrderLineResponseOptionalProperties({ name: 'lineNumber', nullable: false }, { name: 'requestedQty', nullable: false }, { name: 'dispatchedQty', nullable: false }, { name: 'receivedQty', nullable: false }, );
+    const optionalStringProperties = createTransferOrderLineResponseOptionalProperties({ name: 'createdAt', nullable: false }, { name: 'lineId', nullable: false }, { name: 'lotId', nullable: false }, { name: 'lotNumber', nullable: false }, { name: 'sku', nullable: false }, { name: 'updatedAt', nullable: false }, );
+    const optionalNumberProperties = createTransferOrderLineResponseOptionalProperties({ name: 'dispatchedQty', nullable: false }, { name: 'lineNumber', nullable: false }, { name: 'receivedQty', nullable: false }, { name: 'requestedQty', nullable: false }, );
     const optionalBooleanProperties = createTransferOrderLineResponseOptionalProperties();
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

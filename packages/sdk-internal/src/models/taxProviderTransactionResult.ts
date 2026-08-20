@@ -14,14 +14,6 @@
  */
 export interface TaxProviderTransactionResult { 
     /**
-     * Document code / idempotency key (source invoice id)
-     */
-    referenceId: string;
-    /**
-     * Recorded lifecycle status
-     */
-    status: TaxProviderTransactionResultStatusEnum;
-    /**
      * Provider transaction id when known; null in test mode
      */
     externalTransactionId?: string;
@@ -29,6 +21,14 @@ export interface TaxProviderTransactionResult {
      * Short human-readable outcome note
      */
     message?: string;
+    /**
+     * Document code / idempotency key (source invoice id)
+     */
+    referenceId: string;
+    /**
+     * Recorded lifecycle status
+     */
+    status: TaxProviderTransactionResultStatusEnum;
 }
 export enum TaxProviderTransactionResultStatusEnum {
     PendingCommit = 'PENDING_COMMIT',
@@ -78,7 +78,7 @@ export function instanceOfTaxProviderTransactionResult(value: object): value is 
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createTaxProviderTransactionResultPropertyNames('referenceId', 'status', );
-    const optionalStringProperties = createTaxProviderTransactionResultOptionalProperties({ name: 'referenceId', nullable: false }, { name: 'status', nullable: false }, { name: 'externalTransactionId', nullable: false }, { name: 'message', nullable: false }, );
+    const optionalStringProperties = createTaxProviderTransactionResultOptionalProperties({ name: 'externalTransactionId', nullable: false }, { name: 'message', nullable: false }, { name: 'referenceId', nullable: false }, { name: 'status', nullable: false }, );
     const optionalNumberProperties = createTaxProviderTransactionResultOptionalProperties();
     const optionalBooleanProperties = createTaxProviderTransactionResultOptionalProperties();
 

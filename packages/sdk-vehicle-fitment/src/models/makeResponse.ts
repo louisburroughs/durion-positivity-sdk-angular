@@ -18,13 +18,13 @@ export interface MakeResponse {
      */
     id: string;
     /**
-     * Make name
-     */
-    name: string;
-    /**
      * Manufacturer identifier for this make
      */
     manufacturerId?: string;
+    /**
+     * Make name
+     */
+    name: string;
 }
 
 function isOptionalMakeResponsePropertyOfType(
@@ -66,7 +66,7 @@ export function instanceOfMakeResponse(value: object): value is MakeResponse {
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createMakeResponsePropertyNames('id', 'name', );
-    const optionalStringProperties = createMakeResponseOptionalProperties({ name: 'id', nullable: false }, { name: 'name', nullable: false }, { name: 'manufacturerId', nullable: false }, );
+    const optionalStringProperties = createMakeResponseOptionalProperties({ name: 'id', nullable: false }, { name: 'manufacturerId', nullable: false }, { name: 'name', nullable: false }, );
     const optionalNumberProperties = createMakeResponseOptionalProperties();
     const optionalBooleanProperties = createMakeResponseOptionalProperties();
 

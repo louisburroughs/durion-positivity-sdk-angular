@@ -38,8 +38,8 @@ export class EstimateSearchService extends BaseService {
     }
 
     /**
-     * Search estimates
-     * Paginated search for estimates filtered by optional customerId and/or vehicleId.
+     * Search Estimates With Filters
+     * Searches estimates and returns a page of estimate summaries, either by free-text query or by exact customer and vehicle filters. Use this tool when locating estimates by estimate number, customer name, estimate id, customer, or vehicle; use listEstimates instead for an unfiltered listing of every estimate. Preconditions: none beyond the caller holding workorder:estimate:view; unmatched queries return an empty page rather than an error. Required inputs: none are mandatory — a non-blank q takes precedence and causes customerId and vehicleId to be ignored; page size defaults to 25. Emits a WORKORDER_ESTIMATE_SEARCH audit event; no estimate state changes — this is a read-only projection. Returns 200 with an empty page when nothing matches; no 404 is produced for empty results. 
      * @endpoint get /v1/workexec/estimates/search
      * @param pageable 
      * @param q Free-text query matching estimate number, customer name, or estimate id (optional)

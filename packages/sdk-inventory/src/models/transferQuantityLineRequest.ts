@@ -18,13 +18,13 @@ export interface TransferQuantityLineRequest {
      */
     lineId: string;
     /**
-     * Quantity to dispatch/receive on this line; must be positive
-     */
-    quantity: number;
-    /**
      * Lot number the dispatched units are drawn from (dispatch only; receive and short-close reuse the lot recorded at dispatch). Required (422 LOT_NUMBER_REQUIRED) when the SKU is LOT-tracked; must reference an existing (422 LOT_UNKNOWN) ACTIVE (422 LOT_NOT_AVAILABLE) lot. Ignored for untracked SKUs
      */
     lotNumber?: string;
+    /**
+     * Quantity to dispatch/receive on this line; must be positive
+     */
+    quantity: number;
 }
 
 function isOptionalTransferQuantityLineRequestPropertyOfType(

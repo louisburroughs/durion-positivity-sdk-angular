@@ -15,37 +15,37 @@ import { LeadTimeInfo } from './leadTimeInfo';
  */
 export interface AvailabilityInfo { 
     /**
-     * On-hand quantity at location
-     */
-    onHandQuantity?: number;
-    /**
-     * Available to promise quantity
-     */
-    availableToPromiseQuantity?: number;
-    leadTime?: LeadTimeInfo;
-    /**
-     * Availability data status
-     */
-    status: AvailabilityInfoStatusEnum;
-    /**
      * Timestamp of availability data
      */
     asOf?: string;
     /**
+     * Available to promise quantity
+     */
+    availableToPromiseQuantity?: number;
+    /**
      * Confidence level in availability data
      */
     confidence: AvailabilityInfoConfidenceEnum;
+    leadTime?: LeadTimeInfo;
+    /**
+     * On-hand quantity at location
+     */
+    onHandQuantity?: number;
+    /**
+     * Availability data status
+     */
+    status: AvailabilityInfoStatusEnum;
 }
+export enum AvailabilityInfoConfidenceEnum {
+    Low = 'LOW',
+    Medium = 'MEDIUM',
+    High = 'HIGH'
+};
 export enum AvailabilityInfoStatusEnum {
     Ok = 'OK',
     Unavailable = 'UNAVAILABLE',
     Stale = 'STALE',
     Error = 'ERROR'
-};
-export enum AvailabilityInfoConfidenceEnum {
-    Low = 'LOW',
-    Medium = 'MEDIUM',
-    High = 'HIGH'
 };
 
 
@@ -88,9 +88,9 @@ export function instanceOfAvailabilityInfo(value: object): value is Availability
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createAvailabilityInfoPropertyNames('status', 'confidence', );
-    const optionalStringProperties = createAvailabilityInfoOptionalProperties({ name: 'status', nullable: false }, { name: 'asOf', nullable: false }, { name: 'confidence', nullable: false }, );
-    const optionalNumberProperties = createAvailabilityInfoOptionalProperties({ name: 'onHandQuantity', nullable: false }, { name: 'availableToPromiseQuantity', nullable: false }, );
+    const requiredProperties = createAvailabilityInfoPropertyNames('confidence', 'status', );
+    const optionalStringProperties = createAvailabilityInfoOptionalProperties({ name: 'asOf', nullable: false }, { name: 'confidence', nullable: false }, { name: 'status', nullable: false }, );
+    const optionalNumberProperties = createAvailabilityInfoOptionalProperties({ name: 'availableToPromiseQuantity', nullable: false }, { name: 'onHandQuantity', nullable: false }, );
     const optionalBooleanProperties = createAvailabilityInfoOptionalProperties();
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

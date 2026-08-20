@@ -18,17 +18,17 @@ export interface RefundPaymentRequest {
      */
     amount: number;
     /**
-     * Reason the payment is being refunded
+     * Optional correlation id to an external record (e.g. a warranty claim settlement)
      */
-    reason: RefundPaymentRequestReasonEnum;
+    externalReference?: string;
     /**
      * Optional free-text notes explaining the refund
      */
     notes?: string;
     /**
-     * Optional correlation id to an external record (e.g. a warranty claim settlement)
+     * Reason the payment is being refunded
      */
-    externalReference?: string;
+    reason: RefundPaymentRequestReasonEnum;
 }
 export enum RefundPaymentRequestReasonEnum {
     CustomerReturn = 'CUSTOMER_RETURN',
@@ -83,7 +83,7 @@ export function instanceOfRefundPaymentRequest(value: object): value is RefundPa
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createRefundPaymentRequestPropertyNames('amount', 'reason', );
-    const optionalStringProperties = createRefundPaymentRequestOptionalProperties({ name: 'reason', nullable: false }, { name: 'notes', nullable: false }, { name: 'externalReference', nullable: false }, );
+    const optionalStringProperties = createRefundPaymentRequestOptionalProperties({ name: 'externalReference', nullable: false }, { name: 'notes', nullable: false }, { name: 'reason', nullable: false }, );
     const optionalNumberProperties = createRefundPaymentRequestOptionalProperties({ name: 'amount', nullable: false }, );
     const optionalBooleanProperties = createRefundPaymentRequestOptionalProperties();
 

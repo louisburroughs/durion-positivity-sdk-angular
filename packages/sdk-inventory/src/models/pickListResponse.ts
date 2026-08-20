@@ -14,33 +14,33 @@
  */
 export interface PickListResponse { 
     /**
-     * Unique identifier of the pick list
+     * Timestamp when the pick list was created
      */
-    pickListId: string;
-    /**
-     * Identifier of the workorder the pick list fulfills
-     */
-    workorderId: string;
-    /**
-     * Current lifecycle status of the pick list
-     */
-    status: PickListResponseStatusEnum;
-    /**
-     * Relative priority of the pick list; higher values are picked sooner
-     */
-    priority: number;
+    createdAt: string;
     /**
      * Timestamp by which the pick list should be completed
      */
     dueAt?: string;
     /**
-     * Timestamp when the pick list was created
+     * Unique identifier of the pick list
      */
-    createdAt: string;
+    pickListId: string;
+    /**
+     * Relative priority of the pick list; higher values are picked sooner
+     */
+    priority: number;
+    /**
+     * Current lifecycle status of the pick list
+     */
+    status: PickListResponseStatusEnum;
     /**
      * Timestamp when the pick list was last updated
      */
     updatedAt: string;
+    /**
+     * Identifier of the workorder the pick list fulfills
+     */
+    workorderId: string;
 }
 export enum PickListResponseStatusEnum {
     Draft = 'DRAFT',
@@ -90,8 +90,8 @@ export function instanceOfPickListResponse(value: object): value is PickListResp
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createPickListResponsePropertyNames('pickListId', 'workorderId', 'status', 'priority', 'createdAt', 'updatedAt', );
-    const optionalStringProperties = createPickListResponseOptionalProperties({ name: 'pickListId', nullable: false }, { name: 'workorderId', nullable: false }, { name: 'status', nullable: false }, { name: 'dueAt', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'updatedAt', nullable: false }, );
+    const requiredProperties = createPickListResponsePropertyNames('createdAt', 'pickListId', 'priority', 'status', 'updatedAt', 'workorderId', );
+    const optionalStringProperties = createPickListResponseOptionalProperties({ name: 'createdAt', nullable: false }, { name: 'dueAt', nullable: false }, { name: 'pickListId', nullable: false }, { name: 'status', nullable: false }, { name: 'updatedAt', nullable: false }, { name: 'workorderId', nullable: false }, );
     const optionalNumberProperties = createPickListResponseOptionalProperties({ name: 'priority', nullable: false }, );
     const optionalBooleanProperties = createPickListResponseOptionalProperties();
 

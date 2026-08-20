@@ -39,19 +39,19 @@ export class VehicleSearchService extends BaseService {
 
     /**
      * Search vehicles
-     * Search for vehicles by VIN, license plate, unit number, or description. Results are ranked by relevance: exact match &gt; prefix match &gt; contains match.
+     * Searches vehicle registry records with a single free-text query, ranking exact matches ahead of prefix matches ahead of optional contains matches. Use this tool for vehicle discovery from a JSON body; use searchVehiclesByQuery for the query-parameter variant, and use getVehicleByVin instead when the full 17-character VIN is already known. Preconditions: none beyond registry data existing; the match field is inferred from the query shape, with six or more alphanumeric characters searched as a VIN (seventeen as an exact VIN), shorter queries searched against license plates, and the remainder searched against unit number plus description. Required inputs: query (non-blank, at least 3 characters, or 6 when VIN-shaped); limit defaults to 25 and is capped at 50, enableContainsMatching defaults to false, and cursor is reserved and currently ignored. Emits a VEHICLE_SEARCH event; no vehicle state changes. Returns 200 with ranked results plus totalCount and hasMore, and 400 with a VALIDATION_ERROR ApiError when the query is empty or shorter than the minimum for its inferred type. 
      * @endpoint post /v1/vehicles/search
-     * @param searchVehiclesRequest 
+     * @param searchVehiclesRequest Free-text search criteria with an optional result limit and matching strategy flag.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public search(searchVehiclesRequest: SearchVehiclesRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<SearchVehiclesResponse>;
-    public search(searchVehiclesRequest: SearchVehiclesRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<SearchVehiclesResponse>>;
-    public search(searchVehiclesRequest: SearchVehiclesRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<SearchVehiclesResponse>>;
-    public search(searchVehiclesRequest: SearchVehiclesRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public searchVehicles(searchVehiclesRequest: SearchVehiclesRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<SearchVehiclesResponse>;
+    public searchVehicles(searchVehiclesRequest: SearchVehiclesRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<SearchVehiclesResponse>>;
+    public searchVehicles(searchVehiclesRequest: SearchVehiclesRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<SearchVehiclesResponse>>;
+    public searchVehicles(searchVehiclesRequest: SearchVehiclesRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (searchVehiclesRequest === null || searchVehiclesRequest === undefined) {
-            throw new Error('Required parameter searchVehiclesRequest was null or undefined when calling search.');
+            throw new Error('Required parameter searchVehiclesRequest was null or undefined when calling searchVehicles.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -109,7 +109,7 @@ export class VehicleSearchService extends BaseService {
 
     /**
      * Search vehicles (query parameter)
-     * Alternative search endpoint using query parameters. Useful for browser-based queries.
+     * Searches vehicle registry records using query parameters, applying the same ranking as searchVehicles with exact matches first, then prefix matches, then optional contains matches. Use this tool for browser-friendly or link-style searches; use searchVehicles instead when the client can send a JSON body, and use getVehicleByVin when the full 17-character VIN is already known. Preconditions: none beyond registry data existing; the match field is inferred from the query shape exactly as in searchVehicles. Required inputs: q (non-blank, at least 3 characters, or 6 when VIN-shaped); limit defaults to 25 and is capped at 50, and enableContains defaults to false. Emits a VEHICLE_SEARCH event; no vehicle state changes. Returns 200 with ranked results plus totalCount and hasMore, and 400 with a VALIDATION_ERROR ApiError when q is empty or shorter than the minimum for its inferred type. 
      * @endpoint get /v1/vehicles/search
      * @param q Search query (VIN, license plate, unit number, or description)
      * @param limit Result limit (default 25, max 50)
@@ -118,12 +118,12 @@ export class VehicleSearchService extends BaseService {
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public searchByQuery(q: string, limit?: number, enableContains?: boolean, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<SearchVehiclesResponse>;
-    public searchByQuery(q: string, limit?: number, enableContains?: boolean, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<SearchVehiclesResponse>>;
-    public searchByQuery(q: string, limit?: number, enableContains?: boolean, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<SearchVehiclesResponse>>;
-    public searchByQuery(q: string, limit?: number, enableContains?: boolean, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public searchVehiclesByQuery(q: string, limit?: number, enableContains?: boolean, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<SearchVehiclesResponse>;
+    public searchVehiclesByQuery(q: string, limit?: number, enableContains?: boolean, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<SearchVehiclesResponse>>;
+    public searchVehiclesByQuery(q: string, limit?: number, enableContains?: boolean, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<SearchVehiclesResponse>>;
+    public searchVehiclesByQuery(q: string, limit?: number, enableContains?: boolean, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (q === null || q === undefined) {
-            throw new Error('Required parameter q was null or undefined when calling searchByQuery.');
+            throw new Error('Required parameter q was null or undefined when calling searchVehiclesByQuery.');
         }
 
         let localVarQueryParameters = new OpenApiHttpParams(this.encoder);

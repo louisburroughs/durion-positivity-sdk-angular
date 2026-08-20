@@ -14,49 +14,49 @@
  */
 export interface MessageTemplateResponse { 
     /**
-     * Template identifier
-     */
-    templateId: string;
-    /**
-     * Template name
-     */
-    name: string;
-    /**
-     * Delivery channel
-     */
-    channel: MessageTemplateResponseChannelEnum;
-    /**
      * Audience whose token vocabulary applies
      */
     audienceType: MessageTemplateResponseAudienceTypeEnum;
-    /**
-     * Subject line; null for SMS
-     */
-    subject?: string;
-    /**
-     * Message body with token placeholders
-     */
-    body: string;
     /**
      * Tokens available to this template\'s audience
      */
     availableTokens: Set<string>;
     /**
+     * Message body with token placeholders
+     */
+    body: string;
+    /**
+     * Delivery channel
+     */
+    channel: MessageTemplateResponseChannelEnum;
+    /**
      * Creation timestamp
      */
     createdAt?: string;
+    /**
+     * Template name
+     */
+    name: string;
+    /**
+     * Subject line; null for SMS
+     */
+    subject?: string;
+    /**
+     * Template identifier
+     */
+    templateId: string;
     /**
      * Last update timestamp
      */
     updatedAt?: string;
 }
-export enum MessageTemplateResponseChannelEnum {
-    Email = 'EMAIL',
-    Sms = 'SMS'
-};
 export enum MessageTemplateResponseAudienceTypeEnum {
     Commercial = 'COMMERCIAL',
     Individual = 'INDIVIDUAL'
+};
+export enum MessageTemplateResponseChannelEnum {
+    Email = 'EMAIL',
+    Sms = 'SMS'
 };
 
 
@@ -99,8 +99,8 @@ export function instanceOfMessageTemplateResponse(value: object): value is Messa
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createMessageTemplateResponsePropertyNames('templateId', 'name', 'channel', 'audienceType', 'body', 'availableTokens', );
-    const optionalStringProperties = createMessageTemplateResponseOptionalProperties({ name: 'templateId', nullable: false }, { name: 'name', nullable: false }, { name: 'channel', nullable: false }, { name: 'audienceType', nullable: false }, { name: 'subject', nullable: false }, { name: 'body', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'updatedAt', nullable: false }, );
+    const requiredProperties = createMessageTemplateResponsePropertyNames('audienceType', 'availableTokens', 'body', 'channel', 'name', 'templateId', );
+    const optionalStringProperties = createMessageTemplateResponseOptionalProperties({ name: 'audienceType', nullable: false }, { name: 'body', nullable: false }, { name: 'channel', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'name', nullable: false }, { name: 'subject', nullable: false }, { name: 'templateId', nullable: false }, { name: 'updatedAt', nullable: false }, );
     const optionalNumberProperties = createMessageTemplateResponseOptionalProperties();
     const optionalBooleanProperties = createMessageTemplateResponseOptionalProperties();
 

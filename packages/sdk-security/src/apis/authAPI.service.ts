@@ -44,20 +44,20 @@ export class AuthAPIService extends BaseService {
     }
 
     /**
-     * User login
-     * Authenticates a user with username and password and returns a JWT token pair.
+     * Authenticate User and Issue Tokens
+     * Authenticates a user with username and password and returns a JWT access token (1-hour) and refresh token (7-day) carrying uid, roles, perm_bits, and perm_ver claims. Use this tool when a person signs in with credentials; do not use refreshTokenPair, which exchanges an existing refresh token, and do not use issueInternalToken, which mints tokens for trusted internal callers without a password. Preconditions: the user account must exist, be enabled, non-expired, hold unexpired credentials, and not be inside an active failed-login lockout window. Required inputs: username and password, both non-blank. Emits a SECURITY_AUTH_LOGIN event, resets the failed-attempt counter on success, and persists the issued token pair for later validation and revocation. Returns 401 with code ACCOUNT_LOCKED while the lockout window is active, INVALID_CREDENTIALS on a bad password, and ACCOUNT_DISABLED, ACCOUNT_EXPIRED, or CREDENTIALS_EXPIRED for the matching account states. 
      * @endpoint post /v1/auth/login
-     * @param loginRequest 
+     * @param loginRequest Credentials of the user signing in.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public login(loginRequest: LoginRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<TokenPairResponse>;
-    public login(loginRequest: LoginRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<TokenPairResponse>>;
-    public login(loginRequest: LoginRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<TokenPairResponse>>;
-    public login(loginRequest: LoginRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public loginUser(loginRequest: LoginRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<TokenPairResponse>;
+    public loginUser(loginRequest: LoginRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<TokenPairResponse>>;
+    public loginUser(loginRequest: LoginRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<TokenPairResponse>>;
+    public loginUser(loginRequest: LoginRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (loginRequest === null || loginRequest === undefined) {
-            throw new Error('Required parameter loginRequest was null or undefined when calling login.');
+            throw new Error('Required parameter loginRequest was null or undefined when calling loginUser.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -111,20 +111,20 @@ export class AuthAPIService extends BaseService {
     }
 
     /**
-     * Self-register a new user
-     * Creates a low-privilege customer account after resolving or creating a linked person record. Successful registration requires a follow-up login and does not issue tokens immediately. Conflict responses include operator guidance for recovery, linked-account, and CRM identity-review cases.
+     * Self-Register a New Customer Account
+     * Creates a low-privilege SELF_SERVICE_CUSTOMER account for an anonymous person, resolving or creating a linked person record before any account row is written. Use this tool when a customer registers themselves; do not use createUser, the operator-facing endpoint that provisions accounts with arbitrary roles and no identity resolution. Preconditions: no active user may exist for the requested or email-derived username, the resolved person must not already have an active linked user, and CRM identity signals must not require manual review. Required inputs: email, password, firstName, and lastName; username is optional and defaults to the email local part, phone and idpSubject are optional, and idempotencyKey optionally replays a completed attempt instead of duplicating it. Emits a SECURITY_AUTH_SELF_REGISTER event, creates the user, and queues an asynchronous user-person link command, so the response reports linkStatus PENDING and issuedTokens false; a follow-up loginUser call is required to obtain tokens. Returns 409 with code USER_ALREADY_EXISTS, ACCOUNT_RECOVERY_REQUIRED, PERSON_ALREADY_HAS_ACTIVE_USER, CRM_PERSON_CONFLICT, or IDEMPOTENCY_KEY_REUSED; recovery and identity conflicts also open a review case and return its id as referenceId with nextAction and supportAction guidance. 
      * @endpoint post /v1/auth/self-register
-     * @param selfRegistrationRequest 
+     * @param selfRegistrationRequest Identity and credential details of the person registering themselves.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public selfRegister(selfRegistrationRequest: SelfRegistrationRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<SelfRegistrationResponse>;
-    public selfRegister(selfRegistrationRequest: SelfRegistrationRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<SelfRegistrationResponse>>;
-    public selfRegister(selfRegistrationRequest: SelfRegistrationRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<SelfRegistrationResponse>>;
-    public selfRegister(selfRegistrationRequest: SelfRegistrationRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public selfRegisterUser(selfRegistrationRequest: SelfRegistrationRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<SelfRegistrationResponse>;
+    public selfRegisterUser(selfRegistrationRequest: SelfRegistrationRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<SelfRegistrationResponse>>;
+    public selfRegisterUser(selfRegistrationRequest: SelfRegistrationRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<SelfRegistrationResponse>>;
+    public selfRegisterUser(selfRegistrationRequest: SelfRegistrationRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (selfRegistrationRequest === null || selfRegistrationRequest === undefined) {
-            throw new Error('Required parameter selfRegistrationRequest was null or undefined when calling selfRegister.');
+            throw new Error('Required parameter selfRegistrationRequest was null or undefined when calling selfRegisterUser.');
         }
 
         let localVarHeaders = this.defaultHeaders;

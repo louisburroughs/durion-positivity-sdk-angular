@@ -38,20 +38,20 @@ export class PeopleBulkIngestAPIService extends BaseService {
     }
 
     /**
-     * Bulk ingest records
-     * Accepts a batch of domain records for bulk import. Returns per-record results.
+     * Bulk Import Employee Records From Batch
+     * Imports a batch of employee records, creating each one through the same path as createEmployee with status forced to ACTIVE. Use this tool for initial loads or migrations of many employees; use createEmployee instead for a single hire, since per-record failures here are reported in the response body rather than as an HTTP error. Preconditions: each record is checked under the STRICT duplicate policy, so an existing employee number, email, or phone fails that record. Required inputs: jobId (UUID), locationId (UUID), and records, each with firstName, lastName, employeeNumber, and hireDate as a YYYY-MM-DD string. Emits a PEOPLE_BULK_INGEST event, and each successfully created employee also publishes its identity upsert command and people.employee.updated fact. Returns 200 even when individual records fail (inspect per-record success flags and errorCode PEOPLE_INGEST_FAILED), and 400 when the envelope itself is invalid or the records list is empty. 
      * @endpoint post /v1/people/bulk-ingest
-     * @param bulkIngestRequestPersonBulkIngestRecord 
+     * @param bulkIngestRequestPersonBulkIngestRecord Bulk ingest envelope: a job-scoped batch of person records to import as ACTIVE employees.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public bulkIngest(bulkIngestRequestPersonBulkIngestRecord: BulkIngestRequestPersonBulkIngestRecord, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<BulkIngestResponse>;
-    public bulkIngest(bulkIngestRequestPersonBulkIngestRecord: BulkIngestRequestPersonBulkIngestRecord, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<BulkIngestResponse>>;
-    public bulkIngest(bulkIngestRequestPersonBulkIngestRecord: BulkIngestRequestPersonBulkIngestRecord, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<BulkIngestResponse>>;
-    public bulkIngest(bulkIngestRequestPersonBulkIngestRecord: BulkIngestRequestPersonBulkIngestRecord, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public createEmployeesBulk(bulkIngestRequestPersonBulkIngestRecord: BulkIngestRequestPersonBulkIngestRecord, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<BulkIngestResponse>;
+    public createEmployeesBulk(bulkIngestRequestPersonBulkIngestRecord: BulkIngestRequestPersonBulkIngestRecord, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<BulkIngestResponse>>;
+    public createEmployeesBulk(bulkIngestRequestPersonBulkIngestRecord: BulkIngestRequestPersonBulkIngestRecord, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<BulkIngestResponse>>;
+    public createEmployeesBulk(bulkIngestRequestPersonBulkIngestRecord: BulkIngestRequestPersonBulkIngestRecord, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (bulkIngestRequestPersonBulkIngestRecord === null || bulkIngestRequestPersonBulkIngestRecord === undefined) {
-            throw new Error('Required parameter bulkIngestRequestPersonBulkIngestRecord was null or undefined when calling bulkIngest.');
+            throw new Error('Required parameter bulkIngestRequestPersonBulkIngestRecord was null or undefined when calling createEmployeesBulk.');
         }
 
         let localVarHeaders = this.defaultHeaders;

@@ -10,12 +10,12 @@
 
 
 export interface ProblemDetail { 
-    type?: string;
-    title?: string;
-    status?: number;
     detail?: string;
     instance?: string;
     properties?: object;
+    status?: number;
+    title?: string;
+    type?: string;
 }
 
 function isOptionalProblemDetailPropertyOfType(
@@ -57,7 +57,7 @@ export function instanceOfProblemDetail(value: object): value is ProblemDetail {
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createProblemDetailPropertyNames();
-    const optionalStringProperties = createProblemDetailOptionalProperties({ name: 'type', nullable: false }, { name: 'title', nullable: false }, { name: 'detail', nullable: false }, { name: 'instance', nullable: false }, );
+    const optionalStringProperties = createProblemDetailOptionalProperties({ name: 'detail', nullable: false }, { name: 'instance', nullable: false }, { name: 'title', nullable: false }, { name: 'type', nullable: false }, );
     const optionalNumberProperties = createProblemDetailOptionalProperties({ name: 'status', nullable: false }, );
     const optionalBooleanProperties = createProblemDetailOptionalProperties();
 

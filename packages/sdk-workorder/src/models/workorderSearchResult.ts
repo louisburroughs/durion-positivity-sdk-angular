@@ -14,21 +14,9 @@
  */
 export interface WorkorderSearchResult { 
     /**
-     * Workorder identifier
+     * Creation timestamp
      */
-    workorderId: string;
-    /**
-     * Human workorder number
-     */
-    workorderNumber?: string;
-    /**
-     * Linked estimate number, if created from an estimate
-     */
-    estimateNumber?: string;
-    /**
-     * Current workorder status
-     */
-    status: WorkorderSearchResultStatusEnum;
+    createdAt?: string;
     /**
      * Customer identifier
      */
@@ -37,6 +25,14 @@ export interface WorkorderSearchResult {
      * Resolved customer display name
      */
     customerName?: string;
+    /**
+     * Linked estimate number, if created from an estimate
+     */
+    estimateNumber?: string;
+    /**
+     * Current workorder status
+     */
+    status: WorkorderSearchResultStatusEnum;
     /**
      * Vehicle identifier
      */
@@ -50,9 +46,13 @@ export interface WorkorderSearchResult {
      */
     vin?: string;
     /**
-     * Creation timestamp
+     * Workorder identifier
      */
-    createdAt?: string;
+    workorderId: string;
+    /**
+     * Human workorder number
+     */
+    workorderNumber?: string;
 }
 export enum WorkorderSearchResultStatusEnum {
     Draft = 'DRAFT',
@@ -106,8 +106,8 @@ export function instanceOfWorkorderSearchResult(value: object): value is Workord
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createWorkorderSearchResultPropertyNames('workorderId', 'status', );
-    const optionalStringProperties = createWorkorderSearchResultOptionalProperties({ name: 'workorderId', nullable: false }, { name: 'workorderNumber', nullable: false }, { name: 'estimateNumber', nullable: false }, { name: 'status', nullable: false }, { name: 'customerId', nullable: false }, { name: 'customerName', nullable: false }, { name: 'vehicleId', nullable: false }, { name: 'vehicleLabel', nullable: false }, { name: 'vin', nullable: false }, { name: 'createdAt', nullable: false }, );
+    const requiredProperties = createWorkorderSearchResultPropertyNames('status', 'workorderId', );
+    const optionalStringProperties = createWorkorderSearchResultOptionalProperties({ name: 'createdAt', nullable: false }, { name: 'customerId', nullable: false }, { name: 'customerName', nullable: false }, { name: 'estimateNumber', nullable: false }, { name: 'status', nullable: false }, { name: 'vehicleId', nullable: false }, { name: 'vehicleLabel', nullable: false }, { name: 'vin', nullable: false }, { name: 'workorderId', nullable: false }, { name: 'workorderNumber', nullable: false }, );
     const optionalNumberProperties = createWorkorderSearchResultOptionalProperties();
     const optionalBooleanProperties = createWorkorderSearchResultOptionalProperties();
 

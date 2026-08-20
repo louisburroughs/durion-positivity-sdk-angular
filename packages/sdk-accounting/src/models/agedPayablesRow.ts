@@ -14,14 +14,6 @@
  */
 export interface AgedPayablesRow { 
     /**
-     * Vendor UUID
-     */
-    vendorId: string;
-    /**
-     * Vendor display name
-     */
-    vendorName?: string;
-    /**
      * Outstanding 0-30 days past due (includes not-yet-due)
      */
     current: number;
@@ -41,6 +33,14 @@ export interface AgedPayablesRow {
      * Total outstanding for the vendor across all buckets
      */
     totalOutstanding: number;
+    /**
+     * Vendor UUID
+     */
+    vendorId: string;
+    /**
+     * Vendor display name
+     */
+    vendorName?: string;
 }
 
 function isOptionalAgedPayablesRowPropertyOfType(
@@ -81,7 +81,7 @@ export function instanceOfAgedPayablesRow(value: object): value is AgedPayablesR
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createAgedPayablesRowPropertyNames('vendorId', 'current', 'days31To60', 'days61To90', 'days90Plus', 'totalOutstanding', );
+    const requiredProperties = createAgedPayablesRowPropertyNames('current', 'days31To60', 'days61To90', 'days90Plus', 'totalOutstanding', 'vendorId', );
     const optionalStringProperties = createAgedPayablesRowOptionalProperties({ name: 'vendorId', nullable: false }, { name: 'vendorName', nullable: false }, );
     const optionalNumberProperties = createAgedPayablesRowOptionalProperties({ name: 'current', nullable: false }, { name: 'days31To60', nullable: false }, { name: 'days61To90', nullable: false }, { name: 'days90Plus', nullable: false }, { name: 'totalOutstanding', nullable: false }, );
     const optionalBooleanProperties = createAgedPayablesRowOptionalProperties();

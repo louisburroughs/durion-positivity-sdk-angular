@@ -48,12 +48,12 @@ export class WorkorderPickFacadeService extends BaseService {
     }
 
     /**
-     * Complete pick task
-     * Queues asynchronous completion of a workorder pick task (ADR-0044 #901). Returns 202 with status PENDING while the command is in flight; an already-complete task is returned as-is with 200.
+     * Complete a Workorder Pick Task
+     * Queues asynchronous completion of a pick task by confirming its full required quantity over the Kafka command feed per ADR-0044; a task with nothing left to pick is returned as-is. Use this tool to close out a pick task in one step; use confirmPickLine instead to record a partial picked quantity. Preconditions: the pick task must exist on the workorder\&#39;s pick list replica. Required inputs: workorderId and pickTaskId (UUIDs) as path parameters; the body is optional and may carry a completion reason. Emits a WORKORDER_PICK_FACADE_COMPLETE_TASK event and publishes a pick-confirm command for the remaining quantity; callers must poll getPickTasks to observe the applied state. Returns 202 with status PENDING while the command is in flight, 200 with the current state when the task is already complete, 404 when the pick list or task is missing, and 503 when the command feed is unavailable. 
      * @endpoint post /v1/workorders/{workorderId}/pick-tasks/{pickTaskId}:complete
      * @param workorderId Workorder ID
      * @param pickTaskId Pick task ID
-     * @param completePickTaskRequest Completion details; omit or send {} if no reason is provided
+     * @param completePickTaskRequest Optional completion details; omit or send {} if no reason is provided.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -106,7 +106,7 @@ export class WorkorderPickFacadeService extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/workorders/${this.configuration.encodeParam({name: "workorderId", value: workorderId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/pick-tasks/${this.configuration.encodeParam({name: "pickTaskId", value: pickTaskId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}:complete`;
+        let localVarPath = `/v1/workorders/${this.configuration.encodeParam({name: "workorderId", value: workorderId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/pick-tasks/${this.configuration.encodeParam({name: "pickTaskId", value: pickTaskId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}:complete`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<WorkorderPickTaskResponse>('post', `${basePath}${localVarPath}`,
             {
@@ -123,13 +123,13 @@ export class WorkorderPickFacadeService extends BaseService {
     }
 
     /**
-     * Confirm pick line quantity
-     * Queues asynchronous pick confirmation (ADR-0044 #901): the response is 202 with status PENDING; the inventory.pick-task.updated fact updates the pick replica and subsequent reads observe the confirmed quantity.
+     * Confirm Pick Line Quantity
+     * Queues asynchronous confirmation of a picked quantity on one pick line over the Kafka command feed per ADR-0044; the response carries status PENDING, and the inventory pick-task-updated fact later updates the local replica. Use this tool after resolvePickScan validates the scan; do not use completePickTask, which confirms the full remaining required quantity in one step. Preconditions: the pick task must exist on the workorder\&#39;s pick list replica, and pickLineId must equal pickTaskId in the current single-line model. Required inputs: workorderId, pickTaskId, and pickLineId (UUIDs) as path parameters, plus quantityPicked (integer) in the body. Emits a WORKORDER_PICK_FACADE_CONFIRM_LINE event and publishes a pick-confirm command; callers must poll getPickTasks to observe the applied quantity. Returns 202 with status PENDING when the confirmation is queued, 400 when pickLineId does not match pickTaskId, 404 when the pick list or task is missing, and 503 when the command feed is unavailable. 
      * @endpoint post /v1/workorders/{workorderId}/pick-tasks/{pickTaskId}/lines/{pickLineId}:confirm
      * @param workorderId Workorder ID
      * @param pickTaskId Pick task ID
      * @param pickLineId Pick line ID
-     * @param confirmPickLineRequest 
+     * @param confirmPickLineRequest Quantity actually picked for the line being confirmed.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -188,7 +188,7 @@ export class WorkorderPickFacadeService extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/workorders/${this.configuration.encodeParam({name: "workorderId", value: workorderId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/pick-tasks/${this.configuration.encodeParam({name: "pickTaskId", value: pickTaskId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/lines/${this.configuration.encodeParam({name: "pickLineId", value: pickLineId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}:confirm`;
+        let localVarPath = `/v1/workorders/${this.configuration.encodeParam({name: "workorderId", value: workorderId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/pick-tasks/${this.configuration.encodeParam({name: "pickTaskId", value: pickTaskId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/lines/${this.configuration.encodeParam({name: "pickLineId", value: pickLineId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}:confirm`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<WorkorderPickTaskResponse>('post', `${basePath}${localVarPath}`,
             {
@@ -205,68 +205,8 @@ export class WorkorderPickFacadeService extends BaseService {
     }
 
     /**
-     * Get pick list for workorder
-     * Retrieve the pick list for a workorder so parts can be staged and fulfilled
-     * @endpoint get /v1/workorders/{workorderId}/pick-list
-     * @param workorderId Workorder ID
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     * @param options additional options
-     */
-    public getPickList(workorderId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<WorkorderPickListResponse>;
-    public getPickList(workorderId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<WorkorderPickListResponse>>;
-    public getPickList(workorderId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<WorkorderPickListResponse>>;
-    public getPickList(workorderId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
-        if (workorderId === null || workorderId === undefined) {
-            throw new Error('Required parameter workorderId was null or undefined when calling getPickList.');
-        }
-
-        let localVarHeaders = this.defaultHeaders;
-
-        // authentication (bearerAuth) required
-        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
-
-        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
-            'application/json'
-        ]);
-        if (localVarHttpHeaderAcceptSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
-        }
-
-        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
-
-        const localVarTransferCache: boolean = options?.transferCache ?? true;
-
-
-        let responseType_: 'text' | 'json' | 'blob' = 'json';
-        if (localVarHttpHeaderAcceptSelected) {
-            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
-                responseType_ = 'text';
-            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
-                responseType_ = 'json';
-            } else {
-                responseType_ = 'blob';
-            }
-        }
-
-        let localVarPath = `/v1/workorders/${this.configuration.encodeParam({name: "workorderId", value: workorderId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/pick-list`;
-        const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<WorkorderPickListResponse>('get', `${basePath}${localVarPath}`,
-            {
-                context: localVarHttpContext,
-                responseType: <any>responseType_,
-                ...(withCredentials ? { withCredentials } : {}),
-                headers: localVarHeaders,
-                observe: observe,
-                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * Get pick tasks for workorder
-     * Retrieve the pick tasks for a workorder to guide pick-list execution
+     * Get Pick Tasks for Workorder
+     * Returns the pick tasks of the workorder\&#39;s primary pick list in sort order, each with its SKU, location, required and picked quantities, and status. Use this tool to drive pick execution line by line; use getWorkorderPickList instead for the list header and getPickedItems for what has already been picked. Preconditions: a pick list replica must already exist for the workorder. Required inputs: workorderId (UUID) as a path parameter. No events are emitted and no state changes; this is a read-only replica projection. Returns 404 when no pick list exists for the workorder. 
      * @endpoint get /v1/workorders/{workorderId}/pick-list/tasks
      * @param workorderId Workorder ID
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -309,7 +249,7 @@ export class WorkorderPickFacadeService extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/workorders/${this.configuration.encodeParam({name: "workorderId", value: workorderId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/pick-list/tasks`;
+        let localVarPath = `/v1/workorders/${this.configuration.encodeParam({name: "workorderId", value: workorderId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/pick-list/tasks`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<Array<WorkorderPickTaskResponse>>('get', `${basePath}${localVarPath}`,
             {
@@ -325,28 +265,88 @@ export class WorkorderPickFacadeService extends BaseService {
     }
 
     /**
-     * Resolve scan for pick task
-     * Resolve a scanned item for a workorder pick task before confirming fulfillment
-     * @endpoint post /v1/workorders/{workorderId}/pick-tasks/{pickTaskId}:resolve-scan
+     * Get Pick List for Workorder
+     * Returns the workorder\&#39;s primary pick list header from the local inventory replica so parts can be staged and fulfilled. Use this tool for the pick list summary; use getPickTasks instead for the individual pick lines that guide execution. Preconditions: a pick list replica must already exist for the workorder, replicated from pos-inventory facts. Required inputs: workorderId (UUID) as a path parameter. No events are emitted and no state changes; this is a read-only replica projection. Returns 404 when no pick list exists for the workorder. 
+     * @endpoint get /v1/workorders/{workorderId}/pick-list
      * @param workorderId Workorder ID
-     * @param pickTaskId Pick task ID
-     * @param resolveScanRequest 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public resolveScan(workorderId: string, pickTaskId: string, resolveScanRequest: ResolveScanRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ResolveScanResponse>;
-    public resolveScan(workorderId: string, pickTaskId: string, resolveScanRequest: ResolveScanRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ResolveScanResponse>>;
-    public resolveScan(workorderId: string, pickTaskId: string, resolveScanRequest: ResolveScanRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ResolveScanResponse>>;
-    public resolveScan(workorderId: string, pickTaskId: string, resolveScanRequest: ResolveScanRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getWorkorderPickList(workorderId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<WorkorderPickListResponse>;
+    public getWorkorderPickList(workorderId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<WorkorderPickListResponse>>;
+    public getWorkorderPickList(workorderId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<WorkorderPickListResponse>>;
+    public getWorkorderPickList(workorderId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (workorderId === null || workorderId === undefined) {
-            throw new Error('Required parameter workorderId was null or undefined when calling resolveScan.');
+            throw new Error('Required parameter workorderId was null or undefined when calling getWorkorderPickList.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/workorders/${this.configuration.encodeParam({name: "workorderId", value: workorderId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/pick-list`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<WorkorderPickListResponse>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Resolve Scan Against Pick Task
+     * Checks a scanned SKU and location against a pick task\&#39;s expected SKU and location, returning matched plus a matchStatus of MATCHED, SKU_MISMATCH, LOCATION_MISMATCH, or NO_MATCH. Use this tool to validate a barcode scan before confirmPickLine; it performs no confirmation itself, so do not treat a match as a recorded pick. Preconditions: the pick task must exist on the workorder\&#39;s pick list replica. Required inputs: workorderId and pickTaskId (UUIDs) as path parameters, plus scannedSkuId and scannedLocationId (UUIDs) in the body. Emits a WORKORDER_PICK_FACADE_RESOLVE_SCAN audit event; no pick state changes — the check is purely evaluative. Returns 404 when the workorder has no pick list or the pick task is not on it. 
+     * @endpoint post /v1/workorders/{workorderId}/pick-tasks/{pickTaskId}:resolve-scan
+     * @param workorderId Workorder ID
+     * @param pickTaskId Pick task ID
+     * @param resolveScanRequest Scanned SKU and location to check against the pick task\&#39;s expectation.
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public resolvePickScan(workorderId: string, pickTaskId: string, resolveScanRequest: ResolveScanRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ResolveScanResponse>;
+    public resolvePickScan(workorderId: string, pickTaskId: string, resolveScanRequest: ResolveScanRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ResolveScanResponse>>;
+    public resolvePickScan(workorderId: string, pickTaskId: string, resolveScanRequest: ResolveScanRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ResolveScanResponse>>;
+    public resolvePickScan(workorderId: string, pickTaskId: string, resolveScanRequest: ResolveScanRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (workorderId === null || workorderId === undefined) {
+            throw new Error('Required parameter workorderId was null or undefined when calling resolvePickScan.');
         }
         if (pickTaskId === null || pickTaskId === undefined) {
-            throw new Error('Required parameter pickTaskId was null or undefined when calling resolveScan.');
+            throw new Error('Required parameter pickTaskId was null or undefined when calling resolvePickScan.');
         }
         if (resolveScanRequest === null || resolveScanRequest === undefined) {
-            throw new Error('Required parameter resolveScanRequest was null or undefined when calling resolveScan.');
+            throw new Error('Required parameter resolveScanRequest was null or undefined when calling resolvePickScan.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -386,7 +386,7 @@ export class WorkorderPickFacadeService extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/workorders/${this.configuration.encodeParam({name: "workorderId", value: workorderId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/pick-tasks/${this.configuration.encodeParam({name: "pickTaskId", value: pickTaskId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}:resolve-scan`;
+        let localVarPath = `/v1/workorders/${this.configuration.encodeParam({name: "workorderId", value: workorderId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/pick-tasks/${this.configuration.encodeParam({name: "pickTaskId", value: pickTaskId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}:resolve-scan`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<ResolveScanResponse>('post', `${basePath}${localVarPath}`,
             {

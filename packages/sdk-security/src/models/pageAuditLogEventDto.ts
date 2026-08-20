@@ -13,17 +13,17 @@ import { AuditLogEventDto } from './auditLogEventDto';
 
 
 export interface PageAuditLogEventDto { 
-    totalElements?: number;
-    totalPages?: number;
-    size?: number;
     content?: Array<AuditLogEventDto>;
-    number?: number;
-    pageable?: PageableObject;
-    sort?: SortObject;
+    empty?: boolean;
     first?: boolean;
     last?: boolean;
+    number?: number;
     numberOfElements?: number;
-    empty?: boolean;
+    pageable?: PageableObject;
+    size?: number;
+    sort?: SortObject;
+    totalElements?: number;
+    totalPages?: number;
 }
 
 function isOptionalPageAuditLogEventDtoPropertyOfType(
@@ -66,8 +66,8 @@ export function instanceOfPageAuditLogEventDto(value: object): value is PageAudi
 
     const requiredProperties = createPageAuditLogEventDtoPropertyNames();
     const optionalStringProperties = createPageAuditLogEventDtoOptionalProperties();
-    const optionalNumberProperties = createPageAuditLogEventDtoOptionalProperties({ name: 'totalElements', nullable: false }, { name: 'totalPages', nullable: false }, { name: 'size', nullable: false }, { name: 'number', nullable: false }, { name: 'numberOfElements', nullable: false }, );
-    const optionalBooleanProperties = createPageAuditLogEventDtoOptionalProperties({ name: 'first', nullable: false }, { name: 'last', nullable: false }, { name: 'empty', nullable: false }, );
+    const optionalNumberProperties = createPageAuditLogEventDtoOptionalProperties({ name: 'number', nullable: false }, { name: 'numberOfElements', nullable: false }, { name: 'size', nullable: false }, { name: 'totalElements', nullable: false }, { name: 'totalPages', nullable: false }, );
+    const optionalBooleanProperties = createPageAuditLogEventDtoOptionalProperties({ name: 'empty', nullable: false }, { name: 'first', nullable: false }, { name: 'last', nullable: false }, );
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
         && optionalStringProperties.every((property) => isOptionalPageAuditLogEventDtoPropertyOfType(_v, property.name, 'string', property.nullable))

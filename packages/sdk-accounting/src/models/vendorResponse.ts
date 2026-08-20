@@ -14,21 +14,21 @@
  */
 export interface VendorResponse { 
     /**
-     * Stable vendor identifier
-     */
-    vendorId: string;
-    /**
      * Vendor display name
      */
     name: string;
     /**
-     * Human-readable vendor number, when assigned
-     */
-    vendorNumber?: string;
-    /**
      * Vendor status
      */
     status?: VendorResponseStatusEnum;
+    /**
+     * Stable vendor identifier
+     */
+    vendorId: string;
+    /**
+     * Human-readable vendor number, when assigned
+     */
+    vendorNumber?: string;
 }
 export enum VendorResponseStatusEnum {
     Active = 'ACTIVE',
@@ -75,8 +75,8 @@ export function instanceOfVendorResponse(value: object): value is VendorResponse
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createVendorResponsePropertyNames('vendorId', 'name', );
-    const optionalStringProperties = createVendorResponseOptionalProperties({ name: 'vendorId', nullable: false }, { name: 'name', nullable: false }, { name: 'vendorNumber', nullable: false }, { name: 'status', nullable: false }, );
+    const requiredProperties = createVendorResponsePropertyNames('name', 'vendorId', );
+    const optionalStringProperties = createVendorResponseOptionalProperties({ name: 'name', nullable: false }, { name: 'status', nullable: false }, { name: 'vendorId', nullable: false }, { name: 'vendorNumber', nullable: false }, );
     const optionalNumberProperties = createVendorResponseOptionalProperties();
     const optionalBooleanProperties = createVendorResponseOptionalProperties();
 

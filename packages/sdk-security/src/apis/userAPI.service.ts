@@ -40,24 +40,24 @@ export class UserAPIService extends BaseService {
     }
 
     /**
-     * Assign roles to a user
-     * Replaces or applies the requested role set for the specified user by username.
+     * Replace a User\&#39;s Direct Role Set
+     * Replaces a user\&#39;s directly attached role set with the supplied role names, looking the user up by username. Use this tool for wholesale role replacement by username; do not use assignUserRole, which adds a single scoped role assignment by UUID without touching the direct set. Preconditions: the caller must hold security:role:assign, the username must resolve to a user, and every named role must exist. Required inputs: username as a path parameter and roles, an array of existing role names, in the body; the set replaces all current direct roles. Emits a SECURITY_USER_ASSIGN_ROLES event. Returns 400 with INVALID_REQUEST when the user or a named role cannot be found; the miss surfaces as 400 rather than 404. 
      * @endpoint put /v1/users/{username}/roles
      * @param username Username of the user whose roles are being assigned
-     * @param body 
+     * @param body The replacement set of role names for the user.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public assignRoles(username: string, body: object, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<UserDto>;
-    public assignRoles(username: string, body: object, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<UserDto>>;
-    public assignRoles(username: string, body: object, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<UserDto>>;
-    public assignRoles(username: string, body: object, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public assignUserRolesByUsername(username: string, body: object, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<UserDto>;
+    public assignUserRolesByUsername(username: string, body: object, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<UserDto>>;
+    public assignUserRolesByUsername(username: string, body: object, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<UserDto>>;
+    public assignUserRolesByUsername(username: string, body: object, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (username === null || username === undefined) {
-            throw new Error('Required parameter username was null or undefined when calling assignRoles.');
+            throw new Error('Required parameter username was null or undefined when calling assignUserRolesByUsername.');
         }
         if (body === null || body === undefined) {
-            throw new Error('Required parameter body was null or undefined when calling assignRoles.');
+            throw new Error('Required parameter body was null or undefined when calling assignUserRolesByUsername.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -114,10 +114,10 @@ export class UserAPIService extends BaseService {
     }
 
     /**
-     * Create a new user
-     * Creates a new user with username, password, and roles.
+     * Create a User With Roles
+     * Creates a user account with a username, a hashed password, and a set of directly attached roles. Use this tool for operator provisioning of accounts; do not use selfRegisterUser, the anonymous customer flow that fixes the role to SELF_SERVICE_CUSTOMER and runs identity resolution first. Preconditions: the caller must hold security:user:create, the username must be unused, and every named role must already exist. Required inputs: username, password, and roles, a non-empty array of existing role names. Emits a SECURITY_USER_CREATE event; the password is hashed before storage. Returns 400 when the username already exists or a named role is not found. 
      * @endpoint post /v1/users
-     * @param body 
+     * @param body Username, password, and role names of the account to create.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -184,8 +184,8 @@ export class UserAPIService extends BaseService {
     }
 
     /**
-     * Delete a user
-     * Delete a user by their unique ID.
+     * Delete a User Account
+     * Deletes a user account and queues removal of its user-person link so downstream projections follow the account out. Use this tool to remove an account permanently; do not use disableUserAccount, which blocks sign-in reversibly and keeps the record. Preconditions: the caller must hold security:user:delete; deleting an id that does not exist is a silent no-op. Required inputs: id (UUID) as a path parameter. Emits a SECURITY_USER_DELETE event and sends a UserPersonLinkRemoveRequested command to the people-contact domain in the same transaction. Returns 204 in all cases, including when the user was already absent. 
      * @endpoint delete /v1/users/{id}
      * @param id ID of the user to delete
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -244,64 +244,8 @@ export class UserAPIService extends BaseService {
     }
 
     /**
-     * Get all users
-     * Retrieve a list of all users.
-     * @endpoint get /v1/users
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     * @param options additional options
-     */
-    public getAllUsers(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<UserDto>>;
-    public getAllUsers(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<UserDto>>>;
-    public getAllUsers(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<UserDto>>>;
-    public getAllUsers(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
-
-        let localVarHeaders = this.defaultHeaders;
-
-        // authentication (bearerAuth) required
-        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
-
-        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
-            'application/json'
-        ]);
-        if (localVarHttpHeaderAcceptSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
-        }
-
-        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
-
-        const localVarTransferCache: boolean = options?.transferCache ?? true;
-
-
-        let responseType_: 'text' | 'json' | 'blob' = 'json';
-        if (localVarHttpHeaderAcceptSelected) {
-            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
-                responseType_ = 'text';
-            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
-                responseType_ = 'json';
-            } else {
-                responseType_ = 'blob';
-            }
-        }
-
-        let localVarPath = `/v1/users`;
-        const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<Array<UserDto>>('get', `${basePath}${localVarPath}`,
-            {
-                context: localVarHttpContext,
-                responseType: <any>responseType_,
-                ...(withCredentials ? { withCredentials } : {}),
-                headers: localVarHeaders,
-                observe: observe,
-                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * Get user by ID
-     * Retrieve a user by their unique ID.
+     * Get a User Account by Id
+     * Returns a single user account by UUID, including effective role names merged from direct roles and currently active role assignments. Use this tool when the user id is known; use listUsers instead to browse accounts, and getUserAccountState for administrative lock and expiry flags. Preconditions: the caller must hold security:user:view and the user must exist. Required inputs: id (UUID) as a path parameter. No events are emitted and no state changes; this is a read-only projection. Returns 404 when no user exists for the supplied id. 
      * @endpoint get /v1/users/{id}
      * @param id ID of the user to retrieve
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -360,11 +304,67 @@ export class UserAPIService extends BaseService {
     }
 
     /**
-     * Update an existing user
-     * Update the details of an existing user.
+     * List All User Accounts
+     * Returns every user account with its id, username, effective role names, and linked personId. Use this tool to enumerate accounts; use getUserById instead for one known user. Preconditions: the caller must hold security:user:view. Required inputs: none; there are no filters or paging parameters, so the full user table is returned. No events are emitted and no state changes; this is a read-only projection. Returns 200 with an empty list when no users exist; there are no business error conditions. 
+     * @endpoint get /v1/users
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public listUsers(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<UserDto>>;
+    public listUsers(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<UserDto>>>;
+    public listUsers(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<UserDto>>>;
+    public listUsers(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/users`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<Array<UserDto>>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Partially Update a User Account
+     * Applies a partial update to a user account: username, password, and the direct role set are each replaced only when supplied. Use this tool to change account fields; do not use assignUserRolesByUsername, which only replaces roles, and do not use the account-state endpoints such as disableUserAccount, which flip administrative flags. Preconditions: the caller must hold security:user:edit, the user must exist, and any named role must already exist. Required inputs: id (UUID) as a path parameter; username, password, and roles are all optional, and omitted or blank fields are left unchanged. Emits a SECURITY_USER_UPDATE event; a supplied password is re-hashed before storage. Returns 400 with INVALID_REQUEST when the user or a named role cannot be found; the miss surfaces as 400 rather than 404. 
      * @endpoint put /v1/users/{id}
      * @param id ID of the user to update
-     * @param userUpdateRequest 
+     * @param userUpdateRequest The account fields to change; omitted fields are left untouched.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options

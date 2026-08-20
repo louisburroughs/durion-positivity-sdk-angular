@@ -14,29 +14,29 @@
  */
 export interface ValuationRow { 
     /**
-     * SKU / stock-item identifier
+     * Resolved costing method for the SKU (AVERAGE or STANDARD)
      */
-    stockItemId: string;
+    costingMethod: string;
     /**
      * On-hand quantity contributing to the value (site-scoped when a location filter is applied)
      */
     onHand: number;
     /**
-     * Resolved costing method for the SKU (AVERAGE or STANDARD)
-     */
-    costingMethod: string;
-    /**
-     * Current unit cost per the resolved method; null when the SKU is uncosted
-     */
-    unitCostCurrent?: number;
-    /**
      * On-hand value: onHand × unitCostCurrent (0 when uncosted)
      */
     onHandValue: number;
     /**
+     * SKU / stock-item identifier
+     */
+    stockItemId: string;
+    /**
      * True when the SKU has no derivable unit cost, so its value is reported as 0
      */
     uncosted: boolean;
+    /**
+     * Current unit cost per the resolved method; null when the SKU is uncosted
+     */
+    unitCostCurrent?: number;
 }
 
 function isOptionalValuationRowPropertyOfType(
@@ -77,9 +77,9 @@ export function instanceOfValuationRow(value: object): value is ValuationRow {
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createValuationRowPropertyNames('stockItemId', 'onHand', 'costingMethod', 'onHandValue', 'uncosted', );
-    const optionalStringProperties = createValuationRowOptionalProperties({ name: 'stockItemId', nullable: false }, { name: 'costingMethod', nullable: false }, );
-    const optionalNumberProperties = createValuationRowOptionalProperties({ name: 'onHand', nullable: false }, { name: 'unitCostCurrent', nullable: false }, { name: 'onHandValue', nullable: false }, );
+    const requiredProperties = createValuationRowPropertyNames('costingMethod', 'onHand', 'onHandValue', 'stockItemId', 'uncosted', );
+    const optionalStringProperties = createValuationRowOptionalProperties({ name: 'costingMethod', nullable: false }, { name: 'stockItemId', nullable: false }, );
+    const optionalNumberProperties = createValuationRowOptionalProperties({ name: 'onHand', nullable: false }, { name: 'onHandValue', nullable: false }, { name: 'unitCostCurrent', nullable: false }, );
     const optionalBooleanProperties = createValuationRowOptionalProperties({ name: 'uncosted', nullable: false }, );
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

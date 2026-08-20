@@ -14,25 +14,25 @@
  */
 export interface RoleDto { 
     /**
+     * Whether the role is active
+     */
+    active?: boolean;
+    /**
      * Stable role code
      */
     code?: string;
-    /**
-     * Human-readable role name
-     */
-    name?: string;
     /**
      * Description of the role
      */
     description?: string;
     /**
+     * Human-readable role name
+     */
+    name?: string;
+    /**
      * Scope at which the role applies
      */
     scopeType?: string;
-    /**
-     * Whether the role is active
-     */
-    active?: boolean;
 }
 
 function isOptionalRoleDtoPropertyOfType(
@@ -74,7 +74,7 @@ export function instanceOfRoleDto(value: object): value is RoleDto {
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createRoleDtoPropertyNames();
-    const optionalStringProperties = createRoleDtoOptionalProperties({ name: 'code', nullable: false }, { name: 'name', nullable: false }, { name: 'description', nullable: false }, { name: 'scopeType', nullable: false }, );
+    const optionalStringProperties = createRoleDtoOptionalProperties({ name: 'code', nullable: false }, { name: 'description', nullable: false }, { name: 'name', nullable: false }, { name: 'scopeType', nullable: false }, );
     const optionalNumberProperties = createRoleDtoOptionalProperties();
     const optionalBooleanProperties = createRoleDtoOptionalProperties({ name: 'active', nullable: false }, );
 

@@ -14,37 +14,13 @@
  */
 export interface CycleCountTaskResponse { 
     /**
-     * Unique identifier of the cycle count task
-     */
-    taskId: string;
-    /**
-     * Bin or location code where the item is stored
-     */
-    binLocation: string;
-    /**
-     * Stock keeping unit of the item to count
-     */
-    itemSku: string;
-    /**
-     * Human-readable description of the item
-     */
-    itemDescription?: string;
-    /**
-     * Quantity expected on hand for the item
-     */
-    expectedQuantity: number;
-    /**
      * Identifier of the auditor assigned to the task, if assigned
      */
     auditorId?: string;
     /**
-     * Current status of the cycle count task
+     * Bin or location code where the item is stored
      */
-    status: CycleCountTaskResponseStatusEnum;
-    /**
-     * Identifier of the most recent count entry recorded for the task, if any
-     */
-    latestCountEntryId?: string;
+    binLocation: string;
     /**
      * Total number of count entries recorded for the task
      */
@@ -53,6 +29,34 @@ export interface CycleCountTaskResponse {
      * Timestamp when the task was created
      */
     createdAt: string;
+    /**
+     * Quantity expected on hand for the item, in base UoM
+     */
+    expectedQuantity: number;
+    /**
+     * Human-readable description of the item
+     */
+    itemDescription?: string;
+    /**
+     * Stock keeping unit of the item to count
+     */
+    itemSku: string;
+    /**
+     * Identifier of the most recent count entry recorded for the task, if any
+     */
+    latestCountEntryId?: string;
+    /**
+     * Current status of the cycle count task
+     */
+    status: CycleCountTaskResponseStatusEnum;
+    /**
+     * Unique identifier of the cycle count task
+     */
+    taskId: string;
+    /**
+     * The item\'s base unit of measure, when itemSku resolves to a catalog product with a declared UoM; null otherwise
+     */
+    unitOfMeasure?: string;
     /**
      * Timestamp when the task was last updated
      */
@@ -63,6 +67,7 @@ export enum CycleCountTaskResponseStatusEnum {
     CountedPendingReview = 'COUNTED_PENDING_REVIEW',
     Conflict = 'CONFLICT',
     RequiresInvestigation = 'REQUIRES_INVESTIGATION',
+    AcceptedWithinTolerance = 'ACCEPTED_WITHIN_TOLERANCE',
     Approved = 'APPROVED',
     Rejected = 'REJECTED'
 };
@@ -107,9 +112,9 @@ export function instanceOfCycleCountTaskResponse(value: object): value is CycleC
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createCycleCountTaskResponsePropertyNames('taskId', 'binLocation', 'itemSku', 'expectedQuantity', 'status', 'countEntriesCount', 'createdAt', 'updatedAt', );
-    const optionalStringProperties = createCycleCountTaskResponseOptionalProperties({ name: 'taskId', nullable: false }, { name: 'binLocation', nullable: false }, { name: 'itemSku', nullable: false }, { name: 'itemDescription', nullable: false }, { name: 'auditorId', nullable: false }, { name: 'status', nullable: false }, { name: 'latestCountEntryId', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'updatedAt', nullable: false }, );
-    const optionalNumberProperties = createCycleCountTaskResponseOptionalProperties({ name: 'expectedQuantity', nullable: false }, { name: 'countEntriesCount', nullable: false }, );
+    const requiredProperties = createCycleCountTaskResponsePropertyNames('binLocation', 'countEntriesCount', 'createdAt', 'expectedQuantity', 'itemSku', 'status', 'taskId', 'updatedAt', );
+    const optionalStringProperties = createCycleCountTaskResponseOptionalProperties({ name: 'auditorId', nullable: false }, { name: 'binLocation', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'itemDescription', nullable: false }, { name: 'itemSku', nullable: false }, { name: 'latestCountEntryId', nullable: false }, { name: 'status', nullable: false }, { name: 'taskId', nullable: false }, { name: 'unitOfMeasure', nullable: false }, { name: 'updatedAt', nullable: false }, );
+    const optionalNumberProperties = createCycleCountTaskResponseOptionalProperties({ name: 'countEntriesCount', nullable: false }, { name: 'expectedQuantity', nullable: false }, );
     const optionalBooleanProperties = createCycleCountTaskResponseOptionalProperties();
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

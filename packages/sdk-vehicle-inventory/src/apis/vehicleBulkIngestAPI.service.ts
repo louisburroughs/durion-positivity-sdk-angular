@@ -38,20 +38,20 @@ export class VehicleBulkIngestAPIService extends BaseService {
     }
 
     /**
-     * Bulk ingest records
-     * Accepts a batch of domain records for bulk import. Returns per-record results.
+     * Bulk ingest vehicle records
+     * Ingests a batch of vehicle records into the registry, creating each row independently through the same validation as createVehicle and reporting a per-row outcome. Use this tool for bulk loads such as fleet imports; do not use createVehicle, which registers one vehicle per call, and do not retry a whole batch blindly, because rows that already succeeded would then fail as duplicate VINs. Preconditions: the caller must hold the vehicle-inventory:registry:create authority, and each row\&#39;s VIN must be valid and not already held by an active vehicle for that row to succeed. Required inputs: jobId (UUID), locationId (UUID) and a non-empty records array whose entries require accountId (UUID), vin (17 characters), unitNumber and description; licensePlate, licensePlateJurisdiction, year, make, model and trim are optional per record, and operatorId is optional on the envelope. Emits a VEHICLE_BULK_INGEST event, and every successfully created row also queues a vehicle.vehicle.updated fact on the vehicle.events.v1 outbox for downstream replicas. Returns 200 with per-row results even when some rows fail, since row failures carry the VEHICLE_INGEST_FAILED error code instead of an error status, and 400 with a VALIDATION_FAILED ApiError when the envelope is missing jobId or locationId or the records array is empty. 
      * @endpoint post /v1/vehicles/bulk-ingest
-     * @param bulkIngestRequestVehicleBulkIngestRecord 
+     * @param bulkIngestRequestVehicleBulkIngestRecord Batch envelope carrying the ingest job, target location and the vehicle records to create.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public bulkIngest(bulkIngestRequestVehicleBulkIngestRecord: BulkIngestRequestVehicleBulkIngestRecord, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<BulkIngestResponse>;
-    public bulkIngest(bulkIngestRequestVehicleBulkIngestRecord: BulkIngestRequestVehicleBulkIngestRecord, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<BulkIngestResponse>>;
-    public bulkIngest(bulkIngestRequestVehicleBulkIngestRecord: BulkIngestRequestVehicleBulkIngestRecord, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<BulkIngestResponse>>;
-    public bulkIngest(bulkIngestRequestVehicleBulkIngestRecord: BulkIngestRequestVehicleBulkIngestRecord, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public bulkIngestVehicles(bulkIngestRequestVehicleBulkIngestRecord: BulkIngestRequestVehicleBulkIngestRecord, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<BulkIngestResponse>;
+    public bulkIngestVehicles(bulkIngestRequestVehicleBulkIngestRecord: BulkIngestRequestVehicleBulkIngestRecord, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<BulkIngestResponse>>;
+    public bulkIngestVehicles(bulkIngestRequestVehicleBulkIngestRecord: BulkIngestRequestVehicleBulkIngestRecord, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<BulkIngestResponse>>;
+    public bulkIngestVehicles(bulkIngestRequestVehicleBulkIngestRecord: BulkIngestRequestVehicleBulkIngestRecord, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (bulkIngestRequestVehicleBulkIngestRecord === null || bulkIngestRequestVehicleBulkIngestRecord === undefined) {
-            throw new Error('Required parameter bulkIngestRequestVehicleBulkIngestRecord was null or undefined when calling bulkIngest.');
+            throw new Error('Required parameter bulkIngestRequestVehicleBulkIngestRecord was null or undefined when calling bulkIngestVehicles.');
         }
 
         let localVarHeaders = this.defaultHeaders;

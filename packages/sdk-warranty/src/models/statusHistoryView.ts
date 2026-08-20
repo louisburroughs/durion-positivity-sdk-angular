@@ -13,12 +13,12 @@
  * Claim status transition
  */
 export interface StatusHistoryView { 
-    id?: string;
-    fromStatus?: StatusHistoryViewFromStatusEnum;
-    toStatus?: StatusHistoryViewToStatusEnum;
     actor?: string;
-    reason?: string;
     createdAt?: string;
+    fromStatus?: StatusHistoryViewFromStatusEnum;
+    id?: string;
+    reason?: string;
+    toStatus?: StatusHistoryViewToStatusEnum;
 }
 export enum StatusHistoryViewFromStatusEnum {
     Draft = 'DRAFT',
@@ -84,7 +84,7 @@ export function instanceOfStatusHistoryView(value: object): value is StatusHisto
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createStatusHistoryViewPropertyNames();
-    const optionalStringProperties = createStatusHistoryViewOptionalProperties({ name: 'id', nullable: false }, { name: 'fromStatus', nullable: false }, { name: 'toStatus', nullable: false }, { name: 'actor', nullable: false }, { name: 'reason', nullable: false }, { name: 'createdAt', nullable: false }, );
+    const optionalStringProperties = createStatusHistoryViewOptionalProperties({ name: 'actor', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'fromStatus', nullable: false }, { name: 'id', nullable: false }, { name: 'reason', nullable: false }, { name: 'toStatus', nullable: false }, );
     const optionalNumberProperties = createStatusHistoryViewOptionalProperties();
     const optionalBooleanProperties = createStatusHistoryViewOptionalProperties();
 

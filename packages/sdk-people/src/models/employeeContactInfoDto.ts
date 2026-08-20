@@ -15,6 +15,8 @@ import { EmployeeAddressDto } from './employeeAddressDto';
  * Contact information for an employee
  */
 export interface EmployeeContactInfoDto { 
+    address?: EmployeeAddressDto;
+    emergencyContact?: EmployeeEmergencyContactDto;
     /**
      * Primary email address
      */
@@ -31,8 +33,6 @@ export interface EmployeeContactInfoDto {
      * Secondary phone number
      */
     secondaryPhone?: string;
-    address?: EmployeeAddressDto;
-    emergencyContact?: EmployeeEmergencyContactDto;
 }
 
 function isOptionalEmployeeContactInfoDtoPropertyOfType(

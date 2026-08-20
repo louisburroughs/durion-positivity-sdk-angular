@@ -18,21 +18,21 @@ export interface UpdateMsrpRequestDto {
      */
     amount: number;
     /**
+     * Identifier of the user creating this MSRP entry
+     */
+    createdByUserId: string;
+    /**
      * ISO currency code for the amount
      */
     currency: string;
-    /**
-     * Date the MSRP becomes effective
-     */
-    effectiveStartDate: string;
     /**
      * Date the MSRP stops being effective (null means open-ended)
      */
     effectiveEndDate?: string;
     /**
-     * Identifier of the user creating this MSRP entry
+     * Date the MSRP becomes effective
      */
-    createdByUserId: string;
+    effectiveStartDate: string;
     /**
      * Version for optimistic locking
      */
@@ -77,8 +77,8 @@ export function instanceOfUpdateMsrpRequestDto(value: object): value is UpdateMs
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createUpdateMsrpRequestDtoPropertyNames('amount', 'currency', 'effectiveStartDate', 'createdByUserId', );
-    const optionalStringProperties = createUpdateMsrpRequestDtoOptionalProperties({ name: 'currency', nullable: false }, { name: 'effectiveStartDate', nullable: false }, { name: 'effectiveEndDate', nullable: false }, { name: 'createdByUserId', nullable: false }, );
+    const requiredProperties = createUpdateMsrpRequestDtoPropertyNames('amount', 'createdByUserId', 'currency', 'effectiveStartDate', );
+    const optionalStringProperties = createUpdateMsrpRequestDtoOptionalProperties({ name: 'createdByUserId', nullable: false }, { name: 'currency', nullable: false }, { name: 'effectiveEndDate', nullable: false }, { name: 'effectiveStartDate', nullable: false }, );
     const optionalNumberProperties = createUpdateMsrpRequestDtoOptionalProperties({ name: 'amount', nullable: false }, { name: 'version', nullable: false }, );
     const optionalBooleanProperties = createUpdateMsrpRequestDtoOptionalProperties();
 

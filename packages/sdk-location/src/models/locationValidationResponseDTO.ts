@@ -14,17 +14,17 @@
  */
 export interface LocationValidationResponseDTO { 
     /**
-     * Identifier of the location that was validated
+     * Whether the location is active
      */
-    locationId: string;
+    active: boolean;
     /**
      * Whether the location exists
      */
     exists: boolean;
     /**
-     * Whether the location is active
+     * Identifier of the location that was validated
      */
-    active: boolean;
+    locationId: string;
 }
 
 function isOptionalLocationValidationResponseDTOPropertyOfType(
@@ -65,10 +65,10 @@ export function instanceOfLocationValidationResponseDTO(value: object): value is
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createLocationValidationResponseDTOPropertyNames('locationId', 'exists', 'active', );
+    const requiredProperties = createLocationValidationResponseDTOPropertyNames('active', 'exists', 'locationId', );
     const optionalStringProperties = createLocationValidationResponseDTOOptionalProperties({ name: 'locationId', nullable: false }, );
     const optionalNumberProperties = createLocationValidationResponseDTOOptionalProperties();
-    const optionalBooleanProperties = createLocationValidationResponseDTOOptionalProperties({ name: 'exists', nullable: false }, { name: 'active', nullable: false }, );
+    const optionalBooleanProperties = createLocationValidationResponseDTOOptionalProperties({ name: 'active', nullable: false }, { name: 'exists', nullable: false }, );
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
         && optionalStringProperties.every((property) => isOptionalLocationValidationResponseDTOPropertyOfType(_v, property.name, 'string', property.nullable))

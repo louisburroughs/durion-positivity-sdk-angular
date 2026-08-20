@@ -10,17 +10,17 @@
 
 
 /**
- * Request DTO for workorder creation
+ * Work order creation request
  */
 export interface CreateWorkorderRequest { 
-    /**
-     * Estimate ID
-     */
-    estimateId: string;
     /**
      * Customer ID
      */
     customerId: string;
+    /**
+     * Estimate ID
+     */
+    estimateId: string;
 }
 
 function isOptionalCreateWorkorderRequestPropertyOfType(
@@ -61,8 +61,8 @@ export function instanceOfCreateWorkorderRequest(value: object): value is Create
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createCreateWorkorderRequestPropertyNames('estimateId', 'customerId', );
-    const optionalStringProperties = createCreateWorkorderRequestOptionalProperties({ name: 'estimateId', nullable: false }, { name: 'customerId', nullable: false }, );
+    const requiredProperties = createCreateWorkorderRequestPropertyNames('customerId', 'estimateId', );
+    const optionalStringProperties = createCreateWorkorderRequestOptionalProperties({ name: 'customerId', nullable: false }, { name: 'estimateId', nullable: false }, );
     const optionalNumberProperties = createCreateWorkorderRequestOptionalProperties();
     const optionalBooleanProperties = createCreateWorkorderRequestOptionalProperties();
 

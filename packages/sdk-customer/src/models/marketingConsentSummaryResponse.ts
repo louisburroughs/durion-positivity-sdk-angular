@@ -15,9 +15,10 @@ import { MarketingConsentDecision } from './marketingConsentDecision';
  */
 export interface MarketingConsentSummaryResponse { 
     /**
-     * Party identifier
+     * Account-level hard gate; only meaningful for commercial parties, null for individuals
      */
-    partyId: string;
+    accountMarketingOptOut?: boolean;
+    emailEligibility: MarketingConsentDecision;
     /**
      * Marketing consent for email
      */
@@ -27,30 +28,29 @@ export interface MarketingConsentSummaryResponse {
      */
     marketingSmsConsent: MarketingConsentSummaryResponseMarketingSmsConsentEnum;
     /**
-     * Reason marketing consent was last withdrawn
+     * Cadence cap on marketing sends per month
      */
-    optOutReason?: string;
+    maxMarketingSendsPerMonth?: number;
     /**
      * When marketing consent was last withdrawn
      */
     optOutAt?: string;
     /**
-     * Account-level hard gate; only meaningful for commercial parties, null for individuals
+     * Reason marketing consent was last withdrawn
      */
-    accountMarketingOptOut?: boolean;
+    optOutReason?: string;
     /**
-     * Start of the quiet-hours window
+     * Party identifier
      */
-    quietHoursStart?: string;
+    partyId: string;
     /**
      * End of the quiet-hours window
      */
     quietHoursEnd?: string;
     /**
-     * Cadence cap on marketing sends per month
+     * Start of the quiet-hours window
      */
-    maxMarketingSendsPerMonth?: number;
-    emailEligibility: MarketingConsentDecision;
+    quietHoursStart?: string;
     smsEligibility: MarketingConsentDecision;
 }
 export enum MarketingConsentSummaryResponseMarketingEmailConsentEnum {
@@ -104,8 +104,8 @@ export function instanceOfMarketingConsentSummaryResponse(value: object): value 
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createMarketingConsentSummaryResponsePropertyNames('partyId', 'marketingEmailConsent', 'marketingSmsConsent', 'emailEligibility', 'smsEligibility', );
-    const optionalStringProperties = createMarketingConsentSummaryResponseOptionalProperties({ name: 'partyId', nullable: false }, { name: 'marketingEmailConsent', nullable: false }, { name: 'marketingSmsConsent', nullable: false }, { name: 'optOutReason', nullable: false }, { name: 'optOutAt', nullable: false }, { name: 'quietHoursStart', nullable: false }, { name: 'quietHoursEnd', nullable: false }, );
+    const requiredProperties = createMarketingConsentSummaryResponsePropertyNames('emailEligibility', 'marketingEmailConsent', 'marketingSmsConsent', 'partyId', 'smsEligibility', );
+    const optionalStringProperties = createMarketingConsentSummaryResponseOptionalProperties({ name: 'marketingEmailConsent', nullable: false }, { name: 'marketingSmsConsent', nullable: false }, { name: 'optOutAt', nullable: false }, { name: 'optOutReason', nullable: false }, { name: 'partyId', nullable: false }, { name: 'quietHoursEnd', nullable: false }, { name: 'quietHoursStart', nullable: false }, );
     const optionalNumberProperties = createMarketingConsentSummaryResponseOptionalProperties({ name: 'maxMarketingSendsPerMonth', nullable: false }, );
     const optionalBooleanProperties = createMarketingConsentSummaryResponseOptionalProperties({ name: 'accountMarketingOptOut', nullable: false }, );
 

@@ -14,22 +14,6 @@
  */
 export interface PricingInfo { 
     /**
-     * Manufacturer\'s suggested retail price
-     */
-    msrp?: number;
-    /**
-     * Store-specific price
-     */
-    storePrice?: number;
-    /**
-     * Currency code
-     */
-    currency?: string;
-    /**
-     * Pricing data status
-     */
-    status: PricingInfoStatusEnum;
-    /**
      * Timestamp of pricing data
      */
     asOf?: string;
@@ -37,17 +21,33 @@ export interface PricingInfo {
      * Confidence level in pricing data
      */
     confidence: PricingInfoConfidenceEnum;
+    /**
+     * Currency code
+     */
+    currency?: string;
+    /**
+     * Manufacturer\'s suggested retail price
+     */
+    msrp?: number;
+    /**
+     * Pricing data status
+     */
+    status: PricingInfoStatusEnum;
+    /**
+     * Store-specific price
+     */
+    storePrice?: number;
 }
+export enum PricingInfoConfidenceEnum {
+    Low = 'LOW',
+    Medium = 'MEDIUM',
+    High = 'HIGH'
+};
 export enum PricingInfoStatusEnum {
     Ok = 'OK',
     Unavailable = 'UNAVAILABLE',
     Stale = 'STALE',
     Error = 'ERROR'
-};
-export enum PricingInfoConfidenceEnum {
-    Low = 'LOW',
-    Medium = 'MEDIUM',
-    High = 'HIGH'
 };
 
 
@@ -90,8 +90,8 @@ export function instanceOfPricingInfo(value: object): value is PricingInfo {
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createPricingInfoPropertyNames('status', 'confidence', );
-    const optionalStringProperties = createPricingInfoOptionalProperties({ name: 'currency', nullable: false }, { name: 'status', nullable: false }, { name: 'asOf', nullable: false }, { name: 'confidence', nullable: false }, );
+    const requiredProperties = createPricingInfoPropertyNames('confidence', 'status', );
+    const optionalStringProperties = createPricingInfoOptionalProperties({ name: 'asOf', nullable: false }, { name: 'confidence', nullable: false }, { name: 'currency', nullable: false }, { name: 'status', nullable: false }, );
     const optionalNumberProperties = createPricingInfoOptionalProperties();
     const optionalBooleanProperties = createPricingInfoOptionalProperties();
 

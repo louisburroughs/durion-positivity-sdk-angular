@@ -14,21 +14,17 @@
  */
 export interface SerialUnitResponse { 
     /**
-     * Identifier of the serial unit
+     * When the unit last left stock
      */
-    serialUnitId: string;
+    consumedAt?: string;
     /**
-     * Stock item (catalog product id) the unit belongs to
+     * The outbound ledger entry that last consumed this unit
      */
-    stockItemId: string;
+    consumptionLedgerEntryId?: string;
     /**
-     * Manufacturer/vendor serial number, unique per stock item
+     * Creation timestamp
      */
-    serialNumber: string;
-    /**
-     * Lifecycle status of the unit
-     */
-    status: SerialUnitResponseStatusEnum;
+    createdAt?: string;
     /**
      * Current location while IN_STOCK; null once the unit has left stock
      */
@@ -38,33 +34,37 @@ export interface SerialUnitResponse {
      */
     lotId?: string;
     /**
-     * Workorder the unit was consumed to, when known
-     */
-    workorderId?: string;
-    /**
      * The receipt ledger entry that enumerated (or last re-stocked) this unit
      */
     receiptLedgerEntryId?: string;
-    /**
-     * The outbound ledger entry that last consumed this unit
-     */
-    consumptionLedgerEntryId?: string;
     /**
      * When the unit was received into stock
      */
     receivedAt?: string;
     /**
-     * When the unit last left stock
+     * Manufacturer/vendor serial number, unique per stock item
      */
-    consumedAt?: string;
+    serialNumber: string;
     /**
-     * Creation timestamp
+     * Identifier of the serial unit
      */
-    createdAt?: string;
+    serialUnitId: string;
+    /**
+     * Lifecycle status of the unit
+     */
+    status: SerialUnitResponseStatusEnum;
+    /**
+     * Stock item (catalog product id) the unit belongs to
+     */
+    stockItemId: string;
     /**
      * Last update timestamp
      */
     updatedAt?: string;
+    /**
+     * Workorder the unit was consumed to, when known
+     */
+    workorderId?: string;
 }
 export enum SerialUnitResponseStatusEnum {
     InStock = 'IN_STOCK',
@@ -113,8 +113,8 @@ export function instanceOfSerialUnitResponse(value: object): value is SerialUnit
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createSerialUnitResponsePropertyNames('serialUnitId', 'stockItemId', 'serialNumber', 'status', );
-    const optionalStringProperties = createSerialUnitResponseOptionalProperties({ name: 'serialUnitId', nullable: false }, { name: 'stockItemId', nullable: false }, { name: 'serialNumber', nullable: false }, { name: 'status', nullable: false }, { name: 'locationId', nullable: false }, { name: 'lotId', nullable: false }, { name: 'workorderId', nullable: false }, { name: 'receiptLedgerEntryId', nullable: false }, { name: 'consumptionLedgerEntryId', nullable: false }, { name: 'receivedAt', nullable: false }, { name: 'consumedAt', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'updatedAt', nullable: false }, );
+    const requiredProperties = createSerialUnitResponsePropertyNames('serialNumber', 'serialUnitId', 'status', 'stockItemId', );
+    const optionalStringProperties = createSerialUnitResponseOptionalProperties({ name: 'consumedAt', nullable: false }, { name: 'consumptionLedgerEntryId', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'locationId', nullable: false }, { name: 'lotId', nullable: false }, { name: 'receiptLedgerEntryId', nullable: false }, { name: 'receivedAt', nullable: false }, { name: 'serialNumber', nullable: false }, { name: 'serialUnitId', nullable: false }, { name: 'status', nullable: false }, { name: 'stockItemId', nullable: false }, { name: 'updatedAt', nullable: false }, { name: 'workorderId', nullable: false }, );
     const optionalNumberProperties = createSerialUnitResponseOptionalProperties();
     const optionalBooleanProperties = createSerialUnitResponseOptionalProperties();
 

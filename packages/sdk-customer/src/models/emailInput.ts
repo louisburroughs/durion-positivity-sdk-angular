@@ -13,11 +13,11 @@
  * Email address input
  */
 export interface EmailInput { 
+    primary?: boolean;
     /**
      * Email address
      */
     value: string;
-    primary?: boolean;
 }
 
 function isOptionalEmailInputPropertyOfType(

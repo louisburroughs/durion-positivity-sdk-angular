@@ -16,13 +16,13 @@ import { TraceabilityUpstream } from './traceabilityUpstream';
  */
 export interface LotTraceabilityResponse { 
     /**
+     * Downstream movement chain, oldest first
+     */
+    downstream: Array<TraceabilityMovement>;
+    /**
      * Identifier of the lot
      */
     lotId: string;
-    /**
-     * Stock item (catalog product id) the lot belongs to
-     */
-    stockItemId: string;
     /**
      * Vendor/manufacturer lot number
      */
@@ -31,11 +31,11 @@ export interface LotTraceabilityResponse {
      * Lifecycle status of the lot
      */
     lotStatus?: LotTraceabilityResponseLotStatusEnum;
-    upstream: TraceabilityUpstream;
     /**
-     * Downstream movement chain, oldest first
+     * Stock item (catalog product id) the lot belongs to
      */
-    downstream: Array<TraceabilityMovement>;
+    stockItemId: string;
+    upstream: TraceabilityUpstream;
 }
 export enum LotTraceabilityResponseLotStatusEnum {
     Active = 'ACTIVE',
@@ -84,8 +84,8 @@ export function instanceOfLotTraceabilityResponse(value: object): value is LotTr
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createLotTraceabilityResponsePropertyNames('lotId', 'stockItemId', 'lotNumber', 'upstream', 'downstream', );
-    const optionalStringProperties = createLotTraceabilityResponseOptionalProperties({ name: 'lotId', nullable: false }, { name: 'stockItemId', nullable: false }, { name: 'lotNumber', nullable: false }, { name: 'lotStatus', nullable: false }, );
+    const requiredProperties = createLotTraceabilityResponsePropertyNames('downstream', 'lotId', 'lotNumber', 'stockItemId', 'upstream', );
+    const optionalStringProperties = createLotTraceabilityResponseOptionalProperties({ name: 'lotId', nullable: false }, { name: 'lotNumber', nullable: false }, { name: 'lotStatus', nullable: false }, { name: 'stockItemId', nullable: false }, );
     const optionalNumberProperties = createLotTraceabilityResponseOptionalProperties();
     const optionalBooleanProperties = createLotTraceabilityResponseOptionalProperties();
 

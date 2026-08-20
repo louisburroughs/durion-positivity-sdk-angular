@@ -14,21 +14,29 @@
  */
 export interface StartTravelSegmentRequest { 
     /**
+     * Identifier of the person on whose behalf this segment is entered, if applicable
+     */
+    actedForPersonId?: string;
+    /**
+     * Identifier of the origin location for the travel leg
+     */
+    fromLocationId?: string;
+    /**
      * Identifier of the mobile work assignment the travel segment belongs to
      */
     mobileWorkAssignmentId: string;
     /**
-     * Identifier of the technician performing the travel
+     * Reason code when the segment is entered on behalf of another person
      */
-    technicianId: string;
+    onBehalfReasonCode?: StartTravelSegmentRequestOnBehalfReasonCodeEnum;
     /**
      * Direction or purpose of this travel leg
      */
     segmentType: StartTravelSegmentRequestSegmentTypeEnum;
     /**
-     * Identifier of the origin location for the travel leg
+     * Identifier of the technician performing the travel
      */
-    fromLocationId?: string;
+    technicianId: string;
     /**
      * Identifier of the destination location for the travel leg
      */
@@ -37,15 +45,12 @@ export interface StartTravelSegmentRequest {
      * Identifier of the workorder associated with the travel
      */
     workOrderId?: string;
-    /**
-     * Identifier of the person on whose behalf this segment is entered, if applicable
-     */
-    actedForPersonId?: string;
-    /**
-     * Reason code when the segment is entered on behalf of another person
-     */
-    onBehalfReasonCode?: StartTravelSegmentRequestOnBehalfReasonCodeEnum;
 }
+export enum StartTravelSegmentRequestOnBehalfReasonCodeEnum {
+    TechnicianUnavailable = 'TECHNICIAN_UNAVAILABLE',
+    ForgotToClock = 'FORGOT_TO_CLOCK',
+    DataEntryError = 'DATA_ENTRY_ERROR'
+};
 export enum StartTravelSegmentRequestSegmentTypeEnum {
     DepartShop = 'DEPART_SHOP',
     ArriveCustomerSite = 'ARRIVE_CUSTOMER_SITE',
@@ -53,11 +58,6 @@ export enum StartTravelSegmentRequestSegmentTypeEnum {
     ArriveShop = 'ARRIVE_SHOP',
     TravelBetweenSites = 'TRAVEL_BETWEEN_SITES',
     Deadhead = 'DEADHEAD'
-};
-export enum StartTravelSegmentRequestOnBehalfReasonCodeEnum {
-    TechnicianUnavailable = 'TECHNICIAN_UNAVAILABLE',
-    ForgotToClock = 'FORGOT_TO_CLOCK',
-    DataEntryError = 'DATA_ENTRY_ERROR'
 };
 
 
@@ -100,8 +100,8 @@ export function instanceOfStartTravelSegmentRequest(value: object): value is Sta
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createStartTravelSegmentRequestPropertyNames('mobileWorkAssignmentId', 'technicianId', 'segmentType', );
-    const optionalStringProperties = createStartTravelSegmentRequestOptionalProperties({ name: 'mobileWorkAssignmentId', nullable: false }, { name: 'technicianId', nullable: false }, { name: 'segmentType', nullable: false }, { name: 'fromLocationId', nullable: false }, { name: 'toLocationId', nullable: false }, { name: 'workOrderId', nullable: false }, { name: 'actedForPersonId', nullable: false }, { name: 'onBehalfReasonCode', nullable: false }, );
+    const requiredProperties = createStartTravelSegmentRequestPropertyNames('mobileWorkAssignmentId', 'segmentType', 'technicianId', );
+    const optionalStringProperties = createStartTravelSegmentRequestOptionalProperties({ name: 'actedForPersonId', nullable: false }, { name: 'fromLocationId', nullable: false }, { name: 'mobileWorkAssignmentId', nullable: false }, { name: 'onBehalfReasonCode', nullable: false }, { name: 'segmentType', nullable: false }, { name: 'technicianId', nullable: false }, { name: 'toLocationId', nullable: false }, { name: 'workOrderId', nullable: false }, );
     const optionalNumberProperties = createStartTravelSegmentRequestOptionalProperties();
     const optionalBooleanProperties = createStartTravelSegmentRequestOptionalProperties();
 

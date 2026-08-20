@@ -14,25 +14,21 @@
  */
 export interface OrderInvoiceLineItem { 
     /**
-     * Sales order line identifier, carried for settlement reconciliation.
+     * Extended line amount (post-line-discount, pre-tax).
      */
-    orderLineId?: string;
+    amount: number;
     /**
      * Line description as sold.
      */
     description: string;
     /**
+     * Sales order line identifier, carried for settlement reconciliation.
+     */
+    orderLineId?: string;
+    /**
      * Quantity sold.
      */
     quantity: number;
-    /**
-     * Applied unit price.
-     */
-    unitPrice: number;
-    /**
-     * Extended line amount (post-line-discount, pre-tax).
-     */
-    amount: number;
     /**
      * Per-line tax amount.
      */
@@ -41,6 +37,10 @@ export interface OrderInvoiceLineItem {
      * Line item type (e.g. PART, LABOR, FEE).
      */
     type?: string;
+    /**
+     * Applied unit price.
+     */
+    unitPrice: number;
 }
 
 function isOptionalOrderInvoiceLineItemPropertyOfType(
@@ -81,9 +81,9 @@ export function instanceOfOrderInvoiceLineItem(value: object): value is OrderInv
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createOrderInvoiceLineItemPropertyNames('description', 'quantity', 'unitPrice', 'amount', );
-    const optionalStringProperties = createOrderInvoiceLineItemOptionalProperties({ name: 'orderLineId', nullable: false }, { name: 'description', nullable: false }, { name: 'type', nullable: false }, );
-    const optionalNumberProperties = createOrderInvoiceLineItemOptionalProperties({ name: 'quantity', nullable: false }, { name: 'unitPrice', nullable: false }, { name: 'amount', nullable: false }, { name: 'taxAmount', nullable: false }, );
+    const requiredProperties = createOrderInvoiceLineItemPropertyNames('amount', 'description', 'quantity', 'unitPrice', );
+    const optionalStringProperties = createOrderInvoiceLineItemOptionalProperties({ name: 'description', nullable: false }, { name: 'orderLineId', nullable: false }, { name: 'type', nullable: false }, );
+    const optionalNumberProperties = createOrderInvoiceLineItemOptionalProperties({ name: 'amount', nullable: false }, { name: 'quantity', nullable: false }, { name: 'taxAmount', nullable: false }, { name: 'unitPrice', nullable: false }, );
     const optionalBooleanProperties = createOrderInvoiceLineItemOptionalProperties();
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

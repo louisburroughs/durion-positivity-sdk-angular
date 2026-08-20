@@ -14,69 +14,65 @@
  */
 export interface SalesOrderLineResponse { 
     /**
-     * Unique identifier of the order line
+     * Customer-visible line note
      */
-    orderLineId: string;
-    /**
-     * Stock keeping unit identifying the line item
-     */
-    itemSku: string;
-    /**
-     * Human-readable description of the line item
-     */
-    itemDescription?: string;
-    /**
-     * Quantity of the item on the line
-     */
-    quantity: number;
-    /**
-     * Unit price applied to the line
-     */
-    unitPrice?: number;
-    /**
-     * Line-level discount percent (0-100)
-     */
-    discountPercent?: number;
+    customerNote?: string;
     /**
      * Line discount plus this line\'s pro-rata share of the order discount
      */
     discountAmount?: number;
     /**
-     * Extended amount post-line-discount, pre-order-discount, pre-tax
+     * Line-level discount percent (0-100)
      */
-    lineSubtotal?: number;
-    /**
-     * Tax for this line (pos-tax authoritative)
-     */
-    taxAmount?: number;
-    /**
-     * lineSubtotal minus order-discount allocation plus taxAmount
-     */
-    lineTotal?: number;
-    /**
-     * Customer-visible line note
-     */
-    customerNote?: string;
-    /**
-     * Shop-internal line note
-     */
-    internalNote?: string;
+    discountPercent?: number;
     /**
      * Fulfillment status of the line
      */
     fulfillmentStatus?: string;
     /**
+     * Shop-internal line note
+     */
+    internalNote?: string;
+    /**
+     * Human-readable description of the line item
+     */
+    itemDescription?: string;
+    /**
+     * Stock keeping unit identifying the line item
+     */
+    itemSku: string;
+    /**
+     * Extended amount post-line-discount, pre-order-discount, pre-tax
+     */
+    lineSubtotal?: number;
+    /**
+     * lineSubtotal minus order-discount allocation plus taxAmount
+     */
+    lineTotal?: number;
+    /**
+     * Unique identifier of the order line
+     */
+    orderLineId: string;
+    /**
      * Source of the line price (e.g. CATALOG, MANUAL, OVERRIDE)
      */
     priceSource?: string;
+    /**
+     * Quantity of the item on the line
+     */
+    quantity: number;
     /**
      * Reason code associated with a manual price or special handling
      */
     reasonCode?: string;
     /**
-     * Type classification of the line\'s originating source
+     * Explicit source-document returnability flag (imported lines only; null for counter lines)
      */
-    sourceType?: string;
+    returnable?: boolean;
+    /**
+     * Captured lot/serial numbers for tracked products
+     */
+    serialNumbers?: Array<string>;
     /**
      * Identifier of the originating source record
      */
@@ -86,13 +82,17 @@ export interface SalesOrderLineResponse {
      */
     sourceLineId?: string;
     /**
-     * Captured lot/serial numbers for tracked products
+     * Type classification of the line\'s originating source
      */
-    serialNumbers?: Array<string>;
+    sourceType?: string;
     /**
-     * Explicit source-document returnability flag (imported lines only; null for counter lines)
+     * Tax for this line (pos-tax authoritative)
      */
-    returnable?: boolean;
+    taxAmount?: number;
+    /**
+     * Unit price applied to the line
+     */
+    unitPrice?: number;
 }
 
 function isOptionalSalesOrderLineResponsePropertyOfType(
@@ -133,9 +133,9 @@ export function instanceOfSalesOrderLineResponse(value: object): value is SalesO
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createSalesOrderLineResponsePropertyNames('orderLineId', 'itemSku', 'quantity', );
-    const optionalStringProperties = createSalesOrderLineResponseOptionalProperties({ name: 'orderLineId', nullable: false }, { name: 'itemSku', nullable: false }, { name: 'itemDescription', nullable: false }, { name: 'customerNote', nullable: false }, { name: 'internalNote', nullable: false }, { name: 'fulfillmentStatus', nullable: false }, { name: 'priceSource', nullable: false }, { name: 'reasonCode', nullable: false }, { name: 'sourceType', nullable: false }, { name: 'sourceId', nullable: false }, { name: 'sourceLineId', nullable: false }, );
-    const optionalNumberProperties = createSalesOrderLineResponseOptionalProperties({ name: 'quantity', nullable: false }, { name: 'unitPrice', nullable: false }, { name: 'discountPercent', nullable: false }, { name: 'discountAmount', nullable: false }, { name: 'lineSubtotal', nullable: false }, { name: 'taxAmount', nullable: false }, { name: 'lineTotal', nullable: false }, );
+    const requiredProperties = createSalesOrderLineResponsePropertyNames('itemSku', 'orderLineId', 'quantity', );
+    const optionalStringProperties = createSalesOrderLineResponseOptionalProperties({ name: 'customerNote', nullable: false }, { name: 'fulfillmentStatus', nullable: false }, { name: 'internalNote', nullable: false }, { name: 'itemDescription', nullable: false }, { name: 'itemSku', nullable: false }, { name: 'orderLineId', nullable: false }, { name: 'priceSource', nullable: false }, { name: 'reasonCode', nullable: false }, { name: 'sourceId', nullable: false }, { name: 'sourceLineId', nullable: false }, { name: 'sourceType', nullable: false }, );
+    const optionalNumberProperties = createSalesOrderLineResponseOptionalProperties({ name: 'discountAmount', nullable: false }, { name: 'discountPercent', nullable: false }, { name: 'lineSubtotal', nullable: false }, { name: 'lineTotal', nullable: false }, { name: 'quantity', nullable: false }, { name: 'taxAmount', nullable: false }, { name: 'unitPrice', nullable: false }, );
     const optionalBooleanProperties = createSalesOrderLineResponseOptionalProperties({ name: 'returnable', nullable: false }, );
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

@@ -15,22 +15,6 @@ import { PermissionDto } from './permissionDto';
  */
 export interface RoleDto { 
     /**
-     * Role identifier
-     */
-    id: string;
-    /**
-     * Role name
-     */
-    name: string;
-    /**
-     * Human-readable description of the role
-     */
-    description?: string;
-    /**
-     * Permissions granted to the role
-     */
-    permissions?: Set<PermissionDto>;
-    /**
      * Creation timestamp
      */
     createdAt?: string;
@@ -39,6 +23,14 @@ export interface RoleDto {
      */
     createdBy?: string;
     /**
+     * Human-readable description of the role
+     */
+    description?: string;
+    /**
+     * Role identifier
+     */
+    id: string;
+    /**
      * Last-modified timestamp
      */
     lastModifiedAt?: string;
@@ -46,6 +38,14 @@ export interface RoleDto {
      * Actor that last modified the role
      */
     lastModifiedBy?: string;
+    /**
+     * Role name
+     */
+    name: string;
+    /**
+     * Permissions granted to the role
+     */
+    permissions?: Set<PermissionDto>;
 }
 
 function isOptionalRoleDtoPropertyOfType(
@@ -87,7 +87,7 @@ export function instanceOfRoleDto(value: object): value is RoleDto {
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createRoleDtoPropertyNames('id', 'name', );
-    const optionalStringProperties = createRoleDtoOptionalProperties({ name: 'id', nullable: false }, { name: 'name', nullable: false }, { name: 'description', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'lastModifiedAt', nullable: false }, { name: 'lastModifiedBy', nullable: false }, );
+    const optionalStringProperties = createRoleDtoOptionalProperties({ name: 'createdAt', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'description', nullable: false }, { name: 'id', nullable: false }, { name: 'lastModifiedAt', nullable: false }, { name: 'lastModifiedBy', nullable: false }, { name: 'name', nullable: false }, );
     const optionalNumberProperties = createRoleDtoOptionalProperties();
     const optionalBooleanProperties = createRoleDtoOptionalProperties();
 

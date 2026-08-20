@@ -42,8 +42,8 @@ export class FinancialReportingForTaxLiabilityService extends BaseService {
     }
 
     /**
-     * Freeze the Sales-Tax Liability report for a closed period
-     * Generate the Sales-Tax Liability report over the accounting period\&#39;s exact date range and persist it as an immutable snapshot with a canonical SHA-256 content hash. The period must be CLOSED. If an ACTIVE snapshot already exists for the period the request fails with 409 unless supersede&#x3D;true, which demotes the prior snapshot to SUPERSEDED (reopen → adjust → re-close flow) and preserves history.
+     * Freeze Sales-Tax Liability Snapshot
+     * Generates the Sales-Tax Liability report over a closed accounting period\&#39;s exact date range and persists it as an immutable snapshot with a canonical SHA-256 content hash; snapshots are provider-neutral and carry no filing-provider identifiers. Use this tool at period close to fix filing figures; do not use generateTaxLiabilityReport, which computes the live report without freezing anything. Preconditions: the accounting period must exist and be CLOSED, and no ACTIVE snapshot may exist for the period unless supersede is set. Required inputs: periodCode (YYYY-MM) as a query parameter; supersede defaults to false and, when true, demotes the prior ACTIVE snapshot to SUPERSEDED while preserving history. Emits a TAX_LIABILITY_SNAPSHOT_FREEZE event. Returns 404 when the period does not exist, 409 when the period is not CLOSED or an ACTIVE snapshot exists without supersede, and 400 when the period code is malformed. 
      * @endpoint post /v1/accounting/reports/financial/tax-liability/snapshots
      * @param periodCode Accounting period code (YYYY-MM)
      * @param supersede Supersede an existing ACTIVE snapshot for the period
@@ -51,12 +51,12 @@ export class FinancialReportingForTaxLiabilityService extends BaseService {
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public freezeSnapshot(periodCode: string, supersede?: boolean, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<TaxLiabilitySnapshotResponse>;
-    public freezeSnapshot(periodCode: string, supersede?: boolean, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<TaxLiabilitySnapshotResponse>>;
-    public freezeSnapshot(periodCode: string, supersede?: boolean, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<TaxLiabilitySnapshotResponse>>;
-    public freezeSnapshot(periodCode: string, supersede?: boolean, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public freezeTaxLiabilitySnapshot(periodCode: string, supersede?: boolean, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<TaxLiabilitySnapshotResponse>;
+    public freezeTaxLiabilitySnapshot(periodCode: string, supersede?: boolean, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<TaxLiabilitySnapshotResponse>>;
+    public freezeTaxLiabilitySnapshot(periodCode: string, supersede?: boolean, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<TaxLiabilitySnapshotResponse>>;
+    public freezeTaxLiabilitySnapshot(periodCode: string, supersede?: boolean, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (periodCode === null || periodCode === undefined) {
-            throw new Error('Required parameter periodCode was null or undefined when calling freezeSnapshot.');
+            throw new Error('Required parameter periodCode was null or undefined when calling freezeTaxLiabilitySnapshot.');
         }
 
         let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
@@ -124,20 +124,20 @@ export class FinancialReportingForTaxLiabilityService extends BaseService {
     }
 
     /**
-     * Get a Sales-Tax Liability snapshot
-     * Full frozen snapshot including per-jurisdiction rows, totals, reconciliation, and hash.
+     * Get Sales-Tax Liability Snapshot
+     * Returns one frozen Sales-Tax Liability snapshot in full: per-jurisdiction rows, totals, reconciliation and the canonical content hash. Use this tool to read filing figures exactly as frozen; use listTaxLiabilitySnapshots instead when hunting for the right snapshot, and verifyTaxLiabilitySnapshot to check it against live data. Preconditions: the snapshot must exist. Required inputs: snapshotId (UUID) as a path parameter; there is no request body. Emits a TAX_LIABILITY_SNAPSHOT_GET audit event; the snapshot is immutable and never changed by reads. Returns 404 TAX_SNAPSHOT_NOT_FOUND when no snapshot exists for the supplied id. 
      * @endpoint get /v1/accounting/reports/financial/tax-liability/snapshots/{snapshotId}
      * @param snapshotId Snapshot id
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public getSnapshot(snapshotId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<TaxLiabilitySnapshotResponse>;
-    public getSnapshot(snapshotId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<TaxLiabilitySnapshotResponse>>;
-    public getSnapshot(snapshotId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<TaxLiabilitySnapshotResponse>>;
-    public getSnapshot(snapshotId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getTaxLiabilitySnapshot(snapshotId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<TaxLiabilitySnapshotResponse>;
+    public getTaxLiabilitySnapshot(snapshotId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<TaxLiabilitySnapshotResponse>>;
+    public getTaxLiabilitySnapshot(snapshotId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<TaxLiabilitySnapshotResponse>>;
+    public getTaxLiabilitySnapshot(snapshotId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (snapshotId === null || snapshotId === undefined) {
-            throw new Error('Required parameter snapshotId was null or undefined when calling getSnapshot.');
+            throw new Error('Required parameter snapshotId was null or undefined when calling getTaxLiabilitySnapshot.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -184,18 +184,18 @@ export class FinancialReportingForTaxLiabilityService extends BaseService {
     }
 
     /**
-     * List Sales-Tax Liability snapshots
-     * List snapshot summaries (no rows), newest freeze first, optionally filtered by period code.
+     * List Sales-Tax Liability Snapshots
+     * Lists Sales-Tax Liability snapshot summaries without their row detail, newest freeze first, optionally filtered by period code. Use this tool to find which periods are frozen and which snapshot is ACTIVE; use getTaxLiabilitySnapshot instead for a snapshot\&#39;s full frozen content. Preconditions: none. Required inputs: none; periodCode (YYYY-MM) is an optional filter. Emits a TAX_LIABILITY_SNAPSHOT_LIST audit event; no state changes. Returns 200 with an empty list when no snapshots exist. 
      * @endpoint get /v1/accounting/reports/financial/tax-liability/snapshots
      * @param periodCode Optional accounting period code filter (YYYY-MM)
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public listSnapshots(periodCode?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<TaxLiabilitySnapshotSummary>>;
-    public listSnapshots(periodCode?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<TaxLiabilitySnapshotSummary>>>;
-    public listSnapshots(periodCode?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<TaxLiabilitySnapshotSummary>>>;
-    public listSnapshots(periodCode?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public listTaxLiabilitySnapshots(periodCode?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<TaxLiabilitySnapshotSummary>>;
+    public listTaxLiabilitySnapshots(periodCode?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<TaxLiabilitySnapshotSummary>>>;
+    public listTaxLiabilitySnapshots(periodCode?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<TaxLiabilitySnapshotSummary>>>;
+    public listTaxLiabilitySnapshots(periodCode?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
 
@@ -253,20 +253,20 @@ export class FinancialReportingForTaxLiabilityService extends BaseService {
     }
 
     /**
-     * Verify a snapshot against live data
-     * Re-derive the Sales-Tax Liability report for the snapshot\&#39;s period from the live replicas and compare canonical hashes. Read-only: the snapshot is never mutated. Inconsistency means underlying data moved after the freeze (e.g. postings into a reopened period); re-freeze with supersede&#x3D;true once the period is closed again.
+     * Verify Sales-Tax Liability Snapshot
+     * Re-derives the Sales-Tax Liability report for a snapshot\&#39;s period from the live replicas and compares canonical hashes, reporting consistent&#x3D;true when they match. Use this tool to detect drift after a freeze; do not use freezeTaxLiabilitySnapshot to check consistency, since freezing creates state. Preconditions: the snapshot must exist; inconsistency means underlying data moved after the freeze, for example postings into a reopened period, and the remedy is re-freezing with supersede&#x3D;true once the period is closed again. Required inputs: snapshotId (UUID) as a path parameter; there is no request body. Emits a TAX_LIABILITY_SNAPSHOT_VERIFY audit event; the snapshot itself is never mutated. Returns 404 TAX_SNAPSHOT_NOT_FOUND when no snapshot exists for the supplied id. 
      * @endpoint post /v1/accounting/reports/financial/tax-liability/snapshots/{snapshotId}/verify
      * @param snapshotId Snapshot id
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public verifySnapshot(snapshotId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<TaxLiabilitySnapshotVerification>;
-    public verifySnapshot(snapshotId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<TaxLiabilitySnapshotVerification>>;
-    public verifySnapshot(snapshotId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<TaxLiabilitySnapshotVerification>>;
-    public verifySnapshot(snapshotId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public verifyTaxLiabilitySnapshot(snapshotId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<TaxLiabilitySnapshotVerification>;
+    public verifyTaxLiabilitySnapshot(snapshotId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<TaxLiabilitySnapshotVerification>>;
+    public verifyTaxLiabilitySnapshot(snapshotId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<TaxLiabilitySnapshotVerification>>;
+    public verifyTaxLiabilitySnapshot(snapshotId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (snapshotId === null || snapshotId === undefined) {
-            throw new Error('Required parameter snapshotId was null or undefined when calling verifySnapshot.');
+            throw new Error('Required parameter snapshotId was null or undefined when calling verifyTaxLiabilitySnapshot.');
         }
 
         let localVarHeaders = this.defaultHeaders;

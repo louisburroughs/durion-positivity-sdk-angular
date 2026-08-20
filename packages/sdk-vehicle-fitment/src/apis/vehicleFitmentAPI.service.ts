@@ -42,20 +42,20 @@ export class VehicleFitmentAPIService extends BaseService {
     }
 
     /**
-     * Get makes by manufacturer
-     * Retrieve all makes for a given manufacturer.
+     * List Makes for a Manufacturer
+     * Returns all vehicle makes recorded for one manufacturer, served from a local cache of the NHTSA vPIC registry. Use this tool after picking a manufacturer from listManufacturers; do not use listModelsByMake, which descends one level further and needs a makeId taken from this response. Preconditions: the manufacturer must already exist in the local cache under the supplied id; ids are the UUIDs returned by listManufacturers, not raw NHTSA numeric ids. Required inputs: manufacturerId (UUID) as a path parameter. No events are emitted; a cache refresh may rewrite the local make rows for the manufacturer, but nothing else changes. Returns 200 with the make list, and 500 when the manufacturer id cannot be resolved or the NHTSA refresh fails, because the not-found case is not currently mapped to 404. 
      * @endpoint get /v1/vehicle-fitment/makes/{manufacturerId}
      * @param manufacturerId ID of the manufacturer
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public getMakesByManufacturer(manufacturerId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<MakeResponse>>;
-    public getMakesByManufacturer(manufacturerId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<MakeResponse>>>;
-    public getMakesByManufacturer(manufacturerId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<MakeResponse>>>;
-    public getMakesByManufacturer(manufacturerId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public listMakesByManufacturer(manufacturerId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<MakeResponse>>;
+    public listMakesByManufacturer(manufacturerId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<MakeResponse>>>;
+    public listMakesByManufacturer(manufacturerId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<MakeResponse>>>;
+    public listMakesByManufacturer(manufacturerId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (manufacturerId === null || manufacturerId === undefined) {
-            throw new Error('Required parameter manufacturerId was null or undefined when calling getMakesByManufacturer.');
+            throw new Error('Required parameter manufacturerId was null or undefined when calling listMakesByManufacturer.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -102,17 +102,17 @@ export class VehicleFitmentAPIService extends BaseService {
     }
 
     /**
-     * Get all manufacturers
-     * Retrieve a list of all vehicle manufacturers.
+     * List Vehicle Manufacturers
+     * Returns the list of vehicle manufacturers known to the fitment service, served from a local cache of the NHTSA vPIC registry. Use this tool to start the manufacturer-make-model selection chain; do not use listMakesByManufacturer, which requires a manufacturerId taken from this response. Preconditions: none beyond authentication; when the local cache is empty or stale the list is re-fetched from the public NHTSA vPIC service, so outbound connectivity is required for a refresh. Required inputs: none; there are no parameters, no paging and no filtering. No events are emitted; a refresh rewrites the local manufacturer cache rows, but the response is otherwise a read-only projection. Returns 200 with the manufacturer list, which may be empty, and 500 when the NHTSA refresh cannot be fetched or parsed. 
      * @endpoint get /v1/vehicle-fitment/manufacturers
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public getManufacturers(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<ManufacturerResponse>>;
-    public getManufacturers(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<ManufacturerResponse>>>;
-    public getManufacturers(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<ManufacturerResponse>>>;
-    public getManufacturers(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public listManufacturers(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<ManufacturerResponse>>;
+    public listManufacturers(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<ManufacturerResponse>>>;
+    public listManufacturers(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<ManufacturerResponse>>>;
+    public listManufacturers(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -158,20 +158,20 @@ export class VehicleFitmentAPIService extends BaseService {
     }
 
     /**
-     * Get models by make
-     * Retrieve all models for a given make.
+     * List Models for a Make
+     * Returns all vehicle models recorded for one make, served from a local cache of the NHTSA vPIC registry. Use this tool after picking a make from listMakesByManufacturer; do not use listVehicleTypesByMake, which returns body classes such as Passenger Car rather than named models. Preconditions: the make must already exist in the local cache under the supplied id. Required inputs: makeId (UUID) as a path parameter. No events are emitted; a cache refresh may rewrite the local model rows for the make, but nothing else changes. Returns 200 with the model list, and 500 when the make id cannot be resolved or the NHTSA refresh fails, because the not-found case is not currently mapped to 404. 
      * @endpoint get /v1/vehicle-fitment/models/{makeId}
      * @param makeId ID of the make
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public getModelsByMake(makeId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<ModelResponse>>;
-    public getModelsByMake(makeId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<ModelResponse>>>;
-    public getModelsByMake(makeId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<ModelResponse>>>;
-    public getModelsByMake(makeId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public listModelsByMake(makeId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<ModelResponse>>;
+    public listModelsByMake(makeId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<ModelResponse>>>;
+    public listModelsByMake(makeId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<ModelResponse>>>;
+    public listModelsByMake(makeId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (makeId === null || makeId === undefined) {
-            throw new Error('Required parameter makeId was null or undefined when calling getModelsByMake.');
+            throw new Error('Required parameter makeId was null or undefined when calling listModelsByMake.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -218,20 +218,20 @@ export class VehicleFitmentAPIService extends BaseService {
     }
 
     /**
-     * Get vehicle types for make
-     * Retrieve all vehicle types for a given make.
+     * List Vehicle Types for a Make
+     * Returns the vehicle types, meaning body classes such as Passenger Car or Truck, recorded for one make, served from a local cache of the NHTSA vPIC registry. Use this tool when a make\&#39;s body classes are needed; do not use listModelsByMake, which returns the make\&#39;s named models instead. Preconditions: the make must already exist in the local cache under the supplied id. Required inputs: makeId (UUID) as a path parameter. No events are emitted; a cache refresh may rewrite the local vehicle-type rows for the make, but nothing else changes. Returns 200 with the vehicle-type list, and 500 when the make id cannot be resolved or the NHTSA refresh fails, because the not-found case is not currently mapped to 404. 
      * @endpoint get /v1/vehicle-fitment/vehicle-types/{makeId}
      * @param makeId ID of the make
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public getVehicleTypesForMake(makeId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<VehicleTypeResponse>>;
-    public getVehicleTypesForMake(makeId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<VehicleTypeResponse>>>;
-    public getVehicleTypesForMake(makeId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<VehicleTypeResponse>>>;
-    public getVehicleTypesForMake(makeId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public listVehicleTypesByMake(makeId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<VehicleTypeResponse>>;
+    public listVehicleTypesByMake(makeId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<VehicleTypeResponse>>>;
+    public listVehicleTypesByMake(makeId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<VehicleTypeResponse>>>;
+    public listVehicleTypesByMake(makeId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (makeId === null || makeId === undefined) {
-            throw new Error('Required parameter makeId was null or undefined when calling getVehicleTypesForMake.');
+            throw new Error('Required parameter makeId was null or undefined when calling listVehicleTypesByMake.');
         }
 
         let localVarHeaders = this.defaultHeaders;

@@ -40,8 +40,8 @@ export class WIPDashboardService extends BaseService {
     }
 
     /**
-     * Get WIP detail for a workorder
-     * Returns full WIP detail for a single workorder including status history.
+     * Get WIP Detail for Workorder
+     * Returns the full work-in-progress detail for one workorder: current status, the complete status transition history with actors and reasons, blocking part numbers, and the currently assigned technician. Use this tool when drilling into a single workorder from the WIP board; use listWipWorkorders instead for the paginated board itself. Preconditions: the workorder must exist; it does not need to be in an active WIP status to be viewed. Required inputs: workorderId (UUID) as a path parameter. Emits a WORKORDER_WIP_VIEW audit event; no workorder state changes — this is a read-only projection. Returns 400 with code INVALID_ARGUMENT when no workorder exists for the id — the not-found case surfaces as 400 rather than 404 in this operation. 
      * @endpoint get /v1/workexec/wip/{workorderId}
      * @param workorderId UUID of the workorder
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -84,7 +84,7 @@ export class WIPDashboardService extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/workexec/wip/${this.configuration.encodeParam({name: "workorderId", value: workorderId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
+        let localVarPath = `/v1/workexec/wip/${this.configuration.encodeParam({name: "workorderId", value: workorderId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<WorkorderStatusDetail>('get', `${basePath}${localVarPath}`,
             {
@@ -100,8 +100,8 @@ export class WIPDashboardService extends BaseService {
     }
 
     /**
-     * List active WIP workorders
-     * Returns a paginated list of workorders in active WIP statuses. When the caller holds workorder:wip:view_all_locations, results span all locations.
+     * List Active WIP Workorders
+     * Returns a page of workorders in active work-in-progress statuses (APPROVED, ASSIGNED, WORK_IN_PROGRESS, AWAITING_PARTS, AWAITING_APPROVAL), enriched with customer and vehicle references. Use this tool for the WIP status board; do not use getDispatchDashboard, which aggregates mechanics, bays, and conflicts for one date, and use getWipDetail for a single workorder\&#39;s status history. Preconditions: multiLocation&#x3D;true requires the caller to hold workorder:wip:view_all_locations; otherwise results are scoped to the given location. Required inputs: locationId (UUID as a string) as a query parameter — ignored when multiLocation is true; multiLocation defaults to false and page size defaults to 25. Emits a WORKORDER_WIP_LIST audit event; no workorder state changes — this is a read-only projection. Returns 400 when locationId does not parse as a UUID, and 403 when multiLocation is requested without workorder:wip:view_all_locations. 
      * @endpoint get /v1/workexec/wip
      * @param locationId Location ID to filter workorders by
      * @param pageable 
@@ -110,15 +110,15 @@ export class WIPDashboardService extends BaseService {
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public listWip(locationId: string, pageable: Pageable, multiLocation?: boolean, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PageWorkorderStatusView>;
-    public listWip(locationId: string, pageable: Pageable, multiLocation?: boolean, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PageWorkorderStatusView>>;
-    public listWip(locationId: string, pageable: Pageable, multiLocation?: boolean, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PageWorkorderStatusView>>;
-    public listWip(locationId: string, pageable: Pageable, multiLocation?: boolean, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public listWipWorkorders(locationId: string, pageable: Pageable, multiLocation?: boolean, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PageWorkorderStatusView>;
+    public listWipWorkorders(locationId: string, pageable: Pageable, multiLocation?: boolean, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PageWorkorderStatusView>>;
+    public listWipWorkorders(locationId: string, pageable: Pageable, multiLocation?: boolean, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PageWorkorderStatusView>>;
+    public listWipWorkorders(locationId: string, pageable: Pageable, multiLocation?: boolean, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (locationId === null || locationId === undefined) {
-            throw new Error('Required parameter locationId was null or undefined when calling listWip.');
+            throw new Error('Required parameter locationId was null or undefined when calling listWipWorkorders.');
         }
         if (pageable === null || pageable === undefined) {
-            throw new Error('Required parameter pageable was null or undefined when calling listWip.');
+            throw new Error('Required parameter pageable was null or undefined when calling listWipWorkorders.');
         }
 
         let localVarQueryParameters = new OpenApiHttpParams(this.encoder);

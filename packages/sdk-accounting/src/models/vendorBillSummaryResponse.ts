@@ -14,6 +14,30 @@
  */
 export interface VendorBillSummaryResponse { 
     /**
+     * Bill date
+     */
+    billDate?: string;
+    /**
+     * Bill number
+     */
+    billNumber: string;
+    /**
+     * Due date
+     */
+    dueDate?: string;
+    /**
+     * Open/unpaid amount (eligible for payment)
+     */
+    openAmount?: number;
+    /**
+     * Bill status
+     */
+    status: VendorBillSummaryResponseStatusEnum;
+    /**
+     * Total bill amount
+     */
+    totalAmount: number;
+    /**
      * Vendor bill UUID
      */
     vendorBillId: string;
@@ -25,30 +49,6 @@ export interface VendorBillSummaryResponse {
      * Vendor name
      */
     vendorName?: string;
-    /**
-     * Bill number
-     */
-    billNumber: string;
-    /**
-     * Bill date
-     */
-    billDate?: string;
-    /**
-     * Due date
-     */
-    dueDate?: string;
-    /**
-     * Total bill amount
-     */
-    totalAmount: number;
-    /**
-     * Open/unpaid amount (eligible for payment)
-     */
-    openAmount?: number;
-    /**
-     * Bill status
-     */
-    status: VendorBillSummaryResponseStatusEnum;
 }
 export enum VendorBillSummaryResponseStatusEnum {
     PendingReceiptMatch = 'PENDING_RECEIPT_MATCH',
@@ -99,9 +99,9 @@ export function instanceOfVendorBillSummaryResponse(value: object): value is Ven
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createVendorBillSummaryResponsePropertyNames('vendorBillId', 'vendorId', 'billNumber', 'totalAmount', 'status', );
-    const optionalStringProperties = createVendorBillSummaryResponseOptionalProperties({ name: 'vendorBillId', nullable: false }, { name: 'vendorId', nullable: false }, { name: 'vendorName', nullable: false }, { name: 'billNumber', nullable: false }, { name: 'billDate', nullable: false }, { name: 'dueDate', nullable: false }, { name: 'status', nullable: false }, );
-    const optionalNumberProperties = createVendorBillSummaryResponseOptionalProperties({ name: 'totalAmount', nullable: false }, { name: 'openAmount', nullable: false }, );
+    const requiredProperties = createVendorBillSummaryResponsePropertyNames('billNumber', 'status', 'totalAmount', 'vendorBillId', 'vendorId', );
+    const optionalStringProperties = createVendorBillSummaryResponseOptionalProperties({ name: 'billDate', nullable: false }, { name: 'billNumber', nullable: false }, { name: 'dueDate', nullable: false }, { name: 'status', nullable: false }, { name: 'vendorBillId', nullable: false }, { name: 'vendorId', nullable: false }, { name: 'vendorName', nullable: false }, );
+    const optionalNumberProperties = createVendorBillSummaryResponseOptionalProperties({ name: 'openAmount', nullable: false }, { name: 'totalAmount', nullable: false }, );
     const optionalBooleanProperties = createVendorBillSummaryResponseOptionalProperties();
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

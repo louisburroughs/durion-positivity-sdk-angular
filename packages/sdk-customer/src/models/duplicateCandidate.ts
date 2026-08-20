@@ -14,10 +14,6 @@
  */
 export interface DuplicateCandidate { 
     /**
-     * Candidate party ID
-     */
-    partyId: string;
-    /**
      * Candidate legal name
      */
     legalName: string;
@@ -25,6 +21,10 @@ export interface DuplicateCandidate {
      * Reason this candidate matched
      */
     matchReason: string;
+    /**
+     * Candidate party ID
+     */
+    partyId: string;
 }
 
 function isOptionalDuplicateCandidatePropertyOfType(
@@ -65,8 +65,8 @@ export function instanceOfDuplicateCandidate(value: object): value is DuplicateC
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createDuplicateCandidatePropertyNames('partyId', 'legalName', 'matchReason', );
-    const optionalStringProperties = createDuplicateCandidateOptionalProperties({ name: 'partyId', nullable: false }, { name: 'legalName', nullable: false }, { name: 'matchReason', nullable: false }, );
+    const requiredProperties = createDuplicateCandidatePropertyNames('legalName', 'matchReason', 'partyId', );
+    const optionalStringProperties = createDuplicateCandidateOptionalProperties({ name: 'legalName', nullable: false }, { name: 'matchReason', nullable: false }, { name: 'partyId', nullable: false }, );
     const optionalNumberProperties = createDuplicateCandidateOptionalProperties();
     const optionalBooleanProperties = createDuplicateCandidateOptionalProperties();
 

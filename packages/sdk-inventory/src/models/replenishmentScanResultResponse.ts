@@ -14,21 +14,21 @@
  */
 export interface ReplenishmentScanResultResponse { 
     /**
-     * Number of replenishment policies evaluated by the scan
-     */
-    policiesEvaluated: number;
-    /**
      * Number of policies whose on-hand quantity was below the configured minimum
      */
     policiesBelowMinimum: number;
     /**
-     * Number of new replenishment tasks created by the scan
+     * Number of replenishment policies evaluated by the scan
      */
-    tasksCreated: number;
+    policiesEvaluated: number;
     /**
-     * Number of already-open replenishment tasks whose quantity was refreshed to the current need
+     * Number of policies skipped without evaluation because they are inactive or snoozed
      */
-    tasksRefreshed: number;
+    policiesSkipped: number;
+    /**
+     * Timestamp at which the scan ran
+     */
+    scanAt: string;
     /**
      * Number of new purchase suggestions created for PURCHASE-preferring policies (odoo-parity F4)
      */
@@ -38,13 +38,13 @@ export interface ReplenishmentScanResultResponse {
      */
     suggestionsRefreshed: number;
     /**
-     * Number of policies skipped without evaluation because they are inactive or snoozed
+     * Number of new replenishment tasks created by the scan
      */
-    policiesSkipped: number;
+    tasksCreated: number;
     /**
-     * Timestamp at which the scan ran
+     * Number of already-open replenishment tasks whose quantity was refreshed to the current need
      */
-    scanAt: string;
+    tasksRefreshed: number;
 }
 
 function isOptionalReplenishmentScanResultResponsePropertyOfType(
@@ -85,9 +85,9 @@ export function instanceOfReplenishmentScanResultResponse(value: object): value 
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createReplenishmentScanResultResponsePropertyNames('policiesEvaluated', 'policiesBelowMinimum', 'tasksCreated', 'tasksRefreshed', 'suggestionsCreated', 'suggestionsRefreshed', 'policiesSkipped', 'scanAt', );
+    const requiredProperties = createReplenishmentScanResultResponsePropertyNames('policiesBelowMinimum', 'policiesEvaluated', 'policiesSkipped', 'scanAt', 'suggestionsCreated', 'suggestionsRefreshed', 'tasksCreated', 'tasksRefreshed', );
     const optionalStringProperties = createReplenishmentScanResultResponseOptionalProperties({ name: 'scanAt', nullable: false }, );
-    const optionalNumberProperties = createReplenishmentScanResultResponseOptionalProperties({ name: 'policiesEvaluated', nullable: false }, { name: 'policiesBelowMinimum', nullable: false }, { name: 'tasksCreated', nullable: false }, { name: 'tasksRefreshed', nullable: false }, { name: 'suggestionsCreated', nullable: false }, { name: 'suggestionsRefreshed', nullable: false }, { name: 'policiesSkipped', nullable: false }, );
+    const optionalNumberProperties = createReplenishmentScanResultResponseOptionalProperties({ name: 'policiesBelowMinimum', nullable: false }, { name: 'policiesEvaluated', nullable: false }, { name: 'policiesSkipped', nullable: false }, { name: 'suggestionsCreated', nullable: false }, { name: 'suggestionsRefreshed', nullable: false }, { name: 'tasksCreated', nullable: false }, { name: 'tasksRefreshed', nullable: false }, );
     const optionalBooleanProperties = createReplenishmentScanResultResponseOptionalProperties();
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

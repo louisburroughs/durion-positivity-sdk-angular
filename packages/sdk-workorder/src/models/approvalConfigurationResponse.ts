@@ -14,6 +14,18 @@
  */
 export interface ApprovalConfigurationResponse { 
     /**
+     * Approval method
+     */
+    approvalMethod?: string;
+    /**
+     * Customer ID for this configuration (null = applies to all customers)
+     */
+    customerId?: string;
+    /**
+     * Number of days a declined estimate can be reopened
+     */
+    declineExpiryDays?: number;
+    /**
      * Unique identifier for the configuration
      */
     id: string;
@@ -22,25 +34,13 @@ export interface ApprovalConfigurationResponse {
      */
     locationId?: string;
     /**
-     * Customer ID for this configuration (null = applies to all customers)
+     * Priority for configuration matching (0=default, 1=location-specific, 2=customer-specific)
      */
-    customerId?: string;
-    /**
-     * Approval method
-     */
-    approvalMethod?: string;
-    /**
-     * Number of days a declined estimate can be reopened
-     */
-    declineExpiryDays?: number;
+    priority?: number;
     /**
      * Whether signature is required
      */
     requireSignature?: boolean;
-    /**
-     * Priority for configuration matching (0=default, 1=location-specific, 2=customer-specific)
-     */
-    priority?: number;
 }
 
 function isOptionalApprovalConfigurationResponsePropertyOfType(
@@ -82,7 +82,7 @@ export function instanceOfApprovalConfigurationResponse(value: object): value is
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createApprovalConfigurationResponsePropertyNames('id', );
-    const optionalStringProperties = createApprovalConfigurationResponseOptionalProperties({ name: 'id', nullable: false }, { name: 'locationId', nullable: false }, { name: 'customerId', nullable: false }, { name: 'approvalMethod', nullable: false }, );
+    const optionalStringProperties = createApprovalConfigurationResponseOptionalProperties({ name: 'approvalMethod', nullable: false }, { name: 'customerId', nullable: false }, { name: 'id', nullable: false }, { name: 'locationId', nullable: false }, );
     const optionalNumberProperties = createApprovalConfigurationResponseOptionalProperties({ name: 'declineExpiryDays', nullable: false }, { name: 'priority', nullable: false }, );
     const optionalBooleanProperties = createApprovalConfigurationResponseOptionalProperties({ name: 'requireSignature', nullable: false }, );
 

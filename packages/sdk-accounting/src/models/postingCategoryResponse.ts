@@ -14,21 +14,9 @@
  */
 export interface PostingCategoryResponse { 
     /**
-     * Unique identifier of the posting category
-     */
-    postingCategoryId: string;
-    /**
      * Name of the posting category
      */
     categoryName: string;
-    /**
-     * Description of the posting category
-     */
-    description?: string;
-    /**
-     * Whether the posting category is active
-     */
-    isActive?: boolean;
     /**
      * Timestamp when the posting category was created (ISO 8601)
      */
@@ -38,6 +26,14 @@ export interface PostingCategoryResponse {
      */
     createdBy?: string;
     /**
+     * Description of the posting category
+     */
+    description?: string;
+    /**
+     * Whether the posting category is active
+     */
+    isActive?: boolean;
+    /**
      * Timestamp when the posting category was last modified (ISO 8601)
      */
     modifiedAt?: string;
@@ -45,6 +41,10 @@ export interface PostingCategoryResponse {
      * Identifier of the user who last modified the posting category
      */
     modifiedBy?: string;
+    /**
+     * Unique identifier of the posting category
+     */
+    postingCategoryId: string;
 }
 
 function isOptionalPostingCategoryResponsePropertyOfType(
@@ -85,8 +85,8 @@ export function instanceOfPostingCategoryResponse(value: object): value is Posti
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createPostingCategoryResponsePropertyNames('postingCategoryId', 'categoryName', );
-    const optionalStringProperties = createPostingCategoryResponseOptionalProperties({ name: 'postingCategoryId', nullable: false }, { name: 'categoryName', nullable: false }, { name: 'description', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'modifiedAt', nullable: false }, { name: 'modifiedBy', nullable: false }, );
+    const requiredProperties = createPostingCategoryResponsePropertyNames('categoryName', 'postingCategoryId', );
+    const optionalStringProperties = createPostingCategoryResponseOptionalProperties({ name: 'categoryName', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'description', nullable: false }, { name: 'modifiedAt', nullable: false }, { name: 'modifiedBy', nullable: false }, { name: 'postingCategoryId', nullable: false }, );
     const optionalNumberProperties = createPostingCategoryResponseOptionalProperties();
     const optionalBooleanProperties = createPostingCategoryResponseOptionalProperties({ name: 'isActive', nullable: false }, );
 

@@ -14,10 +14,6 @@
  */
 export interface CommercialAccountRequest { 
     /**
-     * Canonical account role. BILLING is the invoicing account; DELIVERY maps a pos-location to its vendor account number.
-     */
-    role?: CommercialAccountRequestRoleEnum;
-    /**
      * Vendor-assigned account number. Never blank. Ordinary configuration data, not a credential.
      */
     accountNumber?: string;
@@ -29,6 +25,10 @@ export interface CommercialAccountRequest {
      * pos-location identifier this delivery account belongs to. Required for DELIVERY, must be absent for BILLING.
      */
     deliveryLocationId?: string;
+    /**
+     * Canonical account role. BILLING is the invoicing account; DELIVERY maps a pos-location to its vendor account number.
+     */
+    role?: CommercialAccountRequestRoleEnum;
 }
 export enum CommercialAccountRequestRoleEnum {
     Billing = 'BILLING',
@@ -76,7 +76,7 @@ export function instanceOfCommercialAccountRequest(value: object): value is Comm
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createCommercialAccountRequestPropertyNames();
-    const optionalStringProperties = createCommercialAccountRequestOptionalProperties({ name: 'role', nullable: false }, { name: 'accountNumber', nullable: false }, { name: 'agencyCode', nullable: false }, { name: 'deliveryLocationId', nullable: false }, );
+    const optionalStringProperties = createCommercialAccountRequestOptionalProperties({ name: 'accountNumber', nullable: false }, { name: 'agencyCode', nullable: false }, { name: 'deliveryLocationId', nullable: false }, { name: 'role', nullable: false }, );
     const optionalNumberProperties = createCommercialAccountRequestOptionalProperties();
     const optionalBooleanProperties = createCommercialAccountRequestOptionalProperties();
 

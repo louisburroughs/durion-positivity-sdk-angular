@@ -44,8 +44,8 @@ export class AccountingPeriodsService extends BaseService {
     }
 
     /**
-     * Close an accounting period
-     * Closes an OPEN accounting period (OPEN → CLOSED), recording its lifecycle status as CLOSED. Use this tool during month-end close after all journal entries for the month are posted; use reopenAccountingPeriod to reverse the transition. Note: journal-entry posting paths do not yet reject postings dated into a CLOSED period; that enforcement (error code PERIOD_CLOSED) arrives with the period-enforcement story (parity-B2). Preconditions: the period must not already be CLOSED, and no DRAFT journal entries may be dated inside the period. A valid YYYY-MM period with no row whose month has already started is auto-provisioned and then closed. The close is audit-logged with the acting user and emits ACCOUNTING_PERIOD_CLOSE. Returns 409 PERIOD_ALREADY_CLOSED if the period is already closed, and 422 PERIOD_HAS_DRAFT_ENTRIES listing the blocking draft journal entry IDs in fieldErrors — post or delete those entries before retrying.
+     * Close Accounting Period
+     * Closes an OPEN accounting period (OPEN to CLOSED), after which posting paths reject entries dated inside it with PERIOD_CLOSED unless a permissioned override is supplied. Use this tool during month-end close after all journal entries for the month are posted; do not use reopenAccountingPeriod, which reverses this transition for late adjustments. Preconditions: the period must not already be CLOSED, and no DRAFT journal entries may be dated inside the period; a valid YYYY-MM code with no row whose month has already started is auto-provisioned and then closed. Required inputs: periodCode (YYYY-MM) as a path parameter; there is no request body. Emits an ACCOUNTING_PERIOD_CLOSE event and audit-logs the close with the acting user. Returns 409 PERIOD_ALREADY_CLOSED when the period is already closed, 404 PERIOD_NOT_FOUND when no row exists and the month has not started, and 422 PERIOD_HAS_DRAFT_ENTRIES listing the blocking draftJournalEntryIds in fieldErrors; post or delete those entries before retrying. 
      * @endpoint post /v1/accounting/periods/{periodCode}/close
      * @param periodCode Period code in YYYY-MM format
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -104,8 +104,8 @@ export class AccountingPeriodsService extends BaseService {
     }
 
     /**
-     * Get the accounting hard-lock date
-     * Returns the org-level hard-lock date: journal entries dated strictly before this date are permanently rejected (422 PERIOD_HARD_LOCKED) with no override path — unlike a CLOSED period, which accounting:period:override plus a justification can bypass. Use this tool to check the current lock boundary before posting backdated entries or before moving the lock with setAccountingHardLockDate. Returns hardLockDate: null when no hard lock has been configured yet. No preconditions and no side effects.
+     * Get Accounting Hard-Lock Date
+     * Returns the org-level hard-lock date; journal entries dated strictly before this date are permanently rejected with PERIOD_HARD_LOCKED and no override path, unlike a CLOSED period which accounting:period:override plus a justification can bypass. Use this tool to check the current lock boundary before posting backdated entries; do not use setAccountingHardLockDate, which moves the lock, unless a change is intended. Preconditions: none; the lock may be unset. Required inputs: none; there are no parameters and no request body. Emits an ACCOUNTING_PERIOD_HARD_LOCK_VIEW audit event; no state changes. Returns 200 with hardLockDate null when no hard lock has been configured yet. 
      * @endpoint get /v1/accounting/periods/hard-lock
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
@@ -160,8 +160,8 @@ export class AccountingPeriodsService extends BaseService {
     }
 
     /**
-     * List accounting periods
-     * Lists all known accounting periods, most recent first (descending period code). Use this tool to review period statuses before closing or reopening a period. Periods are auto-provisioned on first posting, so months never posted into may be absent; an absent month counts as OPEN for posting purposes. No preconditions and no side effects; nothing is created by this call.
+     * List Accounting Periods
+     * Lists all known accounting periods with their OPEN or CLOSED status, most recent first (descending period code). Use this tool to review period statuses before closing or reopening a period; do not use closeAccountingPeriod or reopenAccountingPeriod, which perform the state transitions. Preconditions: none; periods are auto-provisioned on first posting, so months never posted into may be absent, and an absent month counts as OPEN for posting purposes. Required inputs: none; there are no parameters and no request body. Emits an ACCOUNTING_PERIOD_LIST audit event; nothing is created or changed by this call. Returns 200 with an empty list when no period has ever been provisioned. 
      * @endpoint get /v1/accounting/periods
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
@@ -216,11 +216,11 @@ export class AccountingPeriodsService extends BaseService {
     }
 
     /**
-     * Reopen a closed accounting period
-     * Reopens a CLOSED accounting period (CLOSED → OPEN), resetting its lifecycle status to OPEN. Use this tool only when late adjustments must be posted into an already-closed month; use closeAccountingPeriod to close it again afterwards. Preconditions: a period row must exist for the code and be CLOSED. Required input: a non-blank justification (max 500 characters) which is recorded on the period and in the audit trail with the acting user. Emits ACCOUNTING_PERIOD_REOPEN. Returns 409 PERIOD_ALREADY_OPEN if the period is not closed, and 400 if the justification is missing or blank.
+     * Reopen Accounting Period
+     * Reopens a CLOSED accounting period (CLOSED to OPEN), allowing entries to be posted into that month again. Use this tool only when late adjustments must be posted into an already-closed month; use closeAccountingPeriod instead to close it again afterwards, and prefer a permissioned closed-period override on postJournalEntry for a one-off posting. Preconditions: a period row must exist for the code and be CLOSED. Required inputs: periodCode (YYYY-MM) as a path parameter and a non-blank justification (max 500 characters), recorded on the period and in the audit trail with the acting user. Emits an ACCOUNTING_PERIOD_REOPEN event. Returns 409 PERIOD_ALREADY_OPEN when the period is not closed, 404 PERIOD_NOT_FOUND when no period row exists for the code, and 400 when the justification is missing or blank. 
      * @endpoint post /v1/accounting/periods/{periodCode}/reopen
      * @param periodCode Period code in YYYY-MM format
-     * @param accountingPeriodReopenRequest 
+     * @param accountingPeriodReopenRequest Audit justification for reopening the closed period.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -290,10 +290,10 @@ export class AccountingPeriodsService extends BaseService {
     }
 
     /**
-     * Set the accounting hard-lock date
-     * Sets the org-level hard-lock date: from then on, journal entries dated strictly before this date are permanently rejected (422 PERIOD_HARD_LOCKED) with NO override path — not even accounting:period:override can bypass it (that permission only covers CLOSED periods, error PERIOD_CLOSED). Use this tool after statutory filings or audits to make history immutable; use closeAccountingPeriod for the reversible month-end close instead. The date is monotonic-forward-only: it must be on or after the currently stored hard-lock date, and moving it backward is rejected with 422 HARD_LOCK_DATE_REGRESSION — effectively irreversible, so set it deliberately. Required inputs: hardLockDate (ISO date) and a non-blank justification (max 500 characters), recorded in the audit trail with the acting user. Emits ACCOUNTING_PERIOD_HARD_LOCK_SET and returns the stored hard-lock date. Returns 400 if the date is missing or the justification is missing or blank.
+     * Set Accounting Hard-Lock Date
+     * Sets the org-level hard-lock date; from then on, journal entries dated strictly before this date are permanently rejected with PERIOD_HARD_LOCKED and no override path, not even accounting:period:override, which only covers CLOSED periods. Use this tool after statutory filings or audits to make history immutable; use closeAccountingPeriod for the reversible month-end close instead. Preconditions: the new date must be on or after the currently stored hard-lock date; the lock is monotonic-forward-only and effectively irreversible, so set it deliberately. Required inputs: hardLockDate (ISO date) and a non-blank justification (max 500 characters), recorded in the audit trail with the acting user. Emits an ACCOUNTING_PERIOD_HARD_LOCK_SET event and returns the stored hard-lock date. Returns 422 HARD_LOCK_DATE_REGRESSION when the date would move backward, and 400 when the date or justification is missing or blank. 
      * @endpoint put /v1/accounting/periods/hard-lock
-     * @param hardLockDateUpdateRequest 
+     * @param hardLockDateUpdateRequest New hard-lock date with the audit justification for moving it forward.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options

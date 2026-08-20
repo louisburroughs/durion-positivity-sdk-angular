@@ -36,8 +36,8 @@ export class DailyDispatchBoardDashboardService extends BaseService {
     }
 
     /**
-     * Get daily dispatch dashboard
-     * Returns workorder, mechanic, bay, and conflict data for the given location and date
+     * Get Daily Dispatch Board Dashboard
+     * Returns the aggregated dispatch board for one location and one date: workorder summaries, mechanic statuses, bay statuses derived from workorder assignments, and detected scheduling conflicts. Use this tool when rendering the shop\&#39;s daily dispatch board; do not use listWipWorkorders, which returns flat work-in-progress rows without mechanic, bay, or conflict aggregation. Preconditions: the location must exist as a UUID-keyed location; mechanic availability comes from local people replicas, and a failed replica lookup sets dataQualityWarning to true instead of failing the call. Required inputs: locationId (UUID as a string) as a query parameter; date (ISO date) is optional and defaults to today on the server clock. Emits a WORKEXEC_DASHBOARD_TODAY_GET audit event; no workorder state changes — this is a read-only aggregation. Returns 400 when locationId does not parse as a UUID, and 200 with empty panels when no workorders are scheduled for the date. 
      * @endpoint get /v1/workexec/dashboard/today
      * @param locationId 
      * @param date 
@@ -45,12 +45,12 @@ export class DailyDispatchBoardDashboardService extends BaseService {
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public getDashboard(locationId: string, date?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<DashboardResponse>;
-    public getDashboard(locationId: string, date?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<DashboardResponse>>;
-    public getDashboard(locationId: string, date?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<DashboardResponse>>;
-    public getDashboard(locationId: string, date?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getDispatchDashboard(locationId: string, date?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<DashboardResponse>;
+    public getDispatchDashboard(locationId: string, date?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<DashboardResponse>>;
+    public getDispatchDashboard(locationId: string, date?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<DashboardResponse>>;
+    public getDispatchDashboard(locationId: string, date?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (locationId === null || locationId === undefined) {
-            throw new Error('Required parameter locationId was null or undefined when calling getDashboard.');
+            throw new Error('Required parameter locationId was null or undefined when calling getDispatchDashboard.');
         }
 
         let localVarQueryParameters = new OpenApiHttpParams(this.encoder);

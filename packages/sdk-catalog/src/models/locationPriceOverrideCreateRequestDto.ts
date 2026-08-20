@@ -14,14 +14,6 @@
  */
 export interface LocationPriceOverrideCreateRequestDto { 
     /**
-     * Location identifier the override applies to
-     */
-    locationId: string;
-    /**
-     * Product identifier the override applies to
-     */
-    productId: string;
-    /**
      * Base price before override
      */
     basePrice: number;
@@ -30,13 +22,21 @@ export interface LocationPriceOverrideCreateRequestDto {
      */
     cost?: number;
     /**
+     * Identifier of the user creating the override
+     */
+    createdByUserId: string;
+    /**
+     * Location identifier the override applies to
+     */
+    locationId: string;
+    /**
      * Requested override price
      */
     overridePrice: number;
     /**
-     * Identifier of the user creating the override
+     * Product identifier the override applies to
      */
-    createdByUserId: string;
+    productId: string;
 }
 
 function isOptionalLocationPriceOverrideCreateRequestDtoPropertyOfType(
@@ -77,8 +77,8 @@ export function instanceOfLocationPriceOverrideCreateRequestDto(value: object): 
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createLocationPriceOverrideCreateRequestDtoPropertyNames('locationId', 'productId', 'basePrice', 'overridePrice', 'createdByUserId', );
-    const optionalStringProperties = createLocationPriceOverrideCreateRequestDtoOptionalProperties({ name: 'locationId', nullable: false }, { name: 'productId', nullable: false }, { name: 'createdByUserId', nullable: false }, );
+    const requiredProperties = createLocationPriceOverrideCreateRequestDtoPropertyNames('basePrice', 'createdByUserId', 'locationId', 'overridePrice', 'productId', );
+    const optionalStringProperties = createLocationPriceOverrideCreateRequestDtoOptionalProperties({ name: 'createdByUserId', nullable: false }, { name: 'locationId', nullable: false }, { name: 'productId', nullable: false }, );
     const optionalNumberProperties = createLocationPriceOverrideCreateRequestDtoOptionalProperties({ name: 'basePrice', nullable: false }, { name: 'cost', nullable: false }, { name: 'overridePrice', nullable: false }, );
     const optionalBooleanProperties = createLocationPriceOverrideCreateRequestDtoOptionalProperties();
 

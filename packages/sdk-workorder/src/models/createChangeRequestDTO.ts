@@ -11,33 +11,33 @@ import { WorkorderItemDTO } from './workorderItemDTO';
 
 
 /**
- * Request payload for creating a change request
+ * Change request details including items
  */
 export interface CreateChangeRequestDTO { 
-    /**
-     * Workorder identifier
-     */
-    workorderId?: string;
     /**
      * Description of additional requested work
      */
     description: string;
     /**
+     * Exception reason when emergency override context applies
+     */
+    exceptionReason?: string;
+    /**
      * Whether this request contains emergency/safety exception items
      */
     isEmergencyException?: boolean;
     /**
-     * Exception reason when emergency override context applies
+     * Part items included in this change request
      */
-    exceptionReason?: string;
+    parts?: Array<WorkorderItemDTO>;
     /**
      * Service items included in this change request
      */
     services?: Array<WorkorderItemDTO>;
     /**
-     * Part items included in this change request
+     * Workorder identifier
      */
-    parts?: Array<WorkorderItemDTO>;
+    workorderId?: string;
 }
 
 function isOptionalCreateChangeRequestDTOPropertyOfType(
@@ -79,7 +79,7 @@ export function instanceOfCreateChangeRequestDTO(value: object): value is Create
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createCreateChangeRequestDTOPropertyNames('description', );
-    const optionalStringProperties = createCreateChangeRequestDTOOptionalProperties({ name: 'workorderId', nullable: false }, { name: 'description', nullable: false }, { name: 'exceptionReason', nullable: false }, );
+    const optionalStringProperties = createCreateChangeRequestDTOOptionalProperties({ name: 'description', nullable: false }, { name: 'exceptionReason', nullable: false }, { name: 'workorderId', nullable: false }, );
     const optionalNumberProperties = createCreateChangeRequestDTOOptionalProperties();
     const optionalBooleanProperties = createCreateChangeRequestDTOOptionalProperties({ name: 'isEmergencyException', nullable: false }, );
 

@@ -14,21 +14,21 @@
  */
 export interface ConfirmPickTaskRequest { 
     /**
-     * Identifier of the SKU scanned by the picker
+     * Lot number the units were picked from. Required (422 LOT_NUMBER_REQUIRED) when the SKU is LOT-tracked; must reference an existing (422 LOT_UNKNOWN) ACTIVE (422 LOT_NOT_AVAILABLE) lot. May differ from the task\'s advisory suggestedLotNumber. Ignored for untracked SKUs
      */
-    scannedSkuId: string;
-    /**
-     * Identifier of the bin or shelf location scanned during the pick
-     */
-    scannedLocationId: string;
+    lotNumber?: string;
     /**
      * Quantity of units actually picked at the scanned location
      */
     quantityPicked: number;
     /**
-     * Lot number the units were picked from. Required (422 LOT_NUMBER_REQUIRED) when the SKU is LOT-tracked; must reference an existing (422 LOT_UNKNOWN) ACTIVE (422 LOT_NOT_AVAILABLE) lot. May differ from the task\'s advisory suggestedLotNumber. Ignored for untracked SKUs
+     * Identifier of the bin or shelf location scanned during the pick
      */
-    lotNumber?: string;
+    scannedLocationId: string;
+    /**
+     * Identifier of the SKU scanned by the picker
+     */
+    scannedSkuId: string;
 }
 
 function isOptionalConfirmPickTaskRequestPropertyOfType(
@@ -69,8 +69,8 @@ export function instanceOfConfirmPickTaskRequest(value: object): value is Confir
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createConfirmPickTaskRequestPropertyNames('scannedSkuId', 'scannedLocationId', 'quantityPicked', );
-    const optionalStringProperties = createConfirmPickTaskRequestOptionalProperties({ name: 'scannedSkuId', nullable: false }, { name: 'scannedLocationId', nullable: false }, { name: 'lotNumber', nullable: false }, );
+    const requiredProperties = createConfirmPickTaskRequestPropertyNames('quantityPicked', 'scannedLocationId', 'scannedSkuId', );
+    const optionalStringProperties = createConfirmPickTaskRequestOptionalProperties({ name: 'lotNumber', nullable: false }, { name: 'scannedLocationId', nullable: false }, { name: 'scannedSkuId', nullable: false }, );
     const optionalNumberProperties = createConfirmPickTaskRequestOptionalProperties({ name: 'quantityPicked', nullable: false }, );
     const optionalBooleanProperties = createConfirmPickTaskRequestOptionalProperties();
 

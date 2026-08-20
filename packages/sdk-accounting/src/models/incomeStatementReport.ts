@@ -14,10 +14,6 @@
  */
 export interface IncomeStatementReport { 
     /**
-     * Report period start date (inclusive)
-     */
-    startDate: string;
-    /**
      * Report period end date (inclusive)
      */
     endDate: string;
@@ -30,17 +26,21 @@ export interface IncomeStatementReport {
      */
     lineItems: { [key: string]: number; };
     /**
-     * Total revenue (sum of all revenue accounts)
+     * Net income (total revenue minus total expenses); positive is profit, negative is loss
      */
-    totalRevenue: number;
+    netIncome: number;
+    /**
+     * Report period start date (inclusive)
+     */
+    startDate: string;
     /**
      * Total expenses (sum of all expense accounts)
      */
     totalExpenses: number;
     /**
-     * Net income (total revenue minus total expenses); positive is profit, negative is loss
+     * Total revenue (sum of all revenue accounts)
      */
-    netIncome: number;
+    totalRevenue: number;
 }
 
 function isOptionalIncomeStatementReportPropertyOfType(
@@ -81,9 +81,9 @@ export function instanceOfIncomeStatementReport(value: object): value is IncomeS
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createIncomeStatementReportPropertyNames('startDate', 'endDate', 'generatedAt', 'lineItems', 'totalRevenue', 'totalExpenses', 'netIncome', );
-    const optionalStringProperties = createIncomeStatementReportOptionalProperties({ name: 'startDate', nullable: false }, { name: 'endDate', nullable: false }, { name: 'generatedAt', nullable: false }, );
-    const optionalNumberProperties = createIncomeStatementReportOptionalProperties({ name: 'totalRevenue', nullable: false }, { name: 'totalExpenses', nullable: false }, { name: 'netIncome', nullable: false }, );
+    const requiredProperties = createIncomeStatementReportPropertyNames('endDate', 'generatedAt', 'lineItems', 'netIncome', 'startDate', 'totalExpenses', 'totalRevenue', );
+    const optionalStringProperties = createIncomeStatementReportOptionalProperties({ name: 'endDate', nullable: false }, { name: 'generatedAt', nullable: false }, { name: 'startDate', nullable: false }, );
+    const optionalNumberProperties = createIncomeStatementReportOptionalProperties({ name: 'netIncome', nullable: false }, { name: 'totalExpenses', nullable: false }, { name: 'totalRevenue', nullable: false }, );
     const optionalBooleanProperties = createIncomeStatementReportOptionalProperties();
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

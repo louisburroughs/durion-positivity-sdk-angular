@@ -38,24 +38,24 @@ export class SiteDefaultsAPIService extends BaseService {
     }
 
     /**
-     * Configure site defaults
-     * Create or update default site configuration for a location.
+     * Configure Default Storage Locations for Site
+     * Creates or replaces the default staging and quarantine storage locations of a site in a single idempotent upsert. Use this tool when commissioning a site\&#39;s receiving flow or moving its defaults; use getSiteDefaults instead to read the current assignment. Preconditions: the site must exist, and both referenced storage locations must belong to that site. Required inputs: locationId (UUID) as a path parameter and a body with both defaultStagingLocationId and defaultQuarantineLocationId; the two ids must differ. Emits a LOCATION_SITE_DEFAULTS_PUT event and republishes the location fact carrying the new defaults. Returns 404 when the site does not exist, 400 when either id is missing or both ids are the same, and 422 when a referenced storage location does not belong to the site. 
      * @endpoint put /v1/locations/{locationId}/defaults
      * @param locationId ID of the location
-     * @param siteDefaultsRequest 
+     * @param siteDefaultsRequest Pair of storage location ids to install as the site\&#39;s staging and quarantine defaults.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public configureDefaults(locationId: string, siteDefaultsRequest: SiteDefaultsRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<SiteDefaultsResponse>;
-    public configureDefaults(locationId: string, siteDefaultsRequest: SiteDefaultsRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<SiteDefaultsResponse>>;
-    public configureDefaults(locationId: string, siteDefaultsRequest: SiteDefaultsRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<SiteDefaultsResponse>>;
-    public configureDefaults(locationId: string, siteDefaultsRequest: SiteDefaultsRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public configureSiteDefaults(locationId: string, siteDefaultsRequest: SiteDefaultsRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<SiteDefaultsResponse>;
+    public configureSiteDefaults(locationId: string, siteDefaultsRequest: SiteDefaultsRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<SiteDefaultsResponse>>;
+    public configureSiteDefaults(locationId: string, siteDefaultsRequest: SiteDefaultsRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<SiteDefaultsResponse>>;
+    public configureSiteDefaults(locationId: string, siteDefaultsRequest: SiteDefaultsRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (locationId === null || locationId === undefined) {
-            throw new Error('Required parameter locationId was null or undefined when calling configureDefaults.');
+            throw new Error('Required parameter locationId was null or undefined when calling configureSiteDefaults.');
         }
         if (siteDefaultsRequest === null || siteDefaultsRequest === undefined) {
-            throw new Error('Required parameter siteDefaultsRequest was null or undefined when calling configureDefaults.');
+            throw new Error('Required parameter siteDefaultsRequest was null or undefined when calling configureSiteDefaults.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -112,20 +112,20 @@ export class SiteDefaultsAPIService extends BaseService {
     }
 
     /**
-     * Get site defaults
-     * Retrieve default site configuration for a location.
+     * Get Default Storage Locations for Site
+     * Returns the default staging and quarantine storage location ids configured for a site. Use this tool when routing received or quarantined inventory; do not use configureSiteDefaults, which overwrites the assignment. Preconditions: the site must exist; both ids are null when defaults were never configured. Required inputs: locationId (UUID) as a path parameter. Emits a LOCATION_SITE_DEFAULTS_GET event; no state changes. Returns 404 when the site does not exist. 
      * @endpoint get /v1/locations/{locationId}/defaults
      * @param locationId ID of the location
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public getDefaults(locationId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<SiteDefaultsResponse>;
-    public getDefaults(locationId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<SiteDefaultsResponse>>;
-    public getDefaults(locationId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<SiteDefaultsResponse>>;
-    public getDefaults(locationId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getSiteDefaults(locationId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<SiteDefaultsResponse>;
+    public getSiteDefaults(locationId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<SiteDefaultsResponse>>;
+    public getSiteDefaults(locationId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<SiteDefaultsResponse>>;
+    public getSiteDefaults(locationId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (locationId === null || locationId === undefined) {
-            throw new Error('Required parameter locationId was null or undefined when calling getDefaults.');
+            throw new Error('Required parameter locationId was null or undefined when calling getSiteDefaults.');
         }
 
         let localVarHeaders = this.defaultHeaders;

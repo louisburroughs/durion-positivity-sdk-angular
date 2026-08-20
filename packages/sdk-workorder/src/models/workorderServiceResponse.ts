@@ -14,33 +14,13 @@
  */
 export interface WorkorderServiceResponse { 
     /**
-     * Service line item ID
-     */
-    id?: string;
-    /**
-     * Service entity ID from catalog
-     */
-    serviceEntityId?: string;
-    /**
      * Service description
      */
     description?: string;
     /**
-     * Service line status
+     * Service line item ID
      */
-    status?: WorkorderServiceResponseStatusEnum;
-    /**
-     * Authorized quantity (hours for labor)
-     */
-    quantity?: number;
-    /**
-     * Unit price (hourly rate)
-     */
-    unitPrice?: number;
-    /**
-     * Total labor hours recorded
-     */
-    totalLaborHours?: number;
+    id?: string;
     /**
      * Total labor cost
      */
@@ -49,6 +29,26 @@ export interface WorkorderServiceResponse {
      * Line total from estimate
      */
     lineTotal?: number;
+    /**
+     * Authorized quantity (hours for labor)
+     */
+    quantity?: number;
+    /**
+     * Service entity ID from catalog
+     */
+    serviceEntityId?: string;
+    /**
+     * Service line status
+     */
+    status?: WorkorderServiceResponseStatusEnum;
+    /**
+     * Total labor hours recorded
+     */
+    totalLaborHours?: number;
+    /**
+     * Unit price (hourly rate)
+     */
+    unitPrice?: number;
 }
 export enum WorkorderServiceResponseStatusEnum {
     PendingApproval = 'PENDING_APPROVAL',
@@ -100,8 +100,8 @@ export function instanceOfWorkorderServiceResponse(value: object): value is Work
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createWorkorderServiceResponsePropertyNames();
-    const optionalStringProperties = createWorkorderServiceResponseOptionalProperties({ name: 'id', nullable: false }, { name: 'serviceEntityId', nullable: false }, { name: 'description', nullable: false }, { name: 'status', nullable: false }, );
-    const optionalNumberProperties = createWorkorderServiceResponseOptionalProperties({ name: 'quantity', nullable: false }, { name: 'unitPrice', nullable: false }, { name: 'totalLaborHours', nullable: false }, { name: 'laborCost', nullable: false }, { name: 'lineTotal', nullable: false }, );
+    const optionalStringProperties = createWorkorderServiceResponseOptionalProperties({ name: 'description', nullable: false }, { name: 'id', nullable: false }, { name: 'serviceEntityId', nullable: false }, { name: 'status', nullable: false }, );
+    const optionalNumberProperties = createWorkorderServiceResponseOptionalProperties({ name: 'laborCost', nullable: false }, { name: 'lineTotal', nullable: false }, { name: 'quantity', nullable: false }, { name: 'totalLaborHours', nullable: false }, { name: 'unitPrice', nullable: false }, );
     const optionalBooleanProperties = createWorkorderServiceResponseOptionalProperties();
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

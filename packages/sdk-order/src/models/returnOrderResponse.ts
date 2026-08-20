@@ -14,19 +14,19 @@ import { Line } from './line';
  * A return order and its lines
  */
 export interface ReturnOrderResponse { 
-    returnOrderId?: string;
-    originalOrderId?: string;
-    originalOrderNumber?: string;
-    locationId?: string;
+    createdAt?: string;
     customerId?: string;
-    refundMethod?: string;
-    status?: string;
-    reasonCode?: string;
-    totalRefund?: number;
     failureReason?: string;
     lines?: Array<Line>;
+    locationId?: string;
+    originalOrderId?: string;
+    originalOrderNumber?: string;
+    reasonCode?: string;
+    refundMethod?: string;
+    returnOrderId?: string;
     returnedAt?: string;
-    createdAt?: string;
+    status?: string;
+    totalRefund?: number;
 }
 
 function isOptionalReturnOrderResponsePropertyOfType(
@@ -68,7 +68,7 @@ export function instanceOfReturnOrderResponse(value: object): value is ReturnOrd
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createReturnOrderResponsePropertyNames();
-    const optionalStringProperties = createReturnOrderResponseOptionalProperties({ name: 'returnOrderId', nullable: false }, { name: 'originalOrderId', nullable: false }, { name: 'originalOrderNumber', nullable: false }, { name: 'locationId', nullable: false }, { name: 'customerId', nullable: false }, { name: 'refundMethod', nullable: false }, { name: 'status', nullable: false }, { name: 'reasonCode', nullable: false }, { name: 'failureReason', nullable: false }, { name: 'returnedAt', nullable: false }, { name: 'createdAt', nullable: false }, );
+    const optionalStringProperties = createReturnOrderResponseOptionalProperties({ name: 'createdAt', nullable: false }, { name: 'customerId', nullable: false }, { name: 'failureReason', nullable: false }, { name: 'locationId', nullable: false }, { name: 'originalOrderId', nullable: false }, { name: 'originalOrderNumber', nullable: false }, { name: 'reasonCode', nullable: false }, { name: 'refundMethod', nullable: false }, { name: 'returnOrderId', nullable: false }, { name: 'returnedAt', nullable: false }, { name: 'status', nullable: false }, );
     const optionalNumberProperties = createReturnOrderResponseOptionalProperties({ name: 'totalRefund', nullable: false }, );
     const optionalBooleanProperties = createReturnOrderResponseOptionalProperties();
 

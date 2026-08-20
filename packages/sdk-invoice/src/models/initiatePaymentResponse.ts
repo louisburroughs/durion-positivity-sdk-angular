@@ -14,14 +14,6 @@
  */
 export interface InitiatePaymentResponse { 
     /**
-     * Payment intent identifier
-     */
-    paymentIntentId: string;
-    /**
-     * Current lifecycle status of the payment intent
-     */
-    status: InitiatePaymentResponseStatusEnum;
-    /**
      * Amount authorized on the card
      */
     authorizedAmount?: number;
@@ -30,10 +22,6 @@ export interface InitiatePaymentResponse {
      */
     capturedAmount?: number;
     /**
-     * Remainder voided after partial capture
-     */
-    voidedRemainderAmount?: number;
-    /**
      * Gateway provider identifier (e.g., stripe)
      */
     gatewayProvider?: string;
@@ -41,6 +29,18 @@ export interface InitiatePaymentResponse {
      * Raw gateway response JSON for audit
      */
     gatewayResponse?: string;
+    /**
+     * Payment intent identifier
+     */
+    paymentIntentId: string;
+    /**
+     * Current lifecycle status of the payment intent
+     */
+    status: InitiatePaymentResponseStatusEnum;
+    /**
+     * Remainder voided after partial capture
+     */
+    voidedRemainderAmount?: number;
 }
 export enum InitiatePaymentResponseStatusEnum {
     Pending = 'PENDING',
@@ -92,7 +92,7 @@ export function instanceOfInitiatePaymentResponse(value: object): value is Initi
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createInitiatePaymentResponsePropertyNames('paymentIntentId', 'status', );
-    const optionalStringProperties = createInitiatePaymentResponseOptionalProperties({ name: 'paymentIntentId', nullable: false }, { name: 'status', nullable: false }, { name: 'gatewayProvider', nullable: false }, { name: 'gatewayResponse', nullable: false }, );
+    const optionalStringProperties = createInitiatePaymentResponseOptionalProperties({ name: 'gatewayProvider', nullable: false }, { name: 'gatewayResponse', nullable: false }, { name: 'paymentIntentId', nullable: false }, { name: 'status', nullable: false }, );
     const optionalNumberProperties = createInitiatePaymentResponseOptionalProperties({ name: 'authorizedAmount', nullable: false }, { name: 'capturedAmount', nullable: false }, { name: 'voidedRemainderAmount', nullable: false }, );
     const optionalBooleanProperties = createInitiatePaymentResponseOptionalProperties();
 

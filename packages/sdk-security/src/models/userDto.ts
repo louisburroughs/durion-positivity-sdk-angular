@@ -18,17 +18,17 @@ export interface UserDto {
      */
     id: string;
     /**
-     * Login username
+     * Linked person identifier, when the account is linked to a person record
      */
-    username: string;
+    personId?: string;
     /**
      * Role names assigned to the user
      */
     roles: Set<string>;
     /**
-     * Linked person identifier, when the account is linked to a person record
+     * Login username
      */
-    personId?: string;
+    username: string;
 }
 
 function isOptionalUserDtoPropertyOfType(
@@ -69,8 +69,8 @@ export function instanceOfUserDto(value: object): value is UserDto {
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createUserDtoPropertyNames('id', 'username', 'roles', );
-    const optionalStringProperties = createUserDtoOptionalProperties({ name: 'id', nullable: false }, { name: 'username', nullable: false }, { name: 'personId', nullable: false }, );
+    const requiredProperties = createUserDtoPropertyNames('id', 'roles', 'username', );
+    const optionalStringProperties = createUserDtoOptionalProperties({ name: 'id', nullable: false }, { name: 'personId', nullable: false }, { name: 'username', nullable: false }, );
     const optionalNumberProperties = createUserDtoOptionalProperties();
     const optionalBooleanProperties = createUserDtoOptionalProperties();
 

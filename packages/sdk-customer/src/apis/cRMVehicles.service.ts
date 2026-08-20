@@ -38,8 +38,8 @@ export class CRMVehiclesService extends BaseService {
     }
 
     /**
-     * Get vehicle for customer
-     * Retrieve a specific vehicle for a given customer
+     * Get Customer Vehicle
+     * Returns one vehicle\&#39;s record from the local ext_vehicle replica, verified to belong to the named customer through the party\&#39;s VIN association. Use this tool when both the customer and vehicle ids are known; use listVehiclesForCustomer instead to discover which vehicles a customer owns. Preconditions: the customer must exist, the vehicle must exist in the replica, and the vehicle must be associated with that customer. Required inputs: customerId and vehicleId (UUIDs) as path parameters; there is no request body. No events are emitted and no state changes; this is a read-only projection. Returns 404 when the customer, the vehicle, or the ownership association cannot be resolved. 
      * @endpoint get /v1/crm/{customerId}/vehicles/{vehicleId}
      * @param customerId Customer ID
      * @param vehicleId Vehicle ID
@@ -47,15 +47,15 @@ export class CRMVehiclesService extends BaseService {
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public getVehiclesForCustomer(customerId: string, vehicleId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<VehicleResponse>;
-    public getVehiclesForCustomer(customerId: string, vehicleId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<VehicleResponse>>;
-    public getVehiclesForCustomer(customerId: string, vehicleId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<VehicleResponse>>;
-    public getVehiclesForCustomer(customerId: string, vehicleId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getVehicleForCustomer(customerId: string, vehicleId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<VehicleResponse>;
+    public getVehicleForCustomer(customerId: string, vehicleId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<VehicleResponse>>;
+    public getVehicleForCustomer(customerId: string, vehicleId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<VehicleResponse>>;
+    public getVehicleForCustomer(customerId: string, vehicleId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (customerId === null || customerId === undefined) {
-            throw new Error('Required parameter customerId was null or undefined when calling getVehiclesForCustomer.');
+            throw new Error('Required parameter customerId was null or undefined when calling getVehicleForCustomer.');
         }
         if (vehicleId === null || vehicleId === undefined) {
-            throw new Error('Required parameter vehicleId was null or undefined when calling getVehiclesForCustomer.');
+            throw new Error('Required parameter vehicleId was null or undefined when calling getVehicleForCustomer.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -102,8 +102,8 @@ export class CRMVehiclesService extends BaseService {
     }
 
     /**
-     * List vehicles for customer
-     * Retrieve all vehicle summaries (vehicleId, VIN, make/model/year) associated with a customer. Returns the vehicle UUIDs the frontend needs to build estimates for a given Durion customer.
+     * List Customer Vehicles
+     * Returns the vehicle summaries (vehicleId, VIN, make, model, year) associated with a customer, resolved from the party\&#39;s VIN set against the local ext_vehicle replica of pos-vehicle-inventory. Use this tool when the vehicle UUIDs for a known customer are needed, for example to build an estimate; use getVehicleForCustomer instead for one vehicle\&#39;s full record, and note vehicle writes go to pos-vehicle-inventory, not this module. Preconditions: the customer must exist as a person or commercial party; VINs whose vehicle events have not yet been replicated are silently dropped from the list. Required inputs: customerId (UUID, the party id) as a path parameter; there is no request body. No events are emitted and no state changes; this is a read-only projection. Returns 404 when no party exists for the supplied customerId, and 200 with an empty list when the customer owns no resolvable vehicles. 
      * @endpoint get /v1/crm/{customerId}/vehicles
      * @param customerId Customer ID
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.

@@ -18,13 +18,13 @@ export interface BackorderResponse {
      */
     backorderId?: string;
     /**
-     * Workorder line whose demand was short
+     * When the backorder was opened
      */
-    workorderLineId?: string;
+    createdAt?: string;
     /**
-     * SKU / stock-item identifier that was short
+     * Actor that opened the backorder
      */
-    sku?: string;
+    createdBy?: string;
     /**
      * Site the demand is short at
      */
@@ -34,39 +34,47 @@ export interface BackorderResponse {
      */
     quantityShort?: number;
     /**
-     * Lifecycle status: OPEN, RESOLVED, or CANCELLED
-     */
-    status?: BackorderResponseStatusEnum;
-    /**
      * What drove resolution; null while OPEN or CANCELLED
      */
     resolutionSource?: BackorderResponseResolutionSourceEnum;
     /**
-     * Actor that opened the backorder
+     * When the backorder was resolved; null otherwise
      */
-    createdBy?: string;
+    resolvedAt?: string;
     /**
-     * When the backorder was opened
+     * Sales-order line whose demand was short (CAP #1315), when demand was from a sales order; null otherwise
      */
-    createdAt?: string;
+    salesOrderLineId?: string;
+    /**
+     * SKU / stock-item identifier that was short
+     */
+    sku?: string;
+    /**
+     * Lifecycle status: OPEN, RESOLVED, or CANCELLED
+     */
+    status?: BackorderResponseStatusEnum;
+    /**
+     * The stock item\'s base unit of measure, when sku resolves to a catalog product with a declared UoM; null otherwise
+     */
+    unitOfMeasure?: string;
     /**
      * When the backorder was last updated
      */
     updatedAt?: string;
     /**
-     * When the backorder was resolved; null otherwise
+     * Workorder line whose demand was short, when demand was from a workorder; null otherwise
      */
-    resolvedAt?: string;
+    workorderLineId?: string;
 }
-export enum BackorderResponseStatusEnum {
-    Open = 'OPEN',
-    Resolved = 'RESOLVED',
-    Cancelled = 'CANCELLED'
-};
 export enum BackorderResponseResolutionSourceEnum {
     Availability = 'AVAILABILITY',
     ReplenishmentReceipt = 'REPLENISHMENT_RECEIPT',
     Manual = 'MANUAL'
+};
+export enum BackorderResponseStatusEnum {
+    Open = 'OPEN',
+    Resolved = 'RESOLVED',
+    Cancelled = 'CANCELLED'
 };
 
 
@@ -110,7 +118,7 @@ export function instanceOfBackorderResponse(value: object): value is BackorderRe
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createBackorderResponsePropertyNames();
-    const optionalStringProperties = createBackorderResponseOptionalProperties({ name: 'backorderId', nullable: false }, { name: 'workorderLineId', nullable: false }, { name: 'sku', nullable: false }, { name: 'locationId', nullable: false }, { name: 'status', nullable: false }, { name: 'resolutionSource', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'updatedAt', nullable: false }, { name: 'resolvedAt', nullable: false }, );
+    const optionalStringProperties = createBackorderResponseOptionalProperties({ name: 'backorderId', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'locationId', nullable: false }, { name: 'resolutionSource', nullable: false }, { name: 'resolvedAt', nullable: false }, { name: 'salesOrderLineId', nullable: false }, { name: 'sku', nullable: false }, { name: 'status', nullable: false }, { name: 'unitOfMeasure', nullable: false }, { name: 'updatedAt', nullable: false }, { name: 'workorderLineId', nullable: false }, );
     const optionalNumberProperties = createBackorderResponseOptionalProperties({ name: 'quantityShort', nullable: false }, );
     const optionalBooleanProperties = createBackorderResponseOptionalProperties();
 

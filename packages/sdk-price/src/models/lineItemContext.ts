@@ -14,13 +14,13 @@
  */
 export interface LineItemContext { 
     /**
-     * Product SKU or identifier
-     */
-    sku: string;
-    /**
      * Line item quantity
      */
     quantity: number;
+    /**
+     * Product SKU or identifier
+     */
+    sku: string;
     /**
      * Line item unit price
      */
@@ -65,7 +65,7 @@ export function instanceOfLineItemContext(value: object): value is LineItemConte
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createLineItemContextPropertyNames('sku', 'quantity', 'unitPrice', );
+    const requiredProperties = createLineItemContextPropertyNames('quantity', 'sku', 'unitPrice', );
     const optionalStringProperties = createLineItemContextOptionalProperties({ name: 'sku', nullable: false }, );
     const optionalNumberProperties = createLineItemContextOptionalProperties({ name: 'quantity', nullable: false }, { name: 'unitPrice', nullable: false }, );
     const optionalBooleanProperties = createLineItemContextOptionalProperties();

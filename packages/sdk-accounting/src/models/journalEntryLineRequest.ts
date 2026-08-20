@@ -14,17 +14,13 @@
  */
 export interface JournalEntryLineRequest { 
     /**
-     * GL account UUID
+     * Credit amount for this line
      */
-    glAccountId: string;
+    creditAmount?: number;
     /**
      * Debit amount for this line
      */
     debitAmount?: number;
-    /**
-     * Credit amount for this line
-     */
-    creditAmount?: number;
     /**
      * Line description
      */
@@ -33,6 +29,10 @@ export interface JournalEntryLineRequest {
      * Optional dimensional attributes for reporting
      */
     dimensions?: { [key: string]: string; };
+    /**
+     * GL account UUID
+     */
+    glAccountId: string;
     singleSidedAmount?: boolean;
 }
 
@@ -75,8 +75,8 @@ export function instanceOfJournalEntryLineRequest(value: object): value is Journ
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createJournalEntryLineRequestPropertyNames('glAccountId', );
-    const optionalStringProperties = createJournalEntryLineRequestOptionalProperties({ name: 'glAccountId', nullable: false }, { name: 'description', nullable: false }, );
-    const optionalNumberProperties = createJournalEntryLineRequestOptionalProperties({ name: 'debitAmount', nullable: false }, { name: 'creditAmount', nullable: false }, );
+    const optionalStringProperties = createJournalEntryLineRequestOptionalProperties({ name: 'description', nullable: false }, { name: 'glAccountId', nullable: false }, );
+    const optionalNumberProperties = createJournalEntryLineRequestOptionalProperties({ name: 'creditAmount', nullable: false }, { name: 'debitAmount', nullable: false }, );
     const optionalBooleanProperties = createJournalEntryLineRequestOptionalProperties({ name: 'singleSidedAmount', nullable: false }, );
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

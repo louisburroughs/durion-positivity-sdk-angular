@@ -14,29 +14,29 @@
  */
 export interface WorkorderPickedItemResponse { 
     /**
-     * Identifier of the pick task that produced this item
-     */
-    pickTaskId: string;
-    /**
      * Identifier of the pick list the task belongs to
      */
     pickListId: string;
     /**
-     * Identifier of the SKU that was picked
+     * Identifier of the pick task that produced this item
      */
-    skuId: string;
-    /**
-     * Quantity picked
-     */
-    qtyPicked: number;
+    pickTaskId: string;
     /**
      * Quantity consumed from the picked amount
      */
     qtyConsumed: number;
     /**
+     * Quantity picked
+     */
+    qtyPicked: number;
+    /**
      * Quantity remaining from the picked amount
      */
     qtyRemaining: number;
+    /**
+     * Identifier of the SKU that was picked
+     */
+    skuId: string;
     /**
      * Status of the picked item
      */
@@ -81,9 +81,9 @@ export function instanceOfWorkorderPickedItemResponse(value: object): value is W
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createWorkorderPickedItemResponsePropertyNames('pickTaskId', 'pickListId', 'skuId', 'qtyPicked', 'qtyConsumed', 'qtyRemaining', 'status', );
-    const optionalStringProperties = createWorkorderPickedItemResponseOptionalProperties({ name: 'pickTaskId', nullable: false }, { name: 'pickListId', nullable: false }, { name: 'skuId', nullable: false }, { name: 'status', nullable: false }, );
-    const optionalNumberProperties = createWorkorderPickedItemResponseOptionalProperties({ name: 'qtyPicked', nullable: false }, { name: 'qtyConsumed', nullable: false }, { name: 'qtyRemaining', nullable: false }, );
+    const requiredProperties = createWorkorderPickedItemResponsePropertyNames('pickListId', 'pickTaskId', 'qtyConsumed', 'qtyPicked', 'qtyRemaining', 'skuId', 'status', );
+    const optionalStringProperties = createWorkorderPickedItemResponseOptionalProperties({ name: 'pickListId', nullable: false }, { name: 'pickTaskId', nullable: false }, { name: 'skuId', nullable: false }, { name: 'status', nullable: false }, );
+    const optionalNumberProperties = createWorkorderPickedItemResponseOptionalProperties({ name: 'qtyConsumed', nullable: false }, { name: 'qtyPicked', nullable: false }, { name: 'qtyRemaining', nullable: false }, );
     const optionalBooleanProperties = createWorkorderPickedItemResponseOptionalProperties();
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

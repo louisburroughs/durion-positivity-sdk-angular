@@ -15,6 +15,18 @@ import { JurisdictionTax } from './jurisdictionTax';
  */
 export interface LineItemTax { 
     /**
+     * Whether a claimed exemption was denied (unbacked by a valid certificate) and the line taxed anyway
+     */
+    exemptionDenied?: boolean;
+    /**
+     * Resolved exemption reason echoed onto this line (honored or denied)
+     */
+    exemptionReasonCode?: LineItemTaxExemptionReasonCodeEnum;
+    /**
+     * Per-jurisdiction tax breakdown for this line item; rows sum to taxAmount
+     */
+    jurisdictions?: Array<JurisdictionTax>;
+    /**
      * Line item identifier
      */
     lineItemId: string;
@@ -27,25 +39,13 @@ export interface LineItemTax {
      */
     taxAmount: number;
     /**
-     * Line total including tax
-     */
-    total: number;
-    /**
      * Whether this line item is tax exempt (resolved exemption produced zero-rate rows)
      */
     taxExempt: boolean;
     /**
-     * Resolved exemption reason echoed onto this line (honored or denied)
+     * Line total including tax
      */
-    exemptionReasonCode?: LineItemTaxExemptionReasonCodeEnum;
-    /**
-     * Whether a claimed exemption was denied (unbacked by a valid certificate) and the line taxed anyway
-     */
-    exemptionDenied?: boolean;
-    /**
-     * Per-jurisdiction tax breakdown for this line item; rows sum to taxAmount
-     */
-    jurisdictions?: Array<JurisdictionTax>;
+    total: number;
 }
 export enum LineItemTaxExemptionReasonCodeEnum {
     Resale = 'RESALE',
@@ -95,10 +95,10 @@ export function instanceOfLineItemTax(value: object): value is LineItemTax {
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createLineItemTaxPropertyNames('lineItemId', 'subtotal', 'taxAmount', 'total', 'taxExempt', );
-    const optionalStringProperties = createLineItemTaxOptionalProperties({ name: 'lineItemId', nullable: false }, { name: 'exemptionReasonCode', nullable: false }, );
+    const requiredProperties = createLineItemTaxPropertyNames('lineItemId', 'subtotal', 'taxAmount', 'taxExempt', 'total', );
+    const optionalStringProperties = createLineItemTaxOptionalProperties({ name: 'exemptionReasonCode', nullable: false }, { name: 'lineItemId', nullable: false }, );
     const optionalNumberProperties = createLineItemTaxOptionalProperties({ name: 'subtotal', nullable: false }, { name: 'taxAmount', nullable: false }, { name: 'total', nullable: false }, );
-    const optionalBooleanProperties = createLineItemTaxOptionalProperties({ name: 'taxExempt', nullable: false }, { name: 'exemptionDenied', nullable: false }, );
+    const optionalBooleanProperties = createLineItemTaxOptionalProperties({ name: 'exemptionDenied', nullable: false }, { name: 'taxExempt', nullable: false }, );
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
         && optionalStringProperties.every((property) => isOptionalLineItemTaxPropertyOfType(_v, property.name, 'string', property.nullable))

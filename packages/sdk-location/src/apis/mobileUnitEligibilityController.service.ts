@@ -36,8 +36,8 @@ export class MobileUnitEligibilityControllerService extends BaseService {
     }
 
     /**
-     * Find eligible mobile units
-     * Return eligible active units for a service request.
+     * Find Eligible Mobile Units for Address
+     * Finds the ACTIVE mobile units whose coverage rules include a postal code on a given date, ordered by ascending rule priority. Use this tool when dispatching a mobile service request to a customer address; use listMobileUnits instead for plain enumeration without eligibility matching. Preconditions: coverage rules must already link units to service areas containing the postal code; units whose status is not ACTIVE are excluded. Required inputs: postalCode, countryCode and at (an ISO-8601 instant), all mandatory; the instant is reduced to a UTC calendar date for validFrom and validTo matching. No events are emitted and no state changes; this is a read-only projection. Returns 200 with the eligible units, empty when nothing covers the address on that date. 
      * @endpoint get /v1/mobile-units:eligible
      * @param postalCode 
      * @param countryCode 

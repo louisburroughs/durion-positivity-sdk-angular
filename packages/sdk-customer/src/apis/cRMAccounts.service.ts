@@ -78,8 +78,8 @@ export class CRMAccountsService extends BaseService {
     }
 
     /**
-     * Browse parties
-     * Browse parties with paging and sorting. The service sorts by legalName ascending by default, appends partyId ascending as a stable tie-breaker whenever the requested sort list does not explicitly include partyId, and applies case-insensitive legalName sorting.
+     * Browse Customer Directory
+     * Returns a paged customer directory that unifies commercial parties and standalone individual customers, with person names and contact points resolved from pos-people. Use this tool when listing or typeahead-filtering customers by name, status, party type, or customer number; do not use searchParties, which filters commercial parties only by structured criteria, and use getParty instead when the party id is already known. Preconditions: none; an empty page is returned when nothing matches, and a pos-people outage degrades person names to null rather than failing the request. Required inputs: none; page defaults to 0 with size 20, the name filter matches legal name, display name, or customer number case-insensitively, status matches ACTIVE, INACTIVE, ON_HOLD, or MERGED, sortField is name (default) or customerNumber, and sortOrder is asc (default) or desc with partyId as a stable tie-breaker. Emits a CUSTOMER_PARTY_BROWSE audit event; no state changes occur. Returns 200 with an empty results array rather than an error when no party matches the filters. 
      * @endpoint get /v1/crm/accounts/parties
      * @param pageable Pagination parameters (page, size, sort). The service uses legalName,asc by default and appends partyId,asc as a stable tie-breaker whenever the requested sort list does not explicitly include partyId; legalName sorting is case-insensitive.
      * @param name Filter by name (case-insensitive contains on legal/display name)
@@ -210,8 +210,8 @@ export class CRMAccountsService extends BaseService {
     }
 
     /**
-     * Check for duplicate commercial parties
-     * Search for existing parties with a similar legal name to detect potential duplicates before creating a new commercial account.
+     * Check Commercial Party Duplicates
+     * Checks for existing commercial parties whose legal name contains the supplied name, flagging case-insensitive exact matches as EXACT with score 1.0 and other containment matches as FUZZY with score 0.7. Use this tool before createCrmCommercialAccount to avoid creating a duplicate customer; do not use searchParties for this, which does not classify match strength or surface an exactMatchPartyId. Preconditions: none; the check reads existing commercial parties only. Required inputs: legalName as a query parameter with at least 2 non-whitespace characters; there is no request body. Emits a CUSTOMER_PARTY_DUPLICATE_CHECK audit event; no state changes occur. Returns 400 when legalName is blank or shorter than 2 characters after trimming, and 200 with duplicatesFound false when no similar party exists. 
      * @endpoint get /v1/crm/accounts/parties/duplicate-check
      * @param legalName Legal name to check for duplicates
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -282,18 +282,21 @@ export class CRMAccountsService extends BaseService {
     }
 
     /**
-     * Create commercial account
-     * Create a new commercial party/account in the CRM system
+     * Create Commercial Account
+     * Creates a commercial party record with status ACTIVE and a generated customer number of the form CUST-XXXXXXXX. Use this tool when onboarding a new commercial customer; do not use searchParties or checkPartyDuplicates, which only look up existing parties, and run checkPartyDuplicates first to avoid creating a duplicate, because no uniqueness check is applied here. Preconditions: none beyond authorization; the service performs no duplicate detection on legalName. Required inputs: legalName (non-blank, max 255); partyType defaults to COMMERCIAL and must be PERSON, COMMERCIAL, or UNKNOWN when supplied; displayName, taxId, billingTermsId, and externalIdentifiers are optional. Emits a CUSTOMER_PARTY_CREATE event and publishes a party-changed customer fact. Returns 400 when legalName is missing or blank, or when partyType is not a recognized value. 
      * @endpoint post /v1/crm/accounts/parties
-     * @param createCommercialAccountRequest 
+     * @param createCommercialAccountRequest Commercial party to create; legalName is the only mandatory field and no duplicate check is applied.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public createCommercialAccount(createCommercialAccountRequest?: CreateCommercialAccountRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<CreateCommercialAccountResponse>;
-    public createCommercialAccount(createCommercialAccountRequest?: CreateCommercialAccountRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<CreateCommercialAccountResponse>>;
-    public createCommercialAccount(createCommercialAccountRequest?: CreateCommercialAccountRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<CreateCommercialAccountResponse>>;
-    public createCommercialAccount(createCommercialAccountRequest?: CreateCommercialAccountRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public createCrmCommercialAccount(createCommercialAccountRequest: CreateCommercialAccountRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<CreateCommercialAccountResponse>;
+    public createCrmCommercialAccount(createCommercialAccountRequest: CreateCommercialAccountRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<CreateCommercialAccountResponse>>;
+    public createCrmCommercialAccount(createCommercialAccountRequest: CreateCommercialAccountRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<CreateCommercialAccountResponse>>;
+    public createCrmCommercialAccount(createCommercialAccountRequest: CreateCommercialAccountRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (createCommercialAccountRequest === null || createCommercialAccountRequest === undefined) {
+            throw new Error('Required parameter createCommercialAccountRequest was null or undefined when calling createCrmCommercialAccount.');
+        }
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -349,21 +352,24 @@ export class CRMAccountsService extends BaseService {
     }
 
     /**
-     * Create vehicle for party
-     * Associate a new vehicle with a party/customer
+     * Associate Vehicle With Party
+     * Associates a vehicle VIN with a commercial party by appending it to the party\&#39;s owned VIN list. Use this tool when recording that a commercial account operates a vehicle; do not use it to change vehicle details, and note the VIN list is account-level rather than a full vehicle record. Preconditions: a commercial party must exist for the supplied partyId, and the VIN must not already be associated with that party. Required inputs: partyId (UUID) as a path parameter and vinNumber (max 17 characters) in the body; unitNumber, description, licensePlate, and licensePlateRegion are optional. Emits a CUSTOMER_VEHICLE_CREATE event and republishes the party-changed customer fact. Returns 404 when the party does not exist, 409 when the VIN is already associated with the party, and 400 when vinNumber is missing or blank. 
      * @endpoint post /v1/crm/accounts/parties/{partyId}/vehicles
      * @param partyId Party ID
-     * @param createVehicleForPartyRequest 
+     * @param createVehicleForPartyRequest Vehicle identification to associate with the party, keyed by VIN.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public createVehicleForParty(partyId: string, createVehicleForPartyRequest?: CreateVehicleForPartyRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<CreateVehicleForPartyResponse>;
-    public createVehicleForParty(partyId: string, createVehicleForPartyRequest?: CreateVehicleForPartyRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<CreateVehicleForPartyResponse>>;
-    public createVehicleForParty(partyId: string, createVehicleForPartyRequest?: CreateVehicleForPartyRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<CreateVehicleForPartyResponse>>;
-    public createVehicleForParty(partyId: string, createVehicleForPartyRequest?: CreateVehicleForPartyRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public createVehicleForParty(partyId: string, createVehicleForPartyRequest: CreateVehicleForPartyRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<CreateVehicleForPartyResponse>;
+    public createVehicleForParty(partyId: string, createVehicleForPartyRequest: CreateVehicleForPartyRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<CreateVehicleForPartyResponse>>;
+    public createVehicleForParty(partyId: string, createVehicleForPartyRequest: CreateVehicleForPartyRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<CreateVehicleForPartyResponse>>;
+    public createVehicleForParty(partyId: string, createVehicleForPartyRequest: CreateVehicleForPartyRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (partyId === null || partyId === undefined) {
             throw new Error('Required parameter partyId was null or undefined when calling createVehicleForParty.');
+        }
+        if (createVehicleForPartyRequest === null || createVehicleForPartyRequest === undefined) {
+            throw new Error('Required parameter createVehicleForPartyRequest was null or undefined when calling createVehicleForParty.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -420,8 +426,68 @@ export class CRMAccountsService extends BaseService {
     }
 
     /**
-     * Get account tier
-     * Retrieve the tier level for a specific account
+     * Get Account Communication Preferences
+     * Returns a legacy account-scoped communication-preference projection for a commercial party in which every channel currently reports the placeholder value N/A. Use this tool only for the legacy accounts-scoped path; use getCommunicationPreferences instead, which reads the persisted per-party preference record with real channel values and consent flags. Preconditions: a commercial party must exist for the supplied partyId. Required inputs: partyId (UUID) as a path parameter; there is no request body. No events are emitted and no state changes; this is a read-only projection. Returns 404 when no commercial party exists for the supplied partyId. 
+     * @endpoint get /v1/crm/accounts/parties/{partyId}/communicationPreferences
+     * @param partyId Party ID
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public getAccountCommunicationPreferences(partyId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<GetCommunicationPreferencesResponse>;
+    public getAccountCommunicationPreferences(partyId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<GetCommunicationPreferencesResponse>>;
+    public getAccountCommunicationPreferences(partyId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<GetCommunicationPreferencesResponse>>;
+    public getAccountCommunicationPreferences(partyId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (partyId === null || partyId === undefined) {
+            throw new Error('Required parameter partyId was null or undefined when calling getAccountCommunicationPreferences.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/crm/accounts/parties/${this.configuration.encodeParam({name: "partyId", value: partyId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/communicationPreferences`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<GetCommunicationPreferencesResponse>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Get Account Tier
+     * Returns the currently assigned tier for a commercial account, including who assigned it, when, and whether a manual override is active; unassigned accounts report STANDARD. Use this tool when the stored tier of a known commercial account is needed; do not use resolveAccountTier, which recomputes a recommended tier from revenue and contract inputs. Preconditions: a commercial party must exist for the accountId; person parties have no tier. Required inputs: accountId (UUID) as a path parameter; there is no request body. Emits a CUSTOMER_ACCOUNT_TIER_GET audit event; no state changes occur. Returns 404 when no commercial account exists for the supplied accountId. 
      * @endpoint get /v1/crm/accounts/{accountId}/tier
      * @param accountId Account ID
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -480,68 +546,8 @@ export class CRMAccountsService extends BaseService {
     }
 
     /**
-     * Get communication preferences
-     * Retrieve communication preferences and consent flags for a party
-     * @endpoint get /v1/crm/accounts/parties/{partyId}/communicationPreferences
-     * @param partyId Party ID
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     * @param options additional options
-     */
-    public getCommunicationPreferences1(partyId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<GetCommunicationPreferencesResponse>;
-    public getCommunicationPreferences1(partyId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<GetCommunicationPreferencesResponse>>;
-    public getCommunicationPreferences1(partyId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<GetCommunicationPreferencesResponse>>;
-    public getCommunicationPreferences1(partyId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
-        if (partyId === null || partyId === undefined) {
-            throw new Error('Required parameter partyId was null or undefined when calling getCommunicationPreferences1.');
-        }
-
-        let localVarHeaders = this.defaultHeaders;
-
-        // authentication (bearerAuth) required
-        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
-
-        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
-            'application/json'
-        ]);
-        if (localVarHttpHeaderAcceptSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
-        }
-
-        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
-
-        const localVarTransferCache: boolean = options?.transferCache ?? true;
-
-
-        let responseType_: 'text' | 'json' | 'blob' = 'json';
-        if (localVarHttpHeaderAcceptSelected) {
-            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
-                responseType_ = 'text';
-            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
-                responseType_ = 'json';
-            } else {
-                responseType_ = 'blob';
-            }
-        }
-
-        let localVarPath = `/v1/crm/accounts/parties/${this.configuration.encodeParam({name: "partyId", value: partyId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/communicationPreferences`;
-        const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<GetCommunicationPreferencesResponse>('get', `${basePath}${localVarPath}`,
-            {
-                context: localVarHttpContext,
-                responseType: <any>responseType_,
-                ...(withCredentials ? { withCredentials } : {}),
-                headers: localVarHeaders,
-                observe: observe,
-                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * Get party details
-     * Retrieve details for a specific party by ID
+     * Get Party Details
+     * Returns the identity projection of a single party, resolving commercial parties first and falling back to person parties, whose display name is resolved from the person directory. Use this tool when a party id is already known; use browseParties or searchParties instead when locating a party by name, status, or customer number. Preconditions: a commercial or person party must exist for the supplied partyId. Required inputs: partyId (UUID) as a path parameter; there is no request body. No events are emitted and no state changes; this is a read-only projection. Returns 404 when neither a commercial nor a person party exists for the supplied partyId. 
      * @endpoint get /v1/crm/accounts/parties/{partyId}
      * @param partyId Party ID
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -600,8 +606,8 @@ export class CRMAccountsService extends BaseService {
     }
 
     /**
-     * List billing terms
-     * Returns the reference list of all available billing terms. This is a static reference endpoint; it does not vary per party or account.
+     * List Billing Term Options
+     * Returns the static reference list of billing term options: NET_30, NET_60, NET_90, COD, and PREPAID, each with a display label and net-day count. Use this tool when populating a billing-terms dropdown before createCrmCommercialAccount or upsertPartyBillingRules; do not use upsertPartyBillingRules to discover valid terms, which writes configuration rather than listing options. Preconditions: none; the list is compiled into the service and identical for every caller. Required inputs: none; there are no parameters and no request body. No events are emitted and no state changes; this is a read-only reference lookup. Returns 200 with the full five-entry list in every successful call; there are no business error responses. 
      * @endpoint get /v1/crm/billing-terms
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
@@ -656,21 +662,24 @@ export class CRMAccountsService extends BaseService {
     }
 
     /**
-     * Merge parties
-     * Merge multiple parties into a single party record
+     * Merge Duplicate Commercial Parties
+     * Merges one duplicate commercial party into a surviving party: relationships are reassigned to the survivor, external identifiers and vehicle VINs are copied over, and the losing party\&#39;s status is set to MERGED. Use this tool when checkPartyDuplicates has confirmed two records represent the same customer; do not use createCrmCommercialAccount to work around duplicates, and note the merge is not reversible through this API. Preconditions: both the surviving party (path) and losing party (body) must exist as commercial parties and must be different records. Required inputs: partyId of the survivor as a path parameter, plus losingPartyId (UUID string) and a justification of up to 1000 characters in the body. Emits a CUSTOMER_PARTY_MERGE event and republishes customer facts for both parties and for contacts whose account linkage moved. Returns 404 when either party cannot be found, and 400 when losingPartyId or justification is missing, losingPartyId is not a valid UUID, or both ids refer to the same party. 
      * @endpoint post /v1/crm/accounts/parties/{partyId}/merge
      * @param partyId Target party ID
-     * @param mergePartiesRequest 
+     * @param mergePartiesRequest Identifies the losing party to fold into the survivor and records the audit justification for the merge.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public mergeParties(partyId: string, mergePartiesRequest?: MergePartiesRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<MergePartiesResponse>;
-    public mergeParties(partyId: string, mergePartiesRequest?: MergePartiesRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<MergePartiesResponse>>;
-    public mergeParties(partyId: string, mergePartiesRequest?: MergePartiesRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<MergePartiesResponse>>;
-    public mergeParties(partyId: string, mergePartiesRequest?: MergePartiesRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public mergeParties(partyId: string, mergePartiesRequest: MergePartiesRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<MergePartiesResponse>;
+    public mergeParties(partyId: string, mergePartiesRequest: MergePartiesRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<MergePartiesResponse>>;
+    public mergeParties(partyId: string, mergePartiesRequest: MergePartiesRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<MergePartiesResponse>>;
+    public mergeParties(partyId: string, mergePartiesRequest: MergePartiesRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (partyId === null || partyId === undefined) {
             throw new Error('Required parameter partyId was null or undefined when calling mergeParties.');
+        }
+        if (mergePartiesRequest === null || mergePartiesRequest === undefined) {
+            throw new Error('Required parameter mergePartiesRequest was null or undefined when calling mergeParties.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -727,10 +736,10 @@ export class CRMAccountsService extends BaseService {
     }
 
     /**
-     * Resolve account tier
-     * Resolve or compute the account tier based on business rules
+     * Resolve Account Tier
+     * Computes the recommended tier for a commercial account from annual revenue, active contract count, and account age thresholds, and optionally applies it to the account. Use this tool when a tier recommendation or recalculation is needed; do not use getAccountTier, which only reads the stored tier without recomputing it. Preconditions: a commercial party must exist for the accountId; when applyTier is true, a manual tier override on the account blocks application unless forceRecalculation is also true. Required inputs: accountId (UUID string); annualRevenue, activeContractCount, and accountAgeMonths are optional scoring inputs, and applyTier and forceRecalculation both default to false, so the default call is a dry run. Emits a CUSTOMER_ACCOUNT_TIER_RESOLVE event; when the tier is applied the account record is updated with assignedBy SYSTEM and a customer fact is republished. Returns 404 when the account does not exist or the accountId is not a valid UUID. 
      * @endpoint post /v1/crm/accounts/tierResolve
-     * @param resolveAccountTierRequest 
+     * @param resolveAccountTierRequest Tier scoring inputs for one account, plus flags controlling whether the resolved tier is applied.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -797,10 +806,10 @@ export class CRMAccountsService extends BaseService {
     }
 
     /**
-     * Resolve party display names
-     * Batch-resolve party ids to display names. Consumed server-side by sibling services (e.g. pos-invoice) that store only the party id and need the display name to enrich finder/search rows. Unknown or unresolvable ids are omitted from the response.
+     * Resolve Party Display Names
+     * Batch-resolves party ids to display names for both commercial and person parties, for sibling services such as pos-invoice that store only the party id. Use this tool when enriching rows that already carry party ids; do not use getParty, which returns the full identity projection for a single party per call. Preconditions: none; unknown or unresolvable ids are silently omitted from the response rather than causing an error. Required inputs: partyIds, a non-empty list of up to 200 UUIDs; null entries and duplicates are dropped before resolution. Emits a CUSTOMER_PARTY_RESOLVE audit event; no state changes occur. Returns 400 when partyIds is empty or exceeds 200 entries, and 200 with a possibly shorter list than requested when some ids cannot be resolved. 
      * @endpoint post /v1/crm/accounts/parties:resolve
-     * @param partyNameResolveRequest 
+     * @param partyNameResolveRequest Batch of party ids whose display names should be resolved.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -867,10 +876,10 @@ export class CRMAccountsService extends BaseService {
     }
 
     /**
-     * Search parties
-     * Search for parties based on various criteria
+     * Search Commercial Parties
+     * Searches commercial party records by structured criteria such as name, tax id, party type, and status, returning all matches in a single unpaged result set. Use this tool when filtering commercial parties by structured attributes like taxId; use browseParties instead for the paged, unified directory that also includes individual customers, and checkPartyDuplicates for pre-create duplicate detection by legal name. Preconditions: none; an omitted or empty body matches every commercial party. Required inputs: none; name, email, phone, taxId, partyType, and status are all optional filters, and the pageNumber and pageSize fields are accepted but not applied, so the full match list is always returned. Emits a CUSTOMER_PARTY_SEARCH audit event; no state changes occur. Returns 200 with an empty results array rather than an error when no party matches. 
      * @endpoint post /v1/crm/accounts/parties/search
-     * @param searchPartiesRequest 
+     * @param searchPartiesRequest Optional structured filter criteria; every supplied field narrows the match and an empty body matches all commercial parties.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -934,95 +943,24 @@ export class CRMAccountsService extends BaseService {
     }
 
     /**
-     * Upsert billing rules for a party
-     * Create or update the billing rules configuration for a commercial party.
-     * @endpoint put /v1/crm/accounts/parties/{partyId}/billing-rules
-     * @param partyId Party ID
-     * @param upsertBillingRulesRequest 
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     * @param options additional options
-     */
-    public upsertBillingRules(partyId: string, upsertBillingRulesRequest: UpsertBillingRulesRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<BillingRuleRef>;
-    public upsertBillingRules(partyId: string, upsertBillingRulesRequest: UpsertBillingRulesRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<BillingRuleRef>>;
-    public upsertBillingRules(partyId: string, upsertBillingRulesRequest: UpsertBillingRulesRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<BillingRuleRef>>;
-    public upsertBillingRules(partyId: string, upsertBillingRulesRequest: UpsertBillingRulesRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
-        if (partyId === null || partyId === undefined) {
-            throw new Error('Required parameter partyId was null or undefined when calling upsertBillingRules.');
-        }
-        if (upsertBillingRulesRequest === null || upsertBillingRulesRequest === undefined) {
-            throw new Error('Required parameter upsertBillingRulesRequest was null or undefined when calling upsertBillingRules.');
-        }
-
-        let localVarHeaders = this.defaultHeaders;
-
-        // authentication (bearerAuth) required
-        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
-
-        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
-            'application/json'
-        ]);
-        if (localVarHttpHeaderAcceptSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
-        }
-
-        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
-
-        const localVarTransferCache: boolean = options?.transferCache ?? true;
-
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-            'application/json'
-        ];
-        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
-        if (httpContentTypeSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
-        }
-
-        let responseType_: 'text' | 'json' | 'blob' = 'json';
-        if (localVarHttpHeaderAcceptSelected) {
-            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
-                responseType_ = 'text';
-            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
-                responseType_ = 'json';
-            } else {
-                responseType_ = 'blob';
-            }
-        }
-
-        let localVarPath = `/v1/crm/accounts/parties/${this.configuration.encodeParam({name: "partyId", value: partyId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/billing-rules`;
-        const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<BillingRuleRef>('put', `${basePath}${localVarPath}`,
-            {
-                context: localVarHttpContext,
-                body: upsertBillingRulesRequest,
-                responseType: <any>responseType_,
-                ...(withCredentials ? { withCredentials } : {}),
-                headers: localVarHeaders,
-                observe: observe,
-                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * Create or update communication preferences
-     * Set or update communication preferences and consent flags for a party
+     * Upsert Account Communication Preferences
+     * Acknowledges an account-scoped communication-preference submission for a commercial party without persisting any preference values; this legacy path only validates the party and returns SUCCESS. Use this tool only for the legacy accounts-scoped path; use upsertCommunicationPreferences instead, which actually stores channel preferences and consent flags per party. Preconditions: a commercial party must exist for the supplied partyId. Required inputs: partyId (UUID) as a path parameter and a non-null JSON body; the preference fields themselves are accepted but not stored. Emits a CUSTOMER_COMMUNICATION_PREFERENCE_UPSERT audit event; no preference record is written. Returns 404 when no commercial party exists for the supplied partyId, and 400 when the request body is missing. 
      * @endpoint post /v1/crm/accounts/parties/{partyId}/communicationPreferences
      * @param partyId Party ID
-     * @param upsertCommunicationPreferencesRequest 
+     * @param upsertCommunicationPreferencesRequest Channel preference values acknowledged by this legacy endpoint; the values are validated but not stored.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public upsertCommunicationPreferences1(partyId: string, upsertCommunicationPreferencesRequest?: UpsertCommunicationPreferencesRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<UpsertCommunicationPreferencesResponse>;
-    public upsertCommunicationPreferences1(partyId: string, upsertCommunicationPreferencesRequest?: UpsertCommunicationPreferencesRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<UpsertCommunicationPreferencesResponse>>;
-    public upsertCommunicationPreferences1(partyId: string, upsertCommunicationPreferencesRequest?: UpsertCommunicationPreferencesRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<UpsertCommunicationPreferencesResponse>>;
-    public upsertCommunicationPreferences1(partyId: string, upsertCommunicationPreferencesRequest?: UpsertCommunicationPreferencesRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public upsertAccountCommunicationPreferences(partyId: string, upsertCommunicationPreferencesRequest: UpsertCommunicationPreferencesRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<UpsertCommunicationPreferencesResponse>;
+    public upsertAccountCommunicationPreferences(partyId: string, upsertCommunicationPreferencesRequest: UpsertCommunicationPreferencesRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<UpsertCommunicationPreferencesResponse>>;
+    public upsertAccountCommunicationPreferences(partyId: string, upsertCommunicationPreferencesRequest: UpsertCommunicationPreferencesRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<UpsertCommunicationPreferencesResponse>>;
+    public upsertAccountCommunicationPreferences(partyId: string, upsertCommunicationPreferencesRequest: UpsertCommunicationPreferencesRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (partyId === null || partyId === undefined) {
-            throw new Error('Required parameter partyId was null or undefined when calling upsertCommunicationPreferences1.');
+            throw new Error('Required parameter partyId was null or undefined when calling upsertAccountCommunicationPreferences.');
+        }
+        if (upsertCommunicationPreferencesRequest === null || upsertCommunicationPreferencesRequest === undefined) {
+            throw new Error('Required parameter upsertCommunicationPreferencesRequest was null or undefined when calling upsertAccountCommunicationPreferences.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -1068,6 +1006,80 @@ export class CRMAccountsService extends BaseService {
             {
                 context: localVarHttpContext,
                 body: upsertCommunicationPreferencesRequest,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Upsert Party Billing Rules
+     * Creates or replaces the embedded billing-rules configuration on a commercial party, covering PO requirement, tax exemption, credit hold, auto-pay, payment terms, credit limit, currency, and invoice delivery method. Use this tool when configuring how a commercial account is billed; do not use createCrmCommercialAccount, which only sets billingTermsId at creation and cannot change billing flags afterwards. Preconditions: a commercial party must exist for the supplied partyId; the whole rules block is replaced on every call rather than patched field by field. Required inputs: partyId (UUID) as a path parameter; boolean flags poRequired, taxExempt, creditHold, and autoPayEnabled default to false when omitted, and paymentTerms, creditLimit, currency, and invoiceDeliveryMethod (EMAIL, MAIL, PORTAL) are optional. Emits a CUSTOMER_BILLING_RULES_UPSERT event; the rules are stored on the party record itself. Returns 404 when no commercial party exists for the supplied partyId. 
+     * @endpoint put /v1/crm/accounts/parties/{partyId}/billing-rules
+     * @param partyId Party ID
+     * @param upsertBillingRulesRequest Complete billing-rules configuration that replaces the party\&#39;s current rules block.
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public upsertPartyBillingRules(partyId: string, upsertBillingRulesRequest: UpsertBillingRulesRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<BillingRuleRef>;
+    public upsertPartyBillingRules(partyId: string, upsertBillingRulesRequest: UpsertBillingRulesRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<BillingRuleRef>>;
+    public upsertPartyBillingRules(partyId: string, upsertBillingRulesRequest: UpsertBillingRulesRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<BillingRuleRef>>;
+    public upsertPartyBillingRules(partyId: string, upsertBillingRulesRequest: UpsertBillingRulesRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (partyId === null || partyId === undefined) {
+            throw new Error('Required parameter partyId was null or undefined when calling upsertPartyBillingRules.');
+        }
+        if (upsertBillingRulesRequest === null || upsertBillingRulesRequest === undefined) {
+            throw new Error('Required parameter upsertBillingRulesRequest was null or undefined when calling upsertPartyBillingRules.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/crm/accounts/parties/${this.configuration.encodeParam({name: "partyId", value: partyId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/billing-rules`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<BillingRuleRef>('put', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                body: upsertBillingRulesRequest,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,

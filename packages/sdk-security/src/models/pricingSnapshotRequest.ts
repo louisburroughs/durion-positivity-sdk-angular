@@ -14,15 +14,15 @@ import { PricingRuleTraceEntryRequest } from './pricingRuleTraceEntryRequest';
  * Request to create a pricing snapshot with its rule-evaluation trace
  */
 export interface PricingSnapshotRequest { 
-    quoteContext?: any | null;
-    /**
-     * Final computed price
-     */
-    finalPrice: number;
     /**
      * Ordered rule-evaluation steps that produced the price
      */
     evaluationSteps?: Array<PricingRuleTraceEntryRequest>;
+    /**
+     * Final computed price
+     */
+    finalPrice: number;
+    quoteContext?: any | null;
 }
 
 function isOptionalPricingSnapshotRequestPropertyOfType(

@@ -46,10 +46,10 @@ export class CreditMemosService extends BaseService {
     }
 
     /**
-     * Create credit memo
-     * Create a new Credit Memo to reverse invoice charges. Reduces Accounts Receivable by posting offsetting GL entries. Requires finalized invoice and credit amount within outstanding balance.
+     * Create Credit Memo
+     * Creates and posts a credit memo against a finalized invoice, reversing invoice charges by posting debit revenue and tax, credit Accounts Receivable, and reducing the invoice\&#39;s outstanding balance. Use this tool for AR corrections against a specific invoice; do not use applyCustomerCredit, which draws down a standing customer credit, and do not use voidCreditMemo, which backs out a memo already posted. Preconditions: the invoice must exist and be finalized, and creditAmount must not exceed the invoice\&#39;s outstanding balance. Required inputs: originalInvoiceId (UUID), creditAmount (min 0.01) and reasonCode (max 50 chars, kept for the audit trail); justificationNote (max 1000 chars) is optional. Emits an ACCOUNTING_CREDIT_MEMO_CREATE event and posts the reversing GL entries. Returns 404 when the invoice is not found, 409 when the amount exceeds the outstanding balance or the invoice is not finalized, and 401 when no authenticated user is present. 
      * @endpoint post /v1/accounting/credit-memos
-     * @param createCreditMemoRequest 
+     * @param createCreditMemoRequest Credit to issue against a finalized invoice, with the audit reason code.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -116,8 +116,8 @@ export class CreditMemosService extends BaseService {
     }
 
     /**
-     * Get credit memo
-     * Retrieve details for a specific Credit Memo by ID. Includes full audit trail and current invoice balance.
+     * Get Credit Memo
+     * Returns one credit memo with its amounts, status, audit trail and the invoice\&#39;s current balance. Use this tool when the memo id is already known; use listCreditMemos instead when searching by customer, invoice or status. Preconditions: the credit memo must exist. Required inputs: creditMemoId (UUID) as a path parameter; there is no request body. Emits an ACCOUNTING_CREDIT_MEMO_GET audit event; no state changes. Returns 404 when no credit memo exists for the supplied id. 
      * @endpoint get /v1/accounting/credit-memos/{creditMemoId}
      * @param creditMemoId Credit Memo ID
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -176,8 +176,8 @@ export class CreditMemosService extends BaseService {
     }
 
     /**
-     * List credit memos
-     * Retrieve paginated credit memos with optional filters. Filter by customer, invoice, or status. Supports standard pagination parameters (page, size, sort).
+     * List Credit Memos
+     * Lists credit memos as a paginated projection, optionally filtered by customer, original invoice or lifecycle status. Use this tool when browsing or reconciling memos; do not use getCreditMemo, which fetches one memo by its known id. Preconditions: none beyond the caller holding accounting:credit-memo:read. Required inputs: none; customerId, originalInvoiceId and status (DRAFT, POSTED, APPLIED, VOIDED) are optional filters, with standard page, size and sort parameters. Emits an ACCOUNTING_CREDIT_MEMO_LIST audit event; no state changes. Returns 400 when pagination or filter parameters are invalid. 
      * @endpoint get /v1/accounting/credit-memos
      * @param pageable 
      * @param customerId Filter by customer ID
@@ -278,11 +278,11 @@ export class CreditMemosService extends BaseService {
     }
 
     /**
-     * Void a posted credit memo
-     * Void a POSTED Credit Memo: posts the mirror GL entry (Dr AR / Cr Revenue + Cr Sales-Tax Payable) dated at void time and restores the invoice\&#39;s outstanding balance. The memo\&#39;s original posting-period figures are never restated; the tax-liability report restores the reversed tax in the void\&#39;s period. Only POSTED memos are voidable — APPLIED memos have been consumed and VOIDED is terminal.
+     * Void Credit Memo
+     * Voids a POSTED credit memo by posting the mirror GL entry (debit AR, credit Revenue and Sales-Tax Payable) dated at void time, restoring the invoice\&#39;s outstanding balance. Use this tool to back out a memo issued in error; do not use createCreditMemo, which issues new credit, and note that APPLIED memos have been consumed and cannot be voided. Preconditions: the credit memo must exist and be in POSTED status; VOIDED is terminal. Required inputs: creditMemoId (UUID) as a path parameter and a non-blank voidReason (max 1000 chars). Emits an ACCOUNTING_CREDIT_MEMO_VOID event; the memo\&#39;s original posting-period figures are never restated, and the tax-liability report restores the reversed tax in the void\&#39;s period so GL drift stays zero. Returns 404 when the memo is not found, 409 when it is not POSTED, and 400 when the void reason is missing or blank. 
      * @endpoint post /v1/accounting/credit-memos/{creditMemoId}/void
      * @param creditMemoId Credit Memo id
-     * @param voidCreditMemoRequest 
+     * @param voidCreditMemoRequest Mandatory audit reason for voiding the posted memo.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options

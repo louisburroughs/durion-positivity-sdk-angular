@@ -14,13 +14,13 @@
  */
 export interface BulkLoadJobCreateRequest { 
     /**
-     * Name of the source file to be uploaded for this job
-     */
-    fileName: string;
-    /**
      * Target domain for the bulk load
      */
     domainType: BulkLoadJobCreateRequestDomainTypeEnum;
+    /**
+     * Name of the source file to be uploaded for this job
+     */
+    fileName: string;
     /**
      * Identifier of the location to scope the load to, if applicable
      */
@@ -77,8 +77,8 @@ export function instanceOfBulkLoadJobCreateRequest(value: object): value is Bulk
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createBulkLoadJobCreateRequestPropertyNames('fileName', 'domainType', );
-    const optionalStringProperties = createBulkLoadJobCreateRequestOptionalProperties({ name: 'fileName', nullable: false }, { name: 'domainType', nullable: false }, { name: 'locationId', nullable: false }, );
+    const requiredProperties = createBulkLoadJobCreateRequestPropertyNames('domainType', 'fileName', );
+    const optionalStringProperties = createBulkLoadJobCreateRequestOptionalProperties({ name: 'domainType', nullable: false }, { name: 'fileName', nullable: false }, { name: 'locationId', nullable: false }, );
     const optionalNumberProperties = createBulkLoadJobCreateRequestOptionalProperties();
     const optionalBooleanProperties = createBulkLoadJobCreateRequestOptionalProperties();
 

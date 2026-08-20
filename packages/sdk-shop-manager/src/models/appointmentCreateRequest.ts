@@ -10,7 +10,7 @@
 
 
 /**
- * Appointment creation request body
+ * Request to create an appointment from an estimate or workorder source document
  */
 export interface AppointmentCreateRequest { 
     /**
@@ -22,6 +22,10 @@ export interface AppointmentCreateRequest {
      */
     crmVehicleId: string;
     /**
+     * Appointment end instant in UTC (ISO-8601); must be after startAt
+     */
+    endAt: string;
+    /**
      * Facility/location identifier where the appointment is scheduled
      */
     locationId: string;
@@ -30,29 +34,25 @@ export interface AppointmentCreateRequest {
      */
     resourceId?: string;
     /**
-     * Appointment start instant in UTC (ISO-8601)
-     */
-    startAt: string;
-    /**
-     * Appointment end instant in UTC (ISO-8601); must be after startAt
-     */
-    endAt: string;
-    /**
      * Service request identifiers included in this appointment (at least one required)
      */
     serviceRequestIds: Array<string>;
     /**
-     * Optional reference linking the appointment to a workorder
+     * External identifier of the originating estimate or workorder; required when sourceType is set
      */
-    workorderLinkRef?: string;
+    sourceId?: string;
     /**
      * Originating workexec source type; when set, sourceId must also be provided
      */
     sourceType?: AppointmentCreateRequestSourceTypeEnum;
     /**
-     * External identifier of the originating estimate or workorder; required when sourceType is set
+     * Appointment start instant in UTC (ISO-8601)
      */
-    sourceId?: string;
+    startAt: string;
+    /**
+     * Optional reference linking the appointment to a workorder
+     */
+    workorderLinkRef?: string;
 }
 export enum AppointmentCreateRequestSourceTypeEnum {
     Estimate = 'ESTIMATE',
@@ -99,8 +99,8 @@ export function instanceOfAppointmentCreateRequest(value: object): value is Appo
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createAppointmentCreateRequestPropertyNames('crmCustomerId', 'crmVehicleId', 'locationId', 'startAt', 'endAt', 'serviceRequestIds', );
-    const optionalStringProperties = createAppointmentCreateRequestOptionalProperties({ name: 'crmCustomerId', nullable: false }, { name: 'crmVehicleId', nullable: false }, { name: 'locationId', nullable: false }, { name: 'resourceId', nullable: false }, { name: 'startAt', nullable: false }, { name: 'endAt', nullable: false }, { name: 'workorderLinkRef', nullable: false }, { name: 'sourceType', nullable: false }, { name: 'sourceId', nullable: false }, );
+    const requiredProperties = createAppointmentCreateRequestPropertyNames('crmCustomerId', 'crmVehicleId', 'endAt', 'locationId', 'serviceRequestIds', 'startAt', );
+    const optionalStringProperties = createAppointmentCreateRequestOptionalProperties({ name: 'crmCustomerId', nullable: false }, { name: 'crmVehicleId', nullable: false }, { name: 'endAt', nullable: false }, { name: 'locationId', nullable: false }, { name: 'resourceId', nullable: false }, { name: 'sourceId', nullable: false }, { name: 'sourceType', nullable: false }, { name: 'startAt', nullable: false }, { name: 'workorderLinkRef', nullable: false }, );
     const optionalNumberProperties = createAppointmentCreateRequestOptionalProperties();
     const optionalBooleanProperties = createAppointmentCreateRequestOptionalProperties();
 

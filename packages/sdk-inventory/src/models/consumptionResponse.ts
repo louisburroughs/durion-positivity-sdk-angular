@@ -18,9 +18,13 @@ export interface ConsumptionResponse {
      */
     consumptionId: string;
     /**
-     * Identifier of the workorder the items were consumed for
+     * Timestamp when the consumption was recorded
      */
-    workorderId: string;
+    createdAt: string;
+    /**
+     * Identifiers of the inventory ledger entries created by this consumption
+     */
+    ledgerEntryIds?: Array<string>;
     /**
      * Identifier of the pick list the consumed items were drawn from, if applicable
      */
@@ -30,13 +34,9 @@ export interface ConsumptionResponse {
      */
     totalItemsConsumed: number;
     /**
-     * Timestamp when the consumption was recorded
+     * Identifier of the workorder the items were consumed for
      */
-    createdAt: string;
-    /**
-     * Identifiers of the inventory ledger entries created by this consumption
-     */
-    ledgerEntryIds?: Array<string>;
+    workorderId: string;
 }
 
 function isOptionalConsumptionResponsePropertyOfType(
@@ -77,8 +77,8 @@ export function instanceOfConsumptionResponse(value: object): value is Consumpti
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createConsumptionResponsePropertyNames('consumptionId', 'workorderId', 'totalItemsConsumed', 'createdAt', );
-    const optionalStringProperties = createConsumptionResponseOptionalProperties({ name: 'consumptionId', nullable: false }, { name: 'workorderId', nullable: false }, { name: 'pickListId', nullable: false }, { name: 'createdAt', nullable: false }, );
+    const requiredProperties = createConsumptionResponsePropertyNames('consumptionId', 'createdAt', 'totalItemsConsumed', 'workorderId', );
+    const optionalStringProperties = createConsumptionResponseOptionalProperties({ name: 'consumptionId', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'pickListId', nullable: false }, { name: 'workorderId', nullable: false }, );
     const optionalNumberProperties = createConsumptionResponseOptionalProperties({ name: 'totalItemsConsumed', nullable: false }, );
     const optionalBooleanProperties = createConsumptionResponseOptionalProperties();
 

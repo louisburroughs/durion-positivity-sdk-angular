@@ -14,25 +14,25 @@
  */
 export interface PostingRuleSetCreateRequest { 
     /**
-     * Display name of the posting rule set
+     * Identifier of the user creating the rule set
      */
-    name: string;
-    /**
-     * Accounting event type the rule set applies to
-     */
-    eventType: string;
+    createdBy: string;
     /**
      * Optional human-readable description of the rule set
      */
     description?: string;
     /**
+     * Accounting event type the rule set applies to
+     */
+    eventType: string;
+    /**
+     * Display name of the posting rule set
+     */
+    name: string;
+    /**
      * Serialized rules definition (JSON) describing GL mapping logic
      */
     rulesDefinition: string;
-    /**
-     * Identifier of the user creating the rule set
-     */
-    createdBy: string;
 }
 
 function isOptionalPostingRuleSetCreateRequestPropertyOfType(
@@ -73,8 +73,8 @@ export function instanceOfPostingRuleSetCreateRequest(value: object): value is P
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createPostingRuleSetCreateRequestPropertyNames('name', 'eventType', 'rulesDefinition', 'createdBy', );
-    const optionalStringProperties = createPostingRuleSetCreateRequestOptionalProperties({ name: 'name', nullable: false }, { name: 'eventType', nullable: false }, { name: 'description', nullable: false }, { name: 'rulesDefinition', nullable: false }, { name: 'createdBy', nullable: false }, );
+    const requiredProperties = createPostingRuleSetCreateRequestPropertyNames('createdBy', 'eventType', 'name', 'rulesDefinition', );
+    const optionalStringProperties = createPostingRuleSetCreateRequestOptionalProperties({ name: 'createdBy', nullable: false }, { name: 'description', nullable: false }, { name: 'eventType', nullable: false }, { name: 'name', nullable: false }, { name: 'rulesDefinition', nullable: false }, );
     const optionalNumberProperties = createPostingRuleSetCreateRequestOptionalProperties();
     const optionalBooleanProperties = createPostingRuleSetCreateRequestOptionalProperties();
 

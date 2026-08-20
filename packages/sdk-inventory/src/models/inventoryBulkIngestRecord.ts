@@ -14,10 +14,6 @@
  */
 export interface InventoryBulkIngestRecord { 
     /**
-     * Stock-keeping unit of the product being ingested
-     */
-    sku: string;
-    /**
      * Identifier of the location the quantity applies to
      */
     locationId?: string;
@@ -29,6 +25,10 @@ export interface InventoryBulkIngestRecord {
      * Optional reason code explaining the ingest
      */
     reasonCode?: string;
+    /**
+     * Stock-keeping unit of the product being ingested
+     */
+    sku: string;
     /**
      * Optional unit of measure code for the quantity (e.g. EACH, KG)
      */
@@ -73,8 +73,8 @@ export function instanceOfInventoryBulkIngestRecord(value: object): value is Inv
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createInventoryBulkIngestRecordPropertyNames('sku', 'quantity', );
-    const optionalStringProperties = createInventoryBulkIngestRecordOptionalProperties({ name: 'sku', nullable: false }, { name: 'locationId', nullable: false }, { name: 'reasonCode', nullable: false }, { name: 'unitOfMeasure', nullable: false }, );
+    const requiredProperties = createInventoryBulkIngestRecordPropertyNames('quantity', 'sku', );
+    const optionalStringProperties = createInventoryBulkIngestRecordOptionalProperties({ name: 'locationId', nullable: false }, { name: 'reasonCode', nullable: false }, { name: 'sku', nullable: false }, { name: 'unitOfMeasure', nullable: false }, );
     const optionalNumberProperties = createInventoryBulkIngestRecordOptionalProperties({ name: 'quantity', nullable: false }, );
     const optionalBooleanProperties = createInventoryBulkIngestRecordOptionalProperties();
 

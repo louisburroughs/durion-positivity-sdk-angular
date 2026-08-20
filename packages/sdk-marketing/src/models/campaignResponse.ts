@@ -14,57 +14,49 @@
  */
 export interface CampaignResponse { 
     /**
-     * Campaign identifier
-     */
-    campaignId: string;
-    /**
-     * Stable campaign code
-     */
-    code: string;
-    /**
-     * Campaign name
-     */
-    name: string;
-    /**
-     * What the campaign is for
-     */
-    description?: string;
-    /**
      * Targeted party kind
      */
     audienceType: CampaignResponseAudienceTypeEnum;
+    /**
+     * Campaign identifier
+     */
+    campaignId: string;
     /**
      * Program grouping the commercial and individual arms
      */
     campaignProgramId?: string;
     /**
-     * Lifecycle status
+     * pos-catalog focus reference
      */
-    status: CampaignResponseStatusEnum;
+    catalogFocusRef?: string;
     /**
      * Delivery channels
      */
     channels: Set<string>;
     /**
-     * Bound pos-customer segment
+     * Stable campaign code
      */
-    segmentId?: string;
+    code: string;
+    /**
+     * Creation timestamp
+     */
+    createdAt?: string;
+    /**
+     * What the campaign is for
+     */
+    description?: string;
+    /**
+     * Email template
+     */
+    emailTemplateId?: string;
+    /**
+     * Campaign name
+     */
+    name: string;
     /**
      * Promoted pos-price offer
      */
     promotionOfferId?: string;
-    /**
-     * pos-catalog focus reference
-     */
-    catalogFocusRef?: string;
-    /**
-     * Start of the active window
-     */
-    windowStart?: string;
-    /**
-     * End of the active window
-     */
-    windowEnd?: string;
     /**
      * Dispatch timing
      */
@@ -74,25 +66,37 @@ export interface CampaignResponse {
      */
     scheduledAt?: string;
     /**
-     * Email template
+     * Bound pos-customer segment
      */
-    emailTemplateId?: string;
+    segmentId?: string;
     /**
      * SMS template
      */
     smsTemplateId?: string;
     /**
-     * Creation timestamp
+     * Lifecycle status
      */
-    createdAt?: string;
+    status: CampaignResponseStatusEnum;
     /**
      * Last update timestamp
      */
     updatedAt?: string;
+    /**
+     * End of the active window
+     */
+    windowEnd?: string;
+    /**
+     * Start of the active window
+     */
+    windowStart?: string;
 }
 export enum CampaignResponseAudienceTypeEnum {
     Commercial = 'COMMERCIAL',
     Individual = 'INDIVIDUAL'
+};
+export enum CampaignResponseScheduleTypeEnum {
+    Immediate = 'IMMEDIATE',
+    Scheduled = 'SCHEDULED'
 };
 export enum CampaignResponseStatusEnum {
     Draft = 'DRAFT',
@@ -102,10 +106,6 @@ export enum CampaignResponseStatusEnum {
     Paused = 'PAUSED',
     Cancelled = 'CANCELLED',
     Closed = 'CLOSED'
-};
-export enum CampaignResponseScheduleTypeEnum {
-    Immediate = 'IMMEDIATE',
-    Scheduled = 'SCHEDULED'
 };
 
 
@@ -148,8 +148,8 @@ export function instanceOfCampaignResponse(value: object): value is CampaignResp
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createCampaignResponsePropertyNames('campaignId', 'code', 'name', 'audienceType', 'status', 'channels', 'scheduleType', );
-    const optionalStringProperties = createCampaignResponseOptionalProperties({ name: 'campaignId', nullable: false }, { name: 'code', nullable: false }, { name: 'name', nullable: false }, { name: 'description', nullable: false }, { name: 'audienceType', nullable: false }, { name: 'campaignProgramId', nullable: false }, { name: 'status', nullable: false }, { name: 'segmentId', nullable: false }, { name: 'promotionOfferId', nullable: false }, { name: 'catalogFocusRef', nullable: false }, { name: 'windowStart', nullable: false }, { name: 'windowEnd', nullable: false }, { name: 'scheduleType', nullable: false }, { name: 'scheduledAt', nullable: false }, { name: 'emailTemplateId', nullable: false }, { name: 'smsTemplateId', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'updatedAt', nullable: false }, );
+    const requiredProperties = createCampaignResponsePropertyNames('audienceType', 'campaignId', 'channels', 'code', 'name', 'scheduleType', 'status', );
+    const optionalStringProperties = createCampaignResponseOptionalProperties({ name: 'audienceType', nullable: false }, { name: 'campaignId', nullable: false }, { name: 'campaignProgramId', nullable: false }, { name: 'catalogFocusRef', nullable: false }, { name: 'code', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'description', nullable: false }, { name: 'emailTemplateId', nullable: false }, { name: 'name', nullable: false }, { name: 'promotionOfferId', nullable: false }, { name: 'scheduleType', nullable: false }, { name: 'scheduledAt', nullable: false }, { name: 'segmentId', nullable: false }, { name: 'smsTemplateId', nullable: false }, { name: 'status', nullable: false }, { name: 'updatedAt', nullable: false }, { name: 'windowEnd', nullable: false }, { name: 'windowStart', nullable: false }, );
     const optionalNumberProperties = createCampaignResponseOptionalProperties();
     const optionalBooleanProperties = createCampaignResponseOptionalProperties();
 

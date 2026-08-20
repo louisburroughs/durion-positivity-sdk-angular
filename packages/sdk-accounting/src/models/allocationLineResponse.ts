@@ -18,17 +18,17 @@ export interface AllocationLineResponse {
      */
     allocationId?: string;
     /**
-     * Vendor bill UUID
+     * Allocation sequence number
      */
-    vendorBillId?: string;
+    allocationSequence?: number;
     /**
      * Amount applied to this bill
      */
     appliedAmount?: number;
     /**
-     * Allocation sequence number
+     * Vendor bill UUID
      */
-    allocationSequence?: number;
+    vendorBillId?: string;
 }
 
 function isOptionalAllocationLineResponsePropertyOfType(
@@ -71,7 +71,7 @@ export function instanceOfAllocationLineResponse(value: object): value is Alloca
 
     const requiredProperties = createAllocationLineResponsePropertyNames();
     const optionalStringProperties = createAllocationLineResponseOptionalProperties({ name: 'allocationId', nullable: false }, { name: 'vendorBillId', nullable: false }, );
-    const optionalNumberProperties = createAllocationLineResponseOptionalProperties({ name: 'appliedAmount', nullable: false }, { name: 'allocationSequence', nullable: false }, );
+    const optionalNumberProperties = createAllocationLineResponseOptionalProperties({ name: 'allocationSequence', nullable: false }, { name: 'appliedAmount', nullable: false }, );
     const optionalBooleanProperties = createAllocationLineResponseOptionalProperties();
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

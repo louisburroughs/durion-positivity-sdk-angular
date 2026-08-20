@@ -14,13 +14,13 @@
  */
 export interface SourceReference { 
     /**
-     * Identifier of the originating external system
-     */
-    system: string;
-    /**
      * Reference identifier of the record in the source system
      */
     sourceReferenceId: string;
+    /**
+     * Identifier of the originating external system
+     */
+    system: string;
 }
 
 function isOptionalSourceReferencePropertyOfType(
@@ -61,8 +61,8 @@ export function instanceOfSourceReference(value: object): value is SourceReferen
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createSourceReferencePropertyNames('system', 'sourceReferenceId', );
-    const optionalStringProperties = createSourceReferenceOptionalProperties({ name: 'system', nullable: false }, { name: 'sourceReferenceId', nullable: false }, );
+    const requiredProperties = createSourceReferencePropertyNames('sourceReferenceId', 'system', );
+    const optionalStringProperties = createSourceReferenceOptionalProperties({ name: 'sourceReferenceId', nullable: false }, { name: 'system', nullable: false }, );
     const optionalNumberProperties = createSourceReferenceOptionalProperties();
     const optionalBooleanProperties = createSourceReferenceOptionalProperties();
 

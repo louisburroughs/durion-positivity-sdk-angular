@@ -14,21 +14,17 @@
  */
 export interface BreakSegmentResponse { 
     /**
+     * Break end timestamp
+     */
+    breakEndAt?: string;
+    /**
      * Unique identifier of the break segment
      */
     breakSegmentId: string;
     /**
-     * ID of the parent work session
-     */
-    workSessionId: string;
-    /**
      * Break start timestamp
      */
     breakStartAt: string;
-    /**
-     * Break end timestamp
-     */
-    breakEndAt?: string;
     /**
      * Type of break
      */
@@ -37,6 +33,10 @@ export interface BreakSegmentResponse {
      * Optional break notes
      */
     notes?: string;
+    /**
+     * ID of the parent work session
+     */
+    workSessionId: string;
 }
 export enum BreakSegmentResponseBreakTypeEnum {
     Meal = 'MEAL',
@@ -84,8 +84,8 @@ export function instanceOfBreakSegmentResponse(value: object): value is BreakSeg
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createBreakSegmentResponsePropertyNames('breakSegmentId', 'workSessionId', 'breakStartAt', );
-    const optionalStringProperties = createBreakSegmentResponseOptionalProperties({ name: 'breakSegmentId', nullable: false }, { name: 'workSessionId', nullable: false }, { name: 'breakStartAt', nullable: false }, { name: 'breakEndAt', nullable: false }, { name: 'breakType', nullable: false }, { name: 'notes', nullable: false }, );
+    const requiredProperties = createBreakSegmentResponsePropertyNames('breakSegmentId', 'breakStartAt', 'workSessionId', );
+    const optionalStringProperties = createBreakSegmentResponseOptionalProperties({ name: 'breakEndAt', nullable: false }, { name: 'breakSegmentId', nullable: false }, { name: 'breakStartAt', nullable: false }, { name: 'breakType', nullable: false }, { name: 'notes', nullable: false }, { name: 'workSessionId', nullable: false }, );
     const optionalNumberProperties = createBreakSegmentResponseOptionalProperties();
     const optionalBooleanProperties = createBreakSegmentResponseOptionalProperties();
 

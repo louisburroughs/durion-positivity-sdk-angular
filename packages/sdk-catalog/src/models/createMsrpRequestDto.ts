@@ -18,21 +18,21 @@ export interface CreateMsrpRequestDto {
      */
     amount: number;
     /**
+     * Identifier of the user creating the MSRP
+     */
+    createdByUserId: string;
+    /**
      * ISO 4217 currency code
      */
     currency: string;
-    /**
-     * Date the MSRP becomes effective
-     */
-    effectiveStartDate: string;
     /**
      * Date the MSRP stops being effective
      */
     effectiveEndDate?: string;
     /**
-     * Identifier of the user creating the MSRP
+     * Date the MSRP becomes effective
      */
-    createdByUserId: string;
+    effectiveStartDate: string;
 }
 
 function isOptionalCreateMsrpRequestDtoPropertyOfType(
@@ -73,8 +73,8 @@ export function instanceOfCreateMsrpRequestDto(value: object): value is CreateMs
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createCreateMsrpRequestDtoPropertyNames('amount', 'currency', 'effectiveStartDate', 'createdByUserId', );
-    const optionalStringProperties = createCreateMsrpRequestDtoOptionalProperties({ name: 'currency', nullable: false }, { name: 'effectiveStartDate', nullable: false }, { name: 'effectiveEndDate', nullable: false }, { name: 'createdByUserId', nullable: false }, );
+    const requiredProperties = createCreateMsrpRequestDtoPropertyNames('amount', 'createdByUserId', 'currency', 'effectiveStartDate', );
+    const optionalStringProperties = createCreateMsrpRequestDtoOptionalProperties({ name: 'createdByUserId', nullable: false }, { name: 'currency', nullable: false }, { name: 'effectiveEndDate', nullable: false }, { name: 'effectiveStartDate', nullable: false }, );
     const optionalNumberProperties = createCreateMsrpRequestDtoOptionalProperties({ name: 'amount', nullable: false }, );
     const optionalBooleanProperties = createCreateMsrpRequestDtoOptionalProperties();
 

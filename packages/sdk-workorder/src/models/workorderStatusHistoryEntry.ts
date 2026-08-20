@@ -14,10 +14,6 @@
  */
 export interface WorkorderStatusHistoryEntry { 
     /**
-     * Status reached at this point in history
-     */
-    status?: WorkorderStatusHistoryEntryStatusEnum;
-    /**
      * Timestamp when the status change occurred
      */
     changedAt?: string;
@@ -29,6 +25,10 @@ export interface WorkorderStatusHistoryEntry {
      * Optional reason provided for the status change
      */
     reason?: string;
+    /**
+     * Status reached at this point in history
+     */
+    status?: WorkorderStatusHistoryEntryStatusEnum;
 }
 export enum WorkorderStatusHistoryEntryStatusEnum {
     Draft = 'DRAFT',
@@ -83,7 +83,7 @@ export function instanceOfWorkorderStatusHistoryEntry(value: object): value is W
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createWorkorderStatusHistoryEntryPropertyNames();
-    const optionalStringProperties = createWorkorderStatusHistoryEntryOptionalProperties({ name: 'status', nullable: false }, { name: 'changedAt', nullable: false }, { name: 'changedBy', nullable: false }, { name: 'reason', nullable: false }, );
+    const optionalStringProperties = createWorkorderStatusHistoryEntryOptionalProperties({ name: 'changedAt', nullable: false }, { name: 'changedBy', nullable: false }, { name: 'reason', nullable: false }, { name: 'status', nullable: false }, );
     const optionalNumberProperties = createWorkorderStatusHistoryEntryOptionalProperties();
     const optionalBooleanProperties = createWorkorderStatusHistoryEntryOptionalProperties();
 

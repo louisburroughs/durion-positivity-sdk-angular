@@ -16,6 +16,12 @@ import { HttpClient, HttpHeaders, HttpParams,
 import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
+// @ts-ignore
+import { ApiError } from '../src/models/apiError';
+// @ts-ignore
+import { StoreImageRequest } from '../src/models/storeImageRequest';
+// @ts-ignore
+import { StoredImage } from '../src/models/storedImage';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
@@ -35,7 +41,7 @@ export class ImageAPIService extends BaseService {
 
     /**
      * Get image by filename
-     * Retrieve an image file by its filename.
+     * Returns the stored image file matching a filename as a binary attachment. Use this tool when only the filename is known, such as a reference embedded in catalog data; use getImageById instead when the numeric id is available, because filenames are not guaranteed unique over time. Preconditions: an image record with that exact filename must exist and its backing file must still be present on disk. Required inputs: filename path parameter, matched exactly including extension; there is no request body and no resizing or format options. No events are emitted and no state changes; this is a read-only file retrieval. Returns 404 when no image record matches the filename or the backing file is missing from storage. 
      * @endpoint get /v1/images/filename/{filename}
      * @param filename Filename of the image to retrieve
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -81,7 +87,7 @@ export class ImageAPIService extends BaseService {
 
     /**
      * Get image by ID
-     * Retrieve an image file by its unique database ID.
+     * Returns the stored image file for a numeric image id as a binary attachment. Use this tool when the image\&#39;s database id is already known; use getImageByFilename instead when only the filename is known. Preconditions: the image record must exist and its backing file must still be present on disk. Required inputs: id (numeric database id) path parameter; there is no request body and no resizing or format options. No events are emitted and no state changes; this is a read-only file retrieval. Returns 404 when no image record has that id or the backing file is missing from storage. 
      * @endpoint get /v1/images/id/{id}
      * @param id ID of the image to retrieve
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -116,6 +122,74 @@ export class ImageAPIService extends BaseService {
             {
                 context: localVarHttpContext,
                 responseType: "blob",
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Store An Image
+     * Stores image bytes and returns a reference to them, or returns the reference already held when the same bytes from the same origin have been stored before. Use this tool when ingesting artwork that must not depend on a third party to render, such as manufacturer marketing images; do not use it to register an image that already lives somewhere this service can read, because that needs no copy. Preconditions: the content must not be empty, because an empty body is a failed download and storing one would stop it ever being retried. Required inputs: filename, contentType and content as base64; sourceUri and context are optional, and sourceUri is kept as provenance rather than as a render source. No events are emitted. Returns 200 with the reference, whose newlyStored flag says whether this call did the storing or found the bytes already held, and 400 when the content is empty. 
+     * @endpoint post /v1/images
+     * @param storeImageRequest The image to store, with the origin it was fetched from where there was one.
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public storeImage(storeImageRequest: StoreImageRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*' | 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<StoredImage>;
+    public storeImage(storeImageRequest: StoreImageRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*' | 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<StoredImage>>;
+    public storeImage(storeImageRequest: StoreImageRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*' | 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<StoredImage>>;
+    public storeImage(storeImageRequest: StoreImageRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: '*/*' | 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (storeImageRequest === null || storeImageRequest === undefined) {
+            throw new Error('Required parameter storeImageRequest was null or undefined when calling storeImage.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            '*/*',
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/images`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<StoredImage>('post', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                body: storeImageRequest,
+                responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,
                 observe: observe,

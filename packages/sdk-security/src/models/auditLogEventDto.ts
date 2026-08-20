@@ -14,21 +14,13 @@
  */
 export interface AuditLogEventDto { 
     /**
-     * Audit event identifier
-     */
-    eventId: string;
-    /**
-     * Timestamp recorded for the event
-     */
-    timestamp: string;
-    /**
-     * Event type code
-     */
-    eventType: string;
-    /**
      * Actor that triggered the event
      */
     actorId?: string;
+    /**
+     * Additional contextual metadata
+     */
+    context?: string;
     /**
      * Identifier of the affected entity
      */
@@ -38,17 +30,25 @@ export interface AuditLogEventDto {
      */
     entityType?: string;
     /**
-     * Serialized value before the change
+     * Audit event identifier
      */
-    oldValue?: string;
+    eventId: string;
+    /**
+     * Event type code
+     */
+    eventType: string;
     /**
      * Serialized value after the change
      */
     newValue?: string;
     /**
-     * Additional contextual metadata
+     * Serialized value before the change
      */
-    context?: string;
+    oldValue?: string;
+    /**
+     * Timestamp recorded for the event
+     */
+    timestamp: string;
 }
 
 function isOptionalAuditLogEventDtoPropertyOfType(
@@ -89,8 +89,8 @@ export function instanceOfAuditLogEventDto(value: object): value is AuditLogEven
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createAuditLogEventDtoPropertyNames('eventId', 'timestamp', 'eventType', );
-    const optionalStringProperties = createAuditLogEventDtoOptionalProperties({ name: 'eventId', nullable: false }, { name: 'timestamp', nullable: false }, { name: 'eventType', nullable: false }, { name: 'actorId', nullable: false }, { name: 'entityId', nullable: false }, { name: 'entityType', nullable: false }, { name: 'oldValue', nullable: false }, { name: 'newValue', nullable: false }, { name: 'context', nullable: false }, );
+    const requiredProperties = createAuditLogEventDtoPropertyNames('eventId', 'eventType', 'timestamp', );
+    const optionalStringProperties = createAuditLogEventDtoOptionalProperties({ name: 'actorId', nullable: false }, { name: 'context', nullable: false }, { name: 'entityId', nullable: false }, { name: 'entityType', nullable: false }, { name: 'eventId', nullable: false }, { name: 'eventType', nullable: false }, { name: 'newValue', nullable: false }, { name: 'oldValue', nullable: false }, { name: 'timestamp', nullable: false }, );
     const optionalNumberProperties = createAuditLogEventDtoOptionalProperties();
     const optionalBooleanProperties = createAuditLogEventDtoOptionalProperties();
 

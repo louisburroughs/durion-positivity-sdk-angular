@@ -23,13 +23,13 @@ export interface BulkIngestRequestBasePriceBulkIngestRecord {
      */
     locationId: string;
     /**
-     * The records to ingest (at least one); shape depends on the target domain
-     */
-    records: Array<BasePriceBulkIngestRecord>;
-    /**
      * Identifier of the operator submitting the batch
      */
     operatorId?: string;
+    /**
+     * The records to ingest (at least one); shape depends on the target domain
+     */
+    records: Array<BasePriceBulkIngestRecord>;
 }
 
 function isOptionalBulkIngestRequestBasePriceBulkIngestRecordPropertyOfType(

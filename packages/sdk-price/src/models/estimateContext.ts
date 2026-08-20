@@ -15,17 +15,17 @@ import { LineItemContext } from './lineItemContext';
  */
 export interface EstimateContext { 
     /**
-     * Estimate identifier
+     * Promotion codes already applied to this estimate
      */
-    estimateId: string;
+    appliedPromoCodes?: Array<string> | null;
     /**
      * Customer identifier
      */
     customerId: string;
     /**
-     * Optional vehicle identifier for vehicle-specific eligibility checks
+     * Estimate identifier
      */
-    vehicleId?: string | null;
+    estimateId: string;
     /**
      * Line items included in the estimate
      */
@@ -35,9 +35,9 @@ export interface EstimateContext {
      */
     subtotal: number;
     /**
-     * Promotion codes already applied to this estimate
+     * Optional vehicle identifier for vehicle-specific eligibility checks
      */
-    appliedPromoCodes?: Array<string> | null;
+    vehicleId?: string | null;
 }
 
 function isOptionalEstimateContextPropertyOfType(
@@ -78,8 +78,8 @@ export function instanceOfEstimateContext(value: object): value is EstimateConte
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createEstimateContextPropertyNames('estimateId', 'customerId', 'lineItems', 'subtotal', );
-    const optionalStringProperties = createEstimateContextOptionalProperties({ name: 'estimateId', nullable: false }, { name: 'customerId', nullable: false }, { name: 'vehicleId', nullable: true }, );
+    const requiredProperties = createEstimateContextPropertyNames('customerId', 'estimateId', 'lineItems', 'subtotal', );
+    const optionalStringProperties = createEstimateContextOptionalProperties({ name: 'customerId', nullable: false }, { name: 'estimateId', nullable: false }, { name: 'vehicleId', nullable: true }, );
     const optionalNumberProperties = createEstimateContextOptionalProperties({ name: 'subtotal', nullable: false }, );
     const optionalBooleanProperties = createEstimateContextOptionalProperties();
 

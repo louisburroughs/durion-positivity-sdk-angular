@@ -15,9 +15,17 @@ import { PtoEntry } from './ptoEntry';
  */
 export interface MechanicStatus { 
     /**
-     * Identifier of the mechanic person
+     * Identifier of the workorder the mechanic is currently assigned to
      */
-    personId: string;
+    assignedWorkorderId?: string;
+    /**
+     * Expected return time when the mechanic is on break
+     */
+    breakExpectedReturn?: string;
+    /**
+     * Current work status of the mechanic
+     */
+    currentStatus?: string;
     /**
      * Mechanic first name
      */
@@ -27,21 +35,13 @@ export interface MechanicStatus {
      */
     lastName?: string;
     /**
-     * Current work status of the mechanic
-     */
-    currentStatus?: string;
-    /**
-     * Identifier of the workorder the mechanic is currently assigned to
-     */
-    assignedWorkorderId?: string;
-    /**
      * Whether the mechanic is currently on break
      */
     onBreak?: boolean;
     /**
-     * Expected return time when the mechanic is on break
+     * Identifier of the mechanic person
      */
-    breakExpectedReturn?: string;
+    personId: string;
     /**
      * Paid time-off entries for the mechanic
      */
@@ -87,7 +87,7 @@ export function instanceOfMechanicStatus(value: object): value is MechanicStatus
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createMechanicStatusPropertyNames('personId', );
-    const optionalStringProperties = createMechanicStatusOptionalProperties({ name: 'personId', nullable: false }, { name: 'firstName', nullable: false }, { name: 'lastName', nullable: false }, { name: 'currentStatus', nullable: false }, { name: 'assignedWorkorderId', nullable: false }, { name: 'breakExpectedReturn', nullable: false }, );
+    const optionalStringProperties = createMechanicStatusOptionalProperties({ name: 'assignedWorkorderId', nullable: false }, { name: 'breakExpectedReturn', nullable: false }, { name: 'currentStatus', nullable: false }, { name: 'firstName', nullable: false }, { name: 'lastName', nullable: false }, { name: 'personId', nullable: false }, );
     const optionalNumberProperties = createMechanicStatusOptionalProperties();
     const optionalBooleanProperties = createMechanicStatusOptionalProperties({ name: 'onBreak', nullable: false }, );
 

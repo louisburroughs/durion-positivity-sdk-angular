@@ -13,9 +13,9 @@
  * One draw-down of the credit against a settlement invoice
  */
 export interface Application { 
-    invoiceId?: string;
     amountApplied?: number;
     appliedAt?: string;
+    invoiceId?: string;
 }
 
 function isOptionalApplicationPropertyOfType(
@@ -57,7 +57,7 @@ export function instanceOfApplication(value: object): value is Application {
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createApplicationPropertyNames();
-    const optionalStringProperties = createApplicationOptionalProperties({ name: 'invoiceId', nullable: false }, { name: 'appliedAt', nullable: false }, );
+    const optionalStringProperties = createApplicationOptionalProperties({ name: 'appliedAt', nullable: false }, { name: 'invoiceId', nullable: false }, );
     const optionalNumberProperties = createApplicationOptionalProperties({ name: 'amountApplied', nullable: false }, );
     const optionalBooleanProperties = createApplicationOptionalProperties();
 

@@ -40,10 +40,10 @@ export class DefaultGLMappingsService extends BaseService {
     }
 
     /**
-     * Create default GL mapping
-     * Create a new default GL account mapping for an event type
+     * Create Default GL Mapping
+     * Creates a fallback debit and credit account pair for an event type, used by the posting engine when no explicit posting rule matches; resolution order is explicit rule, then org-scoped default, then global default, then UNMAPPED_EVENT_TYPE failure. Use this tool to guarantee an event type always posts somewhere; do not use createGLMapping, which maps a source-system external code to a single account. Preconditions: the debit and credit GL accounts must exist. Required inputs: eventType (max 100 chars), debitAccountId (UUID) and creditAccountId (UUID); organizationId is optional (null makes the default global) and active defaults to true. Emits an ACCOUNTING_DEFAULT_MAPPING_CREATE event. Returns 400 when a referenced GL account cannot be resolved. 
      * @endpoint post /v1/accounting/default-mappings
-     * @param defaultGLMappingRequest 
+     * @param defaultGLMappingRequest Fallback debit and credit account pair for one event type.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -110,8 +110,8 @@ export class DefaultGLMappingsService extends BaseService {
     }
 
     /**
-     * Deactivate default GL mapping
-     * Soft delete (deactivate) a default GL mapping
+     * Deactivate Default GL Mapping
+     * Soft deletes a default GL mapping by marking it inactive; the row is retained for history and stops participating in fallback resolution. Use this tool to retire a fallback pair; do not use updateDefaultMapping with active&#x3D;false only when other fields must change at the same time, and note there is no reactivation endpoint other than updateDefaultMapping. Preconditions: the default mapping must exist. Required inputs: id (UUID) as a path parameter; there is no request body. Emits an ACCOUNTING_DEFAULT_MAPPING_DELETE event. Returns 400 when no default mapping exists for the supplied id (mapped as VALIDATION_ERROR, not 404), and 204 with no body on success. 
      * @endpoint delete /v1/accounting/default-mappings/{id}
      * @param id Default mapping identifier
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -169,8 +169,8 @@ export class DefaultGLMappingsService extends BaseService {
     }
 
     /**
-     * Get default GL mapping
-     * Retrieve a default GL mapping by identifier
+     * Get Default GL Mapping
+     * Returns one default GL mapping with its event type, debit and credit accounts, scope and active flag. Use this tool when the mapping id is already known; use searchDefaultMappings or listDefaultMappings instead when hunting by event type or organization. Preconditions: the default mapping must exist. Required inputs: id (UUID) as a path parameter; there is no request body. No events are emitted and no state changes; this is a read-only projection. Returns 400 when no default mapping exists for the supplied id (mapped as VALIDATION_ERROR, not 404). 
      * @endpoint get /v1/accounting/default-mappings/{id}
      * @param id Default mapping identifier
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -229,8 +229,8 @@ export class DefaultGLMappingsService extends BaseService {
     }
 
     /**
-     * List default GL mappings
-     * Retrieve paginated list of default GL mappings
+     * List Default GL Mappings
+     * Lists all default GL mappings as a paginated projection, including inactive ones. Use this tool to browse the fallback catalog; use searchDefaultMappings instead to filter by event type or organization, or resolveDefaultMapping to find the one that would apply to an event. Preconditions: none beyond the caller holding accounting:default-mapping:view. Required inputs: none; page defaults to 0 and size to 20. Emits an ACCOUNTING_DEFAULT_MAPPING_LIST audit event; no state changes. Returns 200 with an empty page when no default mappings exist. 
      * @endpoint get /v1/accounting/default-mappings
      * @param page Page index (0-based)
      * @param size Page size
@@ -308,17 +308,17 @@ export class DefaultGLMappingsService extends BaseService {
     }
 
     /**
-     * List global default mappings
-     * Retrieve all global default GL mappings (organizationId IS NULL)
+     * List Global Default Mappings
+     * Returns all global default GL mappings, meaning those with no organizationId, which act as the last fallback before an event type fails as UNMAPPED_EVENT_TYPE. Use this tool to audit the global safety net; use searchDefaultMappings instead when org-scoped mappings are also of interest. Preconditions: none beyond the caller holding accounting:default-mapping:view. Required inputs: none; there are no parameters and no request body. No events are emitted and no state changes; this is a read-only projection. Returns 200 with an empty list when no global defaults are configured. 
      * @endpoint get /v1/accounting/default-mappings/global
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public listGlobalDefaults(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<DefaultGLMappingResponse>>;
-    public listGlobalDefaults(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<DefaultGLMappingResponse>>>;
-    public listGlobalDefaults(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<DefaultGLMappingResponse>>>;
-    public listGlobalDefaults(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public listGlobalDefaultMappings(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<DefaultGLMappingResponse>>;
+    public listGlobalDefaultMappings(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<DefaultGLMappingResponse>>>;
+    public listGlobalDefaultMappings(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<DefaultGLMappingResponse>>>;
+    public listGlobalDefaultMappings(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -364,8 +364,8 @@ export class DefaultGLMappingsService extends BaseService {
     }
 
     /**
-     * Resolve default mapping for event
-     * Find the most specific active default mapping for an event type and organization
+     * Resolve Default Mapping For Event
+     * Finds the most specific active default mapping for an event type, preferring an org-scoped mapping over the global one. Use this tool to see which fallback the posting engine would use for an event; do not use searchDefaultMappings, which lists matches without applying resolution priority. Preconditions: an active default mapping must exist for the event type at org or global scope. Required inputs: eventType as a query parameter; organizationId (UUID) is optional and widens resolution to that org\&#39;s mappings first. No events are emitted and no state changes; this is a read-only projection. Returns 404 when no active default mapping resolves for the event type. 
      * @endpoint get /v1/accounting/default-mappings/resolve
      * @param eventType Event type
      * @param organizationId Organization ID (optional)
@@ -446,8 +446,8 @@ export class DefaultGLMappingsService extends BaseService {
     }
 
     /**
-     * Search default GL mappings
-     * Find default GL mappings by event type or organization
+     * Search Default GL Mappings
+     * Finds default GL mappings filtered by event type or organization; when both filters are omitted it returns the global defaults only. Use this tool to filter the fallback catalog; do not use resolveDefaultMapping, which applies the org-then-global resolution priority to pick the single winning mapping. Preconditions: none; eventType takes precedence when both filters are supplied. Required inputs: none; eventType and organizationId are optional query parameters. No events are emitted and no state changes; this is a read-only projection. Returns 200 with an empty list when nothing matches the filter. 
      * @endpoint get /v1/accounting/default-mappings/search
      * @param eventType Filter by event type
      * @param organizationId Filter by organization ID
@@ -525,11 +525,11 @@ export class DefaultGLMappingsService extends BaseService {
     }
 
     /**
-     * Update default GL mapping
-     * Update an existing default GL account mapping
+     * Update Default GL Mapping
+     * Updates an existing default GL mapping\&#39;s event type, accounts, scope, description or active flag. Use this tool to repoint or rescope an existing fallback; do not use createDefaultMapping, which adds a new one, or deactivateDefaultMapping, which soft deletes. Preconditions: the default mapping must exist. Required inputs: id (UUID) as a path parameter plus the full replacement body with eventType, debitAccountId and creditAccountId; organizationId null means global scope. Emits an ACCOUNTING_DEFAULT_MAPPING_UPDATE event; future postings resolve against the updated pair while already-posted entries are untouched. Returns 400 when no default mapping exists for the supplied id (mapped as VALIDATION_ERROR, not 404). 
      * @endpoint put /v1/accounting/default-mappings/{id}
      * @param id Default mapping identifier
-     * @param defaultGLMappingRequest 
+     * @param defaultGLMappingRequest Replacement fallback mapping definition for the event type.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options

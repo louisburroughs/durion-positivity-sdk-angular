@@ -14,25 +14,25 @@
  */
 export interface TimePeriodDto { 
     /**
-     * Time period identifier
+     * Last date of the period
      */
-    timePeriodId: string;
-    /**
-     * Tenant identifier the period belongs to
-     */
-    tenantId: string;
+    endDate: string;
     /**
      * First date of the period
      */
     startDate: string;
     /**
-     * Last date of the period
-     */
-    endDate: string;
-    /**
      * Lifecycle status of the period
      */
     status: TimePeriodDtoStatusEnum;
+    /**
+     * Tenant identifier the period belongs to
+     */
+    tenantId: string;
+    /**
+     * Time period identifier
+     */
+    timePeriodId: string;
 }
 export enum TimePeriodDtoStatusEnum {
     Open = 'OPEN',
@@ -80,8 +80,8 @@ export function instanceOfTimePeriodDto(value: object): value is TimePeriodDto {
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createTimePeriodDtoPropertyNames('timePeriodId', 'tenantId', 'startDate', 'endDate', 'status', );
-    const optionalStringProperties = createTimePeriodDtoOptionalProperties({ name: 'timePeriodId', nullable: false }, { name: 'tenantId', nullable: false }, { name: 'startDate', nullable: false }, { name: 'endDate', nullable: false }, { name: 'status', nullable: false }, );
+    const requiredProperties = createTimePeriodDtoPropertyNames('endDate', 'startDate', 'status', 'tenantId', 'timePeriodId', );
+    const optionalStringProperties = createTimePeriodDtoOptionalProperties({ name: 'endDate', nullable: false }, { name: 'startDate', nullable: false }, { name: 'status', nullable: false }, { name: 'tenantId', nullable: false }, { name: 'timePeriodId', nullable: false }, );
     const optionalNumberProperties = createTimePeriodDtoOptionalProperties();
     const optionalBooleanProperties = createTimePeriodDtoOptionalProperties();
 

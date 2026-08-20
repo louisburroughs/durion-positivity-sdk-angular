@@ -14,26 +14,6 @@
  */
 export interface OperationalContextResponse { 
     /**
-     * Operational context version
-     */
-    version?: string;
-    /**
-     * Location identifier
-     */
-    locationId?: string;
-    /**
-     * Bay identifier
-     */
-    bayId?: string;
-    /**
-     * Scheduled start time
-     */
-    scheduledStartAt?: string;
-    /**
-     * Scheduled end time
-     */
-    scheduledEndAt?: string;
-    /**
      * Assigned mechanic identifiers
      */
     assignedMechanics?: Array<string>;
@@ -42,13 +22,33 @@ export interface OperationalContextResponse {
      */
     assignedResources?: Array<string>;
     /**
+     * Bay identifier
+     */
+    bayId?: string;
+    /**
      * Operational constraints
      */
     constraints?: Array<string>;
     /**
+     * Location identifier
+     */
+    locationId?: string;
+    /**
      * Whether context is locked after work start
      */
     locked: boolean;
+    /**
+     * Scheduled end time
+     */
+    scheduledEndAt?: string;
+    /**
+     * Scheduled start time
+     */
+    scheduledStartAt?: string;
+    /**
+     * Operational context version
+     */
+    version?: string;
 }
 
 function isOptionalOperationalContextResponsePropertyOfType(
@@ -90,7 +90,7 @@ export function instanceOfOperationalContextResponse(value: object): value is Op
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createOperationalContextResponsePropertyNames('locked', );
-    const optionalStringProperties = createOperationalContextResponseOptionalProperties({ name: 'version', nullable: false }, { name: 'locationId', nullable: false }, { name: 'bayId', nullable: false }, { name: 'scheduledStartAt', nullable: false }, { name: 'scheduledEndAt', nullable: false }, );
+    const optionalStringProperties = createOperationalContextResponseOptionalProperties({ name: 'bayId', nullable: false }, { name: 'locationId', nullable: false }, { name: 'scheduledEndAt', nullable: false }, { name: 'scheduledStartAt', nullable: false }, { name: 'version', nullable: false }, );
     const optionalNumberProperties = createOperationalContextResponseOptionalProperties();
     const optionalBooleanProperties = createOperationalContextResponseOptionalProperties({ name: 'locked', nullable: false }, );
 

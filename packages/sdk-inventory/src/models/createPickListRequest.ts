@@ -14,10 +14,6 @@
  */
 export interface CreatePickListRequest { 
     /**
-     * Identifier of the workorder the pick list fulfills
-     */
-    workorderId: string;
-    /**
      * Timestamp by which the pick list should be completed
      */
     dueAt?: string;
@@ -29,6 +25,10 @@ export interface CreatePickListRequest {
      * Identifier of the reservation backing the pick list, when applicable
      */
     reservationId?: string;
+    /**
+     * Identifier of the workorder the pick list fulfills
+     */
+    workorderId: string;
 }
 
 function isOptionalCreatePickListRequestPropertyOfType(
@@ -70,7 +70,7 @@ export function instanceOfCreatePickListRequest(value: object): value is CreateP
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createCreatePickListRequestPropertyNames('workorderId', );
-    const optionalStringProperties = createCreatePickListRequestOptionalProperties({ name: 'workorderId', nullable: false }, { name: 'dueAt', nullable: false }, { name: 'reservationId', nullable: false }, );
+    const optionalStringProperties = createCreatePickListRequestOptionalProperties({ name: 'dueAt', nullable: false }, { name: 'reservationId', nullable: false }, { name: 'workorderId', nullable: false }, );
     const optionalNumberProperties = createCreatePickListRequestOptionalProperties({ name: 'priority', nullable: false }, );
     const optionalBooleanProperties = createCreatePickListRequestOptionalProperties();
 

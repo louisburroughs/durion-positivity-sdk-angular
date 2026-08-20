@@ -14,6 +14,34 @@
  */
 export interface WorkorderSummary { 
     /**
+     * Identifier of the assigned bay
+     */
+    assignedBayId?: string;
+    /**
+     * Identifier of the assigned mechanic
+     */
+    assignedMechanicId?: string;
+    /**
+     * Name of the customer
+     */
+    customerName?: string;
+    /**
+     * Estimated labor hours for the workorder
+     */
+    estimatedLaborHours?: number;
+    /**
+     * Date the workorder is scheduled for
+     */
+    scheduledDate?: string;
+    /**
+     * Current workorder status
+     */
+    status?: string;
+    /**
+     * Human-readable vehicle description
+     */
+    vehicleDescription?: string;
+    /**
      * Unique identifier of the workorder
      */
     workorderId: string;
@@ -21,34 +49,6 @@ export interface WorkorderSummary {
      * Human-readable workorder number
      */
     workorderNumber?: string;
-    /**
-     * Current workorder status
-     */
-    status?: string;
-    /**
-     * Name of the customer
-     */
-    customerName?: string;
-    /**
-     * Human-readable vehicle description
-     */
-    vehicleDescription?: string;
-    /**
-     * Date the workorder is scheduled for
-     */
-    scheduledDate?: string;
-    /**
-     * Identifier of the assigned mechanic
-     */
-    assignedMechanicId?: string;
-    /**
-     * Identifier of the assigned bay
-     */
-    assignedBayId?: string;
-    /**
-     * Estimated labor hours for the workorder
-     */
-    estimatedLaborHours?: number;
 }
 
 function isOptionalWorkorderSummaryPropertyOfType(
@@ -90,7 +90,7 @@ export function instanceOfWorkorderSummary(value: object): value is WorkorderSum
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createWorkorderSummaryPropertyNames('workorderId', );
-    const optionalStringProperties = createWorkorderSummaryOptionalProperties({ name: 'workorderId', nullable: false }, { name: 'workorderNumber', nullable: false }, { name: 'status', nullable: false }, { name: 'customerName', nullable: false }, { name: 'vehicleDescription', nullable: false }, { name: 'scheduledDate', nullable: false }, { name: 'assignedMechanicId', nullable: false }, { name: 'assignedBayId', nullable: false }, );
+    const optionalStringProperties = createWorkorderSummaryOptionalProperties({ name: 'assignedBayId', nullable: false }, { name: 'assignedMechanicId', nullable: false }, { name: 'customerName', nullable: false }, { name: 'scheduledDate', nullable: false }, { name: 'status', nullable: false }, { name: 'vehicleDescription', nullable: false }, { name: 'workorderId', nullable: false }, { name: 'workorderNumber', nullable: false }, );
     const optionalNumberProperties = createWorkorderSummaryOptionalProperties({ name: 'estimatedLaborHours', nullable: false }, );
     const optionalBooleanProperties = createWorkorderSummaryOptionalProperties();
 

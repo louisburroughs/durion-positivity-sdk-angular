@@ -15,26 +15,26 @@ import { UpsertSegmentRequestPredicate } from './upsertSegmentRequestPredicate';
  */
 export interface UpsertSegmentRequest { 
     /**
-     * Unique segment name
+     * Whether the segment can be bound to a campaign; defaults to true
      */
-    name: string;
-    /**
-     * What the segment is for
-     */
-    description?: string;
+    active?: boolean;
     /**
      * Which kind of party the segment targets
      */
     audienceType: UpsertSegmentRequestAudienceTypeEnum;
     /**
+     * What the segment is for
+     */
+    description?: string;
+    /**
+     * Unique segment name
+     */
+    name: string;
+    predicate?: UpsertSegmentRequestPredicate;
+    /**
      * STATIC for an explicit list, DYNAMIC for a stored predicate
      */
     type: UpsertSegmentRequestTypeEnum;
-    predicate?: UpsertSegmentRequestPredicate;
-    /**
-     * Whether the segment can be bound to a campaign; defaults to true
-     */
-    active?: boolean;
 }
 export enum UpsertSegmentRequestAudienceTypeEnum {
     Commercial = 'COMMERCIAL',
@@ -85,8 +85,8 @@ export function instanceOfUpsertSegmentRequest(value: object): value is UpsertSe
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createUpsertSegmentRequestPropertyNames('name', 'audienceType', 'type', );
-    const optionalStringProperties = createUpsertSegmentRequestOptionalProperties({ name: 'name', nullable: false }, { name: 'description', nullable: false }, { name: 'audienceType', nullable: false }, { name: 'type', nullable: false }, );
+    const requiredProperties = createUpsertSegmentRequestPropertyNames('audienceType', 'name', 'type', );
+    const optionalStringProperties = createUpsertSegmentRequestOptionalProperties({ name: 'audienceType', nullable: false }, { name: 'description', nullable: false }, { name: 'name', nullable: false }, { name: 'type', nullable: false }, );
     const optionalNumberProperties = createUpsertSegmentRequestOptionalProperties();
     const optionalBooleanProperties = createUpsertSegmentRequestOptionalProperties({ name: 'active', nullable: false }, );
 

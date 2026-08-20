@@ -17,6 +17,8 @@ import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
 // @ts-ignore
+import { ApiError } from '../src/models/apiError';
+// @ts-ignore
 import { GeneratePutawayTasksRequest } from '../src/models/generatePutawayTasksRequest';
 // @ts-ignore
 import { PutawayTaskResponse } from '../src/models/putawayTaskResponse';
@@ -38,8 +40,8 @@ export class PutawayService extends BaseService {
     }
 
     /**
-     * Claim a putaway task
-     * Claims an available putaway task for the current actor.
+     * Claim Putaway Task
+     * Claims a putaway task for the calling user, locking the row and marking it ASSIGNED with the caller as assignee. Use this tool after finding a task via listPutawayTasks and before executePutaway; do not use executePutaway to claim, execution completes the task regardless of assignee. Preconditions: the task must exist; the service applies no status gate, so claiming an already ASSIGNED task silently reassigns it to the caller. Required inputs: taskId (UUID string) path parameter; there is no request body. Emits an INVENTORY_PUTAWAY_TASK_CLAIM event; no stock moves and the task\&#39;s suggested destination is unchanged. Returns 404 when no putaway task exists for the supplied id, and 400 when taskId is not a valid UUID. 
      * @endpoint post /v1/inventory/putaway/tasks/{taskId}/claim
      * @param taskId Putaway task identifier
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -98,10 +100,10 @@ export class PutawayService extends BaseService {
     }
 
     /**
-     * Generate putaway tasks
-     * Generates putaway tasks for received inventory lines.
+     * Generate Putaway Tasks
+     * Generates one UNASSIGNED putaway task per received line of a goods receipt, sourced from the staging location, with the suggested destination resolved by the highest-priority enabled putaway rule or the default location when no rule exists. Use this tool once staged goods need storage assignments; do not use executePutaway, which performs the physical move for one task, and do not use claimPutawayTask, which assigns an existing task to a worker. Preconditions: the goods receipt named by sourceReceiptId must exist; putaway rules are optional. Required inputs: sourceReceiptId (UUID string) plus either lineItems, each naming productId (UUID string) and a quantity of at least 1, or the legacy productId/quantity pair, but never both forms together. Emits an INVENTORY_PUTAWAY_TASK_GENERATE event; the tasks are created UNASSIGNED and no stock moves until executePutaway runs. Returns 404 when the goods receipt does not exist, and 400 when both line forms are supplied, neither is supplied, an id is not a valid UUID, or a quantity is below 1. 
      * @endpoint post /v1/inventory/putaway/tasks/generate
-     * @param generatePutawayTasksRequest 
+     * @param generatePutawayTasksRequest The source goods receipt and the received lines needing storage.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -168,8 +170,8 @@ export class PutawayService extends BaseService {
     }
 
     /**
-     * List available putaway tasks
-     * Returns all currently available putaway tasks.
+     * List Available Putaway Tasks
+     * Returns every UNASSIGNED putaway task, each with its product, quantity, staging source and suggested destination. Use this tool to find claimable putaway work before claimPutawayTask; tasks already ASSIGNED or COMPLETED never appear here, so do not use it to check a specific task\&#39;s progress. Preconditions: none; tasks exist only after generatePutawayTasks has run for a receipt. Required inputs: none; locationId and storageLocationId optionally scope the list by source location, and storageLocationId wins when both are given. No events are emitted and no state changes; this is a read-only projection. Returns 200 with an empty array when no unassigned tasks match, so an empty result is not an error condition. 
      * @endpoint get /v1/inventory/putaway/tasks
      * @param locationId Location identifier
      * @param storageLocationId Storage location identifier

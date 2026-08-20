@@ -38,11 +38,11 @@ export class AppointmentAssignmentsService extends BaseService {
     }
 
     /**
-     * Create appointment assignments
-     * Creates assignments for the specified appointment using the requested mechanics or shop resources.
+     * Create Mechanic Assignments for an Appointment
+     * Creates the mechanic assignment for a scheduled appointment in CONFIRMED status, linking one LEAD mechanic and optional ASSIST mechanics and optionally reserving a bay or mobile-unit resource. Use this tool when staffing a booked appointment; do not use executeConflictOverride, which records a schedule-conflict bypass without assigning anyone, and use listAssignments to read what is already assigned. Preconditions: the appointment must exist and be in SCHEDULED status, no CONFIRMED or IN_PROGRESS assignment may already exist for it, and every mechanicPersonId must resolve to a known mechanic. Required inputs: mechanics with exactly one LEAD role (a single mechanic with a null role defaults to LEAD); resourceId and resourceType are optional, and override&#x3D;true requires the shop:schedule:edit authority plus a non-blank overrideReason. Emits a SHOPMGR_ASSIGNMENT_CREATED event and persists the assignment and its mechanic links. Returns 400 when the appointment or a mechanic cannot be resolved, the LEAD constraint is violated, or overrideReason is blank with override&#x3D;true, and 403 when override is requested without the shop:schedule:edit authority. 
      * @endpoint post /v1/appointments/{appointmentId}/assignments
      * @param appointmentId Appointment identifier
-     * @param createAssignmentRequest 
+     * @param createAssignmentRequest Mechanics to assign with their roles plus an optional bay or mobile-unit resource; the appointmentId in the path takes precedence over the body.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -112,8 +112,8 @@ export class AppointmentAssignmentsService extends BaseService {
     }
 
     /**
-     * List appointment assignments
-     * Returns the current assignments associated with the specified appointment.
+     * List Assignments for an Appointment
+     * Returns all assignments recorded for an appointment, including each mechanic\&#39;s role, the reserved resource, status and override flag. Use this tool when reading the staffing of a known appointment; do not use createAssignment, which creates a new assignment, and use searchShopAudit for the historical change trail. Preconditions: none beyond authorization; an unknown appointmentId is not rejected. Required inputs: appointmentId (UUID) as a path parameter; there is no request body and no filtering. Emits a SHOPMGR_ASSIGNMENT_LIST_FETCHED audit event; no state changes occur, this is a read-only projection. Returns 200 with an empty list when the appointment has no assignments or does not exist; no 404 is raised for an unknown appointmentId. 
      * @endpoint get /v1/appointments/{appointmentId}/assignments
      * @param appointmentId Appointment identifier
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.

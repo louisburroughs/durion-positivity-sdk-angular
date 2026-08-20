@@ -13,12 +13,12 @@
  * One returned line
  */
 export interface Line { 
-    returnLineId?: string;
-    originalOrderLineId?: string;
-    itemSku?: string;
-    returnQty?: number;
     condition?: string;
+    itemSku?: string;
     lineRefund?: number;
+    originalOrderLineId?: string;
+    returnLineId?: string;
+    returnQty?: number;
     serialNumbers?: Array<string>;
 }
 
@@ -61,8 +61,8 @@ export function instanceOfLine(value: object): value is Line {
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createLinePropertyNames();
-    const optionalStringProperties = createLineOptionalProperties({ name: 'returnLineId', nullable: false }, { name: 'originalOrderLineId', nullable: false }, { name: 'itemSku', nullable: false }, { name: 'condition', nullable: false }, );
-    const optionalNumberProperties = createLineOptionalProperties({ name: 'returnQty', nullable: false }, { name: 'lineRefund', nullable: false }, );
+    const optionalStringProperties = createLineOptionalProperties({ name: 'condition', nullable: false }, { name: 'itemSku', nullable: false }, { name: 'originalOrderLineId', nullable: false }, { name: 'returnLineId', nullable: false }, );
+    const optionalNumberProperties = createLineOptionalProperties({ name: 'lineRefund', nullable: false }, { name: 'returnQty', nullable: false }, );
     const optionalBooleanProperties = createLineOptionalProperties();
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

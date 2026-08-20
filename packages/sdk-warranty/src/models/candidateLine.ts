@@ -10,18 +10,18 @@
 
 
 export interface CandidateLine { 
-    sourceType?: CandidateLineSourceTypeEnum;
+    description?: string;
+    lineTotal?: number;
+    photoEvidenceUrl?: string;
+    productEntityId?: string;
+    quantity?: number;
+    sku?: string;
+    sourceCreatedAt?: string;
     sourceId?: string;
     sourceLineId?: string;
     sourceReference?: string;
-    productEntityId?: string;
-    sku?: string;
-    description?: string;
-    quantity?: number;
+    sourceType?: CandidateLineSourceTypeEnum;
     unitPrice?: number;
-    lineTotal?: number;
-    sourceCreatedAt?: string;
-    photoEvidenceUrl?: string;
 }
 export enum CandidateLineSourceTypeEnum {
     InvoiceLine = 'INVOICE_LINE',
@@ -71,8 +71,8 @@ export function instanceOfCandidateLine(value: object): value is CandidateLine {
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createCandidateLinePropertyNames();
-    const optionalStringProperties = createCandidateLineOptionalProperties({ name: 'sourceType', nullable: false }, { name: 'sourceId', nullable: false }, { name: 'sourceLineId', nullable: false }, { name: 'sourceReference', nullable: false }, { name: 'productEntityId', nullable: false }, { name: 'sku', nullable: false }, { name: 'description', nullable: false }, { name: 'sourceCreatedAt', nullable: false }, { name: 'photoEvidenceUrl', nullable: false }, );
-    const optionalNumberProperties = createCandidateLineOptionalProperties({ name: 'quantity', nullable: false }, { name: 'unitPrice', nullable: false }, { name: 'lineTotal', nullable: false }, );
+    const optionalStringProperties = createCandidateLineOptionalProperties({ name: 'description', nullable: false }, { name: 'photoEvidenceUrl', nullable: false }, { name: 'productEntityId', nullable: false }, { name: 'sku', nullable: false }, { name: 'sourceCreatedAt', nullable: false }, { name: 'sourceId', nullable: false }, { name: 'sourceLineId', nullable: false }, { name: 'sourceReference', nullable: false }, { name: 'sourceType', nullable: false }, );
+    const optionalNumberProperties = createCandidateLineOptionalProperties({ name: 'lineTotal', nullable: false }, { name: 'quantity', nullable: false }, { name: 'unitPrice', nullable: false }, );
     const optionalBooleanProperties = createCandidateLineOptionalProperties();
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

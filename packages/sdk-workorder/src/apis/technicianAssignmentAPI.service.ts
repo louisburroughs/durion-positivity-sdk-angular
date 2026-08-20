@@ -40,11 +40,11 @@ export class TechnicianAssignmentAPIService extends BaseService {
     }
 
     /**
-     * Assign technician to workorder
-     * Assign a technician to a work order. Transitions workorder to ASSIGNED status if currently APPROVED.
+     * Assign Technician to Workorder
+     * Assigns a technician to a workorder as the current assignment, retiring any previous assignment into history and transitioning the workorder from APPROVED to ASSIGNED when applicable. Use this tool for the first assignment on a workorder; do not use reassignTechnician, which requires an existing current assignment and records a reassignment reason. Preconditions: the workorder must exist and be in APPROVED, ASSIGNED, or WORK_IN_PROGRESS status. Required inputs: workorderId (UUID) as a path parameter and technicianId (UUID) in the body; notes are optional, the assignedByUserId body field is ignored in favor of the security context, and the Idempotency-Key header is accepted but not currently used to deduplicate. Emits a WORKORDER_TECHNICIAN_ASSIGN event; an APPROVED workorder is transitioned to ASSIGNED with a recorded state transition. Returns 404 when the workorder does not exist, and 400 with the failure reason when the workorder status does not allow assignment. 
      * @endpoint post /v1/workorders/{workorderId}/technician
      * @param workorderId ID of the workorder
-     * @param assignTechnicianRequest Assign technician request
+     * @param assignTechnicianRequest Technician to place on the workorder, with optional assignment notes.
      * @param idempotencyKey Optional idempotency key to prevent duplicate assignments
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
@@ -101,7 +101,7 @@ export class TechnicianAssignmentAPIService extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/workorders/${this.configuration.encodeParam({name: "workorderId", value: workorderId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/technician`;
+        let localVarPath = `/v1/workorders/${this.configuration.encodeParam({name: "workorderId", value: workorderId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/technician`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<TechnicianAssignmentResponse>('post', `${basePath}${localVarPath}`,
             {
@@ -118,8 +118,8 @@ export class TechnicianAssignmentAPIService extends BaseService {
     }
 
     /**
-     * Get technician assignment
-     * Retrieve the current technician assignment and full assignment history for a workorder.
+     * Get Current Technician Assignment
+     * Returns the workorder\&#39;s current technician assignment together with the full assignment history and the workorder\&#39;s status. Use this tool when checking who owns a workorder; do not use assignTechnician or reassignTechnician, which change the assignment rather than reading it. Preconditions: the workorder must exist and have a current technician assignment. Required inputs: workorderId (UUID) as a path parameter. No events are emitted and no state changes; this is a read-only projection. Returns 404 when the workorder does not exist or when it has no current assignment. 
      * @endpoint get /v1/workorders/{workorderId}/technician
      * @param workorderId ID of the workorder
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -162,7 +162,7 @@ export class TechnicianAssignmentAPIService extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/workorders/${this.configuration.encodeParam({name: "workorderId", value: workorderId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/technician`;
+        let localVarPath = `/v1/workorders/${this.configuration.encodeParam({name: "workorderId", value: workorderId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/technician`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<TechnicianAssignmentResponse>('get', `${basePath}${localVarPath}`,
             {
@@ -178,11 +178,11 @@ export class TechnicianAssignmentAPIService extends BaseService {
     }
 
     /**
-     * Reassign workorder to different technician
-     * Reassign a workorder to a different technician. Records reassignment reason and maintains history.
+     * Reassign Workorder to Different Technician
+     * Reassigns a workorder to a different technician, retiring the current assignment with the given reason and creating a new current assignment that preserves the full history. Use this tool when a workorder already has a technician and must change hands; do not use assignTechnician, which is for the initial assignment and records no reassignment reason. Preconditions: the workorder must exist, be in APPROVED, ASSIGNED, or WORK_IN_PROGRESS status, and have a current technician assignment to reassign from. Required inputs: workorderId (UUID) as a path parameter and newTechnicianId (UUID) in the body; reason and notes are optional, the reassignedByUserId body field is ignored in favor of the security context, and the Idempotency-Key header is accepted but not currently used. Emits a WORKORDER_TECHNICIAN_REASSIGN event. Returns 404 when the workorder does not exist, and 400 with the failure reason when there is no current assignment or the workorder status does not allow reassignment. 
      * @endpoint put /v1/workorders/{workorderId}/technician
      * @param workorderId ID of the workorder
-     * @param reassignTechnicianRequest Reassign technician request
+     * @param reassignTechnicianRequest Replacement technician plus the reason the workorder is changing hands.
      * @param idempotencyKey Optional idempotency key to prevent duplicate reassignments
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
@@ -239,7 +239,7 @@ export class TechnicianAssignmentAPIService extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/workorders/${this.configuration.encodeParam({name: "workorderId", value: workorderId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/technician`;
+        let localVarPath = `/v1/workorders/${this.configuration.encodeParam({name: "workorderId", value: workorderId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/technician`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<TechnicianAssignmentResponse>('put', `${basePath}${localVarPath}`,
             {

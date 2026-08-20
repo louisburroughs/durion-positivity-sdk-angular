@@ -14,17 +14,21 @@
  */
 export interface SuppressionEntryResponse { 
     /**
-     * Suppression identifier
+     * Masked address; the raw value is never stored or returned
      */
-    suppressionId: string;
+    addressHint?: string;
     /**
      * Channel the block applies to
      */
     channel: SuppressionEntryResponseChannelEnum;
     /**
-     * Masked address; the raw value is never stored or returned
+     * When the block was created
      */
-    addressHint?: string;
+    createdAt: string;
+    /**
+     * Actor that created the block
+     */
+    createdBy?: string;
     /**
      * Party the address belonged to when blocked
      */
@@ -38,13 +42,9 @@ export interface SuppressionEntryResponse {
      */
     source: string;
     /**
-     * Actor that created the block
+     * Suppression identifier
      */
-    createdBy?: string;
-    /**
-     * When the block was created
-     */
-    createdAt: string;
+    suppressionId: string;
 }
 export enum SuppressionEntryResponseChannelEnum {
     Email = 'EMAIL',
@@ -91,8 +91,8 @@ export function instanceOfSuppressionEntryResponse(value: object): value is Supp
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createSuppressionEntryResponsePropertyNames('suppressionId', 'channel', 'reason', 'source', 'createdAt', );
-    const optionalStringProperties = createSuppressionEntryResponseOptionalProperties({ name: 'suppressionId', nullable: false }, { name: 'channel', nullable: false }, { name: 'addressHint', nullable: false }, { name: 'partyId', nullable: false }, { name: 'reason', nullable: false }, { name: 'source', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'createdAt', nullable: false }, );
+    const requiredProperties = createSuppressionEntryResponsePropertyNames('channel', 'createdAt', 'reason', 'source', 'suppressionId', );
+    const optionalStringProperties = createSuppressionEntryResponseOptionalProperties({ name: 'addressHint', nullable: false }, { name: 'channel', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'partyId', nullable: false }, { name: 'reason', nullable: false }, { name: 'source', nullable: false }, { name: 'suppressionId', nullable: false }, );
     const optionalNumberProperties = createSuppressionEntryResponseOptionalProperties();
     const optionalBooleanProperties = createSuppressionEntryResponseOptionalProperties();
 

@@ -14,13 +14,9 @@
  */
 export interface VendorProfileView { 
     /**
-     * Platform identity of the profile (UUIDv7, ADR-0050 §1).
+     * Default connect timeout for the profile\'s bindings, in milliseconds. Must be > 0 when present; omit to use the deployment default.
      */
-    vendorProfileId?: string;
-    /**
-     * Unique human-readable profile alias (ADR-0050 §1). Never blank. Identifies the configuration, and is never used as an identifier across a contract boundary.
-     */
-    supplierRef?: string;
+    connectTimeoutMillis?: number;
     /**
      * Admin-screen display name. Never blank.
      */
@@ -30,41 +26,45 @@ export interface VendorProfileView {
      */
     enabled?: boolean;
     /**
-     * Whether the profile runs against the vendor\'s sandbox environment (ADR-0050 §2 sandbox overlay).
+     * Default pre-send retry budget for the profile\'s bindings. Must be >= 0 when present; omit to use the deployment default. Only pre-send failures are retried.
      */
-    sandbox?: boolean;
-    /**
-     * Authoritative configuration source (ADR-0050 §6). Every mutation is rejected with 409 while this is YAML.
-     */
-    sourceOfTruth?: VendorProfileViewSourceOfTruthEnum;
-    /**
-     * Default connect timeout for the profile\'s bindings, in milliseconds. Must be > 0 when present; omit to use the deployment default.
-     */
-    connectTimeoutMillis?: number;
+    maxRetries?: number;
     /**
      * Default read timeout for the profile\'s bindings, in milliseconds. Must be > 0 when present; omit to use the deployment default.
      */
     readTimeoutMillis?: number;
     /**
-     * Default pre-send retry budget for the profile\'s bindings. Must be >= 0 when present; omit to use the deployment default. Only pre-send failures are retried.
+     * Default retry backoff strategy. Omit to use the deployment default.
      */
-    maxRetries?: number;
+    retryBackoff?: VendorProfileViewRetryBackoffEnum;
+    /**
+     * Whether the profile runs against the vendor\'s sandbox environment (ADR-0050 §2 sandbox overlay).
+     */
+    sandbox?: boolean;
     /**
      * Base URL the profile\'s bindings use while sandbox is set (ADR-0050 §2). Omit to leave the bindings\' own base URLs unchanged; never blank when present.
      */
     sandboxBaseUrlOverride?: string;
     /**
-     * Default retry backoff strategy. Omit to use the deployment default.
+     * Authoritative configuration source (ADR-0050 §6). Every mutation is rejected with 409 while this is YAML.
      */
-    retryBackoff?: VendorProfileViewRetryBackoffEnum;
+    sourceOfTruth?: VendorProfileViewSourceOfTruthEnum;
+    /**
+     * Unique human-readable profile alias (ADR-0050 §1). Never blank. Identifies the configuration, and is never used as an identifier across a contract boundary.
+     */
+    supplierRef?: string;
+    /**
+     * Platform identity of the profile (UUIDv7, ADR-0050 §1).
+     */
+    vendorProfileId?: string;
 }
-export enum VendorProfileViewSourceOfTruthEnum {
-    Yaml = 'YAML',
-    Admin = 'ADMIN'
-};
 export enum VendorProfileViewRetryBackoffEnum {
     Fixed = 'FIXED',
     Exponential = 'EXPONENTIAL'
+};
+export enum VendorProfileViewSourceOfTruthEnum {
+    Yaml = 'YAML',
+    Admin = 'ADMIN'
 };
 
 
@@ -108,8 +108,8 @@ export function instanceOfVendorProfileView(value: object): value is VendorProfi
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createVendorProfileViewPropertyNames();
-    const optionalStringProperties = createVendorProfileViewOptionalProperties({ name: 'vendorProfileId', nullable: false }, { name: 'supplierRef', nullable: false }, { name: 'displayName', nullable: false }, { name: 'sourceOfTruth', nullable: false }, { name: 'sandboxBaseUrlOverride', nullable: false }, { name: 'retryBackoff', nullable: false }, );
-    const optionalNumberProperties = createVendorProfileViewOptionalProperties({ name: 'connectTimeoutMillis', nullable: false }, { name: 'readTimeoutMillis', nullable: false }, { name: 'maxRetries', nullable: false }, );
+    const optionalStringProperties = createVendorProfileViewOptionalProperties({ name: 'displayName', nullable: false }, { name: 'retryBackoff', nullable: false }, { name: 'sandboxBaseUrlOverride', nullable: false }, { name: 'sourceOfTruth', nullable: false }, { name: 'supplierRef', nullable: false }, { name: 'vendorProfileId', nullable: false }, );
+    const optionalNumberProperties = createVendorProfileViewOptionalProperties({ name: 'connectTimeoutMillis', nullable: false }, { name: 'maxRetries', nullable: false }, { name: 'readTimeoutMillis', nullable: false }, );
     const optionalBooleanProperties = createVendorProfileViewOptionalProperties({ name: 'enabled', nullable: false }, { name: 'sandbox', nullable: false }, );
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

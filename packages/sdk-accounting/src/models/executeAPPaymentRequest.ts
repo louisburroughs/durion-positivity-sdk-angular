@@ -15,45 +15,45 @@ import { AllocationLineRequest } from './allocationLineRequest';
  */
 export interface ExecuteAPPaymentRequest { 
     /**
-     * Vendor UUID
+     * Optional explicit allocations to vendor bills. If omitted, automatic allocation applied.
      */
-    vendorId: string;
-    /**
-     * Gross payment amount
-     */
-    grossAmount: number;
-    /**
-     * Fee amount (if known at capture time)
-     */
-    feeAmount?: number;
-    /**
-     * Net amount deposited (if applicable)
-     */
-    netAmount?: number;
+    allocations?: Array<AllocationLineRequest>;
     /**
      * ISO 4217 currency code
      */
     currency: string;
     /**
-     * Unique payment reference (idempotency key)
+     * Fee amount (if known at capture time)
      */
-    paymentRef: string;
+    feeAmount?: number;
     /**
-     * Payment method (ACH, CHECK, WIRE, CREDIT_CARD, OTHER)
+     * Gross payment amount
      */
-    paymentMethod: ExecuteAPPaymentRequestPaymentMethodEnum;
-    /**
-     * Payment source token or identifier from the payment provider (e.g., Stripe token, bank account ID)
-     */
-    paymentSource?: string;
+    grossAmount: number;
     /**
      * Optional payment memo/notes
      */
     memo?: string;
     /**
-     * Optional explicit allocations to vendor bills. If omitted, automatic allocation applied.
+     * Net amount deposited (if applicable)
      */
-    allocations?: Array<AllocationLineRequest>;
+    netAmount?: number;
+    /**
+     * Payment method (ACH, CHECK, WIRE, CREDIT_CARD, OTHER)
+     */
+    paymentMethod: ExecuteAPPaymentRequestPaymentMethodEnum;
+    /**
+     * Unique payment reference (idempotency key)
+     */
+    paymentRef: string;
+    /**
+     * Payment source token or identifier from the payment provider (e.g., Stripe token, bank account ID)
+     */
+    paymentSource?: string;
+    /**
+     * Vendor UUID
+     */
+    vendorId: string;
 }
 export enum ExecuteAPPaymentRequestPaymentMethodEnum {
     Ach = 'ACH',
@@ -103,9 +103,9 @@ export function instanceOfExecuteAPPaymentRequest(value: object): value is Execu
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createExecuteAPPaymentRequestPropertyNames('vendorId', 'grossAmount', 'currency', 'paymentRef', 'paymentMethod', );
-    const optionalStringProperties = createExecuteAPPaymentRequestOptionalProperties({ name: 'vendorId', nullable: false }, { name: 'currency', nullable: false }, { name: 'paymentRef', nullable: false }, { name: 'paymentMethod', nullable: false }, { name: 'paymentSource', nullable: false }, { name: 'memo', nullable: false }, );
-    const optionalNumberProperties = createExecuteAPPaymentRequestOptionalProperties({ name: 'grossAmount', nullable: false }, { name: 'feeAmount', nullable: false }, { name: 'netAmount', nullable: false }, );
+    const requiredProperties = createExecuteAPPaymentRequestPropertyNames('currency', 'grossAmount', 'paymentMethod', 'paymentRef', 'vendorId', );
+    const optionalStringProperties = createExecuteAPPaymentRequestOptionalProperties({ name: 'currency', nullable: false }, { name: 'memo', nullable: false }, { name: 'paymentMethod', nullable: false }, { name: 'paymentRef', nullable: false }, { name: 'paymentSource', nullable: false }, { name: 'vendorId', nullable: false }, );
+    const optionalNumberProperties = createExecuteAPPaymentRequestOptionalProperties({ name: 'feeAmount', nullable: false }, { name: 'grossAmount', nullable: false }, { name: 'netAmount', nullable: false }, );
     const optionalBooleanProperties = createExecuteAPPaymentRequestOptionalProperties();
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

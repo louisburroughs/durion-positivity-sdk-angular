@@ -14,26 +14,6 @@
  */
 export interface RefundRequest { 
     /**
-     * Identifier of the invoice being refunded
-     */
-    invoiceId: string;
-    /**
-     * Identifier of the payment being refunded
-     */
-    paymentId: string;
-    /**
-     * Type of refund being recorded
-     */
-    refundType: RefundRequestRefundTypeEnum;
-    /**
-     * Amount being refunded
-     */
-    refundAmount: number;
-    /**
-     * Status of the original payment being refunded
-     */
-    originalPaymentStatus: RefundRequestOriginalPaymentStatusEnum;
-    /**
      * Legacy client-provided actor identifier; service resolves authoritative actor from security context
      */
     actorId?: string;
@@ -42,20 +22,40 @@ export interface RefundRequest {
      */
     actorRole: string;
     /**
+     * Identifier of the invoice being refunded
+     */
+    invoiceId: string;
+    /**
+     * Status of the original payment being refunded
+     */
+    originalPaymentStatus: RefundRequestOriginalPaymentStatusEnum;
+    /**
+     * Identifier of the payment being refunded
+     */
+    paymentId: string;
+    /**
      * Reason for the refund
      */
     reason: string;
+    /**
+     * Amount being refunded
+     */
+    refundAmount: number;
+    /**
+     * Type of refund being recorded
+     */
+    refundType: RefundRequestRefundTypeEnum;
 }
-export enum RefundRequestRefundTypeEnum {
-    Reversal = 'REVERSAL',
-    CreditMemo = 'CREDIT_MEMO',
-    Adjustment = 'ADJUSTMENT'
-};
 export enum RefundRequestOriginalPaymentStatusEnum {
     Pending = 'PENDING',
     Settled = 'SETTLED',
     Failed = 'FAILED',
     Authorized = 'AUTHORIZED'
+};
+export enum RefundRequestRefundTypeEnum {
+    Reversal = 'REVERSAL',
+    CreditMemo = 'CREDIT_MEMO',
+    Adjustment = 'ADJUSTMENT'
 };
 
 
@@ -98,8 +98,8 @@ export function instanceOfRefundRequest(value: object): value is RefundRequest {
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createRefundRequestPropertyNames('invoiceId', 'paymentId', 'refundType', 'refundAmount', 'originalPaymentStatus', 'actorRole', 'reason', );
-    const optionalStringProperties = createRefundRequestOptionalProperties({ name: 'invoiceId', nullable: false }, { name: 'paymentId', nullable: false }, { name: 'refundType', nullable: false }, { name: 'originalPaymentStatus', nullable: false }, { name: 'actorId', nullable: false }, { name: 'actorRole', nullable: false }, { name: 'reason', nullable: false }, );
+    const requiredProperties = createRefundRequestPropertyNames('actorRole', 'invoiceId', 'originalPaymentStatus', 'paymentId', 'reason', 'refundAmount', 'refundType', );
+    const optionalStringProperties = createRefundRequestOptionalProperties({ name: 'actorId', nullable: false }, { name: 'actorRole', nullable: false }, { name: 'invoiceId', nullable: false }, { name: 'originalPaymentStatus', nullable: false }, { name: 'paymentId', nullable: false }, { name: 'reason', nullable: false }, { name: 'refundType', nullable: false }, );
     const optionalNumberProperties = createRefundRequestOptionalProperties({ name: 'refundAmount', nullable: false }, );
     const optionalBooleanProperties = createRefundRequestOptionalProperties();
 

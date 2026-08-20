@@ -15,17 +15,17 @@ import { ConsumedItemResult } from './consumedItemResult';
  */
 export interface ConsumePickedItemsResponse { 
     /**
-     * Identifier of the workorder the items were consumed into
+     * Per-item consumption results
      */
-    workorderId: string;
+    results?: Array<ConsumedItemResult>;
     /**
      * Total number of items consumed
      */
     totalItemsConsumed: number;
     /**
-     * Per-item consumption results
+     * Identifier of the workorder the items were consumed into
      */
-    results?: Array<ConsumedItemResult>;
+    workorderId: string;
 }
 
 function isOptionalConsumePickedItemsResponsePropertyOfType(
@@ -66,7 +66,7 @@ export function instanceOfConsumePickedItemsResponse(value: object): value is Co
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createConsumePickedItemsResponsePropertyNames('workorderId', 'totalItemsConsumed', );
+    const requiredProperties = createConsumePickedItemsResponsePropertyNames('totalItemsConsumed', 'workorderId', );
     const optionalStringProperties = createConsumePickedItemsResponseOptionalProperties({ name: 'workorderId', nullable: false }, );
     const optionalNumberProperties = createConsumePickedItemsResponseOptionalProperties({ name: 'totalItemsConsumed', nullable: false }, );
     const optionalBooleanProperties = createConsumePickedItemsResponseOptionalProperties();

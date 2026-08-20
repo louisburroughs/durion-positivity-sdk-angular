@@ -14,38 +14,38 @@
  */
 export interface CreateReplenishmentPolicyRequest { 
     /**
-     * Identifier of the location the replenishment policy applies to
+     * Whether the policy participates in replenishment evaluation; defaults to true
      */
-    locationId: string;
+    active?: boolean;
     /**
      * SKU of the item the replenishment policy applies to
      */
     itemSKU: string;
     /**
-     * Minimum on-hand quantity that triggers replenishment when reached
+     * Per-policy lead-time override in days; takes precedence over vendor-feed lead-time estimates and the configured default
      */
-    minimumQuantity: number;
+    leadTimeDaysOverride?: number;
+    /**
+     * Identifier of the location the replenishment policy applies to
+     */
+    locationId: string;
     /**
      * Maximum on-hand quantity replenishment aims to restock up to
      */
     maximumQuantity: number;
+    minimumLessThanMaximum?: boolean;
+    /**
+     * Minimum on-hand quantity that triggers replenishment when reached
+     */
+    minimumQuantity: number;
     /**
      * Round the computed replenishment quantity up to the nearest multiple of this value. When omitted, defaults to the vendor-feed pack size for the SKU when one is known (greater than 1); otherwise no rounding is applied.
      */
     orderMultiple?: number;
     /**
-     * Per-policy lead-time override in days; takes precedence over vendor-feed lead-time estimates and the configured default
-     */
-    leadTimeDaysOverride?: number;
-    /**
      * Preferred sourcing channel for replenishing this policy\'s pick face; defaults to EITHER
      */
     preferredSourceType?: CreateReplenishmentPolicyRequestPreferredSourceTypeEnum;
-    /**
-     * Whether the policy participates in replenishment evaluation; defaults to true
-     */
-    active?: boolean;
-    minimumLessThanMaximum?: boolean;
 }
 export enum CreateReplenishmentPolicyRequestPreferredSourceTypeEnum {
     InternalTransfer = 'INTERNAL_TRANSFER',
@@ -93,9 +93,9 @@ export function instanceOfCreateReplenishmentPolicyRequest(value: object): value
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createCreateReplenishmentPolicyRequestPropertyNames('locationId', 'itemSKU', 'minimumQuantity', 'maximumQuantity', );
-    const optionalStringProperties = createCreateReplenishmentPolicyRequestOptionalProperties({ name: 'locationId', nullable: false }, { name: 'itemSKU', nullable: false }, { name: 'preferredSourceType', nullable: false }, );
-    const optionalNumberProperties = createCreateReplenishmentPolicyRequestOptionalProperties({ name: 'minimumQuantity', nullable: false }, { name: 'maximumQuantity', nullable: false }, { name: 'orderMultiple', nullable: false }, { name: 'leadTimeDaysOverride', nullable: false }, );
+    const requiredProperties = createCreateReplenishmentPolicyRequestPropertyNames('itemSKU', 'locationId', 'maximumQuantity', 'minimumQuantity', );
+    const optionalStringProperties = createCreateReplenishmentPolicyRequestOptionalProperties({ name: 'itemSKU', nullable: false }, { name: 'locationId', nullable: false }, { name: 'preferredSourceType', nullable: false }, );
+    const optionalNumberProperties = createCreateReplenishmentPolicyRequestOptionalProperties({ name: 'leadTimeDaysOverride', nullable: false }, { name: 'maximumQuantity', nullable: false }, { name: 'minimumQuantity', nullable: false }, { name: 'orderMultiple', nullable: false }, );
     const optionalBooleanProperties = createCreateReplenishmentPolicyRequestOptionalProperties({ name: 'active', nullable: false }, { name: 'minimumLessThanMaximum', nullable: false }, );
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

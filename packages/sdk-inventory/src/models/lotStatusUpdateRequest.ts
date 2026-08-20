@@ -14,13 +14,13 @@
  */
 export interface LotStatusUpdateRequest { 
     /**
-     * Target lifecycle status. One of ACTIVE (release), QUARANTINED, RECALLED. CONSUMED is rejected (reconciler-owned).
-     */
-    status: LotStatusUpdateRequestStatusEnum;
-    /**
      * Reason for the status change (mandatory; recorded for traceability)
      */
     reason: string;
+    /**
+     * Target lifecycle status. One of ACTIVE (release), QUARANTINED, RECALLED. CONSUMED is rejected (reconciler-owned).
+     */
+    status: LotStatusUpdateRequestStatusEnum;
 }
 export enum LotStatusUpdateRequestStatusEnum {
     Active = 'ACTIVE',
@@ -69,8 +69,8 @@ export function instanceOfLotStatusUpdateRequest(value: object): value is LotSta
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createLotStatusUpdateRequestPropertyNames('status', 'reason', );
-    const optionalStringProperties = createLotStatusUpdateRequestOptionalProperties({ name: 'status', nullable: false }, { name: 'reason', nullable: false }, );
+    const requiredProperties = createLotStatusUpdateRequestPropertyNames('reason', 'status', );
+    const optionalStringProperties = createLotStatusUpdateRequestOptionalProperties({ name: 'reason', nullable: false }, { name: 'status', nullable: false }, );
     const optionalNumberProperties = createLotStatusUpdateRequestOptionalProperties();
     const optionalBooleanProperties = createLotStatusUpdateRequestOptionalProperties();
 

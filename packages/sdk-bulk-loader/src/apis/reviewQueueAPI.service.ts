@@ -26,6 +26,8 @@ import { BulkCorrectionRequest } from '../src/models/bulkCorrectionRequest';
 import { BulkCorrectionResponse } from '../src/models/bulkCorrectionResponse';
 // @ts-ignore
 import { CorrectionResultDto } from '../src/models/correctionResultDto';
+// @ts-ignore
+import { ProblemDetail } from '../src/models/problemDetail';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
@@ -44,18 +46,18 @@ export class ReviewQueueAPIService extends BaseService {
     }
 
     /**
-     * Download error report as CSV for a bulk load job
-     * Generates and downloads a CSV file containing all error records for the specified bulk load job.
+     * Download Error Report as CSV
+     * Generates a CSV export of the audit records for a bulk load job and returns it as a text/csv attachment. Use this tool to hand failed rows to a spreadsheet for offline correction; use listAuditRecords instead when the records are needed as JSON for programmatic handling. Preconditions: the job must exist and belong to the authenticated operator. Required inputs: jobId (UUID) as a path parameter; the response is a CSV with header columns row_number, entity_type, review_status, reason_codes and original_values, covering every audit record for the job rather than only errored rows. No events are emitted and no state changes; this is a read-only projection. Returns 404 when no job exists with the supplied id for the authenticated operator. 
      * @endpoint get /v1/bulk-jobs/{jobId}/error-report
      * @param jobId 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public downloadErrorReport(jobId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Blob>;
-    public downloadErrorReport(jobId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Blob>>;
-    public downloadErrorReport(jobId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Blob>>;
-    public downloadErrorReport(jobId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public downloadErrorReport(jobId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<Blob>;
+    public downloadErrorReport(jobId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Blob>>;
+    public downloadErrorReport(jobId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Blob>>;
+    public downloadErrorReport(jobId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (jobId === null || jobId === undefined) {
             throw new Error('Required parameter jobId was null or undefined when calling downloadErrorReport.');
         }
@@ -66,7 +68,8 @@ export class ReviewQueueAPIService extends BaseService {
         localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
 
         const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
-            'application/json'
+            'application/json',
+            'application/problem+json'
         ]);
         if (localVarHttpHeaderAcceptSelected !== undefined) {
             localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
@@ -93,20 +96,20 @@ export class ReviewQueueAPIService extends BaseService {
     }
 
     /**
-     * Get audit records for a bulk load job
-     * Returns a list of audit records for the specified bulk load job, including review status and details for each record.
+     * Get Audit Records for Job
+     * Returns every row-level audit record captured for a bulk load job, including review status, reason codes and the original source values. Use this tool to inspect which rows failed and why after processing; use downloadErrorReport instead when a CSV export of the same records is needed. Preconditions: the job must exist and belong to the authenticated operator; audit records exist only after processing has run. Required inputs: jobId (UUID) as a path parameter; there is no request body and no pagination, so the full list is returned in one response. No events are emitted and no state changes; this is a read-only projection. Returns 404 when no job exists with the supplied id for the authenticated operator. 
      * @endpoint get /v1/bulk-jobs/{jobId}/audit
      * @param jobId 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public getAuditRecords(jobId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<AuditRecordResponse>>;
-    public getAuditRecords(jobId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<AuditRecordResponse>>>;
-    public getAuditRecords(jobId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<AuditRecordResponse>>>;
-    public getAuditRecords(jobId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public listAuditRecords(jobId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<Array<AuditRecordResponse>>;
+    public listAuditRecords(jobId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<AuditRecordResponse>>>;
+    public listAuditRecords(jobId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<AuditRecordResponse>>>;
+    public listAuditRecords(jobId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (jobId === null || jobId === undefined) {
-            throw new Error('Required parameter jobId was null or undefined when calling getAuditRecords.');
+            throw new Error('Required parameter jobId was null or undefined when calling listAuditRecords.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -115,7 +118,8 @@ export class ReviewQueueAPIService extends BaseService {
         localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
 
         const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
-            'application/json'
+            'application/json',
+            'application/problem+json'
         ]);
         if (localVarHttpHeaderAcceptSelected !== undefined) {
             localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
@@ -153,19 +157,19 @@ export class ReviewQueueAPIService extends BaseService {
     }
 
     /**
-     * Submit corrected records for a bulk load job
-     * Submits corrected data for one or more error records from a bulk import audit. The job must be in FAILED state to accept corrections. Returns 409 if the job is not in a correctable state.
+     * Submit Corrected Records for Job
+     * Submits corrected field values for one or more audit records of a FAILED bulk load job, marking each accepted record CORRECTED. Use this tool to fix several failed rows in one call; use submitSingleCorrection instead when correcting exactly one record and a per-record accept or reject status is wanted. Preconditions: the job must belong to the authenticated operator and be in FAILED state; each auditRecordId must belong to that job. Required inputs: corrections, a non-empty list where each item carries auditRecordId (UUID) and correctedData, a map of field names to corrected string values. Emits a BULK_LOADER_CORRECTION_SUBMIT event and stores the corrected values on each audit record; items whose audit record is missing or belongs to another job are rejected individually and reported in the response\&#39;s rejections list without failing the call. Correcting records does not re-run the import; call retryBulkLoadJob and then startJobProcessing to process the job again. Returns 201 with accepted and rejected counts, 409 when the job is not in FAILED state, 404 when the job does not exist, and 403 when it belongs to another operator. 
      * @endpoint post /v1/bulk-jobs/{jobId}/corrections
      * @param jobId 
-     * @param bulkCorrectionRequest 
+     * @param bulkCorrectionRequest Batch of corrected values, one item per failed audit record to be marked CORRECTED.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public submitCorrections(jobId: string, bulkCorrectionRequest: BulkCorrectionRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<BulkCorrectionResponse>;
-    public submitCorrections(jobId: string, bulkCorrectionRequest: BulkCorrectionRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<BulkCorrectionResponse>>;
-    public submitCorrections(jobId: string, bulkCorrectionRequest: BulkCorrectionRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<BulkCorrectionResponse>>;
-    public submitCorrections(jobId: string, bulkCorrectionRequest: BulkCorrectionRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public submitCorrections(jobId: string, bulkCorrectionRequest: BulkCorrectionRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<BulkCorrectionResponse>;
+    public submitCorrections(jobId: string, bulkCorrectionRequest: BulkCorrectionRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<BulkCorrectionResponse>>;
+    public submitCorrections(jobId: string, bulkCorrectionRequest: BulkCorrectionRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<BulkCorrectionResponse>>;
+    public submitCorrections(jobId: string, bulkCorrectionRequest: BulkCorrectionRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (jobId === null || jobId === undefined) {
             throw new Error('Required parameter jobId was null or undefined when calling submitCorrections.');
         }
@@ -179,7 +183,8 @@ export class ReviewQueueAPIService extends BaseService {
         localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
 
         const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
-            'application/json'
+            'application/json',
+            'application/problem+json'
         ]);
         if (localVarHttpHeaderAcceptSelected !== undefined) {
             localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
@@ -227,19 +232,19 @@ export class ReviewQueueAPIService extends BaseService {
     }
 
     /**
-     * Submit a single correction record
-     * Submits a corrected data record for a single failed audit entry from a bulk import job. The job must be in FAILED state. Returns the acceptance or rejection status for the submitted record.
+     * Submit a Single Correction Record
+     * Submits corrected field values for exactly one audit record of a FAILED bulk load job and reports whether the correction was accepted. Use this tool for interactive row-by-row fixing; use submitCorrections instead to correct a batch of records in one call. Preconditions: the job must belong to the authenticated operator and be in FAILED state; the auditRecordId must belong to that job. Required inputs: auditRecordId (UUID) and correctedData, a map of field names to corrected string values. Emits a BULK_LOADER_CORRECTION_SUBMIT_SINGLE event and stores the corrected values on the audit record, setting its review status to CORRECTED when accepted; correcting a record does not re-run the import. Returns 201 with status ACCEPTED or REJECTED plus a rejectionReason when rejected, 409 when the job is not in FAILED state, 404 when the job does not exist, and 403 when it belongs to another operator. 
      * @endpoint post /v1/bulk-jobs/{jobId}/corrections/single
      * @param jobId ID of the bulk load job
-     * @param bulkCorrectionItem 
+     * @param bulkCorrectionItem Single corrected record naming the audit record and the field values that replace the failed ones.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public submitSingleCorrection(jobId: string, bulkCorrectionItem: BulkCorrectionItem, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<CorrectionResultDto>;
-    public submitSingleCorrection(jobId: string, bulkCorrectionItem: BulkCorrectionItem, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<CorrectionResultDto>>;
-    public submitSingleCorrection(jobId: string, bulkCorrectionItem: BulkCorrectionItem, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<CorrectionResultDto>>;
-    public submitSingleCorrection(jobId: string, bulkCorrectionItem: BulkCorrectionItem, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public submitSingleCorrection(jobId: string, bulkCorrectionItem: BulkCorrectionItem, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<CorrectionResultDto>;
+    public submitSingleCorrection(jobId: string, bulkCorrectionItem: BulkCorrectionItem, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<CorrectionResultDto>>;
+    public submitSingleCorrection(jobId: string, bulkCorrectionItem: BulkCorrectionItem, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<CorrectionResultDto>>;
+    public submitSingleCorrection(jobId: string, bulkCorrectionItem: BulkCorrectionItem, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (jobId === null || jobId === undefined) {
             throw new Error('Required parameter jobId was null or undefined when calling submitSingleCorrection.');
         }
@@ -253,7 +258,8 @@ export class ReviewQueueAPIService extends BaseService {
         localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
 
         const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
-            'application/json'
+            'application/json',
+            'application/problem+json'
         ]);
         if (localVarHttpHeaderAcceptSelected !== undefined) {
             localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
@@ -284,7 +290,7 @@ export class ReviewQueueAPIService extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/bulk-jobs/${this.configuration.encodeParam({name: "jobId", value: jobId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/corrections/single`;
+        let localVarPath = `/v1/bulk-jobs/${this.configuration.encodeParam({name: "jobId", value: jobId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/corrections/single`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<CorrectionResultDto>('post', `${basePath}${localVarPath}`,
             {

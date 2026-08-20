@@ -14,6 +14,10 @@
  */
 export interface PreferencesUpsertDto { 
     /**
+     * Identifier of the user creating the preferences
+     */
+    createdByUserId?: string;
+    /**
      * Complete preference map to store for the vehicle
      */
     preferences: object;
@@ -25,10 +29,6 @@ export interface PreferencesUpsertDto {
      * Optional free-text service notes
      */
     serviceNotes?: string;
-    /**
-     * Identifier of the user creating the preferences
-     */
-    createdByUserId?: string;
     /**
      * Identifier of the user updating the preferences
      */
@@ -74,7 +74,7 @@ export function instanceOfPreferencesUpsertDto(value: object): value is Preferen
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createPreferencesUpsertDtoPropertyNames('preferences', );
-    const optionalStringProperties = createPreferencesUpsertDtoOptionalProperties({ name: 'serviceNotes', nullable: false }, { name: 'createdByUserId', nullable: false }, { name: 'updatedByUserId', nullable: false }, );
+    const optionalStringProperties = createPreferencesUpsertDtoOptionalProperties({ name: 'createdByUserId', nullable: false }, { name: 'serviceNotes', nullable: false }, { name: 'updatedByUserId', nullable: false }, );
     const optionalNumberProperties = createPreferencesUpsertDtoOptionalProperties({ name: 'serviceIntervalMonths', nullable: false }, );
     const optionalBooleanProperties = createPreferencesUpsertDtoOptionalProperties();
 

@@ -14,25 +14,25 @@
  */
 export interface EmitEventRequest { 
     /**
-     * Preregistered event type code
-     */
-    id: string;
-    /**
      * Event API version
      */
     apiVersion: string;
-    /**
-     * Event timestamp in epoch milliseconds
-     */
-    timestamp: number;
     /**
      * Elapsed operation time in milliseconds
      */
     elapsedMs: number;
     /**
+     * Preregistered event type code
+     */
+    id: string;
+    /**
      * Event publication time in UTC
      */
     publishedAt: string;
+    /**
+     * Event timestamp in epoch milliseconds
+     */
+    timestamp: number;
 }
 
 function isOptionalEmitEventRequestPropertyOfType(
@@ -73,9 +73,9 @@ export function instanceOfEmitEventRequest(value: object): value is EmitEventReq
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createEmitEventRequestPropertyNames('id', 'apiVersion', 'timestamp', 'elapsedMs', 'publishedAt', );
-    const optionalStringProperties = createEmitEventRequestOptionalProperties({ name: 'id', nullable: false }, { name: 'apiVersion', nullable: false }, { name: 'publishedAt', nullable: false }, );
-    const optionalNumberProperties = createEmitEventRequestOptionalProperties({ name: 'timestamp', nullable: false }, { name: 'elapsedMs', nullable: false }, );
+    const requiredProperties = createEmitEventRequestPropertyNames('apiVersion', 'elapsedMs', 'id', 'publishedAt', 'timestamp', );
+    const optionalStringProperties = createEmitEventRequestOptionalProperties({ name: 'apiVersion', nullable: false }, { name: 'id', nullable: false }, { name: 'publishedAt', nullable: false }, );
+    const optionalNumberProperties = createEmitEventRequestOptionalProperties({ name: 'elapsedMs', nullable: false }, { name: 'timestamp', nullable: false }, );
     const optionalBooleanProperties = createEmitEventRequestOptionalProperties();
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

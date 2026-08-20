@@ -9,6 +9,7 @@
  */
 import { SubstitutionHint } from './substitutionHint';
 import { PricingInfo } from './pricingInfo';
+import { SupplierAvailabilityInfo } from './supplierAvailabilityInfo';
 import { AvailabilityInfo } from './availabilityInfo';
 import { ProductSpecification } from './productSpecification';
 
@@ -17,32 +18,33 @@ import { ProductSpecification } from './productSpecification';
  * Consolidated product detail view with pricing and availability
  */
 export interface ProductDetailView { 
+    availability?: AvailabilityInfo;
     /**
-     * Unique product identifier
+     * Overall confidence in the data completeness
      */
-    productId: string;
+    confidence: ProductDetailViewConfidenceEnum;
     /**
      * Product description
      */
     description?: string;
     /**
+     * Timestamp when this response was generated
+     */
+    generatedAt: string;
+    pricing?: PricingInfo;
+    /**
+     * Unique product identifier
+     */
+    productId: string;
+    /**
      * Product specifications
      */
     specifications?: Array<ProductSpecification>;
-    pricing?: PricingInfo;
-    availability?: AvailabilityInfo;
     /**
      * Substitution product suggestions
      */
     substitutions?: Array<SubstitutionHint>;
-    /**
-     * Timestamp when this response was generated
-     */
-    generatedAt: string;
-    /**
-     * Overall confidence in the data completeness
-     */
-    confidence: ProductDetailViewConfidenceEnum;
+    supplierAvailability?: SupplierAvailabilityInfo;
 }
 export enum ProductDetailViewConfidenceEnum {
     Low = 'LOW',
@@ -90,8 +92,8 @@ export function instanceOfProductDetailView(value: object): value is ProductDeta
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createProductDetailViewPropertyNames('productId', 'generatedAt', 'confidence', );
-    const optionalStringProperties = createProductDetailViewOptionalProperties({ name: 'productId', nullable: false }, { name: 'description', nullable: false }, { name: 'generatedAt', nullable: false }, { name: 'confidence', nullable: false }, );
+    const requiredProperties = createProductDetailViewPropertyNames('confidence', 'generatedAt', 'productId', );
+    const optionalStringProperties = createProductDetailViewOptionalProperties({ name: 'confidence', nullable: false }, { name: 'description', nullable: false }, { name: 'generatedAt', nullable: false }, { name: 'productId', nullable: false }, );
     const optionalNumberProperties = createProductDetailViewOptionalProperties();
     const optionalBooleanProperties = createProductDetailViewOptionalProperties();
 

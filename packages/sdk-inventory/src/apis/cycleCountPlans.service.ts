@@ -41,19 +41,19 @@ export class CycleCountPlansService extends BaseService {
 
     /**
      * Create cycle count plan
-     * Creates a cycle count plan and returns its configuration details.
+     * Creates a cycle count plan in PLANNED status for one location, covering one or more zones on a future scheduled date. Use this tool for a one-off, manually initiated count; do not use createCycleCountSchedule, which sets up a recurring schedule that generates plans automatically. Preconditions: the caller must be an authenticated user (recorded as the plan creator), and scheduledDate must be strictly after today. Required inputs: locationId (UUID), at least one zone in zoneIds, planName, and scheduledDate (ISO date, future). Emits an INVENTORY_CYCLE_COUNT_PLAN_CREATE event; no tasks or ledger entries are created by this call. Returns 400 when locationId is missing, zoneIds is empty, or scheduledDate is not in the future. 
      * @endpoint post /v1/inventory/cycleCountPlans
-     * @param createCycleCountPlanRequest 
+     * @param createCycleCountPlanRequest Cycle count plan to create, naming the location, zones, and the future date the count is scheduled for.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public createPlan(createCycleCountPlanRequest: CreateCycleCountPlanRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<CycleCountPlanResponse>;
-    public createPlan(createCycleCountPlanRequest: CreateCycleCountPlanRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<CycleCountPlanResponse>>;
-    public createPlan(createCycleCountPlanRequest: CreateCycleCountPlanRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<CycleCountPlanResponse>>;
-    public createPlan(createCycleCountPlanRequest: CreateCycleCountPlanRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public createCycleCountPlan(createCycleCountPlanRequest: CreateCycleCountPlanRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<CycleCountPlanResponse>;
+    public createCycleCountPlan(createCycleCountPlanRequest: CreateCycleCountPlanRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<CycleCountPlanResponse>>;
+    public createCycleCountPlan(createCycleCountPlanRequest: CreateCycleCountPlanRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<CycleCountPlanResponse>>;
+    public createCycleCountPlan(createCycleCountPlanRequest: CreateCycleCountPlanRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (createCycleCountPlanRequest === null || createCycleCountPlanRequest === undefined) {
-            throw new Error('Required parameter createCycleCountPlanRequest was null or undefined when calling createPlan.');
+            throw new Error('Required parameter createCycleCountPlanRequest was null or undefined when calling createCycleCountPlan.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -111,19 +111,19 @@ export class CycleCountPlansService extends BaseService {
 
     /**
      * Get cycle count plan
-     * Returns a cycle count plan by identifier.
+     * Returns one cycle count plan with its zones, scheduled date, lifecycle status, and originating schedule linkage. Use this tool when the planId is already known; use listCycleCountPlans instead to search by location or status. Preconditions: the plan must exist. Required inputs: planId (UUID) as a path parameter; there is no request body. No events are emitted and no state changes; this is a read-only projection. Returns 404 when no cycle count plan exists for the supplied id. 
      * @endpoint get /v1/inventory/cycleCountPlans/{planId}
      * @param planId Cycle count plan identifier
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public getPlan(planId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<CycleCountPlanResponse>;
-    public getPlan(planId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<CycleCountPlanResponse>>;
-    public getPlan(planId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<CycleCountPlanResponse>>;
-    public getPlan(planId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getCycleCountPlan(planId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<CycleCountPlanResponse>;
+    public getCycleCountPlan(planId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<CycleCountPlanResponse>>;
+    public getCycleCountPlan(planId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<CycleCountPlanResponse>>;
+    public getCycleCountPlan(planId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (planId === null || planId === undefined) {
-            throw new Error('Required parameter planId was null or undefined when calling getPlan.');
+            throw new Error('Required parameter planId was null or undefined when calling getCycleCountPlan.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -171,7 +171,7 @@ export class CycleCountPlansService extends BaseService {
 
     /**
      * List cycle count plans
-     * Lists one page of cycle count plans, newest first, optionally filtered by location and/or status. Bounded by page/size (default size 50).
+     * Returns one page of cycle count plans, newest first, optionally filtered by location and/or lifecycle status. Use this tool to discover planIds or review upcoming and completed counts; use getCycleCountPlan instead when the planId is already known. Preconditions: none. Required inputs: all query parameters are optional — locationId (UUID), status (PLANNED, STARTED, COMPLETED_PENDING_APPROVAL, APPROVED, REJECTED, CANCELLED), page (0-based, default 0) and size (default 50). Emits an INVENTORY_CYCLE_COUNT_PLAN_LIST audit event; no plan state changes. Returns 200 with an empty array when no plans match, so an empty result is not an error condition. 
      * @endpoint get /v1/inventory/cycleCountPlans
      * @param locationId Filter by location identifier
      * @param status Filter by plan status
@@ -181,10 +181,10 @@ export class CycleCountPlansService extends BaseService {
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public listPlans(locationId?: string, status?: 'PLANNED' | 'STARTED' | 'COMPLETED_PENDING_APPROVAL' | 'APPROVED' | 'REJECTED' | 'CANCELLED', page?: number, size?: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<CycleCountPlanResponse>>;
-    public listPlans(locationId?: string, status?: 'PLANNED' | 'STARTED' | 'COMPLETED_PENDING_APPROVAL' | 'APPROVED' | 'REJECTED' | 'CANCELLED', page?: number, size?: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<CycleCountPlanResponse>>>;
-    public listPlans(locationId?: string, status?: 'PLANNED' | 'STARTED' | 'COMPLETED_PENDING_APPROVAL' | 'APPROVED' | 'REJECTED' | 'CANCELLED', page?: number, size?: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<CycleCountPlanResponse>>>;
-    public listPlans(locationId?: string, status?: 'PLANNED' | 'STARTED' | 'COMPLETED_PENDING_APPROVAL' | 'APPROVED' | 'REJECTED' | 'CANCELLED', page?: number, size?: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public listCycleCountPlans(locationId?: string, status?: 'PLANNED' | 'STARTED' | 'COMPLETED_PENDING_APPROVAL' | 'APPROVED' | 'REJECTED' | 'CANCELLED', page?: number, size?: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<CycleCountPlanResponse>>;
+    public listCycleCountPlans(locationId?: string, status?: 'PLANNED' | 'STARTED' | 'COMPLETED_PENDING_APPROVAL' | 'APPROVED' | 'REJECTED' | 'CANCELLED', page?: number, size?: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<CycleCountPlanResponse>>>;
+    public listCycleCountPlans(locationId?: string, status?: 'PLANNED' | 'STARTED' | 'COMPLETED_PENDING_APPROVAL' | 'APPROVED' | 'REJECTED' | 'CANCELLED', page?: number, size?: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<CycleCountPlanResponse>>>;
+    public listCycleCountPlans(locationId?: string, status?: 'PLANNED' | 'STARTED' | 'COMPLETED_PENDING_APPROVAL' | 'APPROVED' | 'REJECTED' | 'CANCELLED', page?: number, size?: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
 
@@ -270,23 +270,23 @@ export class CycleCountPlansService extends BaseService {
 
     /**
      * Transition cycle count plan status
-     * Moves a plan through its lifecycle (PLANNED → STARTED → COMPLETED_PENDING_APPROVAL → APPROVED/REJECTED; PLANNED/STARTED may be CANCELLED). Approving a schedule-created plan restamps the originating schedule\&#39;s next due date (odoo-parity I1, #1031).
+     * Moves a cycle count plan one step through its lifecycle: PLANNED to STARTED or CANCELLED, STARTED to COMPLETED_PENDING_APPROVAL or CANCELLED, and COMPLETED_PENDING_APPROVAL to APPROVED or REJECTED; APPROVED, REJECTED and CANCELLED are terminal. Use this tool for plan lifecycle transitions only; do not use updateCycleCountSchedule, which edits a recurring schedule\&#39;s configuration. Preconditions: the plan must exist and the requested status must be a legal transition from its current status. Required inputs: planId (UUID) path parameter and status (the target lifecycle value) in the body. Emits an INVENTORY_CYCLE_COUNT_PLAN_STATUS_UPDATE event; approving a schedule-created plan also restamps the originating schedule\&#39;s nextDueDate to today plus its frequencyDays, so a late count does not immediately come due again. Returns 404 when the plan does not exist, and 409 when the transition is not allowed from the current status. 
      * @endpoint put /v1/inventory/cycleCountPlans/{planId}/status
      * @param planId Cycle count plan identifier
-     * @param updateCycleCountPlanStatusRequest 
+     * @param updateCycleCountPlanStatusRequest Target lifecycle status for the plan transition.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public updatePlanStatus(planId: string, updateCycleCountPlanStatusRequest: UpdateCycleCountPlanStatusRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<CycleCountPlanResponse>;
-    public updatePlanStatus(planId: string, updateCycleCountPlanStatusRequest: UpdateCycleCountPlanStatusRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<CycleCountPlanResponse>>;
-    public updatePlanStatus(planId: string, updateCycleCountPlanStatusRequest: UpdateCycleCountPlanStatusRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<CycleCountPlanResponse>>;
-    public updatePlanStatus(planId: string, updateCycleCountPlanStatusRequest: UpdateCycleCountPlanStatusRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public updateCycleCountPlanStatus(planId: string, updateCycleCountPlanStatusRequest: UpdateCycleCountPlanStatusRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<CycleCountPlanResponse>;
+    public updateCycleCountPlanStatus(planId: string, updateCycleCountPlanStatusRequest: UpdateCycleCountPlanStatusRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<CycleCountPlanResponse>>;
+    public updateCycleCountPlanStatus(planId: string, updateCycleCountPlanStatusRequest: UpdateCycleCountPlanStatusRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<CycleCountPlanResponse>>;
+    public updateCycleCountPlanStatus(planId: string, updateCycleCountPlanStatusRequest: UpdateCycleCountPlanStatusRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (planId === null || planId === undefined) {
-            throw new Error('Required parameter planId was null or undefined when calling updatePlanStatus.');
+            throw new Error('Required parameter planId was null or undefined when calling updateCycleCountPlanStatus.');
         }
         if (updateCycleCountPlanStatusRequest === null || updateCycleCountPlanStatusRequest === undefined) {
-            throw new Error('Required parameter updateCycleCountPlanStatusRequest was null or undefined when calling updatePlanStatus.');
+            throw new Error('Required parameter updateCycleCountPlanStatusRequest was null or undefined when calling updateCycleCountPlanStatus.');
         }
 
         let localVarHeaders = this.defaultHeaders;

@@ -14,13 +14,13 @@
  */
 export interface AuditTrailResponse { 
     /**
-     * Unique identifier of the audit trail entry
+     * Accounting intent of the event
      */
-    auditId: string;
+    accountingIntent?: AuditTrailResponseAccountingIntentEnum;
     /**
-     * Category of exception recorded
+     * Accounting status of the event
      */
-    exceptionType: AuditTrailResponseExceptionTypeEnum;
+    accountingStatus?: AuditTrailResponseAccountingStatusEnum;
     /**
      * Identifier of the actor who performed the action
      */
@@ -30,150 +30,118 @@ export interface AuditTrailResponse {
      */
     actorRole?: string;
     /**
-     * Timestamp when the audit event occurred (ISO 8601)
-     */
-    timestamp: string;
-    /**
-     * Reason captured for the action
-     */
-    reason?: string;
-    /**
-     * Authorization level applied to the action
-     */
-    authorizationLevel?: string;
-    /**
-     * Version of the policy evaluated for the action
-     */
-    policyVersion?: string;
-    /**
-     * Identifier of the order associated with the event
-     */
-    orderId?: string;
-    /**
-     * Identifier of the line item associated with the event
-     */
-    lineItemId?: string;
-    /**
-     * Original price before override
-     */
-    originalPrice?: number;
-    /**
      * Adjusted price after override
      */
     adjustedPrice?: number;
-    /**
-     * Override expressed as an amount or percentage
-     */
-    overrideAmountOrPercent?: string;
-    /**
-     * Forbidden category code that was triggered, if any
-     */
-    forbiddenCategoryCode?: string;
-    /**
-     * Result of policy validation for the event
-     */
-    policyValidationResult?: AuditTrailResponsePolicyValidationResultEnum;
-    /**
-     * Identifier of the invoice associated with the event
-     */
-    invoiceId?: string;
-    /**
-     * Identifier of the payment associated with the event
-     */
-    paymentId?: string;
-    /**
-     * Type of refund recorded
-     */
-    refundType?: AuditTrailResponseRefundTypeEnum;
-    /**
-     * Refund amount
-     */
-    refundAmount?: number;
-    /**
-     * Status of the original payment being refunded
-     */
-    originalPaymentStatus?: AuditTrailResponseOriginalPaymentStatusEnum;
-    /**
-     * Method used to issue the refund
-     */
-    refundMethod?: AuditTrailResponseRefundMethodEnum;
-    /**
-     * Comma-separated linked source identifiers
-     */
-    linkedSourceIds?: string;
-    /**
-     * Type of cancellation recorded
-     */
-    cancellationType?: AuditTrailResponseCancellationTypeEnum;
-    /**
-     * Snapshot of state before the cancellation (JSON)
-     */
-    beforeSnapshot?: string;
     /**
      * Snapshot of state after the cancellation (JSON)
      */
     afterSnapshot?: string;
     /**
-     * Partial payment details captured at cancellation (JSON)
+     * Unique identifier of the audit trail entry
      */
-    partialPaymentInfo?: string;
+    auditId: string;
     /**
-     * Status of the GL reversal triggered by the cancellation
+     * Authorization level applied to the action
      */
-    glReversalStatus?: string;
+    authorizationLevel?: string;
     /**
-     * Accounting intent of the event
+     * Snapshot of state before the cancellation (JSON)
      */
-    accountingIntent?: AuditTrailResponseAccountingIntentEnum;
+    beforeSnapshot?: string;
     /**
-     * Accounting status of the event
+     * Type of cancellation recorded
      */
-    accountingStatus?: AuditTrailResponseAccountingStatusEnum;
+    cancellationType?: AuditTrailResponseCancellationTypeEnum;
+    /**
+     * Category of exception recorded
+     */
+    exceptionType: AuditTrailResponseExceptionTypeEnum;
     /**
      * Expected accounting outcome description
      */
     expectedAccountingOutcome?: string;
     /**
-     * Identifier of the source accounting event
+     * Forbidden category code that was triggered, if any
      */
-    sourceEventId?: string;
+    forbiddenCategoryCode?: string;
+    /**
+     * Status of the GL reversal triggered by the cancellation
+     */
+    glReversalStatus?: string;
+    /**
+     * Identifier of the invoice associated with the event
+     */
+    invoiceId?: string;
+    /**
+     * Identifier of the line item associated with the event
+     */
+    lineItemId?: string;
+    /**
+     * Comma-separated linked source identifiers
+     */
+    linkedSourceIds?: string;
+    /**
+     * Identifier of the order associated with the event
+     */
+    orderId?: string;
+    /**
+     * Status of the original payment being refunded
+     */
+    originalPaymentStatus?: AuditTrailResponseOriginalPaymentStatusEnum;
+    /**
+     * Original price before override
+     */
+    originalPrice?: number;
+    /**
+     * Override expressed as an amount or percentage
+     */
+    overrideAmountOrPercent?: string;
+    /**
+     * Partial payment details captured at cancellation (JSON)
+     */
+    partialPaymentInfo?: string;
+    /**
+     * Identifier of the payment associated with the event
+     */
+    paymentId?: string;
+    /**
+     * Result of policy validation for the event
+     */
+    policyValidationResult?: AuditTrailResponsePolicyValidationResultEnum;
+    /**
+     * Version of the policy evaluated for the action
+     */
+    policyVersion?: string;
+    /**
+     * Reason captured for the action
+     */
+    reason?: string;
+    /**
+     * Refund amount
+     */
+    refundAmount?: number;
+    /**
+     * Method used to issue the refund
+     */
+    refundMethod?: AuditTrailResponseRefundMethodEnum;
+    /**
+     * Type of refund recorded
+     */
+    refundType?: AuditTrailResponseRefundTypeEnum;
     /**
      * Identifier of the source business document
      */
     sourceDocumentId?: string;
+    /**
+     * Identifier of the source accounting event
+     */
+    sourceEventId?: string;
+    /**
+     * Timestamp when the audit event occurred (ISO 8601)
+     */
+    timestamp: string;
 }
-export enum AuditTrailResponseExceptionTypeEnum {
-    PriceOverride = 'PRICE_OVERRIDE',
-    Refund = 'REFUND',
-    Cancellation = 'CANCELLATION'
-};
-export enum AuditTrailResponsePolicyValidationResultEnum {
-    Approved = 'APPROVED',
-    RejectedForbidden = 'REJECTED_FORBIDDEN',
-    RejectedThresholdExceeded = 'REJECTED_THRESHOLD_EXCEEDED'
-};
-export enum AuditTrailResponseRefundTypeEnum {
-    Reversal = 'REVERSAL',
-    CreditMemo = 'CREDIT_MEMO',
-    Adjustment = 'ADJUSTMENT'
-};
-export enum AuditTrailResponseOriginalPaymentStatusEnum {
-    Pending = 'PENDING',
-    Settled = 'SETTLED',
-    Failed = 'FAILED',
-    Authorized = 'AUTHORIZED'
-};
-export enum AuditTrailResponseRefundMethodEnum {
-    Void = 'VOID',
-    Chargeback = 'CHARGEBACK',
-    CashRefund = 'CASH_REFUND',
-    CreditMemo = 'CREDIT_MEMO'
-};
-export enum AuditTrailResponseCancellationTypeEnum {
-    OrderCancelled = 'ORDER_CANCELLED',
-    InvoiceCancelled = 'INVOICE_CANCELLED',
-    PaymentFailed = 'PAYMENT_FAILED'
-};
 export enum AuditTrailResponseAccountingIntentEnum {
     RevenueAdjustment = 'REVENUE_ADJUSTMENT',
     PaymentReversal = 'PAYMENT_REVERSAL',
@@ -191,6 +159,38 @@ export enum AuditTrailResponseAccountingStatusEnum {
     Voided = 'VOIDED',
     OnHold = 'ON_HOLD',
     Disputed = 'DISPUTED'
+};
+export enum AuditTrailResponseCancellationTypeEnum {
+    OrderCancelled = 'ORDER_CANCELLED',
+    InvoiceCancelled = 'INVOICE_CANCELLED',
+    PaymentFailed = 'PAYMENT_FAILED'
+};
+export enum AuditTrailResponseExceptionTypeEnum {
+    PriceOverride = 'PRICE_OVERRIDE',
+    Refund = 'REFUND',
+    Cancellation = 'CANCELLATION'
+};
+export enum AuditTrailResponseOriginalPaymentStatusEnum {
+    Pending = 'PENDING',
+    Settled = 'SETTLED',
+    Failed = 'FAILED',
+    Authorized = 'AUTHORIZED'
+};
+export enum AuditTrailResponsePolicyValidationResultEnum {
+    Approved = 'APPROVED',
+    RejectedForbidden = 'REJECTED_FORBIDDEN',
+    RejectedThresholdExceeded = 'REJECTED_THRESHOLD_EXCEEDED'
+};
+export enum AuditTrailResponseRefundMethodEnum {
+    Void = 'VOID',
+    Chargeback = 'CHARGEBACK',
+    CashRefund = 'CASH_REFUND',
+    CreditMemo = 'CREDIT_MEMO'
+};
+export enum AuditTrailResponseRefundTypeEnum {
+    Reversal = 'REVERSAL',
+    CreditMemo = 'CREDIT_MEMO',
+    Adjustment = 'ADJUSTMENT'
 };
 
 
@@ -234,8 +234,8 @@ export function instanceOfAuditTrailResponse(value: object): value is AuditTrail
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createAuditTrailResponsePropertyNames('auditId', 'exceptionType', 'timestamp', );
-    const optionalStringProperties = createAuditTrailResponseOptionalProperties({ name: 'auditId', nullable: false }, { name: 'exceptionType', nullable: false }, { name: 'actorId', nullable: false }, { name: 'actorRole', nullable: false }, { name: 'timestamp', nullable: false }, { name: 'reason', nullable: false }, { name: 'authorizationLevel', nullable: false }, { name: 'policyVersion', nullable: false }, { name: 'orderId', nullable: false }, { name: 'lineItemId', nullable: false }, { name: 'overrideAmountOrPercent', nullable: false }, { name: 'forbiddenCategoryCode', nullable: false }, { name: 'policyValidationResult', nullable: false }, { name: 'invoiceId', nullable: false }, { name: 'paymentId', nullable: false }, { name: 'refundType', nullable: false }, { name: 'originalPaymentStatus', nullable: false }, { name: 'refundMethod', nullable: false }, { name: 'linkedSourceIds', nullable: false }, { name: 'cancellationType', nullable: false }, { name: 'beforeSnapshot', nullable: false }, { name: 'afterSnapshot', nullable: false }, { name: 'partialPaymentInfo', nullable: false }, { name: 'glReversalStatus', nullable: false }, { name: 'accountingIntent', nullable: false }, { name: 'accountingStatus', nullable: false }, { name: 'expectedAccountingOutcome', nullable: false }, { name: 'sourceEventId', nullable: false }, { name: 'sourceDocumentId', nullable: false }, );
-    const optionalNumberProperties = createAuditTrailResponseOptionalProperties({ name: 'originalPrice', nullable: false }, { name: 'adjustedPrice', nullable: false }, { name: 'refundAmount', nullable: false }, );
+    const optionalStringProperties = createAuditTrailResponseOptionalProperties({ name: 'accountingIntent', nullable: false }, { name: 'accountingStatus', nullable: false }, { name: 'actorId', nullable: false }, { name: 'actorRole', nullable: false }, { name: 'afterSnapshot', nullable: false }, { name: 'auditId', nullable: false }, { name: 'authorizationLevel', nullable: false }, { name: 'beforeSnapshot', nullable: false }, { name: 'cancellationType', nullable: false }, { name: 'exceptionType', nullable: false }, { name: 'expectedAccountingOutcome', nullable: false }, { name: 'forbiddenCategoryCode', nullable: false }, { name: 'glReversalStatus', nullable: false }, { name: 'invoiceId', nullable: false }, { name: 'lineItemId', nullable: false }, { name: 'linkedSourceIds', nullable: false }, { name: 'orderId', nullable: false }, { name: 'originalPaymentStatus', nullable: false }, { name: 'overrideAmountOrPercent', nullable: false }, { name: 'partialPaymentInfo', nullable: false }, { name: 'paymentId', nullable: false }, { name: 'policyValidationResult', nullable: false }, { name: 'policyVersion', nullable: false }, { name: 'reason', nullable: false }, { name: 'refundMethod', nullable: false }, { name: 'refundType', nullable: false }, { name: 'sourceDocumentId', nullable: false }, { name: 'sourceEventId', nullable: false }, { name: 'timestamp', nullable: false }, );
+    const optionalNumberProperties = createAuditTrailResponseOptionalProperties({ name: 'adjustedPrice', nullable: false }, { name: 'originalPrice', nullable: false }, { name: 'refundAmount', nullable: false }, );
     const optionalBooleanProperties = createAuditTrailResponseOptionalProperties();
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

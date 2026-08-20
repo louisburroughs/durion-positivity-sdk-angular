@@ -14,6 +14,10 @@
  */
 export interface CostingMethodConfigRequest { 
     /**
+     * Costing method applied at this scope
+     */
+    method: CostingMethodConfigRequestMethodEnum;
+    /**
      * Configuration scope kind
      */
     scopeType: CostingMethodConfigRequestScopeTypeEnum;
@@ -21,19 +25,15 @@ export interface CostingMethodConfigRequest {
      * Scope key: the stock item id for SKU, the category string for SKU_CATEGORY, omitted for DEFAULT
      */
     scopeValue?: string;
-    /**
-     * Costing method applied at this scope
-     */
-    method: CostingMethodConfigRequestMethodEnum;
 }
+export enum CostingMethodConfigRequestMethodEnum {
+    Standard = 'STANDARD',
+    Average = 'AVERAGE'
+};
 export enum CostingMethodConfigRequestScopeTypeEnum {
     Sku = 'SKU',
     SkuCategory = 'SKU_CATEGORY',
     Default = 'DEFAULT'
-};
-export enum CostingMethodConfigRequestMethodEnum {
-    Standard = 'STANDARD',
-    Average = 'AVERAGE'
 };
 
 
@@ -76,8 +76,8 @@ export function instanceOfCostingMethodConfigRequest(value: object): value is Co
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createCostingMethodConfigRequestPropertyNames('scopeType', 'method', );
-    const optionalStringProperties = createCostingMethodConfigRequestOptionalProperties({ name: 'scopeType', nullable: false }, { name: 'scopeValue', nullable: false }, { name: 'method', nullable: false }, );
+    const requiredProperties = createCostingMethodConfigRequestPropertyNames('method', 'scopeType', );
+    const optionalStringProperties = createCostingMethodConfigRequestOptionalProperties({ name: 'method', nullable: false }, { name: 'scopeType', nullable: false }, { name: 'scopeValue', nullable: false }, );
     const optionalNumberProperties = createCostingMethodConfigRequestOptionalProperties();
     const optionalBooleanProperties = createCostingMethodConfigRequestOptionalProperties();
 

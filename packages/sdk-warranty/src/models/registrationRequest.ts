@@ -14,17 +14,25 @@
  */
 export interface RegistrationRequest { 
     /**
-     * Governing warranty policy id
+     * Provider contract number
      */
-    policyId: string;
+    contractNumber?: string;
     /**
      * pos-customer customer id
      */
     customerId: string;
     /**
-     * pos-vehicle-inventory vehicle id, when vehicle-bound
+     * Coverage end date, when bounded
      */
-    vehicleId?: string;
+    expiresAt?: string;
+    /**
+     * Governing warranty policy id
+     */
+    policyId: string;
+    /**
+     * Date the coverage was purchased
+     */
+    purchaseDate: string;
     /**
      * Originating pos-invoice invoice id
      */
@@ -34,21 +42,13 @@ export interface RegistrationRequest {
      */
     sourceInvoiceLineId?: string;
     /**
-     * Provider contract number
-     */
-    contractNumber?: string;
-    /**
-     * Date the coverage was purchased
-     */
-    purchaseDate: string;
-    /**
-     * Coverage end date, when bounded
-     */
-    expiresAt?: string;
-    /**
      * Lifecycle status; defaults to ACTIVE on create
      */
     status?: RegistrationRequestStatusEnum;
+    /**
+     * pos-vehicle-inventory vehicle id, when vehicle-bound
+     */
+    vehicleId?: string;
 }
 export enum RegistrationRequestStatusEnum {
     Active = 'ACTIVE',
@@ -97,8 +97,8 @@ export function instanceOfRegistrationRequest(value: object): value is Registrat
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createRegistrationRequestPropertyNames('policyId', 'customerId', 'purchaseDate', );
-    const optionalStringProperties = createRegistrationRequestOptionalProperties({ name: 'policyId', nullable: false }, { name: 'customerId', nullable: false }, { name: 'vehicleId', nullable: false }, { name: 'sourceInvoiceId', nullable: false }, { name: 'sourceInvoiceLineId', nullable: false }, { name: 'contractNumber', nullable: false }, { name: 'purchaseDate', nullable: false }, { name: 'expiresAt', nullable: false }, { name: 'status', nullable: false }, );
+    const requiredProperties = createRegistrationRequestPropertyNames('customerId', 'policyId', 'purchaseDate', );
+    const optionalStringProperties = createRegistrationRequestOptionalProperties({ name: 'contractNumber', nullable: false }, { name: 'customerId', nullable: false }, { name: 'expiresAt', nullable: false }, { name: 'policyId', nullable: false }, { name: 'purchaseDate', nullable: false }, { name: 'sourceInvoiceId', nullable: false }, { name: 'sourceInvoiceLineId', nullable: false }, { name: 'status', nullable: false }, { name: 'vehicleId', nullable: false }, );
     const optionalNumberProperties = createRegistrationRequestOptionalProperties();
     const optionalBooleanProperties = createRegistrationRequestOptionalProperties();
 

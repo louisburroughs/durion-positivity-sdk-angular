@@ -46,20 +46,20 @@ export class VendorBillAPIService extends BaseService {
     }
 
     /**
-     * Create vendor bill from goods received event
-     * Creates a vendor bill from an inbound goods-received event payload
+     * Create Vendor Bill From Goods Received
+     * Creates a vendor bill in PENDING_RECEIPT_MATCH status from a goods-received event, totaling the received line items and syncing the vendor into the AP vendor directory. Use this tool when goods arrive against a purchase order; do not use matchVendorInvoice, which is the later step that matches the vendor\&#39;s invoice against this pending bill. Preconditions: none; a duplicate eventId is ignored and the existing bill is returned instead of creating a second one. Required inputs: eventId, organizationId, purchaseOrderId and vendorId (UUIDs), receivedDate, and lineItems each with productId, description, quantity and unitPrice; vendorName and dimensions are optional. Emits an ACCOUNTING_VENDOR_BILL_CREATE event; a vendor-directory sync failure is logged and never fails bill creation. Returns 201 with the created (or already-existing) bill, and 400 when the payload fails validation. 
      * @endpoint post /v1/accounting/vendor-bills
-     * @param goodsReceivedEvent 
+     * @param goodsReceivedEvent Goods-received event payload that seeds a pending vendor bill.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public createBillFromGoodsReceivedEvent(goodsReceivedEvent: GoodsReceivedEvent, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<VendorBillResponse>;
-    public createBillFromGoodsReceivedEvent(goodsReceivedEvent: GoodsReceivedEvent, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<VendorBillResponse>>;
-    public createBillFromGoodsReceivedEvent(goodsReceivedEvent: GoodsReceivedEvent, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<VendorBillResponse>>;
-    public createBillFromGoodsReceivedEvent(goodsReceivedEvent: GoodsReceivedEvent, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public createVendorBillFromGoodsReceived(goodsReceivedEvent: GoodsReceivedEvent, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<VendorBillResponse>;
+    public createVendorBillFromGoodsReceived(goodsReceivedEvent: GoodsReceivedEvent, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<VendorBillResponse>>;
+    public createVendorBillFromGoodsReceived(goodsReceivedEvent: GoodsReceivedEvent, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<VendorBillResponse>>;
+    public createVendorBillFromGoodsReceived(goodsReceivedEvent: GoodsReceivedEvent, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (goodsReceivedEvent === null || goodsReceivedEvent === undefined) {
-            throw new Error('Required parameter goodsReceivedEvent was null or undefined when calling createBillFromGoodsReceivedEvent.');
+            throw new Error('Required parameter goodsReceivedEvent was null or undefined when calling createVendorBillFromGoodsReceived.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -116,20 +116,20 @@ export class VendorBillAPIService extends BaseService {
     }
 
     /**
-     * Get vendor bill by id
-     * Retrieves a vendor bill by its unique identifier
+     * Get Vendor Bill By Id
+     * Returns one vendor bill with its status, amounts, match metadata and approval history. Use this tool when the bill id is already known; use getVendorBillByOriginEventId instead when only the goods-received event id is available, or listApBills to browse APPROVED bills. Preconditions: the vendor bill must exist. Required inputs: billId (UUID) as a path parameter; there is no request body. Emits an ACCOUNTING_VENDOR_BILL_GET audit event; no state changes. Returns 404 when no vendor bill exists for the supplied id. 
      * @endpoint get /v1/accounting/vendor-bills/{billId}
      * @param billId Vendor bill identifier
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public getBillById(billId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<VendorBillResponse>;
-    public getBillById(billId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<VendorBillResponse>>;
-    public getBillById(billId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<VendorBillResponse>>;
-    public getBillById(billId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getVendorBillById(billId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<VendorBillResponse>;
+    public getVendorBillById(billId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<VendorBillResponse>>;
+    public getVendorBillById(billId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<VendorBillResponse>>;
+    public getVendorBillById(billId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (billId === null || billId === undefined) {
-            throw new Error('Required parameter billId was null or undefined when calling getBillById.');
+            throw new Error('Required parameter billId was null or undefined when calling getVendorBillById.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -176,20 +176,20 @@ export class VendorBillAPIService extends BaseService {
     }
 
     /**
-     * Get vendor bill by origin event id
-     * Retrieves a vendor bill by origin goods-received event identifier
+     * Get Vendor Bill By Origin Event
+     * Returns the vendor bill created from a specific goods-received event, using the event id recorded at bill creation. Use this tool to check whether a goods-received event was already billed, for example before replaying it; use getVendorBillById instead when the bill id is known. Preconditions: a bill must have been created from the event. Required inputs: eventId (UUID of the origin GoodsReceivedEvent) as a path parameter; there is no request body. Emits an ACCOUNTING_VENDOR_BILL_GET_BY_EVENT audit event; no state changes. Returns 404 when no vendor bill originates from the supplied event id. 
      * @endpoint get /v1/accounting/vendor-bills/event/{eventId}
      * @param eventId Origin event identifier
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public getBillByOriginEventId(eventId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<VendorBillResponse>;
-    public getBillByOriginEventId(eventId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<VendorBillResponse>>;
-    public getBillByOriginEventId(eventId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<VendorBillResponse>>;
-    public getBillByOriginEventId(eventId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getVendorBillByOriginEventId(eventId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<VendorBillResponse>;
+    public getVendorBillByOriginEventId(eventId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<VendorBillResponse>>;
+    public getVendorBillByOriginEventId(eventId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<VendorBillResponse>>;
+    public getVendorBillByOriginEventId(eventId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (eventId === null || eventId === undefined) {
-            throw new Error('Required parameter eventId was null or undefined when calling getBillByOriginEventId.');
+            throw new Error('Required parameter eventId was null or undefined when calling getVendorBillByOriginEventId.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -236,20 +236,20 @@ export class VendorBillAPIService extends BaseService {
     }
 
     /**
-     * List match candidates
-     * Lists unresolved match candidates for an ambiguous invoice event
+     * List Vendor Bill Match Candidates
+     * Lists the unresolved, scored candidate bills persisted when an invoice match came back AMBIGUOUS, ordered by score descending. Use this tool to review the choices before calling selectVendorBillMatchCandidate; do not use resolveVendorBillMatchException, which handles single-bill discrepancies rather than ambiguity. Preconditions: a matchVendorInvoice call for this invoice event must have produced an AMBIGUOUS outcome. Required inputs: invoiceEventId (UUID of the triggering invoice event) as a path parameter; there is no request body. Emits an ACCOUNTING_VENDOR_BILL_MATCH_CANDIDATES_LIST audit event; no state changes. Returns 200 with an empty list when no unresolved candidates exist for the event. 
      * @endpoint get /v1/accounting/vendor-bills/match-candidates/{invoiceEventId}
      * @param invoiceEventId Invoice event identifier
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public listMatchCandidates(invoiceEventId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<VendorBillMatchCandidateResponse>;
-    public listMatchCandidates(invoiceEventId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<VendorBillMatchCandidateResponse>>;
-    public listMatchCandidates(invoiceEventId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<VendorBillMatchCandidateResponse>>;
-    public listMatchCandidates(invoiceEventId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public listVendorBillMatchCandidates(invoiceEventId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<VendorBillMatchCandidateResponse>;
+    public listVendorBillMatchCandidates(invoiceEventId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<VendorBillMatchCandidateResponse>>;
+    public listVendorBillMatchCandidates(invoiceEventId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<VendorBillMatchCandidateResponse>>;
+    public listVendorBillMatchCandidates(invoiceEventId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (invoiceEventId === null || invoiceEventId === undefined) {
-            throw new Error('Required parameter invoiceEventId was null or undefined when calling listMatchCandidates.');
+            throw new Error('Required parameter invoiceEventId was null or undefined when calling listVendorBillMatchCandidates.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -296,10 +296,10 @@ export class VendorBillAPIService extends BaseService {
     }
 
     /**
-     * Match vendor invoice
-     * Performs matching for a received vendor invoice and creates/updates bill state
+     * Match Vendor Invoice
+     * Runs the three-way match of a received vendor invoice against pending goods-received bills: a HIGH_CONFIDENCE match with consistent quantities and prices auto-approves the bill, while a discrepancy, a MEDIUM confidence score or an AMBIGUOUS match parks it in MATCH_EXCEPTION. Use this tool when a vendor invoice arrives; do not use createVendorBillFromGoodsReceived, which records the receipt, and use resolveVendorBillMatchException or selectVendorBillMatchCandidate to clear exceptions. Preconditions: a bill in PENDING_RECEIPT_MATCH must exist for the vendor; an ambiguous outcome persists scored candidates for later operator selection. Required inputs: eventId, organizationId and vendorId (UUIDs), invoiceReference, invoiceDate and lineItems; dueDate is optional. Emits an ACCOUNTING_VENDOR_BILL_MATCH event; the returned bill\&#39;s status conveys the outcome (APPROVED or MATCH_EXCEPTION), so callers must inspect it rather than assume approval. Returns 400 when no pending receipt matches the invoice or the payload fails validation. 
      * @endpoint post /v1/accounting/vendor-bills/match
-     * @param vendorInvoiceReceivedEvent 
+     * @param vendorInvoiceReceivedEvent Vendor invoice payload to three-way match against pending receipt bills.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -366,24 +366,24 @@ export class VendorBillAPIService extends BaseService {
     }
 
     /**
-     * Resolve bill match exception
-     * Resolves a matching exception with action ACCEPT, VOID, or CORRECT
+     * Resolve Vendor Bill Match Exception
+     * Resolves a vendor bill parked in MATCH_EXCEPTION with an operator decision: ACCEPT approves the bill despite the discrepancy, VOID rejects it, and CORRECT sends it back for correction. Use this tool for quantity, price or medium-confidence exceptions on one identified bill; do not use selectVendorBillMatchCandidate, which resolves an ambiguous match by picking among several candidate bills. Preconditions: the bill must exist and be in MATCH_EXCEPTION status. Required inputs: billId (UUID) as a path parameter, resolutionAction (ACCEPT, VOID or CORRECT), reason and operatorId, all recorded for audit. Emits an ACCOUNTING_VENDOR_BILL_MATCH_EXCEPTION_RESOLVE event. Returns 400 when the bill is not found, is not in MATCH_EXCEPTION status, or the action is not one of ACCEPT, VOID or CORRECT. 
      * @endpoint post /v1/accounting/vendor-bills/{billId}/resolve-exception
      * @param billId Vendor bill identifier
-     * @param exceptionResolutionRequest 
+     * @param exceptionResolutionRequest Operator decision (ACCEPT, VOID or CORRECT) with the audit reason.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public resolveMatchException(billId: string, exceptionResolutionRequest: ExceptionResolutionRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<VendorBillResponse>;
-    public resolveMatchException(billId: string, exceptionResolutionRequest: ExceptionResolutionRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<VendorBillResponse>>;
-    public resolveMatchException(billId: string, exceptionResolutionRequest: ExceptionResolutionRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<VendorBillResponse>>;
-    public resolveMatchException(billId: string, exceptionResolutionRequest: ExceptionResolutionRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public resolveVendorBillMatchException(billId: string, exceptionResolutionRequest: ExceptionResolutionRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<VendorBillResponse>;
+    public resolveVendorBillMatchException(billId: string, exceptionResolutionRequest: ExceptionResolutionRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<VendorBillResponse>>;
+    public resolveVendorBillMatchException(billId: string, exceptionResolutionRequest: ExceptionResolutionRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<VendorBillResponse>>;
+    public resolveVendorBillMatchException(billId: string, exceptionResolutionRequest: ExceptionResolutionRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (billId === null || billId === undefined) {
-            throw new Error('Required parameter billId was null or undefined when calling resolveMatchException.');
+            throw new Error('Required parameter billId was null or undefined when calling resolveVendorBillMatchException.');
         }
         if (exceptionResolutionRequest === null || exceptionResolutionRequest === undefined) {
-            throw new Error('Required parameter exceptionResolutionRequest was null or undefined when calling resolveMatchException.');
+            throw new Error('Required parameter exceptionResolutionRequest was null or undefined when calling resolveVendorBillMatchException.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -440,24 +440,24 @@ export class VendorBillAPIService extends BaseService {
     }
 
     /**
-     * Select match candidate
-     * Selects a candidate and approves corresponding vendor bill flow
+     * Select Vendor Bill Match Candidate
+     * Selects one candidate from an ambiguous invoice match, approving the corresponding vendor bill and marking the candidate set resolved. Use this tool after reviewing listVendorBillMatchCandidates; do not use resolveVendorBillMatchException, which handles discrepancy exceptions on a single bill. Preconditions: the candidate must exist and must not already be resolved. Required inputs: candidateId (UUID) as a path parameter and operatorId in the body, recorded as the approver. Emits an ACCOUNTING_VENDOR_BILL_MATCH_CANDIDATE_SELECT event. Returns 400 when the candidate is missing or already resolved (mapped as VALIDATION_ERROR, not 404). 
      * @endpoint post /v1/accounting/vendor-bills/match-candidates/{candidateId}/select
      * @param candidateId Match candidate identifier
-     * @param candidateSelectionRequest 
+     * @param candidateSelectionRequest Operator making the candidate selection, recorded as the approver.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public selectMatchCandidate(candidateId: string, candidateSelectionRequest: CandidateSelectionRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<VendorBillResponse>;
-    public selectMatchCandidate(candidateId: string, candidateSelectionRequest: CandidateSelectionRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<VendorBillResponse>>;
-    public selectMatchCandidate(candidateId: string, candidateSelectionRequest: CandidateSelectionRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<VendorBillResponse>>;
-    public selectMatchCandidate(candidateId: string, candidateSelectionRequest: CandidateSelectionRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public selectVendorBillMatchCandidate(candidateId: string, candidateSelectionRequest: CandidateSelectionRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<VendorBillResponse>;
+    public selectVendorBillMatchCandidate(candidateId: string, candidateSelectionRequest: CandidateSelectionRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<VendorBillResponse>>;
+    public selectVendorBillMatchCandidate(candidateId: string, candidateSelectionRequest: CandidateSelectionRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<VendorBillResponse>>;
+    public selectVendorBillMatchCandidate(candidateId: string, candidateSelectionRequest: CandidateSelectionRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (candidateId === null || candidateId === undefined) {
-            throw new Error('Required parameter candidateId was null or undefined when calling selectMatchCandidate.');
+            throw new Error('Required parameter candidateId was null or undefined when calling selectVendorBillMatchCandidate.');
         }
         if (candidateSelectionRequest === null || candidateSelectionRequest === undefined) {
-            throw new Error('Required parameter candidateSelectionRequest was null or undefined when calling selectMatchCandidate.');
+            throw new Error('Required parameter candidateSelectionRequest was null or undefined when calling selectVendorBillMatchCandidate.');
         }
 
         let localVarHeaders = this.defaultHeaders;

@@ -14,6 +14,14 @@
  */
 export interface LocationDescendantResponseDTO { 
     /**
+     * Unique business code of the location
+     */
+    code?: string;
+    /**
+     * Distance from the requested root location (1 = direct child)
+     */
+    depth: number;
+    /**
      * Unique identifier of the descendant location
      */
     id: string;
@@ -22,21 +30,13 @@ export interface LocationDescendantResponseDTO {
      */
     name: string;
     /**
-     * Unique business code of the location
-     */
-    code?: string;
-    /**
-     * Operational status of the location
-     */
-    status?: string;
-    /**
      * Identifier of the immediate parent of this location within the traversed chain
      */
     parentId?: string;
     /**
-     * Distance from the requested root location (1 = direct child)
+     * Operational status of the location
      */
-    depth: number;
+    status?: string;
 }
 
 function isOptionalLocationDescendantResponseDTOPropertyOfType(
@@ -77,8 +77,8 @@ export function instanceOfLocationDescendantResponseDTO(value: object): value is
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createLocationDescendantResponseDTOPropertyNames('id', 'name', 'depth', );
-    const optionalStringProperties = createLocationDescendantResponseDTOOptionalProperties({ name: 'id', nullable: false }, { name: 'name', nullable: false }, { name: 'code', nullable: false }, { name: 'status', nullable: false }, { name: 'parentId', nullable: false }, );
+    const requiredProperties = createLocationDescendantResponseDTOPropertyNames('depth', 'id', 'name', );
+    const optionalStringProperties = createLocationDescendantResponseDTOOptionalProperties({ name: 'code', nullable: false }, { name: 'id', nullable: false }, { name: 'name', nullable: false }, { name: 'parentId', nullable: false }, { name: 'status', nullable: false }, );
     const optionalNumberProperties = createLocationDescendantResponseDTOOptionalProperties({ name: 'depth', nullable: false }, );
     const optionalBooleanProperties = createLocationDescendantResponseDTOOptionalProperties();
 

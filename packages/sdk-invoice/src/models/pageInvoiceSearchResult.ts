@@ -13,17 +13,17 @@ import { SortObject } from './sortObject';
 
 
 export interface PageInvoiceSearchResult { 
-    totalPages?: number;
-    totalElements?: number;
-    size?: number;
     content?: Array<InvoiceSearchResult>;
-    number?: number;
-    pageable?: PageableObject;
-    sort?: SortObject;
+    empty?: boolean;
     first?: boolean;
     last?: boolean;
+    number?: number;
     numberOfElements?: number;
-    empty?: boolean;
+    pageable?: PageableObject;
+    size?: number;
+    sort?: SortObject;
+    totalElements?: number;
+    totalPages?: number;
 }
 
 function isOptionalPageInvoiceSearchResultPropertyOfType(
@@ -66,8 +66,8 @@ export function instanceOfPageInvoiceSearchResult(value: object): value is PageI
 
     const requiredProperties = createPageInvoiceSearchResultPropertyNames();
     const optionalStringProperties = createPageInvoiceSearchResultOptionalProperties();
-    const optionalNumberProperties = createPageInvoiceSearchResultOptionalProperties({ name: 'totalPages', nullable: false }, { name: 'totalElements', nullable: false }, { name: 'size', nullable: false }, { name: 'number', nullable: false }, { name: 'numberOfElements', nullable: false }, );
-    const optionalBooleanProperties = createPageInvoiceSearchResultOptionalProperties({ name: 'first', nullable: false }, { name: 'last', nullable: false }, { name: 'empty', nullable: false }, );
+    const optionalNumberProperties = createPageInvoiceSearchResultOptionalProperties({ name: 'number', nullable: false }, { name: 'numberOfElements', nullable: false }, { name: 'size', nullable: false }, { name: 'totalElements', nullable: false }, { name: 'totalPages', nullable: false }, );
+    const optionalBooleanProperties = createPageInvoiceSearchResultOptionalProperties({ name: 'empty', nullable: false }, { name: 'first', nullable: false }, { name: 'last', nullable: false }, );
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
         && optionalStringProperties.every((property) => isOptionalPageInvoiceSearchResultPropertyOfType(_v, property.name, 'string', property.nullable))

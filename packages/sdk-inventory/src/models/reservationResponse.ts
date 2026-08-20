@@ -14,29 +14,33 @@
  */
 export interface ReservationResponse { 
     /**
-     * Identifier of the reservation
+     * Quantity currently allocated against the reservation
      */
-    reservationId: string;
-    /**
-     * Identifier of the workorder line the reservation fulfils
-     */
-    workorderLineId: string;
-    /**
-     * Identifier of the stock item being reserved
-     */
-    stockItemId: string;
+    allocatedQuantity: number;
     /**
      * Quantity of the stock item required by the reservation
      */
     requiredQuantity: number;
     /**
-     * Quantity currently allocated against the reservation
+     * Identifier of the reservation
      */
-    allocatedQuantity: number;
+    reservationId: string;
+    /**
+     * Identifier of the sales-order line the reservation fulfils (CAP #1315), when demand is from a sales order; null when demand is from a workorder instead.
+     */
+    salesOrderLineId?: string;
     /**
      * Status of the reservation, such as PENDING, ALLOCATED, or HARDENED
      */
     status: string;
+    /**
+     * Identifier of the stock item being reserved
+     */
+    stockItemId: string;
+    /**
+     * Identifier of the workorder line the reservation fulfils, when demand is from a workorder; null when demand is from a sales order instead.
+     */
+    workorderLineId?: string;
 }
 
 function isOptionalReservationResponsePropertyOfType(
@@ -77,9 +81,9 @@ export function instanceOfReservationResponse(value: object): value is Reservati
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createReservationResponsePropertyNames('reservationId', 'workorderLineId', 'stockItemId', 'requiredQuantity', 'allocatedQuantity', 'status', );
-    const optionalStringProperties = createReservationResponseOptionalProperties({ name: 'reservationId', nullable: false }, { name: 'workorderLineId', nullable: false }, { name: 'stockItemId', nullable: false }, { name: 'status', nullable: false }, );
-    const optionalNumberProperties = createReservationResponseOptionalProperties({ name: 'requiredQuantity', nullable: false }, { name: 'allocatedQuantity', nullable: false }, );
+    const requiredProperties = createReservationResponsePropertyNames('allocatedQuantity', 'requiredQuantity', 'reservationId', 'status', 'stockItemId', );
+    const optionalStringProperties = createReservationResponseOptionalProperties({ name: 'reservationId', nullable: false }, { name: 'salesOrderLineId', nullable: false }, { name: 'status', nullable: false }, { name: 'stockItemId', nullable: false }, { name: 'workorderLineId', nullable: false }, );
+    const optionalNumberProperties = createReservationResponseOptionalProperties({ name: 'allocatedQuantity', nullable: false }, { name: 'requiredQuantity', nullable: false }, );
     const optionalBooleanProperties = createReservationResponseOptionalProperties();
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

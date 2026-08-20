@@ -43,7 +43,7 @@ export class StockMovementsService extends BaseService {
 
     /**
      * Approve adjustment request
-     * Approves a pending adjustment request and posts the resulting movement to the inventory ledger.
+     * Approves a PENDING adjustment request and posts the resulting ADJUSTMENT_IN or ADJUSTMENT_OUT entry to the inventory ledger. Use this tool as the second step of the adjustment workflow, after createAdjustmentRequest; do not use createStockMovement to post corrections, and note approval needs the separate inventory:adjustment:approve authority. Preconditions: the adjustment request must exist and still be PENDING. Required inputs: adjustmentRequestId (UUID) path parameter; there is no request body. Emits an INVENTORY_ADJUSTMENT_REQUEST_APPROVE event; the request is stamped APPROVED with approver and timestamp, and the ledger posting updates the stock summary that availability reads. Returns 400 when the adjustment request id is unknown (the lookup failure maps to a validation error rather than 404), and 409 when the request is no longer PENDING. 
      * @endpoint post /v1/inventory/adjustments/{adjustmentRequestId}/approve
      * @param adjustmentRequestId 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -103,9 +103,9 @@ export class StockMovementsService extends BaseService {
 
     /**
      * Create adjustment request
-     * Creates a pending adjustment request for approval before posting to the inventory ledger.
+     * Creates a PENDING inventory adjustment request that must be approved before any stock change posts. Use this tool to propose a quantity correction, then post it with approveAdjustmentRequest; do not use createStockMovement, whose ADJUST type is rejected — this two-step workflow is the only correction path. Preconditions: none are checked at creation; the SKU, location and quantity are validated for shape only, not against on-hand. Required inputs: productSku, locationId (UUID), quantity (integer — positive adds stock, negative removes it) and reasonCode; unitOfMeasure is optional. Emits an INVENTORY_ADJUSTMENT_REQUEST_CREATE event; no ledger entry is written and availability is unchanged until approval. Returns 201 with the PENDING request, and 400 when productSku, locationId, quantity or reasonCode is missing. 
      * @endpoint post /v1/inventory/adjustments
-     * @param createAdjustmentRequestDto 
+     * @param createAdjustmentRequestDto The proposed correction: SKU, location, signed quantity and the reason code justifying it.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -173,19 +173,19 @@ export class StockMovementsService extends BaseService {
 
     /**
      * Record a stock movement
-     * Records a RECEIVE, PUT_AWAY, PICK, ISSUE, RETURN, or TRANSFER movement in the inventory ledger.
+     * Records a directional stock movement in the inventory ledger: RECEIVE posts GOODS_RECEIPT, PUT_AWAY posts PUTAWAY, PICK and ISSUE post GOODS_ISSUE, RETURN posts RETURN_TO_STOCK, and TRANSFER posts a paired TRANSFER_OUT and TRANSFER_IN. Use this tool for ledger-backed inventory changes; do not use updateInventoryAvailability, which always returns 501, and do not send movementType ADJUST here — quantity corrections go through createAdjustmentRequest and approveAdjustmentRequest. Preconditions: PICK and ISSUE require on-hand at fromLocationId to cover the quantity; TRANSFER is intra-site only — when both ends resolve to different sites the movement must go through a transfer order so in-transit stock is represented. Required inputs: productSku, fromLocationId (UUID), movementType and a positive quantity; toLocationId is required for TRANSFER, while unitOfMeasure and sourceTransactionId are optional. Emits an INVENTORY_STOCK_MOVEMENT_CREATE event and posts the entries through the ledger funnel, which updates the stock summary that availability reads. Returns 201 with no body, 422 with INSUFFICIENT_STOCK when a PICK or ISSUE exceeds on-hand at the source, 422 with CROSS_SITE_TRANSFER_REQUIRES_ORDER for a cross-site TRANSFER, and 400 when toLocationId is missing for TRANSFER or movementType is ADJUST. 
      * @endpoint post /v1/inventory/stock-movements
-     * @param recordMovementRequest 
+     * @param recordMovementRequest The directional movement to post: SKU, source location, movement type and quantity, plus a destination for transfers.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public recordMovement(recordMovementRequest: RecordMovementRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public recordMovement(recordMovementRequest: RecordMovementRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public recordMovement(recordMovementRequest: RecordMovementRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public recordMovement(recordMovementRequest: RecordMovementRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public createStockMovement(recordMovementRequest: RecordMovementRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
+    public createStockMovement(recordMovementRequest: RecordMovementRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
+    public createStockMovement(recordMovementRequest: RecordMovementRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
+    public createStockMovement(recordMovementRequest: RecordMovementRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (recordMovementRequest === null || recordMovementRequest === undefined) {
-            throw new Error('Required parameter recordMovementRequest was null or undefined when calling recordMovement.');
+            throw new Error('Required parameter recordMovementRequest was null or undefined when calling createStockMovement.');
         }
 
         let localVarHeaders = this.defaultHeaders;

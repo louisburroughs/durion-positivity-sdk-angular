@@ -38,20 +38,20 @@ export class ServiceAreaAPIService extends BaseService {
     }
 
     /**
-     * Create service area
-     * Create a service area that defines where a location can provide service coverage
+     * Create a Postal Code Service Area
+     * Creates a service area, a named set of postal codes that defines where mobile coverage can be offered. Use this tool before wiring coverage rules that reference the area; do not use patchServiceArea, which edits an existing area. Preconditions: at least one postal code entry must be supplied and every entry must carry a countryCode; the name must not collide with an existing service area. Required inputs: name and postalCodes, each entry with postalCode and countryCode; description is optional and active defaults to true. Emits a LOCATION_SERVICE_AREA_CREATE event. Returns 201 with the created area and 409 when the name is already taken. 
      * @endpoint post /v1/service-areas
-     * @param serviceAreaRequest 
+     * @param serviceAreaRequest Service area to create, defined by its postal code and country code entries.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public create1(serviceAreaRequest: ServiceAreaRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ServiceAreaResponse>;
-    public create1(serviceAreaRequest: ServiceAreaRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ServiceAreaResponse>>;
-    public create1(serviceAreaRequest: ServiceAreaRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ServiceAreaResponse>>;
-    public create1(serviceAreaRequest: ServiceAreaRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public createServiceArea(serviceAreaRequest: ServiceAreaRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ServiceAreaResponse>;
+    public createServiceArea(serviceAreaRequest: ServiceAreaRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ServiceAreaResponse>>;
+    public createServiceArea(serviceAreaRequest: ServiceAreaRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ServiceAreaResponse>>;
+    public createServiceArea(serviceAreaRequest: ServiceAreaRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (serviceAreaRequest === null || serviceAreaRequest === undefined) {
-            throw new Error('Required parameter serviceAreaRequest was null or undefined when calling create1.');
+            throw new Error('Required parameter serviceAreaRequest was null or undefined when calling createServiceArea.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -108,17 +108,17 @@ export class ServiceAreaAPIService extends BaseService {
     }
 
     /**
-     * List service areas
-     * List configured service areas available for dispatching and coverage management
+     * List All Configured Service Areas
+     * Lists all configured service areas with their postal code sets and active flags. Use this tool to discover area ids for coverage rules; use listCoverageRules instead to see which areas a specific mobile unit uses. Preconditions: none beyond the location:service-area:read authority. Required inputs: none; there are no parameters, no paging and no request body. No events are emitted and no state changes; this is a read-only projection. Returns 200 with the full unpaginated list. 
      * @endpoint get /v1/service-areas
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public list1(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<ServiceAreaResponse>>;
-    public list1(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<ServiceAreaResponse>>>;
-    public list1(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<ServiceAreaResponse>>>;
-    public list1(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public listServiceAreas(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<ServiceAreaResponse>>;
+    public listServiceAreas(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<ServiceAreaResponse>>>;
+    public listServiceAreas(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<ServiceAreaResponse>>>;
+    public listServiceAreas(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -164,24 +164,24 @@ export class ServiceAreaAPIService extends BaseService {
     }
 
     /**
-     * Patch service area
-     * Patch an existing service area using the provided partial field updates
+     * Patch Fields of a Service Area
+     * Applies a partial update to a service area, accepting only the keys description and active. Use this tool to retire an area with active&#x3D;false or amend its description; do not use it to rename an area or change its postal codes, which are immutable after createServiceArea. Preconditions: the service area must exist. Required inputs: id (UUID) as a path parameter and a JSON object; keys other than description and active are silently ignored. Emits a LOCATION_SERVICE_AREA_PATCH event. Returns 400 when the id is not a valid UUID and 404 when no service area exists for it. 
      * @endpoint patch /v1/service-areas/{id}
      * @param id 
-     * @param body 
+     * @param body Free-form patch object; only the keys description and active are recognized.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public patch1(id: string, body: object, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ServiceAreaResponse>;
-    public patch1(id: string, body: object, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ServiceAreaResponse>>;
-    public patch1(id: string, body: object, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ServiceAreaResponse>>;
-    public patch1(id: string, body: object, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public patchServiceArea(id: string, body: object, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ServiceAreaResponse>;
+    public patchServiceArea(id: string, body: object, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ServiceAreaResponse>>;
+    public patchServiceArea(id: string, body: object, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ServiceAreaResponse>>;
+    public patchServiceArea(id: string, body: object, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (id === null || id === undefined) {
-            throw new Error('Required parameter id was null or undefined when calling patch1.');
+            throw new Error('Required parameter id was null or undefined when calling patchServiceArea.');
         }
         if (body === null || body === undefined) {
-            throw new Error('Required parameter body was null or undefined when calling patch1.');
+            throw new Error('Required parameter body was null or undefined when calling patchServiceArea.');
         }
 
         let localVarHeaders = this.defaultHeaders;

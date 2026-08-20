@@ -14,22 +14,6 @@
  */
 export interface AvailabilityView { 
     /**
-     * Stock-keeping unit identifier of the product
-     */
-    productSku: string;
-    /**
-     * Location identifier for the scope of this availability view
-     */
-    locationId: string;
-    /**
-     * Optional storage sub-location identifier; null when scoped to the full location
-     */
-    storageLocationId?: string;
-    /**
-     * Net on-hand quantity (sum of affectsOnHand ledger entries)
-     */
-    onHandQuantity: number;
-    /**
      * Net allocated quantity (ALLOCATION_CREATED minus ALLOCATION_RELEASED)
      */
     allocatedQuantity: number;
@@ -38,21 +22,37 @@ export interface AvailabilityView {
      */
     availableToPromiseQuantity: number;
     /**
-     * Unit of measure code for the quantities (e.g. EACH, KG)
-     */
-    unitOfMeasure: string;
-    /**
      * Open expected supply: approved purchase-order open line quantity plus un-received ASN remainder. Site-level when a location scope is given. Bounded by the \'horizon\' query parameter when present (documents without an expected date are excluded from horizon-bounded results). Omitted for as-of (historical) requests.
      */
     incomingQty?: number;
+    /**
+     * Location identifier for the scope of this availability view
+     */
+    locationId: string;
+    /**
+     * Net on-hand quantity (sum of affectsOnHand ledger entries)
+     */
+    onHandQuantity: number;
     /**
      * Open expected demand not yet decremented from on-hand: unallocated reservation remainders plus released-not-picked pick-task remainders. Reservation demand carries no site and is included in every scope. Omitted for as-of (historical) requests.
      */
     outgoingQty?: number;
     /**
+     * Stock-keeping unit identifier of the product
+     */
+    productSku: string;
+    /**
      * Projected availability: onHandQuantity + incomingQty - outgoingQty. Omitted for as-of (historical) requests.
      */
     projectedAvailable?: number;
+    /**
+     * Optional storage sub-location identifier; null when scoped to the full location
+     */
+    storageLocationId?: string;
+    /**
+     * Unit of measure code for the quantities (e.g. EACH, KG)
+     */
+    unitOfMeasure: string;
 }
 
 function isOptionalAvailabilityViewPropertyOfType(
@@ -93,9 +93,9 @@ export function instanceOfAvailabilityView(value: object): value is Availability
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createAvailabilityViewPropertyNames('productSku', 'locationId', 'onHandQuantity', 'allocatedQuantity', 'availableToPromiseQuantity', 'unitOfMeasure', );
-    const optionalStringProperties = createAvailabilityViewOptionalProperties({ name: 'productSku', nullable: false }, { name: 'locationId', nullable: false }, { name: 'storageLocationId', nullable: false }, { name: 'unitOfMeasure', nullable: false }, );
-    const optionalNumberProperties = createAvailabilityViewOptionalProperties({ name: 'onHandQuantity', nullable: false }, { name: 'allocatedQuantity', nullable: false }, { name: 'availableToPromiseQuantity', nullable: false }, { name: 'incomingQty', nullable: false }, { name: 'outgoingQty', nullable: false }, { name: 'projectedAvailable', nullable: false }, );
+    const requiredProperties = createAvailabilityViewPropertyNames('allocatedQuantity', 'availableToPromiseQuantity', 'locationId', 'onHandQuantity', 'productSku', 'unitOfMeasure', );
+    const optionalStringProperties = createAvailabilityViewOptionalProperties({ name: 'locationId', nullable: false }, { name: 'productSku', nullable: false }, { name: 'storageLocationId', nullable: false }, { name: 'unitOfMeasure', nullable: false }, );
+    const optionalNumberProperties = createAvailabilityViewOptionalProperties({ name: 'allocatedQuantity', nullable: false }, { name: 'availableToPromiseQuantity', nullable: false }, { name: 'incomingQty', nullable: false }, { name: 'onHandQuantity', nullable: false }, { name: 'outgoingQty', nullable: false }, { name: 'projectedAvailable', nullable: false }, );
     const optionalBooleanProperties = createAvailabilityViewOptionalProperties();
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

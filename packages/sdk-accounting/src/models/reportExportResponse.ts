@@ -14,18 +14,6 @@
  */
 export interface ReportExportResponse { 
     /**
-     * Unique export job identifier
-     */
-    exportId: string;
-    /**
-     * Current export status
-     */
-    status: ReportExportResponseStatusEnum;
-    /**
-     * ISO-8601 timestamp when the export was requested
-     */
-    requestedAt?: string;
-    /**
      * ISO-8601 timestamp when export completed (null if not finished)
      */
     completedAt?: string;
@@ -34,29 +22,41 @@ export interface ReportExportResponse {
      */
     downloadUrl?: string;
     /**
-     * Export format
+     * Unique export job identifier
      */
-    format?: ReportExportResponseFormatEnum;
+    exportId: string;
     /**
      * Failure reason (only present when status is FAILED)
      */
     failureReason?: string;
     /**
+     * Export format
+     */
+    format?: ReportExportResponseFormatEnum;
+    /**
      * Report type that was exported
      */
     reportType?: string;
+    /**
+     * ISO-8601 timestamp when the export was requested
+     */
+    requestedAt?: string;
+    /**
+     * Current export status
+     */
+    status: ReportExportResponseStatusEnum;
 }
-export enum ReportExportResponseStatusEnum {
-    Pending = 'PENDING',
-    InProgress = 'IN_PROGRESS',
-    Completed = 'COMPLETED',
-    Failed = 'FAILED'
-};
 export enum ReportExportResponseFormatEnum {
     Pdf = 'PDF',
     Csv = 'CSV',
     Xlsx = 'XLSX',
     Json = 'JSON'
+};
+export enum ReportExportResponseStatusEnum {
+    Pending = 'PENDING',
+    InProgress = 'IN_PROGRESS',
+    Completed = 'COMPLETED',
+    Failed = 'FAILED'
 };
 
 
@@ -100,7 +100,7 @@ export function instanceOfReportExportResponse(value: object): value is ReportEx
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createReportExportResponsePropertyNames('exportId', 'status', );
-    const optionalStringProperties = createReportExportResponseOptionalProperties({ name: 'exportId', nullable: false }, { name: 'status', nullable: false }, { name: 'requestedAt', nullable: false }, { name: 'completedAt', nullable: false }, { name: 'downloadUrl', nullable: false }, { name: 'format', nullable: false }, { name: 'failureReason', nullable: false }, { name: 'reportType', nullable: false }, );
+    const optionalStringProperties = createReportExportResponseOptionalProperties({ name: 'completedAt', nullable: false }, { name: 'downloadUrl', nullable: false }, { name: 'exportId', nullable: false }, { name: 'failureReason', nullable: false }, { name: 'format', nullable: false }, { name: 'reportType', nullable: false }, { name: 'requestedAt', nullable: false }, { name: 'status', nullable: false }, );
     const optionalNumberProperties = createReportExportResponseOptionalProperties();
     const optionalBooleanProperties = createReportExportResponseOptionalProperties();
 

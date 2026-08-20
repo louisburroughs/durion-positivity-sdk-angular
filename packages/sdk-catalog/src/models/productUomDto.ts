@@ -14,9 +14,21 @@
  */
 export interface ProductUomDto { 
     /**
+     * Created timestamp
+     */
+    createdAt?: string;
+    /**
+     * Multiplier converting one unit of this UoM into the product\'s base UoM
+     */
+    factorToBase: number;
+    /**
      * Identifier of the product UoM row
      */
     id: string;
+    /**
+     * Decimal precision scale for quantities expressed in this UoM
+     */
+    precisionScale: number;
     /**
      * Identifier of the product
      */
@@ -29,18 +41,6 @@ export interface ProductUomDto {
      * Role of this UoM for the product
      */
     uomType: ProductUomDtoUomTypeEnum;
-    /**
-     * Multiplier converting one unit of this UoM into the product\'s base UoM
-     */
-    factorToBase: number;
-    /**
-     * Decimal precision scale for quantities expressed in this UoM
-     */
-    precisionScale: number;
-    /**
-     * Created timestamp
-     */
-    createdAt?: string;
     /**
      * Updated timestamp
      */
@@ -93,8 +93,8 @@ export function instanceOfProductUomDto(value: object): value is ProductUomDto {
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createProductUomDtoPropertyNames('id', 'productId', 'uomCode', 'uomType', 'factorToBase', 'precisionScale', );
-    const optionalStringProperties = createProductUomDtoOptionalProperties({ name: 'id', nullable: false }, { name: 'productId', nullable: false }, { name: 'uomCode', nullable: false }, { name: 'uomType', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'updatedAt', nullable: false }, );
+    const requiredProperties = createProductUomDtoPropertyNames('factorToBase', 'id', 'precisionScale', 'productId', 'uomCode', 'uomType', );
+    const optionalStringProperties = createProductUomDtoOptionalProperties({ name: 'createdAt', nullable: false }, { name: 'id', nullable: false }, { name: 'productId', nullable: false }, { name: 'uomCode', nullable: false }, { name: 'uomType', nullable: false }, { name: 'updatedAt', nullable: false }, );
     const optionalNumberProperties = createProductUomDtoOptionalProperties({ name: 'factorToBase', nullable: false }, { name: 'precisionScale', nullable: false }, );
     const optionalBooleanProperties = createProductUomDtoOptionalProperties();
 

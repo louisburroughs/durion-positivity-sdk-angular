@@ -14,10 +14,6 @@
  */
 export interface SettlementCreateRequest { 
     /**
-     * How the customer is made whole
-     */
-    settlementType: SettlementCreateRequestSettlementTypeEnum;
-    /**
      * Amount coverage pays
      */
     coveredAmount: number;
@@ -26,21 +22,25 @@ export interface SettlementCreateRequest {
      */
     customerAmount: number;
     /**
-     * Replacement workorder link (REPLACEMENT_WORKORDER only)
-     */
-    replacementWorkorderId?: string;
-    /**
      * Invoice to credit/refund against (credit and refund types)
      */
     invoiceId?: string;
+    /**
+     * Staff notes recorded on the claim
+     */
+    notes?: string;
     /**
      * Captured payment to refund (REFUND only)
      */
     paymentId?: string;
     /**
-     * Staff notes recorded on the claim
+     * Replacement workorder link (REPLACEMENT_WORKORDER only)
      */
-    notes?: string;
+    replacementWorkorderId?: string;
+    /**
+     * How the customer is made whole
+     */
+    settlementType: SettlementCreateRequestSettlementTypeEnum;
 }
 export enum SettlementCreateRequestSettlementTypeEnum {
     ReplacementWorkorder = 'REPLACEMENT_WORKORDER',
@@ -91,8 +91,8 @@ export function instanceOfSettlementCreateRequest(value: object): value is Settl
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createSettlementCreateRequestPropertyNames('settlementType', 'coveredAmount', 'customerAmount', );
-    const optionalStringProperties = createSettlementCreateRequestOptionalProperties({ name: 'settlementType', nullable: false }, { name: 'replacementWorkorderId', nullable: false }, { name: 'invoiceId', nullable: false }, { name: 'paymentId', nullable: false }, { name: 'notes', nullable: false }, );
+    const requiredProperties = createSettlementCreateRequestPropertyNames('coveredAmount', 'customerAmount', 'settlementType', );
+    const optionalStringProperties = createSettlementCreateRequestOptionalProperties({ name: 'invoiceId', nullable: false }, { name: 'notes', nullable: false }, { name: 'paymentId', nullable: false }, { name: 'replacementWorkorderId', nullable: false }, { name: 'settlementType', nullable: false }, );
     const optionalNumberProperties = createSettlementCreateRequestOptionalProperties({ name: 'coveredAmount', nullable: false }, { name: 'customerAmount', nullable: false }, );
     const optionalBooleanProperties = createSettlementCreateRequestOptionalProperties();
 

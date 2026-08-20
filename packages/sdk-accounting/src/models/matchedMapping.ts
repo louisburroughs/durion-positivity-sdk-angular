@@ -14,17 +14,17 @@
  */
 export interface MatchedMapping { 
     /**
-     * Type of mapping that was matched (exact, fallback, category_default)
+     * All mapping keys evaluated during the search, in evaluation order
      */
-    mappingType?: string;
+    keysEvaluated?: Array<string>;
     /**
      * Mapping key that was matched
      */
     mappingKey?: string;
     /**
-     * All mapping keys evaluated during the search, in evaluation order
+     * Type of mapping that was matched (exact, fallback, category_default)
      */
-    keysEvaluated?: Array<string>;
+    mappingType?: string;
 }
 
 function isOptionalMatchedMappingPropertyOfType(
@@ -66,7 +66,7 @@ export function instanceOfMatchedMapping(value: object): value is MatchedMapping
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createMatchedMappingPropertyNames();
-    const optionalStringProperties = createMatchedMappingOptionalProperties({ name: 'mappingType', nullable: false }, { name: 'mappingKey', nullable: false }, );
+    const optionalStringProperties = createMatchedMappingOptionalProperties({ name: 'mappingKey', nullable: false }, { name: 'mappingType', nullable: false }, );
     const optionalNumberProperties = createMatchedMappingOptionalProperties();
     const optionalBooleanProperties = createMatchedMappingOptionalProperties();
 

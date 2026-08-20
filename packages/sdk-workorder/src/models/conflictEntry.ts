@@ -14,18 +14,6 @@
  */
 export interface ConflictEntry { 
     /**
-     * Type of conflict detected
-     */
-    conflictType: string;
-    /**
-     * Severity of the conflict
-     */
-    severity: string;
-    /**
-     * Human-readable conflict message
-     */
-    message: string;
-    /**
      * Identifier of the affected resource (mechanic or bay)
      */
     affectedResourceId?: string;
@@ -33,6 +21,18 @@ export interface ConflictEntry {
      * Identifier of the affected workorder
      */
     affectedWorkorderId?: string;
+    /**
+     * Type of conflict detected
+     */
+    conflictType: string;
+    /**
+     * Human-readable conflict message
+     */
+    message: string;
+    /**
+     * Severity of the conflict
+     */
+    severity: string;
 }
 
 function isOptionalConflictEntryPropertyOfType(
@@ -73,8 +73,8 @@ export function instanceOfConflictEntry(value: object): value is ConflictEntry {
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createConflictEntryPropertyNames('conflictType', 'severity', 'message', );
-    const optionalStringProperties = createConflictEntryOptionalProperties({ name: 'conflictType', nullable: false }, { name: 'severity', nullable: false }, { name: 'message', nullable: false }, { name: 'affectedResourceId', nullable: false }, { name: 'affectedWorkorderId', nullable: false }, );
+    const requiredProperties = createConflictEntryPropertyNames('conflictType', 'message', 'severity', );
+    const optionalStringProperties = createConflictEntryOptionalProperties({ name: 'affectedResourceId', nullable: false }, { name: 'affectedWorkorderId', nullable: false }, { name: 'conflictType', nullable: false }, { name: 'message', nullable: false }, { name: 'severity', nullable: false }, );
     const optionalNumberProperties = createConflictEntryOptionalProperties();
     const optionalBooleanProperties = createConflictEntryOptionalProperties();
 

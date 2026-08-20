@@ -16,6 +16,34 @@ import { InvoiceItemResponse } from './invoiceItemResponse';
  */
 export interface InvoiceDetailsResponse { 
     /**
+     * Monetary adjustment entries applied to the invoice
+     */
+    adjustmentEntries: Array<InvoiceAdjustmentResponse>;
+    /**
+     * Net total of all monetary adjustments
+     */
+    adjustments?: number;
+    /**
+     * Identifier of the approval record
+     */
+    approvalId?: string;
+    /**
+     * Timestamp when the invoice was created
+     */
+    createdAt?: string;
+    /**
+     * Identifier of the source estimate
+     */
+    estimateId?: string;
+    /**
+     * Timestamp when the invoice was finalized
+     */
+    finalizedAt?: string;
+    /**
+     * Identifier of the actor who finalized the invoice
+     */
+    finalizedBy?: string;
+    /**
      * Unique identifier of the invoice
      */
     invoiceId?: string;
@@ -24,25 +52,29 @@ export interface InvoiceDetailsResponse {
      */
     invoiceNumber?: string;
     /**
-     * Identifier of the associated workorder
+     * Line items belonging to the invoice
      */
-    workorderId?: string;
-    /**
-     * Human-readable number of the associated workorder
-     */
-    workorderNumber?: string;
-    /**
-     * Identifier of the source estimate
-     */
-    estimateId?: string;
-    /**
-     * Identifier of the approval record
-     */
-    approvalId?: string;
+    items: Array<InvoiceItemResponse>;
     /**
      * Identifier of the billed party
      */
     partyId?: string;
+    /**
+     * Whether finalizing this invoice requires a manager approval code (DRAFT total exceeds the service-advisor threshold)
+     */
+    requiresManagerApproval?: boolean;
+    /**
+     * Reason the invoice was reverted
+     */
+    reversionReason?: string;
+    /**
+     * Timestamp when the invoice was reverted to draft
+     */
+    revertedAt?: string;
+    /**
+     * Identifier of the actor who reverted the invoice
+     */
+    revertedBy?: string;
     /**
      * Current lifecycle status of the invoice
      */
@@ -60,49 +92,17 @@ export interface InvoiceDetailsResponse {
      */
     total?: number;
     /**
-     * Net total of all monetary adjustments
-     */
-    adjustments?: number;
-    /**
-     * Timestamp when the invoice was created
-     */
-    createdAt?: string;
-    /**
      * Timestamp when the invoice was last updated
      */
     updatedAt?: string;
     /**
-     * Timestamp when the invoice was finalized
+     * Identifier of the associated workorder
      */
-    finalizedAt?: string;
+    workorderId?: string;
     /**
-     * Identifier of the actor who finalized the invoice
+     * Human-readable number of the associated workorder
      */
-    finalizedBy?: string;
-    /**
-     * Timestamp when the invoice was reverted to draft
-     */
-    revertedAt?: string;
-    /**
-     * Reason the invoice was reverted
-     */
-    reversionReason?: string;
-    /**
-     * Identifier of the actor who reverted the invoice
-     */
-    revertedBy?: string;
-    /**
-     * Whether finalizing this invoice requires a manager approval code (DRAFT total exceeds the service-advisor threshold)
-     */
-    requiresManagerApproval?: boolean;
-    /**
-     * Line items belonging to the invoice
-     */
-    items: Array<InvoiceItemResponse>;
-    /**
-     * Monetary adjustment entries applied to the invoice
-     */
-    adjustmentEntries: Array<InvoiceAdjustmentResponse>;
+    workorderNumber?: string;
 }
 export enum InvoiceDetailsResponseStatusEnum {
     Draft = 'DRAFT',
@@ -152,9 +152,9 @@ export function instanceOfInvoiceDetailsResponse(value: object): value is Invoic
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createInvoiceDetailsResponsePropertyNames('items', 'adjustmentEntries', );
-    const optionalStringProperties = createInvoiceDetailsResponseOptionalProperties({ name: 'invoiceId', nullable: false }, { name: 'invoiceNumber', nullable: false }, { name: 'workorderId', nullable: false }, { name: 'workorderNumber', nullable: false }, { name: 'estimateId', nullable: false }, { name: 'approvalId', nullable: false }, { name: 'partyId', nullable: false }, { name: 'status', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'updatedAt', nullable: false }, { name: 'finalizedAt', nullable: false }, { name: 'finalizedBy', nullable: false }, { name: 'revertedAt', nullable: false }, { name: 'reversionReason', nullable: false }, { name: 'revertedBy', nullable: false }, );
-    const optionalNumberProperties = createInvoiceDetailsResponseOptionalProperties({ name: 'subtotal', nullable: false }, { name: 'tax', nullable: false }, { name: 'total', nullable: false }, { name: 'adjustments', nullable: false }, );
+    const requiredProperties = createInvoiceDetailsResponsePropertyNames('adjustmentEntries', 'items', );
+    const optionalStringProperties = createInvoiceDetailsResponseOptionalProperties({ name: 'approvalId', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'estimateId', nullable: false }, { name: 'finalizedAt', nullable: false }, { name: 'finalizedBy', nullable: false }, { name: 'invoiceId', nullable: false }, { name: 'invoiceNumber', nullable: false }, { name: 'partyId', nullable: false }, { name: 'reversionReason', nullable: false }, { name: 'revertedAt', nullable: false }, { name: 'revertedBy', nullable: false }, { name: 'status', nullable: false }, { name: 'updatedAt', nullable: false }, { name: 'workorderId', nullable: false }, { name: 'workorderNumber', nullable: false }, );
+    const optionalNumberProperties = createInvoiceDetailsResponseOptionalProperties({ name: 'adjustments', nullable: false }, { name: 'subtotal', nullable: false }, { name: 'tax', nullable: false }, { name: 'total', nullable: false }, );
     const optionalBooleanProperties = createInvoiceDetailsResponseOptionalProperties({ name: 'requiresManagerApproval', nullable: false }, );
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

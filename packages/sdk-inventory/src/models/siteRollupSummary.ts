@@ -16,6 +16,10 @@ import { RollupQuantities } from './rollupQuantities';
  */
 export interface SiteRollupSummary { 
     /**
+     * Full storage-location rollup tree; present only with expand=tree
+     */
+    nodes?: Array<StorageLocationRollupNode>;
+    /**
      * Site (Location) identifier
      */
     siteId: string;
@@ -24,10 +28,6 @@ export interface SiteRollupSummary {
      */
     siteName?: string;
     totals: RollupQuantities;
-    /**
-     * Full storage-location rollup tree; present only with expand=tree
-     */
-    nodes?: Array<StorageLocationRollupNode>;
 }
 
 function isOptionalSiteRollupSummaryPropertyOfType(

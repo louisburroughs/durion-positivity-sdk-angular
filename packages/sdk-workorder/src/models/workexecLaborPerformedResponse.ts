@@ -18,14 +18,6 @@ export interface WorkexecLaborPerformedResponse {
      */
     laborPerformedId: string;
     /**
-     * Workorder identifier
-     */
-    workorderId: string;
-    /**
-     * Technician identifier
-     */
-    technicianId: string;
-    /**
      * Timestamp when labor was performed
      */
     performedAt: string;
@@ -34,17 +26,25 @@ export interface WorkexecLaborPerformedResponse {
      */
     quantity: number;
     /**
-     * Labor quantity unit
+     * Source reference identifier
      */
-    unit: string;
+    sourceReferenceId: string;
     /**
      * Source system identifier
      */
     sourceSystem: string;
     /**
-     * Source reference identifier
+     * Technician identifier
      */
-    sourceReferenceId: string;
+    technicianId: string;
+    /**
+     * Labor quantity unit
+     */
+    unit: string;
+    /**
+     * Workorder identifier
+     */
+    workorderId: string;
 }
 
 function isOptionalWorkexecLaborPerformedResponsePropertyOfType(
@@ -85,8 +85,8 @@ export function instanceOfWorkexecLaborPerformedResponse(value: object): value i
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createWorkexecLaborPerformedResponsePropertyNames('laborPerformedId', 'workorderId', 'technicianId', 'performedAt', 'quantity', 'unit', 'sourceSystem', 'sourceReferenceId', );
-    const optionalStringProperties = createWorkexecLaborPerformedResponseOptionalProperties({ name: 'laborPerformedId', nullable: false }, { name: 'workorderId', nullable: false }, { name: 'technicianId', nullable: false }, { name: 'performedAt', nullable: false }, { name: 'unit', nullable: false }, { name: 'sourceSystem', nullable: false }, { name: 'sourceReferenceId', nullable: false }, );
+    const requiredProperties = createWorkexecLaborPerformedResponsePropertyNames('laborPerformedId', 'performedAt', 'quantity', 'sourceReferenceId', 'sourceSystem', 'technicianId', 'unit', 'workorderId', );
+    const optionalStringProperties = createWorkexecLaborPerformedResponseOptionalProperties({ name: 'laborPerformedId', nullable: false }, { name: 'performedAt', nullable: false }, { name: 'sourceReferenceId', nullable: false }, { name: 'sourceSystem', nullable: false }, { name: 'technicianId', nullable: false }, { name: 'unit', nullable: false }, { name: 'workorderId', nullable: false }, );
     const optionalNumberProperties = createWorkexecLaborPerformedResponseOptionalProperties({ name: 'quantity', nullable: false }, );
     const optionalBooleanProperties = createWorkexecLaborPerformedResponseOptionalProperties();
 

@@ -14,37 +14,37 @@
  */
 export interface PartyTagAssignmentResponse { 
     /**
-     * Assignment identifier
+     * When the tag was attached
      */
-    assignmentId: string;
-    /**
-     * Party the tag is attached to
-     */
-    partyId: string;
-    /**
-     * Tag identifier
-     */
-    tagId: string;
-    /**
-     * Tag name at read time
-     */
-    name: string;
-    /**
-     * Optional display grouping
-     */
-    category?: string;
-    /**
-     * How the assignment was made
-     */
-    source: PartyTagAssignmentResponseSourceEnum;
+    assignedAt: string;
     /**
      * Actor that made the assignment
      */
     assignedBy?: string;
     /**
-     * When the tag was attached
+     * Assignment identifier
      */
-    assignedAt: string;
+    assignmentId: string;
+    /**
+     * Optional display grouping
+     */
+    category?: string;
+    /**
+     * Tag name at read time
+     */
+    name: string;
+    /**
+     * Party the tag is attached to
+     */
+    partyId: string;
+    /**
+     * How the assignment was made
+     */
+    source: PartyTagAssignmentResponseSourceEnum;
+    /**
+     * Tag identifier
+     */
+    tagId: string;
 }
 export enum PartyTagAssignmentResponseSourceEnum {
     Manual = 'MANUAL',
@@ -93,8 +93,8 @@ export function instanceOfPartyTagAssignmentResponse(value: object): value is Pa
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createPartyTagAssignmentResponsePropertyNames('assignmentId', 'partyId', 'tagId', 'name', 'source', 'assignedAt', );
-    const optionalStringProperties = createPartyTagAssignmentResponseOptionalProperties({ name: 'assignmentId', nullable: false }, { name: 'partyId', nullable: false }, { name: 'tagId', nullable: false }, { name: 'name', nullable: false }, { name: 'category', nullable: false }, { name: 'source', nullable: false }, { name: 'assignedBy', nullable: false }, { name: 'assignedAt', nullable: false }, );
+    const requiredProperties = createPartyTagAssignmentResponsePropertyNames('assignedAt', 'assignmentId', 'name', 'partyId', 'source', 'tagId', );
+    const optionalStringProperties = createPartyTagAssignmentResponseOptionalProperties({ name: 'assignedAt', nullable: false }, { name: 'assignedBy', nullable: false }, { name: 'assignmentId', nullable: false }, { name: 'category', nullable: false }, { name: 'name', nullable: false }, { name: 'partyId', nullable: false }, { name: 'source', nullable: false }, { name: 'tagId', nullable: false }, );
     const optionalNumberProperties = createPartyTagAssignmentResponseOptionalProperties();
     const optionalBooleanProperties = createPartyTagAssignmentResponseOptionalProperties();
 

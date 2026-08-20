@@ -14,25 +14,17 @@
  */
 export interface WorkorderPickTaskResponse { 
     /**
-     * Pick task identifier
+     * Identifier of the location to pick from
      */
-    pickTaskId: string;
+    locationId: string;
     /**
      * Identifier of the pick list the task belongs to
      */
     pickListId: string;
     /**
-     * Identifier of the SKU to pick
+     * Pick task identifier
      */
-    skuId: string;
-    /**
-     * Identifier of the location to pick from
-     */
-    locationId: string;
-    /**
-     * Quantity required to pick
-     */
-    requiredQty: number;
+    pickTaskId: string;
     /**
      * Quantity already picked
      */
@@ -42,13 +34,21 @@ export interface WorkorderPickTaskResponse {
      */
     remainingQty: number;
     /**
-     * Status of the pick task
+     * Quantity required to pick
      */
-    status: string;
+    requiredQty: number;
+    /**
+     * Identifier of the SKU to pick
+     */
+    skuId: string;
     /**
      * Sort order of the pick task within the list
      */
     sortOrder: number;
+    /**
+     * Status of the pick task
+     */
+    status: string;
     /**
      * Optimistic-locking version of the pick task
      */
@@ -93,9 +93,9 @@ export function instanceOfWorkorderPickTaskResponse(value: object): value is Wor
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createWorkorderPickTaskResponsePropertyNames('pickTaskId', 'pickListId', 'skuId', 'locationId', 'requiredQty', 'pickedQty', 'remainingQty', 'status', 'sortOrder', 'version', );
-    const optionalStringProperties = createWorkorderPickTaskResponseOptionalProperties({ name: 'pickTaskId', nullable: false }, { name: 'pickListId', nullable: false }, { name: 'skuId', nullable: false }, { name: 'locationId', nullable: false }, { name: 'status', nullable: false }, );
-    const optionalNumberProperties = createWorkorderPickTaskResponseOptionalProperties({ name: 'requiredQty', nullable: false }, { name: 'pickedQty', nullable: false }, { name: 'remainingQty', nullable: false }, { name: 'sortOrder', nullable: false }, { name: 'version', nullable: false }, );
+    const requiredProperties = createWorkorderPickTaskResponsePropertyNames('locationId', 'pickListId', 'pickTaskId', 'pickedQty', 'remainingQty', 'requiredQty', 'skuId', 'sortOrder', 'status', 'version', );
+    const optionalStringProperties = createWorkorderPickTaskResponseOptionalProperties({ name: 'locationId', nullable: false }, { name: 'pickListId', nullable: false }, { name: 'pickTaskId', nullable: false }, { name: 'skuId', nullable: false }, { name: 'status', nullable: false }, );
+    const optionalNumberProperties = createWorkorderPickTaskResponseOptionalProperties({ name: 'pickedQty', nullable: false }, { name: 'remainingQty', nullable: false }, { name: 'requiredQty', nullable: false }, { name: 'sortOrder', nullable: false }, { name: 'version', nullable: false }, );
     const optionalBooleanProperties = createWorkorderPickTaskResponseOptionalProperties();
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

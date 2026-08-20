@@ -14,9 +14,21 @@
  */
 export interface StartWorkSessionRequest { 
     /**
+     * ID of the work location
+     */
+    locationId: string;
+    /**
      * ID of the mechanic starting the session
      */
     mechanicId: string;
+    /**
+     * Reason for overriding overlap policy (requires permission)
+     */
+    overlapOverrideReason?: string;
+    /**
+     * Optional resource/bay ID
+     */
+    resourceId?: string;
     /**
      * ID of the work order
      */
@@ -25,18 +37,6 @@ export interface StartWorkSessionRequest {
      * ID of the work order task
      */
     workOrderTaskId: string;
-    /**
-     * ID of the work location
-     */
-    locationId: string;
-    /**
-     * Optional resource/bay ID
-     */
-    resourceId?: string;
-    /**
-     * Reason for overriding overlap policy (requires permission)
-     */
-    overlapOverrideReason?: string;
 }
 
 function isOptionalStartWorkSessionRequestPropertyOfType(
@@ -77,8 +77,8 @@ export function instanceOfStartWorkSessionRequest(value: object): value is Start
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createStartWorkSessionRequestPropertyNames('mechanicId', 'workOrderId', 'workOrderTaskId', 'locationId', );
-    const optionalStringProperties = createStartWorkSessionRequestOptionalProperties({ name: 'mechanicId', nullable: false }, { name: 'workOrderId', nullable: false }, { name: 'workOrderTaskId', nullable: false }, { name: 'locationId', nullable: false }, { name: 'resourceId', nullable: false }, { name: 'overlapOverrideReason', nullable: false }, );
+    const requiredProperties = createStartWorkSessionRequestPropertyNames('locationId', 'mechanicId', 'workOrderId', 'workOrderTaskId', );
+    const optionalStringProperties = createStartWorkSessionRequestOptionalProperties({ name: 'locationId', nullable: false }, { name: 'mechanicId', nullable: false }, { name: 'overlapOverrideReason', nullable: false }, { name: 'resourceId', nullable: false }, { name: 'workOrderId', nullable: false }, { name: 'workOrderTaskId', nullable: false }, );
     const optionalNumberProperties = createStartWorkSessionRequestOptionalProperties();
     const optionalBooleanProperties = createStartWorkSessionRequestOptionalProperties();
 

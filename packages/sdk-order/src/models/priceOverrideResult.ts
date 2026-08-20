@@ -14,29 +14,13 @@
  */
 export interface PriceOverrideResult { 
     /**
-     * Unique identifier of the created price override
+     * Whether the override affects sales commission
      */
-    overrideId: string;
+    affectsCommission: boolean;
     /**
-     * Identifier of the order the override applies to
+     * Timestamp when the override was created
      */
-    orderId: string;
-    /**
-     * Identifier of the order line the override applies to
-     */
-    orderLineId: string;
-    /**
-     * Identifier of the product on the overridden line
-     */
-    productId: string;
-    /**
-     * Original price before the override
-     */
-    originalPrice: number;
-    /**
-     * Overridden price applied to the line
-     */
-    overridePrice: number;
+    createdAt: string;
     /**
      * Absolute discount amount granted by the override
      */
@@ -46,37 +30,53 @@ export interface PriceOverrideResult {
      */
     discountPercentage: number;
     /**
-     * Reason code supplied for the override
-     */
-    reasonCode: string;
-    /**
      * Free-text justification supporting the override
      */
     justification?: string;
     /**
-     * Override status; APPROVED means applied immediately, PENDING_APPROVAL means queued for review
+     * Optional human-readable message describing the result
      */
-    status: string;
+    message?: string;
     /**
-     * Whether the override required approval
+     * Identifier of the order the override applies to
      */
-    requiresApproval: boolean;
+    orderId: string;
     /**
-     * Whether the override affects sales commission
+     * Identifier of the order line the override applies to
      */
-    affectsCommission: boolean;
+    orderLineId: string;
+    /**
+     * Original price before the override
+     */
+    originalPrice: number;
+    /**
+     * Unique identifier of the created price override
+     */
+    overrideId: string;
+    /**
+     * Overridden price applied to the line
+     */
+    overridePrice: number;
+    /**
+     * Identifier of the product on the overridden line
+     */
+    productId: string;
+    /**
+     * Reason code supplied for the override
+     */
+    reasonCode: string;
     /**
      * Identifier of the user who requested the override
      */
     requestedByUserId: string;
     /**
-     * Timestamp when the override was created
+     * Whether the override required approval
      */
-    createdAt: string;
+    requiresApproval: boolean;
     /**
-     * Optional human-readable message describing the result
+     * Override status; APPROVED means applied immediately, PENDING_APPROVAL means queued for review
      */
-    message?: string;
+    status: string;
 }
 
 function isOptionalPriceOverrideResultPropertyOfType(
@@ -117,10 +117,10 @@ export function instanceOfPriceOverrideResult(value: object): value is PriceOver
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createPriceOverrideResultPropertyNames('overrideId', 'orderId', 'orderLineId', 'productId', 'originalPrice', 'overridePrice', 'discountAmount', 'discountPercentage', 'reasonCode', 'status', 'requiresApproval', 'affectsCommission', 'requestedByUserId', 'createdAt', );
-    const optionalStringProperties = createPriceOverrideResultOptionalProperties({ name: 'overrideId', nullable: false }, { name: 'orderId', nullable: false }, { name: 'orderLineId', nullable: false }, { name: 'productId', nullable: false }, { name: 'reasonCode', nullable: false }, { name: 'justification', nullable: false }, { name: 'status', nullable: false }, { name: 'requestedByUserId', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'message', nullable: false }, );
-    const optionalNumberProperties = createPriceOverrideResultOptionalProperties({ name: 'originalPrice', nullable: false }, { name: 'overridePrice', nullable: false }, { name: 'discountAmount', nullable: false }, { name: 'discountPercentage', nullable: false }, );
-    const optionalBooleanProperties = createPriceOverrideResultOptionalProperties({ name: 'requiresApproval', nullable: false }, { name: 'affectsCommission', nullable: false }, );
+    const requiredProperties = createPriceOverrideResultPropertyNames('affectsCommission', 'createdAt', 'discountAmount', 'discountPercentage', 'orderId', 'orderLineId', 'originalPrice', 'overrideId', 'overridePrice', 'productId', 'reasonCode', 'requestedByUserId', 'requiresApproval', 'status', );
+    const optionalStringProperties = createPriceOverrideResultOptionalProperties({ name: 'createdAt', nullable: false }, { name: 'justification', nullable: false }, { name: 'message', nullable: false }, { name: 'orderId', nullable: false }, { name: 'orderLineId', nullable: false }, { name: 'overrideId', nullable: false }, { name: 'productId', nullable: false }, { name: 'reasonCode', nullable: false }, { name: 'requestedByUserId', nullable: false }, { name: 'status', nullable: false }, );
+    const optionalNumberProperties = createPriceOverrideResultOptionalProperties({ name: 'discountAmount', nullable: false }, { name: 'discountPercentage', nullable: false }, { name: 'originalPrice', nullable: false }, { name: 'overridePrice', nullable: false }, );
+    const optionalBooleanProperties = createPriceOverrideResultOptionalProperties({ name: 'affectsCommission', nullable: false }, { name: 'requiresApproval', nullable: false }, );
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
         && optionalStringProperties.every((property) => isOptionalPriceOverrideResultPropertyOfType(_v, property.name, 'string', property.nullable))

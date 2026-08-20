@@ -42,24 +42,24 @@ export class PeopleAccessControlService extends BaseService {
     }
 
     /**
-     * Assign role to person
-     * Assign a role to a person with optional location scope and date range
+     * Assign a Role to a Person
+     * Assigns a role to a person by delegating to pos-security through the person\&#39;s linked user account, optionally scoped to one location and bounded by a date window. Use this tool to grant access; do not use revokePersonRoleAssignment, which ends an assignment that already exists. Preconditions: the person must have an active user-person link resolving to a pos-security user, and the roleCode must exist in pos-security. Required inputs: personUuid (UUID) as a path parameter and roleCode in the body; locationId (UUID) scopes the role to one location when supplied, and optional startDate/endDate bound the assignment, with endDate required to be on or after startDate. Emits a PEOPLE_CONTACT_ACCESS_ASSIGNMENT_CREATE event; the assignment record itself is created and owned by pos-security. Returns 201 with the created assignment, 400 when roleCode is blank or endDate precedes startDate, and 404 when the person\&#39;s user link, the security user, or the role cannot be resolved. 
      * @endpoint post /v1/people/{personUuid}/access/assignments
      * @param personUuid 
-     * @param personRoleAssignmentRequest 
+     * @param personRoleAssignmentRequest Role code plus optional location scope and effective date window.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public createAssignment(personUuid: string, personRoleAssignmentRequest: PersonRoleAssignmentRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<UserRoleDto>;
-    public createAssignment(personUuid: string, personRoleAssignmentRequest: PersonRoleAssignmentRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<UserRoleDto>>;
-    public createAssignment(personUuid: string, personRoleAssignmentRequest: PersonRoleAssignmentRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<UserRoleDto>>;
-    public createAssignment(personUuid: string, personRoleAssignmentRequest: PersonRoleAssignmentRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public assignRoleToPerson(personUuid: string, personRoleAssignmentRequest: PersonRoleAssignmentRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<UserRoleDto>;
+    public assignRoleToPerson(personUuid: string, personRoleAssignmentRequest: PersonRoleAssignmentRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<UserRoleDto>>;
+    public assignRoleToPerson(personUuid: string, personRoleAssignmentRequest: PersonRoleAssignmentRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<UserRoleDto>>;
+    public assignRoleToPerson(personUuid: string, personRoleAssignmentRequest: PersonRoleAssignmentRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (personUuid === null || personUuid === undefined) {
-            throw new Error('Required parameter personUuid was null or undefined when calling createAssignment.');
+            throw new Error('Required parameter personUuid was null or undefined when calling assignRoleToPerson.');
         }
         if (personRoleAssignmentRequest === null || personRoleAssignmentRequest === undefined) {
-            throw new Error('Required parameter personRoleAssignmentRequest was null or undefined when calling createAssignment.');
+            throw new Error('Required parameter personRoleAssignmentRequest was null or undefined when calling assignRoleToPerson.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -117,8 +117,68 @@ export class PeopleAccessControlService extends BaseService {
     }
 
     /**
-     * Get role assignments
-     * Retrieve role assignments for a person with optional history and date filtering
+     * List Roles Assignable to Person
+     * Lists the role catalog a person could be assigned, combining LOCATION-scoped and GLOBAL-scoped roles fetched live from pos-security. Use this tool to populate a role picker before calling assignRoleToPerson; do not use listRoleAssignments, which returns the roles the person already holds. Preconditions: the person record must exist; the roles themselves are owned by pos-security, and no user-person link is needed for this listing. Required inputs: personUuid (UUID) as a path parameter; there is no request body and no filtering. Emits a PEOPLE_CONTACT_ACCESS_ROLES_LIST audit event; no state changes. Returns 404 when the person does not exist, and propagates the pos-security status code when the role listing call fails there. 
+     * @endpoint get /v1/people/{personUuid}/access/roles
+     * @param personUuid 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public listAssignableRoles(personUuid: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<RoleDto>>;
+    public listAssignableRoles(personUuid: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<RoleDto>>>;
+    public listAssignableRoles(personUuid: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<RoleDto>>>;
+    public listAssignableRoles(personUuid: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (personUuid === null || personUuid === undefined) {
+            throw new Error('Required parameter personUuid was null or undefined when calling listAssignableRoles.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/people/${this.configuration.encodeParam({name: "personUuid", value: personUuid, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/access/roles`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<Array<RoleDto>>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * List a Person\&#39;s Role Assignments
+     * Lists the role assignments a person holds in pos-security, resolved through the person\&#39;s active user-person link. Use this tool to inspect the access a person already has; do not use listAssignableRoles, which returns the catalog of roles available for assignment. Preconditions: the person must have an active user-person link, and the linked username must resolve to a pos-security user. Required inputs: personUuid (UUID) as a path parameter; includeHistory defaults to false and adds ended assignments when true, and endDate (ISO date-time) optionally evaluates assignments as of that moment. Emits a PEOPLE_CONTACT_ACCESS_ASSIGNMENTS_LIST audit event; no state changes. Returns 404 when the person has no user link or the linked username has no security user. 
      * @endpoint get /v1/people/{personUuid}/access/assignments
      * @param personUuid 
      * @param includeHistory 
@@ -127,12 +187,12 @@ export class PeopleAccessControlService extends BaseService {
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public getAssignments(personUuid: string, includeHistory?: boolean, endDate?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<UserRoleDto>>;
-    public getAssignments(personUuid: string, includeHistory?: boolean, endDate?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<UserRoleDto>>>;
-    public getAssignments(personUuid: string, includeHistory?: boolean, endDate?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<UserRoleDto>>>;
-    public getAssignments(personUuid: string, includeHistory?: boolean, endDate?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public listRoleAssignments(personUuid: string, includeHistory?: boolean, endDate?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<UserRoleDto>>;
+    public listRoleAssignments(personUuid: string, includeHistory?: boolean, endDate?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<UserRoleDto>>>;
+    public listRoleAssignments(personUuid: string, includeHistory?: boolean, endDate?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<UserRoleDto>>>;
+    public listRoleAssignments(personUuid: string, includeHistory?: boolean, endDate?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (personUuid === null || personUuid === undefined) {
-            throw new Error('Required parameter personUuid was null or undefined when calling getAssignments.');
+            throw new Error('Required parameter personUuid was null or undefined when calling listRoleAssignments.');
         }
 
         let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
@@ -200,68 +260,8 @@ export class PeopleAccessControlService extends BaseService {
     }
 
     /**
-     * Get available roles
-     * Retrieve list of roles that can be assigned to people
-     * @endpoint get /v1/people/{personUuid}/access/roles
-     * @param personUuid 
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     * @param options additional options
-     */
-    public getRoles(personUuid: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<RoleDto>>;
-    public getRoles(personUuid: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<RoleDto>>>;
-    public getRoles(personUuid: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<RoleDto>>>;
-    public getRoles(personUuid: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
-        if (personUuid === null || personUuid === undefined) {
-            throw new Error('Required parameter personUuid was null or undefined when calling getRoles.');
-        }
-
-        let localVarHeaders = this.defaultHeaders;
-
-        // authentication (bearerAuth) required
-        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
-
-        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
-            'application/json'
-        ]);
-        if (localVarHttpHeaderAcceptSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
-        }
-
-        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
-
-        const localVarTransferCache: boolean = options?.transferCache ?? true;
-
-
-        let responseType_: 'text' | 'json' | 'blob' = 'json';
-        if (localVarHttpHeaderAcceptSelected) {
-            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
-                responseType_ = 'text';
-            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
-                responseType_ = 'json';
-            } else {
-                responseType_ = 'blob';
-            }
-        }
-
-        let localVarPath = `/v1/people/${this.configuration.encodeParam({name: "personUuid", value: personUuid, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/access/roles`;
-        const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<Array<RoleDto>>('get', `${basePath}${localVarPath}`,
-            {
-                context: localVarHttpContext,
-                responseType: <any>responseType_,
-                ...(withCredentials ? { withCredentials } : {}),
-                headers: localVarHeaders,
-                observe: observe,
-                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * Revoke role assignment
-     * Revoke a role assignment from a person
+     * Revoke Role Assignment from Person
+     * Revokes one of a person\&#39;s role assignments by delegating to pos-security through the person\&#39;s linked user account. Use this tool to end access granted with assignRoleToPerson; do not use unlinkUserFromPerson, which severs the whole user-person link rather than a single role. Preconditions: the person must have an active user-person link resolving to a pos-security user, and an assignment for the roleCode must exist there. Required inputs: personUuid (UUID) and roleCode as path parameters; endDate (ISO date-time) optionally ends the assignment at that moment instead of immediately. Emits a PEOPLE_CONTACT_ACCESS_ASSIGNMENT_REVOKE event; the assignment state change is recorded in pos-security. Returns 204 on success, and 404 when the person has no user link, the security user cannot be resolved, or pos-security has no matching assignment. 
      * @endpoint delete /v1/people/{personUuid}/access/assignments/{roleCode}
      * @param personUuid 
      * @param roleCode 
@@ -270,15 +270,15 @@ export class PeopleAccessControlService extends BaseService {
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public revokeAssignment(personUuid: string, roleCode: string, endDate?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public revokeAssignment(personUuid: string, roleCode: string, endDate?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public revokeAssignment(personUuid: string, roleCode: string, endDate?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public revokeAssignment(personUuid: string, roleCode: string, endDate?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public revokePersonRoleAssignment(personUuid: string, roleCode: string, endDate?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<any>;
+    public revokePersonRoleAssignment(personUuid: string, roleCode: string, endDate?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
+    public revokePersonRoleAssignment(personUuid: string, roleCode: string, endDate?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
+    public revokePersonRoleAssignment(personUuid: string, roleCode: string, endDate?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (personUuid === null || personUuid === undefined) {
-            throw new Error('Required parameter personUuid was null or undefined when calling revokeAssignment.');
+            throw new Error('Required parameter personUuid was null or undefined when calling revokePersonRoleAssignment.');
         }
         if (roleCode === null || roleCode === undefined) {
-            throw new Error('Required parameter roleCode was null or undefined when calling revokeAssignment.');
+            throw new Error('Required parameter roleCode was null or undefined when calling revokePersonRoleAssignment.');
         }
 
         let localVarQueryParameters = new OpenApiHttpParams(this.encoder);

@@ -14,10 +14,6 @@
  */
 export interface ApprovalPersonDto { 
     /**
-     * Person identifier
-     */
-    personId: string;
-    /**
      * Person display name
      */
     displayName: string;
@@ -25,6 +21,10 @@ export interface ApprovalPersonDto {
      * Employee number
      */
     employeeNumber?: string;
+    /**
+     * Person identifier
+     */
+    personId: string;
 }
 
 function isOptionalApprovalPersonDtoPropertyOfType(
@@ -65,8 +65,8 @@ export function instanceOfApprovalPersonDto(value: object): value is ApprovalPer
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createApprovalPersonDtoPropertyNames('personId', 'displayName', );
-    const optionalStringProperties = createApprovalPersonDtoOptionalProperties({ name: 'personId', nullable: false }, { name: 'displayName', nullable: false }, { name: 'employeeNumber', nullable: false }, );
+    const requiredProperties = createApprovalPersonDtoPropertyNames('displayName', 'personId', );
+    const optionalStringProperties = createApprovalPersonDtoOptionalProperties({ name: 'displayName', nullable: false }, { name: 'employeeNumber', nullable: false }, { name: 'personId', nullable: false }, );
     const optionalNumberProperties = createApprovalPersonDtoOptionalProperties();
     const optionalBooleanProperties = createApprovalPersonDtoOptionalProperties();
 

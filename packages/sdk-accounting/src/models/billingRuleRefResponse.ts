@@ -14,6 +14,42 @@
  */
 export interface BillingRuleRefResponse { 
     /**
+     * Whether automatic payment is enabled
+     */
+    autoPayEnabled: boolean;
+    /**
+     * Identifier of the billing address
+     */
+    billingAddressId?: string;
+    /**
+     * Whether the customer is currently on credit hold
+     */
+    creditHold: boolean;
+    /**
+     * Credit limit extended to the customer
+     */
+    creditLimit?: number;
+    /**
+     * ISO 4217 currency code
+     */
+    currency?: string;
+    /**
+     * Reference to the applicable discount policy
+     */
+    discountPolicyRef?: string;
+    /**
+     * Additional extension attributes keyed by name
+     */
+    extensions?: object;
+    /**
+     * Method used to deliver invoices
+     */
+    invoiceDeliveryMethod?: string;
+    /**
+     * Agreed payment terms
+     */
+    paymentTerms?: string;
+    /**
      * Whether a purchase order is required for billing
      */
     poRequired: boolean;
@@ -21,42 +57,6 @@ export interface BillingRuleRefResponse {
      * Whether the customer is tax exempt
      */
     taxExempt: boolean;
-    /**
-     * Agreed payment terms
-     */
-    paymentTerms?: string;
-    /**
-     * Credit limit extended to the customer
-     */
-    creditLimit?: number;
-    /**
-     * Whether the customer is currently on credit hold
-     */
-    creditHold: boolean;
-    /**
-     * Method used to deliver invoices
-     */
-    invoiceDeliveryMethod?: string;
-    /**
-     * Identifier of the billing address
-     */
-    billingAddressId?: string;
-    /**
-     * Whether automatic payment is enabled
-     */
-    autoPayEnabled: boolean;
-    /**
-     * Reference to the applicable discount policy
-     */
-    discountPolicyRef?: string;
-    /**
-     * ISO 4217 currency code
-     */
-    currency?: string;
-    /**
-     * Additional extension attributes keyed by name
-     */
-    extensions?: object;
 }
 
 function isOptionalBillingRuleRefResponsePropertyOfType(
@@ -97,10 +97,10 @@ export function instanceOfBillingRuleRefResponse(value: object): value is Billin
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createBillingRuleRefResponsePropertyNames('poRequired', 'taxExempt', 'creditHold', 'autoPayEnabled', );
-    const optionalStringProperties = createBillingRuleRefResponseOptionalProperties({ name: 'paymentTerms', nullable: false }, { name: 'invoiceDeliveryMethod', nullable: false }, { name: 'billingAddressId', nullable: false }, { name: 'discountPolicyRef', nullable: false }, { name: 'currency', nullable: false }, );
+    const requiredProperties = createBillingRuleRefResponsePropertyNames('autoPayEnabled', 'creditHold', 'poRequired', 'taxExempt', );
+    const optionalStringProperties = createBillingRuleRefResponseOptionalProperties({ name: 'billingAddressId', nullable: false }, { name: 'currency', nullable: false }, { name: 'discountPolicyRef', nullable: false }, { name: 'invoiceDeliveryMethod', nullable: false }, { name: 'paymentTerms', nullable: false }, );
     const optionalNumberProperties = createBillingRuleRefResponseOptionalProperties({ name: 'creditLimit', nullable: false }, );
-    const optionalBooleanProperties = createBillingRuleRefResponseOptionalProperties({ name: 'poRequired', nullable: false }, { name: 'taxExempt', nullable: false }, { name: 'creditHold', nullable: false }, { name: 'autoPayEnabled', nullable: false }, );
+    const optionalBooleanProperties = createBillingRuleRefResponseOptionalProperties({ name: 'autoPayEnabled', nullable: false }, { name: 'creditHold', nullable: false }, { name: 'poRequired', nullable: false }, { name: 'taxExempt', nullable: false }, );
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
         && optionalStringProperties.every((property) => isOptionalBillingRuleRefResponsePropertyOfType(_v, property.name, 'string', property.nullable))

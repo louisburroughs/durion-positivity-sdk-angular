@@ -14,10 +14,23 @@ import { EmployeeContactInfoDto } from './employeeContactInfoDto';
  * Request to update an existing employee record
  */
 export interface UpdateEmployeeRequest { 
+    contactInfo?: EmployeeContactInfoDto;
+    /**
+     * Policy controlling how potential duplicate employee records are handled
+     */
+    duplicatePolicy?: UpdateEmployeeRequestDuplicatePolicyEnum;
+    /**
+     * Unique employee number
+     */
+    employeeNumber: string;
     /**
      * First (given) name of the employee
      */
     firstName: string;
+    /**
+     * Date the employee was hired
+     */
+    hireDate: string;
     /**
      * Last (family) name of the employee
      */
@@ -27,37 +40,24 @@ export interface UpdateEmployeeRequest {
      */
     preferredName?: string;
     /**
-     * Unique employee number
-     */
-    employeeNumber: string;
-    /**
      * Employment status of the employee
      */
     status: UpdateEmployeeRequestStatusEnum;
     /**
-     * Date the employee was hired
-     */
-    hireDate: string;
-    /**
      * Date the employee was terminated, if applicable
      */
     terminationDate?: string;
-    contactInfo?: EmployeeContactInfoDto;
-    /**
-     * Policy controlling how potential duplicate employee records are handled
-     */
-    duplicatePolicy?: UpdateEmployeeRequestDuplicatePolicyEnum;
 }
+export enum UpdateEmployeeRequestDuplicatePolicyEnum {
+    Strict = 'STRICT',
+    Balanced = 'BALANCED'
+};
 export enum UpdateEmployeeRequestStatusEnum {
     Active = 'ACTIVE',
     OnLeave = 'ON_LEAVE',
     Suspended = 'SUSPENDED',
     Terminated = 'TERMINATED',
     Disabled = 'DISABLED'
-};
-export enum UpdateEmployeeRequestDuplicatePolicyEnum {
-    Strict = 'STRICT',
-    Balanced = 'BALANCED'
 };
 
 
@@ -100,8 +100,8 @@ export function instanceOfUpdateEmployeeRequest(value: object): value is UpdateE
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createUpdateEmployeeRequestPropertyNames('firstName', 'lastName', 'employeeNumber', 'status', 'hireDate', );
-    const optionalStringProperties = createUpdateEmployeeRequestOptionalProperties({ name: 'firstName', nullable: false }, { name: 'lastName', nullable: false }, { name: 'preferredName', nullable: false }, { name: 'employeeNumber', nullable: false }, { name: 'status', nullable: false }, { name: 'hireDate', nullable: false }, { name: 'terminationDate', nullable: false }, { name: 'duplicatePolicy', nullable: false }, );
+    const requiredProperties = createUpdateEmployeeRequestPropertyNames('employeeNumber', 'firstName', 'hireDate', 'lastName', 'status', );
+    const optionalStringProperties = createUpdateEmployeeRequestOptionalProperties({ name: 'duplicatePolicy', nullable: false }, { name: 'employeeNumber', nullable: false }, { name: 'firstName', nullable: false }, { name: 'hireDate', nullable: false }, { name: 'lastName', nullable: false }, { name: 'preferredName', nullable: false }, { name: 'status', nullable: false }, { name: 'terminationDate', nullable: false }, );
     const optionalNumberProperties = createUpdateEmployeeRequestOptionalProperties();
     const optionalBooleanProperties = createUpdateEmployeeRequestOptionalProperties();
 

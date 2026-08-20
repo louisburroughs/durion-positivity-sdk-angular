@@ -14,13 +14,13 @@
  */
 export interface StopTravelSegmentRequest { 
     /**
-     * Identifier of the location reached when the travel segment stops
-     */
-    toLocationId?: string;
-    /**
      * Optional notes recorded when stopping the travel segment
      */
     notes?: string;
+    /**
+     * Identifier of the location reached when the travel segment stops
+     */
+    toLocationId?: string;
 }
 
 function isOptionalStopTravelSegmentRequestPropertyOfType(
@@ -62,7 +62,7 @@ export function instanceOfStopTravelSegmentRequest(value: object): value is Stop
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createStopTravelSegmentRequestPropertyNames();
-    const optionalStringProperties = createStopTravelSegmentRequestOptionalProperties({ name: 'toLocationId', nullable: false }, { name: 'notes', nullable: false }, );
+    const optionalStringProperties = createStopTravelSegmentRequestOptionalProperties({ name: 'notes', nullable: false }, { name: 'toLocationId', nullable: false }, );
     const optionalNumberProperties = createStopTravelSegmentRequestOptionalProperties();
     const optionalBooleanProperties = createStopTravelSegmentRequestOptionalProperties();
 

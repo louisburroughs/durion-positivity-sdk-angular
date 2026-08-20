@@ -14,69 +14,9 @@
  */
 export interface EstimateResponse { 
     /**
-     * Unique identifier for the estimate
+     * Additional notes provided at approval time
      */
-    id: string;
-    /**
-     * Estimate number
-     */
-    estimateNumber: string;
-    /**
-     * Customer ID
-     */
-    customerId?: string;
-    /**
-     * Vehicle ID
-     */
-    vehicleId?: string;
-    /**
-     * Location ID
-     */
-    locationId?: string;
-    /**
-     * Currency UOM ID
-     */
-    currencyUomId?: string;
-    /**
-     * Whether tax is pending because the tax service was unavailable at calculation time (degraded estimate; no rate invented). Cleared by a successful recalculation.
-     */
-    taxPending?: boolean;
-    /**
-     * Estimate status
-     */
-    status: string;
-    /**
-     * Username who created the estimate
-     */
-    createdByUserId?: string;
-    /**
-     * Date and time the estimate was created
-     */
-    createdAt?: string;
-    /**
-     * Subtotal amount before tax
-     */
-    subtotal?: number;
-    /**
-     * Tax amount
-     */
-    taxAmount?: number;
-    /**
-     * Total amount including tax
-     */
-    total?: number;
-    /**
-     * Date and time the estimate was submitted for approval
-     */
-    submittedAt?: string;
-    /**
-     * Username who submitted the estimate for approval
-     */
-    submittedBy?: string;
-    /**
-     * Date and time the approval window expires
-     */
-    expiresAt?: string;
+    approvalNotes?: string;
     /**
      * Date and time the estimate was approved
      */
@@ -85,6 +25,54 @@ export interface EstimateResponse {
      * Customer UUID who approved the estimate
      */
     approvedBy?: string;
+    /**
+     * Date and time the estimate was created
+     */
+    createdAt?: string;
+    /**
+     * Username who created the estimate
+     */
+    createdByUserId?: string;
+    /**
+     * List of CRM contact identifiers
+     */
+    crmContactIds?: Array<string>;
+    /**
+     * CRM party identifier
+     */
+    crmPartyId?: string;
+    /**
+     * CRM vehicle identifier
+     */
+    crmVehicleId?: string;
+    /**
+     * Currency UOM ID
+     */
+    currencyUomId?: string;
+    /**
+     * Customer ID
+     */
+    customerId?: string;
+    /**
+     * Estimate number
+     */
+    estimateNumber: string;
+    /**
+     * Date and time the approval window expires
+     */
+    expiresAt?: string;
+    /**
+     * Unique identifier for the estimate
+     */
+    id: string;
+    /**
+     * Location ID
+     */
+    locationId?: string;
+    /**
+     * Purchase order number for commercial accounts
+     */
+    purchaseOrderNumber?: string;
     /**
      * Base64-encoded signature image
      */
@@ -98,29 +86,41 @@ export interface EstimateResponse {
      */
     signerName?: string;
     /**
-     * Additional notes provided at approval time
+     * Estimate status
      */
-    approvalNotes?: string;
+    status: string;
     /**
-     * Purchase order number for commercial accounts
+     * Date and time the estimate was submitted for approval
      */
-    purchaseOrderNumber?: string;
+    submittedAt?: string;
+    /**
+     * Username who submitted the estimate for approval
+     */
+    submittedBy?: string;
+    /**
+     * Subtotal amount before tax
+     */
+    subtotal?: number;
+    /**
+     * Tax amount
+     */
+    taxAmount?: number;
+    /**
+     * Whether tax is pending because the tax service was unavailable at calculation time (degraded estimate; no rate invented). Cleared by a successful recalculation.
+     */
+    taxPending?: boolean;
+    /**
+     * Total amount including tax
+     */
+    total?: number;
+    /**
+     * Vehicle ID
+     */
+    vehicleId?: string;
     /**
      * Optimistic locking version
      */
     version?: number;
-    /**
-     * CRM party identifier
-     */
-    crmPartyId?: string;
-    /**
-     * CRM vehicle identifier
-     */
-    crmVehicleId?: string;
-    /**
-     * List of CRM contact identifiers
-     */
-    crmContactIds?: Array<string>;
 }
 
 function isOptionalEstimateResponsePropertyOfType(
@@ -161,8 +161,8 @@ export function instanceOfEstimateResponse(value: object): value is EstimateResp
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createEstimateResponsePropertyNames('id', 'estimateNumber', 'status', );
-    const optionalStringProperties = createEstimateResponseOptionalProperties({ name: 'id', nullable: false }, { name: 'estimateNumber', nullable: false }, { name: 'customerId', nullable: false }, { name: 'vehicleId', nullable: false }, { name: 'locationId', nullable: false }, { name: 'currencyUomId', nullable: false }, { name: 'status', nullable: false }, { name: 'createdByUserId', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'submittedAt', nullable: false }, { name: 'submittedBy', nullable: false }, { name: 'expiresAt', nullable: false }, { name: 'approvedAt', nullable: false }, { name: 'approvedBy', nullable: false }, { name: 'signatureData', nullable: false }, { name: 'signatureMimeType', nullable: false }, { name: 'signerName', nullable: false }, { name: 'approvalNotes', nullable: false }, { name: 'purchaseOrderNumber', nullable: false }, { name: 'crmPartyId', nullable: false }, { name: 'crmVehicleId', nullable: false }, );
+    const requiredProperties = createEstimateResponsePropertyNames('estimateNumber', 'id', 'status', );
+    const optionalStringProperties = createEstimateResponseOptionalProperties({ name: 'approvalNotes', nullable: false }, { name: 'approvedAt', nullable: false }, { name: 'approvedBy', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'createdByUserId', nullable: false }, { name: 'crmPartyId', nullable: false }, { name: 'crmVehicleId', nullable: false }, { name: 'currencyUomId', nullable: false }, { name: 'customerId', nullable: false }, { name: 'estimateNumber', nullable: false }, { name: 'expiresAt', nullable: false }, { name: 'id', nullable: false }, { name: 'locationId', nullable: false }, { name: 'purchaseOrderNumber', nullable: false }, { name: 'signatureData', nullable: false }, { name: 'signatureMimeType', nullable: false }, { name: 'signerName', nullable: false }, { name: 'status', nullable: false }, { name: 'submittedAt', nullable: false }, { name: 'submittedBy', nullable: false }, { name: 'vehicleId', nullable: false }, );
     const optionalNumberProperties = createEstimateResponseOptionalProperties({ name: 'subtotal', nullable: false }, { name: 'taxAmount', nullable: false }, { name: 'total', nullable: false }, { name: 'version', nullable: false }, );
     const optionalBooleanProperties = createEstimateResponseOptionalProperties({ name: 'taxPending', nullable: false }, );
 

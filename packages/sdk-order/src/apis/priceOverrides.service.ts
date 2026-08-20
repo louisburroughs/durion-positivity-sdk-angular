@@ -44,10 +44,10 @@ export class PriceOverridesService extends BaseService {
     }
 
     /**
-     * Apply price override
-     * Apply a price override to an order line. May require approval based on override amount.
+     * Apply a Price Override
+     * Applies a price override to a single DRAFT order line, auto-approving and repricing the line immediately when the discount is below the approval thresholds (10 percent and 50.00), and otherwise parking it at PENDING_APPROVAL for a manager. Use this tool for a one-line price concession; do not use applyOrderDiscount, which spreads a discount pro-rata across the whole order, and do not use approvePriceOverride, which resolves an override that already exists. Preconditions: the order must exist and be DRAFT, the order line must exist, and overridePrice must be between zero and originalPrice inclusive. Required inputs: orderId, orderLineId, and productId as UUID strings, originalPrice, overridePrice, and reasonCode (for example PRICE_MATCH or GOODWILL_ADJUSTMENT); justification and idempotencyKey are optional, and a replayed key returns the existing override. Emits an ORDER_PRICE_OVERRIDE_APPLY event; an auto-approved override immediately rewrites the line\&#39;s unit price, recomputes the order subtotal, and publishes a commission-impact fact. Returns 201 with status APPROVED or PENDING_APPROVAL, 400 when an id or reasonCode cannot be parsed, 409 when the idempotency key was used with a different payload, and 422 when the order or line cannot be found, the order is not DRAFT, or the override price is negative or above the original. 
      * @endpoint post /v1/orders/price-overrides
-     * @param applyPriceOverrideRequest 
+     * @param applyPriceOverrideRequest The line-level override: original and overridden price with an audit reason.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -114,11 +114,11 @@ export class PriceOverridesService extends BaseService {
     }
 
     /**
-     * Approve price override
-     * Approve a pending price override. Validates approver permission level.
+     * Approve a Price Override
+     * Approves a PENDING_APPROVAL price override, marking it APPROVED and recording an approval audit row with the reviewer\&#39;s role resolved from the caller\&#39;s granted roles. Use this tool to grant a pending override; do not use rejectPriceOverride, which declines it, and do not use applyPriceOverride, which creates a new override. Preconditions: the override must exist and be in PENDING_APPROVAL. Required inputs: overrideId (UUID) as a path parameter; the body carries only optional reviewer comments — the approver identity and role come from the security context, not the body. Emits an ORDER_PRICE_OVERRIDE_APPROVE event and publishes a commission-impact fact; note that the approval itself does not rewrite the order line\&#39;s unit price — the line reprice happens only on the auto-approved apply path. Returns 404 when the override does not exist, and 422 when the override is not in PENDING_APPROVAL. 
      * @endpoint post /v1/orders/price-overrides/{overrideId}/approve
      * @param overrideId Price override ID
-     * @param approvePriceOverrideRequest 
+     * @param approvePriceOverrideRequest Optional reviewer commentary recorded on the approval audit row.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -171,7 +171,7 @@ export class PriceOverridesService extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/orders/price-overrides/${this.configuration.encodeParam({name: "overrideId", value: overrideId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/approve`;
+        let localVarPath = `/v1/orders/price-overrides/${this.configuration.encodeParam({name: "overrideId", value: overrideId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/approve`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<PriceOverrideDetail>('post', `${basePath}${localVarPath}`,
             {
@@ -188,20 +188,20 @@ export class PriceOverridesService extends BaseService {
     }
 
     /**
-     * Get price override
-     * Retrieve a specific price override by ID.
+     * Get a Price Override
+     * Returns one price override with its prices, discount figures, status, audit actors, and lifecycle timestamps. Use this tool when the override id is already known; use searchPriceOverrides instead to find overrides by order, status, or date range. Preconditions: the override must exist. Required inputs: overrideId (UUID) as a path parameter; there is no request body. No events are emitted and no state changes; this is a read-only projection. Returns 404 when no price override exists for the supplied id. 
      * @endpoint get /v1/orders/price-overrides/{overrideId}
      * @param overrideId Price override ID
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public getOverride(overrideId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PriceOverrideDetail>;
-    public getOverride(overrideId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PriceOverrideDetail>>;
-    public getOverride(overrideId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PriceOverrideDetail>>;
-    public getOverride(overrideId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getPriceOverride(overrideId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PriceOverrideDetail>;
+    public getPriceOverride(overrideId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PriceOverrideDetail>>;
+    public getPriceOverride(overrideId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PriceOverrideDetail>>;
+    public getPriceOverride(overrideId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (overrideId === null || overrideId === undefined) {
-            throw new Error('Required parameter overrideId was null or undefined when calling getOverride.');
+            throw new Error('Required parameter overrideId was null or undefined when calling getPriceOverride.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -232,7 +232,7 @@ export class PriceOverridesService extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/orders/price-overrides/${this.configuration.encodeParam({name: "overrideId", value: overrideId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
+        let localVarPath = `/v1/orders/price-overrides/${this.configuration.encodeParam({name: "overrideId", value: overrideId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<PriceOverrideDetail>('get', `${basePath}${localVarPath}`,
             {
@@ -248,8 +248,138 @@ export class PriceOverridesService extends BaseService {
     }
 
     /**
-     * Get price overrides
-     * Retrieve price overrides by order ID, status, or date range. At least one filter parameter is required.
+     * List Pending Price Override Approvals
+     * Lists every price override sitting in PENDING_APPROVAL — the manager approval work queue. Use this tool to fetch what needs a decision; use approvePriceOverride or rejectPriceOverride to act on an entry, and searchPriceOverrides instead for historical or filtered queries. Preconditions: none beyond the order:price_override:approve permission. Required inputs: none; there are no parameters and no request body. Emits an ORDER_PRICE_OVERRIDE_LIST_PENDING audit event; no state changes. Returns 200 with a possibly empty list; there are no business error conditions beyond authorization. 
+     * @endpoint get /v1/orders/price-overrides/pending
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public listPendingPriceOverrides(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<PriceOverrideDetail>>;
+    public listPendingPriceOverrides(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<PriceOverrideDetail>>>;
+    public listPendingPriceOverrides(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<PriceOverrideDetail>>>;
+    public listPendingPriceOverrides(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/orders/price-overrides/pending`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<Array<PriceOverrideDetail>>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Reject a Price Override
+     * Rejects a PENDING_APPROVAL price override, marking it REJECTED with the supplied reason and recording a rejection audit row with the reviewer\&#39;s resolved role. Use this tool to decline a pending override; do not use approvePriceOverride, which grants it instead. Preconditions: the override must exist and be in PENDING_APPROVAL; a rejected override is terminal and never touches the order line\&#39;s price. Required inputs: overrideId (UUID) as a path parameter and reason in the body; comments are optional, and the reviewer identity and role come from the security context. Emits an ORDER_PRICE_OVERRIDE_REJECT event; no commission-impact fact is published for a rejection. Returns 404 when the override does not exist, and 422 when the override is not in PENDING_APPROVAL. 
+     * @endpoint post /v1/orders/price-overrides/{overrideId}/reject
+     * @param overrideId Price override ID
+     * @param rejectPriceOverrideRequest The rejection reason plus optional reviewer commentary.
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public rejectPriceOverride(overrideId: string, rejectPriceOverrideRequest: RejectPriceOverrideRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PriceOverrideDetail>;
+    public rejectPriceOverride(overrideId: string, rejectPriceOverrideRequest: RejectPriceOverrideRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PriceOverrideDetail>>;
+    public rejectPriceOverride(overrideId: string, rejectPriceOverrideRequest: RejectPriceOverrideRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PriceOverrideDetail>>;
+    public rejectPriceOverride(overrideId: string, rejectPriceOverrideRequest: RejectPriceOverrideRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (overrideId === null || overrideId === undefined) {
+            throw new Error('Required parameter overrideId was null or undefined when calling rejectPriceOverride.');
+        }
+        if (rejectPriceOverrideRequest === null || rejectPriceOverrideRequest === undefined) {
+            throw new Error('Required parameter rejectPriceOverrideRequest was null or undefined when calling rejectPriceOverride.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/orders/price-overrides/${this.configuration.encodeParam({name: "overrideId", value: overrideId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/reject`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<PriceOverrideDetail>('post', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                body: rejectPriceOverrideRequest,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Search Price Overrides
+     * Searches price overrides by order id, status, or creation-date range; exactly one filter dimension is applied, with orderId taking precedence over status, which takes precedence over the date range. Use this tool to find overrides matching a filter; use getPriceOverride instead when the override id is known, or listPendingPriceOverrides for the approval work queue. Preconditions: at least one filter must be supplied, and a date-range search requires both startDate and endDate. Required inputs: one of orderId (UUID string), status (an override status such as PENDING_APPROVAL, APPROVED or REJECTED), or startDate plus endDate as ISO-8601 date-times. Emits an ORDER_PRICE_OVERRIDE_SEARCH audit event; no state changes. Returns 200 with a possibly empty list, 400 when no filter is supplied or orderId is not a UUID, and 422 when status is not a valid override status name. 
      * @endpoint get /v1/orders/price-overrides
      * @param orderId Order ID filter
      * @param status Override status filter
@@ -259,10 +389,10 @@ export class PriceOverridesService extends BaseService {
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public getOverridesByOrder(orderId?: string, status?: string, startDate?: string, endDate?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<PriceOverrideDetail>>;
-    public getOverridesByOrder(orderId?: string, status?: string, startDate?: string, endDate?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<PriceOverrideDetail>>>;
-    public getOverridesByOrder(orderId?: string, status?: string, startDate?: string, endDate?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<PriceOverrideDetail>>>;
-    public getOverridesByOrder(orderId?: string, status?: string, startDate?: string, endDate?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public searchPriceOverrides(orderId?: string, status?: string, startDate?: string, endDate?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<PriceOverrideDetail>>;
+    public searchPriceOverrides(orderId?: string, status?: string, startDate?: string, endDate?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<PriceOverrideDetail>>>;
+    public searchPriceOverrides(orderId?: string, status?: string, startDate?: string, endDate?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<PriceOverrideDetail>>>;
+    public searchPriceOverrides(orderId?: string, status?: string, startDate?: string, endDate?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
 
@@ -336,136 +466,6 @@ export class PriceOverridesService extends BaseService {
             {
                 context: localVarHttpContext,
                 params: localVarQueryParameters.toHttpParams(),
-                responseType: <any>responseType_,
-                ...(withCredentials ? { withCredentials } : {}),
-                headers: localVarHeaders,
-                observe: observe,
-                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * Get pending approvals
-     * Retrieve all price overrides awaiting approval.
-     * @endpoint get /v1/orders/price-overrides/pending
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     * @param options additional options
-     */
-    public getPendingApprovals(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<PriceOverrideDetail>>;
-    public getPendingApprovals(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<PriceOverrideDetail>>>;
-    public getPendingApprovals(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<PriceOverrideDetail>>>;
-    public getPendingApprovals(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
-
-        let localVarHeaders = this.defaultHeaders;
-
-        // authentication (bearerAuth) required
-        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
-
-        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
-            'application/json'
-        ]);
-        if (localVarHttpHeaderAcceptSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
-        }
-
-        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
-
-        const localVarTransferCache: boolean = options?.transferCache ?? true;
-
-
-        let responseType_: 'text' | 'json' | 'blob' = 'json';
-        if (localVarHttpHeaderAcceptSelected) {
-            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
-                responseType_ = 'text';
-            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
-                responseType_ = 'json';
-            } else {
-                responseType_ = 'blob';
-            }
-        }
-
-        let localVarPath = `/v1/orders/price-overrides/pending`;
-        const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<Array<PriceOverrideDetail>>('get', `${basePath}${localVarPath}`,
-            {
-                context: localVarHttpContext,
-                responseType: <any>responseType_,
-                ...(withCredentials ? { withCredentials } : {}),
-                headers: localVarHeaders,
-                observe: observe,
-                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * Reject price override
-     * Reject a pending price override with a reason.
-     * @endpoint post /v1/orders/price-overrides/{overrideId}/reject
-     * @param overrideId Price override ID
-     * @param rejectPriceOverrideRequest 
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     * @param options additional options
-     */
-    public rejectPriceOverride(overrideId: string, rejectPriceOverrideRequest: RejectPriceOverrideRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PriceOverrideDetail>;
-    public rejectPriceOverride(overrideId: string, rejectPriceOverrideRequest: RejectPriceOverrideRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PriceOverrideDetail>>;
-    public rejectPriceOverride(overrideId: string, rejectPriceOverrideRequest: RejectPriceOverrideRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PriceOverrideDetail>>;
-    public rejectPriceOverride(overrideId: string, rejectPriceOverrideRequest: RejectPriceOverrideRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
-        if (overrideId === null || overrideId === undefined) {
-            throw new Error('Required parameter overrideId was null or undefined when calling rejectPriceOverride.');
-        }
-        if (rejectPriceOverrideRequest === null || rejectPriceOverrideRequest === undefined) {
-            throw new Error('Required parameter rejectPriceOverrideRequest was null or undefined when calling rejectPriceOverride.');
-        }
-
-        let localVarHeaders = this.defaultHeaders;
-
-        // authentication (bearerAuth) required
-        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
-
-        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
-            'application/json'
-        ]);
-        if (localVarHttpHeaderAcceptSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
-        }
-
-        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
-
-        const localVarTransferCache: boolean = options?.transferCache ?? true;
-
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-            'application/json'
-        ];
-        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
-        if (httpContentTypeSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
-        }
-
-        let responseType_: 'text' | 'json' | 'blob' = 'json';
-        if (localVarHttpHeaderAcceptSelected) {
-            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
-                responseType_ = 'text';
-            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
-                responseType_ = 'json';
-            } else {
-                responseType_ = 'blob';
-            }
-        }
-
-        let localVarPath = `/v1/orders/price-overrides/${this.configuration.encodeParam({name: "overrideId", value: overrideId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/reject`;
-        const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<PriceOverrideDetail>('post', `${basePath}${localVarPath}`,
-            {
-                context: localVarHttpContext,
-                body: rejectPriceOverrideRequest,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,

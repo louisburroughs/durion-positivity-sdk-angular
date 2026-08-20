@@ -15,6 +15,30 @@ import { GoodsReceiptLineResponse } from './goodsReceiptLineResponse';
  */
 export interface GoodsReceiptResponse { 
     /**
+     * Identifier of the advance shipping notice (ASN) this receipt fulfilled, if applicable
+     */
+    asnId?: string;
+    /**
+     * Timestamp when the goods receipt was created
+     */
+    createdAt: string;
+    /**
+     * Identifier of the user who recorded the goods receipt
+     */
+    createdBy?: string;
+    /**
+     * Received line items detailing the SKUs and quantities in this goods receipt
+     */
+    lines?: Array<GoodsReceiptLineResponse>;
+    /**
+     * Identifier of the location where the goods were received into inventory
+     */
+    locationId: string;
+    /**
+     * Identifier of the purchase order the goods were received against
+     */
+    poId: string;
+    /**
      * Unique identifier of the goods receipt
      */
     receiptId: string;
@@ -23,33 +47,9 @@ export interface GoodsReceiptResponse {
      */
     receiptNumber: string;
     /**
-     * Identifier of the purchase order the goods were received against
-     */
-    poId: string;
-    /**
-     * Identifier of the advance shipping notice (ASN) this receipt fulfilled, if applicable
-     */
-    asnId?: string;
-    /**
-     * Identifier of the location where the goods were received into inventory
-     */
-    locationId: string;
-    /**
      * Total accrued cost for the goods receipt expressed in minor currency units (e.g. cents)
      */
     totalAccruedAmountMinor?: number;
-    /**
-     * Identifier of the user who recorded the goods receipt
-     */
-    createdBy?: string;
-    /**
-     * Timestamp when the goods receipt was created
-     */
-    createdAt: string;
-    /**
-     * Received line items detailing the SKUs and quantities in this goods receipt
-     */
-    lines?: Array<GoodsReceiptLineResponse>;
 }
 
 function isOptionalGoodsReceiptResponsePropertyOfType(
@@ -90,8 +90,8 @@ export function instanceOfGoodsReceiptResponse(value: object): value is GoodsRec
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createGoodsReceiptResponsePropertyNames('receiptId', 'receiptNumber', 'poId', 'locationId', 'createdAt', );
-    const optionalStringProperties = createGoodsReceiptResponseOptionalProperties({ name: 'receiptId', nullable: false }, { name: 'receiptNumber', nullable: false }, { name: 'poId', nullable: false }, { name: 'asnId', nullable: false }, { name: 'locationId', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'createdAt', nullable: false }, );
+    const requiredProperties = createGoodsReceiptResponsePropertyNames('createdAt', 'locationId', 'poId', 'receiptId', 'receiptNumber', );
+    const optionalStringProperties = createGoodsReceiptResponseOptionalProperties({ name: 'asnId', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'locationId', nullable: false }, { name: 'poId', nullable: false }, { name: 'receiptId', nullable: false }, { name: 'receiptNumber', nullable: false }, );
     const optionalNumberProperties = createGoodsReceiptResponseOptionalProperties({ name: 'totalAccruedAmountMinor', nullable: false }, );
     const optionalBooleanProperties = createGoodsReceiptResponseOptionalProperties();
 

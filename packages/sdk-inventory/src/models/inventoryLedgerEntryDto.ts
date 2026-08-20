@@ -14,53 +14,41 @@
  */
 export interface InventoryLedgerEntryDto { 
     /**
-     * Unique identifier of the ledger entry
-     */
-    ledgerEntryId: string;
-    /**
-     * Identifier of the stock item the entry applies to
-     */
-    stockItemId: string;
-    /**
      * Identifier of the adjustment that produced this entry, if any
      */
     adjustmentId?: string;
-    /**
-     * Type of inventory ledger event recorded
-     */
-    eventType: InventoryLedgerEntryDtoEventTypeEnum;
     /**
      * Signed change in quantity applied by this entry (positive inbound, negative outbound)
      */
     changeInQuantity: number;
     /**
-     * Running quantity after this entry was applied
+     * Timestamp when the entry record was created
      */
-    quantityAfter: number;
+    createdAt?: string;
     /**
-     * Unit cost associated with this movement, if recorded
+     * Type of inventory ledger event recorded
      */
-    unitCost?: number;
-    /**
-     * Identifier of the user who initiated the transaction
-     */
-    transactionUserId?: string;
-    /**
-     * Business timestamp of the inventory event
-     */
-    timestamp: string;
-    /**
-     * Location the entry applies to
-     */
-    locationId?: string;
+    eventType: InventoryLedgerEntryDtoEventTypeEnum;
     /**
      * Source location for transfer events
      */
     fromLocationId?: string;
     /**
-     * Destination location for transfer events
+     * Unique identifier of the ledger entry
      */
-    toLocationId?: string;
+    ledgerEntryId: string;
+    /**
+     * Location the entry applies to
+     */
+    locationId?: string;
+    /**
+     * Free-text notes attached to the entry
+     */
+    notes?: string;
+    /**
+     * Running quantity after this entry was applied
+     */
+    quantityAfter: number;
     /**
      * Reason code explaining the entry
      */
@@ -70,17 +58,29 @@ export interface InventoryLedgerEntryDto {
      */
     sourceTransactionId?: string;
     /**
+     * Identifier of the stock item the entry applies to
+     */
+    stockItemId: string;
+    /**
+     * Business timestamp of the inventory event
+     */
+    timestamp: string;
+    /**
+     * Destination location for transfer events
+     */
+    toLocationId?: string;
+    /**
+     * Identifier of the user who initiated the transaction
+     */
+    transactionUserId?: string;
+    /**
+     * Unit cost associated with this movement, if recorded
+     */
+    unitCost?: number;
+    /**
      * Unit of measure code for the quantities (e.g. EACH, KG)
      */
     unitOfMeasure?: string;
-    /**
-     * Free-text notes attached to the entry
-     */
-    notes?: string;
-    /**
-     * Timestamp when the entry record was created
-     */
-    createdAt?: string;
     /**
      * Timestamp when the entry record was last updated
      */
@@ -150,8 +150,8 @@ export function instanceOfInventoryLedgerEntryDto(value: object): value is Inven
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createInventoryLedgerEntryDtoPropertyNames('ledgerEntryId', 'stockItemId', 'eventType', 'changeInQuantity', 'quantityAfter', 'timestamp', );
-    const optionalStringProperties = createInventoryLedgerEntryDtoOptionalProperties({ name: 'ledgerEntryId', nullable: false }, { name: 'stockItemId', nullable: false }, { name: 'adjustmentId', nullable: false }, { name: 'eventType', nullable: false }, { name: 'transactionUserId', nullable: false }, { name: 'timestamp', nullable: false }, { name: 'locationId', nullable: false }, { name: 'fromLocationId', nullable: false }, { name: 'toLocationId', nullable: false }, { name: 'reasonCode', nullable: false }, { name: 'sourceTransactionId', nullable: false }, { name: 'unitOfMeasure', nullable: false }, { name: 'notes', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'updatedAt', nullable: false }, );
+    const requiredProperties = createInventoryLedgerEntryDtoPropertyNames('changeInQuantity', 'eventType', 'ledgerEntryId', 'quantityAfter', 'stockItemId', 'timestamp', );
+    const optionalStringProperties = createInventoryLedgerEntryDtoOptionalProperties({ name: 'adjustmentId', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'eventType', nullable: false }, { name: 'fromLocationId', nullable: false }, { name: 'ledgerEntryId', nullable: false }, { name: 'locationId', nullable: false }, { name: 'notes', nullable: false }, { name: 'reasonCode', nullable: false }, { name: 'sourceTransactionId', nullable: false }, { name: 'stockItemId', nullable: false }, { name: 'timestamp', nullable: false }, { name: 'toLocationId', nullable: false }, { name: 'transactionUserId', nullable: false }, { name: 'unitOfMeasure', nullable: false }, { name: 'updatedAt', nullable: false }, );
     const optionalNumberProperties = createInventoryLedgerEntryDtoOptionalProperties({ name: 'changeInQuantity', nullable: false }, { name: 'quantityAfter', nullable: false }, { name: 'unitCost', nullable: false }, );
     const optionalBooleanProperties = createInventoryLedgerEntryDtoOptionalProperties();
 

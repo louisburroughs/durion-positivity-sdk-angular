@@ -36,21 +36,21 @@ export class TimeEntryApprovalAPIService extends BaseService {
     }
 
     /**
-     * Batch approve time entries
-     * Approve multiple time entries. pos-people is authoritative for approval execution.
+     * Batch Approve Submitted Time Entries
+     * Approves a batch of time entries, marking each SUBMITTED or PENDING_APPROVAL entry APPROVED and stamping the approver and approval time; pos-people is authoritative for approval execution. Use this tool for supervisor approval of individually selected time entries; do not use rejectTimeEntriesBatch, which rejects them, and do not use approveTimePeriod, which approves a whole pay period per person. Preconditions: each entry must exist and be in SUBMITTED or PENDING_APPROVAL status, and the caller needs the people:timeEntry:approve authority for individual entries to succeed. Required inputs: decisions, a non-empty list of objects each carrying timeEntryId (UUID string); an optional X-Correlation-Id header is recorded in the audit trail. Emits a PEOPLE_TIME_ENTRY_APPROVE event and writes an audit row per decision. Returns 200 with a per-entry result list (failure codes NOT_FOUND, ENTRY_NOT_PENDING, FORBIDDEN) rather than failing the whole batch, and 400 when the decisions list is missing or empty. 
      * @endpoint post /v1/people/timeEntries/approve
-     * @param timeEntryDecisionBatchRequest 
+     * @param timeEntryDecisionBatchRequest Batch of approval decisions, one element per time entry to approve; rejectionReason is ignored here.
      * @param xCorrelationId 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public approveTimeEntries(timeEntryDecisionBatchRequest: TimeEntryDecisionBatchRequest, xCorrelationId?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<object>;
-    public approveTimeEntries(timeEntryDecisionBatchRequest: TimeEntryDecisionBatchRequest, xCorrelationId?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<object>>;
-    public approveTimeEntries(timeEntryDecisionBatchRequest: TimeEntryDecisionBatchRequest, xCorrelationId?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<object>>;
-    public approveTimeEntries(timeEntryDecisionBatchRequest: TimeEntryDecisionBatchRequest, xCorrelationId?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public approveTimeEntriesBatch(timeEntryDecisionBatchRequest: TimeEntryDecisionBatchRequest, xCorrelationId?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<object>;
+    public approveTimeEntriesBatch(timeEntryDecisionBatchRequest: TimeEntryDecisionBatchRequest, xCorrelationId?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<object>>;
+    public approveTimeEntriesBatch(timeEntryDecisionBatchRequest: TimeEntryDecisionBatchRequest, xCorrelationId?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<object>>;
+    public approveTimeEntriesBatch(timeEntryDecisionBatchRequest: TimeEntryDecisionBatchRequest, xCorrelationId?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (timeEntryDecisionBatchRequest === null || timeEntryDecisionBatchRequest === undefined) {
-            throw new Error('Required parameter timeEntryDecisionBatchRequest was null or undefined when calling approveTimeEntries.');
+            throw new Error('Required parameter timeEntryDecisionBatchRequest was null or undefined when calling approveTimeEntriesBatch.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -110,21 +110,21 @@ export class TimeEntryApprovalAPIService extends BaseService {
     }
 
     /**
-     * Batch reject time entries
-     * Reject multiple time entries. rejectionReason is required for each decision.
+     * Batch Reject Submitted Time Entries
+     * Rejects a batch of time entries, marking each SUBMITTED or PENDING_APPROVAL entry REJECTED with the supplied reason stored on the entry. Use this tool to send individually selected entries back with a reason; do not use approveTimeEntriesBatch, which approves them, and do not use rejectTimePeriod, which rejects a whole pay period per person. Preconditions: each entry must exist and be in SUBMITTED or PENDING_APPROVAL status, and the caller needs the people:timeEntry:reject authority for individual entries to succeed. Required inputs: decisions, a non-empty list where every element carries timeEntryId and a non-blank rejectionReason; one missing reason fails the entire request before any entry is touched. Emits a PEOPLE_TIME_ENTRY_REJECT event and writes an audit row per decision. Returns 200 with a per-entry result list (failure codes NOT_FOUND, ENTRY_NOT_PENDING, FORBIDDEN), and 400 when any decision lacks a rejectionReason. 
      * @endpoint post /v1/people/timeEntries/reject
-     * @param timeEntryDecisionBatchRequest 
+     * @param timeEntryDecisionBatchRequest Batch of rejection decisions; every element must carry a non-blank rejectionReason.
      * @param xCorrelationId 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public rejectTimeEntries(timeEntryDecisionBatchRequest: TimeEntryDecisionBatchRequest, xCorrelationId?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<object>;
-    public rejectTimeEntries(timeEntryDecisionBatchRequest: TimeEntryDecisionBatchRequest, xCorrelationId?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<object>>;
-    public rejectTimeEntries(timeEntryDecisionBatchRequest: TimeEntryDecisionBatchRequest, xCorrelationId?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<object>>;
-    public rejectTimeEntries(timeEntryDecisionBatchRequest: TimeEntryDecisionBatchRequest, xCorrelationId?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public rejectTimeEntriesBatch(timeEntryDecisionBatchRequest: TimeEntryDecisionBatchRequest, xCorrelationId?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<object>;
+    public rejectTimeEntriesBatch(timeEntryDecisionBatchRequest: TimeEntryDecisionBatchRequest, xCorrelationId?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<object>>;
+    public rejectTimeEntriesBatch(timeEntryDecisionBatchRequest: TimeEntryDecisionBatchRequest, xCorrelationId?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<object>>;
+    public rejectTimeEntriesBatch(timeEntryDecisionBatchRequest: TimeEntryDecisionBatchRequest, xCorrelationId?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (timeEntryDecisionBatchRequest === null || timeEntryDecisionBatchRequest === undefined) {
-            throw new Error('Required parameter timeEntryDecisionBatchRequest was null or undefined when calling rejectTimeEntries.');
+            throw new Error('Required parameter timeEntryDecisionBatchRequest was null or undefined when calling rejectTimeEntriesBatch.');
         }
 
         let localVarHeaders = this.defaultHeaders;

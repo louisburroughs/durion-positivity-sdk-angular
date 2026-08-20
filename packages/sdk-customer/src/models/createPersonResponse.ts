@@ -14,9 +14,13 @@
  */
 export interface CreatePersonResponse { 
     /**
-     * Unique identifier of the created person
+     * Number of contact points created
      */
-    personId: string;
+    contactPointsCreated: number;
+    /**
+     * Timestamp when the person was created
+     */
+    createdAt: string;
     /**
      * First name
      */
@@ -26,17 +30,13 @@ export interface CreatePersonResponse {
      */
     lastName: string;
     /**
+     * Unique identifier of the created person
+     */
+    personId: string;
+    /**
      * Preferred contact method
      */
     preferredContactMethod: CreatePersonResponsePreferredContactMethodEnum;
-    /**
-     * Number of contact points created
-     */
-    contactPointsCreated: number;
-    /**
-     * Timestamp when the person was created
-     */
-    createdAt: string;
 }
 export enum CreatePersonResponsePreferredContactMethodEnum {
     Email = 'EMAIL',
@@ -85,8 +85,8 @@ export function instanceOfCreatePersonResponse(value: object): value is CreatePe
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createCreatePersonResponsePropertyNames('personId', 'firstName', 'lastName', 'preferredContactMethod', 'contactPointsCreated', 'createdAt', );
-    const optionalStringProperties = createCreatePersonResponseOptionalProperties({ name: 'personId', nullable: false }, { name: 'firstName', nullable: false }, { name: 'lastName', nullable: false }, { name: 'preferredContactMethod', nullable: false }, { name: 'createdAt', nullable: false }, );
+    const requiredProperties = createCreatePersonResponsePropertyNames('contactPointsCreated', 'createdAt', 'firstName', 'lastName', 'personId', 'preferredContactMethod', );
+    const optionalStringProperties = createCreatePersonResponseOptionalProperties({ name: 'createdAt', nullable: false }, { name: 'firstName', nullable: false }, { name: 'lastName', nullable: false }, { name: 'personId', nullable: false }, { name: 'preferredContactMethod', nullable: false }, );
     const optionalNumberProperties = createCreatePersonResponseOptionalProperties({ name: 'contactPointsCreated', nullable: false }, );
     const optionalBooleanProperties = createCreatePersonResponseOptionalProperties();
 

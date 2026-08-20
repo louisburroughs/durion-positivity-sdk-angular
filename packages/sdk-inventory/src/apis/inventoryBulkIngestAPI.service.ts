@@ -39,19 +39,19 @@ export class InventoryBulkIngestAPIService extends BaseService {
 
     /**
      * Bulk ingest inventory adjustments
-     * Processes a batch of inventory adjustment records and creates adjustment requests for each accepted row.
+     * Processes a batch of inventory adjustment records, creating one PENDING adjustment request per accepted row for the normal approval flow rather than posting stock changes directly. Use this tool for bulk imports such as cycle-count loads; do not use createAdjustmentRequest, which files a single interactive adjustment, and do not expect on-hand to change until each request is approved. Preconditions: none beyond authentication; rows are processed independently, so one bad row fails only itself. Required inputs: jobId (UUID), locationId (UUID) and at least one record with sku and a non-negative quantity; a record-level locationId overrides the batch location, reasonCode defaults to CYCLE_COUNT_ADJUSTMENT, and operatorId attributes the rows when a service account submits the batch. Emits an INVENTORY_BULK_INGEST event; each accepted row persists a PENDING adjustment request attributed to the resolved actor. Returns 200 with per-row results — failed rows carry errorCode INVENTORY_INGEST_FAILED and the failure message — and 400 when the envelope itself is invalid because jobId, locationId or records are missing. 
      * @endpoint post /v1/inventory/bulk-ingest
-     * @param bulkIngestRequestInventoryBulkIngestRecord 
+     * @param bulkIngestRequestInventoryBulkIngestRecord Batch envelope with the job, target location and the adjustment records to file.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public bulkIngest(bulkIngestRequestInventoryBulkIngestRecord: BulkIngestRequestInventoryBulkIngestRecord, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<BulkIngestResponse>;
-    public bulkIngest(bulkIngestRequestInventoryBulkIngestRecord: BulkIngestRequestInventoryBulkIngestRecord, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<BulkIngestResponse>>;
-    public bulkIngest(bulkIngestRequestInventoryBulkIngestRecord: BulkIngestRequestInventoryBulkIngestRecord, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<BulkIngestResponse>>;
-    public bulkIngest(bulkIngestRequestInventoryBulkIngestRecord: BulkIngestRequestInventoryBulkIngestRecord, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public bulkIngestInventoryAdjustments(bulkIngestRequestInventoryBulkIngestRecord: BulkIngestRequestInventoryBulkIngestRecord, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<BulkIngestResponse>;
+    public bulkIngestInventoryAdjustments(bulkIngestRequestInventoryBulkIngestRecord: BulkIngestRequestInventoryBulkIngestRecord, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<BulkIngestResponse>>;
+    public bulkIngestInventoryAdjustments(bulkIngestRequestInventoryBulkIngestRecord: BulkIngestRequestInventoryBulkIngestRecord, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<BulkIngestResponse>>;
+    public bulkIngestInventoryAdjustments(bulkIngestRequestInventoryBulkIngestRecord: BulkIngestRequestInventoryBulkIngestRecord, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (bulkIngestRequestInventoryBulkIngestRecord === null || bulkIngestRequestInventoryBulkIngestRecord === undefined) {
-            throw new Error('Required parameter bulkIngestRequestInventoryBulkIngestRecord was null or undefined when calling bulkIngest.');
+            throw new Error('Required parameter bulkIngestRequestInventoryBulkIngestRecord was null or undefined when calling bulkIngestInventoryAdjustments.');
         }
 
         let localVarHeaders = this.defaultHeaders;

@@ -18,17 +18,17 @@ export interface AppointmentResponse {
      */
     appointmentId: string;
     /**
-     * Current appointment status
+     * Free-text cancellation notes when the appointment has been cancelled
      */
-    status: string;
+    cancellationNotes?: string;
     /**
-     * Facility/location identifier of the appointment
+     * Cancellation reason code when the appointment has been cancelled
      */
-    locationId: string;
+    cancellationReason?: string;
     /**
-     * Resource (bay or mobile unit) reserved, if any
+     * Timestamp the appointment was created in UTC (ISO-8601)
      */
-    resourceId?: string;
+    createdAt: string;
     /**
      * CRM customer identifier the appointment is booked for
      */
@@ -38,33 +38,33 @@ export interface AppointmentResponse {
      */
     crmVehicleId: string;
     /**
-     * Appointment start instant in UTC (ISO-8601)
+     * Snapshot of customer attributes captured at booking time
      */
-    startAt: string;
+    customerSnapshot?: object;
     /**
      * Appointment end instant in UTC (ISO-8601)
      */
     endAt: string;
     /**
-     * Timestamp the appointment was created in UTC (ISO-8601)
+     * Facility/location identifier of the appointment
      */
-    createdAt: string;
+    locationId: string;
     /**
-     * Cancellation reason code when the appointment has been cancelled
+     * Resource (bay or mobile unit) reserved, if any
      */
-    cancellationReason?: string;
-    /**
-     * Free-text cancellation notes when the appointment has been cancelled
-     */
-    cancellationNotes?: string;
+    resourceId?: string;
     /**
      * Service request identifiers included in this appointment
      */
     serviceRequestIds?: Array<string>;
     /**
-     * Snapshot of customer attributes captured at booking time
+     * Appointment start instant in UTC (ISO-8601)
      */
-    customerSnapshot?: object;
+    startAt: string;
+    /**
+     * Current appointment status
+     */
+    status: string;
     /**
      * Snapshot of vehicle attributes captured at booking time
      */
@@ -109,8 +109,8 @@ export function instanceOfAppointmentResponse(value: object): value is Appointme
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createAppointmentResponsePropertyNames('appointmentId', 'status', 'locationId', 'crmCustomerId', 'crmVehicleId', 'startAt', 'endAt', 'createdAt', );
-    const optionalStringProperties = createAppointmentResponseOptionalProperties({ name: 'appointmentId', nullable: false }, { name: 'status', nullable: false }, { name: 'locationId', nullable: false }, { name: 'resourceId', nullable: false }, { name: 'crmCustomerId', nullable: false }, { name: 'crmVehicleId', nullable: false }, { name: 'startAt', nullable: false }, { name: 'endAt', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'cancellationReason', nullable: false }, { name: 'cancellationNotes', nullable: false }, );
+    const requiredProperties = createAppointmentResponsePropertyNames('appointmentId', 'createdAt', 'crmCustomerId', 'crmVehicleId', 'endAt', 'locationId', 'startAt', 'status', );
+    const optionalStringProperties = createAppointmentResponseOptionalProperties({ name: 'appointmentId', nullable: false }, { name: 'cancellationNotes', nullable: false }, { name: 'cancellationReason', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'crmCustomerId', nullable: false }, { name: 'crmVehicleId', nullable: false }, { name: 'endAt', nullable: false }, { name: 'locationId', nullable: false }, { name: 'resourceId', nullable: false }, { name: 'startAt', nullable: false }, { name: 'status', nullable: false }, );
     const optionalNumberProperties = createAppointmentResponseOptionalProperties();
     const optionalBooleanProperties = createAppointmentResponseOptionalProperties();
 

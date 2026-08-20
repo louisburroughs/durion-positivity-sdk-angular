@@ -14,17 +14,13 @@
  */
 export interface BulkCorrectionResponse { 
     /**
-     * The bulk load job ID
-     */
-    jobId: string;
-    /**
-     * Total number of corrections submitted
-     */
-    submittedCount: number;
-    /**
      * Number of corrections accepted for processing
      */
     acceptedCount: number;
+    /**
+     * The bulk load job ID
+     */
+    jobId: string;
     /**
      * Number of corrections rejected
      */
@@ -33,6 +29,10 @@ export interface BulkCorrectionResponse {
      * Rejection detail messages for each rejected correction, if any
      */
     rejections?: Array<string>;
+    /**
+     * Total number of corrections submitted
+     */
+    submittedCount: number;
 }
 
 function isOptionalBulkCorrectionResponsePropertyOfType(
@@ -73,9 +73,9 @@ export function instanceOfBulkCorrectionResponse(value: object): value is BulkCo
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createBulkCorrectionResponsePropertyNames('jobId', 'submittedCount', 'acceptedCount', 'rejectedCount', );
+    const requiredProperties = createBulkCorrectionResponsePropertyNames('acceptedCount', 'jobId', 'rejectedCount', 'submittedCount', );
     const optionalStringProperties = createBulkCorrectionResponseOptionalProperties({ name: 'jobId', nullable: false }, );
-    const optionalNumberProperties = createBulkCorrectionResponseOptionalProperties({ name: 'submittedCount', nullable: false }, { name: 'acceptedCount', nullable: false }, { name: 'rejectedCount', nullable: false }, );
+    const optionalNumberProperties = createBulkCorrectionResponseOptionalProperties({ name: 'acceptedCount', nullable: false }, { name: 'rejectedCount', nullable: false }, { name: 'submittedCount', nullable: false }, );
     const optionalBooleanProperties = createBulkCorrectionResponseOptionalProperties();
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

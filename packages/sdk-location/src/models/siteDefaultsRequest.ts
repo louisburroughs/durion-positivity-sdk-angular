@@ -14,13 +14,13 @@
  */
 export interface SiteDefaultsRequest { 
     /**
-     * Identifier of the default staging storage location
-     */
-    defaultStagingLocationId?: string;
-    /**
      * Identifier of the default quarantine storage location
      */
     defaultQuarantineLocationId?: string;
+    /**
+     * Identifier of the default staging storage location
+     */
+    defaultStagingLocationId?: string;
 }
 
 function isOptionalSiteDefaultsRequestPropertyOfType(
@@ -62,7 +62,7 @@ export function instanceOfSiteDefaultsRequest(value: object): value is SiteDefau
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createSiteDefaultsRequestPropertyNames();
-    const optionalStringProperties = createSiteDefaultsRequestOptionalProperties({ name: 'defaultStagingLocationId', nullable: false }, { name: 'defaultQuarantineLocationId', nullable: false }, );
+    const optionalStringProperties = createSiteDefaultsRequestOptionalProperties({ name: 'defaultQuarantineLocationId', nullable: false }, { name: 'defaultStagingLocationId', nullable: false }, );
     const optionalNumberProperties = createSiteDefaultsRequestOptionalProperties();
     const optionalBooleanProperties = createSiteDefaultsRequestOptionalProperties();
 

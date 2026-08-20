@@ -14,6 +14,18 @@
  */
 export interface PermissionDto { 
     /**
+     * True when the permission is deprecated
+     */
+    deprecated: boolean;
+    /**
+     * Human-readable description of the permission
+     */
+    description?: string;
+    /**
+     * Domain that owns the permission
+     */
+    domain: string;
+    /**
      * Permission identifier
      */
     id: string;
@@ -21,18 +33,6 @@ export interface PermissionDto {
      * Permission name in format domain:resource:action
      */
     name: string;
-    /**
-     * Domain that owns the permission
-     */
-    domain: string;
-    /**
-     * Human-readable description of the permission
-     */
-    description?: string;
-    /**
-     * True when the permission is deprecated
-     */
-    deprecated: boolean;
 }
 
 function isOptionalPermissionDtoPropertyOfType(
@@ -73,8 +73,8 @@ export function instanceOfPermissionDto(value: object): value is PermissionDto {
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createPermissionDtoPropertyNames('id', 'name', 'domain', 'deprecated', );
-    const optionalStringProperties = createPermissionDtoOptionalProperties({ name: 'id', nullable: false }, { name: 'name', nullable: false }, { name: 'domain', nullable: false }, { name: 'description', nullable: false }, );
+    const requiredProperties = createPermissionDtoPropertyNames('deprecated', 'domain', 'id', 'name', );
+    const optionalStringProperties = createPermissionDtoOptionalProperties({ name: 'description', nullable: false }, { name: 'domain', nullable: false }, { name: 'id', nullable: false }, { name: 'name', nullable: false }, );
     const optionalNumberProperties = createPermissionDtoOptionalProperties();
     const optionalBooleanProperties = createPermissionDtoOptionalProperties({ name: 'deprecated', nullable: false }, );
 

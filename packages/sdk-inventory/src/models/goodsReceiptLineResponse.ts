@@ -14,41 +14,41 @@
  */
 export interface GoodsReceiptLineResponse { 
     /**
-     * Unique identifier of the goods receipt line
+     * Effective base-per-document-unit conversion factor applied at posting time
      */
-    receiptLineId: string;
-    /**
-     * Identifier of the purchase order line this receipt line fulfills
-     */
-    poLineId?: string;
-    /**
-     * Stock keeping unit identifier for the received product
-     */
-    sku: string;
-    /**
-     * Quantity of the SKU received in this goods receipt
-     */
-    quantityReceived: number;
-    /**
-     * Unit cost of the received product expressed in minor currency units (e.g. cents)
-     */
-    unitCostMinor?: number;
-    /**
-     * Total accrued cost for this line expressed in minor currency units (quantity multiplied by unit cost)
-     */
-    lineAccruedAmountMinor?: number;
-    /**
-     * UoM the line was keyed in when it differed from the product\'s base UoM
-     */
-    documentUom?: string;
+    conversionFactor?: number;
     /**
      * Quantity as keyed in documentUom; quantityReceived holds the derived base quantity
      */
     documentQuantity?: number;
     /**
-     * Effective base-per-document-unit conversion factor applied at posting time
+     * UoM the line was keyed in when it differed from the product\'s base UoM
      */
-    conversionFactor?: number;
+    documentUom?: string;
+    /**
+     * Total accrued cost for this line expressed in minor currency units (quantity multiplied by unit cost)
+     */
+    lineAccruedAmountMinor?: number;
+    /**
+     * Identifier of the purchase order line this receipt line fulfills
+     */
+    poLineId?: string;
+    /**
+     * Quantity of the SKU received in this goods receipt
+     */
+    quantityReceived: number;
+    /**
+     * Unique identifier of the goods receipt line
+     */
+    receiptLineId: string;
+    /**
+     * Stock keeping unit identifier for the received product
+     */
+    sku: string;
+    /**
+     * Unit cost of the received product expressed in minor currency units (e.g. cents)
+     */
+    unitCostMinor?: number;
 }
 
 function isOptionalGoodsReceiptLineResponsePropertyOfType(
@@ -89,9 +89,9 @@ export function instanceOfGoodsReceiptLineResponse(value: object): value is Good
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createGoodsReceiptLineResponsePropertyNames('receiptLineId', 'sku', 'quantityReceived', );
-    const optionalStringProperties = createGoodsReceiptLineResponseOptionalProperties({ name: 'receiptLineId', nullable: false }, { name: 'poLineId', nullable: false }, { name: 'sku', nullable: false }, { name: 'documentUom', nullable: false }, );
-    const optionalNumberProperties = createGoodsReceiptLineResponseOptionalProperties({ name: 'quantityReceived', nullable: false }, { name: 'unitCostMinor', nullable: false }, { name: 'lineAccruedAmountMinor', nullable: false }, { name: 'documentQuantity', nullable: false }, { name: 'conversionFactor', nullable: false }, );
+    const requiredProperties = createGoodsReceiptLineResponsePropertyNames('quantityReceived', 'receiptLineId', 'sku', );
+    const optionalStringProperties = createGoodsReceiptLineResponseOptionalProperties({ name: 'documentUom', nullable: false }, { name: 'poLineId', nullable: false }, { name: 'receiptLineId', nullable: false }, { name: 'sku', nullable: false }, );
+    const optionalNumberProperties = createGoodsReceiptLineResponseOptionalProperties({ name: 'conversionFactor', nullable: false }, { name: 'documentQuantity', nullable: false }, { name: 'lineAccruedAmountMinor', nullable: false }, { name: 'quantityReceived', nullable: false }, { name: 'unitCostMinor', nullable: false }, );
     const optionalBooleanProperties = createGoodsReceiptLineResponseOptionalProperties();
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

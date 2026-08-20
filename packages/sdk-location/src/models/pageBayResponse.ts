@@ -13,17 +13,17 @@ import { BayResponse } from './bayResponse';
 
 
 export interface PageBayResponse { 
-    totalElements?: number;
-    totalPages?: number;
-    size?: number;
     content?: Array<BayResponse>;
-    number?: number;
-    pageable?: PageableObject;
-    sort?: SortObject;
+    empty?: boolean;
     first?: boolean;
     last?: boolean;
+    number?: number;
     numberOfElements?: number;
-    empty?: boolean;
+    pageable?: PageableObject;
+    size?: number;
+    sort?: SortObject;
+    totalElements?: number;
+    totalPages?: number;
 }
 
 function isOptionalPageBayResponsePropertyOfType(
@@ -66,8 +66,8 @@ export function instanceOfPageBayResponse(value: object): value is PageBayRespon
 
     const requiredProperties = createPageBayResponsePropertyNames();
     const optionalStringProperties = createPageBayResponseOptionalProperties();
-    const optionalNumberProperties = createPageBayResponseOptionalProperties({ name: 'totalElements', nullable: false }, { name: 'totalPages', nullable: false }, { name: 'size', nullable: false }, { name: 'number', nullable: false }, { name: 'numberOfElements', nullable: false }, );
-    const optionalBooleanProperties = createPageBayResponseOptionalProperties({ name: 'first', nullable: false }, { name: 'last', nullable: false }, { name: 'empty', nullable: false }, );
+    const optionalNumberProperties = createPageBayResponseOptionalProperties({ name: 'number', nullable: false }, { name: 'numberOfElements', nullable: false }, { name: 'size', nullable: false }, { name: 'totalElements', nullable: false }, { name: 'totalPages', nullable: false }, );
+    const optionalBooleanProperties = createPageBayResponseOptionalProperties({ name: 'empty', nullable: false }, { name: 'first', nullable: false }, { name: 'last', nullable: false }, );
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
         && optionalStringProperties.every((property) => isOptionalPageBayResponsePropertyOfType(_v, property.name, 'string', property.nullable))

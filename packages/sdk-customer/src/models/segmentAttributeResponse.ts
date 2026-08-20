@@ -18,6 +18,18 @@ export interface SegmentAttributeResponse {
      */
     attribute: string;
     /**
+     * Whether the attribute applies only to commercial parties
+     */
+    commercialOnly: boolean;
+    /**
+     * What the attribute means
+     */
+    description: string;
+    /**
+     * Whether the attribute requires a bracketed key, e.g. party.externalIdentifier[QBO]
+     */
+    keyed: boolean;
+    /**
      * Operand shape the attribute compares against
      */
     operandKind: SegmentAttributeResponseOperandKindEnum;
@@ -25,18 +37,6 @@ export interface SegmentAttributeResponse {
      * Operators the attribute accepts
      */
     operators: Array<string>;
-    /**
-     * Whether the attribute applies only to commercial parties
-     */
-    commercialOnly: boolean;
-    /**
-     * Whether the attribute requires a bracketed key, e.g. party.externalIdentifier[QBO]
-     */
-    keyed: boolean;
-    /**
-     * What the attribute means
-     */
-    description: string;
 }
 export enum SegmentAttributeResponseOperandKindEnum {
     Text = 'TEXT',
@@ -87,8 +87,8 @@ export function instanceOfSegmentAttributeResponse(value: object): value is Segm
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createSegmentAttributeResponsePropertyNames('attribute', 'operandKind', 'operators', 'commercialOnly', 'keyed', 'description', );
-    const optionalStringProperties = createSegmentAttributeResponseOptionalProperties({ name: 'attribute', nullable: false }, { name: 'operandKind', nullable: false }, { name: 'description', nullable: false }, );
+    const requiredProperties = createSegmentAttributeResponsePropertyNames('attribute', 'commercialOnly', 'description', 'keyed', 'operandKind', 'operators', );
+    const optionalStringProperties = createSegmentAttributeResponseOptionalProperties({ name: 'attribute', nullable: false }, { name: 'description', nullable: false }, { name: 'operandKind', nullable: false }, );
     const optionalNumberProperties = createSegmentAttributeResponseOptionalProperties();
     const optionalBooleanProperties = createSegmentAttributeResponseOptionalProperties({ name: 'commercialOnly', nullable: false }, { name: 'keyed', nullable: false }, );
 

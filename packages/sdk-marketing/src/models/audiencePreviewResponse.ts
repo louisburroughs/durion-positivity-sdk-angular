@@ -15,33 +15,33 @@ import { ChannelPreview } from './channelPreview';
  */
 export interface AudiencePreviewResponse { 
     /**
-     * Campaign previewed
-     */
-    campaignId: string;
-    /**
-     * Bound segment
-     */
-    segmentId?: string;
-    /**
      * Targeted party kind
      */
     audienceType: AudiencePreviewResponseAudienceTypeEnum;
     /**
-     * Parties in the current audience snapshot, before consent filtering
+     * Campaign previewed
      */
-    segmentMatched: number;
+    campaignId: string;
+    /**
+     * Per-channel reach after consent, account gate, and suppression
+     */
+    channels: Array<ChannelPreview>;
     /**
      * When the CRM resolved this snapshot; null if none has arrived yet. Membership replicates asynchronously, so these counts are as of this moment, not live.
      */
     resolvedAt?: string;
     /**
-     * Whether the segment resolution hit its candidate ceiling and is partial
+     * Bound segment
+     */
+    segmentId?: string;
+    /**
+     * Parties in the current audience snapshot, before consent filtering
+     */
+    segmentMatched: number;
+    /**
+     * Whether the segment resolution hit its candidate ceiling and is partial; when true the real audience is larger than segmentMatched
      */
     truncated: boolean;
-    /**
-     * Per-channel reach after consent, account gate, and suppression
-     */
-    channels: Array<ChannelPreview>;
     /**
      * Validation warnings that would block scheduling, e.g. an expired offer
      */
@@ -92,8 +92,8 @@ export function instanceOfAudiencePreviewResponse(value: object): value is Audie
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createAudiencePreviewResponsePropertyNames('campaignId', 'audienceType', 'segmentMatched', 'truncated', 'channels', 'warnings', );
-    const optionalStringProperties = createAudiencePreviewResponseOptionalProperties({ name: 'campaignId', nullable: false }, { name: 'segmentId', nullable: false }, { name: 'audienceType', nullable: false }, { name: 'resolvedAt', nullable: false }, );
+    const requiredProperties = createAudiencePreviewResponsePropertyNames('audienceType', 'campaignId', 'channels', 'segmentMatched', 'truncated', 'warnings', );
+    const optionalStringProperties = createAudiencePreviewResponseOptionalProperties({ name: 'audienceType', nullable: false }, { name: 'campaignId', nullable: false }, { name: 'resolvedAt', nullable: false }, { name: 'segmentId', nullable: false }, );
     const optionalNumberProperties = createAudiencePreviewResponseOptionalProperties({ name: 'segmentMatched', nullable: false }, );
     const optionalBooleanProperties = createAudiencePreviewResponseOptionalProperties({ name: 'truncated', nullable: false }, );
 

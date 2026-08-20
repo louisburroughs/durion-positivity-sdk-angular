@@ -18,41 +18,41 @@ export interface AsnLineResponse {
      */
     asnLineId: string;
     /**
-     * Identifier of the purchase order this ASN line is associated with
+     * Effective base-per-document-unit conversion factor applied at derivation time
      */
-    poId: string;
-    /**
-     * Stock keeping unit identifier for the shipped product
-     */
-    sku: string;
-    /**
-     * Quantity of the SKU declared as shipped on the ASN
-     */
-    quantityShipped: number;
-    /**
-     * Quantity of the SKU received against this ASN line so far
-     */
-    quantityReceived?: number;
-    /**
-     * Unit of measure for the shipped and received quantities
-     */
-    unitOfMeasure?: string;
-    /**
-     * Lot or batch number associated with the shipped product
-     */
-    lotNumber?: string;
-    /**
-     * UoM the line was keyed in when it differed from the product\'s base UoM
-     */
-    documentUom?: string;
+    conversionFactor?: number;
     /**
      * Quantity as keyed in documentUom; quantityShipped holds the derived base quantity
      */
     documentQuantity?: number;
     /**
-     * Effective base-per-document-unit conversion factor applied at derivation time
+     * UoM the line was keyed in when it differed from the product\'s base UoM
      */
-    conversionFactor?: number;
+    documentUom?: string;
+    /**
+     * Lot or batch number associated with the shipped product
+     */
+    lotNumber?: string;
+    /**
+     * Identifier of the purchase order this ASN line is associated with
+     */
+    poId: string;
+    /**
+     * Quantity of the SKU received against this ASN line so far
+     */
+    quantityReceived?: number;
+    /**
+     * Quantity of the SKU declared as shipped on the ASN
+     */
+    quantityShipped: number;
+    /**
+     * Stock keeping unit identifier for the shipped product
+     */
+    sku: string;
+    /**
+     * Unit of measure for the shipped and received quantities
+     */
+    unitOfMeasure?: string;
 }
 
 function isOptionalAsnLineResponsePropertyOfType(
@@ -93,9 +93,9 @@ export function instanceOfAsnLineResponse(value: object): value is AsnLineRespon
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createAsnLineResponsePropertyNames('asnLineId', 'poId', 'sku', 'quantityShipped', );
-    const optionalStringProperties = createAsnLineResponseOptionalProperties({ name: 'asnLineId', nullable: false }, { name: 'poId', nullable: false }, { name: 'sku', nullable: false }, { name: 'unitOfMeasure', nullable: false }, { name: 'lotNumber', nullable: false }, { name: 'documentUom', nullable: false }, );
-    const optionalNumberProperties = createAsnLineResponseOptionalProperties({ name: 'quantityShipped', nullable: false }, { name: 'quantityReceived', nullable: false }, { name: 'documentQuantity', nullable: false }, { name: 'conversionFactor', nullable: false }, );
+    const requiredProperties = createAsnLineResponsePropertyNames('asnLineId', 'poId', 'quantityShipped', 'sku', );
+    const optionalStringProperties = createAsnLineResponseOptionalProperties({ name: 'asnLineId', nullable: false }, { name: 'documentUom', nullable: false }, { name: 'lotNumber', nullable: false }, { name: 'poId', nullable: false }, { name: 'sku', nullable: false }, { name: 'unitOfMeasure', nullable: false }, );
+    const optionalNumberProperties = createAsnLineResponseOptionalProperties({ name: 'conversionFactor', nullable: false }, { name: 'documentQuantity', nullable: false }, { name: 'quantityReceived', nullable: false }, { name: 'quantityShipped', nullable: false }, );
     const optionalBooleanProperties = createAsnLineResponseOptionalProperties();
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

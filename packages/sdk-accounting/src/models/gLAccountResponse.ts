@@ -14,10 +14,6 @@
  */
 export interface GLAccountResponse { 
     /**
-     * GL account UUID
-     */
-    glAccountId: string;
-    /**
      * GL account code
      */
     accountCode?: string;
@@ -26,37 +22,17 @@ export interface GLAccountResponse {
      */
     accountName?: string;
     /**
-     * Account classification
-     */
-    accountType?: GLAccountResponseAccountTypeEnum;
-    /**
      * Optional subtype refining accountType for report grouping and posting-config plausibility checks. Null when no refinement applies.
      */
     accountSubtype?: GLAccountResponseAccountSubtypeEnum;
     /**
-     * Whether journal entry lines on this account participate in reconciliation (e.g. settlement/bank reconciliation).
+     * Account classification
      */
-    reconcilable: boolean;
-    /**
-     * GL account description
-     */
-    description?: string;
-    /**
-     * Parent GL account UUID for hierarchical accounts
-     */
-    parentAccountId?: string;
+    accountType?: GLAccountResponseAccountTypeEnum;
     /**
      * Date the account becomes active
      */
     activationDate?: string;
-    /**
-     * Date the account becomes inactive
-     */
-    deactivationDate?: string;
-    /**
-     * Derived account status (ACTIVE, INACTIVE, NOT_YET_ACTIVE)
-     */
-    status?: GLAccountResponseStatusEnum;
     /**
      * Created timestamp
      */
@@ -66,6 +42,18 @@ export interface GLAccountResponse {
      */
     createdBy?: string;
     /**
+     * Date the account becomes inactive
+     */
+    deactivationDate?: string;
+    /**
+     * GL account description
+     */
+    description?: string;
+    /**
+     * GL account UUID
+     */
+    glAccountId: string;
+    /**
      * Last modified timestamp
      */
     modifiedAt?: string;
@@ -74,17 +62,22 @@ export interface GLAccountResponse {
      */
     modifiedBy?: string;
     /**
+     * Parent GL account UUID for hierarchical accounts
+     */
+    parentAccountId?: string;
+    /**
+     * Whether journal entry lines on this account participate in reconciliation (e.g. settlement/bank reconciliation).
+     */
+    reconcilable: boolean;
+    /**
+     * Derived account status (ACTIVE, INACTIVE, NOT_YET_ACTIVE)
+     */
+    status?: GLAccountResponseStatusEnum;
+    /**
      * Optimistic locking version
      */
     version?: number;
 }
-export enum GLAccountResponseAccountTypeEnum {
-    Asset = 'ASSET',
-    Liability = 'LIABILITY',
-    Equity = 'EQUITY',
-    Revenue = 'REVENUE',
-    Expense = 'EXPENSE'
-};
 export enum GLAccountResponseAccountSubtypeEnum {
     Receivable = 'RECEIVABLE',
     Payable = 'PAYABLE',
@@ -98,6 +91,13 @@ export enum GLAccountResponseAccountSubtypeEnum {
     CostOfSales = 'COST_OF_SALES',
     OperatingExpense = 'OPERATING_EXPENSE',
     Other = 'OTHER'
+};
+export enum GLAccountResponseAccountTypeEnum {
+    Asset = 'ASSET',
+    Liability = 'LIABILITY',
+    Equity = 'EQUITY',
+    Revenue = 'REVENUE',
+    Expense = 'EXPENSE'
 };
 export enum GLAccountResponseStatusEnum {
     Active = 'ACTIVE',
@@ -146,7 +146,7 @@ export function instanceOfGLAccountResponse(value: object): value is GLAccountRe
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createGLAccountResponsePropertyNames('glAccountId', 'reconcilable', );
-    const optionalStringProperties = createGLAccountResponseOptionalProperties({ name: 'glAccountId', nullable: false }, { name: 'accountCode', nullable: false }, { name: 'accountName', nullable: false }, { name: 'accountType', nullable: false }, { name: 'accountSubtype', nullable: false }, { name: 'description', nullable: false }, { name: 'parentAccountId', nullable: false }, { name: 'activationDate', nullable: false }, { name: 'deactivationDate', nullable: false }, { name: 'status', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'modifiedAt', nullable: false }, { name: 'modifiedBy', nullable: false }, );
+    const optionalStringProperties = createGLAccountResponseOptionalProperties({ name: 'accountCode', nullable: false }, { name: 'accountName', nullable: false }, { name: 'accountSubtype', nullable: false }, { name: 'accountType', nullable: false }, { name: 'activationDate', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'deactivationDate', nullable: false }, { name: 'description', nullable: false }, { name: 'glAccountId', nullable: false }, { name: 'modifiedAt', nullable: false }, { name: 'modifiedBy', nullable: false }, { name: 'parentAccountId', nullable: false }, { name: 'status', nullable: false }, );
     const optionalNumberProperties = createGLAccountResponseOptionalProperties({ name: 'version', nullable: false }, );
     const optionalBooleanProperties = createGLAccountResponseOptionalProperties({ name: 'reconcilable', nullable: false }, );
 

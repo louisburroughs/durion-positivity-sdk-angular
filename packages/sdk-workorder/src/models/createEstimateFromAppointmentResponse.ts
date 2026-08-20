@@ -14,6 +14,10 @@
  */
 export interface CreateEstimateFromAppointmentResponse { 
     /**
+     * Whether a new estimate was created (false when idempotency returns existing record)
+     */
+    created: boolean;
+    /**
      * Created estimate identifier
      */
     estimateId: string;
@@ -21,10 +25,6 @@ export interface CreateEstimateFromAppointmentResponse {
      * Created estimate status
      */
     status: string;
-    /**
-     * Whether a new estimate was created (false when idempotency returns existing record)
-     */
-    created: boolean;
 }
 
 function isOptionalCreateEstimateFromAppointmentResponsePropertyOfType(
@@ -65,7 +65,7 @@ export function instanceOfCreateEstimateFromAppointmentResponse(value: object): 
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createCreateEstimateFromAppointmentResponsePropertyNames('estimateId', 'status', 'created', );
+    const requiredProperties = createCreateEstimateFromAppointmentResponsePropertyNames('created', 'estimateId', 'status', );
     const optionalStringProperties = createCreateEstimateFromAppointmentResponseOptionalProperties({ name: 'estimateId', nullable: false }, { name: 'status', nullable: false }, );
     const optionalNumberProperties = createCreateEstimateFromAppointmentResponseOptionalProperties();
     const optionalBooleanProperties = createCreateEstimateFromAppointmentResponseOptionalProperties({ name: 'created', nullable: false }, );

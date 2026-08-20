@@ -14,22 +14,6 @@
  */
 export interface TimekeepingEntryDto { 
     /**
-     * Timekeeping entry identifier
-     */
-    timekeepingEntryId: string;
-    /**
-     * Employee identifier
-     */
-    employeeId: string;
-    /**
-     * Session start timestamp
-     */
-    sessionStartTime: string;
-    /**
-     * Session end timestamp
-     */
-    sessionEndTime?: string;
-    /**
      * Approval status of the entry
      */
     approvalStatus: TimekeepingEntryDtoApprovalStatusEnum;
@@ -37,6 +21,22 @@ export interface TimekeepingEntryDto {
      * Associated workorder identifier
      */
     associatedWorkOrderId?: string;
+    /**
+     * Employee identifier
+     */
+    employeeId: string;
+    /**
+     * Session end timestamp
+     */
+    sessionEndTime?: string;
+    /**
+     * Session start timestamp
+     */
+    sessionStartTime: string;
+    /**
+     * Timekeeping entry identifier
+     */
+    timekeepingEntryId: string;
 }
 export enum TimekeepingEntryDtoApprovalStatusEnum {
     PendingApproval = 'PENDING_APPROVAL',
@@ -84,8 +84,8 @@ export function instanceOfTimekeepingEntryDto(value: object): value is Timekeepi
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createTimekeepingEntryDtoPropertyNames('timekeepingEntryId', 'employeeId', 'sessionStartTime', 'approvalStatus', );
-    const optionalStringProperties = createTimekeepingEntryDtoOptionalProperties({ name: 'timekeepingEntryId', nullable: false }, { name: 'employeeId', nullable: false }, { name: 'sessionStartTime', nullable: false }, { name: 'sessionEndTime', nullable: false }, { name: 'approvalStatus', nullable: false }, { name: 'associatedWorkOrderId', nullable: false }, );
+    const requiredProperties = createTimekeepingEntryDtoPropertyNames('approvalStatus', 'employeeId', 'sessionStartTime', 'timekeepingEntryId', );
+    const optionalStringProperties = createTimekeepingEntryDtoOptionalProperties({ name: 'approvalStatus', nullable: false }, { name: 'associatedWorkOrderId', nullable: false }, { name: 'employeeId', nullable: false }, { name: 'sessionEndTime', nullable: false }, { name: 'sessionStartTime', nullable: false }, { name: 'timekeepingEntryId', nullable: false }, );
     const optionalNumberProperties = createTimekeepingEntryDtoOptionalProperties();
     const optionalBooleanProperties = createTimekeepingEntryDtoOptionalProperties();
 

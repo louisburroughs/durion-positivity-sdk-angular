@@ -15,33 +15,33 @@ import { SegmentSampleEntry } from './segmentSampleEntry';
  */
 export interface SegmentResolutionResponse { 
     /**
-     * Segment resolved
-     */
-    segmentId: string;
-    /**
      * Targeted party kind
      */
     audienceType: SegmentResolutionResponseAudienceTypeEnum;
-    /**
-     * Parties matching the definition
-     */
-    totalMatched: number;
-    /**
-     * Of those, how many may actually be sent to on the requested channel after consent, account gate, and suppression; null when no channel was requested
-     */
-    eligibleCount?: number;
     /**
      * Channel the eligibility count was computed for
      */
     channel?: SegmentResolutionResponseChannelEnum;
     /**
-     * Whether the candidate scan hit its ceiling and the result is partial
+     * Of those, how many may actually be sent to on the requested channel after consent, account gate, and suppression; null when no channel was requested
      */
-    truncated: boolean;
+    eligibleCount?: number;
     /**
      * A masked sample of matching parties
      */
     sample: Array<SegmentSampleEntry>;
+    /**
+     * Segment resolved
+     */
+    segmentId: string;
+    /**
+     * Parties matching the definition
+     */
+    totalMatched: number;
+    /**
+     * Whether the candidate scan hit its ceiling and the result is partial
+     */
+    truncated: boolean;
 }
 export enum SegmentResolutionResponseAudienceTypeEnum {
     Commercial = 'COMMERCIAL',
@@ -92,9 +92,9 @@ export function instanceOfSegmentResolutionResponse(value: object): value is Seg
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createSegmentResolutionResponsePropertyNames('segmentId', 'audienceType', 'totalMatched', 'truncated', 'sample', );
-    const optionalStringProperties = createSegmentResolutionResponseOptionalProperties({ name: 'segmentId', nullable: false }, { name: 'audienceType', nullable: false }, { name: 'channel', nullable: false }, );
-    const optionalNumberProperties = createSegmentResolutionResponseOptionalProperties({ name: 'totalMatched', nullable: false }, { name: 'eligibleCount', nullable: false }, );
+    const requiredProperties = createSegmentResolutionResponsePropertyNames('audienceType', 'sample', 'segmentId', 'totalMatched', 'truncated', );
+    const optionalStringProperties = createSegmentResolutionResponseOptionalProperties({ name: 'audienceType', nullable: false }, { name: 'channel', nullable: false }, { name: 'segmentId', nullable: false }, );
+    const optionalNumberProperties = createSegmentResolutionResponseOptionalProperties({ name: 'eligibleCount', nullable: false }, { name: 'totalMatched', nullable: false }, );
     const optionalBooleanProperties = createSegmentResolutionResponseOptionalProperties({ name: 'truncated', nullable: false }, );
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

@@ -14,13 +14,13 @@
  */
 export interface InvoiceLineItem { 
     /**
-     * Product/SKU UUID
-     */
-    productId: string;
-    /**
      * Product description
      */
     description: string;
+    /**
+     * Product/SKU UUID
+     */
+    productId: string;
     /**
      * Invoiced quantity
      */
@@ -69,8 +69,8 @@ export function instanceOfInvoiceLineItem(value: object): value is InvoiceLineIt
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createInvoiceLineItemPropertyNames('productId', 'description', 'quantity', 'unitPrice', );
-    const optionalStringProperties = createInvoiceLineItemOptionalProperties({ name: 'productId', nullable: false }, { name: 'description', nullable: false }, );
+    const requiredProperties = createInvoiceLineItemPropertyNames('description', 'productId', 'quantity', 'unitPrice', );
+    const optionalStringProperties = createInvoiceLineItemOptionalProperties({ name: 'description', nullable: false }, { name: 'productId', nullable: false }, );
     const optionalNumberProperties = createInvoiceLineItemOptionalProperties({ name: 'quantity', nullable: false }, { name: 'unitPrice', nullable: false }, );
     const optionalBooleanProperties = createInvoiceLineItemOptionalProperties();
 

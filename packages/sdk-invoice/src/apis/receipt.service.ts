@@ -44,11 +44,11 @@ export class ReceiptService extends BaseService {
     }
 
     /**
-     * Generate invoice receipt
-     * Generate a receipt for an invoice payment using the requested terminal and template
+     * Generate Receipt for Invoice Payment
+     * Generates a receipt record for an invoice payment, assigning a unique reference built from the invoice number, a UTC timestamp and a per-invoice sequence, with the cashier taken from the security context. Use this tool once per payment after tender; do not use reprintReceipt, which duplicates a receipt that already exists. Preconditions: the invoice and payment intent must exist, the intent must belong to the invoice, and the caller needs the GENERATE_RECEIPT authority. Required inputs: paymentIntentId (UUID), terminalId, templateId and templateVersion. Emits an INVOICE_RECEIPT_GENERATE event and stores the receipt in GENERATED status with a zero reprint count; the receipt also becomes a downloadable artifact of the invoice. Returns 201 with the receipt reference, 404 when the invoice or payment intent does not exist or the intent belongs to a different invoice, and 403 when the GENERATE_RECEIPT authority is missing. 
      * @endpoint post /v1/invoices/{invoiceId}/receipts
      * @param invoiceId 
-     * @param generateReceiptRequest 
+     * @param generateReceiptRequest Payment, terminal and template identifying what the receipt documents.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -118,28 +118,105 @@ export class ReceiptService extends BaseService {
     }
 
     /**
-     * Record printed receipt delivery
-     * Record the delivery status for a printed receipt associated with an invoice
-     * @endpoint post /v1/invoices/{invoiceId}/receipts/{receiptId}/print
+     * Record Emailed Receipt Delivery Status
+     * Records the outcome of emailing a receipt to a customer, stamping the receipt\&#39;s delivery method as EMAIL with the recipient address and the reported status; this endpoint records the attempt rather than dispatching the email itself. Use this tool after an email delivery attempt completes; do not use recordReceiptPrintDelivery, which records a terminal print outcome. Preconditions: the receipt must already exist via generateReceipt. Required inputs: receiptId (UUID) as a path parameter plus emailAddress and status (SUCCESS or FAILED) in the body. Emits an INVOICE_RECEIPT_EMAIL_DELIVERY event and overwrites the receipt\&#39;s delivery method, address and status. Returns 200 with an empty body on success, and 404 when the receipt does not exist. 
+     * @endpoint post /v1/invoices/{invoiceId}/receipts/{receiptId}/email
      * @param invoiceId 
      * @param receiptId 
-     * @param printDeliveryRequest 
+     * @param emailDeliveryRequest Recipient address and outcome of the email delivery attempt.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public recordPrintDelivery(invoiceId: string, receiptId: string, printDeliveryRequest: PrintDeliveryRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public recordPrintDelivery(invoiceId: string, receiptId: string, printDeliveryRequest: PrintDeliveryRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public recordPrintDelivery(invoiceId: string, receiptId: string, printDeliveryRequest: PrintDeliveryRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public recordPrintDelivery(invoiceId: string, receiptId: string, printDeliveryRequest: PrintDeliveryRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public recordReceiptEmailDelivery(invoiceId: string, receiptId: string, emailDeliveryRequest: EmailDeliveryRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
+    public recordReceiptEmailDelivery(invoiceId: string, receiptId: string, emailDeliveryRequest: EmailDeliveryRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
+    public recordReceiptEmailDelivery(invoiceId: string, receiptId: string, emailDeliveryRequest: EmailDeliveryRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
+    public recordReceiptEmailDelivery(invoiceId: string, receiptId: string, emailDeliveryRequest: EmailDeliveryRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (invoiceId === null || invoiceId === undefined) {
-            throw new Error('Required parameter invoiceId was null or undefined when calling recordPrintDelivery.');
+            throw new Error('Required parameter invoiceId was null or undefined when calling recordReceiptEmailDelivery.');
         }
         if (receiptId === null || receiptId === undefined) {
-            throw new Error('Required parameter receiptId was null or undefined when calling recordPrintDelivery.');
+            throw new Error('Required parameter receiptId was null or undefined when calling recordReceiptEmailDelivery.');
+        }
+        if (emailDeliveryRequest === null || emailDeliveryRequest === undefined) {
+            throw new Error('Required parameter emailDeliveryRequest was null or undefined when calling recordReceiptEmailDelivery.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/invoices/${this.configuration.encodeParam({name: "invoiceId", value: invoiceId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/receipts/${this.configuration.encodeParam({name: "receiptId", value: receiptId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/email`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<any>('post', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                body: emailDeliveryRequest,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Record Printed Receipt Delivery Status
+     * Records the outcome of printing a receipt at the terminal, stamping the receipt\&#39;s delivery method as PRINT with the reported status; the physical printing itself happens client-side, not here. Use this tool after the terminal reports its print result; do not use recordReceiptEmailDelivery, which records an email delivery attempt with its recipient address. Preconditions: the receipt must already exist via generateReceipt. Required inputs: receiptId (UUID) as a path parameter and status (SUCCESS or FAILED) in the body. Emits an INVOICE_RECEIPT_PRINT_DELIVERY event and overwrites the receipt\&#39;s delivery method and status. Returns 200 with an empty body on success, and 404 when the receipt does not exist. 
+     * @endpoint post /v1/invoices/{invoiceId}/receipts/{receiptId}/print
+     * @param invoiceId 
+     * @param receiptId 
+     * @param printDeliveryRequest Print outcome reported by the terminal.
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public recordReceiptPrintDelivery(invoiceId: string, receiptId: string, printDeliveryRequest: PrintDeliveryRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
+    public recordReceiptPrintDelivery(invoiceId: string, receiptId: string, printDeliveryRequest: PrintDeliveryRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
+    public recordReceiptPrintDelivery(invoiceId: string, receiptId: string, printDeliveryRequest: PrintDeliveryRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
+    public recordReceiptPrintDelivery(invoiceId: string, receiptId: string, printDeliveryRequest: PrintDeliveryRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (invoiceId === null || invoiceId === undefined) {
+            throw new Error('Required parameter invoiceId was null or undefined when calling recordReceiptPrintDelivery.');
+        }
+        if (receiptId === null || receiptId === undefined) {
+            throw new Error('Required parameter receiptId was null or undefined when calling recordReceiptPrintDelivery.');
         }
         if (printDeliveryRequest === null || printDeliveryRequest === undefined) {
-            throw new Error('Required parameter printDeliveryRequest was null or undefined when calling recordPrintDelivery.');
+            throw new Error('Required parameter printDeliveryRequest was null or undefined when calling recordReceiptPrintDelivery.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -195,12 +272,12 @@ export class ReceiptService extends BaseService {
     }
 
     /**
-     * Reprint invoice receipt
-     * Create a reprint of an existing receipt and record the reason for the reprint
+     * Reprint an Existing Receipt
+     * Records a reprint of an existing receipt, incrementing its reprint count and capturing the reason and the reprinting actor for audit. Use this tool when a customer needs a duplicate copy; do not use generateReceipt, which creates a new receipt for a payment that has none yet. Preconditions: the receipt must exist, and its reprint count must be below 5 unless the caller holds the SUPERVISOR_OVERRIDE authority. Required inputs: receiptId (UUID) as a path parameter and a non-blank reason in the body. Emits an INVOICE_RECEIPT_REPRINT event and updates the receipt\&#39;s reprint count, last reprint reason and last reprinted-by. Returns 200 with the receipt, 404 when the receipt does not exist, and 409 when the reprint limit of 5 is exceeded without a supervisor override. 
      * @endpoint post /v1/invoices/{invoiceId}/receipts/{receiptId}/reprint
      * @param invoiceId 
      * @param receiptId 
-     * @param reprintReceiptRequest 
+     * @param reprintReceiptRequest Business reason the duplicate copy is being produced.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -262,83 +339,6 @@ export class ReceiptService extends BaseService {
             {
                 context: localVarHttpContext,
                 body: reprintReceiptRequest,
-                responseType: <any>responseType_,
-                ...(withCredentials ? { withCredentials } : {}),
-                headers: localVarHeaders,
-                observe: observe,
-                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * Email invoice receipt
-     * Send an invoice receipt by email and record the delivery status for the attempt
-     * @endpoint post /v1/invoices/{invoiceId}/receipts/{receiptId}/email
-     * @param invoiceId 
-     * @param receiptId 
-     * @param emailDeliveryRequest 
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     * @param options additional options
-     */
-    public sendEmailReceipt(invoiceId: string, receiptId: string, emailDeliveryRequest: EmailDeliveryRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public sendEmailReceipt(invoiceId: string, receiptId: string, emailDeliveryRequest: EmailDeliveryRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public sendEmailReceipt(invoiceId: string, receiptId: string, emailDeliveryRequest: EmailDeliveryRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public sendEmailReceipt(invoiceId: string, receiptId: string, emailDeliveryRequest: EmailDeliveryRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
-        if (invoiceId === null || invoiceId === undefined) {
-            throw new Error('Required parameter invoiceId was null or undefined when calling sendEmailReceipt.');
-        }
-        if (receiptId === null || receiptId === undefined) {
-            throw new Error('Required parameter receiptId was null or undefined when calling sendEmailReceipt.');
-        }
-        if (emailDeliveryRequest === null || emailDeliveryRequest === undefined) {
-            throw new Error('Required parameter emailDeliveryRequest was null or undefined when calling sendEmailReceipt.');
-        }
-
-        let localVarHeaders = this.defaultHeaders;
-
-        // authentication (bearerAuth) required
-        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
-
-        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
-        ]);
-        if (localVarHttpHeaderAcceptSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
-        }
-
-        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
-
-        const localVarTransferCache: boolean = options?.transferCache ?? true;
-
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-            'application/json'
-        ];
-        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
-        if (httpContentTypeSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
-        }
-
-        let responseType_: 'text' | 'json' | 'blob' = 'json';
-        if (localVarHttpHeaderAcceptSelected) {
-            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
-                responseType_ = 'text';
-            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
-                responseType_ = 'json';
-            } else {
-                responseType_ = 'blob';
-            }
-        }
-
-        let localVarPath = `/v1/invoices/${this.configuration.encodeParam({name: "invoiceId", value: invoiceId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/receipts/${this.configuration.encodeParam({name: "receiptId", value: receiptId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/email`;
-        const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<any>('post', `${basePath}${localVarPath}`,
-            {
-                context: localVarHttpContext,
-                body: emailDeliveryRequest,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,

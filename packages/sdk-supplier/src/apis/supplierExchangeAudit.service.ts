@@ -45,19 +45,19 @@ export class SupplierExchangeAuditService extends BaseService {
 
     /**
      * Get one exchange\&#39;s audit metadata
-     * Metadata of a single attempt, without payload content. Use this to decide whether content exists (requestPayloadPresent / responsePayloadPresent) before making the recorded payload call.
+     * Returns the metadata of a single supplier exchange attempt, without any payload content. Use this tool to check requestPayloadPresent and responsePayloadPresent before calling readSupplierExchangePayload, which is recorded; do not use it to read the documents themselves. Preconditions: the caller must hold supplier:audit:read and the exchange-audit record must exist. Required inputs: exchangeAuditId (UUIDv7) path parameter; there is no request body. Emits a SUPPLIER_AUDIT_EXCHANGE_GET event; because no content is served, no access row is written. Returns 404 when no exchange-audit record has that id. 
      * @endpoint get /v1/supplier/admin/audit/exchanges/{exchangeAuditId}
      * @param exchangeAuditId Exchange-audit record identifier (UUIDv7).
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public getExchange(exchangeAuditId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ExchangeAuditSummary>;
-    public getExchange(exchangeAuditId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ExchangeAuditSummary>>;
-    public getExchange(exchangeAuditId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ExchangeAuditSummary>>;
-    public getExchange(exchangeAuditId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getSupplierExchange(exchangeAuditId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ExchangeAuditSummary>;
+    public getSupplierExchange(exchangeAuditId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ExchangeAuditSummary>>;
+    public getSupplierExchange(exchangeAuditId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ExchangeAuditSummary>>;
+    public getSupplierExchange(exchangeAuditId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (exchangeAuditId === null || exchangeAuditId === undefined) {
-            throw new Error('Required parameter exchangeAuditId was null or undefined when calling getExchange.');
+            throw new Error('Required parameter exchangeAuditId was null or undefined when calling getSupplierExchange.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -105,7 +105,7 @@ export class SupplierExchangeAuditService extends BaseService {
 
     /**
      * List who read one exchange\&#39;s payload content
-     * The ADR-0050 §7 access trail for one exchange, newest first: who read it, when, and what the read yielded. Only payload reads appear here. Metadata browsing does not, and neither do denied attempts — a 403 disclosed nothing. Reading this trail is not itself recorded, or every inspection would generate the noise the next one has to sift.
+     * Returns the access trail for one exchange, newest first: who read its payload, when, and what the read yielded. Use this tool to audit who has seen a trading partner\&#39;s documents; do not expect metadata browsing or denied attempts here, because a 403 disclosed nothing and is deliberately not recorded. Preconditions: the caller must hold supplier:audit:read; an unknown exchangeAuditId returns an empty page rather than 404, because access rows carry no foreign key to the exchange. Required inputs: exchangeAuditId (UUIDv7) path parameter; page defaults to 0 and size defaults to 50 with a maximum of 200. Emits a SUPPLIER_AUDIT_ACCESS_LIST event; reading this trail is not itself recorded, or every inspection would generate the noise the next one has to sift. Returns 400 when the page size is outside the permitted range. 
      * @endpoint get /v1/supplier/admin/audit/exchanges/{exchangeAuditId}/accesses
      * @param exchangeAuditId Exchange-audit record whose access trail to list. An unknown id returns an empty page rather than 404: \&#39;nobody read it\&#39; is the honest answer, and access rows carry no foreign key to the exchange by design.
      * @param page Zero-based page index.
@@ -114,12 +114,12 @@ export class SupplierExchangeAuditService extends BaseService {
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public listAccesses(exchangeAuditId: string, page?: number, size?: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PagedResponseExchangeAuditAccessView>;
-    public listAccesses(exchangeAuditId: string, page?: number, size?: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PagedResponseExchangeAuditAccessView>>;
-    public listAccesses(exchangeAuditId: string, page?: number, size?: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PagedResponseExchangeAuditAccessView>>;
-    public listAccesses(exchangeAuditId: string, page?: number, size?: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public listSupplierExchangeAccesses(exchangeAuditId: string, page?: number, size?: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PagedResponseExchangeAuditAccessView>;
+    public listSupplierExchangeAccesses(exchangeAuditId: string, page?: number, size?: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PagedResponseExchangeAuditAccessView>>;
+    public listSupplierExchangeAccesses(exchangeAuditId: string, page?: number, size?: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PagedResponseExchangeAuditAccessView>>;
+    public listSupplierExchangeAccesses(exchangeAuditId: string, page?: number, size?: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (exchangeAuditId === null || exchangeAuditId === undefined) {
-            throw new Error('Required parameter exchangeAuditId was null or undefined when calling listAccesses.');
+            throw new Error('Required parameter exchangeAuditId was null or undefined when calling listSupplierExchangeAccesses.');
         }
 
         let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
@@ -188,7 +188,7 @@ export class SupplierExchangeAuditService extends BaseService {
 
     /**
      * List supplier exchanges in a window
-     * Exchange metadata for one vendor profile within a half-open time window (from inclusive, to exclusive), newest first. Payload content is NOT included and nothing is recorded: browsing the trail discloses no commercial content. Rows whose stored content cannot be decrypted still list normally, because this query never touches the encrypted columns.
+     * Returns a page of exchange-audit metadata for one vendor profile within a half-open time window, newest first. Use this tool to find the exchangeAuditId of a supplier call; use traceSupplierCorrelation instead when every attempt of one logical call is wanted, and do not expect payload content here. Preconditions: the caller must hold supplier:audit:read, which supplier:profile:read does not imply; the vendor profile need not still exist, because audit history outlives configuration. Required inputs: vendorProfileId, from (inclusive) and to (exclusive) as ISO-8601 instants; capability is optional, page defaults to 0 and size defaults to 50 with a maximum of 200. Emits a SUPPLIER_AUDIT_EXCHANGE_LIST event; no payload content is served, so no access row is written against the exchanges listed. Returns 400 when the window end is not after its start, the capability key is unrecognised, or the page size is out of range. 
      * @endpoint get /v1/supplier/admin/audit/exchanges
      * @param vendorProfileId Vendor profile whose exchanges to list. A query filter rather than a path segment because audit history deliberately outlives the profile: exchanges of a deleted profile are still listed here.
      * @param from Window start, INCLUSIVE. ISO-8601 instant.
@@ -200,18 +200,18 @@ export class SupplierExchangeAuditService extends BaseService {
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public listExchanges(vendorProfileId: string, from: string, to: string, capability?: string, page?: number, size?: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PagedResponseExchangeAuditSummary>;
-    public listExchanges(vendorProfileId: string, from: string, to: string, capability?: string, page?: number, size?: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PagedResponseExchangeAuditSummary>>;
-    public listExchanges(vendorProfileId: string, from: string, to: string, capability?: string, page?: number, size?: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PagedResponseExchangeAuditSummary>>;
-    public listExchanges(vendorProfileId: string, from: string, to: string, capability?: string, page?: number, size?: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public listSupplierExchanges(vendorProfileId: string, from: string, to: string, capability?: string, page?: number, size?: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PagedResponseExchangeAuditSummary>;
+    public listSupplierExchanges(vendorProfileId: string, from: string, to: string, capability?: string, page?: number, size?: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PagedResponseExchangeAuditSummary>>;
+    public listSupplierExchanges(vendorProfileId: string, from: string, to: string, capability?: string, page?: number, size?: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PagedResponseExchangeAuditSummary>>;
+    public listSupplierExchanges(vendorProfileId: string, from: string, to: string, capability?: string, page?: number, size?: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (vendorProfileId === null || vendorProfileId === undefined) {
-            throw new Error('Required parameter vendorProfileId was null or undefined when calling listExchanges.');
+            throw new Error('Required parameter vendorProfileId was null or undefined when calling listSupplierExchanges.');
         }
         if (from === null || from === undefined) {
-            throw new Error('Required parameter from was null or undefined when calling listExchanges.');
+            throw new Error('Required parameter from was null or undefined when calling listSupplierExchanges.');
         }
         if (to === null || to === undefined) {
-            throw new Error('Required parameter to was null or undefined when calling listExchanges.');
+            throw new Error('Required parameter to was null or undefined when calling listSupplierExchanges.');
         }
 
         let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
@@ -316,19 +316,19 @@ export class SupplierExchangeAuditService extends BaseService {
 
     /**
      * Read one exchange\&#39;s stored payload content
-     * Returns the stored request and response documents. THIS CALL IS ITSELF RECORDED (ADR-0050 §7): an access row naming the caller is written in the same transaction, and the content is withheld if that row cannot be written. Null payload fields are a normal state, not an error — a METADATA_ONLY binding captured none, the exchange carried no body, or retention has already purged the content after 400 days. When \&#39;redacted\&#39; is true the documents are not the wire bytes: sensitive fields were replaced at capture time and the originals were never stored.
+     * Returns the stored request and response documents of one supplier exchange. Use this tool only when the documents themselves are needed; use getSupplierExchange instead for routine inspection, because this call is itself recorded and each read adds an access row naming the caller. Preconditions: the caller must hold supplier:audit:read, the record must exist, and the access row must be writable, since content is withheld when it cannot be written. Required inputs: exchangeAuditId (UUIDv7) path parameter; there is no request body and no way to request the unredacted originals. Emits a SUPPLIER_AUDIT_PAYLOAD_READ event and writes an access row in the same transaction; null payload fields are normal, meaning a METADATA_ONLY binding, a bodiless exchange, or content already purged after 400 days, and a redacted flag means sensitive fields were replaced at capture time so the originals were never stored. Returns 404 when no record has that id, and 500 when stored content exists but cannot be decrypted, in which case the read is still recorded with an UNREADABLE outcome. 
      * @endpoint get /v1/supplier/admin/audit/exchanges/{exchangeAuditId}/payload
      * @param exchangeAuditId Exchange-audit record whose stored content to read.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public readPayload(exchangeAuditId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ExchangeAuditPayloadView>;
-    public readPayload(exchangeAuditId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ExchangeAuditPayloadView>>;
-    public readPayload(exchangeAuditId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ExchangeAuditPayloadView>>;
-    public readPayload(exchangeAuditId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public readSupplierExchangePayload(exchangeAuditId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ExchangeAuditPayloadView>;
+    public readSupplierExchangePayload(exchangeAuditId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ExchangeAuditPayloadView>>;
+    public readSupplierExchangePayload(exchangeAuditId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ExchangeAuditPayloadView>>;
+    public readSupplierExchangePayload(exchangeAuditId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (exchangeAuditId === null || exchangeAuditId === undefined) {
-            throw new Error('Required parameter exchangeAuditId was null or undefined when calling readPayload.');
+            throw new Error('Required parameter exchangeAuditId was null or undefined when calling readSupplierExchangePayload.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -376,7 +376,7 @@ export class SupplierExchangeAuditService extends BaseService {
 
     /**
      * Trace one logical call by correlation id
-     * Every attempt sharing a correlation id, OLDEST FIRST — the order in which a retry sequence actually happened. Metadata only; nothing is recorded.
+     * Returns every exchange attempt sharing one correlation id, oldest first, which is the order in which a retry sequence actually happened. Use this tool when a single logical supplier call needs to be reconstructed across its retries; use listSupplierExchanges instead to search a time window. Preconditions: the caller must hold supplier:audit:read; an unknown correlation id is not an error and yields an empty page. Required inputs: correlationId path parameter; page defaults to 0 and size defaults to 50 with a maximum of 200. Emits a SUPPLIER_AUDIT_EXCHANGE_TRACE event; metadata only, so no payload access is recorded. Returns 400 when the page size is outside the permitted range. 
      * @endpoint get /v1/supplier/admin/audit/exchanges/by-correlation/{correlationId}
      * @param correlationId Correlation id shared by every attempt of one logical supplier call.
      * @param page Zero-based page index.
@@ -385,12 +385,12 @@ export class SupplierExchangeAuditService extends BaseService {
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public traceCorrelation(correlationId: string, page?: number, size?: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PagedResponseExchangeAuditSummary>;
-    public traceCorrelation(correlationId: string, page?: number, size?: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PagedResponseExchangeAuditSummary>>;
-    public traceCorrelation(correlationId: string, page?: number, size?: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PagedResponseExchangeAuditSummary>>;
-    public traceCorrelation(correlationId: string, page?: number, size?: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public traceSupplierCorrelation(correlationId: string, page?: number, size?: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PagedResponseExchangeAuditSummary>;
+    public traceSupplierCorrelation(correlationId: string, page?: number, size?: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PagedResponseExchangeAuditSummary>>;
+    public traceSupplierCorrelation(correlationId: string, page?: number, size?: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PagedResponseExchangeAuditSummary>>;
+    public traceSupplierCorrelation(correlationId: string, page?: number, size?: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (correlationId === null || correlationId === undefined) {
-            throw new Error('Required parameter correlationId was null or undefined when calling traceCorrelation.');
+            throw new Error('Required parameter correlationId was null or undefined when calling traceSupplierCorrelation.');
         }
 
         let localVarQueryParameters = new OpenApiHttpParams(this.encoder);

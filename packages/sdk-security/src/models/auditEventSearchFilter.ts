@@ -14,37 +14,9 @@
  */
 export interface AuditEventSearchFilter { 
     /**
-     * Inclusive start timestamp (ISO-8601)
-     */
-    fromDate?: string;
-    /**
-     * Exclusive end timestamp (ISO-8601)
-     */
-    toDate?: string;
-    /**
      * Actor username/service principal
      */
     actorId?: string;
-    /**
-     * Workorder UUID - one word per workspace naming policy
-     */
-    workorderId?: string;
-    /**
-     * Movement UUID
-     */
-    movementId?: string;
-    /**
-     * Product UUID
-     */
-    productId?: string;
-    /**
-     * SKU code
-     */
-    sku?: string;
-    /**
-     * Event type code
-     */
-    eventType?: string;
     /**
      * Aggregate identifier (string)
      */
@@ -54,17 +26,45 @@ export interface AuditEventSearchFilter {
      */
     correlationId?: string;
     /**
-     * Reason code string
+     * Event type code
      */
-    reasonCode?: string;
+    eventType?: string;
+    /**
+     * Inclusive start timestamp (ISO-8601)
+     */
+    fromDate?: string;
+    /**
+     * Location UUID list filter
+     */
+    locationIds?: Array<string>;
+    /**
+     * Movement UUID
+     */
+    movementId?: string;
     /**
      * Cursor token for page-based navigation
      */
     pageToken?: string;
     /**
-     * Location UUID list filter
+     * Product UUID
      */
-    locationIds?: Array<string>;
+    productId?: string;
+    /**
+     * Reason code string
+     */
+    reasonCode?: string;
+    /**
+     * SKU code
+     */
+    sku?: string;
+    /**
+     * Exclusive end timestamp (ISO-8601)
+     */
+    toDate?: string;
+    /**
+     * Workorder UUID - one word per workspace naming policy
+     */
+    workorderId?: string;
 }
 
 function isOptionalAuditEventSearchFilterPropertyOfType(
@@ -106,7 +106,7 @@ export function instanceOfAuditEventSearchFilter(value: object): value is AuditE
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createAuditEventSearchFilterPropertyNames();
-    const optionalStringProperties = createAuditEventSearchFilterOptionalProperties({ name: 'fromDate', nullable: false }, { name: 'toDate', nullable: false }, { name: 'actorId', nullable: false }, { name: 'workorderId', nullable: false }, { name: 'movementId', nullable: false }, { name: 'productId', nullable: false }, { name: 'sku', nullable: false }, { name: 'eventType', nullable: false }, { name: 'aggregateId', nullable: false }, { name: 'correlationId', nullable: false }, { name: 'reasonCode', nullable: false }, { name: 'pageToken', nullable: false }, );
+    const optionalStringProperties = createAuditEventSearchFilterOptionalProperties({ name: 'actorId', nullable: false }, { name: 'aggregateId', nullable: false }, { name: 'correlationId', nullable: false }, { name: 'eventType', nullable: false }, { name: 'fromDate', nullable: false }, { name: 'movementId', nullable: false }, { name: 'pageToken', nullable: false }, { name: 'productId', nullable: false }, { name: 'reasonCode', nullable: false }, { name: 'sku', nullable: false }, { name: 'toDate', nullable: false }, { name: 'workorderId', nullable: false }, );
     const optionalNumberProperties = createAuditEventSearchFilterOptionalProperties();
     const optionalBooleanProperties = createAuditEventSearchFilterOptionalProperties();
 

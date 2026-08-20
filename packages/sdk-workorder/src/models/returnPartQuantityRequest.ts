@@ -14,9 +14,9 @@
  */
 export interface ReturnPartQuantityRequest { 
     /**
-     * Workorder part identifier
+     * Optional return notes
      */
-    workorderPartId: string;
+    notes?: string;
     /**
      * Quantity to return
      */
@@ -26,9 +26,9 @@ export interface ReturnPartQuantityRequest {
      */
     reason: string;
     /**
-     * Optional return notes
+     * Workorder part identifier
      */
-    notes?: string;
+    workorderPartId: string;
 }
 
 function isOptionalReturnPartQuantityRequestPropertyOfType(
@@ -69,8 +69,8 @@ export function instanceOfReturnPartQuantityRequest(value: object): value is Ret
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createReturnPartQuantityRequestPropertyNames('workorderPartId', 'quantity', 'reason', );
-    const optionalStringProperties = createReturnPartQuantityRequestOptionalProperties({ name: 'workorderPartId', nullable: false }, { name: 'reason', nullable: false }, { name: 'notes', nullable: false }, );
+    const requiredProperties = createReturnPartQuantityRequestPropertyNames('quantity', 'reason', 'workorderPartId', );
+    const optionalStringProperties = createReturnPartQuantityRequestOptionalProperties({ name: 'notes', nullable: false }, { name: 'reason', nullable: false }, { name: 'workorderPartId', nullable: false }, );
     const optionalNumberProperties = createReturnPartQuantityRequestOptionalProperties({ name: 'quantity', nullable: false }, );
     const optionalBooleanProperties = createReturnPartQuantityRequestOptionalProperties();
 

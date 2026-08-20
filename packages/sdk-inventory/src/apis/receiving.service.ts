@@ -48,10 +48,10 @@ export class ReceivingService extends BaseService {
     }
 
     /**
-     * Create receiving session
-     * Creates a receiving session from a source document (PO/ASN) using MANUAL or SCAN entry mode
+     * Create Receiving Session
+     * Creates an OPEN receiving session against a source document, pre-populating one EXPECTED line per source-document line fetched from the owning service. Use this tool to start a line-by-line receiving workflow before recording actual quantities with receiveItemsIntoStaging; do not use createGoodsReceipt, which posts stock against a purchase order in one call without a session. Preconditions: the source document must resolve to at least one receivable line and must not already be fully received; the document type is detected from the id prefix, ASN when the id starts with ASN and PO otherwise. Required inputs: sourceDocumentId (non-blank string); entryMethod is optional and defaults to MANUAL, with SCAN the other accepted value. Emits an INVENTORY_RECEIVING_SESSION_CREATE event; no stock is posted, the session only stages expected quantities until items are received. Returns 404 when the source document yields no receiving lines, and 400 when the source document has already been fully received or entryMethod is not a known value. 
      * @endpoint post /v1/inventory/receiving/sessions
-     * @param createReceivingSessionRequest Receiving session creation payload
+     * @param createReceivingSessionRequest Source document to receive against and the line entry method.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -118,28 +118,28 @@ export class ReceivingService extends BaseService {
     }
 
     /**
-     * Cross-dock receiving line to workorder
-     * Cross-docks received quantity from a session line directly to a workorder line with atomic receipt and issue ledger events
+     * Cross-Dock Receiving Line To Workorder
+     * Cross-docks received quantity from a receiving session line directly to a workorder line, posting paired GOODS_RECEIPT and GOODS_ISSUE ledger entries atomically at the cross-dock location so on-hand nets to zero. Use this tool when arrived stock should bypass staging and go straight to the demanding workorder; do not use receiveItemsIntoStaging, which books the quantity into the staging location for later putaway. Preconditions: the session and line must exist, the workorder must not be COMPLETED, CANCELLED or CLOSED, the cumulative received quantity may not exceed the line\&#39;s expected quantity, and the line\&#39;s product must match the workorder line\&#39;s demanded product unless the caller holds inventory:override:part-match. Required inputs: sessionId and lineId (UUIDv7) path parameters plus workorderId, workorderLineId and a positive quantity; lotNumber is mandatory for LOT-tracked products, falling back to the lot already keyed on the line, and notes is optional. Emits an INVENTORY_RECEIVING_CROSSDOCK event, stamps the workorder reference on the line, updates the line to RECEIVED, RECEIVED_SHORT or RECEIVED_OVER, and completes the session when every line is settled. Returns 404 when the session or line is not found, 400 when the workorder is closed or the quantity exceeds the expected quantity, 403 when the product mismatches the workorder demand without the override permission, and 422 when a LOT-tracked product resolves no lot number. 
      * @endpoint post /v1/inventory/receiving/sessions/{sessionId}/lines/{lineId}/cross-dock
      * @param sessionId Receiving session identifier
      * @param lineId Receiving line identifier
-     * @param crossDockRequest Cross-dock request payload
+     * @param crossDockRequest Workorder destination and quantity for the cross-docked stock.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public crossDockLineToWorkorder(sessionId: string, lineId: string, crossDockRequest: CrossDockRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<CrossDockResponse>;
-    public crossDockLineToWorkorder(sessionId: string, lineId: string, crossDockRequest: CrossDockRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<CrossDockResponse>>;
-    public crossDockLineToWorkorder(sessionId: string, lineId: string, crossDockRequest: CrossDockRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<CrossDockResponse>>;
-    public crossDockLineToWorkorder(sessionId: string, lineId: string, crossDockRequest: CrossDockRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public crossDockReceivingLine(sessionId: string, lineId: string, crossDockRequest: CrossDockRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<CrossDockResponse>;
+    public crossDockReceivingLine(sessionId: string, lineId: string, crossDockRequest: CrossDockRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<CrossDockResponse>>;
+    public crossDockReceivingLine(sessionId: string, lineId: string, crossDockRequest: CrossDockRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<CrossDockResponse>>;
+    public crossDockReceivingLine(sessionId: string, lineId: string, crossDockRequest: CrossDockRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (sessionId === null || sessionId === undefined) {
-            throw new Error('Required parameter sessionId was null or undefined when calling crossDockLineToWorkorder.');
+            throw new Error('Required parameter sessionId was null or undefined when calling crossDockReceivingLine.');
         }
         if (lineId === null || lineId === undefined) {
-            throw new Error('Required parameter lineId was null or undefined when calling crossDockLineToWorkorder.');
+            throw new Error('Required parameter lineId was null or undefined when calling crossDockReceivingLine.');
         }
         if (crossDockRequest === null || crossDockRequest === undefined) {
-            throw new Error('Required parameter crossDockRequest was null or undefined when calling crossDockLineToWorkorder.');
+            throw new Error('Required parameter crossDockRequest was null or undefined when calling crossDockReceivingLine.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -196,8 +196,8 @@ export class ReceivingService extends BaseService {
     }
 
     /**
-     * Get receiving session
-     * Retrieves receiving session details by session identifier
+     * Get Receiving Session
+     * Returns one receiving session with its status, entry method and per-line expected and received quantities. Use this tool when the sessionId is already known, for example to check line statuses before or after receiveItemsIntoStaging; use getGoodsReceipt instead for one-shot receipts posted outside a session. Preconditions: the receiving session must exist. Required inputs: sessionId (UUIDv7) path parameter; there is no request body. Emits an INVENTORY_RECEIVING_SESSION_GET audit event; no stock state changes, this is a read-only projection. Returns 404 when no receiving session exists for the supplied id. 
      * @endpoint get /v1/inventory/receiving/sessions/{sessionId}
      * @param sessionId Receiving session identifier
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -256,11 +256,11 @@ export class ReceivingService extends BaseService {
     }
 
     /**
-     * Receive items into staging
-     * Records received quantities for receiving session lines and generates receipt ledger/variance records
+     * Receive Items Into Staging
+     * Records actual received quantities for receiving session lines, posting a GOODS_RECEIPT ledger entry into the staging location per line and a SHORTAGE or OVERAGE variance record for every expected-vs-received mismatch. Use this tool to book arrived stock into an open session; do not use crossDockReceivingLine, which routes a line straight to a workorder instead of staging, and do not use createGoodsReceipt, the sessionless PO receipt. Preconditions: the receiving session must exist; lines naming a lineId not present in the session are skipped rather than failing. Required inputs: sessionId (UUIDv7) path parameter and lines (non-empty), each naming lineId plus either a whole-number receivedQuantity in base UoM or the documentUom/documentQuantity pair; lotNumber is mandatory for LOT-tracked products (expirationDate optionally stamps a new lot) and serialNumbers must enumerate exactly the received quantity for SERIAL-tracked products. Emits an INVENTORY_RECEIVING_SESSION_COMPLETE event, marks each line RECEIVED, RECEIVED_SHORT or RECEIVED_OVER, and moves the session to COMPLETED when every line is settled or IN_PROGRESS otherwise. Returns 404 when the receiving session does not exist, 400 when a quantity is missing or not a whole number, and 422 when a documentUom has no conversion path, a LOT-tracked line omits lotNumber, or a serialized line\&#39;s serial count mismatches the received quantity. 
      * @endpoint post /v1/inventory/receiving/sessions/{sessionId}/receive
      * @param sessionId Receiving session identifier
-     * @param receiveItemsRequest Receive lines payload
+     * @param receiveItemsRequest Actual received quantities, lot and serial data for the session lines.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options

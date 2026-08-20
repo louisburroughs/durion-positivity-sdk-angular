@@ -10,33 +10,33 @@
 
 
 /**
- * Request DTO for approval configuration creation and updates
+ * Configuration object to be created
  */
 export interface ApprovalConfigurationRequest { 
-    /**
-     * Location ID for this configuration (null = applies to all locations)
-     */
-    locationId?: string;
-    /**
-     * Customer ID for this configuration (null = applies to all customers)
-     */
-    customerId?: string;
     /**
      * Approval method
      */
     approvalMethod: string;
     /**
+     * Customer ID for this configuration (null = applies to all customers)
+     */
+    customerId?: string;
+    /**
      * Number of days a declined estimate can be reopened
      */
     declineExpiryDays?: number;
     /**
-     * Whether signature is required
+     * Location ID for this configuration (null = applies to all locations)
      */
-    requireSignature?: string;
+    locationId?: string;
     /**
      * Priority for configuration matching (0=default, 1=location-specific, 2=customer-specific)
      */
     priority?: number;
+    /**
+     * Whether signature is required
+     */
+    requireSignature?: string;
 }
 
 function isOptionalApprovalConfigurationRequestPropertyOfType(
@@ -78,7 +78,7 @@ export function instanceOfApprovalConfigurationRequest(value: object): value is 
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createApprovalConfigurationRequestPropertyNames('approvalMethod', );
-    const optionalStringProperties = createApprovalConfigurationRequestOptionalProperties({ name: 'locationId', nullable: false }, { name: 'customerId', nullable: false }, { name: 'approvalMethod', nullable: false }, { name: 'requireSignature', nullable: false }, );
+    const optionalStringProperties = createApprovalConfigurationRequestOptionalProperties({ name: 'approvalMethod', nullable: false }, { name: 'customerId', nullable: false }, { name: 'locationId', nullable: false }, { name: 'requireSignature', nullable: false }, );
     const optionalNumberProperties = createApprovalConfigurationRequestOptionalProperties({ name: 'declineExpiryDays', nullable: false }, { name: 'priority', nullable: false }, );
     const optionalBooleanProperties = createApprovalConfigurationRequestOptionalProperties();
 

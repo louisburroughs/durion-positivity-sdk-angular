@@ -50,20 +50,20 @@ export class AuditService extends BaseService {
     }
 
     /**
-     * Create audit event
-     * Creates an immutable audit event record and returns the generated event identifier.
+     * Record an Immutable Audit Event
+     * Records an immutable audit event and returns the generated event id and server timestamp. Use this tool to persist a write-once audit fact; do not use createPricingSnapshot, which records a pricing rule trace, and note that updates and deletes of audit events are rejected with 405 by design. Preconditions: the caller must hold security:audit:create; the actor is resolved server-side from the security context, so any actorId in the body is ignored. Required inputs: eventType, entityId, entityType, oldValue, and newValue (empty strings are accepted, null is not); context is optional and stored as serialized JSON. Emits a SECURITY_AUDIT_EVENT_CREATE event; the stored record can never be modified or deleted. Returns 400 when any required field is missing or a value cannot be serialized to JSON. 
      * @endpoint post /v1/audit/events
-     * @param auditLogEventRequest 
+     * @param auditLogEventRequest The audit fact to record: what changed, on which entity, from and to what.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public createEvent(auditLogEventRequest: AuditLogEventRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<AuditEventCreatedResponse>;
-    public createEvent(auditLogEventRequest: AuditLogEventRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<AuditEventCreatedResponse>>;
-    public createEvent(auditLogEventRequest: AuditLogEventRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<AuditEventCreatedResponse>>;
-    public createEvent(auditLogEventRequest: AuditLogEventRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public createAuditEvent(auditLogEventRequest: AuditLogEventRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<AuditEventCreatedResponse>;
+    public createAuditEvent(auditLogEventRequest: AuditLogEventRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<AuditEventCreatedResponse>>;
+    public createAuditEvent(auditLogEventRequest: AuditLogEventRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<AuditEventCreatedResponse>>;
+    public createAuditEvent(auditLogEventRequest: AuditLogEventRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (auditLogEventRequest === null || auditLogEventRequest === undefined) {
-            throw new Error('Required parameter auditLogEventRequest was null or undefined when calling createEvent.');
+            throw new Error('Required parameter auditLogEventRequest was null or undefined when calling createAuditEvent.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -120,10 +120,10 @@ export class AuditService extends BaseService {
     }
 
     /**
-     * Create pricing snapshot
-     * Creates an immutable pricing snapshot record for later audit and traceability.
+     * Record an Immutable Pricing Snapshot
+     * Records an immutable pricing snapshot with its ordered rule-evaluation trace and returns the generated snapshot id. Use this tool to preserve how a price was computed for later audit; do not use createAuditEvent, which records generic entity-change events without a rule trace. Preconditions: the caller must hold security:audit:create; the snapshot is write-once and cannot be modified afterwards. Required inputs: quoteContext, finalPrice, and evaluationSteps, where every step needs ruleId, status, inputs, and outputs; evaluationSteps may be an empty list but not null. Emits a SECURITY_AUDIT_PRICING_SNAPSHOT_CREATE event. Returns 400 when quoteContext, finalPrice, evaluationSteps, or any per-step field is missing, or when a JSON field cannot be serialized. 
      * @endpoint post /v1/audit/pricing-snapshots
-     * @param pricingSnapshotRequest 
+     * @param pricingSnapshotRequest The evaluated quote context, final price, and rule trace to preserve.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -190,76 +190,20 @@ export class AuditService extends BaseService {
     }
 
     /**
-     * Delete audit events not allowed
-     * Audit events are immutable and cannot be deleted once recorded.
-     * @endpoint delete /v1/audit/events/**
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     * @param options additional options
-     */
-    public deleteNotAllowed(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public deleteNotAllowed(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public deleteNotAllowed(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public deleteNotAllowed(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
-
-        let localVarHeaders = this.defaultHeaders;
-
-        // authentication (bearerAuth) required
-        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
-
-        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
-            'application/json'
-        ]);
-        if (localVarHttpHeaderAcceptSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
-        }
-
-        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
-
-        const localVarTransferCache: boolean = options?.transferCache ?? true;
-
-
-        let responseType_: 'text' | 'json' | 'blob' = 'json';
-        if (localVarHttpHeaderAcceptSelected) {
-            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
-                responseType_ = 'text';
-            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
-                responseType_ = 'json';
-            } else {
-                responseType_ = 'blob';
-            }
-        }
-
-        let localVarPath = `/v1/audit/events/**`;
-        const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<any>('delete', `${basePath}${localVarPath}`,
-            {
-                context: localVarHttpContext,
-                responseType: <any>responseType_,
-                ...(withCredentials ? { withCredentials } : {}),
-                headers: localVarHeaders,
-                observe: observe,
-                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * Get audit event
-     * Returns a previously recorded audit event by its event identifier.
+     * Get One Audit Event by Id
+     * Returns a previously recorded audit event by its event id. Use this tool when the event id is known; use searchAuditEvents instead to filter by time window, actor, event type, or aggregate. Preconditions: the caller must hold security:audit:view and the event must exist. Required inputs: eventId (UUID) as a path parameter. No events are emitted and no state changes; audit records are immutable. Returns 404 when no audit event exists for the supplied id. 
      * @endpoint get /v1/audit/events/{eventId}
      * @param eventId 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public getEvent(eventId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<AuditLogEventDto>;
-    public getEvent(eventId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<AuditLogEventDto>>;
-    public getEvent(eventId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<AuditLogEventDto>>;
-    public getEvent(eventId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getAuditEvent(eventId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<AuditLogEventDto>;
+    public getAuditEvent(eventId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<AuditLogEventDto>>;
+    public getAuditEvent(eventId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<AuditLogEventDto>>;
+    public getAuditEvent(eventId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (eventId === null || eventId === undefined) {
-            throw new Error('Required parameter eventId was null or undefined when calling getEvent.');
+            throw new Error('Required parameter eventId was null or undefined when calling getAuditEvent.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -306,8 +250,8 @@ export class AuditService extends BaseService {
     }
 
     /**
-     * Get pricing snapshot
-     * Returns an immutable pricing snapshot by its snapshot identifier.
+     * Get One Pricing Snapshot by Id
+     * Returns an immutable pricing snapshot with its rule-evaluation steps ordered by rule id. Use this tool when the snapshot id is known; use searchAuditEvents instead for general audit queries, since snapshots have no search endpoint. Preconditions: the caller must hold security:audit:view and the snapshot must exist. Required inputs: snapshotId (UUID) as a path parameter. No events are emitted and no state changes; snapshots are read-only after creation. Returns 400 with INVALID_REQUEST, not 404, when no snapshot exists for the supplied id; callers must treat that 400 as a miss. 
      * @endpoint get /v1/audit/pricing-snapshots/{snapshotId}
      * @param snapshotId 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -366,8 +310,120 @@ export class AuditService extends BaseService {
     }
 
     /**
-     * Search audit events
-     * Searches audit events using rich filter criteria with pagination support.
+     * Reject Audit Event Deletion
+     * Rejects every attempt to delete audit events, unconditionally answering 405 Method Not Allowed. Use this tool never; audit events are write-once, so use createAuditEvent to record facts and searchAuditEvents to read them instead. Preconditions: none that permit success; the operation fails by design for any path under the audit events resource. Required inputs: none are honored; the request is rejected regardless of path or payload. No events are emitted and no state changes; the endpoint exists only to make immutability explicit. Returns 405 in all cases. 
+     * @endpoint delete /v1/audit/events/**
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public rejectAuditEventDelete(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any>;
+    public rejectAuditEventDelete(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
+    public rejectAuditEventDelete(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
+    public rejectAuditEventDelete(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/audit/events/**`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<any>('delete', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Reject Audit Event Modification
+     * Rejects every attempt to modify audit events, unconditionally answering 405 Method Not Allowed. Use this tool never; audit events are write-once, so record a new fact with createAuditEvent instead of editing an existing one. Preconditions: none that permit success; the operation fails by design for any path under the audit events resource. Required inputs: none are honored; the request is rejected regardless of path or payload. No events are emitted and no state changes; the endpoint exists only to make immutability explicit. Returns 405 in all cases. 
+     * @endpoint put /v1/audit/events/**
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public rejectAuditEventUpdate(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any>;
+    public rejectAuditEventUpdate(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
+    public rejectAuditEventUpdate(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
+    public rejectAuditEventUpdate(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/audit/events/**`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<any>('put', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Search Audit Events With Filters
+     * Searches audit events with pagination, filtering by time window, actor, event type, and aggregate identifier. Use this tool to query the audit trail; use getAuditEvent instead when the event id is known, and requestAuditExport for bulk extraction as a file. Preconditions: the caller must hold security:audit:view; when both bounds are given, fromDate must be strictly before toDate (fromDate inclusive, toDate exclusive). Required inputs: none are mandatory; fromDate, toDate, actorId, eventType, and aggregateId are applied as filters, while workorderId, movementId, productId, sku, correlationId, reasonCode, pageToken, and locationIds are accepted for contract compatibility but not yet applied. No events are emitted and no state changes; this is a read-only projection. Returns 400 when fromDate is not before toDate or a parameter fails type conversion. 
      * @endpoint get /v1/audit/events
      * @param fromDate Inclusive start timestamp (ISO-8601)
      * @param toDate Exclusive end timestamp (ISO-8601)
@@ -544,62 +600,6 @@ export class AuditService extends BaseService {
             {
                 context: localVarHttpContext,
                 params: localVarQueryParameters.toHttpParams(),
-                responseType: <any>responseType_,
-                ...(withCredentials ? { withCredentials } : {}),
-                headers: localVarHeaders,
-                observe: observe,
-                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * Update audit events not allowed
-     * Audit events are immutable and cannot be modified after creation.
-     * @endpoint put /v1/audit/events/**
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     * @param options additional options
-     */
-    public updateNotAllowed(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public updateNotAllowed(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public updateNotAllowed(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public updateNotAllowed(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
-
-        let localVarHeaders = this.defaultHeaders;
-
-        // authentication (bearerAuth) required
-        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
-
-        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
-            'application/json'
-        ]);
-        if (localVarHttpHeaderAcceptSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
-        }
-
-        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
-
-        const localVarTransferCache: boolean = options?.transferCache ?? true;
-
-
-        let responseType_: 'text' | 'json' | 'blob' = 'json';
-        if (localVarHttpHeaderAcceptSelected) {
-            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
-                responseType_ = 'text';
-            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
-                responseType_ = 'json';
-            } else {
-                responseType_ = 'blob';
-            }
-        }
-
-        let localVarPath = `/v1/audit/events/**`;
-        const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<any>('put', `${basePath}${localVarPath}`,
-            {
-                context: localVarHttpContext,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,

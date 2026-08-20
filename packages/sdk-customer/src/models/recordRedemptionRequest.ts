@@ -14,21 +14,13 @@
  */
 export interface RecordRedemptionRequest { 
     /**
-     * Identifier of the promotion being redeemed
+     * Campaign code that drove the redemption, when the offer was reached through a campaign
      */
-    promotionId: string;
+    campaignCode?: string;
     /**
      * Identifier of the customer redeeming the promotion
      */
     customerId: string;
-    /**
-     * Identifier of the workorder the redemption applies to
-     */
-    workorderId: string;
-    /**
-     * Identifier of the invoice the redemption applies to, if any
-     */
-    invoiceId?: string;
     /**
      * Discount amount to record for the redemption
      */
@@ -38,13 +30,17 @@ export interface RecordRedemptionRequest {
      */
     discountType: string;
     /**
+     * Identifier of the invoice the redemption applies to, if any
+     */
+    invoiceId?: string;
+    /**
      * Promotion code being redeemed
      */
     promotionCode: string;
     /**
-     * Campaign code that drove the redemption, when the offer was reached through a campaign
+     * Identifier of the promotion being redeemed
      */
-    campaignCode?: string;
+    promotionId: string;
     /**
      * Whether the redemption is being recorded over the configured usage limit
      */
@@ -53,6 +49,10 @@ export interface RecordRedemptionRequest {
      * Timestamp when the redemption occurred
      */
     redemptionTimestamp?: string;
+    /**
+     * Identifier of the workorder the redemption applies to
+     */
+    workorderId: string;
 }
 
 function isOptionalRecordRedemptionRequestPropertyOfType(
@@ -93,8 +93,8 @@ export function instanceOfRecordRedemptionRequest(value: object): value is Recor
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createRecordRedemptionRequestPropertyNames('promotionId', 'customerId', 'workorderId', 'discountAmount', 'discountType', 'promotionCode', );
-    const optionalStringProperties = createRecordRedemptionRequestOptionalProperties({ name: 'promotionId', nullable: false }, { name: 'customerId', nullable: false }, { name: 'workorderId', nullable: false }, { name: 'invoiceId', nullable: false }, { name: 'discountType', nullable: false }, { name: 'promotionCode', nullable: false }, { name: 'campaignCode', nullable: false }, { name: 'redemptionTimestamp', nullable: false }, );
+    const requiredProperties = createRecordRedemptionRequestPropertyNames('customerId', 'discountAmount', 'discountType', 'promotionCode', 'promotionId', 'workorderId', );
+    const optionalStringProperties = createRecordRedemptionRequestOptionalProperties({ name: 'campaignCode', nullable: false }, { name: 'customerId', nullable: false }, { name: 'discountType', nullable: false }, { name: 'invoiceId', nullable: false }, { name: 'promotionCode', nullable: false }, { name: 'promotionId', nullable: false }, { name: 'redemptionTimestamp', nullable: false }, { name: 'workorderId', nullable: false }, );
     const optionalNumberProperties = createRecordRedemptionRequestOptionalProperties({ name: 'discountAmount', nullable: false }, );
     const optionalBooleanProperties = createRecordRedemptionRequestOptionalProperties({ name: 'recordedOverLimit', nullable: false }, );
 

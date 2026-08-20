@@ -14,13 +14,13 @@
  */
 export interface InvoiceApplication { 
     /**
-     * Identifier of the invoice the payment is applied to
-     */
-    invoiceId: string;
-    /**
      * Amount of the payment to apply to this invoice
      */
     amountToApply: number;
+    /**
+     * Identifier of the invoice the payment is applied to
+     */
+    invoiceId: string;
 }
 
 function isOptionalInvoiceApplicationPropertyOfType(
@@ -61,7 +61,7 @@ export function instanceOfInvoiceApplication(value: object): value is InvoiceApp
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createInvoiceApplicationPropertyNames('invoiceId', 'amountToApply', );
+    const requiredProperties = createInvoiceApplicationPropertyNames('amountToApply', 'invoiceId', );
     const optionalStringProperties = createInvoiceApplicationOptionalProperties({ name: 'invoiceId', nullable: false }, );
     const optionalNumberProperties = createInvoiceApplicationOptionalProperties({ name: 'amountToApply', nullable: false }, );
     const optionalBooleanProperties = createInvoiceApplicationOptionalProperties();

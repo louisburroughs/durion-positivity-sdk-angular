@@ -35,7 +35,7 @@ export class InventorySitesService extends BaseService {
 
     /**
      * Get site default locations
-     * Returns configured default locations for a site. Stub implementation.
+     * Returns the configured default storage locations for a site; this endpoint is a stub that currently always answers 501 Not Implemented. Use this tool only to probe the future site-defaults contract; use getSiteInventoryRollup instead for actual site inventory data, and do not expect updateSiteDefaultLocations to have stored anything readable here. Preconditions: none are evaluated; no configuration store exists yet. Required inputs: siteId (UUID) as a path parameter; there is no request body. No events are emitted and no state changes; the stub performs no lookup. Returns 501 unconditionally until the configuration store is implemented. 
      * @endpoint get /v1/inventory/sites/{siteId}/defaultLocations
      * @param siteId Site identifier
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -95,20 +95,20 @@ export class InventorySitesService extends BaseService {
 
     /**
      * Replace site default locations
-     * Replaces the configured default locations for a site. Stub implementation.
+     * Replaces the configured default storage locations for a site; this endpoint is a stub that currently always answers 501 Not Implemented. Use this tool only to probe the future site-defaults contract; use getSiteDefaultLocations instead to read the configuration once implemented. Preconditions: none are evaluated; no configuration store exists yet. Required inputs: siteId (UUID) path parameter and an optional JSON array of storage-location UUIDs as the body. Emits an INVENTORY_SITE_DEFAULT_LOCATIONS_UPDATE event when invoked; no configuration is stored. Returns 501 unconditionally until the configuration store is implemented. 
      * @endpoint put /v1/inventory/sites/{siteId}/defaultLocations
      * @param siteId Site identifier
-     * @param requestBody 
+     * @param requestBody Storage-location ids to install as the site\&#39;s defaults, replacing any previous configuration.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public putSiteDefaultLocations(siteId: string, requestBody?: Array<string>, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public putSiteDefaultLocations(siteId: string, requestBody?: Array<string>, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public putSiteDefaultLocations(siteId: string, requestBody?: Array<string>, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public putSiteDefaultLocations(siteId: string, requestBody?: Array<string>, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public updateSiteDefaultLocations(siteId: string, requestBody?: Array<string>, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
+    public updateSiteDefaultLocations(siteId: string, requestBody?: Array<string>, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
+    public updateSiteDefaultLocations(siteId: string, requestBody?: Array<string>, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
+    public updateSiteDefaultLocations(siteId: string, requestBody?: Array<string>, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (siteId === null || siteId === undefined) {
-            throw new Error('Required parameter siteId was null or undefined when calling putSiteDefaultLocations.');
+            throw new Error('Required parameter siteId was null or undefined when calling updateSiteDefaultLocations.');
         }
 
         let localVarHeaders = this.defaultHeaders;

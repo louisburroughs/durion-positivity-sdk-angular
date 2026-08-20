@@ -41,19 +41,19 @@ export class ReallocationService extends BaseService {
 
     /**
      * Reallocate inventory allocations
-     * Rebalances existing allocations for a stock item based on priority and available inventory
+     * Rebalances the allocated quantities of every reservation of one stock item, redistributing the reservations\&#39; current total allocated pool by effective priority. Use this tool after a supply or priority change to re-decide which reservations hold stock; do not use promoteReservationAllocation, which hardens a single allocation, and do not use resolveShortage, which creates resolution artifacts for one short allocation. Preconditions: none beyond reservations existing for the stock item; the pool redistributed is the current total allocated quantity across those reservations, not ledger on-hand. Required inputs: stockItemId (UUID); triggerType (an AllocationAuditReasonCode name, falling back to MANUAL_OVERRIDE when absent or unrecognized) and triggerReferenceId are optional audit fields. Emits an INVENTORY_ALLOCATION_REALLOCATE event and writes one allocation-audit row per reservation; ordering is effective priority ascending (1 is critical, and priority ages one step per 24 hours after a 24-hour grace period), then due date, waiting-since, schedule start and creation time, each reservation receives its full required quantity or zero (no partial awards), and no ledger entries are written. Returns 400 when stockItemId is missing, and 200 with atpAfterReallocation (ledger on-hand minus total allocated) otherwise. 
      * @endpoint post /v1/inventory/allocations/reallocate
-     * @param reallocateRequest 
+     * @param reallocateRequest The stock item to rebalance, with optional audit fields naming what triggered the reallocation.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public reallocate(reallocateRequest: ReallocateRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ReallocateResponse>;
-    public reallocate(reallocateRequest: ReallocateRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ReallocateResponse>>;
-    public reallocate(reallocateRequest: ReallocateRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ReallocateResponse>>;
-    public reallocate(reallocateRequest: ReallocateRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public reallocateAllocations(reallocateRequest: ReallocateRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ReallocateResponse>;
+    public reallocateAllocations(reallocateRequest: ReallocateRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ReallocateResponse>>;
+    public reallocateAllocations(reallocateRequest: ReallocateRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ReallocateResponse>>;
+    public reallocateAllocations(reallocateRequest: ReallocateRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (reallocateRequest === null || reallocateRequest === undefined) {
-            throw new Error('Required parameter reallocateRequest was null or undefined when calling reallocate.');
+            throw new Error('Required parameter reallocateRequest was null or undefined when calling reallocateAllocations.');
         }
 
         let localVarHeaders = this.defaultHeaders;

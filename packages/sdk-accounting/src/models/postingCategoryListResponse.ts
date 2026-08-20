@@ -15,14 +15,6 @@ import { PostingCategoryResponse } from './postingCategoryResponse';
  */
 export interface PostingCategoryListResponse { 
     /**
-     * Posting categories on the current page
-     */
-    results: Array<PostingCategoryResponse>;
-    /**
-     * Total number of posting categories matching the query
-     */
-    totalCount?: number;
-    /**
      * Zero-based index of the current page
      */
     pageNumber?: number;
@@ -30,6 +22,14 @@ export interface PostingCategoryListResponse {
      * Number of items per page
      */
     pageSize?: number;
+    /**
+     * Posting categories on the current page
+     */
+    results: Array<PostingCategoryResponse>;
+    /**
+     * Total number of posting categories matching the query
+     */
+    totalCount?: number;
     /**
      * Total number of pages available
      */
@@ -76,7 +76,7 @@ export function instanceOfPostingCategoryListResponse(value: object): value is P
 
     const requiredProperties = createPostingCategoryListResponsePropertyNames('results', );
     const optionalStringProperties = createPostingCategoryListResponseOptionalProperties();
-    const optionalNumberProperties = createPostingCategoryListResponseOptionalProperties({ name: 'totalCount', nullable: false }, { name: 'pageNumber', nullable: false }, { name: 'pageSize', nullable: false }, { name: 'totalPages', nullable: false }, );
+    const optionalNumberProperties = createPostingCategoryListResponseOptionalProperties({ name: 'pageNumber', nullable: false }, { name: 'pageSize', nullable: false }, { name: 'totalCount', nullable: false }, { name: 'totalPages', nullable: false }, );
     const optionalBooleanProperties = createPostingCategoryListResponseOptionalProperties();
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

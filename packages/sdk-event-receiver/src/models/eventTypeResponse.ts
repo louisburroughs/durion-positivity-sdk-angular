@@ -14,18 +14,6 @@
  */
 export interface EventTypeResponse { 
     /**
-     * Event type identifier
-     */
-    id: string;
-    /**
-     * Unique event type code
-     */
-    typeCode: string;
-    /**
-     * Human-readable event type description
-     */
-    description: string;
-    /**
      * Whether this event type is active
      */
     active: boolean;
@@ -33,6 +21,14 @@ export interface EventTypeResponse {
      * Event API version
      */
     apiVersion: string;
+    /**
+     * Human-readable event type description
+     */
+    description: string;
+    /**
+     * Event type identifier
+     */
+    id: string;
     /**
      * p50 latency threshold in microseconds
      */
@@ -45,6 +41,10 @@ export interface EventTypeResponse {
      * p99 latency threshold in microseconds
      */
     p99Micros: number;
+    /**
+     * Unique event type code
+     */
+    typeCode: string;
 }
 
 function isOptionalEventTypeResponsePropertyOfType(
@@ -85,8 +85,8 @@ export function instanceOfEventTypeResponse(value: object): value is EventTypeRe
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createEventTypeResponsePropertyNames('id', 'typeCode', 'description', 'active', 'apiVersion', 'p50Micros', 'p95Micros', 'p99Micros', );
-    const optionalStringProperties = createEventTypeResponseOptionalProperties({ name: 'id', nullable: false }, { name: 'typeCode', nullable: false }, { name: 'description', nullable: false }, { name: 'apiVersion', nullable: false }, );
+    const requiredProperties = createEventTypeResponsePropertyNames('active', 'apiVersion', 'description', 'id', 'p50Micros', 'p95Micros', 'p99Micros', 'typeCode', );
+    const optionalStringProperties = createEventTypeResponseOptionalProperties({ name: 'apiVersion', nullable: false }, { name: 'description', nullable: false }, { name: 'id', nullable: false }, { name: 'typeCode', nullable: false }, );
     const optionalNumberProperties = createEventTypeResponseOptionalProperties({ name: 'p50Micros', nullable: false }, { name: 'p95Micros', nullable: false }, { name: 'p99Micros', nullable: false }, );
     const optionalBooleanProperties = createEventTypeResponseOptionalProperties({ name: 'active', nullable: false }, );
 

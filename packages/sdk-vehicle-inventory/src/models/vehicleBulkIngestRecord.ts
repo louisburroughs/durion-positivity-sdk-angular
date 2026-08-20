@@ -18,14 +18,6 @@ export interface VehicleBulkIngestRecord {
      */
     accountId: string;
     /**
-     * 17-character Vehicle Identification Number
-     */
-    vin: string;
-    /**
-     * Fleet unit number assigned to the vehicle
-     */
-    unitNumber: string;
-    /**
      * Human-readable description of the vehicle
      */
     description: string;
@@ -38,10 +30,6 @@ export interface VehicleBulkIngestRecord {
      */
     licensePlateJurisdiction?: string;
     /**
-     * Model year of the vehicle
-     */
-    year?: number;
-    /**
      * Manufacturer of the vehicle
      */
     make?: string;
@@ -53,6 +41,18 @@ export interface VehicleBulkIngestRecord {
      * Trim level of the vehicle
      */
     trim?: string;
+    /**
+     * Fleet unit number assigned to the vehicle
+     */
+    unitNumber: string;
+    /**
+     * 17-character Vehicle Identification Number
+     */
+    vin: string;
+    /**
+     * Model year of the vehicle
+     */
+    year?: number;
 }
 
 function isOptionalVehicleBulkIngestRecordPropertyOfType(
@@ -93,8 +93,8 @@ export function instanceOfVehicleBulkIngestRecord(value: object): value is Vehic
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createVehicleBulkIngestRecordPropertyNames('accountId', 'vin', 'unitNumber', 'description', );
-    const optionalStringProperties = createVehicleBulkIngestRecordOptionalProperties({ name: 'accountId', nullable: false }, { name: 'vin', nullable: false }, { name: 'unitNumber', nullable: false }, { name: 'description', nullable: false }, { name: 'licensePlate', nullable: false }, { name: 'licensePlateJurisdiction', nullable: false }, { name: 'make', nullable: false }, { name: 'model', nullable: false }, { name: 'trim', nullable: false }, );
+    const requiredProperties = createVehicleBulkIngestRecordPropertyNames('accountId', 'description', 'unitNumber', 'vin', );
+    const optionalStringProperties = createVehicleBulkIngestRecordOptionalProperties({ name: 'accountId', nullable: false }, { name: 'description', nullable: false }, { name: 'licensePlate', nullable: false }, { name: 'licensePlateJurisdiction', nullable: false }, { name: 'make', nullable: false }, { name: 'model', nullable: false }, { name: 'trim', nullable: false }, { name: 'unitNumber', nullable: false }, { name: 'vin', nullable: false }, );
     const optionalNumberProperties = createVehicleBulkIngestRecordOptionalProperties({ name: 'year', nullable: false }, );
     const optionalBooleanProperties = createVehicleBulkIngestRecordOptionalProperties();
 

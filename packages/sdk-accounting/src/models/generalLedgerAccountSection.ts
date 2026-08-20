@@ -19,33 +19,33 @@ export interface GeneralLedgerAccountSection {
      */
     accountId: string;
     /**
-     * GL account number (chart-of-accounts code)
-     */
-    accountNumber: string;
-    /**
      * GL account display name
      */
     accountName: string;
     /**
-     * Signed opening balance (debit positive) from POSTED activity before the start date
+     * GL account number (chart-of-accounts code)
      */
-    openingBalance: number;
+    accountNumber: string;
+    /**
+     * Signed closing balance (debit positive): opening balance plus in-period net activity
+     */
+    closingBalance: number;
     /**
      * Chronological in-period POSTED lines with running balance
      */
     lines: Array<GeneralLedgerLine>;
     /**
-     * Sum of in-period POSTED debit amounts for the account
+     * Signed opening balance (debit positive) from POSTED activity before the start date
      */
-    totalDebit: number;
+    openingBalance: number;
     /**
      * Sum of in-period POSTED credit amounts for the account
      */
     totalCredit: number;
     /**
-     * Signed closing balance (debit positive): opening balance plus in-period net activity
+     * Sum of in-period POSTED debit amounts for the account
      */
-    closingBalance: number;
+    totalDebit: number;
 }
 
 function isOptionalGeneralLedgerAccountSectionPropertyOfType(
@@ -86,9 +86,9 @@ export function instanceOfGeneralLedgerAccountSection(value: object): value is G
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createGeneralLedgerAccountSectionPropertyNames('accountId', 'accountNumber', 'accountName', 'openingBalance', 'lines', 'totalDebit', 'totalCredit', 'closingBalance', );
-    const optionalStringProperties = createGeneralLedgerAccountSectionOptionalProperties({ name: 'accountId', nullable: false }, { name: 'accountNumber', nullable: false }, { name: 'accountName', nullable: false }, );
-    const optionalNumberProperties = createGeneralLedgerAccountSectionOptionalProperties({ name: 'openingBalance', nullable: false }, { name: 'totalDebit', nullable: false }, { name: 'totalCredit', nullable: false }, { name: 'closingBalance', nullable: false }, );
+    const requiredProperties = createGeneralLedgerAccountSectionPropertyNames('accountId', 'accountName', 'accountNumber', 'closingBalance', 'lines', 'openingBalance', 'totalCredit', 'totalDebit', );
+    const optionalStringProperties = createGeneralLedgerAccountSectionOptionalProperties({ name: 'accountId', nullable: false }, { name: 'accountName', nullable: false }, { name: 'accountNumber', nullable: false }, );
+    const optionalNumberProperties = createGeneralLedgerAccountSectionOptionalProperties({ name: 'closingBalance', nullable: false }, { name: 'openingBalance', nullable: false }, { name: 'totalCredit', nullable: false }, { name: 'totalDebit', nullable: false }, );
     const optionalBooleanProperties = createGeneralLedgerAccountSectionOptionalProperties();
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

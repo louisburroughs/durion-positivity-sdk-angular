@@ -14,14 +14,6 @@
  */
 export interface SearchVehiclesRequest { 
     /**
-     * Free-text search query matched against VIN, unit number, plate, and description
-     */
-    query: string;
-    /**
-     * Maximum number of results to return; defaults to 25 when omitted
-     */
-    limit?: number;
-    /**
      * Opaque pagination cursor for retrieving subsequent result pages (reserved for future use)
      */
     cursor?: string;
@@ -29,6 +21,14 @@ export interface SearchVehiclesRequest {
      * When true, enables substring (contains) matching; defaults to false for strict matching
      */
     enableContainsMatching?: boolean;
+    /**
+     * Maximum number of results to return; defaults to 25 when omitted
+     */
+    limit?: number;
+    /**
+     * Free-text search query matched against VIN, unit number, plate, and description
+     */
+    query: string;
 }
 
 function isOptionalSearchVehiclesRequestPropertyOfType(
@@ -70,7 +70,7 @@ export function instanceOfSearchVehiclesRequest(value: object): value is SearchV
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createSearchVehiclesRequestPropertyNames('query', );
-    const optionalStringProperties = createSearchVehiclesRequestOptionalProperties({ name: 'query', nullable: false }, { name: 'cursor', nullable: false }, );
+    const optionalStringProperties = createSearchVehiclesRequestOptionalProperties({ name: 'cursor', nullable: false }, { name: 'query', nullable: false }, );
     const optionalNumberProperties = createSearchVehiclesRequestOptionalProperties({ name: 'limit', nullable: false }, );
     const optionalBooleanProperties = createSearchVehiclesRequestOptionalProperties({ name: 'enableContainsMatching', nullable: false }, );
 

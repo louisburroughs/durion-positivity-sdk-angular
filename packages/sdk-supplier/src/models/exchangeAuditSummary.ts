@@ -14,17 +14,9 @@
  */
 export interface ExchangeAuditSummary { 
     /**
-     * Identity of this exchange-audit row (UUIDv7).
+     * 1-based attempt number within one logical call. Retries are separate rows sharing a correlation id, so a sequence of 1,2,3 is one call retried twice.
      */
-    exchangeAuditId?: string;
-    /**
-     * Owning vendor profile. Still populated when that profile has since been deleted -- exchange history deliberately outlives configuration (ADR-0050 §7).
-     */
-    vendorProfileId?: string;
-    /**
-     * The profile\'s alias AS AT THE TIME OF THE EXCHANGE. A descriptive snapshot, never a lookup key: profiles are renameable, so this may differ from the profile\'s current ref.
-     */
-    supplierRef?: string;
+    attempt?: number;
     /**
      * Endpoint binding used for this attempt, when one was involved.
      */
@@ -34,6 +26,50 @@ export interface ExchangeAuditSummary {
      */
     capability?: string;
     /**
+     * The payload capture level actually applied to THIS row (ADR-0050 §7). Recorded rather than re-derived, because the binding\'s level can change after the fact: a REDACTED row stays REDACTED even if the binding is later set to FULL.
+     */
+    captureLevel?: ExchangeAuditSummaryCaptureLevelEnum;
+    /**
+     * Groups every attempt of one logical call. Use it to trace a retry sequence.
+     */
+    correlationId?: string;
+    /**
+     * Audit actor that caused the exchange (ADR-0018). The system actor for scheduler-driven exchanges, which have no security context.
+     */
+    createdBy?: string;
+    /**
+     * How long the attempt took, in milliseconds.
+     */
+    durationMs?: number;
+    /**
+     * Absolute request URI, credential-redacted before storage. Sensitive query parameters (api keys, tokens, signatures) and any userinfo in the URL are replaced with a redaction marker. AT METADATA_ONLY THE QUERY STRING IS REMOVED ENTIRELY: that level retains no content, and query parameters are content, so the value you receive is the path only. Redaction is a control applied at capture time -- the original was never stored and cannot be recovered.
+     */
+    endpointUri?: string;
+    /**
+     * Identity of this exchange-audit row (UUIDv7).
+     */
+    exchangeAuditId?: string;
+    /**
+     * Operator-facing failure summary. Null on success. Quotes vendor responses, so any URL it embeds has its credential-bearing query parameters and userinfo redacted at capture time -- a redirect Location can carry a signed URL whose token is a live credential.
+     */
+    failureDetail?: string;
+    /**
+     * HTTP method of the attempt.
+     */
+    httpMethod?: string;
+    /**
+     * Response status code. Null when no response was received at all -- a connect failure, a timeout before headers, or an attempt suppressed by an open circuit breaker.
+     */
+    httpStatus?: number;
+    /**
+     * Classification of the attempt (ADR-0052 §5).
+     */
+    outcome?: string;
+    /**
+     * When retention nulled this row\'s payloads (ADR-0050 §7, 400 days). Distinguishes \'purged\' from \'never captured\': metadata is retained permanently, only content expires.
+     */
+    payloadsPurgedAt?: string;
+    /**
      * Canonical protocol family key of the adapter used.
      */
     protocolFamily?: string;
@@ -41,46 +77,6 @@ export interface ExchangeAuditSummary {
      * Adapter version key within the protocol family.
      */
     protocolVersion?: string;
-    /**
-     * HTTP method of the attempt.
-     */
-    httpMethod?: string;
-    /**
-     * Absolute request URI, credential-redacted before storage. Sensitive query parameters (api keys, tokens, signatures) and any userinfo in the URL are replaced with a redaction marker. AT METADATA_ONLY THE QUERY STRING IS REMOVED ENTIRELY: that level retains no content, and query parameters are content, so the value you receive is the path only. Redaction is a control applied at capture time -- the original was never stored and cannot be recovered.
-     */
-    endpointUri?: string;
-    /**
-     * 1-based attempt number within one logical call. Retries are separate rows sharing a correlation id, so a sequence of 1,2,3 is one call retried twice.
-     */
-    attempt?: number;
-    /**
-     * Groups every attempt of one logical call. Use it to trace a retry sequence.
-     */
-    correlationId?: string;
-    /**
-     * Classification of the attempt (ADR-0052 §5).
-     */
-    outcome?: string;
-    /**
-     * Response status code. Null when no response was received at all -- a connect failure, a timeout before headers, or an attempt suppressed by an open circuit breaker.
-     */
-    httpStatus?: number;
-    /**
-     * When the attempt began.
-     */
-    startedAt?: string;
-    /**
-     * How long the attempt took, in milliseconds.
-     */
-    durationMs?: number;
-    /**
-     * Operator-facing failure summary. Null on success. Quotes vendor responses, so any URL it embeds has its credential-bearing query parameters and userinfo redacted at capture time -- a redirect Location can carry a signed URL whose token is a live credential.
-     */
-    failureDetail?: string;
-    /**
-     * The payload capture level actually applied to THIS row (ADR-0050 §7). Recorded rather than re-derived, because the binding\'s level can change after the fact: a REDACTED row stays REDACTED even if the binding is later set to FULL.
-     */
-    captureLevel?: ExchangeAuditSummaryCaptureLevelEnum;
     /**
      * Whether a request payload is currently stored. Determined without decrypting anything.
      */
@@ -90,13 +86,17 @@ export interface ExchangeAuditSummary {
      */
     responsePayloadPresent?: boolean;
     /**
-     * When retention nulled this row\'s payloads (ADR-0050 §7, 400 days). Distinguishes \'purged\' from \'never captured\': metadata is retained permanently, only content expires.
+     * When the attempt began.
      */
-    payloadsPurgedAt?: string;
+    startedAt?: string;
     /**
-     * Audit actor that caused the exchange (ADR-0018). The system actor for scheduler-driven exchanges, which have no security context.
+     * The profile\'s alias AS AT THE TIME OF THE EXCHANGE. A descriptive snapshot, never a lookup key: profiles are renameable, so this may differ from the profile\'s current ref.
      */
-    createdBy?: string;
+    supplierRef?: string;
+    /**
+     * Owning vendor profile. Still populated when that profile has since been deleted -- exchange history deliberately outlives configuration (ADR-0050 §7).
+     */
+    vendorProfileId?: string;
 }
 export enum ExchangeAuditSummaryCaptureLevelEnum {
     Full = 'FULL',
@@ -145,8 +145,8 @@ export function instanceOfExchangeAuditSummary(value: object): value is Exchange
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createExchangeAuditSummaryPropertyNames();
-    const optionalStringProperties = createExchangeAuditSummaryOptionalProperties({ name: 'exchangeAuditId', nullable: false }, { name: 'vendorProfileId', nullable: false }, { name: 'supplierRef', nullable: false }, { name: 'bindingId', nullable: false }, { name: 'capability', nullable: false }, { name: 'protocolFamily', nullable: false }, { name: 'protocolVersion', nullable: false }, { name: 'httpMethod', nullable: false }, { name: 'endpointUri', nullable: false }, { name: 'correlationId', nullable: false }, { name: 'outcome', nullable: false }, { name: 'startedAt', nullable: false }, { name: 'failureDetail', nullable: false }, { name: 'captureLevel', nullable: false }, { name: 'payloadsPurgedAt', nullable: false }, { name: 'createdBy', nullable: false }, );
-    const optionalNumberProperties = createExchangeAuditSummaryOptionalProperties({ name: 'attempt', nullable: false }, { name: 'httpStatus', nullable: false }, { name: 'durationMs', nullable: false }, );
+    const optionalStringProperties = createExchangeAuditSummaryOptionalProperties({ name: 'bindingId', nullable: false }, { name: 'capability', nullable: false }, { name: 'captureLevel', nullable: false }, { name: 'correlationId', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'endpointUri', nullable: false }, { name: 'exchangeAuditId', nullable: false }, { name: 'failureDetail', nullable: false }, { name: 'httpMethod', nullable: false }, { name: 'outcome', nullable: false }, { name: 'payloadsPurgedAt', nullable: false }, { name: 'protocolFamily', nullable: false }, { name: 'protocolVersion', nullable: false }, { name: 'startedAt', nullable: false }, { name: 'supplierRef', nullable: false }, { name: 'vendorProfileId', nullable: false }, );
+    const optionalNumberProperties = createExchangeAuditSummaryOptionalProperties({ name: 'attempt', nullable: false }, { name: 'durationMs', nullable: false }, { name: 'httpStatus', nullable: false }, );
     const optionalBooleanProperties = createExchangeAuditSummaryOptionalProperties({ name: 'requestPayloadPresent', nullable: false }, { name: 'responsePayloadPresent', nullable: false }, );
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

@@ -18,21 +18,21 @@ export interface ShortageResolutionResultDto {
      */
     allocationId: string;
     /**
-     * The resolution option that was executed
+     * Identifier of the created artifact; null for CANCEL_LINE
      */
-    optionType: ShortageResolutionResultDtoOptionTypeEnum;
-    /**
-     * Idempotency key the resolution was recorded under
-     */
-    idempotencyKey: string;
+    artifactId?: string;
     /**
      * Kind of artifact created (BACKORDER, RESERVATION, TRANSFER_ORDER, PURCHASE_SUGGESTION, NONE)
      */
     artifactType: string;
     /**
-     * Identifier of the created artifact; null for CANCEL_LINE
+     * Idempotency key the resolution was recorded under
      */
-    artifactId?: string;
+    idempotencyKey: string;
+    /**
+     * The resolution option that was executed
+     */
+    optionType: ShortageResolutionResultDtoOptionTypeEnum;
     /**
      * Timestamp when the shortage was resolved
      */
@@ -90,8 +90,8 @@ export function instanceOfShortageResolutionResultDto(value: object): value is S
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createShortageResolutionResultDtoPropertyNames('allocationId', 'optionType', 'idempotencyKey', 'artifactType', 'resolvedAt', 'status', );
-    const optionalStringProperties = createShortageResolutionResultDtoOptionalProperties({ name: 'allocationId', nullable: false }, { name: 'optionType', nullable: false }, { name: 'idempotencyKey', nullable: false }, { name: 'artifactType', nullable: false }, { name: 'artifactId', nullable: false }, { name: 'resolvedAt', nullable: false }, { name: 'status', nullable: false }, );
+    const requiredProperties = createShortageResolutionResultDtoPropertyNames('allocationId', 'artifactType', 'idempotencyKey', 'optionType', 'resolvedAt', 'status', );
+    const optionalStringProperties = createShortageResolutionResultDtoOptionalProperties({ name: 'allocationId', nullable: false }, { name: 'artifactId', nullable: false }, { name: 'artifactType', nullable: false }, { name: 'idempotencyKey', nullable: false }, { name: 'optionType', nullable: false }, { name: 'resolvedAt', nullable: false }, { name: 'status', nullable: false }, );
     const optionalNumberProperties = createShortageResolutionResultDtoOptionalProperties();
     const optionalBooleanProperties = createShortageResolutionResultDtoOptionalProperties();
 

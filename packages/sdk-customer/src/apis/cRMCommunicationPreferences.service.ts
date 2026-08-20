@@ -40,8 +40,8 @@ export class CRMCommunicationPreferencesService extends BaseService {
     }
 
     /**
-     * Get communication preferences
-     * Retrieve communication preferences and consent flags for a party
+     * Get Communication Preferences
+     * Returns the persisted communication preferences and consent flags for a party, covering email, SMS, phone, and marketing channels plus the free-form consent flag map. Use this tool when reading a party\&#39;s current contact-channel opt-ins; do not use getAccountCommunicationPreferences, a legacy accounts-scoped stub that only returns N/A placeholders. Preconditions: the party must exist as either a commercial or person party; a party with no stored preference record is reported with every channel defaulted to OPT_OUT and version 0. Required inputs: partyId (UUID) as a path parameter; there is no request body. Emits a CRM_COMMUNICATION_PREFERENCES_GET audit event; no state changes occur. Returns 404 when no party exists for the supplied partyId. 
      * @endpoint get /v1/crm/parties/{partyId}/communicationPreferences
      * @param partyId Party ID
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -100,11 +100,11 @@ export class CRMCommunicationPreferencesService extends BaseService {
     }
 
     /**
-     * Create or update communication preferences
-     * Set or update communication preferences and consent flags for a party
+     * Upsert Communication Preferences
+     * Creates or updates the persisted communication-preference record for a party, replacing channel preferences, consent flags, and the preferences note. Use this tool when recording a party\&#39;s contact-channel opt-in or opt-out choices; do not use upsertAccountCommunicationPreferences, a legacy accounts-scoped stub that does not persist anything. Preconditions: the party must exist as either a commercial or person party. Required inputs: partyId (UUID) as a path parameter and a JSON body; omitted emailPreference, smsPreference, phonePreference, or marketingPreference values default to OPT_OUT, and updateSource defaults to APP. Emits a CRM_COMMUNICATION_PREFERENCES_UPSERT event and writes the preference record, reporting operationType CREATED or UPDATED with a new version. Returns 404 when no party exists for the supplied partyId. 
      * @endpoint post /v1/crm/parties/{partyId}/communicationPreferences
      * @param partyId Party ID
-     * @param upsertCommunicationPreferencesRequest 
+     * @param upsertCommunicationPreferencesRequest Channel preferences, consent flags, and audit source to store for the party; omitted channels default to OPT_OUT.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options

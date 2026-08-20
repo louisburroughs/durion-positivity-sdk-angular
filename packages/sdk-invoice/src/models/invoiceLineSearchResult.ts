@@ -14,21 +14,37 @@
  */
 export interface InvoiceLineSearchResult { 
     /**
+     * Line total amount
+     */
+    amount?: number;
+    /**
+     * Line item description
+     */
+    description?: string;
+    /**
+     * Creation timestamp of the owning invoice
+     */
+    invoiceCreatedAt?: string;
+    /**
      * Identifier of the owning invoice
      */
     invoiceId: string;
-    /**
-     * Human invoice number
-     */
-    invoiceNumber?: string;
     /**
      * Identifier of the invoice line item
      */
     invoiceItemId: string;
     /**
-     * Line item description
+     * Human invoice number
      */
-    description?: string;
+    invoiceNumber?: string;
+    /**
+     * Current status of the owning invoice
+     */
+    invoiceStatus?: string;
+    /**
+     * Line item type (e.g. PART, LABOR)
+     */
+    itemType?: string;
     /**
      * Quantity sold
      */
@@ -38,25 +54,9 @@ export interface InvoiceLineSearchResult {
      */
     unitPrice?: number;
     /**
-     * Line total amount
-     */
-    amount?: number;
-    /**
      * Originating workorder item identifier, when known
      */
     workorderItemId?: string;
-    /**
-     * Line item type (e.g. PART, LABOR)
-     */
-    itemType?: string;
-    /**
-     * Current status of the owning invoice
-     */
-    invoiceStatus?: string;
-    /**
-     * Creation timestamp of the owning invoice
-     */
-    invoiceCreatedAt?: string;
 }
 
 function isOptionalInvoiceLineSearchResultPropertyOfType(
@@ -98,8 +98,8 @@ export function instanceOfInvoiceLineSearchResult(value: object): value is Invoi
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createInvoiceLineSearchResultPropertyNames('invoiceId', 'invoiceItemId', );
-    const optionalStringProperties = createInvoiceLineSearchResultOptionalProperties({ name: 'invoiceId', nullable: false }, { name: 'invoiceNumber', nullable: false }, { name: 'invoiceItemId', nullable: false }, { name: 'description', nullable: false }, { name: 'workorderItemId', nullable: false }, { name: 'itemType', nullable: false }, { name: 'invoiceStatus', nullable: false }, { name: 'invoiceCreatedAt', nullable: false }, );
-    const optionalNumberProperties = createInvoiceLineSearchResultOptionalProperties({ name: 'quantity', nullable: false }, { name: 'unitPrice', nullable: false }, { name: 'amount', nullable: false }, );
+    const optionalStringProperties = createInvoiceLineSearchResultOptionalProperties({ name: 'description', nullable: false }, { name: 'invoiceCreatedAt', nullable: false }, { name: 'invoiceId', nullable: false }, { name: 'invoiceItemId', nullable: false }, { name: 'invoiceNumber', nullable: false }, { name: 'invoiceStatus', nullable: false }, { name: 'itemType', nullable: false }, { name: 'workorderItemId', nullable: false }, );
+    const optionalNumberProperties = createInvoiceLineSearchResultOptionalProperties({ name: 'amount', nullable: false }, { name: 'quantity', nullable: false }, { name: 'unitPrice', nullable: false }, );
     const optionalBooleanProperties = createInvoiceLineSearchResultOptionalProperties();
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

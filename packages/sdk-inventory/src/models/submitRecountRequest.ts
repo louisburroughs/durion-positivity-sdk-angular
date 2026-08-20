@@ -14,22 +14,44 @@
  */
 export interface SubmitRecountRequest { 
     /**
-     * Identifier of the cycle count task being recounted
+     * Quantity physically measured on the recount, in unitOfMeasure (or the product\'s base UoM when unitOfMeasure is omitted). Converted to base UoM before variance is computed.
      */
-    taskId: string;
+    actualQuantity: number;
     /**
      * Identifier of the auditor submitting the recount
      */
     auditorId: string;
     /**
-     * Quantity physically counted by the auditor on the recount
+     * How the quantity was obtained. Defaults to MANUAL_COUNT.
      */
-    actualQuantity: number;
+    measurementMethod?: SubmitRecountRequestMeasurementMethodEnum;
     /**
      * Permission context authorizing the recount; one of TRIGGER_RECOUNT_SELF or TRIGGER_RECOUNT_ANY
      */
     permission: string;
+    /**
+     * Identifier of the cycle count task being recounted
+     */
+    taskId: string;
+    /**
+     * Unit the quantity was physically measured in. Omit for the product\'s base UoM.
+     */
+    unitOfMeasure?: string;
+    /**
+     * Reason for the variance, if already known at submission time. Optional.
+     */
+    varianceReason?: string;
 }
+export enum SubmitRecountRequestMeasurementMethodEnum {
+    ManualCount = 'MANUAL_COUNT',
+    Dip = 'DIP',
+    Gauge = 'GAUGE',
+    Scale = 'SCALE',
+    Meter = 'METER',
+    Sensor = 'SENSOR'
+};
+
+
 
 function isOptionalSubmitRecountRequestPropertyOfType(
     value: Record<string, unknown>,
@@ -69,8 +91,8 @@ export function instanceOfSubmitRecountRequest(value: object): value is SubmitRe
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createSubmitRecountRequestPropertyNames('taskId', 'auditorId', 'actualQuantity', 'permission', );
-    const optionalStringProperties = createSubmitRecountRequestOptionalProperties({ name: 'taskId', nullable: false }, { name: 'auditorId', nullable: false }, { name: 'permission', nullable: false }, );
+    const requiredProperties = createSubmitRecountRequestPropertyNames('actualQuantity', 'auditorId', 'permission', 'taskId', );
+    const optionalStringProperties = createSubmitRecountRequestOptionalProperties({ name: 'auditorId', nullable: false }, { name: 'measurementMethod', nullable: false }, { name: 'permission', nullable: false }, { name: 'taskId', nullable: false }, { name: 'unitOfMeasure', nullable: false }, { name: 'varianceReason', nullable: false }, );
     const optionalNumberProperties = createSubmitRecountRequestOptionalProperties({ name: 'actualQuantity', nullable: false }, );
     const optionalBooleanProperties = createSubmitRecountRequestOptionalProperties();
 

@@ -36,8 +36,8 @@ export class VendorDirectoryAPIService extends BaseService {
     }
 
     /**
-     * Get vendor by id
-     * Resolves a single vendor by its identifier, e.g. to display a name for a deep-linked id
+     * Get Vendor By Id
+     * Returns one AP vendor by its identifier, typically to display a name for a deep-linked vendor id. Use this tool when the vendor id is already known; use searchVendors instead when resolving a name typed by a user. Preconditions: the vendor must exist in the AP vendor directory. Required inputs: vendorId (UUID) as a path parameter; there is no request body. Emits an ACCOUNTING_VENDOR_GET audit event; no state changes. Returns 404 when no vendor exists for the supplied id. 
      * @endpoint get /v1/accounting/vendors/{vendorId}
      * @param vendorId Vendor identifier
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -96,8 +96,8 @@ export class VendorDirectoryAPIService extends BaseService {
     }
 
     /**
-     * Search vendors by name
-     * Case-insensitive name-contains search over the AP vendor directory, ordered by name. Omit the name parameter to list all vendors (up to the limit).
+     * Search Vendors By Name
+     * Searches the AP vendor directory with a case-insensitive name-contains match, returning vendors ordered by name for typeahead use. Use this tool to resolve a vendor name to its vendorId; use getVendorById instead when a vendor id is already known and only its label is needed. Preconditions: none; a blank or absent name lists all vendors up to the limit. Required inputs: none; name is an optional contains term and limit defaults to 20 with a server cap of 100. Emits an ACCOUNTING_VENDOR_SEARCH audit event; no state changes. Returns 200 with an empty list when no vendor name matches. 
      * @endpoint get /v1/accounting/vendors
      * @param name Name search term (case-insensitive contains)
      * @param limit Maximum results to return (server caps at 100)

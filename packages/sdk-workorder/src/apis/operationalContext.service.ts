@@ -42,8 +42,8 @@ export class OperationalContextService extends BaseService {
     }
 
     /**
-     * Get operational context for workorder
-     * Returns the current operational context for a workorder, including flags and source data used to drive execution decisions.
+     * Get Workorder Operational Context
+     * Returns the workorder\&#39;s current operational context — location, bay (derived from the assigned resource), assigned mechanics, assigned resources, and a locked flag that is true once work has started. Use this tool when checking execution context before dispatch or override; do not use overrideOperationalContext, which mutates the context rather than reading it. Preconditions: the workorder must exist; the context is served from the workorder\&#39;s own assignment state, not from the shop-management service. Required inputs: workorderId (UUID) as a path parameter. No events are emitted and no state changes; this is a read-only projection. Returns 404 when no workorder exists for the id. 
      * @endpoint get /v1/workorders/{workorderId}/operationalContext
      * @param workorderId 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -102,11 +102,11 @@ export class OperationalContextService extends BaseService {
     }
 
     /**
-     * Manager override of operational context
-     * Applies a manager-authorized override to operational context values before work starts; request is rejected once context is locked.
+     * Override Workorder Operational Context
+     * Applies a manager-authorized override of the workorder\&#39;s operational context, replacing the location, assigned mechanics, and assigned resources (the first assigned resource becomes the bay) before work starts. Use this tool when a manager must re-slot a workorder to a different bay, crew, or location prior to execution; do not use getOperationalContext, which only reads the current context. Preconditions: the workorder must exist and work must not have started — once workStartedAt is set the context is locked and overrides are rejected. Required inputs: workorderId (UUID) as a path parameter and a body with locationId (UUID, required); bayId, assignedMechanics, assignedResources, and constraints are optional, and constraints are echoed back but not persisted. Emits a WORKORDER_OPERATIONAL_CONTEXT_OVERRIDE event and marks the workorder fact changed for downstream replication. Returns 404 when no workorder exists for the id, and 409 when work has already started and the context is locked. 
      * @endpoint post /v1/workorders/{workorderId}/operationalContext/override
      * @param workorderId 
-     * @param operationalContextOverrideRequest 
+     * @param operationalContextOverrideRequest Replacement operational context values — location, bay, mechanics, and resources.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -176,21 +176,21 @@ export class OperationalContextService extends BaseService {
     }
 
     /**
-     * Start work on workorder, locking operational context
-     * Transitions the workorder into active execution and locks operational context to prevent further overrides.
+     * Start Workorder Execution and Lock Context
+     * Transitions the workorder to WORK_IN_PROGRESS, stamps workStartedAt, assigns a new operational context version, and locks the context against further overrides. Use this tool when the technician actually begins work; do not use overrideOperationalContext, which adjusts context and is only possible before this call. Preconditions: the workorder must exist in APPROVED or ASSIGNED status, work must not already have started, and no change requests may be awaiting advisor review. Required inputs: workorderId (UUID) as a path parameter; the body is optional and may carry a reason (defaults to \&quot;Work started\&quot;) — the acting user is taken from the security context. Emits a WORKORDER_START event, captures a state snapshot, and records the status transition. Returns 400 when pending change requests block the start, 404 when no workorder exists for the id, and 409 when work has already started or the status is not start-eligible. 
      * @endpoint post /v1/workorders/{workorderId}/start
      * @param workorderId 
-     * @param startWorkorderRequest 
+     * @param startWorkorderRequest Optional start metadata; reason is recorded on the state transition.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public startWork(workorderId: string, startWorkorderRequest?: StartWorkorderRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<WorkorderStartResponse>;
-    public startWork(workorderId: string, startWorkorderRequest?: StartWorkorderRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<WorkorderStartResponse>>;
-    public startWork(workorderId: string, startWorkorderRequest?: StartWorkorderRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<WorkorderStartResponse>>;
-    public startWork(workorderId: string, startWorkorderRequest?: StartWorkorderRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public startWorkorder(workorderId: string, startWorkorderRequest?: StartWorkorderRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<WorkorderStartResponse>;
+    public startWorkorder(workorderId: string, startWorkorderRequest?: StartWorkorderRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<WorkorderStartResponse>>;
+    public startWorkorder(workorderId: string, startWorkorderRequest?: StartWorkorderRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<WorkorderStartResponse>>;
+    public startWorkorder(workorderId: string, startWorkorderRequest?: StartWorkorderRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (workorderId === null || workorderId === undefined) {
-            throw new Error('Required parameter workorderId was null or undefined when calling startWork.');
+            throw new Error('Required parameter workorderId was null or undefined when calling startWorkorder.');
         }
 
         let localVarHeaders = this.defaultHeaders;

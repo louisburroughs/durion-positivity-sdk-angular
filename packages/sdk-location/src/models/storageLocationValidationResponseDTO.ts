@@ -14,25 +14,25 @@
  */
 export interface StorageLocationValidationResponseDTO { 
     /**
-     * Identifier of the storage location that was validated
+     * Whether the storage location is active
      */
-    storageLocationId: string;
-    /**
-     * Identifier of the site that owns the storage location
-     */
-    siteId?: string;
+    active: boolean;
     /**
      * Whether the storage location exists
      */
     exists: boolean;
     /**
-     * Whether the storage location is active
-     */
-    active: boolean;
-    /**
      * Maximum unit capacity of the storage location
      */
     maxUnitCapacity?: number;
+    /**
+     * Identifier of the site that owns the storage location
+     */
+    siteId?: string;
+    /**
+     * Identifier of the storage location that was validated
+     */
+    storageLocationId: string;
 }
 
 function isOptionalStorageLocationValidationResponseDTOPropertyOfType(
@@ -73,10 +73,10 @@ export function instanceOfStorageLocationValidationResponseDTO(value: object): v
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createStorageLocationValidationResponseDTOPropertyNames('storageLocationId', 'exists', 'active', );
-    const optionalStringProperties = createStorageLocationValidationResponseDTOOptionalProperties({ name: 'storageLocationId', nullable: false }, { name: 'siteId', nullable: false }, );
+    const requiredProperties = createStorageLocationValidationResponseDTOPropertyNames('active', 'exists', 'storageLocationId', );
+    const optionalStringProperties = createStorageLocationValidationResponseDTOOptionalProperties({ name: 'siteId', nullable: false }, { name: 'storageLocationId', nullable: false }, );
     const optionalNumberProperties = createStorageLocationValidationResponseDTOOptionalProperties({ name: 'maxUnitCapacity', nullable: false }, );
-    const optionalBooleanProperties = createStorageLocationValidationResponseDTOOptionalProperties({ name: 'exists', nullable: false }, { name: 'active', nullable: false }, );
+    const optionalBooleanProperties = createStorageLocationValidationResponseDTOOptionalProperties({ name: 'active', nullable: false }, { name: 'exists', nullable: false }, );
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
         && optionalStringProperties.every((property) => isOptionalStorageLocationValidationResponseDTOPropertyOfType(_v, property.name, 'string', property.nullable))

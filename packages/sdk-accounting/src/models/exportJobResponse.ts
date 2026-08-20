@@ -14,18 +14,6 @@
  */
 export interface ExportJobResponse { 
     /**
-     * Unique job identifier
-     */
-    jobId: string;
-    /**
-     * Current job status
-     */
-    status: string;
-    /**
-     * When the export was requested (ISO 8601)
-     */
-    requestedAt: string;
-    /**
      * When the export completed (ISO 8601)
      */
     completedAt?: string | null;
@@ -37,6 +25,18 @@ export interface ExportJobResponse {
      * Error message if job failed
      */
     errorMessage?: string | null;
+    /**
+     * Unique job identifier
+     */
+    jobId: string;
+    /**
+     * When the export was requested (ISO 8601)
+     */
+    requestedAt: string;
+    /**
+     * Current job status
+     */
+    status: string;
 }
 
 function isOptionalExportJobResponsePropertyOfType(
@@ -77,8 +77,8 @@ export function instanceOfExportJobResponse(value: object): value is ExportJobRe
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createExportJobResponsePropertyNames('jobId', 'status', 'requestedAt', );
-    const optionalStringProperties = createExportJobResponseOptionalProperties({ name: 'jobId', nullable: false }, { name: 'status', nullable: false }, { name: 'requestedAt', nullable: false }, { name: 'completedAt', nullable: true }, { name: 'downloadUrl', nullable: true }, { name: 'errorMessage', nullable: true }, );
+    const requiredProperties = createExportJobResponsePropertyNames('jobId', 'requestedAt', 'status', );
+    const optionalStringProperties = createExportJobResponseOptionalProperties({ name: 'completedAt', nullable: true }, { name: 'downloadUrl', nullable: true }, { name: 'errorMessage', nullable: true }, { name: 'jobId', nullable: false }, { name: 'requestedAt', nullable: false }, { name: 'status', nullable: false }, );
     const optionalNumberProperties = createExportJobResponseOptionalProperties();
     const optionalBooleanProperties = createExportJobResponseOptionalProperties();
 

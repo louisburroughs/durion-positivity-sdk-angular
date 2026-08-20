@@ -42,8 +42,8 @@ export class InvoiceSearchService extends BaseService {
     }
 
     /**
-     * Search invoice line items by customer party
-     * Returns invoice line items belonging to the given customer party, optionally narrowed by a SKU/description term, flattened with the owning invoice\&#39;s number, status, and creation time. Newest invoice first, bounded to the newest 200 lines. Built for warranty-claim correlation.
+     * Search Invoice Lines by Party
+     * Returns invoice line items belonging to one customer party, flattened with the owning invoice\&#39;s number, status and creation time, newest invoice first and bounded to the newest 200 lines; built for warranty-claim origin-line correlation. Use this tool to find the invoice line a warranty claim originates from; use searchInvoices instead for invoice-level free-text search. Preconditions: none — an unknown party simply returns an empty list. Required inputs: partyId (UUID) query parameter; q is an optional SKU or description term narrowing the lines. Emits an INVOICE_ITEM_SEARCH audit event; no state changes — this is a read-only projection. Returns 400 when partyId is missing or malformed. 
      * @endpoint get /v1/invoices/items/search
      * @param partyId Customer party identifier owning the invoices (required)
      * @param q SKU / description term narrowing the lines (optional)
@@ -124,8 +124,8 @@ export class InvoiceSearchService extends BaseService {
     }
 
     /**
-     * Search invoices
-     * Paginated free-text search for invoices matching the invoice number, customer name, or workorder number.
+     * Search Invoices by Free Text
+     * Searches invoices by a free-text term matched against the invoice number, the customer name (resolved via the customer service), or the workorder number, returning a page of finder rows. Use this tool to locate an invoice when its id is unknown; use getInvoice instead once the invoiceId is known, and searchInvoiceLines for line-level warranty correlation. Preconditions: none — but a blank or missing q short-circuits to an empty page rather than listing all invoices. Required inputs: q (free-text term) plus optional page, size and sort parameters; size defaults to 25, is hard-capped at 50, and the default sort is createdAt descending. Emits an INVOICE_SEARCH audit event; no state changes — this is a read-only projection. Returns 400 when pagination parameters are malformed. 
      * @endpoint get /v1/invoices/search
      * @param pageable 
      * @param q Free-text query matching invoice number, customer name, or workorder number (optional)

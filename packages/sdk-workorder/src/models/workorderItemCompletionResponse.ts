@@ -14,10 +14,6 @@
  */
 export interface WorkorderItemCompletionResponse { 
     /**
-     * Workorder identifier
-     */
-    workorderId: string;
-    /**
      * Line item identifier
      */
     itemId: string;
@@ -29,6 +25,10 @@ export interface WorkorderItemCompletionResponse {
      * Resulting item status
      */
     status: WorkorderItemCompletionResponseStatusEnum;
+    /**
+     * Workorder identifier
+     */
+    workorderId: string;
 }
 export enum WorkorderItemCompletionResponseItemTypeEnum {
     Service = 'SERVICE',
@@ -83,8 +83,8 @@ export function instanceOfWorkorderItemCompletionResponse(value: object): value 
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createWorkorderItemCompletionResponsePropertyNames('workorderId', 'itemId', 'itemType', 'status', );
-    const optionalStringProperties = createWorkorderItemCompletionResponseOptionalProperties({ name: 'workorderId', nullable: false }, { name: 'itemId', nullable: false }, { name: 'itemType', nullable: false }, { name: 'status', nullable: false }, );
+    const requiredProperties = createWorkorderItemCompletionResponsePropertyNames('itemId', 'itemType', 'status', 'workorderId', );
+    const optionalStringProperties = createWorkorderItemCompletionResponseOptionalProperties({ name: 'itemId', nullable: false }, { name: 'itemType', nullable: false }, { name: 'status', nullable: false }, { name: 'workorderId', nullable: false }, );
     const optionalNumberProperties = createWorkorderItemCompletionResponseOptionalProperties();
     const optionalBooleanProperties = createWorkorderItemCompletionResponseOptionalProperties();
 

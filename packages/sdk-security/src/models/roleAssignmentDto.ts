@@ -14,38 +14,6 @@
  */
 export interface RoleAssignmentDto { 
     /**
-     * Role assignment identifier
-     */
-    id: string;
-    /**
-     * Identifier of the user the role is assigned to
-     */
-    userId: string;
-    /**
-     * Identifier of the assigned role
-     */
-    roleId: string;
-    /**
-     * Scope type that constrains the assignment
-     */
-    scopeType: RoleAssignmentDtoScopeTypeEnum;
-    /**
-     * Location identifiers the assignment applies to when scopeType is LOCATION
-     */
-    scopeLocationIds?: Set<string>;
-    /**
-     * Inclusive start of the effective window
-     */
-    effectiveStartDate?: string;
-    /**
-     * Exclusive end of the effective window
-     */
-    effectiveEndDate?: string;
-    /**
-     * Timestamp at which the assignment was revoked
-     */
-    revokedAt?: string;
-    /**
      * Creation timestamp
      */
     createdAt?: string;
@@ -54,6 +22,18 @@ export interface RoleAssignmentDto {
      */
     createdBy?: string;
     /**
+     * Exclusive end of the effective window
+     */
+    effectiveEndDate?: string;
+    /**
+     * Inclusive start of the effective window
+     */
+    effectiveStartDate?: string;
+    /**
+     * Role assignment identifier
+     */
+    id: string;
+    /**
      * Last-modified timestamp
      */
     lastModifiedAt?: string;
@@ -61,6 +41,26 @@ export interface RoleAssignmentDto {
      * Actor that last modified the assignment
      */
     lastModifiedBy?: string;
+    /**
+     * Timestamp at which the assignment was revoked
+     */
+    revokedAt?: string;
+    /**
+     * Identifier of the assigned role
+     */
+    roleId: string;
+    /**
+     * Location identifiers the assignment applies to when scopeType is LOCATION
+     */
+    scopeLocationIds?: Set<string>;
+    /**
+     * Scope type that constrains the assignment
+     */
+    scopeType: RoleAssignmentDtoScopeTypeEnum;
+    /**
+     * Identifier of the user the role is assigned to
+     */
+    userId: string;
 }
 export enum RoleAssignmentDtoScopeTypeEnum {
     Global = 'GLOBAL',
@@ -107,8 +107,8 @@ export function instanceOfRoleAssignmentDto(value: object): value is RoleAssignm
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createRoleAssignmentDtoPropertyNames('id', 'userId', 'roleId', 'scopeType', );
-    const optionalStringProperties = createRoleAssignmentDtoOptionalProperties({ name: 'id', nullable: false }, { name: 'userId', nullable: false }, { name: 'roleId', nullable: false }, { name: 'scopeType', nullable: false }, { name: 'effectiveStartDate', nullable: false }, { name: 'effectiveEndDate', nullable: false }, { name: 'revokedAt', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'lastModifiedAt', nullable: false }, { name: 'lastModifiedBy', nullable: false }, );
+    const requiredProperties = createRoleAssignmentDtoPropertyNames('id', 'roleId', 'scopeType', 'userId', );
+    const optionalStringProperties = createRoleAssignmentDtoOptionalProperties({ name: 'createdAt', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'effectiveEndDate', nullable: false }, { name: 'effectiveStartDate', nullable: false }, { name: 'id', nullable: false }, { name: 'lastModifiedAt', nullable: false }, { name: 'lastModifiedBy', nullable: false }, { name: 'revokedAt', nullable: false }, { name: 'roleId', nullable: false }, { name: 'scopeType', nullable: false }, { name: 'userId', nullable: false }, );
     const optionalNumberProperties = createRoleAssignmentDtoOptionalProperties();
     const optionalBooleanProperties = createRoleAssignmentDtoOptionalProperties();
 

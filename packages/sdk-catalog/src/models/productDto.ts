@@ -17,115 +17,50 @@ import { DimensionDto } from './dimensionDto';
  */
 export interface ProductDto { 
     /**
-     * Product identifier
-     */
-    id: string;
-    /**
-     * Product name
-     */
-    name: string;
-    /**
-     * Short product description
-     */
-    shortDescription?: string;
-    /**
-     * Long product description
-     */
-    longDescription?: string;
-    /**
-     * Product description
-     */
-    description?: string;
-    /**
-     * Product image URLs
-     */
-    images?: Array<string>;
-    /**
-     * Manufacturer part number
-     */
-    manufacturerPartNumber?: string;
-    /**
-     * Manufacturer identifier
-     */
-    manufacturerId?: string;
-    /**
-     * Manufacturer name
-     */
-    manufacturerName?: string;
-    /**
-     * Manufacturer warranty
-     */
-    manufacturerWarranty?: string;
-    /**
-     * Manufacturer brand
-     */
-    manufacturerBrand?: string;
-    /**
-     * Country of origin
-     */
-    countryOfOrigin?: string;
-    /**
-     * SKU
-     */
-    sku?: string;
-    /**
-     * Manufacturer part number
-     */
-    mpn?: string;
-    /**
-     * UPC
-     */
-    upc?: string;
-    /**
      * Attributes JSON
      */
     attributes?: string;
-    /**
-     * Unit of measure
-     */
-    unitOfMeasure?: string;
-    /**
-     * Operational status
-     */
-    status?: ProductDtoStatusEnum;
-    /**
-     * Stock tracking level
-     */
-    trackingLevel?: ProductDtoTrackingLevelEnum;
-    /**
-     * Product code
-     */
-    productCode?: string;
-    /**
-     * Product code type
-     */
-    productCodeType?: ProductDtoProductCodeTypeEnum;
     category?: CategoryDto;
-    subcategory?: SubcategoryDto;
-    /**
-     * Product type
-     */
-    type?: string;
-    /**
-     * Product dimensions
-     */
-    dimensions?: Array<DimensionDto>;
-    /**
-     * Material
-     */
-    material?: string;
     /**
      * Color
      */
     color?: string;
     /**
-     * Warranty
+     * Country of origin
      */
-    warranty?: string;
+    countryOfOrigin?: string;
     /**
-     * Detailed specifications JSON
+     * Created timestamp
      */
-    specifications?: string;
+    createdAt?: string;
+    /**
+     * Product description
+     */
+    description?: string;
+    /**
+     * Product dimensions
+     */
+    dimensions?: Array<DimensionDto>;
+    /**
+     * Product identifier
+     */
+    id: string;
+    /**
+     * Product image URLs
+     */
+    images?: Array<string>;
+    /**
+     * Last lifecycle state change instant
+     */
+    lastStateChangedAt?: string;
+    /**
+     * User that last changed lifecycle state
+     */
+    lastStateChangedBy?: string;
+    /**
+     * Lifecycle override reason
+     */
+    lifecycleOverrideReason?: string;
     /**
      * Lifecycle state
      */
@@ -135,26 +70,100 @@ export interface ProductDto {
      */
     lifecycleStateEffectiveAt?: string;
     /**
-     * User that last changed lifecycle state
+     * Long product description
      */
-    lastStateChangedBy?: string;
+    longDescription?: string;
     /**
-     * Last lifecycle state change instant
+     * Manufacturer brand
      */
-    lastStateChangedAt?: string;
+    manufacturerBrand?: string;
     /**
-     * Lifecycle override reason
+     * Manufacturer identifier
      */
-    lifecycleOverrideReason?: string;
+    manufacturerId?: string;
     /**
-     * Created timestamp
+     * Manufacturer name
      */
-    createdAt?: string;
+    manufacturerName?: string;
+    /**
+     * Manufacturer part number
+     */
+    manufacturerPartNumber?: string;
+    /**
+     * Manufacturer warranty
+     */
+    manufacturerWarranty?: string;
+    /**
+     * Material
+     */
+    material?: string;
+    /**
+     * Manufacturer part number
+     */
+    mpn?: string;
+    /**
+     * Product name
+     */
+    name: string;
+    /**
+     * Product code
+     */
+    productCode?: string;
+    /**
+     * Product code type
+     */
+    productCodeType?: ProductDtoProductCodeTypeEnum;
+    /**
+     * Short product description
+     */
+    shortDescription?: string;
+    /**
+     * SKU
+     */
+    sku?: string;
+    /**
+     * Detailed specifications JSON
+     */
+    specifications?: string;
+    /**
+     * Operational status
+     */
+    status?: ProductDtoStatusEnum;
+    subcategory?: SubcategoryDto;
+    /**
+     * Stock tracking level
+     */
+    trackingLevel?: ProductDtoTrackingLevelEnum;
+    /**
+     * Product type
+     */
+    type?: string;
+    /**
+     * Unit of measure
+     */
+    unitOfMeasure?: string;
+    /**
+     * UPC
+     */
+    upc?: string;
     /**
      * Updated timestamp
      */
     updatedAt?: string;
+    /**
+     * Warranty
+     */
+    warranty?: string;
 }
+export enum ProductDtoLifecycleStateEnum {
+    Active = 'ACTIVE',
+    Inactive = 'INACTIVE',
+    Discontinued = 'DISCONTINUED'
+};
+export enum ProductDtoProductCodeTypeEnum {
+    Upc = 'UPC',
+    Ean = 'EAN'
+};
 export enum ProductDtoStatusEnum {
     Active = 'ACTIVE',
     Inactive = 'INACTIVE'
@@ -163,15 +172,6 @@ export enum ProductDtoTrackingLevelEnum {
     None = 'NONE',
     Lot = 'LOT',
     Serial = 'SERIAL'
-};
-export enum ProductDtoProductCodeTypeEnum {
-    Upc = 'UPC',
-    Ean = 'EAN'
-};
-export enum ProductDtoLifecycleStateEnum {
-    Active = 'ACTIVE',
-    Inactive = 'INACTIVE',
-    Discontinued = 'DISCONTINUED'
 };
 
 
@@ -215,7 +215,7 @@ export function instanceOfProductDto(value: object): value is ProductDto {
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createProductDtoPropertyNames('id', 'name', );
-    const optionalStringProperties = createProductDtoOptionalProperties({ name: 'id', nullable: false }, { name: 'name', nullable: false }, { name: 'shortDescription', nullable: false }, { name: 'longDescription', nullable: false }, { name: 'description', nullable: false }, { name: 'manufacturerPartNumber', nullable: false }, { name: 'manufacturerId', nullable: false }, { name: 'manufacturerName', nullable: false }, { name: 'manufacturerWarranty', nullable: false }, { name: 'manufacturerBrand', nullable: false }, { name: 'countryOfOrigin', nullable: false }, { name: 'sku', nullable: false }, { name: 'mpn', nullable: false }, { name: 'upc', nullable: false }, { name: 'attributes', nullable: false }, { name: 'unitOfMeasure', nullable: false }, { name: 'status', nullable: false }, { name: 'trackingLevel', nullable: false }, { name: 'productCode', nullable: false }, { name: 'productCodeType', nullable: false }, { name: 'type', nullable: false }, { name: 'material', nullable: false }, { name: 'color', nullable: false }, { name: 'warranty', nullable: false }, { name: 'specifications', nullable: false }, { name: 'lifecycleState', nullable: false }, { name: 'lifecycleStateEffectiveAt', nullable: false }, { name: 'lastStateChangedBy', nullable: false }, { name: 'lastStateChangedAt', nullable: false }, { name: 'lifecycleOverrideReason', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'updatedAt', nullable: false }, );
+    const optionalStringProperties = createProductDtoOptionalProperties({ name: 'attributes', nullable: false }, { name: 'color', nullable: false }, { name: 'countryOfOrigin', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'description', nullable: false }, { name: 'id', nullable: false }, { name: 'lastStateChangedAt', nullable: false }, { name: 'lastStateChangedBy', nullable: false }, { name: 'lifecycleOverrideReason', nullable: false }, { name: 'lifecycleState', nullable: false }, { name: 'lifecycleStateEffectiveAt', nullable: false }, { name: 'longDescription', nullable: false }, { name: 'manufacturerBrand', nullable: false }, { name: 'manufacturerId', nullable: false }, { name: 'manufacturerName', nullable: false }, { name: 'manufacturerPartNumber', nullable: false }, { name: 'manufacturerWarranty', nullable: false }, { name: 'material', nullable: false }, { name: 'mpn', nullable: false }, { name: 'name', nullable: false }, { name: 'productCode', nullable: false }, { name: 'productCodeType', nullable: false }, { name: 'shortDescription', nullable: false }, { name: 'sku', nullable: false }, { name: 'specifications', nullable: false }, { name: 'status', nullable: false }, { name: 'trackingLevel', nullable: false }, { name: 'type', nullable: false }, { name: 'unitOfMeasure', nullable: false }, { name: 'upc', nullable: false }, { name: 'updatedAt', nullable: false }, { name: 'warranty', nullable: false }, );
     const optionalNumberProperties = createProductDtoOptionalProperties();
     const optionalBooleanProperties = createProductDtoOptionalProperties();
 

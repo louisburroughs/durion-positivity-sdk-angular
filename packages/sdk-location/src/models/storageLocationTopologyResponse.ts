@@ -22,17 +22,17 @@ export interface StorageLocationTopologyResponse {
      */
     name?: string;
     /**
-     * Type classification of the storage location
+     * Identifier of the parent storage location
      */
-    type?: StorageLocationTopologyResponseTypeEnum;
+    parentStorageLocationId?: string;
     /**
      * Operational status of the storage location
      */
     status?: string;
     /**
-     * Identifier of the parent storage location
+     * Type classification of the storage location
      */
-    parentStorageLocationId?: string;
+    type?: StorageLocationTopologyResponseTypeEnum;
 }
 export enum StorageLocationTopologyResponseTypeEnum {
     Floor = 'FLOOR',
@@ -83,7 +83,7 @@ export function instanceOfStorageLocationTopologyResponse(value: object): value 
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createStorageLocationTopologyResponsePropertyNames('id', );
-    const optionalStringProperties = createStorageLocationTopologyResponseOptionalProperties({ name: 'id', nullable: false }, { name: 'name', nullable: false }, { name: 'type', nullable: false }, { name: 'status', nullable: false }, { name: 'parentStorageLocationId', nullable: false }, );
+    const optionalStringProperties = createStorageLocationTopologyResponseOptionalProperties({ name: 'id', nullable: false }, { name: 'name', nullable: false }, { name: 'parentStorageLocationId', nullable: false }, { name: 'status', nullable: false }, { name: 'type', nullable: false }, );
     const optionalNumberProperties = createStorageLocationTopologyResponseOptionalProperties();
     const optionalBooleanProperties = createStorageLocationTopologyResponseOptionalProperties();
 

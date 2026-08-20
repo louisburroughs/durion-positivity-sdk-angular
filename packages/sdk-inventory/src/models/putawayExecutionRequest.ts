@@ -10,9 +10,37 @@
 
 
 /**
- * Putaway execution request payload
+ * Request to execute a putaway move from staging to storage, with optional business-rule overrides
  */
 export interface PutawayExecutionRequest { 
+    /**
+     * Identifier of the supervisor who approved the override
+     */
+    approvedBy?: string;
+    /**
+     * Identifier of the storage location the goods are moved to
+     */
+    destinationLocationId: string;
+    /**
+     * When true, bypasses the destination capacity check for this move
+     */
+    overrideCapacity?: boolean;
+    /**
+     * Free-text justification supporting the override
+     */
+    overrideJustification?: string;
+    /**
+     * When true, bypasses the location compatibility check for this move
+     */
+    overrideLocationCompatibility?: boolean;
+    /**
+     * Audit reason code justifying any applied override
+     */
+    overrideReasonCode?: PutawayExecutionRequestOverrideReasonCodeEnum;
+    /**
+     * Quantity of units to move
+     */
+    quantity: number;
     /**
      * Identifier of the SKU being moved
      */
@@ -21,34 +49,6 @@ export interface PutawayExecutionRequest {
      * Identifier of the staging location the goods are moved from
      */
     sourceLocationId: string;
-    /**
-     * Identifier of the storage location the goods are moved to
-     */
-    destinationLocationId: string;
-    /**
-     * Quantity of units to move
-     */
-    quantity: number;
-    /**
-     * When true, bypasses the location compatibility check for this move
-     */
-    overrideLocationCompatibility?: boolean;
-    /**
-     * When true, bypasses the destination capacity check for this move
-     */
-    overrideCapacity?: boolean;
-    /**
-     * Audit reason code justifying any applied override
-     */
-    overrideReasonCode?: PutawayExecutionRequestOverrideReasonCodeEnum;
-    /**
-     * Free-text justification supporting the override
-     */
-    overrideJustification?: string;
-    /**
-     * Identifier of the supervisor who approved the override
-     */
-    approvedBy?: string;
 }
 export enum PutawayExecutionRequestOverrideReasonCodeEnum {
     CapacityOverride = 'CAPACITY_OVERRIDE',
@@ -98,10 +98,10 @@ export function instanceOfPutawayExecutionRequest(value: object): value is Putaw
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createPutawayExecutionRequestPropertyNames('skuId', 'sourceLocationId', 'destinationLocationId', 'quantity', );
-    const optionalStringProperties = createPutawayExecutionRequestOptionalProperties({ name: 'skuId', nullable: false }, { name: 'sourceLocationId', nullable: false }, { name: 'destinationLocationId', nullable: false }, { name: 'overrideReasonCode', nullable: false }, { name: 'overrideJustification', nullable: false }, { name: 'approvedBy', nullable: false }, );
+    const requiredProperties = createPutawayExecutionRequestPropertyNames('destinationLocationId', 'quantity', 'skuId', 'sourceLocationId', );
+    const optionalStringProperties = createPutawayExecutionRequestOptionalProperties({ name: 'approvedBy', nullable: false }, { name: 'destinationLocationId', nullable: false }, { name: 'overrideJustification', nullable: false }, { name: 'overrideReasonCode', nullable: false }, { name: 'skuId', nullable: false }, { name: 'sourceLocationId', nullable: false }, );
     const optionalNumberProperties = createPutawayExecutionRequestOptionalProperties({ name: 'quantity', nullable: false }, );
-    const optionalBooleanProperties = createPutawayExecutionRequestOptionalProperties({ name: 'overrideLocationCompatibility', nullable: false }, { name: 'overrideCapacity', nullable: false }, );
+    const optionalBooleanProperties = createPutawayExecutionRequestOptionalProperties({ name: 'overrideCapacity', nullable: false }, { name: 'overrideLocationCompatibility', nullable: false }, );
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
         && optionalStringProperties.every((property) => isOptionalPutawayExecutionRequestPropertyOfType(_v, property.name, 'string', property.nullable))

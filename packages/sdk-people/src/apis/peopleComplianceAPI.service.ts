@@ -36,17 +36,17 @@ export class PeopleComplianceAPIService extends BaseService {
     }
 
     /**
-     * List active users linked to inactive persons
-     * Compliance check (ADR-0015 §4): returns every ACTIVE user-person link whose linked person is in an inactive employment status (SUSPENDED, TERMINATED, DISABLED). Each row is a user that should have been disabled when the person was disabled/archived. Returns an empty list when none. Link facts come from the people-contact replica, so results can trail the link authority by the event-propagation delay.
+     * List Active Users Linked To Inactive Persons
+     * Reports every ACTIVE user-person link whose linked person is in an inactive employment status (SUSPENDED, TERMINATED, or DISABLED), per ADR-0015 section 4; each row is a user that should have been disabled during offboarding. Use this tool for periodic identity-compliance audits; do not use disableEmployee here, which performs the offboarding itself rather than reporting on it. Preconditions: none; link facts come from the people-contact replica, so results can trail the link authority by the event-propagation delay. Required inputs: none; there are no parameters and no request body. Emits a REPORT_INACTIVE_PERSON_ACTIVE_USER_GENERATED audit event but changes no state; this is a read-only report. Returns 200 with an empty list when no offending links exist. 
      * @endpoint get /v1/people/compliance/inactive-person-active-user
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public findActiveUsersForInactivePersons(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<InactivePersonActiveUserResponse>>;
-    public findActiveUsersForInactivePersons(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<InactivePersonActiveUserResponse>>>;
-    public findActiveUsersForInactivePersons(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<InactivePersonActiveUserResponse>>>;
-    public findActiveUsersForInactivePersons(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public listInactivePersonActiveUsers(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<InactivePersonActiveUserResponse>>;
+    public listInactivePersonActiveUsers(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<InactivePersonActiveUserResponse>>>;
+    public listInactivePersonActiveUsers(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<InactivePersonActiveUserResponse>>>;
+    public listInactivePersonActiveUsers(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarHeaders = this.defaultHeaders;
 

@@ -16,10 +16,6 @@ import { BankReconciliationLineResponse } from './bankReconciliationLineResponse
  */
 export interface ReconciliationReportResponse { 
     /**
-     * Reconciliation id
-     */
-    reconciliationId?: string;
-    /**
      * Reconciled account code
      */
     accountCode?: string;
@@ -28,33 +24,21 @@ export interface ReconciliationReportResponse {
      */
     accountName?: string;
     /**
+     * Recorded adjustments
+     */
+    adjustments?: Array<BankReconciliationAdjustmentResponse>;
+    /**
      * Reconciliation currency
      */
     currency?: string;
     /**
-     * Statement date
+     * statementEndingBalance − (glEndingBalance + totalAdjustments); matched lines are already reflected in glEndingBalance
      */
-    statementDate?: string;
+    difference?: number;
     /**
      * GL ending balance snapshotted at import (opening basis)
      */
     glEndingBalance?: number;
-    /**
-     * Statement ending balance (closing basis)
-     */
-    statementEndingBalance?: number;
-    /**
-     * Sum of signed amounts over MATCHED statement lines
-     */
-    totalMatched?: number;
-    /**
-     * Sum of signed adjustment amounts
-     */
-    totalAdjustments?: number;
-    /**
-     * Sum of signed amounts over UNMATCHED statement lines
-     */
-    totalOutstanding?: number;
     /**
      * Number of MATCHED statement lines
      */
@@ -64,17 +48,33 @@ export interface ReconciliationReportResponse {
      */
     outstandingLineCount?: number;
     /**
-     * statementEndingBalance − (glEndingBalance + totalAdjustments); matched lines are already reflected in glEndingBalance
-     */
-    difference?: number;
-    /**
-     * Recorded adjustments
-     */
-    adjustments?: Array<BankReconciliationAdjustmentResponse>;
-    /**
      * Outstanding (UNMATCHED) statement lines
      */
     outstandingLines?: Array<BankReconciliationLineResponse>;
+    /**
+     * Reconciliation id
+     */
+    reconciliationId?: string;
+    /**
+     * Statement date
+     */
+    statementDate?: string;
+    /**
+     * Statement ending balance (closing basis)
+     */
+    statementEndingBalance?: number;
+    /**
+     * Sum of signed adjustment amounts
+     */
+    totalAdjustments?: number;
+    /**
+     * Sum of signed amounts over MATCHED statement lines
+     */
+    totalMatched?: number;
+    /**
+     * Sum of signed amounts over UNMATCHED statement lines
+     */
+    totalOutstanding?: number;
 }
 
 function isOptionalReconciliationReportResponsePropertyOfType(
@@ -116,8 +116,8 @@ export function instanceOfReconciliationReportResponse(value: object): value is 
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createReconciliationReportResponsePropertyNames();
-    const optionalStringProperties = createReconciliationReportResponseOptionalProperties({ name: 'reconciliationId', nullable: false }, { name: 'accountCode', nullable: false }, { name: 'accountName', nullable: false }, { name: 'currency', nullable: false }, { name: 'statementDate', nullable: false }, );
-    const optionalNumberProperties = createReconciliationReportResponseOptionalProperties({ name: 'glEndingBalance', nullable: false }, { name: 'statementEndingBalance', nullable: false }, { name: 'totalMatched', nullable: false }, { name: 'totalAdjustments', nullable: false }, { name: 'totalOutstanding', nullable: false }, { name: 'matchedLineCount', nullable: false }, { name: 'outstandingLineCount', nullable: false }, { name: 'difference', nullable: false }, );
+    const optionalStringProperties = createReconciliationReportResponseOptionalProperties({ name: 'accountCode', nullable: false }, { name: 'accountName', nullable: false }, { name: 'currency', nullable: false }, { name: 'reconciliationId', nullable: false }, { name: 'statementDate', nullable: false }, );
+    const optionalNumberProperties = createReconciliationReportResponseOptionalProperties({ name: 'difference', nullable: false }, { name: 'glEndingBalance', nullable: false }, { name: 'matchedLineCount', nullable: false }, { name: 'outstandingLineCount', nullable: false }, { name: 'statementEndingBalance', nullable: false }, { name: 'totalAdjustments', nullable: false }, { name: 'totalMatched', nullable: false }, { name: 'totalOutstanding', nullable: false }, );
     const optionalBooleanProperties = createReconciliationReportResponseOptionalProperties();
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

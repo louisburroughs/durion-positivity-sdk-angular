@@ -23,14 +23,6 @@ export interface CreateAssignmentRequest {
      */
     mechanics: Array<MechanicAssignmentItem>;
     /**
-     * Optional resource (bay or mobile unit) to associate with the assignment
-     */
-    resourceId?: string;
-    /**
-     * Type of the associated resource (e.g. BAY or MOBILE_UNIT)
-     */
-    resourceType?: string;
-    /**
      * When true, the caller asserts override authority for detected conflicts
      */
     override?: boolean;
@@ -38,6 +30,14 @@ export interface CreateAssignmentRequest {
      * Reason for overriding detected conflicts; required when override is true
      */
     overrideReason?: string;
+    /**
+     * Optional resource (bay or mobile unit) to associate with the assignment
+     */
+    resourceId?: string;
+    /**
+     * Type of the associated resource (e.g. BAY or MOBILE_UNIT)
+     */
+    resourceType?: string;
 }
 
 function isOptionalCreateAssignmentRequestPropertyOfType(
@@ -79,7 +79,7 @@ export function instanceOfCreateAssignmentRequest(value: object): value is Creat
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createCreateAssignmentRequestPropertyNames('appointmentId', 'mechanics', );
-    const optionalStringProperties = createCreateAssignmentRequestOptionalProperties({ name: 'appointmentId', nullable: false }, { name: 'resourceId', nullable: false }, { name: 'resourceType', nullable: false }, { name: 'overrideReason', nullable: false }, );
+    const optionalStringProperties = createCreateAssignmentRequestOptionalProperties({ name: 'appointmentId', nullable: false }, { name: 'overrideReason', nullable: false }, { name: 'resourceId', nullable: false }, { name: 'resourceType', nullable: false }, );
     const optionalNumberProperties = createCreateAssignmentRequestOptionalProperties();
     const optionalBooleanProperties = createCreateAssignmentRequestOptionalProperties({ name: 'override', nullable: false }, );
 

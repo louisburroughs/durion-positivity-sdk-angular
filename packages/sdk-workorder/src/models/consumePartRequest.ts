@@ -14,17 +14,21 @@
  */
 export interface ConsumePartRequest { 
     /**
-     * Workorder part identifier
+     * Optional usage notes
      */
-    workorderPartId: string;
+    notes?: string;
     /**
      * Quantity to consume
      */
     quantity: number;
     /**
-     * Optional usage notes
+     * Unit quantity is expressed in. Omit for the product\'s base unit -- today\'s implicit behavior. Converted to base and validated against the product\'s catalog divisibility.
      */
-    notes?: string;
+    uomCode?: string;
+    /**
+     * Workorder part identifier
+     */
+    workorderPartId: string;
 }
 
 function isOptionalConsumePartRequestPropertyOfType(
@@ -65,8 +69,8 @@ export function instanceOfConsumePartRequest(value: object): value is ConsumePar
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createConsumePartRequestPropertyNames('workorderPartId', 'quantity', );
-    const optionalStringProperties = createConsumePartRequestOptionalProperties({ name: 'workorderPartId', nullable: false }, { name: 'notes', nullable: false }, );
+    const requiredProperties = createConsumePartRequestPropertyNames('quantity', 'workorderPartId', );
+    const optionalStringProperties = createConsumePartRequestOptionalProperties({ name: 'notes', nullable: false }, { name: 'uomCode', nullable: false }, { name: 'workorderPartId', nullable: false }, );
     const optionalNumberProperties = createConsumePartRequestOptionalProperties({ name: 'quantity', nullable: false }, );
     const optionalBooleanProperties = createConsumePartRequestOptionalProperties();
 

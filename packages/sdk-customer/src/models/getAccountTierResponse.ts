@@ -18,13 +18,17 @@ export interface GetAccountTierResponse {
      */
     accountId: string;
     /**
+     * Whether tier was manually assigned or auto-calculated
+     */
+    manualOverride: boolean;
+    /**
+     * Optional notes about tier assignment or status
+     */
+    notes?: string;
+    /**
      * Current tier level
      */
     tier: GetAccountTierResponseTierEnum;
-    /**
-     * Display name of the tier
-     */
-    tierDisplayName: string;
     /**
      * When the tier was last assigned or updated
      */
@@ -34,13 +38,9 @@ export interface GetAccountTierResponse {
      */
     tierAssignedBy?: string;
     /**
-     * Optional notes about tier assignment or status
+     * Display name of the tier
      */
-    notes?: string;
-    /**
-     * Whether tier was manually assigned or auto-calculated
-     */
-    manualOverride: boolean;
+    tierDisplayName: string;
 }
 export enum GetAccountTierResponseTierEnum {
     Standard = 'STANDARD',
@@ -91,8 +91,8 @@ export function instanceOfGetAccountTierResponse(value: object): value is GetAcc
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createGetAccountTierResponsePropertyNames('accountId', 'tier', 'tierDisplayName', 'manualOverride', );
-    const optionalStringProperties = createGetAccountTierResponseOptionalProperties({ name: 'accountId', nullable: false }, { name: 'tier', nullable: false }, { name: 'tierDisplayName', nullable: false }, { name: 'tierAssignedAt', nullable: false }, { name: 'tierAssignedBy', nullable: false }, { name: 'notes', nullable: false }, );
+    const requiredProperties = createGetAccountTierResponsePropertyNames('accountId', 'manualOverride', 'tier', 'tierDisplayName', );
+    const optionalStringProperties = createGetAccountTierResponseOptionalProperties({ name: 'accountId', nullable: false }, { name: 'notes', nullable: false }, { name: 'tier', nullable: false }, { name: 'tierAssignedAt', nullable: false }, { name: 'tierAssignedBy', nullable: false }, { name: 'tierDisplayName', nullable: false }, );
     const optionalNumberProperties = createGetAccountTierResponseOptionalProperties();
     const optionalBooleanProperties = createGetAccountTierResponseOptionalProperties({ name: 'manualOverride', nullable: false }, );
 

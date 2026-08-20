@@ -14,21 +14,13 @@
  */
 export interface BillingRulesDTO { 
     /**
+     * Timestamp when the record was created
+     */
+    createdAt: string;
+    /**
      * Unique identifier of the billing rules record
      */
     id?: string;
-    /**
-     * Identifier of the party these billing rules apply to
-     */
-    partyId: string;
-    /**
-     * Whether a purchase order is required before invoicing
-     */
-    purchaseOrderRequired: boolean;
-    /**
-     * Payment terms code governing due dates
-     */
-    paymentTermsCode: string;
     /**
      * Preferred method for delivering invoices
      */
@@ -38,13 +30,17 @@ export interface BillingRulesDTO {
      */
     invoiceGroupingStrategy: BillingRulesDTOInvoiceGroupingStrategyEnum;
     /**
-     * Optimistic-locking version of the record
+     * Identifier of the party these billing rules apply to
      */
-    version: number;
+    partyId: string;
     /**
-     * Timestamp when the record was created
+     * Payment terms code governing due dates
      */
-    createdAt: string;
+    paymentTermsCode: string;
+    /**
+     * Whether a purchase order is required before invoicing
+     */
+    purchaseOrderRequired: boolean;
     /**
      * Timestamp when the record was last updated
      */
@@ -53,6 +49,10 @@ export interface BillingRulesDTO {
      * Identifier of the actor who last updated the record
      */
     updatedBy: string;
+    /**
+     * Optimistic-locking version of the record
+     */
+    version: number;
 }
 export enum BillingRulesDTOInvoiceDeliveryMethodEnum {
     Email = 'EMAIL',
@@ -105,8 +105,8 @@ export function instanceOfBillingRulesDTO(value: object): value is BillingRulesD
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createBillingRulesDTOPropertyNames('partyId', 'purchaseOrderRequired', 'paymentTermsCode', 'invoiceDeliveryMethod', 'invoiceGroupingStrategy', 'version', 'createdAt', 'updatedAt', 'updatedBy', );
-    const optionalStringProperties = createBillingRulesDTOOptionalProperties({ name: 'id', nullable: false }, { name: 'partyId', nullable: false }, { name: 'paymentTermsCode', nullable: false }, { name: 'invoiceDeliveryMethod', nullable: false }, { name: 'invoiceGroupingStrategy', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'updatedAt', nullable: false }, { name: 'updatedBy', nullable: false }, );
+    const requiredProperties = createBillingRulesDTOPropertyNames('createdAt', 'invoiceDeliveryMethod', 'invoiceGroupingStrategy', 'partyId', 'paymentTermsCode', 'purchaseOrderRequired', 'updatedAt', 'updatedBy', 'version', );
+    const optionalStringProperties = createBillingRulesDTOOptionalProperties({ name: 'createdAt', nullable: false }, { name: 'id', nullable: false }, { name: 'invoiceDeliveryMethod', nullable: false }, { name: 'invoiceGroupingStrategy', nullable: false }, { name: 'partyId', nullable: false }, { name: 'paymentTermsCode', nullable: false }, { name: 'updatedAt', nullable: false }, { name: 'updatedBy', nullable: false }, );
     const optionalNumberProperties = createBillingRulesDTOOptionalProperties({ name: 'version', nullable: false }, );
     const optionalBooleanProperties = createBillingRulesDTOOptionalProperties({ name: 'purchaseOrderRequired', nullable: false }, );
 

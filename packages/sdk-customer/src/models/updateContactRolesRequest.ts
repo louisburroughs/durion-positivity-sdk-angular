@@ -11,17 +11,17 @@ import { RoleAssignment } from './roleAssignment';
 
 
 /**
- * Role assignment request
+ * Request to update the set of role assignments for a contact
  */
 export interface UpdateContactRolesRequest { 
-    /**
-     * Optimistic locking version; required when the backend enforces optimistic locking
-     */
-    version?: string;
     /**
      * List of roles to assign to this contact
      */
     roles: Array<RoleAssignment>;
+    /**
+     * Optimistic locking version; required when the backend enforces optimistic locking
+     */
+    version?: string;
 }
 
 function isOptionalUpdateContactRolesRequestPropertyOfType(

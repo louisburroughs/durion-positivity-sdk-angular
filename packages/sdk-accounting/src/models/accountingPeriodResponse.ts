@@ -14,26 +14,6 @@
  */
 export interface AccountingPeriodResponse { 
     /**
-     * Period UUID
-     */
-    periodId?: string;
-    /**
-     * Period code (YYYY-MM)
-     */
-    periodCode?: string;
-    /**
-     * First day of the period
-     */
-    startDate?: string;
-    /**
-     * Last day of the period (inclusive)
-     */
-    endDate?: string;
-    /**
-     * Lifecycle status
-     */
-    status?: AccountingPeriodResponseStatusEnum;
-    /**
      * When the period was closed (null while OPEN)
      */
     closedAt?: string;
@@ -41,6 +21,22 @@ export interface AccountingPeriodResponse {
      * Actor who closed the period
      */
     closedBy?: string;
+    /**
+     * Last day of the period (inclusive)
+     */
+    endDate?: string;
+    /**
+     * Period code (YYYY-MM)
+     */
+    periodCode?: string;
+    /**
+     * Period UUID
+     */
+    periodId?: string;
+    /**
+     * Justification recorded for the last reopen
+     */
+    reopenJustification?: string;
     /**
      * When the period was last reopened
      */
@@ -50,9 +46,13 @@ export interface AccountingPeriodResponse {
      */
     reopenedBy?: string;
     /**
-     * Justification recorded for the last reopen
+     * First day of the period
      */
-    reopenJustification?: string;
+    startDate?: string;
+    /**
+     * Lifecycle status
+     */
+    status?: AccountingPeriodResponseStatusEnum;
 }
 export enum AccountingPeriodResponseStatusEnum {
     Open = 'OPEN',
@@ -100,7 +100,7 @@ export function instanceOfAccountingPeriodResponse(value: object): value is Acco
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createAccountingPeriodResponsePropertyNames();
-    const optionalStringProperties = createAccountingPeriodResponseOptionalProperties({ name: 'periodId', nullable: false }, { name: 'periodCode', nullable: false }, { name: 'startDate', nullable: false }, { name: 'endDate', nullable: false }, { name: 'status', nullable: false }, { name: 'closedAt', nullable: false }, { name: 'closedBy', nullable: false }, { name: 'reopenedAt', nullable: false }, { name: 'reopenedBy', nullable: false }, { name: 'reopenJustification', nullable: false }, );
+    const optionalStringProperties = createAccountingPeriodResponseOptionalProperties({ name: 'closedAt', nullable: false }, { name: 'closedBy', nullable: false }, { name: 'endDate', nullable: false }, { name: 'periodCode', nullable: false }, { name: 'periodId', nullable: false }, { name: 'reopenJustification', nullable: false }, { name: 'reopenedAt', nullable: false }, { name: 'reopenedBy', nullable: false }, { name: 'startDate', nullable: false }, { name: 'status', nullable: false }, );
     const optionalNumberProperties = createAccountingPeriodResponseOptionalProperties();
     const optionalBooleanProperties = createAccountingPeriodResponseOptionalProperties();
 

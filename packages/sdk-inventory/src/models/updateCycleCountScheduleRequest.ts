@@ -14,13 +14,13 @@
  */
 export interface UpdateCycleCountScheduleRequest { 
     /**
-     * New single-zone filter within the location
+     * Whether the schedule is active
      */
-    zoneId?: string;
+    active?: boolean;
     /**
-     * New SKU-category filter
+     * Whether the scheduled runner auto-creates the next cycle-count plan when due
      */
-    skuCategory?: string;
+    autoCreatePlan?: boolean;
     /**
      * New count frequency in days
      */
@@ -30,13 +30,13 @@ export interface UpdateCycleCountScheduleRequest {
      */
     nextDueDate?: string;
     /**
-     * Whether the scheduled runner auto-creates the next cycle-count plan when due
+     * New SKU-category filter
      */
-    autoCreatePlan?: boolean;
+    skuCategory?: string;
     /**
-     * Whether the schedule is active
+     * New single-zone filter within the location
      */
-    active?: boolean;
+    zoneId?: string;
 }
 
 function isOptionalUpdateCycleCountScheduleRequestPropertyOfType(
@@ -78,9 +78,9 @@ export function instanceOfUpdateCycleCountScheduleRequest(value: object): value 
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createUpdateCycleCountScheduleRequestPropertyNames();
-    const optionalStringProperties = createUpdateCycleCountScheduleRequestOptionalProperties({ name: 'zoneId', nullable: false }, { name: 'skuCategory', nullable: false }, { name: 'nextDueDate', nullable: false }, );
+    const optionalStringProperties = createUpdateCycleCountScheduleRequestOptionalProperties({ name: 'nextDueDate', nullable: false }, { name: 'skuCategory', nullable: false }, { name: 'zoneId', nullable: false }, );
     const optionalNumberProperties = createUpdateCycleCountScheduleRequestOptionalProperties({ name: 'frequencyDays', nullable: false }, );
-    const optionalBooleanProperties = createUpdateCycleCountScheduleRequestOptionalProperties({ name: 'autoCreatePlan', nullable: false }, { name: 'active', nullable: false }, );
+    const optionalBooleanProperties = createUpdateCycleCountScheduleRequestOptionalProperties({ name: 'active', nullable: false }, { name: 'autoCreatePlan', nullable: false }, );
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
         && optionalStringProperties.every((property) => isOptionalUpdateCycleCountScheduleRequestPropertyOfType(_v, property.name, 'string', property.nullable))

@@ -14,17 +14,17 @@
  */
 export interface ExceptionResolutionRequest { 
     /**
-     * Resolution action
+     * Operator identifier performing resolution
      */
-    resolutionAction: ExceptionResolutionRequestResolutionActionEnum;
+    operatorId: string;
     /**
      * Reason for chosen resolution
      */
     reason: string;
     /**
-     * Operator identifier performing resolution
+     * Resolution action
      */
-    operatorId: string;
+    resolutionAction: ExceptionResolutionRequestResolutionActionEnum;
 }
 export enum ExceptionResolutionRequestResolutionActionEnum {
     Accept = 'ACCEPT',
@@ -72,8 +72,8 @@ export function instanceOfExceptionResolutionRequest(value: object): value is Ex
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createExceptionResolutionRequestPropertyNames('resolutionAction', 'reason', 'operatorId', );
-    const optionalStringProperties = createExceptionResolutionRequestOptionalProperties({ name: 'resolutionAction', nullable: false }, { name: 'reason', nullable: false }, { name: 'operatorId', nullable: false }, );
+    const requiredProperties = createExceptionResolutionRequestPropertyNames('operatorId', 'reason', 'resolutionAction', );
+    const optionalStringProperties = createExceptionResolutionRequestOptionalProperties({ name: 'operatorId', nullable: false }, { name: 'reason', nullable: false }, { name: 'resolutionAction', nullable: false }, );
     const optionalNumberProperties = createExceptionResolutionRequestOptionalProperties();
     const optionalBooleanProperties = createExceptionResolutionRequestOptionalProperties();
 

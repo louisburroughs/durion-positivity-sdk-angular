@@ -14,9 +14,21 @@
  */
 export interface PeopleAvailabilityResponse { 
     /**
-     * Person identifier
+     * Lifecycle status of the assignment
      */
-    personId: string;
+    assignmentStatus: PeopleAvailabilityResponseAssignmentStatusEnum;
+    /**
+     * Date the availability was evaluated for
+     */
+    availableOn?: string;
+    /**
+     * Date the assignment becomes effective
+     */
+    effectiveFrom?: string;
+    /**
+     * Date the assignment ends
+     */
+    effectiveTo?: string;
     /**
      * First name of the person
      */
@@ -30,29 +42,17 @@ export interface PeopleAvailabilityResponse {
      */
     locationId: string;
     /**
-     * Assignment role at the location
+     * Person identifier
      */
-    role?: string;
+    personId: string;
     /**
      * Whether this is the person\'s primary assignment
      */
     primary: boolean;
     /**
-     * Lifecycle status of the assignment
+     * Assignment role at the location
      */
-    assignmentStatus: PeopleAvailabilityResponseAssignmentStatusEnum;
-    /**
-     * Date the assignment becomes effective
-     */
-    effectiveFrom?: string;
-    /**
-     * Date the assignment ends
-     */
-    effectiveTo?: string;
-    /**
-     * Date the availability was evaluated for
-     */
-    availableOn?: string;
+    role?: string;
 }
 export enum PeopleAvailabilityResponseAssignmentStatusEnum {
     Active = 'ACTIVE',
@@ -99,8 +99,8 @@ export function instanceOfPeopleAvailabilityResponse(value: object): value is Pe
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createPeopleAvailabilityResponsePropertyNames('personId', 'locationId', 'primary', 'assignmentStatus', );
-    const optionalStringProperties = createPeopleAvailabilityResponseOptionalProperties({ name: 'personId', nullable: false }, { name: 'firstName', nullable: false }, { name: 'lastName', nullable: false }, { name: 'locationId', nullable: false }, { name: 'role', nullable: false }, { name: 'assignmentStatus', nullable: false }, { name: 'effectiveFrom', nullable: false }, { name: 'effectiveTo', nullable: false }, { name: 'availableOn', nullable: false }, );
+    const requiredProperties = createPeopleAvailabilityResponsePropertyNames('assignmentStatus', 'locationId', 'personId', 'primary', );
+    const optionalStringProperties = createPeopleAvailabilityResponseOptionalProperties({ name: 'assignmentStatus', nullable: false }, { name: 'availableOn', nullable: false }, { name: 'effectiveFrom', nullable: false }, { name: 'effectiveTo', nullable: false }, { name: 'firstName', nullable: false }, { name: 'lastName', nullable: false }, { name: 'locationId', nullable: false }, { name: 'personId', nullable: false }, { name: 'role', nullable: false }, );
     const optionalNumberProperties = createPeopleAvailabilityResponseOptionalProperties();
     const optionalBooleanProperties = createPeopleAvailabilityResponseOptionalProperties({ name: 'primary', nullable: false }, );
 

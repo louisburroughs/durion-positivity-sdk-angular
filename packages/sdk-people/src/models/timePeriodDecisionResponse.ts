@@ -18,10 +18,6 @@ export interface TimePeriodDecisionResponse {
      */
     personId: string;
     /**
-     * Time period identifier
-     */
-    timePeriodId: string;
-    /**
      * Number of entries processed by the decision
      */
     processedCount: number;
@@ -29,6 +25,10 @@ export interface TimePeriodDecisionResponse {
      * Resulting status of the operation
      */
     status: string;
+    /**
+     * Time period identifier
+     */
+    timePeriodId: string;
 }
 
 function isOptionalTimePeriodDecisionResponsePropertyOfType(
@@ -69,8 +69,8 @@ export function instanceOfTimePeriodDecisionResponse(value: object): value is Ti
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createTimePeriodDecisionResponsePropertyNames('personId', 'timePeriodId', 'processedCount', 'status', );
-    const optionalStringProperties = createTimePeriodDecisionResponseOptionalProperties({ name: 'personId', nullable: false }, { name: 'timePeriodId', nullable: false }, { name: 'status', nullable: false }, );
+    const requiredProperties = createTimePeriodDecisionResponsePropertyNames('personId', 'processedCount', 'status', 'timePeriodId', );
+    const optionalStringProperties = createTimePeriodDecisionResponseOptionalProperties({ name: 'personId', nullable: false }, { name: 'status', nullable: false }, { name: 'timePeriodId', nullable: false }, );
     const optionalNumberProperties = createTimePeriodDecisionResponseOptionalProperties({ name: 'processedCount', nullable: false }, );
     const optionalBooleanProperties = createTimePeriodDecisionResponseOptionalProperties();
 

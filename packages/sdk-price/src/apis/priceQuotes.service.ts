@@ -40,10 +40,10 @@ export class PriceQuotesService extends BaseService {
     }
 
     /**
-     * Calculate contextual price quote
-     * Calculates a contextual price quote using request inputs such as product, location, customer tier, and pricing context.
+     * Calculate Contextual Price Quote
+     * Calculates a contextual unit and extended price for a product by resolving, in order, the base MSRP effective at the pricing instant, then an active location price override that replaces the running price, then a customer tier discount rate applied to the running price. Use this tool to price a line for an estimate or cart; do not use applyPromotionOffer here, because promotions are layered onto the estimate separately, and use getPricingSnapshotById to re-read a previously captured price instead of recalculating. Preconditions: a base price for the product and quote currency must be effective at the pricing instant; location overrides and tier rules are optional layers that apply only when active. Required inputs: productId, locationId, and customerTierId (UUIDs) plus quantity (minimum 1); effectiveTimestamp defaults to the current time, and currency defaults to the configured pos.price.default-currency (USD unless overridden). Emits a PRICE_QUOTE_CALCULATE event but writes no pricing state; the unit price is rounded half-even to two decimals, priceSource is MSRP_FALLBACK when only the base price applied and CALCULATED otherwise, and each resolution step is itemised in pricingBreakdown. Returns 404 with code PRICE_BASE_UNAVAILABLE when no base price is effective for the product, currency, and instant. 
      * @endpoint post /v1/price/quotes
-     * @param priceQuoteRequest 
+     * @param priceQuoteRequest Pricing context identifying the product, quantity, location, customer tier, and optional instant and currency.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options

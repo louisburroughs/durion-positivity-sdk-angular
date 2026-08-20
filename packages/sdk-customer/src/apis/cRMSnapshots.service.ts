@@ -38,20 +38,80 @@ export class CRMSnapshotsService extends BaseService {
     }
 
     /**
-     * Fetch snapshot by party
-     * Returns complete party snapshot with accounts, contacts, vehicles
+     * Get Party Billing Rules
+     * Returns the billing-rules reference for a party, falling back to default rules when a commercial party has no explicitly configured rules and for person parties, which have no configurable rules; enforcement of the rules belongs to downstream services. Use this tool when reading how an account should be billed; use upsertPartyBillingRules instead to change the configuration. Preconditions: a commercial or person party must exist for the supplied partyId. Required inputs: partyId (UUID) as a path parameter; there is no request body. Emits a CRM_SNAPSHOT_BILLING_RULES_GET audit event; no state changes occur. Returns 404 when no party exists for the supplied partyId, and 200 with defaults rather than an error when rules were never configured. 
+     * @endpoint get /v1/crm/snapshot/party/{partyId}/billing-rules
+     * @param partyId Party ID (UUID)
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public getPartyBillingRules(partyId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<BillingRuleRef>;
+    public getPartyBillingRules(partyId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<BillingRuleRef>>;
+    public getPartyBillingRules(partyId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<BillingRuleRef>>;
+    public getPartyBillingRules(partyId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (partyId === null || partyId === undefined) {
+            throw new Error('Required parameter partyId was null or undefined when calling getPartyBillingRules.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/crm/snapshot/party/${this.configuration.encodeParam({name: "partyId", value: partyId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/billing-rules`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<BillingRuleRef>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Get CRM Snapshot By Party
+     * Returns a consolidated CRM snapshot for a party — account summary, contacts, vehicle summaries, and preferences — assembled for commercial or person parties and served from a cache when a fresh copy exists. Use this tool when a caller needs the whole customer picture in one call; use getParty instead for just the identity fields, and getSnapshotByVehicle when only a vehicle id is known. Preconditions: a commercial or person party must exist for the supplied partyId. Required inputs: partyId (UUID) as a path parameter; there is no request body, and the snapshotMetadata.source field reports CACHE or CRM_API depending on where the data came from. Emits a CRM_SNAPSHOT_PARTY_RETRIEVE audit event; the snapshot cache may be populated but no domain state changes. Returns 404 when neither a commercial nor a person party exists for the supplied partyId. 
      * @endpoint get /v1/crm/snapshot/party/{partyId}
      * @param partyId Party ID
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public fetchByParty(partyId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<CrmSnapshotDTO>;
-    public fetchByParty(partyId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<CrmSnapshotDTO>>;
-    public fetchByParty(partyId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<CrmSnapshotDTO>>;
-    public fetchByParty(partyId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getSnapshotByParty(partyId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<CrmSnapshotDTO>;
+    public getSnapshotByParty(partyId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<CrmSnapshotDTO>>;
+    public getSnapshotByParty(partyId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<CrmSnapshotDTO>>;
+    public getSnapshotByParty(partyId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (partyId === null || partyId === undefined) {
-            throw new Error('Required parameter partyId was null or undefined when calling fetchByParty.');
+            throw new Error('Required parameter partyId was null or undefined when calling getSnapshotByParty.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -98,20 +158,20 @@ export class CRMSnapshotsService extends BaseService {
     }
 
     /**
-     * Fetch snapshot by vehicle
-     * Returns party snapshot based on vehicle ownership
+     * Get CRM Snapshot By Vehicle
+     * Returns the CRM snapshot of the commercial party that owns a vehicle, resolved through the vehicle-to-party association replicated from vehicle events. Use this tool when only a vehicle id is known, for example at service check-in; use getSnapshotByParty instead when the party id is already known. Preconditions: the vehicle must be associated with a commercial party in the local replica; recently registered vehicles may not have been replicated yet. Required inputs: vehicleId (UUID) as a path parameter; there is no request body. Emits a CRM_SNAPSHOT_VEHICLE_RETRIEVE audit event; no state changes occur. Returns 404 when no owning party can be resolved for the supplied vehicleId. 
      * @endpoint get /v1/crm/snapshot/vehicle/{vehicleId}
      * @param vehicleId Vehicle ID
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public fetchByVehicle(vehicleId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<CrmSnapshotDTO>;
-    public fetchByVehicle(vehicleId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<CrmSnapshotDTO>>;
-    public fetchByVehicle(vehicleId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<CrmSnapshotDTO>>;
-    public fetchByVehicle(vehicleId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getSnapshotByVehicle(vehicleId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<CrmSnapshotDTO>;
+    public getSnapshotByVehicle(vehicleId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<CrmSnapshotDTO>>;
+    public getSnapshotByVehicle(vehicleId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<CrmSnapshotDTO>>;
+    public getSnapshotByVehicle(vehicleId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (vehicleId === null || vehicleId === undefined) {
-            throw new Error('Required parameter vehicleId was null or undefined when calling fetchByVehicle.');
+            throw new Error('Required parameter vehicleId was null or undefined when calling getSnapshotByVehicle.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -145,66 +205,6 @@ export class CRMSnapshotsService extends BaseService {
         let localVarPath = `/v1/crm/snapshot/vehicle/${this.configuration.encodeParam({name: "vehicleId", value: vehicleId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<CrmSnapshotDTO>('get', `${basePath}${localVarPath}`,
-            {
-                context: localVarHttpContext,
-                responseType: <any>responseType_,
-                ...(withCredentials ? { withCredentials } : {}),
-                headers: localVarHeaders,
-                observe: observe,
-                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * Get billing rules for a commercial party
-     * Returns the billing rule reference for a commercial party. Returns default billing rules when the party has no explicitly configured rules. Enforcement of these rules is the responsibility of downstream services.
-     * @endpoint get /v1/crm/snapshot/party/{partyId}/billing-rules
-     * @param partyId Party ID (UUID)
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     * @param options additional options
-     */
-    public getBillingRules(partyId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<BillingRuleRef>;
-    public getBillingRules(partyId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<BillingRuleRef>>;
-    public getBillingRules(partyId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<BillingRuleRef>>;
-    public getBillingRules(partyId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
-        if (partyId === null || partyId === undefined) {
-            throw new Error('Required parameter partyId was null or undefined when calling getBillingRules.');
-        }
-
-        let localVarHeaders = this.defaultHeaders;
-
-        // authentication (bearerAuth) required
-        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
-
-        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
-            'application/json'
-        ]);
-        if (localVarHttpHeaderAcceptSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
-        }
-
-        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
-
-        const localVarTransferCache: boolean = options?.transferCache ?? true;
-
-
-        let responseType_: 'text' | 'json' | 'blob' = 'json';
-        if (localVarHttpHeaderAcceptSelected) {
-            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
-                responseType_ = 'text';
-            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
-                responseType_ = 'json';
-            } else {
-                responseType_ = 'blob';
-            }
-        }
-
-        let localVarPath = `/v1/crm/snapshot/party/${this.configuration.encodeParam({name: "partyId", value: partyId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/billing-rules`;
-        const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<BillingRuleRef>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,

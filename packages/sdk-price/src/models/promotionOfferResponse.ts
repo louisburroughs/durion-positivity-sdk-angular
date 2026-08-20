@@ -14,17 +14,13 @@
  */
 export interface PromotionOfferResponse { 
     /**
-     * Promotion offer identifier
+     * Record creation timestamp
      */
-    promotionOfferId: string;
+    createdAt?: string | null;
     /**
-     * Unique promotion code
+     * User that created the record
      */
-    promoCode: string;
-    /**
-     * Promotion display name
-     */
-    name: string;
+    createdBy?: string | null;
     /**
      * Optional promotion description
      */
@@ -38,21 +34,25 @@ export interface PromotionOfferResponse {
      */
     discountValue: number;
     /**
-     * Promotion validity start date
-     */
-    startDate: string;
-    /**
      * Promotion validity end date
      */
     endDate: string;
     /**
-     * Optional usage limit
+     * Promotion display name
      */
-    usageLimit?: number | null;
+    name: string;
     /**
-     * Number of times the promotion has been applied
+     * Unique promotion code
      */
-    usageCount: number;
+    promoCode: string;
+    /**
+     * Promotion offer identifier
+     */
+    promotionOfferId: string;
+    /**
+     * Promotion validity start date
+     */
+    startDate: string;
     /**
      * Current promotion status
      */
@@ -62,17 +62,17 @@ export interface PromotionOfferResponse {
      */
     storeCode?: string | null;
     /**
-     * Record creation timestamp
-     */
-    createdAt?: string | null;
-    /**
      * Record last update timestamp
      */
     updatedAt?: string | null;
     /**
-     * User that created the record
+     * Number of times the promotion has been applied
      */
-    createdBy?: string | null;
+    usageCount: number;
+    /**
+     * Optional usage limit
+     */
+    usageLimit?: number | null;
 }
 export enum PromotionOfferResponseDiscountTypeEnum {
     PercentLabor = 'PERCENT_LABOR',
@@ -126,9 +126,9 @@ export function instanceOfPromotionOfferResponse(value: object): value is Promot
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createPromotionOfferResponsePropertyNames('promotionOfferId', 'promoCode', 'name', 'discountType', 'discountValue', 'startDate', 'endDate', 'usageCount', 'status', );
-    const optionalStringProperties = createPromotionOfferResponseOptionalProperties({ name: 'promotionOfferId', nullable: false }, { name: 'promoCode', nullable: false }, { name: 'name', nullable: false }, { name: 'description', nullable: true }, { name: 'discountType', nullable: false }, { name: 'startDate', nullable: false }, { name: 'endDate', nullable: false }, { name: 'status', nullable: false }, { name: 'storeCode', nullable: true }, { name: 'createdAt', nullable: true }, { name: 'updatedAt', nullable: true }, { name: 'createdBy', nullable: true }, );
-    const optionalNumberProperties = createPromotionOfferResponseOptionalProperties({ name: 'discountValue', nullable: false }, { name: 'usageLimit', nullable: true }, { name: 'usageCount', nullable: false }, );
+    const requiredProperties = createPromotionOfferResponsePropertyNames('discountType', 'discountValue', 'endDate', 'name', 'promoCode', 'promotionOfferId', 'startDate', 'status', 'usageCount', );
+    const optionalStringProperties = createPromotionOfferResponseOptionalProperties({ name: 'createdAt', nullable: true }, { name: 'createdBy', nullable: true }, { name: 'description', nullable: true }, { name: 'discountType', nullable: false }, { name: 'endDate', nullable: false }, { name: 'name', nullable: false }, { name: 'promoCode', nullable: false }, { name: 'promotionOfferId', nullable: false }, { name: 'startDate', nullable: false }, { name: 'status', nullable: false }, { name: 'storeCode', nullable: true }, { name: 'updatedAt', nullable: true }, );
+    const optionalNumberProperties = createPromotionOfferResponseOptionalProperties({ name: 'discountValue', nullable: false }, { name: 'usageCount', nullable: false }, { name: 'usageLimit', nullable: true }, );
     const optionalBooleanProperties = createPromotionOfferResponseOptionalProperties();
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

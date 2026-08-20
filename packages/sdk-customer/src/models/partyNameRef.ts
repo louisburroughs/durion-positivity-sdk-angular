@@ -14,13 +14,13 @@
  */
 export interface PartyNameRef { 
     /**
-     * Party identifier
-     */
-    partyId: string;
-    /**
      * Resolved display name (commercial display/legal name or person full name)
      */
     displayName?: string;
+    /**
+     * Party identifier
+     */
+    partyId: string;
     /**
      * Best-effort phone (person primary phone contact-point; null for commercial parties)
      */
@@ -66,7 +66,7 @@ export function instanceOfPartyNameRef(value: object): value is PartyNameRef {
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createPartyNameRefPropertyNames('partyId', );
-    const optionalStringProperties = createPartyNameRefOptionalProperties({ name: 'partyId', nullable: false }, { name: 'displayName', nullable: false }, { name: 'phoneNumber', nullable: false }, );
+    const optionalStringProperties = createPartyNameRefOptionalProperties({ name: 'displayName', nullable: false }, { name: 'partyId', nullable: false }, { name: 'phoneNumber', nullable: false }, );
     const optionalNumberProperties = createPartyNameRefOptionalProperties();
     const optionalBooleanProperties = createPartyNameRefOptionalProperties();
 

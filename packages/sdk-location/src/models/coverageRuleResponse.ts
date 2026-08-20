@@ -18,21 +18,25 @@ export interface CoverageRuleResponse {
      */
     id: string;
     /**
+     * Maximum service distance in kilometres covered by the rule
+     */
+    maxDistance?: number;
+    /**
      * Identifier of the mobile unit this rule belongs to
      */
     mobileUnitId: string;
     /**
-     * Identifier of the service area this rule applies to
+     * Evaluation priority of the rule (lower is evaluated first)
      */
-    serviceAreaId: string;
+    priority?: number;
     /**
      * Type of coverage rule
      */
     ruleType?: string;
     /**
-     * Evaluation priority of the rule (lower is evaluated first)
+     * Identifier of the service area this rule applies to
      */
-    priority?: number;
+    serviceAreaId: string;
     /**
      * Date from which the rule is effective
      */
@@ -41,10 +45,6 @@ export interface CoverageRuleResponse {
      * Date until which the rule is effective
      */
     validTo?: string;
-    /**
-     * Maximum service distance in kilometres covered by the rule
-     */
-    maxDistance?: number;
 }
 
 function isOptionalCoverageRuleResponsePropertyOfType(
@@ -86,8 +86,8 @@ export function instanceOfCoverageRuleResponse(value: object): value is Coverage
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createCoverageRuleResponsePropertyNames('id', 'mobileUnitId', 'serviceAreaId', );
-    const optionalStringProperties = createCoverageRuleResponseOptionalProperties({ name: 'id', nullable: false }, { name: 'mobileUnitId', nullable: false }, { name: 'serviceAreaId', nullable: false }, { name: 'ruleType', nullable: false }, { name: 'validFrom', nullable: false }, { name: 'validTo', nullable: false }, );
-    const optionalNumberProperties = createCoverageRuleResponseOptionalProperties({ name: 'priority', nullable: false }, { name: 'maxDistance', nullable: false }, );
+    const optionalStringProperties = createCoverageRuleResponseOptionalProperties({ name: 'id', nullable: false }, { name: 'mobileUnitId', nullable: false }, { name: 'ruleType', nullable: false }, { name: 'serviceAreaId', nullable: false }, { name: 'validFrom', nullable: false }, { name: 'validTo', nullable: false }, );
+    const optionalNumberProperties = createCoverageRuleResponseOptionalProperties({ name: 'maxDistance', nullable: false }, { name: 'priority', nullable: false }, );
     const optionalBooleanProperties = createCoverageRuleResponseOptionalProperties();
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

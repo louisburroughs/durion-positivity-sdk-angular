@@ -14,6 +14,10 @@
  */
 export interface InvoiceLineItem { 
     /**
+     * Line amount (quantity x unit price).
+     */
+    amount: number;
+    /**
      * Line item description.
      */
     description: string;
@@ -22,17 +26,13 @@ export interface InvoiceLineItem {
      */
     quantity: number;
     /**
-     * Unit price amount.
-     */
-    unitPrice: number;
-    /**
-     * Line amount (quantity x unit price).
-     */
-    amount: number;
-    /**
      * Line item type (e.g. PART, LABOR, FEE, TAX).
      */
     type?: string;
+    /**
+     * Unit price amount.
+     */
+    unitPrice: number;
 }
 
 function isOptionalInvoiceLineItemPropertyOfType(
@@ -73,9 +73,9 @@ export function instanceOfInvoiceLineItem(value: object): value is InvoiceLineIt
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createInvoiceLineItemPropertyNames('description', 'quantity', 'unitPrice', 'amount', );
+    const requiredProperties = createInvoiceLineItemPropertyNames('amount', 'description', 'quantity', 'unitPrice', );
     const optionalStringProperties = createInvoiceLineItemOptionalProperties({ name: 'description', nullable: false }, { name: 'type', nullable: false }, );
-    const optionalNumberProperties = createInvoiceLineItemOptionalProperties({ name: 'quantity', nullable: false }, { name: 'unitPrice', nullable: false }, { name: 'amount', nullable: false }, );
+    const optionalNumberProperties = createInvoiceLineItemOptionalProperties({ name: 'amount', nullable: false }, { name: 'quantity', nullable: false }, { name: 'unitPrice', nullable: false }, );
     const optionalBooleanProperties = createInvoiceLineItemOptionalProperties();
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

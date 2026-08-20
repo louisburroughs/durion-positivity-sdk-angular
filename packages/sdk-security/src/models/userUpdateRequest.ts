@@ -10,13 +10,9 @@
 
 
 /**
- * Updated user object
+ * Partial update of a user account; only supplied fields are applied
  */
 export interface UserUpdateRequest { 
-    /**
-     * New login username
-     */
-    username?: string;
     /**
      * New password for the account
      */
@@ -25,6 +21,10 @@ export interface UserUpdateRequest {
      * Replacement set of role names
      */
     roles?: Set<string>;
+    /**
+     * New login username
+     */
+    username?: string;
 }
 
 function isOptionalUserUpdateRequestPropertyOfType(
@@ -66,7 +66,7 @@ export function instanceOfUserUpdateRequest(value: object): value is UserUpdateR
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createUserUpdateRequestPropertyNames();
-    const optionalStringProperties = createUserUpdateRequestOptionalProperties({ name: 'username', nullable: false }, { name: 'password', nullable: false }, );
+    const optionalStringProperties = createUserUpdateRequestOptionalProperties({ name: 'password', nullable: false }, { name: 'username', nullable: false }, );
     const optionalNumberProperties = createUserUpdateRequestOptionalProperties();
     const optionalBooleanProperties = createUserUpdateRequestOptionalProperties();
 

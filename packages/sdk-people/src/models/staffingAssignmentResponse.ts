@@ -18,21 +18,13 @@ export interface StaffingAssignmentResponse {
      */
     assignmentId: string;
     /**
-     * Person identifier
+     * Creation timestamp in UTC
      */
-    personId: string;
+    createdAt?: string;
     /**
-     * Location identifier
+     * Username that created the assignment
      */
-    locationId: string;
-    /**
-     * Assignment role
-     */
-    role: string;
-    /**
-     * Assignment lifecycle status
-     */
-    status: StaffingAssignmentResponseStatusEnum;
+    createdBy?: string;
     /**
      * Assignment effective start date
      */
@@ -42,21 +34,29 @@ export interface StaffingAssignmentResponse {
      */
     effectiveTo?: string;
     /**
-     * Creation timestamp in UTC
+     * Whether this assignment is primary
      */
-    createdAt?: string;
+    isPrimary: boolean;
+    /**
+     * Location identifier
+     */
+    locationId: string;
+    /**
+     * Person identifier
+     */
+    personId: string;
+    /**
+     * Assignment role
+     */
+    role: string;
+    /**
+     * Assignment lifecycle status
+     */
+    status: StaffingAssignmentResponseStatusEnum;
     /**
      * Last update timestamp in UTC
      */
     updatedAt?: string;
-    /**
-     * Username that created the assignment
-     */
-    createdBy?: string;
-    /**
-     * Whether this assignment is primary
-     */
-    isPrimary: boolean;
 }
 export enum StaffingAssignmentResponseStatusEnum {
     Active = 'ACTIVE',
@@ -103,8 +103,8 @@ export function instanceOfStaffingAssignmentResponse(value: object): value is St
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createStaffingAssignmentResponsePropertyNames('assignmentId', 'personId', 'locationId', 'role', 'status', 'effectiveFrom', 'isPrimary', );
-    const optionalStringProperties = createStaffingAssignmentResponseOptionalProperties({ name: 'assignmentId', nullable: false }, { name: 'personId', nullable: false }, { name: 'locationId', nullable: false }, { name: 'role', nullable: false }, { name: 'status', nullable: false }, { name: 'effectiveFrom', nullable: false }, { name: 'effectiveTo', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'updatedAt', nullable: false }, { name: 'createdBy', nullable: false }, );
+    const requiredProperties = createStaffingAssignmentResponsePropertyNames('assignmentId', 'effectiveFrom', 'isPrimary', 'locationId', 'personId', 'role', 'status', );
+    const optionalStringProperties = createStaffingAssignmentResponseOptionalProperties({ name: 'assignmentId', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'effectiveFrom', nullable: false }, { name: 'effectiveTo', nullable: false }, { name: 'locationId', nullable: false }, { name: 'personId', nullable: false }, { name: 'role', nullable: false }, { name: 'status', nullable: false }, { name: 'updatedAt', nullable: false }, );
     const optionalNumberProperties = createStaffingAssignmentResponseOptionalProperties();
     const optionalBooleanProperties = createStaffingAssignmentResponseOptionalProperties({ name: 'isPrimary', nullable: false }, );
 

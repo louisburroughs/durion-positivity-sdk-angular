@@ -14,29 +14,29 @@
  */
 export interface UserRoleDto { 
     /**
-     * User identifier
+     * Whether the assignment is active
      */
-    userId?: string;
-    /**
-     * Stable role code
-     */
-    roleCode?: string;
-    /**
-     * Location identifier the role is scoped to
-     */
-    locationId?: string;
-    /**
-     * Date the assignment becomes effective
-     */
-    startDate?: string;
+    active?: boolean;
     /**
      * Date the assignment ends
      */
     endDate?: string;
     /**
-     * Whether the assignment is active
+     * Location identifier the role is scoped to
      */
-    active?: boolean;
+    locationId?: string;
+    /**
+     * Stable role code
+     */
+    roleCode?: string;
+    /**
+     * Date the assignment becomes effective
+     */
+    startDate?: string;
+    /**
+     * User identifier
+     */
+    userId?: string;
 }
 
 function isOptionalUserRoleDtoPropertyOfType(
@@ -78,7 +78,7 @@ export function instanceOfUserRoleDto(value: object): value is UserRoleDto {
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createUserRoleDtoPropertyNames();
-    const optionalStringProperties = createUserRoleDtoOptionalProperties({ name: 'userId', nullable: false }, { name: 'roleCode', nullable: false }, { name: 'locationId', nullable: false }, { name: 'startDate', nullable: false }, { name: 'endDate', nullable: false }, );
+    const optionalStringProperties = createUserRoleDtoOptionalProperties({ name: 'endDate', nullable: false }, { name: 'locationId', nullable: false }, { name: 'roleCode', nullable: false }, { name: 'startDate', nullable: false }, { name: 'userId', nullable: false }, );
     const optionalNumberProperties = createUserRoleDtoOptionalProperties();
     const optionalBooleanProperties = createUserRoleDtoOptionalProperties({ name: 'active', nullable: false }, );
 

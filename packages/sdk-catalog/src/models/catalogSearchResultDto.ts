@@ -19,13 +19,13 @@ export interface CatalogSearchResultDto {
      */
     data: Array<ProductSummary>;
     /**
-     * Opaque cursor for the next page; null if no more results
-     */
-    nextCursor?: string;
-    /**
      * Number of items requested (limit)
      */
     limit: number;
+    /**
+     * Opaque cursor for the next page; null if no more results
+     */
+    nextCursor?: string;
 }
 
 function isOptionalCatalogSearchResultDtoPropertyOfType(

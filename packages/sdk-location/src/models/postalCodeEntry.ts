@@ -14,13 +14,13 @@
  */
 export interface PostalCodeEntry { 
     /**
-     * Postal or ZIP code
-     */
-    postalCode: string;
-    /**
      * ISO 3166-1 alpha-2 country code
      */
     countryCode?: string;
+    /**
+     * Postal or ZIP code
+     */
+    postalCode: string;
 }
 
 function isOptionalPostalCodeEntryPropertyOfType(
@@ -62,7 +62,7 @@ export function instanceOfPostalCodeEntry(value: object): value is PostalCodeEnt
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createPostalCodeEntryPropertyNames('postalCode', );
-    const optionalStringProperties = createPostalCodeEntryOptionalProperties({ name: 'postalCode', nullable: false }, { name: 'countryCode', nullable: false }, );
+    const optionalStringProperties = createPostalCodeEntryOptionalProperties({ name: 'countryCode', nullable: false }, { name: 'postalCode', nullable: false }, );
     const optionalNumberProperties = createPostalCodeEntryOptionalProperties();
     const optionalBooleanProperties = createPostalCodeEntryOptionalProperties();
 

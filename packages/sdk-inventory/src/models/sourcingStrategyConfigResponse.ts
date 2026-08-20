@@ -14,9 +14,17 @@
  */
 export interface SourcingStrategyConfigResponse { 
     /**
+     * Whether this row participates in resolution
+     */
+    active: boolean;
+    /**
      * Unique identifier of the configuration row
      */
     configId: string;
+    /**
+     * Timestamp when the row was created
+     */
+    createdAt: string;
     /**
      * Configuration scope kind
      */
@@ -29,14 +37,6 @@ export interface SourcingStrategyConfigResponse {
      * Sourcing strategy applied at this scope
      */
     strategy: SourcingStrategyConfigResponseStrategyEnum;
-    /**
-     * Whether this row participates in resolution
-     */
-    active: boolean;
-    /**
-     * Timestamp when the row was created
-     */
-    createdAt: string;
     /**
      * Timestamp when the row was last updated
      */
@@ -94,8 +94,8 @@ export function instanceOfSourcingStrategyConfigResponse(value: object): value i
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createSourcingStrategyConfigResponsePropertyNames('configId', 'scopeType', 'strategy', 'active', 'createdAt', 'updatedAt', );
-    const optionalStringProperties = createSourcingStrategyConfigResponseOptionalProperties({ name: 'configId', nullable: false }, { name: 'scopeType', nullable: false }, { name: 'scopeValue', nullable: false }, { name: 'strategy', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'updatedAt', nullable: false }, );
+    const requiredProperties = createSourcingStrategyConfigResponsePropertyNames('active', 'configId', 'createdAt', 'scopeType', 'strategy', 'updatedAt', );
+    const optionalStringProperties = createSourcingStrategyConfigResponseOptionalProperties({ name: 'configId', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'scopeType', nullable: false }, { name: 'scopeValue', nullable: false }, { name: 'strategy', nullable: false }, { name: 'updatedAt', nullable: false }, );
     const optionalNumberProperties = createSourcingStrategyConfigResponseOptionalProperties();
     const optionalBooleanProperties = createSourcingStrategyConfigResponseOptionalProperties({ name: 'active', nullable: false }, );
 

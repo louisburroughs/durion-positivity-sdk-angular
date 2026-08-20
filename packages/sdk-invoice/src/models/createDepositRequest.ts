@@ -14,22 +14,6 @@
  */
 export interface CreateDepositRequest { 
     /**
-     * Sales order that took the deposit (idempotency anchor)
-     */
-    orderId: string;
-    /**
-     * Source document type the deposit is held against
-     */
-    sourceType: CreateDepositRequestSourceTypeEnum;
-    /**
-     * Source document id
-     */
-    sourceId: string;
-    /**
-     * Bill-to party, when known
-     */
-    partyId?: string;
-    /**
      * Deposit amount
      */
     amount: number;
@@ -37,6 +21,22 @@ export interface CreateDepositRequest {
      * ISO-4217 currency; defaults to USD
      */
     currencyCode?: string;
+    /**
+     * Sales order that took the deposit (idempotency anchor)
+     */
+    orderId: string;
+    /**
+     * Bill-to party, when known
+     */
+    partyId?: string;
+    /**
+     * Source document id
+     */
+    sourceId: string;
+    /**
+     * Source document type the deposit is held against
+     */
+    sourceType: CreateDepositRequestSourceTypeEnum;
 }
 export enum CreateDepositRequestSourceTypeEnum {
     Estimate = 'ESTIMATE',
@@ -84,8 +84,8 @@ export function instanceOfCreateDepositRequest(value: object): value is CreateDe
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createCreateDepositRequestPropertyNames('orderId', 'sourceType', 'sourceId', 'amount', );
-    const optionalStringProperties = createCreateDepositRequestOptionalProperties({ name: 'orderId', nullable: false }, { name: 'sourceType', nullable: false }, { name: 'sourceId', nullable: false }, { name: 'partyId', nullable: false }, { name: 'currencyCode', nullable: false }, );
+    const requiredProperties = createCreateDepositRequestPropertyNames('amount', 'orderId', 'sourceId', 'sourceType', );
+    const optionalStringProperties = createCreateDepositRequestOptionalProperties({ name: 'currencyCode', nullable: false }, { name: 'orderId', nullable: false }, { name: 'partyId', nullable: false }, { name: 'sourceId', nullable: false }, { name: 'sourceType', nullable: false }, );
     const optionalNumberProperties = createCreateDepositRequestOptionalProperties({ name: 'amount', nullable: false }, );
     const optionalBooleanProperties = createCreateDepositRequestOptionalProperties();
 

@@ -14,17 +14,17 @@
  */
 export interface DisableEmployeeRequestDto { 
     /**
-     * Reason the employee is being disabled
+     * End date to apply to assignments when the policy is GRACE_PERIOD
      */
-    disableReason?: string;
+    assignmentEndDate?: string;
     /**
      * Policy controlling how active staffing assignments are terminated
      */
     assignmentPolicy?: DisableEmployeeRequestDtoAssignmentPolicyEnum;
     /**
-     * End date to apply to assignments when the policy is GRACE_PERIOD
+     * Reason the employee is being disabled
      */
-    assignmentEndDate?: string;
+    disableReason?: string;
 }
 export enum DisableEmployeeRequestDtoAssignmentPolicyEnum {
     Immediate = 'IMMEDIATE',
@@ -72,7 +72,7 @@ export function instanceOfDisableEmployeeRequestDto(value: object): value is Dis
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createDisableEmployeeRequestDtoPropertyNames();
-    const optionalStringProperties = createDisableEmployeeRequestDtoOptionalProperties({ name: 'disableReason', nullable: false }, { name: 'assignmentPolicy', nullable: false }, { name: 'assignmentEndDate', nullable: false }, );
+    const optionalStringProperties = createDisableEmployeeRequestDtoOptionalProperties({ name: 'assignmentEndDate', nullable: false }, { name: 'assignmentPolicy', nullable: false }, { name: 'disableReason', nullable: false }, );
     const optionalNumberProperties = createDisableEmployeeRequestDtoOptionalProperties();
     const optionalBooleanProperties = createDisableEmployeeRequestDtoOptionalProperties();
 

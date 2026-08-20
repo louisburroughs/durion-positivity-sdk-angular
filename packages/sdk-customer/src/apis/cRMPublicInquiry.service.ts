@@ -38,20 +38,20 @@ export class CRMPublicInquiryService extends BaseService {
     }
 
     /**
-     * Submit an inquiry
-     * Public, unauthenticated capture of a service or fleet-quote request. Rate-limited per submitter; returns only a reference id.
+     * Submit Public Inquiry
+     * Accepts an anonymous service or fleet-quote inquiry from the public web form, rate-limited per hashed submitter fingerprint, and returns only a reference id and NEW status so the endpoint cannot be used to enumerate existing customers. Use this tool only for the unauthenticated public form when the deployment has enabled it via pos.customer.inquiry.public.enabled; do not use captureInquiry here, which is the authenticated staff path and is not rate-limited. Preconditions: the public-inquiry feature flag must be enabled and the submitter must be under the per-source rate ceiling; the raw source address is never stored, only a truncated SHA-256 fingerprint. Required inputs: channel, audienceType (COMMERCIAL or INDIVIDUAL), contactName, and at least one of email or phone; message and interest fields are optional. Emits a CRM_PUBLIC_INQUIRY_SUBMIT event and persists the inquiry in NEW status, unassigned in the shared triage queue. Returns 429 when the submitter has exceeded the rate limit, and 400 when required fields are missing or neither email nor phone is supplied. 
      * @endpoint post /v1/crm/public/inquiries
-     * @param submitInquiryRequest 
+     * @param submitInquiryRequest The public web-form inquiry, carrying who is asking and how to reach them.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public submit(submitInquiryRequest: SubmitInquiryRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<InquiryAcceptedResponse>;
-    public submit(submitInquiryRequest: SubmitInquiryRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<InquiryAcceptedResponse>>;
-    public submit(submitInquiryRequest: SubmitInquiryRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<InquiryAcceptedResponse>>;
-    public submit(submitInquiryRequest: SubmitInquiryRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public submitPublicInquiry(submitInquiryRequest: SubmitInquiryRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<InquiryAcceptedResponse>;
+    public submitPublicInquiry(submitInquiryRequest: SubmitInquiryRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<InquiryAcceptedResponse>>;
+    public submitPublicInquiry(submitInquiryRequest: SubmitInquiryRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<InquiryAcceptedResponse>>;
+    public submitPublicInquiry(submitInquiryRequest: SubmitInquiryRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (submitInquiryRequest === null || submitInquiryRequest === undefined) {
-            throw new Error('Required parameter submitInquiryRequest was null or undefined when calling submit.');
+            throw new Error('Required parameter submitInquiryRequest was null or undefined when calling submitPublicInquiry.');
         }
 
         let localVarHeaders = this.defaultHeaders;

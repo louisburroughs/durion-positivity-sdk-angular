@@ -14,53 +14,13 @@
  */
 export interface LocationPriceOverrideResponseDto { 
     /**
-     * Override identifier
+     * Timestamp the override was approved
      */
-    overrideId: string;
+    approvedAt?: string;
     /**
-     * Version for optimistic locking
+     * Identifier of the user that approved the override
      */
-    version: number;
-    /**
-     * Location identifier the override applies to
-     */
-    locationId: string;
-    /**
-     * Product identifier the override applies to
-     */
-    productId: string;
-    /**
-     * Base price before override
-     */
-    basePrice: number;
-    /**
-     * Item cost used for margin calculation
-     */
-    cost?: number;
-    /**
-     * Override price
-     */
-    overridePrice: number;
-    /**
-     * Computed discount percent versus base price
-     */
-    discountPercent?: number;
-    /**
-     * Computed margin percent versus cost
-     */
-    marginPercent?: number;
-    /**
-     * Current override status
-     */
-    status: LocationPriceOverrideResponseDtoStatusEnum;
-    /**
-     * Identifier of the user that created the override
-     */
-    createdByUserId: string;
-    /**
-     * Timestamp the override was created
-     */
-    createdAt: string;
+    approvedByUserId?: string;
     /**
      * Identifier of the assigned approver
      */
@@ -70,29 +30,69 @@ export interface LocationPriceOverrideResponseDto {
      */
     assignmentStrategy?: string;
     /**
-     * Identifier of the user that approved the override
+     * Base price before override
      */
-    approvedByUserId?: string;
+    basePrice: number;
     /**
-     * Timestamp the override was approved
+     * Item cost used for margin calculation
      */
-    approvedAt?: string;
+    cost?: number;
     /**
-     * Identifier of the user that rejected the override
+     * Timestamp the override was created
      */
-    rejectedBy?: string;
+    createdAt: string;
+    /**
+     * Identifier of the user that created the override
+     */
+    createdByUserId: string;
+    /**
+     * Computed discount percent versus base price
+     */
+    discountPercent?: number;
+    /**
+     * Location identifier the override applies to
+     */
+    locationId: string;
+    /**
+     * Computed margin percent versus cost
+     */
+    marginPercent?: number;
+    /**
+     * Override identifier
+     */
+    overrideId: string;
+    /**
+     * Override price
+     */
+    overridePrice: number;
+    /**
+     * Product identifier the override applies to
+     */
+    productId: string;
     /**
      * Timestamp the override was rejected
      */
     rejectedAt?: string;
     /**
-     * Reason code for rejection
+     * Identifier of the user that rejected the override
      */
-    rejectionReasonCode?: string;
+    rejectedBy?: string;
     /**
      * Free-text notes for rejection
      */
     rejectionNotes?: string;
+    /**
+     * Reason code for rejection
+     */
+    rejectionReasonCode?: string;
+    /**
+     * Current override status
+     */
+    status: LocationPriceOverrideResponseDtoStatusEnum;
+    /**
+     * Version for optimistic locking
+     */
+    version: number;
 }
 export enum LocationPriceOverrideResponseDtoStatusEnum {
     Active = 'ACTIVE',
@@ -141,9 +141,9 @@ export function instanceOfLocationPriceOverrideResponseDto(value: object): value
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createLocationPriceOverrideResponseDtoPropertyNames('overrideId', 'version', 'locationId', 'productId', 'basePrice', 'overridePrice', 'status', 'createdByUserId', 'createdAt', );
-    const optionalStringProperties = createLocationPriceOverrideResponseDtoOptionalProperties({ name: 'overrideId', nullable: false }, { name: 'locationId', nullable: false }, { name: 'productId', nullable: false }, { name: 'status', nullable: false }, { name: 'createdByUserId', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'assignedApproverId', nullable: false }, { name: 'assignmentStrategy', nullable: false }, { name: 'approvedByUserId', nullable: false }, { name: 'approvedAt', nullable: false }, { name: 'rejectedBy', nullable: false }, { name: 'rejectedAt', nullable: false }, { name: 'rejectionReasonCode', nullable: false }, { name: 'rejectionNotes', nullable: false }, );
-    const optionalNumberProperties = createLocationPriceOverrideResponseDtoOptionalProperties({ name: 'version', nullable: false }, { name: 'basePrice', nullable: false }, { name: 'cost', nullable: false }, { name: 'overridePrice', nullable: false }, { name: 'discountPercent', nullable: false }, { name: 'marginPercent', nullable: false }, );
+    const requiredProperties = createLocationPriceOverrideResponseDtoPropertyNames('basePrice', 'createdAt', 'createdByUserId', 'locationId', 'overrideId', 'overridePrice', 'productId', 'status', 'version', );
+    const optionalStringProperties = createLocationPriceOverrideResponseDtoOptionalProperties({ name: 'approvedAt', nullable: false }, { name: 'approvedByUserId', nullable: false }, { name: 'assignedApproverId', nullable: false }, { name: 'assignmentStrategy', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'createdByUserId', nullable: false }, { name: 'locationId', nullable: false }, { name: 'overrideId', nullable: false }, { name: 'productId', nullable: false }, { name: 'rejectedAt', nullable: false }, { name: 'rejectedBy', nullable: false }, { name: 'rejectionNotes', nullable: false }, { name: 'rejectionReasonCode', nullable: false }, { name: 'status', nullable: false }, );
+    const optionalNumberProperties = createLocationPriceOverrideResponseDtoOptionalProperties({ name: 'basePrice', nullable: false }, { name: 'cost', nullable: false }, { name: 'discountPercent', nullable: false }, { name: 'marginPercent', nullable: false }, { name: 'overridePrice', nullable: false }, { name: 'version', nullable: false }, );
     const optionalBooleanProperties = createLocationPriceOverrideResponseDtoOptionalProperties();
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

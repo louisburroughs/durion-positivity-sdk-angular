@@ -14,13 +14,17 @@
  */
 export interface VehicleCarePreferenceResponse { 
     /**
+     * Timestamp when the preference record was created
+     */
+    createdAt: string;
+    /**
+     * User identifier that created the preference record
+     */
+    createdByUserId?: string;
+    /**
      * Unique identifier of the preference record
      */
     id: string;
-    /**
-     * Identifier of the vehicle the preferences apply to
-     */
-    vehicleId: string;
     /**
      * Preferences payload stored as flexible key/value JSON
      */
@@ -34,21 +38,17 @@ export interface VehicleCarePreferenceResponse {
      */
     serviceNotes?: string;
     /**
-     * User identifier that created the preference record
+     * Timestamp when the preference record was last updated
      */
-    createdByUserId?: string;
+    updatedAt: string;
     /**
      * User identifier that last updated the preference record
      */
     updatedByUserId?: string;
     /**
-     * Timestamp when the preference record was created
+     * Identifier of the vehicle the preferences apply to
      */
-    createdAt: string;
-    /**
-     * Timestamp when the preference record was last updated
-     */
-    updatedAt: string;
+    vehicleId: string;
     /**
      * Optimistic-locking version of the preference record
      */
@@ -93,8 +93,8 @@ export function instanceOfVehicleCarePreferenceResponse(value: object): value is
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createVehicleCarePreferenceResponsePropertyNames('id', 'vehicleId', 'preferences', 'createdAt', 'updatedAt', 'version', );
-    const optionalStringProperties = createVehicleCarePreferenceResponseOptionalProperties({ name: 'id', nullable: false }, { name: 'vehicleId', nullable: false }, { name: 'serviceNotes', nullable: false }, { name: 'createdByUserId', nullable: false }, { name: 'updatedByUserId', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'updatedAt', nullable: false }, );
+    const requiredProperties = createVehicleCarePreferenceResponsePropertyNames('createdAt', 'id', 'preferences', 'updatedAt', 'vehicleId', 'version', );
+    const optionalStringProperties = createVehicleCarePreferenceResponseOptionalProperties({ name: 'createdAt', nullable: false }, { name: 'createdByUserId', nullable: false }, { name: 'id', nullable: false }, { name: 'serviceNotes', nullable: false }, { name: 'updatedAt', nullable: false }, { name: 'updatedByUserId', nullable: false }, { name: 'vehicleId', nullable: false }, );
     const optionalNumberProperties = createVehicleCarePreferenceResponseOptionalProperties({ name: 'serviceIntervalMonths', nullable: false }, { name: 'version', nullable: false }, );
     const optionalBooleanProperties = createVehicleCarePreferenceResponseOptionalProperties();
 

@@ -38,8 +38,8 @@ export class AuthorizationService extends BaseService {
     }
 
     /**
-     * Get authorization decision
-     * Returns allow or deny for a principal and permission key
+     * Get Authorization Decision for a Principal
+     * Returns an allow or deny decision for a principal identifier and permission key, evaluated against the principal-role matrix populated by assignPrincipalRole. Use this tool for matrix-based checks keyed by principal string; use getPersonAuthorizationDecision instead when the caller has a personId, and checkUserPermission when it has a user UUID and location. Preconditions: the caller must hold security:authorization:decide; the principal needs no prior registration. Required inputs: principalId and permission (domain:resource:action) as query parameters. No events are emitted and no state changes; this is a read-only evaluation. Returns 200 with decision allow or deny; an unknown principal or permission yields deny rather than an error. 
      * @endpoint get /v1/users/authorization/decision
      * @param principalId Principal identifier to evaluate
      * @param permission Permission key to evaluate
@@ -47,15 +47,15 @@ export class AuthorizationService extends BaseService {
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public getDecision(principalId: string, permission: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<AuthorizationDecisionResponse>;
-    public getDecision(principalId: string, permission: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<AuthorizationDecisionResponse>>;
-    public getDecision(principalId: string, permission: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<AuthorizationDecisionResponse>>;
-    public getDecision(principalId: string, permission: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getAuthorizationDecision(principalId: string, permission: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<AuthorizationDecisionResponse>;
+    public getAuthorizationDecision(principalId: string, permission: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<AuthorizationDecisionResponse>>;
+    public getAuthorizationDecision(principalId: string, permission: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<AuthorizationDecisionResponse>>;
+    public getAuthorizationDecision(principalId: string, permission: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (principalId === null || principalId === undefined) {
-            throw new Error('Required parameter principalId was null or undefined when calling getDecision.');
+            throw new Error('Required parameter principalId was null or undefined when calling getAuthorizationDecision.');
         }
         if (permission === null || permission === undefined) {
-            throw new Error('Required parameter permission was null or undefined when calling getDecision.');
+            throw new Error('Required parameter permission was null or undefined when calling getAuthorizationDecision.');
         }
 
         let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
@@ -123,8 +123,8 @@ export class AuthorizationService extends BaseService {
     }
 
     /**
-     * Get authorization decision for a person
-     * Returns allow or deny for the user backing the given personId and a permission key, evaluated against that user\&#39;s assigned roles. Used to verify an off-session approver (e.g. a manager identified by employee number) holds a required permission.
+     * Get Authorization Decision for a Person
+     * Returns an allow or deny decision for the user account linked to a personId, evaluated against that user\&#39;s directly assigned roles. Use this tool to verify an off-session approver, such as a manager identified by employee number, holds a required permission; use getAuthorizationDecision instead for matrix principals. Preconditions: the caller must hold security:authorization:decide; a user should be linked to the person via the user-person link projection. Required inputs: personId (UUID) and permission (domain:resource:action) as query parameters. No events are emitted and no state changes; this is a read-only evaluation. Returns 200 with decision allow or deny; a person with no linked user or without the permission yields deny rather than an error. 
      * @endpoint get /v1/users/authorization/person-decision
      * @param personId Person identifier whose backing user is evaluated
      * @param permission Permission key to evaluate
@@ -132,15 +132,15 @@ export class AuthorizationService extends BaseService {
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public getPersonDecision(personId: string, permission: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<AuthorizationDecisionResponse>;
-    public getPersonDecision(personId: string, permission: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<AuthorizationDecisionResponse>>;
-    public getPersonDecision(personId: string, permission: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<AuthorizationDecisionResponse>>;
-    public getPersonDecision(personId: string, permission: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getPersonAuthorizationDecision(personId: string, permission: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<AuthorizationDecisionResponse>;
+    public getPersonAuthorizationDecision(personId: string, permission: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<AuthorizationDecisionResponse>>;
+    public getPersonAuthorizationDecision(personId: string, permission: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<AuthorizationDecisionResponse>>;
+    public getPersonAuthorizationDecision(personId: string, permission: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (personId === null || personId === undefined) {
-            throw new Error('Required parameter personId was null or undefined when calling getPersonDecision.');
+            throw new Error('Required parameter personId was null or undefined when calling getPersonAuthorizationDecision.');
         }
         if (permission === null || permission === undefined) {
-            throw new Error('Required parameter permission was null or undefined when calling getPersonDecision.');
+            throw new Error('Required parameter permission was null or undefined when calling getPersonAuthorizationDecision.');
         }
 
         let localVarQueryParameters = new OpenApiHttpParams(this.encoder);

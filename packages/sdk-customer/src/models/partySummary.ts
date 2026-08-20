@@ -15,34 +15,34 @@ import { PrimaryContact } from './primaryContact';
  */
 export interface PartySummary { 
     /**
-     * Unique identifier of the party
+     * Creation timestamp (ISO 8601)
      */
-    partyId: string;
-    /**
-     * Legal name of the party
-     */
-    legalName?: string;
-    /**
-     * Display name of the party
-     */
-    displayName?: string;
-    /**
-     * Party type (ORGANIZATION|INDIVIDUAL)
-     */
-    partyType?: string;
+    createdAt?: string;
     /**
      * Human-readable customer/account number for display and lookup
      */
     customerNumber?: string;
     /**
+     * Display name of the party
+     */
+    displayName?: string;
+    /**
+     * Legal name of the party
+     */
+    legalName?: string;
+    /**
+     * Unique identifier of the party
+     */
+    partyId: string;
+    /**
+     * Party type (ORGANIZATION|INDIVIDUAL)
+     */
+    partyType?: string;
+    primaryContact?: PrimaryContact;
+    /**
      * Party status (ACTIVE|PENDING|SUSPENDED|INACTIVE)
      */
     status?: string;
-    /**
-     * Creation timestamp (ISO 8601)
-     */
-    createdAt?: string;
-    primaryContact?: PrimaryContact;
     /**
      * Number of vehicles associated with the party (defaults to 0)
      */
@@ -88,7 +88,7 @@ export function instanceOfPartySummary(value: object): value is PartySummary {
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createPartySummaryPropertyNames('partyId', );
-    const optionalStringProperties = createPartySummaryOptionalProperties({ name: 'partyId', nullable: false }, { name: 'legalName', nullable: false }, { name: 'displayName', nullable: false }, { name: 'partyType', nullable: false }, { name: 'customerNumber', nullable: false }, { name: 'status', nullable: false }, { name: 'createdAt', nullable: false }, );
+    const optionalStringProperties = createPartySummaryOptionalProperties({ name: 'createdAt', nullable: false }, { name: 'customerNumber', nullable: false }, { name: 'displayName', nullable: false }, { name: 'legalName', nullable: false }, { name: 'partyId', nullable: false }, { name: 'partyType', nullable: false }, { name: 'status', nullable: false }, );
     const optionalNumberProperties = createPartySummaryOptionalProperties({ name: 'vehicleCount', nullable: false }, );
     const optionalBooleanProperties = createPartySummaryOptionalProperties();
 

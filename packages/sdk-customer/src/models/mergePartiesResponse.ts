@@ -14,17 +14,17 @@
  */
 export interface MergePartiesResponse { 
     /**
-     * Merge audit record ID (for traceability)
+     * Timestamp of merge completion (ISO 8601)
      */
-    mergeAuditId: string;
-    /**
-     * Survivor party ID (canonical identifier for merged entity)
-     */
-    survivorPartyId: string;
+    completedAt?: string;
     /**
      * Losing party ID (now merged away)
      */
     losingPartyId: string;
+    /**
+     * Merge audit record ID (for traceability)
+     */
+    mergeAuditId: string;
     /**
      * Alias/redirect ID for the losing party, pointing to the survivor
      */
@@ -34,9 +34,9 @@ export interface MergePartiesResponse {
      */
     status: string;
     /**
-     * Timestamp of merge completion (ISO 8601)
+     * Survivor party ID (canonical identifier for merged entity)
      */
-    completedAt?: string;
+    survivorPartyId: string;
 }
 
 function isOptionalMergePartiesResponsePropertyOfType(
@@ -77,8 +77,8 @@ export function instanceOfMergePartiesResponse(value: object): value is MergePar
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createMergePartiesResponsePropertyNames('mergeAuditId', 'survivorPartyId', 'losingPartyId', 'status', );
-    const optionalStringProperties = createMergePartiesResponseOptionalProperties({ name: 'mergeAuditId', nullable: false }, { name: 'survivorPartyId', nullable: false }, { name: 'losingPartyId', nullable: false }, { name: 'mergedPartyAlias', nullable: false }, { name: 'status', nullable: false }, { name: 'completedAt', nullable: false }, );
+    const requiredProperties = createMergePartiesResponsePropertyNames('losingPartyId', 'mergeAuditId', 'status', 'survivorPartyId', );
+    const optionalStringProperties = createMergePartiesResponseOptionalProperties({ name: 'completedAt', nullable: false }, { name: 'losingPartyId', nullable: false }, { name: 'mergeAuditId', nullable: false }, { name: 'mergedPartyAlias', nullable: false }, { name: 'status', nullable: false }, { name: 'survivorPartyId', nullable: false }, );
     const optionalNumberProperties = createMergePartiesResponseOptionalProperties();
     const optionalBooleanProperties = createMergePartiesResponseOptionalProperties();
 

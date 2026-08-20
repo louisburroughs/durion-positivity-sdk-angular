@@ -15,85 +15,45 @@ import { SalesOrderLineResponse } from './salesOrderLineResponse';
  */
 export interface SalesOrderResponse { 
     /**
-     * Unique identifier of the order
+     * Net settled amount (checkout onward)
      */
-    orderId: string;
+    amountPaid?: number;
     /**
-     * Human-facing order number assigned at creation
+     * Outstanding balance (checkout onward)
      */
-    orderNumber?: string;
-    /**
-     * Shop location the order belongs to
-     */
-    locationId?: string;
-    /**
-     * Parking label for resumable drafts
-     */
-    label?: string;
-    /**
-     * CRM validation state of the customer/vehicle references (VALIDATED or PENDING)
-     */
-    customerValidationStatus?: string;
-    /**
-     * Identifier of the customer associated with the order
-     */
-    customerId?: string;
-    /**
-     * Identifier of the vehicle associated with the order
-     */
-    vehicleId?: string;
+    balanceDue?: number;
     /**
      * Identifier of the clerk who owns the order
      */
     clerkId?: string;
     /**
-     * Identifier of the terminal where the order was created
+     * Timestamp when the order was created (ISO 8601)
      */
-    terminalId?: string;
+    createdAt?: string;
     /**
-     * Current status of the order
+     * Identifier of the user who created the order
      */
-    status: string;
+    createdBy?: string;
     /**
-     * Σ line subtotals: post-line-discount, pre-order-discount, pre-tax
+     * Identifier of the customer associated with the order
      */
-    subtotal?: number;
+    customerId?: string;
+    /**
+     * CRM validation state of the customer/vehicle references (VALIDATED or PENDING)
+     */
+    customerValidationStatus?: string;
     /**
      * Σ line discounts + allocated order discount
      */
     discountTotal?: number;
     /**
-     * Total tax (pos-tax authoritative)
-     */
-    taxTotal?: number;
-    /**
-     * subtotal − order discount + taxTotal
-     */
-    grandTotal?: number;
-    /**
-     * True when mutations invalidated taxTotal; cleared by quote/checkout tax recompute
-     */
-    taxStale?: boolean;
-    /**
-     * Order discount flavor (PERCENT or AMOUNT)
-     */
-    orderDiscountType?: string;
-    /**
-     * Order discount value per type
-     */
-    orderDiscountValue?: number;
-    /**
-     * Order discount reason code
-     */
-    orderDiscountReasonCode?: string;
-    /**
      * Order-level note
      */
     generalNote?: string;
     /**
-     * Quote validity horizon (QUOTED orders)
+     * subtotal − order discount + taxTotal
      */
-    quoteExpiresAt?: string;
+    grandTotal?: number;
     /**
      * Invoice fronting this order, set at checkout
      */
@@ -103,33 +63,73 @@ export interface SalesOrderResponse {
      */
     invoiceNumber?: string;
     /**
-     * Net settled amount (checkout onward)
+     * Parking label for resumable drafts
      */
-    amountPaid?: number;
+    label?: string;
     /**
-     * Outstanding balance (checkout onward)
+     * Lines belonging to the order
      */
-    balanceDue?: number;
+    lines?: Array<SalesOrderLineResponse>;
     /**
-     * Timestamp when the order was created (ISO 8601)
+     * Shop location the order belongs to
      */
-    createdAt?: string;
+    locationId?: string;
+    /**
+     * Order discount reason code
+     */
+    orderDiscountReasonCode?: string;
+    /**
+     * Order discount flavor (PERCENT or AMOUNT)
+     */
+    orderDiscountType?: string;
+    /**
+     * Order discount value per type
+     */
+    orderDiscountValue?: number;
+    /**
+     * Unique identifier of the order
+     */
+    orderId: string;
+    /**
+     * Human-facing order number assigned at creation
+     */
+    orderNumber?: string;
+    /**
+     * Quote validity horizon (QUOTED orders)
+     */
+    quoteExpiresAt?: string;
+    /**
+     * Current status of the order
+     */
+    status: string;
+    /**
+     * Σ line subtotals: post-line-discount, pre-order-discount, pre-tax
+     */
+    subtotal?: number;
+    /**
+     * True when mutations invalidated taxTotal; cleared by quote/checkout tax recompute
+     */
+    taxStale?: boolean;
+    /**
+     * Total tax (pos-tax authoritative)
+     */
+    taxTotal?: number;
+    /**
+     * Identifier of the terminal where the order was created
+     */
+    terminalId?: string;
     /**
      * Timestamp when the order was last updated (ISO 8601)
      */
     updatedAt?: string;
     /**
-     * Identifier of the user who created the order
-     */
-    createdBy?: string;
-    /**
      * Identifier of the user who last updated the order
      */
     updatedBy?: string;
     /**
-     * Lines belonging to the order
+     * Identifier of the vehicle associated with the order
      */
-    lines?: Array<SalesOrderLineResponse>;
+    vehicleId?: string;
 }
 
 function isOptionalSalesOrderResponsePropertyOfType(
@@ -171,8 +171,8 @@ export function instanceOfSalesOrderResponse(value: object): value is SalesOrder
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createSalesOrderResponsePropertyNames('orderId', 'status', );
-    const optionalStringProperties = createSalesOrderResponseOptionalProperties({ name: 'orderId', nullable: false }, { name: 'orderNumber', nullable: false }, { name: 'locationId', nullable: false }, { name: 'label', nullable: false }, { name: 'customerValidationStatus', nullable: false }, { name: 'customerId', nullable: false }, { name: 'vehicleId', nullable: false }, { name: 'clerkId', nullable: false }, { name: 'terminalId', nullable: false }, { name: 'status', nullable: false }, { name: 'orderDiscountType', nullable: false }, { name: 'orderDiscountReasonCode', nullable: false }, { name: 'generalNote', nullable: false }, { name: 'quoteExpiresAt', nullable: false }, { name: 'invoiceId', nullable: false }, { name: 'invoiceNumber', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'updatedAt', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'updatedBy', nullable: false }, );
-    const optionalNumberProperties = createSalesOrderResponseOptionalProperties({ name: 'subtotal', nullable: false }, { name: 'discountTotal', nullable: false }, { name: 'taxTotal', nullable: false }, { name: 'grandTotal', nullable: false }, { name: 'orderDiscountValue', nullable: false }, { name: 'amountPaid', nullable: false }, { name: 'balanceDue', nullable: false }, );
+    const optionalStringProperties = createSalesOrderResponseOptionalProperties({ name: 'clerkId', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'customerId', nullable: false }, { name: 'customerValidationStatus', nullable: false }, { name: 'generalNote', nullable: false }, { name: 'invoiceId', nullable: false }, { name: 'invoiceNumber', nullable: false }, { name: 'label', nullable: false }, { name: 'locationId', nullable: false }, { name: 'orderDiscountReasonCode', nullable: false }, { name: 'orderDiscountType', nullable: false }, { name: 'orderId', nullable: false }, { name: 'orderNumber', nullable: false }, { name: 'quoteExpiresAt', nullable: false }, { name: 'status', nullable: false }, { name: 'terminalId', nullable: false }, { name: 'updatedAt', nullable: false }, { name: 'updatedBy', nullable: false }, { name: 'vehicleId', nullable: false }, );
+    const optionalNumberProperties = createSalesOrderResponseOptionalProperties({ name: 'amountPaid', nullable: false }, { name: 'balanceDue', nullable: false }, { name: 'discountTotal', nullable: false }, { name: 'grandTotal', nullable: false }, { name: 'orderDiscountValue', nullable: false }, { name: 'subtotal', nullable: false }, { name: 'taxTotal', nullable: false }, );
     const optionalBooleanProperties = createSalesOrderResponseOptionalProperties({ name: 'taxStale', nullable: false }, );
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

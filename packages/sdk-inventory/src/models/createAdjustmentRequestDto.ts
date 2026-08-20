@@ -14,13 +14,13 @@
  */
 export interface CreateAdjustmentRequestDto { 
     /**
-     * Stock-keeping unit of the product to adjust
-     */
-    productSku: string;
-    /**
      * Identifier of the location where the adjustment applies
      */
     locationId: string;
+    /**
+     * Stock-keeping unit of the product to adjust
+     */
+    productSku: string;
     /**
      * Adjustment quantity (positive to add stock, negative to remove)
      */
@@ -73,8 +73,8 @@ export function instanceOfCreateAdjustmentRequestDto(value: object): value is Cr
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createCreateAdjustmentRequestDtoPropertyNames('productSku', 'locationId', 'quantity', 'reasonCode', );
-    const optionalStringProperties = createCreateAdjustmentRequestDtoOptionalProperties({ name: 'productSku', nullable: false }, { name: 'locationId', nullable: false }, { name: 'reasonCode', nullable: false }, { name: 'unitOfMeasure', nullable: false }, );
+    const requiredProperties = createCreateAdjustmentRequestDtoPropertyNames('locationId', 'productSku', 'quantity', 'reasonCode', );
+    const optionalStringProperties = createCreateAdjustmentRequestDtoOptionalProperties({ name: 'locationId', nullable: false }, { name: 'productSku', nullable: false }, { name: 'reasonCode', nullable: false }, { name: 'unitOfMeasure', nullable: false }, );
     const optionalNumberProperties = createCreateAdjustmentRequestDtoOptionalProperties({ name: 'quantity', nullable: false }, );
     const optionalBooleanProperties = createCreateAdjustmentRequestDtoOptionalProperties();
 

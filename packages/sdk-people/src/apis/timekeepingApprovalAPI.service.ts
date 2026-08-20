@@ -46,8 +46,8 @@ export class TimekeepingApprovalAPIService extends BaseService {
     }
 
     /**
-     * Approve all pending timekeeping entries for a person in a period
-     * Bulk-approves all PENDING_APPROVAL timekeeping entries for the given employee in the given period.
+     * Approve All Pending Entries In Period
+     * Bulk-approves every PENDING_APPROVAL timekeeping entry for a person within a pay period\&#39;s date range. Use this tool for pay-period sign-off; do not use approveTimeEntriesBatch, which decides individually selected time entries instead of a whole period. Preconditions: the time period must exist; only entries currently in PENDING_APPROVAL are touched, so already decided entries are left as they are. Required inputs: timePeriodId (UUID) and personId (UUID) path parameters; there is no request body. No events are emitted; entries are flipped to APPROVED in place and the response reports the processed count. Returns 200 with processedCount 0 when nothing was pending, and 404 when the time period does not exist. 
      * @endpoint post /v1/people/timekeeping/time-periods/{timePeriodId}/people/{personId}/approve
      * @param timePeriodId 
      * @param personId 
@@ -55,15 +55,15 @@ export class TimekeepingApprovalAPIService extends BaseService {
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public approvePeriod(timePeriodId: string, personId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<TimePeriodDecisionResponse>;
-    public approvePeriod(timePeriodId: string, personId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<TimePeriodDecisionResponse>>;
-    public approvePeriod(timePeriodId: string, personId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<TimePeriodDecisionResponse>>;
-    public approvePeriod(timePeriodId: string, personId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public approveTimePeriod(timePeriodId: string, personId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<TimePeriodDecisionResponse>;
+    public approveTimePeriod(timePeriodId: string, personId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<TimePeriodDecisionResponse>>;
+    public approveTimePeriod(timePeriodId: string, personId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<TimePeriodDecisionResponse>>;
+    public approveTimePeriod(timePeriodId: string, personId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (timePeriodId === null || timePeriodId === undefined) {
-            throw new Error('Required parameter timePeriodId was null or undefined when calling approvePeriod.');
+            throw new Error('Required parameter timePeriodId was null or undefined when calling approveTimePeriod.');
         }
         if (personId === null || personId === undefined) {
-            throw new Error('Required parameter personId was null or undefined when calling approvePeriod.');
+            throw new Error('Required parameter personId was null or undefined when calling approveTimePeriod.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -110,8 +110,8 @@ export class TimekeepingApprovalAPIService extends BaseService {
     }
 
     /**
-     * Get approval summary for a person in a period
-     * Returns the approval status counts and overall status for the given person in the given period.
+     * Get Time Period Approval Summary
+     * Summarises a person\&#39;s timekeeping approval state for a pay period: total, pending, approved, and rejected counts plus an overall status. Use this tool for a status badge or gate; use listTimekeepingEntries instead when the individual entries are needed. Preconditions: the time period must exist; the overall status is PENDING_APPROVAL while any entry is pending, else REJECTED if any entry was rejected, else APPROVED. Required inputs: personId (UUID) and timePeriodId (UUID) query parameters; there is no request body. No events are emitted and no state changes; this is a read-only projection. Returns 404 when the time period does not exist. 
      * @endpoint get /v1/people/timekeeping/time-period-approvals
      * @param personId 
      * @param timePeriodId 
@@ -195,64 +195,8 @@ export class TimekeepingApprovalAPIService extends BaseService {
     }
 
     /**
-     * List employees with timekeeping entries
-     * Returns distinct employees who have at least one timekeeping entry.
-     * @endpoint get /v1/people/timekeeping/approvals/people
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     * @param options additional options
-     */
-    public listApprovalPeople(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<ApprovalPersonDto>>;
-    public listApprovalPeople(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<ApprovalPersonDto>>>;
-    public listApprovalPeople(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<ApprovalPersonDto>>>;
-    public listApprovalPeople(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
-
-        let localVarHeaders = this.defaultHeaders;
-
-        // authentication (bearerAuth) required
-        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
-
-        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
-            'application/json'
-        ]);
-        if (localVarHttpHeaderAcceptSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
-        }
-
-        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
-
-        const localVarTransferCache: boolean = options?.transferCache ?? true;
-
-
-        let responseType_: 'text' | 'json' | 'blob' = 'json';
-        if (localVarHttpHeaderAcceptSelected) {
-            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
-                responseType_ = 'text';
-            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
-                responseType_ = 'json';
-            } else {
-                responseType_ = 'blob';
-            }
-        }
-
-        let localVarPath = `/v1/people/timekeeping/approvals/people`;
-        const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<Array<ApprovalPersonDto>>('get', `${basePath}${localVarPath}`,
-            {
-                context: localVarHttpContext,
-                responseType: <any>responseType_,
-                ...(withCredentials ? { withCredentials } : {}),
-                headers: localVarHeaders,
-                observe: observe,
-                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * List time periods
-     * Returns all pay periods, optionally scoped to a tenant.
+     * List Pay Periods For Timekeeping Approval
+     * Lists pay periods with their start and end dates and status, newest first when scoped to a tenant. Use this tool to choose the period for approval screens; use listTimekeepingEntries instead for the entries inside a chosen period. Preconditions: none; tenantId is an optional scope and omitting it returns all periods in repository order. Required inputs: none; tenantId (UUID) is an optional query parameter. No events are emitted and no state changes; this is a read-only projection. Returns 200 with an empty list when no pay periods exist. 
      * @endpoint get /v1/people/timekeeping/time-periods
      * @param tenantId 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -320,8 +264,64 @@ export class TimekeepingApprovalAPIService extends BaseService {
     }
 
     /**
-     * List timekeeping entries for a person in a period
-     * Returns all timekeeping entries for the given person within the given time period\&#39;s date range.
+     * List Employees With Timekeeping Entries
+     * Lists the distinct employees that have at least one timekeeping entry, with display name and employee number. Use this tool to build the person picker for pay-period approval; use listTimekeepingEntries instead for one person\&#39;s entries in a period. Preconditions: none; display names come from the person identity replica, which is eventually consistent. Required inputs: none; there are no parameters and no request body. No events are emitted and no state changes; this is a read-only projection. Returns 200 with an empty list when no timekeeping entries exist. 
+     * @endpoint get /v1/people/timekeeping/approvals/people
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public listTimekeepingApprovalPeople(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<ApprovalPersonDto>>;
+    public listTimekeepingApprovalPeople(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<ApprovalPersonDto>>>;
+    public listTimekeepingApprovalPeople(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<ApprovalPersonDto>>>;
+    public listTimekeepingApprovalPeople(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/people/timekeeping/approvals/people`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<Array<ApprovalPersonDto>>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * List Timekeeping Entries For Person And Period
+     * Lists a person\&#39;s timekeeping entries whose sessions fall entirely within the given pay period\&#39;s date range, evaluated in UTC. Use this tool to review entries before deciding a period; use getTimePeriodApproval instead for just the status counts. Preconditions: the time period must exist; sessions straddling the period boundary are excluded because both start and end must fall inside it. Required inputs: personId (UUID) and timePeriodId (UUID) query parameters; there is no request body. No events are emitted and no state changes; this is a read-only projection. Returns 404 when the time period does not exist. 
      * @endpoint get /v1/people/timekeeping/timekeeping-entries
      * @param personId 
      * @param timePeriodId 
@@ -405,28 +405,28 @@ export class TimekeepingApprovalAPIService extends BaseService {
     }
 
     /**
-     * Reject all pending timekeeping entries for a person in a period
-     * Bulk-rejects all PENDING_APPROVAL timekeeping entries for the given employee in the given period.
+     * Reject All Pending Entries In Period
+     * Bulk-rejects every PENDING_APPROVAL timekeeping entry for a person within a pay period, storing the reason on each entry as its correctionReason. Use this tool to send a whole period back for correction; do not use rejectTimeEntriesBatch, which rejects individually selected time entries. Preconditions: the time period must exist; only entries currently in PENDING_APPROVAL are touched. Required inputs: timePeriodId (UUID) and personId (UUID) path parameters and a body with a non-blank reason. No events are emitted; entries are flipped to REJECTED in place and the response reports the processed count. Returns 400 when reason is blank, and 404 when the time period does not exist. 
      * @endpoint post /v1/people/timekeeping/time-periods/{timePeriodId}/people/{personId}/reject
      * @param timePeriodId 
      * @param personId 
-     * @param rejectTimePeriodRequest 
+     * @param rejectTimePeriodRequest Rejection justification applied as the correctionReason on every pending entry in the period.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public rejectPeriod(timePeriodId: string, personId: string, rejectTimePeriodRequest: RejectTimePeriodRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<TimePeriodDecisionResponse>;
-    public rejectPeriod(timePeriodId: string, personId: string, rejectTimePeriodRequest: RejectTimePeriodRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<TimePeriodDecisionResponse>>;
-    public rejectPeriod(timePeriodId: string, personId: string, rejectTimePeriodRequest: RejectTimePeriodRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<TimePeriodDecisionResponse>>;
-    public rejectPeriod(timePeriodId: string, personId: string, rejectTimePeriodRequest: RejectTimePeriodRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public rejectTimePeriod(timePeriodId: string, personId: string, rejectTimePeriodRequest: RejectTimePeriodRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<TimePeriodDecisionResponse>;
+    public rejectTimePeriod(timePeriodId: string, personId: string, rejectTimePeriodRequest: RejectTimePeriodRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<TimePeriodDecisionResponse>>;
+    public rejectTimePeriod(timePeriodId: string, personId: string, rejectTimePeriodRequest: RejectTimePeriodRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<TimePeriodDecisionResponse>>;
+    public rejectTimePeriod(timePeriodId: string, personId: string, rejectTimePeriodRequest: RejectTimePeriodRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (timePeriodId === null || timePeriodId === undefined) {
-            throw new Error('Required parameter timePeriodId was null or undefined when calling rejectPeriod.');
+            throw new Error('Required parameter timePeriodId was null or undefined when calling rejectTimePeriod.');
         }
         if (personId === null || personId === undefined) {
-            throw new Error('Required parameter personId was null or undefined when calling rejectPeriod.');
+            throw new Error('Required parameter personId was null or undefined when calling rejectTimePeriod.');
         }
         if (rejectTimePeriodRequest === null || rejectTimePeriodRequest === undefined) {
-            throw new Error('Required parameter rejectTimePeriodRequest was null or undefined when calling rejectPeriod.');
+            throw new Error('Required parameter rejectTimePeriodRequest was null or undefined when calling rejectTimePeriod.');
         }
 
         let localVarHeaders = this.defaultHeaders;

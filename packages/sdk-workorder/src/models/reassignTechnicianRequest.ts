@@ -18,14 +18,6 @@ export interface ReassignTechnicianRequest {
      */
     newTechnicianId: string;
     /**
-     * ID of the user performing the reassignment (defaults from X-User-Id header if not provided)
-     */
-    reassignedByUserId?: string;
-    /**
-     * Reason for reassignment
-     */
-    reason?: string;
-    /**
      * Additional notes for the reassignment
      */
     notes?: string;
@@ -33,6 +25,14 @@ export interface ReassignTechnicianRequest {
      * Whether to send notification to previous technician
      */
     notifyPreviousTechnician?: boolean;
+    /**
+     * Reason for reassignment
+     */
+    reason?: string;
+    /**
+     * ID of the user performing the reassignment (defaults from X-User-Id header if not provided)
+     */
+    reassignedByUserId?: string;
 }
 
 function isOptionalReassignTechnicianRequestPropertyOfType(
@@ -74,7 +74,7 @@ export function instanceOfReassignTechnicianRequest(value: object): value is Rea
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createReassignTechnicianRequestPropertyNames('newTechnicianId', );
-    const optionalStringProperties = createReassignTechnicianRequestOptionalProperties({ name: 'newTechnicianId', nullable: false }, { name: 'reassignedByUserId', nullable: false }, { name: 'reason', nullable: false }, { name: 'notes', nullable: false }, );
+    const optionalStringProperties = createReassignTechnicianRequestOptionalProperties({ name: 'newTechnicianId', nullable: false }, { name: 'notes', nullable: false }, { name: 'reason', nullable: false }, { name: 'reassignedByUserId', nullable: false }, );
     const optionalNumberProperties = createReassignTechnicianRequestOptionalProperties();
     const optionalBooleanProperties = createReassignTechnicianRequestOptionalProperties({ name: 'notifyPreviousTechnician', nullable: false }, );
 

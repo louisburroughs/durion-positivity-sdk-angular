@@ -38,20 +38,20 @@ export class CatalogBulkIngestAPIService extends BaseService {
     }
 
     /**
-     * Bulk ingest records
-     * Accepts a batch of domain records for bulk import. Returns per-record results.
+     * Bulk Import Catalog Products
+     * Imports a batch of catalog products in one call, creating each record through the same governed path as createProduct and reporting a per-row success or failure verdict. Use this tool to load many products at once; do not use createProduct, which registers a single product and surfaces its errors as HTTP statuses rather than row results. Preconditions: each row\&#39;s SKU must not already exist (case-insensitive), or that row fails with CATALOG_INGEST_FAILED while the rest of the batch proceeds. Required inputs: jobId (UUID), locationId (UUID) and a non-empty records array; per record, unitOfMeasure defaults to EA, description defaults to the name, and mpn falls back to the sku then the name, while price, categoryName and subcategoryName are accepted but ignored in this wave. Emits a CATALOG_BULK_INGEST event; each successful row also publishes a product fact and invalidates the product-detail cache. Returns 200 even when rows fail, so callers must inspect successCount, failureCount and the per-row results rather than the HTTP status. 
      * @endpoint post /v1/catalog/bulk-ingest
-     * @param bulkIngestRequestCatalogBulkIngestRecord 
+     * @param bulkIngestRequestCatalogBulkIngestRecord Batch of product records to create for one ingest job scoped to a location.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public bulkIngest(bulkIngestRequestCatalogBulkIngestRecord: BulkIngestRequestCatalogBulkIngestRecord, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<BulkIngestResponse>;
-    public bulkIngest(bulkIngestRequestCatalogBulkIngestRecord: BulkIngestRequestCatalogBulkIngestRecord, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<BulkIngestResponse>>;
-    public bulkIngest(bulkIngestRequestCatalogBulkIngestRecord: BulkIngestRequestCatalogBulkIngestRecord, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<BulkIngestResponse>>;
-    public bulkIngest(bulkIngestRequestCatalogBulkIngestRecord: BulkIngestRequestCatalogBulkIngestRecord, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public bulkIngestCatalogProducts(bulkIngestRequestCatalogBulkIngestRecord: BulkIngestRequestCatalogBulkIngestRecord, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<BulkIngestResponse>;
+    public bulkIngestCatalogProducts(bulkIngestRequestCatalogBulkIngestRecord: BulkIngestRequestCatalogBulkIngestRecord, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<BulkIngestResponse>>;
+    public bulkIngestCatalogProducts(bulkIngestRequestCatalogBulkIngestRecord: BulkIngestRequestCatalogBulkIngestRecord, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<BulkIngestResponse>>;
+    public bulkIngestCatalogProducts(bulkIngestRequestCatalogBulkIngestRecord: BulkIngestRequestCatalogBulkIngestRecord, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (bulkIngestRequestCatalogBulkIngestRecord === null || bulkIngestRequestCatalogBulkIngestRecord === undefined) {
-            throw new Error('Required parameter bulkIngestRequestCatalogBulkIngestRecord was null or undefined when calling bulkIngest.');
+            throw new Error('Required parameter bulkIngestRequestCatalogBulkIngestRecord was null or undefined when calling bulkIngestCatalogProducts.');
         }
 
         let localVarHeaders = this.defaultHeaders;

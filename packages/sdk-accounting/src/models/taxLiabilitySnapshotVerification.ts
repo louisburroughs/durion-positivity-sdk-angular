@@ -14,26 +14,6 @@
  */
 export interface TaxLiabilitySnapshotVerification { 
     /**
-     * Snapshot id verified
-     */
-    snapshotId: string;
-    /**
-     * Accounting period code (YYYY-MM)
-     */
-    periodCode: string;
-    /**
-     * Verification timestamp
-     */
-    verifiedAt: string;
-    /**
-     * Canonical hash stored at freeze time
-     */
-    snapshotContentHash: string;
-    /**
-     * Canonical hash of the report re-derived from live data
-     */
-    recomputedContentHash: string;
-    /**
      * True when the re-derived report hashes identically to the frozen snapshot
      */
     consistent: boolean;
@@ -42,13 +22,33 @@ export interface TaxLiabilitySnapshotVerification {
      */
     frozenTotalNetTax: number;
     /**
+     * recomputedTotalNetTax - frozenTotalNetTax; zero when amounts agree even if row detail moved
+     */
+    netTaxDelta: number;
+    /**
+     * Accounting period code (YYYY-MM)
+     */
+    periodCode: string;
+    /**
+     * Canonical hash of the report re-derived from live data
+     */
+    recomputedContentHash: string;
+    /**
      * Total net tax re-derived from live data
      */
     recomputedTotalNetTax: number;
     /**
-     * recomputedTotalNetTax - frozenTotalNetTax; zero when amounts agree even if row detail moved
+     * Canonical hash stored at freeze time
      */
-    netTaxDelta: number;
+    snapshotContentHash: string;
+    /**
+     * Snapshot id verified
+     */
+    snapshotId: string;
+    /**
+     * Verification timestamp
+     */
+    verifiedAt: string;
 }
 
 function isOptionalTaxLiabilitySnapshotVerificationPropertyOfType(
@@ -89,9 +89,9 @@ export function instanceOfTaxLiabilitySnapshotVerification(value: object): value
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createTaxLiabilitySnapshotVerificationPropertyNames('snapshotId', 'periodCode', 'verifiedAt', 'snapshotContentHash', 'recomputedContentHash', 'consistent', 'frozenTotalNetTax', 'recomputedTotalNetTax', 'netTaxDelta', );
-    const optionalStringProperties = createTaxLiabilitySnapshotVerificationOptionalProperties({ name: 'snapshotId', nullable: false }, { name: 'periodCode', nullable: false }, { name: 'verifiedAt', nullable: false }, { name: 'snapshotContentHash', nullable: false }, { name: 'recomputedContentHash', nullable: false }, );
-    const optionalNumberProperties = createTaxLiabilitySnapshotVerificationOptionalProperties({ name: 'frozenTotalNetTax', nullable: false }, { name: 'recomputedTotalNetTax', nullable: false }, { name: 'netTaxDelta', nullable: false }, );
+    const requiredProperties = createTaxLiabilitySnapshotVerificationPropertyNames('consistent', 'frozenTotalNetTax', 'netTaxDelta', 'periodCode', 'recomputedContentHash', 'recomputedTotalNetTax', 'snapshotContentHash', 'snapshotId', 'verifiedAt', );
+    const optionalStringProperties = createTaxLiabilitySnapshotVerificationOptionalProperties({ name: 'periodCode', nullable: false }, { name: 'recomputedContentHash', nullable: false }, { name: 'snapshotContentHash', nullable: false }, { name: 'snapshotId', nullable: false }, { name: 'verifiedAt', nullable: false }, );
+    const optionalNumberProperties = createTaxLiabilitySnapshotVerificationOptionalProperties({ name: 'frozenTotalNetTax', nullable: false }, { name: 'netTaxDelta', nullable: false }, { name: 'recomputedTotalNetTax', nullable: false }, );
     const optionalBooleanProperties = createTaxLiabilitySnapshotVerificationOptionalProperties({ name: 'consistent', nullable: false }, );
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

@@ -46,24 +46,24 @@ export class TravelSegmentAPIService extends BaseService {
     }
 
     /**
-     * Create a post-approval adjustment for a travel segment
-     * Create an adjustment for a previously recorded travel segment after approval
+     * Create Post-Approval Travel Adjustment
+     * Creates an adjustment record against an APPROVED travel segment, capturing corrected start and end times and a reason while leaving the original segment untouched. Use this tool when approved travel times need correction after the fact; do not use stopTravelSegment or submitTravelSegments, which drive the normal pre-approval lifecycle. Preconditions: the segment must exist and be in APPROVED status — adjustments cannot be created for IN_PROGRESS, COMPLETED, or SUBMITTED segments. Required inputs: travelSegmentId (UUID) as a path parameter and a body with a non-blank adjustmentReason; adjustedStartAt and adjustedEndAt (ISO instants) are optional. Emits a WORKORDER_TRAVEL_SEGMENT_ADJUSTMENT event; the adjusting user is recorded from the security context. Returns 201 with the adjustment, 404 when no segment exists for the id, and 409 when the segment is not APPROVED. 
      * @endpoint post /v1/workorders/travelSegments/{travelSegmentId}/adjustments
      * @param travelSegmentId 
-     * @param createTravelSegmentAdjustmentRequest 
+     * @param createTravelSegmentAdjustmentRequest Corrected travel times and the reason for adjusting an approved segment.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public createAdjustment(travelSegmentId: string, createTravelSegmentAdjustmentRequest: CreateTravelSegmentAdjustmentRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<TravelSegmentAdjustmentResponse>;
-    public createAdjustment(travelSegmentId: string, createTravelSegmentAdjustmentRequest: CreateTravelSegmentAdjustmentRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<TravelSegmentAdjustmentResponse>>;
-    public createAdjustment(travelSegmentId: string, createTravelSegmentAdjustmentRequest: CreateTravelSegmentAdjustmentRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<TravelSegmentAdjustmentResponse>>;
-    public createAdjustment(travelSegmentId: string, createTravelSegmentAdjustmentRequest: CreateTravelSegmentAdjustmentRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public createTravelSegmentAdjustment(travelSegmentId: string, createTravelSegmentAdjustmentRequest: CreateTravelSegmentAdjustmentRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<TravelSegmentAdjustmentResponse>;
+    public createTravelSegmentAdjustment(travelSegmentId: string, createTravelSegmentAdjustmentRequest: CreateTravelSegmentAdjustmentRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<TravelSegmentAdjustmentResponse>>;
+    public createTravelSegmentAdjustment(travelSegmentId: string, createTravelSegmentAdjustmentRequest: CreateTravelSegmentAdjustmentRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<TravelSegmentAdjustmentResponse>>;
+    public createTravelSegmentAdjustment(travelSegmentId: string, createTravelSegmentAdjustmentRequest: CreateTravelSegmentAdjustmentRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (travelSegmentId === null || travelSegmentId === undefined) {
-            throw new Error('Required parameter travelSegmentId was null or undefined when calling createAdjustment.');
+            throw new Error('Required parameter travelSegmentId was null or undefined when calling createTravelSegmentAdjustment.');
         }
         if (createTravelSegmentAdjustmentRequest === null || createTravelSegmentAdjustmentRequest === undefined) {
-            throw new Error('Required parameter createTravelSegmentAdjustmentRequest was null or undefined when calling createAdjustment.');
+            throw new Error('Required parameter createTravelSegmentAdjustmentRequest was null or undefined when calling createTravelSegmentAdjustment.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -120,10 +120,10 @@ export class TravelSegmentAPIService extends BaseService {
     }
 
     /**
-     * Start a travel segment
-     * Start a travel segment for a technician beginning travel related to work execution
+     * Start a Travel Segment
+     * Starts an IN_PROGRESS travel segment for a mobile technician, stamping the start time from the server clock and recording who created it. Use this tool when a technician begins travel tied to a mobile work assignment; do not use stopTravelSegment, which ends an already-running segment. Preconditions: no IN_PROGRESS travel segment may exist for the same mobile work assignment, and when actedForPersonId is set an onBehalfReasonCode is mandatory. Required inputs: mobileWorkAssignmentId (UUID), technicianId (UUID), and segmentType (DEPART_SHOP, ARRIVE_CUSTOMER_SITE, DEPART_CUSTOMER_SITE, ARRIVE_SHOP, TRAVEL_BETWEEN_SITES, or DEADHEAD); fromLocationId, toLocationId, workOrderId, actedForPersonId, and onBehalfReasonCode (TECHNICIAN_UNAVAILABLE, FORGOT_TO_CLOCK, DATA_ENTRY_ERROR) are optional. Emits a WORKORDER_TRAVEL_SEGMENT_START event. Returns 201 with the new segment, 400 when actedForPersonId is given without onBehalfReasonCode, and 409 when an active segment already exists for the assignment. 
      * @endpoint post /v1/workorders/travelSegments/start
-     * @param startTravelSegmentRequest 
+     * @param startTravelSegmentRequest Travel segment start details identifying the assignment, technician, and leg.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -190,11 +190,11 @@ export class TravelSegmentAPIService extends BaseService {
     }
 
     /**
-     * Stop a travel segment
-     * Stop an active travel segment and record the final travel details
+     * Stop an Active Travel Segment
+     * Stops an IN_PROGRESS travel segment, transitioning it to COMPLETED and computing the duration in whole minutes from the server clock. Use this tool when a technician arrives and the travel leg ends; do not use submitTravelSegments, which batches finished segments for approval. Preconditions: the segment must exist and be IN_PROGRESS; COMPLETED, SUBMITTED, or APPROVED segments cannot be stopped again. Required inputs: travelSegmentId (UUID) as a path parameter; toLocationId in the body is optional and overrides the destination recorded at start. Emits a WORKORDER_TRAVEL_SEGMENT_STOP event carrying the computed duration. Returns 404 when no segment exists for the id, and 409 when the segment is not IN_PROGRESS. 
      * @endpoint post /v1/workorders/travelSegments/{travelSegmentId}/stop
      * @param travelSegmentId 
-     * @param stopTravelSegmentRequest 
+     * @param stopTravelSegmentRequest Final travel details recorded when the segment ends.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -264,11 +264,11 @@ export class TravelSegmentAPIService extends BaseService {
     }
 
     /**
-     * Submit travel segments for a mobile work assignment
-     * Submit recorded travel segments for a mobile work assignment for downstream processing
+     * Submit Travel Segments for Approval
+     * Submits the calling technician\&#39;s IN_PROGRESS and COMPLETED travel segments for a mobile work assignment, transitioning them all to SUBMITTED for downstream approval. Use this tool at end of day when travel is ready for review; do not use stopTravelSegment, which ends a single running leg without submitting it. Preconditions: the security-context username must parse as the technician\&#39;s UUID, and at least one IN_PROGRESS or COMPLETED segment must exist for that technician on the assignment. Required inputs: mobileWorkAssignmentId (UUID) as a path parameter and a body with workDate (ISO date); the body is validated but submission is keyed entirely on the path id and the caller\&#39;s identity. Emits a WORKORDER_TRAVEL_SEGMENT_SUBMIT event. Returns 200 with the submitted segments, 400 when the caller\&#39;s username is not a UUID, and 404 when no submittable segments exist for the assignment. 
      * @endpoint post /v1/workorders/travelSegments/submit/{mobileWorkAssignmentId}
      * @param mobileWorkAssignmentId 
-     * @param submitTravelSegmentsRequest 
+     * @param submitTravelSegmentsRequest Submission context for the day\&#39;s travel segments.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options

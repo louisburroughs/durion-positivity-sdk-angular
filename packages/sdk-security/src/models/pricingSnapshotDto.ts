@@ -15,6 +15,18 @@ import { PricingRuleTraceEntryDto } from './pricingRuleTraceEntryDto';
  */
 export interface PricingSnapshotDto { 
     /**
+     * Ordered rule-evaluation steps that produced the price
+     */
+    evaluationSteps?: Array<PricingRuleTraceEntryDto>;
+    /**
+     * Final computed price
+     */
+    finalPrice: number;
+    /**
+     * Serialized quote context evaluated
+     */
+    quoteContext?: string;
+    /**
      * Snapshot identifier
      */
     snapshotId: string;
@@ -22,18 +34,6 @@ export interface PricingSnapshotDto {
      * Timestamp the snapshot was captured
      */
     timestamp: string;
-    /**
-     * Serialized quote context evaluated
-     */
-    quoteContext?: string;
-    /**
-     * Final computed price
-     */
-    finalPrice: number;
-    /**
-     * Ordered rule-evaluation steps that produced the price
-     */
-    evaluationSteps?: Array<PricingRuleTraceEntryDto>;
 }
 
 function isOptionalPricingSnapshotDtoPropertyOfType(
@@ -74,8 +74,8 @@ export function instanceOfPricingSnapshotDto(value: object): value is PricingSna
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createPricingSnapshotDtoPropertyNames('snapshotId', 'timestamp', 'finalPrice', );
-    const optionalStringProperties = createPricingSnapshotDtoOptionalProperties({ name: 'snapshotId', nullable: false }, { name: 'timestamp', nullable: false }, { name: 'quoteContext', nullable: false }, );
+    const requiredProperties = createPricingSnapshotDtoPropertyNames('finalPrice', 'snapshotId', 'timestamp', );
+    const optionalStringProperties = createPricingSnapshotDtoOptionalProperties({ name: 'quoteContext', nullable: false }, { name: 'snapshotId', nullable: false }, { name: 'timestamp', nullable: false }, );
     const optionalNumberProperties = createPricingSnapshotDtoOptionalProperties({ name: 'finalPrice', nullable: false }, );
     const optionalBooleanProperties = createPricingSnapshotDtoOptionalProperties();
 

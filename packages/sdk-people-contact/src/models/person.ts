@@ -10,22 +10,27 @@
 import { ContactPointDto } from './contactPointDto';
 
 
-/**
- * Person object to be created
- */
 export interface Person { 
     /**
-     * Unique identifier for the person
+     * Typed contact points (email, phone). Populated on batch by-id lookups.
      */
-    id?: string;
+    contactPoints?: Array<ContactPointDto>;
     /**
      * First name of the person
      */
     firstName: string;
     /**
+     * Unique identifier for the person
+     */
+    id?: string;
+    /**
      * Last name of the person
      */
     lastName: string;
+    /**
+     * Phone numbers on record
+     */
+    phoneNumbers?: Array<string>;
     /**
      * Primary email address
      */
@@ -35,17 +40,9 @@ export interface Person {
      */
     secondaryEmail?: string;
     /**
-     * Phone numbers on record
-     */
-    phoneNumbers?: Array<string>;
-    /**
      * Linked username, if any
      */
     username?: string;
-    /**
-     * Typed contact points (email, phone). Populated on batch by-id lookups.
-     */
-    contactPoints?: Array<ContactPointDto>;
 }
 
 function isOptionalPersonPropertyOfType(
@@ -87,7 +84,7 @@ export function instanceOfPerson(value: object): value is Person {
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createPersonPropertyNames('firstName', 'lastName', );
-    const optionalStringProperties = createPersonOptionalProperties({ name: 'id', nullable: false }, { name: 'firstName', nullable: false }, { name: 'lastName', nullable: false }, { name: 'primaryEmail', nullable: false }, { name: 'secondaryEmail', nullable: false }, { name: 'username', nullable: false }, );
+    const optionalStringProperties = createPersonOptionalProperties({ name: 'firstName', nullable: false }, { name: 'id', nullable: false }, { name: 'lastName', nullable: false }, { name: 'primaryEmail', nullable: false }, { name: 'secondaryEmail', nullable: false }, { name: 'username', nullable: false }, );
     const optionalNumberProperties = createPersonOptionalProperties();
     const optionalBooleanProperties = createPersonOptionalProperties();
 

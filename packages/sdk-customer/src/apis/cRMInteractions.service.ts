@@ -40,8 +40,8 @@ export class CRMInteractionsService extends BaseService {
     }
 
     /**
-     * List party interactions
-     * Interaction history for a party, newest first, optionally filtered by type
+     * List Party Interaction Timeline
+     * Returns a party\&#39;s interaction timeline newest first, unifying campaign sends, CSR touches, and workorder notes, with interaction bodies passed through redaction before they are returned. Use this tool when reviewing a party\&#39;s touch history; do not use recordInteraction, which appends a new entry to the timeline instead of reading it. Preconditions: none; an unknown partyId simply yields an empty page rather than an error. Required inputs: partyId (UUID) as a path parameter; type optionally filters to one of CAMPAIGN_SEND, EMAIL, SMS, CALL, FOLLOW_UP, NOTE, or WORKORDER_NOTE, page defaults to 0, and size defaults to 50 with a clamp between 1 and 200. Emits a CRM_INTERACTION_LIST audit event; no state changes occur. Returns 200 with an empty page rather than an error when the party has no interactions. 
      * @endpoint get /v1/crm/parties/{partyId}/interactions
      * @param partyId 
      * @param type 
@@ -51,12 +51,12 @@ export class CRMInteractionsService extends BaseService {
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public list2(partyId: string, type?: 'CAMPAIGN_SEND' | 'EMAIL' | 'SMS' | 'CALL' | 'FOLLOW_UP' | 'NOTE' | 'WORKORDER_NOTE', page?: number, size?: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PagedResponse>;
-    public list2(partyId: string, type?: 'CAMPAIGN_SEND' | 'EMAIL' | 'SMS' | 'CALL' | 'FOLLOW_UP' | 'NOTE' | 'WORKORDER_NOTE', page?: number, size?: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PagedResponse>>;
-    public list2(partyId: string, type?: 'CAMPAIGN_SEND' | 'EMAIL' | 'SMS' | 'CALL' | 'FOLLOW_UP' | 'NOTE' | 'WORKORDER_NOTE', page?: number, size?: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PagedResponse>>;
-    public list2(partyId: string, type?: 'CAMPAIGN_SEND' | 'EMAIL' | 'SMS' | 'CALL' | 'FOLLOW_UP' | 'NOTE' | 'WORKORDER_NOTE', page?: number, size?: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public listPartyInteractions(partyId: string, type?: 'CAMPAIGN_SEND' | 'EMAIL' | 'SMS' | 'CALL' | 'FOLLOW_UP' | 'NOTE' | 'WORKORDER_NOTE', page?: number, size?: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PagedResponse>;
+    public listPartyInteractions(partyId: string, type?: 'CAMPAIGN_SEND' | 'EMAIL' | 'SMS' | 'CALL' | 'FOLLOW_UP' | 'NOTE' | 'WORKORDER_NOTE', page?: number, size?: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PagedResponse>>;
+    public listPartyInteractions(partyId: string, type?: 'CAMPAIGN_SEND' | 'EMAIL' | 'SMS' | 'CALL' | 'FOLLOW_UP' | 'NOTE' | 'WORKORDER_NOTE', page?: number, size?: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PagedResponse>>;
+    public listPartyInteractions(partyId: string, type?: 'CAMPAIGN_SEND' | 'EMAIL' | 'SMS' | 'CALL' | 'FOLLOW_UP' | 'NOTE' | 'WORKORDER_NOTE', page?: number, size?: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (partyId === null || partyId === undefined) {
-            throw new Error('Required parameter partyId was null or undefined when calling list2.');
+            throw new Error('Required parameter partyId was null or undefined when calling listPartyInteractions.');
         }
 
         let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
@@ -133,24 +133,24 @@ export class CRMInteractionsService extends BaseService {
     }
 
     /**
-     * Record an interaction
-     * Record a CSR-initiated touch (call, email, note) on a party\&#39;s timeline
+     * Record Party Interaction
+     * Records a CSR-initiated touch such as a call, email, or note on a party\&#39;s interaction timeline, stamping the acting username from the security context. Use this tool when logging a manual customer touch; do not use listPartyInteractions, which reads the timeline, and note that campaign and workorder interactions are ingested from events rather than through this endpoint. Preconditions: none are checked against the party; the interaction is stored against the supplied partyId as-is. Required inputs: partyId (UUID) as a path parameter and type (CAMPAIGN_SEND, EMAIL, SMS, CALL, FOLLOW_UP, NOTE, or WORKORDER_NOTE) in the body; direction defaults to OUTBOUND, occurredAt defaults to now, and channel accepts EMAIL or SMS. Emits a CRM_INTERACTION_RECORD event and persists the interaction row. Returns 400 when type is missing or subject, summary, or body exceed their length limits. 
      * @endpoint post /v1/crm/parties/{partyId}/interactions
      * @param partyId 
-     * @param recordInteractionRequest 
+     * @param recordInteractionRequest The CSR touch to append to the party\&#39;s timeline, typed by interaction kind and optional channel.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public record(partyId: string, recordInteractionRequest: RecordInteractionRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<CustomerInteractionResponse>;
-    public record(partyId: string, recordInteractionRequest: RecordInteractionRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<CustomerInteractionResponse>>;
-    public record(partyId: string, recordInteractionRequest: RecordInteractionRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<CustomerInteractionResponse>>;
-    public record(partyId: string, recordInteractionRequest: RecordInteractionRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public recordInteraction(partyId: string, recordInteractionRequest: RecordInteractionRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<CustomerInteractionResponse>;
+    public recordInteraction(partyId: string, recordInteractionRequest: RecordInteractionRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<CustomerInteractionResponse>>;
+    public recordInteraction(partyId: string, recordInteractionRequest: RecordInteractionRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<CustomerInteractionResponse>>;
+    public recordInteraction(partyId: string, recordInteractionRequest: RecordInteractionRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (partyId === null || partyId === undefined) {
-            throw new Error('Required parameter partyId was null or undefined when calling record.');
+            throw new Error('Required parameter partyId was null or undefined when calling recordInteraction.');
         }
         if (recordInteractionRequest === null || recordInteractionRequest === undefined) {
-            throw new Error('Required parameter recordInteractionRequest was null or undefined when calling record.');
+            throw new Error('Required parameter recordInteractionRequest was null or undefined when calling recordInteraction.');
         }
 
         let localVarHeaders = this.defaultHeaders;

@@ -14,26 +14,6 @@
  */
 export interface WorkSessionDto { 
     /**
-     * Work session identifier
-     */
-    sessionId: string;
-    /**
-     * Person the session belongs to
-     */
-    personId: string;
-    /**
-     * Lifecycle status of the session
-     */
-    status: string;
-    /**
-     * Timestamp the session started
-     */
-    startedAt?: string;
-    /**
-     * Timestamp the session ended
-     */
-    endedAt?: string;
-    /**
      * Total billable minutes for the session
      */
     billableMinutes?: number;
@@ -41,6 +21,26 @@ export interface WorkSessionDto {
      * Total break minutes for the session
      */
     breakMinutes?: number;
+    /**
+     * Timestamp the session ended
+     */
+    endedAt?: string;
+    /**
+     * Person the session belongs to
+     */
+    personId: string;
+    /**
+     * Work session identifier
+     */
+    sessionId: string;
+    /**
+     * Timestamp the session started
+     */
+    startedAt?: string;
+    /**
+     * Lifecycle status of the session
+     */
+    status: string;
     /**
      * Timestamp the session was submitted
      */
@@ -85,8 +85,8 @@ export function instanceOfWorkSessionDto(value: object): value is WorkSessionDto
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createWorkSessionDtoPropertyNames('sessionId', 'personId', 'status', );
-    const optionalStringProperties = createWorkSessionDtoOptionalProperties({ name: 'sessionId', nullable: false }, { name: 'personId', nullable: false }, { name: 'status', nullable: false }, { name: 'startedAt', nullable: false }, { name: 'endedAt', nullable: false }, { name: 'submittedAt', nullable: false }, );
+    const requiredProperties = createWorkSessionDtoPropertyNames('personId', 'sessionId', 'status', );
+    const optionalStringProperties = createWorkSessionDtoOptionalProperties({ name: 'endedAt', nullable: false }, { name: 'personId', nullable: false }, { name: 'sessionId', nullable: false }, { name: 'startedAt', nullable: false }, { name: 'status', nullable: false }, { name: 'submittedAt', nullable: false }, );
     const optionalNumberProperties = createWorkSessionDtoOptionalProperties({ name: 'billableMinutes', nullable: false }, { name: 'breakMinutes', nullable: false }, );
     const optionalBooleanProperties = createWorkSessionDtoOptionalProperties();
 

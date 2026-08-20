@@ -18,13 +18,13 @@ export interface CorrectionResultDto {
      */
     auditRecordId: string;
     /**
-     * Whether the correction was accepted or rejected
-     */
-    status: CorrectionResultDtoStatusEnum;
-    /**
      * Reason for rejection if status is REJECTED
      */
     rejectionReason?: string | null;
+    /**
+     * Whether the correction was accepted or rejected
+     */
+    status: CorrectionResultDtoStatusEnum;
 }
 export enum CorrectionResultDtoStatusEnum {
     Accepted = 'ACCEPTED',
@@ -72,7 +72,7 @@ export function instanceOfCorrectionResultDto(value: object): value is Correctio
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createCorrectionResultDtoPropertyNames('auditRecordId', 'status', );
-    const optionalStringProperties = createCorrectionResultDtoOptionalProperties({ name: 'auditRecordId', nullable: false }, { name: 'status', nullable: false }, { name: 'rejectionReason', nullable: true }, );
+    const optionalStringProperties = createCorrectionResultDtoOptionalProperties({ name: 'auditRecordId', nullable: false }, { name: 'rejectionReason', nullable: true }, { name: 'status', nullable: false }, );
     const optionalNumberProperties = createCorrectionResultDtoOptionalProperties();
     const optionalBooleanProperties = createCorrectionResultDtoOptionalProperties();
 

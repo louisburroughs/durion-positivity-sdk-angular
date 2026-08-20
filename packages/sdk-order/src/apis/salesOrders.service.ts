@@ -52,24 +52,24 @@ export class SalesOrdersService extends BaseService {
     }
 
     /**
-     * Add an item to a sales order cart
-     * Add a line item to an existing sales order cart using SKU, quantity, and optional pricing context. A client-supplied lineUuid makes the call replay-safe: a replay with a known lineUuid updates the existing line instead of duplicating it.
+     * Add an Item to a Cart
+     * Adds a line item to a DRAFT sales order cart, pricing it through the pricing service unless a permissioned manual price is supplied, and marking the line AVAILABLE or BACKORDER from an inventory availability check. Use this tool to put a SKU on an existing cart; do not use updateCartItemQuantity, which only changes the quantity of a line already on the cart. Preconditions: the order must exist and be DRAFT, and a manual price requires the order:line:enter_manual_price permission. Required inputs: itemSku and quantity (minimum 1); manualPrice, reasonCode, notes, and serialNumbers (never more than quantity) are optional, and a client-supplied lineUuid makes the call replay-safe — a replay with a known lineUuid updates that line\&#39;s quantity instead of duplicating it. Emits an ORDER_CART_ITEM_ADD event, recomputes order totals, and marks tax stale. Returns 400 when the SKU is unknown, 404 when the order does not exist, 409 when the order is not DRAFT or the lineUuid was previously used for a different SKU, and 422 when pricing is unavailable or serialNumbers exceed the quantity. 
      * @endpoint post /v1/orders/carts/{orderId}/items
      * @param orderId 
-     * @param addItemRequest 
+     * @param addItemRequest The line item to add: SKU, quantity, and optional pricing context.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public addItem(orderId: string, addItemRequest: AddItemRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<SalesOrderLineResponse>;
-    public addItem(orderId: string, addItemRequest: AddItemRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<SalesOrderLineResponse>>;
-    public addItem(orderId: string, addItemRequest: AddItemRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<SalesOrderLineResponse>>;
-    public addItem(orderId: string, addItemRequest: AddItemRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public addCartItem(orderId: string, addItemRequest: AddItemRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<SalesOrderLineResponse>;
+    public addCartItem(orderId: string, addItemRequest: AddItemRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<SalesOrderLineResponse>>;
+    public addCartItem(orderId: string, addItemRequest: AddItemRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<SalesOrderLineResponse>>;
+    public addCartItem(orderId: string, addItemRequest: AddItemRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (orderId === null || orderId === undefined) {
-            throw new Error('Required parameter orderId was null or undefined when calling addItem.');
+            throw new Error('Required parameter orderId was null or undefined when calling addCartItem.');
         }
         if (addItemRequest === null || addItemRequest === undefined) {
-            throw new Error('Required parameter addItemRequest was null or undefined when calling addItem.');
+            throw new Error('Required parameter addItemRequest was null or undefined when calling addCartItem.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -126,11 +126,11 @@ export class SalesOrdersService extends BaseService {
     }
 
     /**
-     * Apply an order-level discount
-     * Apply or replace the order-level discount (PERCENT or AMOUNT), allocated pro-rata across lines. DRAFT orders only.
+     * Apply an Order-Level Discount
+     * Applies or replaces the single order-level discount on a DRAFT cart, allocated pro-rata across lines when totals are recomputed. Use this tool for a whole-order concession; do not use applyPriceOverride, which changes one line\&#39;s unit price through the price-override approval workflow. Preconditions: the order must exist and be DRAFT. Required inputs: type (PERCENT or AMOUNT) and a positive value — a PERCENT value must not exceed 100; reasonCode is optional. Emits an ORDER_CART_DISCOUNT_APPLY event, recomputes order totals, and marks tax stale. Returns 404 when the order does not exist, 409 when the order is not DRAFT, and 422 when the type or value is invalid. 
      * @endpoint put /v1/orders/carts/{orderId}/discount
      * @param orderId 
-     * @param orderDiscountRequest 
+     * @param orderDiscountRequest The order-level discount to set, replacing any existing one.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -200,25 +200,25 @@ export class SalesOrdersService extends BaseService {
     }
 
     /**
-     * Check out a sales order
-     * Freeze the cart and take it to PENDING_PAYMENT: validates lines/customer/availability, performs the final reprice and tax computation, and creates the fronting invoice at pos-invoice. The Idempotency-Key header is required; a replayed key returns the checked-out order with 200. Settlement completion is asynchronous — the order completes when payment events settle the balance to zero.
+     * Check Out a Sales Order
+     * Freezes a DRAFT or QUOTED cart into PENDING_PAYMENT: revalidates availability and serial capture, runs the final reprice and tax computation, and synchronously creates the fronting invoice at pos-invoice, rolling the whole checkout back if invoice creation fails. Use this tool when the customer is ready to pay; do not use quoteCart, which produces a resumable quote, and do not use voidOrder, which abandons an order already in PENDING_PAYMENT. Preconditions: the cart must be non-empty with customer validation not PENDING, every line must have sufficient inventory, serial-tracked lines must carry one serial per unit (lot-tracked at least one), and ON_ACCOUNT additionally requires the order:order:charge_on_account permission and a VALIDATED commercial customer with payment terms and no credit hold. Required inputs: the Idempotency-Key header; the body is optional with tenderType DEFAULT or ON_ACCOUNT — DEFAULT settles asynchronously via payment events that complete the order when the balance reaches zero, while ON_ACCOUNT settles against the AR invoice and completes the order immediately. Emits an ORDER_CHECKOUT event; an ON_ACCOUNT checkout also records a settled ON_ACCOUNT ledger entry and publishes an order-completed fact. Returns 201 on checkout, 200 when the same Idempotency-Key replays the checked-out order, 409 when the key belongs to a different order or the status does not allow checkout, 422 when the cart is empty, customer validation is pending, availability or serial capture is insufficient, or on-account eligibility fails, and 503 when the tax or invoicing service is unreachable. 
      * @endpoint post /v1/orders/{orderId}/checkout
      * @param orderId 
      * @param idempotencyKey Required checkout idempotency key; replays return the original result
-     * @param checkoutRequest 
+     * @param checkoutRequest Optional checkout options; omit the body entirely for default tender.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public checkout(orderId: string, idempotencyKey: string, checkoutRequest?: CheckoutRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<SalesOrderResponse>;
-    public checkout(orderId: string, idempotencyKey: string, checkoutRequest?: CheckoutRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<SalesOrderResponse>>;
-    public checkout(orderId: string, idempotencyKey: string, checkoutRequest?: CheckoutRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<SalesOrderResponse>>;
-    public checkout(orderId: string, idempotencyKey: string, checkoutRequest?: CheckoutRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public checkoutOrder(orderId: string, idempotencyKey: string, checkoutRequest?: CheckoutRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<SalesOrderResponse>;
+    public checkoutOrder(orderId: string, idempotencyKey: string, checkoutRequest?: CheckoutRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<SalesOrderResponse>>;
+    public checkoutOrder(orderId: string, idempotencyKey: string, checkoutRequest?: CheckoutRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<SalesOrderResponse>>;
+    public checkoutOrder(orderId: string, idempotencyKey: string, checkoutRequest?: CheckoutRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (orderId === null || orderId === undefined) {
-            throw new Error('Required parameter orderId was null or undefined when calling checkout.');
+            throw new Error('Required parameter orderId was null or undefined when calling checkoutOrder.');
         }
         if (idempotencyKey === null || idempotencyKey === undefined) {
-            throw new Error('Required parameter idempotencyKey was null or undefined when calling checkout.');
+            throw new Error('Required parameter idempotencyKey was null or undefined when calling checkoutOrder.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -278,8 +278,8 @@ export class SalesOrdersService extends BaseService {
     }
 
     /**
-     * Remove the order-level discount
-     * Clear any order-level discount and recompute totals. DRAFT orders only.
+     * Remove the Order-Level Discount
+     * Clears any order-level discount from a DRAFT cart and recomputes totals. Use this tool to withdraw a whole-order concession; do not use applyOrderDiscount, which sets or replaces the discount. Preconditions: the order must exist and be DRAFT; clearing a cart that has no discount succeeds. Required inputs: orderId (UUID) as a path parameter; there is no request body. Emits an ORDER_CART_DISCOUNT_REMOVE event, recomputes order totals, and marks tax stale. Returns 404 when the order does not exist, and 409 when the order is not DRAFT. 
      * @endpoint delete /v1/orders/carts/{orderId}/discount
      * @param orderId 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -338,10 +338,10 @@ export class SalesOrdersService extends BaseService {
     }
 
     /**
-     * Create a sales order cart
-     * Create a new sales order cart for a customer, terminal, and optional vehicle context. Supports the Idempotency-Key header: a replayed key returns the original cart with 200 instead of creating a duplicate; a replayed key with a different payload returns 409.
+     * Create a Sales Order Cart
+     * Creates a DRAFT sales order cart bound to a clerk and terminal, with optional customer, vehicle, and deposit-source context; a register session open on the terminal binds the cart to it and supplies the location when locationId is omitted. Use this tool to start a new sale at the counter; do not use addCartItem, which adds line items to a cart that already exists. Preconditions: the terminal must not have a register session in CLOSING, the customer and vehicle must exist in CRM when supplied, and a location must be resolvable from the request or the open session. Required inputs: clerkId and terminalId; customerId and vehicleId are optional UUID strings, depositSourceType (ESTIMATE, WORKORDER or ORDER) and depositSourceId must be supplied together, and the optional Idempotency-Key header makes creation replay-safe. Emits an ORDER_CART_CREATE event and records the initial DRAFT status-history row. Returns 201 on creation, 200 when a replayed Idempotency-Key returns the original cart, 409 when the key was previously used with a different payload, and 422 when the customer or vehicle cannot be validated, the location cannot be resolved, or the terminal\&#39;s session is being closed. 
      * @endpoint post /v1/orders/carts
-     * @param createCartRequest 
+     * @param createCartRequest Cart-creation context: who is selling, where, and for whom.
      * @param idempotencyKey Client idempotency key; replays return the original cart
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
@@ -412,8 +412,8 @@ export class SalesOrdersService extends BaseService {
     }
 
     /**
-     * Get a sales order by ID
-     * Retrieve a sales order cart and its current line items by identifier.
+     * Get a Sales Order by Id
+     * Returns a sales order with its current line items, totals, status, invoice references, and payment balances. Use this tool when the order id is already known; use listCarts instead to search by clerk, terminal or status. Preconditions: the order must exist. Required inputs: orderId (UUID) as a path parameter; there is no request body and no filtering. No events are emitted and no state changes; this is a read-only projection. Returns 404 when no sales order exists for the supplied id. 
      * @endpoint get /v1/orders/carts/{orderId}
      * @param orderId 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -472,24 +472,24 @@ export class SalesOrdersService extends BaseService {
     }
 
     /**
-     * Link a source to a sales order
-     * Associate an external source reference with an existing sales order cart.
+     * Link a Source Document to an Order
+     * Imports the line items of a source document (an ESTIMATE or WORKORDER) into a DRAFT cart, merging into same-SKU same-price lines where possible; imported source prices are contractual and are never repriced. Use this tool to pull approved estimate or workorder lines onto a sale; do not use addCartItem, which adds individually priced counter lines. Preconditions: the order must be DRAFT, a WORKORDER source requires a customer already on the cart, and source lines already linked to the cart are skipped, making the call replay-safe. Required inputs: sourceType (ESTIMATE or WORKORDER) and sourceId, both in the body. Emits an ORDER_LINK_SOURCE event, recomputes order totals, and marks tax stale. Returns 404 when the order does not exist, 409 when the order is not DRAFT, and 422 when the sourceType is unknown or a WORKORDER link is attempted without a customer on the cart. 
      * @endpoint patch /v1/orders/carts/{orderId}/source
      * @param orderId 
-     * @param linkSourceRequest 
+     * @param linkSourceRequest The source document whose lines are imported into the cart.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public linkSource(orderId: string, linkSourceRequest: LinkSourceRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<SalesOrderResponse>;
-    public linkSource(orderId: string, linkSourceRequest: LinkSourceRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<SalesOrderResponse>>;
-    public linkSource(orderId: string, linkSourceRequest: LinkSourceRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<SalesOrderResponse>>;
-    public linkSource(orderId: string, linkSourceRequest: LinkSourceRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public linkOrderSource(orderId: string, linkSourceRequest: LinkSourceRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<SalesOrderResponse>;
+    public linkOrderSource(orderId: string, linkSourceRequest: LinkSourceRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<SalesOrderResponse>>;
+    public linkOrderSource(orderId: string, linkSourceRequest: LinkSourceRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<SalesOrderResponse>>;
+    public linkOrderSource(orderId: string, linkSourceRequest: LinkSourceRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (orderId === null || orderId === undefined) {
-            throw new Error('Required parameter orderId was null or undefined when calling linkSource.');
+            throw new Error('Required parameter orderId was null or undefined when calling linkOrderSource.');
         }
         if (linkSourceRequest === null || linkSourceRequest === undefined) {
-            throw new Error('Required parameter linkSourceRequest was null or undefined when calling linkSource.');
+            throw new Error('Required parameter linkSourceRequest was null or undefined when calling linkOrderSource.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -546,8 +546,8 @@ export class SalesOrdersService extends BaseService {
     }
 
     /**
-     * List sales order carts
-     * List carts filtered by clerk, terminal, and/or status — the draft-parking/resume surface. Line items are omitted from list results.
+     * List Sales Order Carts
+     * Lists sales order carts filtered by clerk, terminal, and status — the draft-parking and resume surface; line items are omitted from list results. Use this tool when searching for carts to resume or review; use getOrder instead when the order id is already known and full line detail is needed. Preconditions: none beyond an authenticated caller with order view permission. Required inputs: none — clerkId, terminalId, and status (a status name such as DRAFT) are optional filters; page defaults to 0 and size defaults to 20, capped at 100. Emits an ORDER_CART_LIST audit event; no order state changes. Returns 200 with a possibly empty page, and 422 when status is not a valid order status name. 
      * @endpoint get /v1/orders/carts
      * @param clerkId Filter by clerk identifier
      * @param terminalId Filter by terminal identifier
@@ -655,20 +655,20 @@ export class SalesOrdersService extends BaseService {
     }
 
     /**
-     * Convert a cart to a counter quote
-     * Final reprice + tax computation, then DRAFT → QUOTED with a validity horizon. Counter quotes only: workorder-linked orders are quoted via pos-workorder estimates and are rejected here (spec Q3).
+     * Convert a Cart to a Counter Quote
+     * Converts a DRAFT counter cart to QUOTED by running a final reprice and authoritative tax computation and stamping a validity horizon (default P7D, configurable via pos.order.quote.validity). Use this tool to hand the customer a priced, resumable counter quote; do not use checkoutOrder, which freezes the cart for payment, and note that workorder-linked orders are quoted via pos-workorder estimates and are rejected here. Preconditions: the order must be DRAFT with at least one line, must not reference a workorder directly or through imported lines, and pricing must be reachable for every non-manual, non-source line. Required inputs: orderId (UUID) as a path parameter; there is no request body. Emits an ORDER_CART_QUOTE event. Returns 404 when the order does not exist, 409 when the status does not allow the transition, 422 when the cart is empty, workorder-linked, or pricing is unavailable, and 503 when the tax service cannot be reached. 
      * @endpoint post /v1/orders/carts/{orderId}/quote
      * @param orderId 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public quote(orderId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<SalesOrderResponse>;
-    public quote(orderId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<SalesOrderResponse>>;
-    public quote(orderId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<SalesOrderResponse>>;
-    public quote(orderId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public quoteCart(orderId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<SalesOrderResponse>;
+    public quoteCart(orderId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<SalesOrderResponse>>;
+    public quoteCart(orderId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<SalesOrderResponse>>;
+    public quoteCart(orderId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (orderId === null || orderId === undefined) {
-            throw new Error('Required parameter orderId was null or undefined when calling quote.');
+            throw new Error('Required parameter orderId was null or undefined when calling quoteCart.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -715,8 +715,8 @@ export class SalesOrdersService extends BaseService {
     }
 
     /**
-     * Remove an item from a sales order cart
-     * Remove a line item from an existing sales order cart.
+     * Remove an Item from a Cart
+     * Removes a line item from a DRAFT sales order cart and recomputes the remaining totals. Use this tool to take a line off the sale entirely; do not use updateCartItemQuantity, which keeps the line and changes its quantity. Preconditions: the order must exist and be DRAFT; a lineId that is not on the order is silently ignored rather than rejected. Required inputs: orderId and lineId as path UUIDs; there is no request body. Emits an ORDER_CART_ITEM_REMOVE event, recomputes order totals, and marks tax stale. Returns 204 on success, 404 when the order does not exist, and 409 when the order is not DRAFT. 
      * @endpoint delete /v1/orders/carts/{orderId}/items/{lineId}
      * @param orderId 
      * @param lineId 
@@ -724,15 +724,15 @@ export class SalesOrdersService extends BaseService {
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public removeItem(orderId: string, lineId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public removeItem(orderId: string, lineId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public removeItem(orderId: string, lineId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public removeItem(orderId: string, lineId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public removeCartItem(orderId: string, lineId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
+    public removeCartItem(orderId: string, lineId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
+    public removeCartItem(orderId: string, lineId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
+    public removeCartItem(orderId: string, lineId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (orderId === null || orderId === undefined) {
-            throw new Error('Required parameter orderId was null or undefined when calling removeItem.');
+            throw new Error('Required parameter orderId was null or undefined when calling removeCartItem.');
         }
         if (lineId === null || lineId === undefined) {
-            throw new Error('Required parameter lineId was null or undefined when calling removeItem.');
+            throw new Error('Required parameter lineId was null or undefined when calling removeCartItem.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -778,8 +778,8 @@ export class SalesOrdersService extends BaseService {
     }
 
     /**
-     * Reopen a counter quote
-     * QUOTED → DRAFT: clears the validity horizon, best-effort reprices, and marks tax stale.
+     * Reopen a Counter Quote
+     * Reopens a QUOTED counter quote back to DRAFT, clearing the validity horizon so the cart can be edited again. Use this tool to resume editing a quoted cart; do not use quoteCart, which moves the cart in the opposite direction from DRAFT to QUOTED. Preconditions: the order must be QUOTED. Required inputs: orderId (UUID) as a path parameter; there is no request body. Emits an ORDER_CART_QUOTE_REOPEN event and best-effort reprices the lines — an unavailable pricing service keeps the old prices, and totals are recomputed with tax marked stale. Returns 404 when the order does not exist, and 409 when the order is not QUOTED. 
      * @endpoint post /v1/orders/carts/{orderId}/quote/reopen
      * @param orderId 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -838,28 +838,28 @@ export class SalesOrdersService extends BaseService {
     }
 
     /**
-     * Update a sales order cart item quantity
-     * Update the quantity for an existing sales order line item in a cart.
+     * Update a Cart Item Quantity
+     * Updates the quantity of an existing line on a DRAFT sales order cart and recomputes order totals. Use this tool to change how many units a line sells; do not use removeCartItem, which deletes the line entirely, and do not use addCartItem, which creates a new line. Preconditions: the order must exist and be DRAFT, and the line must exist on that order. Required inputs: orderId and lineId as path UUIDs, and quantity (minimum 1) in the body. Emits an ORDER_CART_ITEM_UPDATE event, recomputes order totals, and marks tax stale. Returns 404 when the order or line does not exist, and 409 when the order is not DRAFT. 
      * @endpoint put /v1/orders/carts/{orderId}/items/{lineId}
      * @param orderId 
      * @param lineId 
-     * @param updateItemRequest 
+     * @param updateItemRequest The new quantity for the line.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public updateItemQuantity(orderId: string, lineId: string, updateItemRequest: UpdateItemRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<SalesOrderLineResponse>;
-    public updateItemQuantity(orderId: string, lineId: string, updateItemRequest: UpdateItemRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<SalesOrderLineResponse>>;
-    public updateItemQuantity(orderId: string, lineId: string, updateItemRequest: UpdateItemRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<SalesOrderLineResponse>>;
-    public updateItemQuantity(orderId: string, lineId: string, updateItemRequest: UpdateItemRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public updateCartItemQuantity(orderId: string, lineId: string, updateItemRequest: UpdateItemRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<SalesOrderLineResponse>;
+    public updateCartItemQuantity(orderId: string, lineId: string, updateItemRequest: UpdateItemRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<SalesOrderLineResponse>>;
+    public updateCartItemQuantity(orderId: string, lineId: string, updateItemRequest: UpdateItemRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<SalesOrderLineResponse>>;
+    public updateCartItemQuantity(orderId: string, lineId: string, updateItemRequest: UpdateItemRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (orderId === null || orderId === undefined) {
-            throw new Error('Required parameter orderId was null or undefined when calling updateItemQuantity.');
+            throw new Error('Required parameter orderId was null or undefined when calling updateCartItemQuantity.');
         }
         if (lineId === null || lineId === undefined) {
-            throw new Error('Required parameter lineId was null or undefined when calling updateItemQuantity.');
+            throw new Error('Required parameter lineId was null or undefined when calling updateCartItemQuantity.');
         }
         if (updateItemRequest === null || updateItemRequest === undefined) {
-            throw new Error('Required parameter updateItemRequest was null or undefined when calling updateItemQuantity.');
+            throw new Error('Required parameter updateItemRequest was null or undefined when calling updateCartItemQuantity.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -916,11 +916,11 @@ export class SalesOrdersService extends BaseService {
     }
 
     /**
-     * Void an unsettled order
-     * Terminal void of a PENDING_PAYMENT order before any settlement: cancels the fronting pos-invoice invoice and transitions the order to VOIDED. Rejected with 409 when settled payments exist (use the cancellation flow) or from any other status (drafts are cancelled, not voided).
+     * Void an Unsettled Order
+     * Voids a PENDING_PAYMENT order before any settlement: cancels the fronting pos-invoice invoice and transitions the order to VOIDED, rolling the void back if the invoice cancel fails. Use this tool to abandon a checked-out order that has taken no money; do not use cancelOrder, which runs the cancellation saga for DRAFT and QUOTED orders and reverses settled payments. Preconditions: the order must be PENDING_PAYMENT with no settled payment records; voiding an already VOIDED order is an idempotent no-op. Required inputs: orderId (UUID) as a path parameter; the body is optional and carries only a free-text reason. Emits an ORDER_VOID event. Returns 200 on success or an already-voided no-op, 404 when the order does not exist, 409 when settled payments exist (route through cancelOrder) or the status is not PENDING_PAYMENT, and 503 when the invoicing service is unreachable. 
      * @endpoint post /v1/orders/{orderId}/void
      * @param orderId 
-     * @param voidOrderRequest 
+     * @param voidOrderRequest Optional void context; the body may be omitted entirely.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options

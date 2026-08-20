@@ -14,6 +14,10 @@
  */
 export interface AgedReceivablesRow { 
     /**
+     * Outstanding 0-30 days past due (includes not-yet-due)
+     */
+    current: number;
+    /**
      * Customer (party) UUID
      */
     customerId: string;
@@ -21,10 +25,6 @@ export interface AgedReceivablesRow {
      * Customer display name
      */
     customerName?: string;
-    /**
-     * Outstanding 0-30 days past due (includes not-yet-due)
-     */
-    current: number;
     /**
      * Outstanding 31-60 days past due
      */
@@ -81,7 +81,7 @@ export function instanceOfAgedReceivablesRow(value: object): value is AgedReceiv
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createAgedReceivablesRowPropertyNames('customerId', 'current', 'days31To60', 'days61To90', 'days90Plus', 'totalOutstanding', );
+    const requiredProperties = createAgedReceivablesRowPropertyNames('current', 'customerId', 'days31To60', 'days61To90', 'days90Plus', 'totalOutstanding', );
     const optionalStringProperties = createAgedReceivablesRowOptionalProperties({ name: 'customerId', nullable: false }, { name: 'customerName', nullable: false }, );
     const optionalNumberProperties = createAgedReceivablesRowOptionalProperties({ name: 'current', nullable: false }, { name: 'days31To60', nullable: false }, { name: 'days61To90', nullable: false }, { name: 'days90Plus', nullable: false }, { name: 'totalOutstanding', nullable: false }, );
     const optionalBooleanProperties = createAgedReceivablesRowOptionalProperties();

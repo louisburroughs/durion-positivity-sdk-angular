@@ -14,6 +14,10 @@
  */
 export interface LocationParentResponseDTO { 
     /**
+     * Identifier of the child location
+     */
+    childId: string;
+    /**
      * Unique identifier of the parent relationship record
      */
     id: string;
@@ -21,10 +25,6 @@ export interface LocationParentResponseDTO {
      * Identifier of the parent location
      */
     parentId: string;
-    /**
-     * Identifier of the child location
-     */
-    childId: string;
     /**
      * Type of the parent relationship
      */
@@ -69,8 +69,8 @@ export function instanceOfLocationParentResponseDTO(value: object): value is Loc
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createLocationParentResponseDTOPropertyNames('id', 'parentId', 'childId', );
-    const optionalStringProperties = createLocationParentResponseDTOOptionalProperties({ name: 'id', nullable: false }, { name: 'parentId', nullable: false }, { name: 'childId', nullable: false }, { name: 'parentType', nullable: false }, );
+    const requiredProperties = createLocationParentResponseDTOPropertyNames('childId', 'id', 'parentId', );
+    const optionalStringProperties = createLocationParentResponseDTOOptionalProperties({ name: 'childId', nullable: false }, { name: 'id', nullable: false }, { name: 'parentId', nullable: false }, { name: 'parentType', nullable: false }, );
     const optionalNumberProperties = createLocationParentResponseDTOOptionalProperties();
     const optionalBooleanProperties = createLocationParentResponseDTOOptionalProperties();
 

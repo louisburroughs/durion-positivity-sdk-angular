@@ -14,26 +14,6 @@
  */
 export interface PolicyRequest { 
     /**
-     * Owning warranty provider id
-     */
-    providerId: string;
-    /**
-     * Program name
-     */
-    name: string;
-    /**
-     * Claim type this policy covers
-     */
-    coverageType: PolicyRequestCoverageTypeEnum;
-    /**
-     * Matching scope of the appliesTo terms
-     */
-    appliesToType: PolicyRequestAppliesToTypeEnum;
-    /**
-     * Explicit pos-catalog productEntityIds; required when appliesToType=PRODUCT_LIST
-     */
-    appliesToProductEntityIds?: Array<string>;
-    /**
      * pos-catalog category id; required when appliesToType=CATEGORY
      */
     appliesToCategoryId?: string;
@@ -42,22 +22,34 @@ export interface PolicyRequest {
      */
     appliesToManufacturerId?: string;
     /**
-     * Policy must be in effect on the original sale date
+     * Explicit pos-catalog productEntityIds; required when appliesToType=PRODUCT_LIST
      */
-    effectiveFrom: string;
-    effectiveTo?: string;
+    appliesToProductEntityIds?: Array<string>;
+    /**
+     * Matching scope of the appliesTo terms
+     */
+    appliesToType: PolicyRequestAppliesToTypeEnum;
+    /**
+     * Auto-create a registration when a listed product is sold (invoiced workorder); only effective with appliesToType=PRODUCT_LIST; defaults to false
+     */
+    autoRegister?: boolean;
+    /**
+     * Claim type this policy covers
+     */
+    coverageType: PolicyRequestCoverageTypeEnum;
+    /**
+     * Links to the provider\'s policy documents
+     */
+    documentUrls?: Array<string>;
     /**
      * Time limit in months from sale date; null = unlimited
      */
     durationMonths?: number;
     /**
-     * Miles from sale odometer; null = n/a
+     * Policy must be in effect on the original sale date
      */
-    mileageLimit?: number;
-    /**
-     * Tires: coverage ends at this remaining depth, in 32nds of an inch
-     */
-    treadPullPointThirtySeconds?: number;
+    effectiveFrom: string;
+    effectiveTo?: string;
     /**
      * Whether the provider reimburses install labor; defaults to false
      */
@@ -71,9 +63,21 @@ export interface PolicyRequest {
      */
     laborRateCap?: number;
     /**
+     * Miles from sale odometer; null = n/a
+     */
+    mileageLimit?: number;
+    /**
+     * Program name
+     */
+    name: string;
+    /**
      * How the credit fraction is computed
      */
     prorationMethod: PolicyRequestProrationMethodEnum;
+    /**
+     * Owning warranty provider id
+     */
+    providerId: string;
     /**
      * Provider demands the defective part back (drives RMA); defaults to false
      */
@@ -83,33 +87,29 @@ export interface PolicyRequest {
      */
     requiresPhotoEvidence?: boolean;
     /**
-     * Coverage survives vehicle/owner change; defaults to false
-     */
-    transferable?: boolean;
-    /**
-     * Auto-create a registration when a listed product is sold (invoiced workorder); only effective with appliesToType=PRODUCT_LIST; defaults to false
-     */
-    autoRegister?: boolean;
-    /**
      * Human-readable fine print
      */
     termsText?: string;
     /**
-     * Links to the provider\'s policy documents
+     * Coverage survives vehicle/owner change; defaults to false
      */
-    documentUrls?: Array<string>;
+    transferable?: boolean;
+    /**
+     * Tires: coverage ends at this remaining depth, in 32nds of an inch
+     */
+    treadPullPointThirtySeconds?: number;
 }
-export enum PolicyRequestCoverageTypeEnum {
-    ManufacturerDefect = 'MANUFACTURER_DEFECT',
-    DealerWorkmanship = 'DEALER_WORKMANSHIP',
-    RoadHazard = 'ROAD_HAZARD',
-    ExtendedPlan = 'EXTENDED_PLAN'
-};
 export enum PolicyRequestAppliesToTypeEnum {
     ProductList = 'PRODUCT_LIST',
     Category = 'CATEGORY',
     Manufacturer = 'MANUFACTURER',
     All = 'ALL'
+};
+export enum PolicyRequestCoverageTypeEnum {
+    ManufacturerDefect = 'MANUFACTURER_DEFECT',
+    DealerWorkmanship = 'DEALER_WORKMANSHIP',
+    RoadHazard = 'ROAD_HAZARD',
+    ExtendedPlan = 'EXTENDED_PLAN'
 };
 export enum PolicyRequestProrationMethodEnum {
     None = 'NONE',
@@ -158,10 +158,10 @@ export function instanceOfPolicyRequest(value: object): value is PolicyRequest {
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createPolicyRequestPropertyNames('providerId', 'name', 'coverageType', 'appliesToType', 'effectiveFrom', 'prorationMethod', );
-    const optionalStringProperties = createPolicyRequestOptionalProperties({ name: 'providerId', nullable: false }, { name: 'name', nullable: false }, { name: 'coverageType', nullable: false }, { name: 'appliesToType', nullable: false }, { name: 'appliesToCategoryId', nullable: false }, { name: 'appliesToManufacturerId', nullable: false }, { name: 'effectiveFrom', nullable: false }, { name: 'effectiveTo', nullable: false }, { name: 'prorationMethod', nullable: false }, { name: 'termsText', nullable: false }, );
-    const optionalNumberProperties = createPolicyRequestOptionalProperties({ name: 'durationMonths', nullable: false }, { name: 'mileageLimit', nullable: false }, { name: 'treadPullPointThirtySeconds', nullable: false }, { name: 'laborHoursCap', nullable: false }, { name: 'laborRateCap', nullable: false }, );
-    const optionalBooleanProperties = createPolicyRequestOptionalProperties({ name: 'laborCovered', nullable: false }, { name: 'requiresPartReturn', nullable: false }, { name: 'requiresPhotoEvidence', nullable: false }, { name: 'transferable', nullable: false }, { name: 'autoRegister', nullable: false }, );
+    const requiredProperties = createPolicyRequestPropertyNames('appliesToType', 'coverageType', 'effectiveFrom', 'name', 'prorationMethod', 'providerId', );
+    const optionalStringProperties = createPolicyRequestOptionalProperties({ name: 'appliesToCategoryId', nullable: false }, { name: 'appliesToManufacturerId', nullable: false }, { name: 'appliesToType', nullable: false }, { name: 'coverageType', nullable: false }, { name: 'effectiveFrom', nullable: false }, { name: 'effectiveTo', nullable: false }, { name: 'name', nullable: false }, { name: 'prorationMethod', nullable: false }, { name: 'providerId', nullable: false }, { name: 'termsText', nullable: false }, );
+    const optionalNumberProperties = createPolicyRequestOptionalProperties({ name: 'durationMonths', nullable: false }, { name: 'laborHoursCap', nullable: false }, { name: 'laborRateCap', nullable: false }, { name: 'mileageLimit', nullable: false }, { name: 'treadPullPointThirtySeconds', nullable: false }, );
+    const optionalBooleanProperties = createPolicyRequestOptionalProperties({ name: 'autoRegister', nullable: false }, { name: 'laborCovered', nullable: false }, { name: 'requiresPartReturn', nullable: false }, { name: 'requiresPhotoEvidence', nullable: false }, { name: 'transferable', nullable: false }, );
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
         && optionalStringProperties.every((property) => isOptionalPolicyRequestPropertyOfType(_v, property.name, 'string', property.nullable))

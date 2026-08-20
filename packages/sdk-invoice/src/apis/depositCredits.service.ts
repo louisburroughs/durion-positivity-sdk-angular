@@ -38,20 +38,20 @@ export class DepositCreditsService extends BaseService {
     }
 
     /**
-     * Register a deposit credit taken by a sales order
-     * Creates a deposit credit record tied to the provided source transaction.
+     * Register a Deposit Credit
+     * Creates an AVAILABLE deposit credit for a down-payment taken at pos-order checkout, holding the amount against its source document until a settlement invoice draws it down. Use this tool when a deposit was tendered against an estimate, workorder, or order; do not use refundDepositCredit, which returns a credit\&#39;s remaining balance when the source is cancelled. Preconditions: none beyond a priced source document — the call is idempotent on orderId, so a replay for an order that already registered a credit returns the existing record unchanged. Required inputs: orderId (UUID, idempotency anchor), sourceType (ESTIMATE, WORKORDER or ORDER), sourceId (UUID) and amount (positive); partyId is optional and currencyCode defaults to USD. Emits an INVOICE_DEPOSIT_CREATE event; no invoice records are touched until settlement applies the credit. Returns 201 with the credit (existing or new), and 422 when the amount is not positive or the sourceType is not a known value. 
      * @endpoint post /v1/invoices/deposits
-     * @param createDepositRequest 
+     * @param createDepositRequest Deposit taken at checkout to register as a credit against its source document.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public createDeposit(createDepositRequest: CreateDepositRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<DepositCreditResponse>;
-    public createDeposit(createDepositRequest: CreateDepositRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<DepositCreditResponse>>;
-    public createDeposit(createDepositRequest: CreateDepositRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<DepositCreditResponse>>;
-    public createDeposit(createDepositRequest: CreateDepositRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public createDepositCredit(createDepositRequest: CreateDepositRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<DepositCreditResponse>;
+    public createDepositCredit(createDepositRequest: CreateDepositRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<DepositCreditResponse>>;
+    public createDepositCredit(createDepositRequest: CreateDepositRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<DepositCreditResponse>>;
+    public createDepositCredit(createDepositRequest: CreateDepositRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (createDepositRequest === null || createDepositRequest === undefined) {
-            throw new Error('Required parameter createDepositRequest was null or undefined when calling createDeposit.');
+            throw new Error('Required parameter createDepositRequest was null or undefined when calling createDepositCredit.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -108,20 +108,20 @@ export class DepositCreditsService extends BaseService {
     }
 
     /**
-     * Get a deposit credit by id
-     * Retrieves a single deposit credit by its identifier.
+     * Get a Deposit Credit
+     * Returns a single deposit credit with its status (AVAILABLE, PARTIALLY_APPLIED, FULLY_APPLIED or REFUNDED), original amount and remaining balance. Use this tool when the depositCreditId is already known; use listDepositCreditsBySource instead to find the credits held against an estimate, workorder or order. Preconditions: the deposit credit must exist. Required inputs: depositCreditId (UUID) as a path parameter; there is no request body. No events are emitted and no state changes; this is a read-only projection. Returns 404 when no deposit credit exists for the supplied id. 
      * @endpoint get /v1/invoices/deposits/{depositCreditId}
      * @param depositCreditId 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public getDeposit(depositCreditId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<DepositCreditResponse>;
-    public getDeposit(depositCreditId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<DepositCreditResponse>>;
-    public getDeposit(depositCreditId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<DepositCreditResponse>>;
-    public getDeposit(depositCreditId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getDepositCredit(depositCreditId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<DepositCreditResponse>;
+    public getDepositCredit(depositCreditId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<DepositCreditResponse>>;
+    public getDepositCredit(depositCreditId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<DepositCreditResponse>>;
+    public getDepositCredit(depositCreditId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (depositCreditId === null || depositCreditId === undefined) {
-            throw new Error('Required parameter depositCreditId was null or undefined when calling getDeposit.');
+            throw new Error('Required parameter depositCreditId was null or undefined when calling getDepositCredit.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -168,8 +168,8 @@ export class DepositCreditsService extends BaseService {
     }
 
     /**
-     * List deposit credits held against a source document
-     * Lists all deposit credits associated with the given source type and source id.
+     * List Deposit Credits by Source
+     * Lists every deposit credit held against one source document, identified by its type and id. Use this tool when checking what down-payments a settlement can draw on; use getDepositCredit instead when a specific depositCreditId is already known. Preconditions: none — an unknown or credit-free source returns an empty list rather than an error. Required inputs: sourceType query parameter (ESTIMATE, WORKORDER or ORDER, case-insensitive) and sourceId (UUID) query parameter; there is no request body. No events are emitted and no state changes; this is a read-only projection. Returns 422 when sourceType is not one of the known values. 
      * @endpoint get /v1/invoices/deposits
      * @param sourceType 
      * @param sourceId 
@@ -177,15 +177,15 @@ export class DepositCreditsService extends BaseService {
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public listBySource(sourceType: string, sourceId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<DepositCreditResponse>>;
-    public listBySource(sourceType: string, sourceId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<DepositCreditResponse>>>;
-    public listBySource(sourceType: string, sourceId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<DepositCreditResponse>>>;
-    public listBySource(sourceType: string, sourceId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public listDepositCreditsBySource(sourceType: string, sourceId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<DepositCreditResponse>>;
+    public listDepositCreditsBySource(sourceType: string, sourceId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<DepositCreditResponse>>>;
+    public listDepositCreditsBySource(sourceType: string, sourceId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<DepositCreditResponse>>>;
+    public listDepositCreditsBySource(sourceType: string, sourceId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (sourceType === null || sourceType === undefined) {
-            throw new Error('Required parameter sourceType was null or undefined when calling listBySource.');
+            throw new Error('Required parameter sourceType was null or undefined when calling listDepositCreditsBySource.');
         }
         if (sourceId === null || sourceId === undefined) {
-            throw new Error('Required parameter sourceId was null or undefined when calling listBySource.');
+            throw new Error('Required parameter sourceId was null or undefined when calling listDepositCreditsBySource.');
         }
 
         let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
@@ -253,8 +253,8 @@ export class DepositCreditsService extends BaseService {
     }
 
     /**
-     * Refund a deposit credit\&#39;s remaining balance
-     * Used when the deposit\&#39;s source is cancelled after the deposit was taken (spec R7.4).
+     * Refund a Deposit Credit Balance
+     * Zeroes the remaining balance of a deposit credit and marks it REFUNDED, recording that the deposit is returned because its source document was cancelled after the deposit was taken. Use this tool on source cancellation (spec R7.4); do not use createDepositCredit, which registers a new deposit, and note the cash disbursement itself is not performed here. Preconditions: the deposit credit must exist; a credit already REFUNDED is left unchanged, so the call is idempotent. Required inputs: depositCreditId (UUID) as a path parameter; the reason query parameter is optional and defaults to \&quot;source cancelled\&quot;; there is no request body. Emits an INVOICE_DEPOSIT_REFUND event and sets the credit\&#39;s status to REFUNDED with a zero remaining balance. Returns 200 with the refunded credit, and 404 when no deposit credit exists for the supplied id. 
      * @endpoint post /v1/invoices/deposits/{depositCreditId}/refund
      * @param depositCreditId 
      * @param reason 
@@ -262,12 +262,12 @@ export class DepositCreditsService extends BaseService {
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public refundDeposit(depositCreditId: string, reason?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<DepositCreditResponse>;
-    public refundDeposit(depositCreditId: string, reason?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<DepositCreditResponse>>;
-    public refundDeposit(depositCreditId: string, reason?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<DepositCreditResponse>>;
-    public refundDeposit(depositCreditId: string, reason?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public refundDepositCredit(depositCreditId: string, reason?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<DepositCreditResponse>;
+    public refundDepositCredit(depositCreditId: string, reason?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<DepositCreditResponse>>;
+    public refundDepositCredit(depositCreditId: string, reason?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<DepositCreditResponse>>;
+    public refundDepositCredit(depositCreditId: string, reason?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (depositCreditId === null || depositCreditId === undefined) {
-            throw new Error('Required parameter depositCreditId was null or undefined when calling refundDeposit.');
+            throw new Error('Required parameter depositCreditId was null or undefined when calling refundDepositCredit.');
         }
 
         let localVarQueryParameters = new OpenApiHttpParams(this.encoder);

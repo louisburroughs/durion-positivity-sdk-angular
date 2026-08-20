@@ -14,13 +14,13 @@
  */
 export interface LinkSourceRequest { 
     /**
-     * Type classification of the originating source
-     */
-    sourceType: string;
-    /**
      * Identifier of the originating source record
      */
     sourceId: string;
+    /**
+     * Type classification of the originating source
+     */
+    sourceType: string;
 }
 
 function isOptionalLinkSourceRequestPropertyOfType(
@@ -61,8 +61,8 @@ export function instanceOfLinkSourceRequest(value: object): value is LinkSourceR
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createLinkSourceRequestPropertyNames('sourceType', 'sourceId', );
-    const optionalStringProperties = createLinkSourceRequestOptionalProperties({ name: 'sourceType', nullable: false }, { name: 'sourceId', nullable: false }, );
+    const requiredProperties = createLinkSourceRequestPropertyNames('sourceId', 'sourceType', );
+    const optionalStringProperties = createLinkSourceRequestOptionalProperties({ name: 'sourceId', nullable: false }, { name: 'sourceType', nullable: false }, );
     const optionalNumberProperties = createLinkSourceRequestOptionalProperties();
     const optionalBooleanProperties = createLinkSourceRequestOptionalProperties();
 

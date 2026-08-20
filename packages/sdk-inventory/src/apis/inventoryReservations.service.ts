@@ -43,7 +43,7 @@ export class InventoryReservationsService extends BaseService {
 
     /**
      * Cancel reservation by workorder line
-     * Cancels reservation and releases associated allocations for a workorder line
+     * Cancels the reservation for a workorder line and releases every allocation under it. Use this tool when the demand is withdrawn; do not use resolveShortage with CANCEL_LINE, which wraps this cancel in an idempotent shortage-resolution record, and note the path parameter is the workorderLineId, not the reservationId. Preconditions: a reservation must exist for the workorder line. Required inputs: workorderLineId (UUID) path parameter; there is no request body. Emits an INVENTORY_RESERVATION_CANCEL event; every allocation is marked RELEASED, located HARD allocations get ALLOCATION_RELEASED ledger entries for their un-released remainder only (preserving the per-allocation CREATED minus RELEASED invariant), and the reservation ends CANCELLED with allocatedQuantity 0. Returns 404 when no reservation exists for the workorder line. 
      * @endpoint delete /v1/inventory/reservations/{workorderLineId}
      * @param workorderLineId Workorder line identifier
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -102,10 +102,70 @@ export class InventoryReservationsService extends BaseService {
     }
 
     /**
+     * Cancel reservation by sales-order line
+     * Cancels the reservation for a sales-order line (CAP #1315) and releases every allocation under it — the sales-order-demand counterpart of cancelReservation. Use this tool when sales-order demand is withdrawn; do not use cancelReservation, whose path parameter is a workorderLineId and which finds nothing for a sales-order line. Preconditions: a reservation must exist for the sales-order line. Required inputs: salesOrderLineId (UUID) path parameter; there is no request body. Emits an INVENTORY_RESERVATION_CANCEL_SALES_ORDER_LINE event; every allocation is marked RELEASED, located HARD allocations get ALLOCATION_RELEASED ledger entries for their un-released remainder only, and the reservation ends CANCELLED with allocatedQuantity 0. Returns 404 when no reservation exists for the sales-order line. 
+     * @endpoint delete /v1/inventory/reservations/sales-order-line/{salesOrderLineId}
+     * @param salesOrderLineId Sales-order line identifier
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public cancelReservationForSalesOrderLine(salesOrderLineId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any>;
+    public cancelReservationForSalesOrderLine(salesOrderLineId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
+    public cancelReservationForSalesOrderLine(salesOrderLineId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
+    public cancelReservationForSalesOrderLine(salesOrderLineId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (salesOrderLineId === null || salesOrderLineId === undefined) {
+            throw new Error('Required parameter salesOrderLineId was null or undefined when calling cancelReservationForSalesOrderLine.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/inventory/reservations/sales-order-line/${this.configuration.encodeParam({name: "salesOrderLineId", value: salesOrderLineId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<any>('delete', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
      * Create or update a reservation
-     * Creates a reservation for a workorder line or updates an existing reservation with the requested quantity
+     * Creates a soft reservation for a workorder line, or updates the existing reservation for that line to the requested stock item and quantity; creation records one SOFT allocation for the full quantity with no location and no ledger entry. Use this tool to register parts demand before picking; do not use promoteReservationAllocation, which hardens an existing allocation to a storage location, and do not use consumePickedItems, which posts the actual stock decrement. Preconditions: none for creation — no ATP check is performed at this stage, so the reservation is accepted even when stock is short; an update may not change stockItemId while the reservation still has located HARD allocations. Required inputs: workorderLineId (UUID), stockItemId (UUID) and requiredQuantity (positive integer); workorderLineId is the upsert key. Emits an INVENTORY_RESERVATION_CREATE_OR_UPDATE event; no inventory ledger entry is written for a soft allocation. Returns 201 in both the create and the update case, 409 when stockItemId is changed on a reservation with located HARD allocations, and 400 when a required field is missing or requiredQuantity is not positive. 
      * @endpoint post /v1/inventory/reservations
-     * @param createReservationRequest Reservation create/update payload
+     * @param createReservationRequest Demand to reserve: the workorder line, the stock item and the quantity; an existing reservation for the line is updated in place.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -173,23 +233,23 @@ export class InventoryReservationsService extends BaseService {
 
     /**
      * Promote allocation to hard
-     * Promotes an existing allocation to HARD state when ATP is sufficient. Requires a storageLocationId; the hardened allocation is pinned to that storage location and an ALLOCATION_CREATED ledger event is recorded against it. A repeat promote of an already-HARD allocation keeps its original location and writes no duplicate event.
+     * Promotes an existing allocation to HARD, pinning it to a storage location and recording an ALLOCATION_CREATED inventory ledger entry against that location. Use this tool when stock is being committed to a location and ATP must be verified; do not use createOrUpdateReservation, which only registers soft demand, and do not use consumePickedItems, which decrements stock after picking. Preconditions: the allocation must exist, the storage location must exist and be active, and available ATP — the stock item\&#39;s ledger net on-hand minus the reservation\&#39;s other HARD quantity — must cover the allocation\&#39;s quantity. Required inputs: allocationId (UUID) path parameter and storageLocationId (UUID) in the body; hardenedReason is optional free text. Emits an INVENTORY_ALLOCATION_PROMOTE_HARD event; the reservation becomes FULFILLED or PARTIALLY_FULFILLED by total allocated quantity, a failed ATP check flips it to BACKORDERED before the 422 is returned, and a repeat promote of an already-HARD located allocation keeps its location and writes no duplicate ledger entry. Returns 404 when the allocation or storage location cannot be resolved, 422 with INSUFFICIENT_ATP when ATP does not cover the quantity, 409 when a different storageLocationId is supplied for an already-located HARD allocation (relocation via promote is unsupported), and 400 when storageLocationId is missing or the storage location is inactive. 
      * @endpoint post /v1/inventory/reservations/{allocationId}/promote
      * @param allocationId Allocation identifier to promote
-     * @param promoteAllocationRequest Promotion request details
+     * @param promoteAllocationRequest Storage location the hardened allocation pins stock to, with an optional hardening reason.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public promoteToHard(allocationId: string, promoteAllocationRequest: PromoteAllocationRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ReservationResponse>;
-    public promoteToHard(allocationId: string, promoteAllocationRequest: PromoteAllocationRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ReservationResponse>>;
-    public promoteToHard(allocationId: string, promoteAllocationRequest: PromoteAllocationRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ReservationResponse>>;
-    public promoteToHard(allocationId: string, promoteAllocationRequest: PromoteAllocationRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public promoteReservationAllocation(allocationId: string, promoteAllocationRequest: PromoteAllocationRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ReservationResponse>;
+    public promoteReservationAllocation(allocationId: string, promoteAllocationRequest: PromoteAllocationRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ReservationResponse>>;
+    public promoteReservationAllocation(allocationId: string, promoteAllocationRequest: PromoteAllocationRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ReservationResponse>>;
+    public promoteReservationAllocation(allocationId: string, promoteAllocationRequest: PromoteAllocationRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (allocationId === null || allocationId === undefined) {
-            throw new Error('Required parameter allocationId was null or undefined when calling promoteToHard.');
+            throw new Error('Required parameter allocationId was null or undefined when calling promoteReservationAllocation.');
         }
         if (promoteAllocationRequest === null || promoteAllocationRequest === undefined) {
-            throw new Error('Required parameter promoteAllocationRequest was null or undefined when calling promoteToHard.');
+            throw new Error('Required parameter promoteAllocationRequest was null or undefined when calling promoteReservationAllocation.');
         }
 
         let localVarHeaders = this.defaultHeaders;

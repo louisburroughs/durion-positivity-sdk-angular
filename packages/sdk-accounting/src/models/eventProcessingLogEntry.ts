@@ -14,9 +14,17 @@
  */
 export interface EventProcessingLogEntry { 
     /**
+     * Optional JSON context for debugging
+     */
+    contextJson?: string | null;
+    /**
      * Unique identifier for this log entry
      */
     entryId: string;
+    /**
+     * Human-readable log message
+     */
+    message: string;
     /**
      * When this log entry was created (ISO 8601)
      */
@@ -25,14 +33,6 @@ export interface EventProcessingLogEntry {
      * Severity level: INFO, WARN, or ERROR
      */
     severity: string;
-    /**
-     * Human-readable log message
-     */
-    message: string;
-    /**
-     * Optional JSON context for debugging
-     */
-    contextJson?: string | null;
 }
 
 function isOptionalEventProcessingLogEntryPropertyOfType(
@@ -73,8 +73,8 @@ export function instanceOfEventProcessingLogEntry(value: object): value is Event
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createEventProcessingLogEntryPropertyNames('entryId', 'occurredAt', 'severity', 'message', );
-    const optionalStringProperties = createEventProcessingLogEntryOptionalProperties({ name: 'entryId', nullable: false }, { name: 'occurredAt', nullable: false }, { name: 'severity', nullable: false }, { name: 'message', nullable: false }, { name: 'contextJson', nullable: true }, );
+    const requiredProperties = createEventProcessingLogEntryPropertyNames('entryId', 'message', 'occurredAt', 'severity', );
+    const optionalStringProperties = createEventProcessingLogEntryOptionalProperties({ name: 'contextJson', nullable: true }, { name: 'entryId', nullable: false }, { name: 'message', nullable: false }, { name: 'occurredAt', nullable: false }, { name: 'severity', nullable: false }, );
     const optionalNumberProperties = createEventProcessingLogEntryOptionalProperties();
     const optionalBooleanProperties = createEventProcessingLogEntryOptionalProperties();
 

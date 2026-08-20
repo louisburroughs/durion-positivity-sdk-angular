@@ -14,6 +14,58 @@
  */
 export interface VendorBillResponse { 
     /**
+     * Approval justification (if status = APPROVED)
+     */
+    approvalJustification?: string;
+    /**
+     * Bill date
+     */
+    billDate?: string;
+    /**
+     * Bill number
+     */
+    billNumber: string;
+    /**
+     * Created timestamp
+     */
+    createdAt: string;
+    /**
+     * Created by user
+     */
+    createdBy?: string;
+    /**
+     * Due date
+     */
+    dueDate?: string;
+    /**
+     * Journal entry ID (if GL posted)
+     */
+    journalEntryId?: string;
+    /**
+     * Origin event ID (for traceability)
+     */
+    originEventId?: string;
+    /**
+     * Origin event type
+     */
+    originEventType?: string;
+    /**
+     * Payment transaction ID (if paid)
+     */
+    paymentTransactionId?: string;
+    /**
+     * Rejection reason (if status = REJECTED)
+     */
+    rejectionReason?: string;
+    /**
+     * Bill status
+     */
+    status: VendorBillResponseStatusEnum;
+    /**
+     * Total bill amount
+     */
+    totalAmount: number;
+    /**
      * Vendor bill UUID
      */
     vendorBillId: string;
@@ -25,58 +77,6 @@ export interface VendorBillResponse {
      * Vendor name
      */
     vendorName?: string;
-    /**
-     * Bill number
-     */
-    billNumber: string;
-    /**
-     * Bill date
-     */
-    billDate?: string;
-    /**
-     * Due date
-     */
-    dueDate?: string;
-    /**
-     * Total bill amount
-     */
-    totalAmount: number;
-    /**
-     * Bill status
-     */
-    status: VendorBillResponseStatusEnum;
-    /**
-     * Origin event ID (for traceability)
-     */
-    originEventId?: string;
-    /**
-     * Origin event type
-     */
-    originEventType?: string;
-    /**
-     * Journal entry ID (if GL posted)
-     */
-    journalEntryId?: string;
-    /**
-     * Payment transaction ID (if paid)
-     */
-    paymentTransactionId?: string;
-    /**
-     * Created timestamp
-     */
-    createdAt: string;
-    /**
-     * Created by user
-     */
-    createdBy?: string;
-    /**
-     * Approval justification (if status = APPROVED)
-     */
-    approvalJustification?: string;
-    /**
-     * Rejection reason (if status = REJECTED)
-     */
-    rejectionReason?: string;
 }
 export enum VendorBillResponseStatusEnum {
     PendingReceiptMatch = 'PENDING_RECEIPT_MATCH',
@@ -127,8 +127,8 @@ export function instanceOfVendorBillResponse(value: object): value is VendorBill
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createVendorBillResponsePropertyNames('vendorBillId', 'vendorId', 'billNumber', 'totalAmount', 'status', 'createdAt', );
-    const optionalStringProperties = createVendorBillResponseOptionalProperties({ name: 'vendorBillId', nullable: false }, { name: 'vendorId', nullable: false }, { name: 'vendorName', nullable: false }, { name: 'billNumber', nullable: false }, { name: 'billDate', nullable: false }, { name: 'dueDate', nullable: false }, { name: 'status', nullable: false }, { name: 'originEventId', nullable: false }, { name: 'originEventType', nullable: false }, { name: 'journalEntryId', nullable: false }, { name: 'paymentTransactionId', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'approvalJustification', nullable: false }, { name: 'rejectionReason', nullable: false }, );
+    const requiredProperties = createVendorBillResponsePropertyNames('billNumber', 'createdAt', 'status', 'totalAmount', 'vendorBillId', 'vendorId', );
+    const optionalStringProperties = createVendorBillResponseOptionalProperties({ name: 'approvalJustification', nullable: false }, { name: 'billDate', nullable: false }, { name: 'billNumber', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'dueDate', nullable: false }, { name: 'journalEntryId', nullable: false }, { name: 'originEventId', nullable: false }, { name: 'originEventType', nullable: false }, { name: 'paymentTransactionId', nullable: false }, { name: 'rejectionReason', nullable: false }, { name: 'status', nullable: false }, { name: 'vendorBillId', nullable: false }, { name: 'vendorId', nullable: false }, { name: 'vendorName', nullable: false }, );
     const optionalNumberProperties = createVendorBillResponseOptionalProperties({ name: 'totalAmount', nullable: false }, );
     const optionalBooleanProperties = createVendorBillResponseOptionalProperties();
 

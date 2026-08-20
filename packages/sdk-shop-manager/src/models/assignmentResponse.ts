@@ -15,17 +15,33 @@ import { AssignedMechanicInfo } from './assignedMechanicInfo';
  */
 export interface AssignmentResponse { 
     /**
-     * Unique assignment identifier
-     */
-    assignmentId: string;
-    /**
      * Appointment identifier the assignment belongs to
      */
     appointmentId: string;
     /**
+     * Instant the assignment was first created/confirmed in UTC (ISO-8601)
+     */
+    assignedAt: string;
+    /**
+     * Unique assignment identifier
+     */
+    assignmentId: string;
+    /**
+     * Optional notes for this assignment (max 500 chars)
+     */
+    assignmentNotes?: string;
+    /**
+     * Instant the assignment was last modified in UTC (ISO-8601)
+     */
+    lastUpdatedAt?: string;
+    /**
      * Mechanics assigned to the appointment
      */
     mechanics: Array<AssignedMechanicInfo>;
+    /**
+     * Whether the assignment was created with a conflict override
+     */
+    override: boolean;
     /**
      * Associated resource (bay or mobile unit) identifier
      */
@@ -38,22 +54,6 @@ export interface AssignmentResponse {
      * Current assignment status
      */
     status: AssignmentResponseStatusEnum;
-    /**
-     * Whether the assignment was created with a conflict override
-     */
-    override: boolean;
-    /**
-     * Optional notes for this assignment (max 500 chars)
-     */
-    assignmentNotes?: string;
-    /**
-     * Instant the assignment was first created/confirmed in UTC (ISO-8601)
-     */
-    assignedAt: string;
-    /**
-     * Instant the assignment was last modified in UTC (ISO-8601)
-     */
-    lastUpdatedAt?: string;
 }
 export enum AssignmentResponseStatusEnum {
     Confirmed = 'CONFIRMED',
@@ -102,8 +102,8 @@ export function instanceOfAssignmentResponse(value: object): value is Assignment
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createAssignmentResponsePropertyNames('assignmentId', 'appointmentId', 'mechanics', 'status', 'override', 'assignedAt', );
-    const optionalStringProperties = createAssignmentResponseOptionalProperties({ name: 'assignmentId', nullable: false }, { name: 'appointmentId', nullable: false }, { name: 'resourceId', nullable: false }, { name: 'resourceType', nullable: false }, { name: 'status', nullable: false }, { name: 'assignmentNotes', nullable: false }, { name: 'assignedAt', nullable: false }, { name: 'lastUpdatedAt', nullable: false }, );
+    const requiredProperties = createAssignmentResponsePropertyNames('appointmentId', 'assignedAt', 'assignmentId', 'mechanics', 'override', 'status', );
+    const optionalStringProperties = createAssignmentResponseOptionalProperties({ name: 'appointmentId', nullable: false }, { name: 'assignedAt', nullable: false }, { name: 'assignmentId', nullable: false }, { name: 'assignmentNotes', nullable: false }, { name: 'lastUpdatedAt', nullable: false }, { name: 'resourceId', nullable: false }, { name: 'resourceType', nullable: false }, { name: 'status', nullable: false }, );
     const optionalNumberProperties = createAssignmentResponseOptionalProperties();
     const optionalBooleanProperties = createAssignmentResponseOptionalProperties({ name: 'override', nullable: false }, );
 

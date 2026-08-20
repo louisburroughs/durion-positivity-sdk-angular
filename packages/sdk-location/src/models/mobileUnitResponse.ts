@@ -14,29 +14,9 @@
  */
 export interface MobileUnitResponse { 
     /**
-     * Unique identifier of the mobile unit
-     */
-    id: string;
-    /**
-     * Display name of the mobile unit
-     */
-    name?: string;
-    /**
      * Identifier of the base location the mobile unit operates from
      */
     baseLocationId?: string;
-    /**
-     * Operational status of the mobile unit
-     */
-    status?: string;
-    /**
-     * Identifier of the travel buffer policy applied to the mobile unit
-     */
-    travelBufferPolicyId?: string;
-    /**
-     * Free-text notes about the mobile unit
-     */
-    notes?: string;
     /**
      * Identifiers of capabilities the mobile unit can perform
      */
@@ -45,6 +25,26 @@ export interface MobileUnitResponse {
      * Timestamp when the mobile unit was created (ISO 8601)
      */
     createdAt?: string;
+    /**
+     * Unique identifier of the mobile unit
+     */
+    id: string;
+    /**
+     * Display name of the mobile unit
+     */
+    name?: string;
+    /**
+     * Free-text notes about the mobile unit
+     */
+    notes?: string;
+    /**
+     * Operational status of the mobile unit
+     */
+    status?: string;
+    /**
+     * Identifier of the travel buffer policy applied to the mobile unit
+     */
+    travelBufferPolicyId?: string;
     /**
      * Timestamp when the mobile unit was last updated (ISO 8601)
      */
@@ -90,7 +90,7 @@ export function instanceOfMobileUnitResponse(value: object): value is MobileUnit
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createMobileUnitResponsePropertyNames('id', );
-    const optionalStringProperties = createMobileUnitResponseOptionalProperties({ name: 'id', nullable: false }, { name: 'name', nullable: false }, { name: 'baseLocationId', nullable: false }, { name: 'status', nullable: false }, { name: 'travelBufferPolicyId', nullable: false }, { name: 'notes', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'updatedAt', nullable: false }, );
+    const optionalStringProperties = createMobileUnitResponseOptionalProperties({ name: 'baseLocationId', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'id', nullable: false }, { name: 'name', nullable: false }, { name: 'notes', nullable: false }, { name: 'status', nullable: false }, { name: 'travelBufferPolicyId', nullable: false }, { name: 'updatedAt', nullable: false }, );
     const optionalNumberProperties = createMobileUnitResponseOptionalProperties();
     const optionalBooleanProperties = createMobileUnitResponseOptionalProperties();
 

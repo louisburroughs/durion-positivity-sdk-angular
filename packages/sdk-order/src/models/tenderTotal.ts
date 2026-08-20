@@ -13,8 +13,8 @@
  * Net settled amount for one tender method
  */
 export interface TenderTotal { 
-    methodType?: string;
     amount?: number;
+    methodType?: string;
 }
 
 function isOptionalTenderTotalPropertyOfType(

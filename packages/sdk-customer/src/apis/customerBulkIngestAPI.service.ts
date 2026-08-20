@@ -38,20 +38,20 @@ export class CustomerBulkIngestAPIService extends BaseService {
     }
 
     /**
-     * Bulk ingest records
-     * Accepts a batch of domain records for bulk import. Returns per-record results.
+     * Bulk Ingest Customer Records
+     * Imports a batch of individual customer records, creating each one through the same path as createCrmPerson so canonical identities land in pos-people, and reports a per-row success or failure result without aborting the batch. Use this tool for migrations and file imports of individuals; do not use createCrmPerson row by row for large loads, and note this path cannot create commercial accounts. Preconditions: none beyond authorization; rows that fail validation are reported with errorCode CUSTOMER_INGEST_FAILED while the rest of the batch proceeds. Required inputs: jobId (UUID), locationId (UUID), and a non-empty records list where each record has firstName and lastName (each max 100) and optionally email, phoneNumber, primaryAddress, and customerNumber; preferredContactMethod is derived as EMAIL when an email is present and PHONE_CALL otherwise, and operatorId falls back to the security context when absent or not a UUID. Emits a CUSTOMER_BULK_INGEST event, and each successful row publishes a party-changed customer fact and writes contact points to pos-people. Returns 200 with per-row results including failures, and 400 when jobId, locationId, or the records list is missing or empty. 
      * @endpoint post /v1/customer/bulk-ingest
-     * @param bulkIngestRequestCustomerBulkIngestRecord 
+     * @param bulkIngestRequestCustomerBulkIngestRecord The ingest job envelope with the batch of customer records to import.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public bulkIngest(bulkIngestRequestCustomerBulkIngestRecord: BulkIngestRequestCustomerBulkIngestRecord, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<BulkIngestResponse>;
-    public bulkIngest(bulkIngestRequestCustomerBulkIngestRecord: BulkIngestRequestCustomerBulkIngestRecord, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<BulkIngestResponse>>;
-    public bulkIngest(bulkIngestRequestCustomerBulkIngestRecord: BulkIngestRequestCustomerBulkIngestRecord, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<BulkIngestResponse>>;
-    public bulkIngest(bulkIngestRequestCustomerBulkIngestRecord: BulkIngestRequestCustomerBulkIngestRecord, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public bulkIngestCustomers(bulkIngestRequestCustomerBulkIngestRecord: BulkIngestRequestCustomerBulkIngestRecord, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<BulkIngestResponse>;
+    public bulkIngestCustomers(bulkIngestRequestCustomerBulkIngestRecord: BulkIngestRequestCustomerBulkIngestRecord, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<BulkIngestResponse>>;
+    public bulkIngestCustomers(bulkIngestRequestCustomerBulkIngestRecord: BulkIngestRequestCustomerBulkIngestRecord, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<BulkIngestResponse>>;
+    public bulkIngestCustomers(bulkIngestRequestCustomerBulkIngestRecord: BulkIngestRequestCustomerBulkIngestRecord, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (bulkIngestRequestCustomerBulkIngestRecord === null || bulkIngestRequestCustomerBulkIngestRecord === undefined) {
-            throw new Error('Required parameter bulkIngestRequestCustomerBulkIngestRecord was null or undefined when calling bulkIngest.');
+            throw new Error('Required parameter bulkIngestRequestCustomerBulkIngestRecord was null or undefined when calling bulkIngestCustomers.');
         }
 
         let localVarHeaders = this.defaultHeaders;

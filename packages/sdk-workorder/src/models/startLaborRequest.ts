@@ -14,13 +14,13 @@
  */
 export interface StartLaborRequest { 
     /**
-     * ID of the technician performing the work
-     */
-    technicianId: string;
-    /**
      * Optional notes about the labor session
      */
     notes?: string;
+    /**
+     * ID of the technician performing the work
+     */
+    technicianId: string;
 }
 
 function isOptionalStartLaborRequestPropertyOfType(
@@ -62,7 +62,7 @@ export function instanceOfStartLaborRequest(value: object): value is StartLaborR
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createStartLaborRequestPropertyNames('technicianId', );
-    const optionalStringProperties = createStartLaborRequestOptionalProperties({ name: 'technicianId', nullable: false }, { name: 'notes', nullable: false }, );
+    const optionalStringProperties = createStartLaborRequestOptionalProperties({ name: 'notes', nullable: false }, { name: 'technicianId', nullable: false }, );
     const optionalNumberProperties = createStartLaborRequestOptionalProperties();
     const optionalBooleanProperties = createStartLaborRequestOptionalProperties();
 

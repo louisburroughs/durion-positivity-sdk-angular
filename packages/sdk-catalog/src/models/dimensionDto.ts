@@ -14,25 +14,25 @@
  */
 export interface DimensionDto { 
     /**
-     * Dimension identifier
+     * Dimension description
      */
-    id: string;
+    description?: string;
     /**
      * Dimension type
      */
     dimensionType: DimensionDtoDimensionTypeEnum;
     /**
-     * Dimension description
+     * Dimension value
      */
-    description?: string;
+    dimensionValue: number;
+    /**
+     * Dimension identifier
+     */
+    id: string;
     /**
      * Unit of measure
      */
     unitOfMeasure?: string;
-    /**
-     * Dimension value
-     */
-    dimensionValue: number;
 }
 export enum DimensionDtoDimensionTypeEnum {
     Length = 'LENGTH',
@@ -99,8 +99,8 @@ export function instanceOfDimensionDto(value: object): value is DimensionDto {
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createDimensionDtoPropertyNames('id', 'dimensionType', 'dimensionValue', );
-    const optionalStringProperties = createDimensionDtoOptionalProperties({ name: 'id', nullable: false }, { name: 'dimensionType', nullable: false }, { name: 'description', nullable: false }, { name: 'unitOfMeasure', nullable: false }, );
+    const requiredProperties = createDimensionDtoPropertyNames('dimensionType', 'dimensionValue', 'id', );
+    const optionalStringProperties = createDimensionDtoOptionalProperties({ name: 'description', nullable: false }, { name: 'dimensionType', nullable: false }, { name: 'id', nullable: false }, { name: 'unitOfMeasure', nullable: false }, );
     const optionalNumberProperties = createDimensionDtoOptionalProperties();
     const optionalBooleanProperties = createDimensionDtoOptionalProperties();
 

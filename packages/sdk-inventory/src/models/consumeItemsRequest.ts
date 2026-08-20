@@ -15,17 +15,17 @@ import { ConsumeItemLine } from './consumeItemLine';
  */
 export interface ConsumeItemsRequest { 
     /**
-     * Identifier of the workorder the items are consumed for
+     * Line items identifying the SKUs and quantities to consume
      */
-    workorderId: string;
+    items?: Array<ConsumeItemLine>;
     /**
      * Identifier of the pick list the consumed items are drawn from, if applicable
      */
     pickListId?: string;
     /**
-     * Line items identifying the SKUs and quantities to consume
+     * Identifier of the workorder the items are consumed for
      */
-    items?: Array<ConsumeItemLine>;
+    workorderId: string;
 }
 
 function isOptionalConsumeItemsRequestPropertyOfType(
@@ -67,7 +67,7 @@ export function instanceOfConsumeItemsRequest(value: object): value is ConsumeIt
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createConsumeItemsRequestPropertyNames('workorderId', );
-    const optionalStringProperties = createConsumeItemsRequestOptionalProperties({ name: 'workorderId', nullable: false }, { name: 'pickListId', nullable: false }, );
+    const optionalStringProperties = createConsumeItemsRequestOptionalProperties({ name: 'pickListId', nullable: false }, { name: 'workorderId', nullable: false }, );
     const optionalNumberProperties = createConsumeItemsRequestOptionalProperties();
     const optionalBooleanProperties = createConsumeItemsRequestOptionalProperties();
 

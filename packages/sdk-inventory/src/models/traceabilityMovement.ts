@@ -14,49 +14,49 @@
  */
 export interface TraceabilityMovement { 
     /**
-     * Identifier of the ledger entry
+     * Signed quantity change (positive inbound, negative outbound)
      */
-    ledgerEntryId: string;
+    changeInQuantity: number;
     /**
      * Ledger event type
      */
     eventType: TraceabilityMovementEventTypeEnum;
     /**
-     * When the movement was posted
+     * Source location for a paired move (putaway/transfer out)
      */
-    timestamp: string;
+    fromLocationId?: string;
     /**
-     * Signed quantity change (positive inbound, negative outbound)
+     * Identifier of the ledger entry
      */
-    changeInQuantity: number;
-    /**
-     * On-hand quantity after this movement at its location
-     */
-    quantityAfter?: number;
+    ledgerEntryId: string;
     /**
      * Location the movement affected
      */
     locationId?: string;
     /**
-     * Source location for a paired move (putaway/transfer out)
-     */
-    fromLocationId?: string;
-    /**
-     * Destination location for a paired move (putaway/transfer in)
-     */
-    toLocationId?: string;
-    /**
      * Lot stamped on the movement, when lot-tracked
      */
     lotId?: string;
+    /**
+     * Free-text note recorded on the ledger entry
+     */
+    notes?: string;
+    /**
+     * On-hand quantity after this movement at its location
+     */
+    quantityAfter?: number;
     /**
      * Source transaction/document reference the posting carried
      */
     sourceTransactionId?: string;
     /**
-     * Free-text note recorded on the ledger entry
+     * When the movement was posted
      */
-    notes?: string;
+    timestamp: string;
+    /**
+     * Destination location for a paired move (putaway/transfer in)
+     */
+    toLocationId?: string;
 }
 export enum TraceabilityMovementEventTypeEnum {
     GoodsReceipt = 'GOODS_RECEIPT',
@@ -122,8 +122,8 @@ export function instanceOfTraceabilityMovement(value: object): value is Traceabi
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createTraceabilityMovementPropertyNames('ledgerEntryId', 'eventType', 'timestamp', 'changeInQuantity', );
-    const optionalStringProperties = createTraceabilityMovementOptionalProperties({ name: 'ledgerEntryId', nullable: false }, { name: 'eventType', nullable: false }, { name: 'timestamp', nullable: false }, { name: 'locationId', nullable: false }, { name: 'fromLocationId', nullable: false }, { name: 'toLocationId', nullable: false }, { name: 'lotId', nullable: false }, { name: 'sourceTransactionId', nullable: false }, { name: 'notes', nullable: false }, );
+    const requiredProperties = createTraceabilityMovementPropertyNames('changeInQuantity', 'eventType', 'ledgerEntryId', 'timestamp', );
+    const optionalStringProperties = createTraceabilityMovementOptionalProperties({ name: 'eventType', nullable: false }, { name: 'fromLocationId', nullable: false }, { name: 'ledgerEntryId', nullable: false }, { name: 'locationId', nullable: false }, { name: 'lotId', nullable: false }, { name: 'notes', nullable: false }, { name: 'sourceTransactionId', nullable: false }, { name: 'timestamp', nullable: false }, { name: 'toLocationId', nullable: false }, );
     const optionalNumberProperties = createTraceabilityMovementOptionalProperties({ name: 'changeInQuantity', nullable: false }, { name: 'quantityAfter', nullable: false }, );
     const optionalBooleanProperties = createTraceabilityMovementOptionalProperties();
 

@@ -15,22 +15,22 @@ import { CashMovementResponse } from './cashMovementResponse';
  * X-report (mid-day) or Z-report (close summary) for a register session
  */
 export interface SessionReportResponse { 
-    sessionId?: string;
-    terminalId?: string;
-    locationId?: string;
-    status?: string;
-    reportType?: string;
-    openingFloat?: number;
-    tenderTotals?: Array<TenderTotal>;
-    cashSettlements?: number;
     cashMovements?: number;
-    theoreticalCash?: number;
+    cashSettlements?: number;
     countedCash?: number;
-    overShort?: number;
-    orderCount?: number;
+    generatedAt?: string;
+    locationId?: string;
     movements?: Array<CashMovementResponse>;
     openedAt?: string;
-    generatedAt?: string;
+    openingFloat?: number;
+    orderCount?: number;
+    overShort?: number;
+    reportType?: string;
+    sessionId?: string;
+    status?: string;
+    tenderTotals?: Array<TenderTotal>;
+    terminalId?: string;
+    theoreticalCash?: number;
 }
 
 function isOptionalSessionReportResponsePropertyOfType(
@@ -72,8 +72,8 @@ export function instanceOfSessionReportResponse(value: object): value is Session
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createSessionReportResponsePropertyNames();
-    const optionalStringProperties = createSessionReportResponseOptionalProperties({ name: 'sessionId', nullable: false }, { name: 'terminalId', nullable: false }, { name: 'locationId', nullable: false }, { name: 'status', nullable: false }, { name: 'reportType', nullable: false }, { name: 'openedAt', nullable: false }, { name: 'generatedAt', nullable: false }, );
-    const optionalNumberProperties = createSessionReportResponseOptionalProperties({ name: 'openingFloat', nullable: false }, { name: 'cashSettlements', nullable: false }, { name: 'cashMovements', nullable: false }, { name: 'theoreticalCash', nullable: false }, { name: 'countedCash', nullable: false }, { name: 'overShort', nullable: false }, { name: 'orderCount', nullable: false }, );
+    const optionalStringProperties = createSessionReportResponseOptionalProperties({ name: 'generatedAt', nullable: false }, { name: 'locationId', nullable: false }, { name: 'openedAt', nullable: false }, { name: 'reportType', nullable: false }, { name: 'sessionId', nullable: false }, { name: 'status', nullable: false }, { name: 'terminalId', nullable: false }, );
+    const optionalNumberProperties = createSessionReportResponseOptionalProperties({ name: 'cashMovements', nullable: false }, { name: 'cashSettlements', nullable: false }, { name: 'countedCash', nullable: false }, { name: 'openingFloat', nullable: false }, { name: 'orderCount', nullable: false }, { name: 'overShort', nullable: false }, { name: 'theoreticalCash', nullable: false }, );
     const optionalBooleanProperties = createSessionReportResponseOptionalProperties();
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

@@ -14,49 +14,9 @@
  */
 export interface WorkSessionResponse { 
     /**
-     * Unique identifier of the work session
+     * Notes provided at approval
      */
-    workSessionId?: string;
-    /**
-     * ID of the mechanic
-     */
-    mechanicId?: string;
-    /**
-     * ID of the work order
-     */
-    workOrderId?: string;
-    /**
-     * ID of the work order task
-     */
-    workOrderTaskId?: string;
-    /**
-     * ID of the work location
-     */
-    locationId?: string;
-    /**
-     * Optional resource/bay ID
-     */
-    resourceId?: string;
-    /**
-     * Session start timestamp
-     */
-    startAt?: string;
-    /**
-     * Session end timestamp
-     */
-    endAt?: string;
-    /**
-     * Current status of the work session
-     */
-    status?: WorkSessionResponseStatusEnum;
-    /**
-     * Whether the session is locked
-     */
-    locked?: boolean;
-    /**
-     * Total session duration in seconds
-     */
-    totalDurationSeconds?: number;
+    approvalNotes?: string;
     /**
      * Timestamp when the session was approved
      */
@@ -66,13 +26,25 @@ export interface WorkSessionResponse {
      */
     approvedByUserId?: string;
     /**
-     * Notes provided at approval
+     * Session end timestamp
      */
-    approvalNotes?: string;
+    endAt?: string;
+    /**
+     * ID of the work location
+     */
+    locationId?: string;
+    /**
+     * Whether the session is locked
+     */
+    locked?: boolean;
     /**
      * Timestamp when the session was locked
      */
     lockedAt?: string;
+    /**
+     * ID of the mechanic
+     */
+    mechanicId?: string;
     /**
      * Whether an overlap override was used
      */
@@ -81,6 +53,34 @@ export interface WorkSessionResponse {
      * Reason provided for the overlap override
      */
     overrideReason?: string;
+    /**
+     * Optional resource/bay ID
+     */
+    resourceId?: string;
+    /**
+     * Session start timestamp
+     */
+    startAt?: string;
+    /**
+     * Current status of the work session
+     */
+    status?: WorkSessionResponseStatusEnum;
+    /**
+     * Total session duration in seconds
+     */
+    totalDurationSeconds?: number;
+    /**
+     * ID of the work order
+     */
+    workOrderId?: string;
+    /**
+     * ID of the work order task
+     */
+    workOrderTaskId?: string;
+    /**
+     * Unique identifier of the work session
+     */
+    workSessionId?: string;
 }
 export enum WorkSessionResponseStatusEnum {
     InProgress = 'IN_PROGRESS',
@@ -130,7 +130,7 @@ export function instanceOfWorkSessionResponse(value: object): value is WorkSessi
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createWorkSessionResponsePropertyNames();
-    const optionalStringProperties = createWorkSessionResponseOptionalProperties({ name: 'workSessionId', nullable: false }, { name: 'mechanicId', nullable: false }, { name: 'workOrderId', nullable: false }, { name: 'workOrderTaskId', nullable: false }, { name: 'locationId', nullable: false }, { name: 'resourceId', nullable: false }, { name: 'startAt', nullable: false }, { name: 'endAt', nullable: false }, { name: 'status', nullable: false }, { name: 'approvedAt', nullable: false }, { name: 'approvedByUserId', nullable: false }, { name: 'approvalNotes', nullable: false }, { name: 'lockedAt', nullable: false }, { name: 'overrideReason', nullable: false }, );
+    const optionalStringProperties = createWorkSessionResponseOptionalProperties({ name: 'approvalNotes', nullable: false }, { name: 'approvedAt', nullable: false }, { name: 'approvedByUserId', nullable: false }, { name: 'endAt', nullable: false }, { name: 'locationId', nullable: false }, { name: 'lockedAt', nullable: false }, { name: 'mechanicId', nullable: false }, { name: 'overrideReason', nullable: false }, { name: 'resourceId', nullable: false }, { name: 'startAt', nullable: false }, { name: 'status', nullable: false }, { name: 'workOrderId', nullable: false }, { name: 'workOrderTaskId', nullable: false }, { name: 'workSessionId', nullable: false }, );
     const optionalNumberProperties = createWorkSessionResponseOptionalProperties({ name: 'totalDurationSeconds', nullable: false }, );
     const optionalBooleanProperties = createWorkSessionResponseOptionalProperties({ name: 'locked', nullable: false }, { name: 'overlapOverrideUsed', nullable: false }, );
 

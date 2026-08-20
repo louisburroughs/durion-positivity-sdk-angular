@@ -18,13 +18,13 @@ export interface ReimbursementSubmitRequest {
      */
     amountRequested: number;
     /**
-     * The vendor\'s own claim reference number, if already assigned
-     */
-    vendorClaimReference?: string;
-    /**
      * Back-office notes
      */
     notes?: string;
+    /**
+     * The vendor\'s own claim reference number, if already assigned
+     */
+    vendorClaimReference?: string;
 }
 
 function isOptionalReimbursementSubmitRequestPropertyOfType(
@@ -66,7 +66,7 @@ export function instanceOfReimbursementSubmitRequest(value: object): value is Re
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createReimbursementSubmitRequestPropertyNames('amountRequested', );
-    const optionalStringProperties = createReimbursementSubmitRequestOptionalProperties({ name: 'vendorClaimReference', nullable: false }, { name: 'notes', nullable: false }, );
+    const optionalStringProperties = createReimbursementSubmitRequestOptionalProperties({ name: 'notes', nullable: false }, { name: 'vendorClaimReference', nullable: false }, );
     const optionalNumberProperties = createReimbursementSubmitRequestOptionalProperties({ name: 'amountRequested', nullable: false }, );
     const optionalBooleanProperties = createReimbursementSubmitRequestOptionalProperties();
 

@@ -45,9 +45,9 @@ export class ASNService extends BaseService {
 
     /**
      * Create ASN
-     * Creates an advanced shipping notice for inbound inventory
+     * Creates an advance shipping notice (ASN) declaring an inbound vendor shipment against one or more approved purchase orders, stored in LOADED status with its declared lines. Use this tool when a vendor announces a shipment before it arrives; do not use createGoodsReceipt, which records goods actually received and posts stock, and do not use createReceivingSession, which starts a line-by-line receiving workflow. Preconditions: every purchase order in relatedPoIds must exist and be APPROVED, and no ASN may already exist for the same vendorId and asnReferenceNumber pair. Required inputs: vendorId (UUID), asnReferenceNumber, relatedPoIds (non-empty) and lineItems each naming poId and sku plus either quantityShipped in base UoM or the documentUom/documentQuantity pair, from which the base quantity is derived; shipDate and expectedArrivalDate are optional. Emits an INVENTORY_ASN_CREATE event; no stock is posted and no on-hand quantity changes until a goods receipt or receiving session references the ASN. Returns 409 when an ASN with the same vendor and reference number already exists, 400 when a related purchase order is unknown or not APPROVED, and 422 when a documentUom has no conversion path to the product\&#39;s base UoM. 
      * @endpoint post /v1/inventory/asns
-     * @param createAsnRequest 
+     * @param createAsnRequest Shipment declaration from the vendor: the ASN header plus the declared lines.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -114,10 +114,10 @@ export class ASNService extends BaseService {
     }
 
     /**
-     * Create goods receipt
-     * Creates a goods receipt for an inbound shipment
+     * Create Goods Receipt
+     * Records a goods receipt against a purchase order, posting GOODS_RECEIPT ledger entries that increase on-hand stock at the receiving location. Use this tool when goods physically arrive and should enter stock in one posting; do not use createAsn, which only declares an expected shipment, and do not use the session-based flow of createReceivingSession and receiveItemsIntoStaging. Preconditions: the purchase order must exist and be APPROVED or PARTIALLY_RECEIVED, the ASN when supplied must exist, and the receipt total may not exceed the purchase order\&#39;s open balance unless the caller holds inventory:goods_receipt:override. Required inputs: poId (UUID), locationId (UUID) and lines each naming sku and unitCostMinor plus either a whole-number quantityReceived in base UoM or the documentUom/documentQuantity pair; lotNumber is mandatory for LOT-tracked SKUs, serialNumbers must enumerate exactly the received quantity for SERIAL-tracked SKUs, and asnId is optional. Emits an INVENTORY_GOODS_RECEIPT_CREATE event, decrements the purchase order\&#39;s open balance, moves the PO to PARTIALLY_RECEIVED or FULLY_RECEIVED, and updates the linked ASN\&#39;s received quantities and status. Returns 403 when the receipt exceeds the open balance without the override authority, 404 when the ASN or a referenced PO line cannot be resolved, 400 when the purchase order is unknown or not receivable, and 422 when a UoM has no conversion path, a LOT-tracked line omits lotNumber, or a serialized line\&#39;s serial count mismatches the received quantity. 
      * @endpoint post /v1/inventory/goods-receipts
-     * @param createGoodsReceiptRequest Goods receipt creation payload
+     * @param createGoodsReceiptRequest Received goods to post into stock: the target PO, receiving location and the costed receipt lines.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -185,7 +185,7 @@ export class ASNService extends BaseService {
 
     /**
      * Get ASN
-     * Retrieves an ASN by identifier
+     * Returns one advance shipping notice with its status, dates and per-line shipped and received quantities. Use this tool when the asnId is already known; use getGoodsReceipt instead to inspect what was actually received on a specific receipt. Preconditions: the ASN must exist. Required inputs: asnId (UUIDv7) path parameter; there is no request body. Emits an INVENTORY_ASN_GET audit event; no stock state changes, this is a read-only projection. Returns 404 when no ASN exists for the supplied id. 
      * @endpoint get /v1/inventory/asns/{asnId}
      * @param asnId ASN identifier
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -244,8 +244,8 @@ export class ASNService extends BaseService {
     }
 
     /**
-     * Get goods receipt
-     * Retrieves a goods receipt by identifier
+     * Get Goods Receipt
+     * Returns one goods receipt with its accrued amounts and per-line received quantities and costs. Use this tool when the receiptId is already known; use getAsn instead to check the shipment declaration and its outstanding quantities. Preconditions: the goods receipt must exist. Required inputs: receiptId (UUIDv7) path parameter; there is no request body. Emits an INVENTORY_GOODS_RECEIPT_GET audit event; no stock state changes, this is a read-only projection. Returns 404 when no goods receipt exists for the supplied id. 
      * @endpoint get /v1/inventory/goods-receipts/{receiptId}
      * @param receiptId Goods receipt identifier
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.

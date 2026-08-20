@@ -40,20 +40,20 @@ export class PeopleStaffingAssignmentsService extends BaseService {
     }
 
     /**
-     * Create staffing assignment
-     * Link a person to a location with role, effective dates, and primary flag.
+     * Create Person To Location Staffing Assignment
+     * Creates a staffing assignment linking a person to a location with a role, effective dates, and a primary flag. Use this tool when a person starts working at a location; do not use updateStaffingAssignment, which modifies an existing assignment by id. Preconditions: the person must exist in the identity replica with an ACTIVE employee record, the location must be active, and no assignment for the same person, location, and role may overlap the effective dates. Required inputs: personId (UUID), locationId (UUID), role, isPrimary, and effectiveFrom (yyyy-MM-dd); effectiveTo is optional and open-ended when null. Emits a PEOPLE_STAFFING_ASSIGNMENT_CREATE event and publishes a staffing-assignment fact; a new primary demotes and ends any overlapping existing primary, and a person\&#39;s first active assignment is forced primary regardless of the flag. Returns 409 when an overlapping assignment exists for the person, location, and role, 404 when the person, employee record, or active location cannot be resolved, and 400 when the person\&#39;s employee status is not ACTIVE. 
      * @endpoint post /v1/people/staffing/assignments
-     * @param createStaffingAssignmentRequest 
+     * @param createStaffingAssignmentRequest Staffing assignment to create, binding one person to one location for a role over an effective date range.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public createAssignment(createStaffingAssignmentRequest: CreateStaffingAssignmentRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<StaffingAssignmentResponse>;
-    public createAssignment(createStaffingAssignmentRequest: CreateStaffingAssignmentRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<StaffingAssignmentResponse>>;
-    public createAssignment(createStaffingAssignmentRequest: CreateStaffingAssignmentRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<StaffingAssignmentResponse>>;
-    public createAssignment(createStaffingAssignmentRequest: CreateStaffingAssignmentRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public createStaffingAssignment(createStaffingAssignmentRequest: CreateStaffingAssignmentRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<StaffingAssignmentResponse>;
+    public createStaffingAssignment(createStaffingAssignmentRequest: CreateStaffingAssignmentRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<StaffingAssignmentResponse>>;
+    public createStaffingAssignment(createStaffingAssignmentRequest: CreateStaffingAssignmentRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<StaffingAssignmentResponse>>;
+    public createStaffingAssignment(createStaffingAssignmentRequest: CreateStaffingAssignmentRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (createStaffingAssignmentRequest === null || createStaffingAssignmentRequest === undefined) {
-            throw new Error('Required parameter createStaffingAssignmentRequest was null or undefined when calling createAssignment.');
+            throw new Error('Required parameter createStaffingAssignmentRequest was null or undefined when calling createStaffingAssignment.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -110,20 +110,20 @@ export class PeopleStaffingAssignmentsService extends BaseService {
     }
 
     /**
-     * End (soft-delete) an assignment
-     * Ends an active staffing assignment without physically deleting the record.
+     * End An Active Staffing Assignment
+     * Ends a staffing assignment by setting its status to ENDED without physically deleting the row. Use this tool when a person stops working at a location; do not use disableEmployee, which offboards the whole employee, and do not use updateStaffingAssignment to shorten dates manually. Preconditions: the assignment must exist; ending an already ENDED assignment is accepted and republishes the fact. Required inputs: assignmentId (UUID) path parameter; there is no request body. Emits a PEOPLE_STAFFING_ASSIGNMENT_END event and publishes a staffing-assignment fact; a null effectiveTo is stamped with today\&#39;s date. Returns 204 on success, and 404 when no assignment exists for the supplied id. 
      * @endpoint delete /v1/people/staffing/assignments/{assignmentId}
      * @param assignmentId 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public endAssignment(assignmentId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public endAssignment(assignmentId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public endAssignment(assignmentId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public endAssignment(assignmentId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public endStaffingAssignment(assignmentId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
+    public endStaffingAssignment(assignmentId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
+    public endStaffingAssignment(assignmentId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
+    public endStaffingAssignment(assignmentId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (assignmentId === null || assignmentId === undefined) {
-            throw new Error('Required parameter assignmentId was null or undefined when calling endAssignment.');
+            throw new Error('Required parameter assignmentId was null or undefined when calling endStaffingAssignment.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -169,20 +169,20 @@ export class PeopleStaffingAssignmentsService extends BaseService {
     }
 
     /**
-     * Get assignment by ID
-     * Retrieves a single staffing assignment by its unique ID.
+     * Get Staffing Assignment By Id
+     * Returns a single staffing assignment by its unique assignment id. Use this tool when the assignment id is already known; use listStaffingAssignments instead to discover a person\&#39;s assignments. Preconditions: the assignment must exist; both ACTIVE and ENDED assignments are returned. Required inputs: assignmentId (UUID) path parameter; there is no request body. No events are emitted and no state changes; this is a read-only projection. Returns 404 when no assignment exists for the supplied id. 
      * @endpoint get /v1/people/staffing/assignments/{assignmentId}
      * @param assignmentId 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public getAssignment(assignmentId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<StaffingAssignmentResponse>;
-    public getAssignment(assignmentId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<StaffingAssignmentResponse>>;
-    public getAssignment(assignmentId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<StaffingAssignmentResponse>>;
-    public getAssignment(assignmentId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getStaffingAssignment(assignmentId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<StaffingAssignmentResponse>;
+    public getStaffingAssignment(assignmentId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<StaffingAssignmentResponse>>;
+    public getStaffingAssignment(assignmentId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<StaffingAssignmentResponse>>;
+    public getStaffingAssignment(assignmentId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (assignmentId === null || assignmentId === undefined) {
-            throw new Error('Required parameter assignmentId was null or undefined when calling getAssignment.');
+            throw new Error('Required parameter assignmentId was null or undefined when calling getStaffingAssignment.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -229,20 +229,20 @@ export class PeopleStaffingAssignmentsService extends BaseService {
     }
 
     /**
-     * List assignments for person
-     * Returns all staffing assignments for the specified person.
+     * List Staffing Assignments For A Person
+     * Lists every staffing assignment for a person, including ENDED ones, across all locations and roles. Use this tool for assignment history and administration; use listPersonLocations instead when only the assignments active today are wanted. Preconditions: none beyond authentication; an unknown personId simply yields no rows. Required inputs: personId (UUID) as a query parameter; there is no request body. No events are emitted and no state changes; this is a read-only projection. Returns 200 with an empty list when the person has no assignments. 
      * @endpoint get /v1/people/staffing/assignments
      * @param personId 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public getAssignments(personId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<StaffingAssignmentResponse>>;
-    public getAssignments(personId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<StaffingAssignmentResponse>>>;
-    public getAssignments(personId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<StaffingAssignmentResponse>>>;
-    public getAssignments(personId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public listStaffingAssignments(personId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<StaffingAssignmentResponse>>;
+    public listStaffingAssignments(personId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<StaffingAssignmentResponse>>>;
+    public listStaffingAssignments(personId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<StaffingAssignmentResponse>>>;
+    public listStaffingAssignments(personId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (personId === null || personId === undefined) {
-            throw new Error('Required parameter personId was null or undefined when calling getAssignments.');
+            throw new Error('Required parameter personId was null or undefined when calling listStaffingAssignments.');
         }
 
         let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
@@ -301,20 +301,20 @@ export class PeopleStaffingAssignmentsService extends BaseService {
     }
 
     /**
-     * List assignments for person (path variant)
-     * Returns all staffing assignments for the person given in the path. Same contract as GET /v1/people/staffing/assignments?personId&#x3D;{personId}.
+     * List Staffing Assignments By Person Path
+     * Lists every staffing assignment for the person given in the path, including ENDED ones; the data is identical to listStaffingAssignments. Use this tool when a path-style URL is preferred; use listStaffingAssignments instead for the query-parameter form, which returns the same rows. Preconditions: none beyond authentication; an unknown personId simply yields no rows. Required inputs: personId (UUID) path parameter; there is no request body. No events are emitted and no state changes; this is a read-only projection. Returns 200 with an empty list when the person has no assignments. 
      * @endpoint get /v1/people/{personId}/staffing/assignments
      * @param personId 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public getAssignmentsByPath(personId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<StaffingAssignmentResponse>>;
-    public getAssignmentsByPath(personId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<StaffingAssignmentResponse>>>;
-    public getAssignmentsByPath(personId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<StaffingAssignmentResponse>>>;
-    public getAssignmentsByPath(personId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public listStaffingAssignmentsByPath(personId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<StaffingAssignmentResponse>>;
+    public listStaffingAssignmentsByPath(personId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<StaffingAssignmentResponse>>>;
+    public listStaffingAssignmentsByPath(personId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<StaffingAssignmentResponse>>>;
+    public listStaffingAssignmentsByPath(personId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (personId === null || personId === undefined) {
-            throw new Error('Required parameter personId was null or undefined when calling getAssignmentsByPath.');
+            throw new Error('Required parameter personId was null or undefined when calling listStaffingAssignmentsByPath.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -361,24 +361,24 @@ export class PeopleStaffingAssignmentsService extends BaseService {
     }
 
     /**
-     * Update staffing assignment
-     * Updates an existing staffing assignment, including role, dates, and primary flag.
+     * Update An Existing Staffing Assignment
+     * Replaces a staffing assignment\&#39;s person, location, role, primary flag, and effective dates. Use this tool to correct or reshape an existing assignment; do not use endStaffingAssignment, which only closes an assignment, and do not use createStaffingAssignment for a new one. Preconditions: the assignment must exist, the person must exist with an ACTIVE employee record, the location must be active, and no other assignment for the same person, location, and role may overlap the effective dates. Required inputs: assignmentId (UUID) path parameter plus the full body (personId, locationId, role, isPrimary, effectiveFrom); this is a full replacement, not a patch. Emits a PEOPLE_STAFFING_ASSIGNMENT_UPDATE event and publishes a staffing-assignment fact; setting isPrimary true demotes and ends any other overlapping primary assignment. Returns 404 when the assignment, person, employee record, or active location cannot be resolved, 409 when another assignment overlaps for the person, location, and role, and 400 when the person\&#39;s employee status is not ACTIVE. 
      * @endpoint put /v1/people/staffing/assignments/{assignmentId}
      * @param assignmentId 
-     * @param updateStaffingAssignmentRequest 
+     * @param updateStaffingAssignmentRequest Full replacement values for the assignment\&#39;s person, location, role, primary flag, and effective dates.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public updateAssignment(assignmentId: string, updateStaffingAssignmentRequest: UpdateStaffingAssignmentRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<StaffingAssignmentResponse>;
-    public updateAssignment(assignmentId: string, updateStaffingAssignmentRequest: UpdateStaffingAssignmentRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<StaffingAssignmentResponse>>;
-    public updateAssignment(assignmentId: string, updateStaffingAssignmentRequest: UpdateStaffingAssignmentRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<StaffingAssignmentResponse>>;
-    public updateAssignment(assignmentId: string, updateStaffingAssignmentRequest: UpdateStaffingAssignmentRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public updateStaffingAssignment(assignmentId: string, updateStaffingAssignmentRequest: UpdateStaffingAssignmentRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<StaffingAssignmentResponse>;
+    public updateStaffingAssignment(assignmentId: string, updateStaffingAssignmentRequest: UpdateStaffingAssignmentRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<StaffingAssignmentResponse>>;
+    public updateStaffingAssignment(assignmentId: string, updateStaffingAssignmentRequest: UpdateStaffingAssignmentRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<StaffingAssignmentResponse>>;
+    public updateStaffingAssignment(assignmentId: string, updateStaffingAssignmentRequest: UpdateStaffingAssignmentRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (assignmentId === null || assignmentId === undefined) {
-            throw new Error('Required parameter assignmentId was null or undefined when calling updateAssignment.');
+            throw new Error('Required parameter assignmentId was null or undefined when calling updateStaffingAssignment.');
         }
         if (updateStaffingAssignmentRequest === null || updateStaffingAssignmentRequest === undefined) {
-            throw new Error('Required parameter updateStaffingAssignmentRequest was null or undefined when calling updateAssignment.');
+            throw new Error('Required parameter updateStaffingAssignmentRequest was null or undefined when calling updateStaffingAssignment.');
         }
 
         let localVarHeaders = this.defaultHeaders;

@@ -14,17 +14,17 @@
  */
 export interface PredicateEvaluation { 
     /**
-     * Predicate expression as configured on the rule condition
+     * Optional evaluation detail (e.g. which clause failed)
      */
-    predicate: string;
+    detail?: string;
     /**
      * Whether the predicate matched the supplied event type and sample payload
      */
     matched: boolean;
     /**
-     * Optional evaluation detail (e.g. which clause failed)
+     * Predicate expression as configured on the rule condition
      */
-    detail?: string;
+    predicate: string;
 }
 
 function isOptionalPredicateEvaluationPropertyOfType(
@@ -65,8 +65,8 @@ export function instanceOfPredicateEvaluation(value: object): value is Predicate
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createPredicateEvaluationPropertyNames('predicate', 'matched', );
-    const optionalStringProperties = createPredicateEvaluationOptionalProperties({ name: 'predicate', nullable: false }, { name: 'detail', nullable: false }, );
+    const requiredProperties = createPredicateEvaluationPropertyNames('matched', 'predicate', );
+    const optionalStringProperties = createPredicateEvaluationOptionalProperties({ name: 'detail', nullable: false }, { name: 'predicate', nullable: false }, );
     const optionalNumberProperties = createPredicateEvaluationOptionalProperties();
     const optionalBooleanProperties = createPredicateEvaluationOptionalProperties({ name: 'matched', nullable: false }, );
 

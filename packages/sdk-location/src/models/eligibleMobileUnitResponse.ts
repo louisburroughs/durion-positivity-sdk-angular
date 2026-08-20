@@ -14,6 +14,10 @@
  */
 export interface EligibleMobileUnitResponse { 
     /**
+     * Identifier of the base location the mobile unit operates from
+     */
+    baseLocationId?: string;
+    /**
      * Unique identifier of the mobile unit
      */
     id: string;
@@ -21,10 +25,6 @@ export interface EligibleMobileUnitResponse {
      * Display name of the mobile unit
      */
     name?: string;
-    /**
-     * Identifier of the base location the mobile unit operates from
-     */
-    baseLocationId?: string;
     /**
      * Coverage priority of the mobile unit for the requested area (lower is preferred)
      */
@@ -70,7 +70,7 @@ export function instanceOfEligibleMobileUnitResponse(value: object): value is El
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createEligibleMobileUnitResponsePropertyNames('id', );
-    const optionalStringProperties = createEligibleMobileUnitResponseOptionalProperties({ name: 'id', nullable: false }, { name: 'name', nullable: false }, { name: 'baseLocationId', nullable: false }, );
+    const optionalStringProperties = createEligibleMobileUnitResponseOptionalProperties({ name: 'baseLocationId', nullable: false }, { name: 'id', nullable: false }, { name: 'name', nullable: false }, );
     const optionalNumberProperties = createEligibleMobileUnitResponseOptionalProperties({ name: 'priority', nullable: false }, );
     const optionalBooleanProperties = createEligibleMobileUnitResponseOptionalProperties();
 

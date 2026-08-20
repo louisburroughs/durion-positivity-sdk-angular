@@ -23,13 +23,13 @@ export interface BulkIngestRequestCatalogBulkIngestRecord {
      */
     locationId: string;
     /**
-     * The records to ingest (at least one); shape depends on the target domain
-     */
-    records: Array<CatalogBulkIngestRecord>;
-    /**
      * Identifier of the operator submitting the batch
      */
     operatorId?: string;
+    /**
+     * The records to ingest (at least one); shape depends on the target domain
+     */
+    records: Array<CatalogBulkIngestRecord>;
 }
 
 function isOptionalBulkIngestRequestCatalogBulkIngestRecordPropertyOfType(

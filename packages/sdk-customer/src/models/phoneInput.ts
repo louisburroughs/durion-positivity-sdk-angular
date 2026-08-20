@@ -13,15 +13,15 @@
  * Phone number input
  */
 export interface PhoneInput { 
-    /**
-     * Phone number
-     */
-    value: string;
+    primary?: boolean;
     /**
      * Phone type
      */
     type?: PhoneInputTypeEnum;
-    primary?: boolean;
+    /**
+     * Phone number
+     */
+    value: string;
 }
 export enum PhoneInputTypeEnum {
     Email = 'EMAIL',
@@ -72,7 +72,7 @@ export function instanceOfPhoneInput(value: object): value is PhoneInput {
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createPhoneInputPropertyNames('value', );
-    const optionalStringProperties = createPhoneInputOptionalProperties({ name: 'value', nullable: false }, { name: 'type', nullable: false }, );
+    const optionalStringProperties = createPhoneInputOptionalProperties({ name: 'type', nullable: false }, { name: 'value', nullable: false }, );
     const optionalNumberProperties = createPhoneInputOptionalProperties();
     const optionalBooleanProperties = createPhoneInputOptionalProperties({ name: 'primary', nullable: false }, );
 

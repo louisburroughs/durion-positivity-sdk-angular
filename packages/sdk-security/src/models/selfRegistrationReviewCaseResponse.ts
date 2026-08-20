@@ -22,9 +22,45 @@ export interface SelfRegistrationReviewCaseResponse {
      */
     caseType: SelfRegistrationReviewCaseResponseCaseTypeEnum;
     /**
-     * Case status
+     * Case creation timestamp
      */
-    status: SelfRegistrationReviewCaseResponseStatusEnum;
+    createdAt: string;
+    /**
+     * CRM candidate count, when available
+     */
+    crmCandidateCount?: number;
+    /**
+     * CRM exact email match flag, when available
+     */
+    crmExactEmailMatch?: boolean;
+    /**
+     * CRM exact name match flag, when available
+     */
+    crmExactNameMatch?: boolean;
+    /**
+     * CRM exact phone match flag, when available
+     */
+    crmExactPhoneMatch?: boolean;
+    /**
+     * CRM shared-identity candidate count, when available
+     */
+    crmSharedIdentityCandidateCount?: number;
+    /**
+     * Submitted email address
+     */
+    email: string;
+    /**
+     * Linked or recoverable user identifier, when available
+     */
+    linkedUserId?: string;
+    /**
+     * Operator notes recorded for the case
+     */
+    notes?: string;
+    /**
+     * Resolved or created person identifier, when available
+     */
+    personId?: string;
     /**
      * Reason code that created the case
      */
@@ -34,53 +70,13 @@ export interface SelfRegistrationReviewCaseResponse {
      */
     reasonMessage: string;
     /**
-     * Submitted email address
-     */
-    email: string;
-    /**
      * Requested username, when available
      */
     requestedUsername?: string;
     /**
-     * Resolved or created person identifier, when available
+     * Resolution notes, when resolved
      */
-    personId?: string;
-    /**
-     * Linked or recoverable user identifier, when available
-     */
-    linkedUserId?: string;
-    /**
-     * CRM candidate count, when available
-     */
-    crmCandidateCount?: number;
-    /**
-     * CRM shared-identity candidate count, when available
-     */
-    crmSharedIdentityCandidateCount?: number;
-    /**
-     * CRM exact email match flag, when available
-     */
-    crmExactEmailMatch?: boolean;
-    /**
-     * CRM exact phone match flag, when available
-     */
-    crmExactPhoneMatch?: boolean;
-    /**
-     * CRM exact name match flag, when available
-     */
-    crmExactNameMatch?: boolean;
-    /**
-     * Operator notes recorded for the case
-     */
-    notes?: string;
-    /**
-     * Case creation timestamp
-     */
-    createdAt: string;
-    /**
-     * Case last-updated timestamp
-     */
-    updatedAt: string;
+    resolutionNotes?: string;
     /**
      * Resolution timestamp, when resolved
      */
@@ -90,9 +86,13 @@ export interface SelfRegistrationReviewCaseResponse {
      */
     resolvedBy?: string;
     /**
-     * Resolution notes, when resolved
+     * Case status
      */
-    resolutionNotes?: string;
+    status: SelfRegistrationReviewCaseResponseStatusEnum;
+    /**
+     * Case last-updated timestamp
+     */
+    updatedAt: string;
 }
 export enum SelfRegistrationReviewCaseResponseCaseTypeEnum {
     AccountRecovery = 'ACCOUNT_RECOVERY',
@@ -143,10 +143,10 @@ export function instanceOfSelfRegistrationReviewCaseResponse(value: object): val
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createSelfRegistrationReviewCaseResponsePropertyNames('caseId', 'caseType', 'status', 'reasonCode', 'reasonMessage', 'email', 'createdAt', 'updatedAt', );
-    const optionalStringProperties = createSelfRegistrationReviewCaseResponseOptionalProperties({ name: 'caseId', nullable: false }, { name: 'caseType', nullable: false }, { name: 'status', nullable: false }, { name: 'reasonCode', nullable: false }, { name: 'reasonMessage', nullable: false }, { name: 'email', nullable: false }, { name: 'requestedUsername', nullable: false }, { name: 'personId', nullable: false }, { name: 'linkedUserId', nullable: false }, { name: 'notes', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'updatedAt', nullable: false }, { name: 'resolvedAt', nullable: false }, { name: 'resolvedBy', nullable: false }, { name: 'resolutionNotes', nullable: false }, );
+    const requiredProperties = createSelfRegistrationReviewCaseResponsePropertyNames('caseId', 'caseType', 'createdAt', 'email', 'reasonCode', 'reasonMessage', 'status', 'updatedAt', );
+    const optionalStringProperties = createSelfRegistrationReviewCaseResponseOptionalProperties({ name: 'caseId', nullable: false }, { name: 'caseType', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'email', nullable: false }, { name: 'linkedUserId', nullable: false }, { name: 'notes', nullable: false }, { name: 'personId', nullable: false }, { name: 'reasonCode', nullable: false }, { name: 'reasonMessage', nullable: false }, { name: 'requestedUsername', nullable: false }, { name: 'resolutionNotes', nullable: false }, { name: 'resolvedAt', nullable: false }, { name: 'resolvedBy', nullable: false }, { name: 'status', nullable: false }, { name: 'updatedAt', nullable: false }, );
     const optionalNumberProperties = createSelfRegistrationReviewCaseResponseOptionalProperties({ name: 'crmCandidateCount', nullable: false }, { name: 'crmSharedIdentityCandidateCount', nullable: false }, );
-    const optionalBooleanProperties = createSelfRegistrationReviewCaseResponseOptionalProperties({ name: 'crmExactEmailMatch', nullable: false }, { name: 'crmExactPhoneMatch', nullable: false }, { name: 'crmExactNameMatch', nullable: false }, );
+    const optionalBooleanProperties = createSelfRegistrationReviewCaseResponseOptionalProperties({ name: 'crmExactEmailMatch', nullable: false }, { name: 'crmExactNameMatch', nullable: false }, { name: 'crmExactPhoneMatch', nullable: false }, );
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
         && optionalStringProperties.every((property) => isOptionalSelfRegistrationReviewCaseResponsePropertyOfType(_v, property.name, 'string', property.nullable))

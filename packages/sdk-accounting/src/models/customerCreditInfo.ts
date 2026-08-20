@@ -14,10 +14,6 @@
  */
 export interface CustomerCreditInfo { 
     /**
-     * Identifier of the customer credit record
-     */
-    creditId?: string;
-    /**
      * Credit amount created from overpayment
      */
     amount?: number;
@@ -25,6 +21,10 @@ export interface CustomerCreditInfo {
      * Timestamp when the credit was created (ISO 8601)
      */
     createdAt?: string;
+    /**
+     * Identifier of the customer credit record
+     */
+    creditId?: string;
 }
 
 function isOptionalCustomerCreditInfoPropertyOfType(
@@ -66,7 +66,7 @@ export function instanceOfCustomerCreditInfo(value: object): value is CustomerCr
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createCustomerCreditInfoPropertyNames();
-    const optionalStringProperties = createCustomerCreditInfoOptionalProperties({ name: 'creditId', nullable: false }, { name: 'createdAt', nullable: false }, );
+    const optionalStringProperties = createCustomerCreditInfoOptionalProperties({ name: 'createdAt', nullable: false }, { name: 'creditId', nullable: false }, );
     const optionalNumberProperties = createCustomerCreditInfoOptionalProperties({ name: 'amount', nullable: false }, );
     const optionalBooleanProperties = createCustomerCreditInfoOptionalProperties();
 

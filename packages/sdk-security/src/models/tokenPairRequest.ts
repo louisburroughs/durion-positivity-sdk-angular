@@ -14,13 +14,13 @@
  */
 export interface TokenPairRequest { 
     /**
-     * User identifier (subject claim)
-     */
-    subject: string;
-    /**
      * Optional set of role names to include in token
      */
     roles?: Set<string>;
+    /**
+     * User identifier (subject claim)
+     */
+    subject: string;
 }
 
 function isOptionalTokenPairRequestPropertyOfType(

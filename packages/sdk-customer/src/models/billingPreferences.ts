@@ -14,10 +14,6 @@
  */
 export interface BillingPreferences { 
     /**
-     * Whether the account has opted out of marketing communications
-     */
-    marketingOptOut: boolean;
-    /**
      * Whether the account should not be contacted at all
      */
     doNotContact: boolean;
@@ -25,6 +21,10 @@ export interface BillingPreferences {
      * Preferred invoice delivery method
      */
     invoiceDeliveryMethod?: string;
+    /**
+     * Whether the account has opted out of marketing communications
+     */
+    marketingOptOut: boolean;
 }
 
 function isOptionalBillingPreferencesPropertyOfType(
@@ -65,10 +65,10 @@ export function instanceOfBillingPreferences(value: object): value is BillingPre
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createBillingPreferencesPropertyNames('marketingOptOut', 'doNotContact', );
+    const requiredProperties = createBillingPreferencesPropertyNames('doNotContact', 'marketingOptOut', );
     const optionalStringProperties = createBillingPreferencesOptionalProperties({ name: 'invoiceDeliveryMethod', nullable: false }, );
     const optionalNumberProperties = createBillingPreferencesOptionalProperties();
-    const optionalBooleanProperties = createBillingPreferencesOptionalProperties({ name: 'marketingOptOut', nullable: false }, { name: 'doNotContact', nullable: false }, );
+    const optionalBooleanProperties = createBillingPreferencesOptionalProperties({ name: 'doNotContact', nullable: false }, { name: 'marketingOptOut', nullable: false }, );
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
         && optionalStringProperties.every((property) => isOptionalBillingPreferencesPropertyOfType(_v, property.name, 'string', property.nullable))

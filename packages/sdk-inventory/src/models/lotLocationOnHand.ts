@@ -14,6 +14,10 @@
  */
 export interface LotLocationOnHand { 
     /**
+     * Quantity of the lot in transit toward the location
+     */
+    inTransitQty: number;
+    /**
      * Location holding the lot; null for postings recorded without a location
      */
     locationId?: string;
@@ -21,10 +25,6 @@ export interface LotLocationOnHand {
      * On-hand quantity of the lot at the location
      */
     onHand: number;
-    /**
-     * Quantity of the lot in transit toward the location
-     */
-    inTransitQty: number;
 }
 
 function isOptionalLotLocationOnHandPropertyOfType(
@@ -65,9 +65,9 @@ export function instanceOfLotLocationOnHand(value: object): value is LotLocation
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createLotLocationOnHandPropertyNames('onHand', 'inTransitQty', );
+    const requiredProperties = createLotLocationOnHandPropertyNames('inTransitQty', 'onHand', );
     const optionalStringProperties = createLotLocationOnHandOptionalProperties({ name: 'locationId', nullable: false }, );
-    const optionalNumberProperties = createLotLocationOnHandOptionalProperties({ name: 'onHand', nullable: false }, { name: 'inTransitQty', nullable: false }, );
+    const optionalNumberProperties = createLotLocationOnHandOptionalProperties({ name: 'inTransitQty', nullable: false }, { name: 'onHand', nullable: false }, );
     const optionalBooleanProperties = createLotLocationOnHandOptionalProperties();
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

@@ -15,14 +15,6 @@ import { BankReconciliationResponse } from './bankReconciliationResponse';
  */
 export interface BankReconciliationListResponse { 
     /**
-     * Reconciliations on the current page
-     */
-    reconciliations: Array<BankReconciliationResponse>;
-    /**
-     * Total number of matching reconciliations
-     */
-    totalElements: number;
-    /**
      * Zero-based page index
      */
     pageNumber: number;
@@ -30,6 +22,14 @@ export interface BankReconciliationListResponse {
      * Page size
      */
     pageSize: number;
+    /**
+     * Reconciliations on the current page
+     */
+    reconciliations: Array<BankReconciliationResponse>;
+    /**
+     * Total number of matching reconciliations
+     */
+    totalElements: number;
     /**
      * Total number of pages
      */
@@ -74,9 +74,9 @@ export function instanceOfBankReconciliationListResponse(value: object): value i
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createBankReconciliationListResponsePropertyNames('reconciliations', 'totalElements', 'pageNumber', 'pageSize', 'totalPages', );
+    const requiredProperties = createBankReconciliationListResponsePropertyNames('pageNumber', 'pageSize', 'reconciliations', 'totalElements', 'totalPages', );
     const optionalStringProperties = createBankReconciliationListResponseOptionalProperties();
-    const optionalNumberProperties = createBankReconciliationListResponseOptionalProperties({ name: 'totalElements', nullable: false }, { name: 'pageNumber', nullable: false }, { name: 'pageSize', nullable: false }, { name: 'totalPages', nullable: false }, );
+    const optionalNumberProperties = createBankReconciliationListResponseOptionalProperties({ name: 'pageNumber', nullable: false }, { name: 'pageSize', nullable: false }, { name: 'totalElements', nullable: false }, { name: 'totalPages', nullable: false }, );
     const optionalBooleanProperties = createBankReconciliationListResponseOptionalProperties();
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

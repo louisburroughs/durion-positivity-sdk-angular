@@ -14,29 +14,29 @@
  */
 export interface CreateCycleCountScheduleRequest { 
     /**
-     * Identifier of the location the schedule applies to
+     * Whether the scheduled runner auto-creates the next cycle-count plan when due (false = the schedule only appears in the due-for-count view); defaults to false
      */
-    locationId: string;
-    /**
-     * Optional single-zone filter within the location
-     */
-    zoneId?: string;
-    /**
-     * Optional SKU-category filter (plain string, metadata-only in v1)
-     */
-    skuCategory?: string;
+    autoCreatePlan?: boolean;
     /**
      * Count frequency in days
      */
     frequencyDays: number;
     /**
+     * Identifier of the location the schedule applies to
+     */
+    locationId: string;
+    /**
      * First date the schedule is due for counting
      */
     nextDueDate: string;
     /**
-     * Whether the scheduled runner auto-creates the next cycle-count plan when due (false = the schedule only appears in the due-for-count view); defaults to false
+     * Optional SKU-category filter (plain string, metadata-only in v1)
      */
-    autoCreatePlan?: boolean;
+    skuCategory?: string;
+    /**
+     * Optional single-zone filter within the location
+     */
+    zoneId?: string;
 }
 
 function isOptionalCreateCycleCountScheduleRequestPropertyOfType(
@@ -77,8 +77,8 @@ export function instanceOfCreateCycleCountScheduleRequest(value: object): value 
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createCreateCycleCountScheduleRequestPropertyNames('locationId', 'frequencyDays', 'nextDueDate', );
-    const optionalStringProperties = createCreateCycleCountScheduleRequestOptionalProperties({ name: 'locationId', nullable: false }, { name: 'zoneId', nullable: false }, { name: 'skuCategory', nullable: false }, { name: 'nextDueDate', nullable: false }, );
+    const requiredProperties = createCreateCycleCountScheduleRequestPropertyNames('frequencyDays', 'locationId', 'nextDueDate', );
+    const optionalStringProperties = createCreateCycleCountScheduleRequestOptionalProperties({ name: 'locationId', nullable: false }, { name: 'nextDueDate', nullable: false }, { name: 'skuCategory', nullable: false }, { name: 'zoneId', nullable: false }, );
     const optionalNumberProperties = createCreateCycleCountScheduleRequestOptionalProperties({ name: 'frequencyDays', nullable: false }, );
     const optionalBooleanProperties = createCreateCycleCountScheduleRequestOptionalProperties({ name: 'autoCreatePlan', nullable: false }, );
 

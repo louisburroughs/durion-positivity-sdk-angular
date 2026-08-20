@@ -14,17 +14,17 @@
  */
 export interface TravelBufferPolicyRequest { 
     /**
-     * Display name of the travel buffer policy
-     */
-    name: string;
-    /**
-     * Type of buffer the policy applies
+     * Type of buffer the policy applies; one of FLAT_MINUTES, PERCENTAGE_OF_TRAVEL or DISTANCE_MULTIPLIER
      */
     bufferType: string;
     /**
      * Numeric value of the buffer (interpretation depends on buffer type)
      */
     bufferValue?: number;
+    /**
+     * Display name of the travel buffer policy
+     */
+    name: string;
     /**
      * Free-text notes about the policy
      */
@@ -69,8 +69,8 @@ export function instanceOfTravelBufferPolicyRequest(value: object): value is Tra
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createTravelBufferPolicyRequestPropertyNames('name', 'bufferType', );
-    const optionalStringProperties = createTravelBufferPolicyRequestOptionalProperties({ name: 'name', nullable: false }, { name: 'bufferType', nullable: false }, { name: 'notes', nullable: false }, );
+    const requiredProperties = createTravelBufferPolicyRequestPropertyNames('bufferType', 'name', );
+    const optionalStringProperties = createTravelBufferPolicyRequestOptionalProperties({ name: 'bufferType', nullable: false }, { name: 'name', nullable: false }, { name: 'notes', nullable: false }, );
     const optionalNumberProperties = createTravelBufferPolicyRequestOptionalProperties({ name: 'bufferValue', nullable: false }, );
     const optionalBooleanProperties = createTravelBufferPolicyRequestOptionalProperties();
 

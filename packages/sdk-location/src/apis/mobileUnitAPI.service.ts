@@ -42,10 +42,10 @@ export class MobileUnitAPIService extends BaseService {
     }
 
     /**
-     * Create mobile unit
-     * Create a new mobile unit.
+     * Create a New Mobile Service Unit
+     * Creates a mobile service unit with an optional base location, travel buffer policy, capability list and initial coverage rules. Use this tool when commissioning a van or truck that serves customers off-site; do not use patchMobileUnit, which updates an existing unit, and change coverage later with replaceCoverageRules. Preconditions: a unit created with status ACTIVE must include travelBufferPolicyId, capabilityIds and coverageRules; the travel buffer policy must exist, capability ids or codes must resolve to registered capabilities, DISTANCE_TIER coverage rules must be strictly ascending by maxDistance and end with a null catch-all tier, and the name must be unique at the base location. Required inputs: name; status defaults to INACTIVE when omitted, and baseLocationId, travelBufferPolicyId, notes, capabilityIds and coverageRules are optional for inactive units. Emits a LOCATION_MOBILE_UNIT_CREATE event and persists any supplied coverage rules in the same transaction. Returns 201 with the created unit and 409 when the name is already taken at the base location. 
      * @endpoint post /v1/mobile-units
-     * @param mobileUnitRequest 
+     * @param mobileUnitRequest Mobile unit to create; an ACTIVE unit must arrive complete with its travel buffer policy, capabilities and coverage rules.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -112,68 +112,8 @@ export class MobileUnitAPIService extends BaseService {
     }
 
     /**
-     * Get coverage rules
-     * Get coverage rules for a mobile unit.
-     * @endpoint get /v1/mobile-units/{id}/coverage-rules
-     * @param id 
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     * @param options additional options
-     */
-    public getCoverageRules(id: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<CoverageRuleResponse>>;
-    public getCoverageRules(id: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<CoverageRuleResponse>>>;
-    public getCoverageRules(id: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<CoverageRuleResponse>>>;
-    public getCoverageRules(id: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
-        if (id === null || id === undefined) {
-            throw new Error('Required parameter id was null or undefined when calling getCoverageRules.');
-        }
-
-        let localVarHeaders = this.defaultHeaders;
-
-        // authentication (bearerAuth) required
-        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
-
-        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
-            'application/json'
-        ]);
-        if (localVarHttpHeaderAcceptSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
-        }
-
-        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
-
-        const localVarTransferCache: boolean = options?.transferCache ?? true;
-
-
-        let responseType_: 'text' | 'json' | 'blob' = 'json';
-        if (localVarHttpHeaderAcceptSelected) {
-            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
-                responseType_ = 'text';
-            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
-                responseType_ = 'json';
-            } else {
-                responseType_ = 'blob';
-            }
-        }
-
-        let localVarPath = `/v1/mobile-units/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/coverage-rules`;
-        const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<Array<CoverageRuleResponse>>('get', `${basePath}${localVarPath}`,
-            {
-                context: localVarHttpContext,
-                responseType: <any>responseType_,
-                ...(withCredentials ? { withCredentials } : {}),
-                headers: localVarHeaders,
-                observe: observe,
-                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * Get mobile unit
-     * Get a mobile unit by ID.
+     * Get a Mobile Unit by Identifier
+     * Returns a single mobile unit with its status, base location, capability ids and travel buffer policy reference. Use this tool when the unit id is already known; use listMobileUnits instead to enumerate, and listCoverageRules to read the unit\&#39;s coverage separately. Preconditions: the mobile unit must exist. Required inputs: id (UUID) as a path parameter. No events are emitted and no state changes; this is a read-only projection. Returns 404 when no mobile unit exists for the supplied id. 
      * @endpoint get /v1/mobile-units/{id}
      * @param id Mobile unit ID
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -232,8 +172,68 @@ export class MobileUnitAPIService extends BaseService {
     }
 
     /**
-     * List mobile units
-     * List mobile units with pagination.
+     * Get Coverage Rules of Mobile Unit
+     * Returns the coverage rules of a mobile unit ordered by ascending priority. Use this tool to inspect where a unit currently operates; use findEligibleMobileUnits instead to answer which units cover a given postal code. Preconditions: none; an unknown unit id yields an empty list rather than an error. Required inputs: id (UUID) as a path parameter. No events are emitted and no state changes; this is a read-only projection. Returns 200 with the ordered rule list, empty when the unit has no rules or does not exist. 
+     * @endpoint get /v1/mobile-units/{id}/coverage-rules
+     * @param id 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public listCoverageRules(id: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<CoverageRuleResponse>>;
+    public listCoverageRules(id: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<CoverageRuleResponse>>>;
+    public listCoverageRules(id: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<CoverageRuleResponse>>>;
+    public listCoverageRules(id: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (id === null || id === undefined) {
+            throw new Error('Required parameter id was null or undefined when calling listCoverageRules.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/mobile-units/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/coverage-rules`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<Array<CoverageRuleResponse>>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * List Mobile Units With Pagination
+     * Lists all mobile units as a page with status, base location and travel buffer policy references. Use this tool to enumerate or browse units; use getMobileUnitById instead when the unit id is known, and findEligibleMobileUnits to match units to a service address. Preconditions: none beyond the location:mobile-unit:read authority. Required inputs: none; page defaults to 0 and size to 20. No events are emitted and no state changes; this is a read-only projection. Returns 200 with a page of mobile units, empty when none exist. 
      * @endpoint get /v1/mobile-units
      * @param page 
      * @param size 
@@ -311,11 +311,11 @@ export class MobileUnitAPIService extends BaseService {
     }
 
     /**
-     * Patch mobile unit
-     * Partially update a mobile unit.
+     * Patch Fields of a Mobile Unit
+     * Applies a partial update to a mobile unit, accepting the keys name, status, notes and travelBufferPolicyId. Use this tool for status transitions and travel-buffer-policy reassignment; use replaceCoverageRules instead to change where the unit operates. Preconditions: none are enforced; when the unit id does not exist nothing is persisted and a synthesized response built from the patch is echoed back, so callers must verify existence first with getMobileUnitById. Required inputs: id (UUID) as a path parameter and a JSON object of the fields to change; status values are upper-cased and a blank status normalizes to INACTIVE. Emits a LOCATION_MOBILE_UNIT_UPDATE event. Returns 200 even for unknown ids (with the unpersisted echo) and 409 when a name change collides with another unit at the same base location. 
      * @endpoint patch /v1/mobile-units/{id}
      * @param id 
-     * @param body 
+     * @param body Free-form patch object; only the keys name, status, notes and travelBufferPolicyId are recognized.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -385,11 +385,11 @@ export class MobileUnitAPIService extends BaseService {
     }
 
     /**
-     * Replace coverage rules
-     * Atomically replace coverage rules for a mobile unit.
+     * Replace Coverage Rules for Mobile Unit
+     * Atomically replaces the full set of coverage rules for a mobile unit, deleting the existing rules and inserting the supplied ones in one transaction. Use this tool whenever coverage changes, sending the complete desired rule set; do not use patchMobileUnit, which cannot modify coverage. Preconditions: the mobile unit must exist; a referenced serviceAreaId that does not resolve is stored as a rule without a service area rather than rejected. Required inputs: id (UUID) as a path parameter and a body of the form {\&quot;rules\&quot;: [...]}, each rule carrying ruleType and optionally serviceAreaId, priority (defaults to 0), validFrom, validTo and maxDistance. Emits a LOCATION_COVERAGE_RULES_REPLACE event. Returns 404 when the mobile unit does not exist; an omitted or empty rules array clears all coverage. 
      * @endpoint put /v1/mobile-units/{id}/coverage-rules
      * @param id 
-     * @param body 
+     * @param body Envelope holding the complete replacement rule set under the \&quot;rules\&quot; key; existing rules not present here are deleted.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options

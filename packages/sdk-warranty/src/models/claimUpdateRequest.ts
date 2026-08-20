@@ -18,13 +18,17 @@ export interface ClaimUpdateRequest {
      */
     claimType?: ClaimUpdateRequestClaimTypeEnum;
     /**
+     * Date the failure occurred or was noticed
+     */
+    failureDate?: string;
+    /**
+     * What failed and how
+     */
+    failureDescription?: string;
+    /**
      * Location where the claim is handled
      */
     locationId?: string;
-    /**
-     * Originating workorder, when the sale was located
-     */
-    originWorkorderId?: string;
     /**
      * Originating invoice, when the sale was located
      */
@@ -34,21 +38,17 @@ export interface ClaimUpdateRequest {
      */
     originSaleDate?: string;
     /**
-     * Registration id for registration-bound coverage
+     * Originating workorder, when the sale was located
      */
-    registrationId?: string;
-    /**
-     * What failed and how
-     */
-    failureDescription?: string;
-    /**
-     * Date the failure occurred or was noticed
-     */
-    failureDate?: string;
+    originWorkorderId?: string;
     /**
      * Full replacement of photo evidence URLs; unchanged when null
      */
     photoEvidenceUrls?: Array<string>;
+    /**
+     * Registration id for registration-bound coverage
+     */
+    registrationId?: string;
 }
 export enum ClaimUpdateRequestClaimTypeEnum {
     ManufacturerDefect = 'MANUFACTURER_DEFECT',
@@ -98,7 +98,7 @@ export function instanceOfClaimUpdateRequest(value: object): value is ClaimUpdat
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createClaimUpdateRequestPropertyNames();
-    const optionalStringProperties = createClaimUpdateRequestOptionalProperties({ name: 'claimType', nullable: false }, { name: 'locationId', nullable: false }, { name: 'originWorkorderId', nullable: false }, { name: 'originInvoiceId', nullable: false }, { name: 'originSaleDate', nullable: false }, { name: 'registrationId', nullable: false }, { name: 'failureDescription', nullable: false }, { name: 'failureDate', nullable: false }, );
+    const optionalStringProperties = createClaimUpdateRequestOptionalProperties({ name: 'claimType', nullable: false }, { name: 'failureDate', nullable: false }, { name: 'failureDescription', nullable: false }, { name: 'locationId', nullable: false }, { name: 'originInvoiceId', nullable: false }, { name: 'originSaleDate', nullable: false }, { name: 'originWorkorderId', nullable: false }, { name: 'registrationId', nullable: false }, );
     const optionalNumberProperties = createClaimUpdateRequestOptionalProperties();
     const optionalBooleanProperties = createClaimUpdateRequestOptionalProperties();
 

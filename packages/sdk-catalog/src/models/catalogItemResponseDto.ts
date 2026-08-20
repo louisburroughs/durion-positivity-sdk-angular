@@ -22,6 +22,10 @@ export interface CatalogItemResponseDto {
      */
     itemType: string;
     /**
+     * Long description
+     */
+    longDescription?: string;
+    /**
      * Item name
      */
     name?: string;
@@ -29,10 +33,6 @@ export interface CatalogItemResponseDto {
      * Short description
      */
     shortDescription?: string;
-    /**
-     * Long description
-     */
-    longDescription?: string;
 }
 
 function isOptionalCatalogItemResponseDtoPropertyOfType(
@@ -74,7 +74,7 @@ export function instanceOfCatalogItemResponseDto(value: object): value is Catalo
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createCatalogItemResponseDtoPropertyNames('id', 'itemType', );
-    const optionalStringProperties = createCatalogItemResponseDtoOptionalProperties({ name: 'id', nullable: false }, { name: 'itemType', nullable: false }, { name: 'name', nullable: false }, { name: 'shortDescription', nullable: false }, { name: 'longDescription', nullable: false }, );
+    const optionalStringProperties = createCatalogItemResponseDtoOptionalProperties({ name: 'id', nullable: false }, { name: 'itemType', nullable: false }, { name: 'longDescription', nullable: false }, { name: 'name', nullable: false }, { name: 'shortDescription', nullable: false }, );
     const optionalNumberProperties = createCatalogItemResponseDtoOptionalProperties();
     const optionalBooleanProperties = createCatalogItemResponseDtoOptionalProperties();
 

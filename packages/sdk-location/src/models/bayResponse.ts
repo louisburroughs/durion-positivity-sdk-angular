@@ -14,29 +14,33 @@
  */
 export interface BayResponse { 
     /**
+     * Type classification of the bay
+     */
+    bayType?: string;
+    /**
+     * Timestamp when the bay was created (ISO 8601)
+     */
+    createdAt?: string;
+    /**
      * Unique identifier of the bay
      */
     id: string;
+    /**
+     * Timestamp when the bay was last modified (ISO 8601)
+     */
+    lastModifiedAt?: string;
     /**
      * Identifier of the location that owns the bay
      */
     locationId: string;
     /**
-     * Display name of the bay
-     */
-    name: string;
-    /**
-     * Type classification of the bay
-     */
-    bayType?: string;
-    /**
-     * Operational status of the bay
-     */
-    status?: string;
-    /**
      * Maximum number of vehicles that can be serviced concurrently in the bay
      */
     maxConcurrentVehicles?: number;
+    /**
+     * Display name of the bay
+     */
+    name: string;
     /**
      * Identifiers of service capabilities supported by the bay
      */
@@ -46,13 +50,9 @@ export interface BayResponse {
      */
     skillRequirementIds?: Array<string>;
     /**
-     * Timestamp when the bay was created (ISO 8601)
+     * Operational status of the bay
      */
-    createdAt?: string;
-    /**
-     * Timestamp when the bay was last modified (ISO 8601)
-     */
-    lastModifiedAt?: string;
+    status?: string;
 }
 
 function isOptionalBayResponsePropertyOfType(
@@ -94,7 +94,7 @@ export function instanceOfBayResponse(value: object): value is BayResponse {
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createBayResponsePropertyNames('id', 'locationId', 'name', );
-    const optionalStringProperties = createBayResponseOptionalProperties({ name: 'id', nullable: false }, { name: 'locationId', nullable: false }, { name: 'name', nullable: false }, { name: 'bayType', nullable: false }, { name: 'status', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'lastModifiedAt', nullable: false }, );
+    const optionalStringProperties = createBayResponseOptionalProperties({ name: 'bayType', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'id', nullable: false }, { name: 'lastModifiedAt', nullable: false }, { name: 'locationId', nullable: false }, { name: 'name', nullable: false }, { name: 'status', nullable: false }, );
     const optionalNumberProperties = createBayResponseOptionalProperties({ name: 'maxConcurrentVehicles', nullable: false }, );
     const optionalBooleanProperties = createBayResponseOptionalProperties();
 

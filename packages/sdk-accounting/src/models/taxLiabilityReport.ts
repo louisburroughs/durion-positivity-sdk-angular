@@ -16,10 +16,6 @@ import { TaxLiabilityReconciliation } from './taxLiabilityReconciliation';
  */
 export interface TaxLiabilityReport { 
     /**
-     * Period start date (inclusive)
-     */
-    startDate: string;
-    /**
      * Period end date (inclusive)
      */
     endDate: string;
@@ -27,31 +23,35 @@ export interface TaxLiabilityReport {
      * Timestamp when the report was generated (ISO 8601)
      */
     generatedAt: string;
+    reconciliation: TaxLiabilityReconciliation;
     /**
      * Per-jurisdiction rows ordered by level (state/county/city/special) then code; empty when no in-period tax exists
      */
     rows: Array<TaxLiabilityRow>;
     /**
-     * Grand total taxable base across all jurisdictions
+     * Period start date (inclusive)
      */
-    totalTaxableBase: number;
-    /**
-     * Grand total exempt base across all jurisdictions
-     */
-    totalExemptBase: number;
-    /**
-     * Grand total gross tax collected across all jurisdictions
-     */
-    totalTaxCollectedGross: number;
+    startDate: string;
     /**
      * Grand total credits netted across all jurisdictions
      */
     totalCreditsNetted: number;
     /**
+     * Grand total exempt base across all jurisdictions
+     */
+    totalExemptBase: number;
+    /**
      * Grand total net tax across all jurisdictions
      */
     totalNetTax: number;
-    reconciliation: TaxLiabilityReconciliation;
+    /**
+     * Grand total gross tax collected across all jurisdictions
+     */
+    totalTaxCollectedGross: number;
+    /**
+     * Grand total taxable base across all jurisdictions
+     */
+    totalTaxableBase: number;
 }
 
 function isOptionalTaxLiabilityReportPropertyOfType(
@@ -92,9 +92,9 @@ export function instanceOfTaxLiabilityReport(value: object): value is TaxLiabili
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createTaxLiabilityReportPropertyNames('startDate', 'endDate', 'generatedAt', 'rows', 'totalTaxableBase', 'totalExemptBase', 'totalTaxCollectedGross', 'totalCreditsNetted', 'totalNetTax', 'reconciliation', );
-    const optionalStringProperties = createTaxLiabilityReportOptionalProperties({ name: 'startDate', nullable: false }, { name: 'endDate', nullable: false }, { name: 'generatedAt', nullable: false }, );
-    const optionalNumberProperties = createTaxLiabilityReportOptionalProperties({ name: 'totalTaxableBase', nullable: false }, { name: 'totalExemptBase', nullable: false }, { name: 'totalTaxCollectedGross', nullable: false }, { name: 'totalCreditsNetted', nullable: false }, { name: 'totalNetTax', nullable: false }, );
+    const requiredProperties = createTaxLiabilityReportPropertyNames('endDate', 'generatedAt', 'reconciliation', 'rows', 'startDate', 'totalCreditsNetted', 'totalExemptBase', 'totalNetTax', 'totalTaxCollectedGross', 'totalTaxableBase', );
+    const optionalStringProperties = createTaxLiabilityReportOptionalProperties({ name: 'endDate', nullable: false }, { name: 'generatedAt', nullable: false }, { name: 'startDate', nullable: false }, );
+    const optionalNumberProperties = createTaxLiabilityReportOptionalProperties({ name: 'totalCreditsNetted', nullable: false }, { name: 'totalExemptBase', nullable: false }, { name: 'totalNetTax', nullable: false }, { name: 'totalTaxCollectedGross', nullable: false }, { name: 'totalTaxableBase', nullable: false }, );
     const optionalBooleanProperties = createTaxLiabilityReportOptionalProperties();
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

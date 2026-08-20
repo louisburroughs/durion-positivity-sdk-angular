@@ -17,33 +17,10 @@ import { WorkorderPartResponse } from './workorderPartResponse';
  */
 export interface WorkorderDetailResponse { 
     /**
-     * Workorder ID
+     * Assigned technician ID
      */
-    workorderId: string;
-    /**
-     * Workorder number (from sequence)
-     */
-    workorderNumber?: string;
-    /**
-     * Workorder status
-     */
-    status: WorkorderDetailResponseStatusEnum;
-    /**
-     * Customer ID
-     */
-    customerId: string;
-    /**
-     * Customer name
-     */
-    customerName?: string;
-    /**
-     * Vehicle ID
-     */
-    vehicleId: string;
-    /**
-     * Vehicle description
-     */
-    vehicleDescription?: string;
+    assignedTechnicianId?: string;
+    capabilities: WorkorderCapabilities;
     /**
      * Creation timestamp
      */
@@ -53,50 +30,73 @@ export interface WorkorderDetailResponse {
      */
     createdBy: string;
     /**
-     * Is workorder started (derived from status)
+     * Customer ID
      */
-    isStarted?: string;
+    customerId: string;
     /**
-     * Is workorder in progress (derived from status)
+     * Customer name
      */
-    isInProgress?: string;
-    /**
-     * Is workorder completed (derived from status)
-     */
-    isCompleted?: string;
-    /**
-     * Start timestamp
-     */
-    startedAt?: string;
-    /**
-     * Assigned technician ID
-     */
-    assignedTechnicianId?: string;
-    /**
-     * Service line items with labor totals
-     */
-    services?: Array<WorkorderServiceResponse>;
-    /**
-     * Part line items with usage totals
-     */
-    parts?: Array<WorkorderPartResponse>;
+    customerName?: string;
     /**
      * Estimated total (conditionally included based on canViewFinancials)
      */
     estimatedTotal?: number;
     /**
+     * Is workorder completed (derived from status)
+     */
+    isCompleted?: string;
+    /**
+     * Is workorder in progress (derived from status)
+     */
+    isInProgress?: string;
+    /**
+     * Is workorder started (derived from status)
+     */
+    isStarted?: string;
+    /**
      * Total labor cost (conditionally included)
      */
     laborTotal?: number;
+    /**
+     * Part line items with usage totals
+     */
+    parts?: Array<WorkorderPartResponse>;
     /**
      * Total parts cost (conditionally included)
      */
     partsTotal?: number;
     /**
+     * Service line items with labor totals
+     */
+    services?: Array<WorkorderServiceResponse>;
+    /**
+     * Start timestamp
+     */
+    startedAt?: string;
+    /**
+     * Workorder status
+     */
+    status: WorkorderDetailResponseStatusEnum;
+    /**
      * Total tax (conditionally included)
      */
     taxTotal?: number;
-    capabilities: WorkorderCapabilities;
+    /**
+     * Vehicle description
+     */
+    vehicleDescription?: string;
+    /**
+     * Vehicle ID
+     */
+    vehicleId: string;
+    /**
+     * Workorder ID
+     */
+    workorderId: string;
+    /**
+     * Workorder number (from sequence)
+     */
+    workorderNumber?: string;
 }
 export enum WorkorderDetailResponseStatusEnum {
     Draft = 'DRAFT',
@@ -150,8 +150,8 @@ export function instanceOfWorkorderDetailResponse(value: object): value is Worko
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createWorkorderDetailResponsePropertyNames('workorderId', 'status', 'customerId', 'vehicleId', 'createdAt', 'createdBy', 'capabilities', );
-    const optionalStringProperties = createWorkorderDetailResponseOptionalProperties({ name: 'workorderId', nullable: false }, { name: 'workorderNumber', nullable: false }, { name: 'status', nullable: false }, { name: 'customerId', nullable: false }, { name: 'customerName', nullable: false }, { name: 'vehicleId', nullable: false }, { name: 'vehicleDescription', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'isStarted', nullable: false }, { name: 'isInProgress', nullable: false }, { name: 'isCompleted', nullable: false }, { name: 'startedAt', nullable: false }, { name: 'assignedTechnicianId', nullable: false }, );
+    const requiredProperties = createWorkorderDetailResponsePropertyNames('capabilities', 'createdAt', 'createdBy', 'customerId', 'status', 'vehicleId', 'workorderId', );
+    const optionalStringProperties = createWorkorderDetailResponseOptionalProperties({ name: 'assignedTechnicianId', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'customerId', nullable: false }, { name: 'customerName', nullable: false }, { name: 'isCompleted', nullable: false }, { name: 'isInProgress', nullable: false }, { name: 'isStarted', nullable: false }, { name: 'startedAt', nullable: false }, { name: 'status', nullable: false }, { name: 'vehicleDescription', nullable: false }, { name: 'vehicleId', nullable: false }, { name: 'workorderId', nullable: false }, { name: 'workorderNumber', nullable: false }, );
     const optionalNumberProperties = createWorkorderDetailResponseOptionalProperties({ name: 'estimatedTotal', nullable: false }, { name: 'laborTotal', nullable: false }, { name: 'partsTotal', nullable: false }, { name: 'taxTotal', nullable: false }, );
     const optionalBooleanProperties = createWorkorderDetailResponseOptionalProperties();
 

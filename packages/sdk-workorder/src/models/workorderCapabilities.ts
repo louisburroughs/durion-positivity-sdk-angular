@@ -14,10 +14,6 @@
  */
 export interface WorkorderCapabilities { 
     /**
-     * User can start workorder
-     */
-    canStart: boolean;
-    /**
      * User can approve workorder
      */
     canApprove: boolean;
@@ -25,6 +21,14 @@ export interface WorkorderCapabilities {
      * User can assign/reassign technicians
      */
     canAssignTechnician: boolean;
+    /**
+     * User can delete workorder
+     */
+    canDeleteWorkorder: boolean;
+    /**
+     * User can edit workorder
+     */
+    canEditWorkorder: boolean;
     /**
      * User can record labor entries
      */
@@ -34,17 +38,13 @@ export interface WorkorderCapabilities {
      */
     canRecordPartsUsage: boolean;
     /**
+     * User can start workorder
+     */
+    canStart: boolean;
+    /**
      * User can view financial data
      */
     canViewFinancials: boolean;
-    /**
-     * User can edit workorder
-     */
-    canEditWorkorder: boolean;
-    /**
-     * User can delete workorder
-     */
-    canDeleteWorkorder: boolean;
 }
 
 function isOptionalWorkorderCapabilitiesPropertyOfType(
@@ -85,10 +85,10 @@ export function instanceOfWorkorderCapabilities(value: object): value is Workord
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createWorkorderCapabilitiesPropertyNames('canStart', 'canApprove', 'canAssignTechnician', 'canRecordLabor', 'canRecordPartsUsage', 'canViewFinancials', 'canEditWorkorder', 'canDeleteWorkorder', );
+    const requiredProperties = createWorkorderCapabilitiesPropertyNames('canApprove', 'canAssignTechnician', 'canDeleteWorkorder', 'canEditWorkorder', 'canRecordLabor', 'canRecordPartsUsage', 'canStart', 'canViewFinancials', );
     const optionalStringProperties = createWorkorderCapabilitiesOptionalProperties();
     const optionalNumberProperties = createWorkorderCapabilitiesOptionalProperties();
-    const optionalBooleanProperties = createWorkorderCapabilitiesOptionalProperties({ name: 'canStart', nullable: false }, { name: 'canApprove', nullable: false }, { name: 'canAssignTechnician', nullable: false }, { name: 'canRecordLabor', nullable: false }, { name: 'canRecordPartsUsage', nullable: false }, { name: 'canViewFinancials', nullable: false }, { name: 'canEditWorkorder', nullable: false }, { name: 'canDeleteWorkorder', nullable: false }, );
+    const optionalBooleanProperties = createWorkorderCapabilitiesOptionalProperties({ name: 'canApprove', nullable: false }, { name: 'canAssignTechnician', nullable: false }, { name: 'canDeleteWorkorder', nullable: false }, { name: 'canEditWorkorder', nullable: false }, { name: 'canRecordLabor', nullable: false }, { name: 'canRecordPartsUsage', nullable: false }, { name: 'canStart', nullable: false }, { name: 'canViewFinancials', nullable: false }, );
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
         && optionalStringProperties.every((property) => isOptionalWorkorderCapabilitiesPropertyOfType(_v, property.name, 'string', property.nullable))

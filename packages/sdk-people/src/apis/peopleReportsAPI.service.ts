@@ -38,110 +38,8 @@ export class PeopleReportsAPIService extends BaseService {
     }
 
     /**
-     * Get approved time entries for accounting export
-     * Returns People-domain approved time rows for a date range and one or more locations. This endpoint is the stable source-data read contract for accounting export workflows.
-     * @endpoint get /v1/people/reports/approvedTime
-     * @param startDate Start date (inclusive)
-     * @param endDate End date (inclusive)
-     * @param locationId One or more location IDs
-     * @param xCorrelationId 
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     * @param options additional options
-     */
-    public getApprovedTimeForExport(startDate: string, endDate: string, locationId: Array<string>, xCorrelationId?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<ApprovedTimeExportResponse>>;
-    public getApprovedTimeForExport(startDate: string, endDate: string, locationId: Array<string>, xCorrelationId?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<ApprovedTimeExportResponse>>>;
-    public getApprovedTimeForExport(startDate: string, endDate: string, locationId: Array<string>, xCorrelationId?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<ApprovedTimeExportResponse>>>;
-    public getApprovedTimeForExport(startDate: string, endDate: string, locationId: Array<string>, xCorrelationId?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
-        if (startDate === null || startDate === undefined) {
-            throw new Error('Required parameter startDate was null or undefined when calling getApprovedTimeForExport.');
-        }
-        if (endDate === null || endDate === undefined) {
-            throw new Error('Required parameter endDate was null or undefined when calling getApprovedTimeForExport.');
-        }
-        if (locationId === null || locationId === undefined) {
-            throw new Error('Required parameter locationId was null or undefined when calling getApprovedTimeForExport.');
-        }
-
-        let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
-
-        localVarQueryParameters = this.addToHttpParams(
-            localVarQueryParameters,
-            'startDate',
-            <any>startDate,
-            QueryParamStyle.Form,
-            true,
-        );
-
-
-        localVarQueryParameters = this.addToHttpParams(
-            localVarQueryParameters,
-            'endDate',
-            <any>endDate,
-            QueryParamStyle.Form,
-            true,
-        );
-
-
-        localVarQueryParameters = this.addToHttpParams(
-            localVarQueryParameters,
-            'locationId',
-            <any>locationId,
-            QueryParamStyle.Form,
-            true,
-        );
-
-
-        let localVarHeaders = this.defaultHeaders;
-        if (xCorrelationId !== undefined && xCorrelationId !== null) {
-            localVarHeaders = localVarHeaders.set('X-Correlation-Id', String(xCorrelationId));
-        }
-
-        // authentication (bearerAuth) required
-        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
-
-        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
-            'application/json'
-        ]);
-        if (localVarHttpHeaderAcceptSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
-        }
-
-        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
-
-        const localVarTransferCache: boolean = options?.transferCache ?? true;
-
-
-        let responseType_: 'text' | 'json' | 'blob' = 'json';
-        if (localVarHttpHeaderAcceptSelected) {
-            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
-                responseType_ = 'text';
-            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
-                responseType_ = 'json';
-            } else {
-                responseType_ = 'blob';
-            }
-        }
-
-        let localVarPath = `/v1/people/reports/approvedTime`;
-        const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<Array<ApprovedTimeExportResponse>>('get', `${basePath}${localVarPath}`,
-            {
-                context: localVarHttpContext,
-                params: localVarQueryParameters.toHttpParams(),
-                responseType: <any>responseType_,
-                ...(withCredentials ? { withCredentials } : {}),
-                headers: localVarHeaders,
-                observe: observe,
-                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * Get attendance and job time discrepancy report
-     * Generates a per-technician, per-location, per-day discrepancy report based on attendance and approved job time totals.
+     * Get Attendance Versus Job Time Discrepancy Report
+     * Generates a per-technician, per-location, per-day report comparing attendance minutes from time entries with job minutes from the workorder job-time replica. Use this tool to spot technicians whose clocked attendance diverges from booked job time; use listApprovedTimeForExport instead for the raw approved rows consumed by accounting export. Preconditions: attendance comes from local time entries and job minutes from the ext_workorder_job_time replica, so very recent workorder activity may not be reflected yet. Required inputs: startDate and endDate (inclusive, yyyy-MM-dd) and timezone (IANA, used to bucket minutes into local days); locationId and technicianIds are optional filters, and flaggedOnly defaults to false. Emits a REPORT_ATTENDANCE_VS_JOBTIME_GENERATED audit event but changes no state; rows are flagged when the absolute discrepancy exceeds the location\&#39;s configured threshold minutes. Returns 400 when endDate is before startDate or timezone is not a valid IANA zone. 
      * @endpoint get /v1/people/reports/attendanceJobtimeDiscrepancy
      * @param startDate Start date (inclusive)
      * @param endDate End date (inclusive)
@@ -258,6 +156,108 @@ export class PeopleReportsAPIService extends BaseService {
         let localVarPath = `/v1/people/reports/attendanceJobtimeDiscrepancy`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<Array<AttendanceDiscrepancyReportResponse>>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                params: localVarQueryParameters.toHttpParams(),
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * List Approved Time For Accounting Export
+     * Returns APPROVED time-entry rows with worked hours, approval metadata, and resolved employee and location names for a date range and one or more locations. Use this tool as the stable source-data read for accounting time-export workflows; use getAttendanceDiscrepancyReport instead for variance analysis between attendance and job time. Preconditions: every supplied locationId must resolve to an active location; rows missing approval or attendance timestamps are silently excluded. Required inputs: startDate and endDate (inclusive, yyyy-MM-dd, evaluated in UTC) and one or more locationId query parameters. Emits a PEOPLE_TIME_APPROVED_EXPORT_READ audit event but changes no state; this is a read-only projection sorted by entry date then time entry id. Returns 400 when endDate is before startDate, when no locationId is supplied, or when a locationId is unknown or inactive. 
+     * @endpoint get /v1/people/reports/approvedTime
+     * @param startDate Start date (inclusive)
+     * @param endDate End date (inclusive)
+     * @param locationId One or more location IDs
+     * @param xCorrelationId 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public listApprovedTimeForExport(startDate: string, endDate: string, locationId: Array<string>, xCorrelationId?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<ApprovedTimeExportResponse>>;
+    public listApprovedTimeForExport(startDate: string, endDate: string, locationId: Array<string>, xCorrelationId?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<ApprovedTimeExportResponse>>>;
+    public listApprovedTimeForExport(startDate: string, endDate: string, locationId: Array<string>, xCorrelationId?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<ApprovedTimeExportResponse>>>;
+    public listApprovedTimeForExport(startDate: string, endDate: string, locationId: Array<string>, xCorrelationId?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (startDate === null || startDate === undefined) {
+            throw new Error('Required parameter startDate was null or undefined when calling listApprovedTimeForExport.');
+        }
+        if (endDate === null || endDate === undefined) {
+            throw new Error('Required parameter endDate was null or undefined when calling listApprovedTimeForExport.');
+        }
+        if (locationId === null || locationId === undefined) {
+            throw new Error('Required parameter locationId was null or undefined when calling listApprovedTimeForExport.');
+        }
+
+        let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'startDate',
+            <any>startDate,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'endDate',
+            <any>endDate,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'locationId',
+            <any>locationId,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        let localVarHeaders = this.defaultHeaders;
+        if (xCorrelationId !== undefined && xCorrelationId !== null) {
+            localVarHeaders = localVarHeaders.set('X-Correlation-Id', String(xCorrelationId));
+        }
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/people/reports/approvedTime`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<Array<ApprovedTimeExportResponse>>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 params: localVarQueryParameters.toHttpParams(),

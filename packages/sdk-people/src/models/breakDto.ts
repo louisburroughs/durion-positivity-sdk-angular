@@ -14,6 +14,10 @@
  */
 export interface BreakDto { 
     /**
+     * Timestamp the break ended
+     */
+    endedAt?: string;
+    /**
      * Work session the break belongs to
      */
     sessionId: string;
@@ -21,10 +25,6 @@ export interface BreakDto {
      * Timestamp the break started
      */
     startedAt: string;
-    /**
-     * Timestamp the break ended
-     */
-    endedAt?: string;
 }
 
 function isOptionalBreakDtoPropertyOfType(
@@ -66,7 +66,7 @@ export function instanceOfBreakDto(value: object): value is BreakDto {
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createBreakDtoPropertyNames('sessionId', 'startedAt', );
-    const optionalStringProperties = createBreakDtoOptionalProperties({ name: 'sessionId', nullable: false }, { name: 'startedAt', nullable: false }, { name: 'endedAt', nullable: false }, );
+    const optionalStringProperties = createBreakDtoOptionalProperties({ name: 'endedAt', nullable: false }, { name: 'sessionId', nullable: false }, { name: 'startedAt', nullable: false }, );
     const optionalNumberProperties = createBreakDtoOptionalProperties();
     const optionalBooleanProperties = createBreakDtoOptionalProperties();
 

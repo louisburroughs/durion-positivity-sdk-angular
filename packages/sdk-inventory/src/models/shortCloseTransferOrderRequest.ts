@@ -18,13 +18,13 @@ export interface ShortCloseTransferOrderRequest {
      */
     disposition: ShortCloseTransferOrderRequestDispositionEnum;
     /**
-     * Reason for the short-close (mandatory)
-     */
-    reason: string;
-    /**
      * Free-text notes explaining the short-close (mandatory)
      */
     notes: string;
+    /**
+     * Reason for the short-close (mandatory)
+     */
+    reason: string;
 }
 export enum ShortCloseTransferOrderRequestDispositionEnum {
     LostInTransit = 'LOST_IN_TRANSIT',
@@ -71,8 +71,8 @@ export function instanceOfShortCloseTransferOrderRequest(value: object): value i
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createShortCloseTransferOrderRequestPropertyNames('disposition', 'reason', 'notes', );
-    const optionalStringProperties = createShortCloseTransferOrderRequestOptionalProperties({ name: 'disposition', nullable: false }, { name: 'reason', nullable: false }, { name: 'notes', nullable: false }, );
+    const requiredProperties = createShortCloseTransferOrderRequestPropertyNames('disposition', 'notes', 'reason', );
+    const optionalStringProperties = createShortCloseTransferOrderRequestOptionalProperties({ name: 'disposition', nullable: false }, { name: 'notes', nullable: false }, { name: 'reason', nullable: false }, );
     const optionalNumberProperties = createShortCloseTransferOrderRequestOptionalProperties();
     const optionalBooleanProperties = createShortCloseTransferOrderRequestOptionalProperties();
 

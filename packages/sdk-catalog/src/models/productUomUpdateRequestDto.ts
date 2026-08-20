@@ -14,10 +14,6 @@
  */
 export interface ProductUomUpdateRequestDto { 
     /**
-     * New role of this UoM for the product; unchanged when omitted
-     */
-    uomType?: ProductUomUpdateRequestDtoUomTypeEnum;
-    /**
      * Multiplier converting one unit of this UoM into the product\'s base UoM
      */
     factorToBase: number;
@@ -25,6 +21,10 @@ export interface ProductUomUpdateRequestDto {
      * Decimal precision scale for quantities expressed in this UoM (0-6)
      */
     precisionScale: number;
+    /**
+     * New role of this UoM for the product; unchanged when omitted
+     */
+    uomType?: ProductUomUpdateRequestDtoUomTypeEnum;
 }
 export enum ProductUomUpdateRequestDtoUomTypeEnum {
     Base = 'BASE',

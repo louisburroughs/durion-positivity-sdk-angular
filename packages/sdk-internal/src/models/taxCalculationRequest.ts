@@ -16,36 +16,40 @@ import { TaxAddress } from './taxAddress';
  * International tax calculation request payload
  */
 export interface TaxCalculationRequest { 
+    address?: string;
     /**
-     * Line items to calculate tax for
+     * Calculation direction: SALE (default) or REFUND. REFUND amounts are positive and priced at the supplied transactionDate (the original sale date); callers negate at posting. Finalized-invoice credits must use the stored breakdown, not REFUND recompute.
      */
-    lineItems: Array<TaxLineItem>;
-    destinationAddress: TaxAddress;
+    calculationType?: TaxCalculationRequestCalculationTypeEnum;
+    city?: string;
+    /**
+     * True when this calculation will be finalized (committed) rather than a throwaway estimate; requires referenceId to be present
+     */
+    committable?: boolean;
+    countryCode?: string;
     /**
      * Transaction currency in ISO 4217 alpha-3 format
      */
     currencyCode?: string;
+    customerExemption?: CustomerExemption;
+    /**
+     * Optional customer identifier for exemption and tax profile lookups
+     */
+    customerId?: string;
+    destinationAddress: TaxAddress;
+    /**
+     * Line items to calculate tax for
+     */
+    lineItems: Array<TaxLineItem>;
     /**
      * BCP 47 locale tag for localization preferences
      */
     locale?: string;
     /**
-     * Optional customer identifier for exemption and tax profile lookups
-     */
-    customerId?: string;
-    customerExemption?: CustomerExemption;
-    /**
-     * Calculation direction: SALE (default) or REFUND. REFUND amounts are positive and priced at the supplied transactionDate (the original sale date); callers negate at posting. Finalized-invoice credits must use the stored breakdown, not REFUND recompute.
-     */
-    calculationType?: TaxCalculationRequestCalculationTypeEnum;
-    /**
      * Optional reference to the original sale transaction being refunded
      */
     originalReferenceId?: string;
-    /**
-     * Optional transaction date/time in ISO 8601 format
-     */
-    transactionDate?: string;
+    postalCode?: string;
     /**
      * Optional reference identifier for the source transaction
      */
@@ -54,15 +58,11 @@ export interface TaxCalculationRequest {
      * Optional source transaction type associated with referenceId
      */
     referenceType?: TaxCalculationRequestReferenceTypeEnum;
-    /**
-     * True when this calculation will be finalized (committed) rather than a throwaway estimate; requires referenceId to be present
-     */
-    committable?: boolean;
-    address?: string;
-    countryCode?: string;
-    postalCode?: string;
-    city?: string;
     stateCode?: string;
+    /**
+     * Optional transaction date/time in ISO 8601 format
+     */
+    transactionDate?: string;
 }
 export enum TaxCalculationRequestCalculationTypeEnum {
     Sale = 'SALE',
@@ -117,8 +117,8 @@ export function instanceOfTaxCalculationRequest(value: object): value is TaxCalc
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createTaxCalculationRequestPropertyNames('lineItems', 'destinationAddress', );
-    const optionalStringProperties = createTaxCalculationRequestOptionalProperties({ name: 'currencyCode', nullable: false }, { name: 'locale', nullable: false }, { name: 'customerId', nullable: false }, { name: 'calculationType', nullable: false }, { name: 'originalReferenceId', nullable: false }, { name: 'transactionDate', nullable: false }, { name: 'referenceId', nullable: false }, { name: 'referenceType', nullable: false }, { name: 'address', nullable: false }, { name: 'countryCode', nullable: false }, { name: 'postalCode', nullable: false }, { name: 'city', nullable: false }, { name: 'stateCode', nullable: false }, );
+    const requiredProperties = createTaxCalculationRequestPropertyNames('destinationAddress', 'lineItems', );
+    const optionalStringProperties = createTaxCalculationRequestOptionalProperties({ name: 'address', nullable: false }, { name: 'calculationType', nullable: false }, { name: 'city', nullable: false }, { name: 'countryCode', nullable: false }, { name: 'currencyCode', nullable: false }, { name: 'customerId', nullable: false }, { name: 'locale', nullable: false }, { name: 'originalReferenceId', nullable: false }, { name: 'postalCode', nullable: false }, { name: 'referenceId', nullable: false }, { name: 'referenceType', nullable: false }, { name: 'stateCode', nullable: false }, { name: 'transactionDate', nullable: false }, );
     const optionalNumberProperties = createTaxCalculationRequestOptionalProperties();
     const optionalBooleanProperties = createTaxCalculationRequestOptionalProperties({ name: 'committable', nullable: false }, );
 

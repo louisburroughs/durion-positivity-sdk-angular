@@ -16,6 +16,10 @@ import { PhoneInput } from './phoneInput';
  */
 export interface CreatePersonRequest { 
     /**
+     * Email addresses for this person
+     */
+    emails?: Array<EmailInput>;
+    /**
      * First name of the person
      */
     firstName: string;
@@ -24,17 +28,13 @@ export interface CreatePersonRequest {
      */
     lastName: string;
     /**
-     * Preferred method of contact
-     */
-    preferredContactMethod: CreatePersonRequestPreferredContactMethodEnum;
-    /**
-     * Email addresses for this person
-     */
-    emails?: Array<EmailInput>;
-    /**
      * Phone numbers for this person
      */
     phones?: Array<PhoneInput>;
+    /**
+     * Preferred method of contact
+     */
+    preferredContactMethod: CreatePersonRequestPreferredContactMethodEnum;
 }
 export enum CreatePersonRequestPreferredContactMethodEnum {
     Email = 'EMAIL',

@@ -14,13 +14,13 @@
  */
 export interface AllocationLineRequest { 
     /**
-     * Vendor bill UUID
-     */
-    vendorBillId: string;
-    /**
      * Amount to apply to this bill
      */
     appliedAmount: number;
+    /**
+     * Vendor bill UUID
+     */
+    vendorBillId: string;
 }
 
 function isOptionalAllocationLineRequestPropertyOfType(
@@ -61,7 +61,7 @@ export function instanceOfAllocationLineRequest(value: object): value is Allocat
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createAllocationLineRequestPropertyNames('vendorBillId', 'appliedAmount', );
+    const requiredProperties = createAllocationLineRequestPropertyNames('appliedAmount', 'vendorBillId', );
     const optionalStringProperties = createAllocationLineRequestOptionalProperties({ name: 'vendorBillId', nullable: false }, );
     const optionalNumberProperties = createAllocationLineRequestOptionalProperties({ name: 'appliedAmount', nullable: false }, );
     const optionalBooleanProperties = createAllocationLineRequestOptionalProperties();

@@ -14,57 +14,17 @@
  */
 export interface FollowUpTaskResponse { 
     /**
-     * Task identifier
-     */
-    taskId: string;
-    /**
-     * Party the follow-up concerns
-     */
-    partyId: string;
-    /**
-     * Vehicle the follow-up concerns
-     */
-    vehicleId?: string;
-    /**
-     * Why the follow-up exists
-     */
-    type: FollowUpTaskResponseTypeEnum;
-    /**
-     * When it should be worked by
-     */
-    dueDate?: string;
-    /**
      * Owning CSR; null means unassigned
      */
     assignedTo?: string;
     /**
-     * Task state
+     * Appointment booked from the hand-off
      */
-    status: FollowUpTaskResponseStatusEnum;
-    /**
-     * Workorder it originated from
-     */
-    sourceWorkorderId?: string;
-    /**
-     * Context for whoever works it
-     */
-    reason?: string;
-    /**
-     * What happened when it was worked
-     */
-    outcome?: string;
-    /**
-     * Free-text notes
-     */
-    notes?: string;
+    bookedAppointmentId?: string;
     /**
      * Workorder booked from the hand-off
      */
     bookedWorkorderId?: string;
-    /**
-     * Appointment booked from the hand-off
-     */
-    bookedAppointmentId?: string;
     /**
      * When the task was closed
      */
@@ -77,18 +37,58 @@ export interface FollowUpTaskResponse {
      * Creation timestamp
      */
     createdAt?: string;
+    /**
+     * When it should be worked by
+     */
+    dueDate?: string;
+    /**
+     * Free-text notes
+     */
+    notes?: string;
+    /**
+     * What happened when it was worked
+     */
+    outcome?: string;
+    /**
+     * Party the follow-up concerns
+     */
+    partyId: string;
+    /**
+     * Context for whoever works it
+     */
+    reason?: string;
+    /**
+     * Workorder it originated from
+     */
+    sourceWorkorderId?: string;
+    /**
+     * Task state
+     */
+    status: FollowUpTaskResponseStatusEnum;
+    /**
+     * Task identifier
+     */
+    taskId: string;
+    /**
+     * Why the follow-up exists
+     */
+    type: FollowUpTaskResponseTypeEnum;
+    /**
+     * Vehicle the follow-up concerns
+     */
+    vehicleId?: string;
 }
+export enum FollowUpTaskResponseStatusEnum {
+    Open = 'OPEN',
+    Done = 'DONE',
+    Dismissed = 'DISMISSED'
+};
 export enum FollowUpTaskResponseTypeEnum {
     DeclinedServiceFollowup = 'DECLINED_SERVICE_FOLLOWUP',
     ServiceDueReminder = 'SERVICE_DUE_REMINDER',
     FleetCheckin = 'FLEET_CHECKIN',
     CampaignResponse = 'CAMPAIGN_RESPONSE',
     General = 'GENERAL'
-};
-export enum FollowUpTaskResponseStatusEnum {
-    Open = 'OPEN',
-    Done = 'DONE',
-    Dismissed = 'DISMISSED'
 };
 
 
@@ -131,8 +131,8 @@ export function instanceOfFollowUpTaskResponse(value: object): value is FollowUp
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createFollowUpTaskResponsePropertyNames('taskId', 'partyId', 'type', 'status', );
-    const optionalStringProperties = createFollowUpTaskResponseOptionalProperties({ name: 'taskId', nullable: false }, { name: 'partyId', nullable: false }, { name: 'vehicleId', nullable: false }, { name: 'type', nullable: false }, { name: 'dueDate', nullable: false }, { name: 'assignedTo', nullable: false }, { name: 'status', nullable: false }, { name: 'sourceWorkorderId', nullable: false }, { name: 'reason', nullable: false }, { name: 'outcome', nullable: false }, { name: 'notes', nullable: false }, { name: 'bookedWorkorderId', nullable: false }, { name: 'bookedAppointmentId', nullable: false }, { name: 'closedAt', nullable: false }, { name: 'closedBy', nullable: false }, { name: 'createdAt', nullable: false }, );
+    const requiredProperties = createFollowUpTaskResponsePropertyNames('partyId', 'status', 'taskId', 'type', );
+    const optionalStringProperties = createFollowUpTaskResponseOptionalProperties({ name: 'assignedTo', nullable: false }, { name: 'bookedAppointmentId', nullable: false }, { name: 'bookedWorkorderId', nullable: false }, { name: 'closedAt', nullable: false }, { name: 'closedBy', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'dueDate', nullable: false }, { name: 'notes', nullable: false }, { name: 'outcome', nullable: false }, { name: 'partyId', nullable: false }, { name: 'reason', nullable: false }, { name: 'sourceWorkorderId', nullable: false }, { name: 'status', nullable: false }, { name: 'taskId', nullable: false }, { name: 'type', nullable: false }, { name: 'vehicleId', nullable: false }, );
     const optionalNumberProperties = createFollowUpTaskResponseOptionalProperties();
     const optionalBooleanProperties = createFollowUpTaskResponseOptionalProperties();
 

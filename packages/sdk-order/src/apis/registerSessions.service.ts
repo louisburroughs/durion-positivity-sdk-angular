@@ -46,24 +46,24 @@ export class RegisterSessionsService extends BaseService {
     }
 
     /**
-     * Begin closing a register session
-     * Records the counted cash and moves the session to CLOSING. Blocked while any of its orders are in PENDING_PAYMENT.
+     * Begin Closing a Register Session
+     * Records the physically counted drawer cash and moves the register session to CLOSING, freezing the terminal against new orders. Use this tool to start the drawer count at end of shift; do not use confirmSessionClose, which finalizes a session already in CLOSING. Preconditions: the session must exist, must not already be CLOSED, and none of its orders may be in PENDING_PAYMENT. Required inputs: countedCash (zero or greater) in the body and sessionId (UUID) as a path parameter. Emits an ORDER_SESSION_BEGIN_CLOSE event. Returns 200 with the CLOSING session, 404 when the session does not exist, and 409 when the session is already closed or an order on the session is still awaiting payment. 
      * @endpoint post /v1/orders/sessions/{sessionId}/begin-close
      * @param sessionId 
-     * @param beginCloseRequest 
+     * @param beginCloseRequest The physically counted drawer cash at the start of the close.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public beginClose(sessionId: string, beginCloseRequest: BeginCloseRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<RegisterSessionResponse>;
-    public beginClose(sessionId: string, beginCloseRequest: BeginCloseRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<RegisterSessionResponse>>;
-    public beginClose(sessionId: string, beginCloseRequest: BeginCloseRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<RegisterSessionResponse>>;
-    public beginClose(sessionId: string, beginCloseRequest: BeginCloseRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public beginSessionClose(sessionId: string, beginCloseRequest: BeginCloseRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<RegisterSessionResponse>;
+    public beginSessionClose(sessionId: string, beginCloseRequest: BeginCloseRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<RegisterSessionResponse>>;
+    public beginSessionClose(sessionId: string, beginCloseRequest: BeginCloseRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<RegisterSessionResponse>>;
+    public beginSessionClose(sessionId: string, beginCloseRequest: BeginCloseRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (sessionId === null || sessionId === undefined) {
-            throw new Error('Required parameter sessionId was null or undefined when calling beginClose.');
+            throw new Error('Required parameter sessionId was null or undefined when calling beginSessionClose.');
         }
         if (beginCloseRequest === null || beginCloseRequest === undefined) {
-            throw new Error('Required parameter beginCloseRequest was null or undefined when calling beginClose.');
+            throw new Error('Required parameter beginCloseRequest was null or undefined when calling beginSessionClose.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -120,20 +120,20 @@ export class RegisterSessionsService extends BaseService {
     }
 
     /**
-     * Confirm a register session close
-     * Snapshots theoretical cash, computes over/short, and moves the session to CLOSED. An over/short beyond the authorized difference limit requires order:session:approve_variance.
+     * Confirm a Register Session Close
+     * Finalizes a CLOSING register session: snapshots theoretical cash (opening float plus net CASH settlements plus signed cash movements), computes the over/short against the counted drawer, and moves the session to CLOSED. Use this tool to finish the close after the count; do not use beginSessionClose, which records the count and must run first. Preconditions: the session must be in CLOSING, and no order on the session may have re-entered PENDING_PAYMENT since the count began. Required inputs: sessionId (UUID) as a path parameter; there is no request body — an over/short beyond the authorized difference limit (default 5.00, configurable via pos.order.session.authorized-difference-limit) additionally requires the order:session:approve_variance permission. Emits an ORDER_SESSION_CONFIRM_CLOSE event and publishes a register-session-closed fact carrying per-tender totals and the reconciliation figures. Returns 200 with the CLOSED session, 403 when the variance exceeds the limit without the approval permission, 404 when the session does not exist, and 409 when the session is not in CLOSING or an order is still awaiting payment. 
      * @endpoint post /v1/orders/sessions/{sessionId}/confirm-close
      * @param sessionId 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public confirmClose(sessionId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<RegisterSessionResponse>;
-    public confirmClose(sessionId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<RegisterSessionResponse>>;
-    public confirmClose(sessionId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<RegisterSessionResponse>>;
-    public confirmClose(sessionId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public confirmSessionClose(sessionId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<RegisterSessionResponse>;
+    public confirmSessionClose(sessionId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<RegisterSessionResponse>>;
+    public confirmSessionClose(sessionId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<RegisterSessionResponse>>;
+    public confirmSessionClose(sessionId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (sessionId === null || sessionId === undefined) {
-            throw new Error('Required parameter sessionId was null or undefined when calling confirmClose.');
+            throw new Error('Required parameter sessionId was null or undefined when calling confirmSessionClose.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -180,20 +180,20 @@ export class RegisterSessionsService extends BaseService {
     }
 
     /**
-     * Get the current open session for a terminal
-     * Returns the OPEN (or CLOSING) session on the terminal, or 204 if none is open.
+     * Get the Current Session for a Terminal
+     * Returns the active register session on a terminal, preferring an OPEN session and falling back to one in CLOSING. Use this tool to resolve which drawer a terminal is on; use getRegisterSession instead when the session id is already known. Preconditions: none — a terminal without an active session is a normal outcome. Required inputs: terminalId as a query parameter; there is no request body. No events are emitted and no state changes; this is a read-only projection. Returns 200 with the OPEN or CLOSING session, and 204 when the terminal has no active session. 
      * @endpoint get /v1/orders/sessions/current
      * @param terminalId 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public currentSession(terminalId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<RegisterSessionResponse>;
-    public currentSession(terminalId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<RegisterSessionResponse>>;
-    public currentSession(terminalId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<RegisterSessionResponse>>;
-    public currentSession(terminalId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getCurrentRegisterSession(terminalId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<RegisterSessionResponse>;
+    public getCurrentRegisterSession(terminalId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<RegisterSessionResponse>>;
+    public getCurrentRegisterSession(terminalId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<RegisterSessionResponse>>;
+    public getCurrentRegisterSession(terminalId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (terminalId === null || terminalId === undefined) {
-            throw new Error('Required parameter terminalId was null or undefined when calling currentSession.');
+            throw new Error('Required parameter terminalId was null or undefined when calling getCurrentRegisterSession.');
         }
 
         let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
@@ -252,20 +252,20 @@ export class RegisterSessionsService extends BaseService {
     }
 
     /**
-     * Get a register session by id
-     * Retrieves register session details and balances for the given session id.
+     * Get a Register Session
+     * Returns a register session with its status, opening float, counted and theoretical cash, over/short, and lifecycle timestamps. Use this tool when the session id is already known; use getCurrentRegisterSession instead to resolve the active session from a terminal id. Preconditions: the session must exist. Required inputs: sessionId (UUID) as a path parameter; there is no request body. No events are emitted and no state changes; this is a read-only projection. Returns 404 when no register session exists for the supplied id. 
      * @endpoint get /v1/orders/sessions/{sessionId}
      * @param sessionId 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public getSession(sessionId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<RegisterSessionResponse>;
-    public getSession(sessionId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<RegisterSessionResponse>>;
-    public getSession(sessionId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<RegisterSessionResponse>>;
-    public getSession(sessionId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getRegisterSession(sessionId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<RegisterSessionResponse>;
+    public getRegisterSession(sessionId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<RegisterSessionResponse>>;
+    public getRegisterSession(sessionId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<RegisterSessionResponse>>;
+    public getRegisterSession(sessionId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (sessionId === null || sessionId === undefined) {
-            throw new Error('Required parameter sessionId was null or undefined when calling getSession.');
+            throw new Error('Required parameter sessionId was null or undefined when calling getRegisterSession.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -312,8 +312,128 @@ export class RegisterSessionsService extends BaseService {
     }
 
     /**
-     * List a session\&#39;s cash movements
-     * Lists all recorded cash movements for the specified register session.
+     * X-Report for a Register Session
+     * Returns an interim X-report for a register session: opening float, per-tender totals, cash settlements, cash movements, theoretical cash, and over/short when a count has been recorded. Use this tool for mid-shift figures while the session is open; use getSessionZReport instead for the end-of-session close summary. Preconditions: the session must exist; figures are computed live from the session\&#39;s current ledger. Required inputs: sessionId (UUID) as a path parameter; there is no request body. No events are emitted and no state changes; this is a read-only report projection. Returns 404 when no register session exists for the supplied id. 
+     * @endpoint get /v1/orders/sessions/{sessionId}/x-report
+     * @param sessionId 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public getSessionXReport(sessionId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<SessionReportResponse>;
+    public getSessionXReport(sessionId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<SessionReportResponse>>;
+    public getSessionXReport(sessionId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<SessionReportResponse>>;
+    public getSessionXReport(sessionId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (sessionId === null || sessionId === undefined) {
+            throw new Error('Required parameter sessionId was null or undefined when calling getSessionXReport.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/orders/sessions/${this.configuration.encodeParam({name: "sessionId", value: sessionId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/x-report`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<SessionReportResponse>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Z-Report for a Register Session
+     * Returns the Z-report close summary for a register session, including per-tender totals, cash movements, theoretical cash, counted cash, and the over/short variance. Use this tool for the end-of-session summary after close; use getSessionXReport instead for interim mid-shift figures. Preconditions: the session must exist; the report reflects the session\&#39;s current ledger, so it is authoritative once the session is CLOSED. Required inputs: sessionId (UUID) as a path parameter; there is no request body. No events are emitted and no state changes; this is a read-only report projection. Returns 404 when no register session exists for the supplied id. 
+     * @endpoint get /v1/orders/sessions/{sessionId}/z-report
+     * @param sessionId 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public getSessionZReport(sessionId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<SessionReportResponse>;
+    public getSessionZReport(sessionId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<SessionReportResponse>>;
+    public getSessionZReport(sessionId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<SessionReportResponse>>;
+    public getSessionZReport(sessionId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (sessionId === null || sessionId === undefined) {
+            throw new Error('Required parameter sessionId was null or undefined when calling getSessionZReport.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/orders/sessions/${this.configuration.encodeParam({name: "sessionId", value: sessionId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/z-report`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<SessionReportResponse>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * List a Session\&#39;s Cash Movements
+     * Lists every recorded cash movement for a register session in the order they occurred. Use this tool to review drawer ins and outs; use getSessionXReport instead for the aggregated mid-day figures that include tender totals and theoretical cash. Preconditions: the session must exist. Required inputs: sessionId (UUID) as a path parameter; there is no request body. No events are emitted and no state changes; this is a read-only projection. Returns 200 with a possibly empty list, and 404 when the session does not exist. 
      * @endpoint get /v1/orders/sessions/{sessionId}/cash-movements
      * @param sessionId 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -372,20 +492,20 @@ export class RegisterSessionsService extends BaseService {
     }
 
     /**
-     * Open a register session
-     * Opens a new register session for the provided terminal, location, and clerk context.
+     * Open a Register Session
+     * Opens an OPEN register (drawer) session on a terminal; sales orders created on the terminal while it is open bind to it, and it supplies their location by default. Use this tool at the start of a drawer shift; do not use recordCashMovement, which requires a session that is already open. Preconditions: the terminal must have no session in OPEN or CLOSING — one drawer per terminal. Required inputs: terminalId and openedByClerkId; openingFloat defaults to the terminal\&#39;s previous counted close (else zero) when omitted, and locationId defaults from the terminal\&#39;s previous session. Emits an ORDER_SESSION_OPEN event. Returns 201 with the new session, and 409 when the terminal already has an active session. 
      * @endpoint post /v1/orders/sessions
-     * @param openSessionRequest 
+     * @param openSessionRequest The terminal, clerk, and optional opening-float context for the shift.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public openSession(openSessionRequest: OpenSessionRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<RegisterSessionResponse>;
-    public openSession(openSessionRequest: OpenSessionRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<RegisterSessionResponse>>;
-    public openSession(openSessionRequest: OpenSessionRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<RegisterSessionResponse>>;
-    public openSession(openSessionRequest: OpenSessionRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public openRegisterSession(openSessionRequest: OpenSessionRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<RegisterSessionResponse>;
+    public openRegisterSession(openSessionRequest: OpenSessionRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<RegisterSessionResponse>>;
+    public openRegisterSession(openSessionRequest: OpenSessionRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<RegisterSessionResponse>>;
+    public openRegisterSession(openSessionRequest: OpenSessionRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (openSessionRequest === null || openSessionRequest === undefined) {
-            throw new Error('Required parameter openSessionRequest was null or undefined when calling openSession.');
+            throw new Error('Required parameter openSessionRequest was null or undefined when calling openRegisterSession.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -442,11 +562,11 @@ export class RegisterSessionsService extends BaseService {
     }
 
     /**
-     * Record a drawer cash movement
-     * Records a cash in/out drawer movement against the specified register session.
+     * Record a Drawer Cash Movement
+     * Records a PAID_IN or PAID_OUT cash movement against an OPEN register session; movements feed the theoretical-cash calculation at close. Use this tool for non-sale drawer cash such as petty cash or bank drops; do not use beginSessionClose, which records the final counted drawer instead. Preconditions: the session must exist and be OPEN — movements are rejected once closing has begun. Required inputs: movementType (PAID_IN or PAID_OUT), a positive amount, reason, and clerkId. Emits an ORDER_SESSION_CASH_MOVEMENT event. Returns 201 with the recorded movement, 404 when the session does not exist, 409 when the session is not OPEN, and 422 when the amount is not positive or the movement type is unknown. 
      * @endpoint post /v1/orders/sessions/{sessionId}/cash-movements
      * @param sessionId 
-     * @param cashMovementRequest 
+     * @param cashMovementRequest The cash movement: direction, positive amount, reason, and clerk.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -505,126 +625,6 @@ export class RegisterSessionsService extends BaseService {
             {
                 context: localVarHttpContext,
                 body: cashMovementRequest,
-                responseType: <any>responseType_,
-                ...(withCredentials ? { withCredentials } : {}),
-                headers: localVarHeaders,
-                observe: observe,
-                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * X-report (mid-day figures for an open session)
-     * Returns an interim session report for an open or in-progress register session.
-     * @endpoint get /v1/orders/sessions/{sessionId}/x-report
-     * @param sessionId 
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     * @param options additional options
-     */
-    public xReport(sessionId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<SessionReportResponse>;
-    public xReport(sessionId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<SessionReportResponse>>;
-    public xReport(sessionId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<SessionReportResponse>>;
-    public xReport(sessionId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
-        if (sessionId === null || sessionId === undefined) {
-            throw new Error('Required parameter sessionId was null or undefined when calling xReport.');
-        }
-
-        let localVarHeaders = this.defaultHeaders;
-
-        // authentication (bearerAuth) required
-        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
-
-        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
-            'application/json'
-        ]);
-        if (localVarHttpHeaderAcceptSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
-        }
-
-        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
-
-        const localVarTransferCache: boolean = options?.transferCache ?? true;
-
-
-        let responseType_: 'text' | 'json' | 'blob' = 'json';
-        if (localVarHttpHeaderAcceptSelected) {
-            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
-                responseType_ = 'text';
-            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
-                responseType_ = 'json';
-            } else {
-                responseType_ = 'blob';
-            }
-        }
-
-        let localVarPath = `/v1/orders/sessions/${this.configuration.encodeParam({name: "sessionId", value: sessionId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/x-report`;
-        const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<SessionReportResponse>('get', `${basePath}${localVarPath}`,
-            {
-                context: localVarHttpContext,
-                responseType: <any>responseType_,
-                ...(withCredentials ? { withCredentials } : {}),
-                headers: localVarHeaders,
-                observe: observe,
-                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * Z-report (close summary)
-     * Returns the end-of-session close summary, including totals and variance metrics.
-     * @endpoint get /v1/orders/sessions/{sessionId}/z-report
-     * @param sessionId 
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     * @param options additional options
-     */
-    public zReport(sessionId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<SessionReportResponse>;
-    public zReport(sessionId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<SessionReportResponse>>;
-    public zReport(sessionId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<SessionReportResponse>>;
-    public zReport(sessionId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
-        if (sessionId === null || sessionId === undefined) {
-            throw new Error('Required parameter sessionId was null or undefined when calling zReport.');
-        }
-
-        let localVarHeaders = this.defaultHeaders;
-
-        // authentication (bearerAuth) required
-        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
-
-        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
-            'application/json'
-        ]);
-        if (localVarHttpHeaderAcceptSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
-        }
-
-        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
-
-        const localVarTransferCache: boolean = options?.transferCache ?? true;
-
-
-        let responseType_: 'text' | 'json' | 'blob' = 'json';
-        if (localVarHttpHeaderAcceptSelected) {
-            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
-                responseType_ = 'text';
-            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
-                responseType_ = 'json';
-            } else {
-                responseType_ = 'blob';
-            }
-        }
-
-        let localVarPath = `/v1/orders/sessions/${this.configuration.encodeParam({name: "sessionId", value: sessionId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/z-report`;
-        const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<SessionReportResponse>('get', `${basePath}${localVarPath}`,
-            {
-                context: localVarHttpContext,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,

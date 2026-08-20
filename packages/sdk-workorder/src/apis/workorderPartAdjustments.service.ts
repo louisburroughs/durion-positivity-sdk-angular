@@ -42,11 +42,11 @@ export class WorkorderPartAdjustmentsService extends BaseService {
     }
 
     /**
-     * Correct part quantity
-     * Administrative correction for data entry errors
+     * Correct Part Quantity
+     * Applies an administrative correction to a part line\&#39;s quantity, recording the correction and its reason as an adjustment event for data-entry fixes. Use this tool only to repair mistaken quantities; do not use consumeParts or returnParts, which record real physical movement of stock. Preconditions: the workorder and part must exist and the part must belong to the workorder. Required inputs: workorderId (UUID) as a path parameter, plus workorderPartId (UUID), a positive newQuantity, and a reason in the body; notes and uomCode are optional (uomCode is the unit newQuantity is expressed in; omit to leave the part\&#39;s existing unit unchanged) and an Idempotency-Key header deduplicates retries. Emits a WORKORDER_PART_CORRECT event. Returns 201 with the adjustment event, 404 when the workorder or part cannot be found, 400 when newQuantity is not positive or the part does not belong to the workorder, and 422 when uomCode has no conversion row for the product or the converted quantity exceeds its declared decimal scale. 
      * @endpoint post /v1/workorders/{workorderId}/parts/correct
      * @param workorderId 
-     * @param correctPartQuantityRequest Correct part quantity request
+     * @param correctPartQuantityRequest Part line, corrected quantity, and the reason for the administrative fix.
      * @param idempotencyKey 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
@@ -120,8 +120,8 @@ export class WorkorderPartAdjustmentsService extends BaseService {
     }
 
     /**
-     * Get part adjustment history
-     * Retrieve adjustment history (substitutions, returns, corrections) for parts on the workorder
+     * Get Part Adjustment History
+     * Returns the substitution, reasoned-return, and correction adjustment events for a workorder\&#39;s parts, newest first, either for the whole workorder or filtered to one part. Use this tool when auditing part swaps and corrections; use getPartsUsageHistory instead for the plain issue, consume, and return quantity movements. Preconditions: none — an unknown workorder or part simply yields an empty list, and the partId filter is not validated against the workorder in the path. Required inputs: workorderId (UUID) as a path parameter; partId (UUID) is an optional query filter. No events are emitted and no state changes; this is a read-only projection. Returns 200 with the adjustment events, possibly empty. 
      * @endpoint get /v1/workorders/{workorderId}/parts/adjustments
      * @param workorderId 
      * @param partId Optional part ID to filter history for a specific part
@@ -129,12 +129,12 @@ export class WorkorderPartAdjustmentsService extends BaseService {
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public getAdjustmentHistory(workorderId: string, partId?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<WorkorderPartAdjustmentEventResponse>;
-    public getAdjustmentHistory(workorderId: string, partId?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<WorkorderPartAdjustmentEventResponse>>;
-    public getAdjustmentHistory(workorderId: string, partId?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<WorkorderPartAdjustmentEventResponse>>;
-    public getAdjustmentHistory(workorderId: string, partId?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getPartAdjustmentHistory(workorderId: string, partId?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<WorkorderPartAdjustmentEventResponse>;
+    public getPartAdjustmentHistory(workorderId: string, partId?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<WorkorderPartAdjustmentEventResponse>>;
+    public getPartAdjustmentHistory(workorderId: string, partId?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<WorkorderPartAdjustmentEventResponse>>;
+    public getPartAdjustmentHistory(workorderId: string, partId?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (workorderId === null || workorderId === undefined) {
-            throw new Error('Required parameter workorderId was null or undefined when calling getAdjustmentHistory.');
+            throw new Error('Required parameter workorderId was null or undefined when calling getPartAdjustmentHistory.');
         }
 
         let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
@@ -193,25 +193,25 @@ export class WorkorderPartAdjustmentsService extends BaseService {
     }
 
     /**
-     * Return unused quantity
-     * Return unused part quantity beyond normal return flow
+     * Return Unused Part Quantity
+     * Returns unused part quantity through the adjustment flow, recording a reasoned return adjustment event alongside the quantity change. Use this tool when a return needs an explicit reason and audit trail; use returnParts instead for the plain usage-flow return without a reason. Preconditions: the workorder and part must exist, the part must belong to the workorder, and the return cannot exceed the quantity still available on the line. Required inputs: workorderId (UUID) as a path parameter, plus workorderPartId (UUID), a positive quantity, and a reason in the body; notes are optional and an Idempotency-Key header deduplicates retries. Emits a WORKORDER_PART_RETURN_UNUSED event. Returns 201 with the adjustment event, 404 when the workorder or part cannot be found, and 400 when the quantity is not positive, exceeds the available quantity, or the part does not belong to the workorder. 
      * @endpoint post /v1/workorders/{workorderId}/parts/returnUnused
      * @param workorderId 
-     * @param returnPartQuantityRequest Return unused quantity request
+     * @param returnPartQuantityRequest Part line, quantity going back, and the reason for the reasoned return.
      * @param idempotencyKey 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public returnUnusedQuantity(workorderId: string, returnPartQuantityRequest: ReturnPartQuantityRequest, idempotencyKey?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<WorkorderPartAdjustmentEventResponse>;
-    public returnUnusedQuantity(workorderId: string, returnPartQuantityRequest: ReturnPartQuantityRequest, idempotencyKey?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<WorkorderPartAdjustmentEventResponse>>;
-    public returnUnusedQuantity(workorderId: string, returnPartQuantityRequest: ReturnPartQuantityRequest, idempotencyKey?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<WorkorderPartAdjustmentEventResponse>>;
-    public returnUnusedQuantity(workorderId: string, returnPartQuantityRequest: ReturnPartQuantityRequest, idempotencyKey?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public returnUnusedPartQuantity(workorderId: string, returnPartQuantityRequest: ReturnPartQuantityRequest, idempotencyKey?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<WorkorderPartAdjustmentEventResponse>;
+    public returnUnusedPartQuantity(workorderId: string, returnPartQuantityRequest: ReturnPartQuantityRequest, idempotencyKey?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<WorkorderPartAdjustmentEventResponse>>;
+    public returnUnusedPartQuantity(workorderId: string, returnPartQuantityRequest: ReturnPartQuantityRequest, idempotencyKey?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<WorkorderPartAdjustmentEventResponse>>;
+    public returnUnusedPartQuantity(workorderId: string, returnPartQuantityRequest: ReturnPartQuantityRequest, idempotencyKey?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (workorderId === null || workorderId === undefined) {
-            throw new Error('Required parameter workorderId was null or undefined when calling returnUnusedQuantity.');
+            throw new Error('Required parameter workorderId was null or undefined when calling returnUnusedPartQuantity.');
         }
         if (returnPartQuantityRequest === null || returnPartQuantityRequest === undefined) {
-            throw new Error('Required parameter returnPartQuantityRequest was null or undefined when calling returnUnusedQuantity.');
+            throw new Error('Required parameter returnPartQuantityRequest was null or undefined when calling returnUnusedPartQuantity.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -271,11 +271,11 @@ export class WorkorderPartAdjustmentsService extends BaseService {
     }
 
     /**
-     * Substitute part
-     * Replace one part with another. Original part preserved for history.
+     * Substitute Part on Workorder
+     * Substitutes one part line with a different part, preserving the original line for audit history, capturing a pricing snapshot, and recording a substitution adjustment event. Use this tool when the planned part is replaced by an alternative; use suggestWorkorderSubstitutes first to find candidate parts, and do not use correctPartQuantity, which fixes quantities rather than parts. Preconditions: the workorder and original part must exist, the original part must belong to the workorder and must not have any consumed quantity, and the substitute must differ from the original. Required inputs: workorderId (UUID) as a path parameter, plus originalPartId and substitutePartId (UUIDs) and a reason in the body; notes are optional and an Idempotency-Key header deduplicates retries. Emits a WORKORDER_PART_SUBSTITUTE event. Returns 201 with the adjustment event, 404 when the workorder or part cannot be found, and 400 when the part is already consumed, does not belong to the workorder, or the substitute equals the original. 
      * @endpoint post /v1/workorders/{workorderId}/parts/substitute
      * @param workorderId 
-     * @param substitutePartRequest Substitute part request
+     * @param substitutePartRequest Original part, replacement part, and the reason for the swap.
      * @param idempotencyKey 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.

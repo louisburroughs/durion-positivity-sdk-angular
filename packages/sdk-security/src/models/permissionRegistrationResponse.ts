@@ -14,33 +14,33 @@
  */
 export interface PermissionRegistrationResponse { 
     /**
-     * True when the registration completed without fatal errors
+     * Per-permission error messages, when any occurred
      */
-    success: boolean;
+    errors?: Array<string>;
     /**
      * Human-readable summary of the registration outcome
      */
     message?: string;
     /**
-     * Total number of permissions submitted in the manifest
-     */
-    totalPermissions: number;
-    /**
      * Number of new permissions registered
      */
     registeredPermissions: number;
-    /**
-     * Number of existing permissions updated
-     */
-    updatedPermissions: number;
     /**
      * Number of permissions skipped because they were unchanged
      */
     skippedPermissions: number;
     /**
-     * Per-permission error messages, when any occurred
+     * True when the registration completed without fatal errors
      */
-    errors?: Array<string>;
+    success: boolean;
+    /**
+     * Total number of permissions submitted in the manifest
+     */
+    totalPermissions: number;
+    /**
+     * Number of existing permissions updated
+     */
+    updatedPermissions: number;
 }
 
 function isOptionalPermissionRegistrationResponsePropertyOfType(
@@ -81,9 +81,9 @@ export function instanceOfPermissionRegistrationResponse(value: object): value i
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createPermissionRegistrationResponsePropertyNames('success', 'totalPermissions', 'registeredPermissions', 'updatedPermissions', 'skippedPermissions', );
+    const requiredProperties = createPermissionRegistrationResponsePropertyNames('registeredPermissions', 'skippedPermissions', 'success', 'totalPermissions', 'updatedPermissions', );
     const optionalStringProperties = createPermissionRegistrationResponseOptionalProperties({ name: 'message', nullable: false }, );
-    const optionalNumberProperties = createPermissionRegistrationResponseOptionalProperties({ name: 'totalPermissions', nullable: false }, { name: 'registeredPermissions', nullable: false }, { name: 'updatedPermissions', nullable: false }, { name: 'skippedPermissions', nullable: false }, );
+    const optionalNumberProperties = createPermissionRegistrationResponseOptionalProperties({ name: 'registeredPermissions', nullable: false }, { name: 'skippedPermissions', nullable: false }, { name: 'totalPermissions', nullable: false }, { name: 'updatedPermissions', nullable: false }, );
     const optionalBooleanProperties = createPermissionRegistrationResponseOptionalProperties({ name: 'success', nullable: false }, );
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

@@ -38,20 +38,20 @@ export class BillingAuthorizationService extends BaseService {
     }
 
     /**
-     * Mint a manager-approval elevation token
-     * Verifies the named manager (by employee number) holds invoice:finalize:override and mints a short-lived token scoped to the given invoice, returned as the managerApprovalCode for finalize.
+     * Mint Manager-Approval Elevation Token
+     * Mints a short-lived elevation token scoped to one invoice after verifying that the named manager is an ACTIVE employee holding the invoice:finalize:override authority. Use this tool when an actor with invoice:finalize but not invoice:finalize:override needs a managerApprovalCode for finalizeInvoice or revertInvoice; do not use finalizeInvoice directly without a token when the invoice total exceeds the 500.00 service-advisor cap. Preconditions: the manager\&#39;s employee number must resolve to an ACTIVE person in the local employee replica and that person must hold invoice:finalize:override. Required inputs: managerEmployeeNumber and invoiceId (UUID); the token is bound to that invoice only and expires after five minutes by default (invoice.elevation.token-ttl-seconds). No events are emitted; the token is signed and stateless, and the grant is audit-logged with the approving manager\&#39;s person id. Returns 200 with the token and its expiry, and 401 with an empty body when the employee number is unknown or inactive or the person lacks the override authority. 
      * @endpoint post /v1/billing/auth/elevate
-     * @param elevateRequest 
+     * @param elevateRequest Manager identification and the invoice the elevation token will authorize.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public elevate(elevateRequest: ElevateRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ElevateResponse>;
-    public elevate(elevateRequest: ElevateRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ElevateResponse>>;
-    public elevate(elevateRequest: ElevateRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ElevateResponse>>;
-    public elevate(elevateRequest: ElevateRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public elevateManagerApproval(elevateRequest: ElevateRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ElevateResponse>;
+    public elevateManagerApproval(elevateRequest: ElevateRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ElevateResponse>>;
+    public elevateManagerApproval(elevateRequest: ElevateRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ElevateResponse>>;
+    public elevateManagerApproval(elevateRequest: ElevateRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (elevateRequest === null || elevateRequest === undefined) {
-            throw new Error('Required parameter elevateRequest was null or undefined when calling elevate.');
+            throw new Error('Required parameter elevateRequest was null or undefined when calling elevateManagerApproval.');
         }
 
         let localVarHeaders = this.defaultHeaders;

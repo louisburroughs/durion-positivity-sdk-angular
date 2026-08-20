@@ -15,66 +15,6 @@ import { JournalEntryLineResponse } from './journalEntryLineResponse';
  */
 export interface JournalEntryResponse { 
     /**
-     * Journal entry UUID
-     */
-    journalEntryId?: string;
-    /**
-     * Human-readable posted-entry number in the format JE-{YYYYMM}-{seq}, sequential within the entry\'s transaction month and assigned at posting time. Null for DRAFT and PENDING entries and for entries posted before numbering existed.
-     */
-    entryNumber?: string | null;
-    /**
-     * Journal entry status
-     */
-    status?: JournalEntryResponseStatusEnum;
-    /**
-     * Transaction date and time
-     */
-    transactionDate?: string;
-    /**
-     * Journal entry description
-     */
-    description?: string;
-    /**
-     * Source event UUID
-     */
-    sourceEventId?: string;
-    /**
-     * Source event type
-     */
-    sourceEventType?: string;
-    /**
-     * Posting rule set UUID
-     */
-    postingRuleSetId?: string;
-    /**
-     * Posting rule version UUID
-     */
-    postingRuleVersionId?: string;
-    /**
-     * Original journal entry UUID when this entry is a reversal
-     */
-    reversalJournalEntryId?: string;
-    /**
-     * Reversal journal entry UUID when this entry has been reversed
-     */
-    reversedByJournalEntryId?: string;
-    /**
-     * Total debits
-     */
-    totalDebits?: number;
-    /**
-     * Total credits
-     */
-    totalCredits?: number;
-    /**
-     * Whether total debits equal total credits
-     */
-    isBalanced?: boolean;
-    /**
-     * Journal entry lines
-     */
-    lines?: Array<JournalEntryLineResponse>;
-    /**
      * Created timestamp
      */
     createdAt?: string;
@@ -82,6 +22,26 @@ export interface JournalEntryResponse {
      * Created by username
      */
     createdBy?: string;
+    /**
+     * Journal entry description
+     */
+    description?: string;
+    /**
+     * Human-readable posted-entry number in the format JE-{YYYYMM}-{seq}, sequential within the entry\'s transaction month and assigned at posting time. Null for DRAFT and PENDING entries and for entries posted before numbering existed.
+     */
+    entryNumber?: string | null;
+    /**
+     * Whether total debits equal total credits
+     */
+    isBalanced?: boolean;
+    /**
+     * Journal entry UUID
+     */
+    journalEntryId?: string;
+    /**
+     * Journal entry lines
+     */
+    lines?: Array<JournalEntryLineResponse>;
     /**
      * Last modified timestamp
      */
@@ -99,9 +59,49 @@ export interface JournalEntryResponse {
      */
     postedBy?: string;
     /**
+     * Posting rule set UUID
+     */
+    postingRuleSetId?: string;
+    /**
+     * Posting rule version UUID
+     */
+    postingRuleVersionId?: string;
+    /**
+     * Original journal entry UUID when this entry is a reversal
+     */
+    reversalJournalEntryId?: string;
+    /**
      * Reversed timestamp
      */
     reversedAt?: string;
+    /**
+     * Reversal journal entry UUID when this entry has been reversed
+     */
+    reversedByJournalEntryId?: string;
+    /**
+     * Source event UUID
+     */
+    sourceEventId?: string;
+    /**
+     * Source event type
+     */
+    sourceEventType?: string;
+    /**
+     * Journal entry status
+     */
+    status?: JournalEntryResponseStatusEnum;
+    /**
+     * Total credits
+     */
+    totalCredits?: number;
+    /**
+     * Total debits
+     */
+    totalDebits?: number;
+    /**
+     * Transaction date and time
+     */
+    transactionDate?: string;
 }
 export enum JournalEntryResponseStatusEnum {
     Draft = 'DRAFT',
@@ -151,8 +151,8 @@ export function instanceOfJournalEntryResponse(value: object): value is JournalE
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createJournalEntryResponsePropertyNames();
-    const optionalStringProperties = createJournalEntryResponseOptionalProperties({ name: 'journalEntryId', nullable: false }, { name: 'entryNumber', nullable: true }, { name: 'status', nullable: false }, { name: 'transactionDate', nullable: false }, { name: 'description', nullable: false }, { name: 'sourceEventId', nullable: false }, { name: 'sourceEventType', nullable: false }, { name: 'postingRuleSetId', nullable: false }, { name: 'postingRuleVersionId', nullable: false }, { name: 'reversalJournalEntryId', nullable: false }, { name: 'reversedByJournalEntryId', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'modifiedAt', nullable: false }, { name: 'modifiedBy', nullable: false }, { name: 'postedAt', nullable: false }, { name: 'postedBy', nullable: false }, { name: 'reversedAt', nullable: false }, );
-    const optionalNumberProperties = createJournalEntryResponseOptionalProperties({ name: 'totalDebits', nullable: false }, { name: 'totalCredits', nullable: false }, );
+    const optionalStringProperties = createJournalEntryResponseOptionalProperties({ name: 'createdAt', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'description', nullable: false }, { name: 'entryNumber', nullable: true }, { name: 'journalEntryId', nullable: false }, { name: 'modifiedAt', nullable: false }, { name: 'modifiedBy', nullable: false }, { name: 'postedAt', nullable: false }, { name: 'postedBy', nullable: false }, { name: 'postingRuleSetId', nullable: false }, { name: 'postingRuleVersionId', nullable: false }, { name: 'reversalJournalEntryId', nullable: false }, { name: 'reversedAt', nullable: false }, { name: 'reversedByJournalEntryId', nullable: false }, { name: 'sourceEventId', nullable: false }, { name: 'sourceEventType', nullable: false }, { name: 'status', nullable: false }, { name: 'transactionDate', nullable: false }, );
+    const optionalNumberProperties = createJournalEntryResponseOptionalProperties({ name: 'totalCredits', nullable: false }, { name: 'totalDebits', nullable: false }, );
     const optionalBooleanProperties = createJournalEntryResponseOptionalProperties({ name: 'isBalanced', nullable: false }, );
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

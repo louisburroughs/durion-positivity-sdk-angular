@@ -14,21 +14,25 @@
  */
 export interface TaxLineItem { 
     /**
-     * Unique identifier for the line item (e.g., estimate item ID, invoice line ID)
-     */
-    lineItemId: string;
-    /**
      * Description of the item being taxed
      */
     description: string;
     /**
-     * Quantity of the item
+     * Optional exemption-certificate identifier backing this line\'s exemption claim
+     */
+    exemptionCertificateId?: string;
+    /**
+     * Optional certificate-backed exemption reason for this line (RESALE, GOVERNMENT, NONPROFIT, AGRICULTURAL, OTHER)
+     */
+    exemptionReasonCode?: TaxLineItemExemptionReasonCodeEnum;
+    /**
+     * Unique identifier for the line item (e.g., estimate item ID, invoice line ID)
+     */
+    lineItemId: string;
+    /**
+     * Quantity of the item. Must be greater than zero; zero is rejected.
      */
     quantity: number;
-    /**
-     * Unit price of the item before tax
-     */
-    unitPrice: number;
     /**
      * Total amount before tax (quantity x unitPrice); calculated when omitted
      */
@@ -42,13 +46,9 @@ export interface TaxLineItem {
      */
     taxExempt?: boolean;
     /**
-     * Optional certificate-backed exemption reason for this line (RESALE, GOVERNMENT, NONPROFIT, AGRICULTURAL, OTHER)
+     * Unit price of the item before tax. Must be greater than zero; zero is rejected.
      */
-    exemptionReasonCode?: TaxLineItemExemptionReasonCodeEnum;
-    /**
-     * Optional exemption-certificate identifier backing this line\'s exemption claim
-     */
-    exemptionCertificateId?: string;
+    unitPrice: number;
 }
 export enum TaxLineItemExemptionReasonCodeEnum {
     Resale = 'RESALE',
@@ -98,9 +98,9 @@ export function instanceOfTaxLineItem(value: object): value is TaxLineItem {
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createTaxLineItemPropertyNames('lineItemId', 'description', 'quantity', 'unitPrice', );
-    const optionalStringProperties = createTaxLineItemOptionalProperties({ name: 'lineItemId', nullable: false }, { name: 'description', nullable: false }, { name: 'taxCategory', nullable: false }, { name: 'exemptionReasonCode', nullable: false }, { name: 'exemptionCertificateId', nullable: false }, );
-    const optionalNumberProperties = createTaxLineItemOptionalProperties({ name: 'quantity', nullable: false }, { name: 'unitPrice', nullable: false }, { name: 'subtotal', nullable: false }, );
+    const requiredProperties = createTaxLineItemPropertyNames('description', 'lineItemId', 'quantity', 'unitPrice', );
+    const optionalStringProperties = createTaxLineItemOptionalProperties({ name: 'description', nullable: false }, { name: 'exemptionCertificateId', nullable: false }, { name: 'exemptionReasonCode', nullable: false }, { name: 'lineItemId', nullable: false }, { name: 'taxCategory', nullable: false }, );
+    const optionalNumberProperties = createTaxLineItemOptionalProperties({ name: 'quantity', nullable: false }, { name: 'subtotal', nullable: false }, { name: 'unitPrice', nullable: false }, );
     const optionalBooleanProperties = createTaxLineItemOptionalProperties({ name: 'taxExempt', nullable: false }, );
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

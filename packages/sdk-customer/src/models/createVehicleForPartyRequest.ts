@@ -10,17 +10,9 @@
 
 
 /**
- * Vehicle creation request
+ * Request to create a vehicle record for a party
  */
 export interface CreateVehicleForPartyRequest { 
-    /**
-     * Vehicle Identification Number (uniqueness scope global or per-party)
-     */
-    vinNumber: string;
-    /**
-     * Unit number or internal reference
-     */
-    unitNumber?: string;
     /**
      * Vehicle description
      */
@@ -33,6 +25,14 @@ export interface CreateVehicleForPartyRequest {
      * License plate region/state
      */
     licensePlateRegion?: string;
+    /**
+     * Unit number or internal reference
+     */
+    unitNumber?: string;
+    /**
+     * Vehicle Identification Number (uniqueness scope global or per-party)
+     */
+    vinNumber: string;
 }
 
 function isOptionalCreateVehicleForPartyRequestPropertyOfType(
@@ -74,7 +74,7 @@ export function instanceOfCreateVehicleForPartyRequest(value: object): value is 
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createCreateVehicleForPartyRequestPropertyNames('vinNumber', );
-    const optionalStringProperties = createCreateVehicleForPartyRequestOptionalProperties({ name: 'vinNumber', nullable: false }, { name: 'unitNumber', nullable: false }, { name: 'description', nullable: false }, { name: 'licensePlate', nullable: false }, { name: 'licensePlateRegion', nullable: false }, );
+    const optionalStringProperties = createCreateVehicleForPartyRequestOptionalProperties({ name: 'description', nullable: false }, { name: 'licensePlate', nullable: false }, { name: 'licensePlateRegion', nullable: false }, { name: 'unitNumber', nullable: false }, { name: 'vinNumber', nullable: false }, );
     const optionalNumberProperties = createCreateVehicleForPartyRequestOptionalProperties();
     const optionalBooleanProperties = createCreateVehicleForPartyRequestOptionalProperties();
 

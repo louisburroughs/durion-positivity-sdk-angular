@@ -15,6 +15,10 @@ import { GLAccountResponse } from './gLAccountResponse';
  */
 export interface GLAccountListResponse { 
     /**
+     * GL accounts on the current page
+     */
+    glAccounts: Array<GLAccountResponse>;
+    /**
      * Zero-based page index
      */
     pageNumber: number;
@@ -23,17 +27,13 @@ export interface GLAccountListResponse {
      */
     pageSize: number;
     /**
-     * Total number of pages
-     */
-    totalPages: number;
-    /**
-     * GL accounts on the current page
-     */
-    glAccounts: Array<GLAccountResponse>;
-    /**
      * Total number of matching GL accounts
      */
     totalElements: number;
+    /**
+     * Total number of pages
+     */
+    totalPages: number;
 }
 
 function isOptionalGLAccountListResponsePropertyOfType(
@@ -74,9 +74,9 @@ export function instanceOfGLAccountListResponse(value: object): value is GLAccou
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createGLAccountListResponsePropertyNames('pageNumber', 'pageSize', 'totalPages', 'glAccounts', 'totalElements', );
+    const requiredProperties = createGLAccountListResponsePropertyNames('glAccounts', 'pageNumber', 'pageSize', 'totalElements', 'totalPages', );
     const optionalStringProperties = createGLAccountListResponseOptionalProperties();
-    const optionalNumberProperties = createGLAccountListResponseOptionalProperties({ name: 'pageNumber', nullable: false }, { name: 'pageSize', nullable: false }, { name: 'totalPages', nullable: false }, { name: 'totalElements', nullable: false }, );
+    const optionalNumberProperties = createGLAccountListResponseOptionalProperties({ name: 'pageNumber', nullable: false }, { name: 'pageSize', nullable: false }, { name: 'totalElements', nullable: false }, { name: 'totalPages', nullable: false }, );
     const optionalBooleanProperties = createGLAccountListResponseOptionalProperties();
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

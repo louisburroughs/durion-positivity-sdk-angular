@@ -14,6 +14,14 @@
  */
 export interface OrderInvoiceResponse { 
     /**
+     * Deposit / down-payment credit applied to this invoice at creation (odoo-parity story E4); zero when no deposit was held against the source.
+     */
+    depositApplied?: number;
+    /**
+     * True when an existing invoice was returned (orderId replay or workorder dedupe).
+     */
+    existing: boolean;
+    /**
      * Invoice identifier.
      */
     invoiceId: string;
@@ -37,14 +45,6 @@ export interface OrderInvoiceResponse {
      * Invoice total.
      */
     totalAmount?: number;
-    /**
-     * Deposit / down-payment credit applied to this invoice at creation (odoo-parity story E4); zero when no deposit was held against the source.
-     */
-    depositApplied?: number;
-    /**
-     * True when an existing invoice was returned (orderId replay or workorder dedupe).
-     */
-    existing: boolean;
 }
 
 function isOptionalOrderInvoiceResponsePropertyOfType(
@@ -85,9 +85,9 @@ export function instanceOfOrderInvoiceResponse(value: object): value is OrderInv
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createOrderInvoiceResponsePropertyNames('invoiceId', 'status', 'existing', );
+    const requiredProperties = createOrderInvoiceResponsePropertyNames('existing', 'invoiceId', 'status', );
     const optionalStringProperties = createOrderInvoiceResponseOptionalProperties({ name: 'invoiceId', nullable: false }, { name: 'invoiceNumber', nullable: false }, { name: 'status', nullable: false }, );
-    const optionalNumberProperties = createOrderInvoiceResponseOptionalProperties({ name: 'subtotal', nullable: false }, { name: 'taxAmount', nullable: false }, { name: 'totalAmount', nullable: false }, { name: 'depositApplied', nullable: false }, );
+    const optionalNumberProperties = createOrderInvoiceResponseOptionalProperties({ name: 'depositApplied', nullable: false }, { name: 'subtotal', nullable: false }, { name: 'taxAmount', nullable: false }, { name: 'totalAmount', nullable: false }, );
     const optionalBooleanProperties = createOrderInvoiceResponseOptionalProperties({ name: 'existing', nullable: false }, );
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

@@ -46,8 +46,8 @@ export class PurchaseSuggestionsService extends BaseService {
     }
 
     /**
-     * Accept a purchase suggestion
-     * Human-mandatory accept gate (plan D-3): transitions SUGGESTED → ACCEPTED, making the suggestion eligible for conversion into a DRAFT purchase order. The replenishment scan never accepts suggestions.
+     * Accept Purchase Suggestion
+     * Accepts a purchase suggestion, moving it from SUGGESTED to ACCEPTED as the human-mandatory gate the replenishment scan never crosses on its own. Use this tool when a reviewer approves proposed replenishment; do not use convertPurchaseSuggestions before acceptance, and use dismissPurchaseSuggestion instead to reject the proposal. Preconditions: the suggestion must exist and be in SUGGESTED status. Required inputs: suggestionId (UUIDv7) path parameter; there is no request body. Emits an INVENTORY_PURCHASE_SUGGESTION_ACCEPT event; no purchase order is created and no spend is committed, that happens only through convertPurchaseSuggestions and the PO approval workflow. Returns 404 when the suggestion does not exist, and 409 when it is not SUGGESTED because it was already accepted, converted or dismissed. 
      * @endpoint post /v1/inventory/purchase-suggestions/{suggestionId}/accept
      * @param suggestionId Purchase suggestion identifier
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -106,10 +106,10 @@ export class PurchaseSuggestionsService extends BaseService {
     }
 
     /**
-     * Convert accepted purchase suggestions into a DRAFT purchase order
-     * Creates ONE multi-line DRAFT purchase order from ACCEPTED suggestions sharing a single vendor, then stamps each suggestion CONVERTED. The DRAFT order still passes the existing purchase order approval workflow — conversion never approves spend. Requires BOTH inventory:replenishment:manage AND inventory:purchase_order:create.
+     * Convert Purchase Suggestions To Purchase Order
+     * Converts ACCEPTED purchase suggestions into one multi-line DRAFT purchase order, stamping each suggestion CONVERTED with the created order\&#39;s id; a line is keyed in the vendor\&#39;s pack UoM when the suggestion captured a pack size the quantity divides evenly by. Use this tool after acceptPurchaseSuggestion to turn approved replenishment into an order; do not use createPurchaseOrder, the manual path that ignores suggestions, and note that conversion never approves spend, so approvePurchaseOrder must still run on the DRAFT order. Preconditions: every listed suggestion must exist, be ACCEPTED, carry a vendor reference and a feed unit cost, all must share one vendor, and all must resolve to a single ship-to site. Required inputs: suggestionIds (non-empty list of UUIDs); duplicates are collapsed, and the caller needs both inventory:replenishment:manage and inventory:purchase_order:create. Emits an INVENTORY_PURCHASE_SUGGESTION_CONVERT event and creates the DRAFT order through the standard purchase order path, with the latest expected date among the suggestions as the expected delivery date. Returns 404 when a listed suggestion does not exist, 422 when a suggestion is not ACCEPTED, lacks a vendor or unit cost, or the suggestions mix vendors or ship-to sites, and 400 when suggestionIds is empty. 
      * @endpoint post /v1/inventory/purchase-suggestions/convert
-     * @param convertPurchaseSuggestionsRequest 
+     * @param convertPurchaseSuggestionsRequest The ACCEPTED suggestions to fold into a single DRAFT purchase order; all must share one vendor.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -176,11 +176,11 @@ export class PurchaseSuggestionsService extends BaseService {
     }
 
     /**
-     * Dismiss a purchase suggestion
-     * Dismisses a SUGGESTED or ACCEPTED suggestion with a mandatory reason. Dismissal is terminal and per-instance; suppressing future suggestions is the policy snooze\&#39;s job.
+     * Dismiss Purchase Suggestion
+     * Dismisses a purchase suggestion with a recorded reason, moving it to the terminal DISMISSED status. Use this tool to reject one specific proposal; dismissal is per-instance, so use the replenishment policy snooze instead to suppress future suggestions for the SKU, and do not use acceptPurchaseSuggestion, which approves the proposal. Preconditions: the suggestion must exist and be in SUGGESTED or ACCEPTED status. Required inputs: suggestionId (UUIDv7) path parameter and a body with reason, non-blank and at most 255 characters. Emits an INVENTORY_PURCHASE_SUGGESTION_DISMISS event and stores the dismissal reason on the suggestion; the replenishment scan may still raise a new suggestion later. Returns 404 when the suggestion does not exist, 409 when it is already CONVERTED or DISMISSED, and 400 when the reason is missing or blank. 
      * @endpoint post /v1/inventory/purchase-suggestions/{suggestionId}/dismiss
      * @param suggestionId Purchase suggestion identifier
-     * @param dismissPurchaseSuggestionRequest 
+     * @param dismissPurchaseSuggestionRequest Why this suggestion is being rejected; recorded on the suggestion.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -250,8 +250,8 @@ export class PurchaseSuggestionsService extends BaseService {
     }
 
     /**
-     * Get purchase suggestion
-     * Retrieves one purchase suggestion by identifier.
+     * Get Purchase Suggestion
+     * Returns one purchase suggestion with its status, suggested quantity, vendor reference, feed price and, when converted, the created purchase order id. Use this tool when the suggestionId is already known; use listPurchaseSuggestions instead to search by status, SKU or destination location. Preconditions: the purchase suggestion must exist. Required inputs: suggestionId (UUIDv7) path parameter; there is no request body. No events are emitted and no state changes; this is a read-only projection. Returns 404 when no purchase suggestion exists for the supplied id. 
      * @endpoint get /v1/inventory/purchase-suggestions/{suggestionId}
      * @param suggestionId Purchase suggestion identifier
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -310,8 +310,8 @@ export class PurchaseSuggestionsService extends BaseService {
     }
 
     /**
-     * List purchase suggestions
-     * Lists purchase suggestions, optionally filtered by status, SKU, and destination location.
+     * List Purchase Suggestions
+     * Returns a page of replenishment purchase suggestions, newest first, with their lifecycle status, suggested quantity, vendor and pricing snapshot. Use this tool to discover suggestionIds or review what the replenishment scan proposed; use getPurchaseSuggestion instead when the id is already known. Preconditions: none; suggestions are created only by the replenishment scan, so an empty page means the scan proposed nothing matching the filters. Required inputs: none; status (SUGGESTED, ACCEPTED, CONVERTED or DISMISSED), sku and locationId are optional filters, and the page size defaults to 20. No events are emitted and no state changes; this is a read-only projection. Returns 400 when status is not a known lifecycle value, and 200 with an empty page when nothing matches. 
      * @endpoint get /v1/inventory/purchase-suggestions
      * @param pageable 
      * @param status Lifecycle status filter (SUGGESTED, ACCEPTED, CONVERTED, DISMISSED)

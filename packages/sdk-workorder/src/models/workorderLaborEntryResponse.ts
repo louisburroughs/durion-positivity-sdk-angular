@@ -14,25 +14,21 @@
  */
 export interface WorkorderLaborEntryResponse { 
     /**
-     * Unique ID of the labor entry
+     * Whether this session is still active (not stopped)
      */
-    id: string;
+    active: boolean;
     /**
-     * Workorder ID
+     * Adjustment reason (if hours were manually adjusted)
      */
-    workorderId: string;
+    adjustmentReason?: string;
     /**
-     * Service line item ID
+     * Creation timestamp
      */
-    workorderServiceId?: string;
+    createdAt?: string;
     /**
-     * Technician ID who performed the work
+     * User who created this entry
      */
-    technicianId?: string;
-    /**
-     * Labor session start time
-     */
-    startTime?: string;
+    createdBy?: string;
     /**
      * Labor session end time (null if still active)
      */
@@ -42,25 +38,29 @@ export interface WorkorderLaborEntryResponse {
      */
     hoursWorked?: number;
     /**
+     * Unique ID of the labor entry
+     */
+    id: string;
+    /**
      * Session notes
      */
     notes?: string;
     /**
-     * Adjustment reason (if hours were manually adjusted)
+     * Labor session start time
      */
-    adjustmentReason?: string;
+    startTime?: string;
     /**
-     * Whether this session is still active (not stopped)
+     * Technician ID who performed the work
      */
-    active: boolean;
+    technicianId?: string;
     /**
-     * User who created this entry
+     * Workorder ID
      */
-    createdBy?: string;
+    workorderId: string;
     /**
-     * Creation timestamp
+     * Service line item ID
      */
-    createdAt?: string;
+    workorderServiceId?: string;
 }
 
 function isOptionalWorkorderLaborEntryResponsePropertyOfType(
@@ -101,8 +101,8 @@ export function instanceOfWorkorderLaborEntryResponse(value: object): value is W
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createWorkorderLaborEntryResponsePropertyNames('id', 'workorderId', 'active', );
-    const optionalStringProperties = createWorkorderLaborEntryResponseOptionalProperties({ name: 'id', nullable: false }, { name: 'workorderId', nullable: false }, { name: 'workorderServiceId', nullable: false }, { name: 'technicianId', nullable: false }, { name: 'startTime', nullable: false }, { name: 'endTime', nullable: false }, { name: 'notes', nullable: false }, { name: 'adjustmentReason', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'createdAt', nullable: false }, );
+    const requiredProperties = createWorkorderLaborEntryResponsePropertyNames('active', 'id', 'workorderId', );
+    const optionalStringProperties = createWorkorderLaborEntryResponseOptionalProperties({ name: 'adjustmentReason', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'endTime', nullable: false }, { name: 'id', nullable: false }, { name: 'notes', nullable: false }, { name: 'startTime', nullable: false }, { name: 'technicianId', nullable: false }, { name: 'workorderId', nullable: false }, { name: 'workorderServiceId', nullable: false }, );
     const optionalNumberProperties = createWorkorderLaborEntryResponseOptionalProperties({ name: 'hoursWorked', nullable: false }, );
     const optionalBooleanProperties = createWorkorderLaborEntryResponseOptionalProperties({ name: 'active', nullable: false }, );
 

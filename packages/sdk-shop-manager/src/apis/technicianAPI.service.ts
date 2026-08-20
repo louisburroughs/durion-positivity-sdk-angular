@@ -36,8 +36,8 @@ export class TechnicianAPIService extends BaseService {
     }
 
     /**
-     * Get technician person details
-     * Resolves the person identity (names, contact details) of a technician working at the given shop location from the local people-contact replica. Identity fields can trail the people-contact authority by the event-propagation delay.
+     * Get Person Details for a Technician
+     * Resolves the person identity (names, emails, phone numbers) of a technician working at a shop location from the local people-contact replica. Use this tool when displaying or contacting an assigned technician; use viewSchedule instead for the technician\&#39;s scheduled work. Preconditions: a technician record must link the personId to the locationId; replica identity fields can trail the people-contact authority by the event-propagation delay. Required inputs: locationId and personId (UUIDs) as path parameters; there is no request body. Emits a SHOPMGR_TECHNICIAN_PERSON_GET audit event; no state changes occur, and when the replica row has not yet arrived the response carries only the person id with name and contact fields null. Returns 404 when no technician links the person to the location. 
      * @endpoint get /v1/shop-manager/{locationId}/technicians/{personId}/person
      * @param locationId Shop location ID
      * @param personId People-contact person ID

@@ -14,6 +14,14 @@
  */
 export interface ReallocateResponse { 
     /**
+     * Available-to-promise quantity for the stock item after reallocation
+     */
+    atpAfterReallocation: number;
+    /**
+     * Number of audit records created during the reallocation
+     */
+    auditRecordsCreated: number;
+    /**
      * Identifier of the stock item that was reallocated
      */
     stockItemId: string;
@@ -21,14 +29,6 @@ export interface ReallocateResponse {
      * Total quantity reallocated across all affected reservations
      */
     totalReallocated: number;
-    /**
-     * Number of audit records created during the reallocation
-     */
-    auditRecordsCreated: number;
-    /**
-     * Available-to-promise quantity for the stock item after reallocation
-     */
-    atpAfterReallocation: number;
 }
 
 function isOptionalReallocateResponsePropertyOfType(
@@ -69,9 +69,9 @@ export function instanceOfReallocateResponse(value: object): value is Reallocate
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createReallocateResponsePropertyNames('stockItemId', 'totalReallocated', 'auditRecordsCreated', 'atpAfterReallocation', );
+    const requiredProperties = createReallocateResponsePropertyNames('atpAfterReallocation', 'auditRecordsCreated', 'stockItemId', 'totalReallocated', );
     const optionalStringProperties = createReallocateResponseOptionalProperties({ name: 'stockItemId', nullable: false }, );
-    const optionalNumberProperties = createReallocateResponseOptionalProperties({ name: 'totalReallocated', nullable: false }, { name: 'auditRecordsCreated', nullable: false }, { name: 'atpAfterReallocation', nullable: false }, );
+    const optionalNumberProperties = createReallocateResponseOptionalProperties({ name: 'atpAfterReallocation', nullable: false }, { name: 'auditRecordsCreated', nullable: false }, { name: 'totalReallocated', nullable: false }, );
     const optionalBooleanProperties = createReallocateResponseOptionalProperties();
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

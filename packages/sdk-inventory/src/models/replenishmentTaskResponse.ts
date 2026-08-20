@@ -14,9 +14,25 @@
  */
 export interface ReplenishmentTaskResponse { 
     /**
-     * Unique identifier of the replenishment task
+     * Identifier or name of the user the replenishment task is assigned to
      */
-    taskId: string;
+    assignedTo?: string;
+    /**
+     * Timestamp at which the replenishment task was created
+     */
+    createdAt: string;
+    /**
+     * Earliest date at which the projected available quantity goes below zero (stock-out deadline used for prioritization); absent when no stock-out is projected within the lead-time horizon
+     */
+    deadlineDate?: string;
+    /**
+     * Explanation of why this replenishment was decided
+     */
+    decisionReason?: string;
+    /**
+     * Identifier of the location stock is moved to
+     */
+    destinationLocationId: string;
     /**
      * SKU of the item to be replenished
      */
@@ -30,37 +46,21 @@ export interface ReplenishmentTaskResponse {
      */
     sourceLocationId?: string;
     /**
-     * Identifier of the location stock is moved to
+     * Explanation of why the chosen source location was selected to supply the stock
      */
-    destinationLocationId: string;
+    sourcingReason?: string;
     /**
      * Current status of the replenishment task
      */
     status: string;
     /**
+     * Unique identifier of the replenishment task
+     */
+    taskId: string;
+    /**
      * Mechanism that triggered the task, such as a manual request or automatic threshold breach
      */
     triggerType?: string;
-    /**
-     * Explanation of why this replenishment was decided
-     */
-    decisionReason?: string;
-    /**
-     * Explanation of why the chosen source location was selected to supply the stock
-     */
-    sourcingReason?: string;
-    /**
-     * Identifier or name of the user the replenishment task is assigned to
-     */
-    assignedTo?: string;
-    /**
-     * Earliest date at which the projected available quantity goes below zero (stock-out deadline used for prioritization); absent when no stock-out is projected within the lead-time horizon
-     */
-    deadlineDate?: string;
-    /**
-     * Timestamp at which the replenishment task was created
-     */
-    createdAt: string;
 }
 
 function isOptionalReplenishmentTaskResponsePropertyOfType(
@@ -101,8 +101,8 @@ export function instanceOfReplenishmentTaskResponse(value: object): value is Rep
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createReplenishmentTaskResponsePropertyNames('taskId', 'itemSKU', 'quantity', 'destinationLocationId', 'status', 'createdAt', );
-    const optionalStringProperties = createReplenishmentTaskResponseOptionalProperties({ name: 'taskId', nullable: false }, { name: 'itemSKU', nullable: false }, { name: 'sourceLocationId', nullable: false }, { name: 'destinationLocationId', nullable: false }, { name: 'status', nullable: false }, { name: 'triggerType', nullable: false }, { name: 'decisionReason', nullable: false }, { name: 'sourcingReason', nullable: false }, { name: 'assignedTo', nullable: false }, { name: 'deadlineDate', nullable: false }, { name: 'createdAt', nullable: false }, );
+    const requiredProperties = createReplenishmentTaskResponsePropertyNames('createdAt', 'destinationLocationId', 'itemSKU', 'quantity', 'status', 'taskId', );
+    const optionalStringProperties = createReplenishmentTaskResponseOptionalProperties({ name: 'assignedTo', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'deadlineDate', nullable: false }, { name: 'decisionReason', nullable: false }, { name: 'destinationLocationId', nullable: false }, { name: 'itemSKU', nullable: false }, { name: 'sourceLocationId', nullable: false }, { name: 'sourcingReason', nullable: false }, { name: 'status', nullable: false }, { name: 'taskId', nullable: false }, { name: 'triggerType', nullable: false }, );
     const optionalNumberProperties = createReplenishmentTaskResponseOptionalProperties({ name: 'quantity', nullable: false }, );
     const optionalBooleanProperties = createReplenishmentTaskResponseOptionalProperties();
 

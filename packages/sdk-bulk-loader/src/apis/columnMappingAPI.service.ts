@@ -20,6 +20,8 @@ import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 import { ColumnMappingApproveRequest } from '../src/models/columnMappingApproveRequest';
 // @ts-ignore
 import { ColumnMappingResponse } from '../src/models/columnMappingResponse';
+// @ts-ignore
+import { ProblemDetail } from '../src/models/problemDetail';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
@@ -38,24 +40,24 @@ export class ColumnMappingAPIService extends BaseService {
     }
 
     /**
-     * Approve and finalize column mappings for a job
-     * Approves and finalizes the proposed column mappings for the specified bulk load job. The operator can only approve mappings for their own jobs. Once approved, the mappings are locked and used for processing the bulk load job.
+     * Approve and Finalize Column Mappings
+     * Replaces all stored column mappings for a bulk load job with the submitted set, marking every mapping operator-approved with confidence 1.0. Use this tool after reviewing the suggestions from getColumnMappings; do not use getColumnMappings, which only reads mappings, and note that the submitted list fully replaces prior mappings rather than merging with them. Preconditions: the job must exist and belong to the authenticated operator; the job state is not checked, but approved mappings only affect processing started afterwards. Required inputs: mappings, a non-empty list where each entry names a sourceColumn from the uploaded file and the targetField it maps to; mappingId is accepted but ignored because the set is replaced wholesale. Emits a BULK_LOADER_MAPPING_APPROVE event and deletes previously stored mappings, including auto-suggested ones, before saving the new set. Returns 404 when the job does not exist, and 403 when the job belongs to another operator. 
      * @endpoint put /v1/bulk-jobs/{jobId}/mappings
      * @param jobId 
-     * @param columnMappingApproveRequest 
+     * @param columnMappingApproveRequest Full replacement set of column mappings, one entry per source column to import.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public approveMappings(jobId: string, columnMappingApproveRequest: ColumnMappingApproveRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<ColumnMappingResponse>>;
-    public approveMappings(jobId: string, columnMappingApproveRequest: ColumnMappingApproveRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<ColumnMappingResponse>>>;
-    public approveMappings(jobId: string, columnMappingApproveRequest: ColumnMappingApproveRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<ColumnMappingResponse>>>;
-    public approveMappings(jobId: string, columnMappingApproveRequest: ColumnMappingApproveRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public approveColumnMappings(jobId: string, columnMappingApproveRequest: ColumnMappingApproveRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<Array<ColumnMappingResponse>>;
+    public approveColumnMappings(jobId: string, columnMappingApproveRequest: ColumnMappingApproveRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<ColumnMappingResponse>>>;
+    public approveColumnMappings(jobId: string, columnMappingApproveRequest: ColumnMappingApproveRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<ColumnMappingResponse>>>;
+    public approveColumnMappings(jobId: string, columnMappingApproveRequest: ColumnMappingApproveRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (jobId === null || jobId === undefined) {
-            throw new Error('Required parameter jobId was null or undefined when calling approveMappings.');
+            throw new Error('Required parameter jobId was null or undefined when calling approveColumnMappings.');
         }
         if (columnMappingApproveRequest === null || columnMappingApproveRequest === undefined) {
-            throw new Error('Required parameter columnMappingApproveRequest was null or undefined when calling approveMappings.');
+            throw new Error('Required parameter columnMappingApproveRequest was null or undefined when calling approveColumnMappings.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -64,7 +66,8 @@ export class ColumnMappingAPIService extends BaseService {
         localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
 
         const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
-            'application/json'
+            'application/json',
+            'application/problem+json'
         ]);
         if (localVarHttpHeaderAcceptSelected !== undefined) {
             localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
@@ -112,20 +115,20 @@ export class ColumnMappingAPIService extends BaseService {
     }
 
     /**
-     * Get proposed column mappings for a job
-     * Retrieves the proposed column mappings for the specified bulk load job. The operator can only access mappings for their own jobs. This endpoint is typically used to review the detected column mappings before approving them for processing.
+     * Get Proposed Column Mappings for Job
+     * Returns the column mappings currently stored for a bulk load job, covering both auto-suggested mappings from content detection and operator-approved overrides. Use this tool to review detected source-column to target-field mappings, their confidence and origin; use approveColumnMappings instead to finalize the set. Preconditions: the job must exist and belong to the authenticated operator; mappings are typically present only after a file upload has triggered content detection. Required inputs: jobId (UUID) as a path parameter; there is no request body. No events are emitted and no state changes; this is a read-only projection. Returns 404 when the job does not exist, and 403 when the job belongs to another operator. 
      * @endpoint get /v1/bulk-jobs/{jobId}/mappings
      * @param jobId 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public getMappings(jobId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<ColumnMappingResponse>>;
-    public getMappings(jobId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<ColumnMappingResponse>>>;
-    public getMappings(jobId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<ColumnMappingResponse>>>;
-    public getMappings(jobId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getColumnMappings(jobId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<Array<ColumnMappingResponse>>;
+    public getColumnMappings(jobId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<ColumnMappingResponse>>>;
+    public getColumnMappings(jobId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<ColumnMappingResponse>>>;
+    public getColumnMappings(jobId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (jobId === null || jobId === undefined) {
-            throw new Error('Required parameter jobId was null or undefined when calling getMappings.');
+            throw new Error('Required parameter jobId was null or undefined when calling getColumnMappings.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -134,7 +137,8 @@ export class ColumnMappingAPIService extends BaseService {
         localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
 
         const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
-            'application/json'
+            'application/json',
+            'application/problem+json'
         ]);
         if (localVarHttpHeaderAcceptSelected !== undefined) {
             localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);

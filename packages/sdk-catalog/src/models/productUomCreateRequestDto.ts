@@ -14,14 +14,6 @@
  */
 export interface ProductUomCreateRequestDto { 
     /**
-     * Unit-of-measure code
-     */
-    uomCode: string;
-    /**
-     * Role of this UoM for the product
-     */
-    uomType: ProductUomCreateRequestDtoUomTypeEnum;
-    /**
      * Multiplier converting one unit of this UoM into the product\'s base UoM
      */
     factorToBase: number;
@@ -29,6 +21,14 @@ export interface ProductUomCreateRequestDto {
      * Decimal precision scale for quantities expressed in this UoM (0-6)
      */
     precisionScale: number;
+    /**
+     * Unit-of-measure code
+     */
+    uomCode: string;
+    /**
+     * Role of this UoM for the product
+     */
+    uomType: ProductUomCreateRequestDtoUomTypeEnum;
 }
 export enum ProductUomCreateRequestDtoUomTypeEnum {
     Base = 'BASE',
@@ -77,7 +77,7 @@ export function instanceOfProductUomCreateRequestDto(value: object): value is Pr
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createProductUomCreateRequestDtoPropertyNames('uomCode', 'uomType', 'factorToBase', 'precisionScale', );
+    const requiredProperties = createProductUomCreateRequestDtoPropertyNames('factorToBase', 'precisionScale', 'uomCode', 'uomType', );
     const optionalStringProperties = createProductUomCreateRequestDtoOptionalProperties({ name: 'uomCode', nullable: false }, { name: 'uomType', nullable: false }, );
     const optionalNumberProperties = createProductUomCreateRequestDtoOptionalProperties({ name: 'factorToBase', nullable: false }, { name: 'precisionScale', nullable: false }, );
     const optionalBooleanProperties = createProductUomCreateRequestDtoOptionalProperties();

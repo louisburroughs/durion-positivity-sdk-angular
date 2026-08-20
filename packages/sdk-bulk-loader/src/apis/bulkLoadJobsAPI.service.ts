@@ -42,20 +42,20 @@ export class BulkLoadJobsAPIService extends BaseService {
     }
 
     /**
-     * Cancel a running bulk load job
-     * Cancels a bulk load job that is currently in progress. The operator can only cancel their own jobs.
+     * Cancel a Running Bulk Load Job
+     * Cancels an in-flight bulk load job by moving it to the terminal CANCELLED state. Use this tool to abandon a job that is no longer wanted; do not use retryBulkLoadJob, which re-queues a FAILED job rather than stopping one. Preconditions: the job must belong to the authenticated operator and must not already be in a terminal state (COMPLETED, CANCELLED or FAILED). Required inputs: jobId (UUID) as a path parameter; there is no request body. Emits a BULK_LOADER_JOB_CANCEL event and sets the job status to CANCELLED; rows already imported are not rolled back. Returns 404 when the job does not exist, 403 when it belongs to another operator, and 409 when the job is already COMPLETED, CANCELLED or FAILED. 
      * @endpoint post /v1/bulk-jobs/{jobId}/cancel
      * @param jobId 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public cancelJob(jobId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<BulkLoadJobResponse>;
-    public cancelJob(jobId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<BulkLoadJobResponse>>;
-    public cancelJob(jobId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<BulkLoadJobResponse>>;
-    public cancelJob(jobId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public cancelBulkLoadJob(jobId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<BulkLoadJobResponse>;
+    public cancelBulkLoadJob(jobId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<BulkLoadJobResponse>>;
+    public cancelBulkLoadJob(jobId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<BulkLoadJobResponse>>;
+    public cancelBulkLoadJob(jobId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (jobId === null || jobId === undefined) {
-            throw new Error('Required parameter jobId was null or undefined when calling cancelJob.');
+            throw new Error('Required parameter jobId was null or undefined when calling cancelBulkLoadJob.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -102,20 +102,20 @@ export class BulkLoadJobsAPIService extends BaseService {
     }
 
     /**
-     * Create a new bulk load job
-     * Creates a new bulk load job for the authenticated operator. Each operator can only have one active job at a time. The job starts in CREATED state and must be populated with a file upload before processing can begin.
+     * Create a New Bulk Load Job
+     * Creates a bulk load import job owned by the authenticated operator, starting in CREATED state with the target domain and expected file name recorded. Use this tool when starting a new bulk import from a file; do not use uploadJobFile, which attaches the file to a job that already exists, and do not use retryBulkLoadJob, which re-queues a FAILED job. Preconditions: the operator must have no other job in an active state (CREATED, UPLOADING, DETECTING, MAPPING_REVIEW, DEDUP or PROCESSING); only one active job per operator is allowed. Required inputs: fileName (name of the source file that will be uploaded later) and domainType (one of CATALOG_PRODUCT, INVENTORY_STOCK_COUNT, LOCATION, CUSTOMER, PERSON, BASE_PRICE, VEHICLE or VEHICLE_FITMENT); locationId (UUID) is optional at creation but must be set before processing can start. Emits a BULK_LOADER_JOB_CREATE event; no file content is stored by this call. Returns 201 with the new job, and 409 when the operator already has an active bulk load job in progress. 
      * @endpoint post /v1/bulk-jobs
-     * @param bulkLoadJobCreateRequest 
+     * @param bulkLoadJobCreateRequest Bulk load job to create, naming the source file and the target import domain.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public createJob(bulkLoadJobCreateRequest: BulkLoadJobCreateRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<BulkLoadJobResponse>;
-    public createJob(bulkLoadJobCreateRequest: BulkLoadJobCreateRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<BulkLoadJobResponse>>;
-    public createJob(bulkLoadJobCreateRequest: BulkLoadJobCreateRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<BulkLoadJobResponse>>;
-    public createJob(bulkLoadJobCreateRequest: BulkLoadJobCreateRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public createBulkLoadJob(bulkLoadJobCreateRequest: BulkLoadJobCreateRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<BulkLoadJobResponse>;
+    public createBulkLoadJob(bulkLoadJobCreateRequest: BulkLoadJobCreateRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<BulkLoadJobResponse>>;
+    public createBulkLoadJob(bulkLoadJobCreateRequest: BulkLoadJobCreateRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<BulkLoadJobResponse>>;
+    public createBulkLoadJob(bulkLoadJobCreateRequest: BulkLoadJobCreateRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (bulkLoadJobCreateRequest === null || bulkLoadJobCreateRequest === undefined) {
-            throw new Error('Required parameter bulkLoadJobCreateRequest was null or undefined when calling createJob.');
+            throw new Error('Required parameter bulkLoadJobCreateRequest was null or undefined when calling createBulkLoadJob.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -172,20 +172,20 @@ export class BulkLoadJobsAPIService extends BaseService {
     }
 
     /**
-     * Get a bulk load job by ID
-     * Retrieves the details of a bulk load job for the authenticated operator. The operator can only access their own jobs.
+     * Get a Bulk Load Job by ID
+     * Returns the current state of a single bulk load job, including status, row counts and success and failure totals. Use this tool to poll job progress after startJobProcessing, or whenever the job id is already known; use listBulkLoadJobs instead when the id is unknown. Preconditions: the job must exist and belong to the authenticated operator; jobs owned by other operators are reported as not found rather than forbidden. Required inputs: jobId (UUID) as a path parameter; there is no request body. No events are emitted and no state changes; this is a read-only projection. Returns 404 when no job exists with the supplied id for the authenticated operator. 
      * @endpoint get /v1/bulk-jobs/{jobId}
      * @param jobId 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public getJob(jobId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<BulkLoadJobResponse>;
-    public getJob(jobId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<BulkLoadJobResponse>>;
-    public getJob(jobId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<BulkLoadJobResponse>>;
-    public getJob(jobId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getBulkLoadJob(jobId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<BulkLoadJobResponse>;
+    public getBulkLoadJob(jobId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<BulkLoadJobResponse>>;
+    public getBulkLoadJob(jobId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<BulkLoadJobResponse>>;
+    public getBulkLoadJob(jobId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (jobId === null || jobId === undefined) {
-            throw new Error('Required parameter jobId was null or undefined when calling getJob.');
+            throw new Error('Required parameter jobId was null or undefined when calling getBulkLoadJob.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -232,20 +232,20 @@ export class BulkLoadJobsAPIService extends BaseService {
     }
 
     /**
-     * List bulk load jobs for the authenticated operator
-     * Retrieves a paginated list of bulk load jobs for the authenticated operator. The operator can only access their own jobs.
+     * List Bulk Load Jobs for Operator
+     * Returns a paginated list of the authenticated operator\&#39;s bulk load jobs with their statuses and progress counters. Use this tool to find a job id or review import history; use getBulkLoadJob instead when a specific job id is already known. Preconditions: none beyond authentication; the listing is always scoped to the caller\&#39;s own jobs and other operators\&#39; jobs are never included. Required inputs: standard page, size and sort query parameters, all optional with Spring defaults (page 0, size 20). No events are emitted and no state changes; this is a read-only projection. Returns 200 with an empty page when the operator has no jobs; there are no operation-specific error responses. 
      * @endpoint get /v1/bulk-jobs
      * @param pageable 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public listJobs(pageable: Pageable, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PageBulkLoadJobResponse>;
-    public listJobs(pageable: Pageable, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PageBulkLoadJobResponse>>;
-    public listJobs(pageable: Pageable, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PageBulkLoadJobResponse>>;
-    public listJobs(pageable: Pageable, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public listBulkLoadJobs(pageable: Pageable, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PageBulkLoadJobResponse>;
+    public listBulkLoadJobs(pageable: Pageable, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PageBulkLoadJobResponse>>;
+    public listBulkLoadJobs(pageable: Pageable, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PageBulkLoadJobResponse>>;
+    public listBulkLoadJobs(pageable: Pageable, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (pageable === null || pageable === undefined) {
-            throw new Error('Required parameter pageable was null or undefined when calling listJobs.');
+            throw new Error('Required parameter pageable was null or undefined when calling listBulkLoadJobs.');
         }
 
         let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
@@ -304,20 +304,20 @@ export class BulkLoadJobsAPIService extends BaseService {
     }
 
     /**
-     * Retry a failed bulk load job
-     * Retries a bulk load job that has reached the FAILED state, resetting it to CREATED and re-queuing it for processing. The operator can only retry their own jobs. Returns 409 if the job is not in FAILED state.
+     * Retry a Failed Bulk Load Job
+     * Resets a FAILED bulk load job back to CREATED and clears its progress counters so it can be processed again. Use this tool after fixing the cause of a failure, typically via submitCorrections; do not use cancelBulkLoadJob, which terminates a job instead of re-queuing it. Preconditions: the job must belong to the authenticated operator, must be in FAILED state, and the operator must have no other active job. Required inputs: jobId (UUID) as a path parameter; there is no request body. Emits a BULK_LOADER_JOB_RETRY event and resets startedAt, completedAt, totalRows and all row counters; processing does not start until startJobProcessing is called again. Returns 404 when the job does not exist, 403 when it belongs to another operator, and 409 when the job is not in FAILED state or the operator already has an active job. 
      * @endpoint post /v1/bulk-jobs/{jobId}/retry
      * @param jobId ID of the failed bulk load job to retry
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public retryJob(jobId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<BulkLoadJobResponse>;
-    public retryJob(jobId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<BulkLoadJobResponse>>;
-    public retryJob(jobId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<BulkLoadJobResponse>>;
-    public retryJob(jobId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public retryBulkLoadJob(jobId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<BulkLoadJobResponse>;
+    public retryBulkLoadJob(jobId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<BulkLoadJobResponse>>;
+    public retryBulkLoadJob(jobId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<BulkLoadJobResponse>>;
+    public retryBulkLoadJob(jobId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (jobId === null || jobId === undefined) {
-            throw new Error('Required parameter jobId was null or undefined when calling retryJob.');
+            throw new Error('Required parameter jobId was null or undefined when calling retryBulkLoadJob.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -348,7 +348,7 @@ export class BulkLoadJobsAPIService extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/bulk-jobs/${this.configuration.encodeParam({name: "jobId", value: jobId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/retry`;
+        let localVarPath = `/v1/bulk-jobs/${this.configuration.encodeParam({name: "jobId", value: jobId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/retry`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<BulkLoadJobResponse>('post', `${basePath}${localVarPath}`,
             {

@@ -42,8 +42,8 @@ export class SettlementReconciliationService extends BaseService {
     }
 
     /**
-     * List settlement lines
-     * Lists the lines of one processor settlement (payout), optionally filtered to only the UNMATCHED lines awaiting review. Use this tool to triage a settlement before manually matching or writing off its unmatched lines. Matched lines are already posted; unmatched lines park their gross in the settlement suspense account until resolved (decision D-13). No preconditions and no side effects; an unknown settlementId returns an empty list.
+     * List Settlement Lines
+     * Lists the lines of one processor settlement (payout), optionally filtered to only the UNMATCHED lines awaiting review; matched lines are already posted, while unmatched lines park their gross in the settlement suspense account until resolved. Use this tool to triage a settlement before matchSettlementLine or writeOffSettlementLine; do not use those mutation tools just to inspect state. Preconditions: none; an unknown settlementId returns an empty list rather than an error. Required inputs: settlementId (the provider payout id string) as a path parameter; unmatchedOnly defaults to false. Emits an ACCOUNTING_SETTLEMENT_LINES_LIST audit event; no state changes. Returns 200 with an empty list when the settlement is unknown or fully filtered out. 
      * @endpoint get /v1/accounting/settlements/{settlementId}/lines
      * @param settlementId Provider settlement (payout) id
      * @param unmatchedOnly When true, return only UNMATCHED lines
@@ -115,11 +115,11 @@ export class SettlementReconciliationService extends BaseService {
     }
 
     /**
-     * Manually match a settlement line
-     * Manually matches an UNMATCHED settlement line to an AR receivable payment, posting a reclass entry (Dr Settlement Suspense / Cr Undeposited Funds) that clears the line\&#39;s gross out of suspense. Use this tool when the automatic gross match could not identify the payment. AP (vendor) matching is not supported in v1. Preconditions: the line must exist and be UNMATCHED, its parent settlement must already be POSTED, and the receivable payment must exist. Returns 404 if the line or payment is not found (SETTLEMENT_LINE_NOT_FOUND / RECEIVABLE_PAYMENT_NOT_FOUND), 409 if the line is no longer UNMATCHED (SETTLEMENT_LINE_NOT_UNMATCHED) or the settlement has not yet posted (SETTLEMENT_NOT_POSTED), and 422 if the reclass entry is dated into a locked accounting period (PERIOD_CLOSED / PERIOD_HARD_LOCKED). Emits ACCOUNTING_SETTLEMENT_LINE_MATCH.
+     * Manually Match Settlement Line
+     * Manually matches an UNMATCHED settlement line to an AR receivable payment, posting a reclass entry (debit Settlement Suspense, credit Undeposited Funds) that clears the line\&#39;s gross out of suspense. Use this tool when the automatic gross match could not identify the payment; do not use writeOffSettlementLine, which is only for small unidentifiable residuals, and note that AP vendor matching is not supported in v1. Preconditions: the line must exist and be UNMATCHED, its parent settlement must already be POSTED, and the receivable payment must exist. Required inputs: lineId (UUID) as a path parameter and receivablePaymentId (UUID) in the body. Emits an ACCOUNTING_SETTLEMENT_LINE_MATCH event and posts the reclass journal entry. Returns 404 SETTLEMENT_LINE_NOT_FOUND or RECEIVABLE_PAYMENT_NOT_FOUND when either record is missing, 409 SETTLEMENT_LINE_NOT_UNMATCHED or SETTLEMENT_NOT_POSTED for state conflicts, and 422 PERIOD_CLOSED or PERIOD_HARD_LOCKED when the reclass entry is dated into a locked period. 
      * @endpoint post /v1/accounting/settlements/lines/{lineId}/match
      * @param lineId Settlement line id
-     * @param settlementManualMatchRequest 
+     * @param settlementManualMatchRequest Receivable payment to match the unmatched settlement line against.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -189,11 +189,11 @@ export class SettlementReconciliationService extends BaseService {
     }
 
     /**
-     * Write off a small unmatched settlement line
-     * Writes off an UNMATCHED settlement line whose gross is at or below the configured reconciliation write-off threshold (default $25.00, decision D-14), posting a reversible adjustment entry (Dr Settlement Suspense / Cr Settlement Adjustment) — never a silent status flip. Use this tool only for genuinely unidentifiable small residuals; above the threshold there is no self-service write-off — manually match or escalate. Preconditions: the line must exist and be UNMATCHED, its gross must not exceed the threshold (compared on absolute value), and a non-blank reason (max 500 chars) is required and audited. Respects accounting period locks (Story B2). Emits ACCOUNTING_SETTLEMENT_LINE_WRITE_OFF. Returns 422 when the absolute gross exceeds the threshold (WRITE_OFF_THRESHOLD_EXCEEDED) or the adjustment entry is dated into a locked accounting period (PERIOD_CLOSED / PERIOD_HARD_LOCKED), and 409 when the line is no longer UNMATCHED (SETTLEMENT_LINE_NOT_UNMATCHED) or the settlement has not yet posted (SETTLEMENT_NOT_POSTED).
+     * Write Off Small Settlement Line
+     * Writes off an UNMATCHED settlement line whose gross is at or below the configured write-off threshold (default 25.00), posting a reversible adjustment entry (debit Settlement Suspense, credit Settlement Adjustment) rather than a silent status flip. Use this tool only for genuinely unidentifiable small residuals; do not use it above the threshold, where matchSettlementLine or escalation is the only path. Preconditions: the line must exist and be UNMATCHED, its parent settlement must be POSTED, and the line\&#39;s absolute gross must not exceed the threshold. Required inputs: lineId (UUID) as a path parameter and a non-blank audited reason (max 500 chars). Emits an ACCOUNTING_SETTLEMENT_LINE_WRITE_OFF event and posts the adjustment entry through the accounting-period gate. Returns 422 WRITE_OFF_THRESHOLD_EXCEEDED when the absolute gross exceeds the threshold or PERIOD_CLOSED / PERIOD_HARD_LOCKED for locked periods, 409 SETTLEMENT_LINE_NOT_UNMATCHED or SETTLEMENT_NOT_POSTED for state conflicts, and 404 SETTLEMENT_LINE_NOT_FOUND when the line is missing. 
      * @endpoint post /v1/accounting/settlements/lines/{lineId}/write-off
      * @param lineId Settlement line id
-     * @param settlementWriteOffRequest 
+     * @param settlementWriteOffRequest Audited reason for writing off the small unmatched residual.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options

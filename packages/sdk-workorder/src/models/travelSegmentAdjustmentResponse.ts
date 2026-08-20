@@ -14,45 +14,45 @@
  */
 export interface TravelSegmentAdjustmentResponse { 
     /**
-     * Unique identifier of the adjustment
+     * Identifier of the user who made the adjustment
      */
-    adjustmentId: string;
-    /**
-     * Identifier of the travel segment that was adjusted
-     */
-    travelSegmentId: string;
-    /**
-     * Adjusted start timestamp of the travel segment
-     */
-    adjustedStartAt?: string;
+    adjustedByUserId?: string;
     /**
      * Adjusted end timestamp of the travel segment
      */
     adjustedEndAt?: string;
     /**
+     * Adjusted start timestamp of the travel segment
+     */
+    adjustedStartAt?: string;
+    /**
+     * Unique identifier of the adjustment
+     */
+    adjustmentId: string;
+    /**
      * Reason recorded for the adjustment
      */
     adjustmentReason?: string;
-    /**
-     * Identifier of the user who made the adjustment
-     */
-    adjustedByUserId?: string;
     /**
      * Approval status of the adjustment
      */
     approvalStatus?: string;
     /**
-     * Identifier of the user who approved the adjustment
-     */
-    approvedByUserId?: string;
-    /**
      * Timestamp when the adjustment was approved
      */
     approvedAt?: string;
     /**
+     * Identifier of the user who approved the adjustment
+     */
+    approvedByUserId?: string;
+    /**
      * Timestamp when the adjustment was created
      */
     createdAt: string;
+    /**
+     * Identifier of the travel segment that was adjusted
+     */
+    travelSegmentId: string;
 }
 
 function isOptionalTravelSegmentAdjustmentResponsePropertyOfType(
@@ -93,8 +93,8 @@ export function instanceOfTravelSegmentAdjustmentResponse(value: object): value 
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createTravelSegmentAdjustmentResponsePropertyNames('adjustmentId', 'travelSegmentId', 'createdAt', );
-    const optionalStringProperties = createTravelSegmentAdjustmentResponseOptionalProperties({ name: 'adjustmentId', nullable: false }, { name: 'travelSegmentId', nullable: false }, { name: 'adjustedStartAt', nullable: false }, { name: 'adjustedEndAt', nullable: false }, { name: 'adjustmentReason', nullable: false }, { name: 'adjustedByUserId', nullable: false }, { name: 'approvalStatus', nullable: false }, { name: 'approvedByUserId', nullable: false }, { name: 'approvedAt', nullable: false }, { name: 'createdAt', nullable: false }, );
+    const requiredProperties = createTravelSegmentAdjustmentResponsePropertyNames('adjustmentId', 'createdAt', 'travelSegmentId', );
+    const optionalStringProperties = createTravelSegmentAdjustmentResponseOptionalProperties({ name: 'adjustedByUserId', nullable: false }, { name: 'adjustedEndAt', nullable: false }, { name: 'adjustedStartAt', nullable: false }, { name: 'adjustmentId', nullable: false }, { name: 'adjustmentReason', nullable: false }, { name: 'approvalStatus', nullable: false }, { name: 'approvedAt', nullable: false }, { name: 'approvedByUserId', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'travelSegmentId', nullable: false }, );
     const optionalNumberProperties = createTravelSegmentAdjustmentResponseOptionalProperties();
     const optionalBooleanProperties = createTravelSegmentAdjustmentResponseOptionalProperties();
 

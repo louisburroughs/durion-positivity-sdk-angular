@@ -14,6 +14,14 @@
  */
 export interface EmployeeAddressDto { 
     /**
+     * City
+     */
+    city?: string;
+    /**
+     * Country
+     */
+    country?: string;
+    /**
      * First address line
      */
     line1?: string;
@@ -22,21 +30,13 @@ export interface EmployeeAddressDto {
      */
     line2?: string;
     /**
-     * City
-     */
-    city?: string;
-    /**
-     * State, province, or region
-     */
-    region?: string;
-    /**
      * Postal or ZIP code
      */
     postalCode?: string;
     /**
-     * Country
+     * State, province, or region
      */
-    country?: string;
+    region?: string;
 }
 
 function isOptionalEmployeeAddressDtoPropertyOfType(
@@ -78,7 +78,7 @@ export function instanceOfEmployeeAddressDto(value: object): value is EmployeeAd
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createEmployeeAddressDtoPropertyNames();
-    const optionalStringProperties = createEmployeeAddressDtoOptionalProperties({ name: 'line1', nullable: false }, { name: 'line2', nullable: false }, { name: 'city', nullable: false }, { name: 'region', nullable: false }, { name: 'postalCode', nullable: false }, { name: 'country', nullable: false }, );
+    const optionalStringProperties = createEmployeeAddressDtoOptionalProperties({ name: 'city', nullable: false }, { name: 'country', nullable: false }, { name: 'line1', nullable: false }, { name: 'line2', nullable: false }, { name: 'postalCode', nullable: false }, { name: 'region', nullable: false }, );
     const optionalNumberProperties = createEmployeeAddressDtoOptionalProperties();
     const optionalBooleanProperties = createEmployeeAddressDtoOptionalProperties();
 

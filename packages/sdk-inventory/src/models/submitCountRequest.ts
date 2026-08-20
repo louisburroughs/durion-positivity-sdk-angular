@@ -14,18 +14,40 @@
  */
 export interface SubmitCountRequest { 
     /**
-     * Identifier of the cycle count task being counted
+     * Quantity physically measured, in unitOfMeasure (or the product\'s base UoM when unitOfMeasure is omitted). Converted to base UoM before variance is computed.
      */
-    taskId: string;
+    actualQuantity: number;
     /**
      * Identifier of the auditor submitting the count
      */
     auditorId: string;
     /**
-     * Quantity physically counted by the auditor
+     * How the quantity was obtained. Defaults to MANUAL_COUNT.
      */
-    actualQuantity: number;
+    measurementMethod?: SubmitCountRequestMeasurementMethodEnum;
+    /**
+     * Identifier of the cycle count task being counted
+     */
+    taskId: string;
+    /**
+     * Unit the quantity was physically measured in. Omit for the product\'s base UoM.
+     */
+    unitOfMeasure?: string;
+    /**
+     * Reason for the variance, if already known at submission time. Optional: a count and its eventual adjustment are separate transactions, and the adjustment\'s own reason code is what ultimately gates posting an out-of-tolerance variance.
+     */
+    varianceReason?: string;
 }
+export enum SubmitCountRequestMeasurementMethodEnum {
+    ManualCount = 'MANUAL_COUNT',
+    Dip = 'DIP',
+    Gauge = 'GAUGE',
+    Scale = 'SCALE',
+    Meter = 'METER',
+    Sensor = 'SENSOR'
+};
+
+
 
 function isOptionalSubmitCountRequestPropertyOfType(
     value: Record<string, unknown>,
@@ -65,8 +87,8 @@ export function instanceOfSubmitCountRequest(value: object): value is SubmitCoun
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createSubmitCountRequestPropertyNames('taskId', 'auditorId', 'actualQuantity', );
-    const optionalStringProperties = createSubmitCountRequestOptionalProperties({ name: 'taskId', nullable: false }, { name: 'auditorId', nullable: false }, );
+    const requiredProperties = createSubmitCountRequestPropertyNames('actualQuantity', 'auditorId', 'taskId', );
+    const optionalStringProperties = createSubmitCountRequestOptionalProperties({ name: 'auditorId', nullable: false }, { name: 'measurementMethod', nullable: false }, { name: 'taskId', nullable: false }, { name: 'unitOfMeasure', nullable: false }, { name: 'varianceReason', nullable: false }, );
     const optionalNumberProperties = createSubmitCountRequestOptionalProperties({ name: 'actualQuantity', nullable: false }, );
     const optionalBooleanProperties = createSubmitCountRequestOptionalProperties();
 

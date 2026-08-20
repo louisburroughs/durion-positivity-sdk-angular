@@ -34,8 +34,152 @@ export class TUSResumableUploadAPIService extends BaseService {
     }
 
     /**
-     * Create a resumable upload
-     * Creates a new TUS upload scoped to a bulk load job. Returns a Location header with the absolute upload URL for subsequent HEAD and PATCH requests. The URL is reconstructed from the X-Forwarded-Proto/Host/Port/Prefix headers supplied by the API gateway / reverse-proxy chain, so it reflects the public address (including any proxy path prefix) rather than this service\&#39;s internal one.
+     * Upload a Chunk
+     * Appends a contiguous byte range to an in-progress TUS upload and, when the final byte arrives, moves the finished file into job storage. Use this tool repeatedly to stream the file in chunks after createTusUpload; do not guess the offset after a failure, and call getTusUploadOffset instead to learn the server-side offset. Preconditions: the upload must exist, not be complete, and not be expired; the Upload-Offset header must exactly equal the server\&#39;s current offset. Required inputs: uploadId (UUID) as a path parameter, a Content-Type of application/offset+octet-stream, Tus-Resumable, Upload-Offset and Content-Length headers, and the raw chunk bytes as the request body. Emits a BULK_LOADER_TUS_UPLOAD_CHUNK_APPEND event; when the new offset reaches Upload-Length the file is finalized into the job\&#39;s storage and the job records the upload, moving a CREATED job to UPLOADING (finalization fails with 404 when the job is gone or 409 when it is terminal). Returns 204 with the new Upload-Offset header on success, 409 when the offset does not match or the upload is already complete, 410 when the upload has expired, 415 when the Content-Type is wrong, 412 when the TUS version is unsupported, and 404 when the upload does not exist. 
+     * @endpoint patch /v1/tus/{uploadId}
+     * @param uploadId 
+     * @param uploadOffset 
+     * @param contentLength 
+     * @param tusResumable 
+     * @param contentType 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public appendTusUploadChunk(uploadId: string, uploadOffset: number, contentLength: number, tusResumable?: string, contentType?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
+    public appendTusUploadChunk(uploadId: string, uploadOffset: number, contentLength: number, tusResumable?: string, contentType?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
+    public appendTusUploadChunk(uploadId: string, uploadOffset: number, contentLength: number, tusResumable?: string, contentType?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
+    public appendTusUploadChunk(uploadId: string, uploadOffset: number, contentLength: number, tusResumable?: string, contentType?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (uploadId === null || uploadId === undefined) {
+            throw new Error('Required parameter uploadId was null or undefined when calling appendTusUploadChunk.');
+        }
+        if (uploadOffset === null || uploadOffset === undefined) {
+            throw new Error('Required parameter uploadOffset was null or undefined when calling appendTusUploadChunk.');
+        }
+        if (contentLength === null || contentLength === undefined) {
+            throw new Error('Required parameter contentLength was null or undefined when calling appendTusUploadChunk.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+        if (tusResumable !== undefined && tusResumable !== null) {
+            localVarHeaders = localVarHeaders.set('Tus-Resumable', String(tusResumable));
+        }
+        if (uploadOffset !== undefined && uploadOffset !== null) {
+            localVarHeaders = localVarHeaders.set('Upload-Offset', String(uploadOffset));
+        }
+        if (contentLength !== undefined && contentLength !== null) {
+            localVarHeaders = localVarHeaders.set('Content-Length', String(contentLength));
+        }
+        if (contentType !== undefined && contentType !== null) {
+            localVarHeaders = localVarHeaders.set('Content-Type', String(contentType));
+        }
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/tus/${this.configuration.encodeParam({name: "uploadId", value: uploadId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<any>('patch', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Cancel a Resumable Upload
+     * Cancels a TUS upload session, permanently deleting both the session record and its temporary chunk file. Use this tool to abandon a partially transferred upload; do not use cancelBulkLoadJob, which cancels the bulk load job itself rather than an upload session. Preconditions: the upload session must exist and the caller must send a Tus-Resumable header of 1.0.0; a completed upload whose file has already been attached to the job is not detached by this call. Required inputs: uploadId (UUID) as a path parameter; there is no request body. Emits a BULK_LOADER_TUS_UPLOAD_CANCEL event and removes the temporary file; the deletion cannot be undone and the upload URL becomes invalid. Returns 204 on success, 404 when the upload does not exist, and 412 when the Tus-Resumable header is missing or not 1.0.0. 
+     * @endpoint delete /v1/tus/{uploadId}
+     * @param uploadId 
+     * @param tusResumable 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public cancelTusUpload(uploadId: string, tusResumable?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
+    public cancelTusUpload(uploadId: string, tusResumable?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
+    public cancelTusUpload(uploadId: string, tusResumable?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
+    public cancelTusUpload(uploadId: string, tusResumable?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (uploadId === null || uploadId === undefined) {
+            throw new Error('Required parameter uploadId was null or undefined when calling cancelTusUpload.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+        if (tusResumable !== undefined && tusResumable !== null) {
+            localVarHeaders = localVarHeaders.set('Tus-Resumable', String(tusResumable));
+        }
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/tus/${this.configuration.encodeParam({name: "uploadId", value: uploadId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<any>('delete', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Create a Resumable Upload
+     * Creates a resumable TUS upload session scoped to a bulk load job and returns its absolute upload URL in the Location header, rebuilt from the gateway\&#39;s X-Forwarded headers so it reflects the public address. Use this tool to start uploading a large file in chunks; use uploadJobFile instead when the file is small enough for a single multipart request, and do not send file bytes here because chunks go to appendTusUploadChunk. Preconditions: the caller must send a Tus-Resumable header of 1.0.0; the job id is recorded but not validated here, so a wrong job id only fails later when the finished file is attached to the job. Required inputs: Upload-Length header with the total file size in bytes (server maximum 536870912 by default), and optionally Upload-Metadata with a base64-encoded filename field, without which the file is stored as upload.bin. Emits a BULK_LOADER_TUS_UPLOAD_CREATE event and creates an empty temp file; the session expires after 24 hours by default (see the Upload-Expires header) and expired incomplete uploads are cleaned up automatically. Returns 201 with Location, Upload-Offset and Upload-Expires headers, 412 when the Tus-Resumable header is missing or not 1.0.0, and 413 when Upload-Length exceeds the server maximum. 
      * @endpoint post /v1/bulk-jobs/{jobId}/tus
      * @param jobId 
      * @param uploadLength 
@@ -45,15 +189,15 @@ export class TUSResumableUploadAPIService extends BaseService {
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public createUpload(jobId: string, uploadLength: number, tusResumable?: string, uploadMetadata?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public createUpload(jobId: string, uploadLength: number, tusResumable?: string, uploadMetadata?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public createUpload(jobId: string, uploadLength: number, tusResumable?: string, uploadMetadata?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public createUpload(jobId: string, uploadLength: number, tusResumable?: string, uploadMetadata?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public createTusUpload(jobId: string, uploadLength: number, tusResumable?: string, uploadMetadata?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
+    public createTusUpload(jobId: string, uploadLength: number, tusResumable?: string, uploadMetadata?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
+    public createTusUpload(jobId: string, uploadLength: number, tusResumable?: string, uploadMetadata?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
+    public createTusUpload(jobId: string, uploadLength: number, tusResumable?: string, uploadMetadata?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (jobId === null || jobId === undefined) {
-            throw new Error('Required parameter jobId was null or undefined when calling createUpload.');
+            throw new Error('Required parameter jobId was null or undefined when calling createTusUpload.');
         }
         if (uploadLength === null || uploadLength === undefined) {
-            throw new Error('Required parameter uploadLength was null or undefined when calling createUpload.');
+            throw new Error('Required parameter uploadLength was null or undefined when calling createTusUpload.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -108,143 +252,17 @@ export class TUSResumableUploadAPIService extends BaseService {
     }
 
     /**
-     * Cancel an upload
-     * Permanently deletes a TUS upload and its temporary file.
-     * @endpoint delete /v1/tus/{uploadId}
-     * @param uploadId 
-     * @param tusResumable 
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     * @param options additional options
-     */
-    public deleteUpload(uploadId: string, tusResumable?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public deleteUpload(uploadId: string, tusResumable?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public deleteUpload(uploadId: string, tusResumable?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public deleteUpload(uploadId: string, tusResumable?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
-        if (uploadId === null || uploadId === undefined) {
-            throw new Error('Required parameter uploadId was null or undefined when calling deleteUpload.');
-        }
-
-        let localVarHeaders = this.defaultHeaders;
-        if (tusResumable !== undefined && tusResumable !== null) {
-            localVarHeaders = localVarHeaders.set('Tus-Resumable', String(tusResumable));
-        }
-
-        // authentication (bearerAuth) required
-        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
-
-        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
-        ]);
-        if (localVarHttpHeaderAcceptSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
-        }
-
-        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
-
-        const localVarTransferCache: boolean = options?.transferCache ?? true;
-
-
-        let responseType_: 'text' | 'json' | 'blob' = 'json';
-        if (localVarHttpHeaderAcceptSelected) {
-            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
-                responseType_ = 'text';
-            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
-                responseType_ = 'json';
-            } else {
-                responseType_ = 'blob';
-            }
-        }
-
-        let localVarPath = `/v1/tus/${this.configuration.encodeParam({name: "uploadId", value: uploadId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
-        const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<any>('delete', `${basePath}${localVarPath}`,
-            {
-                context: localVarHttpContext,
-                responseType: <any>responseType_,
-                ...(withCredentials ? { withCredentials } : {}),
-                headers: localVarHeaders,
-                observe: observe,
-                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * Get upload offset
-     * Returns the current byte offset of a TUS upload for resumption.
-     * @endpoint head /v1/tus/{uploadId}
-     * @param uploadId 
-     * @param tusResumable 
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     * @param options additional options
-     */
-    public getOffset(uploadId: string, tusResumable?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public getOffset(uploadId: string, tusResumable?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public getOffset(uploadId: string, tusResumable?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public getOffset(uploadId: string, tusResumable?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
-        if (uploadId === null || uploadId === undefined) {
-            throw new Error('Required parameter uploadId was null or undefined when calling getOffset.');
-        }
-
-        let localVarHeaders = this.defaultHeaders;
-        if (tusResumable !== undefined && tusResumable !== null) {
-            localVarHeaders = localVarHeaders.set('Tus-Resumable', String(tusResumable));
-        }
-
-        // authentication (bearerAuth) required
-        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
-
-        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
-        ]);
-        if (localVarHttpHeaderAcceptSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
-        }
-
-        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
-
-        const localVarTransferCache: boolean = options?.transferCache ?? true;
-
-
-        let responseType_: 'text' | 'json' | 'blob' = 'json';
-        if (localVarHttpHeaderAcceptSelected) {
-            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
-                responseType_ = 'text';
-            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
-                responseType_ = 'json';
-            } else {
-                responseType_ = 'blob';
-            }
-        }
-
-        let localVarPath = `/v1/tus/${this.configuration.encodeParam({name: "uploadId", value: uploadId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
-        const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<any>('head', `${basePath}${localVarPath}`,
-            {
-                context: localVarHttpContext,
-                responseType: <any>responseType_,
-                ...(withCredentials ? { withCredentials } : {}),
-                headers: localVarHeaders,
-                observe: observe,
-                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * TUS server capabilities
-     * Returns supported TUS version, extensions, and max upload size. No authentication required.
+     * Get TUS Server Capabilities
+     * Advertises the TUS resumable-upload capabilities of this server, namely protocol version 1.0.0, the creation, termination and expiration extensions, and the maximum upload size. Use this tool during the tus client handshake to discover limits before creating an upload; do not use it to check the progress of an existing upload, which is getTusUploadOffset. Preconditions: none; this endpoint requires no authentication. Required inputs: none; there are no parameters and no request body. No events are emitted and no state changes; the capabilities are returned in the Tus-Version, Tus-Max-Size and Tus-Extension response headers. Returns 204 in all cases, with the capability data carried in headers rather than a body. 
      * @endpoint options /v1/tus
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public options(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public options(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public options(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public options(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getTusCapabilities(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
+    public getTusCapabilities(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
+    public getTusCapabilities(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
+    public getTusCapabilities(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -289,44 +307,26 @@ export class TUSResumableUploadAPIService extends BaseService {
     }
 
     /**
-     * Upload a chunk
-     * Appends a byte range to an in-progress TUS upload. Content-Type must be application/offset+octet-stream. Upload-Offset must equal the current server-side offset.
-     * @endpoint patch /v1/tus/{uploadId}
+     * Get Current Upload Offset
+     * Returns the current byte offset of a TUS upload in the Upload-Offset response header so a client can resume where the last transfer stopped. Use this tool after an interrupted transfer to learn where to resume; do not use getTusCapabilities, which reports server-wide limits rather than per-upload progress. Preconditions: the upload session must exist and the caller must send a Tus-Resumable header of 1.0.0. Required inputs: uploadId (UUID) as a path parameter; there is no request body. No events are emitted and no state changes; the response carries Upload-Offset, Upload-Length and Upload-Expires headers with an empty body. Returns 404 when the upload does not exist, and 412 when the Tus-Resumable header is missing or not 1.0.0. 
+     * @endpoint head /v1/tus/{uploadId}
      * @param uploadId 
-     * @param uploadOffset 
-     * @param contentLength 
      * @param tusResumable 
-     * @param contentType 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public uploadChunk(uploadId: string, uploadOffset: number, contentLength: number, tusResumable?: string, contentType?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public uploadChunk(uploadId: string, uploadOffset: number, contentLength: number, tusResumable?: string, contentType?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public uploadChunk(uploadId: string, uploadOffset: number, contentLength: number, tusResumable?: string, contentType?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public uploadChunk(uploadId: string, uploadOffset: number, contentLength: number, tusResumable?: string, contentType?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getTusUploadOffset(uploadId: string, tusResumable?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
+    public getTusUploadOffset(uploadId: string, tusResumable?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
+    public getTusUploadOffset(uploadId: string, tusResumable?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
+    public getTusUploadOffset(uploadId: string, tusResumable?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (uploadId === null || uploadId === undefined) {
-            throw new Error('Required parameter uploadId was null or undefined when calling uploadChunk.');
-        }
-        if (uploadOffset === null || uploadOffset === undefined) {
-            throw new Error('Required parameter uploadOffset was null or undefined when calling uploadChunk.');
-        }
-        if (contentLength === null || contentLength === undefined) {
-            throw new Error('Required parameter contentLength was null or undefined when calling uploadChunk.');
+            throw new Error('Required parameter uploadId was null or undefined when calling getTusUploadOffset.');
         }
 
         let localVarHeaders = this.defaultHeaders;
         if (tusResumable !== undefined && tusResumable !== null) {
             localVarHeaders = localVarHeaders.set('Tus-Resumable', String(tusResumable));
-        }
-        if (uploadOffset !== undefined && uploadOffset !== null) {
-            localVarHeaders = localVarHeaders.set('Upload-Offset', String(uploadOffset));
-        }
-        if (contentLength !== undefined && contentLength !== null) {
-            localVarHeaders = localVarHeaders.set('Content-Length', String(contentLength));
-        }
-        if (contentType !== undefined && contentType !== null) {
-            localVarHeaders = localVarHeaders.set('Content-Type', String(contentType));
         }
 
         // authentication (bearerAuth) required
@@ -356,7 +356,7 @@ export class TUSResumableUploadAPIService extends BaseService {
 
         let localVarPath = `/v1/tus/${this.configuration.encodeParam({name: "uploadId", value: uploadId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<any>('patch', `${basePath}${localVarPath}`,
+        return this.httpClient.request<any>('head', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,

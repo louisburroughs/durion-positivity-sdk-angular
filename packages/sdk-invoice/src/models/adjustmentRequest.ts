@@ -14,17 +14,9 @@
  */
 export interface AdjustmentRequest { 
     /**
-     * Type of adjustment applied to the invoice
-     */
-    type: AdjustmentRequestTypeEnum;
-    /**
      * Adjustment amount (must be greater than zero)
      */
     amount: number;
-    /**
-     * Business reason justifying the adjustment
-     */
-    reason: string;
     /**
      * Identifier of the actor who authorized the adjustment
      */
@@ -33,6 +25,14 @@ export interface AdjustmentRequest {
      * Optional correlation id to an external record (e.g. a warranty claim code)
      */
     externalReference?: string;
+    /**
+     * Business reason justifying the adjustment
+     */
+    reason: string;
+    /**
+     * Type of adjustment applied to the invoice
+     */
+    type: AdjustmentRequestTypeEnum;
 }
 export enum AdjustmentRequestTypeEnum {
     Discount = 'DISCOUNT',
@@ -81,8 +81,8 @@ export function instanceOfAdjustmentRequest(value: object): value is AdjustmentR
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createAdjustmentRequestPropertyNames('type', 'amount', 'reason', 'authorizedBy', );
-    const optionalStringProperties = createAdjustmentRequestOptionalProperties({ name: 'type', nullable: false }, { name: 'reason', nullable: false }, { name: 'authorizedBy', nullable: false }, { name: 'externalReference', nullable: false }, );
+    const requiredProperties = createAdjustmentRequestPropertyNames('amount', 'authorizedBy', 'reason', 'type', );
+    const optionalStringProperties = createAdjustmentRequestOptionalProperties({ name: 'authorizedBy', nullable: false }, { name: 'externalReference', nullable: false }, { name: 'reason', nullable: false }, { name: 'type', nullable: false }, );
     const optionalNumberProperties = createAdjustmentRequestOptionalProperties({ name: 'amount', nullable: false }, );
     const optionalBooleanProperties = createAdjustmentRequestOptionalProperties();
 

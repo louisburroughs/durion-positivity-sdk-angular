@@ -14,21 +14,61 @@
  */
 export interface CreditMemoResponse { 
     /**
+     * Identifier of the user who created the credit memo
+     */
+    createdByUserId?: string;
+    /**
+     * Timestamp when the credit memo was created (ISO 8601)
+     */
+    creationTimestamp: string;
+    /**
+     * Credit amount
+     */
+    creditAmount: number;
+    /**
      * Unique identifier of the credit memo
      */
     creditMemoId: string;
     /**
-     * Identifier of the original invoice the credit memo references
+     * ISO 4217 currency code
      */
-    originalInvoiceId: string;
+    currency?: string;
     /**
      * Identifier of the customer the credit memo applies to
      */
     customerId?: string;
     /**
-     * Credit amount
+     * Invoice outstanding balance after the credit was applied
      */
-    creditAmount: number;
+    invoiceBalanceAfter?: number;
+    /**
+     * Justification note explaining the credit
+     */
+    justificationNote?: string;
+    /**
+     * Identifier of the original invoice the credit memo references
+     */
+    originalInvoiceId: string;
+    /**
+     * Identifier of the original accounting period
+     */
+    originalPeriodId?: string;
+    /**
+     * Timestamp when the credit memo was posted (ISO 8601)
+     */
+    postedTimestamp?: string;
+    /**
+     * Whether the credit memo is a prior-period adjustment
+     */
+    priorPeriodAdjustment?: boolean;
+    /**
+     * Reason code for the credit memo
+     */
+    reasonCode?: string;
+    /**
+     * Current status of the credit memo
+     */
+    status: CreditMemoResponseStatusEnum;
     /**
      * Tax amount reversed by the credit
      */
@@ -38,57 +78,17 @@ export interface CreditMemoResponse {
      */
     totalAmount?: number;
     /**
-     * Reason code for the credit memo
+     * Reason the memo was voided; null unless status is VOIDED
      */
-    reasonCode?: string;
-    /**
-     * Justification note explaining the credit
-     */
-    justificationNote?: string;
-    /**
-     * Current status of the credit memo
-     */
-    status: CreditMemoResponseStatusEnum;
-    /**
-     * Timestamp when the credit memo was created (ISO 8601)
-     */
-    creationTimestamp: string;
-    /**
-     * Timestamp when the credit memo was posted (ISO 8601)
-     */
-    postedTimestamp?: string;
-    /**
-     * Identifier of the user who created the credit memo
-     */
-    createdByUserId?: string;
-    /**
-     * Whether the credit memo is a prior-period adjustment
-     */
-    priorPeriodAdjustment?: boolean;
-    /**
-     * Identifier of the original accounting period
-     */
-    originalPeriodId?: string;
-    /**
-     * ISO 4217 currency code
-     */
-    currency?: string;
-    /**
-     * When the memo was voided; null unless status is VOIDED
-     */
-    voidedTimestamp?: string;
+    voidReason?: string;
     /**
      * User who voided the memo; null unless status is VOIDED
      */
     voidedByUserId?: string;
     /**
-     * Reason the memo was voided; null unless status is VOIDED
+     * When the memo was voided; null unless status is VOIDED
      */
-    voidReason?: string;
-    /**
-     * Invoice outstanding balance after the credit was applied
-     */
-    invoiceBalanceAfter?: number;
+    voidedTimestamp?: string;
 }
 export enum CreditMemoResponseStatusEnum {
     Draft = 'DRAFT',
@@ -137,9 +137,9 @@ export function instanceOfCreditMemoResponse(value: object): value is CreditMemo
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createCreditMemoResponsePropertyNames('creditMemoId', 'originalInvoiceId', 'creditAmount', 'status', 'creationTimestamp', );
-    const optionalStringProperties = createCreditMemoResponseOptionalProperties({ name: 'creditMemoId', nullable: false }, { name: 'originalInvoiceId', nullable: false }, { name: 'customerId', nullable: false }, { name: 'reasonCode', nullable: false }, { name: 'justificationNote', nullable: false }, { name: 'status', nullable: false }, { name: 'creationTimestamp', nullable: false }, { name: 'postedTimestamp', nullable: false }, { name: 'createdByUserId', nullable: false }, { name: 'originalPeriodId', nullable: false }, { name: 'currency', nullable: false }, { name: 'voidedTimestamp', nullable: false }, { name: 'voidedByUserId', nullable: false }, { name: 'voidReason', nullable: false }, );
-    const optionalNumberProperties = createCreditMemoResponseOptionalProperties({ name: 'creditAmount', nullable: false }, { name: 'taxAmountReversed', nullable: false }, { name: 'totalAmount', nullable: false }, { name: 'invoiceBalanceAfter', nullable: false }, );
+    const requiredProperties = createCreditMemoResponsePropertyNames('creationTimestamp', 'creditAmount', 'creditMemoId', 'originalInvoiceId', 'status', );
+    const optionalStringProperties = createCreditMemoResponseOptionalProperties({ name: 'createdByUserId', nullable: false }, { name: 'creationTimestamp', nullable: false }, { name: 'creditMemoId', nullable: false }, { name: 'currency', nullable: false }, { name: 'customerId', nullable: false }, { name: 'justificationNote', nullable: false }, { name: 'originalInvoiceId', nullable: false }, { name: 'originalPeriodId', nullable: false }, { name: 'postedTimestamp', nullable: false }, { name: 'reasonCode', nullable: false }, { name: 'status', nullable: false }, { name: 'voidReason', nullable: false }, { name: 'voidedByUserId', nullable: false }, { name: 'voidedTimestamp', nullable: false }, );
+    const optionalNumberProperties = createCreditMemoResponseOptionalProperties({ name: 'creditAmount', nullable: false }, { name: 'invoiceBalanceAfter', nullable: false }, { name: 'taxAmountReversed', nullable: false }, { name: 'totalAmount', nullable: false }, );
     const optionalBooleanProperties = createCreditMemoResponseOptionalProperties({ name: 'priorPeriodAdjustment', nullable: false }, );
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

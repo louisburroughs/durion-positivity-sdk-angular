@@ -14,54 +14,54 @@
  */
 export interface ItemCostAuditDto { 
     /**
+     * Actor responsible for the change
+     */
+    actor?: string;
+    /**
      * Audit event identifier
      */
     auditId: string;
-    /**
-     * Item identifier the audit event belongs to
-     */
-    itemId: string;
-    /**
-     * Timestamp the cost change occurred
-     */
-    timestamp: string;
-    /**
-     * Type of cost that changed
-     */
-    costTypeChanged: ItemCostAuditDtoCostTypeChangedEnum;
-    /**
-     * Previous cost value
-     */
-    oldValue?: number;
-    /**
-     * New cost value
-     */
-    newValue?: number;
-    /**
-     * Source that triggered the cost change
-     */
-    changeSourceType: ItemCostAuditDtoChangeSourceTypeEnum;
     /**
      * Identifier of the change source
      */
     changeSourceId?: string;
     /**
-     * Actor responsible for the change
+     * Source that triggered the cost change
      */
-    actor?: string;
+    changeSourceType: ItemCostAuditDtoChangeSourceTypeEnum;
+    /**
+     * Type of cost that changed
+     */
+    costTypeChanged: ItemCostAuditDtoCostTypeChangedEnum;
+    /**
+     * Item identifier the audit event belongs to
+     */
+    itemId: string;
+    /**
+     * New cost value
+     */
+    newValue?: number;
+    /**
+     * Previous cost value
+     */
+    oldValue?: number;
     /**
      * Reason code for the change
      */
     reasonCode?: string;
+    /**
+     * Timestamp the cost change occurred
+     */
+    timestamp: string;
 }
+export enum ItemCostAuditDtoChangeSourceTypeEnum {
+    Manual = 'MANUAL',
+    PurchaseOrder = 'PURCHASE_ORDER'
+};
 export enum ItemCostAuditDtoCostTypeChangedEnum {
     Standard = 'STANDARD',
     Last = 'LAST',
     Average = 'AVERAGE'
-};
-export enum ItemCostAuditDtoChangeSourceTypeEnum {
-    Manual = 'MANUAL',
-    PurchaseOrder = 'PURCHASE_ORDER'
 };
 
 
@@ -104,9 +104,9 @@ export function instanceOfItemCostAuditDto(value: object): value is ItemCostAudi
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createItemCostAuditDtoPropertyNames('auditId', 'itemId', 'timestamp', 'costTypeChanged', 'changeSourceType', );
-    const optionalStringProperties = createItemCostAuditDtoOptionalProperties({ name: 'auditId', nullable: false }, { name: 'itemId', nullable: false }, { name: 'timestamp', nullable: false }, { name: 'costTypeChanged', nullable: false }, { name: 'changeSourceType', nullable: false }, { name: 'changeSourceId', nullable: false }, { name: 'actor', nullable: false }, { name: 'reasonCode', nullable: false }, );
-    const optionalNumberProperties = createItemCostAuditDtoOptionalProperties({ name: 'oldValue', nullable: false }, { name: 'newValue', nullable: false }, );
+    const requiredProperties = createItemCostAuditDtoPropertyNames('auditId', 'changeSourceType', 'costTypeChanged', 'itemId', 'timestamp', );
+    const optionalStringProperties = createItemCostAuditDtoOptionalProperties({ name: 'actor', nullable: false }, { name: 'auditId', nullable: false }, { name: 'changeSourceId', nullable: false }, { name: 'changeSourceType', nullable: false }, { name: 'costTypeChanged', nullable: false }, { name: 'itemId', nullable: false }, { name: 'reasonCode', nullable: false }, { name: 'timestamp', nullable: false }, );
+    const optionalNumberProperties = createItemCostAuditDtoOptionalProperties({ name: 'newValue', nullable: false }, { name: 'oldValue', nullable: false }, );
     const optionalBooleanProperties = createItemCostAuditDtoOptionalProperties();
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

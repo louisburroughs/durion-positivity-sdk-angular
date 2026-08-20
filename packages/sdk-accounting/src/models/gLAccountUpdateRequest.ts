@@ -18,13 +18,13 @@ export interface GLAccountUpdateRequest {
      */
     accountName?: string;
     /**
-     * Updated account description
-     */
-    description?: string;
-    /**
      * Updated account subtype refining the immutable accountType for report grouping and posting-config plausibility checks. Left unchanged when omitted.
      */
     accountSubtype?: GLAccountUpdateRequestAccountSubtypeEnum;
+    /**
+     * Updated account description
+     */
+    description?: string;
     /**
      * Whether journal entry lines on this account participate in reconciliation (e.g. settlement/bank reconciliation). Left unchanged when omitted.
      */
@@ -86,7 +86,7 @@ export function instanceOfGLAccountUpdateRequest(value: object): value is GLAcco
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createGLAccountUpdateRequestPropertyNames();
-    const optionalStringProperties = createGLAccountUpdateRequestOptionalProperties({ name: 'accountName', nullable: false }, { name: 'description', nullable: false }, { name: 'accountSubtype', nullable: false }, );
+    const optionalStringProperties = createGLAccountUpdateRequestOptionalProperties({ name: 'accountName', nullable: false }, { name: 'accountSubtype', nullable: false }, { name: 'description', nullable: false }, );
     const optionalNumberProperties = createGLAccountUpdateRequestOptionalProperties();
     const optionalBooleanProperties = createGLAccountUpdateRequestOptionalProperties({ name: 'reconcilable', nullable: false }, );
 

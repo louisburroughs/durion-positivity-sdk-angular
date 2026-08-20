@@ -18,49 +18,49 @@ export interface TimeEntryAdjustment {
      */
     readonly adjustmentId?: string;
     /**
-     * Time entry identifier being adjusted
+     * Timestamp when the adjustment was created
      */
-    timeEntryId: string;
-    /**
-     * Reason code for the adjustment
-     */
-    reasonCode: string;
-    /**
-     * Additional notes explaining the adjustment
-     */
-    notes?: string;
-    /**
-     * Proposed new start timestamp
-     */
-    proposedStartAt?: string;
-    /**
-     * Proposed new end timestamp
-     */
-    proposedEndAt?: string;
-    /**
-     * Adjustment in minutes (positive to add time, negative to subtract)
-     */
-    minutesDelta?: number;
-    /**
-     * Current status of the adjustment
-     */
-    status: TimeEntryAdjustmentStatusEnum;
+    createdAt?: string;
     /**
      * User who created the adjustment request
      */
     createdBy?: string;
     /**
-     * Timestamp when the adjustment was created
+     * Timestamp when the adjustment was approved or rejected
      */
-    createdAt?: string;
+    decidedAt?: string;
     /**
      * User who approved or rejected the adjustment
      */
     decidedBy?: string;
     /**
-     * Timestamp when the adjustment was approved or rejected
+     * Adjustment in minutes (positive to add time, negative to subtract)
      */
-    decidedAt?: string;
+    minutesDelta?: number;
+    /**
+     * Additional notes explaining the adjustment
+     */
+    notes?: string;
+    /**
+     * Proposed new end timestamp
+     */
+    proposedEndAt?: string;
+    /**
+     * Proposed new start timestamp
+     */
+    proposedStartAt?: string;
+    /**
+     * Reason code for the adjustment
+     */
+    reasonCode: string;
+    /**
+     * Current status of the adjustment
+     */
+    status: TimeEntryAdjustmentStatusEnum;
+    /**
+     * Time entry identifier being adjusted
+     */
+    timeEntryId: string;
 }
 export enum TimeEntryAdjustmentStatusEnum {
     Proposed = 'PROPOSED',
@@ -109,8 +109,8 @@ export function instanceOfTimeEntryAdjustment(value: object): value is TimeEntry
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createTimeEntryAdjustmentPropertyNames('timeEntryId', 'reasonCode', 'status', );
-    const optionalStringProperties = createTimeEntryAdjustmentOptionalProperties({ name: 'adjustmentId', nullable: false }, { name: 'timeEntryId', nullable: false }, { name: 'reasonCode', nullable: false }, { name: 'notes', nullable: false }, { name: 'proposedStartAt', nullable: false }, { name: 'proposedEndAt', nullable: false }, { name: 'status', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'decidedBy', nullable: false }, { name: 'decidedAt', nullable: false }, );
+    const requiredProperties = createTimeEntryAdjustmentPropertyNames('reasonCode', 'status', 'timeEntryId', );
+    const optionalStringProperties = createTimeEntryAdjustmentOptionalProperties({ name: 'adjustmentId', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'decidedAt', nullable: false }, { name: 'decidedBy', nullable: false }, { name: 'notes', nullable: false }, { name: 'proposedEndAt', nullable: false }, { name: 'proposedStartAt', nullable: false }, { name: 'reasonCode', nullable: false }, { name: 'status', nullable: false }, { name: 'timeEntryId', nullable: false }, );
     const optionalNumberProperties = createTimeEntryAdjustmentOptionalProperties({ name: 'minutesDelta', nullable: false }, );
     const optionalBooleanProperties = createTimeEntryAdjustmentOptionalProperties();
 

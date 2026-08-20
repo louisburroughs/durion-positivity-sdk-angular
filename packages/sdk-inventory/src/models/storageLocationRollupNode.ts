@@ -15,27 +15,27 @@ import { RollupQuantities } from './rollupQuantities';
  */
 export interface StorageLocationRollupNode { 
     /**
-     * Storage location identifier
+     * Child storage locations
      */
-    storageLocationId: string;
+    children?: Array<StorageLocationRollupNode>;
     /**
      * Storage location name
      */
     name?: string;
-    /**
-     * Storage location type (e.g. FLOOR, SHELF, BIN)
-     */
-    type?: string;
+    own: RollupQuantities;
+    rolledUp: RollupQuantities;
     /**
      * Storage location status
      */
     status?: string;
-    own: RollupQuantities;
-    rolledUp: RollupQuantities;
     /**
-     * Child storage locations
+     * Storage location identifier
      */
-    children?: Array<StorageLocationRollupNode>;
+    storageLocationId: string;
+    /**
+     * Storage location type (e.g. FLOOR, SHELF, BIN)
+     */
+    type?: string;
 }
 
 function isOptionalStorageLocationRollupNodePropertyOfType(
@@ -76,8 +76,8 @@ export function instanceOfStorageLocationRollupNode(value: object): value is Sto
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createStorageLocationRollupNodePropertyNames('storageLocationId', 'own', 'rolledUp', );
-    const optionalStringProperties = createStorageLocationRollupNodeOptionalProperties({ name: 'storageLocationId', nullable: false }, { name: 'name', nullable: false }, { name: 'type', nullable: false }, { name: 'status', nullable: false }, );
+    const requiredProperties = createStorageLocationRollupNodePropertyNames('own', 'rolledUp', 'storageLocationId', );
+    const optionalStringProperties = createStorageLocationRollupNodeOptionalProperties({ name: 'name', nullable: false }, { name: 'status', nullable: false }, { name: 'storageLocationId', nullable: false }, { name: 'type', nullable: false }, );
     const optionalNumberProperties = createStorageLocationRollupNodeOptionalProperties();
     const optionalBooleanProperties = createStorageLocationRollupNodeOptionalProperties();
 

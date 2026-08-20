@@ -14,13 +14,29 @@
  */
 export interface PutawayTaskResponse { 
     /**
-     * Unique identifier of the putaway task
+     * Actual destination location where the goods were placed
      */
-    taskId: string;
+    actualDestinationLocationId?: string;
     /**
-     * Identifier of the receipt the goods were received against
+     * Identifier of the worker assigned to the task, when assigned
      */
-    sourceReceiptId: string;
+    assigneeId?: string;
+    /**
+     * Timestamp when the putaway task was created
+     */
+    createdAt: string;
+    /**
+     * Reason the suggested location fell back to an alternate, when applicable
+     */
+    fallbackReason?: string;
+    /**
+     * Final suggested destination location after fallback resolution
+     */
+    finalSuggestedLocationId?: string;
+    /**
+     * Originally suggested destination location before any fallback
+     */
+    originalSuggestedLocationId?: string;
     /**
      * Identifier of the product to be put away
      */
@@ -34,37 +50,21 @@ export interface PutawayTaskResponse {
      */
     sourceLocationId?: string;
     /**
-     * Currently suggested destination location for the goods
+     * Identifier of the receipt the goods were received against
      */
-    suggestedDestinationLocationId?: string;
-    /**
-     * Originally suggested destination location before any fallback
-     */
-    originalSuggestedLocationId?: string;
-    /**
-     * Final suggested destination location after fallback resolution
-     */
-    finalSuggestedLocationId?: string;
-    /**
-     * Actual destination location where the goods were placed
-     */
-    actualDestinationLocationId?: string;
-    /**
-     * Reason the suggested location fell back to an alternate, when applicable
-     */
-    fallbackReason?: string;
+    sourceReceiptId: string;
     /**
      * Current status of the putaway task
      */
     status: string;
     /**
-     * Identifier of the worker assigned to the task, when assigned
+     * Currently suggested destination location for the goods
      */
-    assigneeId?: string;
+    suggestedDestinationLocationId?: string;
     /**
-     * Timestamp when the putaway task was created
+     * Unique identifier of the putaway task
      */
-    createdAt: string;
+    taskId: string;
     /**
      * Timestamp when the putaway task was last updated
      */
@@ -109,8 +109,8 @@ export function instanceOfPutawayTaskResponse(value: object): value is PutawayTa
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createPutawayTaskResponsePropertyNames('taskId', 'sourceReceiptId', 'productId', 'quantity', 'status', 'createdAt', 'updatedAt', );
-    const optionalStringProperties = createPutawayTaskResponseOptionalProperties({ name: 'taskId', nullable: false }, { name: 'sourceReceiptId', nullable: false }, { name: 'productId', nullable: false }, { name: 'sourceLocationId', nullable: false }, { name: 'suggestedDestinationLocationId', nullable: false }, { name: 'originalSuggestedLocationId', nullable: false }, { name: 'finalSuggestedLocationId', nullable: false }, { name: 'actualDestinationLocationId', nullable: false }, { name: 'fallbackReason', nullable: false }, { name: 'status', nullable: false }, { name: 'assigneeId', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'updatedAt', nullable: false }, );
+    const requiredProperties = createPutawayTaskResponsePropertyNames('createdAt', 'productId', 'quantity', 'sourceReceiptId', 'status', 'taskId', 'updatedAt', );
+    const optionalStringProperties = createPutawayTaskResponseOptionalProperties({ name: 'actualDestinationLocationId', nullable: false }, { name: 'assigneeId', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'fallbackReason', nullable: false }, { name: 'finalSuggestedLocationId', nullable: false }, { name: 'originalSuggestedLocationId', nullable: false }, { name: 'productId', nullable: false }, { name: 'sourceLocationId', nullable: false }, { name: 'sourceReceiptId', nullable: false }, { name: 'status', nullable: false }, { name: 'suggestedDestinationLocationId', nullable: false }, { name: 'taskId', nullable: false }, { name: 'updatedAt', nullable: false }, );
     const optionalNumberProperties = createPutawayTaskResponseOptionalProperties({ name: 'quantity', nullable: false }, );
     const optionalBooleanProperties = createPutawayTaskResponseOptionalProperties();
 

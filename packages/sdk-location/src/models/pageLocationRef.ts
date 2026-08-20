@@ -13,17 +13,17 @@ import { LocationRef } from './locationRef';
 
 
 export interface PageLocationRef { 
-    totalElements?: number;
-    totalPages?: number;
-    size?: number;
     content?: Array<LocationRef>;
-    number?: number;
-    pageable?: PageableObject;
-    sort?: SortObject;
+    empty?: boolean;
     first?: boolean;
     last?: boolean;
+    number?: number;
     numberOfElements?: number;
-    empty?: boolean;
+    pageable?: PageableObject;
+    size?: number;
+    sort?: SortObject;
+    totalElements?: number;
+    totalPages?: number;
 }
 
 function isOptionalPageLocationRefPropertyOfType(
@@ -66,8 +66,8 @@ export function instanceOfPageLocationRef(value: object): value is PageLocationR
 
     const requiredProperties = createPageLocationRefPropertyNames();
     const optionalStringProperties = createPageLocationRefOptionalProperties();
-    const optionalNumberProperties = createPageLocationRefOptionalProperties({ name: 'totalElements', nullable: false }, { name: 'totalPages', nullable: false }, { name: 'size', nullable: false }, { name: 'number', nullable: false }, { name: 'numberOfElements', nullable: false }, );
-    const optionalBooleanProperties = createPageLocationRefOptionalProperties({ name: 'first', nullable: false }, { name: 'last', nullable: false }, { name: 'empty', nullable: false }, );
+    const optionalNumberProperties = createPageLocationRefOptionalProperties({ name: 'number', nullable: false }, { name: 'numberOfElements', nullable: false }, { name: 'size', nullable: false }, { name: 'totalElements', nullable: false }, { name: 'totalPages', nullable: false }, );
+    const optionalBooleanProperties = createPageLocationRefOptionalProperties({ name: 'empty', nullable: false }, { name: 'first', nullable: false }, { name: 'last', nullable: false }, );
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
         && optionalStringProperties.every((property) => isOptionalPageLocationRefPropertyOfType(_v, property.name, 'string', property.nullable))

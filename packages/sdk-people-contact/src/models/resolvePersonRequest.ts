@@ -10,7 +10,7 @@
 
 
 /**
- * Resolve criteria
+ * Resolve person request with weighted matching inputs
  */
 export interface ResolvePersonRequest { 
     /**
@@ -18,17 +18,17 @@ export interface ResolvePersonRequest {
      */
     email?: string;
     /**
-     * Phone number used for matching
+     * First name used for matching
      */
-    phone?: string;
+    firstName?: string;
     /**
      * Last name used for matching
      */
     lastName?: string;
     /**
-     * First name used for matching
+     * Phone number used for matching
      */
-    firstName?: string;
+    phone?: string;
     /**
      * Optional score threshold override
      */
@@ -74,7 +74,7 @@ export function instanceOfResolvePersonRequest(value: object): value is ResolveP
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createResolvePersonRequestPropertyNames();
-    const optionalStringProperties = createResolvePersonRequestOptionalProperties({ name: 'email', nullable: false }, { name: 'phone', nullable: false }, { name: 'lastName', nullable: false }, { name: 'firstName', nullable: false }, );
+    const optionalStringProperties = createResolvePersonRequestOptionalProperties({ name: 'email', nullable: false }, { name: 'firstName', nullable: false }, { name: 'lastName', nullable: false }, { name: 'phone', nullable: false }, );
     const optionalNumberProperties = createResolvePersonRequestOptionalProperties({ name: 'threshold', nullable: false }, );
     const optionalBooleanProperties = createResolvePersonRequestOptionalProperties();
 

@@ -14,17 +14,21 @@
  */
 export interface IssuePartRequest { 
     /**
-     * Workorder part identifier
+     * Optional issue notes
      */
-    workorderPartId: string;
+    notes?: string;
     /**
      * Quantity to issue
      */
     quantity: number;
     /**
-     * Optional issue notes
+     * Unit quantity is expressed in. Omit for the product\'s base unit -- today\'s implicit behavior. Converted to base and validated against the product\'s catalog divisibility before the part is issued and before the reservation request is sent.
      */
-    notes?: string;
+    uomCode?: string;
+    /**
+     * Workorder part identifier
+     */
+    workorderPartId: string;
 }
 
 function isOptionalIssuePartRequestPropertyOfType(
@@ -65,8 +69,8 @@ export function instanceOfIssuePartRequest(value: object): value is IssuePartReq
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createIssuePartRequestPropertyNames('workorderPartId', 'quantity', );
-    const optionalStringProperties = createIssuePartRequestOptionalProperties({ name: 'workorderPartId', nullable: false }, { name: 'notes', nullable: false }, );
+    const requiredProperties = createIssuePartRequestPropertyNames('quantity', 'workorderPartId', );
+    const optionalStringProperties = createIssuePartRequestOptionalProperties({ name: 'notes', nullable: false }, { name: 'uomCode', nullable: false }, { name: 'workorderPartId', nullable: false }, );
     const optionalNumberProperties = createIssuePartRequestOptionalProperties({ name: 'quantity', nullable: false }, );
     const optionalBooleanProperties = createIssuePartRequestOptionalProperties();
 

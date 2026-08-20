@@ -14,17 +14,9 @@
  */
 export interface PriceQuoteRequest { 
     /**
-     * Product identifier
+     * Optional ISO 4217 currency code for the quote; defaults to the company default currency (pos.price.default-currency) when omitted. Base price and location override selection are filtered to this currency
      */
-    productId: string;
-    /**
-     * Requested quantity
-     */
-    quantity: number;
-    /**
-     * Location identifier where quote applies
-     */
-    locationId: string;
+    currency?: string | null;
     /**
      * Customer tier identifier used for tier pricing rules
      */
@@ -34,9 +26,17 @@ export interface PriceQuoteRequest {
      */
     effectiveTimestamp?: string | null;
     /**
-     * Optional ISO 4217 currency code for the quote; defaults to the company default currency (pos.price.default-currency) when omitted. Base price and location override selection are filtered to this currency
+     * Location identifier where quote applies
      */
-    currency?: string | null;
+    locationId: string;
+    /**
+     * Product identifier
+     */
+    productId: string;
+    /**
+     * Requested quantity
+     */
+    quantity: number;
 }
 
 function isOptionalPriceQuoteRequestPropertyOfType(
@@ -77,8 +77,8 @@ export function instanceOfPriceQuoteRequest(value: object): value is PriceQuoteR
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createPriceQuoteRequestPropertyNames('productId', 'quantity', 'locationId', 'customerTierId', );
-    const optionalStringProperties = createPriceQuoteRequestOptionalProperties({ name: 'productId', nullable: false }, { name: 'locationId', nullable: false }, { name: 'customerTierId', nullable: false }, { name: 'effectiveTimestamp', nullable: true }, { name: 'currency', nullable: true }, );
+    const requiredProperties = createPriceQuoteRequestPropertyNames('customerTierId', 'locationId', 'productId', 'quantity', );
+    const optionalStringProperties = createPriceQuoteRequestOptionalProperties({ name: 'currency', nullable: true }, { name: 'customerTierId', nullable: false }, { name: 'effectiveTimestamp', nullable: true }, { name: 'locationId', nullable: false }, { name: 'productId', nullable: false }, );
     const optionalNumberProperties = createPriceQuoteRequestOptionalProperties({ name: 'quantity', nullable: false }, );
     const optionalBooleanProperties = createPriceQuoteRequestOptionalProperties();
 

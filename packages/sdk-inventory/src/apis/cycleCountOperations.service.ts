@@ -17,6 +17,8 @@ import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
 // @ts-ignore
+import { ApiError } from '../src/models/apiError';
+// @ts-ignore
 import { CountResponse } from '../src/models/countResponse';
 // @ts-ignore
 import { SubmitCountRequest } from '../src/models/submitCountRequest';
@@ -41,19 +43,19 @@ export class CycleCountOperationsService extends BaseService {
 
     /**
      * Submit a count for a cycle count task
-     * Records the actual quantity counted by an auditor. Calculates variance and updates task status.
+     * Records the auditor\&#39;s initial physical count for an ASSIGNED cycle count task, computes the variance against the task\&#39;s expected-quantity snapshot, and moves the task to COUNTED_PENDING_REVIEW — or to CONFLICT when on-hand-affecting stock movements occurred during the count window. Use this tool for the first count of a task; do not use submitCycleCountRecount, which records a follow-up count, and do not use createCycleCountAdjustment, which posts the settled variance to the ledger. Preconditions: the task must exist and be in ASSIGNED status; stock movements are never frozen during counts, so a CONFLICT outcome is expected behaviour, not an error. Required inputs: taskId (UUID), auditorId, and actualQuantity (integer, zero or positive). Emits an INVENTORY_CYCLE_COUNT_SUBMIT event; a count entry is recorded but no ledger posting or on-hand change happens here. Returns 404 when the task does not exist, 409 when the task is not in ASSIGNED status, and 400 when actualQuantity is negative. 
      * @endpoint post /v1/inventory/cycleCount/submit
-     * @param submitCountRequest 
+     * @param submitCountRequest Initial count submission identifying the task, the auditor, and the quantity physically found.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public submitCount(submitCountRequest: SubmitCountRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<CountResponse>;
-    public submitCount(submitCountRequest: SubmitCountRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<CountResponse>>;
-    public submitCount(submitCountRequest: SubmitCountRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<CountResponse>>;
-    public submitCount(submitCountRequest: SubmitCountRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public submitCycleCount(submitCountRequest: SubmitCountRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<CountResponse>;
+    public submitCycleCount(submitCountRequest: SubmitCountRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<CountResponse>>;
+    public submitCycleCount(submitCountRequest: SubmitCountRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<CountResponse>>;
+    public submitCycleCount(submitCountRequest: SubmitCountRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (submitCountRequest === null || submitCountRequest === undefined) {
-            throw new Error('Required parameter submitCountRequest was null or undefined when calling submitCount.');
+            throw new Error('Required parameter submitCountRequest was null or undefined when calling submitCycleCount.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -111,19 +113,19 @@ export class CycleCountOperationsService extends BaseService {
 
     /**
      * Submit a recount for a cycle count task
-     * Records a recount with permission validation and limit enforcement. Maximum 2 recounts allowed (3 total counts).
+     * Records a recount for a cycle count task, appending a new count entry with a recomputed variance and re-running conflict detection against the task\&#39;s count window. Use this tool when a prior count is disputed or a conflict forces recounting; do not use submitCycleCount, which records the first count of a task. Preconditions: the task must exist and hold fewer than 3 total counts (the original plus 2 recounts — an attempt beyond the limit flags the task REQUIRES_INVESTIGATION); permission TRIGGER_RECOUNT_SELF covers only the first recount by the original auditor, while TRIGGER_RECOUNT_ANY (manager) covers any recount. Required inputs: taskId (UUID), auditorId, actualQuantity (zero or positive), and permission (TRIGGER_RECOUNT_SELF or TRIGGER_RECOUNT_ANY). Emits an INVENTORY_CYCLE_COUNT_RECOUNT event; a task already in CONFLICT stays CONFLICT while in-window movements remain, because the expected-quantity snapshot is still stale. Returns 404 when the task does not exist, 400 when the recount limit is already reached (RECOUNT_LIMIT_EXCEEDED) or actualQuantity is negative, and 403 when the permission context does not authorize this recount. 
      * @endpoint post /v1/inventory/cycleCount/recount
-     * @param submitRecountRequest 
+     * @param submitRecountRequest Recount submission carrying the task, the auditor, the newly counted quantity, and the permission context authorizing the recount.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public submitRecount(submitRecountRequest: SubmitRecountRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<CountResponse>;
-    public submitRecount(submitRecountRequest: SubmitRecountRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<CountResponse>>;
-    public submitRecount(submitRecountRequest: SubmitRecountRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<CountResponse>>;
-    public submitRecount(submitRecountRequest: SubmitRecountRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public submitCycleCountRecount(submitRecountRequest: SubmitRecountRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<CountResponse>;
+    public submitCycleCountRecount(submitRecountRequest: SubmitRecountRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<CountResponse>>;
+    public submitCycleCountRecount(submitRecountRequest: SubmitRecountRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<CountResponse>>;
+    public submitCycleCountRecount(submitRecountRequest: SubmitRecountRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (submitRecountRequest === null || submitRecountRequest === undefined) {
-            throw new Error('Required parameter submitRecountRequest was null or undefined when calling submitRecount.');
+            throw new Error('Required parameter submitRecountRequest was null or undefined when calling submitCycleCountRecount.');
         }
 
         let localVarHeaders = this.defaultHeaders;

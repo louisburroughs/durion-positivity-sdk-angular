@@ -44,10 +44,10 @@ export class PeopleAPIService extends BaseService {
     }
 
     /**
-     * Create a new person
-     * Add a new person to the system.
+     * Create a New Person Record
+     * Creates a new person identity record; emails and phone numbers are persisted as contact points owned by this module. Use this tool when the person is known to be new; do not use resolvePerson, which should be preferred when a matching person may already exist, and do not use linkUserToPerson, which only associates an existing person with a security user. Preconditions: none; duplicate names or emails are not rejected, so deduplication is the caller\&#39;s responsibility (or use resolvePerson). Required inputs: firstName and lastName (non-blank); primaryEmail, secondaryEmail and phoneNumbers are optional, and username is ignored because usernames are owned by pos-security and linked separately. Emits a PEOPLE_CONTACT_PERSON_CREATE event and queues a person.updated identity fact on the transactional outbox. Returns 201 with the persisted person, and 400 when firstName or lastName is blank. 
      * @endpoint post /v1/people
-     * @param person 
+     * @param person Identity fields of the person to create; contact data is stored as contact points.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -114,8 +114,8 @@ export class PeopleAPIService extends BaseService {
     }
 
     /**
-     * Delete a person
-     * Delete a person by their unique ID.
+     * Delete a Person Identity Record
+     * Deletes a person record and, in the same transaction, its contact points and postal address. Use this tool to permanently remove an identity record; do not use unlinkUserFromPerson, which only removes a user link and leaves the person in place. Preconditions: the person must exist and must have no user-person links; linked users must be removed first with unlinkUserFromPerson. Required inputs: personId (UUID) as a path parameter; there is no request body. Emits a PEOPLE_CONTACT_PERSON_DELETE event and queues a person.deleted fact on the transactional outbox. Returns 204 on success, 404 when the person does not exist, and 409 when one or more users are still linked to the person. 
      * @endpoint delete /v1/people/{personId}
      * @param personId ID of the person to delete
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -174,77 +174,8 @@ export class PeopleAPIService extends BaseService {
     }
 
     /**
-     * Get all people
-     * Retrieve people with an optional text filter. Employment filtering lives in pos-people (ADR-0044 §6) and is not available on the identity directory.
-     * @endpoint get /v1/people
-     * @param q Case-insensitive text search on firstName, lastName, primaryEmail.
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     * @param options additional options
-     */
-    public getAllPeople(q?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<Person>>;
-    public getAllPeople(q?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<Person>>>;
-    public getAllPeople(q?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<Person>>>;
-    public getAllPeople(q?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
-
-        let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
-
-        localVarQueryParameters = this.addToHttpParams(
-            localVarQueryParameters,
-            'q',
-            <any>q,
-            QueryParamStyle.Form,
-            true,
-        );
-
-
-        let localVarHeaders = this.defaultHeaders;
-
-        // authentication (bearerAuth) required
-        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
-
-        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
-            'application/json'
-        ]);
-        if (localVarHttpHeaderAcceptSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
-        }
-
-        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
-
-        const localVarTransferCache: boolean = options?.transferCache ?? true;
-
-
-        let responseType_: 'text' | 'json' | 'blob' = 'json';
-        if (localVarHttpHeaderAcceptSelected) {
-            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
-                responseType_ = 'text';
-            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
-                responseType_ = 'json';
-            } else {
-                responseType_ = 'blob';
-            }
-        }
-
-        let localVarPath = `/v1/people`;
-        const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<Array<Person>>('get', `${basePath}${localVarPath}`,
-            {
-                context: localVarHttpContext,
-                params: localVarQueryParameters.toHttpParams(),
-                responseType: <any>responseType_,
-                ...(withCredentials ? { withCredentials } : {}),
-                headers: localVarHeaders,
-                observe: observe,
-                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * Get current user\&#39;s person record
-     * Resolve the authenticated user to their linked person record. Returns 404 when the user has no person link or the linked person no longer exists.
+     * Get Current User\&#39;s Person Record
+     * Resolves the authenticated caller\&#39;s username to its linked person record and returns the identity snapshot with emails, work phone numbers and username. Use this tool when the caller needs their own person record without knowing a person id; do not use getPersonById, which requires a known person UUID and can read any person. Preconditions: an active user-person link must exist for the authenticated username, and the linked person record must still exist. Required inputs: none; identity comes entirely from the authenticated security context. No events are emitted and no state changes; this is a read-only projection. Returns 404 when the caller has no user-person link or the linked person no longer exists, and 401 when the authenticated context carries no username. 
      * @endpoint get /v1/people/me
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
@@ -300,10 +231,10 @@ export class PeopleAPIService extends BaseService {
     }
 
     /**
-     * Get people by IDs
-     * Batch-resolve persons by id in one request. Unknown ids are omitted; the result may be smaller than the request. Used for cross-service identity reads (ADR-0015).
+     * Batch Resolve People by IDs
+     * Batch-resolves person records by id in one request, attaching typed contact points and linked usernames to each result. Use this tool for cross-service identity reads that need several people at once (ADR-0015); use getPersonById instead for a single known id. Preconditions: none; unknown ids are silently omitted, so the result may be smaller than the request. Required inputs: a JSON array of person UUIDs as the request body; an empty array yields an empty list. No events are emitted and no state changes; this is a read-only projection. Returns 200 with the resolved people; ids that do not exist are dropped rather than reported as errors. 
      * @endpoint post /v1/people/by-ids
-     * @param requestBody 
+     * @param requestBody JSON array of person UUIDs to resolve in one batch.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -370,8 +301,8 @@ export class PeopleAPIService extends BaseService {
     }
 
     /**
-     * Get person by ID
-     * Retrieve a person by their unique ID.
+     * Get a Person by Unique ID
+     * Returns a single person record by its UUID, including emails, work phone numbers and any linked username. Use this tool when the person id is already known; use listPeople instead when searching by name or email, and getCurrentPerson when the target is the authenticated caller. Preconditions: the person record must exist in the identity directory. Required inputs: personId (UUID) as a path parameter; there is no request body. No events are emitted and no state changes; this is a read-only projection. Returns 404 when no person exists for the supplied id. 
      * @endpoint get /v1/people/{personId}
      * @param personId ID of the person to retrieve
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -431,11 +362,80 @@ export class PeopleAPIService extends BaseService {
     }
 
     /**
-     * Replace a person\&#39;s contact points
-     * Replaces all typed contact points (email/phone) for a person. pos-people-contact is the source of truth for contacts (ADR-0015).
+     * List People in Identity Directory
+     * Lists person records in the identity directory, optionally narrowed by a free-text filter, with each result carrying emails, work phone numbers and any linked username. Use this tool when browsing or searching people by name or email; do not use resolvePerson, which performs weighted duplicate matching and may create a new person as a side effect. Preconditions: none; an empty directory simply yields an empty list. Required inputs: none; q is an optional case-insensitive filter matched against firstName, lastName and primaryEmail, and employment attributes cannot be filtered here because they live in pos-people (ADR-0044 §6). No events are emitted and no state changes; this is a read-only projection. Returns 200 with the matching people, possibly an empty list when nothing matches the filter. 
+     * @endpoint get /v1/people
+     * @param q Case-insensitive text search on firstName, lastName, primaryEmail.
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public listPeople(q?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<Person>>;
+    public listPeople(q?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<Person>>>;
+    public listPeople(q?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<Person>>>;
+    public listPeople(q?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+
+        let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'q',
+            <any>q,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/people`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<Array<Person>>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                params: localVarQueryParameters.toHttpParams(),
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Replace a Person\&#39;s Contact Points
+     * Replaces the full set of typed contact points for one person; pos-people-contact is the source of truth for contact channels (ADR-0015). Use this tool to overwrite a person\&#39;s contact channels wholesale; do not use updatePerson, which replaces names, primaryEmail, secondaryEmail and phoneNumbers as flat identity fields rather than the typed contact-point set. Preconditions: the person should exist; the id is not validated here, so writes for an unknown person are stored without error. Required inputs: a JSON array of contact points, each with contactType (EMAIL, PHONE_MOBILE, PHONE_HOME or PHONE_WORK), value, and primary; entries missing contactType or value are silently dropped, and an empty array clears all contact points. Emits a people-contact person.updated identity fact through the transactional outbox when the person exists; prior contact points are deleted in the same transaction. Returns 204 on success, including when the array is empty or the person id is unknown. 
      * @endpoint put /v1/people/{personId}/contact-points
      * @param personId Person id
-     * @param contactPointDto 
+     * @param contactPointDto Complete replacement set of typed contact points for the person.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -504,10 +504,10 @@ export class PeopleAPIService extends BaseService {
     }
 
     /**
-     * Resolve person
-     * Find best matching person by score or create a new person
+     * Resolve or Create Matching Person
+     * Finds the best-matching existing person using weighted scoring (email 60, phone 25, lastName 10, firstName 5) and creates a new person when no candidate reaches the threshold. Use this tool to deduplicate at intake before creating people; do not use createPerson, which always inserts a new record without any matching. Preconditions: none; inputs are normalized before scoring (email lowercased, phone reduced to digits, names trimmed). Required inputs: at least one of email, phone, lastName or firstName; threshold is optional and defaults to the configured pos.people-contact.matching.threshold value (30 unless overridden). Emits a PEOPLE_CONTACT_PERSON_RESOLVE event; when no match reaches the threshold a new person is created and a person.updated identity fact is queued on the outbox. Returns 200 with matchedExisting true, the score and the matchedBy reasons when a candidate wins, 200 with matchedExisting false when a new person was created, and 400 when all four matching inputs are absent or blank. 
      * @endpoint post /v1/people/resolve
-     * @param resolvePersonRequest 
+     * @param resolvePersonRequest Weighted matching criteria used to find or create the person.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -574,11 +574,11 @@ export class PeopleAPIService extends BaseService {
     }
 
     /**
-     * Update an existing person
-     * Update the details of an existing person.
+     * Update an Existing Person Record
+     * Updates an existing person\&#39;s identity fields, fully replacing names, emails and work phone numbers with the submitted values. Use this tool to correct or complete a known person\&#39;s identity data; do not use replaceContactPoints, which manages the typed contact-point set, and do not use createPerson for records that do not exist yet. Preconditions: the person record must already exist for the supplied id. Required inputs: personId (UUID) as a path parameter plus a full person body with non-blank firstName and lastName; omitting primaryEmail, secondaryEmail or phoneNumbers erases the stored values, and username is ignored because it is owned by pos-security. Emits a PEOPLE_CONTACT_PERSON_UPDATE event and queues a person.updated identity fact on the transactional outbox. Returns 200 with the updated person, 404 when no person exists for the id, and 400 when firstName or lastName is blank. 
      * @endpoint put /v1/people/{personId}
      * @param personId ID of the person to update
-     * @param person 
+     * @param person Full replacement identity snapshot for the person.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options

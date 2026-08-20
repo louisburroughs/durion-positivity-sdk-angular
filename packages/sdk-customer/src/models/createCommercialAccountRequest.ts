@@ -10,33 +10,13 @@
 
 
 /**
- * Commercial account creation request
+ * Request to create a commercial account (party)
  */
 export interface CreateCommercialAccountRequest { 
-    /**
-     * Legal business name
-     */
-    legalName: string;
-    /**
-     * Display/trading name
-     */
-    displayName?: string;
-    /**
-     * Tax identification number (required for certain jurisdictions)
-     */
-    taxId?: string;
-    /**
-     * Party type (ORGANIZATION|INDIVIDUAL; default ORGANIZATION for commercial accounts)
-     */
-    partyType?: string;
     /**
      * Billing terms ID (foreign key to Billing domain)
      */
     billingTermsId?: string;
-    /**
-     * External identifiers (system-specific IDs from upstream systems)
-     */
-    externalIdentifiers?: { [key: string]: string; };
     /**
      * Primary contact first name
      */
@@ -46,13 +26,33 @@ export interface CreateCommercialAccountRequest {
      */
     contactLastName?: string;
     /**
+     * Display/trading name
+     */
+    displayName?: string;
+    /**
      * Contact email
      */
     email?: string;
     /**
+     * External identifiers (system-specific IDs from upstream systems)
+     */
+    externalIdentifiers?: { [key: string]: string; };
+    /**
+     * Legal business name
+     */
+    legalName: string;
+    /**
+     * Party type (ORGANIZATION|INDIVIDUAL; default ORGANIZATION for commercial accounts)
+     */
+    partyType?: string;
+    /**
      * Contact phone
      */
     phone?: string;
+    /**
+     * Tax identification number (required for certain jurisdictions)
+     */
+    taxId?: string;
 }
 
 function isOptionalCreateCommercialAccountRequestPropertyOfType(
@@ -94,7 +94,7 @@ export function instanceOfCreateCommercialAccountRequest(value: object): value i
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createCreateCommercialAccountRequestPropertyNames('legalName', );
-    const optionalStringProperties = createCreateCommercialAccountRequestOptionalProperties({ name: 'legalName', nullable: false }, { name: 'displayName', nullable: false }, { name: 'taxId', nullable: false }, { name: 'partyType', nullable: false }, { name: 'billingTermsId', nullable: false }, { name: 'contactFirstName', nullable: false }, { name: 'contactLastName', nullable: false }, { name: 'email', nullable: false }, { name: 'phone', nullable: false }, );
+    const optionalStringProperties = createCreateCommercialAccountRequestOptionalProperties({ name: 'billingTermsId', nullable: false }, { name: 'contactFirstName', nullable: false }, { name: 'contactLastName', nullable: false }, { name: 'displayName', nullable: false }, { name: 'email', nullable: false }, { name: 'legalName', nullable: false }, { name: 'partyType', nullable: false }, { name: 'phone', nullable: false }, { name: 'taxId', nullable: false }, );
     const optionalNumberProperties = createCreateCommercialAccountRequestOptionalProperties();
     const optionalBooleanProperties = createCreateCommercialAccountRequestOptionalProperties();
 

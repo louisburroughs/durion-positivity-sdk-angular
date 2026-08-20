@@ -15,14 +15,6 @@ import { PartySummary } from './partySummary';
  */
 export interface SearchPartiesResponse { 
     /**
-     * List of party summary records
-     */
-    results: Array<PartySummary>;
-    /**
-     * Total number of matching records
-     */
-    totalCount: number;
-    /**
      * Current page number
      */
     pageNumber: number;
@@ -30,6 +22,14 @@ export interface SearchPartiesResponse {
      * Items per page
      */
     pageSize: number;
+    /**
+     * List of party summary records
+     */
+    results: Array<PartySummary>;
+    /**
+     * Total number of matching records
+     */
+    totalCount: number;
 }
 
 function isOptionalSearchPartiesResponsePropertyOfType(
@@ -70,9 +70,9 @@ export function instanceOfSearchPartiesResponse(value: object): value is SearchP
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createSearchPartiesResponsePropertyNames('results', 'totalCount', 'pageNumber', 'pageSize', );
+    const requiredProperties = createSearchPartiesResponsePropertyNames('pageNumber', 'pageSize', 'results', 'totalCount', );
     const optionalStringProperties = createSearchPartiesResponseOptionalProperties();
-    const optionalNumberProperties = createSearchPartiesResponseOptionalProperties({ name: 'totalCount', nullable: false }, { name: 'pageNumber', nullable: false }, { name: 'pageSize', nullable: false }, );
+    const optionalNumberProperties = createSearchPartiesResponseOptionalProperties({ name: 'pageNumber', nullable: false }, { name: 'pageSize', nullable: false }, { name: 'totalCount', nullable: false }, );
     const optionalBooleanProperties = createSearchPartiesResponseOptionalProperties();
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

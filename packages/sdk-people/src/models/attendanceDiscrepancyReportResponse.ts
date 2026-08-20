@@ -14,13 +14,13 @@
  */
 export interface AttendanceDiscrepancyReportResponse { 
     /**
-     * Technician identifier
+     * Attendance minus job time in decimal hours
      */
-    technicianId: string;
+    discrepancyHours: number;
     /**
-     * Technician display name
+     * True when absolute discrepancy exceeds threshold
      */
-    technicianName: string;
+    isFlagged: boolean;
     /**
      * Location identifier
      */
@@ -30,6 +30,18 @@ export interface AttendanceDiscrepancyReportResponse {
      */
     reportDate: string;
     /**
+     * Technician identifier
+     */
+    technicianId: string;
+    /**
+     * Technician display name
+     */
+    technicianName: string;
+    /**
+     * Threshold in minutes used for this row
+     */
+    thresholdApplied: number;
+    /**
      * Total attendance time in decimal hours
      */
     totalAttendanceHours: number;
@@ -37,18 +49,6 @@ export interface AttendanceDiscrepancyReportResponse {
      * Total approved job time in decimal hours
      */
     totalJobHours: number;
-    /**
-     * Attendance minus job time in decimal hours
-     */
-    discrepancyHours: number;
-    /**
-     * Threshold in minutes used for this row
-     */
-    thresholdApplied: number;
-    /**
-     * True when absolute discrepancy exceeds threshold
-     */
-    isFlagged: boolean;
 }
 
 function isOptionalAttendanceDiscrepancyReportResponsePropertyOfType(
@@ -89,8 +89,8 @@ export function instanceOfAttendanceDiscrepancyReportResponse(value: object): va
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createAttendanceDiscrepancyReportResponsePropertyNames('technicianId', 'technicianName', 'locationId', 'reportDate', 'totalAttendanceHours', 'totalJobHours', 'discrepancyHours', 'thresholdApplied', 'isFlagged', );
-    const optionalStringProperties = createAttendanceDiscrepancyReportResponseOptionalProperties({ name: 'technicianId', nullable: false }, { name: 'technicianName', nullable: false }, { name: 'locationId', nullable: false }, { name: 'reportDate', nullable: false }, );
+    const requiredProperties = createAttendanceDiscrepancyReportResponsePropertyNames('discrepancyHours', 'isFlagged', 'locationId', 'reportDate', 'technicianId', 'technicianName', 'thresholdApplied', 'totalAttendanceHours', 'totalJobHours', );
+    const optionalStringProperties = createAttendanceDiscrepancyReportResponseOptionalProperties({ name: 'locationId', nullable: false }, { name: 'reportDate', nullable: false }, { name: 'technicianId', nullable: false }, { name: 'technicianName', nullable: false }, );
     const optionalNumberProperties = createAttendanceDiscrepancyReportResponseOptionalProperties({ name: 'thresholdApplied', nullable: false }, );
     const optionalBooleanProperties = createAttendanceDiscrepancyReportResponseOptionalProperties({ name: 'isFlagged', nullable: false }, );
 

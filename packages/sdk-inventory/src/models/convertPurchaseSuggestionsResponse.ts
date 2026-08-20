@@ -14,21 +14,21 @@
  */
 export interface ConvertPurchaseSuggestionsResponse { 
     /**
-     * Identifier of the created DRAFT purchase order
+     * Suggestions stamped CONVERTED by this call
      */
-    purchaseOrderId: string;
+    convertedSuggestionIds: Array<string>;
     /**
      * Human-readable purchase order number
      */
     poNumber: string;
     /**
+     * Identifier of the created DRAFT purchase order
+     */
+    purchaseOrderId: string;
+    /**
      * Status of the created purchase order (always DRAFT; the existing approval workflow applies)
      */
     purchaseOrderStatus: string;
-    /**
-     * Suggestions stamped CONVERTED by this call
-     */
-    convertedSuggestionIds: Array<string>;
 }
 
 function isOptionalConvertPurchaseSuggestionsResponsePropertyOfType(
@@ -69,8 +69,8 @@ export function instanceOfConvertPurchaseSuggestionsResponse(value: object): val
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createConvertPurchaseSuggestionsResponsePropertyNames('purchaseOrderId', 'poNumber', 'purchaseOrderStatus', 'convertedSuggestionIds', );
-    const optionalStringProperties = createConvertPurchaseSuggestionsResponseOptionalProperties({ name: 'purchaseOrderId', nullable: false }, { name: 'poNumber', nullable: false }, { name: 'purchaseOrderStatus', nullable: false }, );
+    const requiredProperties = createConvertPurchaseSuggestionsResponsePropertyNames('convertedSuggestionIds', 'poNumber', 'purchaseOrderId', 'purchaseOrderStatus', );
+    const optionalStringProperties = createConvertPurchaseSuggestionsResponseOptionalProperties({ name: 'poNumber', nullable: false }, { name: 'purchaseOrderId', nullable: false }, { name: 'purchaseOrderStatus', nullable: false }, );
     const optionalNumberProperties = createConvertPurchaseSuggestionsResponseOptionalProperties();
     const optionalBooleanProperties = createConvertPurchaseSuggestionsResponseOptionalProperties();
 

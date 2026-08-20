@@ -14,13 +14,13 @@
  */
 export interface AdjustLaborRequest { 
     /**
-     * Adjusted hours worked
-     */
-    hoursWorked: number;
-    /**
      * Reason for the adjustment
      */
     adjustmentReason: string;
+    /**
+     * Adjusted hours worked
+     */
+    hoursWorked: number;
 }
 
 function isOptionalAdjustLaborRequestPropertyOfType(
@@ -61,7 +61,7 @@ export function instanceOfAdjustLaborRequest(value: object): value is AdjustLabo
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createAdjustLaborRequestPropertyNames('hoursWorked', 'adjustmentReason', );
+    const requiredProperties = createAdjustLaborRequestPropertyNames('adjustmentReason', 'hoursWorked', );
     const optionalStringProperties = createAdjustLaborRequestOptionalProperties({ name: 'adjustmentReason', nullable: false }, );
     const optionalNumberProperties = createAdjustLaborRequestOptionalProperties({ name: 'hoursWorked', nullable: false }, );
     const optionalBooleanProperties = createAdjustLaborRequestOptionalProperties();

@@ -14,25 +14,25 @@
  */
 export interface CatalogItemRequestDto { 
     /**
-     * Item name
+     * Color for product type
      */
-    name?: string;
+    color?: string;
     /**
-     * Short description
+     * Country of origin for product type
      */
-    shortDescription?: string;
-    /**
-     * Long description
-     */
-    longDescription?: string;
+    countryOfOrigin?: string;
     /**
      * Product image URLs for product type
      */
     images?: Array<string>;
     /**
-     * Manufacturer part number for product type
+     * Long description
      */
-    manufacturerPartNumber?: string;
+    longDescription?: string;
+    /**
+     * Manufacturer brand for product type
+     */
+    manufacturerBrand?: string;
     /**
      * Manufacturer identifier for product type
      */
@@ -42,45 +42,45 @@ export interface CatalogItemRequestDto {
      */
     manufacturerName?: string;
     /**
+     * Manufacturer part number for product type
+     */
+    manufacturerPartNumber?: string;
+    /**
      * Manufacturer warranty for product type
      */
     manufacturerWarranty?: string;
-    /**
-     * Manufacturer brand for product type
-     */
-    manufacturerBrand?: string;
-    /**
-     * Country of origin for product type
-     */
-    countryOfOrigin?: string;
-    /**
-     * SKU for product type
-     */
-    sku?: string;
-    /**
-     * Product code for product type
-     */
-    productCode?: string;
-    /**
-     * Product type
-     */
-    type?: string;
     /**
      * Material for product type
      */
     material?: string;
     /**
-     * Color for product type
+     * Item name
      */
-    color?: string;
+    name?: string;
     /**
-     * Warranty for product type
+     * Product code for product type
      */
-    warranty?: string;
+    productCode?: string;
+    /**
+     * Short description
+     */
+    shortDescription?: string;
+    /**
+     * SKU for product type
+     */
+    sku?: string;
     /**
      * Detailed specifications JSON for product type
      */
     specifications?: string;
+    /**
+     * Product type
+     */
+    type?: string;
+    /**
+     * Warranty for product type
+     */
+    warranty?: string;
 }
 
 function isOptionalCatalogItemRequestDtoPropertyOfType(
@@ -122,7 +122,7 @@ export function instanceOfCatalogItemRequestDto(value: object): value is Catalog
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createCatalogItemRequestDtoPropertyNames();
-    const optionalStringProperties = createCatalogItemRequestDtoOptionalProperties({ name: 'name', nullable: false }, { name: 'shortDescription', nullable: false }, { name: 'longDescription', nullable: false }, { name: 'manufacturerPartNumber', nullable: false }, { name: 'manufacturerId', nullable: false }, { name: 'manufacturerName', nullable: false }, { name: 'manufacturerWarranty', nullable: false }, { name: 'manufacturerBrand', nullable: false }, { name: 'countryOfOrigin', nullable: false }, { name: 'sku', nullable: false }, { name: 'productCode', nullable: false }, { name: 'type', nullable: false }, { name: 'material', nullable: false }, { name: 'color', nullable: false }, { name: 'warranty', nullable: false }, { name: 'specifications', nullable: false }, );
+    const optionalStringProperties = createCatalogItemRequestDtoOptionalProperties({ name: 'color', nullable: false }, { name: 'countryOfOrigin', nullable: false }, { name: 'longDescription', nullable: false }, { name: 'manufacturerBrand', nullable: false }, { name: 'manufacturerId', nullable: false }, { name: 'manufacturerName', nullable: false }, { name: 'manufacturerPartNumber', nullable: false }, { name: 'manufacturerWarranty', nullable: false }, { name: 'material', nullable: false }, { name: 'name', nullable: false }, { name: 'productCode', nullable: false }, { name: 'shortDescription', nullable: false }, { name: 'sku', nullable: false }, { name: 'specifications', nullable: false }, { name: 'type', nullable: false }, { name: 'warranty', nullable: false }, );
     const optionalNumberProperties = createCatalogItemRequestDtoOptionalProperties();
     const optionalBooleanProperties = createCatalogItemRequestDtoOptionalProperties();
 

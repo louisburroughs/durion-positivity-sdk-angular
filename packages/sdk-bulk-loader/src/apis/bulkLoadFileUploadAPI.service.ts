@@ -21,7 +21,7 @@ import { BulkLoadJobResponse } from '../src/models/bulkLoadJobResponse';
 // @ts-ignore
 import { FileUploadResponse } from '../src/models/fileUploadResponse';
 // @ts-ignore
-import { UploadFileRequest } from '../src/models/uploadFileRequest';
+import { ProblemDetail } from '../src/models/problemDetail';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
@@ -40,20 +40,20 @@ export class BulkLoadFileUploadAPIService extends BaseService {
     }
 
     /**
-     * Launch a bulk load job for processing
-     * Starts Spring Batch execution for the specified bulk load job and transitions it to PROCESSING. The job must be in CREATED, UPLOADING, or MAPPING_REVIEW state and must already have a persisted upload and locationId.
+     * Launch a Bulk Load Job
+     * Starts asynchronous Spring Batch processing for a bulk load job and transitions it to PROCESSING. Use this tool once the uploaded file is persisted and the mappings are acceptable; do not treat the 200 response as import completion, and poll getBulkLoadJob instead because the batch run continues in the background. Preconditions: the job must belong to the authenticated operator, be in CREATED, UPLOADING or MAPPING_REVIEW state, and already have both a persisted uploaded file and a locationId assigned. Required inputs: jobId (UUID) as a path parameter; there is no request body, and the caller\&#39;s Authorization bearer token is forwarded to downstream domain services for the row-level writes. Emits a BULK_LOADER_JOB_START event, launches the Spring Batch job, and stamps startedAt; row counters on the job update as chunks are processed. Returns 404 when the job does not exist, 403 when it belongs to another operator, and 409 when the state is not launchable or the uploaded file or locationId is missing. 
      * @endpoint post /v1/bulk-jobs/{jobId}/process
      * @param jobId 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public startProcessing(jobId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<BulkLoadJobResponse>;
-    public startProcessing(jobId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<BulkLoadJobResponse>>;
-    public startProcessing(jobId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<BulkLoadJobResponse>>;
-    public startProcessing(jobId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public startJobProcessing(jobId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<BulkLoadJobResponse>;
+    public startJobProcessing(jobId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<BulkLoadJobResponse>>;
+    public startJobProcessing(jobId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<BulkLoadJobResponse>>;
+    public startJobProcessing(jobId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (jobId === null || jobId === undefined) {
-            throw new Error('Required parameter jobId was null or undefined when calling startProcessing.');
+            throw new Error('Required parameter jobId was null or undefined when calling startJobProcessing.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -62,7 +62,8 @@ export class BulkLoadFileUploadAPIService extends BaseService {
         localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
 
         const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
-            'application/json'
+            'application/json',
+            'application/problem+json'
         ]);
         if (localVarHttpHeaderAcceptSelected !== undefined) {
             localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
@@ -100,21 +101,21 @@ export class BulkLoadFileUploadAPIService extends BaseService {
     }
 
     /**
-     * Upload a file for a bulk load job
-     * Uploads a file for the specified bulk load job. The file is stored and associated with the job for later processing. The job must be in CREATED or UPLOADING state. Multiple files can be uploaded, but only the latest file will be processed.
+     * Upload a File for Bulk Load Job
+     * Uploads the source data file for a bulk load job as a single multipart request, stores it, and runs content detection to propose column mappings. Use this tool for files small enough to send in one request; use createTusUpload instead for large files that need resumable, chunked upload. Preconditions: the job must exist, belong to the authenticated operator, and not be in a terminal state (COMPLETED, CANCELLED or FAILED); a CREATED job moves to UPLOADING. Required inputs: a multipart form part named file; formats understood by content detection are csv, tsv, txt, psv, xlsx, xlsm, xls, json, xml, yaml and yml, with the first row or record treated as the column headers. Emits a BULK_LOADER_FILE_UPLOAD event and persists suggested column mappings from detection; when detection fails the upload still succeeds with a null detection field in the response, and re-uploading replaces the file to be processed because only the latest upload is used. Returns 404 when the job does not exist for the authenticated operator, and 409 when the job is already in a terminal state. 
      * @endpoint post /v1/bulk-jobs/{jobId}/upload
      * @param jobId 
-     * @param uploadFileRequest 
+     * @param file 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public uploadFile(jobId: string, uploadFileRequest?: UploadFileRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<FileUploadResponse>;
-    public uploadFile(jobId: string, uploadFileRequest?: UploadFileRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<FileUploadResponse>>;
-    public uploadFile(jobId: string, uploadFileRequest?: UploadFileRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<FileUploadResponse>>;
-    public uploadFile(jobId: string, uploadFileRequest?: UploadFileRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public uploadJobFile(jobId: string, file?: Blob, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<FileUploadResponse>;
+    public uploadJobFile(jobId: string, file?: Blob, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<FileUploadResponse>>;
+    public uploadJobFile(jobId: string, file?: Blob, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<FileUploadResponse>>;
+    public uploadJobFile(jobId: string, file?: Blob, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (jobId === null || jobId === undefined) {
-            throw new Error('Required parameter jobId was null or undefined when calling uploadFile.');
+            throw new Error('Required parameter jobId was null or undefined when calling uploadJobFile.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -123,7 +124,8 @@ export class BulkLoadFileUploadAPIService extends BaseService {
         localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
 
         const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
-            'application/json'
+            'application/json',
+            'application/problem+json'
         ]);
         if (localVarHttpHeaderAcceptSelected !== undefined) {
             localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
@@ -133,14 +135,27 @@ export class BulkLoadFileUploadAPIService extends BaseService {
 
         const localVarTransferCache: boolean = options?.transferCache ?? true;
 
-
         // to determine the Content-Type header
         const consumes: string[] = [
-            'application/json'
+            'multipart/form-data'
         ];
-        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
-        if (httpContentTypeSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+
+        const canConsumeForm = this.canConsumeForm(consumes);
+
+        let localVarFormParams: { append(param: string, value: any): any; };
+        let localVarUseForm = false;
+        let localVarConvertFormParamsToString = false;
+        // use FormData to transmit files using content-type "multipart/form-data"
+        // see https://stackoverflow.com/questions/4007969/application-x-www-form-urlencoded-or-multipart-form-data
+        localVarUseForm = canConsumeForm;
+        if (localVarUseForm) {
+            localVarFormParams = new FormData();
+        } else {
+            localVarFormParams = new HttpParams({encoder: this.encoder});
+        }
+
+        if (file !== undefined) {
+            localVarFormParams = localVarFormParams.append('file', <any>file) as any || localVarFormParams;
         }
 
         let responseType_: 'text' | 'json' | 'blob' = 'json';
@@ -159,7 +174,7 @@ export class BulkLoadFileUploadAPIService extends BaseService {
         return this.httpClient.request<FileUploadResponse>('post', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
-                body: uploadFileRequest,
+                body: localVarConvertFormParamsToString ? localVarFormParams.toString() : localVarFormParams,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,

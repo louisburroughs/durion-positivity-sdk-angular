@@ -14,21 +14,33 @@
  */
 export interface FitmentBulkIngestRecord { 
     /**
-     * Part number identifier the fitment record applies to
+     * Engine type for the vehicle
      */
-    partNumberId: number;
-    /**
-     * Manufacturer name for the vehicle
-     */
-    manufacturerName?: string;
+    engineType?: string;
     /**
      * Make name for the vehicle
      */
     makeName?: string;
     /**
+     * Manufacturer name for the vehicle
+     */
+    manufacturerName?: string;
+    /**
      * Model name for the vehicle
      */
     modelName?: string;
+    /**
+     * Free-form notes about the fitment
+     */
+    notes?: string;
+    /**
+     * Part number identifier the fitment record applies to
+     */
+    partNumberId: number;
+    /**
+     * Vehicle submodel or trim
+     */
+    submodel?: string;
     /**
      * Vehicle type name
      */
@@ -37,18 +49,6 @@ export interface FitmentBulkIngestRecord {
      * Vehicle year or year range
      */
     vehicleYear?: string;
-    /**
-     * Engine type for the vehicle
-     */
-    engineType?: string;
-    /**
-     * Vehicle submodel or trim
-     */
-    submodel?: string;
-    /**
-     * Free-form notes about the fitment
-     */
-    notes?: string;
 }
 
 function isOptionalFitmentBulkIngestRecordPropertyOfType(
@@ -90,7 +90,7 @@ export function instanceOfFitmentBulkIngestRecord(value: object): value is Fitme
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createFitmentBulkIngestRecordPropertyNames('partNumberId', );
-    const optionalStringProperties = createFitmentBulkIngestRecordOptionalProperties({ name: 'manufacturerName', nullable: false }, { name: 'makeName', nullable: false }, { name: 'modelName', nullable: false }, { name: 'vehicleTypeName', nullable: false }, { name: 'vehicleYear', nullable: false }, { name: 'engineType', nullable: false }, { name: 'submodel', nullable: false }, { name: 'notes', nullable: false }, );
+    const optionalStringProperties = createFitmentBulkIngestRecordOptionalProperties({ name: 'engineType', nullable: false }, { name: 'makeName', nullable: false }, { name: 'manufacturerName', nullable: false }, { name: 'modelName', nullable: false }, { name: 'notes', nullable: false }, { name: 'submodel', nullable: false }, { name: 'vehicleTypeName', nullable: false }, { name: 'vehicleYear', nullable: false }, );
     const optionalNumberProperties = createFitmentBulkIngestRecordOptionalProperties({ name: 'partNumberId', nullable: false }, );
     const optionalBooleanProperties = createFitmentBulkIngestRecordOptionalProperties();
 

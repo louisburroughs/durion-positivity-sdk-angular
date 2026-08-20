@@ -14,26 +14,6 @@
  */
 export interface PostingRuleVersionResponse { 
     /**
-     * Unique identifier of the rule version
-     */
-    versionId: string;
-    /**
-     * Identifier of the owning posting rule set
-     */
-    postingRuleSetId: string;
-    /**
-     * Sequential version number within the rule set
-     */
-    versionNumber?: number;
-    /**
-     * Lifecycle state of the version
-     */
-    state?: PostingRuleVersionResponseStateEnum;
-    /**
-     * Serialized rules definition (JSON) for this version
-     */
-    rulesDefinition?: string;
-    /**
      * Timestamp when the version was created (ISO 8601)
      */
     createdAt?: string;
@@ -49,6 +29,26 @@ export interface PostingRuleVersionResponse {
      * Identifier of the user who last modified the version
      */
     modifiedBy?: string;
+    /**
+     * Identifier of the owning posting rule set
+     */
+    postingRuleSetId: string;
+    /**
+     * Serialized rules definition (JSON) for this version
+     */
+    rulesDefinition?: string;
+    /**
+     * Lifecycle state of the version
+     */
+    state?: PostingRuleVersionResponseStateEnum;
+    /**
+     * Unique identifier of the rule version
+     */
+    versionId: string;
+    /**
+     * Sequential version number within the rule set
+     */
+    versionNumber?: number;
 }
 export enum PostingRuleVersionResponseStateEnum {
     Draft = 'DRAFT',
@@ -96,8 +96,8 @@ export function instanceOfPostingRuleVersionResponse(value: object): value is Po
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createPostingRuleVersionResponsePropertyNames('versionId', 'postingRuleSetId', );
-    const optionalStringProperties = createPostingRuleVersionResponseOptionalProperties({ name: 'versionId', nullable: false }, { name: 'postingRuleSetId', nullable: false }, { name: 'state', nullable: false }, { name: 'rulesDefinition', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'modifiedAt', nullable: false }, { name: 'modifiedBy', nullable: false }, );
+    const requiredProperties = createPostingRuleVersionResponsePropertyNames('postingRuleSetId', 'versionId', );
+    const optionalStringProperties = createPostingRuleVersionResponseOptionalProperties({ name: 'createdAt', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'modifiedAt', nullable: false }, { name: 'modifiedBy', nullable: false }, { name: 'postingRuleSetId', nullable: false }, { name: 'rulesDefinition', nullable: false }, { name: 'state', nullable: false }, { name: 'versionId', nullable: false }, );
     const optionalNumberProperties = createPostingRuleVersionResponseOptionalProperties({ name: 'versionNumber', nullable: false }, );
     const optionalBooleanProperties = createPostingRuleVersionResponseOptionalProperties();
 

@@ -14,9 +14,13 @@
  */
 export interface ApprovedTimeExportResponse { 
     /**
-     * Time entry identifier
+     * Approval timestamp
      */
-    timeEntryId: string;
+    approvedAt: string;
+    /**
+     * Approver reference
+     */
+    approvedBy: string;
     /**
      * Timekeeping employee identifier
      */
@@ -26,14 +30,6 @@ export interface ApprovedTimeExportResponse {
      */
     employeeName: string;
     /**
-     * Timekeeping location identifier
-     */
-    locationId: string;
-    /**
-     * Location display name
-     */
-    locationName: string;
-    /**
      * Entry date (UTC)
      */
     entryDate: string;
@@ -42,13 +38,17 @@ export interface ApprovedTimeExportResponse {
      */
     hoursWorked: number;
     /**
-     * Approval timestamp
+     * Timekeeping location identifier
      */
-    approvedAt: string;
+    locationId: string;
     /**
-     * Approver reference
+     * Location display name
      */
-    approvedBy: string;
+    locationName: string;
+    /**
+     * Time entry identifier
+     */
+    timeEntryId: string;
 }
 
 function isOptionalApprovedTimeExportResponsePropertyOfType(
@@ -89,8 +89,8 @@ export function instanceOfApprovedTimeExportResponse(value: object): value is Ap
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createApprovedTimeExportResponsePropertyNames('timeEntryId', 'employeeId', 'employeeName', 'locationId', 'locationName', 'entryDate', 'hoursWorked', 'approvedAt', 'approvedBy', );
-    const optionalStringProperties = createApprovedTimeExportResponseOptionalProperties({ name: 'timeEntryId', nullable: false }, { name: 'employeeId', nullable: false }, { name: 'employeeName', nullable: false }, { name: 'locationId', nullable: false }, { name: 'locationName', nullable: false }, { name: 'entryDate', nullable: false }, { name: 'approvedAt', nullable: false }, { name: 'approvedBy', nullable: false }, );
+    const requiredProperties = createApprovedTimeExportResponsePropertyNames('approvedAt', 'approvedBy', 'employeeId', 'employeeName', 'entryDate', 'hoursWorked', 'locationId', 'locationName', 'timeEntryId', );
+    const optionalStringProperties = createApprovedTimeExportResponseOptionalProperties({ name: 'approvedAt', nullable: false }, { name: 'approvedBy', nullable: false }, { name: 'employeeId', nullable: false }, { name: 'employeeName', nullable: false }, { name: 'entryDate', nullable: false }, { name: 'locationId', nullable: false }, { name: 'locationName', nullable: false }, { name: 'timeEntryId', nullable: false }, );
     const optionalNumberProperties = createApprovedTimeExportResponseOptionalProperties({ name: 'hoursWorked', nullable: false }, );
     const optionalBooleanProperties = createApprovedTimeExportResponseOptionalProperties();
 

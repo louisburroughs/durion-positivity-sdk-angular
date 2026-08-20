@@ -48,90 +48,20 @@ export class JWTAPIService extends BaseService {
     }
 
     /**
-     * Issue privileged JWT token pair (access + refresh)
-     * Privileged internal endpoint that issues both access token (1-hour) and refresh token (7-day). Requires authority security:token:issue_internal. See BACKEND_CONTRACT_GUIDE.md §Token Pair Endpoint for full specification.
-     * @endpoint post /v1/auth/token-pair
-     * @param tokenPairRequest 
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     * @param options additional options
-     */
-    public generateTokenPair(tokenPairRequest: TokenPairRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<TokenPairResponse>;
-    public generateTokenPair(tokenPairRequest: TokenPairRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<TokenPairResponse>>;
-    public generateTokenPair(tokenPairRequest: TokenPairRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<TokenPairResponse>>;
-    public generateTokenPair(tokenPairRequest: TokenPairRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
-        if (tokenPairRequest === null || tokenPairRequest === undefined) {
-            throw new Error('Required parameter tokenPairRequest was null or undefined when calling generateTokenPair.');
-        }
-
-        let localVarHeaders = this.defaultHeaders;
-
-        // authentication (bearerAuth) required
-        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
-
-        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
-            'application/json'
-        ]);
-        if (localVarHttpHeaderAcceptSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
-        }
-
-        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
-
-        const localVarTransferCache: boolean = options?.transferCache ?? true;
-
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-            'application/json'
-        ];
-        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
-        if (httpContentTypeSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
-        }
-
-        let responseType_: 'text' | 'json' | 'blob' = 'json';
-        if (localVarHttpHeaderAcceptSelected) {
-            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
-                responseType_ = 'text';
-            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
-                responseType_ = 'json';
-            } else {
-                responseType_ = 'blob';
-            }
-        }
-
-        let localVarPath = `/v1/auth/token-pair`;
-        const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<TokenPairResponse>('post', `${basePath}${localVarPath}`,
-            {
-                context: localVarHttpContext,
-                body: tokenPairRequest,
-                responseType: <any>responseType_,
-                ...(withCredentials ? { withCredentials } : {}),
-                headers: localVarHeaders,
-                observe: observe,
-                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * Extract roles from JWT token
-     * Get the roles claim from a JWT token
+     * Extract Roles From JWT Token
+     * Extracts the roles claim from a valid JWT token and returns the normalized role names. Use this tool when a caller holds a token and needs its roles; use getTokenSubject instead for the username, and decodePermissionBits instead to expand the token\&#39;s perm_bits claim into permission codes. Preconditions: the token must pass full validation, including revocation and token-store checks. Required inputs: token as a query parameter. No events are emitted and no state changes; this is a read-only claim extraction. Returns 401 when the token is invalid, expired, revoked, or unknown to the token store. 
      * @endpoint get /v1/auth/roles
      * @param token 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public getRoles(token: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Set<string>>;
-    public getRoles(token: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Set<string>>>;
-    public getRoles(token: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Set<string>>>;
-    public getRoles(token: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getTokenRoles(token: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Set<string>>;
+    public getTokenRoles(token: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Set<string>>>;
+    public getTokenRoles(token: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Set<string>>>;
+    public getTokenRoles(token: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (token === null || token === undefined) {
-            throw new Error('Required parameter token was null or undefined when calling getRoles.');
+            throw new Error('Required parameter token was null or undefined when calling getTokenRoles.');
         }
 
         let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
@@ -190,20 +120,20 @@ export class JWTAPIService extends BaseService {
     }
 
     /**
-     * Extract subject from JWT token
-     * Get the subject (username) from a JWT token
+     * Extract Subject From JWT Token
+     * Extracts the subject claim, the username, from a valid JWT token and returns it as a plain string body. Use this tool to resolve which user a token belongs to; use getTokenUserId instead for the stable UUID identifier, and getTokenRoles for the role claim. Preconditions: the token must pass full validation, including revocation and token-store checks. Required inputs: token as a query parameter. No events are emitted and no state changes; this is a read-only claim extraction. Returns 401 when the token is invalid, expired, revoked, or unknown to the token store. 
      * @endpoint get /v1/auth/subject
      * @param token 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public getSubject(token: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<string>;
-    public getSubject(token: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<string>>;
-    public getSubject(token: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<string>>;
-    public getSubject(token: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getTokenSubject(token: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<string>;
+    public getTokenSubject(token: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<string>>;
+    public getTokenSubject(token: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<string>>;
+    public getTokenSubject(token: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (token === null || token === undefined) {
-            throw new Error('Required parameter token was null or undefined when calling getSubject.');
+            throw new Error('Required parameter token was null or undefined when calling getTokenSubject.');
         }
 
         let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
@@ -262,20 +192,20 @@ export class JWTAPIService extends BaseService {
     }
 
     /**
-     * Extract userId from JWT token
-     * Get the stable user identifier from a JWT token
+     * Extract User Id From JWT Token
+     * Extracts the stable user identifier from a valid JWT token\&#39;s uid claim (falling back to the legacy userId claim) and returns it as a plain string body. Use this tool to resolve the user UUID behind a token; use getTokenSubject instead when the username is what is needed. Preconditions: the token must pass full validation, including revocation and token-store checks. Required inputs: token as a query parameter. No events are emitted and no state changes; this is a read-only claim extraction. Returns 401 when the token is invalid, expired, revoked, or unknown to the token store. 
      * @endpoint get /v1/auth/user-id
      * @param token 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public getUserId(token: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<string>;
-    public getUserId(token: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<string>>;
-    public getUserId(token: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<string>>;
-    public getUserId(token: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getTokenUserId(token: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<string>;
+    public getTokenUserId(token: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<string>>;
+    public getTokenUserId(token: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<string>>;
+    public getTokenUserId(token: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (token === null || token === undefined) {
-            throw new Error('Required parameter token was null or undefined when calling getUserId.');
+            throw new Error('Required parameter token was null or undefined when calling getTokenUserId.');
         }
 
         let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
@@ -334,10 +264,10 @@ export class JWTAPIService extends BaseService {
     }
 
     /**
-     * Issue internal JWT access token
-     * Internal endpoint to issue a JWT access token (1-hour expiration). See BACKEND_CONTRACT_GUIDE.md §Login Endpoint for full specification.
+     * Issue Internal JWT Access Token
+     * Issues a single JWT access token (1-hour expiry) for an existing user\&#39;s username on behalf of a trusted internal caller, without checking a password. Use this tool for internal service-to-service token minting when only an access token is needed; do not use issueTokenPair, which also returns a 7-day refresh token, and do not use loginUser, which authenticates with credentials. Preconditions: the caller must hold security:token:issue_internal, and a user must already exist for the subject username. Required inputs: subject, an existing username; roles is nominally optional, but an empty effective role set is rejected, so supply at least one role name. Emits a SECURITY_AUTH_INTERNAL_TOKEN_ISSUE event and persists the issued token so validateToken and revokeToken recognize it. Returns 400 when the subject is blank, no user exists for the subject, or the role set is empty. 
      * @endpoint post /v1/auth/internal/token
-     * @param internalTokenRequest 
+     * @param internalTokenRequest Subject and role names to embed in the internally issued access token.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -404,20 +334,90 @@ export class JWTAPIService extends BaseService {
     }
 
     /**
-     * Refresh access token using refresh token
-     * Exchange a valid refresh token for a new access token and refresh token. Old tokens are immediately revoked. See BACKEND_CONTRACT_GUIDE.md §Refresh Endpoint for full specification.
-     * @endpoint post /v1/auth/refresh
-     * @param refreshTokenRequest 
+     * Issue Privileged JWT Token Pair
+     * Privileged internal endpoint that issues a JWT access token (1-hour) and refresh token (7-day) for an existing user\&#39;s username on behalf of a trusted internal caller, embedding uid, roles, perm_bits, and perm_ver claims. Use this tool when an internal caller needs a refreshable session for an existing user; do not use issueInternalToken, which returns only a single access token, and do not use loginUser, which requires the user\&#39;s password. Preconditions: the caller must hold security:token:issue_internal, and a user must already exist for the subject username. Required inputs: subject, an existing username, and at least one role name in roles; roles are expanded to authorities and encoded into the perm_bits bitset claim. Emits a SECURITY_AUTH_TOKEN_PAIR event and persists the pair so validateToken and refreshTokenPair recognize it. Returns 400 when the subject is blank, no user exists for the subject, or the role set is empty. 
+     * @endpoint post /v1/auth/token-pair
+     * @param tokenPairRequest Subject and role names to embed in the issued access and refresh tokens.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public refreshAccessToken(refreshTokenRequest: RefreshTokenRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<TokenPairResponse>;
-    public refreshAccessToken(refreshTokenRequest: RefreshTokenRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<TokenPairResponse>>;
-    public refreshAccessToken(refreshTokenRequest: RefreshTokenRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<TokenPairResponse>>;
-    public refreshAccessToken(refreshTokenRequest: RefreshTokenRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public issueTokenPair(tokenPairRequest: TokenPairRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<TokenPairResponse>;
+    public issueTokenPair(tokenPairRequest: TokenPairRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<TokenPairResponse>>;
+    public issueTokenPair(tokenPairRequest: TokenPairRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<TokenPairResponse>>;
+    public issueTokenPair(tokenPairRequest: TokenPairRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (tokenPairRequest === null || tokenPairRequest === undefined) {
+            throw new Error('Required parameter tokenPairRequest was null or undefined when calling issueTokenPair.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/auth/token-pair`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<TokenPairResponse>('post', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                body: tokenPairRequest,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Refresh Access Token With Rotation
+     * Exchanges a valid refresh token for a new access and refresh token pair, revoking the old pair in the same call (token rotation). Use this tool when an access token nears expiry and the client still holds a refresh token; do not use loginUser, which requires credentials, and do not use validateToken, which only checks a token without renewing it. Preconditions: the refresh token must be unexpired, unrevoked, present in the token store, and its user must still exist with at least one role. Required inputs: refreshToken, the exact refresh token string previously issued. Emits a SECURITY_AUTH_REFRESH event, revokes the old access and refresh token JTIs in Redis, deletes the stored pair, and persists the replacement pair. Returns 400 when the refresh token is invalid, expired, revoked, or unknown, or the user has no roles, 401 with INVALID_REFRESH_TOKEN when the referenced user no longer exists, and 409 when concurrent refreshes race on the same token. 
+     * @endpoint post /v1/auth/refresh
+     * @param refreshTokenRequest The refresh token being exchanged for a new token pair.
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public refreshTokenPair(refreshTokenRequest: RefreshTokenRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<TokenPairResponse>;
+    public refreshTokenPair(refreshTokenRequest: RefreshTokenRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<TokenPairResponse>>;
+    public refreshTokenPair(refreshTokenRequest: RefreshTokenRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<TokenPairResponse>>;
+    public refreshTokenPair(refreshTokenRequest: RefreshTokenRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (refreshTokenRequest === null || refreshTokenRequest === undefined) {
-            throw new Error('Required parameter refreshTokenRequest was null or undefined when calling refreshAccessToken.');
+            throw new Error('Required parameter refreshTokenRequest was null or undefined when calling refreshTokenPair.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -471,8 +471,8 @@ export class JWTAPIService extends BaseService {
     }
 
     /**
-     * Revoke JWT token
-     * Revoke a JWT token immediately (Redis cache + database)
+     * Revoke a JWT Access Token
+     * Revokes a JWT access token immediately by deleting its stored pair and adding its JTI to the Redis revocation cache until natural expiry. Use this tool to invalidate one compromised or abandoned token; do not use disableUserAccount, which revokes every token for a user and blocks future sign-in. Preconditions: an authenticated caller; the token should exist in the token store, though an unknown token is silently ignored. Required inputs: token as a query parameter, the exact access token string to revoke. Emits a SECURITY_AUTH_REVOKE event; revocation takes effect immediately for validateToken and downstream gateway checks. Returns 204 in all cases, including when the token was not found, so revocation success cannot be inferred from the status code. 
      * @endpoint delete /v1/auth/revoke
      * @param token 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -543,8 +543,8 @@ export class JWTAPIService extends BaseService {
     }
 
     /**
-     * Validate JWT token
-     * Check if a JWT token is valid (signature, expiration, revocation)
+     * Validate a JWT Access Token
+     * Checks whether a JWT access token is currently valid by verifying signature, issuer, audience, expiry, Redis revocation status, and presence in the token store. Use this tool to test a token without side effects; do not use refreshTokenPair, which rotates tokens, and do not use revokeToken, which invalidates one. Preconditions: none beyond possessing the token string; the endpoint is public. Required inputs: token as a query parameter. No events are emitted and no state changes; this is a read-only check. Returns 200 in all cases with a valid flag, so callers must read valid&#x3D;false rather than expect an error status when the token fails any check. 
      * @endpoint get /v1/auth/validate
      * @param token 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.

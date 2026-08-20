@@ -14,33 +14,41 @@
  */
 export interface ReplenishmentPolicyResponse { 
     /**
-     * Unique identifier of the replenishment policy
+     * Whether the policy participates in replenishment evaluation
      */
-    policyId: string;
+    active: boolean;
     /**
-     * Identifier of the location the replenishment policy applies to
+     * Timestamp at which the replenishment policy was created
      */
-    locationId: string;
+    createdAt: string;
     /**
      * SKU of the item the replenishment policy applies to
      */
     itemSKU: string;
     /**
-     * Minimum on-hand quantity that triggers replenishment when reached
+     * Per-policy lead-time override in days; absent means vendor-feed/default lead time applies
      */
-    minimumQuantity: number;
+    leadTimeDaysOverride?: number;
+    /**
+     * Identifier of the location the replenishment policy applies to
+     */
+    locationId: string;
     /**
      * Maximum on-hand quantity replenishment aims to restock up to
      */
     maximumQuantity: number;
     /**
+     * Minimum on-hand quantity that triggers replenishment when reached
+     */
+    minimumQuantity: number;
+    /**
      * Round the computed replenishment quantity up to the nearest multiple of this value; absent means no rounding
      */
     orderMultiple?: number;
     /**
-     * Per-policy lead-time override in days; absent means vendor-feed/default lead time applies
+     * Unique identifier of the replenishment policy
      */
-    leadTimeDaysOverride?: number;
+    policyId: string;
     /**
      * Preferred sourcing channel for replenishing this policy\'s pick face
      */
@@ -49,14 +57,6 @@ export interface ReplenishmentPolicyResponse {
      * Instant until which the policy is snoozed (excluded from replenishment evaluation); absent or past means the policy is evaluated normally
      */
     snoozedUntil?: string;
-    /**
-     * Whether the policy participates in replenishment evaluation
-     */
-    active: boolean;
-    /**
-     * Timestamp at which the replenishment policy was created
-     */
-    createdAt: string;
 }
 
 function isOptionalReplenishmentPolicyResponsePropertyOfType(
@@ -97,9 +97,9 @@ export function instanceOfReplenishmentPolicyResponse(value: object): value is R
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createReplenishmentPolicyResponsePropertyNames('policyId', 'locationId', 'itemSKU', 'minimumQuantity', 'maximumQuantity', 'preferredSourceType', 'active', 'createdAt', );
-    const optionalStringProperties = createReplenishmentPolicyResponseOptionalProperties({ name: 'policyId', nullable: false }, { name: 'locationId', nullable: false }, { name: 'itemSKU', nullable: false }, { name: 'preferredSourceType', nullable: false }, { name: 'snoozedUntil', nullable: false }, { name: 'createdAt', nullable: false }, );
-    const optionalNumberProperties = createReplenishmentPolicyResponseOptionalProperties({ name: 'minimumQuantity', nullable: false }, { name: 'maximumQuantity', nullable: false }, { name: 'orderMultiple', nullable: false }, { name: 'leadTimeDaysOverride', nullable: false }, );
+    const requiredProperties = createReplenishmentPolicyResponsePropertyNames('active', 'createdAt', 'itemSKU', 'locationId', 'maximumQuantity', 'minimumQuantity', 'policyId', 'preferredSourceType', );
+    const optionalStringProperties = createReplenishmentPolicyResponseOptionalProperties({ name: 'createdAt', nullable: false }, { name: 'itemSKU', nullable: false }, { name: 'locationId', nullable: false }, { name: 'policyId', nullable: false }, { name: 'preferredSourceType', nullable: false }, { name: 'snoozedUntil', nullable: false }, );
+    const optionalNumberProperties = createReplenishmentPolicyResponseOptionalProperties({ name: 'leadTimeDaysOverride', nullable: false }, { name: 'maximumQuantity', nullable: false }, { name: 'minimumQuantity', nullable: false }, { name: 'orderMultiple', nullable: false }, );
     const optionalBooleanProperties = createReplenishmentPolicyResponseOptionalProperties({ name: 'active', nullable: false }, );
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

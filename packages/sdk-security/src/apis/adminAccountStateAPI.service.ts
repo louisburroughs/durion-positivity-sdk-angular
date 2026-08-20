@@ -38,20 +38,20 @@ export class AdminAccountStateAPIService extends BaseService {
     }
 
     /**
-     * Disable a user account
-     * Marks the specified user account as disabled to prevent further use until it is re-enabled.
+     * Disable a User Account
+     * Marks a user account as disabled, records the disabling actor and time, and immediately revokes every token issued to the user. Use this tool for a reversible administrative block; do not use deleteUser, which removes the account, and do not use expireUserAccount, which marks the account expired instead. Preconditions: the caller must hold security:user_account_state:manage and the user must exist. Required inputs: id (UUID) as a path parameter; there is no request body. Emits a SECURITY_USER_DISABLE event and revokes all of the user\&#39;s access and refresh tokens. Returns 404 with USER_NOT_FOUND when the user does not exist. 
      * @endpoint post /v1/users/{id}/disable
      * @param id 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public disable(id: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public disable(id: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public disable(id: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public disable(id: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public disableUserAccount(id: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any>;
+    public disableUserAccount(id: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
+    public disableUserAccount(id: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
+    public disableUserAccount(id: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (id === null || id === undefined) {
-            throw new Error('Required parameter id was null or undefined when calling disable.');
+            throw new Error('Required parameter id was null or undefined when calling disableUserAccount.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -98,20 +98,20 @@ export class AdminAccountStateAPIService extends BaseService {
     }
 
     /**
-     * Enable a user account
-     * Marks the specified user account as enabled so it can be used for sign-in and access checks.
+     * Enable a Disabled User Account
+     * Marks a user account as enabled so it is again accepted for sign-in and access checks. Use this tool to reverse disableUserAccount; do not use unlockUserAccount, which clears a failed-login lockout instead. Preconditions: the caller must hold security:user_account_state:manage and the user must exist. Required inputs: id (UUID) as a path parameter; there is no request body. Emits a SECURITY_USER_ENABLE event; no tokens are issued or restored, so the user must sign in again. Returns 404 with USER_NOT_FOUND when the user does not exist. 
      * @endpoint post /v1/users/{id}/enable
      * @param id 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public enable(id: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public enable(id: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public enable(id: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public enable(id: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public enableUserAccount(id: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any>;
+    public enableUserAccount(id: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
+    public enableUserAccount(id: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
+    public enableUserAccount(id: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (id === null || id === undefined) {
-            throw new Error('Required parameter id was null or undefined when calling enable.');
+            throw new Error('Required parameter id was null or undefined when calling enableUserAccount.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -158,20 +158,20 @@ export class AdminAccountStateAPIService extends BaseService {
     }
 
     /**
-     * Expire a user account
-     * Expires the specified user account so it is no longer considered valid for authentication.
+     * Expire a User Account
+     * Marks a user account as expired, stamping the expiry time and immediately revoking every token issued to the user. Use this tool to end an account\&#39;s validity, for example at offboarding; do not use disableUserAccount, which signals a reversible administrative block, or expireUserCredentials, which only forces a credential reset. Preconditions: the caller must hold security:user_account_state:manage and the user must exist. Required inputs: id (UUID) as a path parameter; there is no request body. Emits a SECURITY_USER_EXPIRE_ACCOUNT event and revokes all of the user\&#39;s access and refresh tokens. Returns 404 with USER_NOT_FOUND when the user does not exist. 
      * @endpoint post /v1/users/{id}/expire-account
      * @param id 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public expireAccount(id: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public expireAccount(id: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public expireAccount(id: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public expireAccount(id: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public expireUserAccount(id: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any>;
+    public expireUserAccount(id: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
+    public expireUserAccount(id: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
+    public expireUserAccount(id: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (id === null || id === undefined) {
-            throw new Error('Required parameter id was null or undefined when calling expireAccount.');
+            throw new Error('Required parameter id was null or undefined when calling expireUserAccount.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -218,20 +218,20 @@ export class AdminAccountStateAPIService extends BaseService {
     }
 
     /**
-     * Expire user credentials
-     * Expires the specified user\&#39;s credentials so a credential reset or update is required before reuse.
+     * Expire a User\&#39;s Credentials
+     * Marks a user\&#39;s credentials as expired, stamping the expiry time and immediately revoking every token so a credential reset is required before further use. Use this tool to force a password rotation; do not use expireUserAccount, which expires the whole account rather than just its credentials. Preconditions: the caller must hold security:user_account_state:manage and the user must exist. Required inputs: id (UUID) as a path parameter; there is no request body. Emits a SECURITY_USER_EXPIRE_CREDENTIALS event and revokes all of the user\&#39;s access and refresh tokens. Returns 404 with USER_NOT_FOUND when the user does not exist. 
      * @endpoint post /v1/users/{id}/expire-credentials
      * @param id 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public expireCredentials(id: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public expireCredentials(id: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public expireCredentials(id: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public expireCredentials(id: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public expireUserCredentials(id: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any>;
+    public expireUserCredentials(id: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
+    public expireUserCredentials(id: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
+    public expireUserCredentials(id: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (id === null || id === undefined) {
-            throw new Error('Required parameter id was null or undefined when calling expireCredentials.');
+            throw new Error('Required parameter id was null or undefined when calling expireUserCredentials.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -278,20 +278,20 @@ export class AdminAccountStateAPIService extends BaseService {
     }
 
     /**
-     * Get user account state
-     * Returns the current administrative account-state flags for the specified user.
+     * Get a User\&#39;s Account-State Flags
+     * Returns the administrative account-state flags for a user: enabled, lock, account-expiry, and credential-expiry state with their timestamps, disabling actor, and failed-attempt count. Use this tool to diagnose why sign-in fails before choosing among unlockUserAccount, enableUserAccount, and the expiry endpoints; use getUserById instead for identity and role data. Preconditions: the caller must hold security:user_account_state:view and the user must exist. Required inputs: id (UUID) as a path parameter. No events are emitted and no state changes; this is a read-only projection. Returns 404 with USER_NOT_FOUND when the user does not exist. 
      * @endpoint get /v1/users/{id}/account-state
      * @param id 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public getAccountState(id: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<AccountStateResponse>;
-    public getAccountState(id: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<AccountStateResponse>>;
-    public getAccountState(id: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<AccountStateResponse>>;
-    public getAccountState(id: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getUserAccountState(id: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<AccountStateResponse>;
+    public getUserAccountState(id: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<AccountStateResponse>>;
+    public getUserAccountState(id: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<AccountStateResponse>>;
+    public getUserAccountState(id: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (id === null || id === undefined) {
-            throw new Error('Required parameter id was null or undefined when calling getAccountState.');
+            throw new Error('Required parameter id was null or undefined when calling getUserAccountState.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -338,20 +338,20 @@ export class AdminAccountStateAPIService extends BaseService {
     }
 
     /**
-     * Unlock a user account
-     * Removes the locked state from the specified user account so the user can authenticate again.
+     * Unlock a Locked User Account
+     * Clears the lockout state on a user account, resetting the failed-attempt counter and lock timestamps so the user can authenticate again. Use this tool after a lockout caused by repeated failed logins; do not use enableUserAccount, which reverses an administrative disable rather than a lockout. Preconditions: the caller must hold security:user_account_state:manage and the user must exist. Required inputs: id (UUID) as a path parameter; there is no request body. Emits a SECURITY_USER_UNLOCK event; existing tokens are not revoked. Returns 404 with USER_NOT_FOUND when the user does not exist. 
      * @endpoint post /v1/users/{id}/unlock
      * @param id 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public unlock(id: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public unlock(id: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public unlock(id: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public unlock(id: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public unlockUserAccount(id: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any>;
+    public unlockUserAccount(id: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
+    public unlockUserAccount(id: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
+    public unlockUserAccount(id: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (id === null || id === undefined) {
-            throw new Error('Required parameter id was null or undefined when calling unlock.');
+            throw new Error('Required parameter id was null or undefined when calling unlockUserAccount.');
         }
 
         let localVarHeaders = this.defaultHeaders;

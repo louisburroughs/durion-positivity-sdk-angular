@@ -40,11 +40,11 @@ export class PaymentApplicationsService extends BaseService {
     }
 
     /**
-     * Apply payment
-     * Apply a payment to one or more invoices and update their status. The optional allocationStrategy field controls allocation order: CALLER_ORDER (default when omitted) honors the caller-supplied order; OLDEST_FIRST allocates by ascending invoice date.
+     * Apply Payment To Invoices
+     * Applies a receivable payment to one or more invoices atomically, updating each invoice\&#39;s balance and status and reducing the payment\&#39;s unapplied amount. Use this tool to settle invoices from an available payment; do not use applyCustomerCredit, which draws down a standing credit rather than a payment. Preconditions: the payment must be AVAILABLE with sufficient unapplied funds, and every target invoice must be applicable (not paid in full, voided or cancelled); an overpayment creates a CustomerCredit for the excess. Required inputs: paymentId (UUID) as a path parameter, applicationRequestId (max 100 chars, the idempotency key) and a non-empty applications list of invoiceId plus amountToApply (min 0.01); allocationStrategy is optional, CALLER_ORDER when omitted or OLDEST_FIRST to allocate by ascending invoice date. Emits an ACCOUNTING_PAYMENT_APPLY event; the application is atomic across all invoices and idempotent on applicationRequestId. Returns 404 when the payment is not found, 400 for insufficient funds, 409 for a currency mismatch or an inapplicable invoice, and 503 when the invoice service is unreachable. 
      * @endpoint post /v1/accounting/payments/{paymentId}/applications
      * @param paymentId Payment identifier
-     * @param paymentApplicationRequest 
+     * @param paymentApplicationRequest Idempotent, atomic allocation of the payment across one or more invoices.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -114,11 +114,11 @@ export class PaymentApplicationsService extends BaseService {
     }
 
     /**
-     * Reverse payment
-     * Reverse a previously applied payment.
+     * Reverse Payment
+     * Reverses every application of a receivable payment as new compensating records, restoring each invoice\&#39;s balance and the payment\&#39;s unapplied amount. Use this tool to back out a whole applied payment, which is also the required path for multi-invoice applications; do not use reversePaymentApplication, which reverses one single-invoice application, and do not use voidPaymentApplication, which only handles never-applied payments. Preconditions: the payment must exist and have at least one application; already-reversed applications are skipped rather than double-reversed. Required inputs: paymentId (UUID) as a path parameter and a reason of 10 to 1000 characters for the audit trail. Emits an ACCOUNTING_PAYMENT_REVERSE event; reversals are new records, never deletions. Returns 404 when the payment is not found, 409 when it has no applications to reverse, and 204 with no body on success. 
      * @endpoint post /v1/accounting/payments/{paymentId}/reverse
      * @param paymentId Payment identifier
-     * @param paymentApplicationReversalRequest 
+     * @param paymentApplicationReversalRequest Audit reason for reversing all of the payment\&#39;s applications.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -187,11 +187,11 @@ export class PaymentApplicationsService extends BaseService {
     }
 
     /**
-     * Reverse payment application
-     * Reverse a payment application with compensating transaction (no deletion).
+     * Reverse Payment Application
+     * Reverses one payment application as a new compensating record, restoring the invoice\&#39;s balance and the payment\&#39;s unapplied amount. Use this tool for an application that settled a single invoice; do not use it on an application created by a multi-invoice apply request, which must be reversed as a whole via reversePayment. Preconditions: the application must exist, must not already be reversed, and must not belong to a multi-application request. Required inputs: applicationId (UUID) as a path parameter and a reason of 10 to 1000 characters for the audit trail; the caller needs accounting:payment:reverse or an ACCOUNTING_ADMIN or AR_MANAGER authority. Emits an ACCOUNTING_PAYMENT_APPLICATION_REVERSE event; the reversal is a new record, not a deletion. Returns 404 when the application is not found, 409 when it is already reversed, 422 WHOLE_REQUEST_REVERSAL_REQUIRED when it belongs to a multi-application request, and 204 with no body on success. 
      * @endpoint post /v1/accounting/payment-applications/{applicationId}/reverse
      * @param applicationId Payment application identifier
-     * @param paymentApplicationReversalRequest 
+     * @param paymentApplicationReversalRequest Audit reason for reversing this single payment application.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -260,21 +260,21 @@ export class PaymentApplicationsService extends BaseService {
     }
 
     /**
-     * Void payment
-     * Void a payment before settlement.
+     * Void Payment
+     * Voids a receivable payment that has not been applied to any invoice, zeroing its unapplied amount so it can never be applied. Use this tool for a payment recorded in error before any application; do not use reversePayment, which backs out a payment whose applications already exist. Preconditions: the payment must exist and have no invoice applications; voiding an already-voided payment is a no-op. Required inputs: paymentId (UUID) as a path parameter; the request body is optional and ignored. Emits an ACCOUNTING_PAYMENT_VOID event. Returns 404 when the payment is not found, 409 when invoice applications already exist (reverse those first), and 204 with no body on success. 
      * @endpoint post /v1/accounting/payments/{paymentId}/void
      * @param paymentId Payment identifier
-     * @param body 
+     * @param body Optional and ignored; send an empty object or omit the body entirely.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public voidPayment(paymentId: string, body?: object, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public voidPayment(paymentId: string, body?: object, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public voidPayment(paymentId: string, body?: object, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public voidPayment(paymentId: string, body?: object, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public voidPaymentApplication(paymentId: string, body?: object, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
+    public voidPaymentApplication(paymentId: string, body?: object, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
+    public voidPaymentApplication(paymentId: string, body?: object, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
+    public voidPaymentApplication(paymentId: string, body?: object, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (paymentId === null || paymentId === undefined) {
-            throw new Error('Required parameter paymentId was null or undefined when calling voidPayment.');
+            throw new Error('Required parameter paymentId was null or undefined when calling voidPaymentApplication.');
         }
 
         let localVarHeaders = this.defaultHeaders;

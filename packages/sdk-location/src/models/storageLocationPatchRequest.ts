@@ -14,29 +14,29 @@
  */
 export interface StorageLocationPatchRequest { 
     /**
-     * Display name of the storage location
-     */
-    name?: string;
-    /**
      * Barcode identifying the storage location
      */
     barcode?: string;
     /**
-     * Operational status of the storage location
+     * Capacity attributes of the storage location
      */
-    status?: StorageLocationPatchRequestStatusEnum;
-    /**
-     * Identifier of the parent storage location
-     */
-    parentStorageLocationId?: string;
+    capacity?: object;
     /**
      * Identifier of the destination storage location for relocation operations
      */
     destinationStorageLocationId?: string;
     /**
-     * Capacity attributes of the storage location
+     * Display name of the storage location
      */
-    capacity?: object;
+    name?: string;
+    /**
+     * Identifier of the parent storage location
+     */
+    parentStorageLocationId?: string;
+    /**
+     * Operational status of the storage location
+     */
+    status?: StorageLocationPatchRequestStatusEnum;
     /**
      * Temperature attributes of the storage location
      */
@@ -90,7 +90,7 @@ export function instanceOfStorageLocationPatchRequest(value: object): value is S
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createStorageLocationPatchRequestPropertyNames();
-    const optionalStringProperties = createStorageLocationPatchRequestOptionalProperties({ name: 'name', nullable: false }, { name: 'barcode', nullable: false }, { name: 'status', nullable: false }, { name: 'parentStorageLocationId', nullable: false }, { name: 'destinationStorageLocationId', nullable: false }, );
+    const optionalStringProperties = createStorageLocationPatchRequestOptionalProperties({ name: 'barcode', nullable: false }, { name: 'destinationStorageLocationId', nullable: false }, { name: 'name', nullable: false }, { name: 'parentStorageLocationId', nullable: false }, { name: 'status', nullable: false }, );
     const optionalNumberProperties = createStorageLocationPatchRequestOptionalProperties();
     const optionalBooleanProperties = createStorageLocationPatchRequestOptionalProperties();
 

@@ -14,6 +14,66 @@
  */
 export interface SyncLogResponse { 
     /**
+     * When the run completed
+     */
+    completedAt?: string;
+    /**
+     * Correlation id of the triggering request
+     */
+    correlationId?: string;
+    /**
+     * When this entry was recorded
+     */
+    createdAt: string;
+    /**
+     * Error detail when the entry is a failure
+     */
+    errorMessage?: string;
+    /**
+     * HR location id of the record (RECORD scope only)
+     */
+    hrLocationId?: string;
+    /**
+     * pos-location id of the record (RECORD scope only)
+     */
+    locationId?: string;
+    /**
+     * Number of location refs created (RUN scope only)
+     */
+    locationsCreated?: number;
+    /**
+     * Number of records that failed to apply (RUN scope only)
+     */
+    locationsFailed?: number;
+    /**
+     * Number of roster records processed (RUN scope only)
+     */
+    locationsProcessed?: number;
+    /**
+     * Number of records already up to date (RUN scope only)
+     */
+    locationsUnchanged?: number;
+    /**
+     * Number of location refs updated (RUN scope only)
+     */
+    locationsUpdated?: number;
+    /**
+     * Outcome of the run or record
+     */
+    outcome: string;
+    /**
+     * Raw roster payload of a failed record
+     */
+    payload?: string;
+    /**
+     * RUN summary entry or RECORD failure entry
+     */
+    scope: string;
+    /**
+     * When the run started
+     */
+    startedAt?: string;
+    /**
      * Identifier of this log entry
      */
     syncLogId: string;
@@ -22,69 +82,9 @@ export interface SyncLogResponse {
      */
     syncRunId: string;
     /**
-     * RUN summary entry or RECORD failure entry
-     */
-    scope: string;
-    /**
-     * Outcome of the run or record
-     */
-    outcome: string;
-    /**
-     * Correlation id of the triggering request
-     */
-    correlationId?: string;
-    /**
      * User or system that triggered the run
      */
     triggeredBy?: string;
-    /**
-     * pos-location id of the record (RECORD scope only)
-     */
-    locationId?: string;
-    /**
-     * HR location id of the record (RECORD scope only)
-     */
-    hrLocationId?: string;
-    /**
-     * Raw roster payload of a failed record
-     */
-    payload?: string;
-    /**
-     * Error detail when the entry is a failure
-     */
-    errorMessage?: string;
-    /**
-     * Number of roster records processed (RUN scope only)
-     */
-    locationsProcessed?: number;
-    /**
-     * Number of location refs created (RUN scope only)
-     */
-    locationsCreated?: number;
-    /**
-     * Number of location refs updated (RUN scope only)
-     */
-    locationsUpdated?: number;
-    /**
-     * Number of records already up to date (RUN scope only)
-     */
-    locationsUnchanged?: number;
-    /**
-     * Number of records that failed to apply (RUN scope only)
-     */
-    locationsFailed?: number;
-    /**
-     * When the run started
-     */
-    startedAt?: string;
-    /**
-     * When the run completed
-     */
-    completedAt?: string;
-    /**
-     * When this entry was recorded
-     */
-    createdAt: string;
 }
 
 function isOptionalSyncLogResponsePropertyOfType(
@@ -125,9 +125,9 @@ export function instanceOfSyncLogResponse(value: object): value is SyncLogRespon
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createSyncLogResponsePropertyNames('syncLogId', 'syncRunId', 'scope', 'outcome', 'createdAt', );
-    const optionalStringProperties = createSyncLogResponseOptionalProperties({ name: 'syncLogId', nullable: false }, { name: 'syncRunId', nullable: false }, { name: 'scope', nullable: false }, { name: 'outcome', nullable: false }, { name: 'correlationId', nullable: false }, { name: 'triggeredBy', nullable: false }, { name: 'locationId', nullable: false }, { name: 'hrLocationId', nullable: false }, { name: 'payload', nullable: false }, { name: 'errorMessage', nullable: false }, { name: 'startedAt', nullable: false }, { name: 'completedAt', nullable: false }, { name: 'createdAt', nullable: false }, );
-    const optionalNumberProperties = createSyncLogResponseOptionalProperties({ name: 'locationsProcessed', nullable: false }, { name: 'locationsCreated', nullable: false }, { name: 'locationsUpdated', nullable: false }, { name: 'locationsUnchanged', nullable: false }, { name: 'locationsFailed', nullable: false }, );
+    const requiredProperties = createSyncLogResponsePropertyNames('createdAt', 'outcome', 'scope', 'syncLogId', 'syncRunId', );
+    const optionalStringProperties = createSyncLogResponseOptionalProperties({ name: 'completedAt', nullable: false }, { name: 'correlationId', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'errorMessage', nullable: false }, { name: 'hrLocationId', nullable: false }, { name: 'locationId', nullable: false }, { name: 'outcome', nullable: false }, { name: 'payload', nullable: false }, { name: 'scope', nullable: false }, { name: 'startedAt', nullable: false }, { name: 'syncLogId', nullable: false }, { name: 'syncRunId', nullable: false }, { name: 'triggeredBy', nullable: false }, );
+    const optionalNumberProperties = createSyncLogResponseOptionalProperties({ name: 'locationsCreated', nullable: false }, { name: 'locationsFailed', nullable: false }, { name: 'locationsProcessed', nullable: false }, { name: 'locationsUnchanged', nullable: false }, { name: 'locationsUpdated', nullable: false }, );
     const optionalBooleanProperties = createSyncLogResponseOptionalProperties();
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

@@ -10,17 +10,17 @@
 
 
 /**
- * Work session start request body
+ * Request to start or act on a work session for a person
  */
 export interface WorkSessionRequest { 
-    /**
-     * ID of the person
-     */
-    personId: string;
     /**
      * Actor performing the action
      */
     actor?: string;
+    /**
+     * ID of the person
+     */
+    personId: string;
 }
 
 function isOptionalWorkSessionRequestPropertyOfType(
@@ -62,7 +62,7 @@ export function instanceOfWorkSessionRequest(value: object): value is WorkSessio
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createWorkSessionRequestPropertyNames('personId', );
-    const optionalStringProperties = createWorkSessionRequestOptionalProperties({ name: 'personId', nullable: false }, { name: 'actor', nullable: false }, );
+    const optionalStringProperties = createWorkSessionRequestOptionalProperties({ name: 'actor', nullable: false }, { name: 'personId', nullable: false }, );
     const optionalNumberProperties = createWorkSessionRequestOptionalProperties();
     const optionalBooleanProperties = createWorkSessionRequestOptionalProperties();
 

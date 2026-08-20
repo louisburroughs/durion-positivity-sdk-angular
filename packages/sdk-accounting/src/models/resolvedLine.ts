@@ -14,10 +14,6 @@
  */
 export interface ResolvedLine { 
     /**
-     * Resolved GL account identifier
-     */
-    glAccountId: string;
-    /**
      * Resolved GL account code
      */
     accountCode?: string;
@@ -26,25 +22,29 @@ export interface ResolvedLine {
      */
     accountName?: string;
     /**
-     * Debit amount for this line
-     */
-    debitAmount: number;
-    /**
      * Credit amount for this line
      */
     creditAmount: number;
+    /**
+     * Debit amount for this line
+     */
+    debitAmount: number;
     /**
      * Line description
      */
     description?: string;
     /**
-     * E1 split group this line belongs to; null for non-split lines
-     */
-    splitGroup?: string;
-    /**
      * E1 split factor percentage applied to this line; null for non-split lines
      */
     factorPercent?: number;
+    /**
+     * Resolved GL account identifier
+     */
+    glAccountId: string;
+    /**
+     * E1 split group this line belongs to; null for non-split lines
+     */
+    splitGroup?: string;
 }
 
 function isOptionalResolvedLinePropertyOfType(
@@ -85,9 +85,9 @@ export function instanceOfResolvedLine(value: object): value is ResolvedLine {
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createResolvedLinePropertyNames('glAccountId', 'debitAmount', 'creditAmount', );
-    const optionalStringProperties = createResolvedLineOptionalProperties({ name: 'glAccountId', nullable: false }, { name: 'accountCode', nullable: false }, { name: 'accountName', nullable: false }, { name: 'description', nullable: false }, { name: 'splitGroup', nullable: false }, );
-    const optionalNumberProperties = createResolvedLineOptionalProperties({ name: 'debitAmount', nullable: false }, { name: 'creditAmount', nullable: false }, { name: 'factorPercent', nullable: false }, );
+    const requiredProperties = createResolvedLinePropertyNames('creditAmount', 'debitAmount', 'glAccountId', );
+    const optionalStringProperties = createResolvedLineOptionalProperties({ name: 'accountCode', nullable: false }, { name: 'accountName', nullable: false }, { name: 'description', nullable: false }, { name: 'glAccountId', nullable: false }, { name: 'splitGroup', nullable: false }, );
+    const optionalNumberProperties = createResolvedLineOptionalProperties({ name: 'creditAmount', nullable: false }, { name: 'debitAmount', nullable: false }, { name: 'factorPercent', nullable: false }, );
     const optionalBooleanProperties = createResolvedLineOptionalProperties();
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

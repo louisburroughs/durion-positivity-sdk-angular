@@ -14,18 +14,6 @@
  */
 export interface JournalEntryLineResponse { 
     /**
-     * Line UUID
-     */
-    lineId?: string;
-    /**
-     * Line sequence number
-     */
-    lineNumber?: number;
-    /**
-     * GL account UUID
-     */
-    glAccountId?: string;
-    /**
      * GL account code
      */
     accountCode?: string;
@@ -34,13 +22,13 @@ export interface JournalEntryLineResponse {
      */
     accountName?: string;
     /**
-     * Debit amount
-     */
-    debitAmount?: number;
-    /**
      * Credit amount
      */
     creditAmount?: number;
+    /**
+     * Debit amount
+     */
+    debitAmount?: number;
     /**
      * Line description
      */
@@ -49,6 +37,18 @@ export interface JournalEntryLineResponse {
      * Optional dimensional attributes
      */
     dimensions?: { [key: string]: string; };
+    /**
+     * GL account UUID
+     */
+    glAccountId?: string;
+    /**
+     * Line UUID
+     */
+    lineId?: string;
+    /**
+     * Line sequence number
+     */
+    lineNumber?: number;
 }
 
 function isOptionalJournalEntryLineResponsePropertyOfType(
@@ -90,8 +90,8 @@ export function instanceOfJournalEntryLineResponse(value: object): value is Jour
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createJournalEntryLineResponsePropertyNames();
-    const optionalStringProperties = createJournalEntryLineResponseOptionalProperties({ name: 'lineId', nullable: false }, { name: 'glAccountId', nullable: false }, { name: 'accountCode', nullable: false }, { name: 'accountName', nullable: false }, { name: 'description', nullable: false }, );
-    const optionalNumberProperties = createJournalEntryLineResponseOptionalProperties({ name: 'lineNumber', nullable: false }, { name: 'debitAmount', nullable: false }, { name: 'creditAmount', nullable: false }, );
+    const optionalStringProperties = createJournalEntryLineResponseOptionalProperties({ name: 'accountCode', nullable: false }, { name: 'accountName', nullable: false }, { name: 'description', nullable: false }, { name: 'glAccountId', nullable: false }, { name: 'lineId', nullable: false }, );
+    const optionalNumberProperties = createJournalEntryLineResponseOptionalProperties({ name: 'creditAmount', nullable: false }, { name: 'debitAmount', nullable: false }, { name: 'lineNumber', nullable: false }, );
     const optionalBooleanProperties = createJournalEntryLineResponseOptionalProperties();
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

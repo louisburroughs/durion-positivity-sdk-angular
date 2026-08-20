@@ -13,15 +13,15 @@
  * Eligibility evaluation result for a promotion and context
  */
 export interface EligibilityDecisionResponse { 
-    /**
-     * Detailed ineligibility reason when eligibility is false
-     */
-    reasonCode?: EligibilityDecisionResponseReasonCodeEnum;
     eligible?: boolean;
     /**
      * Whether the promotion is eligible for the provided context
      */
     isEligible: boolean;
+    /**
+     * Detailed ineligibility reason when eligibility is false
+     */
+    reasonCode?: EligibilityDecisionResponseReasonCodeEnum;
 }
 export enum EligibilityDecisionResponseReasonCodeEnum {
     Eligible = 'ELIGIBLE',

@@ -14,22 +14,22 @@
  */
 export interface CreatePartyRelationshipRequest { 
     /**
-     * ID of the individual person
+     * Date when this relationship ends (null means no end date)
      */
-    personId: string;
-    /**
-     * Roles for this relationship
-     */
-    roles: Set<CreatePartyRelationshipRequestRolesEnum>;
+    effectiveEndDate?: string;
     /**
      * Date when this relationship becomes effective
      */
     effectiveStartDate: string;
     /**
-     * Date when this relationship ends (null means no end date)
+     * ID of the individual person
      */
-    effectiveEndDate?: string;
+    personId: string;
     primaryBillingContact?: boolean;
+    /**
+     * Roles for this relationship
+     */
+    roles: Set<CreatePartyRelationshipRequestRolesEnum>;
 }
 export enum CreatePartyRelationshipRequestRolesEnum {
     Approver = 'APPROVER',
@@ -79,8 +79,8 @@ export function instanceOfCreatePartyRelationshipRequest(value: object): value i
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createCreatePartyRelationshipRequestPropertyNames('personId', 'roles', 'effectiveStartDate', );
-    const optionalStringProperties = createCreatePartyRelationshipRequestOptionalProperties({ name: 'personId', nullable: false }, { name: 'effectiveStartDate', nullable: false }, { name: 'effectiveEndDate', nullable: false }, );
+    const requiredProperties = createCreatePartyRelationshipRequestPropertyNames('effectiveStartDate', 'personId', 'roles', );
+    const optionalStringProperties = createCreatePartyRelationshipRequestOptionalProperties({ name: 'effectiveEndDate', nullable: false }, { name: 'effectiveStartDate', nullable: false }, { name: 'personId', nullable: false }, );
     const optionalNumberProperties = createCreatePartyRelationshipRequestOptionalProperties();
     const optionalBooleanProperties = createCreatePartyRelationshipRequestOptionalProperties({ name: 'primaryBillingContact', nullable: false }, );
 

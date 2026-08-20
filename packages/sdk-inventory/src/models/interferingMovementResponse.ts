@@ -14,25 +14,29 @@
  */
 export interface InterferingMovementResponse { 
     /**
-     * Unique identifier of the ledger entry
+     * Signed change in quantity applied by this entry (positive inbound, negative outbound)
      */
-    ledgerEntryId: string;
+    changeInQuantity: number;
     /**
      * Type of inventory ledger event recorded
      */
     eventType: InterferingMovementResponseEventTypeEnum;
     /**
-     * Signed change in quantity applied by this entry (positive inbound, negative outbound)
+     * Unique identifier of the ledger entry
      */
-    changeInQuantity: number;
-    /**
-     * Running quantity after this entry was applied
-     */
-    quantityAfter?: number;
+    ledgerEntryId: string;
     /**
      * Location the entry applies to
      */
     locationId?: string;
+    /**
+     * Free-text notes recorded with the entry
+     */
+    notes?: string;
+    /**
+     * Running quantity after this entry was applied
+     */
+    quantityAfter?: number;
     /**
      * Business timestamp of the inventory event
      */
@@ -41,10 +45,6 @@ export interface InterferingMovementResponse {
      * Identifier of the user who initiated the transaction
      */
     transactionUserId?: string;
-    /**
-     * Free-text notes recorded with the entry
-     */
-    notes?: string;
 }
 export enum InterferingMovementResponseEventTypeEnum {
     GoodsReceipt = 'GOODS_RECEIPT',
@@ -110,8 +110,8 @@ export function instanceOfInterferingMovementResponse(value: object): value is I
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createInterferingMovementResponsePropertyNames('ledgerEntryId', 'eventType', 'changeInQuantity', 'timestamp', );
-    const optionalStringProperties = createInterferingMovementResponseOptionalProperties({ name: 'ledgerEntryId', nullable: false }, { name: 'eventType', nullable: false }, { name: 'locationId', nullable: false }, { name: 'timestamp', nullable: false }, { name: 'transactionUserId', nullable: false }, { name: 'notes', nullable: false }, );
+    const requiredProperties = createInterferingMovementResponsePropertyNames('changeInQuantity', 'eventType', 'ledgerEntryId', 'timestamp', );
+    const optionalStringProperties = createInterferingMovementResponseOptionalProperties({ name: 'eventType', nullable: false }, { name: 'ledgerEntryId', nullable: false }, { name: 'locationId', nullable: false }, { name: 'notes', nullable: false }, { name: 'timestamp', nullable: false }, { name: 'transactionUserId', nullable: false }, );
     const optionalNumberProperties = createInterferingMovementResponseOptionalProperties({ name: 'changeInQuantity', nullable: false }, { name: 'quantityAfter', nullable: false }, );
     const optionalBooleanProperties = createInterferingMovementResponseOptionalProperties();
 

@@ -14,53 +14,37 @@
  */
 export interface PurchaseSuggestionResponse { 
     /**
-     * Purchase suggestion identifier
+     * The DRAFT purchase order the suggestion was converted into
      */
-    suggestionId: string;
+    convertedPurchaseOrderId?: string;
     /**
-     * Replenishment policy the suggestion was computed for
+     * Creation timestamp
      */
-    policyId: string;
+    createdAt: string;
+    /**
+     * Human-entered reason captured when the suggestion was dismissed
+     */
+    dismissalReason?: string;
+    /**
+     * Earliest date the purchase could plausibly arrive (suggestion date + lead time)
+     */
+    earliestExpectedDate?: string;
     /**
      * Stock item (SKU) to purchase
      */
     itemSKU: string;
     /**
-     * Destination location the purchased stock is for
-     */
-    locationId: string;
-    /**
-     * Quantity to purchase after MOQ/pack/order-multiple rounding
-     */
-    suggestedQuantity: number;
-    /**
-     * Which normalized vendor feed the selected vendor came from; null when no vendor was selectable
-     */
-    suggestedVendorType?: PurchaseSuggestionResponseSuggestedVendorTypeEnum;
-    /**
-     * Selected manufacturer or distributor identifier; null when no vendor was selectable
-     */
-    vendorRefId?: string;
-    /**
-     * Per-unit cost in minor currency units from the vendor feed; null when the feed carries no price
-     */
-    unitCostMinor?: number;
-    /**
-     * ISO 4217 currency of unitCostMinor
-     */
-    unitCostCurrency?: string;
-    /**
-     * Selected vendor\'s pack size captured at suggestion time
-     */
-    vendorPackSize?: number;
-    /**
      * Vendor lead-time estimate in days (MAX-day estimate, consistent with the replenishment horizon math)
      */
     leadTimeDays?: number;
     /**
-     * Earliest date the purchase could plausibly arrive (suggestion date + lead time)
+     * Destination location the purchased stock is for
      */
-    earliestExpectedDate?: string;
+    locationId: string;
+    /**
+     * Replenishment policy the suggestion was computed for
+     */
+    policyId: string;
     /**
      * Explainable record of the deterministic vendor-ranking inputs
      */
@@ -70,31 +54,47 @@ export interface PurchaseSuggestionResponse {
      */
     status: PurchaseSuggestionResponseStatusEnum;
     /**
-     * Human-entered reason captured when the suggestion was dismissed
+     * Quantity to purchase after MOQ/pack/order-multiple rounding
      */
-    dismissalReason?: string;
+    suggestedQuantity: number;
     /**
-     * The DRAFT purchase order the suggestion was converted into
+     * Which normalized vendor feed the selected vendor came from; null when no vendor was selectable
      */
-    convertedPurchaseOrderId?: string;
+    suggestedVendorType?: PurchaseSuggestionResponseSuggestedVendorTypeEnum;
     /**
-     * Creation timestamp
+     * Purchase suggestion identifier
      */
-    createdAt: string;
+    suggestionId: string;
+    /**
+     * ISO 4217 currency of unitCostMinor
+     */
+    unitCostCurrency?: string;
+    /**
+     * Per-unit cost in minor currency units from the vendor feed; null when the feed carries no price
+     */
+    unitCostMinor?: number;
     /**
      * Last update timestamp
      */
     updatedAt: string;
+    /**
+     * Selected vendor\'s pack size captured at suggestion time
+     */
+    vendorPackSize?: number;
+    /**
+     * Selected manufacturer or distributor identifier; null when no vendor was selectable
+     */
+    vendorRefId?: string;
 }
-export enum PurchaseSuggestionResponseSuggestedVendorTypeEnum {
-    Manufacturer = 'MANUFACTURER',
-    Distributor = 'DISTRIBUTOR'
-};
 export enum PurchaseSuggestionResponseStatusEnum {
     Suggested = 'SUGGESTED',
     Accepted = 'ACCEPTED',
     Converted = 'CONVERTED',
     Dismissed = 'DISMISSED'
+};
+export enum PurchaseSuggestionResponseSuggestedVendorTypeEnum {
+    Manufacturer = 'MANUFACTURER',
+    Distributor = 'DISTRIBUTOR'
 };
 
 
@@ -137,9 +137,9 @@ export function instanceOfPurchaseSuggestionResponse(value: object): value is Pu
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createPurchaseSuggestionResponsePropertyNames('suggestionId', 'policyId', 'itemSKU', 'locationId', 'suggestedQuantity', 'selectionReason', 'status', 'createdAt', 'updatedAt', );
-    const optionalStringProperties = createPurchaseSuggestionResponseOptionalProperties({ name: 'suggestionId', nullable: false }, { name: 'policyId', nullable: false }, { name: 'itemSKU', nullable: false }, { name: 'locationId', nullable: false }, { name: 'suggestedVendorType', nullable: false }, { name: 'vendorRefId', nullable: false }, { name: 'unitCostCurrency', nullable: false }, { name: 'earliestExpectedDate', nullable: false }, { name: 'selectionReason', nullable: false }, { name: 'status', nullable: false }, { name: 'dismissalReason', nullable: false }, { name: 'convertedPurchaseOrderId', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'updatedAt', nullable: false }, );
-    const optionalNumberProperties = createPurchaseSuggestionResponseOptionalProperties({ name: 'suggestedQuantity', nullable: false }, { name: 'unitCostMinor', nullable: false }, { name: 'vendorPackSize', nullable: false }, { name: 'leadTimeDays', nullable: false }, );
+    const requiredProperties = createPurchaseSuggestionResponsePropertyNames('createdAt', 'itemSKU', 'locationId', 'policyId', 'selectionReason', 'status', 'suggestedQuantity', 'suggestionId', 'updatedAt', );
+    const optionalStringProperties = createPurchaseSuggestionResponseOptionalProperties({ name: 'convertedPurchaseOrderId', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'dismissalReason', nullable: false }, { name: 'earliestExpectedDate', nullable: false }, { name: 'itemSKU', nullable: false }, { name: 'locationId', nullable: false }, { name: 'policyId', nullable: false }, { name: 'selectionReason', nullable: false }, { name: 'status', nullable: false }, { name: 'suggestedVendorType', nullable: false }, { name: 'suggestionId', nullable: false }, { name: 'unitCostCurrency', nullable: false }, { name: 'updatedAt', nullable: false }, { name: 'vendorRefId', nullable: false }, );
+    const optionalNumberProperties = createPurchaseSuggestionResponseOptionalProperties({ name: 'leadTimeDays', nullable: false }, { name: 'suggestedQuantity', nullable: false }, { name: 'unitCostMinor', nullable: false }, { name: 'vendorPackSize', nullable: false }, );
     const optionalBooleanProperties = createPurchaseSuggestionResponseOptionalProperties();
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

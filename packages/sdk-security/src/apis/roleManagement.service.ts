@@ -50,8 +50,8 @@ export class RoleManagementService extends BaseService {
     }
 
     /**
-     * Assign permission to a role by key
-     * Assigns the permission identified by path key to the specified role
+     * Assign a Registered Permission to a Role
+     * Adds an already-registered permission, identified by its key in the path, to a role\&#39;s grant set. Use this tool when the permission is known to be registered; do not use grantRolePermission, which auto-registers unknown keys, and do not use updateRolePermissions, which replaces the whole set. Preconditions: the caller must hold security:role:edit, the role must exist, and the permission key must already be registered (modules register at startup via registerModulePermissions). Required inputs: roleId (UUID) and permissionKey (domain:resource:action) as path parameters; there is no request body. Emits a SECURITY_ROLE_PERMISSION_ASSIGN event. Returns 404 when the role does not exist or the permission key has not been registered. 
      * @endpoint put /v1/users/roles/{roleId}/permissions/{permissionKey}
      * @param roleId 
      * @param permissionKey 
@@ -59,15 +59,15 @@ export class RoleManagementService extends BaseService {
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public assignPermissionToRole(roleId: string, permissionKey: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public assignPermissionToRole(roleId: string, permissionKey: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public assignPermissionToRole(roleId: string, permissionKey: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public assignPermissionToRole(roleId: string, permissionKey: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public assignRolePermissionByKey(roleId: string, permissionKey: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any>;
+    public assignRolePermissionByKey(roleId: string, permissionKey: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
+    public assignRolePermissionByKey(roleId: string, permissionKey: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
+    public assignRolePermissionByKey(roleId: string, permissionKey: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (roleId === null || roleId === undefined) {
-            throw new Error('Required parameter roleId was null or undefined when calling assignPermissionToRole.');
+            throw new Error('Required parameter roleId was null or undefined when calling assignRolePermissionByKey.');
         }
         if (permissionKey === null || permissionKey === undefined) {
-            throw new Error('Required parameter permissionKey was null or undefined when calling assignPermissionToRole.');
+            throw new Error('Required parameter permissionKey was null or undefined when calling assignRolePermissionByKey.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -114,8 +114,8 @@ export class RoleManagementService extends BaseService {
     }
 
     /**
-     * Assign permission to a role by key
-     * Assigns the permission identified by path key to the specified role
+     * Assign a Registered Permission to a Role
+     * Adds an already-registered permission, identified by its key in the path, to a role\&#39;s grant set. Use this tool when the permission is known to be registered; do not use grantRolePermission, which auto-registers unknown keys, and do not use updateRolePermissions, which replaces the whole set. Preconditions: the caller must hold security:role:edit, the role must exist, and the permission key must already be registered (modules register at startup via registerModulePermissions). Required inputs: roleId (UUID) and permissionKey (domain:resource:action) as path parameters; there is no request body. Emits a SECURITY_ROLE_PERMISSION_ASSIGN event. Returns 404 when the role does not exist or the permission key has not been registered. 
      * @endpoint put /v1/roles/{roleId}/permissions/{permissionKey}
      * @param roleId 
      * @param permissionKey 
@@ -123,15 +123,15 @@ export class RoleManagementService extends BaseService {
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public assignPermissionToRole1(roleId: string, permissionKey: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public assignPermissionToRole1(roleId: string, permissionKey: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public assignPermissionToRole1(roleId: string, permissionKey: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public assignPermissionToRole1(roleId: string, permissionKey: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public assignRolePermissionByKey1(roleId: string, permissionKey: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any>;
+    public assignRolePermissionByKey1(roleId: string, permissionKey: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
+    public assignRolePermissionByKey1(roleId: string, permissionKey: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
+    public assignRolePermissionByKey1(roleId: string, permissionKey: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (roleId === null || roleId === undefined) {
-            throw new Error('Required parameter roleId was null or undefined when calling assignPermissionToRole1.');
+            throw new Error('Required parameter roleId was null or undefined when calling assignRolePermissionByKey1.');
         }
         if (permissionKey === null || permissionKey === undefined) {
-            throw new Error('Required parameter permissionKey was null or undefined when calling assignPermissionToRole1.');
+            throw new Error('Required parameter permissionKey was null or undefined when calling assignRolePermissionByKey1.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -178,8 +178,8 @@ export class RoleManagementService extends BaseService {
     }
 
     /**
-     * Check user permission
-     * Checks if a user has a specific permission for a location
+     * Check One User Permission at a Location
+     * Checks whether a user holds a specific permission through a currently effective role assignment whose scope covers the given location. Use this tool for a point authorization probe by user UUID; use getAuthorizationDecision instead when the caller has a principal identifier from the RBAC matrix rather than a user id. Preconditions: the caller must hold security:permission:view and the user must exist. Required inputs: userId (UUID) and permission (domain:resource:action) as query parameters; locationId is optional and defaults to GLOBAL. No events are emitted and no state changes; this is a read-only check. Returns 200 with a plain boolean body, and 404 when the user does not exist. 
      * @endpoint get /v1/roles/check-permission
      * @param userId 
      * @param permission 
@@ -273,8 +273,8 @@ export class RoleManagementService extends BaseService {
     }
 
     /**
-     * Check user permission
-     * Checks if a user has a specific permission for a location
+     * Check One User Permission at a Location
+     * Checks whether a user holds a specific permission through a currently effective role assignment whose scope covers the given location. Use this tool for a point authorization probe by user UUID; use getAuthorizationDecision instead when the caller has a principal identifier from the RBAC matrix rather than a user id. Preconditions: the caller must hold security:permission:view and the user must exist. Required inputs: userId (UUID) and permission (domain:resource:action) as query parameters; locationId is optional and defaults to GLOBAL. No events are emitted and no state changes; this is a read-only check. Returns 200 with a plain boolean body, and 404 when the user does not exist. 
      * @endpoint get /v1/users/roles/check-permission
      * @param userId 
      * @param permission 
@@ -368,10 +368,10 @@ export class RoleManagementService extends BaseService {
     }
 
     /**
-     * Create a new role
-     * Creates a new role with the specified name and description
+     * Create a New Role
+     * Creates a new role with the given name and optional description; the role starts with no permissions and no user assignments. Use this tool to define a new role; do not use createRoleAssignment, which links an existing role to a user, and do not use updateRolePermissions, which changes an existing role\&#39;s grants. Preconditions: the caller must hold security:role:create and no role with the same name (compared case-insensitively) may already exist. Required inputs: name, non-blank; description is optional. Emits a SECURITY_ROLE_CREATE event and records the creating actor and timestamp. Returns 400 when name is missing or blank, and 409 with DUPLICATE_ROLE_NAME when the name is already taken regardless of case. 
      * @endpoint post /v1/roles
-     * @param requestBody 
+     * @param requestBody Name and optional description of the role to create.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -438,10 +438,10 @@ export class RoleManagementService extends BaseService {
     }
 
     /**
-     * Create a new role
-     * Creates a new role with the specified name and description
+     * Create a New Role
+     * Creates a new role with the given name and optional description; the role starts with no permissions and no user assignments. Use this tool to define a new role; do not use createRoleAssignment, which links an existing role to a user, and do not use updateRolePermissions, which changes an existing role\&#39;s grants. Preconditions: the caller must hold security:role:create and no role with the same name (compared case-insensitively) may already exist. Required inputs: name, non-blank; description is optional. Emits a SECURITY_ROLE_CREATE event and records the creating actor and timestamp. Returns 400 when name is missing or blank, and 409 with DUPLICATE_ROLE_NAME when the name is already taken regardless of case. 
      * @endpoint post /v1/users/roles
-     * @param requestBody 
+     * @param requestBody Name and optional description of the role to create.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -508,10 +508,10 @@ export class RoleManagementService extends BaseService {
     }
 
     /**
-     * Create role assignment
-     * Assigns a role to a user with optional scope and effective dates
+     * Create a Scoped Role Assignment
+     * Assigns a role to a user with a scope (GLOBAL or LOCATION) and an optional effective date window. Use this tool when the assignment needs scope or dates; do not use assignUserRole, the simple path-parameter variant that always creates a GLOBAL assignment starting now. Preconditions: the caller must hold security:role:assign, the user and role must exist, and no overlapping assignment may exist for the same role, scope, and (for LOCATION scope) location. Required inputs: userId and roleId (UUIDs); scopeType defaults to GLOBAL, scopeLocationIds is required for LOCATION scope and forbidden for GLOBAL, and effectiveStartDate defaults to now with an open-ended effectiveEndDate. Emits a SECURITY_ROLE_ASSIGNMENT_CREATE event. Returns 400 when the scope and location combination is invalid, 404 when the user or role does not exist, and 409 with ROLE_ASSIGNMENT_CONFLICT when the date window overlaps an existing assignment. 
      * @endpoint post /v1/roles/assignments
-     * @param roleAssignmentRequest 
+     * @param roleAssignmentRequest The user, role, scope, and effective window of the assignment to create.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -578,10 +578,10 @@ export class RoleManagementService extends BaseService {
     }
 
     /**
-     * Create role assignment
-     * Assigns a role to a user with optional scope and effective dates
+     * Create a Scoped Role Assignment
+     * Assigns a role to a user with a scope (GLOBAL or LOCATION) and an optional effective date window. Use this tool when the assignment needs scope or dates; do not use assignUserRole, the simple path-parameter variant that always creates a GLOBAL assignment starting now. Preconditions: the caller must hold security:role:assign, the user and role must exist, and no overlapping assignment may exist for the same role, scope, and (for LOCATION scope) location. Required inputs: userId and roleId (UUIDs); scopeType defaults to GLOBAL, scopeLocationIds is required for LOCATION scope and forbidden for GLOBAL, and effectiveStartDate defaults to now with an open-ended effectiveEndDate. Emits a SECURITY_ROLE_ASSIGNMENT_CREATE event. Returns 400 when the scope and location combination is invalid, 404 when the user or role does not exist, and 409 with ROLE_ASSIGNMENT_CONFLICT when the date window overlaps an existing assignment. 
      * @endpoint post /v1/users/roles/assignments
-     * @param roleAssignmentRequest 
+     * @param roleAssignmentRequest The user, role, scope, and effective window of the assignment to create.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -648,8 +648,8 @@ export class RoleManagementService extends BaseService {
     }
 
     /**
-     * Delete a role
-     * Deletes a role by UUID and removes its associations
+     * Delete a Role and Its Associations
+     * Deletes a role by UUID, clearing its permission grants and deleting all of its role assignments in the same transaction. Use this tool to retire a role entirely; do not use revokeRolePermission or revokeRoleAssignment, which remove a single grant or assignment and keep the role. Preconditions: the caller must hold security:role:delete and the role must exist; users holding the role lose it immediately. Required inputs: id (UUID) as a path parameter. Emits a SECURITY_ROLE_DELETE event. Returns 404 when the role does not exist. 
      * @endpoint delete /v1/roles/{id}
      * @param id 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -708,8 +708,8 @@ export class RoleManagementService extends BaseService {
     }
 
     /**
-     * Delete a role
-     * Deletes a role by UUID and removes its associations
+     * Delete a Role and Its Associations
+     * Deletes a role by UUID, clearing its permission grants and deleting all of its role assignments in the same transaction. Use this tool to retire a role entirely; do not use revokeRolePermission or revokeRoleAssignment, which remove a single grant or assignment and keep the role. Preconditions: the caller must hold security:role:delete and the role must exist; users holding the role lose it immediately. Required inputs: id (UUID) as a path parameter. Emits a SECURITY_ROLE_DELETE event. Returns 404 when the role does not exist. 
      * @endpoint delete /v1/users/roles/{id}
      * @param id 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -768,120 +768,8 @@ export class RoleManagementService extends BaseService {
     }
 
     /**
-     * Get all roles
-     * Returns all roles in the system
-     * @endpoint get /v1/roles
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     * @param options additional options
-     */
-    public getAllRoles(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<RoleDto>>;
-    public getAllRoles(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<RoleDto>>>;
-    public getAllRoles(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<RoleDto>>>;
-    public getAllRoles(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
-
-        let localVarHeaders = this.defaultHeaders;
-
-        // authentication (bearerAuth) required
-        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
-
-        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
-            'application/json'
-        ]);
-        if (localVarHttpHeaderAcceptSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
-        }
-
-        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
-
-        const localVarTransferCache: boolean = options?.transferCache ?? true;
-
-
-        let responseType_: 'text' | 'json' | 'blob' = 'json';
-        if (localVarHttpHeaderAcceptSelected) {
-            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
-                responseType_ = 'text';
-            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
-                responseType_ = 'json';
-            } else {
-                responseType_ = 'blob';
-            }
-        }
-
-        let localVarPath = `/v1/roles`;
-        const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<Array<RoleDto>>('get', `${basePath}${localVarPath}`,
-            {
-                context: localVarHttpContext,
-                responseType: <any>responseType_,
-                ...(withCredentials ? { withCredentials } : {}),
-                headers: localVarHeaders,
-                observe: observe,
-                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * Get all roles
-     * Returns all roles in the system
-     * @endpoint get /v1/users/roles
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     * @param options additional options
-     */
-    public getAllRoles1(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<RoleDto>>;
-    public getAllRoles1(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<RoleDto>>>;
-    public getAllRoles1(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<RoleDto>>>;
-    public getAllRoles1(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
-
-        let localVarHeaders = this.defaultHeaders;
-
-        // authentication (bearerAuth) required
-        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
-
-        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
-            'application/json'
-        ]);
-        if (localVarHttpHeaderAcceptSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
-        }
-
-        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
-
-        const localVarTransferCache: boolean = options?.transferCache ?? true;
-
-
-        let responseType_: 'text' | 'json' | 'blob' = 'json';
-        if (localVarHttpHeaderAcceptSelected) {
-            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
-                responseType_ = 'text';
-            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
-                responseType_ = 'json';
-            } else {
-                responseType_ = 'blob';
-            }
-        }
-
-        let localVarPath = `/v1/users/roles`;
-        const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<Array<RoleDto>>('get', `${basePath}${localVarPath}`,
-            {
-                context: localVarHttpContext,
-                responseType: <any>responseType_,
-                ...(withCredentials ? { withCredentials } : {}),
-                headers: localVarHeaders,
-                observe: observe,
-                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * Get role by ID
-     * Returns a specific role by its UUID
+     * Get a Single Role by UUID
+     * Returns a single role looked up by its UUID, including its permission set and audit metadata. Use this tool when the role id is known; use getRoleByName instead when only the name is available, and listRoles to browse. Preconditions: the caller must hold security:role:view and the role must exist. Required inputs: id (UUID) as a path parameter. No events are emitted and no state changes; this is a read-only projection. Returns 404 when no role exists for the supplied UUID. 
      * @endpoint get /v1/roles/{id}
      * @param id 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -940,8 +828,8 @@ export class RoleManagementService extends BaseService {
     }
 
     /**
-     * Get role by ID
-     * Returns a specific role by its UUID
+     * Get a Single Role by UUID
+     * Returns a single role looked up by its UUID, including its permission set and audit metadata. Use this tool when the role id is known; use getRoleByName instead when only the name is available, and listRoles to browse. Preconditions: the caller must hold security:role:view and the role must exist. Required inputs: id (UUID) as a path parameter. No events are emitted and no state changes; this is a read-only projection. Returns 404 when no role exists for the supplied UUID. 
      * @endpoint get /v1/users/roles/{id}
      * @param id 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -1000,8 +888,8 @@ export class RoleManagementService extends BaseService {
     }
 
     /**
-     * Get role by name
-     * Returns a specific role by its name
+     * Get a Single Role by Name
+     * Returns a single role looked up by its exact name, including its permission set. Use this tool when only the role name is known; use getRoleById instead when the UUID is available, and listRoles to browse. Preconditions: the caller must hold security:role:view and a role with that exact (case-sensitive) name must exist. Required inputs: name as a path parameter. No events are emitted and no state changes; this is a read-only projection. Returns 404 with ROLE_NOT_FOUND when no role has the supplied name. 
      * @endpoint get /v1/users/roles/by-name/{name}
      * @param name 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -1060,8 +948,8 @@ export class RoleManagementService extends BaseService {
     }
 
     /**
-     * Get role by name
-     * Returns a specific role by its name
+     * Get a Single Role by Name
+     * Returns a single role looked up by its exact name, including its permission set. Use this tool when only the role name is known; use getRoleById instead when the UUID is available, and listRoles to browse. Preconditions: the caller must hold security:role:view and a role with that exact (case-sensitive) name must exist. Required inputs: name as a path parameter. No events are emitted and no state changes; this is a read-only projection. Returns 404 with ROLE_NOT_FOUND when no role has the supplied name. 
      * @endpoint get /v1/roles/by-name/{name}
      * @param name 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -1120,8 +1008,8 @@ export class RoleManagementService extends BaseService {
     }
 
     /**
-     * Get a role\&#39;s default permissions
-     * Returns the authority codes (ROLE_* plus domain permission codes) that the given role expands to, used by clients to prebuild per-role tool/permission caches.
+     * Get a Role\&#39;s Default Authority Expansion
+     * Returns the authority codes a role name expands to: the ROLE_ prefixed authority plus every permission code granted to that role in role_permissions. Use this tool to prebuild per-role permission or tool caches, as pos-mcp-server does; do not use getUserPermissions, which reads one specific user\&#39;s scoped role assignments rather than the authority set a role carries. Preconditions: the caller must hold security:role:view; the role name does not need to exist in the database. Required inputs: role name as a path parameter, for example SHOP_MGR. No events are emitted and no state changes; this is a read-only lookup of the role\&#39;s persisted permission grants. Returns 200 in all cases; an unrecognized role, or a role with no grants, yields only its ROLE_ authority with no domain codes rather than an error. 
      * @endpoint get /v1/users/roles/{role}/default-permissions
      * @param role 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -1180,8 +1068,8 @@ export class RoleManagementService extends BaseService {
     }
 
     /**
-     * Get a role\&#39;s default permissions
-     * Returns the authority codes (ROLE_* plus domain permission codes) that the given role expands to, used by clients to prebuild per-role tool/permission caches.
+     * Get a Role\&#39;s Default Authority Expansion
+     * Returns the authority codes a role name expands to: the ROLE_ prefixed authority plus every permission code granted to that role in role_permissions. Use this tool to prebuild per-role permission or tool caches, as pos-mcp-server does; do not use getUserPermissions, which reads one specific user\&#39;s scoped role assignments rather than the authority set a role carries. Preconditions: the caller must hold security:role:view; the role name does not need to exist in the database. Required inputs: role name as a path parameter, for example SHOP_MGR. No events are emitted and no state changes; this is a read-only lookup of the role\&#39;s persisted permission grants. Returns 200 in all cases; an unrecognized role, or a role with no grants, yields only its ROLE_ authority with no domain codes rather than an error. 
      * @endpoint get /v1/roles/{role}/default-permissions
      * @param role 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -1240,20 +1128,20 @@ export class RoleManagementService extends BaseService {
     }
 
     /**
-     * Get user permissions (legacy path)
-     * Returns all permissions for a user from their role assignments
+     * Get User Permissions at Legacy Path
+     * Returns the union of permissions granted through a user\&#39;s currently effective role assignments, served at the legacy /permissions/user/{userId} path. Use this tool only for legacy callers; use getUserPermissions instead, which returns the same data at the canonical /v1/users/{userId}/permissions path. Preconditions: the caller must hold security:permission:view and the user must exist. Required inputs: userId (UUID) as a path parameter. No events are emitted and no state changes; this is a read-only projection. Returns 404 when the user does not exist. 
      * @endpoint get /v1/roles/permissions/user/{userId}
      * @param userId 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public getUserPermissionsByUserId(userId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Set<PermissionDto>>;
-    public getUserPermissionsByUserId(userId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Set<PermissionDto>>>;
-    public getUserPermissionsByUserId(userId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Set<PermissionDto>>>;
-    public getUserPermissionsByUserId(userId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getUserPermissionsLegacy(userId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Set<PermissionDto>>;
+    public getUserPermissionsLegacy(userId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Set<PermissionDto>>>;
+    public getUserPermissionsLegacy(userId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Set<PermissionDto>>>;
+    public getUserPermissionsLegacy(userId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (userId === null || userId === undefined) {
-            throw new Error('Required parameter userId was null or undefined when calling getUserPermissionsByUserId.');
+            throw new Error('Required parameter userId was null or undefined when calling getUserPermissionsLegacy.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -1300,20 +1188,20 @@ export class RoleManagementService extends BaseService {
     }
 
     /**
-     * Get user permissions (legacy path)
-     * Returns all permissions for a user from their role assignments
+     * Get User Permissions at Legacy Path
+     * Returns the union of permissions granted through a user\&#39;s currently effective role assignments, served at the legacy /permissions/user/{userId} path. Use this tool only for legacy callers; use getUserPermissions instead, which returns the same data at the canonical /v1/users/{userId}/permissions path. Preconditions: the caller must hold security:permission:view and the user must exist. Required inputs: userId (UUID) as a path parameter. No events are emitted and no state changes; this is a read-only projection. Returns 404 when the user does not exist. 
      * @endpoint get /v1/users/roles/permissions/user/{userId}
      * @param userId 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public getUserPermissionsByUserId1(userId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Set<PermissionDto>>;
-    public getUserPermissionsByUserId1(userId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Set<PermissionDto>>>;
-    public getUserPermissionsByUserId1(userId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Set<PermissionDto>>>;
-    public getUserPermissionsByUserId1(userId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getUserPermissionsLegacy1(userId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Set<PermissionDto>>;
+    public getUserPermissionsLegacy1(userId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Set<PermissionDto>>>;
+    public getUserPermissionsLegacy1(userId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Set<PermissionDto>>>;
+    public getUserPermissionsLegacy1(userId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (userId === null || userId === undefined) {
-            throw new Error('Required parameter userId was null or undefined when calling getUserPermissionsByUserId1.');
+            throw new Error('Required parameter userId was null or undefined when calling getUserPermissionsLegacy1.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -1360,8 +1248,268 @@ export class RoleManagementService extends BaseService {
     }
 
     /**
-     * Get user role assignments
-     * Returns currently effective assignments by default. Set includeHistory&#x3D;true to return all assignments including expired/revoked
+     * Grant a Permission to a Role
+     * Grants a single permission key to a role, auto-registering the key in the permission registry when it is not yet known. Use this tool for additive one-off grants; do not use updateRolePermissions, which replaces the role\&#39;s entire permission set, and do not use assignRolePermissionByKey, which requires the permission to be registered already. Preconditions: the caller must hold security:role:edit and the role must exist; the permission key does not need to exist beforehand. Required inputs: roleId (UUID) as a path parameter and permission (domain:resource:action) in the body; permissionKey is accepted as a field alias. Emits a SECURITY_ROLE_PERMISSION_GRANT event and publishes an internal grant audit record, then returns the updated role. Returns 400 when permission is missing or blank, and 404 when the role does not exist. 
+     * @endpoint put /v1/users/roles/{roleId}/permissions/grant
+     * @param roleId 
+     * @param rolePermissionGrantRequest The single permission key to grant to the role.
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public grantRolePermission(roleId: string, rolePermissionGrantRequest: RolePermissionGrantRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<RoleDto>;
+    public grantRolePermission(roleId: string, rolePermissionGrantRequest: RolePermissionGrantRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<RoleDto>>;
+    public grantRolePermission(roleId: string, rolePermissionGrantRequest: RolePermissionGrantRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<RoleDto>>;
+    public grantRolePermission(roleId: string, rolePermissionGrantRequest: RolePermissionGrantRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (roleId === null || roleId === undefined) {
+            throw new Error('Required parameter roleId was null or undefined when calling grantRolePermission.');
+        }
+        if (rolePermissionGrantRequest === null || rolePermissionGrantRequest === undefined) {
+            throw new Error('Required parameter rolePermissionGrantRequest was null or undefined when calling grantRolePermission.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/users/roles/${this.configuration.encodeParam({name: "roleId", value: roleId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/permissions/grant`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<RoleDto>('put', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                body: rolePermissionGrantRequest,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Grant a Permission to a Role
+     * Grants a single permission key to a role, auto-registering the key in the permission registry when it is not yet known. Use this tool for additive one-off grants; do not use updateRolePermissions, which replaces the role\&#39;s entire permission set, and do not use assignRolePermissionByKey, which requires the permission to be registered already. Preconditions: the caller must hold security:role:edit and the role must exist; the permission key does not need to exist beforehand. Required inputs: roleId (UUID) as a path parameter and permission (domain:resource:action) in the body; permissionKey is accepted as a field alias. Emits a SECURITY_ROLE_PERMISSION_GRANT event and publishes an internal grant audit record, then returns the updated role. Returns 400 when permission is missing or blank, and 404 when the role does not exist. 
+     * @endpoint put /v1/roles/{roleId}/permissions/grant
+     * @param roleId 
+     * @param rolePermissionGrantRequest The single permission key to grant to the role.
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public grantRolePermission1(roleId: string, rolePermissionGrantRequest: RolePermissionGrantRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<RoleDto>;
+    public grantRolePermission1(roleId: string, rolePermissionGrantRequest: RolePermissionGrantRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<RoleDto>>;
+    public grantRolePermission1(roleId: string, rolePermissionGrantRequest: RolePermissionGrantRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<RoleDto>>;
+    public grantRolePermission1(roleId: string, rolePermissionGrantRequest: RolePermissionGrantRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (roleId === null || roleId === undefined) {
+            throw new Error('Required parameter roleId was null or undefined when calling grantRolePermission1.');
+        }
+        if (rolePermissionGrantRequest === null || rolePermissionGrantRequest === undefined) {
+            throw new Error('Required parameter rolePermissionGrantRequest was null or undefined when calling grantRolePermission1.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/roles/${this.configuration.encodeParam({name: "roleId", value: roleId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/permissions/grant`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<RoleDto>('put', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                body: rolePermissionGrantRequest,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * List All Roles in the System
+     * Returns every role in the system with its permission set and audit metadata. Use this tool to enumerate roles; use getRoleById or getRoleByName instead for a single known role. Preconditions: the caller must hold security:role:view. Required inputs: none; there are no filters or paging parameters. No events are emitted and no state changes; this is a read-only projection. Returns 200 with an empty list when no roles exist; there are no business error conditions. 
+     * @endpoint get /v1/roles
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public listRoles(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<RoleDto>>;
+    public listRoles(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<RoleDto>>>;
+    public listRoles(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<RoleDto>>>;
+    public listRoles(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/roles`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<Array<RoleDto>>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * List All Roles in the System
+     * Returns every role in the system with its permission set and audit metadata. Use this tool to enumerate roles; use getRoleById or getRoleByName instead for a single known role. Preconditions: the caller must hold security:role:view. Required inputs: none; there are no filters or paging parameters. No events are emitted and no state changes; this is a read-only projection. Returns 200 with an empty list when no roles exist; there are no business error conditions. 
+     * @endpoint get /v1/users/roles
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public listRoles1(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<RoleDto>>;
+    public listRoles1(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<RoleDto>>>;
+    public listRoles1(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<RoleDto>>>;
+    public listRoles1(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/users/roles`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<Array<RoleDto>>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * List a User\&#39;s Role Assignments
+     * Returns a user\&#39;s role assignments with their scope and effective window, limited to currently effective assignments by default. Use this tool to inspect who holds which roles and in what scope; use getUserPermissions instead when only the flattened permission set matters. Preconditions: the caller must hold security:role:view and the user must exist. Required inputs: userId (UUID) as a path parameter; includeHistory defaults to false and, when true, also returns expired and revoked assignments. No events are emitted and no state changes; this is a read-only projection. Returns 404 when the user does not exist. 
      * @endpoint get /v1/roles/assignments/user/{userId}
      * @param userId User ID
      * @param includeHistory Include historical assignments (expired/revoked)
@@ -1369,12 +1517,12 @@ export class RoleManagementService extends BaseService {
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public getUserRoleAssignments(userId: string, includeHistory?: boolean, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<RoleAssignmentDto>>;
-    public getUserRoleAssignments(userId: string, includeHistory?: boolean, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<RoleAssignmentDto>>>;
-    public getUserRoleAssignments(userId: string, includeHistory?: boolean, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<RoleAssignmentDto>>>;
-    public getUserRoleAssignments(userId: string, includeHistory?: boolean, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public listUserRoleAssignments(userId: string, includeHistory?: boolean, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<RoleAssignmentDto>>;
+    public listUserRoleAssignments(userId: string, includeHistory?: boolean, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<RoleAssignmentDto>>>;
+    public listUserRoleAssignments(userId: string, includeHistory?: boolean, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<RoleAssignmentDto>>>;
+    public listUserRoleAssignments(userId: string, includeHistory?: boolean, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (userId === null || userId === undefined) {
-            throw new Error('Required parameter userId was null or undefined when calling getUserRoleAssignments.');
+            throw new Error('Required parameter userId was null or undefined when calling listUserRoleAssignments.');
         }
 
         let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
@@ -1433,8 +1581,8 @@ export class RoleManagementService extends BaseService {
     }
 
     /**
-     * Get user role assignments
-     * Returns currently effective assignments by default. Set includeHistory&#x3D;true to return all assignments including expired/revoked
+     * List a User\&#39;s Role Assignments
+     * Returns a user\&#39;s role assignments with their scope and effective window, limited to currently effective assignments by default. Use this tool to inspect who holds which roles and in what scope; use getUserPermissions instead when only the flattened permission set matters. Preconditions: the caller must hold security:role:view and the user must exist. Required inputs: userId (UUID) as a path parameter; includeHistory defaults to false and, when true, also returns expired and revoked assignments. No events are emitted and no state changes; this is a read-only projection. Returns 404 when the user does not exist. 
      * @endpoint get /v1/users/roles/assignments/user/{userId}
      * @param userId User ID
      * @param includeHistory Include historical assignments (expired/revoked)
@@ -1442,12 +1590,12 @@ export class RoleManagementService extends BaseService {
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public getUserRoleAssignments1(userId: string, includeHistory?: boolean, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<RoleAssignmentDto>>;
-    public getUserRoleAssignments1(userId: string, includeHistory?: boolean, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<RoleAssignmentDto>>>;
-    public getUserRoleAssignments1(userId: string, includeHistory?: boolean, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<RoleAssignmentDto>>>;
-    public getUserRoleAssignments1(userId: string, includeHistory?: boolean, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public listUserRoleAssignments1(userId: string, includeHistory?: boolean, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<RoleAssignmentDto>>;
+    public listUserRoleAssignments1(userId: string, includeHistory?: boolean, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<RoleAssignmentDto>>>;
+    public listUserRoleAssignments1(userId: string, includeHistory?: boolean, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<RoleAssignmentDto>>>;
+    public listUserRoleAssignments1(userId: string, includeHistory?: boolean, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (userId === null || userId === undefined) {
-            throw new Error('Required parameter userId was null or undefined when calling getUserRoleAssignments1.');
+            throw new Error('Required parameter userId was null or undefined when calling listUserRoleAssignments1.');
         }
 
         let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
@@ -1506,284 +1654,8 @@ export class RoleManagementService extends BaseService {
     }
 
     /**
-     * Grant permission to a role
-     * Grants a single permission to the specified role and returns the updated role
-     * @endpoint put /v1/users/roles/{roleId}/permissions/grant
-     * @param roleId 
-     * @param rolePermissionGrantRequest 
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     * @param options additional options
-     */
-    public grantPermissionToRole(roleId: string, rolePermissionGrantRequest: RolePermissionGrantRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<RoleDto>;
-    public grantPermissionToRole(roleId: string, rolePermissionGrantRequest: RolePermissionGrantRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<RoleDto>>;
-    public grantPermissionToRole(roleId: string, rolePermissionGrantRequest: RolePermissionGrantRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<RoleDto>>;
-    public grantPermissionToRole(roleId: string, rolePermissionGrantRequest: RolePermissionGrantRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
-        if (roleId === null || roleId === undefined) {
-            throw new Error('Required parameter roleId was null or undefined when calling grantPermissionToRole.');
-        }
-        if (rolePermissionGrantRequest === null || rolePermissionGrantRequest === undefined) {
-            throw new Error('Required parameter rolePermissionGrantRequest was null or undefined when calling grantPermissionToRole.');
-        }
-
-        let localVarHeaders = this.defaultHeaders;
-
-        // authentication (bearerAuth) required
-        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
-
-        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
-            'application/json'
-        ]);
-        if (localVarHttpHeaderAcceptSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
-        }
-
-        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
-
-        const localVarTransferCache: boolean = options?.transferCache ?? true;
-
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-            'application/json'
-        ];
-        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
-        if (httpContentTypeSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
-        }
-
-        let responseType_: 'text' | 'json' | 'blob' = 'json';
-        if (localVarHttpHeaderAcceptSelected) {
-            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
-                responseType_ = 'text';
-            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
-                responseType_ = 'json';
-            } else {
-                responseType_ = 'blob';
-            }
-        }
-
-        let localVarPath = `/v1/users/roles/${this.configuration.encodeParam({name: "roleId", value: roleId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/permissions/grant`;
-        const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<RoleDto>('put', `${basePath}${localVarPath}`,
-            {
-                context: localVarHttpContext,
-                body: rolePermissionGrantRequest,
-                responseType: <any>responseType_,
-                ...(withCredentials ? { withCredentials } : {}),
-                headers: localVarHeaders,
-                observe: observe,
-                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * Grant permission to a role
-     * Grants a single permission to the specified role and returns the updated role
-     * @endpoint put /v1/roles/{roleId}/permissions/grant
-     * @param roleId 
-     * @param rolePermissionGrantRequest 
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     * @param options additional options
-     */
-    public grantPermissionToRole1(roleId: string, rolePermissionGrantRequest: RolePermissionGrantRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<RoleDto>;
-    public grantPermissionToRole1(roleId: string, rolePermissionGrantRequest: RolePermissionGrantRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<RoleDto>>;
-    public grantPermissionToRole1(roleId: string, rolePermissionGrantRequest: RolePermissionGrantRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<RoleDto>>;
-    public grantPermissionToRole1(roleId: string, rolePermissionGrantRequest: RolePermissionGrantRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
-        if (roleId === null || roleId === undefined) {
-            throw new Error('Required parameter roleId was null or undefined when calling grantPermissionToRole1.');
-        }
-        if (rolePermissionGrantRequest === null || rolePermissionGrantRequest === undefined) {
-            throw new Error('Required parameter rolePermissionGrantRequest was null or undefined when calling grantPermissionToRole1.');
-        }
-
-        let localVarHeaders = this.defaultHeaders;
-
-        // authentication (bearerAuth) required
-        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
-
-        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
-            'application/json'
-        ]);
-        if (localVarHttpHeaderAcceptSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
-        }
-
-        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
-
-        const localVarTransferCache: boolean = options?.transferCache ?? true;
-
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-            'application/json'
-        ];
-        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
-        if (httpContentTypeSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
-        }
-
-        let responseType_: 'text' | 'json' | 'blob' = 'json';
-        if (localVarHttpHeaderAcceptSelected) {
-            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
-                responseType_ = 'text';
-            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
-                responseType_ = 'json';
-            } else {
-                responseType_ = 'blob';
-            }
-        }
-
-        let localVarPath = `/v1/roles/${this.configuration.encodeParam({name: "roleId", value: roleId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/permissions/grant`;
-        const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<RoleDto>('put', `${basePath}${localVarPath}`,
-            {
-                context: localVarHttpContext,
-                body: rolePermissionGrantRequest,
-                responseType: <any>responseType_,
-                ...(withCredentials ? { withCredentials } : {}),
-                headers: localVarHeaders,
-                observe: observe,
-                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * Revoke permission from a role
-     * Removes the specified permission from the role
-     * @endpoint delete /v1/users/roles/{roleId}/permissions/{permissionKey}
-     * @param roleId 
-     * @param permissionKey 
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     * @param options additional options
-     */
-    public revokePermissionFromRole(roleId: string, permissionKey: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public revokePermissionFromRole(roleId: string, permissionKey: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public revokePermissionFromRole(roleId: string, permissionKey: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public revokePermissionFromRole(roleId: string, permissionKey: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
-        if (roleId === null || roleId === undefined) {
-            throw new Error('Required parameter roleId was null or undefined when calling revokePermissionFromRole.');
-        }
-        if (permissionKey === null || permissionKey === undefined) {
-            throw new Error('Required parameter permissionKey was null or undefined when calling revokePermissionFromRole.');
-        }
-
-        let localVarHeaders = this.defaultHeaders;
-
-        // authentication (bearerAuth) required
-        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
-
-        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
-            'application/json'
-        ]);
-        if (localVarHttpHeaderAcceptSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
-        }
-
-        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
-
-        const localVarTransferCache: boolean = options?.transferCache ?? true;
-
-
-        let responseType_: 'text' | 'json' | 'blob' = 'json';
-        if (localVarHttpHeaderAcceptSelected) {
-            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
-                responseType_ = 'text';
-            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
-                responseType_ = 'json';
-            } else {
-                responseType_ = 'blob';
-            }
-        }
-
-        let localVarPath = `/v1/users/roles/${this.configuration.encodeParam({name: "roleId", value: roleId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/permissions/${this.configuration.encodeParam({name: "permissionKey", value: permissionKey, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
-        const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<any>('delete', `${basePath}${localVarPath}`,
-            {
-                context: localVarHttpContext,
-                responseType: <any>responseType_,
-                ...(withCredentials ? { withCredentials } : {}),
-                headers: localVarHeaders,
-                observe: observe,
-                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * Revoke permission from a role
-     * Removes the specified permission from the role
-     * @endpoint delete /v1/roles/{roleId}/permissions/{permissionKey}
-     * @param roleId 
-     * @param permissionKey 
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     * @param options additional options
-     */
-    public revokePermissionFromRole1(roleId: string, permissionKey: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public revokePermissionFromRole1(roleId: string, permissionKey: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public revokePermissionFromRole1(roleId: string, permissionKey: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public revokePermissionFromRole1(roleId: string, permissionKey: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
-        if (roleId === null || roleId === undefined) {
-            throw new Error('Required parameter roleId was null or undefined when calling revokePermissionFromRole1.');
-        }
-        if (permissionKey === null || permissionKey === undefined) {
-            throw new Error('Required parameter permissionKey was null or undefined when calling revokePermissionFromRole1.');
-        }
-
-        let localVarHeaders = this.defaultHeaders;
-
-        // authentication (bearerAuth) required
-        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
-
-        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
-            'application/json'
-        ]);
-        if (localVarHttpHeaderAcceptSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
-        }
-
-        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
-
-        const localVarTransferCache: boolean = options?.transferCache ?? true;
-
-
-        let responseType_: 'text' | 'json' | 'blob' = 'json';
-        if (localVarHttpHeaderAcceptSelected) {
-            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
-                responseType_ = 'text';
-            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
-                responseType_ = 'json';
-            } else {
-                responseType_ = 'blob';
-            }
-        }
-
-        let localVarPath = `/v1/roles/${this.configuration.encodeParam({name: "roleId", value: roleId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/permissions/${this.configuration.encodeParam({name: "permissionKey", value: permissionKey, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
-        const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<any>('delete', `${basePath}${localVarPath}`,
-            {
-                context: localVarHttpContext,
-                responseType: <any>responseType_,
-                ...(withCredentials ? { withCredentials } : {}),
-                headers: localVarHeaders,
-                observe: observe,
-                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * Revoke role assignment
-     * Revokes a role assignment by setting its end date. Supports past, present, or future dates. The system automatically records when the revocation was requested. Defaults to today when endDate is omitted
+     * Revoke a Role Assignment by Id
+     * Revokes a role assignment by setting its effective end date, preserving the row for history. Use this tool when the assignment id is known or a past or future end date is needed; do not use revokeUserRole, which finds the active assignment from userId and roleId and ends it now. Preconditions: the caller must hold security:role:assign and the assignment must exist. Required inputs: assignmentId (UUID) as a path parameter; endDate (ISO date-time) is optional and defaults to the current time, and the revocation timestamp is recorded automatically. Emits a SECURITY_ROLE_ASSIGNMENT_REVOKE event. Returns 400 when endDate is malformed, and 404 when the assignment does not exist. 
      * @endpoint delete /v1/users/roles/assignments/{assignmentId}
      * @param assignmentId Role assignment ID
      * @param endDate Effective end date and time for revocation. Defaults to current date and time
@@ -1855,8 +1727,8 @@ export class RoleManagementService extends BaseService {
     }
 
     /**
-     * Revoke role assignment
-     * Revokes a role assignment by setting its end date. Supports past, present, or future dates. The system automatically records when the revocation was requested. Defaults to today when endDate is omitted
+     * Revoke a Role Assignment by Id
+     * Revokes a role assignment by setting its effective end date, preserving the row for history. Use this tool when the assignment id is known or a past or future end date is needed; do not use revokeUserRole, which finds the active assignment from userId and roleId and ends it now. Preconditions: the caller must hold security:role:assign and the assignment must exist. Required inputs: assignmentId (UUID) as a path parameter; endDate (ISO date-time) is optional and defaults to the current time, and the revocation timestamp is recorded automatically. Emits a SECURITY_ROLE_ASSIGNMENT_REVOKE event. Returns 400 when endDate is malformed, and 404 when the assignment does not exist. 
      * @endpoint delete /v1/roles/assignments/{assignmentId}
      * @param assignmentId Role assignment ID
      * @param endDate Effective end date and time for revocation. Defaults to current date and time
@@ -1928,10 +1800,138 @@ export class RoleManagementService extends BaseService {
     }
 
     /**
-     * Update role permissions
-     * Assigns a set of permissions to a role
+     * Revoke a Permission From a Role
+     * Removes a permission key from a role\&#39;s grant set. Use this tool to take one permission away from a role; do not use deleteRole, which removes the role entirely, and do not use revokeRoleAssignment, which ends a user\&#39;s assignment instead. Preconditions: the caller must hold security:role:edit and the role must exist; revoking a key the role does not hold is a silent no-op. Required inputs: roleId (UUID) and permissionKey (domain:resource:action) as path parameters; there is no request body. Emits a SECURITY_ROLE_PERMISSION_REVOKE event. Returns 404 when the role does not exist; an unknown permission key still yields 204. 
+     * @endpoint delete /v1/users/roles/{roleId}/permissions/{permissionKey}
+     * @param roleId 
+     * @param permissionKey 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public revokeRolePermission(roleId: string, permissionKey: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any>;
+    public revokeRolePermission(roleId: string, permissionKey: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
+    public revokeRolePermission(roleId: string, permissionKey: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
+    public revokeRolePermission(roleId: string, permissionKey: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (roleId === null || roleId === undefined) {
+            throw new Error('Required parameter roleId was null or undefined when calling revokeRolePermission.');
+        }
+        if (permissionKey === null || permissionKey === undefined) {
+            throw new Error('Required parameter permissionKey was null or undefined when calling revokeRolePermission.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/users/roles/${this.configuration.encodeParam({name: "roleId", value: roleId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/permissions/${this.configuration.encodeParam({name: "permissionKey", value: permissionKey, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<any>('delete', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Revoke a Permission From a Role
+     * Removes a permission key from a role\&#39;s grant set. Use this tool to take one permission away from a role; do not use deleteRole, which removes the role entirely, and do not use revokeRoleAssignment, which ends a user\&#39;s assignment instead. Preconditions: the caller must hold security:role:edit and the role must exist; revoking a key the role does not hold is a silent no-op. Required inputs: roleId (UUID) and permissionKey (domain:resource:action) as path parameters; there is no request body. Emits a SECURITY_ROLE_PERMISSION_REVOKE event. Returns 404 when the role does not exist; an unknown permission key still yields 204. 
+     * @endpoint delete /v1/roles/{roleId}/permissions/{permissionKey}
+     * @param roleId 
+     * @param permissionKey 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public revokeRolePermission1(roleId: string, permissionKey: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any>;
+    public revokeRolePermission1(roleId: string, permissionKey: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
+    public revokeRolePermission1(roleId: string, permissionKey: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
+    public revokeRolePermission1(roleId: string, permissionKey: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (roleId === null || roleId === undefined) {
+            throw new Error('Required parameter roleId was null or undefined when calling revokeRolePermission1.');
+        }
+        if (permissionKey === null || permissionKey === undefined) {
+            throw new Error('Required parameter permissionKey was null or undefined when calling revokeRolePermission1.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/roles/${this.configuration.encodeParam({name: "roleId", value: roleId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/permissions/${this.configuration.encodeParam({name: "permissionKey", value: permissionKey, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<any>('delete', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Replace a Role\&#39;s Permission Set
+     * Replaces a role\&#39;s entire permission set with the supplied list of permission names. Use this tool for wholesale permission resets; do not use grantRolePermission or revokeRolePermission, which change one key at a time and preserve the rest. Preconditions: the caller must hold security:role:edit, the role must exist, and every named permission must already be registered. Required inputs: roleId (UUID) and permissionNames, a set of domain:resource:action strings; an empty set clears all grants. Emits a SECURITY_ROLE_PERMISSIONS_UPDATE event and returns the updated role with its new permission set. Returns 404 when the role or any named permission does not exist; nothing is applied on failure. 
      * @endpoint put /v1/users/roles/permissions
-     * @param rolePermissionsRequest 
+     * @param rolePermissionsRequest The role and the replacement set of permission names it should hold.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -1998,10 +1998,10 @@ export class RoleManagementService extends BaseService {
     }
 
     /**
-     * Update role permissions
-     * Assigns a set of permissions to a role
+     * Replace a Role\&#39;s Permission Set
+     * Replaces a role\&#39;s entire permission set with the supplied list of permission names. Use this tool for wholesale permission resets; do not use grantRolePermission or revokeRolePermission, which change one key at a time and preserve the rest. Preconditions: the caller must hold security:role:edit, the role must exist, and every named permission must already be registered. Required inputs: roleId (UUID) and permissionNames, a set of domain:resource:action strings; an empty set clears all grants. Emits a SECURITY_ROLE_PERMISSIONS_UPDATE event and returns the updated role with its new permission set. Returns 404 when the role or any named permission does not exist; nothing is applied on failure. 
      * @endpoint put /v1/roles/permissions
-     * @param rolePermissionsRequest 
+     * @param rolePermissionsRequest The role and the replacement set of permission names it should hold.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options

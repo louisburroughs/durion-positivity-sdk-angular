@@ -14,25 +14,25 @@
  */
 export interface CompleteWorkorderResponse { 
     /**
-     * Workorder identifier
+     * Timestamp when completion was recorded
      */
-    workorderId: string;
-    /**
-     * Status prior to completion
-     */
-    previousStatus: string;
+    completedAt: string;
     /**
      * Status after completion
      */
     currentStatus: string;
     /**
-     * Timestamp when completion was recorded
-     */
-    completedAt: string;
-    /**
      * Operation outcome message
      */
     message?: string;
+    /**
+     * Status prior to completion
+     */
+    previousStatus: string;
+    /**
+     * Workorder identifier
+     */
+    workorderId: string;
 }
 
 function isOptionalCompleteWorkorderResponsePropertyOfType(
@@ -73,8 +73,8 @@ export function instanceOfCompleteWorkorderResponse(value: object): value is Com
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createCompleteWorkorderResponsePropertyNames('workorderId', 'previousStatus', 'currentStatus', 'completedAt', );
-    const optionalStringProperties = createCompleteWorkorderResponseOptionalProperties({ name: 'workorderId', nullable: false }, { name: 'previousStatus', nullable: false }, { name: 'currentStatus', nullable: false }, { name: 'completedAt', nullable: false }, { name: 'message', nullable: false }, );
+    const requiredProperties = createCompleteWorkorderResponsePropertyNames('completedAt', 'currentStatus', 'previousStatus', 'workorderId', );
+    const optionalStringProperties = createCompleteWorkorderResponseOptionalProperties({ name: 'completedAt', nullable: false }, { name: 'currentStatus', nullable: false }, { name: 'message', nullable: false }, { name: 'previousStatus', nullable: false }, { name: 'workorderId', nullable: false }, );
     const optionalNumberProperties = createCompleteWorkorderResponseOptionalProperties();
     const optionalBooleanProperties = createCompleteWorkorderResponseOptionalProperties();
 

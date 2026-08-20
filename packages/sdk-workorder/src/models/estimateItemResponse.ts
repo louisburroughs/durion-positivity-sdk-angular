@@ -14,49 +14,49 @@
  */
 export interface EstimateItemResponse { 
     /**
-     * Estimate item identifier
+     * Record creation timestamp
      */
-    id?: string;
-    /**
-     * Parent estimate identifier
-     */
-    estimateId?: string;
-    /**
-     * Estimate item type
-     */
-    itemType?: EstimateItemResponseItemTypeEnum;
+    createdAt?: string;
     /**
      * Item description
      */
     description?: string;
     /**
-     * Item quantity
+     * Parent estimate identifier
      */
-    quantity?: number;
+    estimateId?: string;
     /**
-     * Unit price
+     * Estimate item identifier
      */
-    unitPrice?: number;
+    id?: string;
+    /**
+     * Estimate item type
+     */
+    itemType?: EstimateItemResponseItemTypeEnum;
     /**
      * Computed line total
      */
     lineTotal?: number;
     /**
-     * Tax code
-     */
-    taxCode?: string;
-    /**
      * Referenced product identifier when itemType=PART
      */
     productId?: string;
+    /**
+     * Item quantity
+     */
+    quantity?: number;
     /**
      * Referenced service identifier when itemType=LABOR
      */
     serviceId?: string;
     /**
-     * Record creation timestamp
+     * Tax code
      */
-    createdAt?: string;
+    taxCode?: string;
+    /**
+     * Unit price
+     */
+    unitPrice?: number;
     /**
      * Record last update timestamp
      */
@@ -108,8 +108,8 @@ export function instanceOfEstimateItemResponse(value: object): value is Estimate
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createEstimateItemResponsePropertyNames();
-    const optionalStringProperties = createEstimateItemResponseOptionalProperties({ name: 'id', nullable: false }, { name: 'estimateId', nullable: false }, { name: 'itemType', nullable: false }, { name: 'description', nullable: false }, { name: 'taxCode', nullable: false }, { name: 'productId', nullable: false }, { name: 'serviceId', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'updatedAt', nullable: false }, );
-    const optionalNumberProperties = createEstimateItemResponseOptionalProperties({ name: 'quantity', nullable: false }, { name: 'unitPrice', nullable: false }, { name: 'lineTotal', nullable: false }, );
+    const optionalStringProperties = createEstimateItemResponseOptionalProperties({ name: 'createdAt', nullable: false }, { name: 'description', nullable: false }, { name: 'estimateId', nullable: false }, { name: 'id', nullable: false }, { name: 'itemType', nullable: false }, { name: 'productId', nullable: false }, { name: 'serviceId', nullable: false }, { name: 'taxCode', nullable: false }, { name: 'updatedAt', nullable: false }, );
+    const optionalNumberProperties = createEstimateItemResponseOptionalProperties({ name: 'lineTotal', nullable: false }, { name: 'quantity', nullable: false }, { name: 'unitPrice', nullable: false }, );
     const optionalBooleanProperties = createEstimateItemResponseOptionalProperties();
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

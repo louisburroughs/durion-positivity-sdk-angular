@@ -15,6 +15,30 @@ import { LaborOverheadReportLine } from './laborOverheadReportLine';
  */
 export interface LaborOverheadCostReport { 
     /**
+     * Highest elapsed month bounding YTD (1-12)
+     */
+    asOfMonth: number;
+    /**
+     * Average conversion rate used for the year (1.00 for US plants)
+     */
+    averageRate: number;
+    /**
+     * Currency of the amounts (line 2.11.4 is always USD)
+     */
+    currency: string;
+    /**
+     * Fiscal year
+     */
+    fiscalYear: number;
+    /**
+     * Cost lines in canonical order (Labor §1, Overhead §2, totals)
+     */
+    lines: Array<LaborOverheadReportLine>;
+    /**
+     * Local currency units per USD (1.00 for US plants)
+     */
+    localCurrencyPerUsd: number;
+    /**
      * Location/dealer identifier (accounting locationId dimension)
      */
     locationId: string;
@@ -22,30 +46,6 @@ export interface LaborOverheadCostReport {
      * Human-readable location label
      */
     locationLabel?: string;
-    /**
-     * Fiscal year
-     */
-    fiscalYear: number;
-    /**
-     * Highest elapsed month bounding YTD (1-12)
-     */
-    asOfMonth: number;
-    /**
-     * Currency of the amounts (line 2.11.4 is always USD)
-     */
-    currency: string;
-    /**
-     * Local currency units per USD (1.00 for US plants)
-     */
-    localCurrencyPerUsd: number;
-    /**
-     * Average conversion rate used for the year (1.00 for US plants)
-     */
-    averageRate: number;
-    /**
-     * Cost lines in canonical order (Labor §1, Overhead §2, totals)
-     */
-    lines: Array<LaborOverheadReportLine>;
 }
 
 function isOptionalLaborOverheadCostReportPropertyOfType(
@@ -86,9 +86,9 @@ export function instanceOfLaborOverheadCostReport(value: object): value is Labor
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createLaborOverheadCostReportPropertyNames('locationId', 'fiscalYear', 'asOfMonth', 'currency', 'localCurrencyPerUsd', 'averageRate', 'lines', );
-    const optionalStringProperties = createLaborOverheadCostReportOptionalProperties({ name: 'locationId', nullable: false }, { name: 'locationLabel', nullable: false }, { name: 'currency', nullable: false }, );
-    const optionalNumberProperties = createLaborOverheadCostReportOptionalProperties({ name: 'fiscalYear', nullable: false }, { name: 'asOfMonth', nullable: false }, { name: 'localCurrencyPerUsd', nullable: false }, { name: 'averageRate', nullable: false }, );
+    const requiredProperties = createLaborOverheadCostReportPropertyNames('asOfMonth', 'averageRate', 'currency', 'fiscalYear', 'lines', 'localCurrencyPerUsd', 'locationId', );
+    const optionalStringProperties = createLaborOverheadCostReportOptionalProperties({ name: 'currency', nullable: false }, { name: 'locationId', nullable: false }, { name: 'locationLabel', nullable: false }, );
+    const optionalNumberProperties = createLaborOverheadCostReportOptionalProperties({ name: 'asOfMonth', nullable: false }, { name: 'averageRate', nullable: false }, { name: 'fiscalYear', nullable: false }, { name: 'localCurrencyPerUsd', nullable: false }, );
     const optionalBooleanProperties = createLaborOverheadCostReportOptionalProperties();
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

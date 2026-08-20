@@ -10,7 +10,7 @@
 
 
 /**
- * Conflict override request payload
+ * Request to bypass a scheduling conflict with manager permission
  */
 export interface ConflictOverrideRequest { 
     /**
@@ -18,13 +18,13 @@ export interface ConflictOverrideRequest {
      */
     appointmentId: string;
     /**
-     * Non-blank reason justifying the override
-     */
-    overrideReason: string;
-    /**
      * Optional JSON string describing the conflict being overridden
      */
     conflictDetails?: string;
+    /**
+     * Non-blank reason justifying the override
+     */
+    overrideReason: string;
 }
 
 function isOptionalConflictOverrideRequestPropertyOfType(
@@ -66,7 +66,7 @@ export function instanceOfConflictOverrideRequest(value: object): value is Confl
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createConflictOverrideRequestPropertyNames('appointmentId', 'overrideReason', );
-    const optionalStringProperties = createConflictOverrideRequestOptionalProperties({ name: 'appointmentId', nullable: false }, { name: 'overrideReason', nullable: false }, { name: 'conflictDetails', nullable: false }, );
+    const optionalStringProperties = createConflictOverrideRequestOptionalProperties({ name: 'appointmentId', nullable: false }, { name: 'conflictDetails', nullable: false }, { name: 'overrideReason', nullable: false }, );
     const optionalNumberProperties = createConflictOverrideRequestOptionalProperties();
     const optionalBooleanProperties = createConflictOverrideRequestOptionalProperties();
 

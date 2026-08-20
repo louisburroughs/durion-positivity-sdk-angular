@@ -14,21 +14,21 @@
  */
 export interface EmployeeEmergencyContactDto { 
     /**
+     * Email address of the emergency contact
+     */
+    email?: string;
+    /**
      * Name of the emergency contact
      */
     name?: string;
-    /**
-     * Relationship to the employee
-     */
-    relationship?: string;
     /**
      * Phone number of the emergency contact
      */
     phone?: string;
     /**
-     * Email address of the emergency contact
+     * Relationship to the employee
      */
-    email?: string;
+    relationship?: string;
 }
 
 function isOptionalEmployeeEmergencyContactDtoPropertyOfType(
@@ -70,7 +70,7 @@ export function instanceOfEmployeeEmergencyContactDto(value: object): value is E
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createEmployeeEmergencyContactDtoPropertyNames();
-    const optionalStringProperties = createEmployeeEmergencyContactDtoOptionalProperties({ name: 'name', nullable: false }, { name: 'relationship', nullable: false }, { name: 'phone', nullable: false }, { name: 'email', nullable: false }, );
+    const optionalStringProperties = createEmployeeEmergencyContactDtoOptionalProperties({ name: 'email', nullable: false }, { name: 'name', nullable: false }, { name: 'phone', nullable: false }, { name: 'relationship', nullable: false }, );
     const optionalNumberProperties = createEmployeeEmergencyContactDtoOptionalProperties();
     const optionalBooleanProperties = createEmployeeEmergencyContactDtoOptionalProperties();
 

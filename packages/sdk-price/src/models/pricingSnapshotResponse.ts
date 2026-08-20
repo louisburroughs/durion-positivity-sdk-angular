@@ -14,37 +14,37 @@
  */
 export interface PricingSnapshotResponse { 
     /**
-     * Snapshot identifier
+     * Serialized applied-rule details
      */
-    snapshotId: string;
+    appliedRules?: string | null;
     /**
      * Snapshot creation timestamp
      */
     createdAt: string;
     /**
-     * Optional source context
-     */
-    sourceContext?: string | null;
-    /**
      * Identifier of the quoted item
      */
     itemIdentifier: string;
     /**
-     * Quoted quantity
+     * Pricing policy version used
      */
-    quantity: number;
+    policyVersion: string;
     /**
      * Serialized prices payload
      */
     prices: string;
     /**
-     * Serialized applied-rule details
+     * Quoted quantity
      */
-    appliedRules?: string | null;
+    quantity: number;
     /**
-     * Pricing policy version used
+     * Snapshot identifier
      */
-    policyVersion: string;
+    snapshotId: string;
+    /**
+     * Optional source context
+     */
+    sourceContext?: string | null;
 }
 
 function isOptionalPricingSnapshotResponsePropertyOfType(
@@ -85,8 +85,8 @@ export function instanceOfPricingSnapshotResponse(value: object): value is Prici
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createPricingSnapshotResponsePropertyNames('snapshotId', 'createdAt', 'itemIdentifier', 'quantity', 'prices', 'policyVersion', );
-    const optionalStringProperties = createPricingSnapshotResponseOptionalProperties({ name: 'snapshotId', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'sourceContext', nullable: true }, { name: 'itemIdentifier', nullable: false }, { name: 'prices', nullable: false }, { name: 'appliedRules', nullable: true }, { name: 'policyVersion', nullable: false }, );
+    const requiredProperties = createPricingSnapshotResponsePropertyNames('createdAt', 'itemIdentifier', 'policyVersion', 'prices', 'quantity', 'snapshotId', );
+    const optionalStringProperties = createPricingSnapshotResponseOptionalProperties({ name: 'appliedRules', nullable: true }, { name: 'createdAt', nullable: false }, { name: 'itemIdentifier', nullable: false }, { name: 'policyVersion', nullable: false }, { name: 'prices', nullable: false }, { name: 'snapshotId', nullable: false }, { name: 'sourceContext', nullable: true }, );
     const optionalNumberProperties = createPricingSnapshotResponseOptionalProperties({ name: 'quantity', nullable: false }, );
     const optionalBooleanProperties = createPricingSnapshotResponseOptionalProperties();
 

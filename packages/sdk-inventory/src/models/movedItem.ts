@@ -63,7 +63,7 @@ export function instanceOfMovedItem(value: object): value is MovedItem {
 
     const requiredProperties = createMovedItemPropertyNames('itemId', 'quantity', );
     const optionalStringProperties = createMovedItemOptionalProperties({ name: 'itemId', nullable: false }, );
-    const optionalNumberProperties = createMovedItemOptionalProperties();
+    const optionalNumberProperties = createMovedItemOptionalProperties({ name: 'quantity', nullable: false }, );
     const optionalBooleanProperties = createMovedItemOptionalProperties();
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

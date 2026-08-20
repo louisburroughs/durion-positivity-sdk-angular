@@ -14,17 +14,17 @@
  */
 export interface CloseFollowUpTaskRequest { 
     /**
-     * What happened when the follow-up was worked
+     * Appointment created from the hand-off, when booking followed
      */
-    outcome: string;
+    bookedAppointmentId?: string;
     /**
      * Workorder created from the hand-off, when booking followed
      */
     bookedWorkorderId?: string;
     /**
-     * Appointment created from the hand-off, when booking followed
+     * What happened when the follow-up was worked
      */
-    bookedAppointmentId?: string;
+    outcome: string;
 }
 
 function isOptionalCloseFollowUpTaskRequestPropertyOfType(
@@ -66,7 +66,7 @@ export function instanceOfCloseFollowUpTaskRequest(value: object): value is Clos
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createCloseFollowUpTaskRequestPropertyNames('outcome', );
-    const optionalStringProperties = createCloseFollowUpTaskRequestOptionalProperties({ name: 'outcome', nullable: false }, { name: 'bookedWorkorderId', nullable: false }, { name: 'bookedAppointmentId', nullable: false }, );
+    const optionalStringProperties = createCloseFollowUpTaskRequestOptionalProperties({ name: 'bookedAppointmentId', nullable: false }, { name: 'bookedWorkorderId', nullable: false }, { name: 'outcome', nullable: false }, );
     const optionalNumberProperties = createCloseFollowUpTaskRequestOptionalProperties();
     const optionalBooleanProperties = createCloseFollowUpTaskRequestOptionalProperties();
 

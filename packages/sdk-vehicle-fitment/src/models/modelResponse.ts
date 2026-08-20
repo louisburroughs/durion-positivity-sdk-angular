@@ -18,13 +18,13 @@ export interface ModelResponse {
      */
     id: string;
     /**
-     * Model name
-     */
-    name: string;
-    /**
      * Make identifier for this model
      */
     makeId?: string;
+    /**
+     * Model name
+     */
+    name: string;
 }
 
 function isOptionalModelResponsePropertyOfType(
@@ -66,7 +66,7 @@ export function instanceOfModelResponse(value: object): value is ModelResponse {
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createModelResponsePropertyNames('id', 'name', );
-    const optionalStringProperties = createModelResponseOptionalProperties({ name: 'id', nullable: false }, { name: 'name', nullable: false }, { name: 'makeId', nullable: false }, );
+    const optionalStringProperties = createModelResponseOptionalProperties({ name: 'id', nullable: false }, { name: 'makeId', nullable: false }, { name: 'name', nullable: false }, );
     const optionalNumberProperties = createModelResponseOptionalProperties();
     const optionalBooleanProperties = createModelResponseOptionalProperties();
 

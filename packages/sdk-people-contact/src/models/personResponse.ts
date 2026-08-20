@@ -14,17 +14,21 @@
  */
 export interface PersonResponse { 
     /**
-     * Person identifier
-     */
-    id: string;
-    /**
      * First name of the person
      */
     firstName?: string;
     /**
+     * Person identifier
+     */
+    id: string;
+    /**
      * Last name of the person
      */
     lastName?: string;
+    /**
+     * Phone numbers on record
+     */
+    phoneNumbers?: Array<string>;
     /**
      * Primary email address
      */
@@ -33,10 +37,6 @@ export interface PersonResponse {
      * Secondary email address
      */
     secondaryEmail?: string;
-    /**
-     * Phone numbers on record
-     */
-    phoneNumbers?: Array<string>;
     /**
      * Linked username, if any
      */
@@ -82,7 +82,7 @@ export function instanceOfPersonResponse(value: object): value is PersonResponse
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createPersonResponsePropertyNames('id', );
-    const optionalStringProperties = createPersonResponseOptionalProperties({ name: 'id', nullable: false }, { name: 'firstName', nullable: false }, { name: 'lastName', nullable: false }, { name: 'primaryEmail', nullable: false }, { name: 'secondaryEmail', nullable: false }, { name: 'username', nullable: false }, );
+    const optionalStringProperties = createPersonResponseOptionalProperties({ name: 'firstName', nullable: false }, { name: 'id', nullable: false }, { name: 'lastName', nullable: false }, { name: 'primaryEmail', nullable: false }, { name: 'secondaryEmail', nullable: false }, { name: 'username', nullable: false }, );
     const optionalNumberProperties = createPersonResponseOptionalProperties();
     const optionalBooleanProperties = createPersonResponseOptionalProperties();
 

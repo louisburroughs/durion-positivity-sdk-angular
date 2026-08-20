@@ -14,17 +14,17 @@
  */
 export interface SiteDefaultsResponse { 
     /**
-     * Identifier of the site
+     * Identifier of the default quarantine storage location
      */
-    siteId: string;
+    defaultQuarantineLocationId?: string;
     /**
      * Identifier of the default staging storage location
      */
     defaultStagingLocationId?: string;
     /**
-     * Identifier of the default quarantine storage location
+     * Identifier of the site
      */
-    defaultQuarantineLocationId?: string;
+    siteId: string;
 }
 
 function isOptionalSiteDefaultsResponsePropertyOfType(
@@ -66,7 +66,7 @@ export function instanceOfSiteDefaultsResponse(value: object): value is SiteDefa
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createSiteDefaultsResponsePropertyNames('siteId', );
-    const optionalStringProperties = createSiteDefaultsResponseOptionalProperties({ name: 'siteId', nullable: false }, { name: 'defaultStagingLocationId', nullable: false }, { name: 'defaultQuarantineLocationId', nullable: false }, );
+    const optionalStringProperties = createSiteDefaultsResponseOptionalProperties({ name: 'defaultQuarantineLocationId', nullable: false }, { name: 'defaultStagingLocationId', nullable: false }, { name: 'siteId', nullable: false }, );
     const optionalNumberProperties = createSiteDefaultsResponseOptionalProperties();
     const optionalBooleanProperties = createSiteDefaultsResponseOptionalProperties();
 

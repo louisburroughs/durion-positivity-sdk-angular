@@ -14,14 +14,14 @@
  */
 export interface StartWorkorderRequest { 
     /**
+     * Optional reason associated with start transition
+     */
+    reason?: string;
+    /**
      * Deprecated. Actor identity is resolved from authenticated security context.
      * @deprecated
      */
     userId?: string;
-    /**
-     * Optional reason associated with start transition
-     */
-    reason?: string;
 }
 
 function isOptionalStartWorkorderRequestPropertyOfType(
@@ -63,7 +63,7 @@ export function instanceOfStartWorkorderRequest(value: object): value is StartWo
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createStartWorkorderRequestPropertyNames();
-    const optionalStringProperties = createStartWorkorderRequestOptionalProperties({ name: 'userId', nullable: false }, { name: 'reason', nullable: false }, );
+    const optionalStringProperties = createStartWorkorderRequestOptionalProperties({ name: 'reason', nullable: false }, { name: 'userId', nullable: false }, );
     const optionalNumberProperties = createStartWorkorderRequestOptionalProperties();
     const optionalBooleanProperties = createStartWorkorderRequestOptionalProperties();
 

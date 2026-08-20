@@ -38,20 +38,20 @@ export class PostalAddressAPIService extends BaseService {
     }
 
     /**
-     * Delete an organization\&#39;s postal address
-     * Removes the organization party\&#39;s postal address; succeeds even when none is on file.
+     * Delete an Organization\&#39;s Postal Address
+     * Removes the postal address on file for a CRM organization party; the operation is idempotent and succeeds when none exists. Use this tool to clear an organization\&#39;s mailing address; use deletePersonPostalAddress instead for person parties. Preconditions: none; a missing address is treated as already deleted. Required inputs: organizationId (UUID) as a path parameter; there is no request body. Emits a PEOPLE_CONTACT_ORG_ADDRESS_DELETE event, and an organization-address-removed fact is published only when an address actually existed. Returns 204 whether or not an address was on file. 
      * @endpoint delete /v1/organizations/{organizationId}/postal-address
      * @param organizationId Organization party id
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public deleteOrganizationAddress(organizationId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public deleteOrganizationAddress(organizationId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public deleteOrganizationAddress(organizationId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public deleteOrganizationAddress(organizationId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public deleteOrganizationPostalAddress(organizationId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
+    public deleteOrganizationPostalAddress(organizationId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
+    public deleteOrganizationPostalAddress(organizationId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
+    public deleteOrganizationPostalAddress(organizationId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (organizationId === null || organizationId === undefined) {
-            throw new Error('Required parameter organizationId was null or undefined when calling deleteOrganizationAddress.');
+            throw new Error('Required parameter organizationId was null or undefined when calling deleteOrganizationPostalAddress.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -97,20 +97,20 @@ export class PostalAddressAPIService extends BaseService {
     }
 
     /**
-     * Delete a person\&#39;s postal address
-     * Removes the person\&#39;s postal address; succeeds even when none is on file.
+     * Delete a Person\&#39;s Postal Address
+     * Removes the postal address on file for a person; the operation is idempotent and succeeds when none exists. Use this tool to clear a person\&#39;s mailing address; do not use deletePerson, which removes the entire identity record. Preconditions: none; a missing address is treated as already deleted. Required inputs: personId (UUID) as a path parameter; there is no request body. Emits a PEOPLE_CONTACT_PERSON_ADDRESS_DELETE event, and queues a person.updated identity fact only when an address actually existed. Returns 204 whether or not an address was on file. 
      * @endpoint delete /v1/people/{personId}/postal-address
      * @param personId Person id
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public deletePersonAddress(personId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public deletePersonAddress(personId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public deletePersonAddress(personId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public deletePersonAddress(personId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public deletePersonPostalAddress(personId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
+    public deletePersonPostalAddress(personId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
+    public deletePersonPostalAddress(personId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
+    public deletePersonPostalAddress(personId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (personId === null || personId === undefined) {
-            throw new Error('Required parameter personId was null or undefined when calling deletePersonAddress.');
+            throw new Error('Required parameter personId was null or undefined when calling deletePersonPostalAddress.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -156,20 +156,20 @@ export class PostalAddressAPIService extends BaseService {
     }
 
     /**
-     * Get an organization\&#39;s postal address
-     * Returns the organization party\&#39;s structured postal address, or 404 when none is on file. The organization id is the party UUID owned by the CRM module.
+     * Get an Organization\&#39;s Postal Address
+     * Returns the structured postal address on file for a CRM organization party; the organization id is an external pos-customer party reference stored verbatim. Use this tool when reading an organization\&#39;s mailing address; use getPersonPostalAddress instead for person parties. Preconditions: an address must already have been stored for the organization with putOrganizationPostalAddress. Required inputs: organizationId (the pos-customer commercial party UUID) as a path parameter; there is no request body. Emits a PEOPLE_CONTACT_ORG_ADDRESS_GET audit event; no state changes. Returns 404 when no address is on file for the organization. 
      * @endpoint get /v1/organizations/{organizationId}/postal-address
      * @param organizationId Organization party id
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public getOrganizationAddress(organizationId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<PostalAddressDto>;
-    public getOrganizationAddress(organizationId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PostalAddressDto>>;
-    public getOrganizationAddress(organizationId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PostalAddressDto>>;
-    public getOrganizationAddress(organizationId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getOrganizationPostalAddress(organizationId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<PostalAddressDto>;
+    public getOrganizationPostalAddress(organizationId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PostalAddressDto>>;
+    public getOrganizationPostalAddress(organizationId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PostalAddressDto>>;
+    public getOrganizationPostalAddress(organizationId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (organizationId === null || organizationId === undefined) {
-            throw new Error('Required parameter organizationId was null or undefined when calling getOrganizationAddress.');
+            throw new Error('Required parameter organizationId was null or undefined when calling getOrganizationPostalAddress.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -217,20 +217,20 @@ export class PostalAddressAPIService extends BaseService {
     }
 
     /**
-     * Get a person\&#39;s postal address
-     * Returns the person\&#39;s structured postal address, or 404 when none is on file.
+     * Get a Person\&#39;s Postal Address
+     * Returns the single structured postal address on file for a person; pos-people-contact is the postal-address authority for person parties (FI-4). Use this tool when reading a person\&#39;s mailing address; use getOrganizationPostalAddress instead for CRM organization parties. Preconditions: an address must already have been stored for the person with putPersonPostalAddress. Required inputs: personId (UUID) as a path parameter; there is no request body. Emits a PEOPLE_CONTACT_PERSON_ADDRESS_GET audit event; no state changes. Returns 404 when no address is on file for the person. 
      * @endpoint get /v1/people/{personId}/postal-address
      * @param personId Person id
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public getPersonAddress(personId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<PostalAddressDto>;
-    public getPersonAddress(personId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PostalAddressDto>>;
-    public getPersonAddress(personId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PostalAddressDto>>;
-    public getPersonAddress(personId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getPersonPostalAddress(personId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<PostalAddressDto>;
+    public getPersonPostalAddress(personId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PostalAddressDto>>;
+    public getPersonPostalAddress(personId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PostalAddressDto>>;
+    public getPersonPostalAddress(personId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (personId === null || personId === undefined) {
-            throw new Error('Required parameter personId was null or undefined when calling getPersonAddress.');
+            throw new Error('Required parameter personId was null or undefined when calling getPersonPostalAddress.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -278,24 +278,24 @@ export class PostalAddressAPIService extends BaseService {
     }
 
     /**
-     * Create or replace an organization\&#39;s postal address
-     * Stores the structured, validated address for an organization party. The id is an external party reference (pos-customer commercial party) stored verbatim.
+     * Create or Replace Organization Postal Address
+     * Creates or replaces the single structured postal address for a CRM organization party. Use this tool for organization mailing addresses; use putPersonPostalAddress instead for person parties. Preconditions: none in this module; the organization id is an external pos-customer party reference stored verbatim without an existence check. Required inputs: organizationId (UUID) as a path parameter, plus line1 and an ISO 3166-1 alpha-2 countryCode in the body; line2, city, region and postalCode are optional free text. Emits a PEOPLE_CONTACT_ORG_ADDRESS_PUT event and an organization-address-updated fact for downstream consumers. Returns 200 with the stored address, and 422 when line1 is blank or countryCode is not a valid ISO 3166-1 alpha-2 code. 
      * @endpoint put /v1/organizations/{organizationId}/postal-address
      * @param organizationId Organization party id
-     * @param postalAddressDto 
+     * @param postalAddressDto Country-agnostic structured postal address that replaces any address already on file for the organization party.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public putOrganizationAddress(organizationId: string, postalAddressDto: PostalAddressDto, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PostalAddressDto>;
-    public putOrganizationAddress(organizationId: string, postalAddressDto: PostalAddressDto, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PostalAddressDto>>;
-    public putOrganizationAddress(organizationId: string, postalAddressDto: PostalAddressDto, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PostalAddressDto>>;
-    public putOrganizationAddress(organizationId: string, postalAddressDto: PostalAddressDto, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public putOrganizationPostalAddress(organizationId: string, postalAddressDto: PostalAddressDto, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<PostalAddressDto>;
+    public putOrganizationPostalAddress(organizationId: string, postalAddressDto: PostalAddressDto, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PostalAddressDto>>;
+    public putOrganizationPostalAddress(organizationId: string, postalAddressDto: PostalAddressDto, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PostalAddressDto>>;
+    public putOrganizationPostalAddress(organizationId: string, postalAddressDto: PostalAddressDto, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (organizationId === null || organizationId === undefined) {
-            throw new Error('Required parameter organizationId was null or undefined when calling putOrganizationAddress.');
+            throw new Error('Required parameter organizationId was null or undefined when calling putOrganizationPostalAddress.');
         }
         if (postalAddressDto === null || postalAddressDto === undefined) {
-            throw new Error('Required parameter postalAddressDto was null or undefined when calling putOrganizationAddress.');
+            throw new Error('Required parameter postalAddressDto was null or undefined when calling putOrganizationPostalAddress.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -304,7 +304,8 @@ export class PostalAddressAPIService extends BaseService {
         localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
 
         const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
-            'application/json'
+            'application/json',
+            'application/problem+json'
         ]);
         if (localVarHttpHeaderAcceptSelected !== undefined) {
             localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
@@ -352,24 +353,24 @@ export class PostalAddressAPIService extends BaseService {
     }
 
     /**
-     * Create or replace a person\&#39;s postal address
-     * Stores the structured, validated address. Only line1 and an ISO 3166-1 alpha-2 countryCode are required — the shape is country-agnostic (region is free text, postalCode optional) so it works for any deployment locale.
+     * Create or Replace Person Postal Address
+     * Creates or replaces the single structured postal address for a person; the shape is country-agnostic, with free-text region and an optional postalCode. Use this tool for person mailing addresses; use putOrganizationPostalAddress instead for CRM organization parties, and do not use replaceContactPoints, which manages email and phone channels. Preconditions: the person record must exist; any previously stored address is overwritten in place. Required inputs: line1 and an ISO 3166-1 alpha-2 countryCode (stored upper-case); line2, city, region and postalCode are optional free text, trimmed, with blanks stored as null. Emits a PEOPLE_CONTACT_PERSON_ADDRESS_PUT event and queues a person.updated identity fact carrying the new address. Returns 200 with the stored address, 404 when the person does not exist, and 422 when line1 is blank or countryCode is not a valid ISO 3166-1 alpha-2 code. 
      * @endpoint put /v1/people/{personId}/postal-address
      * @param personId Person id
-     * @param postalAddressDto 
+     * @param postalAddressDto Country-agnostic structured postal address that replaces any address already on file for the person.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public putPersonAddress(personId: string, postalAddressDto: PostalAddressDto, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<PostalAddressDto>;
-    public putPersonAddress(personId: string, postalAddressDto: PostalAddressDto, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PostalAddressDto>>;
-    public putPersonAddress(personId: string, postalAddressDto: PostalAddressDto, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PostalAddressDto>>;
-    public putPersonAddress(personId: string, postalAddressDto: PostalAddressDto, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public putPersonPostalAddress(personId: string, postalAddressDto: PostalAddressDto, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<PostalAddressDto>;
+    public putPersonPostalAddress(personId: string, postalAddressDto: PostalAddressDto, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PostalAddressDto>>;
+    public putPersonPostalAddress(personId: string, postalAddressDto: PostalAddressDto, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PostalAddressDto>>;
+    public putPersonPostalAddress(personId: string, postalAddressDto: PostalAddressDto, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (personId === null || personId === undefined) {
-            throw new Error('Required parameter personId was null or undefined when calling putPersonAddress.');
+            throw new Error('Required parameter personId was null or undefined when calling putPersonPostalAddress.');
         }
         if (postalAddressDto === null || postalAddressDto === undefined) {
-            throw new Error('Required parameter postalAddressDto was null or undefined when calling putPersonAddress.');
+            throw new Error('Required parameter postalAddressDto was null or undefined when calling putPersonPostalAddress.');
         }
 
         let localVarHeaders = this.defaultHeaders;

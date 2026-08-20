@@ -18,17 +18,17 @@ export interface ReprocessingAttemptHistoryResponse {
      */
     attemptId: string;
     /**
-     * Identifier of the event that was reprocessed
-     */
-    eventId: string;
-    /**
      * Timestamp when the reprocessing was attempted (ISO 8601)
      */
     attemptedAt?: string;
     /**
-     * Identifier of the user who triggered the attempt
+     * Identifier of the event that was reprocessed
      */
-    triggeredByUserId?: string;
+    eventId: string;
+    /**
+     * Mapping version used for the attempt
+     */
+    mappingVersionUsed?: string;
     /**
      * Outcome of the reprocessing attempt
      */
@@ -38,9 +38,9 @@ export interface ReprocessingAttemptHistoryResponse {
      */
     outcomeDetails?: string;
     /**
-     * Mapping version used for the attempt
+     * Identifier of the user who triggered the attempt
      */
-    mappingVersionUsed?: string;
+    triggeredByUserId?: string;
 }
 export enum ReprocessingAttemptHistoryResponseOutcomeEnum {
     Success = 'SUCCESS',
@@ -88,7 +88,7 @@ export function instanceOfReprocessingAttemptHistoryResponse(value: object): val
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createReprocessingAttemptHistoryResponsePropertyNames('attemptId', 'eventId', );
-    const optionalStringProperties = createReprocessingAttemptHistoryResponseOptionalProperties({ name: 'attemptId', nullable: false }, { name: 'eventId', nullable: false }, { name: 'attemptedAt', nullable: false }, { name: 'triggeredByUserId', nullable: false }, { name: 'outcome', nullable: false }, { name: 'outcomeDetails', nullable: false }, { name: 'mappingVersionUsed', nullable: false }, );
+    const optionalStringProperties = createReprocessingAttemptHistoryResponseOptionalProperties({ name: 'attemptId', nullable: false }, { name: 'attemptedAt', nullable: false }, { name: 'eventId', nullable: false }, { name: 'mappingVersionUsed', nullable: false }, { name: 'outcome', nullable: false }, { name: 'outcomeDetails', nullable: false }, { name: 'triggeredByUserId', nullable: false }, );
     const optionalNumberProperties = createReprocessingAttemptHistoryResponseOptionalProperties();
     const optionalBooleanProperties = createReprocessingAttemptHistoryResponseOptionalProperties();
 

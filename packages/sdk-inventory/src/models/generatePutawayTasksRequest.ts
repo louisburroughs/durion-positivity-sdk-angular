@@ -15,9 +15,9 @@ import { PutawayLineItemRequest } from './putawayLineItemRequest';
  */
 export interface GeneratePutawayTasksRequest { 
     /**
-     * Identifier of the receipt the received goods belong to
+     * Line items describing the products and quantities to be put away
      */
-    sourceReceiptId: string;
+    lineItems?: Array<PutawayLineItemRequest>;
     /**
      * Legacy single-line product identifier; prefer lineItems for new integrations
      */
@@ -27,9 +27,9 @@ export interface GeneratePutawayTasksRequest {
      */
     quantity?: number;
     /**
-     * Line items describing the products and quantities to be put away
+     * Identifier of the receipt the received goods belong to
      */
-    lineItems?: Array<PutawayLineItemRequest>;
+    sourceReceiptId: string;
 }
 
 function isOptionalGeneratePutawayTasksRequestPropertyOfType(
@@ -71,7 +71,7 @@ export function instanceOfGeneratePutawayTasksRequest(value: object): value is G
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createGeneratePutawayTasksRequestPropertyNames('sourceReceiptId', );
-    const optionalStringProperties = createGeneratePutawayTasksRequestOptionalProperties({ name: 'sourceReceiptId', nullable: false }, { name: 'productId', nullable: false }, );
+    const optionalStringProperties = createGeneratePutawayTasksRequestOptionalProperties({ name: 'productId', nullable: false }, { name: 'sourceReceiptId', nullable: false }, );
     const optionalNumberProperties = createGeneratePutawayTasksRequestOptionalProperties({ name: 'quantity', nullable: false }, );
     const optionalBooleanProperties = createGeneratePutawayTasksRequestOptionalProperties();
 

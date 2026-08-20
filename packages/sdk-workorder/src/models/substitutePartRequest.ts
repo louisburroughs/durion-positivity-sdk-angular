@@ -14,21 +14,21 @@
  */
 export interface SubstitutePartRequest { 
     /**
+     * Optional substitution notes
+     */
+    notes?: string;
+    /**
      * Original part identifier
      */
     originalPartId: string;
-    /**
-     * Substitute part identifier
-     */
-    substitutePartId: string;
     /**
      * Audit reason for substitution
      */
     reason: string;
     /**
-     * Optional substitution notes
+     * Substitute part identifier
      */
-    notes?: string;
+    substitutePartId: string;
 }
 
 function isOptionalSubstitutePartRequestPropertyOfType(
@@ -69,8 +69,8 @@ export function instanceOfSubstitutePartRequest(value: object): value is Substit
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createSubstitutePartRequestPropertyNames('originalPartId', 'substitutePartId', 'reason', );
-    const optionalStringProperties = createSubstitutePartRequestOptionalProperties({ name: 'originalPartId', nullable: false }, { name: 'substitutePartId', nullable: false }, { name: 'reason', nullable: false }, { name: 'notes', nullable: false }, );
+    const requiredProperties = createSubstitutePartRequestPropertyNames('originalPartId', 'reason', 'substitutePartId', );
+    const optionalStringProperties = createSubstitutePartRequestOptionalProperties({ name: 'notes', nullable: false }, { name: 'originalPartId', nullable: false }, { name: 'reason', nullable: false }, { name: 'substitutePartId', nullable: false }, );
     const optionalNumberProperties = createSubstitutePartRequestOptionalProperties();
     const optionalBooleanProperties = createSubstitutePartRequestOptionalProperties();
 

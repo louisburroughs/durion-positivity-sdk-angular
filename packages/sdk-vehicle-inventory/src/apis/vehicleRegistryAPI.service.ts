@@ -41,9 +41,9 @@ export class VehicleRegistryAPIService extends BaseService {
 
     /**
      * Create vehicle
-     * Create a new vehicle registry record
+     * Creates an active vehicle registry record after validating and normalizing the VIN, which must be globally unique among active vehicles. Use this tool to register a single vehicle whose changes replicate to consumer services; do not use bulkIngestVehicles, which loads batches with per-row results, and do not use createVehicleLegacy, which writes the unreplicated legacy store. Preconditions: no active vehicle may already hold the same normalized VIN; a deactivated vehicle releases its VIN for reuse. Required inputs: accountId (UUID) and vin (17 characters after separators are stripped, with letters I, O and Q rejected); unitNumber and description are optional and stored as empty strings when omitted, and licensePlate, licensePlateJurisdiction, year, make, model and trim are optional. Emits a VEHICLE_CREATE event and queues a vehicle.vehicle.updated fact on the vehicle.events.v1 outbox for downstream replicas. Returns 201 with the created record, and 400 with a VALIDATION_ERROR ApiError when the VIN is malformed or an active vehicle already holds the same normalized VIN; the duplicate-VIN case is reported as 400, not 409. 
      * @endpoint post /v1/vehicle-registry
-     * @param createVehicleRequest 
+     * @param createVehicleRequest Registry vehicle to create, owned by one account and identified by a globally unique VIN.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -111,7 +111,7 @@ export class VehicleRegistryAPIService extends BaseService {
 
     /**
      * Delete vehicle
-     * Deactivate a vehicle by ID
+     * Deactivates a vehicle registry record by setting isActive to false; the row is retained and remains readable by id and by VIN. Use this tool to retire a registry vehicle while preserving history and releasing its VIN for reuse by a future active vehicle; do not use deleteVehicleLegacy, which hard-deletes from the legacy store. Preconditions: the record must exist in the registry; deactivating an already inactive vehicle is accepted and simply re-emits the replica fact. Required inputs: vehicleId (UUID) as a path parameter; there is no request body. Emits a VEHICLE_DELETE event and queues a vehicle.vehicle.updated fact with isActive false on the vehicle.events.v1 outbox, which tells downstream replicas to treat the vehicle as retired. Returns 204 on successful deactivation, and 404 with a RESOURCE_NOT_FOUND ApiError when the vehicleId is unknown. 
      * @endpoint delete /v1/vehicle-registry/{vehicleId}
      * @param vehicleId Vehicle UUID
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -170,7 +170,7 @@ export class VehicleRegistryAPIService extends BaseService {
 
     /**
      * Get vehicle by ID
-     * Retrieve a vehicle by its unique ID
+     * Returns a single vehicle registry record by its vehicleId, whether the vehicle is active or deactivated. Use this tool when the registry id is already known; use getVehicleByVin instead for VIN lookups, use searchVehicles for free-text discovery, and do not use getVehicleLegacy, which reads the legacy store. Preconditions: the record must exist in the registry; deactivated vehicles are still returned, so callers must check the isActive flag. Required inputs: vehicleId (UUID) as a path parameter; there is no request body. No events are emitted and no state changes; this is a read-only projection. Returns 404 with an empty body when no registry record exists for the supplied vehicleId. 
      * @endpoint get /v1/vehicle-registry/{vehicleId}
      * @param vehicleId Vehicle UUID
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -230,7 +230,7 @@ export class VehicleRegistryAPIService extends BaseService {
 
     /**
      * Get vehicle by VIN
-     * Retrieve a vehicle by VIN
+     * Returns a single vehicle registry record by VIN, normalizing the supplied value by trimming, uppercasing and stripping separators before the lookup. Use this tool when the full 17-character VIN is known; use searchVehicles instead for partial VIN prefixes, and do not use getVehicleLegacyByVin, which reads the legacy store. Preconditions: a record with the normalized VIN must exist in the registry; active and deactivated vehicles are both returned. Required inputs: vin as a path parameter, exactly 17 characters; there is no request body. No events are emitted and no state changes; this is a read-only projection. Returns 404 with an empty body when no registry record carries the normalized VIN, and 400 with a VALIDATION_FAILED ApiError when the path VIN is not exactly 17 characters. 
      * @endpoint get /v1/vehicle-registry/vin/{vin}
      * @param vin Vehicle VIN
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -290,10 +290,10 @@ export class VehicleRegistryAPIService extends BaseService {
 
     /**
      * Update vehicle
-     * Update an existing vehicle by ID
+     * Applies a partial update to a vehicle registry record; only fields present in the body are changed, and the VIN itself cannot be modified here. Use this tool to correct registry data or transfer ownership, since a new accountId moves the vehicle to that party and consumer replicas move their vehicle-party association from the emitted fact (ADR-0044); do not use updateVehicleLegacy, which fully replaces legacy records. Preconditions: the record must exist in the registry; deactivated vehicles can still be updated. Required inputs: vehicleId (UUID) as a path parameter and at least one body field among accountId, unitNumber, description, licensePlate, licensePlateJurisdiction, year, make, model and trim; a provided unitNumber or description must be non-blank, and year must be between 1886 and 2100. Emits a VEHICLE_UPDATE event and queues a vehicle.vehicle.updated fact on the vehicle.events.v1 outbox for downstream replicas. Returns 404 with a RESOURCE_NOT_FOUND ApiError when the vehicleId is unknown, and 400 with a VALIDATION_FAILED ApiError when no field is provided or a provided field violates its constraints. 
      * @endpoint put /v1/vehicle-registry/{vehicleId}
      * @param vehicleId Vehicle UUID
-     * @param updateVehicleRequest 
+     * @param updateVehicleRequest Subset of mutable vehicle fields to change; omitted fields keep their stored values.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options

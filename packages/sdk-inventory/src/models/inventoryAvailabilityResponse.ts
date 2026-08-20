@@ -14,9 +14,21 @@
  */
 export interface InventoryAvailabilityResponse { 
     /**
-     * Product identifier
+     * Total quantity allocated (hard commitments)
      */
-    productId: string;
+    allocatedQty: number;
+    /**
+     * Timestamp when this calculation was performed
+     */
+    asOfTimestamp: string;
+    /**
+     * Available-to-promise quantity (On-Hand - Allocations)
+     */
+    atpQty: number;
+    /**
+     * Expected receipts quantity (optional, not included in ATP for v1)
+     */
+    expectedReceiptsQty?: number | null;
     /**
      * Location identifier
      */
@@ -26,25 +38,13 @@ export interface InventoryAvailabilityResponse {
      */
     onHandQty: number;
     /**
-     * Total quantity allocated (hard commitments)
+     * Product identifier
      */
-    allocatedQty: number;
-    /**
-     * Available-to-promise quantity (On-Hand - Allocations)
-     */
-    atpQty: number;
+    productId: string;
     /**
      * Base unit of measure for all quantities
      */
     uom: string;
-    /**
-     * Timestamp when this calculation was performed
-     */
-    asOfTimestamp: string;
-    /**
-     * Expected receipts quantity (optional, not included in ATP for v1)
-     */
-    expectedReceiptsQty?: number | null;
 }
 
 function isOptionalInventoryAvailabilityResponsePropertyOfType(
@@ -85,9 +85,9 @@ export function instanceOfInventoryAvailabilityResponse(value: object): value is
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createInventoryAvailabilityResponsePropertyNames('productId', 'locationId', 'onHandQty', 'allocatedQty', 'atpQty', 'uom', 'asOfTimestamp', );
-    const optionalStringProperties = createInventoryAvailabilityResponseOptionalProperties({ name: 'productId', nullable: false }, { name: 'locationId', nullable: false }, { name: 'uom', nullable: false }, { name: 'asOfTimestamp', nullable: false }, );
-    const optionalNumberProperties = createInventoryAvailabilityResponseOptionalProperties({ name: 'onHandQty', nullable: false }, { name: 'allocatedQty', nullable: false }, { name: 'atpQty', nullable: false }, { name: 'expectedReceiptsQty', nullable: true }, );
+    const requiredProperties = createInventoryAvailabilityResponsePropertyNames('allocatedQty', 'asOfTimestamp', 'atpQty', 'locationId', 'onHandQty', 'productId', 'uom', );
+    const optionalStringProperties = createInventoryAvailabilityResponseOptionalProperties({ name: 'asOfTimestamp', nullable: false }, { name: 'locationId', nullable: false }, { name: 'productId', nullable: false }, { name: 'uom', nullable: false }, );
+    const optionalNumberProperties = createInventoryAvailabilityResponseOptionalProperties({ name: 'allocatedQty', nullable: false }, { name: 'atpQty', nullable: false }, { name: 'expectedReceiptsQty', nullable: true }, { name: 'onHandQty', nullable: false }, );
     const optionalBooleanProperties = createInventoryAvailabilityResponseOptionalProperties();
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

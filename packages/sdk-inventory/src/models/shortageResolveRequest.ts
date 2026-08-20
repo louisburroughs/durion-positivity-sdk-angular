@@ -14,45 +14,45 @@
  */
 export interface ShortageResolveRequest { 
     /**
-     * Retry-safe idempotency key; a replay with the same key returns the original result
-     */
-    idempotencyKey: string;
-    /**
      * Identifier of the allocation to resolve
      */
     allocationId: string;
     /**
-     * The resolution option to execute
+     * Retry-safe idempotency key; a replay with the same key returns the original result
      */
-    optionType: ShortageResolveRequestOptionTypeEnum;
-    /**
-     * SKU / stock-item identifier that is short
-     */
-    sku: string;
-    /**
-     * Quantity that is short and to be resolved
-     */
-    shortQuantity: number;
+    idempotencyKey: string;
     /**
      * Site the demand is short at (required for BACKORDER / TRANSFER_IN)
      */
     locationId?: string;
     /**
-     * Workorder line whose demand was short (required for BACKORDER / SUBSTITUTE / CANCEL_LINE)
+     * Optional free-text notes explaining the resolution
      */
-    workorderLineId?: string;
+    notes?: string;
     /**
-     * Substitute SKU to reserve; required when optionType is SUBSTITUTE
+     * The resolution option to execute
      */
-    substituteSku?: string;
+    optionType: ShortageResolveRequestOptionTypeEnum;
+    /**
+     * Quantity that is short and to be resolved
+     */
+    shortQuantity: number;
+    /**
+     * SKU / stock-item identifier that is short
+     */
+    sku: string;
     /**
      * Source site to pull surplus from; required when optionType is TRANSFER_IN
      */
     sourceLocationId?: string;
     /**
-     * Optional free-text notes explaining the resolution
+     * Substitute SKU to reserve; required when optionType is SUBSTITUTE
      */
-    notes?: string;
+    substituteSku?: string;
+    /**
+     * Workorder line whose demand was short (required for BACKORDER / SUBSTITUTE / CANCEL_LINE)
+     */
+    workorderLineId?: string;
 }
 export enum ShortageResolveRequestOptionTypeEnum {
     Backorder = 'BACKORDER',
@@ -102,8 +102,8 @@ export function instanceOfShortageResolveRequest(value: object): value is Shorta
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createShortageResolveRequestPropertyNames('idempotencyKey', 'allocationId', 'optionType', 'sku', 'shortQuantity', );
-    const optionalStringProperties = createShortageResolveRequestOptionalProperties({ name: 'idempotencyKey', nullable: false }, { name: 'allocationId', nullable: false }, { name: 'optionType', nullable: false }, { name: 'sku', nullable: false }, { name: 'locationId', nullable: false }, { name: 'workorderLineId', nullable: false }, { name: 'substituteSku', nullable: false }, { name: 'sourceLocationId', nullable: false }, { name: 'notes', nullable: false }, );
+    const requiredProperties = createShortageResolveRequestPropertyNames('allocationId', 'idempotencyKey', 'optionType', 'shortQuantity', 'sku', );
+    const optionalStringProperties = createShortageResolveRequestOptionalProperties({ name: 'allocationId', nullable: false }, { name: 'idempotencyKey', nullable: false }, { name: 'locationId', nullable: false }, { name: 'notes', nullable: false }, { name: 'optionType', nullable: false }, { name: 'sku', nullable: false }, { name: 'sourceLocationId', nullable: false }, { name: 'substituteSku', nullable: false }, { name: 'workorderLineId', nullable: false }, );
     const optionalNumberProperties = createShortageResolveRequestOptionalProperties({ name: 'shortQuantity', nullable: false }, );
     const optionalBooleanProperties = createShortageResolveRequestOptionalProperties();
 

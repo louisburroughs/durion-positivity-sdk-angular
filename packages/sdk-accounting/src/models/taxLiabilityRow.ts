@@ -14,21 +14,9 @@
  */
 export interface TaxLiabilityRow { 
     /**
-     * Jurisdiction level: STATE, COUNTY, CITY, or SPECIAL
+     * Credit/refund tax netted against this jurisdiction — POSTED credit-memo reversals allocated pro-rata to collected tax
      */
-    jurisdictionType: string;
-    /**
-     * Jurisdiction code as reported by the tax engine
-     */
-    jurisdictionCode: string;
-    /**
-     * Human-readable jurisdiction name when available; null when the replica carries only the code
-     */
-    jurisdictionName?: string;
-    /**
-     * Sum of taxable base for non-exempt lines in this jurisdiction
-     */
-    taxableBase: number;
+    creditsNetted: number;
     /**
      * Sum of taxable base for exempt / zero-rate lines in this jurisdiction
      */
@@ -38,17 +26,29 @@ export interface TaxLiabilityRow {
      */
     exemptionReasons: Array<string>;
     /**
-     * Gross tax collected (Σ tax_amount of non-exempt lines) before credits
+     * Jurisdiction code as reported by the tax engine
      */
-    taxCollectedGross: number;
+    jurisdictionCode: string;
     /**
-     * Credit/refund tax netted against this jurisdiction — POSTED credit-memo reversals allocated pro-rata to collected tax
+     * Human-readable jurisdiction name when available; null when the replica carries only the code
      */
-    creditsNetted: number;
+    jurisdictionName?: string;
+    /**
+     * Jurisdiction level: STATE, COUNTY, CITY, or SPECIAL
+     */
+    jurisdictionType: string;
     /**
      * Net tax owed for this jurisdiction: taxCollectedGross - creditsNetted
      */
     netTax: number;
+    /**
+     * Gross tax collected (Σ tax_amount of non-exempt lines) before credits
+     */
+    taxCollectedGross: number;
+    /**
+     * Sum of taxable base for non-exempt lines in this jurisdiction
+     */
+    taxableBase: number;
 }
 
 function isOptionalTaxLiabilityRowPropertyOfType(
@@ -89,9 +89,9 @@ export function instanceOfTaxLiabilityRow(value: object): value is TaxLiabilityR
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createTaxLiabilityRowPropertyNames('jurisdictionType', 'jurisdictionCode', 'taxableBase', 'exemptBase', 'exemptionReasons', 'taxCollectedGross', 'creditsNetted', 'netTax', );
-    const optionalStringProperties = createTaxLiabilityRowOptionalProperties({ name: 'jurisdictionType', nullable: false }, { name: 'jurisdictionCode', nullable: false }, { name: 'jurisdictionName', nullable: false }, );
-    const optionalNumberProperties = createTaxLiabilityRowOptionalProperties({ name: 'taxableBase', nullable: false }, { name: 'exemptBase', nullable: false }, { name: 'taxCollectedGross', nullable: false }, { name: 'creditsNetted', nullable: false }, { name: 'netTax', nullable: false }, );
+    const requiredProperties = createTaxLiabilityRowPropertyNames('creditsNetted', 'exemptBase', 'exemptionReasons', 'jurisdictionCode', 'jurisdictionType', 'netTax', 'taxCollectedGross', 'taxableBase', );
+    const optionalStringProperties = createTaxLiabilityRowOptionalProperties({ name: 'jurisdictionCode', nullable: false }, { name: 'jurisdictionName', nullable: false }, { name: 'jurisdictionType', nullable: false }, );
+    const optionalNumberProperties = createTaxLiabilityRowOptionalProperties({ name: 'creditsNetted', nullable: false }, { name: 'exemptBase', nullable: false }, { name: 'netTax', nullable: false }, { name: 'taxCollectedGross', nullable: false }, { name: 'taxableBase', nullable: false }, );
     const optionalBooleanProperties = createTaxLiabilityRowOptionalProperties();
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

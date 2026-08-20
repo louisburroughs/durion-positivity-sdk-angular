@@ -14,29 +14,25 @@
  */
 export interface GeneralLedgerLine { 
     /**
-     * Journal entry UUID
+     * Credit amount (null if debit)
      */
-    journalEntryId: string;
-    /**
-     * Journal entry number
-     */
-    entryNumber?: string;
-    /**
-     * Transaction date
-     */
-    transactionDate: string;
-    /**
-     * Description/narrative for the journal line
-     */
-    description?: string;
+    creditAmount?: number;
     /**
      * Debit amount (null if credit)
      */
     debitAmount?: number;
     /**
-     * Credit amount (null if debit)
+     * Description/narrative for the journal line
      */
-    creditAmount?: number;
+    description?: string;
+    /**
+     * Journal entry number
+     */
+    entryNumber?: string;
+    /**
+     * Journal entry UUID
+     */
+    journalEntryId: string;
     /**
      * Cumulative signed account balance (debit positive) through this line
      */
@@ -45,6 +41,10 @@ export interface GeneralLedgerLine {
      * Source event type
      */
     sourceEventType?: string;
+    /**
+     * Transaction date
+     */
+    transactionDate: string;
 }
 
 function isOptionalGeneralLedgerLinePropertyOfType(
@@ -85,9 +85,9 @@ export function instanceOfGeneralLedgerLine(value: object): value is GeneralLedg
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createGeneralLedgerLinePropertyNames('journalEntryId', 'transactionDate', 'runningBalance', );
-    const optionalStringProperties = createGeneralLedgerLineOptionalProperties({ name: 'journalEntryId', nullable: false }, { name: 'entryNumber', nullable: false }, { name: 'transactionDate', nullable: false }, { name: 'description', nullable: false }, { name: 'sourceEventType', nullable: false }, );
-    const optionalNumberProperties = createGeneralLedgerLineOptionalProperties({ name: 'debitAmount', nullable: false }, { name: 'creditAmount', nullable: false }, { name: 'runningBalance', nullable: false }, );
+    const requiredProperties = createGeneralLedgerLinePropertyNames('journalEntryId', 'runningBalance', 'transactionDate', );
+    const optionalStringProperties = createGeneralLedgerLineOptionalProperties({ name: 'description', nullable: false }, { name: 'entryNumber', nullable: false }, { name: 'journalEntryId', nullable: false }, { name: 'sourceEventType', nullable: false }, { name: 'transactionDate', nullable: false }, );
+    const optionalNumberProperties = createGeneralLedgerLineOptionalProperties({ name: 'creditAmount', nullable: false }, { name: 'debitAmount', nullable: false }, { name: 'runningBalance', nullable: false }, );
     const optionalBooleanProperties = createGeneralLedgerLineOptionalProperties();
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

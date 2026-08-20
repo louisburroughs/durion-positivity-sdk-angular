@@ -15,13 +15,17 @@ import { CreateAsnLineRequest } from './createAsnLineRequest';
  */
 export interface CreateAsnRequest { 
     /**
-     * Identifier of the vendor that issued the shipment
-     */
-    vendorId: string;
-    /**
      * Human-readable reference number assigned to the ASN by the vendor
      */
     asnReferenceNumber: string;
+    /**
+     * Expected arrival date of the shipment at the destination
+     */
+    expectedArrivalDate?: string;
+    /**
+     * Line items detailing the SKUs and quantities included in this ASN
+     */
+    lineItems: Array<CreateAsnLineRequest>;
     /**
      * Identifiers of the purchase orders this shipment relates to
      */
@@ -31,13 +35,9 @@ export interface CreateAsnRequest {
      */
     shipDate?: string;
     /**
-     * Expected arrival date of the shipment at the destination
+     * Identifier of the vendor that issued the shipment
      */
-    expectedArrivalDate?: string;
-    /**
-     * Line items detailing the SKUs and quantities included in this ASN
-     */
-    lineItems: Array<CreateAsnLineRequest>;
+    vendorId: string;
 }
 
 function isOptionalCreateAsnRequestPropertyOfType(
@@ -78,8 +78,8 @@ export function instanceOfCreateAsnRequest(value: object): value is CreateAsnReq
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createCreateAsnRequestPropertyNames('vendorId', 'asnReferenceNumber', 'relatedPoIds', 'lineItems', );
-    const optionalStringProperties = createCreateAsnRequestOptionalProperties({ name: 'vendorId', nullable: false }, { name: 'asnReferenceNumber', nullable: false }, { name: 'shipDate', nullable: false }, { name: 'expectedArrivalDate', nullable: false }, );
+    const requiredProperties = createCreateAsnRequestPropertyNames('asnReferenceNumber', 'lineItems', 'relatedPoIds', 'vendorId', );
+    const optionalStringProperties = createCreateAsnRequestOptionalProperties({ name: 'asnReferenceNumber', nullable: false }, { name: 'expectedArrivalDate', nullable: false }, { name: 'shipDate', nullable: false }, { name: 'vendorId', nullable: false }, );
     const optionalNumberProperties = createCreateAsnRequestOptionalProperties();
     const optionalBooleanProperties = createCreateAsnRequestOptionalProperties();
 

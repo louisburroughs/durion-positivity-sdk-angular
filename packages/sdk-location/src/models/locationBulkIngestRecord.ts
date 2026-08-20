@@ -14,13 +14,9 @@
  */
 export interface LocationBulkIngestRecord { 
     /**
-     * Display name of the location
+     * Whether the location is active
      */
-    name: string;
-    /**
-     * Unique business code of the location
-     */
-    code: string;
+    active?: boolean;
     /**
      * First line of the street address
      */
@@ -34,29 +30,33 @@ export interface LocationBulkIngestRecord {
      */
     city?: string;
     /**
-     * State or province of the location
+     * Unique business code of the location
      */
-    stateOrProvince?: string;
-    /**
-     * Postal or ZIP code of the location
-     */
-    postalCode?: string;
+    code: string;
     /**
      * ISO 3166-1 alpha-2 country code
      */
     countryCode?: string;
     /**
+     * Name of the location type to resolve during ingest
+     */
+    locationTypeName?: string;
+    /**
+     * Display name of the location
+     */
+    name: string;
+    /**
      * Primary phone number for the location
      */
     phoneNumber?: string;
     /**
-     * Whether the location is active
+     * Postal or ZIP code of the location
      */
-    active?: boolean;
+    postalCode?: string;
     /**
-     * Name of the location type to resolve during ingest
+     * State or province of the location
      */
-    locationTypeName?: string;
+    stateOrProvince?: string;
 }
 
 function isOptionalLocationBulkIngestRecordPropertyOfType(
@@ -97,8 +97,8 @@ export function instanceOfLocationBulkIngestRecord(value: object): value is Loca
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createLocationBulkIngestRecordPropertyNames('name', 'code', );
-    const optionalStringProperties = createLocationBulkIngestRecordOptionalProperties({ name: 'name', nullable: false }, { name: 'code', nullable: false }, { name: 'addressLine1', nullable: false }, { name: 'addressLine2', nullable: false }, { name: 'city', nullable: false }, { name: 'stateOrProvince', nullable: false }, { name: 'postalCode', nullable: false }, { name: 'countryCode', nullable: false }, { name: 'phoneNumber', nullable: false }, { name: 'locationTypeName', nullable: false }, );
+    const requiredProperties = createLocationBulkIngestRecordPropertyNames('code', 'name', );
+    const optionalStringProperties = createLocationBulkIngestRecordOptionalProperties({ name: 'addressLine1', nullable: false }, { name: 'addressLine2', nullable: false }, { name: 'city', nullable: false }, { name: 'code', nullable: false }, { name: 'countryCode', nullable: false }, { name: 'locationTypeName', nullable: false }, { name: 'name', nullable: false }, { name: 'phoneNumber', nullable: false }, { name: 'postalCode', nullable: false }, { name: 'stateOrProvince', nullable: false }, );
     const optionalNumberProperties = createLocationBulkIngestRecordOptionalProperties();
     const optionalBooleanProperties = createLocationBulkIngestRecordOptionalProperties({ name: 'active', nullable: false }, );
 

@@ -22,25 +22,25 @@ export interface UpdateMarketingConsentRequest {
      */
     marketingSmsConsent?: UpdateMarketingConsentRequestMarketingSmsConsentEnum;
     /**
+     * Cadence cap on marketing sends per calendar month
+     */
+    maxMarketingSendsPerMonth?: number;
+    /**
      * Reason recorded when a channel moves to OPT_OUT
      */
     optOutReason?: UpdateMarketingConsentRequestOptOutReasonEnum;
-    /**
-     * Where the change originated; defaults to CSR
-     */
-    source?: UpdateMarketingConsentRequestSourceEnum;
-    /**
-     * Start of the local-time window during which marketing sends are held
-     */
-    quietHoursStart?: string;
     /**
      * End of the local-time window during which marketing sends are held
      */
     quietHoursEnd?: string;
     /**
-     * Cadence cap on marketing sends per calendar month
+     * Start of the local-time window during which marketing sends are held
      */
-    maxMarketingSendsPerMonth?: number;
+    quietHoursStart?: string;
+    /**
+     * Where the change originated; defaults to CSR
+     */
+    source?: UpdateMarketingConsentRequestSourceEnum;
 }
 export enum UpdateMarketingConsentRequestMarketingEmailConsentEnum {
     OptIn = 'OPT_IN',
@@ -110,7 +110,7 @@ export function instanceOfUpdateMarketingConsentRequest(value: object): value is
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createUpdateMarketingConsentRequestPropertyNames();
-    const optionalStringProperties = createUpdateMarketingConsentRequestOptionalProperties({ name: 'marketingEmailConsent', nullable: false }, { name: 'marketingSmsConsent', nullable: false }, { name: 'optOutReason', nullable: false }, { name: 'source', nullable: false }, { name: 'quietHoursStart', nullable: false }, { name: 'quietHoursEnd', nullable: false }, );
+    const optionalStringProperties = createUpdateMarketingConsentRequestOptionalProperties({ name: 'marketingEmailConsent', nullable: false }, { name: 'marketingSmsConsent', nullable: false }, { name: 'optOutReason', nullable: false }, { name: 'quietHoursEnd', nullable: false }, { name: 'quietHoursStart', nullable: false }, { name: 'source', nullable: false }, );
     const optionalNumberProperties = createUpdateMarketingConsentRequestOptionalProperties({ name: 'maxMarketingSendsPerMonth', nullable: false }, );
     const optionalBooleanProperties = createUpdateMarketingConsentRequestOptionalProperties();
 

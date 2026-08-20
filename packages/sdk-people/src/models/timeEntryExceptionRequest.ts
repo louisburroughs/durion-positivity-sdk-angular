@@ -14,6 +14,10 @@
  */
 export interface TimeEntryExceptionRequest { 
     /**
+     * Timestamp when the exception was detected
+     */
+    detectedAt?: string;
+    /**
      * Employee identifier associated with the exception
      */
     employeeId: string;
@@ -22,6 +26,10 @@ export interface TimeEntryExceptionRequest {
      */
     exceptionCode: string;
     /**
+     * Notes describing the exception or initial resolution steps
+     */
+    resolutionNotes?: string;
+    /**
      * Severity level of the exception
      */
     severity?: TimeEntryExceptionRequestSeverityEnum;
@@ -29,14 +37,6 @@ export interface TimeEntryExceptionRequest {
      * Time entry identifier associated with the exception
      */
     timeEntryId?: string;
-    /**
-     * Notes describing the exception or initial resolution steps
-     */
-    resolutionNotes?: string;
-    /**
-     * Timestamp when the exception was detected
-     */
-    detectedAt?: string;
 }
 export enum TimeEntryExceptionRequestSeverityEnum {
     Warning = 'WARNING',
@@ -84,7 +84,7 @@ export function instanceOfTimeEntryExceptionRequest(value: object): value is Tim
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createTimeEntryExceptionRequestPropertyNames('employeeId', 'exceptionCode', );
-    const optionalStringProperties = createTimeEntryExceptionRequestOptionalProperties({ name: 'employeeId', nullable: false }, { name: 'exceptionCode', nullable: false }, { name: 'severity', nullable: false }, { name: 'timeEntryId', nullable: false }, { name: 'resolutionNotes', nullable: false }, { name: 'detectedAt', nullable: false }, );
+    const optionalStringProperties = createTimeEntryExceptionRequestOptionalProperties({ name: 'detectedAt', nullable: false }, { name: 'employeeId', nullable: false }, { name: 'exceptionCode', nullable: false }, { name: 'resolutionNotes', nullable: false }, { name: 'severity', nullable: false }, { name: 'timeEntryId', nullable: false }, );
     const optionalNumberProperties = createTimeEntryExceptionRequestOptionalProperties();
     const optionalBooleanProperties = createTimeEntryExceptionRequestOptionalProperties();
 

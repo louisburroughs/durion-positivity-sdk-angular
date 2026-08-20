@@ -14,17 +14,33 @@
  */
 export interface ReceivingLineResponse { 
     /**
-     * Identifier of the receiving line
+     * Effective base-per-document-unit conversion factor applied at posting time
      */
-    lineId: string;
+    conversionFactor?: number;
     /**
-     * Identifier of the product on the receiving line
+     * Quantity as keyed in documentUom; receivedQuantity holds the derived base quantity
      */
-    productId: string;
+    documentQuantity?: number;
+    /**
+     * UoM the line was keyed in when it differed from the product\'s base UoM
+     */
+    documentUom?: string;
     /**
      * Quantity expected to be received on the line
      */
     expectedQuantity?: number;
+    /**
+     * Identifier of the receiving line
+     */
+    lineId: string;
+    /**
+     * Lot or batch number recorded on receipt; linked to the lot master for LOT-tracked products
+     */
+    lotNumber?: string;
+    /**
+     * Identifier of the product on the receiving line
+     */
+    productId: string;
     /**
      * Quantity received so far on the line
      */
@@ -41,22 +57,6 @@ export interface ReceivingLineResponse {
      * Identifier of the workorder line the receiving line fulfils, when applicable
      */
     workorderLineId?: string;
-    /**
-     * Lot or batch number recorded on receipt; linked to the lot master for LOT-tracked products
-     */
-    lotNumber?: string;
-    /**
-     * UoM the line was keyed in when it differed from the product\'s base UoM
-     */
-    documentUom?: string;
-    /**
-     * Quantity as keyed in documentUom; receivedQuantity holds the derived base quantity
-     */
-    documentQuantity?: number;
-    /**
-     * Effective base-per-document-unit conversion factor applied at posting time
-     */
-    conversionFactor?: number;
 }
 
 function isOptionalReceivingLineResponsePropertyOfType(
@@ -98,8 +98,8 @@ export function instanceOfReceivingLineResponse(value: object): value is Receivi
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createReceivingLineResponsePropertyNames('lineId', 'productId', 'status', );
-    const optionalStringProperties = createReceivingLineResponseOptionalProperties({ name: 'lineId', nullable: false }, { name: 'productId', nullable: false }, { name: 'status', nullable: false }, { name: 'workorderId', nullable: false }, { name: 'workorderLineId', nullable: false }, { name: 'lotNumber', nullable: false }, { name: 'documentUom', nullable: false }, );
-    const optionalNumberProperties = createReceivingLineResponseOptionalProperties({ name: 'expectedQuantity', nullable: false }, { name: 'receivedQuantity', nullable: false }, { name: 'documentQuantity', nullable: false }, { name: 'conversionFactor', nullable: false }, );
+    const optionalStringProperties = createReceivingLineResponseOptionalProperties({ name: 'documentUom', nullable: false }, { name: 'lineId', nullable: false }, { name: 'lotNumber', nullable: false }, { name: 'productId', nullable: false }, { name: 'status', nullable: false }, { name: 'workorderId', nullable: false }, { name: 'workorderLineId', nullable: false }, );
+    const optionalNumberProperties = createReceivingLineResponseOptionalProperties({ name: 'conversionFactor', nullable: false }, { name: 'documentQuantity', nullable: false }, { name: 'expectedQuantity', nullable: false }, { name: 'receivedQuantity', nullable: false }, );
     const optionalBooleanProperties = createReceivingLineResponseOptionalProperties();
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

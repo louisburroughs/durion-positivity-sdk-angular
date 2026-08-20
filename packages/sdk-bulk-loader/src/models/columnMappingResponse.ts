@@ -14,6 +14,14 @@
  */
 export interface ColumnMappingResponse { 
     /**
+     * Confidence score of the inferred mapping, between 0 and 1
+     */
+    confidence?: number;
+    /**
+     * Timestamp when the mapping was created (ISO 8601)
+     */
+    createdAt: string;
+    /**
      * Unique identifier of the column mapping
      */
     id: string;
@@ -22,6 +30,10 @@ export interface ColumnMappingResponse {
      */
     jobId: string;
     /**
+     * Whether the mapping was overridden by a user
+     */
+    overriddenByUser?: boolean;
+    /**
      * Name of the column in the source file
      */
     sourceColumn: string;
@@ -29,18 +41,6 @@ export interface ColumnMappingResponse {
      * Name of the target domain field the column maps to
      */
     targetField: string;
-    /**
-     * Confidence score of the inferred mapping, between 0 and 1
-     */
-    confidence?: number;
-    /**
-     * Whether the mapping was overridden by a user
-     */
-    overriddenByUser?: boolean;
-    /**
-     * Timestamp when the mapping was created (ISO 8601)
-     */
-    createdAt: string;
 }
 
 function isOptionalColumnMappingResponsePropertyOfType(
@@ -81,8 +81,8 @@ export function instanceOfColumnMappingResponse(value: object): value is ColumnM
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createColumnMappingResponsePropertyNames('id', 'jobId', 'sourceColumn', 'targetField', 'createdAt', );
-    const optionalStringProperties = createColumnMappingResponseOptionalProperties({ name: 'id', nullable: false }, { name: 'jobId', nullable: false }, { name: 'sourceColumn', nullable: false }, { name: 'targetField', nullable: false }, { name: 'createdAt', nullable: false }, );
+    const requiredProperties = createColumnMappingResponsePropertyNames('createdAt', 'id', 'jobId', 'sourceColumn', 'targetField', );
+    const optionalStringProperties = createColumnMappingResponseOptionalProperties({ name: 'createdAt', nullable: false }, { name: 'id', nullable: false }, { name: 'jobId', nullable: false }, { name: 'sourceColumn', nullable: false }, { name: 'targetField', nullable: false }, );
     const optionalNumberProperties = createColumnMappingResponseOptionalProperties();
     const optionalBooleanProperties = createColumnMappingResponseOptionalProperties({ name: 'overriddenByUser', nullable: false }, );
 

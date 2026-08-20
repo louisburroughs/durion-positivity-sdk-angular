@@ -14,18 +14,6 @@
  */
 export interface AuditExportJobResponse { 
     /**
-     * Export job UUID
-     */
-    jobId: string;
-    /**
-     * Current status of the export job
-     */
-    status: AuditExportJobResponseStatusEnum;
-    /**
-     * Timestamp when the export was requested
-     */
-    requestedAt: string;
-    /**
      * Timestamp when the export completed (null if not yet complete)
      */
     completedAt?: string;
@@ -37,6 +25,18 @@ export interface AuditExportJobResponse {
      * Error message when status is FAILED
      */
     errorMessage?: string;
+    /**
+     * Export job UUID
+     */
+    jobId: string;
+    /**
+     * Timestamp when the export was requested
+     */
+    requestedAt: string;
+    /**
+     * Current status of the export job
+     */
+    status: AuditExportJobResponseStatusEnum;
 }
 export enum AuditExportJobResponseStatusEnum {
     Pending = 'PENDING',
@@ -85,8 +85,8 @@ export function instanceOfAuditExportJobResponse(value: object): value is AuditE
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createAuditExportJobResponsePropertyNames('jobId', 'status', 'requestedAt', );
-    const optionalStringProperties = createAuditExportJobResponseOptionalProperties({ name: 'jobId', nullable: false }, { name: 'status', nullable: false }, { name: 'requestedAt', nullable: false }, { name: 'completedAt', nullable: false }, { name: 'downloadUrl', nullable: false }, { name: 'errorMessage', nullable: false }, );
+    const requiredProperties = createAuditExportJobResponsePropertyNames('jobId', 'requestedAt', 'status', );
+    const optionalStringProperties = createAuditExportJobResponseOptionalProperties({ name: 'completedAt', nullable: false }, { name: 'downloadUrl', nullable: false }, { name: 'errorMessage', nullable: false }, { name: 'jobId', nullable: false }, { name: 'requestedAt', nullable: false }, { name: 'status', nullable: false }, );
     const optionalNumberProperties = createAuditExportJobResponseOptionalProperties();
     const optionalBooleanProperties = createAuditExportJobResponseOptionalProperties();
 

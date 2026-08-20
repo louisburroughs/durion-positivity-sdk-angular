@@ -14,29 +14,29 @@
  */
 export interface TaxLiabilityReconciliation { 
     /**
-     * Sales-Tax Payable GL account code being reconciled against
+     * GL drift: reportNetTax - glNetActivity. Zero on a clean ledger; non-zero flags a mismatch
      */
-    taxPayableAccountCode: string;
+    drift: number;
     /**
      * Credit-normal net activity of account 2200 in the period (Σ credit - Σ debit of POSTED lines); zero when the account has no activity or is not seeded
      */
     glNetActivity: number;
     /**
+     * True when the UNEXPLAINED drift (drift - unattributedCredits) is within the 0.01 reconciliation tolerance. Unattributed credits inflate drift by exactly their own value, so that portion is explained and does not flag the ledger as out of balance
+     */
+    reconciled: boolean;
+    /**
      * Report\'s total net tax across all jurisdictions (echoes report totals.netTax)
      */
     reportNetTax: number;
     /**
+     * Sales-Tax Payable GL account code being reconciled against
+     */
+    taxPayableAccountCode: string;
+    /**
      * Credit-memo tax that could not be attributed to any jurisdiction (the credit carries no frozen breakdown and its original invoice has no attributable tax rows). Excluded from the jurisdiction rows by design, so it accounts for exactly this much of the drift
      */
     unattributedCredits: number;
-    /**
-     * GL drift: reportNetTax - glNetActivity. Zero on a clean ledger; non-zero flags a mismatch
-     */
-    drift: number;
-    /**
-     * True when the UNEXPLAINED drift (drift - unattributedCredits) is within the 0.01 reconciliation tolerance. Unattributed credits inflate drift by exactly their own value, so that portion is explained and does not flag the ledger as out of balance
-     */
-    reconciled: boolean;
 }
 
 function isOptionalTaxLiabilityReconciliationPropertyOfType(
@@ -77,9 +77,9 @@ export function instanceOfTaxLiabilityReconciliation(value: object): value is Ta
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createTaxLiabilityReconciliationPropertyNames('taxPayableAccountCode', 'glNetActivity', 'reportNetTax', 'unattributedCredits', 'drift', 'reconciled', );
+    const requiredProperties = createTaxLiabilityReconciliationPropertyNames('drift', 'glNetActivity', 'reconciled', 'reportNetTax', 'taxPayableAccountCode', 'unattributedCredits', );
     const optionalStringProperties = createTaxLiabilityReconciliationOptionalProperties({ name: 'taxPayableAccountCode', nullable: false }, );
-    const optionalNumberProperties = createTaxLiabilityReconciliationOptionalProperties({ name: 'glNetActivity', nullable: false }, { name: 'reportNetTax', nullable: false }, { name: 'unattributedCredits', nullable: false }, { name: 'drift', nullable: false }, );
+    const optionalNumberProperties = createTaxLiabilityReconciliationOptionalProperties({ name: 'drift', nullable: false }, { name: 'glNetActivity', nullable: false }, { name: 'reportNetTax', nullable: false }, { name: 'unattributedCredits', nullable: false }, );
     const optionalBooleanProperties = createTaxLiabilityReconciliationOptionalProperties({ name: 'reconciled', nullable: false }, );
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

@@ -14,13 +14,13 @@
  */
 export interface TraceabilityDocumentRef { 
     /**
-     * Kind of source document
-     */
-    documentType: TraceabilityDocumentRefDocumentTypeEnum;
-    /**
      * Identifier of the source document
      */
     documentId: string;
+    /**
+     * Kind of source document
+     */
+    documentType: TraceabilityDocumentRefDocumentTypeEnum;
     /**
      * Human-readable document reference (PO number, ASN reference, receipt number)
      */
@@ -72,8 +72,8 @@ export function instanceOfTraceabilityDocumentRef(value: object): value is Trace
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createTraceabilityDocumentRefPropertyNames('documentType', 'documentId', );
-    const optionalStringProperties = createTraceabilityDocumentRefOptionalProperties({ name: 'documentType', nullable: false }, { name: 'documentId', nullable: false }, { name: 'reference', nullable: false }, );
+    const requiredProperties = createTraceabilityDocumentRefPropertyNames('documentId', 'documentType', );
+    const optionalStringProperties = createTraceabilityDocumentRefOptionalProperties({ name: 'documentId', nullable: false }, { name: 'documentType', nullable: false }, { name: 'reference', nullable: false }, );
     const optionalNumberProperties = createTraceabilityDocumentRefOptionalProperties();
     const optionalBooleanProperties = createTraceabilityDocumentRefOptionalProperties();
 

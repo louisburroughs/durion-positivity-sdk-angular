@@ -15,70 +15,6 @@ import { AllocationLineResponse } from './allocationLineResponse';
  */
 export interface APPaymentResponse { 
     /**
-     * Payment UUID
-     */
-    paymentId?: string;
-    /**
-     * Payment reference (idempotency key)
-     */
-    paymentRef?: string;
-    /**
-     * Vendor UUID
-     */
-    vendorId?: string;
-    /**
-     * Vendor name
-     */
-    vendorName?: string;
-    /**
-     * Gross payment amount
-     */
-    grossAmount?: number;
-    /**
-     * Fee amount
-     */
-    feeAmount?: number;
-    /**
-     * Net amount
-     */
-    netAmount?: number;
-    /**
-     * Unapplied amount (credit to vendor)
-     */
-    unappliedAmount?: number;
-    /**
-     * Currency code
-     */
-    currency?: string;
-    /**
-     * Payment status
-     */
-    status?: APPaymentResponseStatusEnum;
-    /**
-     * Gateway transaction ID
-     */
-    gatewayTransactionId?: string;
-    /**
-     * Gateway response timestamp
-     */
-    gatewayTimestamp?: string;
-    /**
-     * GL journal entry ID (once posted)
-     */
-    glJournalEntryId?: string;
-    /**
-     * GL posting timestamp
-     */
-    glPostedAt?: string;
-    /**
-     * GL posting error message (if failed)
-     */
-    glPostError?: string;
-    /**
-     * Payment memo/notes
-     */
-    memo?: string;
-    /**
      * Allocations to vendor bills
      */
     allocations?: Array<AllocationLineResponse>;
@@ -90,6 +26,70 @@ export interface APPaymentResponse {
      * User who initiated payment
      */
     createdBy?: string;
+    /**
+     * Currency code
+     */
+    currency?: string;
+    /**
+     * Fee amount
+     */
+    feeAmount?: number;
+    /**
+     * Gateway response timestamp
+     */
+    gatewayTimestamp?: string;
+    /**
+     * Gateway transaction ID
+     */
+    gatewayTransactionId?: string;
+    /**
+     * GL journal entry ID (once posted)
+     */
+    glJournalEntryId?: string;
+    /**
+     * GL posting error message (if failed)
+     */
+    glPostError?: string;
+    /**
+     * GL posting timestamp
+     */
+    glPostedAt?: string;
+    /**
+     * Gross payment amount
+     */
+    grossAmount?: number;
+    /**
+     * Payment memo/notes
+     */
+    memo?: string;
+    /**
+     * Net amount
+     */
+    netAmount?: number;
+    /**
+     * Payment UUID
+     */
+    paymentId?: string;
+    /**
+     * Payment reference (idempotency key)
+     */
+    paymentRef?: string;
+    /**
+     * Payment status
+     */
+    status?: APPaymentResponseStatusEnum;
+    /**
+     * Unapplied amount (credit to vendor)
+     */
+    unappliedAmount?: number;
+    /**
+     * Vendor UUID
+     */
+    vendorId?: string;
+    /**
+     * Vendor name
+     */
+    vendorName?: string;
 }
 export enum APPaymentResponseStatusEnum {
     Initiated = 'INITIATED',
@@ -142,8 +142,8 @@ export function instanceOfAPPaymentResponse(value: object): value is APPaymentRe
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createAPPaymentResponsePropertyNames();
-    const optionalStringProperties = createAPPaymentResponseOptionalProperties({ name: 'paymentId', nullable: false }, { name: 'paymentRef', nullable: false }, { name: 'vendorId', nullable: false }, { name: 'vendorName', nullable: false }, { name: 'currency', nullable: false }, { name: 'status', nullable: false }, { name: 'gatewayTransactionId', nullable: false }, { name: 'gatewayTimestamp', nullable: false }, { name: 'glJournalEntryId', nullable: false }, { name: 'glPostedAt', nullable: false }, { name: 'glPostError', nullable: false }, { name: 'memo', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'createdBy', nullable: false }, );
-    const optionalNumberProperties = createAPPaymentResponseOptionalProperties({ name: 'grossAmount', nullable: false }, { name: 'feeAmount', nullable: false }, { name: 'netAmount', nullable: false }, { name: 'unappliedAmount', nullable: false }, );
+    const optionalStringProperties = createAPPaymentResponseOptionalProperties({ name: 'createdAt', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'currency', nullable: false }, { name: 'gatewayTimestamp', nullable: false }, { name: 'gatewayTransactionId', nullable: false }, { name: 'glJournalEntryId', nullable: false }, { name: 'glPostError', nullable: false }, { name: 'glPostedAt', nullable: false }, { name: 'memo', nullable: false }, { name: 'paymentId', nullable: false }, { name: 'paymentRef', nullable: false }, { name: 'status', nullable: false }, { name: 'vendorId', nullable: false }, { name: 'vendorName', nullable: false }, );
+    const optionalNumberProperties = createAPPaymentResponseOptionalProperties({ name: 'feeAmount', nullable: false }, { name: 'grossAmount', nullable: false }, { name: 'netAmount', nullable: false }, { name: 'unappliedAmount', nullable: false }, );
     const optionalBooleanProperties = createAPPaymentResponseOptionalProperties();
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

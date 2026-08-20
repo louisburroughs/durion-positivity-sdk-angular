@@ -15,17 +15,17 @@ import { ContractField } from './contractField';
  */
 export interface EventEnvelopeContract { 
     /**
-     * Contract schema version
+     * Example event payloads
      */
-    version: string;
+    examples?: Array<any>;
     /**
      * Field definitions in the event envelope
      */
     fields: Array<ContractField>;
     /**
-     * Example event payloads
+     * Contract schema version
      */
-    examples?: Array<any>;
+    version: string;
 }
 
 function isOptionalEventEnvelopeContractPropertyOfType(
@@ -66,7 +66,7 @@ export function instanceOfEventEnvelopeContract(value: object): value is EventEn
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createEventEnvelopeContractPropertyNames('version', 'fields', );
+    const requiredProperties = createEventEnvelopeContractPropertyNames('fields', 'version', );
     const optionalStringProperties = createEventEnvelopeContractOptionalProperties({ name: 'version', nullable: false }, );
     const optionalNumberProperties = createEventEnvelopeContractOptionalProperties();
     const optionalBooleanProperties = createEventEnvelopeContractOptionalProperties();

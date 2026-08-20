@@ -14,53 +14,53 @@
  */
 export interface ShopAuditEntryResponse { 
     /**
-     * Unique audit entry identifier
+     * User identifier of the actor who made the change
      */
-    id: string;
-    /**
-     * Type of audit event recorded
-     */
-    eventType: ShopAuditEntryResponseEventTypeEnum;
-    /**
-     * Associated workorder identifier
-     */
-    workorderId?: string;
+    actorUserId: string;
     /**
      * Associated appointment identifier
      */
     appointmentId?: string;
     /**
-     * Mechanic identifier involved in the change
+     * Machine-readable patch describing the change (JSON)
      */
-    mechanicId?: string;
-    /**
-     * Location identifier the change applies to
-     */
-    locationId?: string;
-    /**
-     * User identifier of the actor who made the change
-     */
-    actorUserId: string;
+    changePatch?: string;
     /**
      * Human-readable summary of the change
      */
     changeSummaryText?: string;
     /**
-     * Machine-readable patch describing the change (JSON)
+     * Type of audit event recorded
      */
-    changePatch?: string;
+    eventType: ShopAuditEntryResponseEventTypeEnum;
+    /**
+     * Unique audit entry identifier
+     */
+    id: string;
+    /**
+     * Location identifier the change applies to
+     */
+    locationId?: string;
+    /**
+     * Mechanic identifier involved in the change
+     */
+    mechanicId?: string;
     /**
      * Reason code associated with the change
      */
     reasonCode?: string;
     /**
+     * Instant the audit entry was recorded in UTC (ISO-8601)
+     */
+    recordedAt: string;
+    /**
      * Number of years the entry is retained
      */
     retentionYears: number;
     /**
-     * Instant the audit entry was recorded in UTC (ISO-8601)
+     * Associated workorder identifier
      */
-    recordedAt: string;
+    workorderId?: string;
 }
 export enum ShopAuditEntryResponseEventTypeEnum {
     ScheduleCreated = 'SCHEDULE_CREATED',
@@ -110,8 +110,8 @@ export function instanceOfShopAuditEntryResponse(value: object): value is ShopAu
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createShopAuditEntryResponsePropertyNames('id', 'eventType', 'actorUserId', 'retentionYears', 'recordedAt', );
-    const optionalStringProperties = createShopAuditEntryResponseOptionalProperties({ name: 'id', nullable: false }, { name: 'eventType', nullable: false }, { name: 'workorderId', nullable: false }, { name: 'appointmentId', nullable: false }, { name: 'mechanicId', nullable: false }, { name: 'locationId', nullable: false }, { name: 'actorUserId', nullable: false }, { name: 'changeSummaryText', nullable: false }, { name: 'changePatch', nullable: false }, { name: 'reasonCode', nullable: false }, { name: 'recordedAt', nullable: false }, );
+    const requiredProperties = createShopAuditEntryResponsePropertyNames('actorUserId', 'eventType', 'id', 'recordedAt', 'retentionYears', );
+    const optionalStringProperties = createShopAuditEntryResponseOptionalProperties({ name: 'actorUserId', nullable: false }, { name: 'appointmentId', nullable: false }, { name: 'changePatch', nullable: false }, { name: 'changeSummaryText', nullable: false }, { name: 'eventType', nullable: false }, { name: 'id', nullable: false }, { name: 'locationId', nullable: false }, { name: 'mechanicId', nullable: false }, { name: 'reasonCode', nullable: false }, { name: 'recordedAt', nullable: false }, { name: 'workorderId', nullable: false }, );
     const optionalNumberProperties = createShopAuditEntryResponseOptionalProperties({ name: 'retentionYears', nullable: false }, );
     const optionalBooleanProperties = createShopAuditEntryResponseOptionalProperties();
 

@@ -14,45 +14,49 @@
  */
 export interface PickTaskResponse { 
     /**
-     * Unique identifier of the pick task
+     * Identifier of the location the SKU is picked from
      */
-    pickTaskId: string;
+    locationId: string;
     /**
      * Identifier of the pick list this task belongs to
      */
     pickListId: string;
     /**
-     * Identifier of the SKU to be picked
+     * Unique identifier of the pick task
      */
-    skuId: string;
+    pickTaskId: string;
     /**
-     * Identifier of the location the SKU is picked from
+     * Identifier of the lot actually keyed at pick confirmation for LOT-tracked SKUs; null for untracked SKUs and before confirmation
      */
-    locationId: string;
-    /**
-     * Quantity required to satisfy this pick task
-     */
-    quantityRequired: number;
+    pickedLotId?: string;
     /**
      * Quantity already picked against this task
      */
     quantityPicked: number;
     /**
-     * Current status of the pick task
+     * Quantity required to satisfy this pick task
      */
-    status: PickTaskResponseStatusEnum;
+    quantityRequired: number;
+    /**
+     * Identifier of the SKU to be picked
+     */
+    skuId: string;
     /**
      * Ordinal position of this task in the pick sequence
      */
     sortOrder: number;
     /**
+     * Current status of the pick task
+     */
+    status: PickTaskResponseStatusEnum;
+    /**
      * Advisory lot suggestion for LOT-tracked SKUs (FIFO by lot receivedAt at the suggested location; FEFO once expiry data exists). Null for untracked SKUs or when no lot has stock
      */
     suggestedLotNumber?: string;
     /**
-     * Identifier of the lot actually keyed at pick confirmation for LOT-tracked SKUs; null for untracked SKUs and before confirmation
+     * The SKU\'s base unit of measure, when skuId resolves to a catalog product with a declared UoM; null otherwise
      */
-    pickedLotId?: string;
+    unitOfMeasure?: string;
 }
 export enum PickTaskResponseStatusEnum {
     Pending = 'PENDING',
@@ -101,9 +105,9 @@ export function instanceOfPickTaskResponse(value: object): value is PickTaskResp
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createPickTaskResponsePropertyNames('pickTaskId', 'pickListId', 'skuId', 'locationId', 'quantityRequired', 'quantityPicked', 'status', 'sortOrder', );
-    const optionalStringProperties = createPickTaskResponseOptionalProperties({ name: 'pickTaskId', nullable: false }, { name: 'pickListId', nullable: false }, { name: 'skuId', nullable: false }, { name: 'locationId', nullable: false }, { name: 'status', nullable: false }, { name: 'suggestedLotNumber', nullable: false }, { name: 'pickedLotId', nullable: false }, );
-    const optionalNumberProperties = createPickTaskResponseOptionalProperties({ name: 'quantityRequired', nullable: false }, { name: 'quantityPicked', nullable: false }, { name: 'sortOrder', nullable: false }, );
+    const requiredProperties = createPickTaskResponsePropertyNames('locationId', 'pickListId', 'pickTaskId', 'quantityPicked', 'quantityRequired', 'skuId', 'sortOrder', 'status', );
+    const optionalStringProperties = createPickTaskResponseOptionalProperties({ name: 'locationId', nullable: false }, { name: 'pickListId', nullable: false }, { name: 'pickTaskId', nullable: false }, { name: 'pickedLotId', nullable: false }, { name: 'skuId', nullable: false }, { name: 'status', nullable: false }, { name: 'suggestedLotNumber', nullable: false }, { name: 'unitOfMeasure', nullable: false }, );
+    const optionalNumberProperties = createPickTaskResponseOptionalProperties({ name: 'quantityPicked', nullable: false }, { name: 'quantityRequired', nullable: false }, { name: 'sortOrder', nullable: false }, );
     const optionalBooleanProperties = createPickTaskResponseOptionalProperties();
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

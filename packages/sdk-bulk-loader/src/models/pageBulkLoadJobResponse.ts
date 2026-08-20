@@ -13,17 +13,17 @@ import { BulkLoadJobResponse } from './bulkLoadJobResponse';
 
 
 export interface PageBulkLoadJobResponse { 
-    totalElements?: number;
-    totalPages?: number;
-    size?: number;
     content?: Array<BulkLoadJobResponse>;
-    number?: number;
-    pageable?: PageableObject;
-    sort?: SortObject;
+    empty?: boolean;
     first?: boolean;
     last?: boolean;
+    number?: number;
     numberOfElements?: number;
-    empty?: boolean;
+    pageable?: PageableObject;
+    size?: number;
+    sort?: SortObject;
+    totalElements?: number;
+    totalPages?: number;
 }
 
 function isOptionalPageBulkLoadJobResponsePropertyOfType(
@@ -66,8 +66,8 @@ export function instanceOfPageBulkLoadJobResponse(value: object): value is PageB
 
     const requiredProperties = createPageBulkLoadJobResponsePropertyNames();
     const optionalStringProperties = createPageBulkLoadJobResponseOptionalProperties();
-    const optionalNumberProperties = createPageBulkLoadJobResponseOptionalProperties({ name: 'totalElements', nullable: false }, { name: 'totalPages', nullable: false }, { name: 'size', nullable: false }, { name: 'number', nullable: false }, { name: 'numberOfElements', nullable: false }, );
-    const optionalBooleanProperties = createPageBulkLoadJobResponseOptionalProperties({ name: 'first', nullable: false }, { name: 'last', nullable: false }, { name: 'empty', nullable: false }, );
+    const optionalNumberProperties = createPageBulkLoadJobResponseOptionalProperties({ name: 'number', nullable: false }, { name: 'numberOfElements', nullable: false }, { name: 'size', nullable: false }, { name: 'totalElements', nullable: false }, { name: 'totalPages', nullable: false }, );
+    const optionalBooleanProperties = createPageBulkLoadJobResponseOptionalProperties({ name: 'empty', nullable: false }, { name: 'first', nullable: false }, { name: 'last', nullable: false }, );
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
         && optionalStringProperties.every((property) => isOptionalPageBulkLoadJobResponsePropertyOfType(_v, property.name, 'string', property.nullable))

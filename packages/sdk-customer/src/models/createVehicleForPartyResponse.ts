@@ -14,21 +14,9 @@
  */
 export interface CreateVehicleForPartyResponse { 
     /**
-     * Newly created vehicle identifier
+     * Timestamp of creation (ISO 8601)
      */
-    vehicleId: string;
-    /**
-     * Party identifier of the vehicle owner
-     */
-    partyId: string;
-    /**
-     * Vehicle Identification Number
-     */
-    vinNumber?: string;
-    /**
-     * Unit number or internal reference
-     */
-    unitNumber?: string;
+    createdAt?: string;
     /**
      * Human-readable vehicle description
      */
@@ -38,13 +26,25 @@ export interface CreateVehicleForPartyResponse {
      */
     licensePlate?: string;
     /**
+     * Party identifier of the vehicle owner
+     */
+    partyId: string;
+    /**
      * Vehicle status
      */
     status: CreateVehicleForPartyResponseStatusEnum;
     /**
-     * Timestamp of creation (ISO 8601)
+     * Unit number or internal reference
      */
-    createdAt?: string;
+    unitNumber?: string;
+    /**
+     * Newly created vehicle identifier
+     */
+    vehicleId: string;
+    /**
+     * Vehicle Identification Number
+     */
+    vinNumber?: string;
 }
 export enum CreateVehicleForPartyResponseStatusEnum {
     Active = 'ACTIVE',
@@ -91,8 +91,8 @@ export function instanceOfCreateVehicleForPartyResponse(value: object): value is
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createCreateVehicleForPartyResponsePropertyNames('vehicleId', 'partyId', 'status', );
-    const optionalStringProperties = createCreateVehicleForPartyResponseOptionalProperties({ name: 'vehicleId', nullable: false }, { name: 'partyId', nullable: false }, { name: 'vinNumber', nullable: false }, { name: 'unitNumber', nullable: false }, { name: 'description', nullable: false }, { name: 'licensePlate', nullable: false }, { name: 'status', nullable: false }, { name: 'createdAt', nullable: false }, );
+    const requiredProperties = createCreateVehicleForPartyResponsePropertyNames('partyId', 'status', 'vehicleId', );
+    const optionalStringProperties = createCreateVehicleForPartyResponseOptionalProperties({ name: 'createdAt', nullable: false }, { name: 'description', nullable: false }, { name: 'licensePlate', nullable: false }, { name: 'partyId', nullable: false }, { name: 'status', nullable: false }, { name: 'unitNumber', nullable: false }, { name: 'vehicleId', nullable: false }, { name: 'vinNumber', nullable: false }, );
     const optionalNumberProperties = createCreateVehicleForPartyResponseOptionalProperties();
     const optionalBooleanProperties = createCreateVehicleForPartyResponseOptionalProperties();
 

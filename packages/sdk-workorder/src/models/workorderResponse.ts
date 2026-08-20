@@ -14,30 +14,6 @@
  */
 export interface WorkorderResponse { 
     /**
-     * Unique identifier for the workorder
-     */
-    id?: string;
-    /**
-     * Estimate ID
-     */
-    estimateId?: string;
-    /**
-     * Customer ID
-     */
-    customerId?: string;
-    /**
-     * Shop ID
-     */
-    shopId?: string;
-    /**
-     * Vehicle ID
-     */
-    vehicleId?: string;
-    /**
-     * Workorder status
-     */
-    status?: string;
-    /**
      * Date and time the workorder was approved
      */
     approvedAt?: string;
@@ -46,13 +22,9 @@ export interface WorkorderResponse {
      */
     completedAt?: string;
     /**
-     * Whether the completed workorder is currently reopened for controlled edits
+     * List of CRM contact identifiers
      */
-    isReopened?: boolean;
-    /**
-     * Date and time the workorder was reopened
-     */
-    reopenedAt?: string;
+    crmContactIds?: Array<string>;
     /**
      * CRM party identifier
      */
@@ -62,9 +34,37 @@ export interface WorkorderResponse {
      */
     crmVehicleId?: string;
     /**
-     * List of CRM contact identifiers
+     * Customer ID
      */
-    crmContactIds?: Array<string>;
+    customerId?: string;
+    /**
+     * Estimate ID
+     */
+    estimateId?: string;
+    /**
+     * Unique identifier for the workorder
+     */
+    id?: string;
+    /**
+     * Whether the completed workorder is currently reopened for controlled edits
+     */
+    isReopened?: boolean;
+    /**
+     * Date and time the workorder was reopened
+     */
+    reopenedAt?: string;
+    /**
+     * Shop ID
+     */
+    shopId?: string;
+    /**
+     * Workorder status
+     */
+    status?: string;
+    /**
+     * Vehicle ID
+     */
+    vehicleId?: string;
 }
 
 function isOptionalWorkorderResponsePropertyOfType(
@@ -106,7 +106,7 @@ export function instanceOfWorkorderResponse(value: object): value is WorkorderRe
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createWorkorderResponsePropertyNames();
-    const optionalStringProperties = createWorkorderResponseOptionalProperties({ name: 'id', nullable: false }, { name: 'estimateId', nullable: false }, { name: 'customerId', nullable: false }, { name: 'shopId', nullable: false }, { name: 'vehicleId', nullable: false }, { name: 'status', nullable: false }, { name: 'approvedAt', nullable: false }, { name: 'completedAt', nullable: false }, { name: 'reopenedAt', nullable: false }, { name: 'crmPartyId', nullable: false }, { name: 'crmVehicleId', nullable: false }, );
+    const optionalStringProperties = createWorkorderResponseOptionalProperties({ name: 'approvedAt', nullable: false }, { name: 'completedAt', nullable: false }, { name: 'crmPartyId', nullable: false }, { name: 'crmVehicleId', nullable: false }, { name: 'customerId', nullable: false }, { name: 'estimateId', nullable: false }, { name: 'id', nullable: false }, { name: 'reopenedAt', nullable: false }, { name: 'shopId', nullable: false }, { name: 'status', nullable: false }, { name: 'vehicleId', nullable: false }, );
     const optionalNumberProperties = createWorkorderResponseOptionalProperties();
     const optionalBooleanProperties = createWorkorderResponseOptionalProperties({ name: 'isReopened', nullable: false }, );
 

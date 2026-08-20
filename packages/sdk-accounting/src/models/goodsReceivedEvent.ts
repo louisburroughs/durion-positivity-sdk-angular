@@ -15,9 +15,17 @@ import { ReceivedLineItem } from './receivedLineItem';
  */
 export interface GoodsReceivedEvent { 
     /**
+     * Optional dimensional context for GL mapping
+     */
+    dimensions?: { [key: string]: string; };
+    /**
      * Event UUID (idempotency key)
      */
     eventId: string;
+    /**
+     * Line items received
+     */
+    lineItems: Array<ReceivedLineItem>;
     /**
      * Organization UUID
      */
@@ -27,6 +35,10 @@ export interface GoodsReceivedEvent {
      */
     purchaseOrderId: string;
     /**
+     * Date goods were received
+     */
+    receivedDate: string;
+    /**
      * Vendor UUID
      */
     vendorId: string;
@@ -34,18 +46,6 @@ export interface GoodsReceivedEvent {
      * Vendor name
      */
     vendorName?: string;
-    /**
-     * Date goods were received
-     */
-    receivedDate: string;
-    /**
-     * Line items received
-     */
-    lineItems: Array<ReceivedLineItem>;
-    /**
-     * Optional dimensional context for GL mapping
-     */
-    dimensions?: { [key: string]: string; };
 }
 
 function isOptionalGoodsReceivedEventPropertyOfType(
@@ -86,8 +86,8 @@ export function instanceOfGoodsReceivedEvent(value: object): value is GoodsRecei
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createGoodsReceivedEventPropertyNames('eventId', 'organizationId', 'purchaseOrderId', 'vendorId', 'receivedDate', 'lineItems', );
-    const optionalStringProperties = createGoodsReceivedEventOptionalProperties({ name: 'eventId', nullable: false }, { name: 'organizationId', nullable: false }, { name: 'purchaseOrderId', nullable: false }, { name: 'vendorId', nullable: false }, { name: 'vendorName', nullable: false }, { name: 'receivedDate', nullable: false }, );
+    const requiredProperties = createGoodsReceivedEventPropertyNames('eventId', 'lineItems', 'organizationId', 'purchaseOrderId', 'receivedDate', 'vendorId', );
+    const optionalStringProperties = createGoodsReceivedEventOptionalProperties({ name: 'eventId', nullable: false }, { name: 'organizationId', nullable: false }, { name: 'purchaseOrderId', nullable: false }, { name: 'receivedDate', nullable: false }, { name: 'vendorId', nullable: false }, { name: 'vendorName', nullable: false }, );
     const optionalNumberProperties = createGoodsReceivedEventOptionalProperties();
     const optionalBooleanProperties = createGoodsReceivedEventOptionalProperties();
 

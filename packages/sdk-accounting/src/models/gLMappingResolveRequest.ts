@@ -14,13 +14,13 @@
  */
 export interface GLMappingResolveRequest { 
     /**
-     * Source system identifier
-     */
-    sourceSystem: string;
-    /**
      * External code from the source system
      */
     externalCode: string;
+    /**
+     * Source system identifier
+     */
+    sourceSystem: string;
     /**
      * Transaction date used for temporal mapping resolution
      */
@@ -65,8 +65,8 @@ export function instanceOfGLMappingResolveRequest(value: object): value is GLMap
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createGLMappingResolveRequestPropertyNames('sourceSystem', 'externalCode', 'transactionDate', );
-    const optionalStringProperties = createGLMappingResolveRequestOptionalProperties({ name: 'sourceSystem', nullable: false }, { name: 'externalCode', nullable: false }, { name: 'transactionDate', nullable: false }, );
+    const requiredProperties = createGLMappingResolveRequestPropertyNames('externalCode', 'sourceSystem', 'transactionDate', );
+    const optionalStringProperties = createGLMappingResolveRequestOptionalProperties({ name: 'externalCode', nullable: false }, { name: 'sourceSystem', nullable: false }, { name: 'transactionDate', nullable: false }, );
     const optionalNumberProperties = createGLMappingResolveRequestOptionalProperties();
     const optionalBooleanProperties = createGLMappingResolveRequestOptionalProperties();
 

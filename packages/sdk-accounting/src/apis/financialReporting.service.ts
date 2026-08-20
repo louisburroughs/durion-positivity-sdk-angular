@@ -68,20 +68,20 @@ export class FinancialReportingService extends BaseService {
     }
 
     /**
-     * Download rendered export artifact
-     * Download the rendered CSV or PDF artifact of a COMPLETED export job.
+     * Download Report Export Artifact
+     * Downloads the rendered artifact of a COMPLETED export job as an attachment whose content type matches the requested format, for example text/csv or application/pdf. Use this tool after getReportExportStatus reports COMPLETED; do not use it earlier, and note it requires reporting:view:financial-statements because the artifact carries actual financial figures. Preconditions: the export job must exist, be COMPLETED and still have its artifact. Required inputs: exportId (UUID) as a path parameter; there is no request body. Emits an ACCOUNTING_REPORT_EXPORT_DOWNLOAD audit event; no state changes. Returns 404 when the job or its artifact is missing, and 409 when the job is not COMPLETED. 
      * @endpoint get /v1/accounting/reports/export/{exportId}/download
      * @param exportId Export job UUID
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public downloadExport(exportId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/octet-stream' | 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Blob>;
-    public downloadExport(exportId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/octet-stream' | 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Blob>>;
-    public downloadExport(exportId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/octet-stream' | 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Blob>>;
-    public downloadExport(exportId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/octet-stream' | 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public downloadReportExport(exportId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/octet-stream' | 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Blob>;
+    public downloadReportExport(exportId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/octet-stream' | 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Blob>>;
+    public downloadReportExport(exportId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/octet-stream' | 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Blob>>;
+    public downloadReportExport(exportId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/octet-stream' | 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (exportId === null || exportId === undefined) {
-            throw new Error('Required parameter exportId was null or undefined when calling downloadExport.');
+            throw new Error('Required parameter exportId was null or undefined when calling downloadReportExport.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -118,8 +118,8 @@ export class FinancialReportingService extends BaseService {
     }
 
     /**
-     * Drilldown to Accounts
-     * Show which GL accounts contribute to a specific statement line
+     * Drilldown To Accounts
+     * Shows which GL accounts contribute to a specific financial-statement line over a date range, with each account\&#39;s contribution amount. Use this tool to expand one line of an income statement or balance sheet; do not use drilldownToJournalLines, which is the next level down from an account to its source entries. Preconditions: the statementLineCode must follow the uppercase-and-underscores format (e.g. REVENUE_SALES). Required inputs: statementLineCode as a path parameter plus startDate and endDate (ISO dates), with endDate on or after startDate. Emits a REPORT_DRILLDOWN_ACCOUNTS audit event; no state changes. Returns 400 when the code format is invalid or the end date precedes the start date. 
      * @endpoint get /v1/accounting/reports/financial/drilldown/accounts/{statementLineCode}
      * @param statementLineCode Statement line code (e.g., REVENUE_SALES)
      * @param startDate Period start date (YYYY-MM-DD)
@@ -207,8 +207,8 @@ export class FinancialReportingService extends BaseService {
     }
 
     /**
-     * Drilldown to Journal Lines
-     * Show source journal entries contributing to a GL account balance
+     * Drilldown To Journal Lines
+     * Shows the source journal lines contributing to a GL account\&#39;s balance over a date range, completing the statement-to-transaction audit path. Use this tool after drilldownToAccounts has identified the account of interest; use getJournalEntry instead to open a full entry from a returned line. Preconditions: the accountId path parameter must be a UUID. Required inputs: accountId (UUID) as a path parameter plus startDate and endDate (ISO dates), with endDate on or after startDate. Emits a REPORT_DRILLDOWN_JOURNAL_LINES audit event; no state changes. Returns 400 when the account id is not a UUID or the end date precedes the start date. 
      * @endpoint get /v1/accounting/reports/financial/drilldown/journal-lines/{accountId}
      * @param accountId GL Account ID (UUID)
      * @param startDate Period start date (YYYY-MM-DD)
@@ -296,8 +296,8 @@ export class FinancialReportingService extends BaseService {
     }
 
     /**
-     * Freeze the Sales-Tax Liability report for a closed period
-     * Generate the Sales-Tax Liability report over the accounting period\&#39;s exact date range and persist it as an immutable snapshot with a canonical SHA-256 content hash. The period must be CLOSED. If an ACTIVE snapshot already exists for the period the request fails with 409 unless supersede&#x3D;true, which demotes the prior snapshot to SUPERSEDED (reopen → adjust → re-close flow) and preserves history.
+     * Freeze Sales-Tax Liability Snapshot
+     * Generates the Sales-Tax Liability report over a closed accounting period\&#39;s exact date range and persists it as an immutable snapshot with a canonical SHA-256 content hash; snapshots are provider-neutral and carry no filing-provider identifiers. Use this tool at period close to fix filing figures; do not use generateTaxLiabilityReport, which computes the live report without freezing anything. Preconditions: the accounting period must exist and be CLOSED, and no ACTIVE snapshot may exist for the period unless supersede is set. Required inputs: periodCode (YYYY-MM) as a query parameter; supersede defaults to false and, when true, demotes the prior ACTIVE snapshot to SUPERSEDED while preserving history. Emits a TAX_LIABILITY_SNAPSHOT_FREEZE event. Returns 404 when the period does not exist, 409 when the period is not CLOSED or an ACTIVE snapshot exists without supersede, and 400 when the period code is malformed. 
      * @endpoint post /v1/accounting/reports/financial/tax-liability/snapshots
      * @param periodCode Accounting period code (YYYY-MM)
      * @param supersede Supersede an existing ACTIVE snapshot for the period
@@ -305,12 +305,12 @@ export class FinancialReportingService extends BaseService {
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public freezeSnapshot(periodCode: string, supersede?: boolean, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<TaxLiabilitySnapshotResponse>;
-    public freezeSnapshot(periodCode: string, supersede?: boolean, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<TaxLiabilitySnapshotResponse>>;
-    public freezeSnapshot(periodCode: string, supersede?: boolean, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<TaxLiabilitySnapshotResponse>>;
-    public freezeSnapshot(periodCode: string, supersede?: boolean, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public freezeTaxLiabilitySnapshot(periodCode: string, supersede?: boolean, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<TaxLiabilitySnapshotResponse>;
+    public freezeTaxLiabilitySnapshot(periodCode: string, supersede?: boolean, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<TaxLiabilitySnapshotResponse>>;
+    public freezeTaxLiabilitySnapshot(periodCode: string, supersede?: boolean, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<TaxLiabilitySnapshotResponse>>;
+    public freezeTaxLiabilitySnapshot(periodCode: string, supersede?: boolean, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (periodCode === null || periodCode === undefined) {
-            throw new Error('Required parameter periodCode was null or undefined when calling freezeSnapshot.');
+            throw new Error('Required parameter periodCode was null or undefined when calling freezeTaxLiabilitySnapshot.');
         }
 
         let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
@@ -379,7 +379,7 @@ export class FinancialReportingService extends BaseService {
 
     /**
      * Generate Aged Payables
-     * Generate the Aged Payables report as of a date: per-vendor open vendor-bill balances bucketed by days past due (0-30 / 31-60 / 61-90 / 90+) with grand totals.
+     * Generates the Aged Payables report as of a date: per-vendor open vendor-bill balances bucketed by days past due (0-30, 31-60, 61-90, 90+) with grand totals. Use this tool to review what is owed to vendors and how overdue it is; do not use generateAgedReceivables, which is the customer-side mirror, and use listApBills to pick individual bills for payment. Preconditions: none; rows are empty when no open payables exist. Required inputs: asOfDate (ISO date) as a query parameter. Emits a REPORT_AGED_PAYABLES_GENERATE audit event; no state changes. Returns 400 when the asOfDate is missing or malformed. 
      * @endpoint get /v1/accounting/reports/financial/aged-payables
      * @param asOfDate As-of date (YYYY-MM-DD)
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -451,7 +451,7 @@ export class FinancialReportingService extends BaseService {
 
     /**
      * Generate Aged Receivables
-     * Generate the Aged Receivables report as of a date: per-customer open invoice balances bucketed by days past due (0-30 / 31-60 / 61-90 / 90+) with grand totals.
+     * Generates the Aged Receivables report as of a date: per-customer open invoice balances bucketed by days past due (0-30, 31-60, 61-90, 90+) with grand totals. Use this tool to review customer collection exposure; do not use generateAgedPayables, which is the vendor-side mirror of this report. Preconditions: none; rows are empty when no open receivables exist. Required inputs: asOfDate (ISO date) as a query parameter. Emits a REPORT_AGED_RECEIVABLES_GENERATE audit event; no state changes. Returns 400 when the asOfDate is missing or malformed. 
      * @endpoint get /v1/accounting/reports/financial/aged-receivables
      * @param asOfDate As-of date (YYYY-MM-DD)
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -523,7 +523,7 @@ export class FinancialReportingService extends BaseService {
 
     /**
      * Generate Balance Sheet
-     * Generate Balance Sheet as of a specific date with assets, liabilities, and equity
+     * Generates the Balance Sheet as of a specific date, presenting assets, liabilities and equity from POSTED journal activity. Use this tool for financial position at a point in time; do not use generateIncomeStatement, which covers activity over a period, and use generateTrialBalance for the raw per-account debit and credit proof. Preconditions: none; a date with no POSTED activity yields zeroed sections. Required inputs: asOfDate (ISO date) as a query parameter. Emits a REPORT_BALANCE_SHEET_GENERATE audit event; no state changes. Returns 400 when the asOfDate is missing or malformed. 
      * @endpoint get /v1/accounting/reports/financial/balance-sheet
      * @param asOfDate As-of date (YYYY-MM-DD)
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -595,7 +595,7 @@ export class FinancialReportingService extends BaseService {
 
     /**
      * Generate General Ledger
-     * Generate a General Ledger report for a date range: per-account chronological POSTED journal lines with a running balance, opening/closing balances, and grand totals. Optionally filter to a single account.
+     * Generates the General Ledger report for a date range: per-account chronological POSTED journal lines with a running balance, opening and closing balances, and grand totals. Use this tool for full ledger detail over a period; do not use generateTrialBalance, which shows only closing balances per account, and use drilldownToJournalLines for a single account slice. Preconditions: none; sections are empty when no POSTED activity exists. Required inputs: startDate and endDate (ISO dates), with endDate on or after startDate; accountId (UUID) is optional and restricts the report to one account. Emits a REPORT_GENERAL_LEDGER_GENERATE audit event; no state changes. Returns 400 when the account id is not a UUID or the end date precedes the start date. 
      * @endpoint get /v1/accounting/reports/financial/general-ledger
      * @param startDate Period start date (YYYY-MM-DD)
      * @param endDate Period end date (YYYY-MM-DD)
@@ -690,7 +690,7 @@ export class FinancialReportingService extends BaseService {
 
     /**
      * Generate Income Statement
-     * Generate Profit &amp; Loss report for a date range with revenue, expenses, and net income
+     * Generates the Profit and Loss statement for a date range, aggregating POSTED journal activity into revenue, expense and net-income lines. Use this tool for period profitability; do not use generateBalanceSheet, which is the point-in-time financial position, and use drilldownToAccounts to expand a statement line. Preconditions: none; a period with no POSTED activity yields zeroed lines. Required inputs: startDate and endDate (ISO dates) as query parameters, with endDate on or after startDate. Emits a REPORT_INCOME_STATEMENT_GENERATE audit event; no state changes. Returns 400 when the end date is before the start date. 
      * @endpoint get /v1/accounting/reports/financial/income-statement
      * @param startDate Period start date (YYYY-MM-DD)
      * @param endDate Period end date (YYYY-MM-DD)
@@ -774,8 +774,8 @@ export class FinancialReportingService extends BaseService {
     }
 
     /**
-     * Generate Sales-Tax Liability report
-     * Generate the reconciliation-grade sales-tax liability report for a date range: per-jurisdiction (state/county/city/special) taxable base, exempt base with reasons, gross tax collected, POSTED credit-memo reversals netted pro-rata, and net tax; plus a GL-drift column reconciling total net tax against the Sales-Tax Payable (2200) account activity. Accrual basis: invoice tax bucketed by finalization period, credits by posting period.
+     * Generate Sales-Tax Liability Report
+     * Generates the reconciliation-grade sales-tax liability report for a date range: per-jurisdiction (state, county, city, special) taxable base, exempt base with reasons, gross tax collected, POSTED credit-memo reversals netted pro-rata, and net tax, plus a GL-drift column reconciling total net tax against Sales-Tax Payable (2200) activity. Use this tool for filing-period review on the accrual basis, where invoice tax buckets by finalization period and credits by posting period; do not use createTaxLiabilitySnapshot, which freezes a closed period\&#39;s figures for filing. Preconditions: none; rows are empty when no in-period tax exists. Required inputs: startDate and endDate (ISO dates), with endDate on or after startDate. Emits a REPORT_TAX_LIABILITY_GENERATE audit event; no state changes. Returns 400 when the end date is before the start date. 
      * @endpoint get /v1/accounting/reports/financial/tax-liability
      * @param startDate Period start date (YYYY-MM-DD)
      * @param endDate Period end date (YYYY-MM-DD)
@@ -783,15 +783,15 @@ export class FinancialReportingService extends BaseService {
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public generateTaxLiability(startDate: string, endDate: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<TaxLiabilityReport>;
-    public generateTaxLiability(startDate: string, endDate: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<TaxLiabilityReport>>;
-    public generateTaxLiability(startDate: string, endDate: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<TaxLiabilityReport>>;
-    public generateTaxLiability(startDate: string, endDate: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public generateTaxLiabilityReport(startDate: string, endDate: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<TaxLiabilityReport>;
+    public generateTaxLiabilityReport(startDate: string, endDate: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<TaxLiabilityReport>>;
+    public generateTaxLiabilityReport(startDate: string, endDate: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<TaxLiabilityReport>>;
+    public generateTaxLiabilityReport(startDate: string, endDate: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (startDate === null || startDate === undefined) {
-            throw new Error('Required parameter startDate was null or undefined when calling generateTaxLiability.');
+            throw new Error('Required parameter startDate was null or undefined when calling generateTaxLiabilityReport.');
         }
         if (endDate === null || endDate === undefined) {
-            throw new Error('Required parameter endDate was null or undefined when calling generateTaxLiability.');
+            throw new Error('Required parameter endDate was null or undefined when calling generateTaxLiabilityReport.');
         }
 
         let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
@@ -860,7 +860,7 @@ export class FinancialReportingService extends BaseService {
 
     /**
      * Generate Trial Balance
-     * Generate Trial Balance as of a specific date: per-account debit/credit/balance rows from POSTED journal lines, grand totals proving sum(debit) &#x3D;&#x3D; sum(credit), and an entry-number gap-check footnote per monthly sequence scope
+     * Generates the Trial Balance as of a specific date: per-account debit, credit and balance rows from POSTED journal lines, grand totals proving total debits equal total credits, and an entry-number gap-check footnote per monthly sequence scope. Use this tool to prove ledger integrity before period close; do not use generateBalanceSheet, which classifies balances into statement sections. Preconditions: none; rows are empty when no POSTED data exists as of the date. Required inputs: asOf (ISO date) as a query parameter. Emits a REPORT_TRIAL_BALANCE_GENERATE audit event; no state changes. Returns 400 when the asOf date is missing or malformed. 
      * @endpoint get /v1/accounting/reports/financial/trial-balance
      * @param asOf As-of date (YYYY-MM-DD)
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -931,20 +931,140 @@ export class FinancialReportingService extends BaseService {
     }
 
     /**
-     * List export history
-     * List all async report export jobs, paginated and sorted by most-recent first.
+     * Get Report Export Status
+     * Returns the current status of an asynchronous report export job: PENDING, IN_PROGRESS, COMPLETED or FAILED. Use this tool to poll a job created by requestReportExport; do not use downloadReportExport until the status is COMPLETED. Preconditions: the export job must exist. Required inputs: exportId (UUID) as a path parameter; there is no request body. Emits an ACCOUNTING_REPORT_EXPORT_STATUS audit event; no state changes. Returns 404 EXPORT_JOB_NOT_FOUND when no export job exists for the supplied id. 
+     * @endpoint get /v1/accounting/reports/export/{exportId}
+     * @param exportId Export job UUID
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public getReportExportStatus(exportId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ReportExportResponse>;
+    public getReportExportStatus(exportId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ReportExportResponse>>;
+    public getReportExportStatus(exportId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ReportExportResponse>>;
+    public getReportExportStatus(exportId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (exportId === null || exportId === undefined) {
+            throw new Error('Required parameter exportId was null or undefined when calling getReportExportStatus.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/accounting/reports/export/${this.configuration.encodeParam({name: "exportId", value: exportId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<ReportExportResponse>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Get Sales-Tax Liability Snapshot
+     * Returns one frozen Sales-Tax Liability snapshot in full: per-jurisdiction rows, totals, reconciliation and the canonical content hash. Use this tool to read filing figures exactly as frozen; use listTaxLiabilitySnapshots instead when hunting for the right snapshot, and verifyTaxLiabilitySnapshot to check it against live data. Preconditions: the snapshot must exist. Required inputs: snapshotId (UUID) as a path parameter; there is no request body. Emits a TAX_LIABILITY_SNAPSHOT_GET audit event; the snapshot is immutable and never changed by reads. Returns 404 TAX_SNAPSHOT_NOT_FOUND when no snapshot exists for the supplied id. 
+     * @endpoint get /v1/accounting/reports/financial/tax-liability/snapshots/{snapshotId}
+     * @param snapshotId Snapshot id
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public getTaxLiabilitySnapshot(snapshotId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<TaxLiabilitySnapshotResponse>;
+    public getTaxLiabilitySnapshot(snapshotId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<TaxLiabilitySnapshotResponse>>;
+    public getTaxLiabilitySnapshot(snapshotId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<TaxLiabilitySnapshotResponse>>;
+    public getTaxLiabilitySnapshot(snapshotId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (snapshotId === null || snapshotId === undefined) {
+            throw new Error('Required parameter snapshotId was null or undefined when calling getTaxLiabilitySnapshot.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/accounting/reports/financial/tax-liability/snapshots/${this.configuration.encodeParam({name: "snapshotId", value: snapshotId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<TaxLiabilitySnapshotResponse>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * List Report Export History
+     * Lists all asynchronous report export jobs as a paginated projection, most recent first. Use this tool to review past exports and their statuses; do not use getReportExportStatus, which polls a single job by id. Preconditions: none beyond the caller holding accounting:report:export. Required inputs: none; the page defaults to 20 items and only requestedAt is a supported sort property. Emits an ACCOUNTING_REPORT_EXPORT_LIST audit event; no state changes. Returns 400 when an unsupported sort property is requested. 
      * @endpoint get /v1/accounting/reports/export
      * @param pageable 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public getExportHistory(pageable: Pageable, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PageReportExportResponse>;
-    public getExportHistory(pageable: Pageable, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PageReportExportResponse>>;
-    public getExportHistory(pageable: Pageable, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PageReportExportResponse>>;
-    public getExportHistory(pageable: Pageable, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public listReportExports(pageable: Pageable, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PageReportExportResponse>;
+    public listReportExports(pageable: Pageable, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PageReportExportResponse>>;
+    public listReportExports(pageable: Pageable, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PageReportExportResponse>>;
+    public listReportExports(pageable: Pageable, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (pageable === null || pageable === undefined) {
-            throw new Error('Required parameter pageable was null or undefined when calling getExportHistory.');
+            throw new Error('Required parameter pageable was null or undefined when calling listReportExports.');
         }
 
         let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
@@ -1003,138 +1123,18 @@ export class FinancialReportingService extends BaseService {
     }
 
     /**
-     * Get export status
-     * Poll the current status of an async report export job.
-     * @endpoint get /v1/accounting/reports/export/{exportId}
-     * @param exportId Export job UUID
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     * @param options additional options
-     */
-    public getExportStatus(exportId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ReportExportResponse>;
-    public getExportStatus(exportId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ReportExportResponse>>;
-    public getExportStatus(exportId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ReportExportResponse>>;
-    public getExportStatus(exportId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
-        if (exportId === null || exportId === undefined) {
-            throw new Error('Required parameter exportId was null or undefined when calling getExportStatus.');
-        }
-
-        let localVarHeaders = this.defaultHeaders;
-
-        // authentication (bearerAuth) required
-        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
-
-        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
-            'application/json'
-        ]);
-        if (localVarHttpHeaderAcceptSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
-        }
-
-        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
-
-        const localVarTransferCache: boolean = options?.transferCache ?? true;
-
-
-        let responseType_: 'text' | 'json' | 'blob' = 'json';
-        if (localVarHttpHeaderAcceptSelected) {
-            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
-                responseType_ = 'text';
-            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
-                responseType_ = 'json';
-            } else {
-                responseType_ = 'blob';
-            }
-        }
-
-        let localVarPath = `/v1/accounting/reports/export/${this.configuration.encodeParam({name: "exportId", value: exportId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
-        const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<ReportExportResponse>('get', `${basePath}${localVarPath}`,
-            {
-                context: localVarHttpContext,
-                responseType: <any>responseType_,
-                ...(withCredentials ? { withCredentials } : {}),
-                headers: localVarHeaders,
-                observe: observe,
-                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * Get a Sales-Tax Liability snapshot
-     * Full frozen snapshot including per-jurisdiction rows, totals, reconciliation, and hash.
-     * @endpoint get /v1/accounting/reports/financial/tax-liability/snapshots/{snapshotId}
-     * @param snapshotId Snapshot id
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     * @param options additional options
-     */
-    public getSnapshot(snapshotId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<TaxLiabilitySnapshotResponse>;
-    public getSnapshot(snapshotId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<TaxLiabilitySnapshotResponse>>;
-    public getSnapshot(snapshotId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<TaxLiabilitySnapshotResponse>>;
-    public getSnapshot(snapshotId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
-        if (snapshotId === null || snapshotId === undefined) {
-            throw new Error('Required parameter snapshotId was null or undefined when calling getSnapshot.');
-        }
-
-        let localVarHeaders = this.defaultHeaders;
-
-        // authentication (bearerAuth) required
-        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
-
-        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
-            'application/json'
-        ]);
-        if (localVarHttpHeaderAcceptSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
-        }
-
-        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
-
-        const localVarTransferCache: boolean = options?.transferCache ?? true;
-
-
-        let responseType_: 'text' | 'json' | 'blob' = 'json';
-        if (localVarHttpHeaderAcceptSelected) {
-            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
-                responseType_ = 'text';
-            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
-                responseType_ = 'json';
-            } else {
-                responseType_ = 'blob';
-            }
-        }
-
-        let localVarPath = `/v1/accounting/reports/financial/tax-liability/snapshots/${this.configuration.encodeParam({name: "snapshotId", value: snapshotId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
-        const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<TaxLiabilitySnapshotResponse>('get', `${basePath}${localVarPath}`,
-            {
-                context: localVarHttpContext,
-                responseType: <any>responseType_,
-                ...(withCredentials ? { withCredentials } : {}),
-                headers: localVarHeaders,
-                observe: observe,
-                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * List Sales-Tax Liability snapshots
-     * List snapshot summaries (no rows), newest freeze first, optionally filtered by period code.
+     * List Sales-Tax Liability Snapshots
+     * Lists Sales-Tax Liability snapshot summaries without their row detail, newest freeze first, optionally filtered by period code. Use this tool to find which periods are frozen and which snapshot is ACTIVE; use getTaxLiabilitySnapshot instead for a snapshot\&#39;s full frozen content. Preconditions: none. Required inputs: none; periodCode (YYYY-MM) is an optional filter. Emits a TAX_LIABILITY_SNAPSHOT_LIST audit event; no state changes. Returns 200 with an empty list when no snapshots exist. 
      * @endpoint get /v1/accounting/reports/financial/tax-liability/snapshots
      * @param periodCode Optional accounting period code filter (YYYY-MM)
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public listSnapshots(periodCode?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<TaxLiabilitySnapshotSummary>>;
-    public listSnapshots(periodCode?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<TaxLiabilitySnapshotSummary>>>;
-    public listSnapshots(periodCode?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<TaxLiabilitySnapshotSummary>>>;
-    public listSnapshots(periodCode?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public listTaxLiabilitySnapshots(periodCode?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<TaxLiabilitySnapshotSummary>>;
+    public listTaxLiabilitySnapshots(periodCode?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<TaxLiabilitySnapshotSummary>>>;
+    public listTaxLiabilitySnapshots(periodCode?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<TaxLiabilitySnapshotSummary>>>;
+    public listTaxLiabilitySnapshots(periodCode?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
 
@@ -1192,20 +1192,20 @@ export class FinancialReportingService extends BaseService {
     }
 
     /**
-     * Request async report export
-     * Submit an asynchronous report export job. Returns immediately with PENDING status.
+     * Request Async Report Export
+     * Submits an asynchronous export job that renders a financial report to a downloadable artifact, returning immediately with status PENDING. Use this tool to produce a file for one of the reporting endpoints\&#39; outputs; do not use the synchronous generate operations such as generateIncomeStatement when a file artifact is what is needed, and poll getReportExportStatus for completion. Preconditions: none; as-of report types use the request\&#39;s endDate as the as-of date. Required inputs: format (PDF, CSV, XLSX or JSON), reportType (TAX_LIABILITY, INCOME_STATEMENT, BALANCE_SHEET, TRIAL_BALANCE, GENERAL_LEDGER, AGED_RECEIVABLES or AGED_PAYABLES), startDate and endDate (endDate on or after startDate); accountId and filename are optional. Emits an ACCOUNTING_REPORT_EXPORT_REQUEST event and records the requesting operator. Returns 400 when the payload is invalid or the end date precedes the start date. 
      * @endpoint post /v1/accounting/reports/export
-     * @param reportExportRequest 
+     * @param reportExportRequest Report type, format and date range to render asynchronously.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public requestExport(reportExportRequest: ReportExportRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ReportExportResponse>;
-    public requestExport(reportExportRequest: ReportExportRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ReportExportResponse>>;
-    public requestExport(reportExportRequest: ReportExportRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ReportExportResponse>>;
-    public requestExport(reportExportRequest: ReportExportRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public requestReportExport(reportExportRequest: ReportExportRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ReportExportResponse>;
+    public requestReportExport(reportExportRequest: ReportExportRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ReportExportResponse>>;
+    public requestReportExport(reportExportRequest: ReportExportRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ReportExportResponse>>;
+    public requestReportExport(reportExportRequest: ReportExportRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (reportExportRequest === null || reportExportRequest === undefined) {
-            throw new Error('Required parameter reportExportRequest was null or undefined when calling requestExport.');
+            throw new Error('Required parameter reportExportRequest was null or undefined when calling requestReportExport.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -1262,20 +1262,20 @@ export class FinancialReportingService extends BaseService {
     }
 
     /**
-     * Verify a snapshot against live data
-     * Re-derive the Sales-Tax Liability report for the snapshot\&#39;s period from the live replicas and compare canonical hashes. Read-only: the snapshot is never mutated. Inconsistency means underlying data moved after the freeze (e.g. postings into a reopened period); re-freeze with supersede&#x3D;true once the period is closed again.
+     * Verify Sales-Tax Liability Snapshot
+     * Re-derives the Sales-Tax Liability report for a snapshot\&#39;s period from the live replicas and compares canonical hashes, reporting consistent&#x3D;true when they match. Use this tool to detect drift after a freeze; do not use freezeTaxLiabilitySnapshot to check consistency, since freezing creates state. Preconditions: the snapshot must exist; inconsistency means underlying data moved after the freeze, for example postings into a reopened period, and the remedy is re-freezing with supersede&#x3D;true once the period is closed again. Required inputs: snapshotId (UUID) as a path parameter; there is no request body. Emits a TAX_LIABILITY_SNAPSHOT_VERIFY audit event; the snapshot itself is never mutated. Returns 404 TAX_SNAPSHOT_NOT_FOUND when no snapshot exists for the supplied id. 
      * @endpoint post /v1/accounting/reports/financial/tax-liability/snapshots/{snapshotId}/verify
      * @param snapshotId Snapshot id
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public verifySnapshot(snapshotId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<TaxLiabilitySnapshotVerification>;
-    public verifySnapshot(snapshotId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<TaxLiabilitySnapshotVerification>>;
-    public verifySnapshot(snapshotId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<TaxLiabilitySnapshotVerification>>;
-    public verifySnapshot(snapshotId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public verifyTaxLiabilitySnapshot(snapshotId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<TaxLiabilitySnapshotVerification>;
+    public verifyTaxLiabilitySnapshot(snapshotId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<TaxLiabilitySnapshotVerification>>;
+    public verifyTaxLiabilitySnapshot(snapshotId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<TaxLiabilitySnapshotVerification>>;
+    public verifyTaxLiabilitySnapshot(snapshotId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (snapshotId === null || snapshotId === undefined) {
-            throw new Error('Required parameter snapshotId was null or undefined when calling verifySnapshot.');
+            throw new Error('Required parameter snapshotId was null or undefined when calling verifyTaxLiabilitySnapshot.');
         }
 
         let localVarHeaders = this.defaultHeaders;

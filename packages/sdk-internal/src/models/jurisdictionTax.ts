@@ -14,21 +14,13 @@
  */
 export interface JurisdictionTax { 
     /**
-     * Jurisdiction type (e.g. STATE, COUNTY, CITY, DISTRICT)
+     * Tax amount calculated for this jurisdiction on this line item
      */
-    jurisdictionType: JurisdictionTaxJurisdictionTypeEnum;
+    amount: number;
     /**
      * Jurisdiction code; in test mode this is the jurisdiction type code (e.g. STATE, COUNTY, CITY). With an external tax provider it carries the provider\'s taxing-authority code.
      */
     code: string;
-    /**
-     * Tax rate applied for this jurisdiction, expressed as a decimal fraction (e.g. 0.0725 for 7.25%)
-     */
-    rate: number;
-    /**
-     * Tax amount calculated for this jurisdiction on this line item
-     */
-    amount: number;
     /**
      * Whether this is a zero-rate exempt row (rate is the would-be jurisdiction rate, amount is zero)
      */
@@ -37,7 +29,22 @@ export interface JurisdictionTax {
      * Exemption reason echoed onto a zero-rate exempt row
      */
     exemptionReasonCode?: JurisdictionTaxExemptionReasonCodeEnum;
+    /**
+     * Jurisdiction type (e.g. STATE, COUNTY, CITY, DISTRICT)
+     */
+    jurisdictionType: JurisdictionTaxJurisdictionTypeEnum;
+    /**
+     * Tax rate applied for this jurisdiction, expressed as a decimal fraction (e.g. 0.0725 for 7.25%)
+     */
+    rate: number;
 }
+export enum JurisdictionTaxExemptionReasonCodeEnum {
+    Resale = 'RESALE',
+    Government = 'GOVERNMENT',
+    Nonprofit = 'NONPROFIT',
+    Agricultural = 'AGRICULTURAL',
+    Other = 'OTHER'
+};
 export enum JurisdictionTaxJurisdictionTypeEnum {
     Country = 'COUNTRY',
     State = 'STATE',
@@ -46,13 +53,6 @@ export enum JurisdictionTaxJurisdictionTypeEnum {
     City = 'CITY',
     District = 'DISTRICT',
     Special = 'SPECIAL'
-};
-export enum JurisdictionTaxExemptionReasonCodeEnum {
-    Resale = 'RESALE',
-    Government = 'GOVERNMENT',
-    Nonprofit = 'NONPROFIT',
-    Agricultural = 'AGRICULTURAL',
-    Other = 'OTHER'
 };
 
 
@@ -95,9 +95,9 @@ export function instanceOfJurisdictionTax(value: object): value is JurisdictionT
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createJurisdictionTaxPropertyNames('jurisdictionType', 'code', 'rate', 'amount', );
-    const optionalStringProperties = createJurisdictionTaxOptionalProperties({ name: 'jurisdictionType', nullable: false }, { name: 'code', nullable: false }, { name: 'exemptionReasonCode', nullable: false }, );
-    const optionalNumberProperties = createJurisdictionTaxOptionalProperties({ name: 'rate', nullable: false }, { name: 'amount', nullable: false }, );
+    const requiredProperties = createJurisdictionTaxPropertyNames('amount', 'code', 'jurisdictionType', 'rate', );
+    const optionalStringProperties = createJurisdictionTaxOptionalProperties({ name: 'code', nullable: false }, { name: 'exemptionReasonCode', nullable: false }, { name: 'jurisdictionType', nullable: false }, );
+    const optionalNumberProperties = createJurisdictionTaxOptionalProperties({ name: 'amount', nullable: false }, { name: 'rate', nullable: false }, );
     const optionalBooleanProperties = createJurisdictionTaxOptionalProperties({ name: 'exempt', nullable: false }, );
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

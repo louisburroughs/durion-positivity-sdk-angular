@@ -14,13 +14,13 @@
  */
 export interface LotExpirationUpdateRequest { 
     /**
-     * Expiration date of the lot (null clears it)
-     */
-    expirationDate?: string;
-    /**
      * Date the lot enters its expiring-soon alert window (null means no early alert)
      */
     alertDate?: string;
+    /**
+     * Expiration date of the lot (null clears it)
+     */
+    expirationDate?: string;
 }
 
 function isOptionalLotExpirationUpdateRequestPropertyOfType(
@@ -62,7 +62,7 @@ export function instanceOfLotExpirationUpdateRequest(value: object): value is Lo
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createLotExpirationUpdateRequestPropertyNames();
-    const optionalStringProperties = createLotExpirationUpdateRequestOptionalProperties({ name: 'expirationDate', nullable: false }, { name: 'alertDate', nullable: false }, );
+    const optionalStringProperties = createLotExpirationUpdateRequestOptionalProperties({ name: 'alertDate', nullable: false }, { name: 'expirationDate', nullable: false }, );
     const optionalNumberProperties = createLotExpirationUpdateRequestOptionalProperties();
     const optionalBooleanProperties = createLotExpirationUpdateRequestOptionalProperties();
 

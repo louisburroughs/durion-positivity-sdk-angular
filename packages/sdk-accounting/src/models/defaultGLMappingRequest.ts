@@ -14,6 +14,22 @@
  */
 export interface DefaultGLMappingRequest { 
     /**
+     * Whether the mapping is active
+     */
+    active?: boolean;
+    /**
+     * Identifier of the GL account to credit
+     */
+    creditAccountId: string;
+    /**
+     * Identifier of the GL account to debit
+     */
+    debitAccountId: string;
+    /**
+     * Optional description of the mapping
+     */
+    description?: string;
+    /**
      * Accounting event type the mapping applies to
      */
     eventType: string;
@@ -21,22 +37,6 @@ export interface DefaultGLMappingRequest {
      * Organization scope for the mapping; null for the global default
      */
     organizationId?: string;
-    /**
-     * Identifier of the GL account to debit
-     */
-    debitAccountId: string;
-    /**
-     * Identifier of the GL account to credit
-     */
-    creditAccountId: string;
-    /**
-     * Optional description of the mapping
-     */
-    description?: string;
-    /**
-     * Whether the mapping is active
-     */
-    active?: boolean;
 }
 
 function isOptionalDefaultGLMappingRequestPropertyOfType(
@@ -77,8 +77,8 @@ export function instanceOfDefaultGLMappingRequest(value: object): value is Defau
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createDefaultGLMappingRequestPropertyNames('eventType', 'debitAccountId', 'creditAccountId', );
-    const optionalStringProperties = createDefaultGLMappingRequestOptionalProperties({ name: 'eventType', nullable: false }, { name: 'organizationId', nullable: false }, { name: 'debitAccountId', nullable: false }, { name: 'creditAccountId', nullable: false }, { name: 'description', nullable: false }, );
+    const requiredProperties = createDefaultGLMappingRequestPropertyNames('creditAccountId', 'debitAccountId', 'eventType', );
+    const optionalStringProperties = createDefaultGLMappingRequestOptionalProperties({ name: 'creditAccountId', nullable: false }, { name: 'debitAccountId', nullable: false }, { name: 'description', nullable: false }, { name: 'eventType', nullable: false }, { name: 'organizationId', nullable: false }, );
     const optionalNumberProperties = createDefaultGLMappingRequestOptionalProperties();
     const optionalBooleanProperties = createDefaultGLMappingRequestOptionalProperties({ name: 'active', nullable: false }, );
 

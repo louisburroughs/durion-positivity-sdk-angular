@@ -14,41 +14,41 @@
  */
 export interface CrmMatchSummaryDto { 
     /**
-     * Total number of candidate persons returned
-     */
-    candidateCount: number;
-    /**
      * True when any candidate matched
      */
     anyMatches: boolean;
     /**
-     * Number of individual-customer candidates
+     * Total number of candidate persons returned
      */
-    individualCustomerCandidateCount: number;
+    candidateCount: number;
     /**
      * Number of commercial-contact candidates
      */
     commercialContactCandidateCount: number;
     /**
-     * Number of shared-identity candidates
-     */
-    sharedIdentityCandidateCount: number;
-    /**
      * True when a candidate exactly matched the email
      */
     exactEmailMatch: boolean;
-    /**
-     * True when a candidate exactly matched the phone
-     */
-    exactPhoneMatch: boolean;
     /**
      * True when a candidate exactly matched the name
      */
     exactNameMatch: boolean;
     /**
+     * True when a candidate exactly matched the phone
+     */
+    exactPhoneMatch: boolean;
+    /**
+     * Number of individual-customer candidates
+     */
+    individualCustomerCandidateCount: number;
+    /**
      * True when manual review is required before completing registration
      */
     reviewRequired: boolean;
+    /**
+     * Number of shared-identity candidates
+     */
+    sharedIdentityCandidateCount: number;
 }
 
 function isOptionalCrmMatchSummaryDtoPropertyOfType(
@@ -89,10 +89,10 @@ export function instanceOfCrmMatchSummaryDto(value: object): value is CrmMatchSu
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createCrmMatchSummaryDtoPropertyNames('candidateCount', 'anyMatches', 'individualCustomerCandidateCount', 'commercialContactCandidateCount', 'sharedIdentityCandidateCount', 'exactEmailMatch', 'exactPhoneMatch', 'exactNameMatch', 'reviewRequired', );
+    const requiredProperties = createCrmMatchSummaryDtoPropertyNames('anyMatches', 'candidateCount', 'commercialContactCandidateCount', 'exactEmailMatch', 'exactNameMatch', 'exactPhoneMatch', 'individualCustomerCandidateCount', 'reviewRequired', 'sharedIdentityCandidateCount', );
     const optionalStringProperties = createCrmMatchSummaryDtoOptionalProperties();
-    const optionalNumberProperties = createCrmMatchSummaryDtoOptionalProperties({ name: 'candidateCount', nullable: false }, { name: 'individualCustomerCandidateCount', nullable: false }, { name: 'commercialContactCandidateCount', nullable: false }, { name: 'sharedIdentityCandidateCount', nullable: false }, );
-    const optionalBooleanProperties = createCrmMatchSummaryDtoOptionalProperties({ name: 'anyMatches', nullable: false }, { name: 'exactEmailMatch', nullable: false }, { name: 'exactPhoneMatch', nullable: false }, { name: 'exactNameMatch', nullable: false }, { name: 'reviewRequired', nullable: false }, );
+    const optionalNumberProperties = createCrmMatchSummaryDtoOptionalProperties({ name: 'candidateCount', nullable: false }, { name: 'commercialContactCandidateCount', nullable: false }, { name: 'individualCustomerCandidateCount', nullable: false }, { name: 'sharedIdentityCandidateCount', nullable: false }, );
+    const optionalBooleanProperties = createCrmMatchSummaryDtoOptionalProperties({ name: 'anyMatches', nullable: false }, { name: 'exactEmailMatch', nullable: false }, { name: 'exactNameMatch', nullable: false }, { name: 'exactPhoneMatch', nullable: false }, { name: 'reviewRequired', nullable: false }, );
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
         && optionalStringProperties.every((property) => isOptionalCrmMatchSummaryDtoPropertyOfType(_v, property.name, 'string', property.nullable))

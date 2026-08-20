@@ -14,49 +14,49 @@
  */
 export interface CreateScrapRequest { 
     /**
-     * SKU / stock item identifier being scrapped
+     * Photo/attachment reference (storage out of scope)
      */
-    stockItemId: string;
-    /**
-     * Quantity to write off; must be positive
-     */
-    quantity: number;
+    attachmentReference?: string;
     /**
      * Location the stock is scrapped from
      */
     locationId: string;
     /**
-     * Bin-level storage location, when the scrap is bin-scoped
+     * Lot number the scrapped units belong to. Required (422 LOT_NUMBER_REQUIRED) when the SKU is LOT-tracked; must reference an existing (422 LOT_UNKNOWN) ACTIVE (422 LOT_NOT_AVAILABLE) lot. Ignored for untracked SKUs
      */
-    storageLocationId?: string;
+    lotNumber?: string;
     /**
-     * Scrap reason; OTHER requires notes
+     * Explicit negative-stock override for the auto-approve posting path; honored only when the caller holds inventory:adjustment:override
      */
-    reasonCode: CreateScrapRequestReasonCodeEnum;
+    negativeStockOverride?: boolean;
     /**
      * Free-text notes; mandatory when reasonCode is OTHER
      */
     notes?: string;
     /**
-     * Workorder the scrapped part belonged to, when linked
+     * Quantity to write off; must be positive
      */
-    workorderId?: string;
+    quantity: number;
     /**
-     * Lot number the scrapped units belong to. Required (422 LOT_NUMBER_REQUIRED) when the SKU is LOT-tracked; must reference an existing (422 LOT_UNKNOWN) ACTIVE (422 LOT_NOT_AVAILABLE) lot. Ignored for untracked SKUs
+     * Scrap reason; OTHER requires notes
      */
-    lotNumber?: string;
-    /**
-     * Photo/attachment reference (storage out of scope)
-     */
-    attachmentReference?: string;
+    reasonCode: CreateScrapRequestReasonCodeEnum;
     /**
      * When true, posting triggers a pick-face replenishment evaluation for the SKU/location
      */
     shouldReplenish?: boolean;
     /**
-     * Explicit negative-stock override for the auto-approve posting path; honored only when the caller holds inventory:adjustment:override
+     * SKU / stock item identifier being scrapped
      */
-    negativeStockOverride?: boolean;
+    stockItemId: string;
+    /**
+     * Bin-level storage location, when the scrap is bin-scoped
+     */
+    storageLocationId?: string;
+    /**
+     * Workorder the scrapped part belonged to, when linked
+     */
+    workorderId?: string;
 }
 export enum CreateScrapRequestReasonCodeEnum {
     Damaged = 'DAMAGED',
@@ -108,10 +108,10 @@ export function instanceOfCreateScrapRequest(value: object): value is CreateScra
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createCreateScrapRequestPropertyNames('stockItemId', 'quantity', 'locationId', 'reasonCode', );
-    const optionalStringProperties = createCreateScrapRequestOptionalProperties({ name: 'stockItemId', nullable: false }, { name: 'locationId', nullable: false }, { name: 'storageLocationId', nullable: false }, { name: 'reasonCode', nullable: false }, { name: 'notes', nullable: false }, { name: 'workorderId', nullable: false }, { name: 'lotNumber', nullable: false }, { name: 'attachmentReference', nullable: false }, );
+    const requiredProperties = createCreateScrapRequestPropertyNames('locationId', 'quantity', 'reasonCode', 'stockItemId', );
+    const optionalStringProperties = createCreateScrapRequestOptionalProperties({ name: 'attachmentReference', nullable: false }, { name: 'locationId', nullable: false }, { name: 'lotNumber', nullable: false }, { name: 'notes', nullable: false }, { name: 'reasonCode', nullable: false }, { name: 'stockItemId', nullable: false }, { name: 'storageLocationId', nullable: false }, { name: 'workorderId', nullable: false }, );
     const optionalNumberProperties = createCreateScrapRequestOptionalProperties({ name: 'quantity', nullable: false }, );
-    const optionalBooleanProperties = createCreateScrapRequestOptionalProperties({ name: 'shouldReplenish', nullable: false }, { name: 'negativeStockOverride', nullable: false }, );
+    const optionalBooleanProperties = createCreateScrapRequestOptionalProperties({ name: 'negativeStockOverride', nullable: false }, { name: 'shouldReplenish', nullable: false }, );
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
         && optionalStringProperties.every((property) => isOptionalCreateScrapRequestPropertyOfType(_v, property.name, 'string', property.nullable))

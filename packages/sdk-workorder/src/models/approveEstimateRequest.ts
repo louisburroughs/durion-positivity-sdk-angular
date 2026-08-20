@@ -11,13 +11,25 @@ import { LineItemApprovalDto } from './lineItemApprovalDto';
 
 
 /**
- * Request to approve an estimate with customer signature
+ * Approval request with customer ID, signature capture, and optional selective line item approvals
  */
 export interface ApproveEstimateRequest { 
     /**
      * Customer ID who is approving the estimate
      */
     customerId: string;
+    /**
+     * Individual line item approvals/rejections. If omitted, all items are considered approved.
+     */
+    lineItemApprovals?: Array<LineItemApprovalDto>;
+    /**
+     * Additional notes or comments
+     */
+    notes?: string;
+    /**
+     * Purchase order number (required when PO enforcement is enabled for the account)
+     */
+    purchaseOrderNumber?: string;
     /**
      * Base64-encoded signature image data (PNG format recommended)
      */
@@ -30,18 +42,6 @@ export interface ApproveEstimateRequest {
      * Name of person providing signature
      */
     signerName?: string;
-    /**
-     * Additional notes or comments
-     */
-    notes?: string;
-    /**
-     * Individual line item approvals/rejections. If omitted, all items are considered approved.
-     */
-    lineItemApprovals?: Array<LineItemApprovalDto>;
-    /**
-     * Purchase order number (required when PO enforcement is enabled for the account)
-     */
-    purchaseOrderNumber?: string;
 }
 
 function isOptionalApproveEstimateRequestPropertyOfType(
@@ -83,7 +83,7 @@ export function instanceOfApproveEstimateRequest(value: object): value is Approv
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createApproveEstimateRequestPropertyNames('customerId', );
-    const optionalStringProperties = createApproveEstimateRequestOptionalProperties({ name: 'customerId', nullable: false }, { name: 'signatureData', nullable: false }, { name: 'signatureMimeType', nullable: false }, { name: 'signerName', nullable: false }, { name: 'notes', nullable: false }, { name: 'purchaseOrderNumber', nullable: false }, );
+    const optionalStringProperties = createApproveEstimateRequestOptionalProperties({ name: 'customerId', nullable: false }, { name: 'notes', nullable: false }, { name: 'purchaseOrderNumber', nullable: false }, { name: 'signatureData', nullable: false }, { name: 'signatureMimeType', nullable: false }, { name: 'signerName', nullable: false }, );
     const optionalNumberProperties = createApproveEstimateRequestOptionalProperties();
     const optionalBooleanProperties = createApproveEstimateRequestOptionalProperties();
 

@@ -15,18 +15,6 @@ import { AssignmentHistoryEntry } from './assignmentHistoryEntry';
  */
 export interface TechnicianAssignmentResponse { 
     /**
-     * Work order ID
-     */
-    workorderId?: string;
-    /**
-     * Assigned technician ID
-     */
-    technicianId?: string;
-    /**
-     * Technician display name
-     */
-    technicianName?: string;
-    /**
      * When the technician was assigned
      */
     assignedAt?: string;
@@ -35,17 +23,13 @@ export interface TechnicianAssignmentResponse {
      */
     assignedBy?: string;
     /**
-     * Previous technician ID if this was a reassignment
+     * Full assignment history for the workorder
      */
-    previousTechnicianId?: string;
+    assignmentHistory?: Array<AssignmentHistoryEntry>;
     /**
-     * Previous technician name if this was a reassignment
+     * Current workorder status
      */
-    previousTechnicianName?: string;
-    /**
-     * Status of the workorder after assignment
-     */
-    status?: string;
+    currentStatus?: string;
     /**
      * Operation result message
      */
@@ -55,9 +39,13 @@ export interface TechnicianAssignmentResponse {
      */
     notes?: string;
     /**
-     * Reason for reassignment if applicable
+     * Previous technician ID if this was a reassignment
      */
-    reassignmentReason?: string;
+    previousTechnicianId?: string;
+    /**
+     * Previous technician name if this was a reassignment
+     */
+    previousTechnicianName?: string;
     /**
      * When technician was reassigned
      */
@@ -67,17 +55,29 @@ export interface TechnicianAssignmentResponse {
      */
     reassignedBy?: string;
     /**
+     * Reason for reassignment if applicable
+     */
+    reassignmentReason?: string;
+    /**
+     * Status of the workorder after assignment
+     */
+    status?: string;
+    /**
      * Technician certifications
      */
     technicianCertifications?: Array<string>;
     /**
-     * Current workorder status
+     * Assigned technician ID
      */
-    currentStatus?: string;
+    technicianId?: string;
     /**
-     * Full assignment history for the workorder
+     * Technician display name
      */
-    assignmentHistory?: Array<AssignmentHistoryEntry>;
+    technicianName?: string;
+    /**
+     * Work order ID
+     */
+    workorderId?: string;
 }
 
 function isOptionalTechnicianAssignmentResponsePropertyOfType(
@@ -119,7 +119,7 @@ export function instanceOfTechnicianAssignmentResponse(value: object): value is 
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createTechnicianAssignmentResponsePropertyNames();
-    const optionalStringProperties = createTechnicianAssignmentResponseOptionalProperties({ name: 'workorderId', nullable: false }, { name: 'technicianId', nullable: false }, { name: 'technicianName', nullable: false }, { name: 'assignedAt', nullable: false }, { name: 'assignedBy', nullable: false }, { name: 'previousTechnicianId', nullable: false }, { name: 'previousTechnicianName', nullable: false }, { name: 'status', nullable: false }, { name: 'message', nullable: false }, { name: 'notes', nullable: false }, { name: 'reassignmentReason', nullable: false }, { name: 'reassignedAt', nullable: false }, { name: 'reassignedBy', nullable: false }, { name: 'currentStatus', nullable: false }, );
+    const optionalStringProperties = createTechnicianAssignmentResponseOptionalProperties({ name: 'assignedAt', nullable: false }, { name: 'assignedBy', nullable: false }, { name: 'currentStatus', nullable: false }, { name: 'message', nullable: false }, { name: 'notes', nullable: false }, { name: 'previousTechnicianId', nullable: false }, { name: 'previousTechnicianName', nullable: false }, { name: 'reassignedAt', nullable: false }, { name: 'reassignedBy', nullable: false }, { name: 'reassignmentReason', nullable: false }, { name: 'status', nullable: false }, { name: 'technicianId', nullable: false }, { name: 'technicianName', nullable: false }, { name: 'workorderId', nullable: false }, );
     const optionalNumberProperties = createTechnicianAssignmentResponseOptionalProperties();
     const optionalBooleanProperties = createTechnicianAssignmentResponseOptionalProperties();
 

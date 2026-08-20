@@ -14,10 +14,6 @@
  */
 export interface GLAccountBalanceResponse { 
     /**
-     * Unique identifier of the GL account
-     */
-    glAccountId: string;
-    /**
      * Account code of the GL account
      */
     accountCode?: string;
@@ -26,13 +22,17 @@ export interface GLAccountBalanceResponse {
      */
     accountName?: string;
     /**
+     * Point in time the balance is computed as of (ISO 8601)
+     */
+    asOfDate: string;
+    /**
      * Balance of the account
      */
     balance: number;
     /**
-     * Point in time the balance is computed as of (ISO 8601)
+     * Unique identifier of the GL account
      */
-    asOfDate: string;
+    glAccountId: string;
 }
 
 function isOptionalGLAccountBalanceResponsePropertyOfType(
@@ -73,8 +73,8 @@ export function instanceOfGLAccountBalanceResponse(value: object): value is GLAc
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createGLAccountBalanceResponsePropertyNames('glAccountId', 'balance', 'asOfDate', );
-    const optionalStringProperties = createGLAccountBalanceResponseOptionalProperties({ name: 'glAccountId', nullable: false }, { name: 'accountCode', nullable: false }, { name: 'accountName', nullable: false }, { name: 'asOfDate', nullable: false }, );
+    const requiredProperties = createGLAccountBalanceResponsePropertyNames('asOfDate', 'balance', 'glAccountId', );
+    const optionalStringProperties = createGLAccountBalanceResponseOptionalProperties({ name: 'accountCode', nullable: false }, { name: 'accountName', nullable: false }, { name: 'asOfDate', nullable: false }, { name: 'glAccountId', nullable: false }, );
     const optionalNumberProperties = createGLAccountBalanceResponseOptionalProperties({ name: 'balance', nullable: false }, );
     const optionalBooleanProperties = createGLAccountBalanceResponseOptionalProperties();
 

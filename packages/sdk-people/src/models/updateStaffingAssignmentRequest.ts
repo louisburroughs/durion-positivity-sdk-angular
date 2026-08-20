@@ -13,18 +13,7 @@
  * Request to update a staffing assignment
  */
 export interface UpdateStaffingAssignmentRequest { 
-    /**
-     * Person identifier
-     */
-    personId: string;
-    /**
-     * Location identifier
-     */
-    locationId: string;
-    /**
-     * Assignment role
-     */
-    role: string;
+    effectiveDateRangeValid?: boolean;
     /**
      * Assignment effective start date
      */
@@ -33,11 +22,22 @@ export interface UpdateStaffingAssignmentRequest {
      * Assignment effective end date
      */
     effectiveTo?: string;
-    effectiveDateRangeValid?: boolean;
     /**
      * Whether this assignment is primary
      */
     isPrimary: boolean;
+    /**
+     * Location identifier
+     */
+    locationId: string;
+    /**
+     * Person identifier
+     */
+    personId: string;
+    /**
+     * Assignment role
+     */
+    role: string;
 }
 
 function isOptionalUpdateStaffingAssignmentRequestPropertyOfType(
@@ -78,8 +78,8 @@ export function instanceOfUpdateStaffingAssignmentRequest(value: object): value 
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createUpdateStaffingAssignmentRequestPropertyNames('personId', 'locationId', 'role', 'effectiveFrom', 'isPrimary', );
-    const optionalStringProperties = createUpdateStaffingAssignmentRequestOptionalProperties({ name: 'personId', nullable: false }, { name: 'locationId', nullable: false }, { name: 'role', nullable: false }, { name: 'effectiveFrom', nullable: false }, { name: 'effectiveTo', nullable: false }, );
+    const requiredProperties = createUpdateStaffingAssignmentRequestPropertyNames('effectiveFrom', 'isPrimary', 'locationId', 'personId', 'role', );
+    const optionalStringProperties = createUpdateStaffingAssignmentRequestOptionalProperties({ name: 'effectiveFrom', nullable: false }, { name: 'effectiveTo', nullable: false }, { name: 'locationId', nullable: false }, { name: 'personId', nullable: false }, { name: 'role', nullable: false }, );
     const optionalNumberProperties = createUpdateStaffingAssignmentRequestOptionalProperties();
     const optionalBooleanProperties = createUpdateStaffingAssignmentRequestOptionalProperties({ name: 'effectiveDateRangeValid', nullable: false }, { name: 'isPrimary', nullable: false }, );
 

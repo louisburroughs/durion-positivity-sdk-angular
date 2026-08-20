@@ -54,11 +54,11 @@ export class BankReconciliationService extends BaseService {
     }
 
     /**
-     * Record a reconciliation adjustment
-     * Records a signed adjustment and posts a real balanced journal entry (Dr/Cr the reconciled cash account against the type\&#39;s mapped counter account) through the accounting-period gate. Returns 404 RECONCILIATION_NOT_FOUND if the reconciliation is missing, 409 RECONCILIATION_ALREADY_FINALIZED if it is finalized, and 422 PERIOD_CLOSED / PERIOD_HARD_LOCKED if the adjustment JE is dated into a locked accounting period.
+     * Record Reconciliation Adjustment
+     * Records a signed reconciliation adjustment and posts a real balanced journal entry, debiting or crediting the reconciled cash account against the type\&#39;s mapped counter account, through the accounting-period gate. Use this tool for bank-only items such as fees or interest that have no GL counterpart; do not use matchReconciliation, which links existing posted GL lines. Preconditions: the reconciliation must be IN_PROGRESS, and the amount sign must be permitted for the type (BANK_FEE and NSF_FEE negative, INTEREST_EARNED positive, OTHER any). Required inputs: reconciliationId (UUID) as a path parameter, type (BANK_FEE, NSF_FEE, INTEREST_EARNED or OTHER) and a non-zero signed amount; description (max 500 chars) is optional. Emits an ACCOUNTING_RECONCILIATION_ADJUSTMENT event and posts a journal entry that changes GL balances. Returns 404 RECONCILIATION_NOT_FOUND when the reconciliation is missing, 409 RECONCILIATION_ALREADY_FINALIZED when finalized, and 422 PERIOD_CLOSED, PERIOD_HARD_LOCKED or RECONCILIATION_ADJUSTMENT_SIGN_INVALID for period-gate or sign failures. 
      * @endpoint post /v1/accounting/reconciliations/{reconciliationId}/adjustments
      * @param reconciliationId Reconciliation id
-     * @param reconciliationAdjustmentRequest 
+     * @param reconciliationAdjustmentRequest Typed, signed adjustment that will post a balanced journal entry.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -128,8 +128,8 @@ export class BankReconciliationService extends BaseService {
     }
 
     /**
-     * Finalize a reconciliation
-     * Finalizes a reconciliation (IN_PROGRESS to FINALIZED) only when it balances: the statement ending balance must equal the GL ending balance plus the sum of adjustments, within ±0.01 (matched GL lines are already reflected in the GL ending balance). Returns 404 RECONCILIATION_NOT_FOUND if missing, 409 RECONCILIATION_ALREADY_FINALIZED if already finalized, and 422 RECONCILIATION_NOT_BALANCED (with the outstanding difference) if it does not balance.
+     * Finalize Reconciliation
+     * Finalizes a reconciliation (IN_PROGRESS to FINALIZED), locking it against further matching, unmatching or adjustments. Use this tool once all lines are matched or adjusted; do not use it while a difference remains, which addReconciliationAdjustment or further matching must clear first. Preconditions: the statement ending balance must equal the GL ending balance plus the sum of adjustments within 0.01, matched GL lines being already reflected in the GL ending balance. Required inputs: reconciliationId (UUID) as a path parameter; there is no request body. Emits an ACCOUNTING_RECONCILIATION_FINALIZE event; FINALIZED is terminal for the reconciliation. Returns 404 RECONCILIATION_NOT_FOUND when missing, 409 RECONCILIATION_ALREADY_FINALIZED when already finalized, and 422 RECONCILIATION_NOT_BALANCED carrying the outstanding difference as a field error when it does not balance. 
      * @endpoint post /v1/accounting/reconciliations/{reconciliationId}/finalize
      * @param reconciliationId Reconciliation id
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -188,8 +188,8 @@ export class BankReconciliationService extends BaseService {
     }
 
     /**
-     * Get a reconciliation
-     * Returns one reconciliation with its imported statement lines and adjustments. Returns 404 RECONCILIATION_NOT_FOUND if the id is unknown.
+     * Get Reconciliation
+     * Returns one bank reconciliation with its imported statement lines, match state and adjustments. Use this tool when the reconciliation id is already known; use listReconciliations instead when searching by account or status, or getReconciliationReport for the balance summary view. Preconditions: the reconciliation must exist. Required inputs: reconciliationId (UUID) as a path parameter; there is no request body. Emits an ACCOUNTING_RECONCILIATION_GET audit event; no state changes. Returns 404 RECONCILIATION_NOT_FOUND when the id is unknown. 
      * @endpoint get /v1/accounting/reconciliations/{reconciliationId}
      * @param reconciliationId Reconciliation id
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -248,8 +248,8 @@ export class BankReconciliationService extends BaseService {
     }
 
     /**
-     * Reconciliation audit trail
-     * Returns the audit trail of a reconciliation\&#39;s actions (import, matches, adjustments, finalize), ordered by time. Returns 404 RECONCILIATION_NOT_FOUND if the id is unknown.
+     * Get Reconciliation Audit Trail
+     * Returns the time-ordered audit trail of a reconciliation\&#39;s actions: import, matches, unmatches, adjustments and finalize, each with the acting user. Use this tool when reviewing who did what during a reconciliation; use getReconciliationReport instead for the balance summary. Preconditions: the reconciliation must exist. Required inputs: reconciliationId (UUID) as a path parameter; there is no request body. Emits an ACCOUNTING_RECONCILIATION_AUDIT audit event; no state changes. Returns 404 RECONCILIATION_NOT_FOUND when the id is unknown. 
      * @endpoint get /v1/accounting/reconciliations/{reconciliationId}/audit
      * @param reconciliationId Reconciliation id
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -308,8 +308,8 @@ export class BankReconciliationService extends BaseService {
     }
 
     /**
-     * Reconciliation report
-     * Returns the reconciliation report: opening (GL) and closing (statement) balances, matched vs outstanding lines, adjustments, and the outstanding difference. Returns 404 RECONCILIATION_NOT_FOUND if the id is unknown.
+     * Get Reconciliation Report
+     * Returns the reconciliation report: opening GL and closing statement balances, matched versus outstanding lines, adjustments and the outstanding difference. Use this tool to see how far a reconciliation is from balancing before finalizeReconciliation; use getReconciliation instead for the raw line-level detail. Preconditions: the reconciliation must exist. Required inputs: reconciliationId (UUID) as a path parameter; there is no request body. Emits an ACCOUNTING_RECONCILIATION_REPORT audit event; no state changes. Returns 404 RECONCILIATION_NOT_FOUND when the id is unknown. 
      * @endpoint get /v1/accounting/reconciliations/{reconciliationId}/report
      * @param reconciliationId Reconciliation id
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -368,10 +368,10 @@ export class BankReconciliationService extends BaseService {
     }
 
     /**
-     * Import a bank statement CSV and start a reconciliation
-     * Parses a bank statement CSV (columns: date, description, amount [signed], reference) for a reconcilable GL cash account and creates an IN_PROGRESS reconciliation with its imported statement lines (UNMATCHED). The GL ending balance is snapshotted from posted journal-entry lines on the account as-of the statement date. Returns 422 ACCOUNT_NOT_RECONCILABLE if the account\&#39;s reconcilable flag (story H1) is false, and 400 if the CSV is malformed.
+     * Import Bank Statement CSV
+     * Parses a bank statement CSV (columns: date, description, signed amount, reference) for a reconcilable GL cash account and creates an IN_PROGRESS reconciliation whose statement lines start UNMATCHED, snapshotting the GL ending balance from posted journal-entry lines as of the statement date. Use this tool to start a reconciliation cycle; do not use matchReconciliation, addReconciliationAdjustment or finalizeReconciliation, which operate on a reconciliation that already exists. Preconditions: the GL account must exist with its reconcilable flag set to true. Required inputs: glAccountId (UUID), periodStartDate, periodEndDate, statementDate, statementEndingBalance, currency (3-letter ISO code) and the csv text itself. Emits an ACCOUNTING_RECONCILIATION_IMPORT event. Returns 422 ACCOUNT_NOT_RECONCILABLE when the account\&#39;s reconcilable flag is false, and 400 when the CSV is malformed. 
      * @endpoint post /v1/accounting/reconciliations/import
-     * @param bankReconciliationImportRequest 
+     * @param bankReconciliationImportRequest Statement metadata plus the raw CSV text to import for the cash account.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -438,8 +438,8 @@ export class BankReconciliationService extends BaseService {
     }
 
     /**
-     * List reconciliation adjustment types
-     * Returns the supported reconciliation adjustment types (decision D-6) so the frontend never hardcodes the enum. No preconditions and no side effects.
+     * List Reconciliation Adjustment Types
+     * Returns the supported reconciliation adjustment types with their sign rules (BANK_FEE and NSF_FEE negative-only, INTEREST_EARNED positive-only, OTHER any), so clients never hardcode the enum. Use this tool to populate an adjustment picker before calling addReconciliationAdjustment; do not use addReconciliationAdjustment itself just to discover the types. Preconditions: none. Required inputs: none; there are no parameters and no request body. Emits an ACCOUNTING_RECONCILIATION_ADJUSTMENT_TYPES_LIST audit event; no state changes. Returns 200 with the full static type list. 
      * @endpoint get /v1/accounting/reconciliations/adjustment-types
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
@@ -494,8 +494,8 @@ export class BankReconciliationService extends BaseService {
     }
 
     /**
-     * List reconciliations
-     * Lists reconciliations, optionally filtered by glAccountId and/or status, most recent first. Paginated. No side effects.
+     * List Reconciliations
+     * Lists bank reconciliations most recent first as a paginated projection, optionally filtered by GL account and status. Use this tool to find in-progress or finalized reconciliations; do not use getReconciliation, which fetches one reconciliation with its lines by id. Preconditions: none beyond the caller holding accounting:reconciliation:view. Required inputs: none; glAccountId and status (IN_PROGRESS, FINALIZED) are optional filters, page defaults to 0 and size to 20. Emits an ACCOUNTING_RECONCILIATION_LIST audit event; no state changes. Returns 200 with an empty page when nothing matches the filters. 
      * @endpoint get /v1/accounting/reconciliations
      * @param glAccountId Filter by reconciled GL account id
      * @param status Filter by reconciliation status
@@ -593,11 +593,11 @@ export class BankReconciliationService extends BaseService {
     }
 
     /**
-     * Match statement lines to GL lines
-     * Matches a set of statement lines to a set of posted GL journal-entry lines on the reconciled account (1-to-1 or N-to-1). The two sets must net to equal signed amounts within ±0.01. Marks the statement lines MATCHED and records the linkage. Returns 404 RECONCILIATION_NOT_FOUND if the reconciliation or a line is missing, 409 RECONCILIATION_ALREADY_FINALIZED if the reconciliation is finalized, and 422 MATCH_AMOUNT_MISMATCH if the sets do not net.
+     * Match Statement Lines To GL Lines
+     * Matches a set of statement lines to a set of posted GL journal-entry lines on the reconciled account (1-to-1 or N-to-1), marking the statement lines MATCHED and recording the linkage. Use this tool to pair bank activity with ledger activity; do not use unmatchReconciliation, which reverses a match, and use addReconciliationAdjustment for bank-only items like fees that have no GL counterpart yet. Preconditions: the reconciliation must be IN_PROGRESS, every statement line must be UNMATCHED, every GL line must be POSTED and not already reconciled, and the two sets must net to equal signed amounts within 0.01. Required inputs: reconciliationId (UUID) as a path parameter plus non-empty statementLineIds and glLineIds lists. Emits an ACCOUNTING_RECONCILIATION_MATCH event; no journal entries are created by matching. Returns 404 RECONCILIATION_NOT_FOUND when the reconciliation or a line is missing, 409 RECONCILIATION_ALREADY_FINALIZED or RECONCILIATION_LINE_INELIGIBLE for state conflicts, and 422 MATCH_AMOUNT_MISMATCH when the sets do not net. 
      * @endpoint post /v1/accounting/reconciliations/{reconciliationId}/match
      * @param reconciliationId Reconciliation id
-     * @param reconciliationMatchRequest 
+     * @param reconciliationMatchRequest Statement-line and GL-line id sets to link; the sets must net to equal amounts.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -667,11 +667,11 @@ export class BankReconciliationService extends BaseService {
     }
 
     /**
-     * Reverse a match
-     * Reverses a match by matchId or by statement line ids, returning the affected statement lines to UNMATCHED and releasing the linked GL lines. Returns 404 RECONCILIATION_NOT_FOUND if the reconciliation or match group is missing, and 409 RECONCILIATION_ALREADY_FINALIZED if the reconciliation is finalized.
+     * Reverse A Reconciliation Match
+     * Reverses a previously recorded match, returning the affected statement lines to UNMATCHED and releasing the linked GL lines for re-matching. Use this tool to correct a wrong pairing while the reconciliation is still IN_PROGRESS; do not use matchReconciliation, which records new matches. Preconditions: the reconciliation must not be FINALIZED, and either the matchId or the statementLineIds must resolve to exactly one match group. Required inputs: reconciliationId (UUID) as a path parameter plus matchId or statementLineIds in the body (one of the two is required). Emits an ACCOUNTING_RECONCILIATION_UNMATCH event. Returns 404 RECONCILIATION_NOT_FOUND when the reconciliation or match group is missing, 409 RECONCILIATION_ALREADY_FINALIZED when finalized, and 400 when neither identifier resolves to a single match group. 
      * @endpoint post /v1/accounting/reconciliations/{reconciliationId}/unmatch
      * @param reconciliationId Reconciliation id
-     * @param reconciliationUnmatchRequest 
+     * @param reconciliationUnmatchRequest Match group to reverse, identified by matchId or by its statement line ids.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options

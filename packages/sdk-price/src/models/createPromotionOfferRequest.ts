@@ -14,14 +14,6 @@
  */
 export interface CreatePromotionOfferRequest { 
     /**
-     * Unique promotion code
-     */
-    promoCode: string;
-    /**
-     * Display name for the promotion
-     */
-    name: string;
-    /**
      * Optional promotion description
      */
     description?: string | null;
@@ -34,21 +26,29 @@ export interface CreatePromotionOfferRequest {
      */
     discountValue: number;
     /**
-     * Date when promotion becomes valid
-     */
-    startDate: string;
-    /**
      * Date when promotion expires
      */
     endDate: string;
     /**
-     * Maximum number of times promotion can be applied
+     * Display name for the promotion
      */
-    usageLimit?: number | null;
+    name: string;
+    /**
+     * Unique promotion code
+     */
+    promoCode: string;
+    /**
+     * Date when promotion becomes valid
+     */
+    startDate: string;
     /**
      * Optional store/location code that scopes the promotion
      */
     storeCode?: string | null;
+    /**
+     * Maximum number of times promotion can be applied
+     */
+    usageLimit?: number | null;
 }
 export enum CreatePromotionOfferRequestDiscountTypeEnum {
     PercentLabor = 'PERCENT_LABOR',
@@ -96,8 +96,8 @@ export function instanceOfCreatePromotionOfferRequest(value: object): value is C
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createCreatePromotionOfferRequestPropertyNames('promoCode', 'name', 'discountType', 'discountValue', 'startDate', 'endDate', );
-    const optionalStringProperties = createCreatePromotionOfferRequestOptionalProperties({ name: 'promoCode', nullable: false }, { name: 'name', nullable: false }, { name: 'description', nullable: true }, { name: 'discountType', nullable: false }, { name: 'startDate', nullable: false }, { name: 'endDate', nullable: false }, { name: 'storeCode', nullable: true }, );
+    const requiredProperties = createCreatePromotionOfferRequestPropertyNames('discountType', 'discountValue', 'endDate', 'name', 'promoCode', 'startDate', );
+    const optionalStringProperties = createCreatePromotionOfferRequestOptionalProperties({ name: 'description', nullable: true }, { name: 'discountType', nullable: false }, { name: 'endDate', nullable: false }, { name: 'name', nullable: false }, { name: 'promoCode', nullable: false }, { name: 'startDate', nullable: false }, { name: 'storeCode', nullable: true }, );
     const optionalNumberProperties = createCreatePromotionOfferRequestOptionalProperties({ name: 'discountValue', nullable: false }, { name: 'usageLimit', nullable: true }, );
     const optionalBooleanProperties = createCreatePromotionOfferRequestOptionalProperties();
 

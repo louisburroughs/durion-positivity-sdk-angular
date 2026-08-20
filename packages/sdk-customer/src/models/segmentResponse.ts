@@ -15,38 +15,38 @@ import { SegmentResponsePredicate } from './segmentResponsePredicate';
  */
 export interface SegmentResponse { 
     /**
-     * Segment identifier
+     * Whether the segment can be bound to a campaign
      */
-    segmentId: string;
-    /**
-     * Segment name
-     */
-    name: string;
-    /**
-     * What the segment is for
-     */
-    description?: string;
+    active: boolean;
     /**
      * Targeted party kind
      */
     audienceType: SegmentResponseAudienceTypeEnum;
     /**
-     * How membership is determined
+     * Creation timestamp
      */
-    type: SegmentResponseTypeEnum;
-    predicate?: SegmentResponsePredicate;
+    createdAt?: string;
     /**
-     * Whether the segment can be bound to a campaign
+     * What the segment is for
      */
-    active: boolean;
+    description?: string;
     /**
      * Pinned member count for STATIC segments; null for DYNAMIC
      */
     memberCount?: number;
     /**
-     * Creation timestamp
+     * Segment name
      */
-    createdAt?: string;
+    name: string;
+    predicate?: SegmentResponsePredicate;
+    /**
+     * Segment identifier
+     */
+    segmentId: string;
+    /**
+     * How membership is determined
+     */
+    type: SegmentResponseTypeEnum;
     /**
      * Last update timestamp
      */
@@ -101,8 +101,8 @@ export function instanceOfSegmentResponse(value: object): value is SegmentRespon
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createSegmentResponsePropertyNames('segmentId', 'name', 'audienceType', 'type', 'active', );
-    const optionalStringProperties = createSegmentResponseOptionalProperties({ name: 'segmentId', nullable: false }, { name: 'name', nullable: false }, { name: 'description', nullable: false }, { name: 'audienceType', nullable: false }, { name: 'type', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'updatedAt', nullable: false }, );
+    const requiredProperties = createSegmentResponsePropertyNames('active', 'audienceType', 'name', 'segmentId', 'type', );
+    const optionalStringProperties = createSegmentResponseOptionalProperties({ name: 'audienceType', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'description', nullable: false }, { name: 'name', nullable: false }, { name: 'segmentId', nullable: false }, { name: 'type', nullable: false }, { name: 'updatedAt', nullable: false }, );
     const optionalNumberProperties = createSegmentResponseOptionalProperties({ name: 'memberCount', nullable: false }, );
     const optionalBooleanProperties = createSegmentResponseOptionalProperties({ name: 'active', nullable: false }, );
 

@@ -14,53 +14,81 @@
  */
 export interface ScrapResponse { 
     /**
-     * Scrap document identifier
+     * Approval timestamp
      */
-    scrapId?: string;
+    approvedAt?: string;
     /**
-     * SKU / stock item identifier
+     * User who approved the scrap (SYSTEM for auto-approval)
      */
-    stockItemId?: string;
-    /**
-     * Quantity written off
-     */
-    quantity?: number;
-    /**
-     * Location the stock is scrapped from
-     */
-    locationId?: string;
-    /**
-     * Bin-level storage location, when bin-scoped
-     */
-    storageLocationId?: string;
-    /**
-     * Scrap reason
-     */
-    reasonCode?: ScrapResponseReasonCodeEnum;
-    /**
-     * Free-text notes
-     */
-    notes?: string;
-    /**
-     * Linked workorder, when the part was damaged during a job
-     */
-    workorderId?: string;
-    /**
-     * Lot the scrapped units belong to (LOT-tracked SKUs)
-     */
-    lotId?: string;
+    approvedBy?: string;
     /**
      * Photo/attachment reference
      */
     attachmentReference?: string;
     /**
-     * Unit cost snapshot at creation; null when unknown
-     */
-    unitCostSnapshot?: number;
-    /**
      * Origin of the cost snapshot (LATEST_RECEIPT or NONE)
      */
     costSource?: ScrapResponseCostSourceEnum;
+    /**
+     * Creation timestamp
+     */
+    createdAt?: string;
+    /**
+     * User who created the scrap
+     */
+    createdBy?: string;
+    /**
+     * Error message when status is FAILED
+     */
+    errorMessage?: string;
+    /**
+     * SCRAP_OUT ledger entry created when posted
+     */
+    ledgerEntryId?: string;
+    /**
+     * Location the stock is scrapped from
+     */
+    locationId?: string;
+    /**
+     * Lot the scrapped units belong to (LOT-tracked SKUs)
+     */
+    lotId?: string;
+    /**
+     * Free-text notes
+     */
+    notes?: string;
+    /**
+     * Ledger posting timestamp
+     */
+    postedAt?: string;
+    /**
+     * Quantity written off
+     */
+    quantity?: number;
+    /**
+     * Scrap reason
+     */
+    reasonCode?: ScrapResponseReasonCodeEnum;
+    /**
+     * Rejection timestamp
+     */
+    rejectedAt?: string;
+    /**
+     * User who rejected the scrap
+     */
+    rejectedBy?: string;
+    /**
+     * Reason the scrap was rejected
+     */
+    rejectionReason?: string;
+    /**
+     * Required approval tier; null when auto-approved
+     */
+    requiredApprovalTier?: ScrapResponseRequiredApprovalTierEnum;
+    /**
+     * Scrap document identifier
+     */
+    scrapId?: string;
     /**
      * Monetary value of the scrap (quantity x cost snapshot); null when cost is unknown
      */
@@ -74,54 +102,30 @@ export interface ScrapResponse {
      */
     status?: ScrapResponseStatusEnum;
     /**
-     * Required approval tier; null when auto-approved
+     * SKU / stock item identifier
      */
-    requiredApprovalTier?: ScrapResponseRequiredApprovalTierEnum;
+    stockItemId?: string;
     /**
-     * User who created the scrap
+     * Bin-level storage location, when bin-scoped
      */
-    createdBy?: string;
+    storageLocationId?: string;
     /**
-     * User who approved the scrap (SYSTEM for auto-approval)
+     * Unit cost snapshot at creation; null when unknown
      */
-    approvedBy?: string;
-    /**
-     * User who rejected the scrap
-     */
-    rejectedBy?: string;
-    /**
-     * Reason the scrap was rejected
-     */
-    rejectionReason?: string;
-    /**
-     * SCRAP_OUT ledger entry created when posted
-     */
-    ledgerEntryId?: string;
-    /**
-     * Error message when status is FAILED
-     */
-    errorMessage?: string;
-    /**
-     * Creation timestamp
-     */
-    createdAt?: string;
+    unitCostSnapshot?: number;
     /**
      * Last update timestamp
      */
     updatedAt?: string;
     /**
-     * Approval timestamp
+     * Linked workorder, when the part was damaged during a job
      */
-    approvedAt?: string;
-    /**
-     * Rejection timestamp
-     */
-    rejectedAt?: string;
-    /**
-     * Ledger posting timestamp
-     */
-    postedAt?: string;
+    workorderId?: string;
 }
+export enum ScrapResponseCostSourceEnum {
+    LatestReceipt = 'LATEST_RECEIPT',
+    None = 'NONE'
+};
 export enum ScrapResponseReasonCodeEnum {
     Damaged = 'DAMAGED',
     Expired = 'EXPIRED',
@@ -131,9 +135,9 @@ export enum ScrapResponseReasonCodeEnum {
     WarrantyDestroyed = 'WARRANTY_DESTROYED',
     Other = 'OTHER'
 };
-export enum ScrapResponseCostSourceEnum {
-    LatestReceipt = 'LATEST_RECEIPT',
-    None = 'NONE'
+export enum ScrapResponseRequiredApprovalTierEnum {
+    Tier1Manager = 'TIER_1_MANAGER',
+    Tier2Director = 'TIER_2_DIRECTOR'
 };
 export enum ScrapResponseStatusEnum {
     PendingApproval = 'PENDING_APPROVAL',
@@ -142,10 +146,6 @@ export enum ScrapResponseStatusEnum {
     Posted = 'POSTED',
     Rejected = 'REJECTED',
     Failed = 'FAILED'
-};
-export enum ScrapResponseRequiredApprovalTierEnum {
-    Tier1Manager = 'TIER_1_MANAGER',
-    Tier2Director = 'TIER_2_DIRECTOR'
 };
 
 
@@ -189,8 +189,8 @@ export function instanceOfScrapResponse(value: object): value is ScrapResponse {
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createScrapResponsePropertyNames();
-    const optionalStringProperties = createScrapResponseOptionalProperties({ name: 'scrapId', nullable: false }, { name: 'stockItemId', nullable: false }, { name: 'locationId', nullable: false }, { name: 'storageLocationId', nullable: false }, { name: 'reasonCode', nullable: false }, { name: 'notes', nullable: false }, { name: 'workorderId', nullable: false }, { name: 'lotId', nullable: false }, { name: 'attachmentReference', nullable: false }, { name: 'costSource', nullable: false }, { name: 'status', nullable: false }, { name: 'requiredApprovalTier', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'approvedBy', nullable: false }, { name: 'rejectedBy', nullable: false }, { name: 'rejectionReason', nullable: false }, { name: 'ledgerEntryId', nullable: false }, { name: 'errorMessage', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'updatedAt', nullable: false }, { name: 'approvedAt', nullable: false }, { name: 'rejectedAt', nullable: false }, { name: 'postedAt', nullable: false }, );
-    const optionalNumberProperties = createScrapResponseOptionalProperties({ name: 'quantity', nullable: false }, { name: 'unitCostSnapshot', nullable: false }, { name: 'scrapValue', nullable: false }, );
+    const optionalStringProperties = createScrapResponseOptionalProperties({ name: 'approvedAt', nullable: false }, { name: 'approvedBy', nullable: false }, { name: 'attachmentReference', nullable: false }, { name: 'costSource', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'errorMessage', nullable: false }, { name: 'ledgerEntryId', nullable: false }, { name: 'locationId', nullable: false }, { name: 'lotId', nullable: false }, { name: 'notes', nullable: false }, { name: 'postedAt', nullable: false }, { name: 'reasonCode', nullable: false }, { name: 'rejectedAt', nullable: false }, { name: 'rejectedBy', nullable: false }, { name: 'rejectionReason', nullable: false }, { name: 'requiredApprovalTier', nullable: false }, { name: 'scrapId', nullable: false }, { name: 'status', nullable: false }, { name: 'stockItemId', nullable: false }, { name: 'storageLocationId', nullable: false }, { name: 'updatedAt', nullable: false }, { name: 'workorderId', nullable: false }, );
+    const optionalNumberProperties = createScrapResponseOptionalProperties({ name: 'quantity', nullable: false }, { name: 'scrapValue', nullable: false }, { name: 'unitCostSnapshot', nullable: false }, );
     const optionalBooleanProperties = createScrapResponseOptionalProperties({ name: 'shouldReplenish', nullable: false }, );
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

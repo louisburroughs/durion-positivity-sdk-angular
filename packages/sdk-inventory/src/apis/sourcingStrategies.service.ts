@@ -41,19 +41,19 @@ export class SourcingStrategiesService extends BaseService {
 
     /**
      * Deactivate sourcing strategy configuration
-     * Soft delete: marks the configuration row inactive so it stops participating in strategy resolution; the row is never removed.
+     * Deactivates one sourcing-strategy configuration row so it stops participating in strategy resolution; this is a soft delete and the row is never removed. Use this tool to retire a scope override and fall back to the next precedence level; do not use upsertSourcingStrategyConfig with a different strategy when the intent is to remove the override entirely. Preconditions: the configuration row must exist; deactivating an already inactive row is a no-op that returns the row. Required inputs: configId (UUID) path parameter; there is no request body. Emits an INVENTORY_SOURCING_STRATEGY_DEACTIVATE event; subsequent decisions fall back to SITE, DEFAULT or the platform default FIFO. Returns 404 when no configuration exists for the supplied id. 
      * @endpoint delete /v1/inventory/sourcing-strategies/{configId}
      * @param configId Sourcing strategy configuration identifier
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public deactivateConfig(configId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<SourcingStrategyConfigResponse>;
-    public deactivateConfig(configId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<SourcingStrategyConfigResponse>>;
-    public deactivateConfig(configId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<SourcingStrategyConfigResponse>>;
-    public deactivateConfig(configId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public deactivateSourcingStrategyConfig(configId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<SourcingStrategyConfigResponse>;
+    public deactivateSourcingStrategyConfig(configId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<SourcingStrategyConfigResponse>>;
+    public deactivateSourcingStrategyConfig(configId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<SourcingStrategyConfigResponse>>;
+    public deactivateSourcingStrategyConfig(configId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (configId === null || configId === undefined) {
-            throw new Error('Required parameter configId was null or undefined when calling deactivateConfig.');
+            throw new Error('Required parameter configId was null or undefined when calling deactivateSourcingStrategyConfig.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -101,16 +101,16 @@ export class SourcingStrategiesService extends BaseService {
 
     /**
      * List sourcing strategy configurations
-     * Lists all sourcing strategy configuration rows (active and inactive), ordered by scope. Resolution precedence at decision time is SKU_CATEGORY, then SITE, then DEFAULT, then the platform default FIFO.
+     * Lists every sourcing-strategy configuration row, active and inactive, ordered by scope type then scope value. Use this tool to inspect removal-strategy configuration; use upsertSourcingStrategyConfig instead to change a scope, and deactivateSourcingStrategyConfig instead to retire one. Preconditions: none; at most one row exists per scope. Required inputs: none, and there is no paging or filtering. Emits an INVENTORY_SOURCING_STRATEGY_LIST audit event; no configuration is changed. Returns 200 with an empty array when nothing is configured, in which case decision-time resolution falls through SKU_CATEGORY, SITE and DEFAULT to the platform default FIFO. 
      * @endpoint get /v1/inventory/sourcing-strategies
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public listConfigs1(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<SourcingStrategyConfigResponse>>;
-    public listConfigs1(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<SourcingStrategyConfigResponse>>>;
-    public listConfigs1(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<SourcingStrategyConfigResponse>>>;
-    public listConfigs1(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public listSourcingStrategyConfigs(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<SourcingStrategyConfigResponse>>;
+    public listSourcingStrategyConfigs(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<SourcingStrategyConfigResponse>>>;
+    public listSourcingStrategyConfigs(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<SourcingStrategyConfigResponse>>>;
+    public listSourcingStrategyConfigs(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -157,19 +157,19 @@ export class SourcingStrategiesService extends BaseService {
 
     /**
      * Upsert sourcing strategy configuration
-     * Creates or updates the sourcing strategy for one scope (SKU_CATEGORY, SITE, or DEFAULT) and reactivates it. At most one row exists per scope.
+     * Creates or updates the sourcing strategy for one scope and reactivates the row; at most one row exists per scopeType and scopeValue pair. Use this tool to set FIFO, FEFO, PROXIMITY or HIGHEST_STOCK at a scope; do not use deactivateSourcingStrategyConfig to change a strategy — an upsert on an inactive row reactivates it with the new strategy. Preconditions: none beyond scope-value shape; note that FEFO falls back to FIFO while the SKU has no lot-expiry data, PROXIMITY falls back to FIFO when a decision has no reference location, and SKU_CATEGORY rows are stored but unresolvable until the catalog replica carries categories. Required inputs: scopeType (SKU_CATEGORY, SITE or DEFAULT) and strategy; scopeValue must be the category string for SKU_CATEGORY, the site UUID as text for SITE, and must be omitted for DEFAULT. Emits an INVENTORY_SOURCING_STRATEGY_UPSERT event; the change affects subsequent sourcing decisions immediately. Returns 400 when scopeValue is missing for SITE or SKU_CATEGORY, is not a UUID for SITE, or is present for DEFAULT. 
      * @endpoint put /v1/inventory/sourcing-strategies
-     * @param sourcingStrategyConfigRequest 
+     * @param sourcingStrategyConfigRequest The scope being configured and the sourcing strategy to apply at it.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public upsertConfig1(sourcingStrategyConfigRequest: SourcingStrategyConfigRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<SourcingStrategyConfigResponse>;
-    public upsertConfig1(sourcingStrategyConfigRequest: SourcingStrategyConfigRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<SourcingStrategyConfigResponse>>;
-    public upsertConfig1(sourcingStrategyConfigRequest: SourcingStrategyConfigRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<SourcingStrategyConfigResponse>>;
-    public upsertConfig1(sourcingStrategyConfigRequest: SourcingStrategyConfigRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public upsertSourcingStrategyConfig(sourcingStrategyConfigRequest: SourcingStrategyConfigRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<SourcingStrategyConfigResponse>;
+    public upsertSourcingStrategyConfig(sourcingStrategyConfigRequest: SourcingStrategyConfigRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<SourcingStrategyConfigResponse>>;
+    public upsertSourcingStrategyConfig(sourcingStrategyConfigRequest: SourcingStrategyConfigRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<SourcingStrategyConfigResponse>>;
+    public upsertSourcingStrategyConfig(sourcingStrategyConfigRequest: SourcingStrategyConfigRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (sourcingStrategyConfigRequest === null || sourcingStrategyConfigRequest === undefined) {
-            throw new Error('Required parameter sourcingStrategyConfigRequest was null or undefined when calling upsertConfig1.');
+            throw new Error('Required parameter sourcingStrategyConfigRequest was null or undefined when calling upsertSourcingStrategyConfig.');
         }
 
         let localVarHeaders = this.defaultHeaders;

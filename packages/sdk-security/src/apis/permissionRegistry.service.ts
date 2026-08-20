@@ -50,20 +50,140 @@ export class PermissionRegistryService extends BaseService {
     }
 
     /**
-     * Decode perm_bits for diagnostics
-     * Decodes a perm_bits Base64URL BitSet back to permission code strings. For debugging only.
-     * @endpoint post /v1/users/permissions/decode
-     * @param permissionDecodeRequest 
+     * Check Whether a Permission Is Registered
+     * Checks whether a permission with the given name is registered in the central registry. Use this tool to test registration state; use validatePermissionName instead for a pure format check that ignores the database. Preconditions: the caller must hold security:permission:view. Required inputs: permissionName as a path parameter in domain:resource:action format. No events are emitted and no state changes; this is a read-only existence check. Returns 200 with a plain boolean body; an unregistered name yields false, never an error status. 
+     * @endpoint get /v1/users/permissions/exists/{permissionName}
+     * @param permissionName 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public decodePermissions(permissionDecodeRequest: PermissionDecodeRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PermissionDecodeResponse>;
-    public decodePermissions(permissionDecodeRequest: PermissionDecodeRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PermissionDecodeResponse>>;
-    public decodePermissions(permissionDecodeRequest: PermissionDecodeRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PermissionDecodeResponse>>;
-    public decodePermissions(permissionDecodeRequest: PermissionDecodeRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public checkPermissionExists(permissionName: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<boolean>;
+    public checkPermissionExists(permissionName: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<boolean>>;
+    public checkPermissionExists(permissionName: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<boolean>>;
+    public checkPermissionExists(permissionName: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (permissionName === null || permissionName === undefined) {
+            throw new Error('Required parameter permissionName was null or undefined when calling checkPermissionExists.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/users/permissions/exists/${this.configuration.encodeParam({name: "permissionName", value: permissionName, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<boolean>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Check Whether a Permission Is Registered
+     * Checks whether a permission with the given name is registered in the central registry. Use this tool to test registration state; use validatePermissionName instead for a pure format check that ignores the database. Preconditions: the caller must hold security:permission:view. Required inputs: permissionName as a path parameter in domain:resource:action format. No events are emitted and no state changes; this is a read-only existence check. Returns 200 with a plain boolean body; an unregistered name yields false, never an error status. 
+     * @endpoint get /v1/permissions/exists/{permissionName}
+     * @param permissionName 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public checkPermissionExists1(permissionName: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<boolean>;
+    public checkPermissionExists1(permissionName: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<boolean>>;
+    public checkPermissionExists1(permissionName: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<boolean>>;
+    public checkPermissionExists1(permissionName: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (permissionName === null || permissionName === undefined) {
+            throw new Error('Required parameter permissionName was null or undefined when calling checkPermissionExists1.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/permissions/exists/${this.configuration.encodeParam({name: "permissionName", value: permissionName, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<boolean>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Decode Permission Bits for Diagnostics
+     * Decodes a Base64URL perm_bits bitset taken from an access token back into sorted permission code strings for diagnostics. Use this tool to inspect what a token\&#39;s perm_bits claim grants; do not use getUserPermissions, which reads a user\&#39;s effective permissions from role assignments instead of from a token. Preconditions: the caller must hold security:permission:view, and perm_ver must equal the catalog version currently compiled into the service (see getPermissionCatalogVersion). Required inputs: perm_bits, the Base64URL-encoded BitSet string, and perm_ver, a positive integer catalog version. Emits a SECURITY_PERMISSION_DECODE_EXECUTE event; no records are changed. Returns 400 when perm_bits is blank, perm_ver is not positive, or perm_ver does not match the current catalog version. 
+     * @endpoint post /v1/users/permissions/decode
+     * @param permissionDecodeRequest Encoded permission bitset and the catalog version it was encoded with.
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public decodePermissionBits(permissionDecodeRequest: PermissionDecodeRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PermissionDecodeResponse>;
+    public decodePermissionBits(permissionDecodeRequest: PermissionDecodeRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PermissionDecodeResponse>>;
+    public decodePermissionBits(permissionDecodeRequest: PermissionDecodeRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PermissionDecodeResponse>>;
+    public decodePermissionBits(permissionDecodeRequest: PermissionDecodeRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (permissionDecodeRequest === null || permissionDecodeRequest === undefined) {
-            throw new Error('Required parameter permissionDecodeRequest was null or undefined when calling decodePermissions.');
+            throw new Error('Required parameter permissionDecodeRequest was null or undefined when calling decodePermissionBits.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -120,20 +240,20 @@ export class PermissionRegistryService extends BaseService {
     }
 
     /**
-     * Decode perm_bits for diagnostics
-     * Decodes a perm_bits Base64URL BitSet back to permission code strings. For debugging only.
+     * Decode Permission Bits for Diagnostics
+     * Decodes a Base64URL perm_bits bitset taken from an access token back into sorted permission code strings for diagnostics. Use this tool to inspect what a token\&#39;s perm_bits claim grants; do not use getUserPermissions, which reads a user\&#39;s effective permissions from role assignments instead of from a token. Preconditions: the caller must hold security:permission:view, and perm_ver must equal the catalog version currently compiled into the service (see getPermissionCatalogVersion). Required inputs: perm_bits, the Base64URL-encoded BitSet string, and perm_ver, a positive integer catalog version. Emits a SECURITY_PERMISSION_DECODE_EXECUTE event; no records are changed. Returns 400 when perm_bits is blank, perm_ver is not positive, or perm_ver does not match the current catalog version. 
      * @endpoint post /v1/permissions/decode
-     * @param permissionDecodeRequest 
+     * @param permissionDecodeRequest Encoded permission bitset and the catalog version it was encoded with.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public decodePermissions1(permissionDecodeRequest: PermissionDecodeRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PermissionDecodeResponse>;
-    public decodePermissions1(permissionDecodeRequest: PermissionDecodeRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PermissionDecodeResponse>>;
-    public decodePermissions1(permissionDecodeRequest: PermissionDecodeRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PermissionDecodeResponse>>;
-    public decodePermissions1(permissionDecodeRequest: PermissionDecodeRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public decodePermissionBits1(permissionDecodeRequest: PermissionDecodeRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PermissionDecodeResponse>;
+    public decodePermissionBits1(permissionDecodeRequest: PermissionDecodeRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PermissionDecodeResponse>>;
+    public decodePermissionBits1(permissionDecodeRequest: PermissionDecodeRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PermissionDecodeResponse>>;
+    public decodePermissionBits1(permissionDecodeRequest: PermissionDecodeRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (permissionDecodeRequest === null || permissionDecodeRequest === undefined) {
-            throw new Error('Required parameter permissionDecodeRequest was null or undefined when calling decodePermissions1.');
+            throw new Error('Required parameter permissionDecodeRequest was null or undefined when calling decodePermissionBits1.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -190,114 +310,8 @@ export class PermissionRegistryService extends BaseService {
     }
 
     /**
-     * Get current permission catalog version
-     * Returns the active catalog version and total permission count. No authentication required.
-     * @endpoint get /v1/permissions/catalog-version
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     * @param options additional options
-     */
-    public getCatalogVersion(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<CatalogVersionResponse>;
-    public getCatalogVersion(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<CatalogVersionResponse>>;
-    public getCatalogVersion(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<CatalogVersionResponse>>;
-    public getCatalogVersion(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
-
-        let localVarHeaders = this.defaultHeaders;
-
-        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
-            'application/json'
-        ]);
-        if (localVarHttpHeaderAcceptSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
-        }
-
-        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
-
-        const localVarTransferCache: boolean = options?.transferCache ?? true;
-
-
-        let responseType_: 'text' | 'json' | 'blob' = 'json';
-        if (localVarHttpHeaderAcceptSelected) {
-            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
-                responseType_ = 'text';
-            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
-                responseType_ = 'json';
-            } else {
-                responseType_ = 'blob';
-            }
-        }
-
-        let localVarPath = `/v1/permissions/catalog-version`;
-        const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<CatalogVersionResponse>('get', `${basePath}${localVarPath}`,
-            {
-                context: localVarHttpContext,
-                responseType: <any>responseType_,
-                ...(withCredentials ? { withCredentials } : {}),
-                headers: localVarHeaders,
-                observe: observe,
-                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * Get current permission catalog version
-     * Returns the active catalog version and total permission count. No authentication required.
-     * @endpoint get /v1/users/permissions/catalog-version
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     * @param options additional options
-     */
-    public getCatalogVersion1(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<CatalogVersionResponse>;
-    public getCatalogVersion1(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<CatalogVersionResponse>>;
-    public getCatalogVersion1(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<CatalogVersionResponse>>;
-    public getCatalogVersion1(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
-
-        let localVarHeaders = this.defaultHeaders;
-
-        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
-            'application/json'
-        ]);
-        if (localVarHttpHeaderAcceptSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
-        }
-
-        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
-
-        const localVarTransferCache: boolean = options?.transferCache ?? true;
-
-
-        let responseType_: 'text' | 'json' | 'blob' = 'json';
-        if (localVarHttpHeaderAcceptSelected) {
-            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
-                responseType_ = 'text';
-            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
-                responseType_ = 'json';
-            } else {
-                responseType_ = 'blob';
-            }
-        }
-
-        let localVarPath = `/v1/users/permissions/catalog-version`;
-        const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<CatalogVersionResponse>('get', `${basePath}${localVarPath}`,
-            {
-                context: localVarHttpContext,
-                responseType: <any>responseType_,
-                ...(withCredentials ? { withCredentials } : {}),
-                headers: localVarHeaders,
-                observe: observe,
-                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * Get permission by identifier
-     * Returns a single registered permission by its UUID identifier.
+     * Get Permission by Identifier
+     * Returns a single registered permission by its UUID identifier, including name, domain, description, and deprecation flag. Use this tool when the permission id is already known; use listPermissions instead to search by domain or page through the registry. Preconditions: the caller must hold security:permission:view and the permission must exist in the registry. Required inputs: id (UUID) as a path parameter. No events are emitted and no state changes; this is a read-only projection. Returns 404 when no permission exists for the supplied id. 
      * @endpoint get /v1/users/permissions/{id}
      * @param id 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -356,8 +370,8 @@ export class PermissionRegistryService extends BaseService {
     }
 
     /**
-     * Get permission by identifier
-     * Returns a single registered permission by its UUID identifier.
+     * Get Permission by Identifier
+     * Returns a single registered permission by its UUID identifier, including name, domain, description, and deprecation flag. Use this tool when the permission id is already known; use listPermissions instead to search by domain or page through the registry. Preconditions: the caller must hold security:permission:view and the permission must exist in the registry. Required inputs: id (UUID) as a path parameter. No events are emitted and no state changes; this is a read-only projection. Returns 404 when no permission exists for the supplied id. 
      * @endpoint get /v1/permissions/{id}
      * @param id 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -416,26 +430,19 @@ export class PermissionRegistryService extends BaseService {
     }
 
     /**
-     * Get permissions by domain
-     * Returns all permissions for a specific domain/service
-     * @endpoint get /v1/users/permissions/domain/{domain}
-     * @param domain 
+     * Get Current Permission Catalog Version
+     * Returns the permission catalog version compiled into this service build and the total number of permission codes in that catalog. Use this tool to check whether a cached perm_bits decoding is stale before calling decodePermissionBits; do not use listPermissions, which pages the database registry rather than the compiled catalog. Preconditions: none; the endpoint is public and requires no authentication. Required inputs: none; there are no parameters and no request body. No events are emitted and no state changes; this is a read-only projection of the compiled PermissionCode catalog. Returns 200 in all cases; there are no business error conditions. 
+     * @endpoint get /v1/permissions/catalog-version
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public getPermissionsByDomain(domain: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<PermissionDto>>;
-    public getPermissionsByDomain(domain: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<PermissionDto>>>;
-    public getPermissionsByDomain(domain: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<PermissionDto>>>;
-    public getPermissionsByDomain(domain: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
-        if (domain === null || domain === undefined) {
-            throw new Error('Required parameter domain was null or undefined when calling getPermissionsByDomain.');
-        }
+    public getPermissionCatalogVersion(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<CatalogVersionResponse>;
+    public getPermissionCatalogVersion(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<CatalogVersionResponse>>;
+    public getPermissionCatalogVersion(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<CatalogVersionResponse>>;
+    public getPermissionCatalogVersion(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarHeaders = this.defaultHeaders;
-
-        // authentication (bearerAuth) required
-        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
 
         const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
             'application/json'
@@ -460,9 +467,9 @@ export class PermissionRegistryService extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/users/permissions/domain/${this.configuration.encodeParam({name: "domain", value: domain, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
+        let localVarPath = `/v1/permissions/catalog-version`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<Array<PermissionDto>>('get', `${basePath}${localVarPath}`,
+        return this.httpClient.request<CatalogVersionResponse>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,
@@ -476,26 +483,19 @@ export class PermissionRegistryService extends BaseService {
     }
 
     /**
-     * Get permissions by domain
-     * Returns all permissions for a specific domain/service
-     * @endpoint get /v1/permissions/domain/{domain}
-     * @param domain 
+     * Get Current Permission Catalog Version
+     * Returns the permission catalog version compiled into this service build and the total number of permission codes in that catalog. Use this tool to check whether a cached perm_bits decoding is stale before calling decodePermissionBits; do not use listPermissions, which pages the database registry rather than the compiled catalog. Preconditions: none; the endpoint is public and requires no authentication. Required inputs: none; there are no parameters and no request body. No events are emitted and no state changes; this is a read-only projection of the compiled PermissionCode catalog. Returns 200 in all cases; there are no business error conditions. 
+     * @endpoint get /v1/users/permissions/catalog-version
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public getPermissionsByDomain1(domain: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<PermissionDto>>;
-    public getPermissionsByDomain1(domain: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<PermissionDto>>>;
-    public getPermissionsByDomain1(domain: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<PermissionDto>>>;
-    public getPermissionsByDomain1(domain: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
-        if (domain === null || domain === undefined) {
-            throw new Error('Required parameter domain was null or undefined when calling getPermissionsByDomain1.');
-        }
+    public getPermissionCatalogVersion1(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<CatalogVersionResponse>;
+    public getPermissionCatalogVersion1(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<CatalogVersionResponse>>;
+    public getPermissionCatalogVersion1(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<CatalogVersionResponse>>;
+    public getPermissionCatalogVersion1(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarHeaders = this.defaultHeaders;
-
-        // authentication (bearerAuth) required
-        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
 
         const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
             'application/json'
@@ -520,9 +520,9 @@ export class PermissionRegistryService extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/permissions/domain/${this.configuration.encodeParam({name: "domain", value: domain, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
+        let localVarPath = `/v1/users/permissions/catalog-version`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<Array<PermissionDto>>('get', `${basePath}${localVarPath}`,
+        return this.httpClient.request<CatalogVersionResponse>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,
@@ -536,8 +536,8 @@ export class PermissionRegistryService extends BaseService {
     }
 
     /**
-     * List permissions
-     * Returns a paged list of registered permissions, optionally filtered by domain.
+     * List Registered Permissions
+     * Returns a paged list of registered permissions, optionally filtered to a single domain. Use this tool to browse or search the permission registry; use getPermissionById instead when the UUID is already known, and getRoleDefaultPermissions to see what a role name expands to. Preconditions: the caller must hold security:permission:view. Required inputs: none are mandatory; domain is an optional filter, and page, size, and sort follow Spring pageable defaults (page 0, size 20). No events are emitted and no state changes; this is a read-only projection. Returns 200 with an empty page when nothing matches, and 400 when pagination parameters are malformed. 
      * @endpoint get /v1/users/permissions
      * @param domain Optional domain filter
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -605,8 +605,8 @@ export class PermissionRegistryService extends BaseService {
     }
 
     /**
-     * List permissions
-     * Returns a paged list of registered permissions, optionally filtered by domain.
+     * List Registered Permissions
+     * Returns a paged list of registered permissions, optionally filtered to a single domain. Use this tool to browse or search the permission registry; use getPermissionById instead when the UUID is already known, and getRoleDefaultPermissions to see what a role name expands to. Preconditions: the caller must hold security:permission:view. Required inputs: none are mandatory; domain is an optional filter, and page, size, and sort follow Spring pageable defaults (page 0, size 20). No events are emitted and no state changes; this is a read-only projection. Returns 200 with an empty page when nothing matches, and 400 when pagination parameters are malformed. 
      * @endpoint get /v1/permissions
      * @param domain Optional domain filter
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -674,20 +674,20 @@ export class PermissionRegistryService extends BaseService {
     }
 
     /**
-     * Check if permission exists
-     * Returns true if the permission is registered
-     * @endpoint get /v1/users/permissions/exists/{permissionName}
-     * @param permissionName 
+     * List Permissions for One Domain
+     * Returns every registered permission for one domain as an unpaged list. Use this tool when a complete domain snapshot is needed; use listPermissions instead when paging or when no domain filter applies. Preconditions: the caller must hold security:permission:view. Required inputs: domain as a path parameter, matching the first segment of the permission name (for example catalog in catalog:product:view). No events are emitted and no state changes; this is a read-only projection. Returns 200 with an empty list when the domain has no registered permissions; an unknown domain is not an error. 
+     * @endpoint get /v1/users/permissions/domain/{domain}
+     * @param domain 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public permissionExists(permissionName: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<boolean>;
-    public permissionExists(permissionName: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<boolean>>;
-    public permissionExists(permissionName: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<boolean>>;
-    public permissionExists(permissionName: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
-        if (permissionName === null || permissionName === undefined) {
-            throw new Error('Required parameter permissionName was null or undefined when calling permissionExists.');
+    public listPermissionsByDomain(domain: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<PermissionDto>>;
+    public listPermissionsByDomain(domain: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<PermissionDto>>>;
+    public listPermissionsByDomain(domain: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<PermissionDto>>>;
+    public listPermissionsByDomain(domain: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (domain === null || domain === undefined) {
+            throw new Error('Required parameter domain was null or undefined when calling listPermissionsByDomain.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -718,9 +718,9 @@ export class PermissionRegistryService extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/users/permissions/exists/${this.configuration.encodeParam({name: "permissionName", value: permissionName, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
+        let localVarPath = `/v1/users/permissions/domain/${this.configuration.encodeParam({name: "domain", value: domain, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<boolean>('get', `${basePath}${localVarPath}`,
+        return this.httpClient.request<Array<PermissionDto>>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,
@@ -734,20 +734,20 @@ export class PermissionRegistryService extends BaseService {
     }
 
     /**
-     * Check if permission exists
-     * Returns true if the permission is registered
-     * @endpoint get /v1/permissions/exists/{permissionName}
-     * @param permissionName 
+     * List Permissions for One Domain
+     * Returns every registered permission for one domain as an unpaged list. Use this tool when a complete domain snapshot is needed; use listPermissions instead when paging or when no domain filter applies. Preconditions: the caller must hold security:permission:view. Required inputs: domain as a path parameter, matching the first segment of the permission name (for example catalog in catalog:product:view). No events are emitted and no state changes; this is a read-only projection. Returns 200 with an empty list when the domain has no registered permissions; an unknown domain is not an error. 
+     * @endpoint get /v1/permissions/domain/{domain}
+     * @param domain 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public permissionExists1(permissionName: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<boolean>;
-    public permissionExists1(permissionName: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<boolean>>;
-    public permissionExists1(permissionName: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<boolean>>;
-    public permissionExists1(permissionName: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
-        if (permissionName === null || permissionName === undefined) {
-            throw new Error('Required parameter permissionName was null or undefined when calling permissionExists1.');
+    public listPermissionsByDomain1(domain: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<PermissionDto>>;
+    public listPermissionsByDomain1(domain: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<PermissionDto>>>;
+    public listPermissionsByDomain1(domain: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<PermissionDto>>>;
+    public listPermissionsByDomain1(domain: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (domain === null || domain === undefined) {
+            throw new Error('Required parameter domain was null or undefined when calling listPermissionsByDomain1.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -778,9 +778,9 @@ export class PermissionRegistryService extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/permissions/exists/${this.configuration.encodeParam({name: "permissionName", value: permissionName, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
+        let localVarPath = `/v1/permissions/domain/${this.configuration.encodeParam({name: "domain", value: domain, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<boolean>('get', `${basePath}${localVarPath}`,
+        return this.httpClient.request<Array<PermissionDto>>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,
@@ -794,20 +794,20 @@ export class PermissionRegistryService extends BaseService {
     }
 
     /**
-     * Register permissions from a service
-     * Services call this endpoint to register their available permissions
+     * Register Module Permission Manifest
+     * Registers or updates a module\&#39;s permission manifest in the central registry; this is the endpoint every pos module\&#39;s permission-registry initializer calls at startup. Use this tool for idempotent bulk manifest registration that tolerates partial failure; do not use registerPermissionsContract, which rejects the entire payload on the first invalid key. Preconditions: the caller must hold security:permission:register (module initializers authenticate with an internal service token). Required inputs: serviceName and a non-empty permissions list of name and description entries; names must match domain:resource:action, while domain and version are informational. Emits a SECURITY_PERMISSION_REGISTER event; new names are inserted (with a bit index when the compiled catalog defines one), changed descriptions are updated, and unchanged or invalid entries are counted as skipped. Returns 400 when serviceName is blank or permissions is empty, and 400 with success&#x3D;false and a per-entry errors list when every entry failed; partial failures still return 200 with the errors listed in the response. 
      * @endpoint post /v1/users/permissions/register
-     * @param permissionRegistrationRequest 
+     * @param permissionRegistrationRequest Permission manifest published by one domain service at startup.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public registerPermissions(permissionRegistrationRequest: PermissionRegistrationRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PermissionRegistrationResponse>;
-    public registerPermissions(permissionRegistrationRequest: PermissionRegistrationRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PermissionRegistrationResponse>>;
-    public registerPermissions(permissionRegistrationRequest: PermissionRegistrationRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PermissionRegistrationResponse>>;
-    public registerPermissions(permissionRegistrationRequest: PermissionRegistrationRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public registerModulePermissions(permissionRegistrationRequest: PermissionRegistrationRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PermissionRegistrationResponse>;
+    public registerModulePermissions(permissionRegistrationRequest: PermissionRegistrationRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PermissionRegistrationResponse>>;
+    public registerModulePermissions(permissionRegistrationRequest: PermissionRegistrationRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PermissionRegistrationResponse>>;
+    public registerModulePermissions(permissionRegistrationRequest: PermissionRegistrationRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (permissionRegistrationRequest === null || permissionRegistrationRequest === undefined) {
-            throw new Error('Required parameter permissionRegistrationRequest was null or undefined when calling registerPermissions.');
+            throw new Error('Required parameter permissionRegistrationRequest was null or undefined when calling registerModulePermissions.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -864,20 +864,20 @@ export class PermissionRegistryService extends BaseService {
     }
 
     /**
-     * Register permissions from a service
-     * Services call this endpoint to register their available permissions
+     * Register Module Permission Manifest
+     * Registers or updates a module\&#39;s permission manifest in the central registry; this is the endpoint every pos module\&#39;s permission-registry initializer calls at startup. Use this tool for idempotent bulk manifest registration that tolerates partial failure; do not use registerPermissionsContract, which rejects the entire payload on the first invalid key. Preconditions: the caller must hold security:permission:register (module initializers authenticate with an internal service token). Required inputs: serviceName and a non-empty permissions list of name and description entries; names must match domain:resource:action, while domain and version are informational. Emits a SECURITY_PERMISSION_REGISTER event; new names are inserted (with a bit index when the compiled catalog defines one), changed descriptions are updated, and unchanged or invalid entries are counted as skipped. Returns 400 when serviceName is blank or permissions is empty, and 400 with success&#x3D;false and a per-entry errors list when every entry failed; partial failures still return 200 with the errors listed in the response. 
      * @endpoint post /v1/permissions/register
-     * @param permissionRegistrationRequest 
+     * @param permissionRegistrationRequest Permission manifest published by one domain service at startup.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public registerPermissions1(permissionRegistrationRequest: PermissionRegistrationRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PermissionRegistrationResponse>;
-    public registerPermissions1(permissionRegistrationRequest: PermissionRegistrationRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PermissionRegistrationResponse>>;
-    public registerPermissions1(permissionRegistrationRequest: PermissionRegistrationRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PermissionRegistrationResponse>>;
-    public registerPermissions1(permissionRegistrationRequest: PermissionRegistrationRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public registerModulePermissions1(permissionRegistrationRequest: PermissionRegistrationRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PermissionRegistrationResponse>;
+    public registerModulePermissions1(permissionRegistrationRequest: PermissionRegistrationRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PermissionRegistrationResponse>>;
+    public registerModulePermissions1(permissionRegistrationRequest: PermissionRegistrationRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PermissionRegistrationResponse>>;
+    public registerModulePermissions1(permissionRegistrationRequest: PermissionRegistrationRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (permissionRegistrationRequest === null || permissionRegistrationRequest === undefined) {
-            throw new Error('Required parameter permissionRegistrationRequest was null or undefined when calling registerPermissions1.');
+            throw new Error('Required parameter permissionRegistrationRequest was null or undefined when calling registerModulePermissions1.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -934,10 +934,10 @@ export class PermissionRegistryService extends BaseService {
     }
 
     /**
-     * Register permissions (RBAC contract endpoint)
-     * Registers or updates permissions using the RBAC contract payload and returns the resulting permission set.
+     * Register Permissions via RBAC Contract
+     * Registers or updates permissions from an RBAC contract payload, upserting each named permission and returning the resulting permission list. Use this tool for strict all-or-nothing permission upserts; do not use registerModulePermissions, the lenient startup manifest endpoint that skips invalid entries and reports per-entry counters instead of failing the request. Preconditions: the caller must hold security:permission:register, and every permission name must match domain:resource:action (or the legacy domain:action form). Required inputs: permissions, a list of name and description definitions; serviceName is optional here and defaults to pos-security-service as the registering service. Emits a SECURITY_PERMISSION_REGISTER event; existing permissions with the same name are overwritten in place, including description and registering service. Returns 400 when any permission key fails the format check, rejecting the entire request. 
      * @endpoint post /v1/permissions/registerPermissions
-     * @param permissionRegistrationRequest 
+     * @param permissionRegistrationRequest RBAC contract payload of permission definitions to upsert.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -1004,10 +1004,10 @@ export class PermissionRegistryService extends BaseService {
     }
 
     /**
-     * Register permissions (RBAC contract endpoint)
-     * Registers or updates permissions using the RBAC contract payload and returns the resulting permission set.
+     * Register Permissions via RBAC Contract
+     * Registers or updates permissions from an RBAC contract payload, upserting each named permission and returning the resulting permission list. Use this tool for strict all-or-nothing permission upserts; do not use registerModulePermissions, the lenient startup manifest endpoint that skips invalid entries and reports per-entry counters instead of failing the request. Preconditions: the caller must hold security:permission:register, and every permission name must match domain:resource:action (or the legacy domain:action form). Required inputs: permissions, a list of name and description definitions; serviceName is optional here and defaults to pos-security-service as the registering service. Emits a SECURITY_PERMISSION_REGISTER event; existing permissions with the same name are overwritten in place, including description and registering service. Returns 400 when any permission key fails the format check, rejecting the entire request. 
      * @endpoint post /v1/users/permissions/registerPermissions
-     * @param permissionRegistrationRequest 
+     * @param permissionRegistrationRequest RBAC contract payload of permission definitions to upsert.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -1074,8 +1074,8 @@ export class PermissionRegistryService extends BaseService {
     }
 
     /**
-     * Validate permission name format
-     * Checks if a permission name follows the domain:resource:action format
+     * Validate Permission Name Format
+     * Checks whether a permission name string matches the required domain:resource:action format (or the legacy two-segment domain:action form) without touching the database. Use this tool to pre-validate a name before registration; use checkPermissionExists instead to test whether the name is actually registered. Preconditions: the caller must hold security:permission:view. Required inputs: permissionName as a path parameter; each segment must start with a letter and may contain letters, digits, underscores, and hyphens. No events are emitted and no state changes; this is a pure format check. Returns 200 with a plain boolean body; a malformed name yields false, never an error status. 
      * @endpoint get /v1/users/permissions/validate/{permissionName}
      * @param permissionName 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -1134,8 +1134,8 @@ export class PermissionRegistryService extends BaseService {
     }
 
     /**
-     * Validate permission name format
-     * Checks if a permission name follows the domain:resource:action format
+     * Validate Permission Name Format
+     * Checks whether a permission name string matches the required domain:resource:action format (or the legacy two-segment domain:action form) without touching the database. Use this tool to pre-validate a name before registration; use checkPermissionExists instead to test whether the name is actually registered. Preconditions: the caller must hold security:permission:view. Required inputs: permissionName as a path parameter; each segment must start with a letter and may contain letters, digits, underscores, and hyphens. No events are emitted and no state changes; this is a pure format check. Returns 200 with a plain boolean body; a malformed name yields false, never an error status. 
      * @endpoint get /v1/permissions/validate/{permissionName}
      * @param permissionName 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.

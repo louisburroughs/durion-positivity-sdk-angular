@@ -14,13 +14,13 @@
  */
 export interface PartyTagResponse { 
     /**
-     * Tag identifier
+     * Whether the tag can still be assigned
      */
-    tagId: string;
+    active: boolean;
     /**
-     * Unique tag name
+     * Number of parties currently carrying the tag
      */
-    name: string;
+    assignmentCount: number;
     /**
      * Optional display grouping
      */
@@ -30,17 +30,17 @@ export interface PartyTagResponse {
      */
     color?: string;
     /**
-     * Whether the tag can still be assigned
-     */
-    active: boolean;
-    /**
-     * Number of parties currently carrying the tag
-     */
-    assignmentCount: number;
-    /**
      * Creation timestamp
      */
     createdAt?: string;
+    /**
+     * Unique tag name
+     */
+    name: string;
+    /**
+     * Tag identifier
+     */
+    tagId: string;
 }
 
 function isOptionalPartyTagResponsePropertyOfType(
@@ -81,8 +81,8 @@ export function instanceOfPartyTagResponse(value: object): value is PartyTagResp
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createPartyTagResponsePropertyNames('tagId', 'name', 'active', 'assignmentCount', );
-    const optionalStringProperties = createPartyTagResponseOptionalProperties({ name: 'tagId', nullable: false }, { name: 'name', nullable: false }, { name: 'category', nullable: false }, { name: 'color', nullable: false }, { name: 'createdAt', nullable: false }, );
+    const requiredProperties = createPartyTagResponsePropertyNames('active', 'assignmentCount', 'name', 'tagId', );
+    const optionalStringProperties = createPartyTagResponseOptionalProperties({ name: 'category', nullable: false }, { name: 'color', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'name', nullable: false }, { name: 'tagId', nullable: false }, );
     const optionalNumberProperties = createPartyTagResponseOptionalProperties({ name: 'assignmentCount', nullable: false }, );
     const optionalBooleanProperties = createPartyTagResponseOptionalProperties({ name: 'active', nullable: false }, );
 

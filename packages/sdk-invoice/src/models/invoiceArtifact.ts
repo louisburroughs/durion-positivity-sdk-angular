@@ -18,6 +18,10 @@ export interface InvoiceArtifact {
      */
     artifactRefId?: string;
     /**
+     * When the underlying document was created
+     */
+    createdAt?: string;
+    /**
      * Suggested download file name
      */
     fileName?: string;
@@ -25,10 +29,6 @@ export interface InvoiceArtifact {
      * MIME type of the rendered artifact
      */
     mimeType?: string;
-    /**
-     * When the underlying document was created
-     */
-    createdAt?: string;
 }
 
 function isOptionalInvoiceArtifactPropertyOfType(
@@ -70,7 +70,7 @@ export function instanceOfInvoiceArtifact(value: object): value is InvoiceArtifa
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createInvoiceArtifactPropertyNames();
-    const optionalStringProperties = createInvoiceArtifactOptionalProperties({ name: 'artifactRefId', nullable: false }, { name: 'fileName', nullable: false }, { name: 'mimeType', nullable: false }, { name: 'createdAt', nullable: false }, );
+    const optionalStringProperties = createInvoiceArtifactOptionalProperties({ name: 'artifactRefId', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'fileName', nullable: false }, { name: 'mimeType', nullable: false }, );
     const optionalNumberProperties = createInvoiceArtifactOptionalProperties();
     const optionalBooleanProperties = createInvoiceArtifactOptionalProperties();
 

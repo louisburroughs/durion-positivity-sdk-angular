@@ -14,22 +14,6 @@
  */
 export interface RestrictionRuleResponse { 
     /**
-     * Restriction rule identifier
-     */
-    ruleId: string;
-    /**
-     * Product the restriction rule applies to
-     */
-    productId: string;
-    /**
-     * Location scope tag for the restriction
-     */
-    locationTag: RestrictionRuleResponseLocationTagEnum;
-    /**
-     * Service channel scope tag for the restriction
-     */
-    serviceTag: RestrictionRuleResponseServiceTagEnum;
-    /**
      * Whether the restriction rule is currently active
      */
     active: boolean;
@@ -41,6 +25,22 @@ export interface RestrictionRuleResponse {
      * Optional date the restriction rule stops being effective
      */
     effectiveTo?: string;
+    /**
+     * Location scope tag for the restriction
+     */
+    locationTag: RestrictionRuleResponseLocationTagEnum;
+    /**
+     * Product the restriction rule applies to
+     */
+    productId: string;
+    /**
+     * Restriction rule identifier
+     */
+    ruleId: string;
+    /**
+     * Service channel scope tag for the restriction
+     */
+    serviceTag: RestrictionRuleResponseServiceTagEnum;
 }
 export enum RestrictionRuleResponseLocationTagEnum {
     AllLocations = 'ALL_LOCATIONS',
@@ -98,8 +98,8 @@ export function instanceOfRestrictionRuleResponse(value: object): value is Restr
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createRestrictionRuleResponsePropertyNames('ruleId', 'productId', 'locationTag', 'serviceTag', 'active', 'effectiveFrom', );
-    const optionalStringProperties = createRestrictionRuleResponseOptionalProperties({ name: 'ruleId', nullable: false }, { name: 'productId', nullable: false }, { name: 'locationTag', nullable: false }, { name: 'serviceTag', nullable: false }, { name: 'effectiveFrom', nullable: false }, { name: 'effectiveTo', nullable: false }, );
+    const requiredProperties = createRestrictionRuleResponsePropertyNames('active', 'effectiveFrom', 'locationTag', 'productId', 'ruleId', 'serviceTag', );
+    const optionalStringProperties = createRestrictionRuleResponseOptionalProperties({ name: 'effectiveFrom', nullable: false }, { name: 'effectiveTo', nullable: false }, { name: 'locationTag', nullable: false }, { name: 'productId', nullable: false }, { name: 'ruleId', nullable: false }, { name: 'serviceTag', nullable: false }, );
     const optionalNumberProperties = createRestrictionRuleResponseOptionalProperties();
     const optionalBooleanProperties = createRestrictionRuleResponseOptionalProperties({ name: 'active', nullable: false }, );
 

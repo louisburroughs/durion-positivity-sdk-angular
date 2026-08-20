@@ -14,23 +14,23 @@ import { AuditEventSearchFilter } from './auditEventSearchFilter';
  * Audit export job submission request
  */
 export interface AuditExportRequest { 
+    /**
+     * Delivery mode for the exported file
+     */
+    deliveryMode: AuditExportRequestDeliveryModeEnum;
     filters?: AuditEventSearchFilter;
     /**
      * Output format for the export
      */
     format: AuditExportRequestFormatEnum;
-    /**
-     * Delivery mode for the exported file
-     */
-    deliveryMode: AuditExportRequestDeliveryModeEnum;
 }
-export enum AuditExportRequestFormatEnum {
-    Csv = 'CSV',
-    Json = 'JSON'
-};
 export enum AuditExportRequestDeliveryModeEnum {
     Download = 'DOWNLOAD',
     Webhook = 'WEBHOOK'
+};
+export enum AuditExportRequestFormatEnum {
+    Csv = 'CSV',
+    Json = 'JSON'
 };
 
 
@@ -73,8 +73,8 @@ export function instanceOfAuditExportRequest(value: object): value is AuditExpor
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createAuditExportRequestPropertyNames('format', 'deliveryMode', );
-    const optionalStringProperties = createAuditExportRequestOptionalProperties({ name: 'format', nullable: false }, { name: 'deliveryMode', nullable: false }, );
+    const requiredProperties = createAuditExportRequestPropertyNames('deliveryMode', 'format', );
+    const optionalStringProperties = createAuditExportRequestOptionalProperties({ name: 'deliveryMode', nullable: false }, { name: 'format', nullable: false }, );
     const optionalNumberProperties = createAuditExportRequestOptionalProperties();
     const optionalBooleanProperties = createAuditExportRequestOptionalProperties();
 

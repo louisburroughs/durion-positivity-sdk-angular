@@ -14,10 +14,6 @@
  */
 export interface LineDecision { 
     /**
-     * Claim line UUID
-     */
-    lineId: string;
-    /**
      * Approved amount; defaults to the computed amountRequested on APPROVE
      */
     amountApproved?: number;
@@ -25,6 +21,10 @@ export interface LineDecision {
      * Line disposition; defaults to APPROVED on APPROVE, DENIED on DENY
      */
     lineDisposition?: LineDecisionLineDispositionEnum;
+    /**
+     * Claim line UUID
+     */
+    lineId: string;
     /**
      * Required when amountApproved differs from the computed amountRequested; audited as a claim note
      */
@@ -79,7 +79,7 @@ export function instanceOfLineDecision(value: object): value is LineDecision {
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createLineDecisionPropertyNames('lineId', );
-    const optionalStringProperties = createLineDecisionOptionalProperties({ name: 'lineId', nullable: false }, { name: 'lineDisposition', nullable: false }, { name: 'overrideReason', nullable: false }, );
+    const optionalStringProperties = createLineDecisionOptionalProperties({ name: 'lineDisposition', nullable: false }, { name: 'lineId', nullable: false }, { name: 'overrideReason', nullable: false }, );
     const optionalNumberProperties = createLineDecisionOptionalProperties({ name: 'amountApproved', nullable: false }, );
     const optionalBooleanProperties = createLineDecisionOptionalProperties();
 

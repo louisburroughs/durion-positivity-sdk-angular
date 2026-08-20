@@ -14,9 +14,9 @@
  */
 export interface UpsertPartyTagRequest { 
     /**
-     * Unique tag name
+     * Whether the tag can be assigned; defaults to true on create
      */
-    name: string;
+    active?: boolean;
     /**
      * Optional display grouping
      */
@@ -26,9 +26,9 @@ export interface UpsertPartyTagRequest {
      */
     color?: string;
     /**
-     * Whether the tag can be assigned; defaults to true on create
+     * Unique tag name
      */
-    active?: boolean;
+    name: string;
 }
 
 function isOptionalUpsertPartyTagRequestPropertyOfType(
@@ -70,7 +70,7 @@ export function instanceOfUpsertPartyTagRequest(value: object): value is UpsertP
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createUpsertPartyTagRequestPropertyNames('name', );
-    const optionalStringProperties = createUpsertPartyTagRequestOptionalProperties({ name: 'name', nullable: false }, { name: 'category', nullable: false }, { name: 'color', nullable: false }, );
+    const optionalStringProperties = createUpsertPartyTagRequestOptionalProperties({ name: 'category', nullable: false }, { name: 'color', nullable: false }, { name: 'name', nullable: false }, );
     const optionalNumberProperties = createUpsertPartyTagRequestOptionalProperties();
     const optionalBooleanProperties = createUpsertPartyTagRequestOptionalProperties({ name: 'active', nullable: false }, );
 

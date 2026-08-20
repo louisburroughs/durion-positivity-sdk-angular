@@ -14,21 +14,21 @@
  */
 export interface AccountSummary { 
     /**
-     * Canonical party identifier of the account
+     * Account display name
      */
-    partyId: string;
+    accountName: string;
     /**
      * Human-readable account/customer number
      */
     accountNumber: string;
     /**
-     * Account display name
-     */
-    accountName: string;
-    /**
      * Account type discriminator
      */
     accountType: string;
+    /**
+     * Canonical party identifier of the account
+     */
+    partyId: string;
 }
 
 function isOptionalAccountSummaryPropertyOfType(
@@ -69,8 +69,8 @@ export function instanceOfAccountSummary(value: object): value is AccountSummary
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createAccountSummaryPropertyNames('partyId', 'accountNumber', 'accountName', 'accountType', );
-    const optionalStringProperties = createAccountSummaryOptionalProperties({ name: 'partyId', nullable: false }, { name: 'accountNumber', nullable: false }, { name: 'accountName', nullable: false }, { name: 'accountType', nullable: false }, );
+    const requiredProperties = createAccountSummaryPropertyNames('accountName', 'accountNumber', 'accountType', 'partyId', );
+    const optionalStringProperties = createAccountSummaryOptionalProperties({ name: 'accountName', nullable: false }, { name: 'accountNumber', nullable: false }, { name: 'accountType', nullable: false }, { name: 'partyId', nullable: false }, );
     const optionalNumberProperties = createAccountSummaryOptionalProperties();
     const optionalBooleanProperties = createAccountSummaryOptionalProperties();
 

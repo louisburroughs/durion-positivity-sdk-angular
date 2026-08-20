@@ -14,9 +14,17 @@
  */
 export interface GLMappingCreateRequest { 
     /**
-     * Source system identifier
+     * Dimensional context for this mapping (businessUnitId, locationId, etc.)
      */
-    sourceSystem: string;
+    dimensions?: { [key: string]: string; };
+    /**
+     * Exclusive end of the mapping\'s temporal validity (open-ended when null)
+     */
+    effectiveEndDate?: string;
+    /**
+     * Inclusive start of the mapping\'s temporal validity
+     */
+    effectiveStartDate: string;
     /**
      * External code from the source system
      */
@@ -26,17 +34,9 @@ export interface GLMappingCreateRequest {
      */
     glAccountId: string;
     /**
-     * Inclusive start of the mapping\'s temporal validity
+     * Source system identifier
      */
-    effectiveStartDate: string;
-    /**
-     * Exclusive end of the mapping\'s temporal validity (open-ended when null)
-     */
-    effectiveEndDate?: string;
-    /**
-     * Dimensional context for this mapping (businessUnitId, locationId, etc.)
-     */
-    dimensions?: { [key: string]: string; };
+    sourceSystem: string;
 }
 
 function isOptionalGLMappingCreateRequestPropertyOfType(
@@ -77,8 +77,8 @@ export function instanceOfGLMappingCreateRequest(value: object): value is GLMapp
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createGLMappingCreateRequestPropertyNames('sourceSystem', 'externalCode', 'glAccountId', 'effectiveStartDate', );
-    const optionalStringProperties = createGLMappingCreateRequestOptionalProperties({ name: 'sourceSystem', nullable: false }, { name: 'externalCode', nullable: false }, { name: 'glAccountId', nullable: false }, { name: 'effectiveStartDate', nullable: false }, { name: 'effectiveEndDate', nullable: false }, );
+    const requiredProperties = createGLMappingCreateRequestPropertyNames('effectiveStartDate', 'externalCode', 'glAccountId', 'sourceSystem', );
+    const optionalStringProperties = createGLMappingCreateRequestOptionalProperties({ name: 'effectiveEndDate', nullable: false }, { name: 'effectiveStartDate', nullable: false }, { name: 'externalCode', nullable: false }, { name: 'glAccountId', nullable: false }, { name: 'sourceSystem', nullable: false }, );
     const optionalNumberProperties = createGLMappingCreateRequestOptionalProperties();
     const optionalBooleanProperties = createGLMappingCreateRequestOptionalProperties();
 

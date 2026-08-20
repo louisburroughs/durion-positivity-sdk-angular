@@ -14,10 +14,23 @@ import { EmployeeContactInfoDto } from './employeeContactInfoDto';
  * Request to create an employee record
  */
 export interface CreateEmployeeRequest { 
+    contactInfo?: EmployeeContactInfoDto;
+    /**
+     * Policy controlling how potential duplicate employee records are handled during creation
+     */
+    duplicatePolicy?: CreateEmployeeRequestDuplicatePolicyEnum;
+    /**
+     * Unique employee number
+     */
+    employeeNumber: string;
     /**
      * First (given) name of the employee
      */
     firstName: string;
+    /**
+     * Date the employee was hired
+     */
+    hireDate: string;
     /**
      * Last (family) name of the employee
      */
@@ -27,37 +40,24 @@ export interface CreateEmployeeRequest {
      */
     preferredName?: string;
     /**
-     * Unique employee number
-     */
-    employeeNumber: string;
-    /**
      * Employment status of the employee
      */
     status: CreateEmployeeRequestStatusEnum;
     /**
-     * Date the employee was hired
-     */
-    hireDate: string;
-    /**
      * Date the employee was terminated, if applicable
      */
     terminationDate?: string;
-    contactInfo?: EmployeeContactInfoDto;
-    /**
-     * Policy controlling how potential duplicate employee records are handled during creation
-     */
-    duplicatePolicy?: CreateEmployeeRequestDuplicatePolicyEnum;
 }
+export enum CreateEmployeeRequestDuplicatePolicyEnum {
+    Strict = 'STRICT',
+    Balanced = 'BALANCED'
+};
 export enum CreateEmployeeRequestStatusEnum {
     Active = 'ACTIVE',
     OnLeave = 'ON_LEAVE',
     Suspended = 'SUSPENDED',
     Terminated = 'TERMINATED',
     Disabled = 'DISABLED'
-};
-export enum CreateEmployeeRequestDuplicatePolicyEnum {
-    Strict = 'STRICT',
-    Balanced = 'BALANCED'
 };
 
 
@@ -100,8 +100,8 @@ export function instanceOfCreateEmployeeRequest(value: object): value is CreateE
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createCreateEmployeeRequestPropertyNames('firstName', 'lastName', 'employeeNumber', 'status', 'hireDate', );
-    const optionalStringProperties = createCreateEmployeeRequestOptionalProperties({ name: 'firstName', nullable: false }, { name: 'lastName', nullable: false }, { name: 'preferredName', nullable: false }, { name: 'employeeNumber', nullable: false }, { name: 'status', nullable: false }, { name: 'hireDate', nullable: false }, { name: 'terminationDate', nullable: false }, { name: 'duplicatePolicy', nullable: false }, );
+    const requiredProperties = createCreateEmployeeRequestPropertyNames('employeeNumber', 'firstName', 'hireDate', 'lastName', 'status', );
+    const optionalStringProperties = createCreateEmployeeRequestOptionalProperties({ name: 'duplicatePolicy', nullable: false }, { name: 'employeeNumber', nullable: false }, { name: 'firstName', nullable: false }, { name: 'hireDate', nullable: false }, { name: 'lastName', nullable: false }, { name: 'preferredName', nullable: false }, { name: 'status', nullable: false }, { name: 'terminationDate', nullable: false }, );
     const optionalNumberProperties = createCreateEmployeeRequestOptionalProperties();
     const optionalBooleanProperties = createCreateEmployeeRequestOptionalProperties();
 

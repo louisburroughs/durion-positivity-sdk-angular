@@ -14,13 +14,33 @@
  */
 export interface WorkexecTimerEntryResponse { 
     /**
-     * Timer entry identifier
+     * Computed duration in seconds
      */
-    timeEntryId?: string;
+    durationInSeconds?: number;
+    /**
+     * Timer stop timestamp
+     */
+    endTime?: string;
+    /**
+     * Labor code
+     */
+    laborCode?: string;
     /**
      * Mechanic identifier
      */
     mechanicId?: string;
+    /**
+     * Timer start timestamp
+     */
+    startTime?: string;
+    /**
+     * Timer status
+     */
+    status?: string;
+    /**
+     * Timer entry identifier
+     */
+    timeEntryId?: string;
     /**
      * Workorder identifier
      */
@@ -29,26 +49,6 @@ export interface WorkexecTimerEntryResponse {
      * Optional workorder item identifier
      */
     workorderItemId?: string;
-    /**
-     * Labor code
-     */
-    laborCode?: string;
-    /**
-     * Timer start timestamp
-     */
-    startTime?: string;
-    /**
-     * Timer stop timestamp
-     */
-    endTime?: string;
-    /**
-     * Computed duration in seconds
-     */
-    durationInSeconds?: number;
-    /**
-     * Timer status
-     */
-    status?: string;
 }
 
 function isOptionalWorkexecTimerEntryResponsePropertyOfType(
@@ -90,7 +90,7 @@ export function instanceOfWorkexecTimerEntryResponse(value: object): value is Wo
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createWorkexecTimerEntryResponsePropertyNames();
-    const optionalStringProperties = createWorkexecTimerEntryResponseOptionalProperties({ name: 'timeEntryId', nullable: false }, { name: 'mechanicId', nullable: false }, { name: 'workorderId', nullable: false }, { name: 'workorderItemId', nullable: false }, { name: 'laborCode', nullable: false }, { name: 'startTime', nullable: false }, { name: 'endTime', nullable: false }, { name: 'status', nullable: false }, );
+    const optionalStringProperties = createWorkexecTimerEntryResponseOptionalProperties({ name: 'endTime', nullable: false }, { name: 'laborCode', nullable: false }, { name: 'mechanicId', nullable: false }, { name: 'startTime', nullable: false }, { name: 'status', nullable: false }, { name: 'timeEntryId', nullable: false }, { name: 'workorderId', nullable: false }, { name: 'workorderItemId', nullable: false }, );
     const optionalNumberProperties = createWorkexecTimerEntryResponseOptionalProperties({ name: 'durationInSeconds', nullable: false }, );
     const optionalBooleanProperties = createWorkexecTimerEntryResponseOptionalProperties();
 

@@ -35,10 +35,10 @@ export class PickingListsService extends BaseService {
 
     /**
      * Confirm picking list
-     * Confirms a picking list and commits consumption. Stub implementation.
+     * Rejects picking-list confirmation with 501 NOT_IMPLEMENTED; this legacy pickingLists path has no backing implementation and commits nothing. Use this tool for nothing; confirm individual picks with confirmPickTask on the pick-lists path and commit consumption with consumePickedItems instead — do not expect this stub to change any state. Preconditions: none are evaluated. Required inputs: id path parameter; any request body is ignored. Emits an INVENTORY_PICKING_LIST_CONFIRM event recording the rejected attempt; no inventory state changes. Returns 501 for every call. 
      * @endpoint post /v1/inventory/pickingLists/{id}/confirm
      * @param id Picking list identifier
-     * @param body 
+     * @param body Ignored; the endpoint rejects every call with 501 before reading the body.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options

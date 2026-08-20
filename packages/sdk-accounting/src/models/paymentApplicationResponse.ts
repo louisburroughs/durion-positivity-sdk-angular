@@ -16,42 +16,42 @@ import { CustomerCreditInfo } from './customerCreditInfo';
  */
 export interface PaymentApplicationResponse { 
     /**
-     * Identifier of the payment that was applied
+     * Idempotency key echoed from the application request
      */
-    paymentId: string;
-    /**
-     * Identifier of the customer who made the payment
-     */
-    customerId?: string;
-    /**
-     * Currency code (ISO 4217)
-     */
-    currency?: string;
-    /**
-     * Total payment amount
-     */
-    totalAmount?: number;
-    /**
-     * Amount of the payment applied to invoices
-     */
-    appliedAmount?: number;
-    /**
-     * Amount of the payment remaining after application
-     */
-    remainingAmount?: number;
-    /**
-     * Per-invoice application details
-     */
-    applications?: Array<ApplicationDetail>;
-    customerCredit?: CustomerCreditInfo;
+    applicationRequestId?: string;
     /**
      * Timestamp when the payment was applied (ISO 8601)
      */
     applicationTimestamp?: string;
     /**
-     * Idempotency key echoed from the application request
+     * Per-invoice application details
      */
-    applicationRequestId?: string;
+    applications?: Array<ApplicationDetail>;
+    /**
+     * Amount of the payment applied to invoices
+     */
+    appliedAmount?: number;
+    /**
+     * Currency code (ISO 4217)
+     */
+    currency?: string;
+    customerCredit?: CustomerCreditInfo;
+    /**
+     * Identifier of the customer who made the payment
+     */
+    customerId?: string;
+    /**
+     * Identifier of the payment that was applied
+     */
+    paymentId: string;
+    /**
+     * Amount of the payment remaining after application
+     */
+    remainingAmount?: number;
+    /**
+     * Total payment amount
+     */
+    totalAmount?: number;
 }
 
 function isOptionalPaymentApplicationResponsePropertyOfType(
@@ -93,8 +93,8 @@ export function instanceOfPaymentApplicationResponse(value: object): value is Pa
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createPaymentApplicationResponsePropertyNames('paymentId', );
-    const optionalStringProperties = createPaymentApplicationResponseOptionalProperties({ name: 'paymentId', nullable: false }, { name: 'customerId', nullable: false }, { name: 'currency', nullable: false }, { name: 'applicationTimestamp', nullable: false }, { name: 'applicationRequestId', nullable: false }, );
-    const optionalNumberProperties = createPaymentApplicationResponseOptionalProperties({ name: 'totalAmount', nullable: false }, { name: 'appliedAmount', nullable: false }, { name: 'remainingAmount', nullable: false }, );
+    const optionalStringProperties = createPaymentApplicationResponseOptionalProperties({ name: 'applicationRequestId', nullable: false }, { name: 'applicationTimestamp', nullable: false }, { name: 'currency', nullable: false }, { name: 'customerId', nullable: false }, { name: 'paymentId', nullable: false }, );
+    const optionalNumberProperties = createPaymentApplicationResponseOptionalProperties({ name: 'appliedAmount', nullable: false }, { name: 'remainingAmount', nullable: false }, { name: 'totalAmount', nullable: false }, );
     const optionalBooleanProperties = createPaymentApplicationResponseOptionalProperties();
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

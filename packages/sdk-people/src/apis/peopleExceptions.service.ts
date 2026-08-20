@@ -44,8 +44,8 @@ export class PeopleExceptionsService extends BaseService {
     }
 
     /**
-     * Acknowledge an exception
-     * Mark an exception as acknowledged.
+     * Acknowledge An Open Time Entry Exception
+     * Marks an OPEN time entry exception as ACKNOWLEDGED, stamping the acting user and timestamp. Use this tool to signal an exception has been seen but not yet fixed; use resolveTimeEntryException or waiveTimeEntryException instead to close it. Preconditions: the exception must exist and must not already be RESOLVED or WAIVED, which are terminal states. Required inputs: exceptionId (UUID) path parameter; there is no request body, and an optional X-Correlation-Id header is carried into the audit trail. Emits a PEOPLE_TIME_ENTRY_EXCEPTION_ACKNOWLEDGE event and writes an EXCEPTION_ACKNOWLEDGED audit row. Returns 404 when the exception does not exist, and 400 when it is already RESOLVED or WAIVED. 
      * @endpoint post /v1/people/exceptions/{exceptionId}/acknowledge
      * @param exceptionId 
      * @param xCorrelationId 
@@ -53,12 +53,12 @@ export class PeopleExceptionsService extends BaseService {
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public acknowledgeException(exceptionId: string, xCorrelationId?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<object>;
-    public acknowledgeException(exceptionId: string, xCorrelationId?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<object>>;
-    public acknowledgeException(exceptionId: string, xCorrelationId?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<object>>;
-    public acknowledgeException(exceptionId: string, xCorrelationId?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public acknowledgeTimeEntryException(exceptionId: string, xCorrelationId?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<object>;
+    public acknowledgeTimeEntryException(exceptionId: string, xCorrelationId?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<object>>;
+    public acknowledgeTimeEntryException(exceptionId: string, xCorrelationId?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<object>>;
+    public acknowledgeTimeEntryException(exceptionId: string, xCorrelationId?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (exceptionId === null || exceptionId === undefined) {
-            throw new Error('Required parameter exceptionId was null or undefined when calling acknowledgeException.');
+            throw new Error('Required parameter exceptionId was null or undefined when calling acknowledgeTimeEntryException.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -108,20 +108,20 @@ export class PeopleExceptionsService extends BaseService {
     }
 
     /**
-     * Create a time entry exception
-     * Create a new time entry exception record with validation of required fields.
+     * Create A Time Entry Exception
+     * Records a timekeeping exception in OPEN status for an employee, such as a missed clock-out. Use this tool when a timekeeping anomaly is detected; do not use resolveTimeEntryException or waiveTimeEntryException, which close an existing exception. Preconditions: none are checked against other records; employeeId and timeEntryId are stored as given without referential validation. Required inputs: employeeId and exceptionCode; severity accepts WARNING or BLOCKING and silently falls back to WARNING on any other value, and detectedAt defaults to the current server time. Emits a PEOPLE_TIME_ENTRY_EXCEPTION_CREATE event; the exception starts in OPEN status. Returns 200 with the new exceptionId, and 400 when the JSON payload is malformed. 
      * @endpoint post /v1/people/exceptions
-     * @param timeEntryExceptionRequest 
+     * @param timeEntryExceptionRequest Timekeeping anomaly to record against an employee, optionally tied to a specific time entry.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public createException(timeEntryExceptionRequest: TimeEntryExceptionRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<TimeEntryExceptionResponse>;
-    public createException(timeEntryExceptionRequest: TimeEntryExceptionRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<TimeEntryExceptionResponse>>;
-    public createException(timeEntryExceptionRequest: TimeEntryExceptionRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<TimeEntryExceptionResponse>>;
-    public createException(timeEntryExceptionRequest: TimeEntryExceptionRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public createTimeEntryException(timeEntryExceptionRequest: TimeEntryExceptionRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<TimeEntryExceptionResponse>;
+    public createTimeEntryException(timeEntryExceptionRequest: TimeEntryExceptionRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<TimeEntryExceptionResponse>>;
+    public createTimeEntryException(timeEntryExceptionRequest: TimeEntryExceptionRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<TimeEntryExceptionResponse>>;
+    public createTimeEntryException(timeEntryExceptionRequest: TimeEntryExceptionRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (timeEntryExceptionRequest === null || timeEntryExceptionRequest === undefined) {
-            throw new Error('Required parameter timeEntryExceptionRequest was null or undefined when calling createException.');
+            throw new Error('Required parameter timeEntryExceptionRequest was null or undefined when calling createTimeEntryException.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -178,18 +178,18 @@ export class PeopleExceptionsService extends BaseService {
     }
 
     /**
-     * List exceptions, optional filter by employeeId
-     * Retrieve all exceptions or filter by a specific employee ID.
+     * List Time Entry Exceptions By Employee
+     * Lists time entry exceptions, either all of them or those recorded for one employee. Use this tool to review open and historical exceptions; use createTimeEntryException instead to record a new one. Preconditions: none; when employeeId is omitted every exception in the system is returned without pagination. Required inputs: none; employeeId (string) is an optional filter. No events are emitted and no state changes; this is a read-only projection. Returns 200 with an empty list when nothing matches. 
      * @endpoint get /v1/people/exceptions
      * @param employeeId 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public listByEmployee(employeeId?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<TimeEntryException>>;
-    public listByEmployee(employeeId?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<TimeEntryException>>>;
-    public listByEmployee(employeeId?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<TimeEntryException>>>;
-    public listByEmployee(employeeId?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public listTimeEntryExceptions(employeeId?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<TimeEntryException>>;
+    public listTimeEntryExceptions(employeeId?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<TimeEntryException>>>;
+    public listTimeEntryExceptions(employeeId?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<TimeEntryException>>>;
+    public listTimeEntryExceptions(employeeId?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
 
@@ -247,22 +247,22 @@ export class PeopleExceptionsService extends BaseService {
     }
 
     /**
-     * Resolve an exception
-     * Mark an exception as resolved with optional resolution notes.
+     * Resolve A Time Entry Exception
+     * Marks a time entry exception as RESOLVED with optional resolution notes, stamping the acting user and timestamp. Use this tool when the underlying issue has been fixed; use waiveTimeEntryException instead to close it without a fix, or acknowledgeTimeEntryException to flag it as merely seen. Preconditions: the exception must exist and must not already be RESOLVED or WAIVED, which are terminal states. Required inputs: exceptionId (UUID) path parameter; the body is optional and may carry resolutionNotes. Emits a PEOPLE_TIME_ENTRY_EXCEPTION_RESOLVE event and writes an EXCEPTION_RESOLVED audit row. Returns 404 when the exception does not exist, and 400 when it is already RESOLVED or WAIVED. 
      * @endpoint post /v1/people/exceptions/{exceptionId}/resolve
      * @param exceptionId 
      * @param xCorrelationId 
-     * @param timeEntryExceptionResolveRequest 
+     * @param timeEntryExceptionResolveRequest Optional resolution details; when present, resolutionNotes replaces the notes stored on the exception.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public resolveException(exceptionId: string, xCorrelationId?: string, timeEntryExceptionResolveRequest?: TimeEntryExceptionResolveRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<object>;
-    public resolveException(exceptionId: string, xCorrelationId?: string, timeEntryExceptionResolveRequest?: TimeEntryExceptionResolveRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<object>>;
-    public resolveException(exceptionId: string, xCorrelationId?: string, timeEntryExceptionResolveRequest?: TimeEntryExceptionResolveRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<object>>;
-    public resolveException(exceptionId: string, xCorrelationId?: string, timeEntryExceptionResolveRequest?: TimeEntryExceptionResolveRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public resolveTimeEntryException(exceptionId: string, xCorrelationId?: string, timeEntryExceptionResolveRequest?: TimeEntryExceptionResolveRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<object>;
+    public resolveTimeEntryException(exceptionId: string, xCorrelationId?: string, timeEntryExceptionResolveRequest?: TimeEntryExceptionResolveRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<object>>;
+    public resolveTimeEntryException(exceptionId: string, xCorrelationId?: string, timeEntryExceptionResolveRequest?: TimeEntryExceptionResolveRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<object>>;
+    public resolveTimeEntryException(exceptionId: string, xCorrelationId?: string, timeEntryExceptionResolveRequest?: TimeEntryExceptionResolveRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (exceptionId === null || exceptionId === undefined) {
-            throw new Error('Required parameter exceptionId was null or undefined when calling resolveException.');
+            throw new Error('Required parameter exceptionId was null or undefined when calling resolveTimeEntryException.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -322,25 +322,25 @@ export class PeopleExceptionsService extends BaseService {
     }
 
     /**
-     * Waive an exception
-     * Waive an exception with a reason. waiveReason is required.
+     * Waive A Time Entry Exception
+     * Marks a time entry exception as WAIVED with a mandatory reason, closing it without a correction. Use this tool to deliberately dismiss an exception; use resolveTimeEntryException instead when the underlying issue was actually fixed. Preconditions: the exception must exist and must not already be RESOLVED or WAIVED, which are terminal states. Required inputs: exceptionId (UUID) path parameter and a body with a non-blank waiveReason, which is stored as the exception\&#39;s resolution notes. Emits a PEOPLE_TIME_ENTRY_EXCEPTION_WAIVE event and writes an EXCEPTION_WAIVED audit row. Returns 404 when the exception does not exist, and 400 when waiveReason is blank or the exception is already RESOLVED or WAIVED. 
      * @endpoint post /v1/people/exceptions/{exceptionId}/waive
      * @param exceptionId 
-     * @param timeEntryExceptionWaiveRequest 
+     * @param timeEntryExceptionWaiveRequest Waiver justification; the reason is mandatory and becomes the exception\&#39;s resolution notes.
      * @param xCorrelationId 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public waiveException(exceptionId: string, timeEntryExceptionWaiveRequest: TimeEntryExceptionWaiveRequest, xCorrelationId?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<object>;
-    public waiveException(exceptionId: string, timeEntryExceptionWaiveRequest: TimeEntryExceptionWaiveRequest, xCorrelationId?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<object>>;
-    public waiveException(exceptionId: string, timeEntryExceptionWaiveRequest: TimeEntryExceptionWaiveRequest, xCorrelationId?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<object>>;
-    public waiveException(exceptionId: string, timeEntryExceptionWaiveRequest: TimeEntryExceptionWaiveRequest, xCorrelationId?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public waiveTimeEntryException(exceptionId: string, timeEntryExceptionWaiveRequest: TimeEntryExceptionWaiveRequest, xCorrelationId?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<object>;
+    public waiveTimeEntryException(exceptionId: string, timeEntryExceptionWaiveRequest: TimeEntryExceptionWaiveRequest, xCorrelationId?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<object>>;
+    public waiveTimeEntryException(exceptionId: string, timeEntryExceptionWaiveRequest: TimeEntryExceptionWaiveRequest, xCorrelationId?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<object>>;
+    public waiveTimeEntryException(exceptionId: string, timeEntryExceptionWaiveRequest: TimeEntryExceptionWaiveRequest, xCorrelationId?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (exceptionId === null || exceptionId === undefined) {
-            throw new Error('Required parameter exceptionId was null or undefined when calling waiveException.');
+            throw new Error('Required parameter exceptionId was null or undefined when calling waiveTimeEntryException.');
         }
         if (timeEntryExceptionWaiveRequest === null || timeEntryExceptionWaiveRequest === undefined) {
-            throw new Error('Required parameter timeEntryExceptionWaiveRequest was null or undefined when calling waiveException.');
+            throw new Error('Required parameter timeEntryExceptionWaiveRequest was null or undefined when calling waiveTimeEntryException.');
         }
 
         let localVarHeaders = this.defaultHeaders;

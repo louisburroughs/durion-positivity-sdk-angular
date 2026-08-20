@@ -14,13 +14,13 @@
  */
 export interface CustomerExemption { 
     /**
-     * Exemption reason (RESALE, GOVERNMENT, NONPROFIT, AGRICULTURAL, OTHER)
-     */
-    reasonCode?: CustomerExemptionReasonCodeEnum;
-    /**
      * Optional exemption-certificate identifier backing the claim
      */
     certificateId?: string;
+    /**
+     * Exemption reason (RESALE, GOVERNMENT, NONPROFIT, AGRICULTURAL, OTHER)
+     */
+    reasonCode?: CustomerExemptionReasonCodeEnum;
 }
 export enum CustomerExemptionReasonCodeEnum {
     Resale = 'RESALE',
@@ -71,7 +71,7 @@ export function instanceOfCustomerExemption(value: object): value is CustomerExe
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createCustomerExemptionPropertyNames();
-    const optionalStringProperties = createCustomerExemptionOptionalProperties({ name: 'reasonCode', nullable: false }, { name: 'certificateId', nullable: false }, );
+    const optionalStringProperties = createCustomerExemptionOptionalProperties({ name: 'certificateId', nullable: false }, { name: 'reasonCode', nullable: false }, );
     const optionalNumberProperties = createCustomerExemptionOptionalProperties();
     const optionalBooleanProperties = createCustomerExemptionOptionalProperties();
 

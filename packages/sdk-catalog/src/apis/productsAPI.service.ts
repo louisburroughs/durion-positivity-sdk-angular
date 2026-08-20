@@ -17,6 +17,8 @@ import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
 // @ts-ignore
+import { ApiError } from '../src/models/apiError';
+// @ts-ignore
 import { CatalogSearchResultDto } from '../src/models/catalogSearchResultDto';
 // @ts-ignore
 import { EffectiveLocationPriceResponseDto } from '../src/models/effectiveLocationPriceResponseDto';
@@ -31,11 +33,15 @@ import { LocationPriceOverrideResponseDto } from '../src/models/locationPriceOve
 // @ts-ignore
 import { NonInventoryProductDto } from '../src/models/nonInventoryProductDto';
 // @ts-ignore
+import { ProductCodeMatch } from '../src/models/productCodeMatch';
+// @ts-ignore
 import { ProductCreateRequestDto } from '../src/models/productCreateRequestDto';
 // @ts-ignore
 import { ProductDetailView } from '../src/models/productDetailView';
 // @ts-ignore
 import { ProductDto } from '../src/models/productDto';
+// @ts-ignore
+import { ProductFactReplayResultDto } from '../src/models/productFactReplayResultDto';
 // @ts-ignore
 import { ProductLifecycleResponse } from '../src/models/productLifecycleResponse';
 // @ts-ignore
@@ -68,24 +74,24 @@ export class ProductsAPIService extends BaseService {
     }
 
     /**
-     * Add replacement product
-     * Adds a replacement suggestion to a discontinued product.
+     * Add Replacement Product
+     * Records a replacement suggestion on a discontinued product, pointing buyers at the product that supersedes it, ordered among other options by priorityOrder. Use this tool after discontinuing a product via updateProductLifecycle; do not use listProductReplacements, which only reads the recorded options. Preconditions: the original product must exist and be in lifecycle state DISCONTINUED, and the replacement product must itself exist and differ from the original. Required inputs: productId (UUID) path parameter plus replacementProductId (UUID) and priorityOrder greater than zero; notes are optional and effectiveAt defaults to now when omitted. Emits a CATALOG_PRODUCT_REPLACEMENT_ADD event and invalidates the product-detail cache for the original product. Returns 404 when the original or replacement product does not exist, 409 when the original product is not DISCONTINUED, and 400 when the replacement equals the original or priorityOrder is not positive. 
      * @endpoint post /v1/products/{productId}/replacements
      * @param productId ID of discontinued product
-     * @param productReplacementRequest 
+     * @param productReplacementRequest Replacement suggestion pointing at the superseding product, with its ranking among other options.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public addReplacementProduct(productId: string, productReplacementRequest: ProductReplacementRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ReplacementOption>;
-    public addReplacementProduct(productId: string, productReplacementRequest: ProductReplacementRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ReplacementOption>>;
-    public addReplacementProduct(productId: string, productReplacementRequest: ProductReplacementRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ReplacementOption>>;
-    public addReplacementProduct(productId: string, productReplacementRequest: ProductReplacementRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public addProductReplacement(productId: string, productReplacementRequest: ProductReplacementRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ReplacementOption>;
+    public addProductReplacement(productId: string, productReplacementRequest: ProductReplacementRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ReplacementOption>>;
+    public addProductReplacement(productId: string, productReplacementRequest: ProductReplacementRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ReplacementOption>>;
+    public addProductReplacement(productId: string, productReplacementRequest: ProductReplacementRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (productId === null || productId === undefined) {
-            throw new Error('Required parameter productId was null or undefined when calling addReplacementProduct.');
+            throw new Error('Required parameter productId was null or undefined when calling addProductReplacement.');
         }
         if (productReplacementRequest === null || productReplacementRequest === undefined) {
-            throw new Error('Required parameter productReplacementRequest was null or undefined when calling addReplacementProduct.');
+            throw new Error('Required parameter productReplacementRequest was null or undefined when calling addProductReplacement.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -142,11 +148,11 @@ export class ProductsAPIService extends BaseService {
     }
 
     /**
-     * Approve pending location price override
-     * Approves a pending override and activates it as the effective location price.
+     * Approve Pending Price Override
+     * Approves a PENDING_APPROVAL location price override, setting it ACTIVE and closing its approval request as APPROVED. Use this tool to grant a pending override; do not use rejectLocationPriceOverride, which terminally declines it instead. Preconditions: the override must exist, be in PENDING_APPROVAL status, have an open approval request, and the supplied version must match the override\&#39;s current version. Required inputs: overrideId (UUID) path parameter plus version (long) and actorUserId (UUID) in the body; rejection fields are ignored on approval. Emits a CATALOG_LOCATION_OVERRIDE_APPROVE event and invalidates the product-detail cache for the override\&#39;s location. Returns 404 when the override or its approval request cannot be found, 400 when the override is not in PENDING_APPROVAL status, and 409 when the supplied version does not match the current one. 
      * @endpoint post /v1/products/pricing/location-overrides/{overrideId}/approve
      * @param overrideId Override ID
-     * @param locationPriceOverrideDecisionRequestDto 
+     * @param locationPriceOverrideDecisionRequestDto Approval decision carrying the acting user and the override\&#39;s current version for optimistic-lock verification.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -216,10 +222,10 @@ export class ProductsAPIService extends BaseService {
     }
 
     /**
-     * Create location price override
-     * Creates a location-specific price override and enforces guardrails for margin and discount limits.
+     * Create Location Price Override
+     * Creates a location-specific price override for one product, enforcing the location\&#39;s guardrail policy; discounts at or below the auto-approval threshold activate immediately, larger discounts are stored as PENDING_APPROVAL with an approval request assigned to a deterministic approver. Use this tool to discount a product at one location; do not use upsertLocationGuardrailPolicy, which sets the limits themselves, and use approveLocationPriceOverride to activate a pending one. Preconditions: the product must exist and a LOCATION guardrail policy must already exist for the locationId; any currently ACTIVE override for the same location and product is set INACTIVE. Required inputs: locationId, productId, createdByUserId (UUIDs), positive basePrice and overridePrice with overridePrice not exceeding basePrice; cost is optional and enables the margin check when present. Emits a CATALOG_LOCATION_OVERRIDE_CREATE event and invalidates the product-detail cache for that location. Returns 404 when the product does not exist, and 400 when no guardrail policy exists for the location, the discount exceeds maxDiscountPercent, or the margin falls below minMarginPercent; callers must read the returned status to learn whether the override is ACTIVE or PENDING_APPROVAL. 
      * @endpoint post /v1/products/pricing/location-overrides
-     * @param locationPriceOverrideCreateRequestDto 
+     * @param locationPriceOverrideCreateRequestDto Override pricing for one product at one location; cost is optional and enables the minimum-margin guardrail check.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -286,10 +292,10 @@ export class ProductsAPIService extends BaseService {
     }
 
     /**
-     * Create product master record
-     * Creates a product master record with immutable SKU and uniqueness checks.
+     * Create Product Master Record
+     * Creates a product master record with an immutable SKU, status ACTIVE, and uniqueness enforced on SKU and on the manufacturerId plus mpn pair. Use this tool for governed product-master entry; do not use createCatalogItem, which is the lightweight catalog-item path with no duplicate checks, and do not use bulkIngestCatalogProducts, which loads many products in one call. Preconditions: no product may already use the SKU (case-insensitive), and when manufacturerId is supplied no product may already pair it with the same mpn; a supplied categoryId must resolve. Required inputs: name, description, unitOfMeasure, sku and mpn, all non-blank; manufacturerId, categoryId, upc and attributes are optional, and a upc also becomes the productCode with type UPC. Emits a CATALOG_PRODUCT_CREATED event, publishes a product fact for downstream replicas, and invalidates the product-detail cache. Returns 409 when the SKU or the manufacturerId plus mpn pair already exists, and 400 when the supplied categoryId does not resolve. 
      * @endpoint post /v1/products
-     * @param productCreateRequestDto 
+     * @param productCreateRequestDto Product master data to register; sku becomes immutable after creation and upc, when supplied, also becomes the productCode.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -356,8 +362,93 @@ export class ProductsAPIService extends BaseService {
     }
 
     /**
-     * Get effective location price
-     * Resolves effective price using precedence: ACTIVE override first, otherwise base price.
+     * Find a Product by Exact EAN or UPC
+     * Resolves the single product carrying an exact product code under one code scheme, EAN or UPC, which is the deterministic matching step supplier price-catalog ingestion runs before it applies a vendor line to a product. Use this tool when a code from a vendor document or a scanner must be turned into a product id; use searchCatalogProducts instead for partial text or filters, and getProductById when the id is already known. Preconditions: EAN and UPC values are unique per scheme, so a match is either absent or unique; surrounding whitespace is trimmed but no other normalisation is applied, so a code differing by a leading zero is a different code and will not match. Required inputs: codeType (EAN or UPC) and code, both query parameters; there is no request body and no fuzzy fallback — an unmatched code is reported as a miss, never as a near match. Emits a CATALOG_PRODUCT_CODE_LOOKUP event; no state changes. Returns 404 when no product carries the code, 400 when codeType is not EAN or UPC, and 409 on a schema whose duplicate codes have not yet been cleaned up, in which case the value is ambiguous and matching is refused rather than guessed. 
+     * @endpoint get /v1/products/by-code
+     * @param codeType Code scheme to match within; EAN and UPC are matched independently
+     * @param code Exact code value; trimmed, otherwise matched verbatim
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public findProductByCode(codeType: 'UPC' | 'EAN', code: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ProductCodeMatch>;
+    public findProductByCode(codeType: 'UPC' | 'EAN', code: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ProductCodeMatch>>;
+    public findProductByCode(codeType: 'UPC' | 'EAN', code: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ProductCodeMatch>>;
+    public findProductByCode(codeType: 'UPC' | 'EAN', code: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (codeType === null || codeType === undefined) {
+            throw new Error('Required parameter codeType was null or undefined when calling findProductByCode.');
+        }
+        if (code === null || code === undefined) {
+            throw new Error('Required parameter code was null or undefined when calling findProductByCode.');
+        }
+
+        let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'codeType',
+            <any>codeType,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'code',
+            <any>code,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/products/by-code`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<ProductCodeMatch>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                params: localVarQueryParameters.toHttpParams(),
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Get Effective Location Price
+     * Resolves the price a location currently charges for a product from its override records: the newest ACTIVE override wins, otherwise a PENDING_APPROVAL override reports its basePrice as the effective price with status PENDING_APPROVAL. Use this tool to check what an override has done to a product\&#39;s price at one location; do not use getProductDetailView, which returns the full consolidated pricing and availability view. Preconditions: at least one ACTIVE or PENDING_APPROVAL override must exist for the pair; a product with no override history at the location has no answer here. Required inputs: locationId and productId (UUIDs) as path parameters; there is no request body. No events are emitted and no state changes; this is a read-only projection. Returns 404 when no ACTIVE or PENDING_APPROVAL override exists for the location and product pair, even if the product itself exists. 
      * @endpoint get /v1/products/pricing/effective-price/{locationId}/{productId}
      * @param locationId Location ID
      * @param productId Product ID
@@ -420,8 +511,8 @@ export class ProductsAPIService extends BaseService {
     }
 
     /**
-     * Get a non-inventory product by ID
-     * Retrieves a specific non-inventory product by its unique ID.
+     * Get Non-Inventory Product by ID
+     * Returns one non-inventory product — an item sold without stock tracking, such as a fee or shop supply — with its name and descriptions. Use this tool when the id is already known; use listNonInventoryProductsByName instead to find non-inventory products by exact name. Preconditions: the non-inventory product must exist. Required inputs: productId (UUID) as a path parameter; there is no request body. No events are emitted and no state changes; this is a read-only projection. Returns 404 when no non-inventory product exists for the supplied id. 
      * @endpoint get /v1/products/noninventory/{productId}
      * @param productId ID of the non-inventory product to be obtained
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -480,68 +571,8 @@ export class ProductsAPIService extends BaseService {
     }
 
     /**
-     * Get non-inventory products by name
-     * Retrieves a list of non-inventory products matching the given name.
-     * @endpoint get /v1/products/noninventory/name/{name}
-     * @param name Name of the non-inventory products to be obtained
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     * @param options additional options
-     */
-    public getNonInventoryProductByName(name: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<NonInventoryProductDto>;
-    public getNonInventoryProductByName(name: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<NonInventoryProductDto>>;
-    public getNonInventoryProductByName(name: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<NonInventoryProductDto>>;
-    public getNonInventoryProductByName(name: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
-        if (name === null || name === undefined) {
-            throw new Error('Required parameter name was null or undefined when calling getNonInventoryProductByName.');
-        }
-
-        let localVarHeaders = this.defaultHeaders;
-
-        // authentication (bearerAuth) required
-        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
-
-        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
-            'application/json'
-        ]);
-        if (localVarHttpHeaderAcceptSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
-        }
-
-        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
-
-        const localVarTransferCache: boolean = options?.transferCache ?? true;
-
-
-        let responseType_: 'text' | 'json' | 'blob' = 'json';
-        if (localVarHttpHeaderAcceptSelected) {
-            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
-                responseType_ = 'text';
-            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
-                responseType_ = 'json';
-            } else {
-                responseType_ = 'blob';
-            }
-        }
-
-        let localVarPath = `/v1/products/noninventory/name/${this.configuration.encodeParam({name: "name", value: name, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
-        const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<NonInventoryProductDto>('get', `${basePath}${localVarPath}`,
-            {
-                context: localVarHttpContext,
-                responseType: <any>responseType_,
-                ...(withCredentials ? { withCredentials } : {}),
-                headers: localVarHeaders,
-                observe: observe,
-                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * Get substitute parts
-     * Returns list of substitute parts for a given productId.
+     * Get Substitute Parts
+     * Returns the full product records of a product\&#39;s recorded replacements, resolved from its replacement options in priority order with duplicates and dangling references dropped. Use this tool when selling and a substitute product\&#39;s details are needed directly; use listProductReplacements instead for the raw option rows with priority and notes. Preconditions: the product must exist; substitutes appear only after replacements were recorded via addProductReplacement. Required inputs: productId (UUID) as a path parameter; there is no request body. No events are emitted and no state changes; this is a read-only projection. Returns 404 when no product exists for the supplied id, and 200 with an empty array when no replacement products resolve. 
      * @endpoint get /v1/products/{productId}/substitutes
      * @param productId ID of the product
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -600,8 +631,8 @@ export class ProductsAPIService extends BaseService {
     }
 
     /**
-     * Get a product by ID
-     * Retrieves a specific product by its unique ID.
+     * Get a Product by ID
+     * Returns the full product record including identity codes, manufacturer data, category, dimensions, tracking level and lifecycle state. Use this tool when the productId is already known; use searchCatalogProducts instead to find products by text or filters. Preconditions: the product must exist. Required inputs: productId (UUID) as a path parameter; there is no request body. No events are emitted and no state changes; this is a read-only projection. Returns 404 when no product exists for the supplied id. 
      * @endpoint get /v1/products/{productId}
      * @param productId ID of the product to be obtained
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -660,68 +691,8 @@ export class ProductsAPIService extends BaseService {
     }
 
     /**
-     * Get products by name
-     * Retrieves a list of products matching the given name.
-     * @endpoint get /v1/products/name/{name}
-     * @param name Name of the products to be obtained
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     * @param options additional options
-     */
-    public getProductByName(name: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ProductDto>;
-    public getProductByName(name: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ProductDto>>;
-    public getProductByName(name: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ProductDto>>;
-    public getProductByName(name: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
-        if (name === null || name === undefined) {
-            throw new Error('Required parameter name was null or undefined when calling getProductByName.');
-        }
-
-        let localVarHeaders = this.defaultHeaders;
-
-        // authentication (bearerAuth) required
-        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
-
-        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
-            'application/json'
-        ]);
-        if (localVarHttpHeaderAcceptSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
-        }
-
-        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
-
-        const localVarTransferCache: boolean = options?.transferCache ?? true;
-
-
-        let responseType_: 'text' | 'json' | 'blob' = 'json';
-        if (localVarHttpHeaderAcceptSelected) {
-            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
-                responseType_ = 'text';
-            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
-                responseType_ = 'json';
-            } else {
-                responseType_ = 'blob';
-            }
-        }
-
-        let localVarPath = `/v1/products/name/${this.configuration.encodeParam({name: "name", value: name, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
-        const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<ProductDto>('get', `${basePath}${localVarPath}`,
-            {
-                context: localVarHttpContext,
-                responseType: <any>responseType_,
-                ...(withCredentials ? { withCredentials } : {}),
-                headers: localVarHeaders,
-                observe: observe,
-                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * Get product details with pricing and availability
-     * Retrieves a consolidated view of product information including catalog data, location-specific pricing, and availability. Implements graceful degradation and returns partial data when non-critical services are unavailable.
+     * Get Product Detail With Pricing
+     * Returns a consolidated product view for one location: catalog data, location-specific pricing, availability and lead time, with a confidence indicator describing how complete the data is. Use this tool for a sales-facing view of one product at one store; use getProductById instead for raw master data, and getEffectiveLocationPrice for the override-derived price alone. Preconditions: the product must exist; pricing and availability sources may be degraded, in which case partial data is returned rather than an error. Required inputs: productId (UUID) path parameter and location_id (UUID) query parameter. No events are emitted and no state changes; this is a read-only projection. Returns 404 when the product does not exist, and 400 when location_id is missing or malformed; a 200 may still carry partial data, so callers should inspect the confidence field. 
      * @endpoint get /v1/products/{productId}/detail
      * @param productId ID of the product
      * @param locationId Location/store ID for location-specific data
@@ -796,8 +767,8 @@ export class ProductsAPIService extends BaseService {
     }
 
     /**
-     * Get product lifecycle state
-     * Retrieves lifecycle state and replacement suggestions for a product.
+     * Get Product Lifecycle State
+     * Returns a product\&#39;s lifecycle state — ACTIVE, INACTIVE or DISCONTINUED, defaulting to ACTIVE when never set — together with its effective instant, last-change audit fields and ordered replacement options. Use this tool to inspect selling state before a transition; do not use updateProductLifecycle, which changes the state, and use listProductReplacements when only the replacements are needed. Preconditions: the product must exist. Required inputs: productId (UUID) as a path parameter; there is no request body. Emits a CATALOG_PRODUCT_LIFECYCLE_GET audit event; no state changes. Returns 404 when no product exists for the supplied id. 
      * @endpoint get /v1/products/{productId}/lifecycle
      * @param productId ID of the product
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -856,68 +827,8 @@ export class ProductsAPIService extends BaseService {
     }
 
     /**
-     * List replacement products
-     * Returns replacement options for a product.
-     * @endpoint get /v1/products/{productId}/replacements
-     * @param productId ID of the product
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     * @param options additional options
-     */
-    public getReplacements(productId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<ReplacementOption>>;
-    public getReplacements(productId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<ReplacementOption>>>;
-    public getReplacements(productId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<ReplacementOption>>>;
-    public getReplacements(productId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
-        if (productId === null || productId === undefined) {
-            throw new Error('Required parameter productId was null or undefined when calling getReplacements.');
-        }
-
-        let localVarHeaders = this.defaultHeaders;
-
-        // authentication (bearerAuth) required
-        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
-
-        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
-            'application/json'
-        ]);
-        if (localVarHttpHeaderAcceptSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
-        }
-
-        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
-
-        const localVarTransferCache: boolean = options?.transferCache ?? true;
-
-
-        let responseType_: 'text' | 'json' | 'blob' = 'json';
-        if (localVarHttpHeaderAcceptSelected) {
-            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
-                responseType_ = 'text';
-            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
-                responseType_ = 'json';
-            } else {
-                responseType_ = 'blob';
-            }
-        }
-
-        let localVarPath = `/v1/products/${this.configuration.encodeParam({name: "productId", value: productId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/replacements`;
-        const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<Array<ReplacementOption>>('get', `${basePath}${localVarPath}`,
-            {
-                context: localVarHttpContext,
-                responseType: <any>responseType_,
-                ...(withCredentials ? { withCredentials } : {}),
-                headers: localVarHeaders,
-                observe: observe,
-                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * Get a service by ID
-     * Retrieves a specific service by its unique ID.
+     * Get a Service by ID
+     * Returns one catalog service record with its name, short description and long description. Use this tool when the serviceId is already known; use searchCatalogServices instead to find services by partial name. Preconditions: the service must exist. Required inputs: serviceId (UUID) as a path parameter; there is no request body. No events are emitted and no state changes; this is a read-only projection. Returns 404 when no service exists for the supplied id. 
      * @endpoint get /v1/products/services/{serviceId}
      * @param serviceId ID of the service to be obtained
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -976,20 +887,200 @@ export class ProductsAPIService extends BaseService {
     }
 
     /**
-     * Get services by name
-     * Retrieves a list of services matching the given name.
+     * List Non-Inventory Products by Name
+     * Returns every non-inventory product whose name equals the supplied value exactly; this is a whole-name match, not a substring search. Use this tool only when the exact name is known; use getNonInventoryProductById instead when the id is available, since there is no substring search for non-inventory products. Preconditions: none; an empty result simply means no non-inventory product carries that exact name. Required inputs: name as a path parameter; there is no paging and no request body. No events are emitted and no state changes; this is a read-only projection. Returns 200 with an empty array when nothing matches, so an empty result is not an error condition. 
+     * @endpoint get /v1/products/noninventory/name/{name}
+     * @param name Name of the non-inventory products to be obtained
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public listNonInventoryProductsByName(name: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<NonInventoryProductDto>;
+    public listNonInventoryProductsByName(name: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<NonInventoryProductDto>>;
+    public listNonInventoryProductsByName(name: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<NonInventoryProductDto>>;
+    public listNonInventoryProductsByName(name: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (name === null || name === undefined) {
+            throw new Error('Required parameter name was null or undefined when calling listNonInventoryProductsByName.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/products/noninventory/name/${this.configuration.encodeParam({name: "name", value: name, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<NonInventoryProductDto>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * List Replacement Products
+     * Returns the non-deleted replacement options recorded for a product, ordered by priority, each with its replacement product id, notes and effective instant. Use this tool to see what supersedes a discontinued product; do not use addProductReplacement, which records a new option, and use getPartSubstitutes to resolve the full substitute product records instead of the option rows. Preconditions: the product must exist; replacements are normally present only on DISCONTINUED products. Required inputs: productId (UUID) as a path parameter; there is no request body. No events are emitted and no state changes; this is a read-only projection. Returns 404 when no product exists for the supplied id, and 200 with an empty array when the product has no replacements. 
+     * @endpoint get /v1/products/{productId}/replacements
+     * @param productId ID of the product
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public listProductReplacements(productId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<ReplacementOption>>;
+    public listProductReplacements(productId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<ReplacementOption>>>;
+    public listProductReplacements(productId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<ReplacementOption>>>;
+    public listProductReplacements(productId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (productId === null || productId === undefined) {
+            throw new Error('Required parameter productId was null or undefined when calling listProductReplacements.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/products/${this.configuration.encodeParam({name: "productId", value: productId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/replacements`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<Array<ReplacementOption>>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * List Products by Exact Name
+     * Returns every product whose name equals the supplied value exactly; this is a whole-name match, not a substring search. Use this tool only when the exact product name is known; use searchCatalogProducts instead for partial text, brand, category or SKU matching. Preconditions: none; an empty result simply means no product carries that exact name. Required inputs: name as a path parameter; there is no paging and no request body. No events are emitted and no state changes; this is a read-only projection. Returns 200 with an empty array when nothing matches, so an empty result is not an error condition. 
+     * @endpoint get /v1/products/name/{name}
+     * @param name Name of the products to be obtained
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public listProductsByName(name: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ProductDto>;
+    public listProductsByName(name: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ProductDto>>;
+    public listProductsByName(name: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ProductDto>>;
+    public listProductsByName(name: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (name === null || name === undefined) {
+            throw new Error('Required parameter name was null or undefined when calling listProductsByName.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/products/name/${this.configuration.encodeParam({name: "name", value: name, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<ProductDto>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * List Services by Exact Name
+     * Returns every catalog service whose name equals the supplied value exactly; this is a whole-name match, not a substring search. Use this tool only when the exact service name is known; use searchCatalogServices instead for partial, typeahead-style matching. Preconditions: none; an empty result simply means no service carries that exact name. Required inputs: name as a path parameter; there is no paging and no request body. No events are emitted and no state changes; this is a read-only projection. Returns 200 with an empty array when nothing matches, so an empty result is not an error condition. 
      * @endpoint get /v1/products/services/name/{name}
      * @param name Name of the services to be obtained
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public getServiceByName(name: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ServiceDto>;
-    public getServiceByName(name: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ServiceDto>>;
-    public getServiceByName(name: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ServiceDto>>;
-    public getServiceByName(name: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public listServicesByName(name: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ServiceDto>;
+    public listServicesByName(name: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ServiceDto>>;
+    public listServicesByName(name: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ServiceDto>>;
+    public listServicesByName(name: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (name === null || name === undefined) {
-            throw new Error('Required parameter name was null or undefined when calling getServiceByName.');
+            throw new Error('Required parameter name was null or undefined when calling listServicesByName.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -1036,11 +1127,11 @@ export class ProductsAPIService extends BaseService {
     }
 
     /**
-     * Reject pending location price override
-     * Rejects a pending override, persists rejection metadata, and marks the request as terminal.
+     * Reject Pending Price Override
+     * Rejects a PENDING_APPROVAL location price override, recording who rejected it and why, and closing its approval request as REJECTED; the decision is terminal, a rejected override cannot be revived. Use this tool to decline a pending override; do not use approveLocationPriceOverride, which activates it instead. Preconditions: the override must exist, be in PENDING_APPROVAL status, have an open approval request, and the supplied version must match the override\&#39;s current version. Required inputs: overrideId (UUID) path parameter plus version (long), actorUserId (UUID), and non-blank rejectionReasonCode and rejectionNotes in the body. Emits a CATALOG_LOCATION_OVERRIDE_REJECT event and invalidates the product-detail cache for the override\&#39;s location. Returns 404 when the override or its approval request cannot be found, 400 when the override is not in PENDING_APPROVAL status or the rejection reason or notes are blank, and 409 when the supplied version does not match the current one. 
      * @endpoint post /v1/products/pricing/location-overrides/{overrideId}/reject
      * @param overrideId Override ID
-     * @param locationPriceOverrideDecisionRequestDto 
+     * @param locationPriceOverrideDecisionRequestDto Rejection decision carrying the acting user, the override\&#39;s current version, and a mandatory reason code with notes.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -1110,8 +1201,97 @@ export class ProductsAPIService extends BaseService {
     }
 
     /**
-     * Search catalog products
-     * Cursor-based product search with optional free-text query and exact filters for brand, category, and SKU. Pass detailed&#x3D;true to enrich each row inline with lifecycle state + effective instant and the product\&#39;s active MSRP (amount, currency, effective window), resolved server-side in a single request. Products without an active MSRP return null price fields.
+     * Re-emit Product Facts for Replica Consumers
+     * Re-publishes catalog.product.updated facts for one bounded page of products so that event-fed replicas in other modules can be seeded or repaired, returning what it emitted and a cursor for the next page. Use this tool to fill a consumer\&#39;s replica after a first deployment or a consumer outage longer than broker retention; do not use it to fix one product, which republishes itself on its next ordinary update. Preconditions: Kafka publication must be enabled, or the facts queue in the outbox and reach nobody; replayed facts are indistinguishable from live ones, so consumers apply them through their normal path and their stale guard prevents an older fact regressing newer state. Required inputs: none; afterProductId resumes a previous page, updatedSince restricts to products changed at or after an instant, and limit bounds the page at 1000. Emits a CATALOG_PRODUCT_FACT_REPLAY event and queues one product fact per product in the page; no catalog state changes. Returns 200 with complete&#x3D;true and a null cursor once the catalog end is reached, and 400 when limit is out of range or a parameter is malformed. 
+     * @endpoint post /v1/products/facts/replay
+     * @param afterProductId Resume cursor from a previous call; omit to start at the beginning.
+     * @param updatedSince Restrict to products changed at or after this instant; omit to replay all.
+     * @param limit Maximum facts to emit in this call (1–1000).
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public replayProductFacts(afterProductId?: string, updatedSince?: string, limit?: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ProductFactReplayResultDto>;
+    public replayProductFacts(afterProductId?: string, updatedSince?: string, limit?: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ProductFactReplayResultDto>>;
+    public replayProductFacts(afterProductId?: string, updatedSince?: string, limit?: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ProductFactReplayResultDto>>;
+    public replayProductFacts(afterProductId?: string, updatedSince?: string, limit?: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+
+        let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'afterProductId',
+            <any>afterProductId,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'updatedSince',
+            <any>updatedSince,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'limit',
+            <any>limit,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/products/facts/replay`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<ProductFactReplayResultDto>('post', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                params: localVarQueryParameters.toHttpParams(),
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Search Catalog Products
+     * Searches products with an optional free-text query over name and description plus exact case-insensitive filters for brand, category and SKU, paged by an opaque cursor. Use this tool to find products by partial text or filters; use getProductById instead when the id is known, and listProductsByName only for exact whole-name matches. Preconditions: none; a malformed or missing cursor silently restarts at the first page rather than failing. Required inputs: all parameters are optional; limit defaults to 20 and is clamped to 1-100, and detailed defaults to false — pass detailed&#x3D;true to enrich each row with lifecycle state, its effective instant and the active MSRP, with null price fields for products lacking an active MSRP. No events are emitted and no state changes; this is a read-only projection. Returns 200 with an empty items array when nothing matches, so an empty result is not an error condition. 
      * @endpoint get /v1/products/search
      * @param q Free-text search query (matches product name and description)
      * @param brand Filter by manufacturer brand (exact, case-insensitive)
@@ -1124,10 +1304,10 @@ export class ProductsAPIService extends BaseService {
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public searchProducts(q?: string, brand?: string, category?: string, sku?: string, cursor?: string, limit?: number, detailed?: boolean, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<CatalogSearchResultDto>;
-    public searchProducts(q?: string, brand?: string, category?: string, sku?: string, cursor?: string, limit?: number, detailed?: boolean, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<CatalogSearchResultDto>>;
-    public searchProducts(q?: string, brand?: string, category?: string, sku?: string, cursor?: string, limit?: number, detailed?: boolean, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<CatalogSearchResultDto>>;
-    public searchProducts(q?: string, brand?: string, category?: string, sku?: string, cursor?: string, limit?: number, detailed?: boolean, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public searchCatalogProducts(q?: string, brand?: string, category?: string, sku?: string, cursor?: string, limit?: number, detailed?: boolean, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<CatalogSearchResultDto>;
+    public searchCatalogProducts(q?: string, brand?: string, category?: string, sku?: string, cursor?: string, limit?: number, detailed?: boolean, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<CatalogSearchResultDto>>;
+    public searchCatalogProducts(q?: string, brand?: string, category?: string, sku?: string, cursor?: string, limit?: number, detailed?: boolean, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<CatalogSearchResultDto>>;
+    public searchCatalogProducts(q?: string, brand?: string, category?: string, sku?: string, cursor?: string, limit?: number, detailed?: boolean, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
 
@@ -1239,8 +1419,8 @@ export class ProductsAPIService extends BaseService {
     }
 
     /**
-     * Search catalog services
-     * Free-text substring search over service names for typeahead selection.
+     * Search Catalog Services
+     * Searches services by a case-insensitive substring of the service name, ordered by name, sized for typeahead selection. Use this tool to find a serviceId by partial name; use getServiceById instead when the id is known, and listServicesByName for exact whole-name matches. Preconditions: none; a blank or missing q returns an empty list rather than all services. Required inputs: q as the substring to match; limit is optional, defaults to 20 and is clamped to 1-100. No events are emitted and no state changes; this is a read-only projection. Returns 200 with an empty array when q is blank or nothing matches, so an empty result is not an error condition. 
      * @endpoint get /v1/products/services/search
      * @param q Free-text query matching service name (case-insensitive substring)
      * @param limit Maximum number of results (1–100)
@@ -1248,10 +1428,10 @@ export class ProductsAPIService extends BaseService {
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public searchServices(q?: string, limit?: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<ServiceDto>>;
-    public searchServices(q?: string, limit?: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<ServiceDto>>>;
-    public searchServices(q?: string, limit?: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<ServiceDto>>>;
-    public searchServices(q?: string, limit?: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public searchCatalogServices(q?: string, limit?: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<ServiceDto>>;
+    public searchCatalogServices(q?: string, limit?: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<ServiceDto>>>;
+    public searchCatalogServices(q?: string, limit?: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<ServiceDto>>>;
+    public searchCatalogServices(q?: string, limit?: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
 
@@ -1318,85 +1498,11 @@ export class ProductsAPIService extends BaseService {
     }
 
     /**
-     * Set product lifecycle state
-     * Sets lifecycle state to ACTIVE, INACTIVE, or DISCONTINUED with effective date semantics.
-     * @endpoint put /v1/products/{productId}/lifecycle
-     * @param productId ID of the product
-     * @param productLifecycleUpdateRequest 
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     * @param options additional options
-     */
-    public setLifecycleState(productId: string, productLifecycleUpdateRequest: ProductLifecycleUpdateRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ProductLifecycleResponse>;
-    public setLifecycleState(productId: string, productLifecycleUpdateRequest: ProductLifecycleUpdateRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ProductLifecycleResponse>>;
-    public setLifecycleState(productId: string, productLifecycleUpdateRequest: ProductLifecycleUpdateRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ProductLifecycleResponse>>;
-    public setLifecycleState(productId: string, productLifecycleUpdateRequest: ProductLifecycleUpdateRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
-        if (productId === null || productId === undefined) {
-            throw new Error('Required parameter productId was null or undefined when calling setLifecycleState.');
-        }
-        if (productLifecycleUpdateRequest === null || productLifecycleUpdateRequest === undefined) {
-            throw new Error('Required parameter productLifecycleUpdateRequest was null or undefined when calling setLifecycleState.');
-        }
-
-        let localVarHeaders = this.defaultHeaders;
-
-        // authentication (bearerAuth) required
-        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
-
-        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
-            'application/json'
-        ]);
-        if (localVarHttpHeaderAcceptSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
-        }
-
-        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
-
-        const localVarTransferCache: boolean = options?.transferCache ?? true;
-
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-            'application/json'
-        ];
-        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
-        if (httpContentTypeSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
-        }
-
-        let responseType_: 'text' | 'json' | 'blob' = 'json';
-        if (localVarHttpHeaderAcceptSelected) {
-            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
-                responseType_ = 'text';
-            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
-                responseType_ = 'json';
-            } else {
-                responseType_ = 'blob';
-            }
-        }
-
-        let localVarPath = `/v1/products/${this.configuration.encodeParam({name: "productId", value: productId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/lifecycle`;
-        const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<ProductLifecycleResponse>('put', `${basePath}${localVarPath}`,
-            {
-                context: localVarHttpContext,
-                body: productLifecycleUpdateRequest,
-                responseType: <any>responseType_,
-                ...(withCredentials ? { withCredentials } : {}),
-                headers: localVarHeaders,
-                observe: observe,
-                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * Update product master record
-     * Updates mutable product master fields. SKU is immutable.
+     * Update Product Master Record
+     * Replaces the mutable master-data fields of a product — name, description, unit of measure, manufacturer, category, UPC and attributes — while the SKU stays immutable. Use this tool to correct product master data; do not use updateProductLifecycle, which changes selling state, and do not use updateProductTrackingLevel, which changes stock tracking. Preconditions: the product must exist, and a sku field in the body must either be omitted or match the stored SKU exactly. Required inputs: productId (UUID) path parameter plus non-blank name, description, unitOfMeasure and mpn; omitted optional fields such as upc and categoryId are cleared, not preserved. Emits a CATALOG_PRODUCT_UPDATED event, publishes a product fact for downstream replicas, and invalidates the product-detail cache. Returns 404 when the product does not exist, 400 when the body tries to change the SKU or names a categoryId that does not resolve, and 409 when the manufacturerId plus mpn pair collides with another product. 
      * @endpoint put /v1/products/{productId}
      * @param productId ID of the product to update
-     * @param productUpdateRequestDto 
+     * @param productUpdateRequestDto Replacement master-data fields; sku may be omitted or must equal the stored value, and omitted optional fields are cleared.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -1466,24 +1572,98 @@ export class ProductsAPIService extends BaseService {
     }
 
     /**
-     * Set product tracking level
-     * Sets the product\&#39;s stock tracking level (NONE, LOT, or SERIAL; default NONE) and re-emits the product contract event for downstream replicas.
-     * @endpoint put /v1/products/{productId}/tracking-level
+     * Set Product Lifecycle State
+     * Transitions a product\&#39;s lifecycle state to ACTIVE, INACTIVE or DISCONTINUED with an effective instant; discontinuation is one-way, a DISCONTINUED product can never be reactivated and callers must record a replacement via addProductReplacement instead. Use this tool to change selling state; do not use updateProduct, which edits master data, and do not use deleteCatalogItem, which removes the row outright. Preconditions: the product must exist and must not already be in the requested state; any transition into DISCONTINUED requires the product:lifecycle:override_discontinued authority and a non-blank overrideReason. Required inputs: productId (UUID) path parameter plus lifecycleState and either effectiveAt (instant) or effectiveDate (date, resolved to UTC start of day); effectiveAt more than two seconds in the past is rejected. Emits a CATALOG_PRODUCT_LIFECYCLE_UPDATE event, publishes a product fact for downstream replicas, and invalidates the product-detail cache. Returns 404 when the product does not exist, 409 when attempting to leave DISCONTINUED, 403 when the discontinued-override authority is missing, and 400 when the state is unchanged, the effective time is absent or in the past, or overrideReason is missing for a discontinuation. 
+     * @endpoint put /v1/products/{productId}/lifecycle
      * @param productId ID of the product
-     * @param productTrackingLevelUpdateRequestDto 
+     * @param productLifecycleUpdateRequest Target lifecycle state and when it takes effect; overrideReason is mandatory for transitions into DISCONTINUED.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public updateTrackingLevel(productId: string, productTrackingLevelUpdateRequestDto: ProductTrackingLevelUpdateRequestDto, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ProductDto>;
-    public updateTrackingLevel(productId: string, productTrackingLevelUpdateRequestDto: ProductTrackingLevelUpdateRequestDto, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ProductDto>>;
-    public updateTrackingLevel(productId: string, productTrackingLevelUpdateRequestDto: ProductTrackingLevelUpdateRequestDto, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ProductDto>>;
-    public updateTrackingLevel(productId: string, productTrackingLevelUpdateRequestDto: ProductTrackingLevelUpdateRequestDto, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public updateProductLifecycle(productId: string, productLifecycleUpdateRequest: ProductLifecycleUpdateRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ProductLifecycleResponse>;
+    public updateProductLifecycle(productId: string, productLifecycleUpdateRequest: ProductLifecycleUpdateRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ProductLifecycleResponse>>;
+    public updateProductLifecycle(productId: string, productLifecycleUpdateRequest: ProductLifecycleUpdateRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ProductLifecycleResponse>>;
+    public updateProductLifecycle(productId: string, productLifecycleUpdateRequest: ProductLifecycleUpdateRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (productId === null || productId === undefined) {
-            throw new Error('Required parameter productId was null or undefined when calling updateTrackingLevel.');
+            throw new Error('Required parameter productId was null or undefined when calling updateProductLifecycle.');
+        }
+        if (productLifecycleUpdateRequest === null || productLifecycleUpdateRequest === undefined) {
+            throw new Error('Required parameter productLifecycleUpdateRequest was null or undefined when calling updateProductLifecycle.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/products/${this.configuration.encodeParam({name: "productId", value: productId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/lifecycle`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<ProductLifecycleResponse>('put', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                body: productLifecycleUpdateRequest,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Set Product Tracking Level
+     * Sets the product\&#39;s stock tracking level to NONE, LOT or SERIAL, controlling whether inventory tracks the product per lot or per serial number. Use this tool when a product\&#39;s tracking granularity changes; do not use updateProduct, which replaces master-data fields and does not touch the tracking level. Preconditions: the product must exist; no transition rules apply between levels. Required inputs: productId (UUID) path parameter and trackingLevel in the body, one of NONE, LOT or SERIAL. Emits a CATALOG_PRODUCT_TRACKING_LEVEL_UPDATE event, re-publishes the product fact so downstream replicas pick up the new level, and invalidates the product-detail cache. Returns 404 when the product does not exist, and 400 when trackingLevel is missing or not a valid enum value. 
+     * @endpoint put /v1/products/{productId}/tracking-level
+     * @param productId ID of the product
+     * @param productTrackingLevelUpdateRequestDto The stock tracking granularity to apply to the product.
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public updateProductTrackingLevel(productId: string, productTrackingLevelUpdateRequestDto: ProductTrackingLevelUpdateRequestDto, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ProductDto>;
+    public updateProductTrackingLevel(productId: string, productTrackingLevelUpdateRequestDto: ProductTrackingLevelUpdateRequestDto, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ProductDto>>;
+    public updateProductTrackingLevel(productId: string, productTrackingLevelUpdateRequestDto: ProductTrackingLevelUpdateRequestDto, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ProductDto>>;
+    public updateProductTrackingLevel(productId: string, productTrackingLevelUpdateRequestDto: ProductTrackingLevelUpdateRequestDto, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (productId === null || productId === undefined) {
+            throw new Error('Required parameter productId was null or undefined when calling updateProductTrackingLevel.');
         }
         if (productTrackingLevelUpdateRequestDto === null || productTrackingLevelUpdateRequestDto === undefined) {
-            throw new Error('Required parameter productTrackingLevelUpdateRequestDto was null or undefined when calling updateTrackingLevel.');
+            throw new Error('Required parameter productTrackingLevelUpdateRequestDto was null or undefined when calling updateProductTrackingLevel.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -1540,10 +1720,10 @@ export class ProductsAPIService extends BaseService {
     }
 
     /**
-     * Upsert location guardrail policy
-     * Creates or updates the active LOCATION guardrail policy used by price overrides.
+     * Upsert Location Guardrail Policy
+     * Creates or updates the LOCATION-scoped guardrail policy that createLocationPriceOverride enforces for discount, margin and auto-approval limits. Use this tool to set pricing guardrails for a location before overrides are created there; do not use createLocationPriceOverride, which applies a price and is rejected until a policy exists. Preconditions: none; when a policy already exists for the scopeId its limits are overwritten, otherwise a new policy row is created. Required inputs: scopeId (the location UUID), minMarginPercent, maxDiscountPercent and autoApprovalThresholdPercent, all mandatory. Emits a CATALOG_GUARDRAIL_POLICY_UPSERT event; existing overrides are not re-evaluated, the new limits apply only to overrides created afterwards. Returns 400 when any of the four fields is missing; the 200 response body carries only the locationId, not the stored limits. 
      * @endpoint post /v1/products/pricing/guardrail-policies
-     * @param guardrailPolicyUpsertRequestDto 
+     * @param guardrailPolicyUpsertRequestDto Guardrail limits for one location: minimum margin, maximum discount and the discount threshold under which overrides auto-approve.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options

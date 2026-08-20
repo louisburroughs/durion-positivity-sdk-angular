@@ -18,10 +18,6 @@ export interface CreateCycleCountPlanRequest {
      */
     locationId: string;
     /**
-     * Identifiers of the zones within the location to include in the plan
-     */
-    zoneIds?: Array<string>;
-    /**
      * Human-readable name for the cycle count plan
      */
     planName: string;
@@ -29,6 +25,10 @@ export interface CreateCycleCountPlanRequest {
      * Date on which the cycle count is scheduled to occur
      */
     scheduledDate: string;
+    /**
+     * Identifiers of the zones within the location to include in the plan
+     */
+    zoneIds?: Array<string>;
 }
 
 function isOptionalCreateCycleCountPlanRequestPropertyOfType(

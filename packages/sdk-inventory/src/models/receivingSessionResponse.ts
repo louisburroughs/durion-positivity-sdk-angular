@@ -15,9 +15,29 @@ import { ReceivingLineResponse } from './receivingLineResponse';
  */
 export interface ReceivingSessionResponse { 
     /**
+     * Timestamp when the receiving session was created
+     */
+    createdAt: string;
+    /**
+     * Identifier of the user who created the receiving session
+     */
+    createdByUserId?: string;
+    /**
+     * Method used to enter receiving lines, such as SCAN or MANUAL
+     */
+    entryMethod?: string;
+    /**
+     * Receiving lines belonging to the session
+     */
+    lines?: Array<ReceivingLineResponse>;
+    /**
      * Identifier of the receiving session
      */
     sessionId: string;
+    /**
+     * Carrier or shipment reference for the received goods
+     */
+    shipmentReference?: string;
     /**
      * Identifier of the source document the session receives against
      */
@@ -27,33 +47,13 @@ export interface ReceivingSessionResponse {
      */
     sourceDocumentType?: string;
     /**
-     * Identifier of the supplier providing the received stock
-     */
-    supplierId?: string;
-    /**
-     * Carrier or shipment reference for the received goods
-     */
-    shipmentReference?: string;
-    /**
      * Status of the receiving session, such as IN_PROGRESS or COMPLETED
      */
     status: string;
     /**
-     * Method used to enter receiving lines, such as SCAN or MANUAL
+     * Identifier of the supplier providing the received stock
      */
-    entryMethod?: string;
-    /**
-     * Identifier of the user who created the receiving session
-     */
-    createdByUserId?: string;
-    /**
-     * Timestamp when the receiving session was created
-     */
-    createdAt: string;
-    /**
-     * Receiving lines belonging to the session
-     */
-    lines?: Array<ReceivingLineResponse>;
+    supplierId?: string;
 }
 
 function isOptionalReceivingSessionResponsePropertyOfType(
@@ -94,8 +94,8 @@ export function instanceOfReceivingSessionResponse(value: object): value is Rece
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createReceivingSessionResponsePropertyNames('sessionId', 'sourceDocumentId', 'status', 'createdAt', );
-    const optionalStringProperties = createReceivingSessionResponseOptionalProperties({ name: 'sessionId', nullable: false }, { name: 'sourceDocumentId', nullable: false }, { name: 'sourceDocumentType', nullable: false }, { name: 'supplierId', nullable: false }, { name: 'shipmentReference', nullable: false }, { name: 'status', nullable: false }, { name: 'entryMethod', nullable: false }, { name: 'createdByUserId', nullable: false }, { name: 'createdAt', nullable: false }, );
+    const requiredProperties = createReceivingSessionResponsePropertyNames('createdAt', 'sessionId', 'sourceDocumentId', 'status', );
+    const optionalStringProperties = createReceivingSessionResponseOptionalProperties({ name: 'createdAt', nullable: false }, { name: 'createdByUserId', nullable: false }, { name: 'entryMethod', nullable: false }, { name: 'sessionId', nullable: false }, { name: 'shipmentReference', nullable: false }, { name: 'sourceDocumentId', nullable: false }, { name: 'sourceDocumentType', nullable: false }, { name: 'status', nullable: false }, { name: 'supplierId', nullable: false }, );
     const optionalNumberProperties = createReceivingSessionResponseOptionalProperties();
     const optionalBooleanProperties = createReceivingSessionResponseOptionalProperties();
 

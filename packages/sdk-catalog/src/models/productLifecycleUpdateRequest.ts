@@ -14,9 +14,9 @@
  */
 export interface ProductLifecycleUpdateRequest { 
     /**
-     * Target lifecycle state
+     * Username performing the lifecycle change
      */
-    lifecycleState: ProductLifecycleUpdateRequestLifecycleStateEnum;
+    changedBy?: string;
     /**
      * Effective instant for lifecycle change
      */
@@ -26,9 +26,9 @@ export interface ProductLifecycleUpdateRequest {
      */
     effectiveDate?: string;
     /**
-     * Username performing the lifecycle change
+     * Target lifecycle state
      */
-    changedBy?: string;
+    lifecycleState: ProductLifecycleUpdateRequestLifecycleStateEnum;
     /**
      * Reason for lifecycle override
      */
@@ -81,7 +81,7 @@ export function instanceOfProductLifecycleUpdateRequest(value: object): value is
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createProductLifecycleUpdateRequestPropertyNames('lifecycleState', );
-    const optionalStringProperties = createProductLifecycleUpdateRequestOptionalProperties({ name: 'lifecycleState', nullable: false }, { name: 'effectiveAt', nullable: false }, { name: 'effectiveDate', nullable: false }, { name: 'changedBy', nullable: false }, { name: 'overrideReason', nullable: false }, );
+    const optionalStringProperties = createProductLifecycleUpdateRequestOptionalProperties({ name: 'changedBy', nullable: false }, { name: 'effectiveAt', nullable: false }, { name: 'effectiveDate', nullable: false }, { name: 'lifecycleState', nullable: false }, { name: 'overrideReason', nullable: false }, );
     const optionalNumberProperties = createProductLifecycleUpdateRequestOptionalProperties();
     const optionalBooleanProperties = createProductLifecycleUpdateRequestOptionalProperties();
 

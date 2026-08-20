@@ -39,9 +39,9 @@ export class WarrantyProvidersService extends BaseService {
 
     /**
      * Create provider
-     * Create a new warranty provider
+     * Creates a warranty provider — the party that funds a warranty program, from a manufacturer or third-party administrator to the dealer itself. Use this tool to register a new payer before configuring its policies with createPolicy; do not use updateProvider, which rewrites an existing provider. Preconditions: none — there is no duplicate-name check, so repeating the call creates a second provider. Required inputs: name and providerType (MANUFACTURER, DISTRIBUTOR_PROGRAM, THIRD_PARTY_ADMIN, or DEALER — DEALER means self-funded, which later makes vendor reimbursement NOT_APPLICABLE); status defaults to ACTIVE, and apVendorId optionally links the pos-accounting vendor for credit matching. Emits a WARRANTY_PROVIDER_CREATE event; no policies or claims are touched. Returns 201 with the created provider on success. 
      * @endpoint post /v1/warranty/providers
-     * @param providerRequest 
+     * @param providerRequest Warranty provider to create: funding type, lifecycle status, and claim-submission contact details.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -109,7 +109,7 @@ export class WarrantyProvidersService extends BaseService {
 
     /**
      * Get provider
-     * Retrieve a warranty provider by id
+     * Returns one warranty provider, including its funding type, AP vendor link, and claim-submission contact details. Use this tool when the provider id is already known; use listProviders instead to locate a provider by status or type. Preconditions: the provider must exist. Required inputs: id (UUID) as a path parameter; there is no request body. No events are emitted and no state changes; this is a read-only projection. Returns 404 when no provider exists for the supplied id. 
      * @endpoint get /v1/warranty/providers/{id}
      * @param id Provider UUID
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -169,7 +169,7 @@ export class WarrantyProvidersService extends BaseService {
 
     /**
      * List providers
-     * Optionally filter by status and/or provider type
+     * Returns warranty providers, optionally filtered by lifecycle status and/or provider type. Use this tool to browse who funds warranty programs; use getProvider instead when the provider id is already known. Preconditions: none — an empty list is returned when nothing matches. Required inputs: status (ACTIVE or INACTIVE) and providerType (MANUFACTURER, DISTRIBUTOR_PROGRAM, THIRD_PARTY_ADMIN, DEALER) are optional query parameters; when both are given the status filter is applied first and provider type filters the result. No events are emitted and no state changes; this is a read-only projection. Returns 200 with the list, which is empty rather than 404 when no provider matches. 
      * @endpoint get /v1/warranty/providers
      * @param status Filter by lifecycle status (ACTIVE/INACTIVE)
      * @param providerType Filter by provider type
@@ -248,10 +248,10 @@ export class WarrantyProvidersService extends BaseService {
 
     /**
      * Update provider
-     * Full update of an existing warranty provider
+     * Fully replaces an existing warranty provider\&#39;s fields, including funding type, contact details, and the AP vendor link. Use this tool to change provider data; do not use createProvider, which adds a new provider. Preconditions: the provider must exist; omitting status keeps the current value, while every other field is rewritten from the request and null clears it. Required inputs: id (UUID) as a path parameter, plus name and providerType; apVendorId, manufacturerId, claimSubmissionMethod, and the contact fields are optional. Emits a WARRANTY_PROVIDER_UPDATE event. Returns 404 when no provider exists for the supplied id. 
      * @endpoint put /v1/warranty/providers/{id}
      * @param id Provider UUID
-     * @param providerRequest 
+     * @param providerRequest Full replacement of the provider\&#39;s fields (omitting status keeps the current value).
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options

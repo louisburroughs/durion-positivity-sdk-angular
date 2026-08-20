@@ -14,6 +14,10 @@
  */
 export interface SubstitutionGroupDto { 
     /**
+     * Created timestamp
+     */
+    createdAt?: string;
+    /**
      * Identifier of the substitution group
      */
     id: string;
@@ -29,10 +33,6 @@ export interface SubstitutionGroupDto {
      * Product ids of all group members
      */
     productIds: Array<string>;
-    /**
-     * Created timestamp
-     */
-    createdAt?: string;
     /**
      * Updated timestamp
      */
@@ -78,7 +78,7 @@ export function instanceOfSubstitutionGroupDto(value: object): value is Substitu
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createSubstitutionGroupDtoPropertyNames('id', 'name', 'productIds', );
-    const optionalStringProperties = createSubstitutionGroupDtoOptionalProperties({ name: 'id', nullable: false }, { name: 'name', nullable: false }, { name: 'notes', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'updatedAt', nullable: false }, );
+    const optionalStringProperties = createSubstitutionGroupDtoOptionalProperties({ name: 'createdAt', nullable: false }, { name: 'id', nullable: false }, { name: 'name', nullable: false }, { name: 'notes', nullable: false }, { name: 'updatedAt', nullable: false }, );
     const optionalNumberProperties = createSubstitutionGroupDtoOptionalProperties();
     const optionalBooleanProperties = createSubstitutionGroupDtoOptionalProperties();
 

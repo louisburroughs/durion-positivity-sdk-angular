@@ -14,13 +14,13 @@
  */
 export interface Decision { 
     /**
-     * The unique identifier of the time entry
-     */
-    timeEntryId: string;
-    /**
      * The reason for rejection. Applicable if this is a rejection request.
      */
     rejectionReason?: string;
+    /**
+     * The unique identifier of the time entry
+     */
+    timeEntryId: string;
 }
 
 function isOptionalDecisionPropertyOfType(
@@ -62,7 +62,7 @@ export function instanceOfDecision(value: object): value is Decision {
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createDecisionPropertyNames('timeEntryId', );
-    const optionalStringProperties = createDecisionOptionalProperties({ name: 'timeEntryId', nullable: false }, { name: 'rejectionReason', nullable: false }, );
+    const optionalStringProperties = createDecisionOptionalProperties({ name: 'rejectionReason', nullable: false }, { name: 'timeEntryId', nullable: false }, );
     const optionalNumberProperties = createDecisionOptionalProperties();
     const optionalBooleanProperties = createDecisionOptionalProperties();
 

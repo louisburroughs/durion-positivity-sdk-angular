@@ -14,14 +14,27 @@ import { EmployeeContactInfoDto } from './employeeContactInfoDto';
  * Employee profile returned by employee read and write operations
  */
 export interface EmployeeProfileDto { 
+    contactInfo?: EmployeeContactInfoDto;
     /**
-     * Employee identifier
+     * Timestamp the employee record was created
      */
-    id: string;
+    createdAt?: string;
+    /**
+     * Unique employee number
+     */
+    employeeNumber: string;
     /**
      * First (given) name of the employee
      */
     firstName: string;
+    /**
+     * Date the employee was hired
+     */
+    hireDate: string;
+    /**
+     * Employee identifier
+     */
+    id: string;
     /**
      * Last (family) name of the employee
      */
@@ -31,30 +44,17 @@ export interface EmployeeProfileDto {
      */
     preferredName?: string;
     /**
-     * Unique employee number
-     */
-    employeeNumber: string;
-    /**
      * Employment status of the employee
      */
     status: EmployeeProfileDtoStatusEnum;
-    /**
-     * Date the employee was hired
-     */
-    hireDate: string;
-    /**
-     * Date the employee was terminated, if applicable
-     */
-    terminationDate?: string;
-    contactInfo?: EmployeeContactInfoDto;
     /**
      * Timestamp the current status became effective
      */
     statusEffectiveAt?: string;
     /**
-     * Timestamp the employee record was created
+     * Date the employee was terminated, if applicable
      */
-    createdAt?: string;
+    terminationDate?: string;
     /**
      * Timestamp the employee record was last updated
      */
@@ -112,8 +112,8 @@ export function instanceOfEmployeeProfileDto(value: object): value is EmployeePr
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createEmployeeProfileDtoPropertyNames('id', 'firstName', 'lastName', 'employeeNumber', 'status', 'hireDate', );
-    const optionalStringProperties = createEmployeeProfileDtoOptionalProperties({ name: 'id', nullable: false }, { name: 'firstName', nullable: false }, { name: 'lastName', nullable: false }, { name: 'preferredName', nullable: false }, { name: 'employeeNumber', nullable: false }, { name: 'status', nullable: false }, { name: 'hireDate', nullable: false }, { name: 'terminationDate', nullable: false }, { name: 'statusEffectiveAt', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'updatedAt', nullable: false }, );
+    const requiredProperties = createEmployeeProfileDtoPropertyNames('employeeNumber', 'firstName', 'hireDate', 'id', 'lastName', 'status', );
+    const optionalStringProperties = createEmployeeProfileDtoOptionalProperties({ name: 'createdAt', nullable: false }, { name: 'employeeNumber', nullable: false }, { name: 'firstName', nullable: false }, { name: 'hireDate', nullable: false }, { name: 'id', nullable: false }, { name: 'lastName', nullable: false }, { name: 'preferredName', nullable: false }, { name: 'status', nullable: false }, { name: 'statusEffectiveAt', nullable: false }, { name: 'terminationDate', nullable: false }, { name: 'updatedAt', nullable: false }, );
     const optionalNumberProperties = createEmployeeProfileDtoOptionalProperties();
     const optionalBooleanProperties = createEmployeeProfileDtoOptionalProperties();
 

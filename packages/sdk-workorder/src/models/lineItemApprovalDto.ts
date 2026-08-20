@@ -14,21 +14,21 @@
  */
 export interface LineItemApprovalDto { 
     /**
-     * ID of the line item (service/product) being approved or rejected
-     */
-    lineItemId: string;
-    /**
      * Whether this line item is approved (true) or rejected (false)
      */
     approved: boolean;
     /**
-     * Reason for rejection (required if approved=false)
+     * ID of the line item (service/product) being approved or rejected
      */
-    rejectionReason?: string;
+    lineItemId: string;
     /**
      * Additional notes about this line item decision
      */
     notes?: string;
+    /**
+     * Reason for rejection (required if approved=false)
+     */
+    rejectionReason?: string;
 }
 
 function isOptionalLineItemApprovalDtoPropertyOfType(
@@ -69,8 +69,8 @@ export function instanceOfLineItemApprovalDto(value: object): value is LineItemA
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createLineItemApprovalDtoPropertyNames('lineItemId', 'approved', );
-    const optionalStringProperties = createLineItemApprovalDtoOptionalProperties({ name: 'lineItemId', nullable: false }, { name: 'rejectionReason', nullable: false }, { name: 'notes', nullable: false }, );
+    const requiredProperties = createLineItemApprovalDtoPropertyNames('approved', 'lineItemId', );
+    const optionalStringProperties = createLineItemApprovalDtoOptionalProperties({ name: 'lineItemId', nullable: false }, { name: 'notes', nullable: false }, { name: 'rejectionReason', nullable: false }, );
     const optionalNumberProperties = createLineItemApprovalDtoOptionalProperties();
     const optionalBooleanProperties = createLineItemApprovalDtoOptionalProperties({ name: 'approved', nullable: false }, );
 

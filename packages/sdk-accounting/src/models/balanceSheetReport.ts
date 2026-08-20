@@ -18,6 +18,10 @@ export interface BalanceSheetReport {
      */
     asOfDate: string;
     /**
+     * Whether the accounting equation balances (assets == liabilities + equity within tolerance)
+     */
+    balanced: boolean;
+    /**
      * Timestamp when the report was generated (ISO 8601)
      */
     generatedAt: string;
@@ -30,17 +34,13 @@ export interface BalanceSheetReport {
      */
     totalAssets: number;
     /**
-     * Total liabilities (sum of all liability accounts)
-     */
-    totalLiabilities: number;
-    /**
      * Total equity (sum of all equity accounts)
      */
     totalEquity: number;
     /**
-     * Whether the accounting equation balances (assets == liabilities + equity within tolerance)
+     * Total liabilities (sum of all liability accounts)
      */
-    balanced: boolean;
+    totalLiabilities: number;
 }
 
 function isOptionalBalanceSheetReportPropertyOfType(
@@ -81,9 +81,9 @@ export function instanceOfBalanceSheetReport(value: object): value is BalanceShe
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createBalanceSheetReportPropertyNames('asOfDate', 'generatedAt', 'lineItems', 'totalAssets', 'totalLiabilities', 'totalEquity', 'balanced', );
+    const requiredProperties = createBalanceSheetReportPropertyNames('asOfDate', 'balanced', 'generatedAt', 'lineItems', 'totalAssets', 'totalEquity', 'totalLiabilities', );
     const optionalStringProperties = createBalanceSheetReportOptionalProperties({ name: 'asOfDate', nullable: false }, { name: 'generatedAt', nullable: false }, );
-    const optionalNumberProperties = createBalanceSheetReportOptionalProperties({ name: 'totalAssets', nullable: false }, { name: 'totalLiabilities', nullable: false }, { name: 'totalEquity', nullable: false }, );
+    const optionalNumberProperties = createBalanceSheetReportOptionalProperties({ name: 'totalAssets', nullable: false }, { name: 'totalEquity', nullable: false }, { name: 'totalLiabilities', nullable: false }, );
     const optionalBooleanProperties = createBalanceSheetReportOptionalProperties({ name: 'balanced', nullable: false }, );
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

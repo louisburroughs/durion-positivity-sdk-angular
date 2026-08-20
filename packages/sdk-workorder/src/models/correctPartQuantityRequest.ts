@@ -14,21 +14,25 @@
  */
 export interface CorrectPartQuantityRequest { 
     /**
-     * Workorder part identifier
-     */
-    workorderPartId: string;
-    /**
      * Corrected authorized quantity
      */
     newQuantity: number;
+    /**
+     * Optional correction notes
+     */
+    notes?: string;
     /**
      * Audit reason for correction
      */
     reason: string;
     /**
-     * Optional correction notes
+     * Unit newQuantity is expressed in. Omit to leave the part\'s existing unit unchanged. Converted to base and validated against the product\'s catalog divisibility.
      */
-    notes?: string;
+    uomCode?: string;
+    /**
+     * Workorder part identifier
+     */
+    workorderPartId: string;
 }
 
 function isOptionalCorrectPartQuantityRequestPropertyOfType(
@@ -69,8 +73,8 @@ export function instanceOfCorrectPartQuantityRequest(value: object): value is Co
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createCorrectPartQuantityRequestPropertyNames('workorderPartId', 'newQuantity', 'reason', );
-    const optionalStringProperties = createCorrectPartQuantityRequestOptionalProperties({ name: 'workorderPartId', nullable: false }, { name: 'reason', nullable: false }, { name: 'notes', nullable: false }, );
+    const requiredProperties = createCorrectPartQuantityRequestPropertyNames('newQuantity', 'reason', 'workorderPartId', );
+    const optionalStringProperties = createCorrectPartQuantityRequestOptionalProperties({ name: 'notes', nullable: false }, { name: 'reason', nullable: false }, { name: 'uomCode', nullable: false }, { name: 'workorderPartId', nullable: false }, );
     const optionalNumberProperties = createCorrectPartQuantityRequestOptionalProperties({ name: 'newQuantity', nullable: false }, );
     const optionalBooleanProperties = createCorrectPartQuantityRequestOptionalProperties();
 

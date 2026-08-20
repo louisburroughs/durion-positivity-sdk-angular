@@ -14,29 +14,29 @@
  */
 export interface RoleAssignmentRequest { 
     /**
-     * Identifier of the user to assign the role to
+     * Exclusive end of the effective window
      */
-    userId: string;
-    /**
-     * Identifier of the role to assign
-     */
-    roleId: string;
-    /**
-     * Scope type that constrains the assignment
-     */
-    scopeType?: RoleAssignmentRequestScopeTypeEnum;
-    /**
-     * Location identifiers the assignment applies to when scopeType is LOCATION
-     */
-    scopeLocationIds?: Set<string>;
+    effectiveEndDate?: string;
     /**
      * Inclusive start of the effective window
      */
     effectiveStartDate?: string;
     /**
-     * Exclusive end of the effective window
+     * Identifier of the role to assign
      */
-    effectiveEndDate?: string;
+    roleId: string;
+    /**
+     * Location identifiers the assignment applies to when scopeType is LOCATION
+     */
+    scopeLocationIds?: Set<string>;
+    /**
+     * Scope type that constrains the assignment
+     */
+    scopeType?: RoleAssignmentRequestScopeTypeEnum;
+    /**
+     * Identifier of the user to assign the role to
+     */
+    userId: string;
 }
 export enum RoleAssignmentRequestScopeTypeEnum {
     Global = 'GLOBAL',
@@ -83,8 +83,8 @@ export function instanceOfRoleAssignmentRequest(value: object): value is RoleAss
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createRoleAssignmentRequestPropertyNames('userId', 'roleId', );
-    const optionalStringProperties = createRoleAssignmentRequestOptionalProperties({ name: 'userId', nullable: false }, { name: 'roleId', nullable: false }, { name: 'scopeType', nullable: false }, { name: 'effectiveStartDate', nullable: false }, { name: 'effectiveEndDate', nullable: false }, );
+    const requiredProperties = createRoleAssignmentRequestPropertyNames('roleId', 'userId', );
+    const optionalStringProperties = createRoleAssignmentRequestOptionalProperties({ name: 'effectiveEndDate', nullable: false }, { name: 'effectiveStartDate', nullable: false }, { name: 'roleId', nullable: false }, { name: 'scopeType', nullable: false }, { name: 'userId', nullable: false }, );
     const optionalNumberProperties = createRoleAssignmentRequestOptionalProperties();
     const optionalBooleanProperties = createRoleAssignmentRequestOptionalProperties();
 

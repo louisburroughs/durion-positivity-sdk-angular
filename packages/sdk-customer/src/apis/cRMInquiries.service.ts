@@ -40,8 +40,8 @@ export class CRMInquiriesService extends BaseService {
     }
 
     /**
-     * Assign inquiry
-     * Assign or unassign an inquiry
+     * Assign Inquiry
+     * Assigns an inquiry to a staff member for follow-through, or returns it to the shared queue when assignedTo is omitted. Use this tool when routing a triaged inquiry to an owner; do not use updateInquiryStatus, which moves the lifecycle state rather than ownership. Preconditions: the inquiry must exist; assignment is allowed in any status. Required inputs: inquiryId (UUID) as a path parameter; assignedTo is an optional query parameter whose omission unassigns the inquiry, and there is no request body. Emits a CRM_INQUIRY_ASSIGN event; only the inquiry\&#39;s assignee changes. Returns 404 when no inquiry exists for the supplied inquiryId. 
      * @endpoint put /v1/crm/inquiries/{inquiryId}/assignee
      * @param inquiryId 
      * @param assignedTo 
@@ -49,12 +49,12 @@ export class CRMInquiriesService extends BaseService {
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public assign(inquiryId: string, assignedTo?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<InquiryResponse>;
-    public assign(inquiryId: string, assignedTo?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<InquiryResponse>>;
-    public assign(inquiryId: string, assignedTo?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<InquiryResponse>>;
-    public assign(inquiryId: string, assignedTo?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public assignInquiry(inquiryId: string, assignedTo?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<InquiryResponse>;
+    public assignInquiry(inquiryId: string, assignedTo?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<InquiryResponse>>;
+    public assignInquiry(inquiryId: string, assignedTo?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<InquiryResponse>>;
+    public assignInquiry(inquiryId: string, assignedTo?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (inquiryId === null || inquiryId === undefined) {
-            throw new Error('Required parameter inquiryId was null or undefined when calling assign.');
+            throw new Error('Required parameter inquiryId was null or undefined when calling assignInquiry.');
         }
 
         let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
@@ -113,20 +113,20 @@ export class CRMInquiriesService extends BaseService {
     }
 
     /**
-     * Capture inquiry
-     * Record an inquiry taken by phone, walk-in, or referral
+     * Capture Staff-Taken Inquiry
+     * Records an inbound inquiry taken by staff over phone, walk-in, email, or referral, creating it in NEW status and deliberately unassigned so it lands in the shared queue. Use this tool for staff-entered inquiries on the authenticated API; do not use submitPublicInquiry, which is the anonymous rate-limited public web-form path. Preconditions: none beyond authorization; no party needs to exist yet. Required inputs: channel (WEB_FORM, PHONE, WALK_IN, EMAIL, REFERRAL, or CAMPAIGN), audienceType (COMMERCIAL or INDIVIDUAL), contactName, and at least one of email or phone; organizationName, vehicleOfInterest, serviceOfInterest, message, and campaignCode are optional. Emits a CRM_INQUIRY_CAPTURE event and persists the inquiry. Returns 400 when required fields are missing or when neither email nor phone is supplied, since an unreachable enquirer cannot be actioned. 
      * @endpoint post /v1/crm/inquiries
-     * @param submitInquiryRequest 
+     * @param submitInquiryRequest The inquiry as taken by staff, including how it arrived and how to reach the enquirer.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public capture(submitInquiryRequest: SubmitInquiryRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<InquiryResponse>;
-    public capture(submitInquiryRequest: SubmitInquiryRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<InquiryResponse>>;
-    public capture(submitInquiryRequest: SubmitInquiryRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<InquiryResponse>>;
-    public capture(submitInquiryRequest: SubmitInquiryRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public captureInquiry(submitInquiryRequest: SubmitInquiryRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<InquiryResponse>;
+    public captureInquiry(submitInquiryRequest: SubmitInquiryRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<InquiryResponse>>;
+    public captureInquiry(submitInquiryRequest: SubmitInquiryRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<InquiryResponse>>;
+    public captureInquiry(submitInquiryRequest: SubmitInquiryRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (submitInquiryRequest === null || submitInquiryRequest === undefined) {
-            throw new Error('Required parameter submitInquiryRequest was null or undefined when calling capture.');
+            throw new Error('Required parameter submitInquiryRequest was null or undefined when calling captureInquiry.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -183,8 +183,8 @@ export class CRMInquiriesService extends BaseService {
     }
 
     /**
-     * Convert inquiry
-     * Turn the inquiry into a PROSPECT party, or link it to an existing party when the enquirer is already known
+     * Convert Inquiry To Party
+     * Converts an inquiry into CRM state: a commercial inquiry with no existingPartyId creates a new commercial party in lifecycle stage PROSPECT, while supplying existingPartyId links the inquiry to that party instead; either way the inquiry becomes CONVERTED. Use this tool when an enquirer becomes a prospect or is recognized as an existing customer; do not use updateInquiryStatus, which rejects CONVERTED as a direct status change. Preconditions: the inquiry must exist in an open status (NEW or CONTACTED); an INDIVIDUAL-audience inquiry can only be converted by linking an existing party, because creating a person party requires a verified identity in pos-people-contact. Required inputs: inquiryId (UUID) as a path parameter; existingPartyId (UUID) is an optional query parameter naming a known party to link, and there is no request body. Emits a CRM_INQUIRY_CONVERT event; a new PROSPECT commercial party may be created and the inquiry is stamped with the resulting partyId. Returns 404 when the inquiry or the supplied existingPartyId cannot be found, and 422 when the inquiry is already CONVERTED or CLOSED, or when an individual inquiry has no party to link. 
      * @endpoint post /v1/crm/inquiries/{inquiryId}/convert
      * @param inquiryId 
      * @param existingPartyId 
@@ -192,12 +192,12 @@ export class CRMInquiriesService extends BaseService {
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public convert(inquiryId: string, existingPartyId?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<InquiryResponse>;
-    public convert(inquiryId: string, existingPartyId?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<InquiryResponse>>;
-    public convert(inquiryId: string, existingPartyId?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<InquiryResponse>>;
-    public convert(inquiryId: string, existingPartyId?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public convertInquiry(inquiryId: string, existingPartyId?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<InquiryResponse>;
+    public convertInquiry(inquiryId: string, existingPartyId?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<InquiryResponse>>;
+    public convertInquiry(inquiryId: string, existingPartyId?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<InquiryResponse>>;
+    public convertInquiry(inquiryId: string, existingPartyId?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (inquiryId === null || inquiryId === undefined) {
-            throw new Error('Required parameter inquiryId was null or undefined when calling convert.');
+            throw new Error('Required parameter inquiryId was null or undefined when calling convertInquiry.');
         }
 
         let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
@@ -256,20 +256,20 @@ export class CRMInquiriesService extends BaseService {
     }
 
     /**
-     * Get inquiry
-     * Retrieve a single inquiry
+     * Get Inquiry
+     * Returns one inbound inquiry with its channel, audience type, contact details, interest fields, status, assignee, and any linked party. Use this tool when the inquiry id is already known; use listInquiries instead to find inquiries by status. Preconditions: the inquiry must exist. Required inputs: inquiryId (UUID) as a path parameter; there is no request body. Emits a CRM_INQUIRY_GET audit event; no state changes occur. Returns 404 when no inquiry exists for the supplied inquiryId. 
      * @endpoint get /v1/crm/inquiries/{inquiryId}
      * @param inquiryId 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public get1(inquiryId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<InquiryResponse>;
-    public get1(inquiryId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<InquiryResponse>>;
-    public get1(inquiryId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<InquiryResponse>>;
-    public get1(inquiryId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getInquiry(inquiryId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<InquiryResponse>;
+    public getInquiry(inquiryId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<InquiryResponse>>;
+    public getInquiry(inquiryId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<InquiryResponse>>;
+    public getInquiry(inquiryId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (inquiryId === null || inquiryId === undefined) {
-            throw new Error('Required parameter inquiryId was null or undefined when calling get1.');
+            throw new Error('Required parameter inquiryId was null or undefined when calling getInquiry.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -316,8 +316,8 @@ export class CRMInquiriesService extends BaseService {
     }
 
     /**
-     * List inquiries
-     * Inbound inquiries, newest first
+     * List Inbound Inquiries
+     * Returns inbound service and fleet-quote inquiries newest first, optionally filtered by lifecycle status. Use this tool when triaging the inquiry queue; use getInquiry instead when the inquiry id is already known. Preconditions: none; an empty page is returned when nothing matches. Required inputs: none; status optionally filters on NEW, CONTACTED, CONVERTED, or CLOSED, page defaults to 0, and size defaults to 50 clamped between 1 and 200. Emits a CRM_INQUIRY_LIST audit event; no state changes occur. Returns 200 with an empty page rather than an error when no inquiry matches. 
      * @endpoint get /v1/crm/inquiries
      * @param status 
      * @param page 
@@ -326,10 +326,10 @@ export class CRMInquiriesService extends BaseService {
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public list3(status?: 'NEW' | 'CONTACTED' | 'CONVERTED' | 'CLOSED', page?: number, size?: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PagedResponse>;
-    public list3(status?: 'NEW' | 'CONTACTED' | 'CONVERTED' | 'CLOSED', page?: number, size?: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PagedResponse>>;
-    public list3(status?: 'NEW' | 'CONTACTED' | 'CONVERTED' | 'CLOSED', page?: number, size?: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PagedResponse>>;
-    public list3(status?: 'NEW' | 'CONTACTED' | 'CONVERTED' | 'CLOSED', page?: number, size?: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public listInquiries(status?: 'NEW' | 'CONTACTED' | 'CONVERTED' | 'CLOSED', page?: number, size?: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PagedResponse>;
+    public listInquiries(status?: 'NEW' | 'CONTACTED' | 'CONVERTED' | 'CLOSED', page?: number, size?: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PagedResponse>>;
+    public listInquiries(status?: 'NEW' | 'CONTACTED' | 'CONVERTED' | 'CLOSED', page?: number, size?: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PagedResponse>>;
+    public listInquiries(status?: 'NEW' | 'CONTACTED' | 'CONVERTED' | 'CLOSED', page?: number, size?: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
 
@@ -405,8 +405,8 @@ export class CRMInquiriesService extends BaseService {
     }
 
     /**
-     * Update inquiry status
-     * Move an inquiry to CONTACTED or CLOSED. CONVERTED is reached by converting it.
+     * Update Inquiry Status
+     * Moves an inquiry through its lifecycle to CONTACTED or CLOSED, optionally recording a resolution note. Use this tool for ordinary status progression; do not use it to reach CONVERTED, which is only reachable through convertInquiry because conversion creates or links a party. Preconditions: the inquiry must exist and the transition must be legal — NEW may move to CONTACTED or CLOSED, CONTACTED may move to CLOSED, and CONVERTED and CLOSED are terminal. Required inputs: inquiryId (UUID) as a path parameter and status (CONTACTED or CLOSED) as a required query parameter; resolutionNote is optional and there is no request body. Emits a CRM_INQUIRY_STATUS_UPDATE event; only the inquiry record changes. Returns 404 when the inquiry does not exist, and 422 when CONVERTED is requested directly or the transition is illegal from the current status. 
      * @endpoint put /v1/crm/inquiries/{inquiryId}/status
      * @param inquiryId 
      * @param status 
@@ -415,15 +415,15 @@ export class CRMInquiriesService extends BaseService {
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public updateStatus(inquiryId: string, status: 'NEW' | 'CONTACTED' | 'CONVERTED' | 'CLOSED', resolutionNote?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<InquiryResponse>;
-    public updateStatus(inquiryId: string, status: 'NEW' | 'CONTACTED' | 'CONVERTED' | 'CLOSED', resolutionNote?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<InquiryResponse>>;
-    public updateStatus(inquiryId: string, status: 'NEW' | 'CONTACTED' | 'CONVERTED' | 'CLOSED', resolutionNote?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<InquiryResponse>>;
-    public updateStatus(inquiryId: string, status: 'NEW' | 'CONTACTED' | 'CONVERTED' | 'CLOSED', resolutionNote?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public updateInquiryStatus(inquiryId: string, status: 'NEW' | 'CONTACTED' | 'CONVERTED' | 'CLOSED', resolutionNote?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<InquiryResponse>;
+    public updateInquiryStatus(inquiryId: string, status: 'NEW' | 'CONTACTED' | 'CONVERTED' | 'CLOSED', resolutionNote?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<InquiryResponse>>;
+    public updateInquiryStatus(inquiryId: string, status: 'NEW' | 'CONTACTED' | 'CONVERTED' | 'CLOSED', resolutionNote?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<InquiryResponse>>;
+    public updateInquiryStatus(inquiryId: string, status: 'NEW' | 'CONTACTED' | 'CONVERTED' | 'CLOSED', resolutionNote?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (inquiryId === null || inquiryId === undefined) {
-            throw new Error('Required parameter inquiryId was null or undefined when calling updateStatus.');
+            throw new Error('Required parameter inquiryId was null or undefined when calling updateInquiryStatus.');
         }
         if (status === null || status === undefined) {
-            throw new Error('Required parameter status was null or undefined when calling updateStatus.');
+            throw new Error('Required parameter status was null or undefined when calling updateInquiryStatus.');
         }
 
         let localVarQueryParameters = new OpenApiHttpParams(this.encoder);

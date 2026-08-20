@@ -38,20 +38,20 @@ export class VehicleFitmentBulkIngestAPIService extends BaseService {
     }
 
     /**
-     * Bulk ingest records
-     * Accepts a batch of domain records for bulk import. Returns per-record results.
+     * Bulk Ingest Part Fitment Records
+     * Bulk-imports part fitment records, creating one part-to-vehicle fitment row per record and resolving manufacturer, make, model and vehicle-type names to reference rows. Use this tool for catalog-scale fitment loads from a prepared batch; do not use createVehicleHint, which manages per-product applicability hint tags rather than part fitment rows. Preconditions: the caller must hold vehicle-fitment:hint:create; referenced manufacturer, make, model and vehicle-type names need not pre-exist, because each is matched case-insensitively and created on the fly when missing. Required inputs: jobId (UUID), locationId (UUID) and records, a non-empty list where each record requires partNumberId (numeric); manufacturerName, makeName, modelName, vehicleTypeName, vehicleYear, engineType, submodel and notes are optional, and jobId, locationId and operatorId are accepted for the envelope but not persisted by this module. Emits a VEHICLE_FITMENT_BULK_INGEST event covering the whole batch; rows are processed independently, so one failed row does not roll back the others. Returns 200 even when every row fails, so callers must inspect each result\&#39;s success flag and FITMENT_INGEST_FAILED errorCode rather than trusting the status alone. 
      * @endpoint post /v1/fitments/bulk-ingest
-     * @param bulkIngestRequestFitmentBulkIngestRecord 
+     * @param bulkIngestRequestFitmentBulkIngestRecord Batch envelope of part fitment records to import, each naming the vehicle the part applies to.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public bulkIngest(bulkIngestRequestFitmentBulkIngestRecord: BulkIngestRequestFitmentBulkIngestRecord, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<BulkIngestResponse>;
-    public bulkIngest(bulkIngestRequestFitmentBulkIngestRecord: BulkIngestRequestFitmentBulkIngestRecord, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<BulkIngestResponse>>;
-    public bulkIngest(bulkIngestRequestFitmentBulkIngestRecord: BulkIngestRequestFitmentBulkIngestRecord, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<BulkIngestResponse>>;
-    public bulkIngest(bulkIngestRequestFitmentBulkIngestRecord: BulkIngestRequestFitmentBulkIngestRecord, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public bulkIngestVehicleFitments(bulkIngestRequestFitmentBulkIngestRecord: BulkIngestRequestFitmentBulkIngestRecord, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<BulkIngestResponse>;
+    public bulkIngestVehicleFitments(bulkIngestRequestFitmentBulkIngestRecord: BulkIngestRequestFitmentBulkIngestRecord, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<BulkIngestResponse>>;
+    public bulkIngestVehicleFitments(bulkIngestRequestFitmentBulkIngestRecord: BulkIngestRequestFitmentBulkIngestRecord, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<BulkIngestResponse>>;
+    public bulkIngestVehicleFitments(bulkIngestRequestFitmentBulkIngestRecord: BulkIngestRequestFitmentBulkIngestRecord, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (bulkIngestRequestFitmentBulkIngestRecord === null || bulkIngestRequestFitmentBulkIngestRecord === undefined) {
-            throw new Error('Required parameter bulkIngestRequestFitmentBulkIngestRecord was null or undefined when calling bulkIngest.');
+            throw new Error('Required parameter bulkIngestRequestFitmentBulkIngestRecord was null or undefined when calling bulkIngestVehicleFitments.');
         }
 
         let localVarHeaders = this.defaultHeaders;

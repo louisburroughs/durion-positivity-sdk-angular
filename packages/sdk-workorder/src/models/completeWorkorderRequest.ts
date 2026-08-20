@@ -14,14 +14,14 @@
  */
 export interface CompleteWorkorderRequest { 
     /**
+     * Optional completion notes recorded for closeout
+     */
+    completionNotes?: string;
+    /**
      * Deprecated. Actor identity is resolved from authenticated security context.
      * @deprecated
      */
     userId?: string;
-    /**
-     * Optional completion notes recorded for closeout
-     */
-    completionNotes?: string;
 }
 
 function isOptionalCompleteWorkorderRequestPropertyOfType(
@@ -63,7 +63,7 @@ export function instanceOfCompleteWorkorderRequest(value: object): value is Comp
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createCompleteWorkorderRequestPropertyNames();
-    const optionalStringProperties = createCompleteWorkorderRequestOptionalProperties({ name: 'userId', nullable: false }, { name: 'completionNotes', nullable: false }, );
+    const optionalStringProperties = createCompleteWorkorderRequestOptionalProperties({ name: 'completionNotes', nullable: false }, { name: 'userId', nullable: false }, );
     const optionalNumberProperties = createCompleteWorkorderRequestOptionalProperties();
     const optionalBooleanProperties = createCompleteWorkorderRequestOptionalProperties();
 

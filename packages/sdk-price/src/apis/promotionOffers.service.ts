@@ -42,20 +42,20 @@ export class PromotionOffersService extends BaseService {
     }
 
     /**
-     * Activate promotion offer
-     * Activates a promotion offer so it becomes eligible for application.
+     * Activate Promotion Offer
+     * Transitions a promotion offer to ACTIVE so applyPromotionOffer will accept its promo code within the validity window. Use this tool to publish a DRAFT offer or re-enable an INACTIVE one; do not use createPromotionOffer, which creates a new offer that still starts in DRAFT. Preconditions: the offer must exist, must not be EXPIRED, and its endDate must not already be in the past. Required inputs: id (UUID) as a path parameter; there is no request body. Emits a PROMOTION_OFFER_ACTIVATE event and sets the status to ACTIVE immediately. Returns 404 when the offer does not exist, and 422 when the offer is EXPIRED or its end date has already passed. 
      * @endpoint patch /v1/promotions/offers/{id}/activate
      * @param id 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public activateOffer(id: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PromotionOfferResponse>;
-    public activateOffer(id: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PromotionOfferResponse>>;
-    public activateOffer(id: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PromotionOfferResponse>>;
-    public activateOffer(id: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public activatePromotionOffer(id: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PromotionOfferResponse>;
+    public activatePromotionOffer(id: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PromotionOfferResponse>>;
+    public activatePromotionOffer(id: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PromotionOfferResponse>>;
+    public activatePromotionOffer(id: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (id === null || id === undefined) {
-            throw new Error('Required parameter id was null or undefined when calling activateOffer.');
+            throw new Error('Required parameter id was null or undefined when calling activatePromotionOffer.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -102,20 +102,20 @@ export class PromotionOffersService extends BaseService {
     }
 
     /**
-     * Apply promotion offer during estimate pricing
-     * Applies a promotion offer to pricing inputs and returns resulting discount and adjusted totals.
+     * Apply Promotion Offer During Estimate Pricing
+     * Applies a promotion code to an estimate\&#39;s pricing context and returns the discount adjustment and the adjusted total. Use this tool at estimate time to price in a promotion; use evaluatePromotionEligibility instead for a dry-run check, because this operation consumes one usage against the offer\&#39;s usageLimit. Preconditions: the offer must be ACTIVE, the current date must fall within startDate and endDate, the context must pass the offer\&#39;s eligibility rules, the usage limit must not be exhausted, and no promo code may already be applied because only one promotion is allowed per estimate. Required inputs: promotionCode and estimateContext with estimateId, customerId, subtotal, and at least one line item; PERCENT_LABOR and PERCENT_PARTS both currently discount the full subtotal by the percentage, while FIXED_INVOICE subtracts the fixed discountValue. Emits a PROMOTION_OFFER_APPLY event and atomically increments the offer\&#39;s usage count. Returns 400 with code PROMO_NOT_FOUND when the code is unknown, PROMO_NOT_APPLICABLE when the offer is inactive, outside its date range, ineligible for the context, or over its usage limit, and PROMO_MULTIPLE_NOT_ALLOWED when the estimate already carries an applied promo code. 
      * @endpoint post /v1/promotions/offers/apply
-     * @param applyPromotionRequest 
+     * @param applyPromotionRequest Promotion code plus the estimate context (customer, line items, subtotal) it is applied against.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public applyPromotion(applyPromotionRequest: ApplyPromotionRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ApplyPromotionResponse>;
-    public applyPromotion(applyPromotionRequest: ApplyPromotionRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ApplyPromotionResponse>>;
-    public applyPromotion(applyPromotionRequest: ApplyPromotionRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ApplyPromotionResponse>>;
-    public applyPromotion(applyPromotionRequest: ApplyPromotionRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public applyPromotionOffer(applyPromotionRequest: ApplyPromotionRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ApplyPromotionResponse>;
+    public applyPromotionOffer(applyPromotionRequest: ApplyPromotionRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ApplyPromotionResponse>>;
+    public applyPromotionOffer(applyPromotionRequest: ApplyPromotionRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ApplyPromotionResponse>>;
+    public applyPromotionOffer(applyPromotionRequest: ApplyPromotionRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (applyPromotionRequest === null || applyPromotionRequest === undefined) {
-            throw new Error('Required parameter applyPromotionRequest was null or undefined when calling applyPromotion.');
+            throw new Error('Required parameter applyPromotionRequest was null or undefined when calling applyPromotionOffer.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -172,20 +172,20 @@ export class PromotionOffersService extends BaseService {
     }
 
     /**
-     * Create promotion offer
-     * Creates a new promotion offer with code, lifecycle settings, and discount policy.
+     * Create Promotion Offer
+     * Creates a promotion offer in DRAFT status with a unique promo code, a validity window, and a discount policy. Use this tool to define a new promotion; do not use activatePromotionOffer, which only transitions an existing offer to ACTIVE, and note that a DRAFT offer cannot be applied until activated. Preconditions: no offer may already exist with the same promoCode, and startDate must not be after endDate. Required inputs: promoCode (max 64 characters), name, discountType (PERCENT_LABOR, PERCENT_PARTS, or FIXED_INVOICE), discountValue (minimum 0.01, two decimal places), startDate, and endDate; usageLimit and storeCode are optional and default to unlimited usage and no store scoping. Emits a PROMOTION_OFFER_CREATE event and persists the offer with status DRAFT and a zero usage count. Returns 409 when the promoCode already exists, and 422 when startDate is after endDate. 
      * @endpoint post /v1/promotions/offers
-     * @param createPromotionOfferRequest 
+     * @param createPromotionOfferRequest Promotion offer definition: promo code, discount policy, and validity window.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public createOffer(createPromotionOfferRequest: CreatePromotionOfferRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PromotionOfferResponse>;
-    public createOffer(createPromotionOfferRequest: CreatePromotionOfferRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PromotionOfferResponse>>;
-    public createOffer(createPromotionOfferRequest: CreatePromotionOfferRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PromotionOfferResponse>>;
-    public createOffer(createPromotionOfferRequest: CreatePromotionOfferRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public createPromotionOffer(createPromotionOfferRequest: CreatePromotionOfferRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PromotionOfferResponse>;
+    public createPromotionOffer(createPromotionOfferRequest: CreatePromotionOfferRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PromotionOfferResponse>>;
+    public createPromotionOffer(createPromotionOfferRequest: CreatePromotionOfferRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PromotionOfferResponse>>;
+    public createPromotionOffer(createPromotionOfferRequest: CreatePromotionOfferRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (createPromotionOfferRequest === null || createPromotionOfferRequest === undefined) {
-            throw new Error('Required parameter createPromotionOfferRequest was null or undefined when calling createOffer.');
+            throw new Error('Required parameter createPromotionOfferRequest was null or undefined when calling createPromotionOffer.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -242,20 +242,20 @@ export class PromotionOffersService extends BaseService {
     }
 
     /**
-     * Deactivate promotion offer
-     * Deactivates a promotion offer so it is no longer eligible for application.
+     * Deactivate Promotion Offer
+     * Transitions an ACTIVE promotion offer to INACTIVE so its promo code is no longer accepted by applyPromotionOffer. Use this tool to withdraw a live offer while keeping its history and rules; do not use deletePromotionEligibilityRule, which removes a single audience rule rather than the offer. Preconditions: the offer must exist and currently be ACTIVE; DRAFT, INACTIVE, and EXPIRED offers cannot be deactivated. Required inputs: id (UUID) as a path parameter; there is no request body. Emits a PROMOTION_OFFER_DEACTIVATE event; the offer can later be re-enabled with activatePromotionOffer. Returns 404 when the offer does not exist, and 422 when the offer is not currently ACTIVE. 
      * @endpoint patch /v1/promotions/offers/{id}/deactivate
      * @param id 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public deactivateOffer(id: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PromotionOfferResponse>;
-    public deactivateOffer(id: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PromotionOfferResponse>>;
-    public deactivateOffer(id: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PromotionOfferResponse>>;
-    public deactivateOffer(id: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public deactivatePromotionOffer(id: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PromotionOfferResponse>;
+    public deactivatePromotionOffer(id: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PromotionOfferResponse>>;
+    public deactivatePromotionOffer(id: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PromotionOfferResponse>>;
+    public deactivatePromotionOffer(id: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (id === null || id === undefined) {
-            throw new Error('Required parameter id was null or undefined when calling deactivateOffer.');
+            throw new Error('Required parameter id was null or undefined when calling deactivatePromotionOffer.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -302,20 +302,20 @@ export class PromotionOffersService extends BaseService {
     }
 
     /**
-     * Get promotion offer by code
-     * Retrieves a promotion offer using its promotion code.
+     * Get Promotion Offer By Code
+     * Returns the promotion offer that owns the supplied customer-facing promo code. Use this tool when only the promo code from marketing material is known; use getPromotionOfferById instead when the offer\&#39;s UUID is available. Preconditions: an offer with exactly that promoCode must exist; the lookup is an exact match on the code. Required inputs: promoCode (max 64 characters) as a path parameter; there is no request body. No events are emitted and no state changes; this is a read-only projection. Returns 404 when no promotion offer exists for the supplied code. 
      * @endpoint get /v1/promotions/offers/by-code/{promoCode}
      * @param promoCode 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public getOfferByCode(promoCode: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PromotionOfferResponse>;
-    public getOfferByCode(promoCode: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PromotionOfferResponse>>;
-    public getOfferByCode(promoCode: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PromotionOfferResponse>>;
-    public getOfferByCode(promoCode: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getPromotionOfferByCode(promoCode: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PromotionOfferResponse>;
+    public getPromotionOfferByCode(promoCode: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PromotionOfferResponse>>;
+    public getPromotionOfferByCode(promoCode: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PromotionOfferResponse>>;
+    public getPromotionOfferByCode(promoCode: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (promoCode === null || promoCode === undefined) {
-            throw new Error('Required parameter promoCode was null or undefined when calling getOfferByCode.');
+            throw new Error('Required parameter promoCode was null or undefined when calling getPromotionOfferByCode.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -362,20 +362,20 @@ export class PromotionOffersService extends BaseService {
     }
 
     /**
-     * Get promotion offer by ID
-     * Retrieves a promotion offer using its unique identifier.
+     * Get Promotion Offer By ID
+     * Returns the full promotion offer, including status, discount policy, validity window, and usage counters. Use this tool when the promotion offer\&#39;s UUID is already known; use getPromotionOfferByCode instead when only the customer-facing promo code is available. Preconditions: the promotion offer must exist. Required inputs: id (UUID) as a path parameter; there is no request body. No events are emitted and no state changes; this is a read-only projection. Returns 404 when no promotion offer exists for the supplied id. 
      * @endpoint get /v1/promotions/offers/{id}
      * @param id 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public getOfferById(id: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PromotionOfferResponse>;
-    public getOfferById(id: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PromotionOfferResponse>>;
-    public getOfferById(id: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PromotionOfferResponse>>;
-    public getOfferById(id: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getPromotionOfferById(id: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PromotionOfferResponse>;
+    public getPromotionOfferById(id: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PromotionOfferResponse>>;
+    public getPromotionOfferById(id: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PromotionOfferResponse>>;
+    public getPromotionOfferById(id: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (id === null || id === undefined) {
-            throw new Error('Required parameter id was null or undefined when calling getOfferById.');
+            throw new Error('Required parameter id was null or undefined when calling getPromotionOfferById.');
         }
 
         let localVarHeaders = this.defaultHeaders;

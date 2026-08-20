@@ -14,6 +14,10 @@
  */
 export interface LocationInventoryInquiryResponse { 
     /**
+     * Quantity available to promise after pending allocations. Note: reservation events are not yet factored in. Null for as-of (historical) requests: historical allocation state is not reliably reconstructable from ATP-neutral ledger events, so as-of responses carry on-hand only.
+     */
+    availableToPromiseQuantity?: number;
+    /**
      * Storage location identifier
      */
     locationId: string;
@@ -21,10 +25,6 @@ export interface LocationInventoryInquiryResponse {
      * Current on-hand quantity across all stock items at the location
      */
     onHandQuantity: number;
-    /**
-     * Quantity available to promise after pending allocations. Note: reservation events are not yet factored in. Null for as-of (historical) requests: historical allocation state is not reliably reconstructable from ATP-neutral ledger events, so as-of responses carry on-hand only.
-     */
-    availableToPromiseQuantity?: number;
 }
 
 function isOptionalLocationInventoryInquiryResponsePropertyOfType(
@@ -67,7 +67,7 @@ export function instanceOfLocationInventoryInquiryResponse(value: object): value
 
     const requiredProperties = createLocationInventoryInquiryResponsePropertyNames('locationId', 'onHandQuantity', );
     const optionalStringProperties = createLocationInventoryInquiryResponseOptionalProperties({ name: 'locationId', nullable: false }, );
-    const optionalNumberProperties = createLocationInventoryInquiryResponseOptionalProperties({ name: 'onHandQuantity', nullable: false }, { name: 'availableToPromiseQuantity', nullable: false }, );
+    const optionalNumberProperties = createLocationInventoryInquiryResponseOptionalProperties({ name: 'availableToPromiseQuantity', nullable: false }, { name: 'onHandQuantity', nullable: false }, );
     const optionalBooleanProperties = createLocationInventoryInquiryResponseOptionalProperties();
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

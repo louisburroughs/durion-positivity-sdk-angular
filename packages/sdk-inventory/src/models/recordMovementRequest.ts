@@ -14,33 +14,33 @@
  */
 export interface RecordMovementRequest { 
     /**
-     * Stock keeping unit code of the product being moved
-     */
-    productSku: string;
-    /**
      * Identifier of the location the stock moves from
      */
     fromLocationId: string;
-    /**
-     * Identifier of the destination location; required for TRANSFER movements
-     */
-    toLocationId?: string;
     /**
      * Direct ledger movement type. ADJUST is workflow-only and must use /v1/inventory/adjustments endpoints.
      */
     movementType: RecordMovementRequestMovementTypeEnum;
     /**
+     * Stock keeping unit code of the product being moved
+     */
+    productSku: string;
+    /**
      * Quantity of units being moved
      */
     quantity: number;
     /**
-     * Unit of measure for the quantity
-     */
-    unitOfMeasure?: string;
-    /**
      * Reference to the originating system transaction that caused the movement
      */
     sourceTransactionId?: string;
+    /**
+     * Identifier of the destination location; required for TRANSFER movements
+     */
+    toLocationId?: string;
+    /**
+     * Unit of measure for the quantity
+     */
+    unitOfMeasure?: string;
 }
 export enum RecordMovementRequestMovementTypeEnum {
     Receive = 'RECEIVE',
@@ -91,8 +91,8 @@ export function instanceOfRecordMovementRequest(value: object): value is RecordM
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createRecordMovementRequestPropertyNames('productSku', 'fromLocationId', 'movementType', 'quantity', );
-    const optionalStringProperties = createRecordMovementRequestOptionalProperties({ name: 'productSku', nullable: false }, { name: 'fromLocationId', nullable: false }, { name: 'toLocationId', nullable: false }, { name: 'movementType', nullable: false }, { name: 'unitOfMeasure', nullable: false }, { name: 'sourceTransactionId', nullable: false }, );
+    const requiredProperties = createRecordMovementRequestPropertyNames('fromLocationId', 'movementType', 'productSku', 'quantity', );
+    const optionalStringProperties = createRecordMovementRequestOptionalProperties({ name: 'fromLocationId', nullable: false }, { name: 'movementType', nullable: false }, { name: 'productSku', nullable: false }, { name: 'sourceTransactionId', nullable: false }, { name: 'toLocationId', nullable: false }, { name: 'unitOfMeasure', nullable: false }, );
     const optionalNumberProperties = createRecordMovementRequestOptionalProperties({ name: 'quantity', nullable: false }, );
     const optionalBooleanProperties = createRecordMovementRequestOptionalProperties();
 

@@ -15,21 +15,21 @@ import { CreateGoodsReceiptLineRequest } from './createGoodsReceiptLineRequest';
  */
 export interface CreateGoodsReceiptRequest { 
     /**
-     * Identifier of the purchase order the goods are received against
-     */
-    poId: string;
-    /**
      * Identifier of the advance shipping notice (ASN) this receipt fulfills, if applicable
      */
     asnId?: string;
+    /**
+     * Received line items detailing the SKUs and quantities in this goods receipt
+     */
+    lines: Array<CreateGoodsReceiptLineRequest>;
     /**
      * Identifier of the location where the goods are received into inventory
      */
     locationId: string;
     /**
-     * Received line items detailing the SKUs and quantities in this goods receipt
+     * Identifier of the purchase order the goods are received against
      */
-    lines: Array<CreateGoodsReceiptLineRequest>;
+    poId: string;
 }
 
 function isOptionalCreateGoodsReceiptRequestPropertyOfType(
@@ -70,8 +70,8 @@ export function instanceOfCreateGoodsReceiptRequest(value: object): value is Cre
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createCreateGoodsReceiptRequestPropertyNames('poId', 'locationId', 'lines', );
-    const optionalStringProperties = createCreateGoodsReceiptRequestOptionalProperties({ name: 'poId', nullable: false }, { name: 'asnId', nullable: false }, { name: 'locationId', nullable: false }, );
+    const requiredProperties = createCreateGoodsReceiptRequestPropertyNames('lines', 'locationId', 'poId', );
+    const optionalStringProperties = createCreateGoodsReceiptRequestOptionalProperties({ name: 'asnId', nullable: false }, { name: 'locationId', nullable: false }, { name: 'poId', nullable: false }, );
     const optionalNumberProperties = createCreateGoodsReceiptRequestOptionalProperties();
     const optionalBooleanProperties = createCreateGoodsReceiptRequestOptionalProperties();
 

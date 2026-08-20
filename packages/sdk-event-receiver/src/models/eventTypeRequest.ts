@@ -14,14 +14,6 @@
  */
 export interface EventTypeRequest { 
     /**
-     * Unique code identifying the event type
-     */
-    typeCode: string;
-    /**
-     * Human-readable description of the event type
-     */
-    description: string;
-    /**
      * Whether the event type is active
      */
     active?: boolean;
@@ -29,6 +21,10 @@ export interface EventTypeRequest {
      * API version for this event type
      */
     apiVersion?: string;
+    /**
+     * Human-readable description of the event type
+     */
+    description: string;
     /**
      * 50th percentile latency threshold in microseconds (default: 10,000,000 = 10s)
      */
@@ -41,6 +37,10 @@ export interface EventTypeRequest {
      * 99th percentile latency threshold in microseconds (default: 10,000,000 = 10s)
      */
     p99Micros?: number;
+    /**
+     * Unique code identifying the event type
+     */
+    typeCode: string;
 }
 
 function isOptionalEventTypeRequestPropertyOfType(
@@ -81,8 +81,8 @@ export function instanceOfEventTypeRequest(value: object): value is EventTypeReq
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createEventTypeRequestPropertyNames('typeCode', 'description', );
-    const optionalStringProperties = createEventTypeRequestOptionalProperties({ name: 'typeCode', nullable: false }, { name: 'description', nullable: false }, { name: 'apiVersion', nullable: false }, );
+    const requiredProperties = createEventTypeRequestPropertyNames('description', 'typeCode', );
+    const optionalStringProperties = createEventTypeRequestOptionalProperties({ name: 'apiVersion', nullable: false }, { name: 'description', nullable: false }, { name: 'typeCode', nullable: false }, );
     const optionalNumberProperties = createEventTypeRequestOptionalProperties({ name: 'p50Micros', nullable: false }, { name: 'p95Micros', nullable: false }, { name: 'p99Micros', nullable: false }, );
     const optionalBooleanProperties = createEventTypeRequestOptionalProperties({ name: 'active', nullable: false }, );
 

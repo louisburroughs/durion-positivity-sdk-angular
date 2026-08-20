@@ -39,20 +39,20 @@ export class InventoryManagementService extends BaseService {
 
     /**
      * Deactivate a storage location
-     * Deactivate a storage location with atomic stock transfer to a destination location (Option B). If the location contains active inventory, a destination location must be specified.
+     * Deactivates a storage location, atomically transferring any remaining on-hand stock to a destination location in the same site through paired TRANSFER_OUT and TRANSFER_IN ledger entries with reason LOCATION_DEACTIVATION_TRANSFER. Use this tool to retire a bin or storage location; do not use triggerLocationSync, which repairs the roster replica, and do not use it for routine stock relocation between active locations. Preconditions: the location must exist and be active; when it holds stock, the destination must exist, be active, differ from the source and belong to the same site. Required inputs: locationId (UUID) path parameter; the body is optional and carries destinationLocationId, which becomes mandatory when the source holds stock. Emits an INVENTORY_LOCATION_DEACTIVATE event, posts the transfer entries when stock is moved and publishes an audit event; the response reports status Inactive with the moved items. Returns 404 when the source or destination location is unknown, 409 when the source or destination is already inactive, and 400 when destinationLocationId is missing while stock remains, equals the source, or belongs to a different site. 
      * @endpoint post /v1/inventory/locations/{locationId}/deactivate
      * @param locationId Location ID to deactivate
-     * @param deactivateLocationRequest 
+     * @param deactivateLocationRequest Optional destination for the remaining stock; mandatory when the location still holds inventory.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public deactivate(locationId: string, deactivateLocationRequest?: DeactivateLocationRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<DeactivateLocationResponse>;
-    public deactivate(locationId: string, deactivateLocationRequest?: DeactivateLocationRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<DeactivateLocationResponse>>;
-    public deactivate(locationId: string, deactivateLocationRequest?: DeactivateLocationRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<DeactivateLocationResponse>>;
-    public deactivate(locationId: string, deactivateLocationRequest?: DeactivateLocationRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public deactivateInventoryLocation(locationId: string, deactivateLocationRequest?: DeactivateLocationRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<DeactivateLocationResponse>;
+    public deactivateInventoryLocation(locationId: string, deactivateLocationRequest?: DeactivateLocationRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<DeactivateLocationResponse>>;
+    public deactivateInventoryLocation(locationId: string, deactivateLocationRequest?: DeactivateLocationRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<DeactivateLocationResponse>>;
+    public deactivateInventoryLocation(locationId: string, deactivateLocationRequest?: DeactivateLocationRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (locationId === null || locationId === undefined) {
-            throw new Error('Required parameter locationId was null or undefined when calling deactivate.');
+            throw new Error('Required parameter locationId was null or undefined when calling deactivateInventoryLocation.');
         }
 
         let localVarHeaders = this.defaultHeaders;

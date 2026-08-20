@@ -14,9 +14,17 @@
  */
 export interface PersonBulkIngestRecord { 
     /**
+     * Unique employee number
+     */
+    employeeNumber: string;
+    /**
      * First (given) name of the person
      */
     firstName: string;
+    /**
+     * Date the person was hired (ISO 8601 date)
+     */
+    hireDate: string;
     /**
      * Last (family) name of the person
      */
@@ -25,14 +33,6 @@ export interface PersonBulkIngestRecord {
      * Preferred name of the person
      */
     preferredName?: string;
-    /**
-     * Unique employee number
-     */
-    employeeNumber: string;
-    /**
-     * Date the person was hired (ISO 8601 date)
-     */
-    hireDate: string;
     /**
      * Primary email address
      */
@@ -81,8 +81,8 @@ export function instanceOfPersonBulkIngestRecord(value: object): value is Person
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createPersonBulkIngestRecordPropertyNames('firstName', 'lastName', 'employeeNumber', 'hireDate', );
-    const optionalStringProperties = createPersonBulkIngestRecordOptionalProperties({ name: 'firstName', nullable: false }, { name: 'lastName', nullable: false }, { name: 'preferredName', nullable: false }, { name: 'employeeNumber', nullable: false }, { name: 'hireDate', nullable: false }, { name: 'primaryEmail', nullable: false }, { name: 'primaryPhone', nullable: false }, );
+    const requiredProperties = createPersonBulkIngestRecordPropertyNames('employeeNumber', 'firstName', 'hireDate', 'lastName', );
+    const optionalStringProperties = createPersonBulkIngestRecordOptionalProperties({ name: 'employeeNumber', nullable: false }, { name: 'firstName', nullable: false }, { name: 'hireDate', nullable: false }, { name: 'lastName', nullable: false }, { name: 'preferredName', nullable: false }, { name: 'primaryEmail', nullable: false }, { name: 'primaryPhone', nullable: false }, );
     const optionalNumberProperties = createPersonBulkIngestRecordOptionalProperties();
     const optionalBooleanProperties = createPersonBulkIngestRecordOptionalProperties();
 

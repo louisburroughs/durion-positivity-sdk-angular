@@ -14,49 +14,49 @@
  */
 export interface CustomerCreditTransactionResponse { 
     /**
-     * Draw-down identifier
-     */
-    creditTransactionId?: string;
-    /**
-     * Credit that was drawn down
-     */
-    creditId?: string;
-    /**
-     * Whether the credit settled an invoice or was refunded as cash
-     */
-    transactionType?: CustomerCreditTransactionResponseTransactionTypeEnum;
-    /**
-     * Invoice settled by an APPLICATION; null for a REFUND
-     */
-    invoiceId?: string;
-    /**
      * Amount drawn down
      */
     amount?: number;
-    /**
-     * Currency (ISO 4217)
-     */
-    currency?: string;
-    /**
-     * Caller-supplied idempotency key this draw-down was recorded under
-     */
-    requestId?: string;
-    /**
-     * Credit\'s remaining open amount after this draw-down
-     */
-    creditOpenAmountAfter?: number;
-    /**
-     * Invoice balance after the credit was applied; null for a REFUND
-     */
-    invoiceBalanceAfter?: number;
     /**
      * When the draw-down was recorded
      */
     createdAt?: string;
     /**
+     * Credit that was drawn down
+     */
+    creditId?: string;
+    /**
+     * Credit\'s remaining open amount after this draw-down
+     */
+    creditOpenAmountAfter?: number;
+    /**
+     * Draw-down identifier
+     */
+    creditTransactionId?: string;
+    /**
+     * Currency (ISO 4217)
+     */
+    currency?: string;
+    /**
+     * Invoice balance after the credit was applied; null for a REFUND
+     */
+    invoiceBalanceAfter?: number;
+    /**
+     * Invoice settled by an APPLICATION; null for a REFUND
+     */
+    invoiceId?: string;
+    /**
      * True when this response replays an already-processed request id rather than recording a new draw-down
      */
     replayed?: boolean;
+    /**
+     * Caller-supplied idempotency key this draw-down was recorded under
+     */
+    requestId?: string;
+    /**
+     * Whether the credit settled an invoice or was refunded as cash
+     */
+    transactionType?: CustomerCreditTransactionResponseTransactionTypeEnum;
 }
 export enum CustomerCreditTransactionResponseTransactionTypeEnum {
     Application = 'APPLICATION',
@@ -104,7 +104,7 @@ export function instanceOfCustomerCreditTransactionResponse(value: object): valu
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createCustomerCreditTransactionResponsePropertyNames();
-    const optionalStringProperties = createCustomerCreditTransactionResponseOptionalProperties({ name: 'creditTransactionId', nullable: false }, { name: 'creditId', nullable: false }, { name: 'transactionType', nullable: false }, { name: 'invoiceId', nullable: false }, { name: 'currency', nullable: false }, { name: 'requestId', nullable: false }, { name: 'createdAt', nullable: false }, );
+    const optionalStringProperties = createCustomerCreditTransactionResponseOptionalProperties({ name: 'createdAt', nullable: false }, { name: 'creditId', nullable: false }, { name: 'creditTransactionId', nullable: false }, { name: 'currency', nullable: false }, { name: 'invoiceId', nullable: false }, { name: 'requestId', nullable: false }, { name: 'transactionType', nullable: false }, );
     const optionalNumberProperties = createCustomerCreditTransactionResponseOptionalProperties({ name: 'amount', nullable: false }, { name: 'creditOpenAmountAfter', nullable: false }, { name: 'invoiceBalanceAfter', nullable: false }, );
     const optionalBooleanProperties = createCustomerCreditTransactionResponseOptionalProperties({ name: 'replayed', nullable: false }, );
 

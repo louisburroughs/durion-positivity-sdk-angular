@@ -22,13 +22,13 @@ export interface AddEligibilityRuleRequest {
      */
     operator: AddEligibilityRuleRequestOperatorEnum;
     /**
-     * Rule threshold or comparison value
-     */
-    value: string;
-    /**
      * Logical combinator when multiple rules exist
      */
     ruleCombination?: AddEligibilityRuleRequestRuleCombinationEnum | null;
+    /**
+     * Rule threshold or comparison value
+     */
+    value: string;
 }
 export enum AddEligibilityRuleRequestConditionTypeEnum {
     AccountIdList = 'ACCOUNT_ID_LIST',
@@ -89,7 +89,7 @@ export function instanceOfAddEligibilityRuleRequest(value: object): value is Add
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createAddEligibilityRuleRequestPropertyNames('conditionType', 'operator', 'value', );
-    const optionalStringProperties = createAddEligibilityRuleRequestOptionalProperties({ name: 'conditionType', nullable: false }, { name: 'operator', nullable: false }, { name: 'value', nullable: false }, { name: 'ruleCombination', nullable: true }, );
+    const optionalStringProperties = createAddEligibilityRuleRequestOptionalProperties({ name: 'conditionType', nullable: false }, { name: 'operator', nullable: false }, { name: 'ruleCombination', nullable: true }, { name: 'value', nullable: false }, );
     const optionalNumberProperties = createAddEligibilityRuleRequestOptionalProperties();
     const optionalBooleanProperties = createAddEligibilityRuleRequestOptionalProperties();
 

@@ -14,6 +14,10 @@
  */
 export interface AssignedRole { 
     /**
+     * Whether this contact is primary for this role
+     */
+    isPrimary?: boolean;
+    /**
      * Role code
      */
     roleCode: AssignedRoleRoleCodeEnum;
@@ -21,10 +25,6 @@ export interface AssignedRole {
      * Role display label
      */
     roleLabel?: string;
-    /**
-     * Whether this contact is primary for this role
-     */
-    isPrimary?: boolean;
 }
 export enum AssignedRoleRoleCodeEnum {
     Billing = 'BILLING',

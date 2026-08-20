@@ -14,13 +14,13 @@
  */
 export interface LoginRequest { 
     /**
-     * The user\'s login username
-     */
-    username: string;
-    /**
      * The user\'s login password
      */
     password: string;
+    /**
+     * The user\'s login username
+     */
+    username: string;
 }
 
 function isOptionalLoginRequestPropertyOfType(
@@ -61,8 +61,8 @@ export function instanceOfLoginRequest(value: object): value is LoginRequest {
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createLoginRequestPropertyNames('username', 'password', );
-    const optionalStringProperties = createLoginRequestOptionalProperties({ name: 'username', nullable: false }, { name: 'password', nullable: false }, );
+    const requiredProperties = createLoginRequestPropertyNames('password', 'username', );
+    const optionalStringProperties = createLoginRequestOptionalProperties({ name: 'password', nullable: false }, { name: 'username', nullable: false }, );
     const optionalNumberProperties = createLoginRequestOptionalProperties();
     const optionalBooleanProperties = createLoginRequestOptionalProperties();
 

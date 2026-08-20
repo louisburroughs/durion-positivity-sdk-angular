@@ -41,23 +41,23 @@ export class SupplierEndpointBindingsService extends BaseService {
 
     /**
      * Create endpoint binding
-     * Bind a capability to (protocolFamily, version, baseUrl, path, authConfigName)
+     * Binds one supplier capability on a vendor profile to a protocol family, adapter version, URL and auth config, which is what makes that capability resolve at call time. Use this tool when enabling a capability for a supplier; do not use it to change an existing binding, which is updateEndpointBinding, since at most one binding per capability may exist. Preconditions: the profile must exist and be ADMIN-managed, the capability must not already be bound on it, and authConfigName must name an auth config on the same profile. Required inputs: vendorProfileId (UUIDv7) path parameter plus capability, protocolFamily, version, baseUrl, path and authConfigName; version is not validated on write, so a key with no registered codec is accepted and then resolves to CAPABILITY_NOT_CONFIGURED on every call. Emits a SUPPLIER_BINDING_CREATE audit event; captureLevel and the redaction classifications decide what the exchange-audit trail retains for this binding from now on. Returns 404 when the profile does not exist, 409 when the profile is YAML-managed or the capability is already bound, and 400 when the capability, protocol family or auth config name is unknown. 
      * @endpoint post /v1/supplier/admin/profiles/{vendorProfileId}/bindings
      * @param vendorProfileId Owning vendor profile identifier (UUIDv7). Must reference an existing vendor profile.
-     * @param endpointBindingRequest 
+     * @param endpointBindingRequest Endpoint binding to add to the vendor profile, mapping one capability to a vendor endpoint.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public createBinding(vendorProfileId: string, endpointBindingRequest: EndpointBindingRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<EndpointBindingView>;
-    public createBinding(vendorProfileId: string, endpointBindingRequest: EndpointBindingRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<EndpointBindingView>>;
-    public createBinding(vendorProfileId: string, endpointBindingRequest: EndpointBindingRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<EndpointBindingView>>;
-    public createBinding(vendorProfileId: string, endpointBindingRequest: EndpointBindingRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public createEndpointBinding(vendorProfileId: string, endpointBindingRequest: EndpointBindingRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<EndpointBindingView>;
+    public createEndpointBinding(vendorProfileId: string, endpointBindingRequest: EndpointBindingRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<EndpointBindingView>>;
+    public createEndpointBinding(vendorProfileId: string, endpointBindingRequest: EndpointBindingRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<EndpointBindingView>>;
+    public createEndpointBinding(vendorProfileId: string, endpointBindingRequest: EndpointBindingRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (vendorProfileId === null || vendorProfileId === undefined) {
-            throw new Error('Required parameter vendorProfileId was null or undefined when calling createBinding.');
+            throw new Error('Required parameter vendorProfileId was null or undefined when calling createEndpointBinding.');
         }
         if (endpointBindingRequest === null || endpointBindingRequest === undefined) {
-            throw new Error('Required parameter endpointBindingRequest was null or undefined when calling createBinding.');
+            throw new Error('Required parameter endpointBindingRequest was null or undefined when calling createEndpointBinding.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -115,7 +115,7 @@ export class SupplierEndpointBindingsService extends BaseService {
 
     /**
      * Delete endpoint binding
-     * Remove a binding, disabling its capability for the profile
+     * Removes an endpoint binding, which disables that one capability for the vendor profile. Use this tool when a capability is retired for a supplier; to pause it while keeping the configuration, call updateEndpointBinding with enabled cleared instead, since a disabled binding behaves exactly as an absent one. Preconditions: the profile must exist and be ADMIN-managed, and the binding must belong to it. Required inputs: vendorProfileId and bindingId (UUIDv7) path parameters; there is no request body. Emits a SUPPLIER_BINDING_DELETE audit event; the capability then resolves to the typed CAPABILITY_NOT_CONFIGURED outcome, and exchange audit rows already written are retained. Returns 404 when the profile or binding does not exist, and 409 when the profile is YAML-managed. 
      * @endpoint delete /v1/supplier/admin/profiles/{vendorProfileId}/bindings/{bindingId}
      * @param vendorProfileId Owning vendor profile identifier (UUIDv7). Must reference an existing vendor profile.
      * @param bindingId Endpoint binding identifier (UUIDv7). Must belong to the vendor profile in the path.
@@ -123,15 +123,15 @@ export class SupplierEndpointBindingsService extends BaseService {
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public deleteBinding(vendorProfileId: string, bindingId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public deleteBinding(vendorProfileId: string, bindingId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public deleteBinding(vendorProfileId: string, bindingId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public deleteBinding(vendorProfileId: string, bindingId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public deleteEndpointBinding(vendorProfileId: string, bindingId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any>;
+    public deleteEndpointBinding(vendorProfileId: string, bindingId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
+    public deleteEndpointBinding(vendorProfileId: string, bindingId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
+    public deleteEndpointBinding(vendorProfileId: string, bindingId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (vendorProfileId === null || vendorProfileId === undefined) {
-            throw new Error('Required parameter vendorProfileId was null or undefined when calling deleteBinding.');
+            throw new Error('Required parameter vendorProfileId was null or undefined when calling deleteEndpointBinding.');
         }
         if (bindingId === null || bindingId === undefined) {
-            throw new Error('Required parameter bindingId was null or undefined when calling deleteBinding.');
+            throw new Error('Required parameter bindingId was null or undefined when calling deleteEndpointBinding.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -179,19 +179,19 @@ export class SupplierEndpointBindingsService extends BaseService {
 
     /**
      * List endpoint bindings
-     * Bindings of a vendor profile, ordered by capability
+     * Returns the capability endpoint bindings of a vendor profile, ordered by capability, each with its protocol family, version, URL, auth config name and enabled flag. Use this tool to see which capabilities a supplier actually resolves; do not infer availability from the profile itself, because an absent or disabled binding disables just that capability. Preconditions: the vendor profile must exist. Required inputs: vendorProfileId (UUIDv7) path parameter; there is no request body or filtering. Emits a SUPPLIER_BINDING_LIST audit event; no configuration is changed. Returns 404 when the vendor profile does not exist, and 200 with an empty array when the profile has no bindings, which means every capability is unconfigured. 
      * @endpoint get /v1/supplier/admin/profiles/{vendorProfileId}/bindings
      * @param vendorProfileId Owning vendor profile identifier (UUIDv7). Must reference an existing vendor profile.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public listBindings(vendorProfileId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<EndpointBindingView>>;
-    public listBindings(vendorProfileId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<EndpointBindingView>>>;
-    public listBindings(vendorProfileId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<EndpointBindingView>>>;
-    public listBindings(vendorProfileId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public listEndpointBindings(vendorProfileId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<EndpointBindingView>>;
+    public listEndpointBindings(vendorProfileId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<EndpointBindingView>>>;
+    public listEndpointBindings(vendorProfileId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<EndpointBindingView>>>;
+    public listEndpointBindings(vendorProfileId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (vendorProfileId === null || vendorProfileId === undefined) {
-            throw new Error('Required parameter vendorProfileId was null or undefined when calling listBindings.');
+            throw new Error('Required parameter vendorProfileId was null or undefined when calling listEndpointBindings.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -239,27 +239,27 @@ export class SupplierEndpointBindingsService extends BaseService {
 
     /**
      * Update endpoint binding
-     * Replace an endpoint binding
+     * Replaces every settable field of an endpoint binding, including its capability, adapter version, URL, auth config, schedule, enabled flag and audit capture level. Use this tool to repoint a capability or take it out of service by clearing enabled; do not use it to bind a second capability, which is createEndpointBinding. Preconditions: the profile must exist and be ADMIN-managed, the binding must belong to it, and a changed capability must not already be bound elsewhere on the profile. Required inputs: vendorProfileId and bindingId (UUIDv7) path parameters plus the full body, because every field is replaced; omitting captureLevel resets it to the deployment default rather than leaving the stored value. Emits a SUPPLIER_BINDING_UPDATE audit event; a disabled binding immediately reports the typed CAPABILITY_NOT_CONFIGURED outcome with HTTP 200 rather than failing. Returns 404 when the profile or binding does not exist, 409 when the profile is YAML-managed or the capability is already bound, and 400 when the capability, protocol family or auth config name is unknown. 
      * @endpoint put /v1/supplier/admin/profiles/{vendorProfileId}/bindings/{bindingId}
      * @param vendorProfileId Owning vendor profile identifier (UUIDv7). Must reference an existing vendor profile.
      * @param bindingId Endpoint binding identifier (UUIDv7). Must belong to the vendor profile in the path.
-     * @param endpointBindingRequest 
+     * @param endpointBindingRequest Endpoint binding to store in place of the existing one, mapping one capability to a vendor endpoint.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public updateBinding(vendorProfileId: string, bindingId: string, endpointBindingRequest: EndpointBindingRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<EndpointBindingView>;
-    public updateBinding(vendorProfileId: string, bindingId: string, endpointBindingRequest: EndpointBindingRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<EndpointBindingView>>;
-    public updateBinding(vendorProfileId: string, bindingId: string, endpointBindingRequest: EndpointBindingRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<EndpointBindingView>>;
-    public updateBinding(vendorProfileId: string, bindingId: string, endpointBindingRequest: EndpointBindingRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public updateEndpointBinding(vendorProfileId: string, bindingId: string, endpointBindingRequest: EndpointBindingRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<EndpointBindingView>;
+    public updateEndpointBinding(vendorProfileId: string, bindingId: string, endpointBindingRequest: EndpointBindingRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<EndpointBindingView>>;
+    public updateEndpointBinding(vendorProfileId: string, bindingId: string, endpointBindingRequest: EndpointBindingRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<EndpointBindingView>>;
+    public updateEndpointBinding(vendorProfileId: string, bindingId: string, endpointBindingRequest: EndpointBindingRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (vendorProfileId === null || vendorProfileId === undefined) {
-            throw new Error('Required parameter vendorProfileId was null or undefined when calling updateBinding.');
+            throw new Error('Required parameter vendorProfileId was null or undefined when calling updateEndpointBinding.');
         }
         if (bindingId === null || bindingId === undefined) {
-            throw new Error('Required parameter bindingId was null or undefined when calling updateBinding.');
+            throw new Error('Required parameter bindingId was null or undefined when calling updateEndpointBinding.');
         }
         if (endpointBindingRequest === null || endpointBindingRequest === undefined) {
-            throw new Error('Required parameter endpointBindingRequest was null or undefined when calling updateBinding.');
+            throw new Error('Required parameter endpointBindingRequest was null or undefined when calling updateEndpointBinding.');
         }
 
         let localVarHeaders = this.defaultHeaders;

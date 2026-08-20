@@ -34,20 +34,20 @@ export class CustomerRequirementsService extends BaseService {
     }
 
     /**
-     * Check whether a customer meets requirements
-     * Returns true when the customer is active and, for commercial parties, not on credit hold.
+     * Check Customer Requirements Met
+     * Evaluates whether a customer is eligible for customer-facing workflows: the party must have ACTIVE status, and a commercial party must additionally not be on credit hold. Use this tool as a gate before starting orders or workorders for a customer; use getPartyBillingRules instead to see the underlying credit-hold configuration. Preconditions: a commercial or person party must exist for the supplied id. Required inputs: id (UUID, the party id) as a path parameter; there is no request body. Emits a CUSTOMER_REQUIREMENTS_MET_GET audit event; no state changes occur. Returns 404 when no party exists for the supplied id, and 200 with a bare boolean verdict otherwise. 
      * @endpoint get /v1/customers/{id}/requirements-met
      * @param id Customer ID
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public requirementsMet(id: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<boolean>;
-    public requirementsMet(id: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<boolean>>;
-    public requirementsMet(id: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<boolean>>;
-    public requirementsMet(id: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public checkCustomerRequirementsMet(id: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<boolean>;
+    public checkCustomerRequirementsMet(id: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<boolean>>;
+    public checkCustomerRequirementsMet(id: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<boolean>>;
+    public checkCustomerRequirementsMet(id: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (id === null || id === undefined) {
-            throw new Error('Required parameter id was null or undefined when calling requirementsMet.');
+            throw new Error('Required parameter id was null or undefined when calling checkCustomerRequirementsMet.');
         }
 
         let localVarHeaders = this.defaultHeaders;

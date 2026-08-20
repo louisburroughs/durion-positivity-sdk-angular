@@ -14,6 +14,42 @@
  */
 export interface BillingRuleRef { 
     /**
+     * Whether auto-pay is enabled for this account
+     */
+    autoPayEnabled: boolean;
+    /**
+     * Billing address ID; null if not configured
+     */
+    billingAddressId?: string;
+    /**
+     * Whether the account is on a credit hold
+     */
+    creditHold: boolean;
+    /**
+     * Maximum credit limit available; null means no configured limit
+     */
+    creditLimit?: number;
+    /**
+     * ISO-4217 currency code; null if not configured
+     */
+    currency?: string;
+    /**
+     * Optional reference to a discount policy
+     */
+    discountPolicyRef?: string;
+    /**
+     * Extension map for future fields; consumers must ignore unknown keys
+     */
+    extensions?: object;
+    /**
+     * Preferred invoice delivery method
+     */
+    invoiceDeliveryMethod?: BillingRuleRefInvoiceDeliveryMethodEnum;
+    /**
+     * Payment terms string
+     */
+    paymentTerms?: string;
+    /**
      * Whether a PO number is required before an order can be finalized
      */
     poRequired: boolean;
@@ -21,42 +57,6 @@ export interface BillingRuleRef {
      * Whether the customer is tax-exempt
      */
     taxExempt: boolean;
-    /**
-     * Payment terms string
-     */
-    paymentTerms?: string;
-    /**
-     * Maximum credit limit available; null means no configured limit
-     */
-    creditLimit?: number;
-    /**
-     * Whether the account is on a credit hold
-     */
-    creditHold: boolean;
-    /**
-     * Preferred invoice delivery method
-     */
-    invoiceDeliveryMethod?: BillingRuleRefInvoiceDeliveryMethodEnum;
-    /**
-     * Billing address ID; null if not configured
-     */
-    billingAddressId?: string;
-    /**
-     * Whether auto-pay is enabled for this account
-     */
-    autoPayEnabled: boolean;
-    /**
-     * Optional reference to a discount policy
-     */
-    discountPolicyRef?: string;
-    /**
-     * ISO-4217 currency code; null if not configured
-     */
-    currency?: string;
-    /**
-     * Extension map for future fields; consumers must ignore unknown keys
-     */
-    extensions?: object;
 }
 export enum BillingRuleRefInvoiceDeliveryMethodEnum {
     Email = 'EMAIL',
@@ -105,10 +105,10 @@ export function instanceOfBillingRuleRef(value: object): value is BillingRuleRef
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createBillingRuleRefPropertyNames('poRequired', 'taxExempt', 'creditHold', 'autoPayEnabled', );
-    const optionalStringProperties = createBillingRuleRefOptionalProperties({ name: 'paymentTerms', nullable: false }, { name: 'invoiceDeliveryMethod', nullable: false }, { name: 'billingAddressId', nullable: false }, { name: 'discountPolicyRef', nullable: false }, { name: 'currency', nullable: false }, );
+    const requiredProperties = createBillingRuleRefPropertyNames('autoPayEnabled', 'creditHold', 'poRequired', 'taxExempt', );
+    const optionalStringProperties = createBillingRuleRefOptionalProperties({ name: 'billingAddressId', nullable: false }, { name: 'currency', nullable: false }, { name: 'discountPolicyRef', nullable: false }, { name: 'invoiceDeliveryMethod', nullable: false }, { name: 'paymentTerms', nullable: false }, );
     const optionalNumberProperties = createBillingRuleRefOptionalProperties({ name: 'creditLimit', nullable: false }, );
-    const optionalBooleanProperties = createBillingRuleRefOptionalProperties({ name: 'poRequired', nullable: false }, { name: 'taxExempt', nullable: false }, { name: 'creditHold', nullable: false }, { name: 'autoPayEnabled', nullable: false }, );
+    const optionalBooleanProperties = createBillingRuleRefOptionalProperties({ name: 'autoPayEnabled', nullable: false }, { name: 'creditHold', nullable: false }, { name: 'poRequired', nullable: false }, { name: 'taxExempt', nullable: false }, );
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
         && optionalStringProperties.every((property) => isOptionalBillingRuleRefPropertyOfType(_v, property.name, 'string', property.nullable))

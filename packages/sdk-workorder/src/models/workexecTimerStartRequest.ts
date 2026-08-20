@@ -14,6 +14,18 @@
  */
 export interface WorkexecTimerStartRequest { 
     /**
+     * Optional labor code associated with timer
+     */
+    laborCode?: string;
+    /**
+     * Required when starting a timer on behalf of a technician other than yourself or the current assignee.
+     */
+    reason?: string;
+    /**
+     * Optional technician whose labor this timer tracks. Omit to use the workorder\'s current assignment, or yourself if the workorder is unassigned. Supplying a technician other than yourself or the current assignee requires the \'workorder:labor:add_on_behalf\' authority and a reason.
+     */
+    technicianId?: string;
+    /**
      * Workorder identifier
      */
     workorderId: string;
@@ -21,18 +33,6 @@ export interface WorkexecTimerStartRequest {
      * Optional workorder line item identifier
      */
     workorderItemId?: string;
-    /**
-     * Optional labor code associated with timer
-     */
-    laborCode?: string;
-    /**
-     * Optional technician whose labor this timer tracks. Omit to use the workorder\'s current assignment, or yourself if the workorder is unassigned. Supplying a technician other than yourself or the current assignee requires the \'workorder:labor:add_on_behalf\' authority and a reason.
-     */
-    technicianId?: string;
-    /**
-     * Required when starting a timer on behalf of a technician other than yourself or the current assignee.
-     */
-    reason?: string;
 }
 
 function isOptionalWorkexecTimerStartRequestPropertyOfType(
@@ -74,7 +74,7 @@ export function instanceOfWorkexecTimerStartRequest(value: object): value is Wor
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createWorkexecTimerStartRequestPropertyNames('workorderId', );
-    const optionalStringProperties = createWorkexecTimerStartRequestOptionalProperties({ name: 'workorderId', nullable: false }, { name: 'workorderItemId', nullable: false }, { name: 'laborCode', nullable: false }, { name: 'technicianId', nullable: false }, { name: 'reason', nullable: false }, );
+    const optionalStringProperties = createWorkexecTimerStartRequestOptionalProperties({ name: 'laborCode', nullable: false }, { name: 'reason', nullable: false }, { name: 'technicianId', nullable: false }, { name: 'workorderId', nullable: false }, { name: 'workorderItemId', nullable: false }, );
     const optionalNumberProperties = createWorkexecTimerStartRequestOptionalProperties();
     const optionalBooleanProperties = createWorkexecTimerStartRequestOptionalProperties();
 

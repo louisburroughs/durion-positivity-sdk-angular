@@ -14,26 +14,6 @@
  */
 export interface PriceBookRuleDto { 
     /**
-     * Rule identifier
-     */
-    ruleId: string;
-    /**
-     * Identifier of the owning price book
-     */
-    priceBookId: string;
-    /**
-     * Target type the rule applies to
-     */
-    targetType: PriceBookRuleDtoTargetTypeEnum;
-    /**
-     * Identifier of the targeted entity (SKU or category)
-     */
-    targetId?: string;
-    /**
-     * Pricing logic expression applied by the rule
-     */
-    pricingLogic: string;
-    /**
      * Condition type gating the rule
      */
     conditionType?: PriceBookRuleDtoConditionTypeEnum;
@@ -42,29 +22,49 @@ export interface PriceBookRuleDto {
      */
     conditionValue?: string;
     /**
-     * Evaluation priority; lower wins
+     * Timestamp the rule was created
      */
-    priority?: number;
-    /**
-     * Instant the rule becomes effective
-     */
-    effectiveStartAt: string;
-    /**
-     * Instant the rule stops being effective
-     */
-    effectiveEndAt?: string;
-    /**
-     * Current status of the rule
-     */
-    status: PriceBookRuleDtoStatusEnum;
+    createdAt: string;
     /**
      * Identifier of the user that created the rule
      */
     createdByUserId: string;
     /**
-     * Timestamp the rule was created
+     * Instant the rule stops being effective
      */
-    createdAt: string;
+    effectiveEndAt?: string;
+    /**
+     * Instant the rule becomes effective
+     */
+    effectiveStartAt: string;
+    /**
+     * Identifier of the owning price book
+     */
+    priceBookId: string;
+    /**
+     * Pricing logic expression applied by the rule
+     */
+    pricingLogic: string;
+    /**
+     * Evaluation priority; lower wins
+     */
+    priority?: number;
+    /**
+     * Rule identifier
+     */
+    ruleId: string;
+    /**
+     * Current status of the rule
+     */
+    status: PriceBookRuleDtoStatusEnum;
+    /**
+     * Identifier of the targeted entity (SKU or category)
+     */
+    targetId?: string;
+    /**
+     * Target type the rule applies to
+     */
+    targetType: PriceBookRuleDtoTargetTypeEnum;
     /**
      * Timestamp the rule was last updated
      */
@@ -74,11 +74,6 @@ export interface PriceBookRuleDto {
      */
     version: number;
 }
-export enum PriceBookRuleDtoTargetTypeEnum {
-    Sku = 'SKU',
-    Category = 'CATEGORY',
-    Global = 'GLOBAL'
-};
 export enum PriceBookRuleDtoConditionTypeEnum {
     CustomerTier = 'CUSTOMER_TIER',
     Location = 'LOCATION',
@@ -88,6 +83,11 @@ export enum PriceBookRuleDtoStatusEnum {
     Active = 'ACTIVE',
     Inactive = 'INACTIVE',
     NotApplicableMissingBase = 'NOT_APPLICABLE_MISSING_BASE'
+};
+export enum PriceBookRuleDtoTargetTypeEnum {
+    Sku = 'SKU',
+    Category = 'CATEGORY',
+    Global = 'GLOBAL'
 };
 
 
@@ -130,8 +130,8 @@ export function instanceOfPriceBookRuleDto(value: object): value is PriceBookRul
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createPriceBookRuleDtoPropertyNames('ruleId', 'priceBookId', 'targetType', 'pricingLogic', 'effectiveStartAt', 'status', 'createdByUserId', 'createdAt', 'version', );
-    const optionalStringProperties = createPriceBookRuleDtoOptionalProperties({ name: 'ruleId', nullable: false }, { name: 'priceBookId', nullable: false }, { name: 'targetType', nullable: false }, { name: 'targetId', nullable: false }, { name: 'pricingLogic', nullable: false }, { name: 'conditionType', nullable: false }, { name: 'conditionValue', nullable: false }, { name: 'effectiveStartAt', nullable: false }, { name: 'effectiveEndAt', nullable: false }, { name: 'status', nullable: false }, { name: 'createdByUserId', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'updatedAt', nullable: false }, );
+    const requiredProperties = createPriceBookRuleDtoPropertyNames('createdAt', 'createdByUserId', 'effectiveStartAt', 'priceBookId', 'pricingLogic', 'ruleId', 'status', 'targetType', 'version', );
+    const optionalStringProperties = createPriceBookRuleDtoOptionalProperties({ name: 'conditionType', nullable: false }, { name: 'conditionValue', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'createdByUserId', nullable: false }, { name: 'effectiveEndAt', nullable: false }, { name: 'effectiveStartAt', nullable: false }, { name: 'priceBookId', nullable: false }, { name: 'pricingLogic', nullable: false }, { name: 'ruleId', nullable: false }, { name: 'status', nullable: false }, { name: 'targetId', nullable: false }, { name: 'targetType', nullable: false }, { name: 'updatedAt', nullable: false }, );
     const optionalNumberProperties = createPriceBookRuleDtoOptionalProperties({ name: 'priority', nullable: false }, { name: 'version', nullable: false }, );
     const optionalBooleanProperties = createPriceBookRuleDtoOptionalProperties();
 

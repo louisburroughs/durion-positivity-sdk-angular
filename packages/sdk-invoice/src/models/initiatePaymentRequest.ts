@@ -14,10 +14,6 @@
  */
 export interface InitiatePaymentRequest { 
     /**
-     * Payment flow: SALE_CAPTURE (default one-step) or AUTH_ONLY (two-step)
-     */
-    paymentFlow: InitiatePaymentRequestPaymentFlowEnum;
-    /**
      * Payment amount (must be positive)
      */
     amount: number;
@@ -25,6 +21,10 @@ export interface InitiatePaymentRequest {
      * Client-provided idempotency key for safe retry
      */
     idempotencyKey: string;
+    /**
+     * Payment flow: SALE_CAPTURE (default one-step) or AUTH_ONLY (two-step)
+     */
+    paymentFlow: InitiatePaymentRequestPaymentFlowEnum;
     /**
      * Tokenised card reference (no PAN)
      */
@@ -75,8 +75,8 @@ export function instanceOfInitiatePaymentRequest(value: object): value is Initia
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createInitiatePaymentRequestPropertyNames('paymentFlow', 'amount', 'idempotencyKey', 'paymentToken', );
-    const optionalStringProperties = createInitiatePaymentRequestOptionalProperties({ name: 'paymentFlow', nullable: false }, { name: 'idempotencyKey', nullable: false }, { name: 'paymentToken', nullable: false }, );
+    const requiredProperties = createInitiatePaymentRequestPropertyNames('amount', 'idempotencyKey', 'paymentFlow', 'paymentToken', );
+    const optionalStringProperties = createInitiatePaymentRequestOptionalProperties({ name: 'idempotencyKey', nullable: false }, { name: 'paymentFlow', nullable: false }, { name: 'paymentToken', nullable: false }, );
     const optionalNumberProperties = createInitiatePaymentRequestOptionalProperties({ name: 'amount', nullable: false }, );
     const optionalBooleanProperties = createInitiatePaymentRequestOptionalProperties();
 

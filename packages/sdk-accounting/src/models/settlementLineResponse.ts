@@ -14,37 +14,25 @@
  */
 export interface SettlementLineResponse { 
     /**
-     * Settlement line UUID
+     * When the line was first ingested
      */
-    lineId?: string;
-    /**
-     * Owning settlement id (provider payout id)
-     */
-    settlementId?: string;
-    /**
-     * Provider\'s own line reference
-     */
-    providerLineRef?: string;
-    /**
-     * Settlement line type
-     */
-    lineType?: SettlementLineResponseLineTypeEnum;
-    /**
-     * Line gross amount (matched on gross, decision D-11)
-     */
-    grossAmount?: number;
+    createdAt?: string;
     /**
      * Line fee amount; null for netted/header-only providers
      */
     feeAmount?: number;
     /**
-     * Line net amount; null for netted/header-only providers
+     * Line gross amount (matched on gross, decision D-11)
      */
-    netAmount?: number;
+    grossAmount?: number;
     /**
-     * Platform correlation token echoed by the processor (decision D-11)
+     * Settlement line UUID
      */
-    paymentReference?: string;
+    lineId?: string;
+    /**
+     * Settlement line type
+     */
+    lineType?: SettlementLineResponseLineTypeEnum;
     /**
      * Reconciliation match status
      */
@@ -58,21 +46,33 @@ export interface SettlementLineResponse {
      */
     matchedPaymentType?: SettlementLineResponseMatchedPaymentTypeEnum;
     /**
-     * Recorded reason when the line was written off
+     * Line net amount; null for netted/header-only providers
      */
-    writeoffReason?: string;
+    netAmount?: number;
+    /**
+     * Platform correlation token echoed by the processor (decision D-11)
+     */
+    paymentReference?: string;
+    /**
+     * Provider\'s own line reference
+     */
+    providerLineRef?: string;
+    /**
+     * Owning settlement id (provider payout id)
+     */
+    settlementId?: string;
+    /**
+     * When the line was last updated
+     */
+    updatedAt?: string;
     /**
      * Journal entry id of the reversible write-off posting
      */
     writeoffJournalEntryId?: string;
     /**
-     * When the line was first ingested
+     * Recorded reason when the line was written off
      */
-    createdAt?: string;
-    /**
-     * When the line was last updated
-     */
-    updatedAt?: string;
+    writeoffReason?: string;
 }
 export enum SettlementLineResponseLineTypeEnum {
     Charge = 'CHARGE',
@@ -135,8 +135,8 @@ export function instanceOfSettlementLineResponse(value: object): value is Settle
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createSettlementLineResponsePropertyNames();
-    const optionalStringProperties = createSettlementLineResponseOptionalProperties({ name: 'lineId', nullable: false }, { name: 'settlementId', nullable: false }, { name: 'providerLineRef', nullable: false }, { name: 'lineType', nullable: false }, { name: 'paymentReference', nullable: false }, { name: 'matchStatus', nullable: false }, { name: 'matchedPaymentId', nullable: false }, { name: 'matchedPaymentType', nullable: false }, { name: 'writeoffReason', nullable: false }, { name: 'writeoffJournalEntryId', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'updatedAt', nullable: false }, );
-    const optionalNumberProperties = createSettlementLineResponseOptionalProperties({ name: 'grossAmount', nullable: false }, { name: 'feeAmount', nullable: false }, { name: 'netAmount', nullable: false }, );
+    const optionalStringProperties = createSettlementLineResponseOptionalProperties({ name: 'createdAt', nullable: false }, { name: 'lineId', nullable: false }, { name: 'lineType', nullable: false }, { name: 'matchStatus', nullable: false }, { name: 'matchedPaymentId', nullable: false }, { name: 'matchedPaymentType', nullable: false }, { name: 'paymentReference', nullable: false }, { name: 'providerLineRef', nullable: false }, { name: 'settlementId', nullable: false }, { name: 'updatedAt', nullable: false }, { name: 'writeoffJournalEntryId', nullable: false }, { name: 'writeoffReason', nullable: false }, );
+    const optionalNumberProperties = createSettlementLineResponseOptionalProperties({ name: 'feeAmount', nullable: false }, { name: 'grossAmount', nullable: false }, { name: 'netAmount', nullable: false }, );
     const optionalBooleanProperties = createSettlementLineResponseOptionalProperties();
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

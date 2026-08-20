@@ -14,10 +14,6 @@
  */
 export interface RollupQuantities { 
     /**
-     * On-hand quantity
-     */
-    onHand: number;
-    /**
      * Outstanding allocated quantity
      */
     allocated: number;
@@ -26,6 +22,10 @@ export interface RollupQuantities {
      */
     available: number;
     empty?: boolean;
+    /**
+     * On-hand quantity
+     */
+    onHand: number;
 }
 
 function isOptionalRollupQuantitiesPropertyOfType(
@@ -66,9 +66,9 @@ export function instanceOfRollupQuantities(value: object): value is RollupQuanti
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createRollupQuantitiesPropertyNames('onHand', 'allocated', 'available', );
+    const requiredProperties = createRollupQuantitiesPropertyNames('allocated', 'available', 'onHand', );
     const optionalStringProperties = createRollupQuantitiesOptionalProperties();
-    const optionalNumberProperties = createRollupQuantitiesOptionalProperties({ name: 'onHand', nullable: false }, { name: 'allocated', nullable: false }, { name: 'available', nullable: false }, );
+    const optionalNumberProperties = createRollupQuantitiesOptionalProperties({ name: 'allocated', nullable: false }, { name: 'available', nullable: false }, { name: 'onHand', nullable: false }, );
     const optionalBooleanProperties = createRollupQuantitiesOptionalProperties({ name: 'empty', nullable: false }, );
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

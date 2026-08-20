@@ -14,6 +14,14 @@
  */
 export interface LocationRef { 
     /**
+     * Unique business code of the location
+     */
+    code?: string;
+    /**
+     * Identifier of the location in the HR system of record
+     */
+    hrLocationId?: string;
+    /**
      * Unique identifier of the location
      */
     id: string;
@@ -22,17 +30,9 @@ export interface LocationRef {
      */
     name?: string;
     /**
-     * Unique business code of the location
-     */
-    code?: string;
-    /**
      * Operational status of the location
      */
     status?: string;
-    /**
-     * Identifier of the location in the HR system of record
-     */
-    hrLocationId?: string;
     /**
      * IANA timezone identifier of the location
      */
@@ -82,7 +82,7 @@ export function instanceOfLocationRef(value: object): value is LocationRef {
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createLocationRefPropertyNames('id', );
-    const optionalStringProperties = createLocationRefOptionalProperties({ name: 'id', nullable: false }, { name: 'name', nullable: false }, { name: 'code', nullable: false }, { name: 'status', nullable: false }, { name: 'hrLocationId', nullable: false }, { name: 'timezone', nullable: false }, { name: 'updatedAt', nullable: false }, );
+    const optionalStringProperties = createLocationRefOptionalProperties({ name: 'code', nullable: false }, { name: 'hrLocationId', nullable: false }, { name: 'id', nullable: false }, { name: 'name', nullable: false }, { name: 'status', nullable: false }, { name: 'timezone', nullable: false }, { name: 'updatedAt', nullable: false }, );
     const optionalNumberProperties = createLocationRefOptionalProperties();
     const optionalBooleanProperties = createLocationRefOptionalProperties();
 

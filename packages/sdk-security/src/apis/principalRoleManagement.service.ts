@@ -36,8 +36,8 @@ export class PrincipalRoleManagementService extends BaseService {
     }
 
     /**
-     * Assign a role to a principal
-     * Assigns the specified role to the specified principal identifier for RBAC matrix authorization.
+     * Assign a Role to a Principal
+     * Links a free-form principal identifier to a role in the RBAC principal matrix consulted by getAuthorizationDecision. Use this tool for matrix principals that are not user UUIDs; do not use assignUserRole, which creates a role assignment for a real user account. Preconditions: the caller must hold security:role:assign and the role must exist; the principal is not validated against any store, and an existing identical link makes the call a no-op. Required inputs: principalId (arbitrary string) and roleId (UUID) as path parameters; there is no request body. Emits a SECURITY_PRINCIPAL_ROLE_ASSIGN event. Returns 404 when the role does not exist; repeat assignments still return 200. 
      * @endpoint post /v1/users/principals/{principalId}/roles/{roleId}
      * @param principalId Principal identifier receiving the role assignment
      * @param roleId Role identifier to assign to the principal
@@ -45,15 +45,15 @@ export class PrincipalRoleManagementService extends BaseService {
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public assignRoleToPrincipal(principalId: string, roleId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public assignRoleToPrincipal(principalId: string, roleId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public assignRoleToPrincipal(principalId: string, roleId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public assignRoleToPrincipal(principalId: string, roleId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public assignPrincipalRole(principalId: string, roleId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any>;
+    public assignPrincipalRole(principalId: string, roleId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
+    public assignPrincipalRole(principalId: string, roleId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
+    public assignPrincipalRole(principalId: string, roleId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (principalId === null || principalId === undefined) {
-            throw new Error('Required parameter principalId was null or undefined when calling assignRoleToPrincipal.');
+            throw new Error('Required parameter principalId was null or undefined when calling assignPrincipalRole.');
         }
         if (roleId === null || roleId === undefined) {
-            throw new Error('Required parameter roleId was null or undefined when calling assignRoleToPrincipal.');
+            throw new Error('Required parameter roleId was null or undefined when calling assignPrincipalRole.');
         }
 
         let localVarHeaders = this.defaultHeaders;

@@ -14,18 +14,6 @@
  */
 export interface CustomerCreditResponse { 
     /**
-     * Credit identifier
-     */
-    creditId?: string;
-    /**
-     * Customer the credit belongs to
-     */
-    customerId?: string;
-    /**
-     * Currency (ISO 4217)
-     */
-    currency?: string;
-    /**
      * Amount originally issued
      */
     amount?: number;
@@ -34,25 +22,37 @@ export interface CustomerCreditResponse {
      */
     appliedAmount?: number;
     /**
-     * Cumulative amount refunded to the customer
+     * When the credit was issued
      */
-    refundedAmount?: number;
+    createdAt?: string;
+    /**
+     * Credit identifier
+     */
+    creditId?: string;
+    /**
+     * Currency (ISO 4217)
+     */
+    currency?: string;
+    /**
+     * Customer the credit belongs to
+     */
+    customerId?: string;
     /**
      * Remaining credit owed to the customer (amount - applied - refunded); this is the credit\'s contribution to the Customer Credit Liability (2300) control account
      */
     openAmount?: number;
     /**
-     * Consumption state derived from the applied/refunded totals
+     * Cumulative amount refunded to the customer
      */
-    status?: CustomerCreditResponseStatusEnum;
+    refundedAmount?: number;
     /**
      * Payment whose overpayment created the credit
      */
     sourcePaymentId?: string;
     /**
-     * When the credit was issued
+     * Consumption state derived from the applied/refunded totals
      */
-    createdAt?: string;
+    status?: CustomerCreditResponseStatusEnum;
 }
 export enum CustomerCreditResponseStatusEnum {
     Available = 'AVAILABLE',
@@ -101,8 +101,8 @@ export function instanceOfCustomerCreditResponse(value: object): value is Custom
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createCustomerCreditResponsePropertyNames();
-    const optionalStringProperties = createCustomerCreditResponseOptionalProperties({ name: 'creditId', nullable: false }, { name: 'customerId', nullable: false }, { name: 'currency', nullable: false }, { name: 'status', nullable: false }, { name: 'sourcePaymentId', nullable: false }, { name: 'createdAt', nullable: false }, );
-    const optionalNumberProperties = createCustomerCreditResponseOptionalProperties({ name: 'amount', nullable: false }, { name: 'appliedAmount', nullable: false }, { name: 'refundedAmount', nullable: false }, { name: 'openAmount', nullable: false }, );
+    const optionalStringProperties = createCustomerCreditResponseOptionalProperties({ name: 'createdAt', nullable: false }, { name: 'creditId', nullable: false }, { name: 'currency', nullable: false }, { name: 'customerId', nullable: false }, { name: 'sourcePaymentId', nullable: false }, { name: 'status', nullable: false }, );
+    const optionalNumberProperties = createCustomerCreditResponseOptionalProperties({ name: 'amount', nullable: false }, { name: 'appliedAmount', nullable: false }, { name: 'openAmount', nullable: false }, { name: 'refundedAmount', nullable: false }, );
     const optionalBooleanProperties = createCustomerCreditResponseOptionalProperties();
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

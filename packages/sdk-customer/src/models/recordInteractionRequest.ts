@@ -14,21 +14,25 @@
  */
 export interface RecordInteractionRequest { 
     /**
-     * Kind of touch
+     * Body text
      */
-    type: RecordInteractionRequestTypeEnum;
-    /**
-     * Contact reached, when the touch targeted one
-     */
-    contactId?: string;
+    body?: string;
     /**
      * Channel used
      */
     channel?: RecordInteractionRequestChannelEnum;
     /**
+     * Contact reached, when the touch targeted one
+     */
+    contactId?: string;
+    /**
      * Who initiated the touch; defaults to OUTBOUND
      */
     direction?: RecordInteractionRequestDirectionEnum;
+    /**
+     * When the touch occurred; defaults to now
+     */
+    occurredAt?: string;
     /**
      * Short subject line
      */
@@ -38,14 +42,18 @@ export interface RecordInteractionRequest {
      */
     summary?: string;
     /**
-     * Body text
+     * Kind of touch
      */
-    body?: string;
-    /**
-     * When the touch occurred; defaults to now
-     */
-    occurredAt?: string;
+    type: RecordInteractionRequestTypeEnum;
 }
+export enum RecordInteractionRequestChannelEnum {
+    Email = 'EMAIL',
+    Sms = 'SMS'
+};
+export enum RecordInteractionRequestDirectionEnum {
+    Outbound = 'OUTBOUND',
+    Inbound = 'INBOUND'
+};
 export enum RecordInteractionRequestTypeEnum {
     CampaignSend = 'CAMPAIGN_SEND',
     Email = 'EMAIL',
@@ -54,14 +62,6 @@ export enum RecordInteractionRequestTypeEnum {
     FollowUp = 'FOLLOW_UP',
     Note = 'NOTE',
     WorkorderNote = 'WORKORDER_NOTE'
-};
-export enum RecordInteractionRequestChannelEnum {
-    Email = 'EMAIL',
-    Sms = 'SMS'
-};
-export enum RecordInteractionRequestDirectionEnum {
-    Outbound = 'OUTBOUND',
-    Inbound = 'INBOUND'
 };
 
 
@@ -105,7 +105,7 @@ export function instanceOfRecordInteractionRequest(value: object): value is Reco
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createRecordInteractionRequestPropertyNames('type', );
-    const optionalStringProperties = createRecordInteractionRequestOptionalProperties({ name: 'type', nullable: false }, { name: 'contactId', nullable: false }, { name: 'channel', nullable: false }, { name: 'direction', nullable: false }, { name: 'subject', nullable: false }, { name: 'summary', nullable: false }, { name: 'body', nullable: false }, { name: 'occurredAt', nullable: false }, );
+    const optionalStringProperties = createRecordInteractionRequestOptionalProperties({ name: 'body', nullable: false }, { name: 'channel', nullable: false }, { name: 'contactId', nullable: false }, { name: 'direction', nullable: false }, { name: 'occurredAt', nullable: false }, { name: 'subject', nullable: false }, { name: 'summary', nullable: false }, { name: 'type', nullable: false }, );
     const optionalNumberProperties = createRecordInteractionRequestOptionalProperties();
     const optionalBooleanProperties = createRecordInteractionRequestOptionalProperties();
 

@@ -18,13 +18,13 @@ export interface ReallocateRequest {
      */
     stockItemId: string;
     /**
-     * Type of event that triggered the reallocation
-     */
-    triggerType?: string;
-    /**
      * Identifier of the source record that triggered the reallocation
      */
     triggerReferenceId?: string;
+    /**
+     * Type of event that triggered the reallocation
+     */
+    triggerType?: string;
 }
 
 function isOptionalReallocateRequestPropertyOfType(
@@ -66,7 +66,7 @@ export function instanceOfReallocateRequest(value: object): value is ReallocateR
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createReallocateRequestPropertyNames('stockItemId', );
-    const optionalStringProperties = createReallocateRequestOptionalProperties({ name: 'stockItemId', nullable: false }, { name: 'triggerType', nullable: false }, { name: 'triggerReferenceId', nullable: false }, );
+    const optionalStringProperties = createReallocateRequestOptionalProperties({ name: 'stockItemId', nullable: false }, { name: 'triggerReferenceId', nullable: false }, { name: 'triggerType', nullable: false }, );
     const optionalNumberProperties = createReallocateRequestOptionalProperties();
     const optionalBooleanProperties = createReallocateRequestOptionalProperties();
 

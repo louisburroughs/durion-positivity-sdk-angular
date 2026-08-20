@@ -14,25 +14,25 @@
  */
 export interface PartyStandaloneRefundRequest { 
     /**
-     * Customer party the refund is anchored to
-     */
-    partyId: string;
-    /**
      * Amount to refund
      */
     amount: number;
     /**
-     * Reason the refund is being issued
+     * Optional correlation id to an external record (e.g. a warranty claim settlement)
      */
-    reason: PartyStandaloneRefundRequestReasonEnum;
+    externalReference?: string;
     /**
      * Optional free-text notes explaining the refund
      */
     notes?: string;
     /**
-     * Optional correlation id to an external record (e.g. a warranty claim settlement)
+     * Customer party the refund is anchored to
      */
-    externalReference?: string;
+    partyId: string;
+    /**
+     * Reason the refund is being issued
+     */
+    reason: PartyStandaloneRefundRequestReasonEnum;
 }
 export enum PartyStandaloneRefundRequestReasonEnum {
     CustomerReturn = 'CUSTOMER_RETURN',
@@ -86,8 +86,8 @@ export function instanceOfPartyStandaloneRefundRequest(value: object): value is 
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createPartyStandaloneRefundRequestPropertyNames('partyId', 'amount', 'reason', );
-    const optionalStringProperties = createPartyStandaloneRefundRequestOptionalProperties({ name: 'partyId', nullable: false }, { name: 'reason', nullable: false }, { name: 'notes', nullable: false }, { name: 'externalReference', nullable: false }, );
+    const requiredProperties = createPartyStandaloneRefundRequestPropertyNames('amount', 'partyId', 'reason', );
+    const optionalStringProperties = createPartyStandaloneRefundRequestOptionalProperties({ name: 'externalReference', nullable: false }, { name: 'notes', nullable: false }, { name: 'partyId', nullable: false }, { name: 'reason', nullable: false }, );
     const optionalNumberProperties = createPartyStandaloneRefundRequestOptionalProperties({ name: 'amount', nullable: false }, );
     const optionalBooleanProperties = createPartyStandaloneRefundRequestOptionalProperties();
 

@@ -14,13 +14,13 @@
  */
 export interface RestrictionOverrideResponse { 
     /**
-     * Identifier of the created override
-     */
-    overrideId: string;
-    /**
      * Timestamp when the override expires
      */
     expiresAt: string;
+    /**
+     * Identifier of the created override
+     */
+    overrideId: string;
 }
 
 function isOptionalRestrictionOverrideResponsePropertyOfType(
@@ -61,8 +61,8 @@ export function instanceOfRestrictionOverrideResponse(value: object): value is R
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createRestrictionOverrideResponsePropertyNames('overrideId', 'expiresAt', );
-    const optionalStringProperties = createRestrictionOverrideResponseOptionalProperties({ name: 'overrideId', nullable: false }, { name: 'expiresAt', nullable: false }, );
+    const requiredProperties = createRestrictionOverrideResponsePropertyNames('expiresAt', 'overrideId', );
+    const optionalStringProperties = createRestrictionOverrideResponseOptionalProperties({ name: 'expiresAt', nullable: false }, { name: 'overrideId', nullable: false }, );
     const optionalNumberProperties = createRestrictionOverrideResponseOptionalProperties();
     const optionalBooleanProperties = createRestrictionOverrideResponseOptionalProperties();
 

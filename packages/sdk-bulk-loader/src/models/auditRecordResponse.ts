@@ -14,6 +14,18 @@
  */
 export interface AuditRecordResponse { 
     /**
+     * Timestamp when the audit record was created (ISO 8601)
+     */
+    createdAt: string;
+    /**
+     * Identifier of the entity created or updated from the row, if any
+     */
+    entityId?: string;
+    /**
+     * Type of the target entity for the processed row
+     */
+    entityType?: string;
+    /**
      * Unique identifier of the audit record
      */
     id: string;
@@ -22,33 +34,21 @@ export interface AuditRecordResponse {
      */
     jobId: string;
     /**
-     * Type of the target entity for the processed row
+     * Serialized original values from the source row
      */
-    entityType?: string;
-    /**
-     * Identifier of the entity created or updated from the row, if any
-     */
-    entityId?: string;
-    /**
-     * One-based row number within the source file
-     */
-    rowNumber?: number;
-    /**
-     * Review status of the audit record
-     */
-    reviewStatus: AuditRecordResponseReviewStatusEnum;
+    originalValues?: string;
     /**
      * Machine-readable reason codes describing why the row needs review
      */
     reasonCodes?: string;
     /**
-     * Serialized original values from the source row
+     * Review status of the audit record
      */
-    originalValues?: string;
+    reviewStatus: AuditRecordResponseReviewStatusEnum;
     /**
-     * Timestamp when the audit record was created (ISO 8601)
+     * One-based row number within the source file
      */
-    createdAt: string;
+    rowNumber?: number;
 }
 export enum AuditRecordResponseReviewStatusEnum {
     Pending = 'PENDING',
@@ -97,8 +97,8 @@ export function instanceOfAuditRecordResponse(value: object): value is AuditReco
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createAuditRecordResponsePropertyNames('id', 'jobId', 'reviewStatus', 'createdAt', );
-    const optionalStringProperties = createAuditRecordResponseOptionalProperties({ name: 'id', nullable: false }, { name: 'jobId', nullable: false }, { name: 'entityType', nullable: false }, { name: 'entityId', nullable: false }, { name: 'reviewStatus', nullable: false }, { name: 'reasonCodes', nullable: false }, { name: 'originalValues', nullable: false }, { name: 'createdAt', nullable: false }, );
+    const requiredProperties = createAuditRecordResponsePropertyNames('createdAt', 'id', 'jobId', 'reviewStatus', );
+    const optionalStringProperties = createAuditRecordResponseOptionalProperties({ name: 'createdAt', nullable: false }, { name: 'entityId', nullable: false }, { name: 'entityType', nullable: false }, { name: 'id', nullable: false }, { name: 'jobId', nullable: false }, { name: 'originalValues', nullable: false }, { name: 'reasonCodes', nullable: false }, { name: 'reviewStatus', nullable: false }, );
     const optionalNumberProperties = createAuditRecordResponseOptionalProperties({ name: 'rowNumber', nullable: false }, );
     const optionalBooleanProperties = createAuditRecordResponseOptionalProperties();
 

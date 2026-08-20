@@ -14,30 +14,30 @@
  */
 export interface UpdateReplenishmentPolicyRequest { 
     /**
-     * Minimum on-hand quantity that triggers replenishment when reached
+     * Whether the policy participates in replenishment evaluation; omit to reset to true
      */
-    minimumQuantity: number;
-    /**
-     * Maximum on-hand quantity replenishment aims to restock up to
-     */
-    maximumQuantity: number;
-    /**
-     * Round the computed replenishment quantity up to the nearest multiple of this value; omit to clear (no rounding)
-     */
-    orderMultiple?: number;
+    active?: boolean;
     /**
      * Per-policy lead-time override in days; omit to clear (vendor-feed/default lead time applies)
      */
     leadTimeDaysOverride?: number;
     /**
+     * Maximum on-hand quantity replenishment aims to restock up to
+     */
+    maximumQuantity: number;
+    minimumLessThanMaximum?: boolean;
+    /**
+     * Minimum on-hand quantity that triggers replenishment when reached
+     */
+    minimumQuantity: number;
+    /**
+     * Round the computed replenishment quantity up to the nearest multiple of this value; omit to clear (no rounding)
+     */
+    orderMultiple?: number;
+    /**
      * Preferred sourcing channel for replenishing this policy\'s pick face; omit to reset to EITHER
      */
     preferredSourceType?: UpdateReplenishmentPolicyRequestPreferredSourceTypeEnum;
-    /**
-     * Whether the policy participates in replenishment evaluation; omit to reset to true
-     */
-    active?: boolean;
-    minimumLessThanMaximum?: boolean;
 }
 export enum UpdateReplenishmentPolicyRequestPreferredSourceTypeEnum {
     InternalTransfer = 'INTERNAL_TRANSFER',
@@ -85,9 +85,9 @@ export function instanceOfUpdateReplenishmentPolicyRequest(value: object): value
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createUpdateReplenishmentPolicyRequestPropertyNames('minimumQuantity', 'maximumQuantity', );
+    const requiredProperties = createUpdateReplenishmentPolicyRequestPropertyNames('maximumQuantity', 'minimumQuantity', );
     const optionalStringProperties = createUpdateReplenishmentPolicyRequestOptionalProperties({ name: 'preferredSourceType', nullable: false }, );
-    const optionalNumberProperties = createUpdateReplenishmentPolicyRequestOptionalProperties({ name: 'minimumQuantity', nullable: false }, { name: 'maximumQuantity', nullable: false }, { name: 'orderMultiple', nullable: false }, { name: 'leadTimeDaysOverride', nullable: false }, );
+    const optionalNumberProperties = createUpdateReplenishmentPolicyRequestOptionalProperties({ name: 'leadTimeDaysOverride', nullable: false }, { name: 'maximumQuantity', nullable: false }, { name: 'minimumQuantity', nullable: false }, { name: 'orderMultiple', nullable: false }, );
     const optionalBooleanProperties = createUpdateReplenishmentPolicyRequestOptionalProperties({ name: 'active', nullable: false }, { name: 'minimumLessThanMaximum', nullable: false }, );
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

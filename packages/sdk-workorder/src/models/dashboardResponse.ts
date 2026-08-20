@@ -18,22 +18,6 @@ import { ConflictEntry } from './conflictEntry';
  */
 export interface DashboardResponse { 
     /**
-     * The date this dashboard is for
-     */
-    date: string;
-    /**
-     * Location identifier
-     */
-    locationId: string;
-    /**
-     * Workorder summaries for the day
-     */
-    workorders: Array<WorkorderSummary>;
-    /**
-     * Mechanic statuses
-     */
-    mechanics?: Array<MechanicStatus>;
-    /**
      * Service bay statuses
      */
     bays?: Array<BayStatus>;
@@ -42,13 +26,29 @@ export interface DashboardResponse {
      */
     conflicts?: Array<ConflictEntry>;
     /**
+     * True when one or more upstream data sources were unavailable during aggregation; data may be incomplete
+     */
+    dataQualityWarning?: boolean;
+    /**
+     * The date this dashboard is for
+     */
+    date: string;
+    /**
      * Timestamp when data was last refreshed
      */
     lastRefreshed: string;
     /**
-     * True when one or more upstream data sources were unavailable during aggregation; data may be incomplete
+     * Location identifier
      */
-    dataQualityWarning?: boolean;
+    locationId: string;
+    /**
+     * Mechanic statuses
+     */
+    mechanics?: Array<MechanicStatus>;
+    /**
+     * Workorder summaries for the day
+     */
+    workorders: Array<WorkorderSummary>;
 }
 
 function isOptionalDashboardResponsePropertyOfType(
@@ -89,8 +89,8 @@ export function instanceOfDashboardResponse(value: object): value is DashboardRe
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createDashboardResponsePropertyNames('date', 'locationId', 'workorders', 'lastRefreshed', );
-    const optionalStringProperties = createDashboardResponseOptionalProperties({ name: 'date', nullable: false }, { name: 'locationId', nullable: false }, { name: 'lastRefreshed', nullable: false }, );
+    const requiredProperties = createDashboardResponsePropertyNames('date', 'lastRefreshed', 'locationId', 'workorders', );
+    const optionalStringProperties = createDashboardResponseOptionalProperties({ name: 'date', nullable: false }, { name: 'lastRefreshed', nullable: false }, { name: 'locationId', nullable: false }, );
     const optionalNumberProperties = createDashboardResponseOptionalProperties();
     const optionalBooleanProperties = createDashboardResponseOptionalProperties({ name: 'dataQualityWarning', nullable: false }, );
 

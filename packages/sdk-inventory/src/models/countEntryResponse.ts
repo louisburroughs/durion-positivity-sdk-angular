@@ -14,46 +14,88 @@
  */
 export interface CountEntryResponse { 
     /**
-     * Unique identifier of the count entry
+     * Quantity counted, converted to the product\'s base UoM — what expectedQuantity and variance are computed against
      */
-    countEntryId: string;
+    actualQuantity: number;
     /**
-     * Identifier of the cycle count task this entry belongs to
+     * Resolved absolute-tolerance bound at count time, if configured for this product/location
      */
-    cycleCountTaskId: string;
+    allowedToleranceAbsolute?: number;
+    /**
+     * Resolved percentage-tolerance bound at count time, if configured for this product/location
+     */
+    allowedTolerancePercentage?: number;
     /**
      * Identifier of the auditor who recorded the count
      */
     auditorId: string;
     /**
-     * Quantity physically counted by the auditor
+     * Unique identifier of the count entry
      */
-    actualQuantity: number;
+    countEntryId: string;
     /**
-     * Quantity expected on hand at the time of the count
+     * Measurement timestamp — when the count was physically taken and recorded
+     */
+    countedAt: string;
+    /**
+     * Identifier of the cycle count task this entry belongs to
+     */
+    cycleCountTaskId: string;
+    /**
+     * Book (expected) quantity at the time of the count, in base UoM
      */
     expectedQuantity: number;
     /**
-     * Difference between counted and expected quantity (actual minus expected)
+     * Quantity exactly as measured, in unitOfMeasure. Equal to actualQuantity when unitOfMeasure is null.
      */
-    variance: number;
+    measuredQuantity: number;
     /**
-     * Sequence number of this count within the recount chain; 0 for the initial count
+     * How the quantity was obtained
      */
-    recountSequenceNumber: number;
+    measurementMethod: CountEntryResponseMeasurementMethodEnum;
+    /**
+     * Whether this entry is a recount of a prior count
+     */
+    recount: boolean;
     /**
      * Identifier of the count entry this entry is a recount of, if any
      */
     recountOfCountEntryId?: string;
     /**
-     * Timestamp when the count was recorded
+     * Sequence number of this count within the recount chain; 0 for the initial count
      */
-    countedAt: string;
+    recountSequenceNumber: number;
     /**
-     * Whether this entry is a recount of a prior count
+     * Unit the count was physically measured in; null means the product\'s base UoM
      */
-    recount: boolean;
+    unitOfMeasure?: string;
+    /**
+     * Difference between counted and expected quantity, in base UoM (actual minus expected)
+     */
+    variance: number;
+    /**
+     * Absolute variance as a percentage of book quantity; 100 when book quantity is zero
+     */
+    variancePercentage: number;
+    /**
+     * Reason for the variance, when known. Optional even for an out-of-tolerance count — the eventual adjustment\'s own reason code is what gates posting.
+     */
+    varianceReason?: string;
+    /**
+     * Whether the variance fell within the resolved tolerance. true: reconciled, no adjustment created. false: flagged for investigation and review before an adjustment may be posted.
+     */
+    withinTolerance: boolean;
 }
+export enum CountEntryResponseMeasurementMethodEnum {
+    ManualCount = 'MANUAL_COUNT',
+    Dip = 'DIP',
+    Gauge = 'GAUGE',
+    Scale = 'SCALE',
+    Meter = 'METER',
+    Sensor = 'SENSOR'
+};
+
+
 
 function isOptionalCountEntryResponsePropertyOfType(
     value: Record<string, unknown>,
@@ -93,10 +135,10 @@ export function instanceOfCountEntryResponse(value: object): value is CountEntry
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createCountEntryResponsePropertyNames('countEntryId', 'cycleCountTaskId', 'auditorId', 'actualQuantity', 'expectedQuantity', 'variance', 'recountSequenceNumber', 'countedAt', 'recount', );
-    const optionalStringProperties = createCountEntryResponseOptionalProperties({ name: 'countEntryId', nullable: false }, { name: 'cycleCountTaskId', nullable: false }, { name: 'auditorId', nullable: false }, { name: 'recountOfCountEntryId', nullable: false }, { name: 'countedAt', nullable: false }, );
-    const optionalNumberProperties = createCountEntryResponseOptionalProperties({ name: 'actualQuantity', nullable: false }, { name: 'expectedQuantity', nullable: false }, { name: 'variance', nullable: false }, { name: 'recountSequenceNumber', nullable: false }, );
-    const optionalBooleanProperties = createCountEntryResponseOptionalProperties({ name: 'recount', nullable: false }, );
+    const requiredProperties = createCountEntryResponsePropertyNames('actualQuantity', 'auditorId', 'countEntryId', 'countedAt', 'cycleCountTaskId', 'expectedQuantity', 'measuredQuantity', 'measurementMethod', 'recount', 'recountSequenceNumber', 'variance', 'variancePercentage', 'withinTolerance', );
+    const optionalStringProperties = createCountEntryResponseOptionalProperties({ name: 'auditorId', nullable: false }, { name: 'countEntryId', nullable: false }, { name: 'countedAt', nullable: false }, { name: 'cycleCountTaskId', nullable: false }, { name: 'measurementMethod', nullable: false }, { name: 'recountOfCountEntryId', nullable: false }, { name: 'unitOfMeasure', nullable: false }, { name: 'varianceReason', nullable: false }, );
+    const optionalNumberProperties = createCountEntryResponseOptionalProperties({ name: 'actualQuantity', nullable: false }, { name: 'allowedToleranceAbsolute', nullable: false }, { name: 'allowedTolerancePercentage', nullable: false }, { name: 'expectedQuantity', nullable: false }, { name: 'measuredQuantity', nullable: false }, { name: 'recountSequenceNumber', nullable: false }, { name: 'variance', nullable: false }, { name: 'variancePercentage', nullable: false }, );
+    const optionalBooleanProperties = createCountEntryResponseOptionalProperties({ name: 'recount', nullable: false }, { name: 'withinTolerance', nullable: false }, );
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
         && optionalStringProperties.every((property) => isOptionalCountEntryResponsePropertyOfType(_v, property.name, 'string', property.nullable))

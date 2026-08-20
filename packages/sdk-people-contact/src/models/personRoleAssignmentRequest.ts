@@ -14,21 +14,21 @@
  */
 export interface PersonRoleAssignmentRequest { 
     /**
-     * Stable role code to assign
+     * Date and time the assignment ends
      */
-    roleCode: string;
+    endDate?: string;
     /**
      * Location identifier the role is scoped to
      */
     locationId?: string;
     /**
+     * Stable role code to assign
+     */
+    roleCode: string;
+    /**
      * Date and time the assignment becomes effective
      */
     startDate?: string;
-    /**
-     * Date and time the assignment ends
-     */
-    endDate?: string;
 }
 
 function isOptionalPersonRoleAssignmentRequestPropertyOfType(
@@ -70,7 +70,7 @@ export function instanceOfPersonRoleAssignmentRequest(value: object): value is P
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createPersonRoleAssignmentRequestPropertyNames('roleCode', );
-    const optionalStringProperties = createPersonRoleAssignmentRequestOptionalProperties({ name: 'roleCode', nullable: false }, { name: 'locationId', nullable: false }, { name: 'startDate', nullable: false }, { name: 'endDate', nullable: false }, );
+    const optionalStringProperties = createPersonRoleAssignmentRequestOptionalProperties({ name: 'endDate', nullable: false }, { name: 'locationId', nullable: false }, { name: 'roleCode', nullable: false }, { name: 'startDate', nullable: false }, );
     const optionalNumberProperties = createPersonRoleAssignmentRequestOptionalProperties();
     const optionalBooleanProperties = createPersonRoleAssignmentRequestOptionalProperties();
 

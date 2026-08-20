@@ -21,23 +21,23 @@ export interface ContactSummary {
      */
     contactId: string;
     /**
+     * Email addresses for this contact
+     */
+    emailAddresses: Array<EmailAddressDTO>;
+    /**
      * Contact display name
      */
     name: string;
     /**
-     * Roles assigned to this contact
-     */
-    roles: Array<string>;
-    /**
      * Phone numbers for this contact
      */
     phoneNumbers: Array<PhoneNumberDTO>;
-    /**
-     * Email addresses for this contact
-     */
-    emailAddresses: Array<EmailAddressDTO>;
     preferences?: ContactPreferences;
     primary?: boolean;
+    /**
+     * Roles assigned to this contact
+     */
+    roles: Array<string>;
 }
 
 function isOptionalContactSummaryPropertyOfType(
@@ -78,7 +78,7 @@ export function instanceOfContactSummary(value: object): value is ContactSummary
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createContactSummaryPropertyNames('contactId', 'name', 'roles', 'phoneNumbers', 'emailAddresses', );
+    const requiredProperties = createContactSummaryPropertyNames('contactId', 'emailAddresses', 'name', 'phoneNumbers', 'roles', );
     const optionalStringProperties = createContactSummaryOptionalProperties({ name: 'contactId', nullable: false }, { name: 'name', nullable: false }, );
     const optionalNumberProperties = createContactSummaryOptionalProperties();
     const optionalBooleanProperties = createContactSummaryOptionalProperties({ name: 'primary', nullable: false }, );

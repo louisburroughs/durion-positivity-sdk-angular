@@ -38,10 +38,10 @@ export class EstimatesFromAppointmentsService extends BaseService {
     }
 
     /**
-     * Create draft estimate from appointment
-     * Creates a new DRAFT estimate from an appointment. Idempotent: returns existing estimate if appointmentId already has one.
+     * Create Draft Estimate From Appointment
+     * Creates a DRAFT estimate seeded from a shop appointment, linking the appointment, customer, vehicle, and location ids onto the new estimate. Use this tool when an appointment arrives and needs an estimate started; do not use createEstimate, which builds an estimate from scratch without an appointment link or idempotency guarantee. Preconditions: none beyond authentication — the appointment id is not verified against the scheduling service, and an estimate already linked to the appointmentId short-circuits creation. Required inputs: idempotencyKey, appointmentId, customerId, vehicleId, and locationId (all UUIDs); requestedServices is an optional list of free-text service descriptions. Emits a WORKORDER_ESTIMATE_CREATE_FROM_APPOINTMENT event; the call is idempotent on appointmentId, so retries never create duplicates. Returns 201 with created&#x3D;true when a new estimate is persisted, and 200 with created&#x3D;false and the existing estimateId when the appointment already has one. 
      * @endpoint post /v1/workorders/estimates/from-appointment
-     * @param createEstimateFromAppointmentRequest 
+     * @param createEstimateFromAppointmentRequest Appointment reference and party identifiers used to seed the new draft estimate.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options

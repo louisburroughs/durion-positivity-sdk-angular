@@ -15,26 +15,6 @@ import { PostingRuleVersionResponse } from './postingRuleVersionResponse';
  */
 export interface PostingRuleSetResponse { 
     /**
-     * Unique identifier of the posting rule set
-     */
-    postingRuleSetId: string;
-    /**
-     * Display name of the posting rule set
-     */
-    name?: string;
-    /**
-     * Accounting event type the rule set applies to
-     */
-    eventType?: string;
-    /**
-     * Human-readable description of the rule set
-     */
-    description?: string;
-    /**
-     * Versions belonging to this posting rule set
-     */
-    versions?: Array<PostingRuleVersionResponse>;
-    /**
      * Timestamp when the rule set was created (ISO 8601)
      */
     createdAt?: string;
@@ -43,6 +23,14 @@ export interface PostingRuleSetResponse {
      */
     createdBy?: string;
     /**
+     * Human-readable description of the rule set
+     */
+    description?: string;
+    /**
+     * Accounting event type the rule set applies to
+     */
+    eventType?: string;
+    /**
      * Timestamp when the rule set was last modified (ISO 8601)
      */
     modifiedAt?: string;
@@ -50,6 +38,18 @@ export interface PostingRuleSetResponse {
      * Identifier of the user who last modified the rule set
      */
     modifiedBy?: string;
+    /**
+     * Display name of the posting rule set
+     */
+    name?: string;
+    /**
+     * Unique identifier of the posting rule set
+     */
+    postingRuleSetId: string;
+    /**
+     * Versions belonging to this posting rule set
+     */
+    versions?: Array<PostingRuleVersionResponse>;
 }
 
 function isOptionalPostingRuleSetResponsePropertyOfType(
@@ -91,7 +91,7 @@ export function instanceOfPostingRuleSetResponse(value: object): value is Postin
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createPostingRuleSetResponsePropertyNames('postingRuleSetId', );
-    const optionalStringProperties = createPostingRuleSetResponseOptionalProperties({ name: 'postingRuleSetId', nullable: false }, { name: 'name', nullable: false }, { name: 'eventType', nullable: false }, { name: 'description', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'modifiedAt', nullable: false }, { name: 'modifiedBy', nullable: false }, );
+    const optionalStringProperties = createPostingRuleSetResponseOptionalProperties({ name: 'createdAt', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'description', nullable: false }, { name: 'eventType', nullable: false }, { name: 'modifiedAt', nullable: false }, { name: 'modifiedBy', nullable: false }, { name: 'name', nullable: false }, { name: 'postingRuleSetId', nullable: false }, );
     const optionalNumberProperties = createPostingRuleSetResponseOptionalProperties();
     const optionalBooleanProperties = createPostingRuleSetResponseOptionalProperties();
 

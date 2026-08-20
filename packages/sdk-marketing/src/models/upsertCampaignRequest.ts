@@ -14,18 +14,6 @@
  */
 export interface UpsertCampaignRequest { 
     /**
-     * Stable campaign code; stamped onto redemptions for attribution
-     */
-    code: string;
-    /**
-     * Campaign name
-     */
-    name: string;
-    /**
-     * What the campaign is for
-     */
-    description?: string;
-    /**
      * Targeted party kind; immutable after creation
      */
     audienceType: UpsertCampaignRequestAudienceTypeEnum;
@@ -34,29 +22,33 @@ export interface UpsertCampaignRequest {
      */
     campaignProgramId?: string;
     /**
-     * Delivery channels
-     */
-    channels: Set<UpsertCampaignRequestChannelsEnum>;
-    /**
-     * pos-customer segment to target
-     */
-    segmentId?: string;
-    /**
-     * pos-price offer promoted by the campaign
-     */
-    promotionOfferId?: string;
-    /**
      * pos-catalog reference the message points at
      */
     catalogFocusRef?: string;
     /**
-     * Start of the campaign\'s active window
+     * Delivery channels
      */
-    windowStart?: string;
+    channels: Set<UpsertCampaignRequestChannelsEnum>;
     /**
-     * End of the campaign\'s active window
+     * Stable campaign code; stamped onto redemptions for attribution
      */
-    windowEnd?: string;
+    code: string;
+    /**
+     * What the campaign is for
+     */
+    description?: string;
+    /**
+     * Email template to render
+     */
+    emailTemplateId?: string;
+    /**
+     * Campaign name
+     */
+    name: string;
+    /**
+     * pos-price offer promoted by the campaign
+     */
+    promotionOfferId?: string;
     /**
      * IMMEDIATE or SCHEDULED; defaults to IMMEDIATE
      */
@@ -66,13 +58,21 @@ export interface UpsertCampaignRequest {
      */
     scheduledAt?: string;
     /**
-     * Email template to render
+     * pos-customer segment to target
      */
-    emailTemplateId?: string;
+    segmentId?: string;
     /**
      * SMS template to render
      */
     smsTemplateId?: string;
+    /**
+     * End of the campaign\'s active window
+     */
+    windowEnd?: string;
+    /**
+     * Start of the campaign\'s active window
+     */
+    windowStart?: string;
 }
 export enum UpsertCampaignRequestAudienceTypeEnum {
     Commercial = 'COMMERCIAL',
@@ -127,8 +127,8 @@ export function instanceOfUpsertCampaignRequest(value: object): value is UpsertC
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createUpsertCampaignRequestPropertyNames('code', 'name', 'audienceType', 'channels', );
-    const optionalStringProperties = createUpsertCampaignRequestOptionalProperties({ name: 'code', nullable: false }, { name: 'name', nullable: false }, { name: 'description', nullable: false }, { name: 'audienceType', nullable: false }, { name: 'campaignProgramId', nullable: false }, { name: 'segmentId', nullable: false }, { name: 'promotionOfferId', nullable: false }, { name: 'catalogFocusRef', nullable: false }, { name: 'windowStart', nullable: false }, { name: 'windowEnd', nullable: false }, { name: 'scheduleType', nullable: false }, { name: 'scheduledAt', nullable: false }, { name: 'emailTemplateId', nullable: false }, { name: 'smsTemplateId', nullable: false }, );
+    const requiredProperties = createUpsertCampaignRequestPropertyNames('audienceType', 'channels', 'code', 'name', );
+    const optionalStringProperties = createUpsertCampaignRequestOptionalProperties({ name: 'audienceType', nullable: false }, { name: 'campaignProgramId', nullable: false }, { name: 'catalogFocusRef', nullable: false }, { name: 'code', nullable: false }, { name: 'description', nullable: false }, { name: 'emailTemplateId', nullable: false }, { name: 'name', nullable: false }, { name: 'promotionOfferId', nullable: false }, { name: 'scheduleType', nullable: false }, { name: 'scheduledAt', nullable: false }, { name: 'segmentId', nullable: false }, { name: 'smsTemplateId', nullable: false }, { name: 'windowEnd', nullable: false }, { name: 'windowStart', nullable: false }, );
     const optionalNumberProperties = createUpsertCampaignRequestOptionalProperties();
     const optionalBooleanProperties = createUpsertCampaignRequestOptionalProperties();
 

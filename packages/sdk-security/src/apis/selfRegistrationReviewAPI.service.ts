@@ -40,20 +40,20 @@ export class SelfRegistrationReviewAPIService extends BaseService {
     }
 
     /**
-     * Get a self-registration review case
-     * Returns the details of a blocked self-registration case.
+     * Get One Self-Registration Review Case
+     * Returns the full detail of one blocked self-registration case, including reason codes, CRM match summary, and any linked person or user ids. Use this tool when the case id is known, typically from the referenceId of a 409 selfRegisterUser conflict; use listSelfRegistrationReviewCases instead to browse the queue. Preconditions: the caller must hold security:user_account_state:view and the case must exist. Required inputs: caseId (UUID) as a path parameter. No events are emitted and no state changes; this is a read-only projection. Returns 404 when no review case exists for the supplied id. 
      * @endpoint get /v1/self-registration/review-cases/{caseId}
      * @param caseId 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public getCase(caseId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<SelfRegistrationReviewCaseResponse>;
-    public getCase(caseId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<SelfRegistrationReviewCaseResponse>>;
-    public getCase(caseId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<SelfRegistrationReviewCaseResponse>>;
-    public getCase(caseId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getSelfRegistrationReviewCase(caseId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<SelfRegistrationReviewCaseResponse>;
+    public getSelfRegistrationReviewCase(caseId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<SelfRegistrationReviewCaseResponse>>;
+    public getSelfRegistrationReviewCase(caseId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<SelfRegistrationReviewCaseResponse>>;
+    public getSelfRegistrationReviewCase(caseId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (caseId === null || caseId === undefined) {
-            throw new Error('Required parameter caseId was null or undefined when calling getCase.');
+            throw new Error('Required parameter caseId was null or undefined when calling getSelfRegistrationReviewCase.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -100,8 +100,8 @@ export class SelfRegistrationReviewAPIService extends BaseService {
     }
 
     /**
-     * List self-registration review cases
-     * Returns blocked self-registration cases for recovery or identity review.
+     * List Self-Registration Review Cases
+     * Returns blocked self-registration review cases, newest first, optionally filtered by status and case type. Use this tool to work the recovery and identity-review queue; use getSelfRegistrationReviewCase instead for one known case. Preconditions: the caller must hold security:user_account_state:view. Required inputs: none are mandatory; status filters on OPEN or RESOLVED and caseType on ACCOUNT_RECOVERY or IDENTITY_REVIEW. No events are emitted and no state changes; this is a read-only projection. Returns 200 with an empty list when nothing matches, and 400 when a filter value is not a valid enum constant. 
      * @endpoint get /v1/self-registration/review-cases
      * @param status 
      * @param caseType 
@@ -109,10 +109,10 @@ export class SelfRegistrationReviewAPIService extends BaseService {
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public listCases(status?: 'OPEN' | 'RESOLVED', caseType?: 'ACCOUNT_RECOVERY' | 'IDENTITY_REVIEW', observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<SelfRegistrationReviewCaseResponse>>;
-    public listCases(status?: 'OPEN' | 'RESOLVED', caseType?: 'ACCOUNT_RECOVERY' | 'IDENTITY_REVIEW', observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<SelfRegistrationReviewCaseResponse>>>;
-    public listCases(status?: 'OPEN' | 'RESOLVED', caseType?: 'ACCOUNT_RECOVERY' | 'IDENTITY_REVIEW', observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<SelfRegistrationReviewCaseResponse>>>;
-    public listCases(status?: 'OPEN' | 'RESOLVED', caseType?: 'ACCOUNT_RECOVERY' | 'IDENTITY_REVIEW', observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public listSelfRegistrationReviewCases(status?: 'OPEN' | 'RESOLVED', caseType?: 'ACCOUNT_RECOVERY' | 'IDENTITY_REVIEW', observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<SelfRegistrationReviewCaseResponse>>;
+    public listSelfRegistrationReviewCases(status?: 'OPEN' | 'RESOLVED', caseType?: 'ACCOUNT_RECOVERY' | 'IDENTITY_REVIEW', observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<SelfRegistrationReviewCaseResponse>>>;
+    public listSelfRegistrationReviewCases(status?: 'OPEN' | 'RESOLVED', caseType?: 'ACCOUNT_RECOVERY' | 'IDENTITY_REVIEW', observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<SelfRegistrationReviewCaseResponse>>>;
+    public listSelfRegistrationReviewCases(status?: 'OPEN' | 'RESOLVED', caseType?: 'ACCOUNT_RECOVERY' | 'IDENTITY_REVIEW', observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
 
@@ -179,24 +179,24 @@ export class SelfRegistrationReviewAPIService extends BaseService {
     }
 
     /**
-     * Resolve a self-registration review case
-     * Marks a blocked self-registration case as resolved after recovery or manual review.
+     * Resolve a Self-Registration Review Case
+     * Marks a blocked self-registration case RESOLVED, recording the resolving operator, timestamp, and resolution notes. Use this tool after the underlying recovery or identity review is finished; do not use it to recover the account itself, which is done first with account-state endpoints such as enableUserAccount. Preconditions: the caller must hold security:user_account_state:manage and be authenticated (the resolver is taken from the request principal); the case must exist, and re-resolving an already RESOLVED case overwrites the resolution fields. Required inputs: caseId (UUID) as a path parameter and resolutionNotes, non-blank, in the body. Emits a SECURITY_SELF_REGISTRATION_REVIEW_RESOLVE event. Returns 404 when no review case exists for the supplied id. 
      * @endpoint post /v1/self-registration/review-cases/{caseId}/resolve
      * @param caseId 
-     * @param resolveSelfRegistrationReviewCaseRequest 
+     * @param resolveSelfRegistrationReviewCaseRequest The resolution note recorded against the case.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public resolveCase(caseId: string, resolveSelfRegistrationReviewCaseRequest: ResolveSelfRegistrationReviewCaseRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<SelfRegistrationReviewCaseResponse>;
-    public resolveCase(caseId: string, resolveSelfRegistrationReviewCaseRequest: ResolveSelfRegistrationReviewCaseRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<SelfRegistrationReviewCaseResponse>>;
-    public resolveCase(caseId: string, resolveSelfRegistrationReviewCaseRequest: ResolveSelfRegistrationReviewCaseRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<SelfRegistrationReviewCaseResponse>>;
-    public resolveCase(caseId: string, resolveSelfRegistrationReviewCaseRequest: ResolveSelfRegistrationReviewCaseRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public resolveSelfRegistrationReviewCase(caseId: string, resolveSelfRegistrationReviewCaseRequest: ResolveSelfRegistrationReviewCaseRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<SelfRegistrationReviewCaseResponse>;
+    public resolveSelfRegistrationReviewCase(caseId: string, resolveSelfRegistrationReviewCaseRequest: ResolveSelfRegistrationReviewCaseRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<SelfRegistrationReviewCaseResponse>>;
+    public resolveSelfRegistrationReviewCase(caseId: string, resolveSelfRegistrationReviewCaseRequest: ResolveSelfRegistrationReviewCaseRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<SelfRegistrationReviewCaseResponse>>;
+    public resolveSelfRegistrationReviewCase(caseId: string, resolveSelfRegistrationReviewCaseRequest: ResolveSelfRegistrationReviewCaseRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (caseId === null || caseId === undefined) {
-            throw new Error('Required parameter caseId was null or undefined when calling resolveCase.');
+            throw new Error('Required parameter caseId was null or undefined when calling resolveSelfRegistrationReviewCase.');
         }
         if (resolveSelfRegistrationReviewCaseRequest === null || resolveSelfRegistrationReviewCaseRequest === undefined) {
-            throw new Error('Required parameter resolveSelfRegistrationReviewCaseRequest was null or undefined when calling resolveCase.');
+            throw new Error('Required parameter resolveSelfRegistrationReviewCaseRequest was null or undefined when calling resolveSelfRegistrationReviewCase.');
         }
 
         let localVarHeaders = this.defaultHeaders;

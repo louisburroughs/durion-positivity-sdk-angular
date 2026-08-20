@@ -14,33 +14,33 @@
  */
 export interface TimeEntryAdjustmentRequest { 
     /**
-     * Time entry identifier to adjust
+     * User creating the adjustment request
      */
-    timeEntryId: string;
-    /**
-     * Reason code for the adjustment
-     */
-    reasonCode: string;
-    /**
-     * Additional notes explaining the adjustment
-     */
-    notes?: string;
-    /**
-     * Proposed new start timestamp
-     */
-    proposedStartAt?: string;
-    /**
-     * Proposed new end timestamp
-     */
-    proposedEndAt?: string;
+    createdBy?: string;
     /**
      * Adjustment in minutes (positive to add time, negative to subtract)
      */
     minutesDelta?: number;
     /**
-     * User creating the adjustment request
+     * Additional notes explaining the adjustment
      */
-    createdBy?: string;
+    notes?: string;
+    /**
+     * Proposed new end timestamp
+     */
+    proposedEndAt?: string;
+    /**
+     * Proposed new start timestamp
+     */
+    proposedStartAt?: string;
+    /**
+     * Reason code for the adjustment
+     */
+    reasonCode: string;
+    /**
+     * Time entry identifier to adjust
+     */
+    timeEntryId: string;
 }
 
 function isOptionalTimeEntryAdjustmentRequestPropertyOfType(
@@ -81,8 +81,8 @@ export function instanceOfTimeEntryAdjustmentRequest(value: object): value is Ti
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createTimeEntryAdjustmentRequestPropertyNames('timeEntryId', 'reasonCode', );
-    const optionalStringProperties = createTimeEntryAdjustmentRequestOptionalProperties({ name: 'timeEntryId', nullable: false }, { name: 'reasonCode', nullable: false }, { name: 'notes', nullable: false }, { name: 'proposedStartAt', nullable: false }, { name: 'proposedEndAt', nullable: false }, { name: 'createdBy', nullable: false }, );
+    const requiredProperties = createTimeEntryAdjustmentRequestPropertyNames('reasonCode', 'timeEntryId', );
+    const optionalStringProperties = createTimeEntryAdjustmentRequestOptionalProperties({ name: 'createdBy', nullable: false }, { name: 'notes', nullable: false }, { name: 'proposedEndAt', nullable: false }, { name: 'proposedStartAt', nullable: false }, { name: 'reasonCode', nullable: false }, { name: 'timeEntryId', nullable: false }, );
     const optionalNumberProperties = createTimeEntryAdjustmentRequestOptionalProperties({ name: 'minutesDelta', nullable: false }, );
     const optionalBooleanProperties = createTimeEntryAdjustmentRequestOptionalProperties();
 

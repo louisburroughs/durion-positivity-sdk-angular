@@ -14,13 +14,17 @@
  */
 export interface RescheduleAppointmentRequest { 
     /**
+     * New appointment end instant in UTC (ISO-8601); must be after newStartAt
+     */
+    newEndAt: string;
+    /**
      * New appointment start instant in UTC (ISO-8601)
      */
     newStartAt: string;
     /**
-     * New appointment end instant in UTC (ISO-8601); must be after newStartAt
+     * Whether to notify the customer of this reschedule (defaults to true)
      */
-    newEndAt: string;
+    notifyCustomer?: boolean;
     /**
      * Mandatory reschedule reason code
      */
@@ -29,10 +33,6 @@ export interface RescheduleAppointmentRequest {
      * Optional notes; required when reason is OTHER or when overriding a hard conflict
      */
     rescheduleReasonNotes?: string;
-    /**
-     * Whether to notify the customer of this reschedule (defaults to true)
-     */
-    notifyCustomer?: boolean;
 }
 export enum RescheduleAppointmentRequestReasonEnum {
     CustomerRequest = 'CUSTOMER_REQUEST',
@@ -86,8 +86,8 @@ export function instanceOfRescheduleAppointmentRequest(value: object): value is 
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createRescheduleAppointmentRequestPropertyNames('newStartAt', 'newEndAt', 'reason', );
-    const optionalStringProperties = createRescheduleAppointmentRequestOptionalProperties({ name: 'newStartAt', nullable: false }, { name: 'newEndAt', nullable: false }, { name: 'reason', nullable: false }, { name: 'rescheduleReasonNotes', nullable: false }, );
+    const requiredProperties = createRescheduleAppointmentRequestPropertyNames('newEndAt', 'newStartAt', 'reason', );
+    const optionalStringProperties = createRescheduleAppointmentRequestOptionalProperties({ name: 'newEndAt', nullable: false }, { name: 'newStartAt', nullable: false }, { name: 'reason', nullable: false }, { name: 'rescheduleReasonNotes', nullable: false }, );
     const optionalNumberProperties = createRescheduleAppointmentRequestOptionalProperties();
     const optionalBooleanProperties = createRescheduleAppointmentRequestOptionalProperties({ name: 'notifyCustomer', nullable: false }, );
 

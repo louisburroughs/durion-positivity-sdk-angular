@@ -14,6 +14,7 @@ import { JournalEntryResponse } from './journalEntryResponse';
  * Generic paginated list response wrapper
  */
 export interface PagedResponseJournalEntryResponse { 
+    content?: Array<JournalEntryResponse>;
     /**
      * Items on the current page
      */
@@ -30,12 +31,11 @@ export interface PagedResponseJournalEntryResponse {
      * Total number of items matching the query
      */
     totalCount?: number;
+    totalElements?: number;
     /**
      * Total number of pages available
      */
     totalPages?: number;
-    content?: Array<JournalEntryResponse>;
-    totalElements?: number;
 }
 
 function isOptionalPagedResponseJournalEntryResponsePropertyOfType(
@@ -78,7 +78,7 @@ export function instanceOfPagedResponseJournalEntryResponse(value: object): valu
 
     const requiredProperties = createPagedResponseJournalEntryResponsePropertyNames('items', );
     const optionalStringProperties = createPagedResponseJournalEntryResponseOptionalProperties();
-    const optionalNumberProperties = createPagedResponseJournalEntryResponseOptionalProperties({ name: 'pageNumber', nullable: false }, { name: 'pageSize', nullable: false }, { name: 'totalCount', nullable: false }, { name: 'totalPages', nullable: false }, { name: 'totalElements', nullable: false }, );
+    const optionalNumberProperties = createPagedResponseJournalEntryResponseOptionalProperties({ name: 'pageNumber', nullable: false }, { name: 'pageSize', nullable: false }, { name: 'totalCount', nullable: false }, { name: 'totalElements', nullable: false }, { name: 'totalPages', nullable: false }, );
     const optionalBooleanProperties = createPagedResponseJournalEntryResponseOptionalProperties();
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

@@ -15,21 +15,13 @@ import { EstimateItemResponse } from './estimateItemResponse';
  */
 export interface EstimateSummaryResponse { 
     /**
-     * Estimate identifier
-     */
-    id: string;
-    /**
-     * Estimate number
-     */
-    estimateNumber: string;
-    /**
      * Creation timestamp
      */
     createdAt?: string;
     /**
-     * Estimate expiry timestamp
+     * Currency code
      */
-    expiresAt?: string;
+    currencyUomId?: string;
     /**
      * Customer identifier
      */
@@ -39,33 +31,33 @@ export interface EstimateSummaryResponse {
      */
     customerName?: string;
     /**
-     * Resolved vehicle label
+     * Estimate number
      */
-    vehicleLabel?: string;
+    estimateNumber: string;
     /**
-     * Vehicle VIN (full; truncate for display)
+     * Estimate expiry timestamp
      */
-    vin?: string;
+    expiresAt?: string;
     /**
-     * Vehicle identifier
+     * Estimate identifier
      */
-    vehicleId?: string;
+    id: string;
+    /**
+     * Labor line items
+     */
+    laborItems?: Array<EstimateItemResponse>;
     /**
      * Location identifier
      */
     locationId?: string;
     /**
-     * Current estimate status
-     */
-    status: EstimateSummaryResponseStatusEnum;
-    /**
      * Part line items
      */
     partItems?: Array<EstimateItemResponse>;
     /**
-     * Labor line items
+     * Current estimate status
      */
-    laborItems?: Array<EstimateItemResponse>;
+    status: EstimateSummaryResponseStatusEnum;
     /**
      * Subtotal amount
      */
@@ -79,9 +71,17 @@ export interface EstimateSummaryResponse {
      */
     total?: number;
     /**
-     * Currency code
+     * Vehicle identifier
      */
-    currencyUomId?: string;
+    vehicleId?: string;
+    /**
+     * Resolved vehicle label
+     */
+    vehicleLabel?: string;
+    /**
+     * Vehicle VIN (full; truncate for display)
+     */
+    vin?: string;
 }
 export enum EstimateSummaryResponseStatusEnum {
     Draft = 'DRAFT',
@@ -137,8 +137,8 @@ export function instanceOfEstimateSummaryResponse(value: object): value is Estim
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createEstimateSummaryResponsePropertyNames('id', 'estimateNumber', 'status', );
-    const optionalStringProperties = createEstimateSummaryResponseOptionalProperties({ name: 'id', nullable: false }, { name: 'estimateNumber', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'expiresAt', nullable: false }, { name: 'customerId', nullable: false }, { name: 'customerName', nullable: false }, { name: 'vehicleLabel', nullable: false }, { name: 'vin', nullable: false }, { name: 'vehicleId', nullable: false }, { name: 'locationId', nullable: false }, { name: 'status', nullable: false }, { name: 'currencyUomId', nullable: false }, );
+    const requiredProperties = createEstimateSummaryResponsePropertyNames('estimateNumber', 'id', 'status', );
+    const optionalStringProperties = createEstimateSummaryResponseOptionalProperties({ name: 'createdAt', nullable: false }, { name: 'currencyUomId', nullable: false }, { name: 'customerId', nullable: false }, { name: 'customerName', nullable: false }, { name: 'estimateNumber', nullable: false }, { name: 'expiresAt', nullable: false }, { name: 'id', nullable: false }, { name: 'locationId', nullable: false }, { name: 'status', nullable: false }, { name: 'vehicleId', nullable: false }, { name: 'vehicleLabel', nullable: false }, { name: 'vin', nullable: false }, );
     const optionalNumberProperties = createEstimateSummaryResponseOptionalProperties({ name: 'subtotal', nullable: false }, { name: 'taxAmount', nullable: false }, { name: 'total', nullable: false }, );
     const optionalBooleanProperties = createEstimateSummaryResponseOptionalProperties();
 

@@ -10,37 +10,41 @@
 
 
 /**
- * Request payload for adding a line item to an estimate
+ * Line item details
  */
 export interface AddEstimateItemRequest { 
-    /**
-     * Type of estimate item
-     */
-    itemType: AddEstimateItemRequestItemTypeEnum;
     /**
      * Human-readable description when no catalog reference is provided
      */
     description?: string;
     /**
-     * Requested quantity
+     * Type of estimate item
      */
-    quantity: number;
-    /**
-     * Unit price for the line item
-     */
-    unitPrice: number;
-    /**
-     * Optional tax code
-     */
-    taxCode?: string;
+    itemType: AddEstimateItemRequestItemTypeEnum;
     /**
      * Referenced product identifier for PART items
      */
     productId?: string;
     /**
+     * Requested quantity
+     */
+    quantity: number;
+    /**
      * Referenced service identifier for LABOR items
      */
     serviceId?: string;
+    /**
+     * Optional tax code
+     */
+    taxCode?: string;
+    /**
+     * Unit price for the line item
+     */
+    unitPrice: number;
+    /**
+     * Unit quantity is expressed in, for PART items only (e.g. \"QT\", \"CASE\"). Omit for the product\'s base unit -- today\'s implicit behavior. LABOR items must omit this field; hours carry no catalog unit-of-measure conversion.
+     */
+    uomCode?: string;
 }
 export enum AddEstimateItemRequestItemTypeEnum {
     Part = 'PART',
@@ -88,7 +92,7 @@ export function instanceOfAddEstimateItemRequest(value: object): value is AddEst
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createAddEstimateItemRequestPropertyNames('itemType', 'quantity', 'unitPrice', );
-    const optionalStringProperties = createAddEstimateItemRequestOptionalProperties({ name: 'itemType', nullable: false }, { name: 'description', nullable: false }, { name: 'taxCode', nullable: false }, { name: 'productId', nullable: false }, { name: 'serviceId', nullable: false }, );
+    const optionalStringProperties = createAddEstimateItemRequestOptionalProperties({ name: 'description', nullable: false }, { name: 'itemType', nullable: false }, { name: 'productId', nullable: false }, { name: 'serviceId', nullable: false }, { name: 'taxCode', nullable: false }, { name: 'uomCode', nullable: false }, );
     const optionalNumberProperties = createAddEstimateItemRequestOptionalProperties({ name: 'quantity', nullable: false }, { name: 'unitPrice', nullable: false }, );
     const optionalBooleanProperties = createAddEstimateItemRequestOptionalProperties();
 

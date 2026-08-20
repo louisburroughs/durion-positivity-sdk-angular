@@ -14,13 +14,13 @@
  */
 export interface PrimaryContact { 
     /**
-     * Contact name
-     */
-    name?: string;
-    /**
      * Contact email address
      */
     email?: string;
+    /**
+     * Contact name
+     */
+    name?: string;
     /**
      * Contact phone number
      */
@@ -66,7 +66,7 @@ export function instanceOfPrimaryContact(value: object): value is PrimaryContact
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createPrimaryContactPropertyNames();
-    const optionalStringProperties = createPrimaryContactOptionalProperties({ name: 'name', nullable: false }, { name: 'email', nullable: false }, { name: 'phone', nullable: false }, );
+    const optionalStringProperties = createPrimaryContactOptionalProperties({ name: 'email', nullable: false }, { name: 'name', nullable: false }, { name: 'phone', nullable: false }, );
     const optionalNumberProperties = createPrimaryContactOptionalProperties();
     const optionalBooleanProperties = createPrimaryContactOptionalProperties();
 

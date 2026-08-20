@@ -14,21 +14,33 @@
  */
 export interface CycleCountPlanResponse { 
     /**
-     * Unique identifier of the cycle count plan
+     * Timestamp when the plan was created
      */
-    planId: string;
+    createdAt: string;
+    /**
+     * Identifier of the user who created the plan
+     */
+    createdBy: string;
+    /**
+     * Due date this schedule-created plan covers (null for manual plans)
+     */
+    dueDate?: string;
     /**
      * Identifier of the location the plan applies to
      */
     locationId: string;
     /**
-     * Identifiers of the zones within the location covered by the plan
+     * Unique identifier of the cycle count plan
      */
-    zoneIds?: Array<string>;
+    planId: string;
     /**
      * Human-readable name of the cycle count plan
      */
     planName: string;
+    /**
+     * Identifier of the recurring schedule that created this plan (null for manual plans)
+     */
+    scheduleId?: string;
     /**
      * Date on which the cycle count is scheduled to occur
      */
@@ -38,25 +50,13 @@ export interface CycleCountPlanResponse {
      */
     status: string;
     /**
-     * Identifier of the recurring schedule that created this plan (null for manual plans)
-     */
-    scheduleId?: string;
-    /**
-     * Due date this schedule-created plan covers (null for manual plans)
-     */
-    dueDate?: string;
-    /**
-     * Identifier of the user who created the plan
-     */
-    createdBy: string;
-    /**
-     * Timestamp when the plan was created
-     */
-    createdAt: string;
-    /**
      * Timestamp when the plan was last updated
      */
     updatedAt: string;
+    /**
+     * Identifiers of the zones within the location covered by the plan
+     */
+    zoneIds?: Array<string>;
 }
 
 function isOptionalCycleCountPlanResponsePropertyOfType(
@@ -97,8 +97,8 @@ export function instanceOfCycleCountPlanResponse(value: object): value is CycleC
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createCycleCountPlanResponsePropertyNames('planId', 'locationId', 'planName', 'scheduledDate', 'status', 'createdBy', 'createdAt', 'updatedAt', );
-    const optionalStringProperties = createCycleCountPlanResponseOptionalProperties({ name: 'planId', nullable: false }, { name: 'locationId', nullable: false }, { name: 'planName', nullable: false }, { name: 'scheduledDate', nullable: false }, { name: 'status', nullable: false }, { name: 'scheduleId', nullable: false }, { name: 'dueDate', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'updatedAt', nullable: false }, );
+    const requiredProperties = createCycleCountPlanResponsePropertyNames('createdAt', 'createdBy', 'locationId', 'planId', 'planName', 'scheduledDate', 'status', 'updatedAt', );
+    const optionalStringProperties = createCycleCountPlanResponseOptionalProperties({ name: 'createdAt', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'dueDate', nullable: false }, { name: 'locationId', nullable: false }, { name: 'planId', nullable: false }, { name: 'planName', nullable: false }, { name: 'scheduleId', nullable: false }, { name: 'scheduledDate', nullable: false }, { name: 'status', nullable: false }, { name: 'updatedAt', nullable: false }, );
     const optionalNumberProperties = createCycleCountPlanResponseOptionalProperties();
     const optionalBooleanProperties = createCycleCountPlanResponseOptionalProperties();
 

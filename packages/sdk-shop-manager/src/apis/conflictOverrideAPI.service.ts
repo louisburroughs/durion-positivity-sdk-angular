@@ -38,24 +38,24 @@ export class ConflictOverrideAPIService extends BaseService {
     }
 
     /**
-     * Execute appointment conflict override
-     * Executes a conflict override for the specified appointment when authorized.
+     * Override a Scheduling Conflict on an Appointment
+     * Records a manager-authorized bypass of a detected scheduling conflict, flagging the appointment as conflict-overridden and persisting an immutable override record with the acting user and timestamp. Use this tool when a blocking conflict on an appointment must be deliberately accepted; do not use createAssignment with override&#x3D;true, which overrides assignment constraints while staffing, and do not use rescheduleAppointment, which resolves the conflict by moving the appointment instead. Preconditions: the appointment must exist, and the caller must hold the shop:schedule:edit or appointments:reschedule authority. Required inputs: appointmentId in the body matching the path parameter, and a non-blank overrideReason; conflictDetails is an optional JSON string describing the conflict being bypassed. Emits a SHOPMGR_APPOINTMENT_CONFLICT_OVERRIDE_CREATE event, sets the appointment\&#39;s conflict-override flag and stores the override record with the actor resolved from the security context. Returns 400 when the path and body appointmentId differ, the overrideReason is blank, or the appointment cannot be resolved, and 403 when the caller lacks the required authority. 
      * @endpoint post /v1/appointments/{appointmentId}/conflict-override
      * @param appointmentId Appointment ID
-     * @param conflictOverrideRequest 
+     * @param conflictOverrideRequest Override decision naming the appointment, the justification, and an optional description of the conflict being bypassed.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public executeOverride(appointmentId: string, conflictOverrideRequest: ConflictOverrideRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ConflictOverrideResponse>;
-    public executeOverride(appointmentId: string, conflictOverrideRequest: ConflictOverrideRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ConflictOverrideResponse>>;
-    public executeOverride(appointmentId: string, conflictOverrideRequest: ConflictOverrideRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ConflictOverrideResponse>>;
-    public executeOverride(appointmentId: string, conflictOverrideRequest: ConflictOverrideRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public executeConflictOverride(appointmentId: string, conflictOverrideRequest: ConflictOverrideRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ConflictOverrideResponse>;
+    public executeConflictOverride(appointmentId: string, conflictOverrideRequest: ConflictOverrideRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ConflictOverrideResponse>>;
+    public executeConflictOverride(appointmentId: string, conflictOverrideRequest: ConflictOverrideRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ConflictOverrideResponse>>;
+    public executeConflictOverride(appointmentId: string, conflictOverrideRequest: ConflictOverrideRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (appointmentId === null || appointmentId === undefined) {
-            throw new Error('Required parameter appointmentId was null or undefined when calling executeOverride.');
+            throw new Error('Required parameter appointmentId was null or undefined when calling executeConflictOverride.');
         }
         if (conflictOverrideRequest === null || conflictOverrideRequest === undefined) {
-            throw new Error('Required parameter conflictOverrideRequest was null or undefined when calling executeOverride.');
+            throw new Error('Required parameter conflictOverrideRequest was null or undefined when calling executeConflictOverride.');
         }
 
         let localVarHeaders = this.defaultHeaders;

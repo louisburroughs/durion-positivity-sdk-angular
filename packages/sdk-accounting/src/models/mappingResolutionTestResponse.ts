@@ -21,24 +21,24 @@ export interface MappingResolutionTestResponse {
      * Whether a published posting rule matched the supplied event. false means no rule matched; inspect noMatchReason/noMatchDetail.
      */
     matched: boolean;
-    matchedRule?: MatchedRule;
     matchedMapping?: MatchedMapping;
+    matchedRule?: MatchedRule;
     /**
-     * Journal entry lines the evaluator would post for this event, including E1 proportional split-line shares and residual distribution. Present when matched=true.
+     * Human-readable no-match detail, present when matched=false
      */
-    resolvedLines?: Array<ResolvedLine>;
-    /**
-     * Per-predicate evaluation outcomes against the sample payload (E2 condition grammar). Populated for every candidate rule condition that was evaluated.
-     */
-    predicateEvaluations?: Array<PredicateEvaluation>;
+    noMatchDetail?: string;
     /**
      * Machine-readable no-match reason, present when matched=false
      */
     noMatchReason?: string;
     /**
-     * Human-readable no-match detail, present when matched=false
+     * Per-predicate evaluation outcomes against the sample payload (E2 condition grammar). Populated for every candidate rule condition that was evaluated.
      */
-    noMatchDetail?: string;
+    predicateEvaluations?: Array<PredicateEvaluation>;
+    /**
+     * Journal entry lines the evaluator would post for this event, including E1 proportional split-line shares and residual distribution. Present when matched=true.
+     */
+    resolvedLines?: Array<ResolvedLine>;
 }
 
 function isOptionalMappingResolutionTestResponsePropertyOfType(
@@ -80,7 +80,7 @@ export function instanceOfMappingResolutionTestResponse(value: object): value is
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createMappingResolutionTestResponsePropertyNames('matched', );
-    const optionalStringProperties = createMappingResolutionTestResponseOptionalProperties({ name: 'noMatchReason', nullable: false }, { name: 'noMatchDetail', nullable: false }, );
+    const optionalStringProperties = createMappingResolutionTestResponseOptionalProperties({ name: 'noMatchDetail', nullable: false }, { name: 'noMatchReason', nullable: false }, );
     const optionalNumberProperties = createMappingResolutionTestResponseOptionalProperties();
     const optionalBooleanProperties = createMappingResolutionTestResponseOptionalProperties({ name: 'matched', nullable: false }, );
 

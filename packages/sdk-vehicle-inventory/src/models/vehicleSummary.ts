@@ -14,29 +14,13 @@
  */
 export interface VehicleSummary { 
     /**
-     * Unique identifier of the vehicle
-     */
-    vehicleId: string;
-    /**
-     * 17-character Vehicle Identification Number
-     */
-    vin: string;
-    /**
-     * Fleet unit number assigned to the vehicle
-     */
-    unitNumber?: string;
-    /**
-     * License plate number
-     */
-    licensePlate?: string;
-    /**
      * Human-readable description of the vehicle
      */
     description?: string;
     /**
-     * Model year of the vehicle
+     * License plate number
      */
-    year?: number;
+    licensePlate?: string;
     /**
      * Manufacturer of the vehicle
      */
@@ -45,6 +29,22 @@ export interface VehicleSummary {
      * Model of the vehicle
      */
     model?: string;
+    /**
+     * Fleet unit number assigned to the vehicle
+     */
+    unitNumber?: string;
+    /**
+     * Unique identifier of the vehicle
+     */
+    vehicleId: string;
+    /**
+     * 17-character Vehicle Identification Number
+     */
+    vin: string;
+    /**
+     * Model year of the vehicle
+     */
+    year?: number;
 }
 
 function isOptionalVehicleSummaryPropertyOfType(
@@ -86,7 +86,7 @@ export function instanceOfVehicleSummary(value: object): value is VehicleSummary
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createVehicleSummaryPropertyNames('vehicleId', 'vin', );
-    const optionalStringProperties = createVehicleSummaryOptionalProperties({ name: 'vehicleId', nullable: false }, { name: 'vin', nullable: false }, { name: 'unitNumber', nullable: false }, { name: 'licensePlate', nullable: false }, { name: 'description', nullable: false }, { name: 'make', nullable: false }, { name: 'model', nullable: false }, );
+    const optionalStringProperties = createVehicleSummaryOptionalProperties({ name: 'description', nullable: false }, { name: 'licensePlate', nullable: false }, { name: 'make', nullable: false }, { name: 'model', nullable: false }, { name: 'unitNumber', nullable: false }, { name: 'vehicleId', nullable: false }, { name: 'vin', nullable: false }, );
     const optionalNumberProperties = createVehicleSummaryOptionalProperties({ name: 'year', nullable: false }, );
     const optionalBooleanProperties = createVehicleSummaryOptionalProperties();
 

@@ -41,10 +41,10 @@ export class WarrantyPartReturnsService extends BaseService {
 
     /**
      * Create part return (RMA)
-     * Opens the RMA lifecycle for one claim line (at most one per line); starts AWAITING_PART
+     * Opens the defective-part RMA lifecycle for one claim line, creating a part return in AWAITING_PART with the chosen disposition. Use this tool when the governing policy requires the part back or staff choose to hold or return it; do not use updatePartReturn, which advances or annotates an RMA that already exists — at most one part return is allowed per claim line. Preconditions: the claim must exist and not be CANCELLED or CLOSED, the line must belong to the claim, and no part return may already exist for that line; no policy check gates creation because staff choice is always permitted. Required inputs: claim id (UUID) as a path parameter and a body with claimLineId (UUID) and disposition (HOLD_FOR_INSPECTION, RETURN_TO_VENDOR, SCRAP_AUTHORIZED, or CUSTOMER_RETAINED); rmaNumber and holdLocationNote are optional. Emits a WARRANTY_PART_RETURN_CREATE event, enqueues warranty.part-return.requested so pos-inventory can quarantine the defective unit, and republishes the claim snapshot. Returns 404 when the claim or the line cannot be found, and 409 when the line already has a part return or the claim is terminal. 
      * @endpoint post /v1/warranty/claims/{id}/part-returns
      * @param id Claim id
-     * @param partReturnCreateRequest 
+     * @param partReturnCreateRequest Claim line whose defective part is being returned or held, with its disposition and optional RMA details.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -115,7 +115,7 @@ export class WarrantyPartReturnsService extends BaseService {
 
     /**
      * Part-return worklist
-     * Hold-shelf / shipping worklist of part returns, filterable by status
+     * Returns the hold-shelf and shipping worklist of part returns across all claims, optionally filtered by status. Use this tool to drive the back-office RMA worklist; use getClaim instead to see the part returns of one specific claim. Preconditions: none — an empty list is returned when nothing matches. Required inputs: status is an optional query parameter (AWAITING_PART, ON_HOLD, SHIPPED, RECEIVED_BY_VENDOR, SCRAPPED, CLOSED); omitting it returns every part return. No events are emitted and no state changes; this is a read-only projection. Returns 200 with the list, which is empty rather than 404 when no part return matches. 
      * @endpoint get /v1/warranty/part-returns
      * @param status Filter by part-return status
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -184,10 +184,10 @@ export class WarrantyPartReturnsService extends BaseService {
 
     /**
      * Update part return (RMA)
-     * Advances the RMA (AWAITING_PART -&gt; ON_HOLD -&gt; SHIPPED -&gt; RECEIVED_BY_VENDOR, or SCRAPPED/CLOSED per disposition) and/or updates RMA details
+     * Advances a part return through its child state machine — AWAITING_PART to ON_HOLD to SHIPPED to RECEIVED_BY_VENDOR, or to SCRAPPED/CLOSED per disposition, where ON_HOLD may be skipped — and/or updates RMA details without a lifecycle move. Use this tool for every change after creation; do not use createPartReturn, which opens a new RMA and rejects a line that already has one. Preconditions: the part return must exist and not be terminal; moving to SHIPPED or RECEIVED_BY_VENDOR requires disposition RETURN_TO_VENDOR, and moving to SCRAPPED requires disposition SCRAP_AUTHORIZED (either already set or set in the same request). Required inputs: part return id (UUID) as a path parameter; every body field is optional — omit status for a detail-only update, and shippedAt defaults to now when entering SHIPPED. Emits a WARRANTY_PART_RETURN_UPDATE event, enqueues warranty.part-return.shipped when the return enters SHIPPED, and republishes the claim snapshot. Returns 404 when the part return does not exist, and 409 when the transition is illegal, the disposition does not permit the target status, or the return is already terminal. 
      * @endpoint put /v1/warranty/part-returns/{id}
      * @param id Part return id
-     * @param partReturnUpdateRequest 
+     * @param partReturnUpdateRequest Lifecycle move and/or RMA detail changes; all fields optional, omit status for a detail-only update.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options

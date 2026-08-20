@@ -15,17 +15,17 @@ import { PostalCodeEntry } from './postalCodeEntry';
  */
 export interface ServiceAreaRequest { 
     /**
-     * Display name of the service area
+     * Whether the service area is active
      */
-    name: string;
+    active?: boolean;
     /**
      * Description of the service area
      */
     description?: string;
     /**
-     * Whether the service area is active
+     * Display name of the service area
      */
-    active?: boolean;
+    name: string;
     /**
      * Postal codes included in the service area
      */
@@ -71,7 +71,7 @@ export function instanceOfServiceAreaRequest(value: object): value is ServiceAre
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createServiceAreaRequestPropertyNames('name', );
-    const optionalStringProperties = createServiceAreaRequestOptionalProperties({ name: 'name', nullable: false }, { name: 'description', nullable: false }, );
+    const optionalStringProperties = createServiceAreaRequestOptionalProperties({ name: 'description', nullable: false }, { name: 'name', nullable: false }, );
     const optionalNumberProperties = createServiceAreaRequestOptionalProperties();
     const optionalBooleanProperties = createServiceAreaRequestOptionalProperties({ name: 'active', nullable: false }, );
 

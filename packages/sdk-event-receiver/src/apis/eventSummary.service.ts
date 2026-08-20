@@ -37,16 +37,16 @@ export class EventSummaryService extends BaseService {
 
     /**
      * Get event summary for the last day
-     * Returns event counts grouped by event type for the last 24 hours
+     * Returns emitted-event counts grouped by event type code for the trailing 24 hours, read from the emitted_event_hourly TimescaleDB continuous aggregate. Use this tool for a daily view of platform event traffic; use getEventSummaryLastHour instead for a near-real-time pulse, or getEventSummaryLastWeek for the weekly trend. Preconditions: none beyond service availability; GET requests bypass the shared-secret filter, and the aggregate refreshes hourly with a one-hour end offset, so the newest counts can lag by up to an hour. Required inputs: none; the window is fixed at 24 hours and cannot be parameterized. Emits an EVENT_RECEIVER_SUMMARY_LAST_DAY event recording the query itself; the read changes no stored state. Returns 200 with a list of event-type and count pairs, which is empty when no events fall inside the window. 
      * @endpoint get /v1/events/summary/lastDay
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public getLastDaySummary(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<EventSummaryResponse>;
-    public getLastDaySummary(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<EventSummaryResponse>>;
-    public getLastDaySummary(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<EventSummaryResponse>>;
-    public getLastDaySummary(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getEventSummaryLastDay(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<EventSummaryResponse>;
+    public getEventSummaryLastDay(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<EventSummaryResponse>>;
+    public getEventSummaryLastDay(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<EventSummaryResponse>>;
+    public getEventSummaryLastDay(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -90,16 +90,16 @@ export class EventSummaryService extends BaseService {
 
     /**
      * Get event summary for the last hour
-     * Returns event counts grouped by event type for the last 60 minutes
+     * Returns emitted-event counts grouped by event type code for the trailing 60 minutes, read from the emitted_event_hourly TimescaleDB continuous aggregate. Use this tool for a near-real-time pulse of platform event traffic; use getEventSummaryLastDay or getEventSummaryLastWeek instead for longer trend windows. Preconditions: none beyond service availability; GET requests bypass the shared-secret filter, and the aggregate refreshes hourly with a one-hour end offset, so the newest counts can lag by up to an hour. Required inputs: none; the window is fixed at one hour and cannot be parameterized. Emits an EVENT_RECEIVER_SUMMARY_LAST_HOUR event recording the query itself; the read changes no stored state. Returns 200 with a list of event-type and count pairs, which is empty when no events fall inside the window. 
      * @endpoint get /v1/events/summary/lastHour
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public getLastHourSummary(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<EventSummaryResponse>;
-    public getLastHourSummary(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<EventSummaryResponse>>;
-    public getLastHourSummary(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<EventSummaryResponse>>;
-    public getLastHourSummary(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getEventSummaryLastHour(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<EventSummaryResponse>;
+    public getEventSummaryLastHour(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<EventSummaryResponse>>;
+    public getEventSummaryLastHour(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<EventSummaryResponse>>;
+    public getEventSummaryLastHour(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -143,16 +143,16 @@ export class EventSummaryService extends BaseService {
 
     /**
      * Get event summary for the last week
-     * Returns event counts grouped by event type for the last 7 days
+     * Returns emitted-event counts grouped by event type code for the trailing 7 days, read from the emitted_event_hourly TimescaleDB continuous aggregate. Use this tool for a weekly trend of platform event traffic; use getEventSummaryLastHour or getEventSummaryLastDay instead when a shorter window is wanted. Preconditions: none beyond service availability; GET requests bypass the shared-secret filter, and the aggregate refreshes hourly with a one-hour end offset, so the newest counts can lag by up to an hour. Required inputs: none; the window is fixed at 7 days and cannot be parameterized. Emits an EVENT_RECEIVER_SUMMARY_LAST_WEEK event recording the query itself; the read changes no stored state. Returns 200 with a list of event-type and count pairs, which is empty when no events fall inside the window. 
      * @endpoint get /v1/events/summary/lastWeek
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public getLastWeekSummary(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<EventSummaryResponse>;
-    public getLastWeekSummary(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<EventSummaryResponse>>;
-    public getLastWeekSummary(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<EventSummaryResponse>>;
-    public getLastWeekSummary(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getEventSummaryLastWeek(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<EventSummaryResponse>;
+    public getEventSummaryLastWeek(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<EventSummaryResponse>>;
+    public getEventSummaryLastWeek(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<EventSummaryResponse>>;
+    public getEventSummaryLastWeek(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarHeaders = this.defaultHeaders;
 

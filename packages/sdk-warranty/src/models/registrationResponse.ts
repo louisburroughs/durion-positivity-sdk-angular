@@ -13,18 +13,18 @@
  * Warranty registration — sold/instantiated coverage
  */
 export interface RegistrationResponse { 
+    contractNumber?: string;
+    createdAt?: string;
+    customerId?: string;
+    expiresAt?: string;
     id?: string;
     policyId?: string;
-    customerId?: string;
-    vehicleId?: string;
+    purchaseDate?: string;
     sourceInvoiceId?: string;
     sourceInvoiceLineId?: string;
-    contractNumber?: string;
-    purchaseDate?: string;
-    expiresAt?: string;
     status?: RegistrationResponseStatusEnum;
-    createdAt?: string;
     updatedAt?: string;
+    vehicleId?: string;
     version?: number;
 }
 export enum RegistrationResponseStatusEnum {
@@ -75,7 +75,7 @@ export function instanceOfRegistrationResponse(value: object): value is Registra
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createRegistrationResponsePropertyNames();
-    const optionalStringProperties = createRegistrationResponseOptionalProperties({ name: 'id', nullable: false }, { name: 'policyId', nullable: false }, { name: 'customerId', nullable: false }, { name: 'vehicleId', nullable: false }, { name: 'sourceInvoiceId', nullable: false }, { name: 'sourceInvoiceLineId', nullable: false }, { name: 'contractNumber', nullable: false }, { name: 'purchaseDate', nullable: false }, { name: 'expiresAt', nullable: false }, { name: 'status', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'updatedAt', nullable: false }, );
+    const optionalStringProperties = createRegistrationResponseOptionalProperties({ name: 'contractNumber', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'customerId', nullable: false }, { name: 'expiresAt', nullable: false }, { name: 'id', nullable: false }, { name: 'policyId', nullable: false }, { name: 'purchaseDate', nullable: false }, { name: 'sourceInvoiceId', nullable: false }, { name: 'sourceInvoiceLineId', nullable: false }, { name: 'status', nullable: false }, { name: 'updatedAt', nullable: false }, { name: 'vehicleId', nullable: false }, );
     const optionalNumberProperties = createRegistrationResponseOptionalProperties({ name: 'version', nullable: false }, );
     const optionalBooleanProperties = createRegistrationResponseOptionalProperties();
 

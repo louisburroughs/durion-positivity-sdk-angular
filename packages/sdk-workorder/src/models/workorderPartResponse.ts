@@ -14,53 +14,57 @@
  */
 export interface WorkorderPartResponse { 
     /**
-     * Part line item ID
-     */
-    id: string;
-    /**
-     * Product entity ID from catalog
-     */
-    productEntityId?: string;
-    /**
      * Part description
      */
     description?: string;
     /**
-     * Part line status
+     * Part line item ID
      */
-    status?: WorkorderPartResponseStatusEnum;
-    /**
-     * Authorized quantity from estimate
-     */
-    quantity?: number;
-    /**
-     * Unit price per part
-     */
-    unitPrice?: number;
-    /**
-     * Quantity issued from inventory
-     */
-    quantityIssued?: number;
-    /**
-     * Quantity consumed (cannot be returned)
-     */
-    quantityConsumed?: number;
-    /**
-     * Quantity returned to inventory
-     */
-    quantityReturned?: number;
-    /**
-     * Total part cost (authorized quantity * unit price)
-     */
-    partCost?: number;
+    id: string;
     /**
      * Line total from estimate
      */
     lineTotal?: number;
     /**
+     * Total part cost (authorized quantity * unit price)
+     */
+    partCost?: number;
+    /**
      * URL of photo evidence attached to the part line
      */
     photoEvidenceUrl?: string;
+    /**
+     * Product entity ID from catalog
+     */
+    productEntityId?: string;
+    /**
+     * Authorized quantity from estimate
+     */
+    quantity?: number;
+    /**
+     * Quantity consumed (cannot be returned)
+     */
+    quantityConsumed?: number;
+    /**
+     * Quantity issued from inventory
+     */
+    quantityIssued?: number;
+    /**
+     * Quantity returned to inventory
+     */
+    quantityReturned?: number;
+    /**
+     * Part line status
+     */
+    status?: WorkorderPartResponseStatusEnum;
+    /**
+     * Unit the line\'s quantities are expressed in; null means the product\'s base UoM (ADR-0055 stage 3)
+     */
+    unitOfMeasure?: string;
+    /**
+     * Unit price per part
+     */
+    unitPrice?: number;
 }
 export enum WorkorderPartResponseStatusEnum {
     PendingApproval = 'PENDING_APPROVAL',
@@ -112,8 +116,8 @@ export function instanceOfWorkorderPartResponse(value: object): value is Workord
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createWorkorderPartResponsePropertyNames('id', );
-    const optionalStringProperties = createWorkorderPartResponseOptionalProperties({ name: 'id', nullable: false }, { name: 'productEntityId', nullable: false }, { name: 'description', nullable: false }, { name: 'status', nullable: false }, { name: 'photoEvidenceUrl', nullable: false }, );
-    const optionalNumberProperties = createWorkorderPartResponseOptionalProperties({ name: 'quantity', nullable: false }, { name: 'unitPrice', nullable: false }, { name: 'quantityIssued', nullable: false }, { name: 'quantityConsumed', nullable: false }, { name: 'quantityReturned', nullable: false }, { name: 'partCost', nullable: false }, { name: 'lineTotal', nullable: false }, );
+    const optionalStringProperties = createWorkorderPartResponseOptionalProperties({ name: 'description', nullable: false }, { name: 'id', nullable: false }, { name: 'photoEvidenceUrl', nullable: false }, { name: 'productEntityId', nullable: false }, { name: 'status', nullable: false }, { name: 'unitOfMeasure', nullable: false }, );
+    const optionalNumberProperties = createWorkorderPartResponseOptionalProperties({ name: 'lineTotal', nullable: false }, { name: 'partCost', nullable: false }, { name: 'quantity', nullable: false }, { name: 'quantityConsumed', nullable: false }, { name: 'quantityIssued', nullable: false }, { name: 'quantityReturned', nullable: false }, { name: 'unitPrice', nullable: false }, );
     const optionalBooleanProperties = createWorkorderPartResponseOptionalProperties();
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

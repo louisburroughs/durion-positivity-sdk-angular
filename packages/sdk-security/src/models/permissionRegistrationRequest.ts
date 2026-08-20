@@ -19,13 +19,13 @@ export interface PermissionRegistrationRequest {
      */
     domain: string;
     /**
-     * Service identifier registering the permissions
-     */
-    serviceName: string;
-    /**
      * Permission definitions to register or update
      */
     permissions: Array<PermissionDefinition>;
+    /**
+     * Service identifier registering the permissions
+     */
+    serviceName: string;
     /**
      * Manifest schema version
      */
@@ -70,7 +70,7 @@ export function instanceOfPermissionRegistrationRequest(value: object): value is
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createPermissionRegistrationRequestPropertyNames('domain', 'serviceName', 'permissions', );
+    const requiredProperties = createPermissionRegistrationRequestPropertyNames('domain', 'permissions', 'serviceName', );
     const optionalStringProperties = createPermissionRegistrationRequestOptionalProperties({ name: 'domain', nullable: false }, { name: 'serviceName', nullable: false }, { name: 'version', nullable: false }, );
     const optionalNumberProperties = createPermissionRegistrationRequestOptionalProperties();
     const optionalBooleanProperties = createPermissionRegistrationRequestOptionalProperties();

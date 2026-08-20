@@ -14,22 +14,29 @@
  */
 export interface RestrictionEvaluationItem { 
     /**
-     * Product to evaluate restrictions for
+     * Transaction lifecycle context for the evaluation
      */
-    productId: string;
+    context: RestrictionEvaluationItemContextEnum;
     /**
      * Location scope tag for the evaluation
      */
     locationTag: RestrictionEvaluationItemLocationTagEnum;
     /**
+     * Product to evaluate restrictions for
+     */
+    productId: string;
+    /**
      * Service channel scope tag for the evaluation
      */
     serviceTag: RestrictionEvaluationItemServiceTagEnum;
-    /**
-     * Transaction lifecycle context for the evaluation
-     */
-    context: RestrictionEvaluationItemContextEnum;
 }
+export enum RestrictionEvaluationItemContextEnum {
+    Browse = 'BROWSE',
+    Quote = 'QUOTE',
+    Checkout = 'CHECKOUT',
+    InvoiceFinalize = 'INVOICE_FINALIZE',
+    CommitSale = 'COMMIT_SALE'
+};
 export enum RestrictionEvaluationItemLocationTagEnum {
     AllLocations = 'ALL_LOCATIONS',
     RetailStore = 'RETAIL_STORE',
@@ -44,13 +51,6 @@ export enum RestrictionEvaluationItemServiceTagEnum {
     Estimate = 'ESTIMATE',
     Invoice = 'INVOICE',
     Delivery = 'DELIVERY'
-};
-export enum RestrictionEvaluationItemContextEnum {
-    Browse = 'BROWSE',
-    Quote = 'QUOTE',
-    Checkout = 'CHECKOUT',
-    InvoiceFinalize = 'INVOICE_FINALIZE',
-    CommitSale = 'COMMIT_SALE'
 };
 
 
@@ -93,8 +93,8 @@ export function instanceOfRestrictionEvaluationItem(value: object): value is Res
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createRestrictionEvaluationItemPropertyNames('productId', 'locationTag', 'serviceTag', 'context', );
-    const optionalStringProperties = createRestrictionEvaluationItemOptionalProperties({ name: 'productId', nullable: false }, { name: 'locationTag', nullable: false }, { name: 'serviceTag', nullable: false }, { name: 'context', nullable: false }, );
+    const requiredProperties = createRestrictionEvaluationItemPropertyNames('context', 'locationTag', 'productId', 'serviceTag', );
+    const optionalStringProperties = createRestrictionEvaluationItemOptionalProperties({ name: 'context', nullable: false }, { name: 'locationTag', nullable: false }, { name: 'productId', nullable: false }, { name: 'serviceTag', nullable: false }, );
     const optionalNumberProperties = createRestrictionEvaluationItemOptionalProperties();
     const optionalBooleanProperties = createRestrictionEvaluationItemOptionalProperties();
 

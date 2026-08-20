@@ -19,9 +19,9 @@ export interface GeneralLedgerReport {
      */
     accountId?: string;
     /**
-     * Period start date (inclusive)
+     * Per-account sections ordered by account number; empty when no POSTED activity exists
      */
-    startDate: string;
+    accounts: Array<GeneralLedgerAccountSection>;
     /**
      * Period end date (inclusive)
      */
@@ -31,17 +31,17 @@ export interface GeneralLedgerReport {
      */
     generatedAt: string;
     /**
-     * Per-account sections ordered by account number; empty when no POSTED activity exists
+     * Period start date (inclusive)
      */
-    accounts: Array<GeneralLedgerAccountSection>;
-    /**
-     * Grand total of in-period POSTED debit amounts across all sections
-     */
-    totalDebit: number;
+    startDate: string;
     /**
      * Grand total of in-period POSTED credit amounts across all sections
      */
     totalCredit: number;
+    /**
+     * Grand total of in-period POSTED debit amounts across all sections
+     */
+    totalDebit: number;
 }
 
 function isOptionalGeneralLedgerReportPropertyOfType(
@@ -82,9 +82,9 @@ export function instanceOfGeneralLedgerReport(value: object): value is GeneralLe
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createGeneralLedgerReportPropertyNames('startDate', 'endDate', 'generatedAt', 'accounts', 'totalDebit', 'totalCredit', );
-    const optionalStringProperties = createGeneralLedgerReportOptionalProperties({ name: 'accountId', nullable: false }, { name: 'startDate', nullable: false }, { name: 'endDate', nullable: false }, { name: 'generatedAt', nullable: false }, );
-    const optionalNumberProperties = createGeneralLedgerReportOptionalProperties({ name: 'totalDebit', nullable: false }, { name: 'totalCredit', nullable: false }, );
+    const requiredProperties = createGeneralLedgerReportPropertyNames('accounts', 'endDate', 'generatedAt', 'startDate', 'totalCredit', 'totalDebit', );
+    const optionalStringProperties = createGeneralLedgerReportOptionalProperties({ name: 'accountId', nullable: false }, { name: 'endDate', nullable: false }, { name: 'generatedAt', nullable: false }, { name: 'startDate', nullable: false }, );
+    const optionalNumberProperties = createGeneralLedgerReportOptionalProperties({ name: 'totalCredit', nullable: false }, { name: 'totalDebit', nullable: false }, );
     const optionalBooleanProperties = createGeneralLedgerReportOptionalProperties();
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

@@ -40,10 +40,10 @@ export class CustomerAPIService extends BaseService {
     }
 
     /**
-     * Create a new customer
-     * Add a new customer to the system.
+     * Create Customer Record
+     * Creates a customer from a flat CustomerDTO, routed by customerType to either the commercial or person party store. Use this tool only for the legacy flat customer API; use createCrmCommercialAccount instead for commercial onboarding with duplicate checking, and createCrmPerson for individuals so the canonical identity lands in pos-people. Preconditions: none beyond authorization; no duplicate detection is performed. Required inputs: firstName and lastName (each max 100); customerType selects the store, where COMMERCIAL routes to the commercial service and anything else creates a person party, and customerNumber, primaryAddress, and vehicleVins are optional. Emits a CUSTOMER_CUSTOMER_CREATE event and publishes a party-changed customer fact. Returns 201 with the stored customer on success; returns 400 for a malformed JSON body or when firstName/lastName are blank or absent. 
      * @endpoint post /v1/crm
-     * @param customerDTO 
+     * @param customerDTO The flat customer record to store; customerType routes it to the commercial or person store.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -110,8 +110,8 @@ export class CustomerAPIService extends BaseService {
     }
 
     /**
-     * Delete a customer
-     * Delete a customer by their unique ID.
+     * Delete Customer Record
+     * Hard-deletes a customer row, trying the commercial store first and then the person store, and publishes a party-deleted fact for the removed record. Use this tool only when a customer record must be physically removed; do not use it for duplicates — use mergeParties instead, whose MERGED status preserves history, since this deletion is not reversible. Preconditions: a commercial or person party must exist for the supplied id. Required inputs: id (UUID) as a path parameter; there is no request body. Emits a CUSTOMER_CUSTOMER_DELETE event and publishes a party-deleted customer fact. Returns 404 when neither store holds a party for the supplied id. 
      * @endpoint delete /v1/crm/{id}
      * @param id ID of the customer to delete
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -169,8 +169,68 @@ export class CustomerAPIService extends BaseService {
     }
 
     /**
-     * Get all customers
-     * Retrieve a paginated list of customers by type (PERSON or COMMERCIAL). Defaults to PERSON customers if no type specified. When a name and/or email filter is supplied, performs a server-side search instead of an unfiltered listing (scalable typeahead).
+     * Get Customer By Id
+     * Returns one customer as a flat CustomerDTO, checking commercial parties first and falling back to person parties. Use this tool for the legacy flat customer view; use getParty or getSnapshotByParty instead for the richer party projections. Preconditions: a commercial or person party must exist for the supplied id. Required inputs: id (UUID) as a path parameter; there is no request body. No events are emitted and no state changes; this is a read-only projection. Returns 404 when neither a commercial nor a person party exists for the supplied id. 
+     * @endpoint get /v1/crm/{id}
+     * @param id ID of the customer to retrieve
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public getCustomerById(id: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<CustomerDTO>;
+    public getCustomerById(id: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<CustomerDTO>>;
+    public getCustomerById(id: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<CustomerDTO>>;
+    public getCustomerById(id: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (id === null || id === undefined) {
+            throw new Error('Required parameter id was null or undefined when calling getCustomerById.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/crm/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<CustomerDTO>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * List Customers By Type
+     * Returns a page of customers of one party type, switching to a server-side typeahead search when a name or email filter is supplied. Use this tool for the legacy flat customer listing keyed by customerType; use browseParties instead for the unified directory that merges commercial and individual customers in one result. Preconditions: none; an empty page is returned when nothing matches. Required inputs: none; customerType defaults to PERSON and accepts PERSON or COMMERCIAL, name and email are optional case-insensitive filters, and paging defaults to page 0, size 20, sorted by customerNumber. No events are emitted and no state changes; this is a read-only projection. Returns 200 with an empty page rather than an error when no customer matches. 
      * @endpoint get /v1/crm
      * @param pageable Pagination parameters (page, size, sort)
      * @param customerType Customer type filter: PERSON or COMMERCIAL
@@ -180,12 +240,12 @@ export class CustomerAPIService extends BaseService {
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public getAllCustomers(pageable: Pageable, customerType?: string, name?: string, email?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PageCustomerDTO>;
-    public getAllCustomers(pageable: Pageable, customerType?: string, name?: string, email?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PageCustomerDTO>>;
-    public getAllCustomers(pageable: Pageable, customerType?: string, name?: string, email?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PageCustomerDTO>>;
-    public getAllCustomers(pageable: Pageable, customerType?: string, name?: string, email?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public listCustomers(pageable: Pageable, customerType?: string, name?: string, email?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PageCustomerDTO>;
+    public listCustomers(pageable: Pageable, customerType?: string, name?: string, email?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PageCustomerDTO>>;
+    public listCustomers(pageable: Pageable, customerType?: string, name?: string, email?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PageCustomerDTO>>;
+    public listCustomers(pageable: Pageable, customerType?: string, name?: string, email?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (pageable === null || pageable === undefined) {
-            throw new Error('Required parameter pageable was null or undefined when calling getAllCustomers.');
+            throw new Error('Required parameter pageable was null or undefined when calling listCustomers.');
         }
 
         let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
@@ -271,71 +331,11 @@ export class CustomerAPIService extends BaseService {
     }
 
     /**
-     * Get customer by ID
-     * Retrieve a customer by their unique ID.
-     * @endpoint get /v1/crm/{id}
-     * @param id ID of the customer to retrieve
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     * @param options additional options
-     */
-    public getCustomerById(id: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<CustomerDTO>;
-    public getCustomerById(id: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<CustomerDTO>>;
-    public getCustomerById(id: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<CustomerDTO>>;
-    public getCustomerById(id: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
-        if (id === null || id === undefined) {
-            throw new Error('Required parameter id was null or undefined when calling getCustomerById.');
-        }
-
-        let localVarHeaders = this.defaultHeaders;
-
-        // authentication (bearerAuth) required
-        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
-
-        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
-            'application/json'
-        ]);
-        if (localVarHttpHeaderAcceptSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
-        }
-
-        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
-
-        const localVarTransferCache: boolean = options?.transferCache ?? true;
-
-
-        let responseType_: 'text' | 'json' | 'blob' = 'json';
-        if (localVarHttpHeaderAcceptSelected) {
-            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
-                responseType_ = 'text';
-            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
-                responseType_ = 'json';
-            } else {
-                responseType_ = 'blob';
-            }
-        }
-
-        let localVarPath = `/v1/crm/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
-        const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<CustomerDTO>('get', `${basePath}${localVarPath}`,
-            {
-                context: localVarHttpContext,
-                responseType: <any>responseType_,
-                ...(withCredentials ? { withCredentials } : {}),
-                headers: localVarHeaders,
-                observe: observe,
-                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * Update an existing customer
-     * Update the details of an existing customer.
+     * Update Customer Record
+     * Updates an existing customer\&#39;s flat record, with the body\&#39;s customerType selecting whether the commercial or person store is searched for the id. Use this tool only for the legacy flat customer API; the customerType in the body must match the store the customer actually lives in, or the lookup misses, so do not use it to change a customer from PERSON to COMMERCIAL. Preconditions: a party of the type named by customerType must exist for the supplied id. Required inputs: id (UUID) as a path parameter and the CustomerDTO body including customerType; only fields present in the DTO mapping are applied. Emits a CUSTOMER_CUSTOMER_UPDATE event and publishes a party-changed customer fact. Returns 404 when no party of the selected type exists for the supplied id. 
      * @endpoint put /v1/crm/{id}
      * @param id ID of the customer to update
-     * @param customerDTO 
+     * @param customerDTO The revised customer fields; customerType must name the store the customer already lives in.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options

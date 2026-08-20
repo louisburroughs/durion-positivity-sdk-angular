@@ -14,13 +14,25 @@
  */
 export interface PutawayExecutionResponse { 
     /**
+     * Identifier of the actor who executed the putaway
+     */
+    actorId?: string;
+    /**
+     * Identifier of the storage location the goods moved to
+     */
+    destinationLocationId: string;
+    /**
+     * Timestamp when the putaway was executed
+     */
+    executedAt: string;
+    /**
      * Identifier of the inventory ledger entry recorded for the move
      */
     ledgerEntryId: string;
     /**
-     * Identifier of the putaway task that was executed
+     * Quantity of units moved during the putaway
      */
-    taskId: string;
+    quantityMoved: number;
     /**
      * Identifier of the SKU that was moved
      */
@@ -30,29 +42,17 @@ export interface PutawayExecutionResponse {
      */
     sourceLocationId?: string;
     /**
-     * Identifier of the storage location the goods moved to
-     */
-    destinationLocationId: string;
-    /**
-     * Quantity of units moved during the putaway
-     */
-    quantityMoved: number;
-    /**
-     * Ledger transaction type recorded for the move
-     */
-    transactionType: string;
-    /**
      * Outcome status of the putaway execution
      */
     status: string;
     /**
-     * Timestamp when the putaway was executed
+     * Identifier of the putaway task that was executed
      */
-    executedAt: string;
+    taskId: string;
     /**
-     * Identifier of the actor who executed the putaway
+     * Ledger transaction type recorded for the move
      */
-    actorId?: string;
+    transactionType: string;
 }
 
 function isOptionalPutawayExecutionResponsePropertyOfType(
@@ -93,8 +93,8 @@ export function instanceOfPutawayExecutionResponse(value: object): value is Puta
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createPutawayExecutionResponsePropertyNames('ledgerEntryId', 'taskId', 'skuId', 'destinationLocationId', 'quantityMoved', 'transactionType', 'status', 'executedAt', );
-    const optionalStringProperties = createPutawayExecutionResponseOptionalProperties({ name: 'ledgerEntryId', nullable: false }, { name: 'taskId', nullable: false }, { name: 'skuId', nullable: false }, { name: 'sourceLocationId', nullable: false }, { name: 'destinationLocationId', nullable: false }, { name: 'transactionType', nullable: false }, { name: 'status', nullable: false }, { name: 'executedAt', nullable: false }, { name: 'actorId', nullable: false }, );
+    const requiredProperties = createPutawayExecutionResponsePropertyNames('destinationLocationId', 'executedAt', 'ledgerEntryId', 'quantityMoved', 'skuId', 'status', 'taskId', 'transactionType', );
+    const optionalStringProperties = createPutawayExecutionResponseOptionalProperties({ name: 'actorId', nullable: false }, { name: 'destinationLocationId', nullable: false }, { name: 'executedAt', nullable: false }, { name: 'ledgerEntryId', nullable: false }, { name: 'skuId', nullable: false }, { name: 'sourceLocationId', nullable: false }, { name: 'status', nullable: false }, { name: 'taskId', nullable: false }, { name: 'transactionType', nullable: false }, );
     const optionalNumberProperties = createPutawayExecutionResponseOptionalProperties({ name: 'quantityMoved', nullable: false }, );
     const optionalBooleanProperties = createPutawayExecutionResponseOptionalProperties();
 

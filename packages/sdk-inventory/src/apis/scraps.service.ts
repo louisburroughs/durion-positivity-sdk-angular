@@ -45,10 +45,10 @@ export class ScrapsService extends BaseService {
 
     /**
      * Approve scrap
-     * Approves a pending scrap and posts its SCRAP_OUT entry to the inventory ledger
+     * Approves a PENDING_APPROVAL scrap and posts its SCRAP_OUT entry to the inventory ledger, reducing on-hand at the posting location and emitting a ScrapPostedV1 fact. Use this tool after reviewing an above-threshold or unknown-value scrap; do not use rejectScrap, which discards it without touching inventory. Preconditions: the scrap must exist and be in PENDING_APPROVAL status, and sufficient on-hand must exist at the posting location unless an authorized negative-stock override is passed — an insufficient-stock rejection rolls back and the scrap stays PENDING_APPROVAL. Required inputs: scrapId (UUID) path parameter; the body carries only negativeStockOverride (default false), honored only when the caller holds inventory:adjustment:override; the approving actor comes from the authenticated context. Emits an INVENTORY_SCRAP_APPROVE event plus the ScrapPostedV1 fact on the posting, and a scrap created with shouldReplenish triggers a best-effort replenishment evaluation. Returns 404 when the scrap does not exist, 409 when it is not PENDING_APPROVAL, 403 when the override is requested without the permission, and 422 (SCRAP_INSUFFICIENT_STOCK) when on-hand is insufficient — reconcile via cycle count or adjustment, or use an authorized override. 
      * @endpoint post /v1/inventory/scraps/{scrapId}/approve
      * @param scrapId Scrap document ID
-     * @param approveScrapRequest 
+     * @param approveScrapRequest Approval context; only the optional negative-stock override travels in the body.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -119,9 +119,9 @@ export class ScrapsService extends BaseService {
 
     /**
      * Create scrap document
-     * Creates a scrap (write-off) document. Below the configured value thresholds the scrap is auto-approved and posted as SCRAP_OUT in the same transaction; above them (or when no cost is derivable) it enters PENDING_APPROVAL.
+     * Creates a scrap (write-off) document for stock at a location and evaluates its value — quantity times the latest-receipt cost snapshot — against the configured approval thresholds: below all thresholds it is AUTO_APPROVED and its SCRAP_OUT ledger entry posts in the same transaction, while above them, or when no cost is derivable, it enters PENDING_APPROVAL. Use this tool to write off damaged, expired or lost stock; do not use createCycleCountAdjustment, which settles a counted variance rather than a deliberate write-off. Preconditions: the caller must be an authenticated user; a LOT-tracked SKU must name an existing ACTIVE lot, and the auto-approve posting requires sufficient on-hand at the posting location (the storage location when given, else the location) unless an authorized negative-stock override is passed. Required inputs: stockItemId, quantity (positive), locationId and reasonCode (DAMAGED, EXPIRED, LOST, RECALLED, CONTAMINATED, WARRANTY_DESTROYED or OTHER — OTHER requires notes); storageLocationId, lotNumber, workorderId and attachmentReference are optional, and shouldReplenish and negativeStockOverride default to false. Emits an INVENTORY_SCRAP_CREATE event, and a posted scrap additionally emits a ScrapPostedV1 fact, reduces on-hand immediately, and triggers a best-effort replenishment evaluation when shouldReplenish is true. Returns 400 when reasonCode is OTHER without notes, 403 when negativeStockOverride is requested without inventory:adjustment:override, and 422 for insufficient on-hand (SCRAP_INSUFFICIENT_STOCK) or lot violations (LOT_NUMBER_REQUIRED, LOT_UNKNOWN, LOT_NOT_AVAILABLE). 
      * @endpoint post /v1/inventory/scraps
-     * @param createScrapRequest 
+     * @param createScrapRequest Stock write-off to record: what is scrapped, where, how much, and why.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -189,7 +189,7 @@ export class ScrapsService extends BaseService {
 
     /**
      * Get scrap details
-     * Retrieves one scrap document
+     * Returns one scrap document with its quantity, cost snapshot and source, approval tier, lifecycle status and ledger-entry linkage. Use this tool when the scrapId is already known; use listScraps instead to search by reason, status, location or date range. Preconditions: the scrap must exist. Required inputs: scrapId (UUID) as a path parameter; there is no request body. No events are emitted and no state changes; this is a read-only projection. Returns 404 when no scrap exists for the supplied id. 
      * @endpoint get /v1/inventory/scraps/{scrapId}
      * @param scrapId Scrap document ID
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -249,7 +249,7 @@ export class ScrapsService extends BaseService {
 
     /**
      * List scraps
-     * Lists scrap documents filtered by reason, status, location, and creation-date range
+     * Returns scrap documents, newest first, optionally filtered by reason code, lifecycle status, location, and an inclusive creation-time range. Use this tool to find pending approvals or audit write-off history; use getScrap instead when the scrapId is already known. Preconditions: none. Required inputs: reasonCode, status, locationId, createdFrom and createdTo (ISO-8601 instants) are all optional query parameters; there is no paging — the full match set is returned. No events are emitted and no state changes; this is a read-only projection. Returns 200 with an empty array when no scraps match, so an empty result is not an error condition. 
      * @endpoint get /v1/inventory/scraps
      * @param reasonCode Filter by scrap reason
      * @param status Filter by lifecycle status
@@ -358,10 +358,10 @@ export class ScrapsService extends BaseService {
 
     /**
      * Reject scrap
-     * Rejects a pending scrap with a reason. No inventory changes are made.
+     * Rejects a PENDING_APPROVAL scrap with a recorded reason; no ledger posting or on-hand change is made and the document moves to the terminal REJECTED status. Use this tool when the write-off should not happen (for example the part was recovered); do not use approveScrap, which posts the SCRAP_OUT entry. Preconditions: the scrap must exist and be in PENDING_APPROVAL status; the rejecting actor is taken from the authenticated context, not the body. Required inputs: scrapId (UUID) path parameter and rejectionReason (non-blank, max 1000 characters) in the body. Emits an INVENTORY_SCRAP_REJECT event; inventory is untouched. Returns 404 when the scrap does not exist, and 409 when it is not in PENDING_APPROVAL status. 
      * @endpoint post /v1/inventory/scraps/{scrapId}/reject
      * @param scrapId Scrap document ID
-     * @param rejectScrapRequest 
+     * @param rejectScrapRequest Rejection context recording why the write-off is discarded.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options

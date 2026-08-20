@@ -14,17 +14,21 @@
  */
 export interface ReturnPartRequest { 
     /**
-     * Workorder part identifier
+     * Optional return notes
      */
-    workorderPartId: string;
+    notes?: string;
     /**
      * Quantity to return
      */
     quantity: number;
     /**
-     * Optional return notes
+     * Unit quantity is expressed in. Omit for the product\'s base unit -- today\'s implicit behavior. Converted to base and validated against the product\'s catalog divisibility.
      */
-    notes?: string;
+    uomCode?: string;
+    /**
+     * Workorder part identifier
+     */
+    workorderPartId: string;
 }
 
 function isOptionalReturnPartRequestPropertyOfType(
@@ -65,8 +69,8 @@ export function instanceOfReturnPartRequest(value: object): value is ReturnPartR
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createReturnPartRequestPropertyNames('workorderPartId', 'quantity', );
-    const optionalStringProperties = createReturnPartRequestOptionalProperties({ name: 'workorderPartId', nullable: false }, { name: 'notes', nullable: false }, );
+    const requiredProperties = createReturnPartRequestPropertyNames('quantity', 'workorderPartId', );
+    const optionalStringProperties = createReturnPartRequestOptionalProperties({ name: 'notes', nullable: false }, { name: 'uomCode', nullable: false }, { name: 'workorderPartId', nullable: false }, );
     const optionalNumberProperties = createReturnPartRequestOptionalProperties({ name: 'quantity', nullable: false }, );
     const optionalBooleanProperties = createReturnPartRequestOptionalProperties();
 

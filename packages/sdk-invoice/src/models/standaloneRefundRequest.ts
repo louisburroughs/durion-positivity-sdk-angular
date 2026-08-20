@@ -18,17 +18,17 @@ export interface StandaloneRefundRequest {
      */
     amount: number;
     /**
-     * Reason the refund is being issued
+     * Optional correlation id to an external record (e.g. a warranty claim settlement)
      */
-    reason: StandaloneRefundRequestReasonEnum;
+    externalReference?: string;
     /**
      * Optional free-text notes explaining the refund
      */
     notes?: string;
     /**
-     * Optional correlation id to an external record (e.g. a warranty claim settlement)
+     * Reason the refund is being issued
      */
-    externalReference?: string;
+    reason: StandaloneRefundRequestReasonEnum;
 }
 export enum StandaloneRefundRequestReasonEnum {
     CustomerReturn = 'CUSTOMER_RETURN',
@@ -83,7 +83,7 @@ export function instanceOfStandaloneRefundRequest(value: object): value is Stand
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createStandaloneRefundRequestPropertyNames('amount', 'reason', );
-    const optionalStringProperties = createStandaloneRefundRequestOptionalProperties({ name: 'reason', nullable: false }, { name: 'notes', nullable: false }, { name: 'externalReference', nullable: false }, );
+    const optionalStringProperties = createStandaloneRefundRequestOptionalProperties({ name: 'externalReference', nullable: false }, { name: 'notes', nullable: false }, { name: 'reason', nullable: false }, );
     const optionalNumberProperties = createStandaloneRefundRequestOptionalProperties({ name: 'amount', nullable: false }, );
     const optionalBooleanProperties = createStandaloneRefundRequestOptionalProperties();
 

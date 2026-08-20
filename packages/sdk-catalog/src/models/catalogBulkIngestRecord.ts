@@ -14,41 +14,41 @@
  */
 export interface CatalogBulkIngestRecord { 
     /**
-     * Stock keeping unit for the record
+     * Category name to associate the item with
      */
-    sku: string;
-    /**
-     * Universal product code
-     */
-    upc?: string;
-    /**
-     * Display name of the item
-     */
-    name: string;
+    categoryName?: string;
     /**
      * Long description of the item
      */
     description?: string;
     /**
-     * Category name to associate the item with
+     * Manufacturer part number; falls back to the SKU when absent
      */
-    categoryName?: string;
+    mpn?: string;
     /**
-     * Subcategory name to associate the item with
+     * Display name of the item
      */
-    subcategoryName?: string;
+    name: string;
     /**
      * List price for the item
      */
     price?: number;
     /**
-     * Manufacturer part number; falls back to the SKU when absent
+     * Stock keeping unit for the record
      */
-    mpn?: string;
+    sku: string;
+    /**
+     * Subcategory name to associate the item with
+     */
+    subcategoryName?: string;
     /**
      * Unit of measure for the item; defaults to EA when absent
      */
     unitOfMeasure?: string;
+    /**
+     * Universal product code
+     */
+    upc?: string;
 }
 
 function isOptionalCatalogBulkIngestRecordPropertyOfType(
@@ -89,8 +89,8 @@ export function instanceOfCatalogBulkIngestRecord(value: object): value is Catal
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createCatalogBulkIngestRecordPropertyNames('sku', 'name', );
-    const optionalStringProperties = createCatalogBulkIngestRecordOptionalProperties({ name: 'sku', nullable: false }, { name: 'upc', nullable: false }, { name: 'name', nullable: false }, { name: 'description', nullable: false }, { name: 'categoryName', nullable: false }, { name: 'subcategoryName', nullable: false }, { name: 'mpn', nullable: false }, { name: 'unitOfMeasure', nullable: false }, );
+    const requiredProperties = createCatalogBulkIngestRecordPropertyNames('name', 'sku', );
+    const optionalStringProperties = createCatalogBulkIngestRecordOptionalProperties({ name: 'categoryName', nullable: false }, { name: 'description', nullable: false }, { name: 'mpn', nullable: false }, { name: 'name', nullable: false }, { name: 'sku', nullable: false }, { name: 'subcategoryName', nullable: false }, { name: 'unitOfMeasure', nullable: false }, { name: 'upc', nullable: false }, );
     const optionalNumberProperties = createCatalogBulkIngestRecordOptionalProperties({ name: 'price', nullable: false }, );
     const optionalBooleanProperties = createCatalogBulkIngestRecordOptionalProperties();
 

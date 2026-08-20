@@ -19,56 +19,66 @@ import { PartReturnView } from './partReturnView';
  * Full warranty claim detail
  */
 export interface ClaimResponse { 
-    id?: string;
     claimCode?: string;
     claimType?: ClaimResponseClaimTypeEnum;
-    status?: ClaimResponseStatusEnum;
-    locationId?: string;
+    createdAt?: string;
+    createdBy?: string;
     customerId?: string;
-    vehicleId?: string;
-    /**
-     * VIN snapshot frozen at intake
-     */
-    vin?: string;
+    decidedAt?: string;
+    decidedBy?: string;
+    decision?: ClaimResponseDecisionEnum;
+    decisionReason?: string;
+    eligibilityReasons?: Array<object>;
+    eligibilityResult?: ClaimResponseEligibilityResultEnum;
+    failureDate?: string;
+    failureDescription?: string;
+    history?: Array<StatusHistoryView>;
+    id?: string;
+    lines?: Array<ClaimLineResponse>;
+    locationId?: string;
+    notes?: Array<NoteView>;
     /**
      * Odometer snapshot frozen at intake
      */
     odometerAtClaim?: number;
     odometerUnit?: string;
-    originWorkorderId?: string;
     originInvoiceId?: string;
     originSaleDate?: string;
     originUnverified?: boolean;
-    providerId?: string;
-    policyId?: string;
-    registrationId?: string;
-    failureDescription?: string;
-    failureDate?: string;
-    photoEvidenceUrls?: Array<string>;
-    eligibilityResult?: ClaimResponseEligibilityResultEnum;
-    eligibilityReasons?: Array<object>;
-    suggestedOutcome?: object;
-    decision?: ClaimResponseDecisionEnum;
-    decisionReason?: string;
-    decidedBy?: string;
-    decidedAt?: string;
+    originWorkorderId?: string;
     overrodeSuggestion?: boolean;
-    lines?: Array<ClaimLineResponse>;
-    settlements?: Array<SettlementView>;
-    reimbursements?: Array<ReimbursementView>;
     partReturns?: Array<PartReturnView>;
-    history?: Array<StatusHistoryView>;
-    notes?: Array<NoteView>;
-    createdAt?: string;
-    createdBy?: string;
+    photoEvidenceUrls?: Array<string>;
+    policyId?: string;
+    providerId?: string;
+    registrationId?: string;
+    reimbursements?: Array<ReimbursementView>;
+    settlements?: Array<SettlementView>;
+    status?: ClaimResponseStatusEnum;
+    suggestedOutcome?: object;
     updatedAt?: string;
+    vehicleId?: string;
     version?: number;
+    /**
+     * VIN snapshot frozen at intake
+     */
+    vin?: string;
 }
 export enum ClaimResponseClaimTypeEnum {
     ManufacturerDefect = 'MANUFACTURER_DEFECT',
     DealerWorkmanship = 'DEALER_WORKMANSHIP',
     RoadHazard = 'ROAD_HAZARD',
     ExtendedPlan = 'EXTENDED_PLAN'
+};
+export enum ClaimResponseDecisionEnum {
+    Approve = 'APPROVE',
+    Deny = 'DENY',
+    RequestInfo = 'REQUEST_INFO'
+};
+export enum ClaimResponseEligibilityResultEnum {
+    Eligible = 'ELIGIBLE',
+    Ineligible = 'INELIGIBLE',
+    Indeterminate = 'INDETERMINATE'
 };
 export enum ClaimResponseStatusEnum {
     Draft = 'DRAFT',
@@ -80,16 +90,6 @@ export enum ClaimResponseStatusEnum {
     Settled = 'SETTLED',
     Closed = 'CLOSED',
     Cancelled = 'CANCELLED'
-};
-export enum ClaimResponseEligibilityResultEnum {
-    Eligible = 'ELIGIBLE',
-    Ineligible = 'INELIGIBLE',
-    Indeterminate = 'INDETERMINATE'
-};
-export enum ClaimResponseDecisionEnum {
-    Approve = 'APPROVE',
-    Deny = 'DENY',
-    RequestInfo = 'REQUEST_INFO'
 };
 
 
@@ -133,7 +133,7 @@ export function instanceOfClaimResponse(value: object): value is ClaimResponse {
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createClaimResponsePropertyNames();
-    const optionalStringProperties = createClaimResponseOptionalProperties({ name: 'id', nullable: false }, { name: 'claimCode', nullable: false }, { name: 'claimType', nullable: false }, { name: 'status', nullable: false }, { name: 'locationId', nullable: false }, { name: 'customerId', nullable: false }, { name: 'vehicleId', nullable: false }, { name: 'vin', nullable: false }, { name: 'odometerUnit', nullable: false }, { name: 'originWorkorderId', nullable: false }, { name: 'originInvoiceId', nullable: false }, { name: 'originSaleDate', nullable: false }, { name: 'providerId', nullable: false }, { name: 'policyId', nullable: false }, { name: 'registrationId', nullable: false }, { name: 'failureDescription', nullable: false }, { name: 'failureDate', nullable: false }, { name: 'eligibilityResult', nullable: false }, { name: 'decision', nullable: false }, { name: 'decisionReason', nullable: false }, { name: 'decidedBy', nullable: false }, { name: 'decidedAt', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'updatedAt', nullable: false }, );
+    const optionalStringProperties = createClaimResponseOptionalProperties({ name: 'claimCode', nullable: false }, { name: 'claimType', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'customerId', nullable: false }, { name: 'decidedAt', nullable: false }, { name: 'decidedBy', nullable: false }, { name: 'decision', nullable: false }, { name: 'decisionReason', nullable: false }, { name: 'eligibilityResult', nullable: false }, { name: 'failureDate', nullable: false }, { name: 'failureDescription', nullable: false }, { name: 'id', nullable: false }, { name: 'locationId', nullable: false }, { name: 'odometerUnit', nullable: false }, { name: 'originInvoiceId', nullable: false }, { name: 'originSaleDate', nullable: false }, { name: 'originWorkorderId', nullable: false }, { name: 'policyId', nullable: false }, { name: 'providerId', nullable: false }, { name: 'registrationId', nullable: false }, { name: 'status', nullable: false }, { name: 'updatedAt', nullable: false }, { name: 'vehicleId', nullable: false }, { name: 'vin', nullable: false }, );
     const optionalNumberProperties = createClaimResponseOptionalProperties({ name: 'odometerAtClaim', nullable: false }, { name: 'version', nullable: false }, );
     const optionalBooleanProperties = createClaimResponseOptionalProperties({ name: 'originUnverified', nullable: false }, { name: 'overrodeSuggestion', nullable: false }, );
 

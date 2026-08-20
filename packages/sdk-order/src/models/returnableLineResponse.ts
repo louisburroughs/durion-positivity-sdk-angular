@@ -13,12 +13,12 @@
  * Per-line returnable remainder for a completed order
  */
 export interface ReturnableLineResponse { 
-    orderLineId?: string;
-    itemSku?: string;
-    soldQty?: number;
     alreadyReturned?: number;
-    returnableQty?: number;
+    itemSku?: string;
+    orderLineId?: string;
     returnable?: boolean;
+    returnableQty?: number;
+    soldQty?: number;
 }
 
 function isOptionalReturnableLineResponsePropertyOfType(
@@ -60,8 +60,8 @@ export function instanceOfReturnableLineResponse(value: object): value is Return
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createReturnableLineResponsePropertyNames();
-    const optionalStringProperties = createReturnableLineResponseOptionalProperties({ name: 'orderLineId', nullable: false }, { name: 'itemSku', nullable: false }, );
-    const optionalNumberProperties = createReturnableLineResponseOptionalProperties({ name: 'soldQty', nullable: false }, { name: 'alreadyReturned', nullable: false }, { name: 'returnableQty', nullable: false }, );
+    const optionalStringProperties = createReturnableLineResponseOptionalProperties({ name: 'itemSku', nullable: false }, { name: 'orderLineId', nullable: false }, );
+    const optionalNumberProperties = createReturnableLineResponseOptionalProperties({ name: 'alreadyReturned', nullable: false }, { name: 'returnableQty', nullable: false }, { name: 'soldQty', nullable: false }, );
     const optionalBooleanProperties = createReturnableLineResponseOptionalProperties({ name: 'returnable', nullable: false }, );
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

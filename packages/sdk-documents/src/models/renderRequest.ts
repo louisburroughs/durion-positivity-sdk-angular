@@ -14,6 +14,10 @@
  */
 export interface RenderRequest { 
     /**
+     * Raw content to be rendered into the target format
+     */
+    content: string;
+    /**
      * Target output format for the rendered document
      */
     format: RenderRequestFormatEnum;
@@ -21,10 +25,6 @@ export interface RenderRequest {
      * Optional identifier of the template to apply when rendering
      */
     templateId?: string;
-    /**
-     * Raw content to be rendered into the target format
-     */
-    content: string;
 }
 export enum RenderRequestFormatEnum {
     Json = 'JSON',
@@ -74,8 +74,8 @@ export function instanceOfRenderRequest(value: object): value is RenderRequest {
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createRenderRequestPropertyNames('format', 'content', );
-    const optionalStringProperties = createRenderRequestOptionalProperties({ name: 'format', nullable: false }, { name: 'templateId', nullable: false }, { name: 'content', nullable: false }, );
+    const requiredProperties = createRenderRequestPropertyNames('content', 'format', );
+    const optionalStringProperties = createRenderRequestOptionalProperties({ name: 'content', nullable: false }, { name: 'format', nullable: false }, { name: 'templateId', nullable: false }, );
     const optionalNumberProperties = createRenderRequestOptionalProperties();
     const optionalBooleanProperties = createRenderRequestOptionalProperties();
 

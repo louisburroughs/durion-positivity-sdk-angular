@@ -14,26 +14,6 @@ import { CrmMatchSummaryDto } from './crmMatchSummaryDto';
  * Result of a successful self-registration
  */
 export interface SelfRegistrationResponse { 
-    /**
-     * Created user identifier
-     */
-    userId: string;
-    /**
-     * Resolved or created person identifier
-     */
-    personId: string;
-    /**
-     * Canonical username assigned to the account
-     */
-    username: string;
-    /**
-     * User-person link status
-     */
-    linkStatus: string;
-    /**
-     * True when an existing person was reused
-     */
-    matchedExistingPerson: boolean;
     crmMatchSummary?: CrmMatchSummaryDto;
     /**
      * Idempotency key echoed back when the caller supplied one
@@ -43,6 +23,26 @@ export interface SelfRegistrationResponse {
      * False for Phase 1 because follow-up login is required
      */
     issuedTokens: boolean;
+    /**
+     * User-person link status
+     */
+    linkStatus: string;
+    /**
+     * True when an existing person was reused
+     */
+    matchedExistingPerson: boolean;
+    /**
+     * Resolved or created person identifier
+     */
+    personId: string;
+    /**
+     * Created user identifier
+     */
+    userId: string;
+    /**
+     * Canonical username assigned to the account
+     */
+    username: string;
 }
 
 function isOptionalSelfRegistrationResponsePropertyOfType(
@@ -83,10 +83,10 @@ export function instanceOfSelfRegistrationResponse(value: object): value is Self
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createSelfRegistrationResponsePropertyNames('userId', 'personId', 'username', 'linkStatus', 'matchedExistingPerson', 'issuedTokens', );
-    const optionalStringProperties = createSelfRegistrationResponseOptionalProperties({ name: 'userId', nullable: false }, { name: 'personId', nullable: false }, { name: 'username', nullable: false }, { name: 'linkStatus', nullable: false }, { name: 'idempotencyKey', nullable: false }, );
+    const requiredProperties = createSelfRegistrationResponsePropertyNames('issuedTokens', 'linkStatus', 'matchedExistingPerson', 'personId', 'userId', 'username', );
+    const optionalStringProperties = createSelfRegistrationResponseOptionalProperties({ name: 'idempotencyKey', nullable: false }, { name: 'linkStatus', nullable: false }, { name: 'personId', nullable: false }, { name: 'userId', nullable: false }, { name: 'username', nullable: false }, );
     const optionalNumberProperties = createSelfRegistrationResponseOptionalProperties();
-    const optionalBooleanProperties = createSelfRegistrationResponseOptionalProperties({ name: 'matchedExistingPerson', nullable: false }, { name: 'issuedTokens', nullable: false }, );
+    const optionalBooleanProperties = createSelfRegistrationResponseOptionalProperties({ name: 'issuedTokens', nullable: false }, { name: 'matchedExistingPerson', nullable: false }, );
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
         && optionalStringProperties.every((property) => isOptionalSelfRegistrationResponsePropertyOfType(_v, property.name, 'string', property.nullable))

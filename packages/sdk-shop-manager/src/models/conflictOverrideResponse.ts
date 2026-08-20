@@ -14,10 +14,6 @@
  */
 export interface ConflictOverrideResponse { 
     /**
-     * Unique override record identifier
-     */
-    overrideId: string;
-    /**
      * Appointment identifier whose conflict was overridden
      */
     appointmentId: string;
@@ -26,13 +22,17 @@ export interface ConflictOverrideResponse {
      */
     overriddenByUserId: string;
     /**
-     * Instant the override was performed in UTC (ISO-8601)
+     * Unique override record identifier
      */
-    overrideTimestamp: string;
+    overrideId: string;
     /**
      * Reason recorded for the override
      */
     overrideReason: string;
+    /**
+     * Instant the override was performed in UTC (ISO-8601)
+     */
+    overrideTimestamp: string;
 }
 
 function isOptionalConflictOverrideResponsePropertyOfType(
@@ -73,8 +73,8 @@ export function instanceOfConflictOverrideResponse(value: object): value is Conf
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createConflictOverrideResponsePropertyNames('overrideId', 'appointmentId', 'overriddenByUserId', 'overrideTimestamp', 'overrideReason', );
-    const optionalStringProperties = createConflictOverrideResponseOptionalProperties({ name: 'overrideId', nullable: false }, { name: 'appointmentId', nullable: false }, { name: 'overriddenByUserId', nullable: false }, { name: 'overrideTimestamp', nullable: false }, { name: 'overrideReason', nullable: false }, );
+    const requiredProperties = createConflictOverrideResponsePropertyNames('appointmentId', 'overriddenByUserId', 'overrideId', 'overrideReason', 'overrideTimestamp', );
+    const optionalStringProperties = createConflictOverrideResponseOptionalProperties({ name: 'appointmentId', nullable: false }, { name: 'overriddenByUserId', nullable: false }, { name: 'overrideId', nullable: false }, { name: 'overrideReason', nullable: false }, { name: 'overrideTimestamp', nullable: false }, );
     const optionalNumberProperties = createConflictOverrideResponseOptionalProperties();
     const optionalBooleanProperties = createConflictOverrideResponseOptionalProperties();
 

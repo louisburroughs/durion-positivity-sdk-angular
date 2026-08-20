@@ -14,25 +14,13 @@
  */
 export interface ReplenishmentNeedResponse { 
     /**
-     * Unique identifier of the replenishment policy
+     * Earliest date at which the projected available quantity goes below zero; absent when the policy is not triggered or no stock-out is projected within the lead-time horizon
      */
-    policyId: string;
+    deadlineDate?: string;
     /**
      * SKU of the item the policy applies to
      */
     itemSKU: string;
-    /**
-     * Identifier of the location the policy applies to
-     */
-    locationId: string;
-    /**
-     * Current on-hand quantity at the policy\'s location
-     */
-    onHand: number;
-    /**
-     * Projected available quantity at the lead-time horizon (on-hand + expected supply - open demand)
-     */
-    projectedAvailable: number;
     /**
      * UTC date of the lead-time horizon the projection was evaluated at
      */
@@ -42,29 +30,41 @@ export interface ReplenishmentNeedResponse {
      */
     leadTimeSource: ReplenishmentNeedResponseLeadTimeSourceEnum;
     /**
-     * Minimum on-hand quantity that triggers replenishment when reached
+     * Identifier of the location the policy applies to
      */
-    minimumQuantity: number;
+    locationId: string;
     /**
      * Maximum on-hand quantity replenishment aims to restock up to
      */
     maximumQuantity: number;
     /**
-     * Whether a batch scan run now would consider this policy triggered (projected available below minimum)
+     * Minimum on-hand quantity that triggers replenishment when reached
      */
-    wouldTrigger: boolean;
+    minimumQuantity: number;
+    /**
+     * Current on-hand quantity at the policy\'s location
+     */
+    onHand: number;
+    /**
+     * Unique identifier of the replenishment policy
+     */
+    policyId: string;
+    /**
+     * Preferred sourcing channel configured on the policy
+     */
+    preferredSourceType: string;
+    /**
+     * Projected available quantity at the lead-time horizon (on-hand + expected supply - open demand)
+     */
+    projectedAvailable: number;
     /**
      * Quantity a scan would replenish now: replenish-to-max after in-progress netting, rounded up to the policy\'s order multiple; zero when in-progress supply already covers the need or the policy is not triggered
      */
     suggestedQuantity: number;
     /**
-     * Earliest date at which the projected available quantity goes below zero; absent when the policy is not triggered or no stock-out is projected within the lead-time horizon
+     * Whether a batch scan run now would consider this policy triggered (projected available below minimum)
      */
-    deadlineDate?: string;
-    /**
-     * Preferred sourcing channel configured on the policy
-     */
-    preferredSourceType: string;
+    wouldTrigger: boolean;
 }
 export enum ReplenishmentNeedResponseLeadTimeSourceEnum {
     PolicyOverride = 'POLICY_OVERRIDE',
@@ -112,9 +112,9 @@ export function instanceOfReplenishmentNeedResponse(value: object): value is Rep
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createReplenishmentNeedResponsePropertyNames('policyId', 'itemSKU', 'locationId', 'onHand', 'projectedAvailable', 'leadHorizonDate', 'leadTimeSource', 'minimumQuantity', 'maximumQuantity', 'wouldTrigger', 'suggestedQuantity', 'preferredSourceType', );
-    const optionalStringProperties = createReplenishmentNeedResponseOptionalProperties({ name: 'policyId', nullable: false }, { name: 'itemSKU', nullable: false }, { name: 'locationId', nullable: false }, { name: 'leadHorizonDate', nullable: false }, { name: 'leadTimeSource', nullable: false }, { name: 'deadlineDate', nullable: false }, { name: 'preferredSourceType', nullable: false }, );
-    const optionalNumberProperties = createReplenishmentNeedResponseOptionalProperties({ name: 'onHand', nullable: false }, { name: 'projectedAvailable', nullable: false }, { name: 'minimumQuantity', nullable: false }, { name: 'maximumQuantity', nullable: false }, { name: 'suggestedQuantity', nullable: false }, );
+    const requiredProperties = createReplenishmentNeedResponsePropertyNames('itemSKU', 'leadHorizonDate', 'leadTimeSource', 'locationId', 'maximumQuantity', 'minimumQuantity', 'onHand', 'policyId', 'preferredSourceType', 'projectedAvailable', 'suggestedQuantity', 'wouldTrigger', );
+    const optionalStringProperties = createReplenishmentNeedResponseOptionalProperties({ name: 'deadlineDate', nullable: false }, { name: 'itemSKU', nullable: false }, { name: 'leadHorizonDate', nullable: false }, { name: 'leadTimeSource', nullable: false }, { name: 'locationId', nullable: false }, { name: 'policyId', nullable: false }, { name: 'preferredSourceType', nullable: false }, );
+    const optionalNumberProperties = createReplenishmentNeedResponseOptionalProperties({ name: 'maximumQuantity', nullable: false }, { name: 'minimumQuantity', nullable: false }, { name: 'onHand', nullable: false }, { name: 'projectedAvailable', nullable: false }, { name: 'suggestedQuantity', nullable: false }, );
     const optionalBooleanProperties = createReplenishmentNeedResponseOptionalProperties({ name: 'wouldTrigger', nullable: false }, );
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

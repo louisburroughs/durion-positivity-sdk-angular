@@ -14,21 +14,21 @@ import { JournalEntryResponse } from './journalEntryResponse';
  * Traceability response linking a journal entry to its source and related entries
  */
 export interface JournalEntryTraceabilityResponse { 
+    journalEntry?: JournalEntryResponse;
     /**
      * Journal entry UUID
      */
     journalEntryId: string;
-    /**
-     * Source event UUID that triggered the journal entry
-     */
-    sourceEventId?: string;
-    journalEntry?: JournalEntryResponse;
     originalJournalEntry?: JournalEntryResponse;
-    reversalJournalEntry?: JournalEntryResponse;
     /**
      * Other journal entries related to the same source event
      */
     relatedJournalEntries?: Array<JournalEntryResponse>;
+    reversalJournalEntry?: JournalEntryResponse;
+    /**
+     * Source event UUID that triggered the journal entry
+     */
+    sourceEventId?: string;
 }
 
 function isOptionalJournalEntryTraceabilityResponsePropertyOfType(

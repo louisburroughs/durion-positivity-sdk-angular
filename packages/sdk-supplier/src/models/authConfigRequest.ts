@@ -14,33 +14,17 @@
  */
 export interface AuthConfigRequest { 
     /**
-     * Auth config name, unique within the vendor profile. Endpoint bindings reference it by this name.
+     * Header NAME the API key is sent in — configuration data, not a secret reference. Omit to use the adapter default.
      */
-    name?: string;
-    /**
-     * Credential scheme this config describes. Determines exactly which secret reference fields are required and which must be absent (ADR-0050 §4).
-     */
-    type?: AuthConfigRequestTypeEnum;
-    /**
-     * Secret reference to the username. Required for BASIC_PLUS_APIKEY, must be absent otherwise. Write-only.
-     */
-    usernameRef?: string;
-    /**
-     * Secret reference to the password. Required for BASIC_PLUS_APIKEY, must be absent otherwise. Write-only.
-     */
-    passwordRef?: string;
+    apiKeyHeader?: string;
     /**
      * Secret reference to the API key. Required for BASIC_PLUS_APIKEY, must be absent otherwise. Write-only.
      */
     apiKeyRef?: string;
     /**
-     * Header NAME the API key is sent in — configuration data, not a secret reference. Omit to use the adapter default.
+     * Secret reference to the static bearer token. Required for BEARER, must be absent otherwise. Write-only.
      */
-    apiKeyHeader?: string;
-    /**
-     * Secret reference to the OAuth2 token endpoint URL. Required for OAUTH2_CLIENT_CREDENTIALS, must be absent otherwise. Write-only.
-     */
-    tokenUrlRef?: string;
+    bearerTokenRef?: string;
     /**
      * Secret reference to the OAuth2 client id. Required for OAUTH2_CLIENT_CREDENTIALS, must be absent otherwise. Write-only.
      */
@@ -50,9 +34,25 @@ export interface AuthConfigRequest {
      */
     clientSecretRef?: string;
     /**
-     * Secret reference to the static bearer token. Required for BEARER, must be absent otherwise. Write-only.
+     * Auth config name, unique within the vendor profile. Endpoint bindings reference it by this name.
      */
-    bearerTokenRef?: string;
+    name?: string;
+    /**
+     * Secret reference to the password. Required for BASIC_PLUS_APIKEY, must be absent otherwise. Write-only.
+     */
+    passwordRef?: string;
+    /**
+     * Secret reference to the OAuth2 token endpoint URL. Required for OAUTH2_CLIENT_CREDENTIALS, must be absent otherwise. Write-only.
+     */
+    tokenUrlRef?: string;
+    /**
+     * Credential scheme this config describes. Determines exactly which secret reference fields are required and which must be absent (ADR-0050 §4).
+     */
+    type?: AuthConfigRequestTypeEnum;
+    /**
+     * Secret reference to the username. Required for BASIC_PLUS_APIKEY, must be absent otherwise. Write-only.
+     */
+    usernameRef?: string;
 }
 export enum AuthConfigRequestTypeEnum {
     BasicPlusApikey = 'BASIC_PLUS_APIKEY',
@@ -101,7 +101,7 @@ export function instanceOfAuthConfigRequest(value: object): value is AuthConfigR
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createAuthConfigRequestPropertyNames();
-    const optionalStringProperties = createAuthConfigRequestOptionalProperties({ name: 'name', nullable: false }, { name: 'type', nullable: false }, { name: 'usernameRef', nullable: false }, { name: 'passwordRef', nullable: false }, { name: 'apiKeyRef', nullable: false }, { name: 'apiKeyHeader', nullable: false }, { name: 'tokenUrlRef', nullable: false }, { name: 'clientIdRef', nullable: false }, { name: 'clientSecretRef', nullable: false }, { name: 'bearerTokenRef', nullable: false }, );
+    const optionalStringProperties = createAuthConfigRequestOptionalProperties({ name: 'apiKeyHeader', nullable: false }, { name: 'apiKeyRef', nullable: false }, { name: 'bearerTokenRef', nullable: false }, { name: 'clientIdRef', nullable: false }, { name: 'clientSecretRef', nullable: false }, { name: 'name', nullable: false }, { name: 'passwordRef', nullable: false }, { name: 'tokenUrlRef', nullable: false }, { name: 'type', nullable: false }, { name: 'usernameRef', nullable: false }, );
     const optionalNumberProperties = createAuthConfigRequestOptionalProperties();
     const optionalBooleanProperties = createAuthConfigRequestOptionalProperties();
 

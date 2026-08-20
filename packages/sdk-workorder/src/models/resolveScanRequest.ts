@@ -14,13 +14,13 @@
  */
 export interface ResolveScanRequest { 
     /**
-     * Identifier of the SKU that was scanned
-     */
-    scannedSkuId: string;
-    /**
      * Identifier of the location where the scan occurred
      */
     scannedLocationId: string;
+    /**
+     * Identifier of the SKU that was scanned
+     */
+    scannedSkuId: string;
 }
 
 function isOptionalResolveScanRequestPropertyOfType(
@@ -61,8 +61,8 @@ export function instanceOfResolveScanRequest(value: object): value is ResolveSca
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createResolveScanRequestPropertyNames('scannedSkuId', 'scannedLocationId', );
-    const optionalStringProperties = createResolveScanRequestOptionalProperties({ name: 'scannedSkuId', nullable: false }, { name: 'scannedLocationId', nullable: false }, );
+    const requiredProperties = createResolveScanRequestPropertyNames('scannedLocationId', 'scannedSkuId', );
+    const optionalStringProperties = createResolveScanRequestOptionalProperties({ name: 'scannedLocationId', nullable: false }, { name: 'scannedSkuId', nullable: false }, );
     const optionalNumberProperties = createResolveScanRequestOptionalProperties();
     const optionalBooleanProperties = createResolveScanRequestOptionalProperties();
 

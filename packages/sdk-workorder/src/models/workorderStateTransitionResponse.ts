@@ -14,17 +14,21 @@
  */
 export interface WorkorderStateTransitionResponse { 
     /**
+     * The status the work order transitioned FROM
+     */
+    fromStatus?: string;
+    /**
      * Unique identifier for this transition record
      */
     id?: string;
     /**
-     * ID of the work order
+     * Additional metadata about the transition
      */
-    workorderId?: string;
+    metadata?: string;
     /**
-     * The status the work order transitioned FROM
+     * Reason for the transition
      */
-    fromStatus?: string;
+    reason?: string;
     /**
      * The status the work order transitioned TO
      */
@@ -38,13 +42,9 @@ export interface WorkorderStateTransitionResponse {
      */
     transitionedBy?: string;
     /**
-     * Reason for the transition
+     * ID of the work order
      */
-    reason?: string;
-    /**
-     * Additional metadata about the transition
-     */
-    metadata?: string;
+    workorderId?: string;
 }
 
 function isOptionalWorkorderStateTransitionResponsePropertyOfType(
@@ -86,7 +86,7 @@ export function instanceOfWorkorderStateTransitionResponse(value: object): value
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createWorkorderStateTransitionResponsePropertyNames();
-    const optionalStringProperties = createWorkorderStateTransitionResponseOptionalProperties({ name: 'id', nullable: false }, { name: 'workorderId', nullable: false }, { name: 'fromStatus', nullable: false }, { name: 'toStatus', nullable: false }, { name: 'transitionedAt', nullable: false }, { name: 'transitionedBy', nullable: false }, { name: 'reason', nullable: false }, { name: 'metadata', nullable: false }, );
+    const optionalStringProperties = createWorkorderStateTransitionResponseOptionalProperties({ name: 'fromStatus', nullable: false }, { name: 'id', nullable: false }, { name: 'metadata', nullable: false }, { name: 'reason', nullable: false }, { name: 'toStatus', nullable: false }, { name: 'transitionedAt', nullable: false }, { name: 'transitionedBy', nullable: false }, { name: 'workorderId', nullable: false }, );
     const optionalNumberProperties = createWorkorderStateTransitionResponseOptionalProperties();
     const optionalBooleanProperties = createWorkorderStateTransitionResponseOptionalProperties();
 

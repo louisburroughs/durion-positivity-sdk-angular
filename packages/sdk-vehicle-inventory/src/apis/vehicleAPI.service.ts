@@ -38,80 +38,10 @@ export class VehicleAPIService extends BaseService {
     }
 
     /**
-     * Create vehicle by VIN
-     * Add a new vehicle to the inventory using its VIN.
-     * @endpoint post /v1/vehicles-legacy/vin
-     * @param vehicleLegacyRequest 
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     * @param options additional options
-     */
-    public createVehicleByVIN(vehicleLegacyRequest: VehicleLegacyRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<VehicleLegacyResponse>;
-    public createVehicleByVIN(vehicleLegacyRequest: VehicleLegacyRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<VehicleLegacyResponse>>;
-    public createVehicleByVIN(vehicleLegacyRequest: VehicleLegacyRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<VehicleLegacyResponse>>;
-    public createVehicleByVIN(vehicleLegacyRequest: VehicleLegacyRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
-        if (vehicleLegacyRequest === null || vehicleLegacyRequest === undefined) {
-            throw new Error('Required parameter vehicleLegacyRequest was null or undefined when calling createVehicleByVIN.');
-        }
-
-        let localVarHeaders = this.defaultHeaders;
-
-        // authentication (bearerAuth) required
-        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
-
-        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
-            'application/json'
-        ]);
-        if (localVarHttpHeaderAcceptSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
-        }
-
-        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
-
-        const localVarTransferCache: boolean = options?.transferCache ?? true;
-
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-            'application/json'
-        ];
-        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
-        if (httpContentTypeSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
-        }
-
-        let responseType_: 'text' | 'json' | 'blob' = 'json';
-        if (localVarHttpHeaderAcceptSelected) {
-            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
-                responseType_ = 'text';
-            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
-                responseType_ = 'json';
-            } else {
-                responseType_ = 'blob';
-            }
-        }
-
-        let localVarPath = `/v1/vehicles-legacy/vin`;
-        const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<VehicleLegacyResponse>('post', `${basePath}${localVarPath}`,
-            {
-                context: localVarHttpContext,
-                body: vehicleLegacyRequest,
-                responseType: <any>responseType_,
-                ...(withCredentials ? { withCredentials } : {}),
-                headers: localVarHeaders,
-                observe: observe,
-                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
      * Create a new vehicle
-     * Add a new vehicle to the inventory.
+     * Creates a vehicle in the legacy vehicle store, persisting make, model, year and an optional VIN without enforcing VIN uniqueness. Use this tool only when maintaining the legacy CRUD surface under /v1/vehicles-legacy; do not use it for registry vehicles, which createVehicle owns and which replicate to consumer services. Preconditions: none beyond an authenticated caller; duplicate VINs are accepted because the legacy store has no uniqueness check. Required inputs: make, model and year (year between 1886 and the current year plus one); vin is optional on this operation but must not be blank when present, and vehicleType is optional and limited to CAR, VAN, COMMERCIAL_TRUCK, PASSENGER_TRUCK or TRUCK. Emits a VEHICLE_CREATE event; no replica fact is published, because the legacy store does not feed the vehicle.events.v1 stream. Returns 200 with the stored vehicle, and 400 with a VALIDATION_ERROR ApiError when make, model or year is missing, year is out of range, vin is blank or vehicleType is unsupported. 
      * @endpoint post /v1/vehicles-legacy
-     * @param vehicleLegacyRequest 
+     * @param vehicleLegacyRequest Legacy vehicle to store, identified by its core make, model, year and optional VIN fields.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -178,20 +108,20 @@ export class VehicleAPIService extends BaseService {
     }
 
     /**
-     * Delete vehicle by VIN
-     * Delete a vehicle from the inventory by its VIN.
-     * @endpoint delete /v1/vehicles-legacy/vin/{vin}
-     * @param vin VIN of the vehicle to delete
+     * Create vehicle by VIN
+     * Creates a vehicle in the legacy vehicle store with the VIN treated as mandatory, trimming the supplied value before storing it. Use this tool when the VIN is the identifying field for a legacy record; do not use createVehicleLegacy, which accepts a missing VIN, and do not use createVehicle, which writes the registry store. Preconditions: none beyond an authenticated caller; the VIN is not checked for uniqueness or 17-character format by this legacy surface. Required inputs: make, model, year and vin in the body (year between 1886 and the current year plus one); vehicleType is optional and limited to CAR, VAN, COMMERCIAL_TRUCK, PASSENGER_TRUCK or TRUCK. Emits a VEHICLE_CREATE event; no replica fact is published from the legacy surface. Returns 200 with the stored vehicle, and 400 with a VALIDATION_ERROR ApiError when make, model, year or vin is missing or invalid. 
+     * @endpoint post /v1/vehicles-legacy/vin
+     * @param vehicleLegacyRequest Legacy vehicle to store, with the VIN required as its identifying field.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public deleteVehicleByVIN(vin: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public deleteVehicleByVIN(vin: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public deleteVehicleByVIN(vin: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public deleteVehicleByVIN(vin: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
-        if (vin === null || vin === undefined) {
-            throw new Error('Required parameter vin was null or undefined when calling deleteVehicleByVIN.');
+    public createVehicleLegacyByVin(vehicleLegacyRequest: VehicleLegacyRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<VehicleLegacyResponse>;
+    public createVehicleLegacyByVin(vehicleLegacyRequest: VehicleLegacyRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<VehicleLegacyResponse>>;
+    public createVehicleLegacyByVin(vehicleLegacyRequest: VehicleLegacyRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<VehicleLegacyResponse>>;
+    public createVehicleLegacyByVin(vehicleLegacyRequest: VehicleLegacyRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (vehicleLegacyRequest === null || vehicleLegacyRequest === undefined) {
+            throw new Error('Required parameter vehicleLegacyRequest was null or undefined when calling createVehicleLegacyByVin.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -200,6 +130,7 @@ export class VehicleAPIService extends BaseService {
         localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
 
         const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
         ]);
         if (localVarHttpHeaderAcceptSelected !== undefined) {
             localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
@@ -209,6 +140,15 @@ export class VehicleAPIService extends BaseService {
 
         const localVarTransferCache: boolean = options?.transferCache ?? true;
 
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
 
         let responseType_: 'text' | 'json' | 'blob' = 'json';
         if (localVarHttpHeaderAcceptSelected) {
@@ -221,11 +161,12 @@ export class VehicleAPIService extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/vehicles-legacy/vin/${this.configuration.encodeParam({name: "vin", value: vin, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
+        let localVarPath = `/v1/vehicles-legacy/vin`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<any>('delete', `${basePath}${localVarPath}`,
+        return this.httpClient.request<VehicleLegacyResponse>('post', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
+                body: vehicleLegacyRequest,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,
@@ -238,7 +179,7 @@ export class VehicleAPIService extends BaseService {
 
     /**
      * Delete vehicle by ID
-     * Delete a vehicle from the inventory by its ID.
+     * Permanently deletes a vehicle from the legacy vehicle store; the row is removed rather than deactivated. Use this tool to purge a legacy record by id; do not use deleteVehicle, which soft-deactivates a registry vehicle and keeps it readable. Preconditions: the vehicle must exist in the legacy store; deletion is not recoverable through this API. Required inputs: id (UUID) as a path parameter; there is no request body. Emits a VEHICLE_DELETE event; no replica fact is published from the legacy surface. Returns 204 on successful deletion, and 404 with an empty body when the id is unknown. 
      * @endpoint delete /v1/vehicles-legacy/{id}
      * @param id ID of the vehicle to delete
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -296,76 +237,20 @@ export class VehicleAPIService extends BaseService {
     }
 
     /**
-     * Get all vehicles
-     * Retrieve a list of all vehicles in the inventory.
-     * @endpoint get /v1/vehicles-legacy
+     * Delete vehicle by VIN
+     * Permanently deletes a vehicle from the legacy vehicle store located by VIN; the row is removed rather than deactivated. Use this tool to purge a legacy record when only the VIN is known; use deleteVehicleLegacy instead when the id is known, and do not use deleteVehicle, which soft-deactivates registry vehicles. Preconditions: a vehicle with the trimmed VIN must exist in the legacy store; deletion is not recoverable through this API. Required inputs: vin as a non-blank path parameter; there is no request body. Emits a VEHICLE_DELETE event; no replica fact is published from the legacy surface. Returns 204 on successful deletion, and 404 with an empty body when no legacy vehicle carries the VIN. 
+     * @endpoint delete /v1/vehicles-legacy/vin/{vin}
+     * @param vin VIN of the vehicle to delete
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public getAllVehicles(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<VehicleLegacyResponse>>;
-    public getAllVehicles(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<VehicleLegacyResponse>>>;
-    public getAllVehicles(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<VehicleLegacyResponse>>>;
-    public getAllVehicles(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
-
-        let localVarHeaders = this.defaultHeaders;
-
-        // authentication (bearerAuth) required
-        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
-
-        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
-            'application/json'
-        ]);
-        if (localVarHttpHeaderAcceptSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
-        }
-
-        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
-
-        const localVarTransferCache: boolean = options?.transferCache ?? true;
-
-
-        let responseType_: 'text' | 'json' | 'blob' = 'json';
-        if (localVarHttpHeaderAcceptSelected) {
-            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
-                responseType_ = 'text';
-            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
-                responseType_ = 'json';
-            } else {
-                responseType_ = 'blob';
-            }
-        }
-
-        let localVarPath = `/v1/vehicles-legacy`;
-        const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<Array<VehicleLegacyResponse>>('get', `${basePath}${localVarPath}`,
-            {
-                context: localVarHttpContext,
-                responseType: <any>responseType_,
-                ...(withCredentials ? { withCredentials } : {}),
-                headers: localVarHeaders,
-                observe: observe,
-                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * Get vehicle by VIN
-     * Retrieve a vehicle by its VIN.
-     * @endpoint get /v1/vehicles-legacy/vin/{vin}
-     * @param vin VIN of the vehicle to retrieve
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     * @param options additional options
-     */
-    public getVehicleByVIN(vin: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<VehicleLegacyResponse>;
-    public getVehicleByVIN(vin: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<VehicleLegacyResponse>>;
-    public getVehicleByVIN(vin: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<VehicleLegacyResponse>>;
-    public getVehicleByVIN(vin: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public deleteVehicleLegacyByVin(vin: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
+    public deleteVehicleLegacyByVin(vin: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
+    public deleteVehicleLegacyByVin(vin: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
+    public deleteVehicleLegacyByVin(vin: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (vin === null || vin === undefined) {
-            throw new Error('Required parameter vin was null or undefined when calling getVehicleByVIN.');
+            throw new Error('Required parameter vin was null or undefined when calling deleteVehicleLegacyByVin.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -374,7 +259,6 @@ export class VehicleAPIService extends BaseService {
         localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
 
         const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
-            'application/json'
         ]);
         if (localVarHttpHeaderAcceptSelected !== undefined) {
             localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
@@ -398,7 +282,7 @@ export class VehicleAPIService extends BaseService {
 
         let localVarPath = `/v1/vehicles-legacy/vin/${this.configuration.encodeParam({name: "vin", value: vin, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<VehicleLegacyResponse>('get', `${basePath}${localVarPath}`,
+        return this.httpClient.request<any>('delete', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,
@@ -413,7 +297,7 @@ export class VehicleAPIService extends BaseService {
 
     /**
      * Get vehicle by ID
-     * Retrieve a vehicle by its unique ID.
+     * Returns a single vehicle from the legacy vehicle store by its UUID primary key. Use this tool when the legacy vehicle id is already known; use getVehicleLegacyByVin instead when only the VIN is known, and do not use getVehicle, which reads the separate registry store. Preconditions: the vehicle must exist in the legacy store; legacy deletes are hard deletes, so a deleted vehicle is gone rather than flagged inactive. Required inputs: id (UUID) as a path parameter; there is no request body. No events are emitted and no state changes; this is a read-only projection. Returns 404 with an empty body when no legacy vehicle exists for the supplied id. 
      * @endpoint get /v1/vehicles-legacy/{id}
      * @param id ID of the vehicle to retrieve
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -472,24 +356,20 @@ export class VehicleAPIService extends BaseService {
     }
 
     /**
-     * Update vehicle by VIN
-     * Update an existing vehicle\&#39;s details by its VIN.
-     * @endpoint put /v1/vehicles-legacy/vin/{vin}
-     * @param vin VIN of the vehicle to update
-     * @param vehicleLegacyRequest 
+     * Get vehicle by VIN
+     * Returns a single vehicle from the legacy vehicle store by VIN, trimming the supplied value before the lookup. Use this tool when only the VIN of a legacy record is known; use getVehicleLegacy instead when the id is known, and do not use getVehicleByVin, which reads the registry store with normalized VINs. Preconditions: the vehicle must exist in the legacy store; the lookup is an exact match on the trimmed VIN, not a normalized or partial match. Required inputs: vin as a non-blank path parameter; there is no request body. No events are emitted and no state changes; this is a read-only projection. Returns 404 with an empty body when no legacy vehicle carries the VIN, and 400 with a VALIDATION_ERROR ApiError when the VIN is blank. 
+     * @endpoint get /v1/vehicles-legacy/vin/{vin}
+     * @param vin VIN of the vehicle to retrieve
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public updateVehicleByVIN(vin: string, vehicleLegacyRequest: VehicleLegacyRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<VehicleLegacyResponse>;
-    public updateVehicleByVIN(vin: string, vehicleLegacyRequest: VehicleLegacyRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<VehicleLegacyResponse>>;
-    public updateVehicleByVIN(vin: string, vehicleLegacyRequest: VehicleLegacyRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<VehicleLegacyResponse>>;
-    public updateVehicleByVIN(vin: string, vehicleLegacyRequest: VehicleLegacyRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getVehicleLegacyByVin(vin: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<VehicleLegacyResponse>;
+    public getVehicleLegacyByVin(vin: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<VehicleLegacyResponse>>;
+    public getVehicleLegacyByVin(vin: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<VehicleLegacyResponse>>;
+    public getVehicleLegacyByVin(vin: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (vin === null || vin === undefined) {
-            throw new Error('Required parameter vin was null or undefined when calling updateVehicleByVIN.');
-        }
-        if (vehicleLegacyRequest === null || vehicleLegacyRequest === undefined) {
-            throw new Error('Required parameter vehicleLegacyRequest was null or undefined when calling updateVehicleByVIN.');
+            throw new Error('Required parameter vin was null or undefined when calling getVehicleLegacyByVin.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -509,15 +389,6 @@ export class VehicleAPIService extends BaseService {
         const localVarTransferCache: boolean = options?.transferCache ?? true;
 
 
-        // to determine the Content-Type header
-        const consumes: string[] = [
-            'application/json'
-        ];
-        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
-        if (httpContentTypeSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
-        }
-
         let responseType_: 'text' | 'json' | 'blob' = 'json';
         if (localVarHttpHeaderAcceptSelected) {
             if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
@@ -531,10 +402,65 @@ export class VehicleAPIService extends BaseService {
 
         let localVarPath = `/v1/vehicles-legacy/vin/${this.configuration.encodeParam({name: "vin", value: vin, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<VehicleLegacyResponse>('put', `${basePath}${localVarPath}`,
+        return this.httpClient.request<VehicleLegacyResponse>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
-                body: vehicleLegacyRequest,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Get all vehicles
+     * Returns every vehicle in the legacy vehicle store as a flat list with no paging or filtering. Use this tool to enumerate the legacy store; do not use searchVehicles, which queries the registry store, and prefer getVehicleLegacy when a specific id is already known. Preconditions: none; an empty store simply yields an empty list. Required inputs: none; there are no parameters and no request body. No events are emitted and no state changes; this is a read-only projection. Returns 200 in all cases, including an empty JSON array when the store holds no vehicles. 
+     * @endpoint get /v1/vehicles-legacy
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public listVehiclesLegacy(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<VehicleLegacyResponse>>;
+    public listVehiclesLegacy(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<VehicleLegacyResponse>>>;
+    public listVehiclesLegacy(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<VehicleLegacyResponse>>>;
+    public listVehiclesLegacy(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/vehicles-legacy`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<Array<VehicleLegacyResponse>>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,
@@ -547,10 +473,10 @@ export class VehicleAPIService extends BaseService {
 
     /**
      * Update vehicle by ID
-     * Update an existing vehicle\&#39;s details by its ID.
+     * Replaces the core fields of an existing legacy vehicle identified by its UUID, applying make, model, year, VIN and vehicleType from the request. Use this tool to correct a legacy record by id; use updateVehicleLegacyByVin instead when only the VIN is known, and do not use updateVehicle, which patches registry vehicles field by field. Preconditions: the vehicle must already exist in the legacy store; the request is a full replacement of core fields rather than a partial patch. Required inputs: id (UUID) as a path parameter plus make, model and year in the body (year between 1886 and the current year plus one); vin and vehicleType are optional. Emits a VEHICLE_UPDATE event; no replica fact is published from the legacy surface. Returns 404 with an empty body when the id is unknown, and 400 with a VALIDATION_ERROR ApiError when make, model or year is missing or invalid. 
      * @endpoint put /v1/vehicles-legacy/{id}
      * @param id ID of the vehicle to update
-     * @param vehicleLegacyRequest 
+     * @param vehicleLegacyRequest Full replacement values for the legacy vehicle\&#39;s core fields.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -604,6 +530,80 @@ export class VehicleAPIService extends BaseService {
         }
 
         let localVarPath = `/v1/vehicles-legacy/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<VehicleLegacyResponse>('put', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                body: vehicleLegacyRequest,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Update vehicle by VIN
+     * Replaces the core fields of an existing legacy vehicle located by VIN, applying make, model, year and vehicleType from the request. Use this tool to correct a legacy record when only the VIN is known; use updateVehicleLegacy instead when the id is known, and do not use updateVehicle, which patches registry vehicles. Preconditions: a vehicle with the trimmed VIN must already exist in the legacy store; the request fully replaces core fields rather than patching them. Required inputs: vin as a path parameter plus make, model and year in the body (year between 1886 and the current year plus one); vehicleType is optional. Emits a VEHICLE_UPDATE event; no replica fact is published from the legacy surface. Returns 404 with an empty body when no legacy vehicle carries the VIN, and 400 with a VALIDATION_ERROR ApiError when a required body field is missing or invalid. 
+     * @endpoint put /v1/vehicles-legacy/vin/{vin}
+     * @param vin VIN of the vehicle to update
+     * @param vehicleLegacyRequest Full replacement values for the legacy vehicle\&#39;s core fields.
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public updateVehicleLegacyByVin(vin: string, vehicleLegacyRequest: VehicleLegacyRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<VehicleLegacyResponse>;
+    public updateVehicleLegacyByVin(vin: string, vehicleLegacyRequest: VehicleLegacyRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<VehicleLegacyResponse>>;
+    public updateVehicleLegacyByVin(vin: string, vehicleLegacyRequest: VehicleLegacyRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<VehicleLegacyResponse>>;
+    public updateVehicleLegacyByVin(vin: string, vehicleLegacyRequest: VehicleLegacyRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (vin === null || vin === undefined) {
+            throw new Error('Required parameter vin was null or undefined when calling updateVehicleLegacyByVin.');
+        }
+        if (vehicleLegacyRequest === null || vehicleLegacyRequest === undefined) {
+            throw new Error('Required parameter vehicleLegacyRequest was null or undefined when calling updateVehicleLegacyByVin.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/vehicles-legacy/vin/${this.configuration.encodeParam({name: "vin", value: vin, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<VehicleLegacyResponse>('put', `${basePath}${localVarPath}`,
             {

@@ -18,13 +18,13 @@ export interface AdjustmentRequestResponse {
      */
     adjustmentRequestId: string;
     /**
-     * Stock-keeping unit of the product being adjusted
-     */
-    productSku: string;
-    /**
      * Identifier of the location where the adjustment applies
      */
     locationId: string;
+    /**
+     * Stock-keeping unit of the product being adjusted
+     */
+    productSku: string;
     /**
      * Requested adjustment quantity (positive to add, negative to remove)
      */
@@ -77,8 +77,8 @@ export function instanceOfAdjustmentRequestResponse(value: object): value is Adj
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createAdjustmentRequestResponsePropertyNames('adjustmentRequestId', 'productSku', 'locationId', 'quantity', 'reasonCode', 'status', );
-    const optionalStringProperties = createAdjustmentRequestResponseOptionalProperties({ name: 'adjustmentRequestId', nullable: false }, { name: 'productSku', nullable: false }, { name: 'locationId', nullable: false }, { name: 'reasonCode', nullable: false }, { name: 'status', nullable: false }, );
+    const requiredProperties = createAdjustmentRequestResponsePropertyNames('adjustmentRequestId', 'locationId', 'productSku', 'quantity', 'reasonCode', 'status', );
+    const optionalStringProperties = createAdjustmentRequestResponseOptionalProperties({ name: 'adjustmentRequestId', nullable: false }, { name: 'locationId', nullable: false }, { name: 'productSku', nullable: false }, { name: 'reasonCode', nullable: false }, { name: 'status', nullable: false }, );
     const optionalNumberProperties = createAdjustmentRequestResponseOptionalProperties({ name: 'quantity', nullable: false }, );
     const optionalBooleanProperties = createAdjustmentRequestResponseOptionalProperties();
 

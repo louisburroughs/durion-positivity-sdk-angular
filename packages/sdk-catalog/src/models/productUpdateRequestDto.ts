@@ -14,41 +14,41 @@
  */
 export interface ProductUpdateRequestDto { 
     /**
-     * Product display name
+     * JSON object represented as string
      */
-    name?: string;
-    /**
-     * Product description
-     */
-    description?: string;
-    /**
-     * Unit of measure for the product
-     */
-    unitOfMeasure?: string;
-    /**
-     * Identifier of the product manufacturer
-     */
-    manufacturerId?: string;
+    attributes?: string;
     /**
      * Identifier of the product category
      */
     categoryId?: string;
     /**
-     * Stock keeping unit
+     * Product description
      */
-    sku?: string;
+    description?: string;
+    /**
+     * Identifier of the product manufacturer
+     */
+    manufacturerId?: string;
     /**
      * Manufacturer part number
      */
     mpn?: string;
     /**
+     * Product display name
+     */
+    name?: string;
+    /**
+     * Stock keeping unit
+     */
+    sku?: string;
+    /**
+     * Unit of measure for the product
+     */
+    unitOfMeasure?: string;
+    /**
      * Universal product code
      */
     upc?: string;
-    /**
-     * JSON object represented as string
-     */
-    attributes?: string;
 }
 
 function isOptionalProductUpdateRequestDtoPropertyOfType(
@@ -90,7 +90,7 @@ export function instanceOfProductUpdateRequestDto(value: object): value is Produ
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createProductUpdateRequestDtoPropertyNames();
-    const optionalStringProperties = createProductUpdateRequestDtoOptionalProperties({ name: 'name', nullable: false }, { name: 'description', nullable: false }, { name: 'unitOfMeasure', nullable: false }, { name: 'manufacturerId', nullable: false }, { name: 'categoryId', nullable: false }, { name: 'sku', nullable: false }, { name: 'mpn', nullable: false }, { name: 'upc', nullable: false }, { name: 'attributes', nullable: false }, );
+    const optionalStringProperties = createProductUpdateRequestDtoOptionalProperties({ name: 'attributes', nullable: false }, { name: 'categoryId', nullable: false }, { name: 'description', nullable: false }, { name: 'manufacturerId', nullable: false }, { name: 'mpn', nullable: false }, { name: 'name', nullable: false }, { name: 'sku', nullable: false }, { name: 'unitOfMeasure', nullable: false }, { name: 'upc', nullable: false }, );
     const optionalNumberProperties = createProductUpdateRequestDtoOptionalProperties();
     const optionalBooleanProperties = createProductUpdateRequestDtoOptionalProperties();
 

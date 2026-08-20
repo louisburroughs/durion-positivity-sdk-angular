@@ -14,21 +14,21 @@
  */
 export interface CashMovementRequest { 
     /**
-     * Movement direction
-     */
-    movementType: CashMovementRequestMovementTypeEnum;
-    /**
      * Positive cash amount moved
      */
     amount: number;
     /**
-     * Reason for the movement
-     */
-    reason: string;
-    /**
      * Clerk recording the movement
      */
     clerkId: string;
+    /**
+     * Movement direction
+     */
+    movementType: CashMovementRequestMovementTypeEnum;
+    /**
+     * Reason for the movement
+     */
+    reason: string;
 }
 export enum CashMovementRequestMovementTypeEnum {
     PaidIn = 'PAID_IN',
@@ -75,8 +75,8 @@ export function instanceOfCashMovementRequest(value: object): value is CashMovem
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createCashMovementRequestPropertyNames('movementType', 'amount', 'reason', 'clerkId', );
-    const optionalStringProperties = createCashMovementRequestOptionalProperties({ name: 'movementType', nullable: false }, { name: 'reason', nullable: false }, { name: 'clerkId', nullable: false }, );
+    const requiredProperties = createCashMovementRequestPropertyNames('amount', 'clerkId', 'movementType', 'reason', );
+    const optionalStringProperties = createCashMovementRequestOptionalProperties({ name: 'clerkId', nullable: false }, { name: 'movementType', nullable: false }, { name: 'reason', nullable: false }, );
     const optionalNumberProperties = createCashMovementRequestOptionalProperties({ name: 'amount', nullable: false }, );
     const optionalBooleanProperties = createCashMovementRequestOptionalProperties();
 

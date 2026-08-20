@@ -15,13 +15,13 @@ import { MovedItem } from './movedItem';
  */
 export interface Transfer { 
     /**
-     * Items moved as part of the transfer
-     */
-    movedItems?: Array<MovedItem>;
-    /**
      * Timestamp when the inventory was moved
      */
     movedAt?: string;
+    /**
+     * Items moved as part of the transfer
+     */
+    movedItems?: Array<MovedItem>;
 }
 
 function isOptionalTransferPropertyOfType(

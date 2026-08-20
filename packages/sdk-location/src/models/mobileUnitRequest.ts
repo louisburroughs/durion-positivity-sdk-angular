@@ -11,29 +11,13 @@ import { CoverageRuleRequest } from './coverageRuleRequest';
 
 
 /**
- * Mobile unit creation request body
+ * Request payload for creating or updating a mobile unit
  */
 export interface MobileUnitRequest { 
-    /**
-     * Display name of the mobile unit
-     */
-    name: string;
     /**
      * Identifier of the base location the mobile unit operates from
      */
     baseLocationId?: string;
-    /**
-     * Operational status of the mobile unit
-     */
-    status?: string;
-    /**
-     * Identifier of the travel buffer policy applied to the mobile unit
-     */
-    travelBufferPolicyId?: string;
-    /**
-     * Free-text notes about the mobile unit
-     */
-    notes?: string;
     /**
      * Identifiers of capabilities the mobile unit can perform
      */
@@ -42,6 +26,22 @@ export interface MobileUnitRequest {
      * Coverage rules defining where the mobile unit can operate
      */
     coverageRules?: Array<CoverageRuleRequest>;
+    /**
+     * Display name of the mobile unit
+     */
+    name: string;
+    /**
+     * Free-text notes about the mobile unit
+     */
+    notes?: string;
+    /**
+     * Operational status of the mobile unit
+     */
+    status?: string;
+    /**
+     * Identifier of the travel buffer policy applied to the mobile unit
+     */
+    travelBufferPolicyId?: string;
 }
 
 function isOptionalMobileUnitRequestPropertyOfType(
@@ -83,7 +83,7 @@ export function instanceOfMobileUnitRequest(value: object): value is MobileUnitR
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createMobileUnitRequestPropertyNames('name', );
-    const optionalStringProperties = createMobileUnitRequestOptionalProperties({ name: 'name', nullable: false }, { name: 'baseLocationId', nullable: false }, { name: 'status', nullable: false }, { name: 'travelBufferPolicyId', nullable: false }, { name: 'notes', nullable: false }, );
+    const optionalStringProperties = createMobileUnitRequestOptionalProperties({ name: 'baseLocationId', nullable: false }, { name: 'name', nullable: false }, { name: 'notes', nullable: false }, { name: 'status', nullable: false }, { name: 'travelBufferPolicyId', nullable: false }, );
     const optionalNumberProperties = createMobileUnitRequestOptionalProperties();
     const optionalBooleanProperties = createMobileUnitRequestOptionalProperties();
 

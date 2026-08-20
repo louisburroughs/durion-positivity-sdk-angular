@@ -26,6 +26,10 @@ export interface AccountingEventSubmitRequest {
      */
     organizationId: string;
     /**
+     * Event-specific payload content
+     */
+    payload: object;
+    /**
      * Source system name. If omitted, defaults to POS_ACCOUNTING_API.
      */
     sourceSystem?: string;
@@ -33,10 +37,6 @@ export interface AccountingEventSubmitRequest {
      * Event transaction timestamp. If omitted, defaults to current time.
      */
     transactionDate?: string;
-    /**
-     * Event-specific payload content
-     */
-    payload: object;
 }
 
 function isOptionalAccountingEventSubmitRequestPropertyOfType(

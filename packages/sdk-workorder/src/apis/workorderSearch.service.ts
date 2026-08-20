@@ -42,20 +42,20 @@ export class WorkorderSearchService extends BaseService {
     }
 
     /**
-     * Resolve workorder numbers
-     * Batch-resolves a set of workorder ids to their human workorder numbers. Consumed server-side by sibling services that store only the workorder id and need the human number for finder/search enrichment.
+     * Resolve Workorder Ids to Numbers
+     * Batch-resolves workorder ids to their human-readable workorder numbers for sibling services that store only the id. Use this tool when known workorder ids need display numbers; do not use searchWorkorders, which is for discovering workorders by text query rather than resolving known ids. Preconditions: none — nulls and duplicates in the id list are silently dropped, and ids with no matching workorder are omitted from the response rather than erroring. Required inputs: a body with workorderIds, a non-empty list of UUIDs. Emits a WORKORDER_NUMBER_RESOLVE audit event; no workorder state changes — this is a read-only projection. Returns 200 with one pairing per found workorder, and 400 when workorderIds is missing or empty. 
      * @endpoint post /v1/workorders/numbers:resolve
-     * @param workorderNumberResolveRequest 
+     * @param workorderNumberResolveRequest Batch of workorder ids to resolve to human workorder numbers.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public resolveNumbers(workorderNumberResolveRequest: WorkorderNumberResolveRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<WorkorderNumberRef>>;
-    public resolveNumbers(workorderNumberResolveRequest: WorkorderNumberResolveRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<WorkorderNumberRef>>>;
-    public resolveNumbers(workorderNumberResolveRequest: WorkorderNumberResolveRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<WorkorderNumberRef>>>;
-    public resolveNumbers(workorderNumberResolveRequest: WorkorderNumberResolveRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public resolveWorkorderNumbers(workorderNumberResolveRequest: WorkorderNumberResolveRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<WorkorderNumberRef>>;
+    public resolveWorkorderNumbers(workorderNumberResolveRequest: WorkorderNumberResolveRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<WorkorderNumberRef>>>;
+    public resolveWorkorderNumbers(workorderNumberResolveRequest: WorkorderNumberResolveRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<WorkorderNumberRef>>>;
+    public resolveWorkorderNumbers(workorderNumberResolveRequest: WorkorderNumberResolveRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (workorderNumberResolveRequest === null || workorderNumberResolveRequest === undefined) {
-            throw new Error('Required parameter workorderNumberResolveRequest was null or undefined when calling resolveNumbers.');
+            throw new Error('Required parameter workorderNumberResolveRequest was null or undefined when calling resolveWorkorderNumbers.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -112,8 +112,8 @@ export class WorkorderSearchService extends BaseService {
     }
 
     /**
-     * Search workorders
-     * Paginated free-text search for workorders matching customer name or workorder id, optionally filtered by exact customer and/or vehicle.
+     * Search Workorders With Filters
+     * Searches workorders by free-text query against customer display names or a literal workorder id, optionally narrowed by exact customerId and vehicleId filters, returning a page of rows enriched with customer name, vehicle label, and VIN. Use this tool when finding workorders by customer or id fragments; use listWorkorders instead for an unfiltered listing, and resolveWorkorderNumbers to map known ids to human numbers. Preconditions: customer-name matching depends on the local customer replica; at most 10 name-matched customers are considered per query. Required inputs: none are mandatory — q defaults to an empty string and is treated as a workorder id when it parses as a UUID; page size defaults to 25. Emits a WORKORDER_SEARCH audit event; no workorder state changes — this is a read-only projection. Returns 200 with an empty page when nothing matches; no 404 is produced for empty results. 
      * @endpoint get /v1/workorders/search
      * @param pageable 
      * @param q Free-text query matching customer name or workorder id (optional)

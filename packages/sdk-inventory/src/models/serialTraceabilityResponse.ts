@@ -17,13 +17,13 @@ import { WarrantyHoldRef } from './warrantyHoldRef';
  */
 export interface SerialTraceabilityResponse { 
     /**
-     * Identifier of the serial unit
+     * Downstream movement chain, oldest first
      */
-    serialUnitId: string;
+    downstream: Array<TraceabilityMovement>;
     /**
-     * Stock item (catalog product id) the unit belongs to
+     * Lot the unit belongs to, when lot-linked
      */
-    stockItemId: string;
+    lotId?: string;
     /**
      * Manufacturer/vendor serial number
      */
@@ -33,22 +33,22 @@ export interface SerialTraceabilityResponse {
      */
     serialStatus?: SerialTraceabilityResponseSerialStatusEnum;
     /**
-     * Lot the unit belongs to, when lot-linked
+     * Identifier of the serial unit
      */
-    lotId?: string;
+    serialUnitId: string;
     /**
-     * Workorder the unit was consumed to, when known
+     * Stock item (catalog product id) the unit belongs to
      */
-    workorderId?: string;
+    stockItemId: string;
     upstream: TraceabilityUpstream;
-    /**
-     * Downstream movement chain, oldest first
-     */
-    downstream: Array<TraceabilityMovement>;
     /**
      * Warranty part-return holds joined by serial number
      */
     warrantyHolds: Array<WarrantyHoldRef>;
+    /**
+     * Workorder the unit was consumed to, when known
+     */
+    workorderId?: string;
 }
 export enum SerialTraceabilityResponseSerialStatusEnum {
     InStock = 'IN_STOCK',
@@ -97,8 +97,8 @@ export function instanceOfSerialTraceabilityResponse(value: object): value is Se
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createSerialTraceabilityResponsePropertyNames('serialUnitId', 'stockItemId', 'serialNumber', 'upstream', 'downstream', 'warrantyHolds', );
-    const optionalStringProperties = createSerialTraceabilityResponseOptionalProperties({ name: 'serialUnitId', nullable: false }, { name: 'stockItemId', nullable: false }, { name: 'serialNumber', nullable: false }, { name: 'serialStatus', nullable: false }, { name: 'lotId', nullable: false }, { name: 'workorderId', nullable: false }, );
+    const requiredProperties = createSerialTraceabilityResponsePropertyNames('downstream', 'serialNumber', 'serialUnitId', 'stockItemId', 'upstream', 'warrantyHolds', );
+    const optionalStringProperties = createSerialTraceabilityResponseOptionalProperties({ name: 'lotId', nullable: false }, { name: 'serialNumber', nullable: false }, { name: 'serialStatus', nullable: false }, { name: 'serialUnitId', nullable: false }, { name: 'stockItemId', nullable: false }, { name: 'workorderId', nullable: false }, );
     const optionalNumberProperties = createSerialTraceabilityResponseOptionalProperties();
     const optionalBooleanProperties = createSerialTraceabilityResponseOptionalProperties();
 

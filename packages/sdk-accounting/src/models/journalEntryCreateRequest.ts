@@ -15,25 +15,17 @@ import { JournalEntryLineRequest } from './journalEntryLineRequest';
  */
 export interface JournalEntryCreateRequest { 
     /**
-     * Organization UUID
-     */
-    organizationId?: string;
-    /**
-     * Journal transaction date and time
-     */
-    transactionDate: string;
-    /**
      * Journal entry description
      */
     description?: string;
     /**
-     * Source event UUID
+     * Journal lines (must net to a balanced entry)
      */
-    sourceEventId?: string;
+    lines: Array<JournalEntryLineRequest>;
     /**
-     * Source event type
+     * Organization UUID
      */
-    sourceEventType?: string;
+    organizationId?: string;
     /**
      * Posting rule set UUID used to generate this journal entry
      */
@@ -43,9 +35,17 @@ export interface JournalEntryCreateRequest {
      */
     postingRuleVersionId?: string;
     /**
-     * Journal lines (must net to a balanced entry)
+     * Source event UUID
      */
-    lines: Array<JournalEntryLineRequest>;
+    sourceEventId?: string;
+    /**
+     * Source event type
+     */
+    sourceEventType?: string;
+    /**
+     * Journal transaction date and time
+     */
+    transactionDate: string;
 }
 
 function isOptionalJournalEntryCreateRequestPropertyOfType(
@@ -86,8 +86,8 @@ export function instanceOfJournalEntryCreateRequest(value: object): value is Jou
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createJournalEntryCreateRequestPropertyNames('transactionDate', 'lines', );
-    const optionalStringProperties = createJournalEntryCreateRequestOptionalProperties({ name: 'organizationId', nullable: false }, { name: 'transactionDate', nullable: false }, { name: 'description', nullable: false }, { name: 'sourceEventId', nullable: false }, { name: 'sourceEventType', nullable: false }, { name: 'postingRuleSetId', nullable: false }, { name: 'postingRuleVersionId', nullable: false }, );
+    const requiredProperties = createJournalEntryCreateRequestPropertyNames('lines', 'transactionDate', );
+    const optionalStringProperties = createJournalEntryCreateRequestOptionalProperties({ name: 'description', nullable: false }, { name: 'organizationId', nullable: false }, { name: 'postingRuleSetId', nullable: false }, { name: 'postingRuleVersionId', nullable: false }, { name: 'sourceEventId', nullable: false }, { name: 'sourceEventType', nullable: false }, { name: 'transactionDate', nullable: false }, );
     const optionalNumberProperties = createJournalEntryCreateRequestOptionalProperties();
     const optionalBooleanProperties = createJournalEntryCreateRequestOptionalProperties();
 

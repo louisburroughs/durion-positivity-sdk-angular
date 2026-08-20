@@ -14,9 +14,17 @@
  */
 export interface UpsertBillingRulesRequest { 
     /**
-     * Payment terms string
+     * Whether auto-pay is enabled for this account
      */
-    paymentTerms?: string;
+    autoPayEnabled?: boolean;
+    /**
+     * Billing address ID
+     */
+    billingAddressId?: string;
+    /**
+     * Whether the account is on a credit hold
+     */
+    creditHold?: boolean;
     /**
      * Maximum credit limit; null means no configured limit
      */
@@ -26,33 +34,25 @@ export interface UpsertBillingRulesRequest {
      */
     currency?: string;
     /**
-     * Whether the account is tax-exempt
+     * Optional reference to a discount policy
      */
-    taxExempt?: boolean;
-    /**
-     * Whether a PO number is required before order can be finalized
-     */
-    poRequired?: boolean;
-    /**
-     * Whether the account is on a credit hold
-     */
-    creditHold?: boolean;
-    /**
-     * Whether auto-pay is enabled for this account
-     */
-    autoPayEnabled?: boolean;
+    discountPolicyRef?: string;
     /**
      * Preferred invoice delivery method
      */
     invoiceDeliveryMethod?: UpsertBillingRulesRequestInvoiceDeliveryMethodEnum;
     /**
-     * Billing address ID
+     * Payment terms string
      */
-    billingAddressId?: string;
+    paymentTerms?: string;
     /**
-     * Optional reference to a discount policy
+     * Whether a PO number is required before order can be finalized
      */
-    discountPolicyRef?: string;
+    poRequired?: boolean;
+    /**
+     * Whether the account is tax-exempt
+     */
+    taxExempt?: boolean;
 }
 export enum UpsertBillingRulesRequestInvoiceDeliveryMethodEnum {
     Email = 'EMAIL',
@@ -102,9 +102,9 @@ export function instanceOfUpsertBillingRulesRequest(value: object): value is Ups
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createUpsertBillingRulesRequestPropertyNames();
-    const optionalStringProperties = createUpsertBillingRulesRequestOptionalProperties({ name: 'paymentTerms', nullable: false }, { name: 'currency', nullable: false }, { name: 'invoiceDeliveryMethod', nullable: false }, { name: 'billingAddressId', nullable: false }, { name: 'discountPolicyRef', nullable: false }, );
+    const optionalStringProperties = createUpsertBillingRulesRequestOptionalProperties({ name: 'billingAddressId', nullable: false }, { name: 'currency', nullable: false }, { name: 'discountPolicyRef', nullable: false }, { name: 'invoiceDeliveryMethod', nullable: false }, { name: 'paymentTerms', nullable: false }, );
     const optionalNumberProperties = createUpsertBillingRulesRequestOptionalProperties({ name: 'creditLimit', nullable: false }, );
-    const optionalBooleanProperties = createUpsertBillingRulesRequestOptionalProperties({ name: 'taxExempt', nullable: false }, { name: 'poRequired', nullable: false }, { name: 'creditHold', nullable: false }, { name: 'autoPayEnabled', nullable: false }, );
+    const optionalBooleanProperties = createUpsertBillingRulesRequestOptionalProperties({ name: 'autoPayEnabled', nullable: false }, { name: 'creditHold', nullable: false }, { name: 'poRequired', nullable: false }, { name: 'taxExempt', nullable: false }, );
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
         && optionalStringProperties.every((property) => isOptionalUpsertBillingRulesRequestPropertyOfType(_v, property.name, 'string', property.nullable))

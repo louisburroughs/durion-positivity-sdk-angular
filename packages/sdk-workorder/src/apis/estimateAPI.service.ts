@@ -52,11 +52,11 @@ export class EstimateAPIService extends BaseService {
     }
 
     /**
-     * Add line item to estimate
-     * Add a part or labor line item to a draft estimate. Estimate must be in DRAFT status. For PART items, provide productId or description. For LABOR items, provide serviceId or description.
+     * Add Line Item to Estimate
+     * Adds a PART or LABOR line item to a draft estimate with quantity, unit price, and optional tax code. Use this tool while building the draft; do not use updateEstimateItem, which edits an existing line, and run calculateEstimateTotals afterwards to refresh totals. Preconditions: the estimate must be in DRAFT status; PART items need a productId or description, and LABOR items need a serviceId or description. Required inputs: estimateId (UUID) as a path parameter, plus itemType (PART or LABOR), quantity, and unitPrice in the body; description, taxCode, productId, serviceId, and uomCode are conditional or optional. uomCode is the unit quantity is expressed in for PART items (omit for the product\&#39;s base unit); it must be omitted on LABOR items. Emits an ESTIMATE_ITEM_ADD event. Returns 404 when the estimate does not exist, 400 on validation failures (including a uomCode on a LABOR item), 422 when the referenced product has no conversion row for uomCode or the converted quantity exceeds the product\&#39;s declared decimal scale, and 409 when the estimate is not in DRAFT status. 
      * @endpoint post /v1/workorders/estimates/{estimateId}/items
      * @param estimateId Estimate ID
-     * @param addEstimateItemRequest Line item details
+     * @param addEstimateItemRequest Part or labor line being added to the draft estimate.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -109,7 +109,7 @@ export class EstimateAPIService extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/workorders/estimates/${this.configuration.encodeParam({name: "estimateId", value: estimateId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/items`;
+        let localVarPath = `/v1/workorders/estimates/${this.configuration.encodeParam({name: "estimateId", value: estimateId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/items`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<EstimateItemResponse>('post', `${basePath}${localVarPath}`,
             {
@@ -126,11 +126,11 @@ export class EstimateAPIService extends BaseService {
     }
 
     /**
-     * Approve an estimate with customer signature
-     * Transition estimate to approved state with customer signature capture. Estimate can be approved from DRAFT status. Requires customer ID validation and signature data (base64-encoded image). For commercial accounts with PO enforcement enabled, a purchase order number must be provided (CAP:092 Story #98).
+     * Approve Estimate With Customer Signature
+     * Approves a PENDING_APPROVAL estimate, transitioning it to APPROVED with the captured signature, signer, notes, optional purchase order, and optional selective line-item approvals. Use this tool when the customer accepts the submitted estimate; do not use approveWorkorder, which authorizes a workorder rather than an estimate — submitEstimateForApproval must have run first, and promoteEstimate is the follow-up that turns the approval into a workorder. Preconditions: the estimate must exist in PENDING_APPROVAL status and belong to the customerId in the request; commercial accounts with PO enforcement must supply a purchaseOrderNumber. Required inputs: estimateId (UUID) as a path parameter and customerId (UUID) in the body; signatureData, signerName, notes, purchaseOrderNumber, and lineItemApprovals are optional, and signatureMimeType defaults to image/png. Emits a WORKORDER_ESTIMATE_APPROVE event. Returns 404 when the estimate does not exist, and 400 when the customer does not match, the status is not PENDING_APPROVAL, or a required purchase order is missing. 
      * @endpoint post /v1/workorders/estimates/{estimateId}/approval
      * @param estimateId ID of the estimate to approve
-     * @param approveEstimateRequest Approval request with customer ID, signature capture, and optional selective line item approvals
+     * @param approveEstimateRequest Approving customer\&#39;s identity, signature artifacts, and optional line-item selections.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -183,7 +183,7 @@ export class EstimateAPIService extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/workorders/estimates/${this.configuration.encodeParam({name: "estimateId", value: estimateId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/approval`;
+        let localVarPath = `/v1/workorders/estimates/${this.configuration.encodeParam({name: "estimateId", value: estimateId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/approval`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<EstimateResponse>('post', `${basePath}${localVarPath}`,
             {
@@ -200,8 +200,8 @@ export class EstimateAPIService extends BaseService {
     }
 
     /**
-     * Calculate taxes and totals
-     * Calculate subtotal, tax amount, and total for an estimate based on its line items. Estimate must be in DRAFT status. Uses stub tax calculation (8.25% flat rate) pending pos-accounting integration.
+     * Calculate Estimate Taxes and Totals
+     * Calculates and persists the estimate\&#39;s subtotal, tax amount, and total from its non-deleted line items, delegating tax to the tax service against the jurisdiction of the estimate\&#39;s location. Use this tool after editing line items and before submitEstimateForApproval; do not use getEstimateSummary, which reads the stored figures without recalculating. Preconditions: the estimate must be in DRAFT status; an estimate with no line items has its totals zeroed. Required inputs: estimateId (UUID) as a path parameter; there is no request body. Emits an ESTIMATE_CALCULATE event; when the tax service is unreachable the subtotal is summed locally, tax is stored as zero, and the estimate is flagged taxPending with no fallback rate applied. Returns 404 when the estimate does not exist, and 409 when it is not in DRAFT status. 
      * @endpoint post /v1/workorders/estimates/{estimateId}/calculate
      * @param estimateId Estimate ID
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -244,7 +244,7 @@ export class EstimateAPIService extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/workorders/estimates/${this.configuration.encodeParam({name: "estimateId", value: estimateId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/calculate`;
+        let localVarPath = `/v1/workorders/estimates/${this.configuration.encodeParam({name: "estimateId", value: estimateId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/calculate`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<object>('post', `${basePath}${localVarPath}`,
             {
@@ -260,10 +260,10 @@ export class EstimateAPIService extends BaseService {
     }
 
     /**
-     * Create a new draft estimate
-     * Create a new estimate in DRAFT status for a customer and vehicle. Requires ESTIMATE_CREATE permission. System will generate a unique estimate number and apply default values for location, currency, and tax region if not provided.
+     * Create a New Draft Estimate
+     * Creates an estimate in DRAFT status for a customer and vehicle, generating a unique estimate number and applying defaults for location and currency when omitted. Use this tool for a from-scratch estimate; do not use createEstimateFromAppointment, which seeds the estimate from a scheduled appointment and is idempotent on the appointment id. Preconditions: none beyond the caller holding workorder:estimate:create; when financial fields are supplied, subtotal plus taxAmount must equal total and none may be negative. Required inputs: customerId and vehicleId (UUIDs), crmPartyId, crmVehicleId, and crmContactIds; locationId, currencyUomId, and the financial fields are optional, and an Idempotency-Key header replays the originally created estimate. Emits a WORKORDER_ESTIMATE_CREATE event. Returns 201 with the estimate, 400 with code VALIDATION_ERROR when required fields are missing or negative, and 409 with code CONFLICT when totals are inconsistent or an integrity constraint fails. 
      * @endpoint post /v1/workorders/estimates
-     * @param createEstimateRequest Estimate creation request with customer and vehicle IDs
+     * @param createEstimateRequest Customer, vehicle, and CRM references the draft estimate is opened for.
      * @param idempotencyKey Optional idempotency key for safe retries
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
@@ -334,8 +334,8 @@ export class EstimateAPIService extends BaseService {
     }
 
     /**
-     * Create historical snapshot
-     * Capture an immutable snapshot of the estimate\&#39;s complete state (estimate + all line items) for audit trail and version history purposes.
+     * Create Estimate Historical Snapshot
+     * Captures an immutable snapshot of the estimate\&#39;s complete state — the estimate plus all its line items — for audit trail and version history. Use this tool to preserve state before a significant change; submitEstimateForApproval already snapshots automatically, so do not duplicate it around submission. Preconditions: the estimate must exist; snapshots are additive and never modify the estimate itself. Required inputs: estimateId (UUID) as a path parameter; notes is an optional query parameter explaining why the snapshot was taken. Emits an ESTIMATE_SNAPSHOT_CREATE event. Returns 404 when the estimate does not exist, and 409 when the snapshot cannot be serialized. 
      * @endpoint post /v1/workorders/estimates/{estimateId}/snapshots
      * @param estimateId Estimate ID
      * @param notes Optional notes about why snapshot was created
@@ -390,7 +390,7 @@ export class EstimateAPIService extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/workorders/estimates/${this.configuration.encodeParam({name: "estimateId", value: estimateId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/snapshots`;
+        let localVarPath = `/v1/workorders/estimates/${this.configuration.encodeParam({name: "estimateId", value: estimateId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/snapshots`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<EstimateSnapshotResponse>('post', `${basePath}${localVarPath}`,
             {
@@ -407,8 +407,8 @@ export class EstimateAPIService extends BaseService {
     }
 
     /**
-     * Decline an estimate
-     * Transition estimate to declined state. Estimate can be declined from DRAFT or APPROVED status.
+     * Decline an Estimate
+     * Declines an estimate, setting DECLINED status with the decline reason and timestamp and stamping an expiry date from the applicable approval configuration\&#39;s declineExpiryDays. Use this tool when the customer rejects the estimate; do not use reopenEstimate, which reverses a decline while the expiry window is still open. Preconditions: the estimate must exist and be in DRAFT, PENDING_APPROVAL, or APPROVED status. Required inputs: estimateId (UUID) as a path parameter; reason is an optional query parameter recorded as the decline reason. Emits a WORKORDER_ESTIMATE_DECLINE event and marks the estimate fact changed. Returns 400 when the estimate is missing or cannot be declined from its current status — both failures surface as 400 in this operation. 
      * @endpoint post /v1/workorders/estimates/{estimateId}/decline
      * @param estimateId ID of the estimate to decline
      * @param reason Reason for decline
@@ -463,7 +463,7 @@ export class EstimateAPIService extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/workorders/estimates/${this.configuration.encodeParam({name: "estimateId", value: estimateId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/decline`;
+        let localVarPath = `/v1/workorders/estimates/${this.configuration.encodeParam({name: "estimateId", value: estimateId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/decline`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<EstimateResponse>('post', `${basePath}${localVarPath}`,
             {
@@ -480,8 +480,8 @@ export class EstimateAPIService extends BaseService {
     }
 
     /**
-     * Delete an estimate
-     * Delete an estimate by its unique ID.
+     * Delete an Estimate
+     * Deletes an estimate row by id — a hard delete with no status guard, removing the estimate regardless of its lifecycle state. Use this tool only for mistakenly created estimates; do not use declineEstimate, which records the customer\&#39;s rejection while preserving the record. Preconditions: none are enforced — deletion is idempotent and deleting an unknown id is a silent no-op. Required inputs: estimateId (UUID) as a path parameter; there is no request body. Emits a WORKORDER_ESTIMATE_DELETE event. Returns 204 regardless of whether the estimate previously existed. 
      * @endpoint delete /v1/workorders/estimates/{estimateId}
      * @param estimateId ID of the estimate to delete
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -523,7 +523,7 @@ export class EstimateAPIService extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/workorders/estimates/${this.configuration.encodeParam({name: "estimateId", value: estimateId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
+        let localVarPath = `/v1/workorders/estimates/${this.configuration.encodeParam({name: "estimateId", value: estimateId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<any>('delete', `${basePath}${localVarPath}`,
             {
@@ -539,8 +539,8 @@ export class EstimateAPIService extends BaseService {
     }
 
     /**
-     * Remove line item
-     * Remove a line item from a draft estimate (soft delete). Estimate must be in DRAFT status.
+     * Remove Estimate Line Item
+     * Removes a line item from a draft estimate as a soft delete, so the row is flagged deleted and excluded from future calculations rather than destroyed. Use this tool to drop an unwanted line; do not use deleteEstimate, which hard-deletes the whole estimate. Preconditions: the estimate must be in DRAFT status and the item must exist on that estimate. Required inputs: estimateId and itemId (UUIDs) as path parameters; there is no request body. Emits an ESTIMATE_ITEM_DELETE event; totals are not recalculated until calculateEstimateTotals runs. Returns 404 when the estimate or item does not exist, and 409 when the estimate is not in DRAFT status. 
      * @endpoint delete /v1/workorders/estimates/{estimateId}/items/{itemId}
      * @param estimateId Estimate ID
      * @param itemId Item ID
@@ -586,7 +586,7 @@ export class EstimateAPIService extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/workorders/estimates/${this.configuration.encodeParam({name: "estimateId", value: estimateId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/items/${this.configuration.encodeParam({name: "itemId", value: itemId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
+        let localVarPath = `/v1/workorders/estimates/${this.configuration.encodeParam({name: "estimateId", value: estimateId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/items/${this.configuration.encodeParam({name: "itemId", value: itemId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<any>('delete', `${basePath}${localVarPath}`,
             {
@@ -602,8 +602,8 @@ export class EstimateAPIService extends BaseService {
     }
 
     /**
-     * Generate estimate PDF
-     * Generate a PDF document for an estimate containing header details, line items grouped by type (parts and labor), and financial totals. Rendered via pos-documents service.
+     * Generate Estimate PDF Document
+     * Renders the estimate as a PDF via the pos-documents service, containing header details, line items grouped into parts and labor, and financial totals, returned as an attachment. Use this tool when a printable or emailable document is needed; use getEstimateSummary instead for the same content as JSON. Preconditions: the estimate must exist and the pos-documents service must be reachable. Required inputs: estimateId (UUID) as a path parameter. Emits an ESTIMATE_PDF_GENERATE audit event; no estimate state changes — the render is performed on demand and not stored. Returns 404 when the estimate does not exist, and 502 when the document service fails to render the PDF. 
      * @endpoint get /v1/workorders/estimates/{estimateId}/pdf
      * @param estimateId Estimate ID
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -635,7 +635,7 @@ export class EstimateAPIService extends BaseService {
         const localVarTransferCache: boolean = options?.transferCache ?? true;
 
 
-        let localVarPath = `/v1/workorders/estimates/${this.configuration.encodeParam({name: "estimateId", value: estimateId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/pdf`;
+        let localVarPath = `/v1/workorders/estimates/${this.configuration.encodeParam({name: "estimateId", value: estimateId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/pdf`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request('get', `${basePath}${localVarPath}`,
             {
@@ -651,17 +651,137 @@ export class EstimateAPIService extends BaseService {
     }
 
     /**
-     * Get all estimates
-     * Retrieve a list of all estimates.
+     * Get Estimate by Id
+     * Returns one estimate with its status, customer, vehicle, financial totals, and approval-related fields. Use this tool when the estimate id is known; use getEstimateSummary instead for the customer-facing grouped view, or searchEstimates to find estimates by text. Preconditions: the estimate must exist. Required inputs: estimateId (UUID) as a path parameter. No events are emitted and no state changes; this is a read-only projection. Returns 404 when no estimate exists for the id. 
+     * @endpoint get /v1/workorders/estimates/{estimateId}
+     * @param estimateId ID of the estimate to retrieve
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public getEstimate(estimateId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<EstimateResponse>;
+    public getEstimate(estimateId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<EstimateResponse>>;
+    public getEstimate(estimateId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<EstimateResponse>>;
+    public getEstimate(estimateId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (estimateId === null || estimateId === undefined) {
+            throw new Error('Required parameter estimateId was null or undefined when calling getEstimate.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/workorders/estimates/${this.configuration.encodeParam({name: "estimateId", value: estimateId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<EstimateResponse>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Get Customer-Facing Estimate Summary
+     * Returns the customer-facing summary of an estimate with line items grouped into parts and labor plus the financial breakdown. Use this tool for presentation to the customer; use getEstimate instead for the raw record, and generateEstimatePdf to render the same content as a PDF document. Preconditions: the estimate must exist; totals reflect the last calculateEstimateTotals run. Required inputs: estimateId (UUID) as a path parameter. Emits an ESTIMATE_SUMMARY_VIEW audit event; no estimate state changes — this is a read-only projection. Returns 404 when no estimate exists for the id. 
+     * @endpoint get /v1/workorders/estimates/{estimateId}/summary
+     * @param estimateId Estimate ID
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public getEstimateSummary(estimateId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<EstimateSummaryResponse>;
+    public getEstimateSummary(estimateId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<EstimateSummaryResponse>>;
+    public getEstimateSummary(estimateId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<EstimateSummaryResponse>>;
+    public getEstimateSummary(estimateId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (estimateId === null || estimateId === undefined) {
+            throw new Error('Required parameter estimateId was null or undefined when calling getEstimateSummary.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/workorders/estimates/${this.configuration.encodeParam({name: "estimateId", value: estimateId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/summary`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<EstimateSummaryResponse>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * List All Estimates
+     * Returns every estimate in the system as an unpaginated list, in all statuses from DRAFT through APPROVED, DECLINED, and EXPIRED. Use this tool only for small datasets or admin views; use searchEstimates instead for paginated, filtered lookup by query, customer, or vehicle. Preconditions: none beyond the caller holding workorder:estimate:view. Required inputs: none — there are no filters or pagination parameters. Emits a WORKORDER_ESTIMATE_LIST audit event; no estimate state changes — this is a read-only projection. Returns 200 with the full list, possibly empty. 
      * @endpoint get /v1/workorders/estimates
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public getAllEstimates(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<EstimateResponse>>;
-    public getAllEstimates(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<EstimateResponse>>>;
-    public getAllEstimates(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<EstimateResponse>>>;
-    public getAllEstimates(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public listEstimates(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<EstimateResponse>>;
+    public listEstimates(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<EstimateResponse>>>;
+    public listEstimates(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<EstimateResponse>>>;
+    public listEstimates(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -707,140 +827,20 @@ export class EstimateAPIService extends BaseService {
     }
 
     /**
-     * Get estimate by ID
-     * Retrieve an estimate by its unique ID.
-     * @endpoint get /v1/workorders/estimates/{estimateId}
-     * @param estimateId ID of the estimate to retrieve
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     * @param options additional options
-     */
-    public getEstimateById(estimateId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<EstimateResponse>;
-    public getEstimateById(estimateId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<EstimateResponse>>;
-    public getEstimateById(estimateId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<EstimateResponse>>;
-    public getEstimateById(estimateId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
-        if (estimateId === null || estimateId === undefined) {
-            throw new Error('Required parameter estimateId was null or undefined when calling getEstimateById.');
-        }
-
-        let localVarHeaders = this.defaultHeaders;
-
-        // authentication (bearerAuth) required
-        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
-
-        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
-            'application/json'
-        ]);
-        if (localVarHttpHeaderAcceptSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
-        }
-
-        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
-
-        const localVarTransferCache: boolean = options?.transferCache ?? true;
-
-
-        let responseType_: 'text' | 'json' | 'blob' = 'json';
-        if (localVarHttpHeaderAcceptSelected) {
-            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
-                responseType_ = 'text';
-            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
-                responseType_ = 'json';
-            } else {
-                responseType_ = 'blob';
-            }
-        }
-
-        let localVarPath = `/v1/workorders/estimates/${this.configuration.encodeParam({name: "estimateId", value: estimateId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
-        const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<EstimateResponse>('get', `${basePath}${localVarPath}`,
-            {
-                context: localVarHttpContext,
-                responseType: <any>responseType_,
-                ...(withCredentials ? { withCredentials } : {}),
-                headers: localVarHeaders,
-                observe: observe,
-                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * Get estimate summary (customer-facing)
-     * Retrieve a customer-facing summary of an estimate with grouped line items (parts and labor) and financial breakdown. Use the /{estimateId}/pdf endpoint to generate a PDF document.
-     * @endpoint get /v1/workorders/estimates/{estimateId}/summary
-     * @param estimateId Estimate ID
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     * @param options additional options
-     */
-    public getEstimateSummary(estimateId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<EstimateSummaryResponse>;
-    public getEstimateSummary(estimateId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<EstimateSummaryResponse>>;
-    public getEstimateSummary(estimateId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<EstimateSummaryResponse>>;
-    public getEstimateSummary(estimateId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
-        if (estimateId === null || estimateId === undefined) {
-            throw new Error('Required parameter estimateId was null or undefined when calling getEstimateSummary.');
-        }
-
-        let localVarHeaders = this.defaultHeaders;
-
-        // authentication (bearerAuth) required
-        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
-
-        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
-            'application/json'
-        ]);
-        if (localVarHttpHeaderAcceptSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
-        }
-
-        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
-
-        const localVarTransferCache: boolean = options?.transferCache ?? true;
-
-
-        let responseType_: 'text' | 'json' | 'blob' = 'json';
-        if (localVarHttpHeaderAcceptSelected) {
-            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
-                responseType_ = 'text';
-            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
-                responseType_ = 'json';
-            } else {
-                responseType_ = 'blob';
-            }
-        }
-
-        let localVarPath = `/v1/workorders/estimates/${this.configuration.encodeParam({name: "estimateId", value: estimateId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/summary`;
-        const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<EstimateSummaryResponse>('get', `${basePath}${localVarPath}`,
-            {
-                context: localVarHttpContext,
-                responseType: <any>responseType_,
-                ...(withCredentials ? { withCredentials } : {}),
-                headers: localVarHeaders,
-                observe: observe,
-                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * Get estimates by customer
-     * Retrieve all estimates for a specific customer.
+     * List Estimates for a Customer
+     * Returns all estimates belonging to one customer, unpaginated and in every status. Use this tool for a customer\&#39;s estimate history; use searchEstimates instead when pagination or a combined vehicle filter is needed. Preconditions: none — an unknown customerId simply yields an empty list. Required inputs: customerId (UUID) as a path parameter. Emits a WORKORDER_ESTIMATE_SEARCH_BY_CUSTOMER audit event; no estimate state changes — this is a read-only projection. Returns 200 with the estimates, possibly empty; no 404 is produced for unknown customers. 
      * @endpoint get /v1/workorders/estimates/customer/{customerId}
      * @param customerId ID of the customer
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public getEstimatesByCustomer(customerId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<EstimateResponse>>;
-    public getEstimatesByCustomer(customerId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<EstimateResponse>>>;
-    public getEstimatesByCustomer(customerId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<EstimateResponse>>>;
-    public getEstimatesByCustomer(customerId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public listEstimatesByCustomer(customerId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<EstimateResponse>>;
+    public listEstimatesByCustomer(customerId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<EstimateResponse>>>;
+    public listEstimatesByCustomer(customerId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<EstimateResponse>>>;
+    public listEstimatesByCustomer(customerId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (customerId === null || customerId === undefined) {
-            throw new Error('Required parameter customerId was null or undefined when calling getEstimatesByCustomer.');
+            throw new Error('Required parameter customerId was null or undefined when calling listEstimatesByCustomer.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -871,7 +871,7 @@ export class EstimateAPIService extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/workorders/estimates/customer/${this.configuration.encodeParam({name: "customerId", value: customerId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
+        let localVarPath = `/v1/workorders/estimates/customer/${this.configuration.encodeParam({name: "customerId", value: customerId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<Array<EstimateResponse>>('get', `${basePath}${localVarPath}`,
             {
@@ -887,20 +887,20 @@ export class EstimateAPIService extends BaseService {
     }
 
     /**
-     * Get estimates by location
-     * Retrieve all estimates for a specific location.
+     * List Estimates for a Location
+     * Returns all estimates recorded against one location, unpaginated and in every status. Use this tool for a location\&#39;s estimate book; do not use listEstimatesByShop, which is the legacy alias of this same lookup. Preconditions: none — an unknown locationId simply yields an empty list. Required inputs: locationId (UUID) as a path parameter. Emits a WORKORDER_ESTIMATE_SEARCH_BY_LOCATION audit event; no estimate state changes — this is a read-only projection. Returns 200 with the estimates, possibly empty. 
      * @endpoint get /v1/workorders/estimates/location/{locationId}
      * @param locationId ID of the location
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public getEstimatesByLocation(locationId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<EstimateResponse>>;
-    public getEstimatesByLocation(locationId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<EstimateResponse>>>;
-    public getEstimatesByLocation(locationId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<EstimateResponse>>>;
-    public getEstimatesByLocation(locationId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public listEstimatesByLocation(locationId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<EstimateResponse>>;
+    public listEstimatesByLocation(locationId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<EstimateResponse>>>;
+    public listEstimatesByLocation(locationId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<EstimateResponse>>>;
+    public listEstimatesByLocation(locationId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (locationId === null || locationId === undefined) {
-            throw new Error('Required parameter locationId was null or undefined when calling getEstimatesByLocation.');
+            throw new Error('Required parameter locationId was null or undefined when calling listEstimatesByLocation.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -931,7 +931,7 @@ export class EstimateAPIService extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/workorders/estimates/location/${this.configuration.encodeParam({name: "locationId", value: locationId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
+        let localVarPath = `/v1/workorders/estimates/location/${this.configuration.encodeParam({name: "locationId", value: locationId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<Array<EstimateResponse>>('get', `${basePath}${localVarPath}`,
             {
@@ -947,20 +947,20 @@ export class EstimateAPIService extends BaseService {
     }
 
     /**
-     * Get estimates by shop
-     * Retrieve all estimates for a specific shop.
+     * List Estimates for a Shop
+     * Returns all estimates recorded against one shop location, unpaginated and in every status. Use this tool when the caller\&#39;s route vocabulary says shop; it is a legacy alias of listEstimatesByLocation and returns identical results, so use listEstimatesByLocation instead in new integrations. Preconditions: none — an unknown locationId simply yields an empty list. Required inputs: locationId (UUID) as a path parameter. Emits a WORKORDER_ESTIMATE_SEARCH_BY_SHOP audit event; no estimate state changes — this is a read-only projection. Returns 200 with the estimates, possibly empty. 
      * @endpoint get /v1/workorders/estimates/shop/{locationId}
      * @param locationId ID of the shop
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public getEstimatesByShop(locationId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<EstimateResponse>>;
-    public getEstimatesByShop(locationId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<EstimateResponse>>>;
-    public getEstimatesByShop(locationId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<EstimateResponse>>>;
-    public getEstimatesByShop(locationId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public listEstimatesByShop(locationId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<EstimateResponse>>;
+    public listEstimatesByShop(locationId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<EstimateResponse>>>;
+    public listEstimatesByShop(locationId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<EstimateResponse>>>;
+    public listEstimatesByShop(locationId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (locationId === null || locationId === undefined) {
-            throw new Error('Required parameter locationId was null or undefined when calling getEstimatesByShop.');
+            throw new Error('Required parameter locationId was null or undefined when calling listEstimatesByShop.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -991,7 +991,7 @@ export class EstimateAPIService extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/workorders/estimates/shop/${this.configuration.encodeParam({name: "locationId", value: locationId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
+        let localVarPath = `/v1/workorders/estimates/shop/${this.configuration.encodeParam({name: "locationId", value: locationId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<Array<EstimateResponse>>('get', `${basePath}${localVarPath}`,
             {
@@ -1007,11 +1007,11 @@ export class EstimateAPIService extends BaseService {
     }
 
     /**
-     * Patch estimate status
-     * Patch the status of an estimate by applying an allowed workflow transition
+     * Patch Estimate Status
+     * Applies a workflow transition to an estimate by target status: DECLINED delegates to the decline flow without a reason, and DRAFT delegates to the reopen flow — no other target is accepted. Use this tool only for generic UI status toggles; prefer declineEstimate, which records a decline reason, and reopenEstimate rather than this generic patch. Preconditions: the estimate must exist and the delegated transition\&#39;s own rules apply — decline requires DRAFT, PENDING_APPROVAL, or APPROVED status, and reopen requires DECLINED within the expiry window. Required inputs: estimateId (UUID) as a path parameter and a JSON body whose status field is DECLINED or DRAFT. Emits a WORKORDER_ESTIMATE_PATCH event. Returns 400 with VALIDATION_ERROR when status is missing or not a known value, and 409 with CONFLICT when the target is unsupported or the transition is not allowed from the current state. 
      * @endpoint patch /v1/workorders/estimates/{estimateId}
      * @param estimateId 
-     * @param body 
+     * @param body Patch document naming the target estimate status (DECLINED or DRAFT).
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -1081,8 +1081,8 @@ export class EstimateAPIService extends BaseService {
     }
 
     /**
-     * Promote approved estimate to workorder
-     * Promote an approved estimate to a workorder. Validates preconditions: estimate must be APPROVED, not expired, have approved items, and not already promoted. Returns 409 ALREADY_PROMOTED with existingWorkorderId if estimate was previously promoted (idempotency). CAP:004 Story #26 - Create a workorder from approved estimate.
+     * Promote Approved Estimate to Workorder
+     * Promotes an APPROVED estimate into a new DRAFT workorder that inherits the estimate\&#39;s customer, location, and CRM references. Use this tool after approveEstimate succeeds; do not use createWorkorder, which builds a workorder from an estimate id without the promotion validations. Preconditions: the estimate must be APPROVED with a valid, unexpired approval, have approved items, and not already be promoted — a prior promotion is answered with the existing workorder instead of a duplicate. Required inputs: estimateId (UUID) as a path parameter; an Idempotency-Key header collapses retries onto the originally created workorder. Emits a WORKORDER_ESTIMATE_PROMOTE event. Returns 200 with the workorder (also on ALREADY_PROMOTED replays that can resolve the existing workorder), 404 when the estimate does not exist, 409 when promotion validation fails, and 400 on invalid arguments. 
      * @endpoint post /v1/workorders/estimates/{estimateId}/promote
      * @param estimateId ID of the estimate to promote
      * @param idempotencyKey Idempotency-Key header for safe retries
@@ -1090,12 +1090,12 @@ export class EstimateAPIService extends BaseService {
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public promoteEstimateToWorkorder(estimateId: string, idempotencyKey?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<WorkorderResponse>;
-    public promoteEstimateToWorkorder(estimateId: string, idempotencyKey?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<WorkorderResponse>>;
-    public promoteEstimateToWorkorder(estimateId: string, idempotencyKey?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<WorkorderResponse>>;
-    public promoteEstimateToWorkorder(estimateId: string, idempotencyKey?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public promoteEstimate(estimateId: string, idempotencyKey?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<WorkorderResponse>;
+    public promoteEstimate(estimateId: string, idempotencyKey?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<WorkorderResponse>>;
+    public promoteEstimate(estimateId: string, idempotencyKey?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<WorkorderResponse>>;
+    public promoteEstimate(estimateId: string, idempotencyKey?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (estimateId === null || estimateId === undefined) {
-            throw new Error('Required parameter estimateId was null or undefined when calling promoteEstimateToWorkorder.');
+            throw new Error('Required parameter estimateId was null or undefined when calling promoteEstimate.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -1129,7 +1129,7 @@ export class EstimateAPIService extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/workorders/estimates/${this.configuration.encodeParam({name: "estimateId", value: estimateId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/promote`;
+        let localVarPath = `/v1/workorders/estimates/${this.configuration.encodeParam({name: "estimateId", value: estimateId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/promote`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<WorkorderResponse>('post', `${basePath}${localVarPath}`,
             {
@@ -1145,8 +1145,8 @@ export class EstimateAPIService extends BaseService {
     }
 
     /**
-     * Reopen a declined estimate
-     * Transition a declined estimate back to DRAFT state. Can only be done within the configured expiry period.
+     * Reopen a Declined Estimate
+     * Reopens a DECLINED estimate back to DRAFT, clearing the decline reason, decline timestamp, and expiry date. Use this tool when a customer changes their mind after declining; do not use reopenWorkorder, which reopens a completed workorder rather than an estimate. Preconditions: the estimate must be DECLINED and still within the declineExpiryDays window of its approval configuration — expired declines cannot be reopened. Required inputs: estimateId (UUID) as a path parameter; there is no request body. Emits a WORKORDER_ESTIMATE_REOPEN event and marks the estimate fact changed. Returns 400 when the estimate is missing, not declined, or past its expiry window — all failures surface as 400 in this operation. 
      * @endpoint post /v1/workorders/estimates/{estimateId}/reopen
      * @param estimateId ID of the estimate to reopen
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -1189,7 +1189,7 @@ export class EstimateAPIService extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/workorders/estimates/${this.configuration.encodeParam({name: "estimateId", value: estimateId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/reopen`;
+        let localVarPath = `/v1/workorders/estimates/${this.configuration.encodeParam({name: "estimateId", value: estimateId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/reopen`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<EstimateResponse>('post', `${basePath}${localVarPath}`,
             {
@@ -1205,20 +1205,20 @@ export class EstimateAPIService extends BaseService {
     }
 
     /**
-     * Submit estimate for customer approval
-     * Submit a DRAFT estimate for customer approval. Creates immutable snapshot and transitions to PENDING_APPROVAL state. Validates completeness (has customer, vehicle, line items, calculated totals). CAP:003 Issue #168 - Submit Estimate for Customer Approval
+     * Submit Estimate for Customer Approval
+     * Submits a DRAFT estimate for customer approval, creating an immutable snapshot and transitioning it to PENDING_APPROVAL. Use this tool when the draft is ready to present; do not use approveEstimate before submission, since approval requires PENDING_APPROVAL status, and calculateEstimateTotals should already have produced totals. Preconditions: the estimate must be in DRAFT status and complete — a customer, a vehicle, at least one line item, and calculated totals are all required. Required inputs: estimateId (UUID) as a path parameter; there is no request body, and the submitting user comes from the security context. Emits a WORKORDER_ESTIMATE_SUBMIT event and persists a submission snapshot. Returns 404 when the estimate does not exist, and 400 when it is not DRAFT or fails a completeness check. 
      * @endpoint post /v1/workorders/estimates/{estimateId}/submit-for-approval
      * @param estimateId ID of the estimate to submit
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public submitForApproval(estimateId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<EstimateResponse>;
-    public submitForApproval(estimateId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<EstimateResponse>>;
-    public submitForApproval(estimateId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<EstimateResponse>>;
-    public submitForApproval(estimateId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public submitEstimateForApproval(estimateId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<EstimateResponse>;
+    public submitEstimateForApproval(estimateId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<EstimateResponse>>;
+    public submitEstimateForApproval(estimateId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<EstimateResponse>>;
+    public submitEstimateForApproval(estimateId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (estimateId === null || estimateId === undefined) {
-            throw new Error('Required parameter estimateId was null or undefined when calling submitForApproval.');
+            throw new Error('Required parameter estimateId was null or undefined when calling submitEstimateForApproval.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -1249,7 +1249,7 @@ export class EstimateAPIService extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/workorders/estimates/${this.configuration.encodeParam({name: "estimateId", value: estimateId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/submit-for-approval`;
+        let localVarPath = `/v1/workorders/estimates/${this.configuration.encodeParam({name: "estimateId", value: estimateId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/submit-for-approval`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<EstimateResponse>('post', `${basePath}${localVarPath}`,
             {
@@ -1265,12 +1265,12 @@ export class EstimateAPIService extends BaseService {
     }
 
     /**
-     * Update line item
-     * Update an existing line item on a draft estimate. Estimate must be in DRAFT status. Only provided fields will be updated.
+     * Update Estimate Line Item
+     * Updates an existing line item on a draft estimate, changing only the fields provided and leaving omitted fields untouched. Use this tool to adjust a line\&#39;s description, quantity, price, or tax code; do not use addEstimateItem, which appends a new line, or deleteEstimateItem, which removes one. Preconditions: the estimate must be in DRAFT status and the item must exist on that estimate. Required inputs: estimateId and itemId (UUIDs) as path parameters; description, quantity, unitPrice, taxCode, and uomCode are all optional body fields. uomCode is rejected on a LABOR item. Emits an ESTIMATE_ITEM_UPDATE event; totals are not recalculated until calculateEstimateTotals runs. Returns 404 when the estimate or item does not exist, 400 on validation failures (including a uomCode on a LABOR item), 422 when the effective uomCode has no conversion row for the product or the converted quantity exceeds its declared decimal scale, and 409 when the estimate is not in DRAFT status. 
      * @endpoint patch /v1/workorders/estimates/{estimateId}/items/{itemId}
      * @param estimateId Estimate ID
      * @param itemId Item ID
-     * @param updateEstimateItemRequest Updated item fields
+     * @param updateEstimateItemRequest Fields to change on the line item; omitted fields stay as they are.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -1326,7 +1326,7 @@ export class EstimateAPIService extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/workorders/estimates/${this.configuration.encodeParam({name: "estimateId", value: estimateId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/items/${this.configuration.encodeParam({name: "itemId", value: itemId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
+        let localVarPath = `/v1/workorders/estimates/${this.configuration.encodeParam({name: "estimateId", value: estimateId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/items/${this.configuration.encodeParam({name: "itemId", value: itemId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<EstimateItemResponse>('patch', `${basePath}${localVarPath}`,
             {

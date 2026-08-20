@@ -21,11 +21,11 @@ export interface ContactPointDto {
      * Type of contact point
      */
     contactType: ContactPointDtoContactTypeEnum;
+    primary?: boolean;
     /**
      * Contact value
      */
     value: string;
-    primary?: boolean;
 }
 export enum ContactPointDtoContactTypeEnum {
     Email = 'EMAIL',

@@ -15,14 +15,6 @@ import { MappingKeyResponse } from './mappingKeyResponse';
  */
 export interface MappingKeyListResponse { 
     /**
-     * Mapping keys on the current page
-     */
-    results: Array<MappingKeyResponse>;
-    /**
-     * Total number of mapping keys matching the query
-     */
-    totalCount?: number;
-    /**
      * Zero-based index of the current page
      */
     pageNumber?: number;
@@ -30,6 +22,14 @@ export interface MappingKeyListResponse {
      * Number of items per page
      */
     pageSize?: number;
+    /**
+     * Mapping keys on the current page
+     */
+    results: Array<MappingKeyResponse>;
+    /**
+     * Total number of mapping keys matching the query
+     */
+    totalCount?: number;
     /**
      * Total number of pages available
      */
@@ -76,7 +76,7 @@ export function instanceOfMappingKeyListResponse(value: object): value is Mappin
 
     const requiredProperties = createMappingKeyListResponsePropertyNames('results', );
     const optionalStringProperties = createMappingKeyListResponseOptionalProperties();
-    const optionalNumberProperties = createMappingKeyListResponseOptionalProperties({ name: 'totalCount', nullable: false }, { name: 'pageNumber', nullable: false }, { name: 'pageSize', nullable: false }, { name: 'totalPages', nullable: false }, );
+    const optionalNumberProperties = createMappingKeyListResponseOptionalProperties({ name: 'pageNumber', nullable: false }, { name: 'pageSize', nullable: false }, { name: 'totalCount', nullable: false }, { name: 'totalPages', nullable: false }, );
     const optionalBooleanProperties = createMappingKeyListResponseOptionalProperties();
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

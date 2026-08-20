@@ -14,6 +14,26 @@
  */
 export interface RestrictionOverrideRequest { 
     /**
+     * Optional identifier of the approver who authorized the override
+     */
+    approvedBy?: string;
+    /**
+     * Optional free-text notes for the override
+     */
+    notes?: string;
+    /**
+     * Transaction lifecycle context for the override
+     */
+    overrideContext: RestrictionOverrideRequestOverrideContextEnum;
+    /**
+     * Product the override applies to
+     */
+    productId: string;
+    /**
+     * Reason code justifying the override
+     */
+    reasonCode: string;
+    /**
      * Restriction rule being overridden
      */
     ruleId: string;
@@ -21,26 +41,6 @@ export interface RestrictionOverrideRequest {
      * Transaction the override applies to
      */
     transactionId: string;
-    /**
-     * Product the override applies to
-     */
-    productId: string;
-    /**
-     * Transaction lifecycle context for the override
-     */
-    overrideContext: RestrictionOverrideRequestOverrideContextEnum;
-    /**
-     * Reason code justifying the override
-     */
-    reasonCode: string;
-    /**
-     * Optional free-text notes for the override
-     */
-    notes?: string;
-    /**
-     * Optional identifier of the approver who authorized the override
-     */
-    approvedBy?: string;
 }
 export enum RestrictionOverrideRequestOverrideContextEnum {
     Browse = 'BROWSE',
@@ -90,8 +90,8 @@ export function instanceOfRestrictionOverrideRequest(value: object): value is Re
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createRestrictionOverrideRequestPropertyNames('ruleId', 'transactionId', 'productId', 'overrideContext', 'reasonCode', );
-    const optionalStringProperties = createRestrictionOverrideRequestOptionalProperties({ name: 'ruleId', nullable: false }, { name: 'transactionId', nullable: false }, { name: 'productId', nullable: false }, { name: 'overrideContext', nullable: false }, { name: 'reasonCode', nullable: false }, { name: 'notes', nullable: false }, { name: 'approvedBy', nullable: false }, );
+    const requiredProperties = createRestrictionOverrideRequestPropertyNames('overrideContext', 'productId', 'reasonCode', 'ruleId', 'transactionId', );
+    const optionalStringProperties = createRestrictionOverrideRequestOptionalProperties({ name: 'approvedBy', nullable: false }, { name: 'notes', nullable: false }, { name: 'overrideContext', nullable: false }, { name: 'productId', nullable: false }, { name: 'reasonCode', nullable: false }, { name: 'ruleId', nullable: false }, { name: 'transactionId', nullable: false }, );
     const optionalNumberProperties = createRestrictionOverrideRequestOptionalProperties();
     const optionalBooleanProperties = createRestrictionOverrideRequestOptionalProperties();
 

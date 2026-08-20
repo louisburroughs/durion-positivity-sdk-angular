@@ -14,14 +14,6 @@
  */
 export interface AssignmentHistoryEntry { 
     /**
-     * Technician ID for this assignment period
-     */
-    technicianId?: string;
-    /**
-     * Technician display name
-     */
-    technicianName?: string;
-    /**
      * When the technician was assigned
      */
     assignedAt?: string;
@@ -30,17 +22,25 @@ export interface AssignmentHistoryEntry {
      */
     assignedBy?: string;
     /**
-     * When the technician was unassigned (null for current assignment)
+     * Assignment notes
      */
-    unassignedAt?: string;
+    notes?: string;
     /**
      * Reason for reassignment/unassignment
      */
     reason?: string;
     /**
-     * Assignment notes
+     * Technician ID for this assignment period
      */
-    notes?: string;
+    technicianId?: string;
+    /**
+     * Technician display name
+     */
+    technicianName?: string;
+    /**
+     * When the technician was unassigned (null for current assignment)
+     */
+    unassignedAt?: string;
 }
 
 function isOptionalAssignmentHistoryEntryPropertyOfType(
@@ -82,7 +82,7 @@ export function instanceOfAssignmentHistoryEntry(value: object): value is Assign
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createAssignmentHistoryEntryPropertyNames();
-    const optionalStringProperties = createAssignmentHistoryEntryOptionalProperties({ name: 'technicianId', nullable: false }, { name: 'technicianName', nullable: false }, { name: 'assignedAt', nullable: false }, { name: 'assignedBy', nullable: false }, { name: 'unassignedAt', nullable: false }, { name: 'reason', nullable: false }, { name: 'notes', nullable: false }, );
+    const optionalStringProperties = createAssignmentHistoryEntryOptionalProperties({ name: 'assignedAt', nullable: false }, { name: 'assignedBy', nullable: false }, { name: 'notes', nullable: false }, { name: 'reason', nullable: false }, { name: 'technicianId', nullable: false }, { name: 'technicianName', nullable: false }, { name: 'unassignedAt', nullable: false }, );
     const optionalNumberProperties = createAssignmentHistoryEntryOptionalProperties();
     const optionalBooleanProperties = createAssignmentHistoryEntryOptionalProperties();
 

@@ -23,17 +23,21 @@ export interface ClaimCreateRequest {
      */
     customerId: string;
     /**
-     * pos-vehicle-inventory vehicle id; VIN + odometer are snapshotted from it
+     * Date the failure occurred or was noticed
      */
-    vehicleId: string;
+    failureDate?: string;
+    /**
+     * What failed and how
+     */
+    failureDescription?: string;
+    /**
+     * Initial claim lines (may also be added later while DRAFT/INFO_NEEDED)
+     */
+    lines?: Array<ClaimLineRequest>;
     /**
      * Location where the claim is taken
      */
     locationId?: string;
-    /**
-     * Originating workorder, when the sale was located
-     */
-    originWorkorderId?: string;
     /**
      * Originating invoice, when the sale was located
      */
@@ -43,25 +47,21 @@ export interface ClaimCreateRequest {
      */
     originSaleDate?: string;
     /**
-     * Registration id for registration-bound coverage, when already known
+     * Originating workorder, when the sale was located
      */
-    registrationId?: string;
-    /**
-     * What failed and how
-     */
-    failureDescription?: string;
-    /**
-     * Date the failure occurred or was noticed
-     */
-    failureDate?: string;
+    originWorkorderId?: string;
     /**
      * Photo evidence URLs (URL-reference pattern)
      */
     photoEvidenceUrls?: Array<string>;
     /**
-     * Initial claim lines (may also be added later while DRAFT/INFO_NEEDED)
+     * Registration id for registration-bound coverage, when already known
      */
-    lines?: Array<ClaimLineRequest>;
+    registrationId?: string;
+    /**
+     * pos-vehicle-inventory vehicle id; VIN + odometer are snapshotted from it
+     */
+    vehicleId: string;
 }
 export enum ClaimCreateRequestClaimTypeEnum {
     ManufacturerDefect = 'MANUFACTURER_DEFECT',
@@ -111,7 +111,7 @@ export function instanceOfClaimCreateRequest(value: object): value is ClaimCreat
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createClaimCreateRequestPropertyNames('claimType', 'customerId', 'vehicleId', );
-    const optionalStringProperties = createClaimCreateRequestOptionalProperties({ name: 'claimType', nullable: false }, { name: 'customerId', nullable: false }, { name: 'vehicleId', nullable: false }, { name: 'locationId', nullable: false }, { name: 'originWorkorderId', nullable: false }, { name: 'originInvoiceId', nullable: false }, { name: 'originSaleDate', nullable: false }, { name: 'registrationId', nullable: false }, { name: 'failureDescription', nullable: false }, { name: 'failureDate', nullable: false }, );
+    const optionalStringProperties = createClaimCreateRequestOptionalProperties({ name: 'claimType', nullable: false }, { name: 'customerId', nullable: false }, { name: 'failureDate', nullable: false }, { name: 'failureDescription', nullable: false }, { name: 'locationId', nullable: false }, { name: 'originInvoiceId', nullable: false }, { name: 'originSaleDate', nullable: false }, { name: 'originWorkorderId', nullable: false }, { name: 'registrationId', nullable: false }, { name: 'vehicleId', nullable: false }, );
     const optionalNumberProperties = createClaimCreateRequestOptionalProperties();
     const optionalBooleanProperties = createClaimCreateRequestOptionalProperties();
 

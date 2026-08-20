@@ -14,22 +14,6 @@
  */
 export interface LeadTimeInfo { 
     /**
-     * Source of lead time data
-     */
-    source: LeadTimeInfoSourceEnum;
-    /**
-     * Minimum days for delivery
-     */
-    minDays?: number;
-    /**
-     * Maximum days for delivery
-     */
-    maxDays?: number;
-    /**
-     * Human-readable lead time hint
-     */
-    displayText?: string;
-    /**
      * Timestamp of lead time data
      */
     asOf?: string;
@@ -37,16 +21,32 @@ export interface LeadTimeInfo {
      * Confidence in lead time estimate
      */
     confidence: LeadTimeInfoConfidenceEnum;
+    /**
+     * Human-readable lead time hint
+     */
+    displayText?: string;
+    /**
+     * Maximum days for delivery
+     */
+    maxDays?: number;
+    /**
+     * Minimum days for delivery
+     */
+    minDays?: number;
+    /**
+     * Source of lead time data
+     */
+    source: LeadTimeInfoSourceEnum;
 }
-export enum LeadTimeInfoSourceEnum {
-    Catalog = 'CATALOG',
-    Inventory = 'INVENTORY',
-    SupplyChain = 'SUPPLY_CHAIN'
-};
 export enum LeadTimeInfoConfidenceEnum {
     Low = 'LOW',
     Medium = 'MEDIUM',
     High = 'HIGH'
+};
+export enum LeadTimeInfoSourceEnum {
+    Catalog = 'CATALOG',
+    Inventory = 'INVENTORY',
+    SupplyChain = 'SUPPLY_CHAIN'
 };
 
 
@@ -89,9 +89,9 @@ export function instanceOfLeadTimeInfo(value: object): value is LeadTimeInfo {
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createLeadTimeInfoPropertyNames('source', 'confidence', );
-    const optionalStringProperties = createLeadTimeInfoOptionalProperties({ name: 'source', nullable: false }, { name: 'displayText', nullable: false }, { name: 'asOf', nullable: false }, { name: 'confidence', nullable: false }, );
-    const optionalNumberProperties = createLeadTimeInfoOptionalProperties({ name: 'minDays', nullable: false }, { name: 'maxDays', nullable: false }, );
+    const requiredProperties = createLeadTimeInfoPropertyNames('confidence', 'source', );
+    const optionalStringProperties = createLeadTimeInfoOptionalProperties({ name: 'asOf', nullable: false }, { name: 'confidence', nullable: false }, { name: 'displayText', nullable: false }, { name: 'source', nullable: false }, );
+    const optionalNumberProperties = createLeadTimeInfoOptionalProperties({ name: 'maxDays', nullable: false }, { name: 'minDays', nullable: false }, );
     const optionalBooleanProperties = createLeadTimeInfoOptionalProperties();
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

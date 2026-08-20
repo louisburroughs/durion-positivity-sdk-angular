@@ -14,6 +14,18 @@
  */
 export interface CreateAsnLineRequest { 
     /**
+     * Quantity shipped expressed in documentUom; must be supplied together with documentUom
+     */
+    documentQuantity?: number;
+    /**
+     * Optional UoM the line is keyed in (e.g. CASE). When present, documentQuantity is converted to the product\'s base UoM at derivation time; a UoM with no conversion path is rejected with 422 UOM_CONVERSION_UNDEFINED
+     */
+    documentUom?: string;
+    /**
+     * Lot or batch number associated with the shipped product
+     */
+    lotNumber?: string;
+    /**
      * Identifier of the purchase order this ASN line is associated with
      */
     poId: string;
@@ -22,33 +34,21 @@ export interface CreateAsnLineRequest {
      */
     poLineId?: string;
     /**
-     * Stock keeping unit identifier for the shipped product
-     */
-    sku: string;
-    /**
      * Quantity of the SKU declared as shipped on the ASN, in the product\'s base UoM. Required unless documentUom/documentQuantity are supplied, in which case the base quantity is derived and this field is ignored
      */
     quantityShipped?: number;
     /**
-     * Unit of measure for the shipped quantity
+     * Stock keeping unit identifier for the shipped product
      */
-    unitOfMeasure?: string;
+    sku: string;
     /**
      * Unit cost of the product expressed in minor currency units (e.g. cents)
      */
     unitCostMinor?: number;
     /**
-     * Lot or batch number associated with the shipped product
+     * Unit of measure for the shipped quantity
      */
-    lotNumber?: string;
-    /**
-     * Optional UoM the line is keyed in (e.g. CASE). When present, documentQuantity is converted to the product\'s base UoM at derivation time; a UoM with no conversion path is rejected with 422 UOM_CONVERSION_UNDEFINED
-     */
-    documentUom?: string;
-    /**
-     * Quantity shipped expressed in documentUom; must be supplied together with documentUom
-     */
-    documentQuantity?: number;
+    unitOfMeasure?: string;
 }
 
 function isOptionalCreateAsnLineRequestPropertyOfType(
@@ -90,8 +90,8 @@ export function instanceOfCreateAsnLineRequest(value: object): value is CreateAs
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createCreateAsnLineRequestPropertyNames('poId', 'sku', );
-    const optionalStringProperties = createCreateAsnLineRequestOptionalProperties({ name: 'poId', nullable: false }, { name: 'poLineId', nullable: false }, { name: 'sku', nullable: false }, { name: 'unitOfMeasure', nullable: false }, { name: 'lotNumber', nullable: false }, { name: 'documentUom', nullable: false }, );
-    const optionalNumberProperties = createCreateAsnLineRequestOptionalProperties({ name: 'quantityShipped', nullable: false }, { name: 'unitCostMinor', nullable: false }, { name: 'documentQuantity', nullable: false }, );
+    const optionalStringProperties = createCreateAsnLineRequestOptionalProperties({ name: 'documentUom', nullable: false }, { name: 'lotNumber', nullable: false }, { name: 'poId', nullable: false }, { name: 'poLineId', nullable: false }, { name: 'sku', nullable: false }, { name: 'unitOfMeasure', nullable: false }, );
+    const optionalNumberProperties = createCreateAsnLineRequestOptionalProperties({ name: 'documentQuantity', nullable: false }, { name: 'quantityShipped', nullable: false }, { name: 'unitCostMinor', nullable: false }, );
     const optionalBooleanProperties = createCreateAsnLineRequestOptionalProperties();
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

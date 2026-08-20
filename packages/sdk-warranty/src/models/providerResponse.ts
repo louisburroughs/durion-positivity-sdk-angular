@@ -13,18 +13,18 @@
  * Warranty provider
  */
 export interface ProviderResponse { 
-    id?: string;
-    name?: string;
-    status?: string;
-    providerType?: ProviderResponseProviderTypeEnum;
     apVendorId?: string;
-    manufacturerId?: string;
     claimSubmissionMethod?: string;
-    portalUrl?: string;
+    contactEmail?: string;
     contactName?: string;
     contactPhone?: string;
-    contactEmail?: string;
     createdAt?: string;
+    id?: string;
+    manufacturerId?: string;
+    name?: string;
+    portalUrl?: string;
+    providerType?: ProviderResponseProviderTypeEnum;
+    status?: string;
     updatedAt?: string;
     version?: number;
 }
@@ -76,7 +76,7 @@ export function instanceOfProviderResponse(value: object): value is ProviderResp
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createProviderResponsePropertyNames();
-    const optionalStringProperties = createProviderResponseOptionalProperties({ name: 'id', nullable: false }, { name: 'name', nullable: false }, { name: 'status', nullable: false }, { name: 'providerType', nullable: false }, { name: 'apVendorId', nullable: false }, { name: 'manufacturerId', nullable: false }, { name: 'claimSubmissionMethod', nullable: false }, { name: 'portalUrl', nullable: false }, { name: 'contactName', nullable: false }, { name: 'contactPhone', nullable: false }, { name: 'contactEmail', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'updatedAt', nullable: false }, );
+    const optionalStringProperties = createProviderResponseOptionalProperties({ name: 'apVendorId', nullable: false }, { name: 'claimSubmissionMethod', nullable: false }, { name: 'contactEmail', nullable: false }, { name: 'contactName', nullable: false }, { name: 'contactPhone', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'id', nullable: false }, { name: 'manufacturerId', nullable: false }, { name: 'name', nullable: false }, { name: 'portalUrl', nullable: false }, { name: 'providerType', nullable: false }, { name: 'status', nullable: false }, { name: 'updatedAt', nullable: false }, );
     const optionalNumberProperties = createProviderResponseOptionalProperties({ name: 'version', nullable: false }, );
     const optionalBooleanProperties = createProviderResponseOptionalProperties();
 

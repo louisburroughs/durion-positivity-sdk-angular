@@ -14,70 +14,74 @@
  */
 export interface InquiryResponse { 
     /**
-     * Inquiry identifier
+     * Owning CSR
      */
-    inquiryId: string;
-    /**
-     * How it arrived
-     */
-    channel: InquiryResponseChannelEnum;
+    assignedTo?: string;
     /**
      * Fleet or individual
      */
     audienceType: InquiryResponseAudienceTypeEnum;
     /**
+     * Attributed campaign
+     */
+    campaignCode?: string;
+    /**
+     * How it arrived
+     */
+    channel: InquiryResponseChannelEnum;
+    /**
      * Who is asking
      */
     contactName: string;
     /**
-     * Organization name
+     * Capture timestamp
      */
-    organizationName?: string;
+    createdAt: string;
     /**
      * Contact email
      */
     email?: string;
     /**
-     * Contact phone
+     * Inquiry identifier
      */
-    phone?: string;
-    /**
-     * Vehicle of interest
-     */
-    vehicleOfInterest?: string;
-    /**
-     * Service of interest
-     */
-    serviceOfInterest?: string;
+    inquiryId: string;
     /**
      * Free-text message
      */
     message?: string;
     /**
-     * Attributed campaign
+     * Organization name
      */
-    campaignCode?: string;
-    /**
-     * Inquiry state
-     */
-    status: InquiryResponseStatusEnum;
+    organizationName?: string;
     /**
      * Party it converted into
      */
     partyId?: string;
     /**
-     * Owning CSR
+     * Contact phone
      */
-    assignedTo?: string;
+    phone?: string;
     /**
      * How it was resolved
      */
     resolutionNote?: string;
     /**
-     * Capture timestamp
+     * Service of interest
      */
-    createdAt: string;
+    serviceOfInterest?: string;
+    /**
+     * Inquiry state
+     */
+    status: InquiryResponseStatusEnum;
+    /**
+     * Vehicle of interest
+     */
+    vehicleOfInterest?: string;
 }
+export enum InquiryResponseAudienceTypeEnum {
+    Commercial = 'COMMERCIAL',
+    Individual = 'INDIVIDUAL'
+};
 export enum InquiryResponseChannelEnum {
     WebForm = 'WEB_FORM',
     Phone = 'PHONE',
@@ -85,10 +89,6 @@ export enum InquiryResponseChannelEnum {
     Email = 'EMAIL',
     Referral = 'REFERRAL',
     Campaign = 'CAMPAIGN'
-};
-export enum InquiryResponseAudienceTypeEnum {
-    Commercial = 'COMMERCIAL',
-    Individual = 'INDIVIDUAL'
 };
 export enum InquiryResponseStatusEnum {
     New = 'NEW',
@@ -137,8 +137,8 @@ export function instanceOfInquiryResponse(value: object): value is InquiryRespon
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createInquiryResponsePropertyNames('inquiryId', 'channel', 'audienceType', 'contactName', 'status', 'createdAt', );
-    const optionalStringProperties = createInquiryResponseOptionalProperties({ name: 'inquiryId', nullable: false }, { name: 'channel', nullable: false }, { name: 'audienceType', nullable: false }, { name: 'contactName', nullable: false }, { name: 'organizationName', nullable: false }, { name: 'email', nullable: false }, { name: 'phone', nullable: false }, { name: 'vehicleOfInterest', nullable: false }, { name: 'serviceOfInterest', nullable: false }, { name: 'message', nullable: false }, { name: 'campaignCode', nullable: false }, { name: 'status', nullable: false }, { name: 'partyId', nullable: false }, { name: 'assignedTo', nullable: false }, { name: 'resolutionNote', nullable: false }, { name: 'createdAt', nullable: false }, );
+    const requiredProperties = createInquiryResponsePropertyNames('audienceType', 'channel', 'contactName', 'createdAt', 'inquiryId', 'status', );
+    const optionalStringProperties = createInquiryResponseOptionalProperties({ name: 'assignedTo', nullable: false }, { name: 'audienceType', nullable: false }, { name: 'campaignCode', nullable: false }, { name: 'channel', nullable: false }, { name: 'contactName', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'email', nullable: false }, { name: 'inquiryId', nullable: false }, { name: 'message', nullable: false }, { name: 'organizationName', nullable: false }, { name: 'partyId', nullable: false }, { name: 'phone', nullable: false }, { name: 'resolutionNote', nullable: false }, { name: 'serviceOfInterest', nullable: false }, { name: 'status', nullable: false }, { name: 'vehicleOfInterest', nullable: false }, );
     const optionalNumberProperties = createInquiryResponseOptionalProperties();
     const optionalBooleanProperties = createInquiryResponseOptionalProperties();
 

@@ -14,13 +14,13 @@
  */
 export interface TransferOrderLineRequest { 
     /**
-     * SKU / stock item identifier to transfer
-     */
-    sku: string;
-    /**
      * Quantity requested for transfer; must be positive
      */
     requestedQty: number;
+    /**
+     * SKU / stock item identifier to transfer
+     */
+    sku: string;
 }
 
 function isOptionalTransferOrderLineRequestPropertyOfType(
@@ -61,7 +61,7 @@ export function instanceOfTransferOrderLineRequest(value: object): value is Tran
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createTransferOrderLineRequestPropertyNames('sku', 'requestedQty', );
+    const requiredProperties = createTransferOrderLineRequestPropertyNames('requestedQty', 'sku', );
     const optionalStringProperties = createTransferOrderLineRequestOptionalProperties({ name: 'sku', nullable: false }, );
     const optionalNumberProperties = createTransferOrderLineRequestOptionalProperties({ name: 'requestedQty', nullable: false }, );
     const optionalBooleanProperties = createTransferOrderLineRequestOptionalProperties();

@@ -14,6 +14,10 @@
  */
 export interface LocationTypeDTO { 
     /**
+     * Description of the location type
+     */
+    description?: string;
+    /**
      * Unique identifier of the location type
      */
     id?: string;
@@ -21,10 +25,6 @@ export interface LocationTypeDTO {
      * Name of the location type
      */
     name?: string;
-    /**
-     * Description of the location type
-     */
-    description?: string;
 }
 
 function isOptionalLocationTypeDTOPropertyOfType(
@@ -66,7 +66,7 @@ export function instanceOfLocationTypeDTO(value: object): value is LocationTypeD
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createLocationTypeDTOPropertyNames();
-    const optionalStringProperties = createLocationTypeDTOOptionalProperties({ name: 'id', nullable: false }, { name: 'name', nullable: false }, { name: 'description', nullable: false }, );
+    const optionalStringProperties = createLocationTypeDTOOptionalProperties({ name: 'description', nullable: false }, { name: 'id', nullable: false }, { name: 'name', nullable: false }, );
     const optionalNumberProperties = createLocationTypeDTOOptionalProperties();
     const optionalBooleanProperties = createLocationTypeDTOOptionalProperties();
 

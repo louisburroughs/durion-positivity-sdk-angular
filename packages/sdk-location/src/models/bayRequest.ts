@@ -11,15 +11,11 @@ import { BayCapacityRequest } from './bayCapacityRequest';
 
 
 /**
- * Bay creation request body
+ * Request payload for creating a service bay
  */
 export interface BayRequest { 
     /**
-     * Display name of the bay
-     */
-    name: string;
-    /**
-     * Type classification of the bay
+     * Type classification of the bay; must be a BayType value
      */
     bayType: string;
     capacity: BayCapacityRequest;
@@ -27,6 +23,10 @@ export interface BayRequest {
      * Maximum number of vehicles that can be serviced concurrently in the bay
      */
     maxConcurrentVehicles?: number;
+    /**
+     * Display name of the bay
+     */
+    name: string;
     /**
      * Identifiers of service capabilities supported by the bay
      */
@@ -79,8 +79,8 @@ export function instanceOfBayRequest(value: object): value is BayRequest {
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createBayRequestPropertyNames('name', 'bayType', 'capacity', );
-    const optionalStringProperties = createBayRequestOptionalProperties({ name: 'name', nullable: false }, { name: 'bayType', nullable: false }, { name: 'status', nullable: false }, );
+    const requiredProperties = createBayRequestPropertyNames('bayType', 'capacity', 'name', );
+    const optionalStringProperties = createBayRequestOptionalProperties({ name: 'bayType', nullable: false }, { name: 'name', nullable: false }, { name: 'status', nullable: false }, );
     const optionalNumberProperties = createBayRequestOptionalProperties({ name: 'maxConcurrentVehicles', nullable: false }, );
     const optionalBooleanProperties = createBayRequestOptionalProperties();
 

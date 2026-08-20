@@ -14,13 +14,13 @@
  */
 export interface AssignPartyTagRequest { 
     /**
-     * Tag to attach
-     */
-    tagId: string;
-    /**
      * How the assignment was made; defaults to MANUAL
      */
     source?: AssignPartyTagRequestSourceEnum;
+    /**
+     * Tag to attach
+     */
+    tagId: string;
 }
 export enum AssignPartyTagRequestSourceEnum {
     Manual = 'MANUAL',
@@ -70,7 +70,7 @@ export function instanceOfAssignPartyTagRequest(value: object): value is AssignP
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createAssignPartyTagRequestPropertyNames('tagId', );
-    const optionalStringProperties = createAssignPartyTagRequestOptionalProperties({ name: 'tagId', nullable: false }, { name: 'source', nullable: false }, );
+    const optionalStringProperties = createAssignPartyTagRequestOptionalProperties({ name: 'source', nullable: false }, { name: 'tagId', nullable: false }, );
     const optionalNumberProperties = createAssignPartyTagRequestOptionalProperties();
     const optionalBooleanProperties = createAssignPartyTagRequestOptionalProperties();
 

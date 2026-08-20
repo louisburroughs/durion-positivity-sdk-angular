@@ -14,17 +14,13 @@
  */
 export interface SnapshotMetadata { 
     /**
-     * Unique identifier of the snapshot
-     */
-    snapshotId: string;
-    /**
      * Timestamp when the snapshot was created (ISO 8601)
      */
     createdAt: string;
     /**
-     * Snapshot schema/content version
+     * Unique identifier of the snapshot
      */
-    version: string;
+    snapshotId: string;
     /**
      * Data source the snapshot was served from
      */
@@ -37,6 +33,10 @@ export interface SnapshotMetadata {
      * Timestamp when the cache entry went stale; only present when stale is true
      */
     staleSince?: string;
+    /**
+     * Snapshot schema/content version
+     */
+    version: string;
 }
 export enum SnapshotMetadataSourceEnum {
     Cache = 'CACHE',
@@ -83,8 +83,8 @@ export function instanceOfSnapshotMetadata(value: object): value is SnapshotMeta
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createSnapshotMetadataPropertyNames('snapshotId', 'createdAt', 'version', 'stale', );
-    const optionalStringProperties = createSnapshotMetadataOptionalProperties({ name: 'snapshotId', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'version', nullable: false }, { name: 'source', nullable: false }, { name: 'staleSince', nullable: false }, );
+    const requiredProperties = createSnapshotMetadataPropertyNames('createdAt', 'snapshotId', 'stale', 'version', );
+    const optionalStringProperties = createSnapshotMetadataOptionalProperties({ name: 'createdAt', nullable: false }, { name: 'snapshotId', nullable: false }, { name: 'source', nullable: false }, { name: 'staleSince', nullable: false }, { name: 'version', nullable: false }, );
     const optionalNumberProperties = createSnapshotMetadataOptionalProperties();
     const optionalBooleanProperties = createSnapshotMetadataOptionalProperties({ name: 'stale', nullable: false }, );
 

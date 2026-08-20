@@ -14,33 +14,33 @@
  */
 export interface InvoiceAdjustmentResponse { 
     /**
-     * Unique identifier of the adjustment entry
-     */
-    id?: string;
-    /**
-     * Type of adjustment applied
-     */
-    type?: InvoiceAdjustmentResponseTypeEnum;
-    /**
      * Adjustment amount
      */
     amount?: number;
-    /**
-     * Business reason justifying the adjustment
-     */
-    reason?: string;
     /**
      * Identifier of the actor who authorized the adjustment
      */
     authorizedBy?: string;
     /**
+     * Timestamp when the adjustment was created
+     */
+    createdAt?: string;
+    /**
      * Optional correlation id to an external record (e.g. a warranty claim code)
      */
     externalReference?: string;
     /**
-     * Timestamp when the adjustment was created
+     * Unique identifier of the adjustment entry
      */
-    createdAt?: string;
+    id?: string;
+    /**
+     * Business reason justifying the adjustment
+     */
+    reason?: string;
+    /**
+     * Type of adjustment applied
+     */
+    type?: InvoiceAdjustmentResponseTypeEnum;
 }
 export enum InvoiceAdjustmentResponseTypeEnum {
     Discount = 'DISCOUNT',
@@ -90,7 +90,7 @@ export function instanceOfInvoiceAdjustmentResponse(value: object): value is Inv
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createInvoiceAdjustmentResponsePropertyNames();
-    const optionalStringProperties = createInvoiceAdjustmentResponseOptionalProperties({ name: 'id', nullable: false }, { name: 'type', nullable: false }, { name: 'reason', nullable: false }, { name: 'authorizedBy', nullable: false }, { name: 'externalReference', nullable: false }, { name: 'createdAt', nullable: false }, );
+    const optionalStringProperties = createInvoiceAdjustmentResponseOptionalProperties({ name: 'authorizedBy', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'externalReference', nullable: false }, { name: 'id', nullable: false }, { name: 'reason', nullable: false }, { name: 'type', nullable: false }, );
     const optionalNumberProperties = createInvoiceAdjustmentResponseOptionalProperties({ name: 'amount', nullable: false }, );
     const optionalBooleanProperties = createInvoiceAdjustmentResponseOptionalProperties();
 

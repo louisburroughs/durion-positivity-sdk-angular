@@ -42,10 +42,10 @@ export class PostingCategoriesService extends BaseService {
     }
 
     /**
-     * Create posting category
-     * Create a new posting category.
+     * Create Posting Category
+     * Creates a posting category, the top level of the GL mapping taxonomy under which mapping keys are grouped. Use this tool when adding a new grouping to the taxonomy; do not use createMappingKey, which adds a key inside an existing category. Preconditions: no category with the same trimmed name may already exist. Required inputs: categoryName (max 100 chars, trimmed before the uniqueness check) and createdBy (max 50 chars); description is optional. Emits an ACCOUNTING_POSTING_CATEGORY_CREATE event. Returns 400 when a category with the same name already exists. 
      * @endpoint post /v1/accounting/posting-categories
-     * @param postingCategoryCreateRequest 
+     * @param postingCategoryCreateRequest Posting category to add to the GL mapping taxonomy.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -112,8 +112,8 @@ export class PostingCategoriesService extends BaseService {
     }
 
     /**
-     * Deactivate posting category
-     * Deactivate a posting category.
+     * Deactivate Posting Category
+     * Deactivates a posting category so it can no longer be used for new GL mappings; the record and its keys are retained. Use this tool to retire an unused category; do not use deactivateMappingKey, which retires a single key inside a category. Preconditions: the posting category must exist and have no active GL mappings attached. Required inputs: postingCategoryId (UUID) as a path parameter; there is no request body. Emits an ACCOUNTING_POSTING_CATEGORY_DEACTIVATE event. Returns 404 when the category does not exist, 409 when active GL mappings still reference it, and 204 with no body on success. 
      * @endpoint post /v1/accounting/posting-categories/{postingCategoryId}/deactivate
      * @param postingCategoryId Posting category identifier
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -171,8 +171,8 @@ export class PostingCategoriesService extends BaseService {
     }
 
     /**
-     * Get posting category
-     * Retrieve a posting category by identifier.
+     * Get Posting Category
+     * Returns one posting category with its name, description and active flag. Use this tool when the category id is already known; use listPostingCategories instead when browsing or filtering. Preconditions: the posting category must exist. Required inputs: postingCategoryId (UUID) as a path parameter; there is no request body. No events are emitted and no state changes; this is a read-only projection. Returns 404 when no posting category exists for the supplied id. 
      * @endpoint get /v1/accounting/posting-categories/{postingCategoryId}
      * @param postingCategoryId Posting category identifier
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -231,8 +231,8 @@ export class PostingCategoriesService extends BaseService {
     }
 
     /**
-     * List posting categories
-     * Retrieve paginated posting categories.
+     * List Posting Categories
+     * Lists posting categories as a paginated projection, optionally filtered by active flag. Use this tool when browsing the mapping taxonomy; do not use getPostingCategory, which fetches a single category by id. Preconditions: none beyond the caller holding accounting:posting-category:view. Required inputs: none; page defaults to 0, size to 20, sort to categoryName (an unsupported sort field silently falls back to categoryName), and isActive is an optional filter. Emits an ACCOUNTING_POSTING_CATEGORY_LIST audit event; no state changes. Returns 200 with an empty page when no categories exist. 
      * @endpoint get /v1/accounting/posting-categories
      * @param sort Sort field
      * @param page Page index (0-based)
@@ -333,11 +333,11 @@ export class PostingCategoriesService extends BaseService {
     }
 
     /**
-     * Update posting category
-     * Update an existing posting category.
+     * Update Posting Category
+     * Renames a posting category or changes its description; mapping keys under it are unaffected. Use this tool to correct a category\&#39;s name or description; do not use deactivatePostingCategory, which retires the category from future mapping use. Preconditions: the posting category must exist, and a changed name must not collide with another category. Required inputs: postingCategoryId (UUID) as a path parameter, categoryName (max 100 chars) and modifiedBy (max 50 chars); description is optional. Emits an ACCOUNTING_POSTING_CATEGORY_UPDATE event. Returns 404 when the category does not exist, and 400 when the new name already exists. 
      * @endpoint put /v1/accounting/posting-categories/{postingCategoryId}
      * @param postingCategoryId Posting category identifier
-     * @param postingCategoryUpdateRequest 
+     * @param postingCategoryUpdateRequest Replacement name and description for the posting category.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options

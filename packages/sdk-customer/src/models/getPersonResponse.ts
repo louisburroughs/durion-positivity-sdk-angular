@@ -15,45 +15,45 @@ import { ContactPointDto } from './contactPointDto';
  */
 export interface GetPersonResponse { 
     /**
-     * Unique identifier of the person
+     * Number of active commercial accounts where this person is a contact
      */
-    personId: string;
-    /**
-     * First name
-     */
-    firstName: string;
-    /**
-     * Last name
-     */
-    lastName: string;
-    /**
-     * Display name
-     */
-    displayName?: string;
-    /**
-     * Preferred contact method
-     */
-    preferredContactMethod?: GetPersonResponsePreferredContactMethodEnum;
-    /**
-     * Contact points (emails, phones)
-     */
-    contactPoints?: Array<ContactPointDto>;
-    /**
-     * Whether this CRM record represents an individual customer
-     */
-    individualCustomer: boolean;
+    commercialAccountCount: number;
     /**
      * Whether this person is an active contact on one or more commercial accounts
      */
     commercialContact: boolean;
     /**
-     * Number of active commercial accounts where this person is a contact
+     * Contact points (emails, phones)
      */
-    commercialAccountCount: number;
+    contactPoints?: Array<ContactPointDto>;
     /**
      * Timestamp when the person was created
      */
     createdAt: string;
+    /**
+     * Display name
+     */
+    displayName?: string;
+    /**
+     * First name
+     */
+    firstName: string;
+    /**
+     * Whether this CRM record represents an individual customer
+     */
+    individualCustomer: boolean;
+    /**
+     * Last name
+     */
+    lastName: string;
+    /**
+     * Unique identifier of the person
+     */
+    personId: string;
+    /**
+     * Preferred contact method
+     */
+    preferredContactMethod?: GetPersonResponsePreferredContactMethodEnum;
     /**
      * Timestamp when the person was last updated
      */
@@ -106,10 +106,10 @@ export function instanceOfGetPersonResponse(value: object): value is GetPersonRe
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createGetPersonResponsePropertyNames('personId', 'firstName', 'lastName', 'individualCustomer', 'commercialContact', 'commercialAccountCount', 'createdAt', );
-    const optionalStringProperties = createGetPersonResponseOptionalProperties({ name: 'personId', nullable: false }, { name: 'firstName', nullable: false }, { name: 'lastName', nullable: false }, { name: 'displayName', nullable: false }, { name: 'preferredContactMethod', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'updatedAt', nullable: false }, );
+    const requiredProperties = createGetPersonResponsePropertyNames('commercialAccountCount', 'commercialContact', 'createdAt', 'firstName', 'individualCustomer', 'lastName', 'personId', );
+    const optionalStringProperties = createGetPersonResponseOptionalProperties({ name: 'createdAt', nullable: false }, { name: 'displayName', nullable: false }, { name: 'firstName', nullable: false }, { name: 'lastName', nullable: false }, { name: 'personId', nullable: false }, { name: 'preferredContactMethod', nullable: false }, { name: 'updatedAt', nullable: false }, );
     const optionalNumberProperties = createGetPersonResponseOptionalProperties({ name: 'commercialAccountCount', nullable: false }, );
-    const optionalBooleanProperties = createGetPersonResponseOptionalProperties({ name: 'individualCustomer', nullable: false }, { name: 'commercialContact', nullable: false }, );
+    const optionalBooleanProperties = createGetPersonResponseOptionalProperties({ name: 'commercialContact', nullable: false }, { name: 'individualCustomer', nullable: false }, );
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
         && optionalStringProperties.every((property) => isOptionalGetPersonResponsePropertyOfType(_v, property.name, 'string', property.nullable))

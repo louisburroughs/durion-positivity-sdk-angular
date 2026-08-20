@@ -14,13 +14,13 @@
  */
 export interface PermissionDefinition { 
     /**
-     * Permission name in format domain:resource:action
-     */
-    name: string;
-    /**
      * Human-readable description of the permission
      */
     description?: string;
+    /**
+     * Permission name in format domain:resource:action
+     */
+    name: string;
 }
 
 function isOptionalPermissionDefinitionPropertyOfType(
@@ -62,7 +62,7 @@ export function instanceOfPermissionDefinition(value: object): value is Permissi
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createPermissionDefinitionPropertyNames('name', );
-    const optionalStringProperties = createPermissionDefinitionOptionalProperties({ name: 'name', nullable: false }, { name: 'description', nullable: false }, );
+    const optionalStringProperties = createPermissionDefinitionOptionalProperties({ name: 'description', nullable: false }, { name: 'name', nullable: false }, );
     const optionalNumberProperties = createPermissionDefinitionOptionalProperties();
     const optionalBooleanProperties = createPermissionDefinitionOptionalProperties();
 

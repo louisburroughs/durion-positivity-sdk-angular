@@ -15,13 +15,13 @@ import { ContactWithRoles } from './contactWithRoles';
  */
 export interface GetContactsWithRolesResponse { 
     /**
-     * Party identifier the contacts belong to
-     */
-    partyId: string;
-    /**
      * List of contacts with assigned roles
      */
     contacts: Array<ContactWithRoles>;
+    /**
+     * Party identifier the contacts belong to
+     */
+    partyId: string;
 }
 
 function isOptionalGetContactsWithRolesResponsePropertyOfType(
@@ -62,7 +62,7 @@ export function instanceOfGetContactsWithRolesResponse(value: object): value is 
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createGetContactsWithRolesResponsePropertyNames('partyId', 'contacts', );
+    const requiredProperties = createGetContactsWithRolesResponsePropertyNames('contacts', 'partyId', );
     const optionalStringProperties = createGetContactsWithRolesResponseOptionalProperties({ name: 'partyId', nullable: false }, );
     const optionalNumberProperties = createGetContactsWithRolesResponseOptionalProperties();
     const optionalBooleanProperties = createGetContactsWithRolesResponseOptionalProperties();

@@ -14,10 +14,6 @@
  */
 export interface AssignTechnicianRequest { 
     /**
-     * ID of the technician to assign
-     */
-    technicianId: string;
-    /**
      * ID of the user performing the assignment (defaults from X-User-Id header if not provided)
      */
     assignedByUserId?: string;
@@ -25,6 +21,10 @@ export interface AssignTechnicianRequest {
      * Assignment notes or reason
      */
     notes?: string;
+    /**
+     * ID of the technician to assign
+     */
+    technicianId: string;
 }
 
 function isOptionalAssignTechnicianRequestPropertyOfType(
@@ -66,7 +66,7 @@ export function instanceOfAssignTechnicianRequest(value: object): value is Assig
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createAssignTechnicianRequestPropertyNames('technicianId', );
-    const optionalStringProperties = createAssignTechnicianRequestOptionalProperties({ name: 'technicianId', nullable: false }, { name: 'assignedByUserId', nullable: false }, { name: 'notes', nullable: false }, );
+    const optionalStringProperties = createAssignTechnicianRequestOptionalProperties({ name: 'assignedByUserId', nullable: false }, { name: 'notes', nullable: false }, { name: 'technicianId', nullable: false }, );
     const optionalNumberProperties = createAssignTechnicianRequestOptionalProperties();
     const optionalBooleanProperties = createAssignTechnicianRequestOptionalProperties();
 

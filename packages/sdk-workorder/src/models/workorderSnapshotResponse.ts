@@ -14,18 +14,6 @@
  */
 export interface WorkorderSnapshotResponse { 
     /**
-     * Unique identifier for this snapshot record
-     */
-    id?: string;
-    /**
-     * ID of the work order
-     */
-    workorderId?: string;
-    /**
-     * Status of the work order at the time of this snapshot
-     */
-    status?: string;
-    /**
      * Timestamp when the snapshot was captured
      */
     capturedAt?: string;
@@ -34,17 +22,29 @@ export interface WorkorderSnapshotResponse {
      */
     capturedBy?: string;
     /**
-     * Type of snapshot (e.g., MANUAL, AUTOMATIC, SYSTEM)
+     * Unique identifier for this snapshot record
      */
-    snapshotType?: string;
+    id?: string;
+    /**
+     * Reason for capturing the snapshot
+     */
+    reason?: string;
     /**
      * Snapshot data (typically JSON)
      */
     snapshotData?: string;
     /**
-     * Reason for capturing the snapshot
+     * Type of snapshot (e.g., MANUAL, AUTOMATIC, SYSTEM)
      */
-    reason?: string;
+    snapshotType?: string;
+    /**
+     * Status of the work order at the time of this snapshot
+     */
+    status?: string;
+    /**
+     * ID of the work order
+     */
+    workorderId?: string;
 }
 
 function isOptionalWorkorderSnapshotResponsePropertyOfType(
@@ -86,7 +86,7 @@ export function instanceOfWorkorderSnapshotResponse(value: object): value is Wor
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createWorkorderSnapshotResponsePropertyNames();
-    const optionalStringProperties = createWorkorderSnapshotResponseOptionalProperties({ name: 'id', nullable: false }, { name: 'workorderId', nullable: false }, { name: 'status', nullable: false }, { name: 'capturedAt', nullable: false }, { name: 'capturedBy', nullable: false }, { name: 'snapshotType', nullable: false }, { name: 'snapshotData', nullable: false }, { name: 'reason', nullable: false }, );
+    const optionalStringProperties = createWorkorderSnapshotResponseOptionalProperties({ name: 'capturedAt', nullable: false }, { name: 'capturedBy', nullable: false }, { name: 'id', nullable: false }, { name: 'reason', nullable: false }, { name: 'snapshotData', nullable: false }, { name: 'snapshotType', nullable: false }, { name: 'status', nullable: false }, { name: 'workorderId', nullable: false }, );
     const optionalNumberProperties = createWorkorderSnapshotResponseOptionalProperties();
     const optionalBooleanProperties = createWorkorderSnapshotResponseOptionalProperties();
 

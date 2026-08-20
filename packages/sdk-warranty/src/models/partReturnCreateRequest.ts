@@ -22,13 +22,13 @@ export interface PartReturnCreateRequest {
      */
     disposition: PartReturnCreateRequestDispositionEnum;
     /**
-     * Vendor-issued RMA number, if already assigned
-     */
-    rmaNumber?: string;
-    /**
      * Where the part sits on the physical hold shelf
      */
     holdLocationNote?: string;
+    /**
+     * Vendor-issued RMA number, if already assigned
+     */
+    rmaNumber?: string;
 }
 export enum PartReturnCreateRequestDispositionEnum {
     HoldForInspection = 'HOLD_FOR_INSPECTION',
@@ -78,7 +78,7 @@ export function instanceOfPartReturnCreateRequest(value: object): value is PartR
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createPartReturnCreateRequestPropertyNames('claimLineId', 'disposition', );
-    const optionalStringProperties = createPartReturnCreateRequestOptionalProperties({ name: 'claimLineId', nullable: false }, { name: 'disposition', nullable: false }, { name: 'rmaNumber', nullable: false }, { name: 'holdLocationNote', nullable: false }, );
+    const optionalStringProperties = createPartReturnCreateRequestOptionalProperties({ name: 'claimLineId', nullable: false }, { name: 'disposition', nullable: false }, { name: 'holdLocationNote', nullable: false }, { name: 'rmaNumber', nullable: false }, );
     const optionalNumberProperties = createPartReturnCreateRequestOptionalProperties();
     const optionalBooleanProperties = createPartReturnCreateRequestOptionalProperties();
 

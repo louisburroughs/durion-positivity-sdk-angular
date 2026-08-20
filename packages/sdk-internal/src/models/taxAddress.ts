@@ -14,21 +14,13 @@
  */
 export interface TaxAddress { 
     /**
-     * Country code in ISO 3166-1 alpha-2 format
-     */
-    countryCode: string;
-    /**
-     * Region/subdivision code (typically ISO 3166-2 subdivision part)
-     */
-    regionCode?: string;
-    /**
      * Locality/city/municipality name
      */
     city?: string;
     /**
-     * Postal/ZIP code
+     * Country code in ISO 3166-1 alpha-2 format
      */
-    postalCode: string;
+    countryCode: string;
     /**
      * Primary street address line
      */
@@ -37,6 +29,14 @@ export interface TaxAddress {
      * Secondary address line
      */
     line2?: string;
+    /**
+     * Postal/ZIP code
+     */
+    postalCode: string;
+    /**
+     * Region/subdivision code (typically ISO 3166-2 subdivision part)
+     */
+    regionCode?: string;
 }
 
 function isOptionalTaxAddressPropertyOfType(
@@ -78,7 +78,7 @@ export function instanceOfTaxAddress(value: object): value is TaxAddress {
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createTaxAddressPropertyNames('countryCode', 'postalCode', );
-    const optionalStringProperties = createTaxAddressOptionalProperties({ name: 'countryCode', nullable: false }, { name: 'regionCode', nullable: false }, { name: 'city', nullable: false }, { name: 'postalCode', nullable: false }, { name: 'line1', nullable: false }, { name: 'line2', nullable: false }, );
+    const optionalStringProperties = createTaxAddressOptionalProperties({ name: 'city', nullable: false }, { name: 'countryCode', nullable: false }, { name: 'line1', nullable: false }, { name: 'line2', nullable: false }, { name: 'postalCode', nullable: false }, { name: 'regionCode', nullable: false }, );
     const optionalNumberProperties = createTaxAddressOptionalProperties();
     const optionalBooleanProperties = createTaxAddressOptionalProperties();
 

@@ -40,24 +40,24 @@ export class StandaloneRefundService extends BaseService {
     }
 
     /**
-     * Record standalone refund for an invoice
-     * Record a refund against an invoice whose original payment is not in the system; the disbursement itself happens out of band
+     * Record Standalone Invoice Refund
+     * Records a refund against an invoice whose original payment is not in this system — predecessor-system sales, pre-deploy invoices, vendor-paid warranty work — while the cash disbursement itself happens out of band (till, check, or vendor payment). Use this tool only when no captured payment intent exists to refund; do not use refundPayment, which reverses a CAPTURED gateway payment, and use createStandalonePartyRefund instead when no invoice is on file at all. Preconditions: the invoice must exist, the caller needs the finance-only ISSUE_MANUAL_REFUND authority, and cumulative refunds across payment-anchored and standalone records may not exceed the invoice total. Required inputs: amount (positive) and reason (a RefundReason such as CUSTOMER_RETURN); notes and externalReference are optional, and a retry replaying the same externalReference returns the existing record instead of double-recording. Emits an INVOICE_STANDALONE_REFUND event and stores a COMPLETED refund record anchored to the invoice; no gateway call is made. Returns 201 with the refund record, 404 when the invoice does not exist, and 422 when the amount exceeds the invoice\&#39;s remaining refundable balance. 
      * @endpoint post /v1/invoices/{invoiceId}/refunds
      * @param invoiceId 
-     * @param standaloneRefundRequest 
+     * @param standaloneRefundRequest Out-of-band refund to record against the invoice.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public refundInvoiceStandalone(invoiceId: string, standaloneRefundRequest: StandaloneRefundRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<RefundPaymentResponse>;
-    public refundInvoiceStandalone(invoiceId: string, standaloneRefundRequest: StandaloneRefundRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<RefundPaymentResponse>>;
-    public refundInvoiceStandalone(invoiceId: string, standaloneRefundRequest: StandaloneRefundRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<RefundPaymentResponse>>;
-    public refundInvoiceStandalone(invoiceId: string, standaloneRefundRequest: StandaloneRefundRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public createStandaloneInvoiceRefund(invoiceId: string, standaloneRefundRequest: StandaloneRefundRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<RefundPaymentResponse>;
+    public createStandaloneInvoiceRefund(invoiceId: string, standaloneRefundRequest: StandaloneRefundRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<RefundPaymentResponse>>;
+    public createStandaloneInvoiceRefund(invoiceId: string, standaloneRefundRequest: StandaloneRefundRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<RefundPaymentResponse>>;
+    public createStandaloneInvoiceRefund(invoiceId: string, standaloneRefundRequest: StandaloneRefundRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (invoiceId === null || invoiceId === undefined) {
-            throw new Error('Required parameter invoiceId was null or undefined when calling refundInvoiceStandalone.');
+            throw new Error('Required parameter invoiceId was null or undefined when calling createStandaloneInvoiceRefund.');
         }
         if (standaloneRefundRequest === null || standaloneRefundRequest === undefined) {
-            throw new Error('Required parameter standaloneRefundRequest was null or undefined when calling refundInvoiceStandalone.');
+            throw new Error('Required parameter standaloneRefundRequest was null or undefined when calling createStandaloneInvoiceRefund.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -114,20 +114,20 @@ export class StandaloneRefundService extends BaseService {
     }
 
     /**
-     * Record standalone refund for a customer party
-     * Record a refund anchored to a customer party when no invoice exists in the system; the disbursement itself happens out of band
+     * Record Standalone Party Refund
+     * Records a refund anchored directly to a customer party when no invoice exists in this system, such as a vendor-paid warranty settlement on a predecessor-system sale; the cash disbursement itself happens out of band. Use this tool only when there is no invoice to anchor to; use createStandaloneInvoiceRefund instead when an invoice is on file, and refundPayment when the captured payment itself exists. Preconditions: the caller needs the finance-only ISSUE_MANUAL_REFUND authority; because there is no invoice, no refundable-amount cap applies. Required inputs: partyId (non-blank, max 64 characters), amount (positive) and reason (a RefundReason); notes and externalReference are optional, and a retry replaying the same externalReference among the party\&#39;s purely party-anchored records returns the existing record. Emits an INVOICE_PARTY_STANDALONE_REFUND event and stores a COMPLETED refund record anchored to the party; no gateway call is made. Returns 201 with the refund record, and 400 when partyId is blank. 
      * @endpoint post /v1/refunds
-     * @param partyStandaloneRefundRequest 
+     * @param partyStandaloneRefundRequest Out-of-band refund to record against a customer party with no invoice on file.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public refundPartyStandalone(partyStandaloneRefundRequest: PartyStandaloneRefundRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<RefundPaymentResponse>;
-    public refundPartyStandalone(partyStandaloneRefundRequest: PartyStandaloneRefundRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<RefundPaymentResponse>>;
-    public refundPartyStandalone(partyStandaloneRefundRequest: PartyStandaloneRefundRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<RefundPaymentResponse>>;
-    public refundPartyStandalone(partyStandaloneRefundRequest: PartyStandaloneRefundRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public createStandalonePartyRefund(partyStandaloneRefundRequest: PartyStandaloneRefundRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<RefundPaymentResponse>;
+    public createStandalonePartyRefund(partyStandaloneRefundRequest: PartyStandaloneRefundRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<RefundPaymentResponse>>;
+    public createStandalonePartyRefund(partyStandaloneRefundRequest: PartyStandaloneRefundRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<RefundPaymentResponse>>;
+    public createStandalonePartyRefund(partyStandaloneRefundRequest: PartyStandaloneRefundRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (partyStandaloneRefundRequest === null || partyStandaloneRefundRequest === undefined) {
-            throw new Error('Required parameter partyStandaloneRefundRequest was null or undefined when calling refundPartyStandalone.');
+            throw new Error('Required parameter partyStandaloneRefundRequest was null or undefined when calling createStandalonePartyRefund.');
         }
 
         let localVarHeaders = this.defaultHeaders;

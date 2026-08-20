@@ -13,13 +13,13 @@
  * A drawer cash movement
  */
 export interface CashMovementResponse { 
-    movementId?: string;
-    sessionId?: string;
-    movementType?: string;
     amount?: number;
-    reason?: string;
     clerkId?: string;
+    movementId?: string;
+    movementType?: string;
     occurredAt?: string;
+    reason?: string;
+    sessionId?: string;
 }
 
 function isOptionalCashMovementResponsePropertyOfType(
@@ -61,7 +61,7 @@ export function instanceOfCashMovementResponse(value: object): value is CashMove
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createCashMovementResponsePropertyNames();
-    const optionalStringProperties = createCashMovementResponseOptionalProperties({ name: 'movementId', nullable: false }, { name: 'sessionId', nullable: false }, { name: 'movementType', nullable: false }, { name: 'reason', nullable: false }, { name: 'clerkId', nullable: false }, { name: 'occurredAt', nullable: false }, );
+    const optionalStringProperties = createCashMovementResponseOptionalProperties({ name: 'clerkId', nullable: false }, { name: 'movementId', nullable: false }, { name: 'movementType', nullable: false }, { name: 'occurredAt', nullable: false }, { name: 'reason', nullable: false }, { name: 'sessionId', nullable: false }, );
     const optionalNumberProperties = createCashMovementResponseOptionalProperties({ name: 'amount', nullable: false }, );
     const optionalBooleanProperties = createCashMovementResponseOptionalProperties();
 

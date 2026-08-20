@@ -14,13 +14,13 @@
  */
 export interface CountGroup { 
     /**
-     * Group key (e.g. a status name).
-     */
-    key?: string;
-    /**
      * Count for this key.
      */
     count?: number;
+    /**
+     * Group key (e.g. a status name).
+     */
+    key?: string;
 }
 
 function isOptionalCountGroupPropertyOfType(

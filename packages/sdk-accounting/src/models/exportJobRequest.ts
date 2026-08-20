@@ -14,6 +14,10 @@
  */
 export interface ExportJobRequest { 
     /**
+     * How the export will be delivered
+     */
+    deliveryMode?: string;
+    /**
      * Type of export
      */
     exportType: string;
@@ -25,10 +29,6 @@ export interface ExportJobRequest {
      * Export format: CSV or JSON
      */
     format: string;
-    /**
-     * How the export will be delivered
-     */
-    deliveryMode?: string;
 }
 
 function isOptionalExportJobRequestPropertyOfType(
@@ -70,7 +70,7 @@ export function instanceOfExportJobRequest(value: object): value is ExportJobReq
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createExportJobRequestPropertyNames('exportType', 'format', );
-    const optionalStringProperties = createExportJobRequestOptionalProperties({ name: 'exportType', nullable: false }, { name: 'format', nullable: false }, { name: 'deliveryMode', nullable: false }, );
+    const optionalStringProperties = createExportJobRequestOptionalProperties({ name: 'deliveryMode', nullable: false }, { name: 'exportType', nullable: false }, { name: 'format', nullable: false }, );
     const optionalNumberProperties = createExportJobRequestOptionalProperties();
     const optionalBooleanProperties = createExportJobRequestOptionalProperties();
 

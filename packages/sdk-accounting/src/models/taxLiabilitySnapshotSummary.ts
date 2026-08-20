@@ -14,17 +14,9 @@
  */
 export interface TaxLiabilitySnapshotSummary { 
     /**
-     * Snapshot id
+     * SHA-256 canonical content hash
      */
-    snapshotId: string;
-    /**
-     * Accounting period code (YYYY-MM)
-     */
-    periodCode: string;
-    /**
-     * Snapshot lifecycle status: ACTIVE or SUPERSEDED
-     */
-    status: string;
+    contentHash: string;
     /**
      * Freeze timestamp
      */
@@ -34,17 +26,25 @@ export interface TaxLiabilitySnapshotSummary {
      */
     frozenBy: string;
     /**
-     * Grand total net tax as frozen
+     * Accounting period code (YYYY-MM)
      */
-    totalNetTax: number;
+    periodCode: string;
     /**
      * Whether GL drift was within tolerance at freeze time
      */
     reconciled: boolean;
     /**
-     * SHA-256 canonical content hash
+     * Snapshot id
      */
-    contentHash: string;
+    snapshotId: string;
+    /**
+     * Snapshot lifecycle status: ACTIVE or SUPERSEDED
+     */
+    status: string;
+    /**
+     * Grand total net tax as frozen
+     */
+    totalNetTax: number;
 }
 
 function isOptionalTaxLiabilitySnapshotSummaryPropertyOfType(
@@ -85,8 +85,8 @@ export function instanceOfTaxLiabilitySnapshotSummary(value: object): value is T
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createTaxLiabilitySnapshotSummaryPropertyNames('snapshotId', 'periodCode', 'status', 'frozenAt', 'frozenBy', 'totalNetTax', 'reconciled', 'contentHash', );
-    const optionalStringProperties = createTaxLiabilitySnapshotSummaryOptionalProperties({ name: 'snapshotId', nullable: false }, { name: 'periodCode', nullable: false }, { name: 'status', nullable: false }, { name: 'frozenAt', nullable: false }, { name: 'frozenBy', nullable: false }, { name: 'contentHash', nullable: false }, );
+    const requiredProperties = createTaxLiabilitySnapshotSummaryPropertyNames('contentHash', 'frozenAt', 'frozenBy', 'periodCode', 'reconciled', 'snapshotId', 'status', 'totalNetTax', );
+    const optionalStringProperties = createTaxLiabilitySnapshotSummaryOptionalProperties({ name: 'contentHash', nullable: false }, { name: 'frozenAt', nullable: false }, { name: 'frozenBy', nullable: false }, { name: 'periodCode', nullable: false }, { name: 'snapshotId', nullable: false }, { name: 'status', nullable: false }, );
     const optionalNumberProperties = createTaxLiabilitySnapshotSummaryOptionalProperties({ name: 'totalNetTax', nullable: false }, );
     const optionalBooleanProperties = createTaxLiabilitySnapshotSummaryOptionalProperties({ name: 'reconciled', nullable: false }, );
 

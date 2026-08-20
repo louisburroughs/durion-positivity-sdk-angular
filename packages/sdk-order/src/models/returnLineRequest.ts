@@ -14,6 +14,10 @@
  */
 export interface ReturnLineRequest { 
     /**
+     * Disposition of the returned item
+     */
+    condition: ReturnLineRequestConditionEnum;
+    /**
      * The sold line (order line id) being returned against
      */
     originalOrderLineId: string;
@@ -21,10 +25,6 @@ export interface ReturnLineRequest {
      * Units to return (capped at the un-refunded remainder)
      */
     returnQty: number;
-    /**
-     * Disposition of the returned item
-     */
-    condition: ReturnLineRequestConditionEnum;
     /**
      * Returned serials, when the sale captured them
      */
@@ -76,8 +76,8 @@ export function instanceOfReturnLineRequest(value: object): value is ReturnLineR
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createReturnLineRequestPropertyNames('originalOrderLineId', 'returnQty', 'condition', );
-    const optionalStringProperties = createReturnLineRequestOptionalProperties({ name: 'originalOrderLineId', nullable: false }, { name: 'condition', nullable: false }, );
+    const requiredProperties = createReturnLineRequestPropertyNames('condition', 'originalOrderLineId', 'returnQty', );
+    const optionalStringProperties = createReturnLineRequestOptionalProperties({ name: 'condition', nullable: false }, { name: 'originalOrderLineId', nullable: false }, );
     const optionalNumberProperties = createReturnLineRequestOptionalProperties({ name: 'returnQty', nullable: false }, );
     const optionalBooleanProperties = createReturnLineRequestOptionalProperties();
 

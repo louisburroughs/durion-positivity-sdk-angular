@@ -10,21 +10,16 @@
 
 
 export interface InvoiceRefundResponse { 
-    id?: string;
-    paymentIntentId?: string;
     amount?: number;
-    status?: InvoiceRefundResponseStatusEnum;
-    reason?: InvoiceRefundResponseReasonEnum;
+    completedAt?: string;
     externalReference?: string;
     gatewayReference?: string;
+    id?: string;
+    paymentIntentId?: string;
+    reason?: InvoiceRefundResponseReasonEnum;
     requestedAt?: string;
-    completedAt?: string;
+    status?: InvoiceRefundResponseStatusEnum;
 }
-export enum InvoiceRefundResponseStatusEnum {
-    Pending = 'PENDING',
-    Completed = 'COMPLETED',
-    Failed = 'FAILED'
-};
 export enum InvoiceRefundResponseReasonEnum {
     CustomerReturn = 'CUSTOMER_RETURN',
     ServiceError = 'SERVICE_ERROR',
@@ -35,6 +30,11 @@ export enum InvoiceRefundResponseReasonEnum {
     FraudPrevention = 'FRAUD_PREVENTION',
     ManagerDiscretion = 'MANAGER_DISCRETION',
     Other = 'OTHER'
+};
+export enum InvoiceRefundResponseStatusEnum {
+    Pending = 'PENDING',
+    Completed = 'COMPLETED',
+    Failed = 'FAILED'
 };
 
 
@@ -78,7 +78,7 @@ export function instanceOfInvoiceRefundResponse(value: object): value is Invoice
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createInvoiceRefundResponsePropertyNames();
-    const optionalStringProperties = createInvoiceRefundResponseOptionalProperties({ name: 'id', nullable: false }, { name: 'paymentIntentId', nullable: false }, { name: 'status', nullable: false }, { name: 'reason', nullable: false }, { name: 'externalReference', nullable: false }, { name: 'gatewayReference', nullable: false }, { name: 'requestedAt', nullable: false }, { name: 'completedAt', nullable: false }, );
+    const optionalStringProperties = createInvoiceRefundResponseOptionalProperties({ name: 'completedAt', nullable: false }, { name: 'externalReference', nullable: false }, { name: 'gatewayReference', nullable: false }, { name: 'id', nullable: false }, { name: 'paymentIntentId', nullable: false }, { name: 'reason', nullable: false }, { name: 'requestedAt', nullable: false }, { name: 'status', nullable: false }, );
     const optionalNumberProperties = createInvoiceRefundResponseOptionalProperties({ name: 'amount', nullable: false }, );
     const optionalBooleanProperties = createInvoiceRefundResponseOptionalProperties();
 

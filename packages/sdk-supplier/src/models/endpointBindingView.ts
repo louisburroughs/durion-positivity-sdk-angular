@@ -14,6 +14,14 @@
  */
 export interface EndpointBindingView { 
     /**
+     * Name of the auth config on the same profile that this binding authenticates with. Must already exist.
+     */
+    authConfigName?: string;
+    /**
+     * Base URL of the vendor endpoint for this capability.
+     */
+    baseUrl?: string;
+    /**
      * Identity of the endpoint binding (UUIDv7).
      */
     bindingId?: string;
@@ -22,42 +30,42 @@ export interface EndpointBindingView {
      */
     capability?: string;
     /**
-     * Canonical protocol family key of the adapter to use. Unknown keys are rejected with SUPPLIER_UNKNOWN_PROTOCOL_FAMILY.
+     * Exchange-audit payload capture level for this binding (ADR-0050 §7). Exchange metadata is always retained regardless. Omit to use the deployment default.
      */
-    protocolFamily?: string;
-    /**
-     * Adapter version key within the protocol family. Free-form data, deliberately not an enum (ADR-0051 §3) so a vendor\'s new norm needs no code change. NOT validated on write: a key with no registered codec is accepted here and then resolves to CAPABILITY_NOT_CONFIGURED on every call, so it must match a codec exactly. Keys shipped today: A2_5, B2_1, B3_3, B4_0, C1_0, C1_1, C1_2, S2S_V1.
-     */
-    version?: string;
-    /**
-     * Base URL of the vendor endpoint for this capability.
-     */
-    baseUrl?: string;
-    /**
-     * Path appended to the base URL for this capability.
-     */
-    path?: string;
-    /**
-     * Name of the auth config on the same profile that this binding authenticates with. Must already exist.
-     */
-    authConfigName?: string;
-    /**
-     * Cron expression driving scheduled runs of this binding. Omit for request-driven capabilities.
-     */
-    schedule?: string;
+    captureLevel?: EndpointBindingViewCaptureLevelEnum;
     /**
      * Whether THIS binding resolves. A disabled binding behaves exactly as an absent one: only this capability stops resolving for this supplier, and it reports the typed CAPABILITY_NOT_CONFIGURED outcome. This is a per-capability toggle, NOT a supplier-wide kill switch -- for that, disable the vendor profile itself.
      */
     enabled?: boolean;
     /**
-     * Exchange-audit payload capture level for this binding (ADR-0050 §7). Exchange metadata is always retained regardless. Omit to use the deployment default.
+     * Path appended to the base URL for this capability.
      */
-    captureLevel?: EndpointBindingViewCaptureLevelEnum;
+    path?: string;
+    /**
+     * Canonical protocol family key of the adapter to use. Unknown keys are rejected with SUPPLIER_UNKNOWN_PROTOCOL_FAMILY.
+     */
+    protocolFamily?: string;
+    /**
+     * Data classifications whose named fields are additionally redacted from REDACTED captures of this binding (ADR-0050 §7 minimization). Empty means credential redaction only.
+     */
+    redactionClassifications?: Set<EndpointBindingViewRedactionClassificationsEnum>;
+    /**
+     * Cron expression driving scheduled runs of this binding. Omit for request-driven capabilities.
+     */
+    schedule?: string;
+    /**
+     * Adapter version key within the protocol family. Free-form data, deliberately not an enum (ADR-0051 §3) so a vendor\'s new norm needs no code change. NOT validated on write: a key with no registered codec is accepted here and then resolves to CAPABILITY_NOT_CONFIGURED on every call, so it must match a codec exactly. Keys shipped today: A2_5, B2_1, B3_3, B4_0, C1_0, C1_1, C1_2, S2S_V1.
+     */
+    version?: string;
 }
 export enum EndpointBindingViewCaptureLevelEnum {
     Full = 'FULL',
     Redacted = 'REDACTED',
     MetadataOnly = 'METADATA_ONLY'
+};
+export enum EndpointBindingViewRedactionClassificationsEnum {
+    CustomerIdentifier = 'CUSTOMER_IDENTIFIER',
+    CommercialPricing = 'COMMERCIAL_PRICING'
 };
 
 
@@ -101,7 +109,7 @@ export function instanceOfEndpointBindingView(value: object): value is EndpointB
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createEndpointBindingViewPropertyNames();
-    const optionalStringProperties = createEndpointBindingViewOptionalProperties({ name: 'bindingId', nullable: false }, { name: 'capability', nullable: false }, { name: 'protocolFamily', nullable: false }, { name: 'version', nullable: false }, { name: 'baseUrl', nullable: false }, { name: 'path', nullable: false }, { name: 'authConfigName', nullable: false }, { name: 'schedule', nullable: false }, { name: 'captureLevel', nullable: false }, );
+    const optionalStringProperties = createEndpointBindingViewOptionalProperties({ name: 'authConfigName', nullable: false }, { name: 'baseUrl', nullable: false }, { name: 'bindingId', nullable: false }, { name: 'capability', nullable: false }, { name: 'captureLevel', nullable: false }, { name: 'path', nullable: false }, { name: 'protocolFamily', nullable: false }, { name: 'schedule', nullable: false }, { name: 'version', nullable: false }, );
     const optionalNumberProperties = createEndpointBindingViewOptionalProperties();
     const optionalBooleanProperties = createEndpointBindingViewOptionalProperties({ name: 'enabled', nullable: false }, );
 

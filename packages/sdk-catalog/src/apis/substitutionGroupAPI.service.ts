@@ -40,11 +40,11 @@ export class SubstitutionGroupAPIService extends BaseService {
     }
 
     /**
-     * Add product to substitution group
-     * Adds a product to the group (a product belongs to at most one group) and re-emits the product contract event for every member.
+     * Add Substitution Group Member
+     * Adds a product to a substitution group, making it mutually interchangeable with every other member; membership is exclusive, a product can belong to only one group at a time. Use this tool to grow an interchangeability set; do not use addProductReplacement, which records a one-way successor for a discontinued product rather than a symmetric substitute. Preconditions: the group and the product must both exist, and the product must not already belong to any substitution group, including this one. Required inputs: groupId (UUID) path parameter and productId (UUID) in the body. Emits a CATALOG_SUBSTITUTION_GROUP_MEMBER_ADD event and re-publishes the product fact for every member of the group so downstream replicas learn the new association. Returns 404 when the group or the product does not exist, and 409 when the product already belongs to a substitution group. 
      * @endpoint post /v1/products/substitution-groups/{groupId}/members
      * @param groupId Substitution group ID
-     * @param substitutionGroupMemberRequestDto 
+     * @param substitutionGroupMemberRequestDto The product to add as an interchangeable member of the group.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -114,10 +114,10 @@ export class SubstitutionGroupAPIService extends BaseService {
     }
 
     /**
-     * Create substitution group
-     * Creates an empty substitution group; add members afterwards.
+     * Create Substitution Group
+     * Creates an empty, named substitution group — a set of mutually interchangeable products in which each product may belong to at most one group. Use this tool to establish the group before populating it; do not use addSubstitutionGroupMember, which adds products to a group that already exists, and do not confuse groups with addProductReplacement, which records one-way successors for discontinued products. Preconditions: none; group names are not checked for uniqueness. Required inputs: name (non-blank, trimmed on save); notes are optional. Emits a CATALOG_SUBSTITUTION_GROUP_CREATE event; no product facts are re-published until members are added. Returns 201 with the group and an empty productIds list, and 400 when name is missing or blank. 
      * @endpoint post /v1/products/substitution-groups
-     * @param substitutionGroupCreateRequestDto 
+     * @param substitutionGroupCreateRequestDto Name and optional notes for the new interchangeability group.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -184,8 +184,8 @@ export class SubstitutionGroupAPIService extends BaseService {
     }
 
     /**
-     * Delete substitution group
-     * Deletes a group and its memberships, re-emitting the product contract event for every former member.
+     * Delete Substitution Group
+     * Deletes a substitution group and all of its memberships permanently, freeing every former member to join another group; the products themselves are untouched. Use this tool to dissolve a whole group; use removeSubstitutionGroupMember instead to take a single product out while keeping the group. Preconditions: the group must exist; there is no soft delete or archive. Required inputs: groupId (UUID) as a path parameter; there is no request body. Emits a CATALOG_SUBSTITUTION_GROUP_DELETE event and re-publishes the product fact for every former member so downstream replicas drop the association. Returns 204 on success, and 404 when no substitution group exists for the supplied id. 
      * @endpoint delete /v1/products/substitution-groups/{groupId}
      * @param groupId Substitution group ID
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -243,8 +243,8 @@ export class SubstitutionGroupAPIService extends BaseService {
     }
 
     /**
-     * Get substitution group
-     * Retrieves a substitution group with its member product ids.
+     * Get Substitution Group
+     * Returns one substitution group with its name, notes and member product ids ordered by when each member joined. Use this tool when the groupId is already known; use listSubstitutionGroups instead to discover groups. Preconditions: the group must exist. Required inputs: groupId (UUID) as a path parameter; there is no request body. No events are emitted and no state changes; this is a read-only projection. Returns 404 when no substitution group exists for the supplied id. 
      * @endpoint get /v1/products/substitution-groups/{groupId}
      * @param groupId Substitution group ID
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -303,8 +303,8 @@ export class SubstitutionGroupAPIService extends BaseService {
     }
 
     /**
-     * List substitution groups
-     * Returns all substitution groups with their member product ids.
+     * List Substitution Groups
+     * Returns every substitution group with its name, notes and member product ids ordered by when each member joined. Use this tool to discover a groupId or survey interchangeability sets; use getSubstitutionGroup instead when the id is already known. Preconditions: none; the list is unfiltered and unpaged. Required inputs: none, and there is no request body. No events are emitted and no state changes; this is a read-only projection. Returns 200 with an empty array when no groups exist, so an empty result is not an error condition. 
      * @endpoint get /v1/products/substitution-groups
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
@@ -359,8 +359,8 @@ export class SubstitutionGroupAPIService extends BaseService {
     }
 
     /**
-     * Remove product from substitution group
-     * Removes a product from the group and re-emits the product contract event for the removed product and every remaining member.
+     * Remove Substitution Group Member
+     * Removes a product from a substitution group, ending its interchangeability with the remaining members and freeing it to join another group. Use this tool to take one product out; use deleteSubstitutionGroup instead to dissolve the entire group at once. Preconditions: the group must exist and the product must currently be a member of that specific group. Required inputs: groupId and productId (UUIDs) as path parameters; there is no request body. Emits a CATALOG_SUBSTITUTION_GROUP_MEMBER_REMOVE event and re-publishes the product fact for the removed product and every remaining member. Returns 200 with the group\&#39;s remaining membership, and 404 when the group does not exist or the product is not a member of it. 
      * @endpoint delete /v1/products/substitution-groups/{groupId}/members/{productId}
      * @param groupId Substitution group ID
      * @param productId Product ID to remove

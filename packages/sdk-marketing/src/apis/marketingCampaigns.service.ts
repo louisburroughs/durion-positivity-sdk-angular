@@ -17,6 +17,8 @@ import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
 // @ts-ignore
+import { ApiError } from '../src/models/apiError';
+// @ts-ignore
 import { AudiencePreviewResponse } from '../src/models/audiencePreviewResponse';
 // @ts-ignore
 import { CampaignResponse } from '../src/models/campaignResponse';
@@ -42,20 +44,20 @@ export class MarketingCampaignsService extends BaseService {
     }
 
     /**
-     * Cancel campaign
-     * Cancel a campaign; the state is terminal
+     * Cancel Campaign Permanently
+     * Moves a campaign to CANCELLED, a terminal state from which no further transition exists. Use this tool to abandon a campaign for good; do not use pauseCampaign, which halts dispatch reversibly and keeps the queue intact. Preconditions: the campaign must exist and be in DRAFT, SCHEDULED, SENDING or PAUSED; a SENT campaign can only be CLOSED, and CANCELLED and CLOSED campaigns cannot transition at all. Required inputs: campaignId (UUID) as a path parameter; there is no request body. Emits a MARKETING_CAMPAIGN_CANCEL event; messages already delivered are not recalled. Returns 404 when the campaign does not exist, and 422 when its current status does not allow cancellation. 
      * @endpoint post /v1/marketing/campaigns/{campaignId}/cancel
      * @param campaignId 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public cancel(campaignId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<CampaignResponse>;
-    public cancel(campaignId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<CampaignResponse>>;
-    public cancel(campaignId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<CampaignResponse>>;
-    public cancel(campaignId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public cancelCampaign(campaignId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<CampaignResponse>;
+    public cancelCampaign(campaignId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<CampaignResponse>>;
+    public cancelCampaign(campaignId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<CampaignResponse>>;
+    public cancelCampaign(campaignId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (campaignId === null || campaignId === undefined) {
-            throw new Error('Required parameter campaignId was null or undefined when calling cancel.');
+            throw new Error('Required parameter campaignId was null or undefined when calling cancelCampaign.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -102,20 +104,20 @@ export class MarketingCampaignsService extends BaseService {
     }
 
     /**
-     * Create campaign
-     * Create a campaign in DRAFT status
+     * Create Campaign
+     * Creates a marketing campaign in DRAFT status; nothing is targeted or sent until it is scheduled and dispatched. Use this tool when defining a new campaign; do not use updateCampaign, which edits an existing DRAFT campaign. Preconditions: no campaign may already use the same code (compared case-insensitively); segment and templates may be attached later, since readiness is only enforced by scheduleCampaign. Required inputs: code, name, audienceType (COMMERCIAL or INDIVIDUAL, immutable after creation) and a non-empty channels set (EMAIL, SMS); scheduleType defaults to IMMEDIATE, and scheduledAt is required only when scheduleType is SCHEDULED. Emits a MARKETING_CAMPAIGN_CREATE event; no recipients are contacted. Returns 409 when the code is already in use, and 422 when scheduleType is SCHEDULED without scheduledAt or windowEnd precedes windowStart. 
      * @endpoint post /v1/marketing/campaigns
-     * @param upsertCampaignRequest 
+     * @param upsertCampaignRequest Campaign definition: code, name, audience, channels, and the optional segment, templates, offer and schedule to attach.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public create1(upsertCampaignRequest: UpsertCampaignRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<CampaignResponse>;
-    public create1(upsertCampaignRequest: UpsertCampaignRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<CampaignResponse>>;
-    public create1(upsertCampaignRequest: UpsertCampaignRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<CampaignResponse>>;
-    public create1(upsertCampaignRequest: UpsertCampaignRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public createCampaign(upsertCampaignRequest: UpsertCampaignRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<CampaignResponse>;
+    public createCampaign(upsertCampaignRequest: UpsertCampaignRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<CampaignResponse>>;
+    public createCampaign(upsertCampaignRequest: UpsertCampaignRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<CampaignResponse>>;
+    public createCampaign(upsertCampaignRequest: UpsertCampaignRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (upsertCampaignRequest === null || upsertCampaignRequest === undefined) {
-            throw new Error('Required parameter upsertCampaignRequest was null or undefined when calling create1.');
+            throw new Error('Required parameter upsertCampaignRequest was null or undefined when calling createCampaign.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -172,20 +174,80 @@ export class MarketingCampaignsService extends BaseService {
     }
 
     /**
-     * Get campaign
-     * Retrieve a campaign by id
+     * Dispatch Campaign To Audience
+     * Materializes the campaign\&#39;s resolved audience into one PENDING send row per recipient and channel, moves a SCHEDULED campaign to SENDING, and returns 202 with the queued count while the send worker delivers asynchronously. Use this tool to start or retry delivery; do not use scheduleCampaign, which only validates readiness, and do not use previewCampaignAudience, which reports reach without queueing anything. Preconditions: the campaign must exist, be SCHEDULED or SENDING, and have a segment bound; the audience is the last snapshot replicated from pos-customer. Required inputs: campaignId (UUID) as a path parameter; there is no request body. Emits a MARKETING_CAMPAIGN_SEND event; the call is idempotent because each recipient-channel pair is unique per campaign, so re-invoking never double-sends, and when no audience snapshot has arrived yet it queues nothing, asynchronously requests resolution from pos-customer, and reports queued 0 for a later retry. Returns 404 when the campaign does not exist, and 422 when it is not SCHEDULED or SENDING or has no segment bound. 
+     * @endpoint post /v1/marketing/campaigns/{campaignId}/send
+     * @param campaignId 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public dispatchCampaign(campaignId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<object>;
+    public dispatchCampaign(campaignId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<object>>;
+    public dispatchCampaign(campaignId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<object>>;
+    public dispatchCampaign(campaignId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (campaignId === null || campaignId === undefined) {
+            throw new Error('Required parameter campaignId was null or undefined when calling dispatchCampaign.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/marketing/campaigns/${this.configuration.encodeParam({name: "campaignId", value: campaignId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/send`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<object>('post', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Get Campaign By Id
+     * Returns one campaign\&#39;s full definition, including status, channels, bound segment, templates, schedule and delivery window. Use this tool when the campaign id is already known; use listCampaigns instead when searching by status or program. Preconditions: the campaign must exist. Required inputs: campaignId (UUID) as a path parameter; there is no request body. Emits a MARKETING_CAMPAIGN_GET audit event; no marketing state is changed and this is a read-only projection. Returns 404 when no campaign exists for the supplied id. 
      * @endpoint get /v1/marketing/campaigns/{campaignId}
      * @param campaignId 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public get1(campaignId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<CampaignResponse>;
-    public get1(campaignId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<CampaignResponse>>;
-    public get1(campaignId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<CampaignResponse>>;
-    public get1(campaignId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getCampaignById(campaignId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<CampaignResponse>;
+    public getCampaignById(campaignId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<CampaignResponse>>;
+    public getCampaignById(campaignId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<CampaignResponse>>;
+    public getCampaignById(campaignId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (campaignId === null || campaignId === undefined) {
-            throw new Error('Required parameter campaignId was null or undefined when calling get1.');
+            throw new Error('Required parameter campaignId was null or undefined when calling getCampaignById.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -232,87 +294,8 @@ export class MarketingCampaignsService extends BaseService {
     }
 
     /**
-     * List campaigns
-     * List campaigns, optionally filtered by status or program
-     * @endpoint get /v1/marketing/campaigns
-     * @param status 
-     * @param campaignProgramId 
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     * @param options additional options
-     */
-    public list1(status?: 'DRAFT' | 'SCHEDULED' | 'SENDING' | 'SENT' | 'PAUSED' | 'CANCELLED' | 'CLOSED', campaignProgramId?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<CampaignResponse>>;
-    public list1(status?: 'DRAFT' | 'SCHEDULED' | 'SENDING' | 'SENT' | 'PAUSED' | 'CANCELLED' | 'CLOSED', campaignProgramId?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<CampaignResponse>>>;
-    public list1(status?: 'DRAFT' | 'SCHEDULED' | 'SENDING' | 'SENT' | 'PAUSED' | 'CANCELLED' | 'CLOSED', campaignProgramId?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<CampaignResponse>>>;
-    public list1(status?: 'DRAFT' | 'SCHEDULED' | 'SENDING' | 'SENT' | 'PAUSED' | 'CANCELLED' | 'CLOSED', campaignProgramId?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
-
-        let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
-
-        localVarQueryParameters = this.addToHttpParams(
-            localVarQueryParameters,
-            'status',
-            <any>status,
-            QueryParamStyle.Form,
-            true,
-        );
-
-
-        localVarQueryParameters = this.addToHttpParams(
-            localVarQueryParameters,
-            'campaignProgramId',
-            <any>campaignProgramId,
-            QueryParamStyle.Form,
-            true,
-        );
-
-
-        let localVarHeaders = this.defaultHeaders;
-
-        // authentication (bearerAuth) required
-        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
-
-        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
-            'application/json'
-        ]);
-        if (localVarHttpHeaderAcceptSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
-        }
-
-        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
-
-        const localVarTransferCache: boolean = options?.transferCache ?? true;
-
-
-        let responseType_: 'text' | 'json' | 'blob' = 'json';
-        if (localVarHttpHeaderAcceptSelected) {
-            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
-                responseType_ = 'text';
-            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
-                responseType_ = 'json';
-            } else {
-                responseType_ = 'blob';
-            }
-        }
-
-        let localVarPath = `/v1/marketing/campaigns`;
-        const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<Array<CampaignResponse>>('get', `${basePath}${localVarPath}`,
-            {
-                context: localVarHttpContext,
-                params: localVarQueryParameters.toHttpParams(),
-                responseType: <any>responseType_,
-                ...(withCredentials ? { withCredentials } : {}),
-                headers: localVarHeaders,
-                observe: observe,
-                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * List sends
-     * Per-recipient send records for a campaign
+     * List Campaign Send Records
+     * Lists the per-recipient, per-channel send rows a campaign dispatch queued, including status, failure reason, provider message id, attempts and timestamps. Use this tool to inspect individual delivery outcomes; use getCampaignStats instead for aggregate funnel and attribution numbers. Preconditions: none; an unknown campaignId yields an empty page rather than an error. Required inputs: campaignId (UUID) as a path parameter; page defaults to 0 and size defaults to 50, clamped between 1 and 200, ordered by queuedAt ascending. Emits a MARKETING_CAMPAIGN_SENDS_LIST audit event; no marketing state is changed and this is a read-only projection. Returns 200 with an empty page when the campaign has no send rows, so an empty result is not an error condition. 
      * @endpoint get /v1/marketing/campaigns/{campaignId}/sends
      * @param campaignId 
      * @param page 
@@ -321,12 +304,12 @@ export class MarketingCampaignsService extends BaseService {
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public listSends(campaignId: string, page?: number, size?: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PagedResponse>;
-    public listSends(campaignId: string, page?: number, size?: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PagedResponse>>;
-    public listSends(campaignId: string, page?: number, size?: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PagedResponse>>;
-    public listSends(campaignId: string, page?: number, size?: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public listCampaignSends(campaignId: string, page?: number, size?: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PagedResponse>;
+    public listCampaignSends(campaignId: string, page?: number, size?: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PagedResponse>>;
+    public listCampaignSends(campaignId: string, page?: number, size?: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PagedResponse>>;
+    public listCampaignSends(campaignId: string, page?: number, size?: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (campaignId === null || campaignId === undefined) {
-            throw new Error('Required parameter campaignId was null or undefined when calling listSends.');
+            throw new Error('Required parameter campaignId was null or undefined when calling listCampaignSends.');
         }
 
         let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
@@ -394,20 +377,99 @@ export class MarketingCampaignsService extends BaseService {
     }
 
     /**
-     * Pause campaign
-     * Halt dispatch; queued recipients stop being drained
+     * List Campaigns
+     * Lists marketing campaigns ordered by newest first, optionally filtered by lifecycle status and campaign program. Use this tool when browsing or searching campaigns; do not use getCampaignById, which requires a known campaign id and returns exactly one campaign. Preconditions: none; an empty result simply means no campaign matches the filters. Required inputs: none; status (DRAFT, SCHEDULED, SENDING, SENT, PAUSED, CANCELLED or CLOSED) and campaignProgramId (UUID) are optional query filters that combine when both are supplied. Emits a MARKETING_CAMPAIGN_LIST audit event; no marketing state is changed. Returns 200 with an empty array when nothing matches, so an empty result is not an error condition. 
+     * @endpoint get /v1/marketing/campaigns
+     * @param status 
+     * @param campaignProgramId 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public listCampaigns(status?: 'DRAFT' | 'SCHEDULED' | 'SENDING' | 'SENT' | 'PAUSED' | 'CANCELLED' | 'CLOSED', campaignProgramId?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<CampaignResponse>>;
+    public listCampaigns(status?: 'DRAFT' | 'SCHEDULED' | 'SENDING' | 'SENT' | 'PAUSED' | 'CANCELLED' | 'CLOSED', campaignProgramId?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<CampaignResponse>>>;
+    public listCampaigns(status?: 'DRAFT' | 'SCHEDULED' | 'SENDING' | 'SENT' | 'PAUSED' | 'CANCELLED' | 'CLOSED', campaignProgramId?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<CampaignResponse>>>;
+    public listCampaigns(status?: 'DRAFT' | 'SCHEDULED' | 'SENDING' | 'SENT' | 'PAUSED' | 'CANCELLED' | 'CLOSED', campaignProgramId?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+
+        let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'status',
+            <any>status,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'campaignProgramId',
+            <any>campaignProgramId,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/marketing/campaigns`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<Array<CampaignResponse>>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                params: localVarQueryParameters.toHttpParams(),
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Pause Campaign Dispatch
+     * Moves a campaign to PAUSED so the send worker stops draining its queued recipients. Use this tool to halt an in-flight or scheduled campaign without losing it; do not use cancelCampaign, which is terminal and cannot be undone. Preconditions: the campaign must exist and be in SCHEDULED or SENDING, the only statuses that permit the PAUSED transition. Required inputs: campaignId (UUID) as a path parameter; there is no request body. Emits a MARKETING_CAMPAIGN_PAUSE event; already-delivered messages are unaffected and queued send rows remain PENDING for a later resume. Returns 404 when the campaign does not exist, and 422 when its current status does not allow pausing. 
      * @endpoint post /v1/marketing/campaigns/{campaignId}/pause
      * @param campaignId 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public pause(campaignId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<CampaignResponse>;
-    public pause(campaignId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<CampaignResponse>>;
-    public pause(campaignId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<CampaignResponse>>;
-    public pause(campaignId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public pauseCampaign(campaignId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<CampaignResponse>;
+    public pauseCampaign(campaignId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<CampaignResponse>>;
+    public pauseCampaign(campaignId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<CampaignResponse>>;
+    public pauseCampaign(campaignId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (campaignId === null || campaignId === undefined) {
-            throw new Error('Required parameter campaignId was null or undefined when calling pause.');
+            throw new Error('Required parameter campaignId was null or undefined when calling pauseCampaign.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -454,20 +516,20 @@ export class MarketingCampaignsService extends BaseService {
     }
 
     /**
-     * Preview audience
-     * Per-channel reach after consent, account gate, and suppression, plus any issues that would block scheduling
+     * Preview Campaign Audience
+     * Reports the campaign\&#39;s last resolved audience snapshot: total segment members, whether that snapshot was truncated by the CRM\&#39;s candidate ceiling, per-channel eligible counts after consent, staleness and suppression checks, a bounded per-channel sample of the individual decisions behind those counts, whether each channel has a template, and the readiness problems that would block scheduling. Use this tool to gauge reach before scheduling or dispatch; do not use dispatchCampaign, which actually queues messages for delivery. Preconditions: the campaign must exist and have a segmentId bound; membership is replicated asynchronously from pos-customer, so the counts reflect the snapshot taken at resolvedAt rather than live CRM data. Required inputs: campaignId (UUID) as a path parameter; there is no request body. Emits a MARKETING_AUDIENCE_PREVIEW audit event and, while the campaign is still DRAFT, SCHEDULED or PAUSED, asynchronously requests a fresher membership snapshot from pos-customer; the campaign itself is not modified. Each sample entry carries the party id, the contact resolved to receive the message (the CRM\&#39;s designated contact for a commercial account, the person themselves for an individual), and the machine-readable decision code; it never carries names, addresses or contact details, which this module does not hold. Problems with the campaign\&#39;s promotionOfferId or catalogFocusRef are reported in warnings rather than as errors, because a preview is where a marketer goes to find out what is wrong. Returns 404 when the campaign does not exist, and 422 when no segment is bound so there is nothing to preview. 
      * @endpoint post /v1/marketing/campaigns/{campaignId}/audience-preview
      * @param campaignId 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public previewAudience(campaignId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<AudiencePreviewResponse>;
-    public previewAudience(campaignId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<AudiencePreviewResponse>>;
-    public previewAudience(campaignId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<AudiencePreviewResponse>>;
-    public previewAudience(campaignId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public previewCampaignAudience(campaignId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<AudiencePreviewResponse>;
+    public previewCampaignAudience(campaignId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<AudiencePreviewResponse>>;
+    public previewCampaignAudience(campaignId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<AudiencePreviewResponse>>;
+    public previewCampaignAudience(campaignId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (campaignId === null || campaignId === undefined) {
-            throw new Error('Required parameter campaignId was null or undefined when calling previewAudience.');
+            throw new Error('Required parameter campaignId was null or undefined when calling previewCampaignAudience.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -514,20 +576,20 @@ export class MarketingCampaignsService extends BaseService {
     }
 
     /**
-     * Resume campaign
-     * Return a paused campaign to the dispatch queue
+     * Resume Paused Campaign
+     * Returns a PAUSED campaign to SCHEDULED so it re-enters the dispatch queue; the send worker decides when delivery actually restarts rather than jumping straight back into SENDING. Use this tool to continue a campaign that pauseCampaign halted; do not use scheduleCampaign, which re-runs readiness validation on a DRAFT or PAUSED campaign. Preconditions: the campaign must exist and be PAUSED. Required inputs: campaignId (UUID) as a path parameter; there is no request body. Emits a MARKETING_CAMPAIGN_RESUME event; recipients already recorded as sent are never re-queued, because each recipient-channel pair is unique per campaign. Returns 404 when the campaign does not exist, and 422 when its current status does not allow resuming. 
      * @endpoint post /v1/marketing/campaigns/{campaignId}/resume
      * @param campaignId 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public resume(campaignId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<CampaignResponse>;
-    public resume(campaignId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<CampaignResponse>>;
-    public resume(campaignId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<CampaignResponse>>;
-    public resume(campaignId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public resumeCampaign(campaignId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<CampaignResponse>;
+    public resumeCampaign(campaignId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<CampaignResponse>>;
+    public resumeCampaign(campaignId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<CampaignResponse>>;
+    public resumeCampaign(campaignId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (campaignId === null || campaignId === undefined) {
-            throw new Error('Required parameter campaignId was null or undefined when calling resume.');
+            throw new Error('Required parameter campaignId was null or undefined when calling resumeCampaign.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -574,20 +636,20 @@ export class MarketingCampaignsService extends BaseService {
     }
 
     /**
-     * Schedule campaign
-     * Validate the segment, templates, and offer, then move the campaign to SCHEDULED
+     * Schedule Campaign For Dispatch
+     * Validates a campaign\&#39;s readiness and moves it to SCHEDULED, the state from which dispatch is allowed. Use this tool when a DRAFT campaign is complete; do not use dispatchCampaign, which queues the actual sends and only accepts a campaign that is already SCHEDULED or SENDING. Preconditions: the campaign must exist and be in DRAFT or PAUSED; it must have at least one channel, a bound segment that is known to this module, active, and matching the campaign\&#39;s audienceType, and an existing template attached for every selected channel; any promotionOfferId must resolve in pos-price to an ACTIVE offer whose date window includes today, and any catalogFocusRef must be written as kind:value using one of product, sku, service or category. Required inputs: campaignId (UUID) as a path parameter; there is no request body. Emits a MARKETING_CAMPAIGN_SCHEDULE event and publishes a campaign-scheduled fact through the transactional outbox. Returns 404 when the campaign does not exist, and 422 listing every readiness problem at once when the campaign is not ready or the transition is not legal from its current status. 
      * @endpoint post /v1/marketing/campaigns/{campaignId}/schedule
      * @param campaignId 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public schedule(campaignId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<CampaignResponse>;
-    public schedule(campaignId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<CampaignResponse>>;
-    public schedule(campaignId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<CampaignResponse>>;
-    public schedule(campaignId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public scheduleCampaign(campaignId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<CampaignResponse>;
+    public scheduleCampaign(campaignId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<CampaignResponse>>;
+    public scheduleCampaign(campaignId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<CampaignResponse>>;
+    public scheduleCampaign(campaignId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (campaignId === null || campaignId === undefined) {
-            throw new Error('Required parameter campaignId was null or undefined when calling schedule.');
+            throw new Error('Required parameter campaignId was null or undefined when calling scheduleCampaign.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -634,84 +696,24 @@ export class MarketingCampaignsService extends BaseService {
     }
 
     /**
-     * Dispatch campaign
-     * Queue the campaign\&#39;s audience for delivery. Asynchronous and idempotent: re-invoking never double-sends.
-     * @endpoint post /v1/marketing/campaigns/{campaignId}/send
-     * @param campaignId 
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     * @param options additional options
-     */
-    public send(campaignId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<object>;
-    public send(campaignId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<object>>;
-    public send(campaignId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<object>>;
-    public send(campaignId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
-        if (campaignId === null || campaignId === undefined) {
-            throw new Error('Required parameter campaignId was null or undefined when calling send.');
-        }
-
-        let localVarHeaders = this.defaultHeaders;
-
-        // authentication (bearerAuth) required
-        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
-
-        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
-            'application/json'
-        ]);
-        if (localVarHttpHeaderAcceptSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
-        }
-
-        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
-
-        const localVarTransferCache: boolean = options?.transferCache ?? true;
-
-
-        let responseType_: 'text' | 'json' | 'blob' = 'json';
-        if (localVarHttpHeaderAcceptSelected) {
-            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
-                responseType_ = 'text';
-            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
-                responseType_ = 'json';
-            } else {
-                responseType_ = 'blob';
-            }
-        }
-
-        let localVarPath = `/v1/marketing/campaigns/${this.configuration.encodeParam({name: "campaignId", value: campaignId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/send`;
-        const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<object>('post', `${basePath}${localVarPath}`,
-            {
-                context: localVarHttpContext,
-                responseType: <any>responseType_,
-                ...(withCredentials ? { withCredentials } : {}),
-                headers: localVarHeaders,
-                observe: observe,
-                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * Update campaign
-     * Update a DRAFT campaign. Editing is refused once dispatch has begun.
+     * Update Draft Campaign
+     * Replaces the definition of a DRAFT campaign, including its code, channels, segment, templates, schedule and delivery window. Use this tool to revise a campaign before it is scheduled; do not use createCampaign, which makes a new campaign, and use the lifecycle tools (scheduleCampaign, pauseCampaign, cancelCampaign) rather than this one to change status. Preconditions: the campaign must exist and still be in DRAFT, since once dispatch may have begun the definition is frozen; audienceType must equal the stored value because it is immutable. Required inputs: campaignId (UUID) path parameter plus the full replacement body (code, name, audienceType, channels); scheduleType defaults to IMMEDIATE when omitted, and omitted optional fields are cleared rather than preserved. Emits a MARKETING_CAMPAIGN_UPDATE event; no recipients are contacted. Returns 404 when the campaign does not exist, 409 when the code belongs to another campaign, and 422 when the campaign is no longer editable, audienceType is changed, or the schedule and window fields are inconsistent. 
      * @endpoint put /v1/marketing/campaigns/{campaignId}
      * @param campaignId 
-     * @param upsertCampaignRequest 
+     * @param upsertCampaignRequest Full replacement campaign definition; audienceType must match the stored value, and omitted optional fields are cleared.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public update1(campaignId: string, upsertCampaignRequest: UpsertCampaignRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<CampaignResponse>;
-    public update1(campaignId: string, upsertCampaignRequest: UpsertCampaignRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<CampaignResponse>>;
-    public update1(campaignId: string, upsertCampaignRequest: UpsertCampaignRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<CampaignResponse>>;
-    public update1(campaignId: string, upsertCampaignRequest: UpsertCampaignRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public updateCampaign(campaignId: string, upsertCampaignRequest: UpsertCampaignRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<CampaignResponse>;
+    public updateCampaign(campaignId: string, upsertCampaignRequest: UpsertCampaignRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<CampaignResponse>>;
+    public updateCampaign(campaignId: string, upsertCampaignRequest: UpsertCampaignRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<CampaignResponse>>;
+    public updateCampaign(campaignId: string, upsertCampaignRequest: UpsertCampaignRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (campaignId === null || campaignId === undefined) {
-            throw new Error('Required parameter campaignId was null or undefined when calling update1.');
+            throw new Error('Required parameter campaignId was null or undefined when calling updateCampaign.');
         }
         if (upsertCampaignRequest === null || upsertCampaignRequest === undefined) {
-            throw new Error('Required parameter upsertCampaignRequest was null or undefined when calling update1.');
+            throw new Error('Required parameter upsertCampaignRequest was null or undefined when calling updateCampaign.');
         }
 
         let localVarHeaders = this.defaultHeaders;

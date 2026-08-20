@@ -14,21 +14,21 @@
  */
 export interface MappingKeyCreateRequest { 
     /**
-     * Identifier of the posting category this mapping key belongs to
+     * Identifier of the user creating the mapping key
      */
-    postingCategoryId: string;
-    /**
-     * Name of the mapping key
-     */
-    keyName: string;
+    createdBy: string;
     /**
      * Optional description of the mapping key
      */
     description?: string;
     /**
-     * Identifier of the user creating the mapping key
+     * Name of the mapping key
      */
-    createdBy: string;
+    keyName: string;
+    /**
+     * Identifier of the posting category this mapping key belongs to
+     */
+    postingCategoryId: string;
 }
 
 function isOptionalMappingKeyCreateRequestPropertyOfType(
@@ -69,8 +69,8 @@ export function instanceOfMappingKeyCreateRequest(value: object): value is Mappi
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createMappingKeyCreateRequestPropertyNames('postingCategoryId', 'keyName', 'createdBy', );
-    const optionalStringProperties = createMappingKeyCreateRequestOptionalProperties({ name: 'postingCategoryId', nullable: false }, { name: 'keyName', nullable: false }, { name: 'description', nullable: false }, { name: 'createdBy', nullable: false }, );
+    const requiredProperties = createMappingKeyCreateRequestPropertyNames('createdBy', 'keyName', 'postingCategoryId', );
+    const optionalStringProperties = createMappingKeyCreateRequestOptionalProperties({ name: 'createdBy', nullable: false }, { name: 'description', nullable: false }, { name: 'keyName', nullable: false }, { name: 'postingCategoryId', nullable: false }, );
     const optionalNumberProperties = createMappingKeyCreateRequestOptionalProperties();
     const optionalBooleanProperties = createMappingKeyCreateRequestOptionalProperties();
 

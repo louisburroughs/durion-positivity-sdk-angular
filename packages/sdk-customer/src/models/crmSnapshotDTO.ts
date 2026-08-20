@@ -21,23 +21,23 @@ import { VehicleSummary } from './vehicleSummary';
  * Read-only CRM snapshot of an account, its contacts, vehicles, and billing configuration
  */
 export interface CrmSnapshotDTO { 
-    snapshotMetadata: SnapshotMetadata;
     account: AccountSummary;
+    billingRules?: BillingRuleRef;
     /**
      * Contacts associated with the account
      */
     contacts: Array<ContactSummary>;
-    /**
-     * Vehicles associated with the account
-     */
-    vehicles: Array<VehicleSummary>;
-    preferences?: BillingPreferences;
-    billingRules?: BillingRuleRef;
     marketingConsent?: MarketingConsentSummaryResponse;
+    preferences?: BillingPreferences;
     /**
      * Most recent touches on the party\'s interaction timeline
      */
     recentInteractions?: Array<CustomerInteractionResponse>;
+    snapshotMetadata: SnapshotMetadata;
+    /**
+     * Vehicles associated with the account
+     */
+    vehicles: Array<VehicleSummary>;
 }
 
 function isOptionalCrmSnapshotDTOPropertyOfType(
@@ -78,7 +78,7 @@ export function instanceOfCrmSnapshotDTO(value: object): value is CrmSnapshotDTO
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createCrmSnapshotDTOPropertyNames('snapshotMetadata', 'account', 'contacts', 'vehicles', );
+    const requiredProperties = createCrmSnapshotDTOPropertyNames('account', 'contacts', 'snapshotMetadata', 'vehicles', );
     const optionalStringProperties = createCrmSnapshotDTOOptionalProperties();
     const optionalNumberProperties = createCrmSnapshotDTOOptionalProperties();
     const optionalBooleanProperties = createCrmSnapshotDTOOptionalProperties();

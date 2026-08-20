@@ -14,9 +14,25 @@
  */
 export interface AddItemRequest { 
     /**
+     * Customer-visible line note
+     */
+    customerNote?: string;
+    /**
+     * Shop-internal line note
+     */
+    internalNote?: string;
+    /**
      * Stock keeping unit identifying the item to add
      */
     itemSku: string;
+    /**
+     * Client-supplied stable line identity; a replayed add with a known lineUuid updates the existing line instead of duplicating it
+     */
+    lineUuid?: string;
+    /**
+     * Manual unit price override for the item, when applicable
+     */
+    manualPrice?: number;
     /**
      * Quantity of the item to add to the cart
      */
@@ -25,22 +41,6 @@ export interface AddItemRequest {
      * Reason code justifying a manual price or special handling
      */
     reasonCode?: string;
-    /**
-     * Manual unit price override for the item, when applicable
-     */
-    manualPrice?: number;
-    /**
-     * Client-supplied stable line identity; a replayed add with a known lineUuid updates the existing line instead of duplicating it
-     */
-    lineUuid?: string;
-    /**
-     * Customer-visible line note
-     */
-    customerNote?: string;
-    /**
-     * Shop-internal line note
-     */
-    internalNote?: string;
     /**
      * Captured lot/serial numbers for tracked products (count must not exceed quantity; SERIAL-tracked products require one per unit at checkout, LOT-tracked at least one)
      */
@@ -86,8 +86,8 @@ export function instanceOfAddItemRequest(value: object): value is AddItemRequest
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createAddItemRequestPropertyNames('itemSku', 'quantity', );
-    const optionalStringProperties = createAddItemRequestOptionalProperties({ name: 'itemSku', nullable: false }, { name: 'reasonCode', nullable: false }, { name: 'lineUuid', nullable: false }, { name: 'customerNote', nullable: false }, { name: 'internalNote', nullable: false }, );
-    const optionalNumberProperties = createAddItemRequestOptionalProperties({ name: 'quantity', nullable: false }, { name: 'manualPrice', nullable: false }, );
+    const optionalStringProperties = createAddItemRequestOptionalProperties({ name: 'customerNote', nullable: false }, { name: 'internalNote', nullable: false }, { name: 'itemSku', nullable: false }, { name: 'lineUuid', nullable: false }, { name: 'reasonCode', nullable: false }, );
+    const optionalNumberProperties = createAddItemRequestOptionalProperties({ name: 'manualPrice', nullable: false }, { name: 'quantity', nullable: false }, );
     const optionalBooleanProperties = createAddItemRequestOptionalProperties();
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

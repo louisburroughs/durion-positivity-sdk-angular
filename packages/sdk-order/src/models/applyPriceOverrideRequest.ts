@@ -14,6 +14,14 @@
  */
 export interface ApplyPriceOverrideRequest { 
     /**
+     * Optional idempotency key for duplicate prevention
+     */
+    idempotencyKey?: string;
+    /**
+     * Free-text justification supporting the price override
+     */
+    justification?: string;
+    /**
      * Identifier of the order whose line is being overridden
      */
     orderId: string;
@@ -21,10 +29,6 @@ export interface ApplyPriceOverrideRequest {
      * Identifier of the order line receiving the price override
      */
     orderLineId: string;
-    /**
-     * Identifier of the product on the order line
-     */
-    productId: string;
     /**
      * Original price of the line before the override
      */
@@ -34,17 +38,13 @@ export interface ApplyPriceOverrideRequest {
      */
     overridePrice: number;
     /**
+     * Identifier of the product on the order line
+     */
+    productId: string;
+    /**
      * Reason code for the price override
      */
     reasonCode: string;
-    /**
-     * Free-text justification supporting the price override
-     */
-    justification?: string;
-    /**
-     * Optional idempotency key for duplicate prevention
-     */
-    idempotencyKey?: string;
 }
 
 function isOptionalApplyPriceOverrideRequestPropertyOfType(
@@ -85,8 +85,8 @@ export function instanceOfApplyPriceOverrideRequest(value: object): value is App
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createApplyPriceOverrideRequestPropertyNames('orderId', 'orderLineId', 'productId', 'originalPrice', 'overridePrice', 'reasonCode', );
-    const optionalStringProperties = createApplyPriceOverrideRequestOptionalProperties({ name: 'orderId', nullable: false }, { name: 'orderLineId', nullable: false }, { name: 'productId', nullable: false }, { name: 'reasonCode', nullable: false }, { name: 'justification', nullable: false }, { name: 'idempotencyKey', nullable: false }, );
+    const requiredProperties = createApplyPriceOverrideRequestPropertyNames('orderId', 'orderLineId', 'originalPrice', 'overridePrice', 'productId', 'reasonCode', );
+    const optionalStringProperties = createApplyPriceOverrideRequestOptionalProperties({ name: 'idempotencyKey', nullable: false }, { name: 'justification', nullable: false }, { name: 'orderId', nullable: false }, { name: 'orderLineId', nullable: false }, { name: 'productId', nullable: false }, { name: 'reasonCode', nullable: false }, );
     const optionalNumberProperties = createApplyPriceOverrideRequestOptionalProperties({ name: 'originalPrice', nullable: false }, { name: 'overridePrice', nullable: false }, );
     const optionalBooleanProperties = createApplyPriceOverrideRequestOptionalProperties();
 

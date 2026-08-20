@@ -15,13 +15,13 @@ import { CountGroup } from './countGroup';
  */
 export interface CountResponse { 
     /**
-     * Grand total across all groups.
-     */
-    total?: number;
-    /**
      * Optional per-key breakdown; empty when only a total is requested.
      */
     groups?: Array<CountGroup>;
+    /**
+     * Grand total across all groups.
+     */
+    total?: number;
 }
 
 function isOptionalCountResponsePropertyOfType(

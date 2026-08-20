@@ -14,6 +14,7 @@ export * from './workOrderAPI.service';
 export * from './workSessionAPI.service';
 export * from './workexecTimeTrackingAPI.service';
 export * from './workorderDetail.service';
+export * from './workorderFleetAuthorization.service';
 export * from './workorderLaborAPI.service';
 export * from './workorderPartAdjustments.service';
 export * from './workorderPartsUsage.service';

@@ -14,25 +14,37 @@
  */
 export interface AccountStateResponse { 
     /**
-     * User identifier
+     * Timestamp at which the account expires
      */
-    userId: string;
-    /**
-     * True when the account is enabled
-     */
-    enabled: boolean;
-    /**
-     * True when the account is not locked
-     */
-    accountNonLocked: boolean;
+    accountExpiresAt?: string;
     /**
      * True when the account has not expired
      */
     accountNonExpired: boolean;
     /**
+     * True when the account is not locked
+     */
+    accountNonLocked: boolean;
+    /**
+     * Timestamp at which the credentials expire
+     */
+    credentialsExpireAt?: string;
+    /**
      * True when the credentials have not expired
      */
     credentialsNonExpired: boolean;
+    /**
+     * Timestamp at which the account was disabled
+     */
+    disabledAt?: string;
+    /**
+     * Actor that disabled the account
+     */
+    disabledBy?: string;
+    /**
+     * True when the account is enabled
+     */
+    enabled: boolean;
     /**
      * Number of consecutive failed login attempts
      */
@@ -46,21 +58,9 @@ export interface AccountStateResponse {
      */
     lockedUntil?: string;
     /**
-     * Timestamp at which the account was disabled
+     * User identifier
      */
-    disabledAt?: string;
-    /**
-     * Actor that disabled the account
-     */
-    disabledBy?: string;
-    /**
-     * Timestamp at which the account expires
-     */
-    accountExpiresAt?: string;
-    /**
-     * Timestamp at which the credentials expire
-     */
-    credentialsExpireAt?: string;
+    userId: string;
 }
 
 function isOptionalAccountStateResponsePropertyOfType(
@@ -101,10 +101,10 @@ export function instanceOfAccountStateResponse(value: object): value is AccountS
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createAccountStateResponsePropertyNames('userId', 'enabled', 'accountNonLocked', 'accountNonExpired', 'credentialsNonExpired', 'failedLoginAttempts', );
-    const optionalStringProperties = createAccountStateResponseOptionalProperties({ name: 'userId', nullable: false }, { name: 'lockedAt', nullable: false }, { name: 'lockedUntil', nullable: false }, { name: 'disabledAt', nullable: false }, { name: 'disabledBy', nullable: false }, { name: 'accountExpiresAt', nullable: false }, { name: 'credentialsExpireAt', nullable: false }, );
+    const requiredProperties = createAccountStateResponsePropertyNames('accountNonExpired', 'accountNonLocked', 'credentialsNonExpired', 'enabled', 'failedLoginAttempts', 'userId', );
+    const optionalStringProperties = createAccountStateResponseOptionalProperties({ name: 'accountExpiresAt', nullable: false }, { name: 'credentialsExpireAt', nullable: false }, { name: 'disabledAt', nullable: false }, { name: 'disabledBy', nullable: false }, { name: 'lockedAt', nullable: false }, { name: 'lockedUntil', nullable: false }, { name: 'userId', nullable: false }, );
     const optionalNumberProperties = createAccountStateResponseOptionalProperties({ name: 'failedLoginAttempts', nullable: false }, );
-    const optionalBooleanProperties = createAccountStateResponseOptionalProperties({ name: 'enabled', nullable: false }, { name: 'accountNonLocked', nullable: false }, { name: 'accountNonExpired', nullable: false }, { name: 'credentialsNonExpired', nullable: false }, );
+    const optionalBooleanProperties = createAccountStateResponseOptionalProperties({ name: 'accountNonExpired', nullable: false }, { name: 'accountNonLocked', nullable: false }, { name: 'credentialsNonExpired', nullable: false }, { name: 'enabled', nullable: false }, );
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
         && optionalStringProperties.every((property) => isOptionalAccountStateResponsePropertyOfType(_v, property.name, 'string', property.nullable))

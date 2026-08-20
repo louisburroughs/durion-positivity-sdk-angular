@@ -15,14 +15,6 @@ import { VehicleSummary } from './vehicleSummary';
  */
 export interface SearchVehiclesResponse { 
     /**
-     * Vehicle summaries matching the search query
-     */
-    results: Array<VehicleSummary>;
-    /**
-     * Total number of vehicles matching the query
-     */
-    totalCount: number;
-    /**
      * Whether additional result pages are available beyond the current page
      */
     hasMore: boolean;
@@ -30,6 +22,14 @@ export interface SearchVehiclesResponse {
      * Echo of the originating search query
      */
     query: string;
+    /**
+     * Vehicle summaries matching the search query
+     */
+    results: Array<VehicleSummary>;
+    /**
+     * Total number of vehicles matching the query
+     */
+    totalCount: number;
 }
 
 function isOptionalSearchVehiclesResponsePropertyOfType(
@@ -70,7 +70,7 @@ export function instanceOfSearchVehiclesResponse(value: object): value is Search
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createSearchVehiclesResponsePropertyNames('results', 'totalCount', 'hasMore', 'query', );
+    const requiredProperties = createSearchVehiclesResponsePropertyNames('hasMore', 'query', 'results', 'totalCount', );
     const optionalStringProperties = createSearchVehiclesResponseOptionalProperties({ name: 'query', nullable: false }, );
     const optionalNumberProperties = createSearchVehiclesResponseOptionalProperties({ name: 'totalCount', nullable: false }, );
     const optionalBooleanProperties = createSearchVehiclesResponseOptionalProperties({ name: 'hasMore', nullable: false }, );

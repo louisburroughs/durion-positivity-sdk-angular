@@ -14,37 +14,21 @@
  */
 export interface CompletionPreconditionsResponse { 
     /**
-     * Workorder identifier
+     * Blocking reasons that prevent completion
      */
-    workorderId: string;
+    blockingReasons?: Array<string>;
     /**
      * Whether the workorder can be completed
      */
     canComplete: boolean;
     /**
-     * Current status
-     */
-    currentStatus: string;
-    /**
      * Checklist items evaluated before completion
      */
     checklistItems?: Array<string>;
     /**
-     * Blocking reasons that prevent completion
+     * Current status
      */
-    blockingReasons?: Array<string>;
-    /**
-     * Number of unresolved approval-gated change requests
-     */
-    unresolvedApprovalGatedChangeRequests?: number;
-    /**
-     * Number of service items not in COMPLETED/CANCELLED status
-     */
-    nonTerminalServiceItems?: number;
-    /**
-     * Number of part items not in COMPLETED/CANCELLED status
-     */
-    nonTerminalPartItems?: number;
+    currentStatus: string;
     /**
      * Whether emergency denial acknowledgment requirements are satisfied
      */
@@ -53,6 +37,22 @@ export interface CompletionPreconditionsResponse {
      * Whether at least one billable item exists for final snapshot
      */
     hasBillableItems?: boolean;
+    /**
+     * Number of part items not in COMPLETED/CANCELLED status
+     */
+    nonTerminalPartItems?: number;
+    /**
+     * Number of service items not in COMPLETED/CANCELLED status
+     */
+    nonTerminalServiceItems?: number;
+    /**
+     * Number of unresolved approval-gated change requests
+     */
+    unresolvedApprovalGatedChangeRequests?: number;
+    /**
+     * Workorder identifier
+     */
+    workorderId: string;
 }
 
 function isOptionalCompletionPreconditionsResponsePropertyOfType(
@@ -93,9 +93,9 @@ export function instanceOfCompletionPreconditionsResponse(value: object): value 
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createCompletionPreconditionsResponsePropertyNames('workorderId', 'canComplete', 'currentStatus', );
-    const optionalStringProperties = createCompletionPreconditionsResponseOptionalProperties({ name: 'workorderId', nullable: false }, { name: 'currentStatus', nullable: false }, );
-    const optionalNumberProperties = createCompletionPreconditionsResponseOptionalProperties({ name: 'unresolvedApprovalGatedChangeRequests', nullable: false }, { name: 'nonTerminalServiceItems', nullable: false }, { name: 'nonTerminalPartItems', nullable: false }, );
+    const requiredProperties = createCompletionPreconditionsResponsePropertyNames('canComplete', 'currentStatus', 'workorderId', );
+    const optionalStringProperties = createCompletionPreconditionsResponseOptionalProperties({ name: 'currentStatus', nullable: false }, { name: 'workorderId', nullable: false }, );
+    const optionalNumberProperties = createCompletionPreconditionsResponseOptionalProperties({ name: 'nonTerminalPartItems', nullable: false }, { name: 'nonTerminalServiceItems', nullable: false }, { name: 'unresolvedApprovalGatedChangeRequests', nullable: false }, );
     const optionalBooleanProperties = createCompletionPreconditionsResponseOptionalProperties({ name: 'canComplete', nullable: false }, { name: 'emergencyDenialAcknowledged', nullable: false }, { name: 'hasBillableItems', nullable: false }, );
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

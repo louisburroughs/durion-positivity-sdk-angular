@@ -15,6 +15,18 @@ import { PostalCodeEntry } from './postalCodeEntry';
  */
 export interface ServiceAreaResponse { 
     /**
+     * Whether the service area is active
+     */
+    active?: boolean;
+    /**
+     * Timestamp when the service area was created (ISO 8601)
+     */
+    createdAt?: string;
+    /**
+     * Description of the service area
+     */
+    description?: string;
+    /**
      * Unique identifier of the service area
      */
     id: string;
@@ -23,21 +35,9 @@ export interface ServiceAreaResponse {
      */
     name?: string;
     /**
-     * Description of the service area
-     */
-    description?: string;
-    /**
-     * Whether the service area is active
-     */
-    active?: boolean;
-    /**
      * Postal codes included in the service area
      */
     postalCodes?: Array<PostalCodeEntry>;
-    /**
-     * Timestamp when the service area was created (ISO 8601)
-     */
-    createdAt?: string;
     /**
      * Timestamp when the service area was last updated (ISO 8601)
      */
@@ -83,7 +83,7 @@ export function instanceOfServiceAreaResponse(value: object): value is ServiceAr
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createServiceAreaResponsePropertyNames('id', );
-    const optionalStringProperties = createServiceAreaResponseOptionalProperties({ name: 'id', nullable: false }, { name: 'name', nullable: false }, { name: 'description', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'updatedAt', nullable: false }, );
+    const optionalStringProperties = createServiceAreaResponseOptionalProperties({ name: 'createdAt', nullable: false }, { name: 'description', nullable: false }, { name: 'id', nullable: false }, { name: 'name', nullable: false }, { name: 'updatedAt', nullable: false }, );
     const optionalNumberProperties = createServiceAreaResponseOptionalProperties();
     const optionalBooleanProperties = createServiceAreaResponseOptionalProperties({ name: 'active', nullable: false }, );
 

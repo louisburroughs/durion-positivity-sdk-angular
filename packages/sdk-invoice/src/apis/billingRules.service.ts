@@ -36,8 +36,8 @@ export class BillingRulesService extends BaseService {
     }
 
     /**
-     * Get billing rules for a party/customer
-     * Retrieve the current billing rules configuration for a commercial account
+     * Get Billing Rules for a Party
+     * Returns the billing rules configured for a commercial account party: purchase-order requirement, payment terms code, invoice delivery method, and invoice grouping strategy. Use this tool when the billing configuration of a known party is needed before invoicing; do not use upsertBillingRules, which creates or replaces the configuration. Preconditions: a billing rules record must already exist for the party, created explicitly or defaulted when the commercial account was provisioned. Required inputs: partyId (UUID) as a path parameter; there is no request body. Emits a BILLING_RULES_GET audit event; no state changes — this is a read-only projection. Returns 404 when no billing rules are configured for the party, and 400 with an empty body when partyId is not a well-formed UUID. 
      * @endpoint get /v1/billing/rules/{partyId}
      * @param partyId 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -96,11 +96,11 @@ export class BillingRulesService extends BaseService {
     }
 
     /**
-     * Create or update billing rules
-     * Idempotent upsert of billing rules for a commercial account
+     * Create or Update Billing Rules
+     * Creates or replaces the billing rules for a commercial account party in one idempotent upsert keyed on the path partyId, which overrides any partyId carried in the body. Use this tool when configuring how a party is invoiced; use getBillingRules instead to read the current configuration without changing it. Preconditions: paymentTermsCode must belong to the validated vocabulary (DUE_ON_RECEIPT, NET_10, NET_15, NET_30, NET_45, NET_60); a missing record is created and an existing one is updated in place. Required inputs: partyId (UUID path), purchaseOrderRequired (boolean), paymentTermsCode, invoiceDeliveryMethod (EMAIL, PORTAL, MAIL) and invoiceGroupingStrategy (PER_WORKORDER, PER_VEHICLE, SINGLE_INVOICE); updatedBy is taken from the security context, never from the body. Emits a BILLING_RULES_UPSERT event and publishes a billing-rules-updated notification; due dates of already-finalized invoices are never recomputed from a terms change. Returns 201 when the record is created, 200 when an existing record is updated, and 400 with an empty body when partyId is not a well-formed UUID. 
      * @endpoint put /v1/billing/rules/{partyId}
      * @param partyId 
-     * @param billingRulesDTO 
+     * @param billingRulesDTO Billing rules configuration to store for the party.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options

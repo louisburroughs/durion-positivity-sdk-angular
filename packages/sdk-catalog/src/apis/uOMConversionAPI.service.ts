@@ -40,10 +40,10 @@ export class UOMConversionAPIService extends BaseService {
     }
 
     /**
-     * Create UOM conversion
-     * Creates a new unit-of-measure conversion record.
+     * Create UoM Conversion
+     * Creates a global, directional unit-of-measure conversion stating how many target units one source unit represents; codes are normalised to upper case and the factor stored at six decimal places. Use this tool for conversions that apply across the whole catalog; do not use addProductUom, which defines a conversion for a single product\&#39;s own unit set. Preconditions: no active conversion may already exist for the same from and to code pair; a self-conversion (same code both sides) must carry factor 1. Required inputs: fromUomCode, toUomCode and a positive conversionFactor; createdBy is optional. Emits a CATALOG_UOM_CONVERSION_CREATE event; the reverse direction is derived at read time, not stored. Returns 409 when an active conversion already exists for the pair, and 400 when either code is blank, the factor is not positive, or a self-conversion factor is not 1. 
      * @endpoint post /v1/products/uom-conversions
-     * @param uomConversionCreateRequestDto 
+     * @param uomConversionCreateRequestDto Directional conversion pair with the factor of target units per one source unit.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -110,8 +110,8 @@ export class UOMConversionAPIService extends BaseService {
     }
 
     /**
-     * Deactivate conversion
-     * Deactivates a conversion so it is excluded from active conversion results.
+     * Deactivate UoM Conversion
+     * Marks a unit-of-measure conversion inactive so it disappears from listUomConversions and from factor lookups; the row is kept and remains readable by id. Use this tool to retire a conversion pair; do not use updateUomConversion, which changes the factor while keeping it active — there is no reactivation endpoint, so recreate the pair with createUomConversion if it is needed again. Preconditions: the conversion must exist; deactivating an already inactive conversion succeeds idempotently. Required inputs: id (UUID) as a path parameter; there is no request body. Emits a CATALOG_UOM_CONVERSION_DEACTIVATE event; product-level UoM sets are unaffected. Returns 204 on success, and 404 when no conversion exists for the supplied id. 
      * @endpoint delete /v1/products/uom-conversions/{id}
      * @param id Conversion ID
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -169,8 +169,8 @@ export class UOMConversionAPIService extends BaseService {
     }
 
     /**
-     * Get conversion
-     * Retrieves a unit-of-measure conversion by its ID.
+     * Get UoM Conversion by ID
+     * Returns one unit-of-measure conversion with its from and to codes, factor and active flag; inactive conversions are returned here even though listUomConversions hides them. Use this tool when the conversion id is already known; use listUomConversions instead to browse the active table. Preconditions: the conversion must exist. Required inputs: id (UUID) as a path parameter; there is no request body. No events are emitted and no state changes; this is a read-only projection. Returns 404 when no conversion exists for the supplied id. 
      * @endpoint get /v1/products/uom-conversions/{id}
      * @param id Conversion ID
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -229,8 +229,8 @@ export class UOMConversionAPIService extends BaseService {
     }
 
     /**
-     * List active conversions
-     * Returns all active unit-of-measure conversion records.
+     * List Active UoM Conversions
+     * Returns every active unit-of-measure conversion in the global table; deactivated conversions are excluded. Use this tool to survey available conversions or find a conversion id; use getUomConversionById instead when the id is already known, and listProductUoms for a product\&#39;s own unit set. Preconditions: none; the list is unfiltered and unpaged. Required inputs: none, and there is no request body. No events are emitted and no state changes; this is a read-only projection. Returns 200 with an empty array when no active conversions exist, so an empty result is not an error condition. 
      * @endpoint get /v1/products/uom-conversions
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
@@ -285,11 +285,11 @@ export class UOMConversionAPIService extends BaseService {
     }
 
     /**
-     * Update conversion factor
-     * Updates the conversion factor and mutable fields for an existing conversion.
+     * Update UoM Conversion Factor
+     * Updates the factor of an existing unit-of-measure conversion; the from and to codes are immutable, so redefining a pair means deactivating this conversion and creating a new one. Use this tool to correct a factor; do not use createUomConversion, which adds a new pair, or deactivateUomConversion, which retires one. Preconditions: the conversion must exist; a self-conversion must keep factor 1. Required inputs: id (UUID) path parameter and a positive conversionFactor in the body, stored at six decimal places. Emits a CATALOG_UOM_CONVERSION_UPDATE event; derived inverse factors reflect the change immediately. Returns 404 when no conversion exists for the supplied id, and 400 when the factor is not positive or a self-conversion factor is not 1. 
      * @endpoint put /v1/products/uom-conversions/{id}
      * @param id Conversion ID
-     * @param uomConversionUpdateRequestDto 
+     * @param uomConversionUpdateRequestDto The corrected conversion factor for the existing from/to pair.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options

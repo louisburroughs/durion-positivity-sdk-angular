@@ -14,33 +14,33 @@
  */
 export interface InvoiceItemResponse { 
     /**
-     * Unique identifier of the invoice line item
+     * Extended amount (quantity x unit price)
      */
-    id?: string;
+    amount?: number;
     /**
      * Description of the line item
      */
     description?: string;
     /**
+     * Unique identifier of the invoice line item
+     */
+    id?: string;
+    /**
      * Quantity billed
      */
     quantity?: number;
+    /**
+     * Line item type (e.g. PART, LABOR, FEE, TAX)
+     */
+    type?: string;
     /**
      * Price per unit
      */
     unitPrice?: number;
     /**
-     * Extended amount (quantity x unit price)
-     */
-    amount?: number;
-    /**
      * Identifier of the source workorder item
      */
     workorderItemId?: string;
-    /**
-     * Line item type (e.g. PART, LABOR, FEE, TAX)
-     */
-    type?: string;
 }
 
 function isOptionalInvoiceItemResponsePropertyOfType(
@@ -82,8 +82,8 @@ export function instanceOfInvoiceItemResponse(value: object): value is InvoiceIt
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createInvoiceItemResponsePropertyNames();
-    const optionalStringProperties = createInvoiceItemResponseOptionalProperties({ name: 'id', nullable: false }, { name: 'description', nullable: false }, { name: 'workorderItemId', nullable: false }, { name: 'type', nullable: false }, );
-    const optionalNumberProperties = createInvoiceItemResponseOptionalProperties({ name: 'quantity', nullable: false }, { name: 'unitPrice', nullable: false }, { name: 'amount', nullable: false }, );
+    const optionalStringProperties = createInvoiceItemResponseOptionalProperties({ name: 'description', nullable: false }, { name: 'id', nullable: false }, { name: 'type', nullable: false }, { name: 'workorderItemId', nullable: false }, );
+    const optionalNumberProperties = createInvoiceItemResponseOptionalProperties({ name: 'amount', nullable: false }, { name: 'quantity', nullable: false }, { name: 'unitPrice', nullable: false }, );
     const optionalBooleanProperties = createInvoiceItemResponseOptionalProperties();
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

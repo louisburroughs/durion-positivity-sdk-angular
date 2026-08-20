@@ -36,20 +36,20 @@ export class PricingSnapshotsService extends BaseService {
     }
 
     /**
-     * Get pricing snapshot by ID
-     * Retrieves an immutable pricing snapshot using its snapshot identifier.
+     * Get Pricing Snapshot By ID
+     * Returns an immutable pricing snapshot that captured the prices, applied rules, and policy version of a past pricing decision. Use this tool to audit or re-display exactly what was priced at capture time; do not use calculatePriceQuote, which computes a fresh price that may differ from the recorded one. Preconditions: a snapshot with the supplied id must have been persisted by an earlier pricing flow. Required inputs: snapshotId (UUID) as a path parameter; there is no request body. No events are emitted and no state changes; snapshots are immutable and this is a read-only projection. Returns 404 with code SNAPSHOT_NOT_FOUND when no snapshot exists for the supplied id. 
      * @endpoint get /v1/price/snapshots/{snapshotId}
      * @param snapshotId 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public getSnapshot(snapshotId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PricingSnapshotResponse>;
-    public getSnapshot(snapshotId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PricingSnapshotResponse>>;
-    public getSnapshot(snapshotId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PricingSnapshotResponse>>;
-    public getSnapshot(snapshotId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getPricingSnapshotById(snapshotId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PricingSnapshotResponse>;
+    public getPricingSnapshotById(snapshotId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PricingSnapshotResponse>>;
+    public getPricingSnapshotById(snapshotId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PricingSnapshotResponse>>;
+    public getPricingSnapshotById(snapshotId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (snapshotId === null || snapshotId === undefined) {
-            throw new Error('Required parameter snapshotId was null or undefined when calling getSnapshot.');
+            throw new Error('Required parameter snapshotId was null or undefined when calling getPricingSnapshotById.');
         }
 
         let localVarHeaders = this.defaultHeaders;

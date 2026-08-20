@@ -15,20 +15,20 @@ import { LaborQuantity } from './laborQuantity';
  * Request payload for recording labor performed from external systems
  */
 export interface WorkexecLaborPerformedRequest { 
+    labor: LaborQuantity;
     /**
-     * Workorder identifier
+     * Timestamp when labor was performed
      */
-    workorderId: string;
+    performedAt: string;
+    source: SourceReference;
     /**
      * Technician identifier
      */
     technicianId: string;
     /**
-     * Timestamp when labor was performed
+     * Workorder identifier
      */
-    performedAt: string;
-    labor: LaborQuantity;
-    source: SourceReference;
+    workorderId: string;
 }
 
 function isOptionalWorkexecLaborPerformedRequestPropertyOfType(
@@ -69,8 +69,8 @@ export function instanceOfWorkexecLaborPerformedRequest(value: object): value is
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createWorkexecLaborPerformedRequestPropertyNames('workorderId', 'technicianId', 'performedAt', 'labor', 'source', );
-    const optionalStringProperties = createWorkexecLaborPerformedRequestOptionalProperties({ name: 'workorderId', nullable: false }, { name: 'technicianId', nullable: false }, { name: 'performedAt', nullable: false }, );
+    const requiredProperties = createWorkexecLaborPerformedRequestPropertyNames('labor', 'performedAt', 'source', 'technicianId', 'workorderId', );
+    const optionalStringProperties = createWorkexecLaborPerformedRequestOptionalProperties({ name: 'performedAt', nullable: false }, { name: 'technicianId', nullable: false }, { name: 'workorderId', nullable: false }, );
     const optionalNumberProperties = createWorkexecLaborPerformedRequestOptionalProperties();
     const optionalBooleanProperties = createWorkexecLaborPerformedRequestOptionalProperties();
 

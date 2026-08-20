@@ -10,41 +10,41 @@
 
 
 /**
- * Communication preferences to set
+ * Request to upsert communication preferences and consent flags for a party
  */
 export interface UpsertCommunicationPreferencesRequest { 
-    /**
-     * Optimistic locking version; required for updates, omitted for creates
-     */
-    version?: string;
-    /**
-     * Email preference (OPT_IN|OPT_OUT|NOT_APPLICABLE)
-     */
-    emailPreference?: string;
-    /**
-     * SMS preference (OPT_IN|OPT_OUT|NOT_APPLICABLE)
-     */
-    smsPreference?: string;
-    /**
-     * Phone preference (OPT_IN|OPT_OUT|NOT_APPLICABLE)
-     */
-    phonePreference?: string;
-    /**
-     * Marketing communications preference (OPT_IN|OPT_OUT)
-     */
-    marketingPreference?: string;
     /**
      * Consent flags keyed by consent type; field names depend on legal requirements
      */
     consentFlags?: { [key: string]: boolean; };
     /**
+     * Email preference (OPT_IN|OPT_OUT|NOT_APPLICABLE)
+     */
+    emailPreference?: string;
+    /**
+     * Marketing communications preference (OPT_IN|OPT_OUT)
+     */
+    marketingPreference?: string;
+    /**
+     * Phone preference (OPT_IN|OPT_OUT|NOT_APPLICABLE)
+     */
+    phonePreference?: string;
+    /**
      * User-provided note or preferences summary
      */
     preferencesNote?: string;
     /**
+     * SMS preference (OPT_IN|OPT_OUT|NOT_APPLICABLE)
+     */
+    smsPreference?: string;
+    /**
      * Source of update (APP|API|ADMIN)
      */
     updateSource?: string;
+    /**
+     * Optimistic locking version; required for updates, omitted for creates
+     */
+    version?: string;
 }
 
 function isOptionalUpsertCommunicationPreferencesRequestPropertyOfType(
@@ -86,7 +86,7 @@ export function instanceOfUpsertCommunicationPreferencesRequest(value: object): 
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createUpsertCommunicationPreferencesRequestPropertyNames();
-    const optionalStringProperties = createUpsertCommunicationPreferencesRequestOptionalProperties({ name: 'version', nullable: false }, { name: 'emailPreference', nullable: false }, { name: 'smsPreference', nullable: false }, { name: 'phonePreference', nullable: false }, { name: 'marketingPreference', nullable: false }, { name: 'preferencesNote', nullable: false }, { name: 'updateSource', nullable: false }, );
+    const optionalStringProperties = createUpsertCommunicationPreferencesRequestOptionalProperties({ name: 'emailPreference', nullable: false }, { name: 'marketingPreference', nullable: false }, { name: 'phonePreference', nullable: false }, { name: 'preferencesNote', nullable: false }, { name: 'smsPreference', nullable: false }, { name: 'updateSource', nullable: false }, { name: 'version', nullable: false }, );
     const optionalNumberProperties = createUpsertCommunicationPreferencesRequestOptionalProperties();
     const optionalBooleanProperties = createUpsertCommunicationPreferencesRequestOptionalProperties();
 

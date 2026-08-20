@@ -14,17 +14,13 @@
  */
 export interface UpdateContactRolesResponse { 
     /**
-     * Identifier of the party that owns the contact
-     */
-    partyId: string;
-    /**
      * Identifier of the contact that was updated
      */
     contactId: string;
     /**
-     * Updated version for optimistic locking conflict resolution
+     * Identifier of the party that owns the contact
      */
-    version?: string;
+    partyId: string;
     /**
      * Update status (SUCCESS|CONFLICT)
      */
@@ -33,6 +29,10 @@ export interface UpdateContactRolesResponse {
      * Timestamp of update (ISO 8601)
      */
     updatedAt?: string;
+    /**
+     * Updated version for optimistic locking conflict resolution
+     */
+    version?: string;
 }
 
 function isOptionalUpdateContactRolesResponsePropertyOfType(
@@ -73,8 +73,8 @@ export function instanceOfUpdateContactRolesResponse(value: object): value is Up
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createUpdateContactRolesResponsePropertyNames('partyId', 'contactId', 'status', );
-    const optionalStringProperties = createUpdateContactRolesResponseOptionalProperties({ name: 'partyId', nullable: false }, { name: 'contactId', nullable: false }, { name: 'version', nullable: false }, { name: 'status', nullable: false }, { name: 'updatedAt', nullable: false }, );
+    const requiredProperties = createUpdateContactRolesResponsePropertyNames('contactId', 'partyId', 'status', );
+    const optionalStringProperties = createUpdateContactRolesResponseOptionalProperties({ name: 'contactId', nullable: false }, { name: 'partyId', nullable: false }, { name: 'status', nullable: false }, { name: 'updatedAt', nullable: false }, { name: 'version', nullable: false }, );
     const optionalNumberProperties = createUpdateContactRolesResponseOptionalProperties();
     const optionalBooleanProperties = createUpdateContactRolesResponseOptionalProperties();
 

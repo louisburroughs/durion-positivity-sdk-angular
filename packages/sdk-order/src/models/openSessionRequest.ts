@@ -14,21 +14,21 @@
  */
 export interface OpenSessionRequest { 
     /**
-     * Terminal the drawer belongs to; one open session per terminal
+     * Shop location; defaults from the terminal\'s previous session when omitted
      */
-    terminalId: string;
+    locationId?: string;
     /**
      * Clerk opening the session
      */
     openedByClerkId: string;
     /**
-     * Shop location; defaults from the terminal\'s previous session when omitted
-     */
-    locationId?: string;
-    /**
      * Starting drawer cash; defaults to the terminal\'s previous counted close when omitted
      */
     openingFloat?: number;
+    /**
+     * Terminal the drawer belongs to; one open session per terminal
+     */
+    terminalId: string;
 }
 
 function isOptionalOpenSessionRequestPropertyOfType(
@@ -69,8 +69,8 @@ export function instanceOfOpenSessionRequest(value: object): value is OpenSessio
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createOpenSessionRequestPropertyNames('terminalId', 'openedByClerkId', );
-    const optionalStringProperties = createOpenSessionRequestOptionalProperties({ name: 'terminalId', nullable: false }, { name: 'openedByClerkId', nullable: false }, { name: 'locationId', nullable: false }, );
+    const requiredProperties = createOpenSessionRequestPropertyNames('openedByClerkId', 'terminalId', );
+    const optionalStringProperties = createOpenSessionRequestOptionalProperties({ name: 'locationId', nullable: false }, { name: 'openedByClerkId', nullable: false }, { name: 'terminalId', nullable: false }, );
     const optionalNumberProperties = createOpenSessionRequestOptionalProperties({ name: 'openingFloat', nullable: false }, );
     const optionalBooleanProperties = createOpenSessionRequestOptionalProperties();
 

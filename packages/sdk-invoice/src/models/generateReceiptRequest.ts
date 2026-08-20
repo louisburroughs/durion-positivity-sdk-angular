@@ -18,10 +18,6 @@ export interface GenerateReceiptRequest {
      */
     paymentIntentId: string;
     /**
-     * Identifier of the terminal producing the receipt
-     */
-    terminalId: string;
-    /**
      * Receipt template identifier
      */
     templateId: string;
@@ -29,6 +25,10 @@ export interface GenerateReceiptRequest {
      * Receipt template version
      */
     templateVersion: string;
+    /**
+     * Identifier of the terminal producing the receipt
+     */
+    terminalId: string;
 }
 
 function isOptionalGenerateReceiptRequestPropertyOfType(
@@ -69,8 +69,8 @@ export function instanceOfGenerateReceiptRequest(value: object): value is Genera
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createGenerateReceiptRequestPropertyNames('paymentIntentId', 'terminalId', 'templateId', 'templateVersion', );
-    const optionalStringProperties = createGenerateReceiptRequestOptionalProperties({ name: 'paymentIntentId', nullable: false }, { name: 'terminalId', nullable: false }, { name: 'templateId', nullable: false }, { name: 'templateVersion', nullable: false }, );
+    const requiredProperties = createGenerateReceiptRequestPropertyNames('paymentIntentId', 'templateId', 'templateVersion', 'terminalId', );
+    const optionalStringProperties = createGenerateReceiptRequestOptionalProperties({ name: 'paymentIntentId', nullable: false }, { name: 'templateId', nullable: false }, { name: 'templateVersion', nullable: false }, { name: 'terminalId', nullable: false }, );
     const optionalNumberProperties = createGenerateReceiptRequestOptionalProperties();
     const optionalBooleanProperties = createGenerateReceiptRequestOptionalProperties();
 

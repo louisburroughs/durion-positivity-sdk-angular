@@ -14,13 +14,13 @@
  */
 export interface MappingKeyUpdateRequest { 
     /**
-     * Name of the mapping key
-     */
-    keyName: string;
-    /**
      * Optional description of the mapping key
      */
     description?: string;
+    /**
+     * Name of the mapping key
+     */
+    keyName: string;
     /**
      * Identifier of the user modifying the mapping key
      */
@@ -66,7 +66,7 @@ export function instanceOfMappingKeyUpdateRequest(value: object): value is Mappi
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createMappingKeyUpdateRequestPropertyNames('keyName', 'modifiedBy', );
-    const optionalStringProperties = createMappingKeyUpdateRequestOptionalProperties({ name: 'keyName', nullable: false }, { name: 'description', nullable: false }, { name: 'modifiedBy', nullable: false }, );
+    const optionalStringProperties = createMappingKeyUpdateRequestOptionalProperties({ name: 'description', nullable: false }, { name: 'keyName', nullable: false }, { name: 'modifiedBy', nullable: false }, );
     const optionalNumberProperties = createMappingKeyUpdateRequestOptionalProperties();
     const optionalBooleanProperties = createMappingKeyUpdateRequestOptionalProperties();
 

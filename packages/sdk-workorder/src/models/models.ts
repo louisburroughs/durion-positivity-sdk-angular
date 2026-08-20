@@ -40,6 +40,8 @@ export * from './estimateResponse';
 export * from './estimateSnapshotResponse';
 export * from './estimateSummaryResponse';
 export * from './fieldError';
+export * from './fleetAuthorizationResolutionRequest';
+export * from './fleetAuthorizationView';
 export * from './invoiceGenerationResponse';
 export * from './issuePartRequest';
 export * from './laborQuantity';

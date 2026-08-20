@@ -14,14 +14,6 @@
  */
 export interface EligibilityRuleResponse { 
     /**
-     * Eligibility rule identifier
-     */
-    ruleId: string;
-    /**
-     * Promotion identifier to which this rule belongs
-     */
-    promotionId: string;
-    /**
      * Rule condition type
      */
     conditionType: EligibilityRuleResponseConditionTypeEnum;
@@ -29,6 +21,14 @@ export interface EligibilityRuleResponse {
      * Comparison operator
      */
     operator: EligibilityRuleResponseOperatorEnum;
+    /**
+     * Promotion identifier to which this rule belongs
+     */
+    promotionId: string;
+    /**
+     * Eligibility rule identifier
+     */
+    ruleId: string;
     /**
      * Rule threshold or value
      */
@@ -88,8 +88,8 @@ export function instanceOfEligibilityRuleResponse(value: object): value is Eligi
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createEligibilityRuleResponsePropertyNames('ruleId', 'promotionId', 'conditionType', 'operator', 'value', );
-    const optionalStringProperties = createEligibilityRuleResponseOptionalProperties({ name: 'ruleId', nullable: false }, { name: 'promotionId', nullable: false }, { name: 'conditionType', nullable: false }, { name: 'operator', nullable: false }, { name: 'value', nullable: false }, );
+    const requiredProperties = createEligibilityRuleResponsePropertyNames('conditionType', 'operator', 'promotionId', 'ruleId', 'value', );
+    const optionalStringProperties = createEligibilityRuleResponseOptionalProperties({ name: 'conditionType', nullable: false }, { name: 'operator', nullable: false }, { name: 'promotionId', nullable: false }, { name: 'ruleId', nullable: false }, { name: 'value', nullable: false }, );
     const optionalNumberProperties = createEligibilityRuleResponseOptionalProperties();
     const optionalBooleanProperties = createEligibilityRuleResponseOptionalProperties();
 

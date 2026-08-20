@@ -15,21 +15,33 @@ import { OrderInvoiceLineItem } from './orderInvoiceLineItem';
  */
 export interface OrderInvoiceCreationRequest { 
     /**
-     * Sales order the invoice fronts; idempotency anchor (one invoice per order).
-     */
-    orderId: string;
-    /**
-     * Workorder being settled through this order, when the order fronts a workorder settlement; the existing workorder invoice is returned instead of creating a duplicate.
-     */
-    workorderId?: string;
-    /**
      * Customer party; null for anonymous counter sales.
      */
     customerId?: string;
     /**
+     * Deposit amount to register as a credit; when set, the order is a deposit take.
+     */
+    depositAmount?: number;
+    /**
+     * Source document id the deposit is held against (required when depositSourceType is set).
+     */
+    depositSourceId?: string;
+    /**
+     * When this order is a deposit / down-payment take (odoo-parity story E4), the source document type the deposit is held against; pos-invoice registers a deposit credit.
+     */
+    depositSourceType?: OrderInvoiceCreationRequestDepositSourceTypeEnum;
+    /**
+     * Order lines as sold.
+     */
+    lines: Array<OrderInvoiceLineItem>;
+    /**
      * Shop location of the sale.
      */
     locationId?: string;
+    /**
+     * Sales order the invoice fronts; idempotency anchor (one invoice per order).
+     */
+    orderId: string;
     /**
      * Order subtotal (post-discount, pre-tax).
      */
@@ -43,21 +55,9 @@ export interface OrderInvoiceCreationRequest {
      */
     totalAmount: number;
     /**
-     * Order lines as sold.
+     * Workorder being settled through this order, when the order fronts a workorder settlement; the existing workorder invoice is returned instead of creating a duplicate.
      */
-    lines: Array<OrderInvoiceLineItem>;
-    /**
-     * When this order is a deposit / down-payment take (odoo-parity story E4), the source document type the deposit is held against; pos-invoice registers a deposit credit.
-     */
-    depositSourceType?: OrderInvoiceCreationRequestDepositSourceTypeEnum;
-    /**
-     * Source document id the deposit is held against (required when depositSourceType is set).
-     */
-    depositSourceId?: string;
-    /**
-     * Deposit amount to register as a credit; when set, the order is a deposit take.
-     */
-    depositAmount?: number;
+    workorderId?: string;
 }
 export enum OrderInvoiceCreationRequestDepositSourceTypeEnum {
     Estimate = 'ESTIMATE',
@@ -105,9 +105,9 @@ export function instanceOfOrderInvoiceCreationRequest(value: object): value is O
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createOrderInvoiceCreationRequestPropertyNames('orderId', 'subtotal', 'taxAmount', 'totalAmount', 'lines', );
-    const optionalStringProperties = createOrderInvoiceCreationRequestOptionalProperties({ name: 'orderId', nullable: false }, { name: 'workorderId', nullable: false }, { name: 'customerId', nullable: false }, { name: 'locationId', nullable: false }, { name: 'depositSourceType', nullable: false }, { name: 'depositSourceId', nullable: false }, );
-    const optionalNumberProperties = createOrderInvoiceCreationRequestOptionalProperties({ name: 'subtotal', nullable: false }, { name: 'taxAmount', nullable: false }, { name: 'totalAmount', nullable: false }, { name: 'depositAmount', nullable: false }, );
+    const requiredProperties = createOrderInvoiceCreationRequestPropertyNames('lines', 'orderId', 'subtotal', 'taxAmount', 'totalAmount', );
+    const optionalStringProperties = createOrderInvoiceCreationRequestOptionalProperties({ name: 'customerId', nullable: false }, { name: 'depositSourceId', nullable: false }, { name: 'depositSourceType', nullable: false }, { name: 'locationId', nullable: false }, { name: 'orderId', nullable: false }, { name: 'workorderId', nullable: false }, );
+    const optionalNumberProperties = createOrderInvoiceCreationRequestOptionalProperties({ name: 'depositAmount', nullable: false }, { name: 'subtotal', nullable: false }, { name: 'taxAmount', nullable: false }, { name: 'totalAmount', nullable: false }, );
     const optionalBooleanProperties = createOrderInvoiceCreationRequestOptionalProperties();
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

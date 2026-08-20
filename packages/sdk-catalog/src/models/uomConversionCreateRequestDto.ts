@@ -14,14 +14,6 @@
  */
 export interface UomConversionCreateRequestDto { 
     /**
-     * Source unit-of-measure code
-     */
-    fromUomCode: string;
-    /**
-     * Target unit-of-measure code
-     */
-    toUomCode: string;
-    /**
      * Multiplier to convert one unit of the source UOM into the target UOM
      */
     conversionFactor: number;
@@ -29,6 +21,14 @@ export interface UomConversionCreateRequestDto {
      * Identifier of the user creating the conversion
      */
     createdBy?: string;
+    /**
+     * Source unit-of-measure code
+     */
+    fromUomCode: string;
+    /**
+     * Target unit-of-measure code
+     */
+    toUomCode: string;
 }
 
 function isOptionalUomConversionCreateRequestDtoPropertyOfType(
@@ -69,8 +69,8 @@ export function instanceOfUomConversionCreateRequestDto(value: object): value is
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createUomConversionCreateRequestDtoPropertyNames('fromUomCode', 'toUomCode', 'conversionFactor', );
-    const optionalStringProperties = createUomConversionCreateRequestDtoOptionalProperties({ name: 'fromUomCode', nullable: false }, { name: 'toUomCode', nullable: false }, { name: 'createdBy', nullable: false }, );
+    const requiredProperties = createUomConversionCreateRequestDtoPropertyNames('conversionFactor', 'fromUomCode', 'toUomCode', );
+    const optionalStringProperties = createUomConversionCreateRequestDtoOptionalProperties({ name: 'createdBy', nullable: false }, { name: 'fromUomCode', nullable: false }, { name: 'toUomCode', nullable: false }, );
     const optionalNumberProperties = createUomConversionCreateRequestDtoOptionalProperties({ name: 'conversionFactor', nullable: false }, );
     const optionalBooleanProperties = createUomConversionCreateRequestDtoOptionalProperties();
 

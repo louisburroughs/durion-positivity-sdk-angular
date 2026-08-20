@@ -16,14 +16,14 @@ import { RollupQuantities } from './rollupQuantities';
  */
 export interface SiteInventoryRollupResponse { 
     /**
+     * Root storage locations of the site topology
+     */
+    nodes: Array<StorageLocationRollupNode>;
+    /**
      * Site (Location) identifier
      */
     siteId: string;
     totals: RollupQuantities;
-    /**
-     * Root storage locations of the site topology
-     */
-    nodes: Array<StorageLocationRollupNode>;
 }
 
 function isOptionalSiteInventoryRollupResponsePropertyOfType(
@@ -64,7 +64,7 @@ export function instanceOfSiteInventoryRollupResponse(value: object): value is S
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createSiteInventoryRollupResponsePropertyNames('siteId', 'totals', 'nodes', );
+    const requiredProperties = createSiteInventoryRollupResponsePropertyNames('nodes', 'siteId', 'totals', );
     const optionalStringProperties = createSiteInventoryRollupResponseOptionalProperties({ name: 'siteId', nullable: false }, );
     const optionalNumberProperties = createSiteInventoryRollupResponseOptionalProperties();
     const optionalBooleanProperties = createSiteInventoryRollupResponseOptionalProperties();

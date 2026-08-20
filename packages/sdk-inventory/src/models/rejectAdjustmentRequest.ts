@@ -14,13 +14,13 @@
  */
 export interface RejectAdjustmentRequest { 
     /**
-     * Identifier of the user rejecting the adjustment
-     */
-    rejectorUserId: string;
-    /**
      * Reason explaining why the adjustment is being rejected
      */
     rejectionReason: string;
+    /**
+     * Identifier of the user rejecting the adjustment
+     */
+    rejectorUserId: string;
 }
 
 function isOptionalRejectAdjustmentRequestPropertyOfType(
@@ -61,8 +61,8 @@ export function instanceOfRejectAdjustmentRequest(value: object): value is Rejec
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createRejectAdjustmentRequestPropertyNames('rejectorUserId', 'rejectionReason', );
-    const optionalStringProperties = createRejectAdjustmentRequestOptionalProperties({ name: 'rejectorUserId', nullable: false }, { name: 'rejectionReason', nullable: false }, );
+    const requiredProperties = createRejectAdjustmentRequestPropertyNames('rejectionReason', 'rejectorUserId', );
+    const optionalStringProperties = createRejectAdjustmentRequestOptionalProperties({ name: 'rejectionReason', nullable: false }, { name: 'rejectorUserId', nullable: false }, );
     const optionalNumberProperties = createRejectAdjustmentRequestOptionalProperties();
     const optionalBooleanProperties = createRejectAdjustmentRequestOptionalProperties();
 

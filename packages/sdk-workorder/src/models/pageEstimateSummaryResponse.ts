@@ -13,17 +13,17 @@ import { SortObject } from './sortObject';
 
 
 export interface PageEstimateSummaryResponse { 
-    totalElements?: number;
-    totalPages?: number;
-    size?: number;
     content?: Array<EstimateSummaryResponse>;
-    number?: number;
-    pageable?: PageableObject;
-    sort?: SortObject;
+    empty?: boolean;
     first?: boolean;
     last?: boolean;
+    number?: number;
     numberOfElements?: number;
-    empty?: boolean;
+    pageable?: PageableObject;
+    size?: number;
+    sort?: SortObject;
+    totalElements?: number;
+    totalPages?: number;
 }
 
 function isOptionalPageEstimateSummaryResponsePropertyOfType(
@@ -66,8 +66,8 @@ export function instanceOfPageEstimateSummaryResponse(value: object): value is P
 
     const requiredProperties = createPageEstimateSummaryResponsePropertyNames();
     const optionalStringProperties = createPageEstimateSummaryResponseOptionalProperties();
-    const optionalNumberProperties = createPageEstimateSummaryResponseOptionalProperties({ name: 'totalElements', nullable: false }, { name: 'totalPages', nullable: false }, { name: 'size', nullable: false }, { name: 'number', nullable: false }, { name: 'numberOfElements', nullable: false }, );
-    const optionalBooleanProperties = createPageEstimateSummaryResponseOptionalProperties({ name: 'first', nullable: false }, { name: 'last', nullable: false }, { name: 'empty', nullable: false }, );
+    const optionalNumberProperties = createPageEstimateSummaryResponseOptionalProperties({ name: 'number', nullable: false }, { name: 'numberOfElements', nullable: false }, { name: 'size', nullable: false }, { name: 'totalElements', nullable: false }, { name: 'totalPages', nullable: false }, );
+    const optionalBooleanProperties = createPageEstimateSummaryResponseOptionalProperties({ name: 'empty', nullable: false }, { name: 'first', nullable: false }, { name: 'last', nullable: false }, );
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
         && optionalStringProperties.every((property) => isOptionalPageEstimateSummaryResponsePropertyOfType(_v, property.name, 'string', property.nullable))

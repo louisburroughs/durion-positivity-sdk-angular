@@ -14,34 +14,40 @@
  */
 export interface PartReturnUpdateRequest { 
     /**
-     * Target status; omit for a detail-only update
+     * Shipping carrier
      */
-    status?: PartReturnUpdateRequestStatusEnum;
+    carrier?: string;
     /**
      * Revised disposition for the defective part
      */
     disposition?: PartReturnUpdateRequestDispositionEnum;
     /**
-     * Shipping carrier
+     * Where the part sits on the physical hold shelf
      */
-    carrier?: string;
-    /**
-     * Carrier tracking number
-     */
-    trackingNumber?: string;
-    /**
-     * When the part shipped; defaults to now when entering SHIPPED
-     */
-    shippedAt?: string;
+    holdLocationNote?: string;
     /**
      * Vendor-issued RMA number
      */
     rmaNumber?: string;
     /**
-     * Where the part sits on the physical hold shelf
+     * When the part shipped; defaults to now when entering SHIPPED
      */
-    holdLocationNote?: string;
+    shippedAt?: string;
+    /**
+     * Target status; omit for a detail-only update
+     */
+    status?: PartReturnUpdateRequestStatusEnum;
+    /**
+     * Carrier tracking number
+     */
+    trackingNumber?: string;
 }
+export enum PartReturnUpdateRequestDispositionEnum {
+    HoldForInspection = 'HOLD_FOR_INSPECTION',
+    ReturnToVendor = 'RETURN_TO_VENDOR',
+    ScrapAuthorized = 'SCRAP_AUTHORIZED',
+    CustomerRetained = 'CUSTOMER_RETAINED'
+};
 export enum PartReturnUpdateRequestStatusEnum {
     AwaitingPart = 'AWAITING_PART',
     OnHold = 'ON_HOLD',
@@ -49,12 +55,6 @@ export enum PartReturnUpdateRequestStatusEnum {
     ReceivedByVendor = 'RECEIVED_BY_VENDOR',
     Scrapped = 'SCRAPPED',
     Closed = 'CLOSED'
-};
-export enum PartReturnUpdateRequestDispositionEnum {
-    HoldForInspection = 'HOLD_FOR_INSPECTION',
-    ReturnToVendor = 'RETURN_TO_VENDOR',
-    ScrapAuthorized = 'SCRAP_AUTHORIZED',
-    CustomerRetained = 'CUSTOMER_RETAINED'
 };
 
 
@@ -98,7 +98,7 @@ export function instanceOfPartReturnUpdateRequest(value: object): value is PartR
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createPartReturnUpdateRequestPropertyNames();
-    const optionalStringProperties = createPartReturnUpdateRequestOptionalProperties({ name: 'status', nullable: false }, { name: 'disposition', nullable: false }, { name: 'carrier', nullable: false }, { name: 'trackingNumber', nullable: false }, { name: 'shippedAt', nullable: false }, { name: 'rmaNumber', nullable: false }, { name: 'holdLocationNote', nullable: false }, );
+    const optionalStringProperties = createPartReturnUpdateRequestOptionalProperties({ name: 'carrier', nullable: false }, { name: 'disposition', nullable: false }, { name: 'holdLocationNote', nullable: false }, { name: 'rmaNumber', nullable: false }, { name: 'shippedAt', nullable: false }, { name: 'status', nullable: false }, { name: 'trackingNumber', nullable: false }, );
     const optionalNumberProperties = createPartReturnUpdateRequestOptionalProperties();
     const optionalBooleanProperties = createPartReturnUpdateRequestOptionalProperties();
 

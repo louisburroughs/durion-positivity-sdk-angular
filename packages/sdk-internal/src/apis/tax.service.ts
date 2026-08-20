@@ -43,7 +43,7 @@ export class TaxService extends BaseService {
 
     /**
      * Calculate tax
-     * Calculate tax for line items based on location. Routes to external service in production or test calculator in test mode.
+     * Calculates tax for the supplied line items against the destination address and returns the per-line and total tax amounts. Use this tool whenever a quote, estimate or invoice needs tax figures; do not use it to make a calculation permanent, which is commitTaxDocument. Preconditions: none beyond an authenticated caller; when an exemption is claimed the referenced certificate must already exist in the registry and be ACTIVE for the destination state on the transaction date, otherwise tax is calculated as taxable. Required inputs: lineItems (at least one) and destinationAddress with countryCode and postalCode; currencyCode defaults to USD, calculationType defaults to SALE, and referenceId should carry the source document id so the result can later be committed. Emits a TAX_CALCULATE event and, in production mode, calls the configured external tax provider; no provider document is created until commitTaxDocument is called. Returns 400 when line items or the destination address are missing or malformed, and 500 when the provider is unreachable in production mode. 
      * @endpoint post /v1/tax/calculate
      * @param taxCalculationRequest International tax calculation request
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -113,7 +113,7 @@ export class TaxService extends BaseService {
 
     /**
      * Commit tax document
-     * Commit the provider tax document for a finalized invoice. Idempotent; never blocks on provider outage (records PENDING_COMMIT for the re-commit job).
+     * Commits the provider tax document for a finalized invoice so the recorded tax becomes filing-visible at the provider. Use this tool when an invoice is finalized; do not use it to recalculate amounts, which is calculateTax, and do not use it to reverse a commit, which is voidTaxDocument. Preconditions: tax must already have been calculated for this referenceId with a committable request, so that a provider document exists to commit. Required inputs: referenceId (UUID) path parameter, which is the source invoice id; referenceType is an optional query parameter defaulting to INVOICE. Emits a TAX_COMMIT event and updates the stored provider transaction; the call is idempotent, so an already-COMMITTED document is returned unchanged. Returns 200 with status PENDING_COMMIT rather than an error when the provider call fails, because a sale is never blocked on the provider, so callers must read the returned status instead of treating 200 as a completed commit and leave the re-commit job to true it up. 
      * @endpoint post /v1/tax/transactions/{referenceId}/commit
      * @param referenceId 
      * @param referenceType 
@@ -121,12 +121,12 @@ export class TaxService extends BaseService {
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public commit(referenceId: string, referenceType?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<TaxProviderTransactionResult>;
-    public commit(referenceId: string, referenceType?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<TaxProviderTransactionResult>>;
-    public commit(referenceId: string, referenceType?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<TaxProviderTransactionResult>>;
-    public commit(referenceId: string, referenceType?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public commitTaxDocument(referenceId: string, referenceType?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<TaxProviderTransactionResult>;
+    public commitTaxDocument(referenceId: string, referenceType?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<TaxProviderTransactionResult>>;
+    public commitTaxDocument(referenceId: string, referenceType?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<TaxProviderTransactionResult>>;
+    public commitTaxDocument(referenceId: string, referenceType?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (referenceId === null || referenceId === undefined) {
-            throw new Error('Required parameter referenceId was null or undefined when calling commit.');
+            throw new Error('Required parameter referenceId was null or undefined when calling commitTaxDocument.');
         }
 
         let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
@@ -186,16 +186,16 @@ export class TaxService extends BaseService {
 
     /**
      * Get tax service mode
-     * Check if the tax service is currently in test mode or production mode
+     * Returns whether the tax service is running against the external provider or against the built-in test calculator. Use this tool to interpret a calculation result before relying on it; do not use it as a health check, which is the actuator health endpoint instead. Preconditions: none; the mode is service configuration and is readable at any time. Required inputs: none, and there is no request body or query parameter. No events are emitted and no state changes; this is a read-only configuration projection. Returns 200 in all cases, so an absent or unexpected mode value indicates a misconfigured deployment rather than a request error. 
      * @endpoint get /v1/tax/mode
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public getMode(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ModeResponse>;
-    public getMode(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ModeResponse>>;
-    public getMode(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ModeResponse>>;
-    public getMode(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getTaxServiceMode(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ModeResponse>;
+    public getTaxServiceMode(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ModeResponse>>;
+    public getTaxServiceMode(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ModeResponse>>;
+    public getTaxServiceMode(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -242,19 +242,19 @@ export class TaxService extends BaseService {
 
     /**
      * Void tax document
-     * Void the provider tax document when its invoice reverts to DRAFT (InvoiceStatus has no CANCELLED/VOIDED; void hooks the revert transition).
+     * Voids the provider tax document for an invoice that has been reverted to DRAFT, withdrawing the committed tax from the provider. Use this tool when a finalized invoice reverts to DRAFT; do not use it for ordinary corrections, where calculateTax followed by commitTaxDocument replaces the figures instead. Preconditions: a provider transaction must already exist for this referenceId, which means tax was calculated and committed earlier. Required inputs: referenceId (UUID) path parameter, which is the source invoice id; there is no request body and no referenceType, because the existing transaction supplies it. Emits a TAX_VOID event and moves the stored provider transaction to VOIDED, or to FAILED when the provider rejects the void. Returns 200 with status FAILED when the provider call fails, so callers must read the returned status rather than treating 200 as a completed void. 
      * @endpoint post /v1/tax/transactions/{referenceId}/void
      * @param referenceId 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public voidTransaction(referenceId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<TaxProviderTransactionResult>;
-    public voidTransaction(referenceId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<TaxProviderTransactionResult>>;
-    public voidTransaction(referenceId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<TaxProviderTransactionResult>>;
-    public voidTransaction(referenceId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public voidTaxDocument(referenceId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<TaxProviderTransactionResult>;
+    public voidTaxDocument(referenceId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<TaxProviderTransactionResult>>;
+    public voidTaxDocument(referenceId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<TaxProviderTransactionResult>>;
+    public voidTaxDocument(referenceId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (referenceId === null || referenceId === undefined) {
-            throw new Error('Required parameter referenceId was null or undefined when calling voidTransaction.');
+            throw new Error('Required parameter referenceId was null or undefined when calling voidTaxDocument.');
         }
 
         let localVarHeaders = this.defaultHeaders;

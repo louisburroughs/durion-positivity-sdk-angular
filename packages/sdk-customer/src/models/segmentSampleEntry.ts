@@ -14,13 +14,13 @@
  */
 export interface SegmentSampleEntry { 
     /**
-     * Party identifier
-     */
-    partyId: string;
-    /**
      * Masked display label
      */
     maskedLabel?: string;
+    /**
+     * Party identifier
+     */
+    partyId: string;
 }
 
 function isOptionalSegmentSampleEntryPropertyOfType(
@@ -62,7 +62,7 @@ export function instanceOfSegmentSampleEntry(value: object): value is SegmentSam
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createSegmentSampleEntryPropertyNames('partyId', );
-    const optionalStringProperties = createSegmentSampleEntryOptionalProperties({ name: 'partyId', nullable: false }, { name: 'maskedLabel', nullable: false }, );
+    const optionalStringProperties = createSegmentSampleEntryOptionalProperties({ name: 'maskedLabel', nullable: false }, { name: 'partyId', nullable: false }, );
     const optionalNumberProperties = createSegmentSampleEntryOptionalProperties();
     const optionalBooleanProperties = createSegmentSampleEntryOptionalProperties();
 

@@ -14,13 +14,13 @@
  */
 export interface CreateUserLinkRequest { 
     /**
-     * Username of the security user account
-     */
-    username: string;
-    /**
      * Person identifier
      */
     personId: string;
+    /**
+     * Username of the security user account
+     */
+    username: string;
 }
 
 function isOptionalCreateUserLinkRequestPropertyOfType(
@@ -61,8 +61,8 @@ export function instanceOfCreateUserLinkRequest(value: object): value is CreateU
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createCreateUserLinkRequestPropertyNames('username', 'personId', );
-    const optionalStringProperties = createCreateUserLinkRequestOptionalProperties({ name: 'username', nullable: false }, { name: 'personId', nullable: false }, );
+    const requiredProperties = createCreateUserLinkRequestPropertyNames('personId', 'username', );
+    const optionalStringProperties = createCreateUserLinkRequestOptionalProperties({ name: 'personId', nullable: false }, { name: 'username', nullable: false }, );
     const optionalNumberProperties = createCreateUserLinkRequestOptionalProperties();
     const optionalBooleanProperties = createCreateUserLinkRequestOptionalProperties();
 

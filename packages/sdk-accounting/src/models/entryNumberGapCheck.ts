@@ -14,13 +14,13 @@
  */
 export interface EntryNumberGapCheck { 
     /**
-     * Monthly sequence scope key
-     */
-    scopeKey: string;
-    /**
      * Ascending sequence numbers handed out but missing from the ledger for this scope
      */
     missingNumbers: Array<number>;
+    /**
+     * Monthly sequence scope key
+     */
+    scopeKey: string;
 }
 
 function isOptionalEntryNumberGapCheckPropertyOfType(
@@ -61,7 +61,7 @@ export function instanceOfEntryNumberGapCheck(value: object): value is EntryNumb
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createEntryNumberGapCheckPropertyNames('scopeKey', 'missingNumbers', );
+    const requiredProperties = createEntryNumberGapCheckPropertyNames('missingNumbers', 'scopeKey', );
     const optionalStringProperties = createEntryNumberGapCheckOptionalProperties({ name: 'scopeKey', nullable: false }, );
     const optionalNumberProperties = createEntryNumberGapCheckOptionalProperties();
     const optionalBooleanProperties = createEntryNumberGapCheckOptionalProperties();

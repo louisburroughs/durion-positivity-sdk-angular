@@ -41,19 +41,19 @@ export class SupplierVendorProfilesService extends BaseService {
 
     /**
      * Create vendor profile
-     * Create an ADMIN-managed vendor profile; supplierRef must be unique
+     * Creates an ADMIN-managed vendor profile, the row that carries one supplier connection and owns its accounts, auth config and endpoint bindings. Use this tool when onboarding a new supplier connection; do not use it to change an existing profile, which is updateVendorProfile, and note that YAML-managed profiles cannot be created here at all. Preconditions: supplierRef must not already be in use by another profile. Required inputs: supplierRef and displayName, both non-blank, plus the enabled and sandbox flags; timeouts, maxRetries, retryBackoff and sandboxBaseUrlOverride are optional and fall back to the deployment defaults when omitted. Emits a SUPPLIER_PROFILE_CREATE audit event; the profile is created with no bindings, so it resolves every capability to a not-configured outcome until bindings are added. Returns 409 when supplierRef is already in use, and 400 when supplierRef or displayName are blank or a timeout value is not greater than zero. 
      * @endpoint post /v1/supplier/admin/profiles
-     * @param vendorProfileRequest 
+     * @param vendorProfileRequest Vendor profile to create; the configuration source is always ADMIN.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public createProfile(vendorProfileRequest: VendorProfileRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<VendorProfileView>;
-    public createProfile(vendorProfileRequest: VendorProfileRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<VendorProfileView>>;
-    public createProfile(vendorProfileRequest: VendorProfileRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<VendorProfileView>>;
-    public createProfile(vendorProfileRequest: VendorProfileRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public createVendorProfile(vendorProfileRequest: VendorProfileRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<VendorProfileView>;
+    public createVendorProfile(vendorProfileRequest: VendorProfileRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<VendorProfileView>>;
+    public createVendorProfile(vendorProfileRequest: VendorProfileRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<VendorProfileView>>;
+    public createVendorProfile(vendorProfileRequest: VendorProfileRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (vendorProfileRequest === null || vendorProfileRequest === undefined) {
-            throw new Error('Required parameter vendorProfileRequest was null or undefined when calling createProfile.');
+            throw new Error('Required parameter vendorProfileRequest was null or undefined when calling createVendorProfile.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -111,19 +111,19 @@ export class SupplierVendorProfilesService extends BaseService {
 
     /**
      * Delete vendor profile
-     * Delete a vendor profile and its child configuration; rejected for YAML-managed profiles
+     * Deletes a vendor profile together with its accounts, auth config and endpoint bindings. Use this tool only when a supplier connection is being retired permanently; to stop traffic while keeping the configuration, call updateVendorProfile with enabled cleared instead. Preconditions: the profile must exist and must be ADMIN-managed, because YAML-managed profiles are owned by the deployment configuration. Required inputs: vendorProfileId (UUIDv7) path parameter; there is no request body and no confirmation flag. Emits a SUPPLIER_PROFILE_DELETE audit event and cascades to the profile\&#39;s child configuration; exchange audit records already written are retained. Returns 404 when the profile does not exist and 409 when it is YAML-managed. 
      * @endpoint delete /v1/supplier/admin/profiles/{vendorProfileId}
      * @param vendorProfileId Vendor profile identifier (UUIDv7). Must reference an existing vendor profile.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public deleteProfile(vendorProfileId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public deleteProfile(vendorProfileId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public deleteProfile(vendorProfileId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public deleteProfile(vendorProfileId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public deleteVendorProfile(vendorProfileId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any>;
+    public deleteVendorProfile(vendorProfileId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
+    public deleteVendorProfile(vendorProfileId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
+    public deleteVendorProfile(vendorProfileId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (vendorProfileId === null || vendorProfileId === undefined) {
-            throw new Error('Required parameter vendorProfileId was null or undefined when calling deleteProfile.');
+            throw new Error('Required parameter vendorProfileId was null or undefined when calling deleteVendorProfile.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -171,19 +171,19 @@ export class SupplierVendorProfilesService extends BaseService {
 
     /**
      * Get vendor profile
-     * Retrieve one vendor profile by id
+     * Returns one vendor profile with its timeouts, retry settings, sandbox overlay and whether it is ADMIN-managed or YAML-managed. Use this tool when the vendorProfileId is already known; use listVendorProfiles instead to search by supplierRef. Preconditions: the profile must exist. Required inputs: vendorProfileId (UUIDv7) path parameter; there is no request body. Emits a SUPPLIER_PROFILE_GET audit event; no configuration is changed. Returns 404 when no profile exists for the supplied id. 
      * @endpoint get /v1/supplier/admin/profiles/{vendorProfileId}
      * @param vendorProfileId Vendor profile identifier (UUIDv7). Must reference an existing vendor profile.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public getProfile(vendorProfileId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<VendorProfileView>;
-    public getProfile(vendorProfileId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<VendorProfileView>>;
-    public getProfile(vendorProfileId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<VendorProfileView>>;
-    public getProfile(vendorProfileId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getVendorProfile(vendorProfileId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<VendorProfileView>;
+    public getVendorProfile(vendorProfileId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<VendorProfileView>>;
+    public getVendorProfile(vendorProfileId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<VendorProfileView>>;
+    public getVendorProfile(vendorProfileId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (vendorProfileId === null || vendorProfileId === undefined) {
-            throw new Error('Required parameter vendorProfileId was null or undefined when calling getProfile.');
+            throw new Error('Required parameter vendorProfileId was null or undefined when calling getVendorProfile.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -231,16 +231,16 @@ export class SupplierVendorProfilesService extends BaseService {
 
     /**
      * List vendor profiles
-     * All vendor profiles, ordered by supplierRef
+     * Returns every configured vendor profile, ordered by supplierRef, with its enabled, sandbox and source-of-truth state. Use this tool to discover a vendorProfileId before working with accounts, auth config or bindings; use getVendorProfile instead when the id is already known. Preconditions: none; the list is unfiltered and includes both ADMIN-managed and YAML-managed profiles. Required inputs: none, and there is no request body, paging or filtering. Emits a SUPPLIER_PROFILE_LIST audit event; no configuration is changed. Returns 200 with an empty array when nothing is configured, so an empty result is not an error condition. 
      * @endpoint get /v1/supplier/admin/profiles
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public listProfiles(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<VendorProfileView>>;
-    public listProfiles(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<VendorProfileView>>>;
-    public listProfiles(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<VendorProfileView>>>;
-    public listProfiles(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public listVendorProfiles(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<VendorProfileView>>;
+    public listVendorProfiles(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<VendorProfileView>>>;
+    public listVendorProfiles(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<VendorProfileView>>>;
+    public listVendorProfiles(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -287,23 +287,23 @@ export class SupplierVendorProfilesService extends BaseService {
 
     /**
      * Update vendor profile
-     * Full update of a vendor profile; rejected for YAML-managed profiles (ADR-0050 §6)
+     * Replaces every settable field of a vendor profile, including its alias, display name, enabled and sandbox flags and default timeouts. Use this tool to change connection defaults or take a supplier out of service by clearing enabled; do not use it on YAML-managed profiles, whose source of truth is the deployment configuration instead. Preconditions: the profile must exist, must be ADMIN-managed, and the supplierRef in the body must not belong to a different profile. Required inputs: vendorProfileId (UUIDv7) path parameter plus the full body, because every field is replaced; omitting an optional field resets it to the deployment default rather than leaving the stored value. Emits a SUPPLIER_PROFILE_UPDATE audit event; disabling a profile immediately makes its bindings resolve to a typed not-configured outcome. Returns 404 when the profile does not exist, 409 when it is YAML-managed or the supplierRef is taken, and 400 when a required field is blank or a timeout is not greater than zero. 
      * @endpoint put /v1/supplier/admin/profiles/{vendorProfileId}
      * @param vendorProfileId Vendor profile identifier (UUIDv7). Must reference an existing vendor profile.
-     * @param vendorProfileRequest 
+     * @param vendorProfileRequest Replacement values for every settable field of the vendor profile.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public updateProfile(vendorProfileId: string, vendorProfileRequest: VendorProfileRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<VendorProfileView>;
-    public updateProfile(vendorProfileId: string, vendorProfileRequest: VendorProfileRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<VendorProfileView>>;
-    public updateProfile(vendorProfileId: string, vendorProfileRequest: VendorProfileRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<VendorProfileView>>;
-    public updateProfile(vendorProfileId: string, vendorProfileRequest: VendorProfileRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public updateVendorProfile(vendorProfileId: string, vendorProfileRequest: VendorProfileRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<VendorProfileView>;
+    public updateVendorProfile(vendorProfileId: string, vendorProfileRequest: VendorProfileRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<VendorProfileView>>;
+    public updateVendorProfile(vendorProfileId: string, vendorProfileRequest: VendorProfileRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<VendorProfileView>>;
+    public updateVendorProfile(vendorProfileId: string, vendorProfileRequest: VendorProfileRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (vendorProfileId === null || vendorProfileId === undefined) {
-            throw new Error('Required parameter vendorProfileId was null or undefined when calling updateProfile.');
+            throw new Error('Required parameter vendorProfileId was null or undefined when calling updateVendorProfile.');
         }
         if (vendorProfileRequest === null || vendorProfileRequest === undefined) {
-            throw new Error('Required parameter vendorProfileRequest was null or undefined when calling updateProfile.');
+            throw new Error('Required parameter vendorProfileRequest was null or undefined when calling updateVendorProfile.');
         }
 
         let localVarHeaders = this.defaultHeaders;

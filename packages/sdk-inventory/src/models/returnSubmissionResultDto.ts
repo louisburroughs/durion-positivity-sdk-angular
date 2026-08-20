@@ -14,25 +14,25 @@
  */
 export interface ReturnSubmissionResultDto { 
     /**
-     * Identifier of the created return record
+     * Timestamp when the return was processed
      */
-    returnId: string;
-    /**
-     * Identifier of the workorder the return was submitted against
-     */
-    workorderId: string;
+    processedAt: string;
     /**
      * Number of return lines that were processed
      */
     processedLines: number;
     /**
+     * Identifier of the created return record
+     */
+    returnId: string;
+    /**
      * Status of the return submission
      */
     status: string;
     /**
-     * Timestamp when the return was processed
+     * Identifier of the workorder the return was submitted against
      */
-    processedAt: string;
+    workorderId: string;
 }
 
 function isOptionalReturnSubmissionResultDtoPropertyOfType(
@@ -73,8 +73,8 @@ export function instanceOfReturnSubmissionResultDto(value: object): value is Ret
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createReturnSubmissionResultDtoPropertyNames('returnId', 'workorderId', 'processedLines', 'status', 'processedAt', );
-    const optionalStringProperties = createReturnSubmissionResultDtoOptionalProperties({ name: 'returnId', nullable: false }, { name: 'workorderId', nullable: false }, { name: 'status', nullable: false }, { name: 'processedAt', nullable: false }, );
+    const requiredProperties = createReturnSubmissionResultDtoPropertyNames('processedAt', 'processedLines', 'returnId', 'status', 'workorderId', );
+    const optionalStringProperties = createReturnSubmissionResultDtoOptionalProperties({ name: 'processedAt', nullable: false }, { name: 'returnId', nullable: false }, { name: 'status', nullable: false }, { name: 'workorderId', nullable: false }, );
     const optionalNumberProperties = createReturnSubmissionResultDtoOptionalProperties({ name: 'processedLines', nullable: false }, );
     const optionalBooleanProperties = createReturnSubmissionResultDtoOptionalProperties();
 

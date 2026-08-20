@@ -14,33 +14,33 @@
  */
 export interface UpsertMessageTemplateRequest { 
     /**
-     * Unique template name
+     * Audience whose token vocabulary applies
      */
-    name: string;
+    audienceType: UpsertMessageTemplateRequestAudienceTypeEnum;
+    /**
+     * Message body with {{token}} placeholders from the audience\'s token catalog
+     */
+    body: string;
     /**
      * Delivery channel
      */
     channel: UpsertMessageTemplateRequestChannelEnum;
     /**
-     * Audience whose token vocabulary applies
+     * Unique template name
      */
-    audienceType: UpsertMessageTemplateRequestAudienceTypeEnum;
+    name: string;
     /**
      * Subject line; required for EMAIL, rejected for SMS
      */
     subject?: string;
-    /**
-     * Message body with {{token}} placeholders from the audience\'s token catalog
-     */
-    body: string;
 }
-export enum UpsertMessageTemplateRequestChannelEnum {
-    Email = 'EMAIL',
-    Sms = 'SMS'
-};
 export enum UpsertMessageTemplateRequestAudienceTypeEnum {
     Commercial = 'COMMERCIAL',
     Individual = 'INDIVIDUAL'
+};
+export enum UpsertMessageTemplateRequestChannelEnum {
+    Email = 'EMAIL',
+    Sms = 'SMS'
 };
 
 
@@ -83,8 +83,8 @@ export function instanceOfUpsertMessageTemplateRequest(value: object): value is 
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createUpsertMessageTemplateRequestPropertyNames('name', 'channel', 'audienceType', 'body', );
-    const optionalStringProperties = createUpsertMessageTemplateRequestOptionalProperties({ name: 'name', nullable: false }, { name: 'channel', nullable: false }, { name: 'audienceType', nullable: false }, { name: 'subject', nullable: false }, { name: 'body', nullable: false }, );
+    const requiredProperties = createUpsertMessageTemplateRequestPropertyNames('audienceType', 'body', 'channel', 'name', );
+    const optionalStringProperties = createUpsertMessageTemplateRequestOptionalProperties({ name: 'audienceType', nullable: false }, { name: 'body', nullable: false }, { name: 'channel', nullable: false }, { name: 'name', nullable: false }, { name: 'subject', nullable: false }, );
     const optionalNumberProperties = createUpsertMessageTemplateRequestOptionalProperties();
     const optionalBooleanProperties = createUpsertMessageTemplateRequestOptionalProperties();
 

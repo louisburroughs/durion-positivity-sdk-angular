@@ -15,6 +15,10 @@ import { VarianceSummaryResponse } from './varianceSummaryResponse';
  */
 export interface ReceiveItemsResponse { 
     /**
+     * Number of receiving lines processed in this request
+     */
+    linesProcessed: number;
+    /**
      * Identifier of the receiving session the items were recorded against
      */
     sessionId: string;
@@ -22,10 +26,6 @@ export interface ReceiveItemsResponse {
      * Status of the receiving session after recording the items
      */
     sessionStatus: string;
-    /**
-     * Number of receiving lines processed in this request
-     */
-    linesProcessed: number;
     /**
      * Variance summaries for lines whose received quantity differed from the expected quantity
      */
@@ -70,7 +70,7 @@ export function instanceOfReceiveItemsResponse(value: object): value is ReceiveI
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createReceiveItemsResponsePropertyNames('sessionId', 'sessionStatus', 'linesProcessed', );
+    const requiredProperties = createReceiveItemsResponsePropertyNames('linesProcessed', 'sessionId', 'sessionStatus', );
     const optionalStringProperties = createReceiveItemsResponseOptionalProperties({ name: 'sessionId', nullable: false }, { name: 'sessionStatus', nullable: false }, );
     const optionalNumberProperties = createReceiveItemsResponseOptionalProperties({ name: 'linesProcessed', nullable: false }, );
     const optionalBooleanProperties = createReceiveItemsResponseOptionalProperties();

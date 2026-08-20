@@ -13,30 +13,40 @@
  * FAILED settlement reconciled against pos-invoice — the double-pay-risk worklist
  */
 export interface SettlementReconciliationRow { 
-    settlementId?: string;
+    checkStatus?: SettlementReconciliationRowCheckStatusEnum;
     claimId?: string;
-    settlementType?: SettlementReconciliationRowSettlementTypeEnum;
-    /**
-     * Always FAILED in this worklist
-     */
-    settlementStatus?: SettlementReconciliationRowSettlementStatusEnum;
-    invoiceId?: string;
-    /**
-     * Idempotency key warranty sent to pos-invoice (the settlement id)
-     */
-    externalReference?: string;
     /**
      * Whether pos-invoice committed the write; null when checkStatus is UNKNOWN
      */
     committedOnInvoice?: boolean;
+    coveredAmount?: number;
+    createdAt?: string;
+    customerAmount?: number;
+    /**
+     * Idempotency key warranty sent to pos-invoice (the settlement id)
+     */
+    externalReference?: string;
+    invoiceId?: string;
     matchedAdjustmentId?: string;
     matchedRefundId?: string;
-    checkStatus?: SettlementReconciliationRowCheckStatusEnum;
-    coveredAmount?: number;
-    customerAmount?: number;
-    createdAt?: string;
+    settlementId?: string;
+    /**
+     * Always FAILED in this worklist
+     */
+    settlementStatus?: SettlementReconciliationRowSettlementStatusEnum;
+    settlementType?: SettlementReconciliationRowSettlementTypeEnum;
     updatedAt?: string;
 }
+export enum SettlementReconciliationRowCheckStatusEnum {
+    ConfirmedCommitted = 'CONFIRMED_COMMITTED',
+    ConfirmedAbsent = 'CONFIRMED_ABSENT',
+    Unknown = 'UNKNOWN'
+};
+export enum SettlementReconciliationRowSettlementStatusEnum {
+    Pending = 'PENDING',
+    Completed = 'COMPLETED',
+    Failed = 'FAILED'
+};
 export enum SettlementReconciliationRowSettlementTypeEnum {
     ReplacementWorkorder = 'REPLACEMENT_WORKORDER',
     InvoiceCredit = 'INVOICE_CREDIT',
@@ -44,16 +54,6 @@ export enum SettlementReconciliationRowSettlementTypeEnum {
     ProratedCredit = 'PRORATED_CREDIT',
     Goodwill = 'GOODWILL',
     NoAction = 'NO_ACTION'
-};
-export enum SettlementReconciliationRowSettlementStatusEnum {
-    Pending = 'PENDING',
-    Completed = 'COMPLETED',
-    Failed = 'FAILED'
-};
-export enum SettlementReconciliationRowCheckStatusEnum {
-    ConfirmedCommitted = 'CONFIRMED_COMMITTED',
-    ConfirmedAbsent = 'CONFIRMED_ABSENT',
-    Unknown = 'UNKNOWN'
 };
 
 
@@ -97,7 +97,7 @@ export function instanceOfSettlementReconciliationRow(value: object): value is S
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createSettlementReconciliationRowPropertyNames();
-    const optionalStringProperties = createSettlementReconciliationRowOptionalProperties({ name: 'settlementId', nullable: false }, { name: 'claimId', nullable: false }, { name: 'settlementType', nullable: false }, { name: 'settlementStatus', nullable: false }, { name: 'invoiceId', nullable: false }, { name: 'externalReference', nullable: false }, { name: 'matchedAdjustmentId', nullable: false }, { name: 'matchedRefundId', nullable: false }, { name: 'checkStatus', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'updatedAt', nullable: false }, );
+    const optionalStringProperties = createSettlementReconciliationRowOptionalProperties({ name: 'checkStatus', nullable: false }, { name: 'claimId', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'externalReference', nullable: false }, { name: 'invoiceId', nullable: false }, { name: 'matchedAdjustmentId', nullable: false }, { name: 'matchedRefundId', nullable: false }, { name: 'settlementId', nullable: false }, { name: 'settlementStatus', nullable: false }, { name: 'settlementType', nullable: false }, { name: 'updatedAt', nullable: false }, );
     const optionalNumberProperties = createSettlementReconciliationRowOptionalProperties({ name: 'coveredAmount', nullable: false }, { name: 'customerAmount', nullable: false }, );
     const optionalBooleanProperties = createSettlementReconciliationRowOptionalProperties({ name: 'committedOnInvoice', nullable: false }, );
 

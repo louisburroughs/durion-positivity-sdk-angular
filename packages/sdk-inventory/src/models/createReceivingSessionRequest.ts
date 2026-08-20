@@ -14,13 +14,13 @@
  */
 export interface CreateReceivingSessionRequest { 
     /**
-     * Identifier of the source document (e.g. purchase order or workorder) being received against
-     */
-    sourceDocumentId: string;
-    /**
      * Method used to enter receiving lines, such as SCAN or MANUAL
      */
     entryMethod?: string;
+    /**
+     * Identifier of the source document (e.g. purchase order or workorder) being received against
+     */
+    sourceDocumentId: string;
 }
 
 function isOptionalCreateReceivingSessionRequestPropertyOfType(
@@ -62,7 +62,7 @@ export function instanceOfCreateReceivingSessionRequest(value: object): value is
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createCreateReceivingSessionRequestPropertyNames('sourceDocumentId', );
-    const optionalStringProperties = createCreateReceivingSessionRequestOptionalProperties({ name: 'sourceDocumentId', nullable: false }, { name: 'entryMethod', nullable: false }, );
+    const optionalStringProperties = createCreateReceivingSessionRequestOptionalProperties({ name: 'entryMethod', nullable: false }, { name: 'sourceDocumentId', nullable: false }, );
     const optionalNumberProperties = createCreateReceivingSessionRequestOptionalProperties();
     const optionalBooleanProperties = createCreateReceivingSessionRequestOptionalProperties();
 

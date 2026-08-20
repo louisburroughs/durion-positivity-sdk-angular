@@ -19,6 +19,8 @@ import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 // @ts-ignore
 import { AdjustmentResponse } from '../src/models/adjustmentResponse';
 // @ts-ignore
+import { ApiError } from '../src/models/apiError';
+// @ts-ignore
 import { ApproveAdjustmentRequest } from '../src/models/approveAdjustmentRequest';
 // @ts-ignore
 import { CreateAdjustmentRequest } from '../src/models/createAdjustmentRequest';
@@ -43,24 +45,24 @@ export class CycleCountAdjustmentsService extends BaseService {
 
     /**
      * Approve adjustment
-     * Approves a pending adjustment and posts it to the inventory ledger
+     * Approves a PENDING_APPROVAL cycle count adjustment and posts its COUNT_VARIANCE_IN or COUNT_VARIANCE_OUT entry to the inventory ledger, marking the linked task APPROVED. Use this tool after reviewing a pending adjustment; do not use rejectCycleCountAdjustment, which discards it without touching inventory. Preconditions: the adjustment must be in PENDING_APPROVAL; for a task-linked adjustment the conflict gate applies — a first approval that detects in-window stock movements flags the task CONFLICT and aborts, and re-approving a CONFLICT task recomputes the variance against current on-hand rather than the stale snapshot (a recomputed zero variance approves without posting anything). Required inputs: adjustmentId (UUID) path parameter; the body\&#39;s approverUserId is legacy and ignored — the actor is resolved from the authenticated context; notes are optional, and an optional X-Correlation-Id header is propagated to the audit event. Emits an INVENTORY_CYCLE_COUNT_ADJUSTMENT_APPROVE event plus a MovementAdjusted audit event, and the posting changes on-hand immediately. Returns 400 when no adjustment exists for the id (the unknown id maps to a validation error, not 404), and 409 when the adjustment is not PENDING_APPROVAL or the conflict gate rejects the first approval (CYCLE_COUNT_CONFLICT). 
      * @endpoint post /v1/inventory/cycleCountAdjustments/{adjustmentId}/approve
      * @param adjustmentId Adjustment ID
-     * @param approveAdjustmentRequest 
+     * @param approveAdjustmentRequest Approval context; the authoritative approver is resolved server-side from the authenticated caller.
      * @param xCorrelationId 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public approveAdjustment(adjustmentId: string, approveAdjustmentRequest: ApproveAdjustmentRequest, xCorrelationId?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<AdjustmentResponse>;
-    public approveAdjustment(adjustmentId: string, approveAdjustmentRequest: ApproveAdjustmentRequest, xCorrelationId?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<AdjustmentResponse>>;
-    public approveAdjustment(adjustmentId: string, approveAdjustmentRequest: ApproveAdjustmentRequest, xCorrelationId?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<AdjustmentResponse>>;
-    public approveAdjustment(adjustmentId: string, approveAdjustmentRequest: ApproveAdjustmentRequest, xCorrelationId?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public approveCycleCountAdjustment(adjustmentId: string, approveAdjustmentRequest: ApproveAdjustmentRequest, xCorrelationId?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<AdjustmentResponse>;
+    public approveCycleCountAdjustment(adjustmentId: string, approveAdjustmentRequest: ApproveAdjustmentRequest, xCorrelationId?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<AdjustmentResponse>>;
+    public approveCycleCountAdjustment(adjustmentId: string, approveAdjustmentRequest: ApproveAdjustmentRequest, xCorrelationId?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<AdjustmentResponse>>;
+    public approveCycleCountAdjustment(adjustmentId: string, approveAdjustmentRequest: ApproveAdjustmentRequest, xCorrelationId?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (adjustmentId === null || adjustmentId === undefined) {
-            throw new Error('Required parameter adjustmentId was null or undefined when calling approveAdjustment.');
+            throw new Error('Required parameter adjustmentId was null or undefined when calling approveCycleCountAdjustment.');
         }
         if (approveAdjustmentRequest === null || approveAdjustmentRequest === undefined) {
-            throw new Error('Required parameter approveAdjustmentRequest was null or undefined when calling approveAdjustment.');
+            throw new Error('Required parameter approveAdjustmentRequest was null or undefined when calling approveCycleCountAdjustment.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -121,16 +123,16 @@ export class CycleCountAdjustmentsService extends BaseService {
 
     /**
      * Count pending approvals
-     * Returns the count of adjustments awaiting approval
+     * Returns the number of cycle count adjustments awaiting approval, as a bare JSON number. Use this tool for dashboards and badge counts; use listPendingCycleCountAdjustments instead when the adjustments themselves are needed. Preconditions: none. Required inputs: none; there is no request body or filtering. No events are emitted and no state changes; this is a read-only projection. Returns 200 with 0 when nothing awaits approval, so zero is not an error condition. 
      * @endpoint get /v1/inventory/cycleCountAdjustments/pending/count
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public countPendingApprovals(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<number>;
-    public countPendingApprovals(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<number>>;
-    public countPendingApprovals(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<number>>;
-    public countPendingApprovals(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public countPendingCycleCountAdjustments(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<number>;
+    public countPendingCycleCountAdjustments(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<number>>;
+    public countPendingCycleCountAdjustments(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<number>>;
+    public countPendingCycleCountAdjustments(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -177,19 +179,19 @@ export class CycleCountAdjustmentsService extends BaseService {
 
     /**
      * Create cycle count adjustment
-     * Creates a new adjustment from a cycle count. Automatically evaluates against approval thresholds.
+     * Creates an inventory adjustment from a cycle count variance and evaluates it against the configured approval thresholds: below all thresholds it is AUTO_APPROVED and its COUNT_VARIANCE_IN or COUNT_VARIANCE_OUT entry posts to the inventory ledger in the same transaction, otherwise it enters PENDING_APPROVAL with a required approval tier. Use this tool to settle a counted variance; do not use submitCycleCount, which only records a count, and do not use approveCycleCountAdjustment, which acts on an adjustment that already exists. Preconditions: countedQuantity must differ from quantityOnHandBefore (a zero variance is rejected), a supplied taskId must reference an existing cycle count task, and the auto-approve path additionally requires the linked task to have no unreviewed in-window stock movements. Required inputs: stockItemId (UUID), reasonCode, countedQuantity, quantityOnHandBefore, costAtTimeOfAdjustment and createdByUserId; taskId is optional but enables conflict detection; the posted unit cost prefers the costing engine\&#39;s per-SKU running cost and falls back to costAtTimeOfAdjustment only for a SKU the engine has not costed. Emits an INVENTORY_CYCLE_COUNT_ADJUSTMENT_CREATE event, and an auto-approved posting changes on-hand immediately. Returns 400 when the counted quantity matches the system quantity, 404 when the referenced task does not exist, and 409 (CYCLE_COUNT_CONFLICT) when auto-approval detects in-window movements — the task is flagged CONFLICT and a reviewer must explicitly recount or approve with recomputation. 
      * @endpoint post /v1/inventory/cycleCountAdjustments
-     * @param createAdjustmentRequest 
+     * @param createAdjustmentRequest Cycle count variance to turn into an inventory adjustment, with the before/after quantities and the fallback unit cost.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public createAdjustment(createAdjustmentRequest: CreateAdjustmentRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<AdjustmentResponse>;
-    public createAdjustment(createAdjustmentRequest: CreateAdjustmentRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<AdjustmentResponse>>;
-    public createAdjustment(createAdjustmentRequest: CreateAdjustmentRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<AdjustmentResponse>>;
-    public createAdjustment(createAdjustmentRequest: CreateAdjustmentRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public createCycleCountAdjustment(createAdjustmentRequest: CreateAdjustmentRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<AdjustmentResponse>;
+    public createCycleCountAdjustment(createAdjustmentRequest: CreateAdjustmentRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<AdjustmentResponse>>;
+    public createCycleCountAdjustment(createAdjustmentRequest: CreateAdjustmentRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<AdjustmentResponse>>;
+    public createCycleCountAdjustment(createAdjustmentRequest: CreateAdjustmentRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (createAdjustmentRequest === null || createAdjustmentRequest === undefined) {
-            throw new Error('Required parameter createAdjustmentRequest was null or undefined when calling createAdjustment.');
+            throw new Error('Required parameter createAdjustmentRequest was null or undefined when calling createCycleCountAdjustment.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -247,19 +249,19 @@ export class CycleCountAdjustmentsService extends BaseService {
 
     /**
      * Get adjustment details
-     * Retrieves details of a specific cycle count adjustment
+     * Returns one cycle count adjustment with its variance, cost snapshot, approval tier, lifecycle status and ledger-entry linkage. Use this tool when the adjustmentId is already known; use listCycleCountAdjustments instead to search by status. Preconditions: the adjustment must exist. Required inputs: adjustmentId (UUID) as a path parameter; there is no request body. No events are emitted and no state changes; this is a read-only projection. Returns 400 when no adjustment exists for the supplied id — the module maps the unknown-id lookup to a validation error rather than 404. 
      * @endpoint get /v1/inventory/cycleCountAdjustments/{adjustmentId}
      * @param adjustmentId Adjustment ID
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public getAdjustment(adjustmentId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<AdjustmentResponse>;
-    public getAdjustment(adjustmentId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<AdjustmentResponse>>;
-    public getAdjustment(adjustmentId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<AdjustmentResponse>>;
-    public getAdjustment(adjustmentId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getCycleCountAdjustment(adjustmentId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<AdjustmentResponse>;
+    public getCycleCountAdjustment(adjustmentId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<AdjustmentResponse>>;
+    public getCycleCountAdjustment(adjustmentId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<AdjustmentResponse>>;
+    public getCycleCountAdjustment(adjustmentId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (adjustmentId === null || adjustmentId === undefined) {
-            throw new Error('Required parameter adjustmentId was null or undefined when calling getAdjustment.');
+            throw new Error('Required parameter adjustmentId was null or undefined when calling getCycleCountAdjustment.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -307,17 +309,17 @@ export class CycleCountAdjustmentsService extends BaseService {
 
     /**
      * List adjustments by status
-     * Lists all adjustments matching the specified status
+     * Returns every cycle count adjustment in one lifecycle status. Use this tool to browse adjustments by status; do not use listPendingCycleCountAdjustments, which returns only the pending-approval subset without a parameter, or countPendingCycleCountAdjustments, which returns just their number. Preconditions: none. Required inputs: status is an optional query parameter (PENDING_APPROVAL, AUTO_APPROVED, APPROVED, POSTED, REJECTED or FAILED) and defaults to PENDING_APPROVAL when omitted; there is no paging. No events are emitted and no state changes; this is a read-only projection. Returns 200 with an empty array when no adjustments match, so an empty result is not an error condition. 
      * @endpoint get /v1/inventory/cycleCountAdjustments
      * @param status Filter by adjustment status
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public listAdjustments(status?: 'PENDING_APPROVAL' | 'AUTO_APPROVED' | 'APPROVED' | 'POSTED' | 'REJECTED' | 'FAILED', observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<AdjustmentResponse>>;
-    public listAdjustments(status?: 'PENDING_APPROVAL' | 'AUTO_APPROVED' | 'APPROVED' | 'POSTED' | 'REJECTED' | 'FAILED', observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<AdjustmentResponse>>>;
-    public listAdjustments(status?: 'PENDING_APPROVAL' | 'AUTO_APPROVED' | 'APPROVED' | 'POSTED' | 'REJECTED' | 'FAILED', observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<AdjustmentResponse>>>;
-    public listAdjustments(status?: 'PENDING_APPROVAL' | 'AUTO_APPROVED' | 'APPROVED' | 'POSTED' | 'REJECTED' | 'FAILED', observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public listCycleCountAdjustments(status?: 'PENDING_APPROVAL' | 'AUTO_APPROVED' | 'APPROVED' | 'POSTED' | 'REJECTED' | 'FAILED', observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<AdjustmentResponse>>;
+    public listCycleCountAdjustments(status?: 'PENDING_APPROVAL' | 'AUTO_APPROVED' | 'APPROVED' | 'POSTED' | 'REJECTED' | 'FAILED', observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<AdjustmentResponse>>>;
+    public listCycleCountAdjustments(status?: 'PENDING_APPROVAL' | 'AUTO_APPROVED' | 'APPROVED' | 'POSTED' | 'REJECTED' | 'FAILED', observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<AdjustmentResponse>>>;
+    public listCycleCountAdjustments(status?: 'PENDING_APPROVAL' | 'AUTO_APPROVED' | 'APPROVED' | 'POSTED' | 'REJECTED' | 'FAILED', observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
 
@@ -376,16 +378,16 @@ export class CycleCountAdjustmentsService extends BaseService {
 
     /**
      * List pending approvals
-     * Lists all adjustments awaiting approval
+     * Returns every cycle count adjustment currently awaiting approval (status PENDING_APPROVAL). Use this tool to build an approval work queue; use countPendingCycleCountAdjustments instead when only the badge number is needed, and listCycleCountAdjustments to browse other statuses. Preconditions: none. Required inputs: none; there is no request body, paging or filtering. No events are emitted and no state changes; this is a read-only projection. Returns 200 with an empty array when nothing awaits approval, so an empty result is not an error condition. 
      * @endpoint get /v1/inventory/cycleCountAdjustments/pending
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public listPendingApprovals(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<AdjustmentResponse>>;
-    public listPendingApprovals(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<AdjustmentResponse>>>;
-    public listPendingApprovals(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<AdjustmentResponse>>>;
-    public listPendingApprovals(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public listPendingCycleCountAdjustments(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<AdjustmentResponse>>;
+    public listPendingCycleCountAdjustments(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<AdjustmentResponse>>>;
+    public listPendingCycleCountAdjustments(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<AdjustmentResponse>>>;
+    public listPendingCycleCountAdjustments(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -432,23 +434,23 @@ export class CycleCountAdjustmentsService extends BaseService {
 
     /**
      * Reject adjustment
-     * Rejects a pending adjustment with a reason. No inventory changes are made.
+     * Rejects a PENDING_APPROVAL cycle count adjustment with a recorded reason; rejection is final and no inventory or ledger change is made. Use this tool to discard a variance that should not post; do not use approveCycleCountAdjustment, which posts the variance to the ledger. Preconditions: the adjustment must be in PENDING_APPROVAL status. Required inputs: adjustmentId (UUID) path parameter plus rejectorUserId and rejectionReason in the body, both non-blank. Emits an INVENTORY_CYCLE_COUNT_ADJUSTMENT_REJECT event; the adjustment moves to REJECTED and its linked task is left untouched. Returns 400 when no adjustment exists for the id (mapped to a validation error, not 404), and 409 when the adjustment is not PENDING_APPROVAL. 
      * @endpoint post /v1/inventory/cycleCountAdjustments/{adjustmentId}/reject
      * @param adjustmentId Adjustment ID
-     * @param rejectAdjustmentRequest 
+     * @param rejectAdjustmentRequest Rejection context recording who rejected the adjustment and why.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public rejectAdjustment(adjustmentId: string, rejectAdjustmentRequest: RejectAdjustmentRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<AdjustmentResponse>;
-    public rejectAdjustment(adjustmentId: string, rejectAdjustmentRequest: RejectAdjustmentRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<AdjustmentResponse>>;
-    public rejectAdjustment(adjustmentId: string, rejectAdjustmentRequest: RejectAdjustmentRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<AdjustmentResponse>>;
-    public rejectAdjustment(adjustmentId: string, rejectAdjustmentRequest: RejectAdjustmentRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public rejectCycleCountAdjustment(adjustmentId: string, rejectAdjustmentRequest: RejectAdjustmentRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<AdjustmentResponse>;
+    public rejectCycleCountAdjustment(adjustmentId: string, rejectAdjustmentRequest: RejectAdjustmentRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<AdjustmentResponse>>;
+    public rejectCycleCountAdjustment(adjustmentId: string, rejectAdjustmentRequest: RejectAdjustmentRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<AdjustmentResponse>>;
+    public rejectCycleCountAdjustment(adjustmentId: string, rejectAdjustmentRequest: RejectAdjustmentRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (adjustmentId === null || adjustmentId === undefined) {
-            throw new Error('Required parameter adjustmentId was null or undefined when calling rejectAdjustment.');
+            throw new Error('Required parameter adjustmentId was null or undefined when calling rejectCycleCountAdjustment.');
         }
         if (rejectAdjustmentRequest === null || rejectAdjustmentRequest === undefined) {
-            throw new Error('Required parameter rejectAdjustmentRequest was null or undefined when calling rejectAdjustment.');
+            throw new Error('Required parameter rejectAdjustmentRequest was null or undefined when calling rejectCycleCountAdjustment.');
         }
 
         let localVarHeaders = this.defaultHeaders;

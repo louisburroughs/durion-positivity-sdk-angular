@@ -14,9 +14,21 @@
  */
 export interface CostingMethodConfigResponse { 
     /**
+     * Whether this row participates in resolution
+     */
+    active: boolean;
+    /**
      * Unique identifier of the configuration row
      */
     configId: string;
+    /**
+     * Timestamp when the row was created
+     */
+    createdAt: string;
+    /**
+     * Costing method applied at this scope
+     */
+    method: CostingMethodConfigResponseMethodEnum;
     /**
      * Configuration scope kind
      */
@@ -26,30 +38,18 @@ export interface CostingMethodConfigResponse {
      */
     scopeValue?: string;
     /**
-     * Costing method applied at this scope
-     */
-    method: CostingMethodConfigResponseMethodEnum;
-    /**
-     * Whether this row participates in resolution
-     */
-    active: boolean;
-    /**
-     * Timestamp when the row was created
-     */
-    createdAt: string;
-    /**
      * Timestamp when the row was last updated
      */
     updatedAt: string;
 }
+export enum CostingMethodConfigResponseMethodEnum {
+    Standard = 'STANDARD',
+    Average = 'AVERAGE'
+};
 export enum CostingMethodConfigResponseScopeTypeEnum {
     Sku = 'SKU',
     SkuCategory = 'SKU_CATEGORY',
     Default = 'DEFAULT'
-};
-export enum CostingMethodConfigResponseMethodEnum {
-    Standard = 'STANDARD',
-    Average = 'AVERAGE'
 };
 
 
@@ -92,8 +92,8 @@ export function instanceOfCostingMethodConfigResponse(value: object): value is C
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createCostingMethodConfigResponsePropertyNames('configId', 'scopeType', 'method', 'active', 'createdAt', 'updatedAt', );
-    const optionalStringProperties = createCostingMethodConfigResponseOptionalProperties({ name: 'configId', nullable: false }, { name: 'scopeType', nullable: false }, { name: 'scopeValue', nullable: false }, { name: 'method', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'updatedAt', nullable: false }, );
+    const requiredProperties = createCostingMethodConfigResponsePropertyNames('active', 'configId', 'createdAt', 'method', 'scopeType', 'updatedAt', );
+    const optionalStringProperties = createCostingMethodConfigResponseOptionalProperties({ name: 'configId', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'method', nullable: false }, { name: 'scopeType', nullable: false }, { name: 'scopeValue', nullable: false }, { name: 'updatedAt', nullable: false }, );
     const optionalNumberProperties = createCostingMethodConfigResponseOptionalProperties();
     const optionalBooleanProperties = createCostingMethodConfigResponseOptionalProperties({ name: 'active', nullable: false }, );
 

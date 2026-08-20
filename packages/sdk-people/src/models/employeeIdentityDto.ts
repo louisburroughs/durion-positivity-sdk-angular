@@ -14,25 +14,25 @@
  */
 export interface EmployeeIdentityDto { 
     /**
+     * True when the employee is in an ACTIVE employment status
+     */
+    active: boolean;
+    /**
      * Employee record identifier
      */
     employeeId: string;
-    /**
-     * Stable person identifier the employee maps to
-     */
-    personId: string;
     /**
      * Employee number
      */
     employeeNumber: string;
     /**
+     * Stable person identifier the employee maps to
+     */
+    personId: string;
+    /**
      * Employment status
      */
     status: string;
-    /**
-     * True when the employee is in an ACTIVE employment status
-     */
-    active: boolean;
 }
 
 function isOptionalEmployeeIdentityDtoPropertyOfType(
@@ -73,8 +73,8 @@ export function instanceOfEmployeeIdentityDto(value: object): value is EmployeeI
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createEmployeeIdentityDtoPropertyNames('employeeId', 'personId', 'employeeNumber', 'status', 'active', );
-    const optionalStringProperties = createEmployeeIdentityDtoOptionalProperties({ name: 'employeeId', nullable: false }, { name: 'personId', nullable: false }, { name: 'employeeNumber', nullable: false }, { name: 'status', nullable: false }, );
+    const requiredProperties = createEmployeeIdentityDtoPropertyNames('active', 'employeeId', 'employeeNumber', 'personId', 'status', );
+    const optionalStringProperties = createEmployeeIdentityDtoOptionalProperties({ name: 'employeeId', nullable: false }, { name: 'employeeNumber', nullable: false }, { name: 'personId', nullable: false }, { name: 'status', nullable: false }, );
     const optionalNumberProperties = createEmployeeIdentityDtoOptionalProperties();
     const optionalBooleanProperties = createEmployeeIdentityDtoOptionalProperties({ name: 'active', nullable: false }, );
 

@@ -14,25 +14,21 @@
  */
 export interface JournalLineDrilldownResponse { 
     /**
-     * Journal entry UUID
+     * Credit amount (null if debit)
      */
-    journalEntryId: string;
-    /**
-     * Transaction date
-     */
-    transactionDate: string;
-    /**
-     * Description/narrative for the journal line
-     */
-    description?: string;
+    creditAmount?: number;
     /**
      * Debit amount (null if credit)
      */
     debitAmount?: number;
     /**
-     * Credit amount (null if debit)
+     * Description/narrative for the journal line
      */
-    creditAmount?: number;
+    description?: string;
+    /**
+     * Journal entry UUID
+     */
+    journalEntryId: string;
     /**
      * Source event UUID that triggered this journal entry
      */
@@ -41,6 +37,10 @@ export interface JournalLineDrilldownResponse {
      * Source event type
      */
     sourceEventType?: string;
+    /**
+     * Transaction date
+     */
+    transactionDate: string;
 }
 
 function isOptionalJournalLineDrilldownResponsePropertyOfType(
@@ -82,8 +82,8 @@ export function instanceOfJournalLineDrilldownResponse(value: object): value is 
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createJournalLineDrilldownResponsePropertyNames('journalEntryId', 'transactionDate', );
-    const optionalStringProperties = createJournalLineDrilldownResponseOptionalProperties({ name: 'journalEntryId', nullable: false }, { name: 'transactionDate', nullable: false }, { name: 'description', nullable: false }, { name: 'sourceEventId', nullable: false }, { name: 'sourceEventType', nullable: false }, );
-    const optionalNumberProperties = createJournalLineDrilldownResponseOptionalProperties({ name: 'debitAmount', nullable: false }, { name: 'creditAmount', nullable: false }, );
+    const optionalStringProperties = createJournalLineDrilldownResponseOptionalProperties({ name: 'description', nullable: false }, { name: 'journalEntryId', nullable: false }, { name: 'sourceEventId', nullable: false }, { name: 'sourceEventType', nullable: false }, { name: 'transactionDate', nullable: false }, );
+    const optionalNumberProperties = createJournalLineDrilldownResponseOptionalProperties({ name: 'creditAmount', nullable: false }, { name: 'debitAmount', nullable: false }, );
     const optionalBooleanProperties = createJournalLineDrilldownResponseOptionalProperties();
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

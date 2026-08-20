@@ -42,20 +42,80 @@ export class CycleCountQueryService extends BaseService {
     }
 
     /**
+     * Get cycle count task details
+     * Returns one cycle count task with its expected-quantity snapshot, assigned auditor, lifecycle status, and count-entry bookkeeping. Use this tool when the taskId is already known; use listCycleCountAuditorTasks instead to discover the tasks assigned to an auditor. Preconditions: the task must exist. Required inputs: taskId (UUID) as a path parameter; there is no request body. No events are emitted and no state changes; this is a read-only projection. Returns 404 when no cycle count task exists for the supplied id. 
+     * @endpoint get /v1/inventory/cycleCount/task/{taskId}
+     * @param taskId Task ID
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public getCycleCountTask(taskId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<CycleCountTaskResponse>;
+    public getCycleCountTask(taskId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<CycleCountTaskResponse>>;
+    public getCycleCountTask(taskId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<CycleCountTaskResponse>>;
+    public getCycleCountTask(taskId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (taskId === null || taskId === undefined) {
+            throw new Error('Required parameter taskId was null or undefined when calling getCycleCountTask.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/inventory/cycleCount/task/${this.configuration.encodeParam({name: "taskId", value: taskId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<CycleCountTaskResponse>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
      * Get tasks assigned to an auditor
-     * Retrieves all cycle count tasks assigned to a specific auditor.
+     * Returns every cycle count task assigned to one auditor, regardless of task status. Use this tool to build an auditor\&#39;s work queue and discover taskIds; use getCycleCountTask instead when the taskId is already known. Preconditions: none; an auditor with no assignments yields an empty array. Required inputs: auditorId (string) as a path parameter; there is no request body, paging or filtering. No events are emitted and no state changes; this is a read-only projection. Returns 200 with an empty array when the auditor has no tasks, so an empty result is not an error condition. 
      * @endpoint get /v1/inventory/cycleCount/auditor/{auditorId}/tasks
      * @param auditorId Auditor ID
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public getAuditorTasks(auditorId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<CycleCountTaskResponse>;
-    public getAuditorTasks(auditorId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<CycleCountTaskResponse>>;
-    public getAuditorTasks(auditorId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<CycleCountTaskResponse>>;
-    public getAuditorTasks(auditorId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public listCycleCountAuditorTasks(auditorId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<CycleCountTaskResponse>;
+    public listCycleCountAuditorTasks(auditorId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<CycleCountTaskResponse>>;
+    public listCycleCountAuditorTasks(auditorId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<CycleCountTaskResponse>>;
+    public listCycleCountAuditorTasks(auditorId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (auditorId === null || auditorId === undefined) {
-            throw new Error('Required parameter auditorId was null or undefined when calling getAuditorTasks.');
+            throw new Error('Required parameter auditorId was null or undefined when calling listCycleCountAuditorTasks.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -103,19 +163,19 @@ export class CycleCountQueryService extends BaseService {
 
     /**
      * Get count history for a task
-     * Retrieves all count entries (original + recounts) for a task, ordered by sequence.
+     * Returns every count entry recorded for a cycle count task — the original count and any recounts — ordered by recount sequence number. Use this tool to review how counted quantities and variances evolved across recounts; use listCycleCountInterferingMovements instead for the stock movements that made the task\&#39;s snapshot stale. Preconditions: none are enforced; an unknown taskId yields an empty array rather than 404. Required inputs: taskId (UUID) as a path parameter; there is no request body. No events are emitted and no state changes; this is a read-only projection. Returns 200 with an empty array when the task has no counts or the id is unknown, so an empty result is not an error condition. 
      * @endpoint get /v1/inventory/cycleCount/task/{taskId}/history
      * @param taskId Task ID
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public getCountHistory(taskId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<CountEntryResponse>;
-    public getCountHistory(taskId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<CountEntryResponse>>;
-    public getCountHistory(taskId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<CountEntryResponse>>;
-    public getCountHistory(taskId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public listCycleCountHistory(taskId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<CountEntryResponse>;
+    public listCycleCountHistory(taskId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<CountEntryResponse>>;
+    public listCycleCountHistory(taskId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<CountEntryResponse>>;
+    public listCycleCountHistory(taskId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (taskId === null || taskId === undefined) {
-            throw new Error('Required parameter taskId was null or undefined when calling getCountHistory.');
+            throw new Error('Required parameter taskId was null or undefined when calling listCycleCountHistory.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -163,19 +223,19 @@ export class CycleCountQueryService extends BaseService {
 
     /**
      * List interfering movements for a cycle count task
-     * Returns the on-hand-affecting ledger entries for the task\&#39;s SKU/location recorded between task creation and now — the movements that make the task\&#39;s expected-quantity snapshot stale (CONFLICT). Design note: freezing stock movements during counts was rejected as it contradicts continuous shop operation; conflict detection with this listing replaces freezing.
+     * Returns the on-hand-affecting ledger entries for the task\&#39;s SKU recorded between task creation and now — the movements that make the task\&#39;s expected-quantity snapshot stale and drive its CONFLICT status. Use this tool when a count or adjustment reports CONFLICT and the reviewer must choose between a recount and approving with the variance recomputed; use listCycleCountHistory instead for the count entries themselves. Preconditions: the task must exist; movements are never frozen during counts, so entries listed here are legitimate operations, not errors. Required inputs: taskId (UUID) as a path parameter; there is no request body. No events are emitted and no state changes; this is a read-only projection. Returns 404 when no cycle count task exists for the supplied id. 
      * @endpoint get /v1/inventory/cycleCount/task/{taskId}/interfering-movements
      * @param taskId Task ID
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public getInterferingMovements(taskId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<InterferingMovementResponse>>;
-    public getInterferingMovements(taskId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<InterferingMovementResponse>>>;
-    public getInterferingMovements(taskId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<InterferingMovementResponse>>>;
-    public getInterferingMovements(taskId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public listCycleCountInterferingMovements(taskId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<InterferingMovementResponse>>;
+    public listCycleCountInterferingMovements(taskId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<InterferingMovementResponse>>>;
+    public listCycleCountInterferingMovements(taskId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<InterferingMovementResponse>>>;
+    public listCycleCountInterferingMovements(taskId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (taskId === null || taskId === undefined) {
-            throw new Error('Required parameter taskId was null or undefined when calling getInterferingMovements.');
+            throw new Error('Required parameter taskId was null or undefined when calling listCycleCountInterferingMovements.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -209,66 +269,6 @@ export class CycleCountQueryService extends BaseService {
         let localVarPath = `/v1/inventory/cycleCount/task/${this.configuration.encodeParam({name: "taskId", value: taskId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/interfering-movements`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<Array<InterferingMovementResponse>>('get', `${basePath}${localVarPath}`,
-            {
-                context: localVarHttpContext,
-                responseType: <any>responseType_,
-                ...(withCredentials ? { withCredentials } : {}),
-                headers: localVarHeaders,
-                observe: observe,
-                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * Get cycle count task details
-     * Retrieves details of a specific cycle count task.
-     * @endpoint get /v1/inventory/cycleCount/task/{taskId}
-     * @param taskId Task ID
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     * @param options additional options
-     */
-    public getTask(taskId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<CycleCountTaskResponse>;
-    public getTask(taskId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<CycleCountTaskResponse>>;
-    public getTask(taskId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<CycleCountTaskResponse>>;
-    public getTask(taskId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
-        if (taskId === null || taskId === undefined) {
-            throw new Error('Required parameter taskId was null or undefined when calling getTask.');
-        }
-
-        let localVarHeaders = this.defaultHeaders;
-
-        // authentication (bearerAuth) required
-        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
-
-        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
-            'application/json'
-        ]);
-        if (localVarHttpHeaderAcceptSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
-        }
-
-        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
-
-        const localVarTransferCache: boolean = options?.transferCache ?? true;
-
-
-        let responseType_: 'text' | 'json' | 'blob' = 'json';
-        if (localVarHttpHeaderAcceptSelected) {
-            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
-                responseType_ = 'text';
-            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
-                responseType_ = 'json';
-            } else {
-                responseType_ = 'blob';
-            }
-        }
-
-        let localVarPath = `/v1/inventory/cycleCount/task/${this.configuration.encodeParam({name: "taskId", value: taskId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
-        const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<CycleCountTaskResponse>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,

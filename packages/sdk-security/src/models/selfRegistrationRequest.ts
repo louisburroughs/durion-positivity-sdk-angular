@@ -18,17 +18,25 @@ export interface SelfRegistrationRequest {
      */
     email: string;
     /**
-     * Password for the new account
-     */
-    password: string;
-    /**
      * Given name
      */
     firstName: string;
     /**
+     * Optional idempotency key used to replay a completed registration attempt without creating duplicate side effects
+     */
+    idempotencyKey?: string;
+    /**
+     * Optional external identity subject for future federation support
+     */
+    idpSubject?: string;
+    /**
      * Family name
      */
     lastName: string;
+    /**
+     * Password for the new account
+     */
+    password: string;
     /**
      * Optional primary phone number
      */
@@ -37,14 +45,6 @@ export interface SelfRegistrationRequest {
      * Optional requested username. If omitted, the email local part is used.
      */
     username?: string;
-    /**
-     * Optional external identity subject for future federation support
-     */
-    idpSubject?: string;
-    /**
-     * Optional idempotency key used to replay a completed registration attempt without creating duplicate side effects
-     */
-    idempotencyKey?: string;
 }
 
 function isOptionalSelfRegistrationRequestPropertyOfType(
@@ -85,8 +85,8 @@ export function instanceOfSelfRegistrationRequest(value: object): value is SelfR
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createSelfRegistrationRequestPropertyNames('email', 'password', 'firstName', 'lastName', );
-    const optionalStringProperties = createSelfRegistrationRequestOptionalProperties({ name: 'email', nullable: false }, { name: 'password', nullable: false }, { name: 'firstName', nullable: false }, { name: 'lastName', nullable: false }, { name: 'phone', nullable: false }, { name: 'username', nullable: false }, { name: 'idpSubject', nullable: false }, { name: 'idempotencyKey', nullable: false }, );
+    const requiredProperties = createSelfRegistrationRequestPropertyNames('email', 'firstName', 'lastName', 'password', );
+    const optionalStringProperties = createSelfRegistrationRequestOptionalProperties({ name: 'email', nullable: false }, { name: 'firstName', nullable: false }, { name: 'idempotencyKey', nullable: false }, { name: 'idpSubject', nullable: false }, { name: 'lastName', nullable: false }, { name: 'password', nullable: false }, { name: 'phone', nullable: false }, { name: 'username', nullable: false }, );
     const optionalNumberProperties = createSelfRegistrationRequestOptionalProperties();
     const optionalBooleanProperties = createSelfRegistrationRequestOptionalProperties();
 

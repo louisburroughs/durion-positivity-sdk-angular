@@ -18,13 +18,17 @@ export interface BankReconciliationAdjustmentResponse {
      */
     adjustmentId?: string;
     /**
-     * Adjustment type (decision D-6)
-     */
-    type?: BankReconciliationAdjustmentResponseTypeEnum;
-    /**
      * Signed adjustment amount
      */
     amount?: number;
+    /**
+     * When the adjustment was recorded
+     */
+    createdAt?: string;
+    /**
+     * Who recorded the adjustment
+     */
+    createdBy?: string;
     /**
      * Adjustment description
      */
@@ -34,13 +38,9 @@ export interface BankReconciliationAdjustmentResponse {
      */
     journalEntryId?: string;
     /**
-     * When the adjustment was recorded
+     * Adjustment type (decision D-6)
      */
-    createdAt?: string;
-    /**
-     * Who recorded the adjustment
-     */
-    createdBy?: string;
+    type?: BankReconciliationAdjustmentResponseTypeEnum;
 }
 export enum BankReconciliationAdjustmentResponseTypeEnum {
     BankFee = 'BANK_FEE',
@@ -90,7 +90,7 @@ export function instanceOfBankReconciliationAdjustmentResponse(value: object): v
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createBankReconciliationAdjustmentResponsePropertyNames();
-    const optionalStringProperties = createBankReconciliationAdjustmentResponseOptionalProperties({ name: 'adjustmentId', nullable: false }, { name: 'type', nullable: false }, { name: 'description', nullable: false }, { name: 'journalEntryId', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'createdBy', nullable: false }, );
+    const optionalStringProperties = createBankReconciliationAdjustmentResponseOptionalProperties({ name: 'adjustmentId', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'description', nullable: false }, { name: 'journalEntryId', nullable: false }, { name: 'type', nullable: false }, );
     const optionalNumberProperties = createBankReconciliationAdjustmentResponseOptionalProperties({ name: 'amount', nullable: false }, );
     const optionalBooleanProperties = createBankReconciliationAdjustmentResponseOptionalProperties();
 

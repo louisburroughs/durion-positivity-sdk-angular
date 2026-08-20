@@ -42,20 +42,20 @@ export class PriceRestrictionsService extends BaseService {
     }
 
     /**
-     * Evaluate price restrictions
-     * Evaluates whether products are subject to restrictions in the given context.
+     * Evaluate Price Restrictions
+     * Evaluates each submitted product and context entry against active sale-restriction rules and returns a per-item decision of ALLOW, BLOCK, ALLOW_WITH_OVERRIDE, or RESTRICTION_UNKNOWN. Use this tool before quoting or selling a product to learn whether the sale is blocked or needs an override; do not use overridePriceRestriction, which records the override itself after a decision of ALLOW_WITH_OVERRIDE. Preconditions: none; items with no matching active rule resolve to ALLOW. Required inputs: items (at least one), each with productId (UUID), locationTag, serviceTag, and context (BROWSE, QUOTE, CHECKOUT, INVOICE_FINALIZE, or COMMIT_SALE); any matching rule with overrideable false forces BLOCK, otherwise matching rules yield ALLOW_WITH_OVERRIDE with the matched ruleIds. Emits a PRICE_RESTRICTIONS_EVALUATE event; the evaluation itself is read-only and each item is bounded by an 800 ms timeout. Returns 503 when evaluation fails or times out for an item in a commit-path context (CHECKOUT, INVOICE_FINALIZE, COMMIT_SALE), while the same failure on BROWSE or QUOTE degrades that item to a RESTRICTION_UNKNOWN decision instead of an error. 
      * @endpoint post /v1/price/restrictions:evaluate
-     * @param restrictionEvaluationRequest 
+     * @param restrictionEvaluationRequest Batch of product/location/service/context entries to test against the active restriction rules.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public evaluateRestrictions(restrictionEvaluationRequest: RestrictionEvaluationRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<RestrictionEvaluationResponse>;
-    public evaluateRestrictions(restrictionEvaluationRequest: RestrictionEvaluationRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<RestrictionEvaluationResponse>>;
-    public evaluateRestrictions(restrictionEvaluationRequest: RestrictionEvaluationRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<RestrictionEvaluationResponse>>;
-    public evaluateRestrictions(restrictionEvaluationRequest: RestrictionEvaluationRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public evaluatePriceRestrictions(restrictionEvaluationRequest: RestrictionEvaluationRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<RestrictionEvaluationResponse>;
+    public evaluatePriceRestrictions(restrictionEvaluationRequest: RestrictionEvaluationRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<RestrictionEvaluationResponse>>;
+    public evaluatePriceRestrictions(restrictionEvaluationRequest: RestrictionEvaluationRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<RestrictionEvaluationResponse>>;
+    public evaluatePriceRestrictions(restrictionEvaluationRequest: RestrictionEvaluationRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (restrictionEvaluationRequest === null || restrictionEvaluationRequest === undefined) {
-            throw new Error('Required parameter restrictionEvaluationRequest was null or undefined when calling evaluateRestrictions.');
+            throw new Error('Required parameter restrictionEvaluationRequest was null or undefined when calling evaluatePriceRestrictions.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -112,20 +112,20 @@ export class PriceRestrictionsService extends BaseService {
     }
 
     /**
-     * Override price restrictions
-     * Issues an override for price restrictions. Requires pricing:restriction:override authority.
+     * Override Price Restrictions
+     * Issues an audited, time-boxed override of a sale-restriction rule for a specific transaction and product. Use this tool after evaluatePriceRestrictions returns ALLOW_WITH_OVERRIDE; do not use deactivateRestrictionRule, which retires the rule for everyone instead of exempting one transaction. Preconditions: the referenced restriction rule must exist; the rule\&#39;s overrideable flag is not re-checked here, so callers must honour a BLOCK decision from evaluation rather than overriding it. Required inputs: ruleId, transactionId, and productId (UUIDs), overrideContext (BROWSE, QUOTE, CHECKOUT, INVOICE_FINALIZE, or COMMIT_SALE), and reasonCode; notes and approvedBy are optional. Emits a PRICE_RESTRICTIONS_OVERRIDE event and persists an ISSUED audit record capturing the actor and the rule\&#39;s policyVersion; the returned overrideId expires 24 hours after issue. Returns 404 when the referenced restriction rule does not exist. 
      * @endpoint post /v1/price/restrictions:override
-     * @param restrictionOverrideRequest 
+     * @param restrictionOverrideRequest Override justification tying a restriction rule to the transaction and product it is waived for.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public overrideRestrictions(restrictionOverrideRequest: RestrictionOverrideRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<RestrictionOverrideResponse>;
-    public overrideRestrictions(restrictionOverrideRequest: RestrictionOverrideRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<RestrictionOverrideResponse>>;
-    public overrideRestrictions(restrictionOverrideRequest: RestrictionOverrideRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<RestrictionOverrideResponse>>;
-    public overrideRestrictions(restrictionOverrideRequest: RestrictionOverrideRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public overridePriceRestriction(restrictionOverrideRequest: RestrictionOverrideRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<RestrictionOverrideResponse>;
+    public overridePriceRestriction(restrictionOverrideRequest: RestrictionOverrideRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<RestrictionOverrideResponse>>;
+    public overridePriceRestriction(restrictionOverrideRequest: RestrictionOverrideRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<RestrictionOverrideResponse>>;
+    public overridePriceRestriction(restrictionOverrideRequest: RestrictionOverrideRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (restrictionOverrideRequest === null || restrictionOverrideRequest === undefined) {
-            throw new Error('Required parameter restrictionOverrideRequest was null or undefined when calling overrideRestrictions.');
+            throw new Error('Required parameter restrictionOverrideRequest was null or undefined when calling overridePriceRestriction.');
         }
 
         let localVarHeaders = this.defaultHeaders;

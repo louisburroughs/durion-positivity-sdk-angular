@@ -7,6 +7,7 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { SampleRecipient } from './sampleRecipient';
 
 
 /**
@@ -18,13 +19,17 @@ export interface ChannelPreview {
      */
     channel: ChannelPreviewChannelEnum;
     /**
-     * Parties targeted on this channel
-     */
-    targeted: number;
-    /**
      * Of those, how many may actually be sent to
      */
     eligible: number;
+    /**
+     * A bounded sample of the snapshot with the per-party decision behind the eligible count; identifiers and reason codes only, never contact details
+     */
+    sample: Array<SampleRecipient>;
+    /**
+     * Parties targeted on this channel
+     */
+    targeted: number;
     /**
      * Whether a template is attached for this channel
      */
@@ -75,9 +80,9 @@ export function instanceOfChannelPreview(value: object): value is ChannelPreview
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createChannelPreviewPropertyNames('channel', 'targeted', 'eligible', 'templateAttached', );
+    const requiredProperties = createChannelPreviewPropertyNames('channel', 'eligible', 'sample', 'targeted', 'templateAttached', );
     const optionalStringProperties = createChannelPreviewOptionalProperties({ name: 'channel', nullable: false }, );
-    const optionalNumberProperties = createChannelPreviewOptionalProperties({ name: 'targeted', nullable: false }, { name: 'eligible', nullable: false }, );
+    const optionalNumberProperties = createChannelPreviewOptionalProperties({ name: 'eligible', nullable: false }, { name: 'targeted', nullable: false }, );
     const optionalBooleanProperties = createChannelPreviewOptionalProperties({ name: 'templateAttached', nullable: false }, );
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

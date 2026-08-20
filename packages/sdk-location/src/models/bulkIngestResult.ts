@@ -14,17 +14,9 @@
  */
 export interface BulkIngestResult { 
     /**
-     * Zero-based index of the record within the submitted batch
-     */
-    rowIndex: number;
-    /**
      * Identifier of the entity created/updated for this record, when successful
      */
     entityId?: string;
-    /**
-     * Whether this record was ingested successfully
-     */
-    success: boolean;
     /**
      * Machine-readable error code when the record failed
      */
@@ -33,6 +25,14 @@ export interface BulkIngestResult {
      * Human-readable error detail when the record failed
      */
     errorMessage?: string;
+    /**
+     * Zero-based index of the record within the submitted batch
+     */
+    rowIndex: number;
+    /**
+     * Whether this record was ingested successfully
+     */
+    success: boolean;
 }
 
 function isOptionalBulkIngestResultPropertyOfType(

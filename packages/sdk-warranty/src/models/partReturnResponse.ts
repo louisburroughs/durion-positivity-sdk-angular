@@ -13,17 +13,17 @@
  * Part return (RMA) — defective-part return lifecycle for a claim line
  */
 export interface PartReturnResponse { 
-    id?: string;
+    carrier?: string;
     claimId?: string;
     claimLineId?: string;
-    rmaNumber?: string;
-    disposition?: PartReturnResponseDispositionEnum;
-    status?: PartReturnResponseStatusEnum;
-    carrier?: string;
-    trackingNumber?: string;
-    shippedAt?: string;
-    holdLocationNote?: string;
     createdAt?: string;
+    disposition?: PartReturnResponseDispositionEnum;
+    holdLocationNote?: string;
+    id?: string;
+    rmaNumber?: string;
+    shippedAt?: string;
+    status?: PartReturnResponseStatusEnum;
+    trackingNumber?: string;
     updatedAt?: string;
 }
 export enum PartReturnResponseDispositionEnum {
@@ -82,7 +82,7 @@ export function instanceOfPartReturnResponse(value: object): value is PartReturn
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createPartReturnResponsePropertyNames();
-    const optionalStringProperties = createPartReturnResponseOptionalProperties({ name: 'id', nullable: false }, { name: 'claimId', nullable: false }, { name: 'claimLineId', nullable: false }, { name: 'rmaNumber', nullable: false }, { name: 'disposition', nullable: false }, { name: 'status', nullable: false }, { name: 'carrier', nullable: false }, { name: 'trackingNumber', nullable: false }, { name: 'shippedAt', nullable: false }, { name: 'holdLocationNote', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'updatedAt', nullable: false }, );
+    const optionalStringProperties = createPartReturnResponseOptionalProperties({ name: 'carrier', nullable: false }, { name: 'claimId', nullable: false }, { name: 'claimLineId', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'disposition', nullable: false }, { name: 'holdLocationNote', nullable: false }, { name: 'id', nullable: false }, { name: 'rmaNumber', nullable: false }, { name: 'shippedAt', nullable: false }, { name: 'status', nullable: false }, { name: 'trackingNumber', nullable: false }, { name: 'updatedAt', nullable: false }, );
     const optionalNumberProperties = createPartReturnResponseOptionalProperties();
     const optionalBooleanProperties = createPartReturnResponseOptionalProperties();
 

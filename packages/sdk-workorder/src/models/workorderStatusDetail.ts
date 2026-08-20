@@ -15,61 +15,61 @@ import { WorkorderStatusHistoryEntry } from './workorderStatusHistoryEntry';
  */
 export interface WorkorderStatusDetail { 
     /**
-     * Workorder unique identifier
-     */
-    workorderId?: string;
-    /**
-     * Current workorder status
-     */
-    status?: WorkorderStatusDetailStatusEnum;
-    /**
      * ID of the technician currently assigned (null if unassigned)
      */
     assignedTechnicianId?: string;
-    /**
-     * Location ID the workorder belongs to
-     */
-    locationId?: string;
-    /**
-     * Estimated time of completion (null if not set)
-     */
-    estimatedCompletionTime?: string;
     /**
      * Full name of the customer
      */
     customerName?: string;
     /**
-     * Human-readable vehicle description (year/make/model/trim)
+     * Estimated time of completion (null if not set)
      */
-    vehicleInfo?: string;
-    /**
-     * Timestamp of the last status update
-     */
-    lastUpdatedAt?: string;
-    /**
-     * Ordered history of all status changes for this workorder
-     */
-    statusHistory?: Array<WorkorderStatusHistoryEntry>;
-    /**
-     * Customer contact phone number (null if not available)
-     */
-    phoneNumber?: string;
-    /**
-     * Vehicle VIN (null if not recorded)
-     */
-    vehicleVin?: string;
-    /**
-     * Summary of the service being performed
-     */
-    serviceDescription?: string;
+    estimatedCompletionTime?: string;
     /**
      * Internal shop notes (null if none)
      */
     internalNotes?: string;
     /**
+     * Timestamp of the last status update
+     */
+    lastUpdatedAt?: string;
+    /**
+     * Location ID the workorder belongs to
+     */
+    locationId?: string;
+    /**
      * Part numbers or descriptions that are blocking progress
      */
     partsBlocking?: Array<string>;
+    /**
+     * Customer contact phone number (null if not available)
+     */
+    phoneNumber?: string;
+    /**
+     * Summary of the service being performed
+     */
+    serviceDescription?: string;
+    /**
+     * Current workorder status
+     */
+    status?: WorkorderStatusDetailStatusEnum;
+    /**
+     * Ordered history of all status changes for this workorder
+     */
+    statusHistory?: Array<WorkorderStatusHistoryEntry>;
+    /**
+     * Human-readable vehicle description (year/make/model/trim)
+     */
+    vehicleInfo?: string;
+    /**
+     * Vehicle VIN (null if not recorded)
+     */
+    vehicleVin?: string;
+    /**
+     * Workorder unique identifier
+     */
+    workorderId?: string;
 }
 export enum WorkorderStatusDetailStatusEnum {
     Draft = 'DRAFT',
@@ -124,7 +124,7 @@ export function instanceOfWorkorderStatusDetail(value: object): value is Workord
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createWorkorderStatusDetailPropertyNames();
-    const optionalStringProperties = createWorkorderStatusDetailOptionalProperties({ name: 'workorderId', nullable: false }, { name: 'status', nullable: false }, { name: 'assignedTechnicianId', nullable: false }, { name: 'locationId', nullable: false }, { name: 'estimatedCompletionTime', nullable: false }, { name: 'customerName', nullable: false }, { name: 'vehicleInfo', nullable: false }, { name: 'lastUpdatedAt', nullable: false }, { name: 'phoneNumber', nullable: false }, { name: 'vehicleVin', nullable: false }, { name: 'serviceDescription', nullable: false }, { name: 'internalNotes', nullable: false }, );
+    const optionalStringProperties = createWorkorderStatusDetailOptionalProperties({ name: 'assignedTechnicianId', nullable: false }, { name: 'customerName', nullable: false }, { name: 'estimatedCompletionTime', nullable: false }, { name: 'internalNotes', nullable: false }, { name: 'lastUpdatedAt', nullable: false }, { name: 'locationId', nullable: false }, { name: 'phoneNumber', nullable: false }, { name: 'serviceDescription', nullable: false }, { name: 'status', nullable: false }, { name: 'vehicleInfo', nullable: false }, { name: 'vehicleVin', nullable: false }, { name: 'workorderId', nullable: false }, );
     const optionalNumberProperties = createWorkorderStatusDetailOptionalProperties();
     const optionalBooleanProperties = createWorkorderStatusDetailOptionalProperties();
 

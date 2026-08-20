@@ -23,11 +23,11 @@ export interface LocationInventoryRollupResponse {
      * Parent chain type used for descendant resolution
      */
     parentType: string;
-    totals: RollupQuantities;
     /**
      * Per-site summaries (trees inlined with expand=tree)
      */
     sites: Array<SiteRollupSummary>;
+    totals: RollupQuantities;
 }
 
 function isOptionalLocationInventoryRollupResponsePropertyOfType(
@@ -68,7 +68,7 @@ export function instanceOfLocationInventoryRollupResponse(value: object): value 
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createLocationInventoryRollupResponsePropertyNames('locationId', 'parentType', 'totals', 'sites', );
+    const requiredProperties = createLocationInventoryRollupResponsePropertyNames('locationId', 'parentType', 'sites', 'totals', );
     const optionalStringProperties = createLocationInventoryRollupResponseOptionalProperties({ name: 'locationId', nullable: false }, { name: 'parentType', nullable: false }, );
     const optionalNumberProperties = createLocationInventoryRollupResponseOptionalProperties();
     const optionalBooleanProperties = createLocationInventoryRollupResponseOptionalProperties();

@@ -20,6 +20,14 @@ export interface TrialBalanceReport {
      */
     asOfDate: string;
     /**
+     * Whether sum of debits equals sum of credits; false surfaces a balance-constraint violation
+     */
+    balanced: boolean;
+    /**
+     * Entry-number gap-check footnote: per-month sequence scopes with missing entry numbers; empty on a clean ledger
+     */
+    entryNumberGaps: Array<EntryNumberGapCheck>;
+    /**
      * Timestamp when the report was generated (ISO 8601)
      */
     generatedAt: string;
@@ -28,21 +36,13 @@ export interface TrialBalanceReport {
      */
     rows: Array<TrialBalanceRow>;
     /**
-     * Grand total of all POSTED debit amounts across rows
-     */
-    totalDebit: number;
-    /**
      * Grand total of all POSTED credit amounts across rows
      */
     totalCredit: number;
     /**
-     * Whether sum of debits equals sum of credits; false surfaces a balance-constraint violation
+     * Grand total of all POSTED debit amounts across rows
      */
-    balanced: boolean;
-    /**
-     * Entry-number gap-check footnote: per-month sequence scopes with missing entry numbers; empty on a clean ledger
-     */
-    entryNumberGaps: Array<EntryNumberGapCheck>;
+    totalDebit: number;
 }
 
 function isOptionalTrialBalanceReportPropertyOfType(
@@ -83,9 +83,9 @@ export function instanceOfTrialBalanceReport(value: object): value is TrialBalan
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createTrialBalanceReportPropertyNames('asOfDate', 'generatedAt', 'rows', 'totalDebit', 'totalCredit', 'balanced', 'entryNumberGaps', );
+    const requiredProperties = createTrialBalanceReportPropertyNames('asOfDate', 'balanced', 'entryNumberGaps', 'generatedAt', 'rows', 'totalCredit', 'totalDebit', );
     const optionalStringProperties = createTrialBalanceReportOptionalProperties({ name: 'asOfDate', nullable: false }, { name: 'generatedAt', nullable: false }, );
-    const optionalNumberProperties = createTrialBalanceReportOptionalProperties({ name: 'totalDebit', nullable: false }, { name: 'totalCredit', nullable: false }, );
+    const optionalNumberProperties = createTrialBalanceReportOptionalProperties({ name: 'totalCredit', nullable: false }, { name: 'totalDebit', nullable: false }, );
     const optionalBooleanProperties = createTrialBalanceReportOptionalProperties({ name: 'balanced', nullable: false }, );
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

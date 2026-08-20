@@ -13,21 +13,13 @@ import { LocationTypeDTO } from './locationTypeDTO';
 
 
 /**
- * Location object to be created
+ * Request payload for creating or updating a location
  */
 export interface LocationRequestDTO { 
     /**
-     * Display name of the location
+     * Whether the location is active
      */
-    name: string;
-    /**
-     * Unique business code of the location
-     */
-    code: string;
-    /**
-     * Identifier of the associated geographical location
-     */
-    geographicalLocationId?: string;
+    active?: boolean;
     /**
      * First line of the street address
      */
@@ -37,58 +29,66 @@ export interface LocationRequestDTO {
      */
     addressLine2?: string;
     /**
+     * Buffer minutes reserved before appointments for check-in
+     */
+    checkInBufferMinutes?: number;
+    /**
      * City of the location
      */
     city?: string;
     /**
-     * State or province of the location
+     * Buffer minutes reserved after appointments for cleanup
      */
-    state?: string;
+    cleanupBufferMinutes?: number;
     /**
-     * Postal or ZIP code of the location
+     * Unique business code of the location
      */
-    postalCode?: string;
+    code: string;
     /**
      * Country of the location
      */
     country?: string;
     /**
-     * Mailing address of the location
+     * Identifier of the associated geographical location
      */
-    mailingAddress?: string;
-    /**
-     * Whether the location is active
-     */
-    active?: boolean;
-    /**
-     * People-contact person identifier of the person responsible for the location
-     */
-    responsiblePersonId?: string;
-    /**
-     * IANA timezone identifier for the location
-     */
-    timezone?: string;
-    /**
-     * Weekly operating hours for the location
-     */
-    operatingHours?: Array<OperatingHoursRequest>;
+    geographicalLocationId?: string;
     /**
      * Holiday closures for the location
      */
     holidayClosures?: Array<HolidayClosureRequest>;
     /**
-     * Buffer minutes reserved before appointments for check-in
+     * Mailing address of the location
      */
-    checkInBufferMinutes?: number;
+    mailingAddress?: string;
     /**
-     * Buffer minutes reserved after appointments for cleanup
+     * Display name of the location
      */
-    cleanupBufferMinutes?: number;
-    type: LocationTypeDTO;
+    name: string;
+    /**
+     * Weekly operating hours for the location
+     */
+    operatingHours?: Array<OperatingHoursRequest>;
     /**
      * Map of parent relationships keyed by relationship type
      */
     parents?: object;
+    /**
+     * Postal or ZIP code of the location
+     */
+    postalCode?: string;
+    /**
+     * People-contact person identifier of the person responsible for the location
+     */
+    responsiblePersonId?: string;
+    /**
+     * State or province of the location
+     */
+    state?: string;
+    /**
+     * IANA timezone identifier for the location
+     */
+    timezone?: string;
+    type: LocationTypeDTO;
 }
 
 function isOptionalLocationRequestDTOPropertyOfType(
@@ -129,8 +129,8 @@ export function instanceOfLocationRequestDTO(value: object): value is LocationRe
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createLocationRequestDTOPropertyNames('name', 'code', 'type', );
-    const optionalStringProperties = createLocationRequestDTOOptionalProperties({ name: 'name', nullable: false }, { name: 'code', nullable: false }, { name: 'geographicalLocationId', nullable: false }, { name: 'addressLine1', nullable: false }, { name: 'addressLine2', nullable: false }, { name: 'city', nullable: false }, { name: 'state', nullable: false }, { name: 'postalCode', nullable: false }, { name: 'country', nullable: false }, { name: 'mailingAddress', nullable: false }, { name: 'responsiblePersonId', nullable: false }, { name: 'timezone', nullable: false }, );
+    const requiredProperties = createLocationRequestDTOPropertyNames('code', 'name', 'type', );
+    const optionalStringProperties = createLocationRequestDTOOptionalProperties({ name: 'addressLine1', nullable: false }, { name: 'addressLine2', nullable: false }, { name: 'city', nullable: false }, { name: 'code', nullable: false }, { name: 'country', nullable: false }, { name: 'geographicalLocationId', nullable: false }, { name: 'mailingAddress', nullable: false }, { name: 'name', nullable: false }, { name: 'postalCode', nullable: false }, { name: 'responsiblePersonId', nullable: false }, { name: 'state', nullable: false }, { name: 'timezone', nullable: false }, );
     const optionalNumberProperties = createLocationRequestDTOOptionalProperties({ name: 'checkInBufferMinutes', nullable: false }, { name: 'cleanupBufferMinutes', nullable: false }, );
     const optionalBooleanProperties = createLocationRequestDTOOptionalProperties({ name: 'active', nullable: false }, );
 

@@ -14,6 +14,10 @@
  */
 export interface OrderDiscountRequest { 
     /**
+     * Business reason for the discount
+     */
+    reasonCode?: string;
+    /**
      * Discount flavor
      */
     type: OrderDiscountRequestTypeEnum;
@@ -21,10 +25,6 @@ export interface OrderDiscountRequest {
      * Percent (0-100] or currency amount, per type
      */
     value: number;
-    /**
-     * Business reason for the discount
-     */
-    reasonCode?: string;
 }
 export enum OrderDiscountRequestTypeEnum {
     Percent = 'PERCENT',
@@ -72,7 +72,7 @@ export function instanceOfOrderDiscountRequest(value: object): value is OrderDis
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createOrderDiscountRequestPropertyNames('type', 'value', );
-    const optionalStringProperties = createOrderDiscountRequestOptionalProperties({ name: 'type', nullable: false }, { name: 'reasonCode', nullable: false }, );
+    const optionalStringProperties = createOrderDiscountRequestOptionalProperties({ name: 'reasonCode', nullable: false }, { name: 'type', nullable: false }, );
     const optionalNumberProperties = createOrderDiscountRequestOptionalProperties({ name: 'value', nullable: false }, );
     const optionalBooleanProperties = createOrderDiscountRequestOptionalProperties();
 

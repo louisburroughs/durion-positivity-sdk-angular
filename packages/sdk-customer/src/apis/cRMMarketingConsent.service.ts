@@ -42,68 +42,8 @@ export class CRMMarketingConsentService extends BaseService {
     }
 
     /**
-     * Get marketing consent
-     * Per-channel marketing consent plus the effective send eligibility for each channel
-     * @endpoint get /v1/crm/parties/{partyId}/marketing-consent
-     * @param partyId 
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     * @param options additional options
-     */
-    public getConsent(partyId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<MarketingConsentSummaryResponse>;
-    public getConsent(partyId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<MarketingConsentSummaryResponse>>;
-    public getConsent(partyId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<MarketingConsentSummaryResponse>>;
-    public getConsent(partyId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
-        if (partyId === null || partyId === undefined) {
-            throw new Error('Required parameter partyId was null or undefined when calling getConsent.');
-        }
-
-        let localVarHeaders = this.defaultHeaders;
-
-        // authentication (bearerAuth) required
-        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
-
-        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
-            'application/json'
-        ]);
-        if (localVarHttpHeaderAcceptSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
-        }
-
-        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
-
-        const localVarTransferCache: boolean = options?.transferCache ?? true;
-
-
-        let responseType_: 'text' | 'json' | 'blob' = 'json';
-        if (localVarHttpHeaderAcceptSelected) {
-            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
-                responseType_ = 'text';
-            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
-                responseType_ = 'json';
-            } else {
-                responseType_ = 'blob';
-            }
-        }
-
-        let localVarPath = `/v1/crm/parties/${this.configuration.encodeParam({name: "partyId", value: partyId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/marketing-consent`;
-        const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<MarketingConsentSummaryResponse>('get', `${basePath}${localVarPath}`,
-            {
-                context: localVarHttpContext,
-                responseType: <any>responseType_,
-                ...(withCredentials ? { withCredentials } : {}),
-                headers: localVarHeaders,
-                observe: observe,
-                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * Get consent history
-     * Append-only marketing-consent audit trail for a party, newest first
+     * Get Consent Audit History
+     * Returns the append-only marketing-consent audit trail for a party, newest first, with one entry per actual consent change recording the channel, old and new values, reason, source, and acting user. Use this tool when auditing how a party\&#39;s consent reached its current state; use getMarketingConsent instead for the current consent summary and eligibility. Preconditions: none; a party with no recorded consent changes yields an empty page rather than an error. Required inputs: partyId (UUID) as a path parameter; page defaults to 0 and size defaults to 50 with a clamp between 1 and 200. No events are emitted by the consent trail itself beyond the CRM_CONSENT_HISTORY_GET audit event this read emits; no state changes occur. Returns 200 with an empty page rather than an error when no history exists. 
      * @endpoint get /v1/crm/parties/{partyId}/consent-history
      * @param partyId 
      * @param page 
@@ -185,8 +125,68 @@ export class CRMMarketingConsentService extends BaseService {
     }
 
     /**
-     * Resolve send eligibility
-     * Fold the account gate, governing contact consent, and suppression into a single allow/deny decision for one channel
+     * Get Marketing Consent Summary
+     * Returns a party\&#39;s per-channel marketing consent (EMAIL and SMS, each OPT_IN, OPT_OUT, or UNSET) together with the account gate, quiet hours, monthly send cap, and the resolved send eligibility per channel. Use this tool when reviewing a party\&#39;s full consent state; use resolveMarketingEligibility instead when only a single allow or deny decision for one channel is needed. Preconditions: the party must exist as either a commercial or person party. Required inputs: partyId (UUID) as a path parameter; there is no request body. Emits a CRM_MARKETING_CONSENT_GET audit event; no state changes occur. Returns 404 when no party exists for the supplied partyId. 
+     * @endpoint get /v1/crm/parties/{partyId}/marketing-consent
+     * @param partyId 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public getMarketingConsent(partyId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<MarketingConsentSummaryResponse>;
+    public getMarketingConsent(partyId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<MarketingConsentSummaryResponse>>;
+    public getMarketingConsent(partyId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<MarketingConsentSummaryResponse>>;
+    public getMarketingConsent(partyId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (partyId === null || partyId === undefined) {
+            throw new Error('Required parameter partyId was null or undefined when calling getMarketingConsent.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/crm/parties/${this.configuration.encodeParam({name: "partyId", value: partyId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/marketing-consent`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<MarketingConsentSummaryResponse>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Resolve Marketing Send Eligibility
+     * Resolves a single allow-or-deny marketing send decision for one party and channel by folding together the account gate, the governing party\&#39;s consent, and the suppression list, where suppression is a hard block layered on top of an opt-in. Use this tool immediately before sending marketing to a party; use getMarketingConsent instead when the full consent summary rather than one decision is needed. Preconditions: none; unknown parties resolve to a deny decision rather than an error. Required inputs: partyId (UUID) as a path parameter and channel (EMAIL or SMS) as a required query parameter. Emits a CRM_MARKETING_ELIGIBILITY_GET audit event; no state changes occur. Returns 200 with allowed false and a reason code such as SUPPRESSED when the send must not happen, and 400 when channel is not EMAIL or SMS. 
      * @endpoint get /v1/crm/parties/{partyId}/marketing-eligibility
      * @param partyId 
      * @param channel 
@@ -194,15 +194,15 @@ export class CRMMarketingConsentService extends BaseService {
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public resolveEligibility(partyId: string, channel: 'EMAIL' | 'SMS', observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<MarketingConsentDecision>;
-    public resolveEligibility(partyId: string, channel: 'EMAIL' | 'SMS', observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<MarketingConsentDecision>>;
-    public resolveEligibility(partyId: string, channel: 'EMAIL' | 'SMS', observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<MarketingConsentDecision>>;
-    public resolveEligibility(partyId: string, channel: 'EMAIL' | 'SMS', observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public resolveMarketingEligibility(partyId: string, channel: 'EMAIL' | 'SMS', observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<MarketingConsentDecision>;
+    public resolveMarketingEligibility(partyId: string, channel: 'EMAIL' | 'SMS', observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<MarketingConsentDecision>>;
+    public resolveMarketingEligibility(partyId: string, channel: 'EMAIL' | 'SMS', observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<MarketingConsentDecision>>;
+    public resolveMarketingEligibility(partyId: string, channel: 'EMAIL' | 'SMS', observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (partyId === null || partyId === undefined) {
-            throw new Error('Required parameter partyId was null or undefined when calling resolveEligibility.');
+            throw new Error('Required parameter partyId was null or undefined when calling resolveMarketingEligibility.');
         }
         if (channel === null || channel === undefined) {
-            throw new Error('Required parameter channel was null or undefined when calling resolveEligibility.');
+            throw new Error('Required parameter channel was null or undefined when calling resolveMarketingEligibility.');
         }
 
         let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
@@ -261,8 +261,8 @@ export class CRMMarketingConsentService extends BaseService {
     }
 
     /**
-     * Set account marketing gate
-     * Set or clear the commercial-account hard gate. When set, no marketing reaches the account on any channel regardless of individual contact consent.
+     * Set Account Marketing Gate
+     * Sets or clears the commercial-account marketing hard gate; while set, no marketing reaches the account on any channel regardless of individual contact consent. Use this tool when an entire commercial account must be excluded from marketing; do not use updateMarketingConsent, which changes one party\&#39;s per-channel consent and cannot override the gate. Preconditions: the party must exist as a commercial party; person parties have no account gate, and setting the gate to its current value is an idempotent no-op. Required inputs: partyId (UUID) as a path parameter and optOut (boolean) as a query parameter, where true engages the gate and false clears it; there is no request body. Emits a CRM_MARKETING_ACCOUNT_GATE_SET event, and when the gate actually flips it republishes the resolved eligibility decisions for both channels. Returns 404 when no commercial party exists for the supplied partyId. 
      * @endpoint put /v1/crm/parties/{partyId}/marketing-consent/account-gate
      * @param partyId 
      * @param optOut 
@@ -270,15 +270,15 @@ export class CRMMarketingConsentService extends BaseService {
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public setAccountGate(partyId: string, optOut: boolean, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<MarketingConsentSummaryResponse>;
-    public setAccountGate(partyId: string, optOut: boolean, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<MarketingConsentSummaryResponse>>;
-    public setAccountGate(partyId: string, optOut: boolean, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<MarketingConsentSummaryResponse>>;
-    public setAccountGate(partyId: string, optOut: boolean, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public setAccountMarketingGate(partyId: string, optOut: boolean, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<MarketingConsentSummaryResponse>;
+    public setAccountMarketingGate(partyId: string, optOut: boolean, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<MarketingConsentSummaryResponse>>;
+    public setAccountMarketingGate(partyId: string, optOut: boolean, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<MarketingConsentSummaryResponse>>;
+    public setAccountMarketingGate(partyId: string, optOut: boolean, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (partyId === null || partyId === undefined) {
-            throw new Error('Required parameter partyId was null or undefined when calling setAccountGate.');
+            throw new Error('Required parameter partyId was null or undefined when calling setAccountMarketingGate.');
         }
         if (optOut === null || optOut === undefined) {
-            throw new Error('Required parameter optOut was null or undefined when calling setAccountGate.');
+            throw new Error('Required parameter optOut was null or undefined when calling setAccountMarketingGate.');
         }
 
         let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
@@ -337,24 +337,24 @@ export class CRMMarketingConsentService extends BaseService {
     }
 
     /**
-     * Update marketing consent
-     * Update per-channel marketing consent. Only channels present in the request change; each change writes one immutable consent-audit entry.
+     * Update Marketing Consent
+     * Updates a party\&#39;s per-channel marketing consent; only channels present in the request change, and each actual change appends one immutable consent-audit entry attributed to the calling user. Use this tool when a party grants or withdraws marketing consent; do not use setAccountMarketingGate, which is the account-level hard gate overriding all contact consent, and do not use upsertCommunicationPreferences, which stores transactional channel preferences rather than marketing consent. Preconditions: the party must exist as either a commercial or person party; re-submitting an unchanged value is an idempotent no-op that writes no audit row. Required inputs: partyId (UUID) as a path parameter; marketingEmailConsent and marketingSmsConsent take OPT_IN, OPT_OUT, or UNSET, source defaults to CSR, and optOutReason, quietHoursStart, quietHoursEnd, and maxMarketingSendsPerMonth are optional. Emits a CRM_MARKETING_CONSENT_UPDATE event and republishes the resolved eligibility decision for both channels so downstream consumers never hold a stale allow. Returns 404 when no party exists for the supplied partyId. 
      * @endpoint put /v1/crm/parties/{partyId}/marketing-consent
      * @param partyId 
-     * @param updateMarketingConsentRequest 
+     * @param updateMarketingConsentRequest Partial consent update; only the channels and settings present in the body are changed.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public updateConsent(partyId: string, updateMarketingConsentRequest: UpdateMarketingConsentRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<MarketingConsentSummaryResponse>;
-    public updateConsent(partyId: string, updateMarketingConsentRequest: UpdateMarketingConsentRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<MarketingConsentSummaryResponse>>;
-    public updateConsent(partyId: string, updateMarketingConsentRequest: UpdateMarketingConsentRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<MarketingConsentSummaryResponse>>;
-    public updateConsent(partyId: string, updateMarketingConsentRequest: UpdateMarketingConsentRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public updateMarketingConsent(partyId: string, updateMarketingConsentRequest: UpdateMarketingConsentRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<MarketingConsentSummaryResponse>;
+    public updateMarketingConsent(partyId: string, updateMarketingConsentRequest: UpdateMarketingConsentRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<MarketingConsentSummaryResponse>>;
+    public updateMarketingConsent(partyId: string, updateMarketingConsentRequest: UpdateMarketingConsentRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<MarketingConsentSummaryResponse>>;
+    public updateMarketingConsent(partyId: string, updateMarketingConsentRequest: UpdateMarketingConsentRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (partyId === null || partyId === undefined) {
-            throw new Error('Required parameter partyId was null or undefined when calling updateConsent.');
+            throw new Error('Required parameter partyId was null or undefined when calling updateMarketingConsent.');
         }
         if (updateMarketingConsentRequest === null || updateMarketingConsentRequest === undefined) {
-            throw new Error('Required parameter updateMarketingConsentRequest was null or undefined when calling updateConsent.');
+            throw new Error('Required parameter updateMarketingConsentRequest was null or undefined when calling updateMarketingConsent.');
         }
 
         let localVarHeaders = this.defaultHeaders;

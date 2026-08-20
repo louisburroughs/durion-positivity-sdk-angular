@@ -15,13 +15,13 @@ import { Entry } from './entry';
  */
 export interface ReconciliationAuditResponse { 
     /**
-     * Reconciliation id
-     */
-    reconciliationId?: string;
-    /**
      * Audit entries ordered by time
      */
     entries?: Array<Entry>;
+    /**
+     * Reconciliation id
+     */
+    reconciliationId?: string;
 }
 
 function isOptionalReconciliationAuditResponsePropertyOfType(

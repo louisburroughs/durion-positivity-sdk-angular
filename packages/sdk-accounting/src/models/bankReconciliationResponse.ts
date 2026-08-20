@@ -16,14 +16,6 @@ import { BankReconciliationLineResponse } from './bankReconciliationLineResponse
  */
 export interface BankReconciliationResponse { 
     /**
-     * Reconciliation id
-     */
-    reconciliationId?: string;
-    /**
-     * Reconciled GL cash account id
-     */
-    glAccountId?: string;
-    /**
      * Reconciled account code
      */
     accountCode?: string;
@@ -32,37 +24,9 @@ export interface BankReconciliationResponse {
      */
     accountName?: string;
     /**
-     * Statement period start date
+     * Recorded adjustments
      */
-    periodStartDate?: string;
-    /**
-     * Statement period end date
-     */
-    periodEndDate?: string;
-    /**
-     * Statement date
-     */
-    statementDate?: string;
-    /**
-     * Reconciliation currency
-     */
-    currency?: string;
-    /**
-     * Statement ending balance
-     */
-    statementEndingBalance?: number;
-    /**
-     * GL ending balance snapshotted at import as-of the statement date
-     */
-    glEndingBalance?: number;
-    /**
-     * statementEndingBalance − (glEndingBalance + Σ adjustments); 0 when balanced
-     */
-    difference?: number;
-    /**
-     * Reconciliation status
-     */
-    status?: BankReconciliationResponseStatusEnum;
+    adjustments?: Array<BankReconciliationAdjustmentResponse>;
     /**
      * When the reconciliation was created
      */
@@ -72,6 +36,14 @@ export interface BankReconciliationResponse {
      */
     createdBy?: string;
     /**
+     * Reconciliation currency
+     */
+    currency?: string;
+    /**
+     * statementEndingBalance − (glEndingBalance + Σ adjustments); 0 when balanced
+     */
+    difference?: number;
+    /**
      * When the reconciliation was finalized; null while IN_PROGRESS
      */
     finalizedAt?: string;
@@ -80,13 +52,41 @@ export interface BankReconciliationResponse {
      */
     finalizedBy?: string;
     /**
+     * Reconciled GL cash account id
+     */
+    glAccountId?: string;
+    /**
+     * GL ending balance snapshotted at import as-of the statement date
+     */
+    glEndingBalance?: number;
+    /**
+     * Statement period end date
+     */
+    periodEndDate?: string;
+    /**
+     * Statement period start date
+     */
+    periodStartDate?: string;
+    /**
+     * Reconciliation id
+     */
+    reconciliationId?: string;
+    /**
+     * Statement date
+     */
+    statementDate?: string;
+    /**
+     * Statement ending balance
+     */
+    statementEndingBalance?: number;
+    /**
      * Imported statement lines
      */
     statementLines?: Array<BankReconciliationLineResponse>;
     /**
-     * Recorded adjustments
+     * Reconciliation status
      */
-    adjustments?: Array<BankReconciliationAdjustmentResponse>;
+    status?: BankReconciliationResponseStatusEnum;
 }
 export enum BankReconciliationResponseStatusEnum {
     InProgress = 'IN_PROGRESS',
@@ -135,8 +135,8 @@ export function instanceOfBankReconciliationResponse(value: object): value is Ba
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createBankReconciliationResponsePropertyNames();
-    const optionalStringProperties = createBankReconciliationResponseOptionalProperties({ name: 'reconciliationId', nullable: false }, { name: 'glAccountId', nullable: false }, { name: 'accountCode', nullable: false }, { name: 'accountName', nullable: false }, { name: 'periodStartDate', nullable: false }, { name: 'periodEndDate', nullable: false }, { name: 'statementDate', nullable: false }, { name: 'currency', nullable: false }, { name: 'status', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'finalizedAt', nullable: false }, { name: 'finalizedBy', nullable: false }, );
-    const optionalNumberProperties = createBankReconciliationResponseOptionalProperties({ name: 'statementEndingBalance', nullable: false }, { name: 'glEndingBalance', nullable: false }, { name: 'difference', nullable: false }, );
+    const optionalStringProperties = createBankReconciliationResponseOptionalProperties({ name: 'accountCode', nullable: false }, { name: 'accountName', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'currency', nullable: false }, { name: 'finalizedAt', nullable: false }, { name: 'finalizedBy', nullable: false }, { name: 'glAccountId', nullable: false }, { name: 'periodEndDate', nullable: false }, { name: 'periodStartDate', nullable: false }, { name: 'reconciliationId', nullable: false }, { name: 'statementDate', nullable: false }, { name: 'status', nullable: false }, );
+    const optionalNumberProperties = createBankReconciliationResponseOptionalProperties({ name: 'difference', nullable: false }, { name: 'glEndingBalance', nullable: false }, { name: 'statementEndingBalance', nullable: false }, );
     const optionalBooleanProperties = createBankReconciliationResponseOptionalProperties();
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

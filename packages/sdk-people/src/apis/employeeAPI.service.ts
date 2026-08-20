@@ -44,10 +44,10 @@ export class EmployeeAPIService extends BaseService {
     }
 
     /**
-     * Create employee profile
-     * Creates a new employee profile with identity, employment, and role-related attributes.
+     * Create A New Employee Profile
+     * Creates an employee profile: employment attributes (employee number, status, hire date) are stored in the people domain, while identity attributes (names, contact info) are forwarded to pos-people-contact as an upsert command with a server-generated UUIDv7 person id. Use this tool when hiring or registering a brand-new employee; do not use updateEmployee, which modifies an existing profile, and do not use createEmployeesBulk, which imports many records in one call. Preconditions: no existing employee may match the employee number, primary email, or phone when duplicatePolicy is STRICT (the default); identity duplicate checks run against an eventually consistent replica. Required inputs: firstName, lastName, employeeNumber, status (ACTIVE, ON_LEAVE, SUSPENDED, TERMINATED, DISABLED) and hireDate (yyyy-MM-dd); duplicatePolicy defaults to STRICT, and BALANCED accepts suspected duplicates while returning warnings in the response. Emits a PEOPLE_EMPLOYEE_CREATE event, publishes a people.employee.updated fact, and sends a person upsert command to pos-people-contact; the response echoes the submitted identity fields because the replica may lag. Returns 409 when a duplicate employee number, email, or phone is detected under STRICT policy, and 422 when terminationDate is before hireDate. 
      * @endpoint post /v1/people/employees
-     * @param createEmployeeRequest 
+     * @param createEmployeeRequest Employee profile to create: identity fields forwarded to pos-people-contact plus local employment attributes.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -114,11 +114,11 @@ export class EmployeeAPIService extends BaseService {
     }
 
     /**
-     * Disable employee profile
-     * Disables an employee profile and records optional disable metadata.
+     * Disable Employee And Offboard Assignments
+     * Disables an ACTIVE employee, setting status DISABLED with a fresh statusEffectiveAt, and applies the requested staffing-assignment offboarding policy. Use this tool for offboarding; do not use updateEmployee to force the status field, which skips offboarding, and do not use endStaffingAssignment, which ends a single assignment only. Preconditions: the employee must exist and be in ACTIVE status; ON_LEAVE or SUSPENDED employees are rejected, as are already DISABLED or TERMINATED ones. Required inputs: employeeId (UUID) path parameter; the body is optional, assignmentPolicy defaults to IMMEDIATE, and assignmentEndDate applies only with GRACE_PERIOD. Emits a PEOPLE_EMPLOYEE_DISABLE event and publishes a people.employee.updated fact; when the downstream assignment action fails, a retry is queued with a five-minute delay instead of failing the request. Returns 404 when the employee does not exist, and 400 when the employee is not currently ACTIVE. 
      * @endpoint post /v1/people/employees/{employeeId}/disable
      * @param employeeId 
-     * @param disableEmployeeRequestDto 
+     * @param disableEmployeeRequestDto Optional offboarding metadata controlling how the employee\&#39;s staffing assignments are terminated; omitting it applies the IMMEDIATE policy.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -185,8 +185,8 @@ export class EmployeeAPIService extends BaseService {
     }
 
     /**
-     * Get employee profile
-     * Retrieves an employee profile by employee ID.
+     * Get Employee Profile By Person Id
+     * Returns the full employee profile for a person id, merging identity fields from the pos-people-contact replica with local employment fields. Use this tool when the person id is already known; use getEmployeeByNumber instead to resolve a human-entered employee number. Preconditions: an employee row or identity-replica row must exist for the id; identity fields may briefly be null right after creation while the replica catches up. Required inputs: employeeId (UUID) path parameter, which is the person id; there is no request body. Emits a PEOPLE_EMPLOYEE_GET audit event but changes no state; this is a read-only projection. Returns 404 when neither an employee record nor a person replica row exists for the id. 
      * @endpoint get /v1/people/employees/{employeeId}
      * @param employeeId 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -245,20 +245,20 @@ export class EmployeeAPIService extends BaseService {
     }
 
     /**
-     * Resolve employee by employee number
-     * Resolves an employee number to a slim identity projection (person id + employment status). Used for service-to-service approver resolution, such as manager-approval-by-employee-number.
+     * Resolve Employee By Employee Number
+     * Resolves an employee number to a slim identity projection containing the person id, employee number, employment status, and an active flag. Use this tool for service-to-service approver resolution such as manager-approval-by-employee-number; use getEmployee instead when the full profile with names and contact info is needed. Preconditions: an employee record with the given employee number must exist; matching is case-insensitive. Required inputs: employeeNumber (string) path parameter; there is no request body and no pagination. No events are emitted and no state changes; this is a read-only lookup. Returns 404 when no employee carries the supplied employee number. 
      * @endpoint get /v1/people/employees/by-number/{employeeNumber}
      * @param employeeNumber 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public resolveByNumber(employeeNumber: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<EmployeeIdentityDto>;
-    public resolveByNumber(employeeNumber: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<EmployeeIdentityDto>>;
-    public resolveByNumber(employeeNumber: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<EmployeeIdentityDto>>;
-    public resolveByNumber(employeeNumber: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getEmployeeByNumber(employeeNumber: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<EmployeeIdentityDto>;
+    public getEmployeeByNumber(employeeNumber: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<EmployeeIdentityDto>>;
+    public getEmployeeByNumber(employeeNumber: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<EmployeeIdentityDto>>;
+    public getEmployeeByNumber(employeeNumber: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (employeeNumber === null || employeeNumber === undefined) {
-            throw new Error('Required parameter employeeNumber was null or undefined when calling resolveByNumber.');
+            throw new Error('Required parameter employeeNumber was null or undefined when calling getEmployeeByNumber.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -305,11 +305,11 @@ export class EmployeeAPIService extends BaseService {
     }
 
     /**
-     * Update employee profile
-     * Updates an existing employee profile using the provided employee ID.
+     * Update An Existing Employee Profile
+     * Updates an existing employee profile by person id, replacing employment attributes locally and forwarding identity attributes to pos-people-contact as an upsert command. Use this tool when correcting or changing an existing employee\&#39;s details; do not use createEmployee, which registers a new person, and do not use disableEmployee, which is the offboarding transition. Preconditions: an employee row or identity-replica row must exist for the supplied employeeId, which is the person id at this API surface. Required inputs: employeeId (UUID) path parameter plus the full profile (firstName, lastName, employeeNumber, status, hireDate); this is a full replacement, not a patch, and duplicatePolicy defaults to STRICT. Emits a PEOPLE_EMPLOYEE_UPDATE event and publishes a people.employee.updated fact; a status change also stamps statusEffectiveAt. Returns 404 when no employee or person exists for the id, 409 when another employee already uses the employee number, email, or phone under STRICT policy, and 422 when terminationDate is before hireDate. 
      * @endpoint put /v1/people/employees/{employeeId}
      * @param employeeId 
-     * @param updateEmployeeRequest 
+     * @param updateEmployeeRequest Full replacement employee profile; identity fields are re-sent to pos-people-contact as an upsert command.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options

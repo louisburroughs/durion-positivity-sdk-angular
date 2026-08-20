@@ -11,13 +11,21 @@ import { LineItemApprovalDto } from './lineItemApprovalDto';
 
 
 /**
- * Request to approve a work order with customer signature
+ * Approval request with customer ID and signature capture
  */
 export interface ApproveWorkorderRequest { 
     /**
      * Customer ID who is approving the work order
      */
     customerId: string;
+    /**
+     * Individual line item approvals/rejections. If omitted, all items are considered approved.
+     */
+    lineItemApprovals?: Array<LineItemApprovalDto>;
+    /**
+     * Additional notes or comments
+     */
+    notes?: string;
     /**
      * Base64-encoded signature image data (PNG format recommended)
      */
@@ -30,14 +38,6 @@ export interface ApproveWorkorderRequest {
      * Name of person providing signature
      */
     signerName?: string;
-    /**
-     * Additional notes or comments
-     */
-    notes?: string;
-    /**
-     * Individual line item approvals/rejections. If omitted, all items are considered approved.
-     */
-    lineItemApprovals?: Array<LineItemApprovalDto>;
 }
 
 function isOptionalApproveWorkorderRequestPropertyOfType(
@@ -79,7 +79,7 @@ export function instanceOfApproveWorkorderRequest(value: object): value is Appro
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createApproveWorkorderRequestPropertyNames('customerId', );
-    const optionalStringProperties = createApproveWorkorderRequestOptionalProperties({ name: 'customerId', nullable: false }, { name: 'signatureData', nullable: false }, { name: 'signatureMimeType', nullable: false }, { name: 'signerName', nullable: false }, { name: 'notes', nullable: false }, );
+    const optionalStringProperties = createApproveWorkorderRequestOptionalProperties({ name: 'customerId', nullable: false }, { name: 'notes', nullable: false }, { name: 'signatureData', nullable: false }, { name: 'signatureMimeType', nullable: false }, { name: 'signerName', nullable: false }, );
     const optionalNumberProperties = createApproveWorkorderRequestOptionalProperties();
     const optionalBooleanProperties = createApproveWorkorderRequestOptionalProperties();
 

@@ -14,49 +14,49 @@
  */
 export interface CycleCountScheduleResponse { 
     /**
-     * Unique identifier of the schedule
+     * Whether the schedule is active
      */
-    scheduleId: string;
-    /**
-     * Identifier of the location the schedule applies to
-     */
-    locationId: string;
-    /**
-     * Optional single-zone filter within the location
-     */
-    zoneId?: string;
-    /**
-     * Optional SKU-category filter
-     */
-    skuCategory?: string;
-    /**
-     * Count frequency in days
-     */
-    frequencyDays: number;
-    /**
-     * Next date the schedule is due for counting
-     */
-    nextDueDate: string;
+    active: boolean;
     /**
      * Whether the scheduled runner auto-creates the next cycle-count plan when due
      */
     autoCreatePlan: boolean;
     /**
-     * Whether the schedule is active
+     * Timestamp when the schedule was created
      */
-    active: boolean;
+    createdAt: string;
     /**
      * Identifier of the user who created the schedule
      */
     createdBy: string;
     /**
-     * Timestamp when the schedule was created
+     * Count frequency in days
      */
-    createdAt: string;
+    frequencyDays: number;
+    /**
+     * Identifier of the location the schedule applies to
+     */
+    locationId: string;
+    /**
+     * Next date the schedule is due for counting
+     */
+    nextDueDate: string;
+    /**
+     * Unique identifier of the schedule
+     */
+    scheduleId: string;
+    /**
+     * Optional SKU-category filter
+     */
+    skuCategory?: string;
     /**
      * Timestamp when the schedule was last updated
      */
     updatedAt: string;
+    /**
+     * Optional single-zone filter within the location
+     */
+    zoneId?: string;
 }
 
 function isOptionalCycleCountScheduleResponsePropertyOfType(
@@ -97,10 +97,10 @@ export function instanceOfCycleCountScheduleResponse(value: object): value is Cy
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createCycleCountScheduleResponsePropertyNames('scheduleId', 'locationId', 'frequencyDays', 'nextDueDate', 'autoCreatePlan', 'active', 'createdBy', 'createdAt', 'updatedAt', );
-    const optionalStringProperties = createCycleCountScheduleResponseOptionalProperties({ name: 'scheduleId', nullable: false }, { name: 'locationId', nullable: false }, { name: 'zoneId', nullable: false }, { name: 'skuCategory', nullable: false }, { name: 'nextDueDate', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'updatedAt', nullable: false }, );
+    const requiredProperties = createCycleCountScheduleResponsePropertyNames('active', 'autoCreatePlan', 'createdAt', 'createdBy', 'frequencyDays', 'locationId', 'nextDueDate', 'scheduleId', 'updatedAt', );
+    const optionalStringProperties = createCycleCountScheduleResponseOptionalProperties({ name: 'createdAt', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'locationId', nullable: false }, { name: 'nextDueDate', nullable: false }, { name: 'scheduleId', nullable: false }, { name: 'skuCategory', nullable: false }, { name: 'updatedAt', nullable: false }, { name: 'zoneId', nullable: false }, );
     const optionalNumberProperties = createCycleCountScheduleResponseOptionalProperties({ name: 'frequencyDays', nullable: false }, );
-    const optionalBooleanProperties = createCycleCountScheduleResponseOptionalProperties({ name: 'autoCreatePlan', nullable: false }, { name: 'active', nullable: false }, );
+    const optionalBooleanProperties = createCycleCountScheduleResponseOptionalProperties({ name: 'active', nullable: false }, { name: 'autoCreatePlan', nullable: false }, );
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
         && optionalStringProperties.every((property) => isOptionalCycleCountScheduleResponsePropertyOfType(_v, property.name, 'string', property.nullable))

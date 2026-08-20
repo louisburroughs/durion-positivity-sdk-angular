@@ -14,13 +14,18 @@
  */
 export interface PriceBookDto { 
     /**
-     * Price book identifier
+     * Timestamp the price book was created
      */
-    priceBookId: string;
+    createdAt: string;
+    'default'?: boolean;
     /**
      * Price book name
      */
     name: string;
+    /**
+     * Price book identifier
+     */
+    priceBookId: string;
     /**
      * Scope the price book applies to
      */
@@ -34,10 +39,6 @@ export interface PriceBookDto {
      */
     status: PriceBookDtoStatusEnum;
     /**
-     * Timestamp the price book was created
-     */
-    createdAt: string;
-    /**
      * Timestamp the price book was last updated
      */
     updatedAt?: string;
@@ -45,7 +46,6 @@ export interface PriceBookDto {
      * Version for optimistic locking
      */
     version: number;
-    'default'?: boolean;
 }
 export enum PriceBookDtoScopeEnum {
     CompanyDefault = 'COMPANY_DEFAULT',
@@ -97,8 +97,8 @@ export function instanceOfPriceBookDto(value: object): value is PriceBookDto {
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createPriceBookDtoPropertyNames('priceBookId', 'name', 'scope', 'status', 'createdAt', 'version', );
-    const optionalStringProperties = createPriceBookDtoOptionalProperties({ name: 'priceBookId', nullable: false }, { name: 'name', nullable: false }, { name: 'scope', nullable: false }, { name: 'scopeId', nullable: false }, { name: 'status', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'updatedAt', nullable: false }, );
+    const requiredProperties = createPriceBookDtoPropertyNames('createdAt', 'name', 'priceBookId', 'scope', 'status', 'version', );
+    const optionalStringProperties = createPriceBookDtoOptionalProperties({ name: 'createdAt', nullable: false }, { name: 'name', nullable: false }, { name: 'priceBookId', nullable: false }, { name: 'scope', nullable: false }, { name: 'scopeId', nullable: false }, { name: 'status', nullable: false }, { name: 'updatedAt', nullable: false }, );
     const optionalNumberProperties = createPriceBookDtoOptionalProperties({ name: 'version', nullable: false }, );
     const optionalBooleanProperties = createPriceBookDtoOptionalProperties({ name: '_default', nullable: false }, );
 

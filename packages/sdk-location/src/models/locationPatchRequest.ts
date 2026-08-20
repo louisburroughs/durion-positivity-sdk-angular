@@ -12,29 +12,9 @@ import { HolidayClosureRequest } from './holidayClosureRequest';
 
 
 /**
- * Partial location payload
+ * Partial update payload for a location; null fields are left unchanged
  */
 export interface LocationPatchRequest { 
-    /**
-     * Display name of the location
-     */
-    name?: string;
-    /**
-     * Operational status of the location
-     */
-    status?: string;
-    /**
-     * IANA timezone identifier for the location
-     */
-    timezone?: string;
-    /**
-     * Weekly operating hours for the location
-     */
-    operatingHours?: Array<OperatingHoursRequest>;
-    /**
-     * Holiday closures for the location
-     */
-    holidayClosures?: Array<HolidayClosureRequest>;
     /**
      * Buffer minutes reserved before appointments for check-in
      */
@@ -43,6 +23,26 @@ export interface LocationPatchRequest {
      * Buffer minutes reserved after appointments for cleanup
      */
     cleanupBufferMinutes?: number;
+    /**
+     * Holiday closures for the location
+     */
+    holidayClosures?: Array<HolidayClosureRequest>;
+    /**
+     * Display name of the location
+     */
+    name?: string;
+    /**
+     * Weekly operating hours for the location
+     */
+    operatingHours?: Array<OperatingHoursRequest>;
+    /**
+     * Operational status of the location
+     */
+    status?: string;
+    /**
+     * IANA timezone identifier for the location
+     */
+    timezone?: string;
 }
 
 function isOptionalLocationPatchRequestPropertyOfType(

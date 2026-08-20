@@ -14,14 +14,6 @@
  */
 export interface TravelBufferPolicyResponse { 
     /**
-     * Unique identifier of the travel buffer policy
-     */
-    id: string;
-    /**
-     * Display name of the travel buffer policy
-     */
-    name?: string;
-    /**
      * Type of buffer the policy applies
      */
     bufferType?: string;
@@ -30,13 +22,21 @@ export interface TravelBufferPolicyResponse {
      */
     bufferValue?: number;
     /**
-     * Free-text notes about the policy
-     */
-    notes?: string;
-    /**
      * Timestamp when the policy was created (ISO 8601)
      */
     createdAt?: string;
+    /**
+     * Unique identifier of the travel buffer policy
+     */
+    id: string;
+    /**
+     * Display name of the travel buffer policy
+     */
+    name?: string;
+    /**
+     * Free-text notes about the policy
+     */
+    notes?: string;
     /**
      * Timestamp when the policy was last updated (ISO 8601)
      */
@@ -82,7 +82,7 @@ export function instanceOfTravelBufferPolicyResponse(value: object): value is Tr
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createTravelBufferPolicyResponsePropertyNames('id', );
-    const optionalStringProperties = createTravelBufferPolicyResponseOptionalProperties({ name: 'id', nullable: false }, { name: 'name', nullable: false }, { name: 'bufferType', nullable: false }, { name: 'notes', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'updatedAt', nullable: false }, );
+    const optionalStringProperties = createTravelBufferPolicyResponseOptionalProperties({ name: 'bufferType', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'id', nullable: false }, { name: 'name', nullable: false }, { name: 'notes', nullable: false }, { name: 'updatedAt', nullable: false }, );
     const optionalNumberProperties = createTravelBufferPolicyResponseOptionalProperties({ name: 'bufferValue', nullable: false }, );
     const optionalBooleanProperties = createTravelBufferPolicyResponseOptionalProperties();
 

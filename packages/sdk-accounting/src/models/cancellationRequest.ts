@@ -14,30 +14,6 @@
  */
 export interface CancellationRequest { 
     /**
-     * Identifier of the order being cancelled
-     */
-    orderId?: string;
-    /**
-     * Identifier of the invoice being cancelled
-     */
-    invoiceId?: string;
-    /**
-     * Type of cancellation being recorded
-     */
-    cancellationType: CancellationRequestCancellationTypeEnum;
-    /**
-     * Snapshot of state before the cancellation (JSON)
-     */
-    beforeSnapshot: string;
-    /**
-     * Snapshot of state after the cancellation (JSON)
-     */
-    afterSnapshot: string;
-    /**
-     * Partial payment details captured at cancellation (JSON)
-     */
-    partialPaymentInfo?: string;
-    /**
      * Legacy client-provided actor identifier; service resolves authoritative actor from security context
      */
     actorId?: string;
@@ -45,6 +21,30 @@ export interface CancellationRequest {
      * Role of the actor performing the cancellation
      */
     actorRole: string;
+    /**
+     * Snapshot of state after the cancellation (JSON)
+     */
+    afterSnapshot: string;
+    /**
+     * Snapshot of state before the cancellation (JSON)
+     */
+    beforeSnapshot: string;
+    /**
+     * Type of cancellation being recorded
+     */
+    cancellationType: CancellationRequestCancellationTypeEnum;
+    /**
+     * Identifier of the invoice being cancelled
+     */
+    invoiceId?: string;
+    /**
+     * Identifier of the order being cancelled
+     */
+    orderId?: string;
+    /**
+     * Partial payment details captured at cancellation (JSON)
+     */
+    partialPaymentInfo?: string;
     /**
      * Reason for the cancellation
      */
@@ -96,8 +96,8 @@ export function instanceOfCancellationRequest(value: object): value is Cancellat
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createCancellationRequestPropertyNames('cancellationType', 'beforeSnapshot', 'afterSnapshot', 'actorRole', 'reason', );
-    const optionalStringProperties = createCancellationRequestOptionalProperties({ name: 'orderId', nullable: false }, { name: 'invoiceId', nullable: false }, { name: 'cancellationType', nullable: false }, { name: 'beforeSnapshot', nullable: false }, { name: 'afterSnapshot', nullable: false }, { name: 'partialPaymentInfo', nullable: false }, { name: 'actorId', nullable: false }, { name: 'actorRole', nullable: false }, { name: 'reason', nullable: false }, );
+    const requiredProperties = createCancellationRequestPropertyNames('actorRole', 'afterSnapshot', 'beforeSnapshot', 'cancellationType', 'reason', );
+    const optionalStringProperties = createCancellationRequestOptionalProperties({ name: 'actorId', nullable: false }, { name: 'actorRole', nullable: false }, { name: 'afterSnapshot', nullable: false }, { name: 'beforeSnapshot', nullable: false }, { name: 'cancellationType', nullable: false }, { name: 'invoiceId', nullable: false }, { name: 'orderId', nullable: false }, { name: 'partialPaymentInfo', nullable: false }, { name: 'reason', nullable: false }, );
     const optionalNumberProperties = createCancellationRequestOptionalProperties();
     const optionalBooleanProperties = createCancellationRequestOptionalProperties();
 

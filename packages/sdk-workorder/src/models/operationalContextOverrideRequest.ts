@@ -14,14 +14,6 @@
  */
 export interface OperationalContextOverrideRequest { 
     /**
-     * Location identifier to set on the workorder
-     */
-    locationId: string;
-    /**
-     * Optional bay identifier
-     */
-    bayId?: string;
-    /**
      * Assigned mechanic identifiers
      */
     assignedMechanics?: Array<string>;
@@ -30,9 +22,17 @@ export interface OperationalContextOverrideRequest {
      */
     assignedResources?: Array<string>;
     /**
+     * Optional bay identifier
+     */
+    bayId?: string;
+    /**
      * Optional execution constraints
      */
     constraints?: Array<string>;
+    /**
+     * Location identifier to set on the workorder
+     */
+    locationId: string;
 }
 
 function isOptionalOperationalContextOverrideRequestPropertyOfType(
@@ -74,7 +74,7 @@ export function instanceOfOperationalContextOverrideRequest(value: object): valu
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createOperationalContextOverrideRequestPropertyNames('locationId', );
-    const optionalStringProperties = createOperationalContextOverrideRequestOptionalProperties({ name: 'locationId', nullable: false }, { name: 'bayId', nullable: false }, );
+    const optionalStringProperties = createOperationalContextOverrideRequestOptionalProperties({ name: 'bayId', nullable: false }, { name: 'locationId', nullable: false }, );
     const optionalNumberProperties = createOperationalContextOverrideRequestOptionalProperties();
     const optionalBooleanProperties = createOperationalContextOverrideRequestOptionalProperties();
 

@@ -18,6 +18,22 @@ export interface InvoiceStatusResponse {
      */
     invoiceId: string;
     /**
+     * Total invoice amount
+     */
+    invoiceTotal?: number;
+    /**
+     * Last updated timestamp
+     */
+    lastUpdated?: string;
+    /**
+     * Reference of the latest payment transaction
+     */
+    latestTransactionReference?: string;
+    /**
+     * Remaining balance (invoice total minus total paid)
+     */
+    remainingBalance?: number;
+    /**
      * Payment status of the invoice
      */
     status: InvoiceStatusResponseStatusEnum;
@@ -25,22 +41,6 @@ export interface InvoiceStatusResponse {
      * Total amount paid to date
      */
     totalPaid?: number;
-    /**
-     * Total invoice amount
-     */
-    invoiceTotal?: number;
-    /**
-     * Remaining balance (invoice total minus total paid)
-     */
-    remainingBalance?: number;
-    /**
-     * Reference of the latest payment transaction
-     */
-    latestTransactionReference?: string;
-    /**
-     * Last updated timestamp
-     */
-    lastUpdated?: string;
 }
 export enum InvoiceStatusResponseStatusEnum {
     Paid = 'PAID',
@@ -91,8 +91,8 @@ export function instanceOfInvoiceStatusResponse(value: object): value is Invoice
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createInvoiceStatusResponsePropertyNames('invoiceId', 'status', );
-    const optionalStringProperties = createInvoiceStatusResponseOptionalProperties({ name: 'invoiceId', nullable: false }, { name: 'status', nullable: false }, { name: 'latestTransactionReference', nullable: false }, { name: 'lastUpdated', nullable: false }, );
-    const optionalNumberProperties = createInvoiceStatusResponseOptionalProperties({ name: 'totalPaid', nullable: false }, { name: 'invoiceTotal', nullable: false }, { name: 'remainingBalance', nullable: false }, );
+    const optionalStringProperties = createInvoiceStatusResponseOptionalProperties({ name: 'invoiceId', nullable: false }, { name: 'lastUpdated', nullable: false }, { name: 'latestTransactionReference', nullable: false }, { name: 'status', nullable: false }, );
+    const optionalNumberProperties = createInvoiceStatusResponseOptionalProperties({ name: 'invoiceTotal', nullable: false }, { name: 'remainingBalance', nullable: false }, { name: 'totalPaid', nullable: false }, );
     const optionalBooleanProperties = createInvoiceStatusResponseOptionalProperties();
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

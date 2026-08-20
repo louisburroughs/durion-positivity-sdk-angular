@@ -36,10 +36,10 @@ export class EventEmissionService extends BaseService {
     }
 
     /**
-     * Receive emitted event
-     * Stores a preregistered emitted event payload
+     * Receive and store an emitted event
+     * Receives one event occurrence emitted by another pos service and queues it for storage in the emitted_event time-series table. Use this tool when a service needs to record that a registered event happened; do not use upsertEventType, which registers or edits event-type metadata rather than recording occurrences. Preconditions: the event id must already exist in the preregistered_event allowlist, and the call must carry a valid X-Events-Api-Secret shared-secret header when pos.events.api-secret is configured; this service is internal-network only and is not exposed through the API gateway. Required inputs: id (uppercase letters, digits and underscores), numeric apiVersion, timestamp as positive epoch milliseconds, elapsedMs of zero or more, and publishedAt as a UTC instant. No events are emitted by this operation itself, by design, to prevent infinite recursion; the submitted event is queued in memory and a batch flush persists the queue every 5 seconds, so a 200 response means accepted, not yet durably stored. Returns 400 when the id is not preregistered or a field fails validation, and 401 when the shared secret is missing or invalid. 
      * @endpoint post /v1/events
-     * @param emitEventRequest Event payload to persist
+     * @param emitEventRequest Single event occurrence to record, identifying the preregistered event id and its timing measurements.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options

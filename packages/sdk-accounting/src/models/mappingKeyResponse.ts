@@ -14,21 +14,13 @@
  */
 export interface MappingKeyResponse { 
     /**
-     * Unique identifier of the mapping key
+     * Timestamp when the mapping key was created (ISO 8601)
      */
-    mappingKeyId: string;
+    createdAt?: string;
     /**
-     * Identifier of the posting category this mapping key belongs to
+     * Identifier of the user who created the mapping key
      */
-    postingCategoryId: string;
-    /**
-     * Name of the posting category this mapping key belongs to
-     */
-    postingCategoryName?: string;
-    /**
-     * Name of the mapping key
-     */
-    keyName: string;
+    createdBy?: string;
     /**
      * Description of the mapping key
      */
@@ -38,13 +30,13 @@ export interface MappingKeyResponse {
      */
     isActive?: boolean;
     /**
-     * Timestamp when the mapping key was created (ISO 8601)
+     * Name of the mapping key
      */
-    createdAt?: string;
+    keyName: string;
     /**
-     * Identifier of the user who created the mapping key
+     * Unique identifier of the mapping key
      */
-    createdBy?: string;
+    mappingKeyId: string;
     /**
      * Timestamp when the mapping key was last modified (ISO 8601)
      */
@@ -53,6 +45,14 @@ export interface MappingKeyResponse {
      * Identifier of the user who last modified the mapping key
      */
     modifiedBy?: string;
+    /**
+     * Identifier of the posting category this mapping key belongs to
+     */
+    postingCategoryId: string;
+    /**
+     * Name of the posting category this mapping key belongs to
+     */
+    postingCategoryName?: string;
 }
 
 function isOptionalMappingKeyResponsePropertyOfType(
@@ -93,8 +93,8 @@ export function instanceOfMappingKeyResponse(value: object): value is MappingKey
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createMappingKeyResponsePropertyNames('mappingKeyId', 'postingCategoryId', 'keyName', );
-    const optionalStringProperties = createMappingKeyResponseOptionalProperties({ name: 'mappingKeyId', nullable: false }, { name: 'postingCategoryId', nullable: false }, { name: 'postingCategoryName', nullable: false }, { name: 'keyName', nullable: false }, { name: 'description', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'modifiedAt', nullable: false }, { name: 'modifiedBy', nullable: false }, );
+    const requiredProperties = createMappingKeyResponsePropertyNames('keyName', 'mappingKeyId', 'postingCategoryId', );
+    const optionalStringProperties = createMappingKeyResponseOptionalProperties({ name: 'createdAt', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'description', nullable: false }, { name: 'keyName', nullable: false }, { name: 'mappingKeyId', nullable: false }, { name: 'modifiedAt', nullable: false }, { name: 'modifiedBy', nullable: false }, { name: 'postingCategoryId', nullable: false }, { name: 'postingCategoryName', nullable: false }, );
     const optionalNumberProperties = createMappingKeyResponseOptionalProperties();
     const optionalBooleanProperties = createMappingKeyResponseOptionalProperties({ name: 'isActive', nullable: false }, );
 

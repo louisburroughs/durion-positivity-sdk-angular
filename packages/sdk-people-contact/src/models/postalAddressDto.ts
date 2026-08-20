@@ -14,6 +14,14 @@
  */
 export interface PostalAddressDto { 
     /**
+     * City, town, or locality
+     */
+    city?: string;
+    /**
+     * ISO 3166-1 alpha-2 country code
+     */
+    countryCode: string;
+    /**
      * First address line (street address, PO box, company name)
      */
     line1: string;
@@ -22,21 +30,13 @@ export interface PostalAddressDto {
      */
     line2?: string;
     /**
-     * City, town, or locality
-     */
-    city?: string;
-    /**
-     * Administrative area: state, province, prefecture, or county (free text)
-     */
-    region?: string;
-    /**
      * Postal or ZIP code; omit for countries without one
      */
     postalCode?: string;
     /**
-     * ISO 3166-1 alpha-2 country code
+     * Administrative area: state, province, prefecture, or county (free text)
      */
-    countryCode: string;
+    region?: string;
 }
 
 function isOptionalPostalAddressDtoPropertyOfType(
@@ -77,8 +77,8 @@ export function instanceOfPostalAddressDto(value: object): value is PostalAddres
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createPostalAddressDtoPropertyNames('line1', 'countryCode', );
-    const optionalStringProperties = createPostalAddressDtoOptionalProperties({ name: 'line1', nullable: false }, { name: 'line2', nullable: false }, { name: 'city', nullable: false }, { name: 'region', nullable: false }, { name: 'postalCode', nullable: false }, { name: 'countryCode', nullable: false }, );
+    const requiredProperties = createPostalAddressDtoPropertyNames('countryCode', 'line1', );
+    const optionalStringProperties = createPostalAddressDtoOptionalProperties({ name: 'city', nullable: false }, { name: 'countryCode', nullable: false }, { name: 'line1', nullable: false }, { name: 'line2', nullable: false }, { name: 'postalCode', nullable: false }, { name: 'region', nullable: false }, );
     const optionalNumberProperties = createPostalAddressDtoOptionalProperties();
     const optionalBooleanProperties = createPostalAddressDtoOptionalProperties();
 

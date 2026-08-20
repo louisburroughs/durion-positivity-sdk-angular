@@ -40,20 +40,20 @@ export class CRMSuppressionService extends BaseService {
     }
 
     /**
-     * Suppress an address
-     * Hard-block an address from marketing. Idempotent: re-adding returns the existing entry.
+     * Suppress Marketing Address
+     * Hard-blocks an address from marketing on one channel, storing only a normalized hash and a masked hint of the address. Use this tool for bounce feeds, spam complaints, and legal do-not-contact requests; do not use updateMarketingConsent, which records a party\&#39;s choice and can be reversed by the party, whereas suppression outranks consent entirely. Preconditions: none; the call is idempotent, and re-adding an already-suppressed address returns the existing entry without touching the audit trail. Required inputs: channel (EMAIL or SMS), address (raw, max 320 characters), and reason (HARD_BOUNCE, SPAM_COMPLAINT, LEGAL_DNC, MANUAL, or UNSUBSCRIBE_LINK); partyId is optional and source defaults to CSR. Emits a CRM_SUPPRESSION_ADD event and publishes a suppression-changed fact when a new entry is actually created. Returns 400 when channel, address, or reason is missing, and 201 with the existing entry when the address was already suppressed. 
      * @endpoint post /v1/crm/suppression
-     * @param addSuppressionRequest 
+     * @param addSuppressionRequest The address to hard-block, the channel it applies to, and why it is being suppressed.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public add(addSuppressionRequest: AddSuppressionRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<SuppressionEntryResponse>;
-    public add(addSuppressionRequest: AddSuppressionRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<SuppressionEntryResponse>>;
-    public add(addSuppressionRequest: AddSuppressionRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<SuppressionEntryResponse>>;
-    public add(addSuppressionRequest: AddSuppressionRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public addSuppressionEntry(addSuppressionRequest: AddSuppressionRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<SuppressionEntryResponse>;
+    public addSuppressionEntry(addSuppressionRequest: AddSuppressionRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<SuppressionEntryResponse>>;
+    public addSuppressionEntry(addSuppressionRequest: AddSuppressionRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<SuppressionEntryResponse>>;
+    public addSuppressionEntry(addSuppressionRequest: AddSuppressionRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (addSuppressionRequest === null || addSuppressionRequest === undefined) {
-            throw new Error('Required parameter addSuppressionRequest was null or undefined when calling add.');
+            throw new Error('Required parameter addSuppressionRequest was null or undefined when calling addSuppressionEntry.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -110,8 +110,8 @@ export class CRMSuppressionService extends BaseService {
     }
 
     /**
-     * Check address suppression
-     * Whether a raw address is currently blocked on a channel. Used by send pipelines.
+     * Check Address Suppression
+     * Reports whether a raw address is currently hard-blocked on a channel by normalizing and hashing it and looking the hash up in the suppression list. Use this tool from send pipelines immediately before dispatch; use resolveMarketingEligibility instead for the full party-level decision that also folds in consent and the account gate. Preconditions: none; suppression outranks consent, so a true result must block the send regardless of opt-in state. Required inputs: channel (EMAIL or SMS) and address (the raw address to test) as required query parameters; the raw address is used only for hashing and never stored. Emits a CRM_SUPPRESSION_CHECK audit event; no state changes occur. Returns 200 with a bare boolean body, true when the address is suppressed on that channel and false otherwise. 
      * @endpoint get /v1/crm/suppression/check
      * @param channel 
      * @param address 
@@ -119,15 +119,15 @@ export class CRMSuppressionService extends BaseService {
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public check(channel: 'EMAIL' | 'SMS', address: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<boolean>;
-    public check(channel: 'EMAIL' | 'SMS', address: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<boolean>>;
-    public check(channel: 'EMAIL' | 'SMS', address: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<boolean>>;
-    public check(channel: 'EMAIL' | 'SMS', address: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public checkAddressSuppression(channel: 'EMAIL' | 'SMS', address: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<boolean>;
+    public checkAddressSuppression(channel: 'EMAIL' | 'SMS', address: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<boolean>>;
+    public checkAddressSuppression(channel: 'EMAIL' | 'SMS', address: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<boolean>>;
+    public checkAddressSuppression(channel: 'EMAIL' | 'SMS', address: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (channel === null || channel === undefined) {
-            throw new Error('Required parameter channel was null or undefined when calling check.');
+            throw new Error('Required parameter channel was null or undefined when calling checkAddressSuppression.');
         }
         if (address === null || address === undefined) {
-            throw new Error('Required parameter address was null or undefined when calling check.');
+            throw new Error('Required parameter address was null or undefined when calling checkAddressSuppression.');
         }
 
         let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
@@ -195,8 +195,8 @@ export class CRMSuppressionService extends BaseService {
     }
 
     /**
-     * List suppression entries
-     * List suppressed addresses, newest first
+     * List Suppression Entries
+     * Returns hard-suppressed marketing addresses newest first, showing only a masked address hint and the normalized hash — raw addresses are never stored or returned. Use this tool when reviewing the suppression list; use checkAddressSuppression instead to test one specific address before a send. Preconditions: none; an empty page is returned when nothing matches. Required inputs: none; channel optionally filters on EMAIL or SMS, page defaults to 0, and size defaults to 50 clamped between 1 and 200. Emits a CRM_SUPPRESSION_LIST audit event; no state changes occur. Returns 200 with an empty page rather than an error when the list is empty. 
      * @endpoint get /v1/crm/suppression
      * @param channel 
      * @param page 
@@ -205,10 +205,10 @@ export class CRMSuppressionService extends BaseService {
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public list(channel?: 'EMAIL' | 'SMS', page?: number, size?: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PagedResponse>;
-    public list(channel?: 'EMAIL' | 'SMS', page?: number, size?: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PagedResponse>>;
-    public list(channel?: 'EMAIL' | 'SMS', page?: number, size?: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PagedResponse>>;
-    public list(channel?: 'EMAIL' | 'SMS', page?: number, size?: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public listSuppressionEntries(channel?: 'EMAIL' | 'SMS', page?: number, size?: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PagedResponse>;
+    public listSuppressionEntries(channel?: 'EMAIL' | 'SMS', page?: number, size?: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PagedResponse>>;
+    public listSuppressionEntries(channel?: 'EMAIL' | 'SMS', page?: number, size?: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PagedResponse>>;
+    public listSuppressionEntries(channel?: 'EMAIL' | 'SMS', page?: number, size?: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
 
@@ -284,20 +284,20 @@ export class CRMSuppressionService extends BaseService {
     }
 
     /**
-     * Lift a suppression
-     * Remove a suppression entry
+     * Lift Address Suppression
+     * Removes one suppression entry, allowing marketing to reach the address again subject to normal consent rules. Use this tool when an address was suppressed in error or a legal block is lifted; do not use updateMarketingConsent for this, which cannot override a suppression entry. Preconditions: the suppression entry must exist. Required inputs: suppressionId (UUID) as a path parameter; there is no request body. Emits a CRM_SUPPRESSION_REMOVE event and publishes a suppression-changed fact so consumers stop blocking the address. Returns 404 when no suppression entry exists for the supplied suppressionId. 
      * @endpoint delete /v1/crm/suppression/{suppressionId}
      * @param suppressionId 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public remove(suppressionId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public remove(suppressionId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public remove(suppressionId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public remove(suppressionId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public removeSuppressionEntry(suppressionId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
+    public removeSuppressionEntry(suppressionId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
+    public removeSuppressionEntry(suppressionId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
+    public removeSuppressionEntry(suppressionId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (suppressionId === null || suppressionId === undefined) {
-            throw new Error('Required parameter suppressionId was null or undefined when calling remove.');
+            throw new Error('Required parameter suppressionId was null or undefined when calling removeSuppressionEntry.');
         }
 
         let localVarHeaders = this.defaultHeaders;

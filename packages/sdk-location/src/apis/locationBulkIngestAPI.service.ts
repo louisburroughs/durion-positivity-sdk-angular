@@ -38,20 +38,20 @@ export class LocationBulkIngestAPIService extends BaseService {
     }
 
     /**
-     * Bulk ingest records
-     * Accepts a batch of domain records for bulk import. Returns per-record results.
+     * Bulk Import a Batch of Locations
+     * Imports a batch of location records in one call, creating each row independently and reporting per-record success or failure. Use this tool for initial data loads or migrations; do not use createLocation, which creates a single location per call. Preconditions: names and codes must be unique against existing locations; each record is validated independently, so one failure does not abort the batch. Required inputs: jobId, locationId and a non-empty records array, each record with name and code; active defaults to true and locationTypeName defaults to STORE when omitted. Emits a LOCATION_BULK_INGEST event, and every successfully created location also publishes a location fact for replica consumers. Returns 200 with per-record results even when some records fail (failed rows carry errorCode LOCATION_INGEST_FAILED), and 400 when the batch envelope itself is invalid. 
      * @endpoint post /v1/locations/bulk-ingest
-     * @param bulkIngestRequestLocationBulkIngestRecord 
+     * @param bulkIngestRequestLocationBulkIngestRecord Batch envelope of location records to import, scoped to a bulk ingest job and submitting operator.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public bulkIngest(bulkIngestRequestLocationBulkIngestRecord: BulkIngestRequestLocationBulkIngestRecord, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<BulkIngestResponse>;
-    public bulkIngest(bulkIngestRequestLocationBulkIngestRecord: BulkIngestRequestLocationBulkIngestRecord, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<BulkIngestResponse>>;
-    public bulkIngest(bulkIngestRequestLocationBulkIngestRecord: BulkIngestRequestLocationBulkIngestRecord, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<BulkIngestResponse>>;
-    public bulkIngest(bulkIngestRequestLocationBulkIngestRecord: BulkIngestRequestLocationBulkIngestRecord, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public bulkIngestLocations(bulkIngestRequestLocationBulkIngestRecord: BulkIngestRequestLocationBulkIngestRecord, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<BulkIngestResponse>;
+    public bulkIngestLocations(bulkIngestRequestLocationBulkIngestRecord: BulkIngestRequestLocationBulkIngestRecord, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<BulkIngestResponse>>;
+    public bulkIngestLocations(bulkIngestRequestLocationBulkIngestRecord: BulkIngestRequestLocationBulkIngestRecord, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<BulkIngestResponse>>;
+    public bulkIngestLocations(bulkIngestRequestLocationBulkIngestRecord: BulkIngestRequestLocationBulkIngestRecord, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (bulkIngestRequestLocationBulkIngestRecord === null || bulkIngestRequestLocationBulkIngestRecord === undefined) {
-            throw new Error('Required parameter bulkIngestRequestLocationBulkIngestRecord was null or undefined when calling bulkIngest.');
+            throw new Error('Required parameter bulkIngestRequestLocationBulkIngestRecord was null or undefined when calling bulkIngestLocations.');
         }
 
         let localVarHeaders = this.defaultHeaders;

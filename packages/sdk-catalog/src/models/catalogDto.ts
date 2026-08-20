@@ -14,6 +14,10 @@
  */
 export interface CatalogDto { 
     /**
+     * Catalog description
+     */
+    description?: string;
+    /**
      * Catalog identifier
      */
     id: string;
@@ -22,9 +26,9 @@ export interface CatalogDto {
      */
     name: string;
     /**
-     * Catalog description
+     * Non-inventory product IDs included in the catalog
      */
-    description?: string;
+    nonInventoryProductIds?: Array<string>;
     /**
      * Product IDs included in the catalog
      */
@@ -33,10 +37,6 @@ export interface CatalogDto {
      * Service IDs included in the catalog
      */
     serviceIds?: Array<string>;
-    /**
-     * Non-inventory product IDs included in the catalog
-     */
-    nonInventoryProductIds?: Array<string>;
 }
 
 function isOptionalCatalogDtoPropertyOfType(
@@ -78,7 +78,7 @@ export function instanceOfCatalogDto(value: object): value is CatalogDto {
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createCatalogDtoPropertyNames('id', 'name', );
-    const optionalStringProperties = createCatalogDtoOptionalProperties({ name: 'id', nullable: false }, { name: 'name', nullable: false }, { name: 'description', nullable: false }, );
+    const optionalStringProperties = createCatalogDtoOptionalProperties({ name: 'description', nullable: false }, { name: 'id', nullable: false }, { name: 'name', nullable: false }, );
     const optionalNumberProperties = createCatalogDtoOptionalProperties();
     const optionalBooleanProperties = createCatalogDtoOptionalProperties();
 

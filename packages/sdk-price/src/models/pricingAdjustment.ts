@@ -14,22 +14,22 @@
  */
 export interface PricingAdjustment { 
     /**
-     * Adjustment type
+     * Adjustment amount; negative values reduce total
      */
-    type: string;
+    amount: number;
+    /**
+     * Human-readable adjustment label
+     */
+    label: string;
+    metadata?: any | null;
     /**
      * Source identifier that produced this adjustment
      */
     sourceId?: string;
     /**
-     * Human-readable adjustment label
+     * Adjustment type
      */
-    label: string;
-    /**
-     * Adjustment amount; negative values reduce total
-     */
-    amount: number;
-    metadata?: any | null;
+    type: string;
 }
 
 function isOptionalPricingAdjustmentPropertyOfType(
@@ -70,8 +70,8 @@ export function instanceOfPricingAdjustment(value: object): value is PricingAdju
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createPricingAdjustmentPropertyNames('type', 'label', 'amount', );
-    const optionalStringProperties = createPricingAdjustmentOptionalProperties({ name: 'type', nullable: false }, { name: 'sourceId', nullable: false }, { name: 'label', nullable: false }, );
+    const requiredProperties = createPricingAdjustmentPropertyNames('amount', 'label', 'type', );
+    const optionalStringProperties = createPricingAdjustmentOptionalProperties({ name: 'label', nullable: false }, { name: 'sourceId', nullable: false }, { name: 'type', nullable: false }, );
     const optionalNumberProperties = createPricingAdjustmentOptionalProperties({ name: 'amount', nullable: false }, );
     const optionalBooleanProperties = createPricingAdjustmentOptionalProperties();
 

@@ -14,46 +14,50 @@
  */
 export interface SubmitInquiryRequest { 
     /**
-     * How the inquiry arrived
-     */
-    channel: SubmitInquiryRequestChannelEnum;
-    /**
      * Whether this is a fleet or individual inquiry
      */
     audienceType: SubmitInquiryRequestAudienceTypeEnum;
+    /**
+     * Campaign that drove the inquiry
+     */
+    campaignCode?: string;
+    /**
+     * How the inquiry arrived
+     */
+    channel: SubmitInquiryRequestChannelEnum;
     /**
      * Who is asking
      */
     contactName: string;
     /**
-     * Organization name, for a fleet inquiry
-     */
-    organizationName?: string;
-    /**
      * Contact email
      */
     email?: string;
-    /**
-     * Contact phone
-     */
-    phone?: string;
-    /**
-     * Vehicle the inquiry concerns
-     */
-    vehicleOfInterest?: string;
-    /**
-     * Service the inquiry concerns
-     */
-    serviceOfInterest?: string;
     /**
      * Free-text message
      */
     message?: string;
     /**
-     * Campaign that drove the inquiry
+     * Organization name, for a fleet inquiry
      */
-    campaignCode?: string;
+    organizationName?: string;
+    /**
+     * Contact phone
+     */
+    phone?: string;
+    /**
+     * Service the inquiry concerns
+     */
+    serviceOfInterest?: string;
+    /**
+     * Vehicle the inquiry concerns
+     */
+    vehicleOfInterest?: string;
 }
+export enum SubmitInquiryRequestAudienceTypeEnum {
+    Commercial = 'COMMERCIAL',
+    Individual = 'INDIVIDUAL'
+};
 export enum SubmitInquiryRequestChannelEnum {
     WebForm = 'WEB_FORM',
     Phone = 'PHONE',
@@ -61,10 +65,6 @@ export enum SubmitInquiryRequestChannelEnum {
     Email = 'EMAIL',
     Referral = 'REFERRAL',
     Campaign = 'CAMPAIGN'
-};
-export enum SubmitInquiryRequestAudienceTypeEnum {
-    Commercial = 'COMMERCIAL',
-    Individual = 'INDIVIDUAL'
 };
 
 
@@ -107,8 +107,8 @@ export function instanceOfSubmitInquiryRequest(value: object): value is SubmitIn
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createSubmitInquiryRequestPropertyNames('channel', 'audienceType', 'contactName', );
-    const optionalStringProperties = createSubmitInquiryRequestOptionalProperties({ name: 'channel', nullable: false }, { name: 'audienceType', nullable: false }, { name: 'contactName', nullable: false }, { name: 'organizationName', nullable: false }, { name: 'email', nullable: false }, { name: 'phone', nullable: false }, { name: 'vehicleOfInterest', nullable: false }, { name: 'serviceOfInterest', nullable: false }, { name: 'message', nullable: false }, { name: 'campaignCode', nullable: false }, );
+    const requiredProperties = createSubmitInquiryRequestPropertyNames('audienceType', 'channel', 'contactName', );
+    const optionalStringProperties = createSubmitInquiryRequestOptionalProperties({ name: 'audienceType', nullable: false }, { name: 'campaignCode', nullable: false }, { name: 'channel', nullable: false }, { name: 'contactName', nullable: false }, { name: 'email', nullable: false }, { name: 'message', nullable: false }, { name: 'organizationName', nullable: false }, { name: 'phone', nullable: false }, { name: 'serviceOfInterest', nullable: false }, { name: 'vehicleOfInterest', nullable: false }, );
     const optionalNumberProperties = createSubmitInquiryRequestOptionalProperties();
     const optionalBooleanProperties = createSubmitInquiryRequestOptionalProperties();
 

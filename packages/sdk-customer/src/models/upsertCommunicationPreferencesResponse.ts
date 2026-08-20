@@ -14,17 +14,13 @@
  */
 export interface UpsertCommunicationPreferencesResponse { 
     /**
-     * Identifier of the party that was updated
-     */
-    partyId: string;
-    /**
-     * Updated version for optimistic locking
-     */
-    version?: string;
-    /**
      * Operation type (CREATED|UPDATED)
      */
     operationType: string;
+    /**
+     * Identifier of the party that was updated
+     */
+    partyId: string;
     /**
      * Update status (SUCCESS|CONFLICT)
      */
@@ -33,6 +29,10 @@ export interface UpsertCommunicationPreferencesResponse {
      * Timestamp of update (ISO 8601)
      */
     updatedAt?: string;
+    /**
+     * Updated version for optimistic locking
+     */
+    version?: string;
 }
 
 function isOptionalUpsertCommunicationPreferencesResponsePropertyOfType(
@@ -73,8 +73,8 @@ export function instanceOfUpsertCommunicationPreferencesResponse(value: object):
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createUpsertCommunicationPreferencesResponsePropertyNames('partyId', 'operationType', 'status', );
-    const optionalStringProperties = createUpsertCommunicationPreferencesResponseOptionalProperties({ name: 'partyId', nullable: false }, { name: 'version', nullable: false }, { name: 'operationType', nullable: false }, { name: 'status', nullable: false }, { name: 'updatedAt', nullable: false }, );
+    const requiredProperties = createUpsertCommunicationPreferencesResponsePropertyNames('operationType', 'partyId', 'status', );
+    const optionalStringProperties = createUpsertCommunicationPreferencesResponseOptionalProperties({ name: 'operationType', nullable: false }, { name: 'partyId', nullable: false }, { name: 'status', nullable: false }, { name: 'updatedAt', nullable: false }, { name: 'version', nullable: false }, );
     const optionalNumberProperties = createUpsertCommunicationPreferencesResponseOptionalProperties();
     const optionalBooleanProperties = createUpsertCommunicationPreferencesResponseOptionalProperties();
 

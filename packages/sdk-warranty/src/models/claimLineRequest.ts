@@ -14,9 +14,41 @@
  */
 export interface ClaimLineRequest { 
     /**
-     * Provenance of the line
+     * Line description snapshot
      */
-    sourceType: ClaimLineRequestSourceTypeEnum;
+    description?: string;
+    /**
+     * Tire DOT number
+     */
+    dotNumber?: string;
+    /**
+     * Measured remaining tread depth in 32nds of an inch
+     */
+    measuredTreadDepth?: number;
+    /**
+     * Original tread depth in 32nds of an inch
+     */
+    originalTreadDepth?: number;
+    /**
+     * Original unit price snapshot
+     */
+    originalUnitPrice?: number;
+    /**
+     * pos-catalog product id, when known
+     */
+    productEntityId?: string;
+    /**
+     * Quantity claimed; defaults to 1
+     */
+    quantity?: number;
+    /**
+     * Serial number of the failed unit
+     */
+    serialNumber?: string;
+    /**
+     * Catalog SKU snapshot
+     */
+    sku?: string;
     /**
      * Originating invoice or workorder id (null for MANUAL lines)
      */
@@ -26,41 +58,9 @@ export interface ClaimLineRequest {
      */
     sourceLineId?: string;
     /**
-     * pos-catalog product id, when known
+     * Provenance of the line
      */
-    productEntityId?: string;
-    /**
-     * Catalog SKU snapshot
-     */
-    sku?: string;
-    /**
-     * Line description snapshot
-     */
-    description?: string;
-    /**
-     * Serial number of the failed unit
-     */
-    serialNumber?: string;
-    /**
-     * Tire DOT number
-     */
-    dotNumber?: string;
-    /**
-     * Quantity claimed; defaults to 1
-     */
-    quantity?: number;
-    /**
-     * Original unit price snapshot
-     */
-    originalUnitPrice?: number;
-    /**
-     * Original tread depth in 32nds of an inch
-     */
-    originalTreadDepth?: number;
-    /**
-     * Measured remaining tread depth in 32nds of an inch
-     */
-    measuredTreadDepth?: number;
+    sourceType: ClaimLineRequestSourceTypeEnum;
 }
 export enum ClaimLineRequestSourceTypeEnum {
     InvoiceLine = 'INVOICE_LINE',
@@ -110,8 +110,8 @@ export function instanceOfClaimLineRequest(value: object): value is ClaimLineReq
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createClaimLineRequestPropertyNames('sourceType', );
-    const optionalStringProperties = createClaimLineRequestOptionalProperties({ name: 'sourceType', nullable: false }, { name: 'sourceId', nullable: false }, { name: 'sourceLineId', nullable: false }, { name: 'productEntityId', nullable: false }, { name: 'sku', nullable: false }, { name: 'description', nullable: false }, { name: 'serialNumber', nullable: false }, { name: 'dotNumber', nullable: false }, );
-    const optionalNumberProperties = createClaimLineRequestOptionalProperties({ name: 'quantity', nullable: false }, { name: 'originalUnitPrice', nullable: false }, { name: 'originalTreadDepth', nullable: false }, { name: 'measuredTreadDepth', nullable: false }, );
+    const optionalStringProperties = createClaimLineRequestOptionalProperties({ name: 'description', nullable: false }, { name: 'dotNumber', nullable: false }, { name: 'productEntityId', nullable: false }, { name: 'serialNumber', nullable: false }, { name: 'sku', nullable: false }, { name: 'sourceId', nullable: false }, { name: 'sourceLineId', nullable: false }, { name: 'sourceType', nullable: false }, );
+    const optionalNumberProperties = createClaimLineRequestOptionalProperties({ name: 'measuredTreadDepth', nullable: false }, { name: 'originalTreadDepth', nullable: false }, { name: 'originalUnitPrice', nullable: false }, { name: 'quantity', nullable: false }, );
     const optionalBooleanProperties = createClaimLineRequestOptionalProperties();
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

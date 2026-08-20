@@ -44,24 +44,83 @@ export class ChangeRequestAPIService extends BaseService {
     }
 
     /**
-     * Apply emergency override
-     * Manager applies emergency override to approve a change request with exception. Requires Manager role and a valid exception reason. Items move from PENDING_APPROVAL to READY_TO_EXECUTE status.
-     * @endpoint post /v1/workorders/changeRequests/{changeId}/emergency-override
+     * Record Customer Denial Acknowledgment
+     * Records that the customer acknowledged the denial of a declined emergency or safety change request, marking every emergency-flagged service and part item on it as acknowledged. Use this tool after a customer refuses safety-critical work so the vehicle can be released; use checkWorkorderCanClose instead to verify whether any acknowledgments are still outstanding. Preconditions: the change request must exist, be flagged as an emergency or safety exception, and be in DECLINED status. Required inputs: changeId (UUID) as a path parameter; there is no request body. Emits a WORKORDER_CHANGE_REQUEST_DENIAL_ACKNOWLEDGE event. Returns 204 on success, and 400 when the change request cannot be found, is not an emergency exception, or is not declined — all failures surface as 400 in this operation. 
+     * @endpoint post /v1/workorders/changeRequests/{changeId}/acknowledgeDenial
      * @param changeId ID of the change request
-     * @param emergencyOverrideDTO Emergency override details including manager ID and reason
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public applyEmergencyOverride(changeId: string, emergencyOverrideDTO: EmergencyOverrideDTO, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ChangeRequestResponse>;
-    public applyEmergencyOverride(changeId: string, emergencyOverrideDTO: EmergencyOverrideDTO, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ChangeRequestResponse>>;
-    public applyEmergencyOverride(changeId: string, emergencyOverrideDTO: EmergencyOverrideDTO, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ChangeRequestResponse>>;
-    public applyEmergencyOverride(changeId: string, emergencyOverrideDTO: EmergencyOverrideDTO, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public acknowledgeChangeRequestDenial(changeId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
+    public acknowledgeChangeRequestDenial(changeId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
+    public acknowledgeChangeRequestDenial(changeId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
+    public acknowledgeChangeRequestDenial(changeId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (changeId === null || changeId === undefined) {
-            throw new Error('Required parameter changeId was null or undefined when calling applyEmergencyOverride.');
+            throw new Error('Required parameter changeId was null or undefined when calling acknowledgeChangeRequestDenial.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/workorders/changeRequests/${this.configuration.encodeParam({name: "changeId", value: changeId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/acknowledgeDenial`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<any>('post', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Apply Manager Emergency Override
+     * Applies a manager\&#39;s emergency override to a change request awaiting advisor review, setting it to APPROVED_WITH_EXCEPTION, flagging it as an emergency exception, and moving its items to READY_TO_EXECUTE. Use this tool only when safety-critical work must proceed without the normal approval artifact; do not use approveChangeRequest, which is the standard advisor approval. Preconditions: the change request must exist in AWAITING_ADVISOR_REVIEW status, and the caller must hold workorder:change_request:emergency_override — the caller\&#39;s identity becomes the overriding manager of record. Required inputs: changeId (UUID) as a path parameter and a non-blank exceptionReason; the managerId body field is ignored in favor of the security context. Emits a WORKORDER_CHANGE_REQUEST_EMERGENCY_OVERRIDE event and persists an ApprovalRecord with the APPROVED_WITH_EXCEPTION resolution. Returns 400 when the change request cannot be found, is not awaiting review, or the reason is missing — all failures surface as 400 in this operation. 
+     * @endpoint post /v1/workorders/changeRequests/{changeId}/emergency-override
+     * @param changeId ID of the change request
+     * @param emergencyOverrideDTO Reason justifying the manager\&#39;s emergency exception approval.
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public applyChangeRequestEmergencyOverride(changeId: string, emergencyOverrideDTO: EmergencyOverrideDTO, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ChangeRequestResponse>;
+    public applyChangeRequestEmergencyOverride(changeId: string, emergencyOverrideDTO: EmergencyOverrideDTO, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ChangeRequestResponse>>;
+    public applyChangeRequestEmergencyOverride(changeId: string, emergencyOverrideDTO: EmergencyOverrideDTO, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ChangeRequestResponse>>;
+    public applyChangeRequestEmergencyOverride(changeId: string, emergencyOverrideDTO: EmergencyOverrideDTO, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (changeId === null || changeId === undefined) {
+            throw new Error('Required parameter changeId was null or undefined when calling applyChangeRequestEmergencyOverride.');
         }
         if (emergencyOverrideDTO === null || emergencyOverrideDTO === undefined) {
-            throw new Error('Required parameter emergencyOverrideDTO was null or undefined when calling applyEmergencyOverride.');
+            throw new Error('Required parameter emergencyOverrideDTO was null or undefined when calling applyChangeRequestEmergencyOverride.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -101,7 +160,7 @@ export class ChangeRequestAPIService extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/workorders/changeRequests/${this.configuration.encodeParam({name: "changeId", value: changeId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/emergency-override`;
+        let localVarPath = `/v1/workorders/changeRequests/${this.configuration.encodeParam({name: "changeId", value: changeId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/emergency-override`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<ChangeRequestResponse>('post', `${basePath}${localVarPath}`,
             {
@@ -118,11 +177,11 @@ export class ChangeRequestAPIService extends BaseService {
     }
 
     /**
-     * Approve a change request
-     * Service Advisor approves the change request. Items move from PENDING_APPROVAL to READY_TO_EXECUTE status. Approval note is required as the approval artifact.
+     * Approve a Change Request
+     * Approves a change request awaiting advisor review, setting it to APPROVED, writing an immutable approval record, and moving its items from PENDING_APPROVAL to READY_TO_EXECUTE. Use this tool for a normal advisor approval; do not use applyChangeRequestEmergencyOverride, which is the manager\&#39;s exception path producing APPROVED_WITH_EXCEPTION. Preconditions: the change request must exist in AWAITING_ADVISOR_REVIEW status, and the caller must be an authenticated user whose identity becomes the approver of record. Required inputs: changeId (UUID) as a path parameter and a non-blank approvalNote as the approval artifact; the approvedBy body field is ignored in favor of the security context. Emits a WORKORDER_CHANGE_REQUEST_APPROVE event and persists an ApprovalRecord audit row. Returns 400 when the change request cannot be found, is not awaiting review, or the note is missing — all failures surface as 400 in this operation. 
      * @endpoint post /v1/workorders/changeRequests/{changeId}/approve
      * @param changeId ID of the change request
-     * @param approveChangeRequestDTO Approval details including user ID and note
+     * @param approveChangeRequestDTO Advisor\&#39;s approval note recorded as the approval artifact.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -175,7 +234,7 @@ export class ChangeRequestAPIService extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/workorders/changeRequests/${this.configuration.encodeParam({name: "changeId", value: changeId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/approve`;
+        let localVarPath = `/v1/workorders/changeRequests/${this.configuration.encodeParam({name: "changeId", value: changeId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/approve`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<ChangeRequestResponse>('post', `${basePath}${localVarPath}`,
             {
@@ -192,20 +251,20 @@ export class ChangeRequestAPIService extends BaseService {
     }
 
     /**
-     * Check if work order can be closed
-     * Verify all declined emergency/safety items have customer denial acknowledgment
+     * Check Workorder Close Eligibility
+     * Checks whether a workorder can be closed with respect to declined emergency change requests, returning true only when every declined emergency or safety item has a customer denial acknowledgment. Use this tool before completing a workorder that had declined safety work; use acknowledgeChangeRequestDenial to clear a blocking acknowledgment rather than re-polling this check. Preconditions: none — a workorder with no declined emergency requests yields true. Required inputs: workorderId (UUID) as a path parameter. No events are emitted and no state changes; this is a read-only check. Returns 200 with a bare boolean body; no 404 is produced for unknown workorders. 
      * @endpoint get /v1/workorders/{workorderId}/canClose
      * @param workorderId ID of the work order
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public canCloseWorkorder(workorderId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<boolean>;
-    public canCloseWorkorder(workorderId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<boolean>>;
-    public canCloseWorkorder(workorderId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<boolean>>;
-    public canCloseWorkorder(workorderId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public checkWorkorderCanClose(workorderId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<boolean>;
+    public checkWorkorderCanClose(workorderId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<boolean>>;
+    public checkWorkorderCanClose(workorderId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<boolean>>;
+    public checkWorkorderCanClose(workorderId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (workorderId === null || workorderId === undefined) {
-            throw new Error('Required parameter workorderId was null or undefined when calling canCloseWorkorder.');
+            throw new Error('Required parameter workorderId was null or undefined when calling checkWorkorderCanClose.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -236,7 +295,7 @@ export class ChangeRequestAPIService extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/workorders/${this.configuration.encodeParam({name: "workorderId", value: workorderId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/canClose`;
+        let localVarPath = `/v1/workorders/${this.configuration.encodeParam({name: "workorderId", value: workorderId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/canClose`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<boolean>('get', `${basePath}${localVarPath}`,
             {
@@ -252,11 +311,11 @@ export class ChangeRequestAPIService extends BaseService {
     }
 
     /**
-     * Create a change request
-     * Technician creates a request for additional work beyond authorized scope. Items are marked as PENDING_APPROVAL until advisor approves. Requires description and at least one service or part item. Supports idempotent creation via Idempotency-Key header to prevent duplicate change requests.
+     * Create Change Request for Additional Work
+     * Creates a change request for work beyond the authorized scope, placing it in AWAITING_ADVISOR_REVIEW with its service and part items marked PENDING_APPROVAL. Use this tool when a technician finds additional work mid-job; do not use approveChangeRequest or declineChangeRequest, which are the advisor\&#39;s decision steps on an existing request. Preconditions: the workorder must exist and be in WORK_IN_PROGRESS status, and emergency exception requests must carry the required emergency documentation on their items. Required inputs: workorderId (UUID) as a path parameter, a non-blank description, and at least one entry in services or parts; an Idempotency-Key header is recommended — a repeated key returns the originally created request instead of a duplicate. Emits a WORKORDER_CHANGE_REQUEST_CREATE event and renders a supplemental estimate PDF via the documents service when items are present. Returns 400 when the description or items are missing, the workorder is absent or not WORK_IN_PROGRESS, or emergency documentation is incomplete — all failures surface as 400 in this operation. 
      * @endpoint post /v1/workorders/{workorderId}/changeRequests
      * @param workorderId ID of the work order
-     * @param createChangeRequestDTO Change request details including items
+     * @param createChangeRequestDTO Requested additional work: description plus the service and part items needing approval.
      * @param idempotencyKey Optional idempotency key to prevent duplicate creation (recommended for retries)
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
@@ -313,7 +372,7 @@ export class ChangeRequestAPIService extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/workorders/${this.configuration.encodeParam({name: "workorderId", value: workorderId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/changeRequests`;
+        let localVarPath = `/v1/workorders/${this.configuration.encodeParam({name: "workorderId", value: workorderId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/changeRequests`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<ChangeRequestResponse>('post', `${basePath}${localVarPath}`,
             {
@@ -330,11 +389,11 @@ export class ChangeRequestAPIService extends BaseService {
     }
 
     /**
-     * Decline a change request
-     * Service Advisor declines the change request. Items move from PENDING_APPROVAL to CANCELLED status (not billable). Approval note is required to record the decline decision.
+     * Decline a Change Request
+     * Declines a change request awaiting advisor review, setting it to DECLINED, writing an immutable approval record, and moving its items from PENDING_APPROVAL to CANCELLED so they are not billable. Use this tool when the customer refuses the additional work; do not use approveChangeRequest, which authorizes the work instead. Preconditions: the change request must exist in AWAITING_ADVISOR_REVIEW status, and the caller must be an authenticated user whose identity becomes the decliner of record. Required inputs: changeId (UUID) as a path parameter and a non-blank approvalNote recording the decline decision. Emits a WORKORDER_CHANGE_REQUEST_DECLINE event; declined emergency items later require acknowledgeChangeRequestDenial before the workorder can close. Returns 400 when the change request cannot be found, is not awaiting review, or the note is missing — all failures surface as 400 in this operation. 
      * @endpoint post /v1/workorders/changeRequests/{changeId}/decline
      * @param changeId ID of the change request
-     * @param declineChangeRequestDTO Decline details including note
+     * @param declineChangeRequestDTO Advisor\&#39;s note recording why the change request was declined.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -387,7 +446,7 @@ export class ChangeRequestAPIService extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/workorders/changeRequests/${this.configuration.encodeParam({name: "changeId", value: changeId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/decline`;
+        let localVarPath = `/v1/workorders/changeRequests/${this.configuration.encodeParam({name: "changeId", value: changeId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/decline`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<ChangeRequestResponse>('post', `${basePath}${localVarPath}`,
             {
@@ -404,20 +463,20 @@ export class ChangeRequestAPIService extends BaseService {
     }
 
     /**
-     * Get change request by ID
-     * Retrieve details of a specific change request
+     * Get Change Request by Id
+     * Returns one change request with its status, description, emergency flags, approval details, and item associations. Use this tool when the change request id is known; use listChangeRequests instead to see every change request on a workorder. Preconditions: the change request must exist. Required inputs: changeId (UUID) as a path parameter. No events are emitted and no state changes; this is a read-only projection. Returns 404 when no change request exists for the id. 
      * @endpoint get /v1/workorders/changeRequests/{changeId}
      * @param changeId ID of the change request
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public getChangeRequestById(changeId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ChangeRequestResponse>;
-    public getChangeRequestById(changeId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ChangeRequestResponse>>;
-    public getChangeRequestById(changeId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ChangeRequestResponse>>;
-    public getChangeRequestById(changeId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getChangeRequest(changeId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ChangeRequestResponse>;
+    public getChangeRequest(changeId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ChangeRequestResponse>>;
+    public getChangeRequest(changeId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ChangeRequestResponse>>;
+    public getChangeRequest(changeId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (changeId === null || changeId === undefined) {
-            throw new Error('Required parameter changeId was null or undefined when calling getChangeRequestById.');
+            throw new Error('Required parameter changeId was null or undefined when calling getChangeRequest.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -448,7 +507,7 @@ export class ChangeRequestAPIService extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/workorders/changeRequests/${this.configuration.encodeParam({name: "changeId", value: changeId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
+        let localVarPath = `/v1/workorders/changeRequests/${this.configuration.encodeParam({name: "changeId", value: changeId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<ChangeRequestResponse>('get', `${basePath}${localVarPath}`,
             {
@@ -464,20 +523,20 @@ export class ChangeRequestAPIService extends BaseService {
     }
 
     /**
-     * Get all change requests for a work order
-     * Retrieve all change requests associated with a specific work order
+     * List Change Requests for Workorder
+     * Returns every change request attached to a workorder, in all statuses from AWAITING_ADVISOR_REVIEW through APPROVED, DECLINED, CANCELLED, and APPROVED_WITH_EXCEPTION. Use this tool when reviewing a workorder\&#39;s additional-work history; use getChangeRequest instead for one request by id. Preconditions: none — an unknown workorderId simply yields an empty list. Required inputs: workorderId (UUID) as a path parameter. Emits a WORKORDER_CHANGE_REQUEST_LIST audit event; no change request state changes — this is a read-only projection. Returns 200 with the list, possibly empty; no 404 is produced for unknown workorders. 
      * @endpoint get /v1/workorders/{workorderId}/changeRequests
      * @param workorderId ID of the work order
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public getChangeRequestsByWorkorder(workorderId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<ChangeRequestResponse>>;
-    public getChangeRequestsByWorkorder(workorderId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<ChangeRequestResponse>>>;
-    public getChangeRequestsByWorkorder(workorderId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<ChangeRequestResponse>>>;
-    public getChangeRequestsByWorkorder(workorderId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public listChangeRequests(workorderId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<ChangeRequestResponse>>;
+    public listChangeRequests(workorderId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<ChangeRequestResponse>>>;
+    public listChangeRequests(workorderId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<ChangeRequestResponse>>>;
+    public listChangeRequests(workorderId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (workorderId === null || workorderId === undefined) {
-            throw new Error('Required parameter workorderId was null or undefined when calling getChangeRequestsByWorkorder.');
+            throw new Error('Required parameter workorderId was null or undefined when calling listChangeRequests.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -508,68 +567,9 @@ export class ChangeRequestAPIService extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/workorders/${this.configuration.encodeParam({name: "workorderId", value: workorderId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/changeRequests`;
+        let localVarPath = `/v1/workorders/${this.configuration.encodeParam({name: "workorderId", value: workorderId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/changeRequests`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<Array<ChangeRequestResponse>>('get', `${basePath}${localVarPath}`,
-            {
-                context: localVarHttpContext,
-                responseType: <any>responseType_,
-                ...(withCredentials ? { withCredentials } : {}),
-                headers: localVarHeaders,
-                observe: observe,
-                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * Record customer denial acknowledgment
-     * For declined emergency/safety items, record that customer acknowledged the denial. Required before closing the work order and returning the vehicle.
-     * @endpoint post /v1/workorders/changeRequests/{changeId}/acknowledgeDenial
-     * @param changeId ID of the change request
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     * @param options additional options
-     */
-    public recordCustomerDenialAcknowledgment(changeId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public recordCustomerDenialAcknowledgment(changeId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public recordCustomerDenialAcknowledgment(changeId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public recordCustomerDenialAcknowledgment(changeId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
-        if (changeId === null || changeId === undefined) {
-            throw new Error('Required parameter changeId was null or undefined when calling recordCustomerDenialAcknowledgment.');
-        }
-
-        let localVarHeaders = this.defaultHeaders;
-
-        // authentication (bearerAuth) required
-        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
-
-        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
-        ]);
-        if (localVarHttpHeaderAcceptSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
-        }
-
-        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
-
-        const localVarTransferCache: boolean = options?.transferCache ?? true;
-
-
-        let responseType_: 'text' | 'json' | 'blob' = 'json';
-        if (localVarHttpHeaderAcceptSelected) {
-            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
-                responseType_ = 'text';
-            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
-                responseType_ = 'json';
-            } else {
-                responseType_ = 'blob';
-            }
-        }
-
-        let localVarPath = `/v1/workorders/changeRequests/${this.configuration.encodeParam({name: "changeId", value: changeId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/acknowledgeDenial`;
-        const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<any>('post', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,

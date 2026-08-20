@@ -10,42 +10,42 @@
 
 
 /**
- * Customer object to be created
+ * Customer data transfer object for API operations
  */
 export interface CustomerDTO { 
-    /**
-     * Unique identifier of the customer
-     */
-    id?: string;
-    /**
-     * CRM party identifier. Equal to id; exposed explicitly so callers can pass it to the CRM snapshot endpoints (GET /v1/crm/snapshot/party/{partyId}) without assuming the id mapping.
-     */
-    partyId?: string;
     /**
      * Unique customer number
      */
     customerNumber?: string;
     /**
-     * Last name of the customer
+     * Type of customer (e.g., \'retail\', \'commercial\')
      */
-    lastName: string;
+    customerType?: string;
     /**
-     * First name of the customer
+     * First name of the customer. For a commercial party (customerType=COMMERCIAL), this field carries the organization\'s display name instead. Required when creating a customer (POST); optional on update (PUT), where an absent value leaves the existing name unchanged.
      */
-    firstName: string;
+    firstName?: string;
+    /**
+     * Unique identifier of the customer
+     */
+    id?: string;
+    /**
+     * Last name of the customer. For a commercial party (customerType=COMMERCIAL), this field carries the organization\'s legal/registered name instead. Required when creating a customer (POST); optional on update (PUT), where an absent value leaves the existing name unchanged.
+     */
+    lastName?: string;
+    /**
+     * CRM party identifier. Equal to id; exposed explicitly so callers can pass it to the CRM snapshot endpoints (GET /v1/crm/snapshot/party/{partyId}) without assuming the id mapping.
+     */
+    partyId?: string;
     /**
      * Legacy free-text address label. Superseded by the structured postal address in pos-people-contact (FI-4); retained for display compatibility.
      * @deprecated
      */
     primaryAddress?: string;
     /**
-     * List of vehicle VINs associated with the customer
+     * List of vehicle VINs associated with the customer. Omitting this field on an update leaves the customer\'s existing VINs unchanged; sending an empty list clears them.
      */
     vehicleVins?: Array<string>;
-    /**
-     * Type of customer (e.g., \'retail\', \'commercial\')
-     */
-    customerType?: string;
 }
 
 function isOptionalCustomerDTOPropertyOfType(
@@ -86,8 +86,8 @@ export function instanceOfCustomerDTO(value: object): value is CustomerDTO {
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createCustomerDTOPropertyNames('lastName', 'firstName', );
-    const optionalStringProperties = createCustomerDTOOptionalProperties({ name: 'id', nullable: false }, { name: 'partyId', nullable: false }, { name: 'customerNumber', nullable: false }, { name: 'lastName', nullable: false }, { name: 'firstName', nullable: false }, { name: 'primaryAddress', nullable: false }, { name: 'customerType', nullable: false }, );
+    const requiredProperties = createCustomerDTOPropertyNames();
+    const optionalStringProperties = createCustomerDTOOptionalProperties({ name: 'customerNumber', nullable: false }, { name: 'customerType', nullable: false }, { name: 'firstName', nullable: false }, { name: 'id', nullable: false }, { name: 'lastName', nullable: false }, { name: 'partyId', nullable: false }, { name: 'primaryAddress', nullable: false }, );
     const optionalNumberProperties = createCustomerDTOOptionalProperties();
     const optionalBooleanProperties = createCustomerDTOOptionalProperties();
 

@@ -14,49 +14,49 @@
  */
 export interface RefundPaymentResponse { 
     /**
-     * Unique identifier of the refund
-     */
-    refundId: string;
-    /**
-     * Identifier of the invoice being refunded; absent for party-anchored standalone refunds
-     */
-    invoiceId?: string;
-    /**
-     * Identifier of the originating payment intent; absent for standalone refunds
-     */
-    paymentIntentId?: string;
-    /**
-     * Customer party associated with the refund — the anchor for standalone refunds, derived from the invoice for invoice- and payment-anchored refunds
-     */
-    partyId?: string;
-    /**
      * Refunded amount
      */
     amount?: number;
     /**
-     * Reason for the refund
+     * Timestamp when the refund completed
      */
-    reason?: RefundPaymentResponseReasonEnum;
-    /**
-     * Free-text notes accompanying the refund
-     */
-    notes?: string;
-    /**
-     * Current status of the refund
-     */
-    status: RefundPaymentResponseStatusEnum;
-    /**
-     * Gateway reference identifier for the refund
-     */
-    gatewayReference?: string;
+    completedAt?: string;
     /**
      * Optional correlation id to an external record (e.g. a warranty claim settlement)
      */
     externalReference?: string;
     /**
-     * Timestamp when the refund completed
+     * Gateway reference identifier for the refund
      */
-    completedAt?: string;
+    gatewayReference?: string;
+    /**
+     * Identifier of the invoice being refunded; absent for party-anchored standalone refunds
+     */
+    invoiceId?: string;
+    /**
+     * Free-text notes accompanying the refund
+     */
+    notes?: string;
+    /**
+     * Customer party associated with the refund — the anchor for standalone refunds, derived from the invoice for invoice- and payment-anchored refunds
+     */
+    partyId?: string;
+    /**
+     * Identifier of the originating payment intent; absent for standalone refunds
+     */
+    paymentIntentId?: string;
+    /**
+     * Reason for the refund
+     */
+    reason?: RefundPaymentResponseReasonEnum;
+    /**
+     * Unique identifier of the refund
+     */
+    refundId: string;
+    /**
+     * Current status of the refund
+     */
+    status: RefundPaymentResponseStatusEnum;
 }
 export enum RefundPaymentResponseReasonEnum {
     CustomerReturn = 'CUSTOMER_RETURN',
@@ -116,7 +116,7 @@ export function instanceOfRefundPaymentResponse(value: object): value is RefundP
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createRefundPaymentResponsePropertyNames('refundId', 'status', );
-    const optionalStringProperties = createRefundPaymentResponseOptionalProperties({ name: 'refundId', nullable: false }, { name: 'invoiceId', nullable: false }, { name: 'paymentIntentId', nullable: false }, { name: 'partyId', nullable: false }, { name: 'reason', nullable: false }, { name: 'notes', nullable: false }, { name: 'status', nullable: false }, { name: 'gatewayReference', nullable: false }, { name: 'externalReference', nullable: false }, { name: 'completedAt', nullable: false }, );
+    const optionalStringProperties = createRefundPaymentResponseOptionalProperties({ name: 'completedAt', nullable: false }, { name: 'externalReference', nullable: false }, { name: 'gatewayReference', nullable: false }, { name: 'invoiceId', nullable: false }, { name: 'notes', nullable: false }, { name: 'partyId', nullable: false }, { name: 'paymentIntentId', nullable: false }, { name: 'reason', nullable: false }, { name: 'refundId', nullable: false }, { name: 'status', nullable: false }, );
     const optionalNumberProperties = createRefundPaymentResponseOptionalProperties({ name: 'amount', nullable: false }, );
     const optionalBooleanProperties = createRefundPaymentResponseOptionalProperties();
 

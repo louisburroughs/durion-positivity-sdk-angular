@@ -18,25 +18,25 @@ export interface TrialBalanceRow {
      */
     accountId: string;
     /**
-     * GL account number (chart-of-accounts code)
-     */
-    accountNumber: string;
-    /**
      * GL account display name
      */
     accountName: string;
     /**
-     * Sum of POSTED debit amounts for the account up to the as-of date
+     * GL account number (chart-of-accounts code)
      */
-    totalDebit: number;
+    accountNumber: string;
+    /**
+     * Net account balance (totalDebit - totalCredit, signed)
+     */
+    balance: number;
     /**
      * Sum of POSTED credit amounts for the account up to the as-of date
      */
     totalCredit: number;
     /**
-     * Net account balance (totalDebit - totalCredit, signed)
+     * Sum of POSTED debit amounts for the account up to the as-of date
      */
-    balance: number;
+    totalDebit: number;
 }
 
 function isOptionalTrialBalanceRowPropertyOfType(
@@ -77,9 +77,9 @@ export function instanceOfTrialBalanceRow(value: object): value is TrialBalanceR
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createTrialBalanceRowPropertyNames('accountId', 'accountNumber', 'accountName', 'totalDebit', 'totalCredit', 'balance', );
-    const optionalStringProperties = createTrialBalanceRowOptionalProperties({ name: 'accountId', nullable: false }, { name: 'accountNumber', nullable: false }, { name: 'accountName', nullable: false }, );
-    const optionalNumberProperties = createTrialBalanceRowOptionalProperties({ name: 'totalDebit', nullable: false }, { name: 'totalCredit', nullable: false }, { name: 'balance', nullable: false }, );
+    const requiredProperties = createTrialBalanceRowPropertyNames('accountId', 'accountName', 'accountNumber', 'balance', 'totalCredit', 'totalDebit', );
+    const optionalStringProperties = createTrialBalanceRowOptionalProperties({ name: 'accountId', nullable: false }, { name: 'accountName', nullable: false }, { name: 'accountNumber', nullable: false }, );
+    const optionalNumberProperties = createTrialBalanceRowOptionalProperties({ name: 'balance', nullable: false }, { name: 'totalCredit', nullable: false }, { name: 'totalDebit', nullable: false }, );
     const optionalBooleanProperties = createTrialBalanceRowOptionalProperties();
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

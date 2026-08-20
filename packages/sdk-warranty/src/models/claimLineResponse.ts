@@ -13,49 +13,49 @@
  * Warranty claim line
  */
 export interface ClaimLineResponse { 
-    id?: string;
-    sourceType?: ClaimLineResponseSourceTypeEnum;
-    sourceId?: string;
-    sourceLineId?: string;
-    productEntityId?: string;
-    sku?: string;
+    amountApproved?: number;
+    amountRequested?: number;
     description?: string;
-    serialNumber?: string;
     dotNumber?: string;
-    quantity?: number;
-    originalUnitPrice?: number;
-    /**
-     * Original tread depth in 32nds of an inch
-     */
-    originalTreadDepth?: number;
+    id?: string;
+    lineDisposition?: ClaimLineResponseLineDispositionEnum;
     /**
      * Measured remaining tread depth in 32nds of an inch
      */
     measuredTreadDepth?: number;
     /**
-     * Computed credit fraction in [0, 1]
+     * Original tread depth in 32nds of an inch
      */
-    prorationPct?: number;
+    originalTreadDepth?: number;
+    originalUnitPrice?: number;
+    productEntityId?: string;
     /**
      * Every number that fed the proration computation
      */
     prorationInputs?: object;
-    amountRequested?: number;
-    amountApproved?: number;
-    lineDisposition?: ClaimLineResponseLineDispositionEnum;
+    /**
+     * Computed credit fraction in [0, 1]
+     */
+    prorationPct?: number;
+    quantity?: number;
+    serialNumber?: string;
+    sku?: string;
+    sourceId?: string;
+    sourceLineId?: string;
+    sourceType?: ClaimLineResponseSourceTypeEnum;
 }
-export enum ClaimLineResponseSourceTypeEnum {
-    InvoiceLine = 'INVOICE_LINE',
-    WorkorderPart = 'WORKORDER_PART',
-    WorkorderService = 'WORKORDER_SERVICE',
-    Manual = 'MANUAL'
-};
 export enum ClaimLineResponseLineDispositionEnum {
     Pending = 'PENDING',
     Approved = 'APPROVED',
     PartiallyApproved = 'PARTIALLY_APPROVED',
     Denied = 'DENIED',
     Withdrawn = 'WITHDRAWN'
+};
+export enum ClaimLineResponseSourceTypeEnum {
+    InvoiceLine = 'INVOICE_LINE',
+    WorkorderPart = 'WORKORDER_PART',
+    WorkorderService = 'WORKORDER_SERVICE',
+    Manual = 'MANUAL'
 };
 
 
@@ -99,8 +99,8 @@ export function instanceOfClaimLineResponse(value: object): value is ClaimLineRe
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createClaimLineResponsePropertyNames();
-    const optionalStringProperties = createClaimLineResponseOptionalProperties({ name: 'id', nullable: false }, { name: 'sourceType', nullable: false }, { name: 'sourceId', nullable: false }, { name: 'sourceLineId', nullable: false }, { name: 'productEntityId', nullable: false }, { name: 'sku', nullable: false }, { name: 'description', nullable: false }, { name: 'serialNumber', nullable: false }, { name: 'dotNumber', nullable: false }, { name: 'lineDisposition', nullable: false }, );
-    const optionalNumberProperties = createClaimLineResponseOptionalProperties({ name: 'quantity', nullable: false }, { name: 'originalUnitPrice', nullable: false }, { name: 'originalTreadDepth', nullable: false }, { name: 'measuredTreadDepth', nullable: false }, { name: 'prorationPct', nullable: false }, { name: 'amountRequested', nullable: false }, { name: 'amountApproved', nullable: false }, );
+    const optionalStringProperties = createClaimLineResponseOptionalProperties({ name: 'description', nullable: false }, { name: 'dotNumber', nullable: false }, { name: 'id', nullable: false }, { name: 'lineDisposition', nullable: false }, { name: 'productEntityId', nullable: false }, { name: 'serialNumber', nullable: false }, { name: 'sku', nullable: false }, { name: 'sourceId', nullable: false }, { name: 'sourceLineId', nullable: false }, { name: 'sourceType', nullable: false }, );
+    const optionalNumberProperties = createClaimLineResponseOptionalProperties({ name: 'amountApproved', nullable: false }, { name: 'amountRequested', nullable: false }, { name: 'measuredTreadDepth', nullable: false }, { name: 'originalTreadDepth', nullable: false }, { name: 'originalUnitPrice', nullable: false }, { name: 'prorationPct', nullable: false }, { name: 'quantity', nullable: false }, );
     const optionalBooleanProperties = createClaimLineResponseOptionalProperties();
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

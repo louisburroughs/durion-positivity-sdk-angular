@@ -14,21 +14,13 @@
  */
 export interface ExemptionCertificateRequest { 
     /**
-     * Customer this certificate belongs to
-     */
-    customerId: string;
-    /**
-     * State/region scope (subdivision code); null applies to all states
-     */
-    stateScope?: string;
-    /**
-     * Exemption reason (RESALE, GOVERNMENT, NONPROFIT, AGRICULTURAL, OTHER)
-     */
-    reasonCode: ExemptionCertificateRequestReasonCodeEnum;
-    /**
      * Optional external/paper certificate number
      */
     certificateNumber?: string;
+    /**
+     * Customer this certificate belongs to
+     */
+    customerId: string;
     /**
      * Inclusive date the certificate becomes effective
      */
@@ -37,6 +29,14 @@ export interface ExemptionCertificateRequest {
      * Inclusive expiry date; null means no expiry
      */
     expiresAt?: string;
+    /**
+     * Exemption reason (RESALE, GOVERNMENT, NONPROFIT, AGRICULTURAL, OTHER)
+     */
+    reasonCode: ExemptionCertificateRequestReasonCodeEnum;
+    /**
+     * State/region scope (subdivision code); null applies to all states
+     */
+    stateScope?: string;
     /**
      * Lifecycle status; defaults to ACTIVE when omitted on create
      */
@@ -95,8 +95,8 @@ export function instanceOfExemptionCertificateRequest(value: object): value is E
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createExemptionCertificateRequestPropertyNames('customerId', 'reasonCode', 'effectiveFrom', );
-    const optionalStringProperties = createExemptionCertificateRequestOptionalProperties({ name: 'customerId', nullable: false }, { name: 'stateScope', nullable: false }, { name: 'reasonCode', nullable: false }, { name: 'certificateNumber', nullable: false }, { name: 'effectiveFrom', nullable: false }, { name: 'expiresAt', nullable: false }, { name: 'status', nullable: false }, );
+    const requiredProperties = createExemptionCertificateRequestPropertyNames('customerId', 'effectiveFrom', 'reasonCode', );
+    const optionalStringProperties = createExemptionCertificateRequestOptionalProperties({ name: 'certificateNumber', nullable: false }, { name: 'customerId', nullable: false }, { name: 'effectiveFrom', nullable: false }, { name: 'expiresAt', nullable: false }, { name: 'reasonCode', nullable: false }, { name: 'stateScope', nullable: false }, { name: 'status', nullable: false }, );
     const optionalNumberProperties = createExemptionCertificateRequestOptionalProperties();
     const optionalBooleanProperties = createExemptionCertificateRequestOptionalProperties();
 

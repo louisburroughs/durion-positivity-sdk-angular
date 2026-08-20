@@ -18,6 +18,10 @@ export interface ReturnLineDto {
      */
     itemId: string;
     /**
+     * Identifier of the location the item is returned to
+     */
+    locationId: string;
+    /**
      * Quantity of the item being returned
      */
     quantity: number;
@@ -25,10 +29,6 @@ export interface ReturnLineDto {
      * Reason code explaining the return
      */
     reasonCode: string;
-    /**
-     * Identifier of the location the item is returned to
-     */
-    locationId: string;
     /**
      * Optional storage location within the location to receive the returned item
      */
@@ -73,8 +73,8 @@ export function instanceOfReturnLineDto(value: object): value is ReturnLineDto {
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createReturnLineDtoPropertyNames('itemId', 'quantity', 'reasonCode', 'locationId', );
-    const optionalStringProperties = createReturnLineDtoOptionalProperties({ name: 'itemId', nullable: false }, { name: 'reasonCode', nullable: false }, { name: 'locationId', nullable: false }, { name: 'storageLocationId', nullable: false }, );
+    const requiredProperties = createReturnLineDtoPropertyNames('itemId', 'locationId', 'quantity', 'reasonCode', );
+    const optionalStringProperties = createReturnLineDtoOptionalProperties({ name: 'itemId', nullable: false }, { name: 'locationId', nullable: false }, { name: 'reasonCode', nullable: false }, { name: 'storageLocationId', nullable: false }, );
     const optionalNumberProperties = createReturnLineDtoOptionalProperties({ name: 'quantity', nullable: false }, );
     const optionalBooleanProperties = createReturnLineDtoOptionalProperties();
 

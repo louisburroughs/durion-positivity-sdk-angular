@@ -13,16 +13,16 @@
  * Claim settlement
  */
 export interface SettlementView { 
+    coveredAmount?: number;
+    createdAt?: string;
+    customerAmount?: number;
     id?: string;
+    invoiceAdjustmentId?: string;
+    invoiceId?: string;
+    refundRecordId?: string;
+    replacementWorkorderId?: string;
     settlementType?: SettlementViewSettlementTypeEnum;
     status?: SettlementViewStatusEnum;
-    replacementWorkorderId?: string;
-    invoiceId?: string;
-    invoiceAdjustmentId?: string;
-    refundRecordId?: string;
-    coveredAmount?: number;
-    customerAmount?: number;
-    createdAt?: string;
 }
 export enum SettlementViewSettlementTypeEnum {
     ReplacementWorkorder = 'REPLACEMENT_WORKORDER',
@@ -79,7 +79,7 @@ export function instanceOfSettlementView(value: object): value is SettlementView
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createSettlementViewPropertyNames();
-    const optionalStringProperties = createSettlementViewOptionalProperties({ name: 'id', nullable: false }, { name: 'settlementType', nullable: false }, { name: 'status', nullable: false }, { name: 'replacementWorkorderId', nullable: false }, { name: 'invoiceId', nullable: false }, { name: 'invoiceAdjustmentId', nullable: false }, { name: 'refundRecordId', nullable: false }, { name: 'createdAt', nullable: false }, );
+    const optionalStringProperties = createSettlementViewOptionalProperties({ name: 'createdAt', nullable: false }, { name: 'id', nullable: false }, { name: 'invoiceAdjustmentId', nullable: false }, { name: 'invoiceId', nullable: false }, { name: 'refundRecordId', nullable: false }, { name: 'replacementWorkorderId', nullable: false }, { name: 'settlementType', nullable: false }, { name: 'status', nullable: false }, );
     const optionalNumberProperties = createSettlementViewOptionalProperties({ name: 'coveredAmount', nullable: false }, { name: 'customerAmount', nullable: false }, );
     const optionalBooleanProperties = createSettlementViewOptionalProperties();
 

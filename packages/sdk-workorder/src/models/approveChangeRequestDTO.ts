@@ -10,18 +10,18 @@
 
 
 /**
- * Request payload for approving a change request
+ * Approval details including user ID and note
  */
 export interface ApproveChangeRequestDTO { 
+    /**
+     * Approval note captured as the decision artifact
+     */
+    approvalNote: string;
     /**
      * Deprecated. Actor identity is resolved from authenticated security context.
      * @deprecated
      */
     approvedBy?: string;
-    /**
-     * Approval note captured as the decision artifact
-     */
-    approvalNote: string;
 }
 
 function isOptionalApproveChangeRequestDTOPropertyOfType(
@@ -63,7 +63,7 @@ export function instanceOfApproveChangeRequestDTO(value: object): value is Appro
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createApproveChangeRequestDTOPropertyNames('approvalNote', );
-    const optionalStringProperties = createApproveChangeRequestDTOOptionalProperties({ name: 'approvedBy', nullable: false }, { name: 'approvalNote', nullable: false }, );
+    const optionalStringProperties = createApproveChangeRequestDTOOptionalProperties({ name: 'approvalNote', nullable: false }, { name: 'approvedBy', nullable: false }, );
     const optionalNumberProperties = createApproveChangeRequestDTOOptionalProperties();
     const optionalBooleanProperties = createApproveChangeRequestDTOOptionalProperties();
 

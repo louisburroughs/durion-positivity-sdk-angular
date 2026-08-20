@@ -13,17 +13,17 @@ import { SortObject } from './sortObject';
 
 
 export interface PageMobileUnitResponse { 
-    totalElements?: number;
-    totalPages?: number;
-    size?: number;
     content?: Array<MobileUnitResponse>;
-    number?: number;
-    pageable?: PageableObject;
-    sort?: SortObject;
+    empty?: boolean;
     first?: boolean;
     last?: boolean;
+    number?: number;
     numberOfElements?: number;
-    empty?: boolean;
+    pageable?: PageableObject;
+    size?: number;
+    sort?: SortObject;
+    totalElements?: number;
+    totalPages?: number;
 }
 
 function isOptionalPageMobileUnitResponsePropertyOfType(
@@ -66,8 +66,8 @@ export function instanceOfPageMobileUnitResponse(value: object): value is PageMo
 
     const requiredProperties = createPageMobileUnitResponsePropertyNames();
     const optionalStringProperties = createPageMobileUnitResponseOptionalProperties();
-    const optionalNumberProperties = createPageMobileUnitResponseOptionalProperties({ name: 'totalElements', nullable: false }, { name: 'totalPages', nullable: false }, { name: 'size', nullable: false }, { name: 'number', nullable: false }, { name: 'numberOfElements', nullable: false }, );
-    const optionalBooleanProperties = createPageMobileUnitResponseOptionalProperties({ name: 'first', nullable: false }, { name: 'last', nullable: false }, { name: 'empty', nullable: false }, );
+    const optionalNumberProperties = createPageMobileUnitResponseOptionalProperties({ name: 'number', nullable: false }, { name: 'numberOfElements', nullable: false }, { name: 'size', nullable: false }, { name: 'totalElements', nullable: false }, { name: 'totalPages', nullable: false }, );
+    const optionalBooleanProperties = createPageMobileUnitResponseOptionalProperties({ name: 'empty', nullable: false }, { name: 'first', nullable: false }, { name: 'last', nullable: false }, );
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
         && optionalStringProperties.every((property) => isOptionalPageMobileUnitResponsePropertyOfType(_v, property.name, 'string', property.nullable))

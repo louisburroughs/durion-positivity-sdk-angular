@@ -15,21 +15,9 @@ import { LocationTypeDTO } from './locationTypeDTO';
  */
 export interface LocationResponseDTO { 
     /**
-     * Unique identifier of the location
+     * Whether the location is active
      */
-    id: string;
-    /**
-     * Display name of the location
-     */
-    name: string;
-    /**
-     * Unique business code of the location
-     */
-    code?: string;
-    /**
-     * Identifier of the associated geographical location
-     */
-    geographicalLocationId?: string;
+    active: boolean;
     /**
      * First line of the street address
      */
@@ -43,29 +31,41 @@ export interface LocationResponseDTO {
      */
     city?: string;
     /**
-     * State or province of the location
+     * Unique business code of the location
      */
-    state?: string;
-    /**
-     * Postal or ZIP code of the location
-     */
-    postalCode?: string;
+    code?: string;
     /**
      * Country of the location
      */
     country?: string;
     /**
+     * Identifier of the associated geographical location
+     */
+    geographicalLocationId?: string;
+    /**
+     * Unique identifier of the location
+     */
+    id: string;
+    /**
      * Mailing address of the location
      */
     mailingAddress?: string;
     /**
-     * Whether the location is active
+     * Display name of the location
      */
-    active: boolean;
+    name: string;
+    /**
+     * Postal or ZIP code of the location
+     */
+    postalCode?: string;
     /**
      * People-contact person identifier of the person responsible for the location
      */
     responsiblePersonId?: string;
+    /**
+     * State or province of the location
+     */
+    state?: string;
     type?: LocationTypeDTO;
 }
 
@@ -107,8 +107,8 @@ export function instanceOfLocationResponseDTO(value: object): value is LocationR
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createLocationResponseDTOPropertyNames('id', 'name', 'active', );
-    const optionalStringProperties = createLocationResponseDTOOptionalProperties({ name: 'id', nullable: false }, { name: 'name', nullable: false }, { name: 'code', nullable: false }, { name: 'geographicalLocationId', nullable: false }, { name: 'addressLine1', nullable: false }, { name: 'addressLine2', nullable: false }, { name: 'city', nullable: false }, { name: 'state', nullable: false }, { name: 'postalCode', nullable: false }, { name: 'country', nullable: false }, { name: 'mailingAddress', nullable: false }, { name: 'responsiblePersonId', nullable: false }, );
+    const requiredProperties = createLocationResponseDTOPropertyNames('active', 'id', 'name', );
+    const optionalStringProperties = createLocationResponseDTOOptionalProperties({ name: 'addressLine1', nullable: false }, { name: 'addressLine2', nullable: false }, { name: 'city', nullable: false }, { name: 'code', nullable: false }, { name: 'country', nullable: false }, { name: 'geographicalLocationId', nullable: false }, { name: 'id', nullable: false }, { name: 'mailingAddress', nullable: false }, { name: 'name', nullable: false }, { name: 'postalCode', nullable: false }, { name: 'responsiblePersonId', nullable: false }, { name: 'state', nullable: false }, );
     const optionalNumberProperties = createLocationResponseDTOOptionalProperties();
     const optionalBooleanProperties = createLocationResponseDTOOptionalProperties({ name: 'active', nullable: false }, );
 

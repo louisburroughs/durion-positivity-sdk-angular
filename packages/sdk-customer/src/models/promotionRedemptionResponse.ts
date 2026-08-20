@@ -14,25 +14,17 @@
  */
 export interface PromotionRedemptionResponse { 
     /**
-     * Unique identifier of the promotion redemption record
+     * Campaign code the redemption is attributed to, if any
      */
-    promotionRedemptionId: string;
+    campaignCode?: string;
     /**
-     * Identifier of the redeemed promotion
+     * Timestamp when the redemption record was created
      */
-    promotionId: string;
+    createdAt: string;
     /**
      * Identifier of the customer who redeemed the promotion
      */
     customerId: string;
-    /**
-     * Identifier of the workorder the redemption was applied to
-     */
-    workorderId: string;
-    /**
-     * Identifier of the invoice the redemption was applied to, if any
-     */
-    invoiceId?: string;
     /**
      * Discount amount applied by the redemption
      */
@@ -42,13 +34,21 @@ export interface PromotionRedemptionResponse {
      */
     discountType: string;
     /**
+     * Identifier of the invoice the redemption was applied to, if any
+     */
+    invoiceId?: string;
+    /**
      * Promotion code that was redeemed
      */
     promotionCode: string;
     /**
-     * Campaign code the redemption is attributed to, if any
+     * Identifier of the redeemed promotion
      */
-    campaignCode?: string;
+    promotionId: string;
+    /**
+     * Unique identifier of the promotion redemption record
+     */
+    promotionRedemptionId: string;
     /**
      * Identifier of the actor who recorded the redemption
      */
@@ -58,17 +58,17 @@ export interface PromotionRedemptionResponse {
      */
     recordedOverLimit?: boolean;
     /**
-     * Current status of the redemption
-     */
-    status: PromotionRedemptionResponseStatusEnum;
-    /**
      * Timestamp when the redemption occurred
      */
     redemptionTimestamp?: string;
     /**
-     * Timestamp when the redemption record was created
+     * Current status of the redemption
      */
-    createdAt: string;
+    status: PromotionRedemptionResponseStatusEnum;
+    /**
+     * Identifier of the workorder the redemption was applied to
+     */
+    workorderId: string;
 }
 export enum PromotionRedemptionResponseStatusEnum {
     Recorded = 'RECORDED',
@@ -115,8 +115,8 @@ export function instanceOfPromotionRedemptionResponse(value: object): value is P
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createPromotionRedemptionResponsePropertyNames('promotionRedemptionId', 'promotionId', 'customerId', 'workorderId', 'discountAmount', 'discountType', 'promotionCode', 'status', 'createdAt', );
-    const optionalStringProperties = createPromotionRedemptionResponseOptionalProperties({ name: 'promotionRedemptionId', nullable: false }, { name: 'promotionId', nullable: false }, { name: 'customerId', nullable: false }, { name: 'workorderId', nullable: false }, { name: 'invoiceId', nullable: false }, { name: 'discountType', nullable: false }, { name: 'promotionCode', nullable: false }, { name: 'campaignCode', nullable: false }, { name: 'recordedBy', nullable: false }, { name: 'status', nullable: false }, { name: 'redemptionTimestamp', nullable: false }, { name: 'createdAt', nullable: false }, );
+    const requiredProperties = createPromotionRedemptionResponsePropertyNames('createdAt', 'customerId', 'discountAmount', 'discountType', 'promotionCode', 'promotionId', 'promotionRedemptionId', 'status', 'workorderId', );
+    const optionalStringProperties = createPromotionRedemptionResponseOptionalProperties({ name: 'campaignCode', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'customerId', nullable: false }, { name: 'discountType', nullable: false }, { name: 'invoiceId', nullable: false }, { name: 'promotionCode', nullable: false }, { name: 'promotionId', nullable: false }, { name: 'promotionRedemptionId', nullable: false }, { name: 'recordedBy', nullable: false }, { name: 'redemptionTimestamp', nullable: false }, { name: 'status', nullable: false }, { name: 'workorderId', nullable: false }, );
     const optionalNumberProperties = createPromotionRedemptionResponseOptionalProperties({ name: 'discountAmount', nullable: false }, );
     const optionalBooleanProperties = createPromotionRedemptionResponseOptionalProperties({ name: 'recordedOverLimit', nullable: false }, );
 

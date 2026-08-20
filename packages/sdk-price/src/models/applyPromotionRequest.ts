@@ -14,11 +14,11 @@ import { EstimateContext } from './estimateContext';
  * Request payload for applying a promotion code to an estimate context
  */
 export interface ApplyPromotionRequest { 
+    estimateContext: EstimateContext;
     /**
      * Promotion code to apply
      */
     promotionCode: string;
-    estimateContext: EstimateContext;
 }
 
 function isOptionalApplyPromotionRequestPropertyOfType(
@@ -59,7 +59,7 @@ export function instanceOfApplyPromotionRequest(value: object): value is ApplyPr
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createApplyPromotionRequestPropertyNames('promotionCode', 'estimateContext', );
+    const requiredProperties = createApplyPromotionRequestPropertyNames('estimateContext', 'promotionCode', );
     const optionalStringProperties = createApplyPromotionRequestOptionalProperties({ name: 'promotionCode', nullable: false }, );
     const optionalNumberProperties = createApplyPromotionRequestOptionalProperties();
     const optionalBooleanProperties = createApplyPromotionRequestOptionalProperties();

@@ -13,18 +13,18 @@
  * Vendor reimbursement
  */
 export interface ReimbursementView { 
-    id?: string;
-    providerId?: string;
-    status?: ReimbursementViewStatusEnum;
-    amountRequested?: number;
     amountApproved?: number;
-    vendorClaimReference?: string;
+    amountRequested?: number;
+    creditReceivedAt?: string;
+    creditReference?: string;
+    id?: string;
+    notes?: string;
+    providerId?: string;
+    resolvedAt?: string;
+    status?: ReimbursementViewStatusEnum;
     submittedAt?: string;
     submittedBy?: string;
-    resolvedAt?: string;
-    creditReference?: string;
-    creditReceivedAt?: string;
-    notes?: string;
+    vendorClaimReference?: string;
 }
 export enum ReimbursementViewStatusEnum {
     NotSubmitted = 'NOT_SUBMITTED',
@@ -78,8 +78,8 @@ export function instanceOfReimbursementView(value: object): value is Reimburseme
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createReimbursementViewPropertyNames();
-    const optionalStringProperties = createReimbursementViewOptionalProperties({ name: 'id', nullable: false }, { name: 'providerId', nullable: false }, { name: 'status', nullable: false }, { name: 'vendorClaimReference', nullable: false }, { name: 'submittedAt', nullable: false }, { name: 'submittedBy', nullable: false }, { name: 'resolvedAt', nullable: false }, { name: 'creditReference', nullable: false }, { name: 'creditReceivedAt', nullable: false }, { name: 'notes', nullable: false }, );
-    const optionalNumberProperties = createReimbursementViewOptionalProperties({ name: 'amountRequested', nullable: false }, { name: 'amountApproved', nullable: false }, );
+    const optionalStringProperties = createReimbursementViewOptionalProperties({ name: 'creditReceivedAt', nullable: false }, { name: 'creditReference', nullable: false }, { name: 'id', nullable: false }, { name: 'notes', nullable: false }, { name: 'providerId', nullable: false }, { name: 'resolvedAt', nullable: false }, { name: 'status', nullable: false }, { name: 'submittedAt', nullable: false }, { name: 'submittedBy', nullable: false }, { name: 'vendorClaimReference', nullable: false }, );
+    const optionalNumberProperties = createReimbursementViewOptionalProperties({ name: 'amountApproved', nullable: false }, { name: 'amountRequested', nullable: false }, );
     const optionalBooleanProperties = createReimbursementViewOptionalProperties();
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

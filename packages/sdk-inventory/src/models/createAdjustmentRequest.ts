@@ -14,6 +14,26 @@
  */
 export interface CreateAdjustmentRequest { 
     /**
+     * Unit cost to capture at the time of the adjustment
+     */
+    costAtTimeOfAdjustment: number;
+    /**
+     * Quantity physically counted by the auditor
+     */
+    countedQuantity: number;
+    /**
+     * Identifier of the user creating the adjustment
+     */
+    createdByUserId: string;
+    /**
+     * Quantity on hand recorded before the count was applied
+     */
+    quantityOnHandBefore: number;
+    /**
+     * Reason code explaining why the adjustment is being made
+     */
+    reasonCode: string;
+    /**
      * Identifier of the stock item being adjusted
      */
     stockItemId: string;
@@ -21,26 +41,6 @@ export interface CreateAdjustmentRequest {
      * Cycle count task this adjustment settles, if created from a task. Enables approval-time conflict detection and variance recomputation against current on-hand.
      */
     taskId?: string;
-    /**
-     * Reason code explaining why the adjustment is being made
-     */
-    reasonCode: string;
-    /**
-     * Quantity physically counted by the auditor
-     */
-    countedQuantity: number;
-    /**
-     * Quantity on hand recorded before the count was applied
-     */
-    quantityOnHandBefore: number;
-    /**
-     * Unit cost to capture at the time of the adjustment
-     */
-    costAtTimeOfAdjustment: number;
-    /**
-     * Identifier of the user creating the adjustment
-     */
-    createdByUserId: string;
 }
 
 function isOptionalCreateAdjustmentRequestPropertyOfType(
@@ -81,9 +81,9 @@ export function instanceOfCreateAdjustmentRequest(value: object): value is Creat
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createCreateAdjustmentRequestPropertyNames('stockItemId', 'reasonCode', 'countedQuantity', 'quantityOnHandBefore', 'costAtTimeOfAdjustment', 'createdByUserId', );
-    const optionalStringProperties = createCreateAdjustmentRequestOptionalProperties({ name: 'stockItemId', nullable: false }, { name: 'taskId', nullable: false }, { name: 'reasonCode', nullable: false }, { name: 'createdByUserId', nullable: false }, );
-    const optionalNumberProperties = createCreateAdjustmentRequestOptionalProperties({ name: 'countedQuantity', nullable: false }, { name: 'quantityOnHandBefore', nullable: false }, { name: 'costAtTimeOfAdjustment', nullable: false }, );
+    const requiredProperties = createCreateAdjustmentRequestPropertyNames('costAtTimeOfAdjustment', 'countedQuantity', 'createdByUserId', 'quantityOnHandBefore', 'reasonCode', 'stockItemId', );
+    const optionalStringProperties = createCreateAdjustmentRequestOptionalProperties({ name: 'createdByUserId', nullable: false }, { name: 'reasonCode', nullable: false }, { name: 'stockItemId', nullable: false }, { name: 'taskId', nullable: false }, );
+    const optionalNumberProperties = createCreateAdjustmentRequestOptionalProperties({ name: 'costAtTimeOfAdjustment', nullable: false }, { name: 'countedQuantity', nullable: false }, { name: 'quantityOnHandBefore', nullable: false }, );
     const optionalBooleanProperties = createCreateAdjustmentRequestOptionalProperties();
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

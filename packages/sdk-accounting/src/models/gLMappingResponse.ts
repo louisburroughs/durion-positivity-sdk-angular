@@ -14,13 +14,33 @@
  */
 export interface GLMappingResponse { 
     /**
-     * GL mapping UUID
+     * GL account code
      */
-    glMappingId: string;
+    accountCode?: string;
     /**
-     * Source system identifier
+     * GL account name
      */
-    sourceSystem?: string;
+    accountName?: string;
+    /**
+     * Created timestamp
+     */
+    createdAt?: string;
+    /**
+     * Created by username
+     */
+    createdBy?: string;
+    /**
+     * Dimensional context for this mapping
+     */
+    dimensions?: { [key: string]: string; };
+    /**
+     * Exclusive end of the mapping\'s temporal validity (open-ended when null)
+     */
+    effectiveEndDate?: string;
+    /**
+     * Inclusive start of the mapping\'s temporal validity
+     */
+    effectiveStartDate?: string;
     /**
      * External code from the source system
      */
@@ -30,37 +50,17 @@ export interface GLMappingResponse {
      */
     glAccountId?: string;
     /**
-     * GL account code
+     * GL mapping UUID
      */
-    accountCode?: string;
-    /**
-     * GL account name
-     */
-    accountName?: string;
-    /**
-     * Inclusive start of the mapping\'s temporal validity
-     */
-    effectiveStartDate?: string;
-    /**
-     * Exclusive end of the mapping\'s temporal validity (open-ended when null)
-     */
-    effectiveEndDate?: string;
-    /**
-     * Dimensional context for this mapping
-     */
-    dimensions?: { [key: string]: string; };
+    glMappingId: string;
     /**
      * Mapping resolution priority
      */
     priority?: number;
     /**
-     * Created timestamp
+     * Source system identifier
      */
-    createdAt?: string;
-    /**
-     * Created by username
-     */
-    createdBy?: string;
+    sourceSystem?: string;
 }
 
 function isOptionalGLMappingResponsePropertyOfType(
@@ -102,7 +102,7 @@ export function instanceOfGLMappingResponse(value: object): value is GLMappingRe
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createGLMappingResponsePropertyNames('glMappingId', );
-    const optionalStringProperties = createGLMappingResponseOptionalProperties({ name: 'glMappingId', nullable: false }, { name: 'sourceSystem', nullable: false }, { name: 'externalCode', nullable: false }, { name: 'glAccountId', nullable: false }, { name: 'accountCode', nullable: false }, { name: 'accountName', nullable: false }, { name: 'effectiveStartDate', nullable: false }, { name: 'effectiveEndDate', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'createdBy', nullable: false }, );
+    const optionalStringProperties = createGLMappingResponseOptionalProperties({ name: 'accountCode', nullable: false }, { name: 'accountName', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'effectiveEndDate', nullable: false }, { name: 'effectiveStartDate', nullable: false }, { name: 'externalCode', nullable: false }, { name: 'glAccountId', nullable: false }, { name: 'glMappingId', nullable: false }, { name: 'sourceSystem', nullable: false }, );
     const optionalNumberProperties = createGLMappingResponseOptionalProperties({ name: 'priority', nullable: false }, );
     const optionalBooleanProperties = createGLMappingResponseOptionalProperties();
 

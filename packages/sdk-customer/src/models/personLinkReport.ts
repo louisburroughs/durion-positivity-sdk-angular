@@ -14,25 +14,25 @@
  */
 export interface PersonLinkReport { 
     /**
-     * Count of distinct linked person ids checked
+     * Whether reconciliation is healthy: pos-people reachable and no unresolved orphan links
      */
-    totalLinks: number;
-    /**
-     * Count of linked ids that exist in pos-people
-     */
-    resolved: number;
-    /**
-     * Linked person ids with no matching pos-people person (orphans)
-     */
-    unresolvedPersonIds: Array<string>;
+    healthy: boolean;
     /**
      * False if pos-people could not be reached, in which case resolved/unresolved counts are not meaningful
      */
     posPeopleReachable: boolean;
     /**
-     * Whether reconciliation is healthy: pos-people reachable and no unresolved orphan links
+     * Count of linked ids that exist in pos-people
      */
-    healthy: boolean;
+    resolved: number;
+    /**
+     * Count of distinct linked person ids checked
+     */
+    totalLinks: number;
+    /**
+     * Linked person ids with no matching pos-people person (orphans)
+     */
+    unresolvedPersonIds: Array<string>;
 }
 
 function isOptionalPersonLinkReportPropertyOfType(
@@ -73,10 +73,10 @@ export function instanceOfPersonLinkReport(value: object): value is PersonLinkRe
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createPersonLinkReportPropertyNames('totalLinks', 'resolved', 'unresolvedPersonIds', 'posPeopleReachable', 'healthy', );
+    const requiredProperties = createPersonLinkReportPropertyNames('healthy', 'posPeopleReachable', 'resolved', 'totalLinks', 'unresolvedPersonIds', );
     const optionalStringProperties = createPersonLinkReportOptionalProperties();
-    const optionalNumberProperties = createPersonLinkReportOptionalProperties({ name: 'totalLinks', nullable: false }, { name: 'resolved', nullable: false }, );
-    const optionalBooleanProperties = createPersonLinkReportOptionalProperties({ name: 'posPeopleReachable', nullable: false }, { name: 'healthy', nullable: false }, );
+    const optionalNumberProperties = createPersonLinkReportOptionalProperties({ name: 'resolved', nullable: false }, { name: 'totalLinks', nullable: false }, );
+    const optionalBooleanProperties = createPersonLinkReportOptionalProperties({ name: 'healthy', nullable: false }, { name: 'posPeopleReachable', nullable: false }, );
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
         && optionalStringProperties.every((property) => isOptionalPersonLinkReportPropertyOfType(_v, property.name, 'string', property.nullable))

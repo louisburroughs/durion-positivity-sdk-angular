@@ -13,23 +13,34 @@
  * Claim settlement — how the customer was made whole
  */
 export interface SettlementResponse { 
-    id?: string;
     claimId?: string;
-    settlementType?: SettlementResponseSettlementTypeEnum;
-    status?: SettlementResponseStatusEnum;
-    replacementWorkorderId?: string;
-    invoiceId?: string;
-    invoiceAdjustmentId?: string;
-    refundRecordId?: string;
-    coveredAmount?: number;
-    customerAmount?: number;
     /**
      * Claim status after this settlement executed
      */
     claimStatus?: SettlementResponseClaimStatusEnum;
+    coveredAmount?: number;
     createdAt?: string;
+    customerAmount?: number;
+    id?: string;
+    invoiceAdjustmentId?: string;
+    invoiceId?: string;
+    refundRecordId?: string;
+    replacementWorkorderId?: string;
+    settlementType?: SettlementResponseSettlementTypeEnum;
+    status?: SettlementResponseStatusEnum;
     updatedAt?: string;
 }
+export enum SettlementResponseClaimStatusEnum {
+    Draft = 'DRAFT',
+    Submitted = 'SUBMITTED',
+    InReview = 'IN_REVIEW',
+    InfoNeeded = 'INFO_NEEDED',
+    Approved = 'APPROVED',
+    Denied = 'DENIED',
+    Settled = 'SETTLED',
+    Closed = 'CLOSED',
+    Cancelled = 'CANCELLED'
+};
 export enum SettlementResponseSettlementTypeEnum {
     ReplacementWorkorder = 'REPLACEMENT_WORKORDER',
     InvoiceCredit = 'INVOICE_CREDIT',
@@ -42,17 +53,6 @@ export enum SettlementResponseStatusEnum {
     Pending = 'PENDING',
     Completed = 'COMPLETED',
     Failed = 'FAILED'
-};
-export enum SettlementResponseClaimStatusEnum {
-    Draft = 'DRAFT',
-    Submitted = 'SUBMITTED',
-    InReview = 'IN_REVIEW',
-    InfoNeeded = 'INFO_NEEDED',
-    Approved = 'APPROVED',
-    Denied = 'DENIED',
-    Settled = 'SETTLED',
-    Closed = 'CLOSED',
-    Cancelled = 'CANCELLED'
 };
 
 
@@ -96,7 +96,7 @@ export function instanceOfSettlementResponse(value: object): value is Settlement
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createSettlementResponsePropertyNames();
-    const optionalStringProperties = createSettlementResponseOptionalProperties({ name: 'id', nullable: false }, { name: 'claimId', nullable: false }, { name: 'settlementType', nullable: false }, { name: 'status', nullable: false }, { name: 'replacementWorkorderId', nullable: false }, { name: 'invoiceId', nullable: false }, { name: 'invoiceAdjustmentId', nullable: false }, { name: 'refundRecordId', nullable: false }, { name: 'claimStatus', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'updatedAt', nullable: false }, );
+    const optionalStringProperties = createSettlementResponseOptionalProperties({ name: 'claimId', nullable: false }, { name: 'claimStatus', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'id', nullable: false }, { name: 'invoiceAdjustmentId', nullable: false }, { name: 'invoiceId', nullable: false }, { name: 'refundRecordId', nullable: false }, { name: 'replacementWorkorderId', nullable: false }, { name: 'settlementType', nullable: false }, { name: 'status', nullable: false }, { name: 'updatedAt', nullable: false }, );
     const optionalNumberProperties = createSettlementResponseOptionalProperties({ name: 'coveredAmount', nullable: false }, { name: 'customerAmount', nullable: false }, );
     const optionalBooleanProperties = createSettlementResponseOptionalProperties();
 

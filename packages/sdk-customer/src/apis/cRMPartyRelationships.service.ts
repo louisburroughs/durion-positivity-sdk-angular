@@ -40,24 +40,24 @@ export class CRMPartyRelationshipsService extends BaseService {
     }
 
     /**
-     * Create a party relationship
-     * Creates a relationship between a commercial account and an individual person
+     * Create Party Relationship
+     * Creates a dated relationship that links an individual person to a commercial account in one or more roles, optionally marking the person as the primary billing contact. Use this tool when associating a known person with a commercial account; do not use updateContactRoles, which manages the separate contact-role assignment model, and do not use createCrmPerson, which creates the person record itself. Preconditions: the commercial party and the person must both exist, and no active relationship may already cover the same party, person, and role for today\&#39;s date; isPrimaryBillingContact requires the BILLING role in the same request. Required inputs: partyId (UUID) as a path parameter, plus personId (UUID), roles (one or more of APPROVER, BILLING, PRIMARY_CONTACT, DRIVER, TECHNICAL), and effectiveStartDate; effectiveEndDate and isPrimaryBillingContact (default false) are optional. Emits a CRM_RELATIONSHIP_CREATE event, atomically demotes any existing primary billing contact when one is designated, and re-emits the person\&#39;s identity fact. Returns 404 when the party or person cannot be found, 409 when an overlapping active relationship already exists for a requested role, and 400 when isPrimaryBillingContact is set without the BILLING role. 
      * @endpoint post /v1/crm/commercial-accounts/{partyId}/relationships
      * @param partyId The commercial account party ID
-     * @param createPartyRelationshipRequest 
+     * @param createPartyRelationshipRequest The person, roles, and effective dates of the relationship being established with the account.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public createRelationship(partyId: string, createPartyRelationshipRequest: CreatePartyRelationshipRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<CreatePartyRelationshipResponse>;
-    public createRelationship(partyId: string, createPartyRelationshipRequest: CreatePartyRelationshipRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<CreatePartyRelationshipResponse>>;
-    public createRelationship(partyId: string, createPartyRelationshipRequest: CreatePartyRelationshipRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<CreatePartyRelationshipResponse>>;
-    public createRelationship(partyId: string, createPartyRelationshipRequest: CreatePartyRelationshipRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public createPartyRelationship(partyId: string, createPartyRelationshipRequest: CreatePartyRelationshipRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<CreatePartyRelationshipResponse>;
+    public createPartyRelationship(partyId: string, createPartyRelationshipRequest: CreatePartyRelationshipRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<CreatePartyRelationshipResponse>>;
+    public createPartyRelationship(partyId: string, createPartyRelationshipRequest: CreatePartyRelationshipRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<CreatePartyRelationshipResponse>>;
+    public createPartyRelationship(partyId: string, createPartyRelationshipRequest: CreatePartyRelationshipRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (partyId === null || partyId === undefined) {
-            throw new Error('Required parameter partyId was null or undefined when calling createRelationship.');
+            throw new Error('Required parameter partyId was null or undefined when calling createPartyRelationship.');
         }
         if (createPartyRelationshipRequest === null || createPartyRelationshipRequest === undefined) {
-            throw new Error('Required parameter createPartyRelationshipRequest was null or undefined when calling createRelationship.');
+            throw new Error('Required parameter createPartyRelationshipRequest was null or undefined when calling createPartyRelationship.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -114,8 +114,8 @@ export class CRMPartyRelationshipsService extends BaseService {
     }
 
     /**
-     * Deactivate a party relationship
-     * Soft-deletes a relationship by setting its effective end date
+     * Deactivate Party Relationship
+     * Soft-deletes a relationship between a person and a commercial account by setting its effective end date to today; the historical record is retained. Use this tool when a person no longer represents the account; do not use createPartyRelationship to fix a wrong assignment without first deactivating the old one, since overlapping active roles are rejected. Preconditions: the relationship must exist; the partyId in the path is not validated against the relationship on this operation. Required inputs: partyId and relationshipId (UUIDs) as path parameters; there is no request body. Emits a CRM_RELATIONSHIP_DEACTIVATE event and re-emits the person\&#39;s identity fact because their account linkage changed. Returns 404 when no relationship exists for the supplied relationshipId. 
      * @endpoint delete /v1/crm/commercial-accounts/{partyId}/relationships/{relationshipId}
      * @param partyId The commercial account party ID
      * @param relationshipId The relationship ID to deactivate
@@ -123,15 +123,15 @@ export class CRMPartyRelationshipsService extends BaseService {
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public deactivateRelationship(partyId: string, relationshipId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public deactivateRelationship(partyId: string, relationshipId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public deactivateRelationship(partyId: string, relationshipId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public deactivateRelationship(partyId: string, relationshipId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public deactivatePartyRelationship(partyId: string, relationshipId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
+    public deactivatePartyRelationship(partyId: string, relationshipId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
+    public deactivatePartyRelationship(partyId: string, relationshipId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
+    public deactivatePartyRelationship(partyId: string, relationshipId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (partyId === null || partyId === undefined) {
-            throw new Error('Required parameter partyId was null or undefined when calling deactivateRelationship.');
+            throw new Error('Required parameter partyId was null or undefined when calling deactivatePartyRelationship.');
         }
         if (relationshipId === null || relationshipId === undefined) {
-            throw new Error('Required parameter relationshipId was null or undefined when calling deactivateRelationship.');
+            throw new Error('Required parameter relationshipId was null or undefined when calling deactivatePartyRelationship.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -177,8 +177,8 @@ export class CRMPartyRelationshipsService extends BaseService {
     }
 
     /**
-     * Designate primary billing contact
-     * Sets a relationship as the primary billing contact, demoting any existing primary
+     * Designate Primary Billing Contact
+     * Promotes an existing relationship to be the account\&#39;s primary billing contact, atomically demoting any current primary. Use this tool when the billing contact changes on an account; do not use createPartyRelationship, which is for a person not yet related to the account and can set the flag at creation time. Preconditions: the relationship must exist, must belong to the account in the path, must carry the BILLING role, and must be active as of today. Required inputs: partyId and relationshipId (UUIDs) as path parameters; there is no request body. Emits a CRM_RELATIONSHIP_PRIMARY_BILLING_UPDATE event; the previous primary, if any, is demoted in the same transaction. Returns 404 when the relationship does not exist, and 400 when it belongs to a different party, lacks the BILLING role, or is no longer active. 
      * @endpoint put /v1/crm/commercial-accounts/{partyId}/relationships/{relationshipId}/primary-billing
      * @param partyId The commercial account party ID
      * @param relationshipId The relationship ID to designate as primary
@@ -240,8 +240,8 @@ export class CRMPartyRelationshipsService extends BaseService {
     }
 
     /**
-     * Get contacts for a commercial account
-     * Retrieves all individuals associated with a commercial account with their roles
+     * Get Commercial Account Contacts
+     * Returns the individuals related to a commercial account through party relationships, with their roles, primary-billing flag, effective dates, and status. Use this tool when listing who is associated with an account through the relationship model; use getContactsWithRoles instead for the contact-role assignment view of the same account. Preconditions: the commercial party must exist. Required inputs: partyId (UUID) as a path parameter; roles optionally filters on APPROVER, BILLING, PRIMARY_CONTACT, DRIVER, or TECHNICAL, and status optionally filters on ACTIVE or INACTIVE. Emits a CRM_ACCOUNT_CONTACTS_GET audit event; no state changes occur. Returns 404 when no commercial party exists for the supplied partyId. 
      * @endpoint get /v1/crm/commercial-accounts/{partyId}/contacts
      * @param partyId The commercial account party ID
      * @param roles Filter by relationship roles
@@ -250,12 +250,12 @@ export class CRMPartyRelationshipsService extends BaseService {
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public getContacts(partyId: string, roles?: Array<'APPROVER' | 'BILLING' | 'PRIMARY_CONTACT' | 'DRIVER' | 'TECHNICAL'>, status?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<GetCommercialAccountContactsResponse>;
-    public getContacts(partyId: string, roles?: Array<'APPROVER' | 'BILLING' | 'PRIMARY_CONTACT' | 'DRIVER' | 'TECHNICAL'>, status?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<GetCommercialAccountContactsResponse>>;
-    public getContacts(partyId: string, roles?: Array<'APPROVER' | 'BILLING' | 'PRIMARY_CONTACT' | 'DRIVER' | 'TECHNICAL'>, status?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<GetCommercialAccountContactsResponse>>;
-    public getContacts(partyId: string, roles?: Array<'APPROVER' | 'BILLING' | 'PRIMARY_CONTACT' | 'DRIVER' | 'TECHNICAL'>, status?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getCommercialAccountContacts(partyId: string, roles?: Array<'APPROVER' | 'BILLING' | 'PRIMARY_CONTACT' | 'DRIVER' | 'TECHNICAL'>, status?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<GetCommercialAccountContactsResponse>;
+    public getCommercialAccountContacts(partyId: string, roles?: Array<'APPROVER' | 'BILLING' | 'PRIMARY_CONTACT' | 'DRIVER' | 'TECHNICAL'>, status?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<GetCommercialAccountContactsResponse>>;
+    public getCommercialAccountContacts(partyId: string, roles?: Array<'APPROVER' | 'BILLING' | 'PRIMARY_CONTACT' | 'DRIVER' | 'TECHNICAL'>, status?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<GetCommercialAccountContactsResponse>>;
+    public getCommercialAccountContacts(partyId: string, roles?: Array<'APPROVER' | 'BILLING' | 'PRIMARY_CONTACT' | 'DRIVER' | 'TECHNICAL'>, status?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (partyId === null || partyId === undefined) {
-            throw new Error('Required parameter partyId was null or undefined when calling getContacts.');
+            throw new Error('Required parameter partyId was null or undefined when calling getCommercialAccountContacts.');
         }
 
         let localVarQueryParameters = new OpenApiHttpParams(this.encoder);

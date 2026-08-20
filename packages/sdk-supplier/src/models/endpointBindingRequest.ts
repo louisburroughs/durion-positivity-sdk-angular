@@ -14,46 +14,54 @@
  */
 export interface EndpointBindingRequest { 
     /**
-     * Canonical supplier capability key this binding serves. Unknown keys are rejected with SUPPLIER_UNKNOWN_CAPABILITY.
+     * Name of the auth config on the same profile that this binding authenticates with. Must already exist.
      */
-    capability?: string;
-    /**
-     * Canonical protocol family key of the adapter to use. Unknown keys are rejected with SUPPLIER_UNKNOWN_PROTOCOL_FAMILY.
-     */
-    protocolFamily?: string;
-    /**
-     * Adapter version key within the protocol family. Free-form data, deliberately not an enum (ADR-0051 §3) so a vendor\'s new norm needs no code change. NOT validated on write: a key with no registered codec is accepted here and then resolves to CAPABILITY_NOT_CONFIGURED on every call, so it must match a codec exactly. Keys shipped today: A2_5, B2_1, B3_3, B4_0, C1_0, C1_1, C1_2, S2S_V1. At most 64 characters: the exchange-audit trail stores this key at that width, and a longer one would make every audit write for the binding fail.
-     */
-    version?: string;
+    authConfigName?: string;
     /**
      * Base URL of the vendor endpoint for this capability.
      */
     baseUrl?: string;
     /**
-     * Path appended to the base URL for this capability.
+     * Canonical supplier capability key this binding serves. Unknown keys are rejected with SUPPLIER_UNKNOWN_CAPABILITY.
      */
-    path?: string;
+    capability?: string;
     /**
-     * Name of the auth config on the same profile that this binding authenticates with. Must already exist.
+     * Exchange-audit payload capture level for this binding (ADR-0050 §7). Exchange metadata is always retained regardless. Omit to use the deployment default.
      */
-    authConfigName?: string;
-    /**
-     * Cron expression driving scheduled runs of this binding. Omit for request-driven capabilities.
-     */
-    schedule?: string;
+    captureLevel?: EndpointBindingRequestCaptureLevelEnum;
     /**
      * Whether THIS binding resolves. A disabled binding behaves exactly as an absent one: only this capability stops resolving for this supplier, and it reports the typed CAPABILITY_NOT_CONFIGURED outcome. This is a per-capability toggle, NOT a supplier-wide kill switch -- for that, disable the vendor profile itself.
      */
     enabled?: boolean;
     /**
-     * Exchange-audit payload capture level for this binding (ADR-0050 §7). Exchange metadata is always retained regardless. Omit to use the deployment default.
+     * Path appended to the base URL for this capability.
      */
-    captureLevel?: EndpointBindingRequestCaptureLevelEnum;
+    path?: string;
+    /**
+     * Canonical protocol family key of the adapter to use. Unknown keys are rejected with SUPPLIER_UNKNOWN_PROTOCOL_FAMILY.
+     */
+    protocolFamily?: string;
+    /**
+     * Data classifications whose named fields are additionally redacted from REDACTED captures of this binding (ADR-0050 §7 minimization). Credential redaction always applies and cannot be configured away; classifications only narrow what a REDACTED capture retains. Name-based: for positional vendor formats (EDIFACT segments) they redact nothing and METADATA_ONLY is the only level guaranteeing no content is retained. Omit for credential redaction only.
+     */
+    redactionClassifications?: Set<EndpointBindingRequestRedactionClassificationsEnum>;
+    /**
+     * Cron expression driving scheduled runs of this binding. Omit for request-driven capabilities.
+     */
+    schedule?: string;
+    /**
+     * Adapter version key within the protocol family. Free-form data, deliberately not an enum (ADR-0051 §3) so a vendor\'s new norm needs no code change. NOT validated on write: a key with no registered codec is accepted here and then resolves to CAPABILITY_NOT_CONFIGURED on every call, so it must match a codec exactly. Keys shipped today: A2_5, B2_1, B3_3, B4_0, C1_0, C1_1, C1_2, S2S_V1. At most 64 characters: the exchange-audit trail stores this key at that width, and a longer one would make every audit write for the binding fail.
+     */
+    version?: string;
 }
 export enum EndpointBindingRequestCaptureLevelEnum {
     Full = 'FULL',
     Redacted = 'REDACTED',
     MetadataOnly = 'METADATA_ONLY'
+};
+export enum EndpointBindingRequestRedactionClassificationsEnum {
+    CustomerIdentifier = 'CUSTOMER_IDENTIFIER',
+    CommercialPricing = 'COMMERCIAL_PRICING'
 };
 
 
@@ -97,7 +105,7 @@ export function instanceOfEndpointBindingRequest(value: object): value is Endpoi
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createEndpointBindingRequestPropertyNames();
-    const optionalStringProperties = createEndpointBindingRequestOptionalProperties({ name: 'capability', nullable: false }, { name: 'protocolFamily', nullable: false }, { name: 'version', nullable: false }, { name: 'baseUrl', nullable: false }, { name: 'path', nullable: false }, { name: 'authConfigName', nullable: false }, { name: 'schedule', nullable: false }, { name: 'captureLevel', nullable: false }, );
+    const optionalStringProperties = createEndpointBindingRequestOptionalProperties({ name: 'authConfigName', nullable: false }, { name: 'baseUrl', nullable: false }, { name: 'capability', nullable: false }, { name: 'captureLevel', nullable: false }, { name: 'path', nullable: false }, { name: 'protocolFamily', nullable: false }, { name: 'schedule', nullable: false }, { name: 'version', nullable: false }, );
     const optionalNumberProperties = createEndpointBindingRequestOptionalProperties();
     const optionalBooleanProperties = createEndpointBindingRequestOptionalProperties({ name: 'enabled', nullable: false }, );
 

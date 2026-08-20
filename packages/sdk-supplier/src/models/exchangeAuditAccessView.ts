@@ -14,37 +14,41 @@
  */
 export interface ExchangeAuditAccessView { 
     /**
-     * Identity of this access record (UUIDv7).
+     * What the caller reached. Only payload reads are recorded.
      */
-    auditAccessId?: string;
-    /**
-     * The exchange-audit row whose content was read.
-     */
-    exchangeAuditId?: string;
-    /**
-     * Owning vendor profile of the exchange that was read.
-     */
-    vendorProfileId?: string;
-    /**
-     * Canonical capability key of the exchange that was read.
-     */
-    capability?: string;
-    /**
-     * The authenticated subject that performed the read. Taken from the security context, never from the request body or a query parameter.
-     */
-    accessedBy?: string;
+    accessKind?: ExchangeAuditAccessViewAccessKindEnum;
     /**
      * When the read happened.
      */
     accessedAt?: string;
     /**
-     * What the caller reached. Only payload reads are recorded.
+     * The authenticated subject that performed the read. Taken from the security context, never from the request body or a query parameter.
      */
-    accessKind?: ExchangeAuditAccessViewAccessKindEnum;
+    accessedBy?: string;
+    /**
+     * Identity of this access record (UUIDv7).
+     */
+    auditAccessId?: string;
+    /**
+     * Canonical capability key of the exchange that was read.
+     */
+    capability?: string;
+    /**
+     * Correlation id of the request that caused the read, reused from the caller\'s X-Correlation-Id header (or generated when absent). Null only for access records written before inbound correlation existed.
+     */
+    correlationId?: string;
+    /**
+     * The exchange-audit row whose content was read.
+     */
+    exchangeAuditId?: string;
     /**
      * What the read yielded, including the failed and empty cases.
      */
     payloadOutcome?: ExchangeAuditAccessViewPayloadOutcomeEnum;
+    /**
+     * Owning vendor profile of the exchange that was read.
+     */
+    vendorProfileId?: string;
 }
 export enum ExchangeAuditAccessViewAccessKindEnum {
     PayloadRead = 'PAYLOAD_READ'
@@ -96,7 +100,7 @@ export function instanceOfExchangeAuditAccessView(value: object): value is Excha
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createExchangeAuditAccessViewPropertyNames();
-    const optionalStringProperties = createExchangeAuditAccessViewOptionalProperties({ name: 'auditAccessId', nullable: false }, { name: 'exchangeAuditId', nullable: false }, { name: 'vendorProfileId', nullable: false }, { name: 'capability', nullable: false }, { name: 'accessedBy', nullable: false }, { name: 'accessedAt', nullable: false }, { name: 'accessKind', nullable: false }, { name: 'payloadOutcome', nullable: false }, );
+    const optionalStringProperties = createExchangeAuditAccessViewOptionalProperties({ name: 'accessKind', nullable: false }, { name: 'accessedAt', nullable: false }, { name: 'accessedBy', nullable: false }, { name: 'auditAccessId', nullable: false }, { name: 'capability', nullable: false }, { name: 'correlationId', nullable: false }, { name: 'exchangeAuditId', nullable: false }, { name: 'payloadOutcome', nullable: false }, { name: 'vendorProfileId', nullable: false }, );
     const optionalNumberProperties = createExchangeAuditAccessViewOptionalProperties();
     const optionalBooleanProperties = createExchangeAuditAccessViewOptionalProperties();
 

@@ -14,13 +14,13 @@
  */
 export interface EmailAddressDTO { 
     /**
-     * Email address type
-     */
-    type: string;
-    /**
      * Email address value
      */
     address: string;
+    /**
+     * Email address type
+     */
+    type: string;
 }
 
 function isOptionalEmailAddressDTOPropertyOfType(
@@ -61,8 +61,8 @@ export function instanceOfEmailAddressDTO(value: object): value is EmailAddressD
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createEmailAddressDTOPropertyNames('type', 'address', );
-    const optionalStringProperties = createEmailAddressDTOOptionalProperties({ name: 'type', nullable: false }, { name: 'address', nullable: false }, );
+    const requiredProperties = createEmailAddressDTOPropertyNames('address', 'type', );
+    const optionalStringProperties = createEmailAddressDTOOptionalProperties({ name: 'address', nullable: false }, { name: 'type', nullable: false }, );
     const optionalNumberProperties = createEmailAddressDTOOptionalProperties();
     const optionalBooleanProperties = createEmailAddressDTOOptionalProperties();
 

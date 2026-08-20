@@ -10,21 +10,13 @@
 
 
 /**
- * Vehicle creation request
+ * Request payload for creating a vehicle record.
  */
 export interface CreateVehicleRequest { 
     /**
      * Owning account identifier.
      */
     accountId: string;
-    /**
-     * Vehicle VIN.
-     */
-    vin: string;
-    /**
-     * Fleet/unit number. Optional; stored as empty when omitted.
-     */
-    unitNumber?: string;
     /**
      * Human-readable vehicle description. Optional; stored as empty when omitted.
      */
@@ -38,10 +30,6 @@ export interface CreateVehicleRequest {
      */
     licensePlateJurisdiction?: string;
     /**
-     * Model year.
-     */
-    year?: number;
-    /**
      * Vehicle make.
      */
     make?: string;
@@ -53,6 +41,18 @@ export interface CreateVehicleRequest {
      * Vehicle trim.
      */
     trim?: string;
+    /**
+     * Fleet/unit number. Optional; stored as empty when omitted.
+     */
+    unitNumber?: string;
+    /**
+     * Vehicle VIN.
+     */
+    vin: string;
+    /**
+     * Model year.
+     */
+    year?: number;
 }
 
 function isOptionalCreateVehicleRequestPropertyOfType(
@@ -94,7 +94,7 @@ export function instanceOfCreateVehicleRequest(value: object): value is CreateVe
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createCreateVehicleRequestPropertyNames('accountId', 'vin', );
-    const optionalStringProperties = createCreateVehicleRequestOptionalProperties({ name: 'accountId', nullable: false }, { name: 'vin', nullable: false }, { name: 'unitNumber', nullable: false }, { name: 'description', nullable: false }, { name: 'licensePlate', nullable: false }, { name: 'licensePlateJurisdiction', nullable: false }, { name: 'make', nullable: false }, { name: 'model', nullable: false }, { name: 'trim', nullable: false }, );
+    const optionalStringProperties = createCreateVehicleRequestOptionalProperties({ name: 'accountId', nullable: false }, { name: 'description', nullable: false }, { name: 'licensePlate', nullable: false }, { name: 'licensePlateJurisdiction', nullable: false }, { name: 'make', nullable: false }, { name: 'model', nullable: false }, { name: 'trim', nullable: false }, { name: 'unitNumber', nullable: false }, { name: 'vin', nullable: false }, );
     const optionalNumberProperties = createCreateVehicleRequestOptionalProperties({ name: 'year', nullable: false }, );
     const optionalBooleanProperties = createCreateVehicleRequestOptionalProperties();
 

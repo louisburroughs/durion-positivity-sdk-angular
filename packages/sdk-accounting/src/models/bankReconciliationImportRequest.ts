@@ -14,17 +14,25 @@
  */
 export interface BankReconciliationImportRequest { 
     /**
+     * Bank statement CSV (columns: date, description, amount, reference), raw text lines or base64
+     */
+    csv: string;
+    /**
+     * ISO currency code; single currency governs the reconciliation
+     */
+    currency: string;
+    /**
      * Reconcilable GL cash account being reconciled
      */
     glAccountId: string;
     /**
-     * Statement period start date
-     */
-    periodStartDate: string;
-    /**
      * Statement period end date
      */
     periodEndDate: string;
+    /**
+     * Statement period start date
+     */
+    periodStartDate: string;
     /**
      * Statement date; GL ending balance is computed as-of this date
      */
@@ -33,14 +41,6 @@ export interface BankReconciliationImportRequest {
      * Statement ending balance
      */
     statementEndingBalance: number;
-    /**
-     * ISO currency code; single currency governs the reconciliation
-     */
-    currency: string;
-    /**
-     * Bank statement CSV (columns: date, description, amount, reference), raw text lines or base64
-     */
-    csv: string;
 }
 
 function isOptionalBankReconciliationImportRequestPropertyOfType(
@@ -81,8 +81,8 @@ export function instanceOfBankReconciliationImportRequest(value: object): value 
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createBankReconciliationImportRequestPropertyNames('glAccountId', 'periodStartDate', 'periodEndDate', 'statementDate', 'statementEndingBalance', 'currency', 'csv', );
-    const optionalStringProperties = createBankReconciliationImportRequestOptionalProperties({ name: 'glAccountId', nullable: false }, { name: 'periodStartDate', nullable: false }, { name: 'periodEndDate', nullable: false }, { name: 'statementDate', nullable: false }, { name: 'currency', nullable: false }, { name: 'csv', nullable: false }, );
+    const requiredProperties = createBankReconciliationImportRequestPropertyNames('csv', 'currency', 'glAccountId', 'periodEndDate', 'periodStartDate', 'statementDate', 'statementEndingBalance', );
+    const optionalStringProperties = createBankReconciliationImportRequestOptionalProperties({ name: 'csv', nullable: false }, { name: 'currency', nullable: false }, { name: 'glAccountId', nullable: false }, { name: 'periodEndDate', nullable: false }, { name: 'periodStartDate', nullable: false }, { name: 'statementDate', nullable: false }, );
     const optionalNumberProperties = createBankReconciliationImportRequestOptionalProperties({ name: 'statementEndingBalance', nullable: false }, );
     const optionalBooleanProperties = createBankReconciliationImportRequestOptionalProperties();
 

@@ -42,8 +42,8 @@ export class AuditTrailService extends BaseService {
     }
 
     /**
-     * Get audit trail by actor
-     * Retrieves audit trail entries for a specific actor (user) within a date range
+     * Get Audit Trail By Actor
+     * Returns audit trail entries recorded by one actor (user) within a date range, across all exception types. Use this tool to review a specific user\&#39;s overrides, refunds and cancellations; use getAuditTrailByType instead to slice by exception category. Preconditions: none; an unknown actor yields an empty list. Required inputs: actorId (user identifier string) as a path parameter plus startDate and endDate (ISO-8601 instants) as query parameters. No events are emitted and no state changes; this is a read-only projection. Returns 400 when the dates cannot be parsed. 
      * @endpoint get /v1/accounting/audit/actor/{actorId}
      * @param actorId Actor (User) ID
      * @param startDate Start date in ISO 8601 format
@@ -52,18 +52,18 @@ export class AuditTrailService extends BaseService {
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public getByActor(actorId: string, startDate: string, endDate: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<AuditTrailResponse>;
-    public getByActor(actorId: string, startDate: string, endDate: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<AuditTrailResponse>>;
-    public getByActor(actorId: string, startDate: string, endDate: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<AuditTrailResponse>>;
-    public getByActor(actorId: string, startDate: string, endDate: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getAuditTrailByActor(actorId: string, startDate: string, endDate: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<AuditTrailResponse>;
+    public getAuditTrailByActor(actorId: string, startDate: string, endDate: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<AuditTrailResponse>>;
+    public getAuditTrailByActor(actorId: string, startDate: string, endDate: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<AuditTrailResponse>>;
+    public getAuditTrailByActor(actorId: string, startDate: string, endDate: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (actorId === null || actorId === undefined) {
-            throw new Error('Required parameter actorId was null or undefined when calling getByActor.');
+            throw new Error('Required parameter actorId was null or undefined when calling getAuditTrailByActor.');
         }
         if (startDate === null || startDate === undefined) {
-            throw new Error('Required parameter startDate was null or undefined when calling getByActor.');
+            throw new Error('Required parameter startDate was null or undefined when calling getAuditTrailByActor.');
         }
         if (endDate === null || endDate === undefined) {
-            throw new Error('Required parameter endDate was null or undefined when calling getByActor.');
+            throw new Error('Required parameter endDate was null or undefined when calling getAuditTrailByActor.');
         }
 
         let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
@@ -131,8 +131,8 @@ export class AuditTrailService extends BaseService {
     }
 
     /**
-     * Get audit trail by date range
-     * Retrieves all audit trail entries within a specified date range
+     * Get Audit Trail By Date Range
+     * Returns all audit trail entries of every exception type within a date range. Use this tool for a broad period review; use getAuditTrailByType or getAuditTrailByActor instead when a narrower slice is wanted. Preconditions: none; a quiet range yields an empty list. Required inputs: startDate and endDate (ISO-8601 instants) as query parameters. No events are emitted and no state changes; this is a read-only projection. Returns 400 when the dates cannot be parsed. 
      * @endpoint get /v1/accounting/audit/range
      * @param startDate Start date in ISO 8601 format
      * @param endDate End date in ISO 8601 format
@@ -140,15 +140,15 @@ export class AuditTrailService extends BaseService {
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public getByDateRange(startDate: string, endDate: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<AuditTrailResponse>;
-    public getByDateRange(startDate: string, endDate: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<AuditTrailResponse>>;
-    public getByDateRange(startDate: string, endDate: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<AuditTrailResponse>>;
-    public getByDateRange(startDate: string, endDate: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getAuditTrailByDateRange(startDate: string, endDate: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<AuditTrailResponse>;
+    public getAuditTrailByDateRange(startDate: string, endDate: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<AuditTrailResponse>>;
+    public getAuditTrailByDateRange(startDate: string, endDate: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<AuditTrailResponse>>;
+    public getAuditTrailByDateRange(startDate: string, endDate: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (startDate === null || startDate === undefined) {
-            throw new Error('Required parameter startDate was null or undefined when calling getByDateRange.');
+            throw new Error('Required parameter startDate was null or undefined when calling getAuditTrailByDateRange.');
         }
         if (endDate === null || endDate === undefined) {
-            throw new Error('Required parameter endDate was null or undefined when calling getByDateRange.');
+            throw new Error('Required parameter endDate was null or undefined when calling getAuditTrailByDateRange.');
         }
 
         let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
@@ -216,20 +216,20 @@ export class AuditTrailService extends BaseService {
     }
 
     /**
-     * Get audit trail for invoice
-     * Retrieves all audit trail entries associated with a specific invoice
+     * Get Audit Trail For Invoice
+     * Returns all audit trail entries recorded against one invoice, covering refunds and cancellations. Use this tool when the invoice id is known; use getAuditTrailByOrder for order-scoped entries instead. Preconditions: none; an invoice with no exceptions yields an empty list. Required inputs: invoiceId (UUID) as a path parameter; there is no request body. No events are emitted and no state changes; this is a read-only projection. Returns 200 with an empty list when no audit entries exist for the invoice. 
      * @endpoint get /v1/accounting/audit/invoice/{invoiceId}
      * @param invoiceId Invoice ID
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public getByInvoiceId(invoiceId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<AuditTrailResponse>;
-    public getByInvoiceId(invoiceId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<AuditTrailResponse>>;
-    public getByInvoiceId(invoiceId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<AuditTrailResponse>>;
-    public getByInvoiceId(invoiceId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getAuditTrailByInvoice(invoiceId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<AuditTrailResponse>;
+    public getAuditTrailByInvoice(invoiceId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<AuditTrailResponse>>;
+    public getAuditTrailByInvoice(invoiceId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<AuditTrailResponse>>;
+    public getAuditTrailByInvoice(invoiceId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (invoiceId === null || invoiceId === undefined) {
-            throw new Error('Required parameter invoiceId was null or undefined when calling getByInvoiceId.');
+            throw new Error('Required parameter invoiceId was null or undefined when calling getAuditTrailByInvoice.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -276,20 +276,20 @@ export class AuditTrailService extends BaseService {
     }
 
     /**
-     * Get audit trail for order
-     * Retrieves all audit trail entries associated with a specific order
+     * Get Audit Trail For Order
+     * Returns all audit trail entries recorded against one order, covering price overrides and cancellations. Use this tool when the order id is known; use getAuditTrailByType or getAuditTrailByDateRange instead for cross-document review. Preconditions: none; an order with no exceptions yields an empty list. Required inputs: orderId (UUID) as a path parameter; there is no request body. No events are emitted and no state changes; this is a read-only projection. Returns 200 with an empty list when no audit entries exist for the order. 
      * @endpoint get /v1/accounting/audit/order/{orderId}
      * @param orderId Order ID
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public getByOrderId(orderId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<AuditTrailResponse>;
-    public getByOrderId(orderId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<AuditTrailResponse>>;
-    public getByOrderId(orderId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<AuditTrailResponse>>;
-    public getByOrderId(orderId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getAuditTrailByOrder(orderId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<AuditTrailResponse>;
+    public getAuditTrailByOrder(orderId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<AuditTrailResponse>>;
+    public getAuditTrailByOrder(orderId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<AuditTrailResponse>>;
+    public getAuditTrailByOrder(orderId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (orderId === null || orderId === undefined) {
-            throw new Error('Required parameter orderId was null or undefined when calling getByOrderId.');
+            throw new Error('Required parameter orderId was null or undefined when calling getAuditTrailByOrder.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -336,20 +336,20 @@ export class AuditTrailService extends BaseService {
     }
 
     /**
-     * Get audit trail for order
-     * Retrieves all audit trail entries associated with a specific order
+     * Get Audit Trail For Order
+     * Returns all audit trail entries recorded against one order, covering price overrides and cancellations. Use this tool when the order id is known; use getAuditTrailByType or getAuditTrailByDateRange instead for cross-document review. Preconditions: none; an order with no exceptions yields an empty list. Required inputs: orderId (UUID) as a path parameter; there is no request body. No events are emitted and no state changes; this is a read-only projection. Returns 200 with an empty list when no audit entries exist for the order. 
      * @endpoint get /v1/accounting/audit/by-order/{orderId}
      * @param orderId Order ID
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public getByOrderId1(orderId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<AuditTrailResponse>;
-    public getByOrderId1(orderId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<AuditTrailResponse>>;
-    public getByOrderId1(orderId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<AuditTrailResponse>>;
-    public getByOrderId1(orderId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getAuditTrailByOrder1(orderId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<AuditTrailResponse>;
+    public getAuditTrailByOrder1(orderId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<AuditTrailResponse>>;
+    public getAuditTrailByOrder1(orderId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<AuditTrailResponse>>;
+    public getAuditTrailByOrder1(orderId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (orderId === null || orderId === undefined) {
-            throw new Error('Required parameter orderId was null or undefined when calling getByOrderId1.');
+            throw new Error('Required parameter orderId was null or undefined when calling getAuditTrailByOrder1.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -396,8 +396,8 @@ export class AuditTrailService extends BaseService {
     }
 
     /**
-     * Get audit trail by exception type
-     * Retrieves audit trail entries filtered by exception type and date range
+     * Get Audit Trail By Exception Type
+     * Returns audit trail entries of one exception type (PRICE_OVERRIDE, REFUND or CANCELLATION) within a date range. Use this tool to review one exception category across documents; use getAuditTrailByActor instead when reviewing one user\&#39;s activity. Preconditions: none; an empty range yields an empty list. Required inputs: type as a path parameter plus startDate and endDate (ISO-8601 instants) as query parameters. No events are emitted and no state changes; this is a read-only projection. Returns 400 when the type or dates cannot be parsed. 
      * @endpoint get /v1/accounting/audit/type/{type}
      * @param type Exception type
      * @param startDate Start date in ISO 8601 format
@@ -406,18 +406,18 @@ export class AuditTrailService extends BaseService {
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public getByType(type: 'PRICE_OVERRIDE' | 'REFUND' | 'CANCELLATION', startDate: string, endDate: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<AuditTrailResponse>;
-    public getByType(type: 'PRICE_OVERRIDE' | 'REFUND' | 'CANCELLATION', startDate: string, endDate: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<AuditTrailResponse>>;
-    public getByType(type: 'PRICE_OVERRIDE' | 'REFUND' | 'CANCELLATION', startDate: string, endDate: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<AuditTrailResponse>>;
-    public getByType(type: 'PRICE_OVERRIDE' | 'REFUND' | 'CANCELLATION', startDate: string, endDate: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getAuditTrailByType(type: 'PRICE_OVERRIDE' | 'REFUND' | 'CANCELLATION', startDate: string, endDate: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<AuditTrailResponse>;
+    public getAuditTrailByType(type: 'PRICE_OVERRIDE' | 'REFUND' | 'CANCELLATION', startDate: string, endDate: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<AuditTrailResponse>>;
+    public getAuditTrailByType(type: 'PRICE_OVERRIDE' | 'REFUND' | 'CANCELLATION', startDate: string, endDate: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<AuditTrailResponse>>;
+    public getAuditTrailByType(type: 'PRICE_OVERRIDE' | 'REFUND' | 'CANCELLATION', startDate: string, endDate: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (type === null || type === undefined) {
-            throw new Error('Required parameter type was null or undefined when calling getByType.');
+            throw new Error('Required parameter type was null or undefined when calling getAuditTrailByType.');
         }
         if (startDate === null || startDate === undefined) {
-            throw new Error('Required parameter startDate was null or undefined when calling getByType.');
+            throw new Error('Required parameter startDate was null or undefined when calling getAuditTrailByType.');
         }
         if (endDate === null || endDate === undefined) {
-            throw new Error('Required parameter endDate was null or undefined when calling getByType.');
+            throw new Error('Required parameter endDate was null or undefined when calling getAuditTrailByType.');
         }
 
         let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
@@ -485,20 +485,20 @@ export class AuditTrailService extends BaseService {
     }
 
     /**
-     * Record a cancellation
-     * Creates an audit trail entry for an order or invoice cancellation
+     * Record Cancellation Audit Entry
+     * Records an audit trail entry for an order or invoice cancellation, capturing before and after document snapshots. Use this tool when an order or invoice is cancelled upstream; do not use recordRefundAudit, which covers money returned on a retained document. Preconditions: none enforced beyond validation; either orderId or invoiceId should identify the cancelled document. Required inputs: cancellationType (ORDER_CANCELLED, INVOICE_CANCELLED or PAYMENT_FAILED), beforeSnapshot and afterSnapshot (JSON strings), actorRole and reason; orderId, invoiceId, actorId and partialPaymentInfo are optional. Emits an ACCOUNTING_AUDIT_CANCELLATION event. Returns 400 when required fields are missing. 
      * @endpoint post /v1/accounting/audit/cancellation
-     * @param cancellationRequest 
+     * @param cancellationRequest Cancellation exception with before and after document snapshots.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public recordCancellation(cancellationRequest: CancellationRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<AuditTrailResponse>;
-    public recordCancellation(cancellationRequest: CancellationRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<AuditTrailResponse>>;
-    public recordCancellation(cancellationRequest: CancellationRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<AuditTrailResponse>>;
-    public recordCancellation(cancellationRequest: CancellationRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public recordCancellationAudit(cancellationRequest: CancellationRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<AuditTrailResponse>;
+    public recordCancellationAudit(cancellationRequest: CancellationRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<AuditTrailResponse>>;
+    public recordCancellationAudit(cancellationRequest: CancellationRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<AuditTrailResponse>>;
+    public recordCancellationAudit(cancellationRequest: CancellationRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (cancellationRequest === null || cancellationRequest === undefined) {
-            throw new Error('Required parameter cancellationRequest was null or undefined when calling recordCancellation.');
+            throw new Error('Required parameter cancellationRequest was null or undefined when calling recordCancellationAudit.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -555,20 +555,20 @@ export class AuditTrailService extends BaseService {
     }
 
     /**
-     * Record a price override
-     * Creates an audit trail entry for a price override exception with policy validation
+     * Record Price Override Audit Entry
+     * Records an audit trail entry for a price override exception, validating the acting role\&#39;s authorization level against the override amount before persisting. Use this tool when an order line price is overridden at the point of sale; do not use recordRefundAudit or recordCancellationAudit, which cover those other exception types. Preconditions: the actor\&#39;s role must be authorized for the override delta; a denied authorization publishes an AuthorizationDenied event and records nothing. Required inputs: orderId (UUID), lineItemId (UUID), originalPrice, adjustedPrice, actorRole and reason; categoryCode is optional. Emits an ACCOUNTING_AUDIT_PRICE_OVERRIDE event. Returns 403 AUTHORIZATION_DENIED when the role\&#39;s limit does not cover the override, and 400 when required fields are missing. 
      * @endpoint post /v1/accounting/audit/price-override
-     * @param priceOverrideRequest 
+     * @param priceOverrideRequest Price override exception with the acting role and audit reason.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public recordPriceOverride(priceOverrideRequest: PriceOverrideRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<AuditTrailResponse>;
-    public recordPriceOverride(priceOverrideRequest: PriceOverrideRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<AuditTrailResponse>>;
-    public recordPriceOverride(priceOverrideRequest: PriceOverrideRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<AuditTrailResponse>>;
-    public recordPriceOverride(priceOverrideRequest: PriceOverrideRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public recordPriceOverrideAudit(priceOverrideRequest: PriceOverrideRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<AuditTrailResponse>;
+    public recordPriceOverrideAudit(priceOverrideRequest: PriceOverrideRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<AuditTrailResponse>>;
+    public recordPriceOverrideAudit(priceOverrideRequest: PriceOverrideRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<AuditTrailResponse>>;
+    public recordPriceOverrideAudit(priceOverrideRequest: PriceOverrideRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (priceOverrideRequest === null || priceOverrideRequest === undefined) {
-            throw new Error('Required parameter priceOverrideRequest was null or undefined when calling recordPriceOverride.');
+            throw new Error('Required parameter priceOverrideRequest was null or undefined when calling recordPriceOverrideAudit.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -625,20 +625,20 @@ export class AuditTrailService extends BaseService {
     }
 
     /**
-     * Record a refund
-     * Creates an audit trail entry for a refund exception with policy validation and settlement handling
+     * Record Refund Audit Entry
+     * Records an audit trail entry for a refund exception, validating refund policy and settlement handling for the original payment before persisting. Use this tool when a customer refund is granted; do not use refundCustomerCredit, which actually moves money out of a standing credit, and do not use recordPriceOverrideAudit for price changes. Preconditions: the refund must pass the refund authorization policy for its type and amount; a denial records nothing. Required inputs: invoiceId (UUID), paymentId (UUID), refundType, refundAmount and originalPaymentStatus; actorId is optional. Emits an ACCOUNTING_AUDIT_REFUND event. Returns 403 AUTHORIZATION_DENIED when separate authorization is required and absent, and 400 when required fields are missing. 
      * @endpoint post /v1/accounting/audit/refund
-     * @param refundRequest 
+     * @param refundRequest Refund exception details with type, amount and original payment status.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public recordRefund(refundRequest: RefundRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<AuditTrailResponse>;
-    public recordRefund(refundRequest: RefundRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<AuditTrailResponse>>;
-    public recordRefund(refundRequest: RefundRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<AuditTrailResponse>>;
-    public recordRefund(refundRequest: RefundRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public recordRefundAudit(refundRequest: RefundRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<AuditTrailResponse>;
+    public recordRefundAudit(refundRequest: RefundRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<AuditTrailResponse>>;
+    public recordRefundAudit(refundRequest: RefundRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<AuditTrailResponse>>;
+    public recordRefundAudit(refundRequest: RefundRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (refundRequest === null || refundRequest === undefined) {
-            throw new Error('Required parameter refundRequest was null or undefined when calling recordRefund.');
+            throw new Error('Required parameter refundRequest was null or undefined when calling recordRefundAudit.');
         }
 
         let localVarHeaders = this.defaultHeaders;

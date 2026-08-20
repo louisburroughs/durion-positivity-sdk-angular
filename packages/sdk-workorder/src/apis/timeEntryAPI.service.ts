@@ -38,8 +38,8 @@ export class TimeEntryAPIService extends BaseService {
     }
 
     /**
-     * Approve a time entry in SUBMITTED state
-     * Approve a submitted time entry so it can move forward in the workorder timekeeping workflow
+     * Approve a Submitted Time Entry
+     * Approves a SUBMITTED time entry, stamping the approving user and decision timestamp so the hours can flow onward in the workorder timekeeping workflow. Use this tool when a supervisor accepts a technician\&#39;s submitted hours; do not use rejectTimeEntry, which marks the entry REJECTED with a reason instead. Preconditions: the time entry must exist and be in SUBMITTED status; entries already APPROVED or REJECTED cannot be re-decided. Required inputs: timeEntryId (UUID) as a path parameter; there is no request body, and the approver identity is taken from the security context. Emits a WORKORDER_TIME_ENTRY_APPROVED event recording the decision. Returns 404 when no time entry exists for the id, and 409 when the entry is not in SUBMITTED status. 
      * @endpoint post /v1/workorders/timeEntries/{timeEntryId}/approve
      * @param timeEntryId 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -98,11 +98,11 @@ export class TimeEntryAPIService extends BaseService {
     }
 
     /**
-     * Reject a time entry in SUBMITTED state
-     * Reject a submitted time entry and record the rejection details for follow-up
+     * Reject a Submitted Time Entry
+     * Rejects a SUBMITTED time entry, recording the rejection reason, the deciding user, and the decision timestamp for technician follow-up. Use this tool when submitted hours are wrong and must be sent back; do not use approveTimeEntry, which accepts the entry as-is. Preconditions: the time entry must exist and be in SUBMITTED status; entries already APPROVED or REJECTED cannot be re-decided. Required inputs: timeEntryId (UUID) as a path parameter and a body with a non-blank rejectionReason; the deciding identity is taken from the security context. Emits a WORKORDER_TIME_ENTRY_REJECTED event carrying the rejection reason. Returns 404 when no time entry exists for the id, and 409 when the entry is not in SUBMITTED status. 
      * @endpoint post /v1/workorders/timeEntries/{timeEntryId}/reject
      * @param timeEntryId 
-     * @param rejectTimeEntryRequest 
+     * @param rejectTimeEntryRequest Rejection details explaining why the submitted hours are being sent back.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options

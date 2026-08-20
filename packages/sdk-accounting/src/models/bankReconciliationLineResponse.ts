@@ -14,6 +14,18 @@
  */
 export interface BankReconciliationLineResponse { 
     /**
+     * Signed statement amount
+     */
+    amount?: number;
+    /**
+     * Statement line description
+     */
+    description?: string;
+    /**
+     * Statement line date
+     */
+    lineDate?: string;
+    /**
      * Statement line id
      */
     lineId?: string;
@@ -22,17 +34,9 @@ export interface BankReconciliationLineResponse {
      */
     lineNumber?: number;
     /**
-     * Statement line date
+     * Match group id when MATCHED; null while UNMATCHED
      */
-    lineDate?: string;
-    /**
-     * Statement line description
-     */
-    description?: string;
-    /**
-     * Signed statement amount
-     */
-    amount?: number;
+    matchId?: string;
     /**
      * Statement line reference
      */
@@ -41,10 +45,6 @@ export interface BankReconciliationLineResponse {
      * Match status
      */
     status?: BankReconciliationLineResponseStatusEnum;
-    /**
-     * Match group id when MATCHED; null while UNMATCHED
-     */
-    matchId?: string;
 }
 export enum BankReconciliationLineResponseStatusEnum {
     Unmatched = 'UNMATCHED',
@@ -92,8 +92,8 @@ export function instanceOfBankReconciliationLineResponse(value: object): value i
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createBankReconciliationLineResponsePropertyNames();
-    const optionalStringProperties = createBankReconciliationLineResponseOptionalProperties({ name: 'lineId', nullable: false }, { name: 'lineDate', nullable: false }, { name: 'description', nullable: false }, { name: 'reference', nullable: false }, { name: 'status', nullable: false }, { name: 'matchId', nullable: false }, );
-    const optionalNumberProperties = createBankReconciliationLineResponseOptionalProperties({ name: 'lineNumber', nullable: false }, { name: 'amount', nullable: false }, );
+    const optionalStringProperties = createBankReconciliationLineResponseOptionalProperties({ name: 'description', nullable: false }, { name: 'lineDate', nullable: false }, { name: 'lineId', nullable: false }, { name: 'matchId', nullable: false }, { name: 'reference', nullable: false }, { name: 'status', nullable: false }, );
+    const optionalNumberProperties = createBankReconciliationLineResponseOptionalProperties({ name: 'amount', nullable: false }, { name: 'lineNumber', nullable: false }, );
     const optionalBooleanProperties = createBankReconciliationLineResponseOptionalProperties();
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

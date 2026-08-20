@@ -14,9 +14,25 @@
  */
 export interface ProviderRequest { 
     /**
+     * Optional pos-accounting ap_vendor.vendorId for credit matching
+     */
+    apVendorId?: string;
+    /**
+     * How claims are submitted to this provider
+     */
+    claimSubmissionMethod?: string;
+    contactEmail?: string;
+    contactName?: string;
+    contactPhone?: string;
+    /**
+     * Optional pos-catalog ProductEntity.manufacturerId for policy lookup
+     */
+    manufacturerId?: string;
+    /**
      * Provider display name
      */
     name: string;
+    portalUrl?: string;
     /**
      * Who funds the program
      */
@@ -25,22 +41,6 @@ export interface ProviderRequest {
      * Lifecycle status; defaults to ACTIVE on create
      */
     status?: string;
-    /**
-     * Optional pos-accounting ap_vendor.vendorId for credit matching
-     */
-    apVendorId?: string;
-    /**
-     * Optional pos-catalog ProductEntity.manufacturerId for policy lookup
-     */
-    manufacturerId?: string;
-    /**
-     * How claims are submitted to this provider
-     */
-    claimSubmissionMethod?: string;
-    portalUrl?: string;
-    contactName?: string;
-    contactPhone?: string;
-    contactEmail?: string;
 }
 export enum ProviderRequestProviderTypeEnum {
     Manufacturer = 'MANUFACTURER',
@@ -90,7 +90,7 @@ export function instanceOfProviderRequest(value: object): value is ProviderReque
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createProviderRequestPropertyNames('name', 'providerType', );
-    const optionalStringProperties = createProviderRequestOptionalProperties({ name: 'name', nullable: false }, { name: 'providerType', nullable: false }, { name: 'status', nullable: false }, { name: 'apVendorId', nullable: false }, { name: 'manufacturerId', nullable: false }, { name: 'claimSubmissionMethod', nullable: false }, { name: 'portalUrl', nullable: false }, { name: 'contactName', nullable: false }, { name: 'contactPhone', nullable: false }, { name: 'contactEmail', nullable: false }, );
+    const optionalStringProperties = createProviderRequestOptionalProperties({ name: 'apVendorId', nullable: false }, { name: 'claimSubmissionMethod', nullable: false }, { name: 'contactEmail', nullable: false }, { name: 'contactName', nullable: false }, { name: 'contactPhone', nullable: false }, { name: 'manufacturerId', nullable: false }, { name: 'name', nullable: false }, { name: 'portalUrl', nullable: false }, { name: 'providerType', nullable: false }, { name: 'status', nullable: false }, );
     const optionalNumberProperties = createProviderRequestOptionalProperties();
     const optionalBooleanProperties = createProviderRequestOptionalProperties();
 

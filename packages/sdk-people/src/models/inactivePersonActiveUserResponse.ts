@@ -18,10 +18,6 @@ export interface InactivePersonActiveUserResponse {
      */
     linkId: string;
     /**
-     * Username of the security user account with the still-active link
-     */
-    username: string;
-    /**
      * Person identifier in an inactive status
      */
     personId: string;
@@ -33,6 +29,10 @@ export interface InactivePersonActiveUserResponse {
      * When the person\'s status last became effective
      */
     personStatusEffectiveAt?: string;
+    /**
+     * Username of the security user account with the still-active link
+     */
+    username: string;
 }
 export enum InactivePersonActiveUserResponsePersonStatusEnum {
     Active = 'ACTIVE',
@@ -82,8 +82,8 @@ export function instanceOfInactivePersonActiveUserResponse(value: object): value
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createInactivePersonActiveUserResponsePropertyNames('linkId', 'username', 'personId', );
-    const optionalStringProperties = createInactivePersonActiveUserResponseOptionalProperties({ name: 'linkId', nullable: false }, { name: 'username', nullable: false }, { name: 'personId', nullable: false }, { name: 'personStatus', nullable: false }, { name: 'personStatusEffectiveAt', nullable: false }, );
+    const requiredProperties = createInactivePersonActiveUserResponsePropertyNames('linkId', 'personId', 'username', );
+    const optionalStringProperties = createInactivePersonActiveUserResponseOptionalProperties({ name: 'linkId', nullable: false }, { name: 'personId', nullable: false }, { name: 'personStatus', nullable: false }, { name: 'personStatusEffectiveAt', nullable: false }, { name: 'username', nullable: false }, );
     const optionalNumberProperties = createInactivePersonActiveUserResponseOptionalProperties();
     const optionalBooleanProperties = createInactivePersonActiveUserResponseOptionalProperties();
 

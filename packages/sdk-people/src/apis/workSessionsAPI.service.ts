@@ -42,10 +42,10 @@ export class WorkSessionsAPIService extends BaseService {
     }
 
     /**
-     * Start work session
-     * Create/start a work session for a person.
+     * Start A Work Session For Person
+     * Starts a new ACTIVE work session for a person, stamping the start time from the server clock and the actor from the security context. Use this tool when a person clocks in for the day; do not use startWorkSessionBreak, which pauses an already running session. Preconditions: the person must exist in the identity replica, and the person must have no session that is still open. Required inputs: personId (UUID) in the body; the body\&#39;s actor field is ignored, because the recorded actor is always the authenticated username. Emits a PEOPLE_WORK_SESSION_START event. Returns 404 when the person is unknown, and 409 when an active session already exists for the person, including under concurrent start races. 
      * @endpoint post /v1/people/workSessions/start
-     * @param workSessionRequest 
+     * @param workSessionRequest Identifies the person clocking in; the actor field is ignored in favour of the authenticated username.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -112,8 +112,8 @@ export class WorkSessionsAPIService extends BaseService {
     }
 
     /**
-     * Start work session break
-     * Start a break within an active work session.
+     * Start A Break In Work Session
+     * Starts a break inside an active work session, stamping the start time from the server clock. Use this tool when a person pauses work; do not use stopWorkSession, which ends the whole session rather than pausing it. Preconditions: the session must exist and still be open, and no break may already be open on it. Required inputs: the work session id (UUID) as the path parameter; there is no request body. Emits a PEOPLE_WORK_SESSION_BREAK_START event. Returns 404 when no open session exists for the id, and 409 when a break is already open, including under concurrent break-start races. 
      * @endpoint post /v1/people/workSessions/{id}/breaks/start
      * @param id Work session ID
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -172,10 +172,10 @@ export class WorkSessionsAPIService extends BaseService {
     }
 
     /**
-     * Stop work session
-     * Stop an active work session.
+     * Stop An Active Work Session
+     * Stops a person\&#39;s open work session, setting status ENDED and closing any break still open at the same timestamp. Use this tool when a person clocks out; do not use submitWorkSession, which sends an already ENDED session for approval. Preconditions: the person must have an open session; sessions are keyed by person here, not by session id. Required inputs: personId (UUID) in the body; the body\&#39;s actor field is ignored in favour of the authenticated username. Emits a PEOPLE_WORK_SESSION_STOP event. Returns 404 when no active session exists for the person. 
      * @endpoint post /v1/people/workSessions/stop
-     * @param workSessionRequest 
+     * @param workSessionRequest Identifies the person clocking out; the open session is found by person id, not session id.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -242,8 +242,8 @@ export class WorkSessionsAPIService extends BaseService {
     }
 
     /**
-     * Stop work session break
-     * End a break within a work session.
+     * Stop The Open Work Session Break
+     * Ends the open break on a work session, stamping the end time from the server clock. Use this tool when a person returns from a break; do not use stopWorkSession, which ends the session and auto-closes any open break itself. Preconditions: the session must have an open break with no recorded end time. Required inputs: the work session id (UUID) as the path parameter; there is no request body. Emits a PEOPLE_WORK_SESSION_BREAK_STOP event. Returns 409 when no open break exists for the session, including when the session id itself is unknown. 
      * @endpoint post /v1/people/workSessions/{id}/breaks/stop
      * @param id Work session ID
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -302,11 +302,11 @@ export class WorkSessionsAPIService extends BaseService {
     }
 
     /**
-     * Submit work session
-     * Submit an ended work session with its billable and break totals for approval.
+     * Submit An Ended Work Session
+     * Submits an ENDED work session for approval, recording billable and break minute totals and marking the session SUBMITTED. Use this tool after stopWorkSession has ended the session; do not use approveTimeEntriesBatch, which decides time entries, not work sessions. Preconditions: the session must exist and be in ENDED status; ACTIVE or already SUBMITTED sessions are rejected. Required inputs: the work session id (UUID) path parameter and a body with billableMinutes and breakMinutes (both zero or greater) and submittedAt (ISO-8601 instant). Emits a PEOPLE_WORK_SESSION_SUBMIT event. Returns 404 when the session does not exist, and 409 when the session is not in ENDED status. 
      * @endpoint post /v1/people/workSessions/{id}/submit
      * @param id Work session ID
-     * @param workSessionSubmitRequest 
+     * @param workSessionSubmitRequest Billable and break minute totals plus the submission timestamp for the ended session.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options

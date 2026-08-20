@@ -14,47 +14,56 @@
  */
 export interface GetCommunicationPreferencesResponse { 
     /**
-     * Party identifier the preferences belong to
+     * Consent flags keyed by consent type
      */
-    partyId: string;
-    /**
-     * Optimistic locking version token for concurrent updates
-     */
-    version?: string;
+    consentFlags?: { [key: string]: boolean; };
     /**
      * Email communication preference
      */
     emailPreference?: GetCommunicationPreferencesResponseEmailPreferenceEnum;
     /**
-     * SMS communication preference
+     * Marketing communications preference
      */
-    smsPreference?: GetCommunicationPreferencesResponseSmsPreferenceEnum;
+    marketingPreference?: GetCommunicationPreferencesResponseMarketingPreferenceEnum;
+    /**
+     * Party identifier the preferences belong to
+     */
+    partyId: string;
     /**
      * Phone communication preference
      */
     phonePreference?: GetCommunicationPreferencesResponsePhonePreferenceEnum;
     /**
-     * Marketing communications preference
-     */
-    marketingPreference?: GetCommunicationPreferencesResponseMarketingPreferenceEnum;
-    /**
-     * Consent flags keyed by consent type
-     */
-    consentFlags?: { [key: string]: boolean; };
-    /**
      * User-provided note or preferences summary
      */
     preferencesNote?: string;
+    /**
+     * SMS communication preference
+     */
+    smsPreference?: GetCommunicationPreferencesResponseSmsPreferenceEnum;
+    /**
+     * Source of the last update
+     */
+    updateSource?: GetCommunicationPreferencesResponseUpdateSourceEnum;
     /**
      * Last update timestamp (ISO 8601)
      */
     updatedAt?: string;
     /**
-     * Source of the last update
+     * Optimistic locking version token for concurrent updates
      */
-    updateSource?: GetCommunicationPreferencesResponseUpdateSourceEnum;
+    version?: string;
 }
 export enum GetCommunicationPreferencesResponseEmailPreferenceEnum {
+    OptIn = 'OPT_IN',
+    OptOut = 'OPT_OUT',
+    NotApplicable = 'NOT_APPLICABLE'
+};
+export enum GetCommunicationPreferencesResponseMarketingPreferenceEnum {
+    OptIn = 'OPT_IN',
+    OptOut = 'OPT_OUT'
+};
+export enum GetCommunicationPreferencesResponsePhonePreferenceEnum {
     OptIn = 'OPT_IN',
     OptOut = 'OPT_OUT',
     NotApplicable = 'NOT_APPLICABLE'
@@ -63,15 +72,6 @@ export enum GetCommunicationPreferencesResponseSmsPreferenceEnum {
     OptIn = 'OPT_IN',
     OptOut = 'OPT_OUT',
     NotApplicable = 'NOT_APPLICABLE'
-};
-export enum GetCommunicationPreferencesResponsePhonePreferenceEnum {
-    OptIn = 'OPT_IN',
-    OptOut = 'OPT_OUT',
-    NotApplicable = 'NOT_APPLICABLE'
-};
-export enum GetCommunicationPreferencesResponseMarketingPreferenceEnum {
-    OptIn = 'OPT_IN',
-    OptOut = 'OPT_OUT'
 };
 export enum GetCommunicationPreferencesResponseUpdateSourceEnum {
     App = 'APP',
@@ -121,7 +121,7 @@ export function instanceOfGetCommunicationPreferencesResponse(value: object): va
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createGetCommunicationPreferencesResponsePropertyNames('partyId', );
-    const optionalStringProperties = createGetCommunicationPreferencesResponseOptionalProperties({ name: 'partyId', nullable: false }, { name: 'version', nullable: false }, { name: 'emailPreference', nullable: false }, { name: 'smsPreference', nullable: false }, { name: 'phonePreference', nullable: false }, { name: 'marketingPreference', nullable: false }, { name: 'preferencesNote', nullable: false }, { name: 'updatedAt', nullable: false }, { name: 'updateSource', nullable: false }, );
+    const optionalStringProperties = createGetCommunicationPreferencesResponseOptionalProperties({ name: 'emailPreference', nullable: false }, { name: 'marketingPreference', nullable: false }, { name: 'partyId', nullable: false }, { name: 'phonePreference', nullable: false }, { name: 'preferencesNote', nullable: false }, { name: 'smsPreference', nullable: false }, { name: 'updateSource', nullable: false }, { name: 'updatedAt', nullable: false }, { name: 'version', nullable: false }, );
     const optionalNumberProperties = createGetCommunicationPreferencesResponseOptionalProperties();
     const optionalBooleanProperties = createGetCommunicationPreferencesResponseOptionalProperties();
 

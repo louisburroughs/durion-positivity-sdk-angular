@@ -14,29 +14,9 @@
  */
 export interface ProductSummary { 
     /**
-     * Unique product identifier
-     */
-    productId?: string;
-    /**
-     * Product name
-     */
-    name?: string;
-    /**
-     * Stock Keeping Unit
-     */
-    sku?: string;
-    /**
      * Category name
      */
     category?: string;
-    /**
-     * URL of the primary product thumbnail image
-     */
-    thumbnailUrl?: string;
-    /**
-     * Manufacturer brand name
-     */
-    manufacturerBrand?: string;
     /**
      * Lifecycle state; only populated for detailed search
      */
@@ -46,6 +26,10 @@ export interface ProductSummary {
      */
     lifecycleStateEffectiveAt?: string | null;
     /**
+     * Manufacturer brand name
+     */
+    manufacturerBrand?: string;
+    /**
      * Active MSRP amount; null when the product has no active MSRP or for lean search
      */
     msrpAmount?: string | null;
@@ -54,13 +38,29 @@ export interface ProductSummary {
      */
     msrpCurrency?: string | null;
     /**
+     * End of the active MSRP effective window; null for open-ended, no active MSRP, or lean search
+     */
+    msrpEffectiveEndDate?: string | null;
+    /**
      * Start of the active MSRP effective window; null when no active MSRP or for lean search
      */
     msrpEffectiveStartDate?: string | null;
     /**
-     * End of the active MSRP effective window; null for open-ended, no active MSRP, or lean search
+     * Product name
      */
-    msrpEffectiveEndDate?: string | null;
+    name?: string;
+    /**
+     * Unique product identifier
+     */
+    productId?: string;
+    /**
+     * Stock Keeping Unit
+     */
+    sku?: string;
+    /**
+     * URL of the primary product thumbnail image
+     */
+    thumbnailUrl?: string;
 }
 export enum ProductSummaryLifecycleStateEnum {
     Active = 'ACTIVE',
@@ -109,7 +109,7 @@ export function instanceOfProductSummary(value: object): value is ProductSummary
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createProductSummaryPropertyNames();
-    const optionalStringProperties = createProductSummaryOptionalProperties({ name: 'productId', nullable: false }, { name: 'name', nullable: false }, { name: 'sku', nullable: false }, { name: 'category', nullable: false }, { name: 'thumbnailUrl', nullable: false }, { name: 'manufacturerBrand', nullable: false }, { name: 'lifecycleState', nullable: true }, { name: 'lifecycleStateEffectiveAt', nullable: true }, { name: 'msrpAmount', nullable: true }, { name: 'msrpCurrency', nullable: true }, { name: 'msrpEffectiveStartDate', nullable: true }, { name: 'msrpEffectiveEndDate', nullable: true }, );
+    const optionalStringProperties = createProductSummaryOptionalProperties({ name: 'category', nullable: false }, { name: 'lifecycleState', nullable: true }, { name: 'lifecycleStateEffectiveAt', nullable: true }, { name: 'manufacturerBrand', nullable: false }, { name: 'msrpAmount', nullable: true }, { name: 'msrpCurrency', nullable: true }, { name: 'msrpEffectiveEndDate', nullable: true }, { name: 'msrpEffectiveStartDate', nullable: true }, { name: 'name', nullable: false }, { name: 'productId', nullable: false }, { name: 'sku', nullable: false }, { name: 'thumbnailUrl', nullable: false }, );
     const optionalNumberProperties = createProductSummaryOptionalProperties();
     const optionalBooleanProperties = createProductSummaryOptionalProperties();
 

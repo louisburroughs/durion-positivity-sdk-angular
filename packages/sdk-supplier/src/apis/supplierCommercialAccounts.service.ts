@@ -41,23 +41,23 @@ export class SupplierCommercialAccountsService extends BaseService {
 
     /**
      * Create commercial account
-     * Add a billing or delivery account; delivery accounts carry the pos-location mapping
+     * Adds a commercial account to a vendor profile, either the profile\&#39;s single BILLING account or a DELIVERY account mapping one pos-location to its vendor account number. Use this tool when a location is first authorised to order from a supplier; do not use it to correct an account number, which is updateCommercialAccount. Preconditions: the vendor profile must exist and be ADMIN-managed, and the slot must be free — one BILLING account per profile and one DELIVERY account per profile and location pair. Required inputs: vendorProfileId (UUIDv7) path parameter plus role and accountNumber in the body; deliveryLocationId is required for DELIVERY and must be absent for BILLING, and agencyCode is optional. Emits a SUPPLIER_ACCOUNT_CREATE audit event; no order or invoice records are touched. Returns 404 when the profile does not exist, 409 when the profile is YAML-managed or the account slot is already taken, and 400 when accountNumber is blank or deliveryLocationId does not match the role. 
      * @endpoint post /v1/supplier/admin/profiles/{vendorProfileId}/accounts
      * @param vendorProfileId Owning vendor profile identifier (UUIDv7). Must reference an existing vendor profile.
-     * @param commercialAccountRequest 
+     * @param commercialAccountRequest Commercial account to create on the vendor profile.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public createAccount(vendorProfileId: string, commercialAccountRequest: CommercialAccountRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<CommercialAccountView>;
-    public createAccount(vendorProfileId: string, commercialAccountRequest: CommercialAccountRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<CommercialAccountView>>;
-    public createAccount(vendorProfileId: string, commercialAccountRequest: CommercialAccountRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<CommercialAccountView>>;
-    public createAccount(vendorProfileId: string, commercialAccountRequest: CommercialAccountRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public createCommercialAccount(vendorProfileId: string, commercialAccountRequest: CommercialAccountRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<CommercialAccountView>;
+    public createCommercialAccount(vendorProfileId: string, commercialAccountRequest: CommercialAccountRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<CommercialAccountView>>;
+    public createCommercialAccount(vendorProfileId: string, commercialAccountRequest: CommercialAccountRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<CommercialAccountView>>;
+    public createCommercialAccount(vendorProfileId: string, commercialAccountRequest: CommercialAccountRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (vendorProfileId === null || vendorProfileId === undefined) {
-            throw new Error('Required parameter vendorProfileId was null or undefined when calling createAccount.');
+            throw new Error('Required parameter vendorProfileId was null or undefined when calling createCommercialAccount.');
         }
         if (commercialAccountRequest === null || commercialAccountRequest === undefined) {
-            throw new Error('Required parameter commercialAccountRequest was null or undefined when calling createAccount.');
+            throw new Error('Required parameter commercialAccountRequest was null or undefined when calling createCommercialAccount.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -115,7 +115,7 @@ export class SupplierCommercialAccountsService extends BaseService {
 
     /**
      * Delete commercial account
-     * Remove a commercial account
+     * Removes a commercial account from a vendor profile, freeing its BILLING or per-location DELIVERY slot. Use this tool when a location stops ordering from the supplier; to change the account number instead, call updateCommercialAccount, which preserves the slot. Preconditions: the profile must exist and be ADMIN-managed, and the account must belong to that profile. Required inputs: vendorProfileId and accountId (UUIDv7) path parameters; there is no request body. Emits a SUPPLIER_ACCOUNT_DELETE audit event; ordering for the mapped location resolves to a not-configured outcome from that point on. Returns 404 when the profile or account does not exist, and 409 when the profile is YAML-managed. 
      * @endpoint delete /v1/supplier/admin/profiles/{vendorProfileId}/accounts/{accountId}
      * @param vendorProfileId Owning vendor profile identifier (UUIDv7). Must reference an existing vendor profile.
      * @param accountId Commercial account identifier (UUIDv7). Must belong to the vendor profile in the path.
@@ -123,15 +123,15 @@ export class SupplierCommercialAccountsService extends BaseService {
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public deleteAccount(vendorProfileId: string, accountId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public deleteAccount(vendorProfileId: string, accountId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public deleteAccount(vendorProfileId: string, accountId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public deleteAccount(vendorProfileId: string, accountId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public deleteCommercialAccount(vendorProfileId: string, accountId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any>;
+    public deleteCommercialAccount(vendorProfileId: string, accountId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
+    public deleteCommercialAccount(vendorProfileId: string, accountId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
+    public deleteCommercialAccount(vendorProfileId: string, accountId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (vendorProfileId === null || vendorProfileId === undefined) {
-            throw new Error('Required parameter vendorProfileId was null or undefined when calling deleteAccount.');
+            throw new Error('Required parameter vendorProfileId was null or undefined when calling deleteCommercialAccount.');
         }
         if (accountId === null || accountId === undefined) {
-            throw new Error('Required parameter accountId was null or undefined when calling deleteAccount.');
+            throw new Error('Required parameter accountId was null or undefined when calling deleteCommercialAccount.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -179,19 +179,19 @@ export class SupplierCommercialAccountsService extends BaseService {
 
     /**
      * List commercial accounts
-     * Accounts of a vendor profile, billing first
+     * Returns the commercial accounts configured on a vendor profile, the BILLING account first and then the per-location DELIVERY accounts. Use this tool to find the accountId or the vendor account number for a location; do not use it to read credentials, which are never returned here because account numbers are ordinary configuration data. Preconditions: the vendor profile must exist. Required inputs: vendorProfileId (UUIDv7) path parameter; there is no request body or filtering. Emits a SUPPLIER_ACCOUNT_LIST audit event; no configuration is changed. Returns 404 when the vendor profile does not exist, and 200 with an empty array when the profile exists but has no accounts. 
      * @endpoint get /v1/supplier/admin/profiles/{vendorProfileId}/accounts
      * @param vendorProfileId Owning vendor profile identifier (UUIDv7). Must reference an existing vendor profile.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public listAccounts(vendorProfileId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<CommercialAccountView>>;
-    public listAccounts(vendorProfileId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<CommercialAccountView>>>;
-    public listAccounts(vendorProfileId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<CommercialAccountView>>>;
-    public listAccounts(vendorProfileId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public listCommercialAccounts(vendorProfileId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<CommercialAccountView>>;
+    public listCommercialAccounts(vendorProfileId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<CommercialAccountView>>>;
+    public listCommercialAccounts(vendorProfileId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<CommercialAccountView>>>;
+    public listCommercialAccounts(vendorProfileId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (vendorProfileId === null || vendorProfileId === undefined) {
-            throw new Error('Required parameter vendorProfileId was null or undefined when calling listAccounts.');
+            throw new Error('Required parameter vendorProfileId was null or undefined when calling listCommercialAccounts.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -239,27 +239,27 @@ export class SupplierCommercialAccountsService extends BaseService {
 
     /**
      * Update commercial account
-     * Replace a commercial account
+     * Replaces the role, account number, agency code and location mapping of an existing commercial account. Use this tool to correct a vendor-assigned account number or move a DELIVERY account to another location; do not use it to add a second account, which is createCommercialAccount. Preconditions: the profile must exist and be ADMIN-managed, the account must belong to that profile, and the target slot must not already be occupied by another account. Required inputs: vendorProfileId and accountId (UUIDv7) path parameters plus the full body, because every field is replaced; omitting agencyCode clears it. Emits a SUPPLIER_ACCOUNT_UPDATE audit event; orders already transmitted under the previous account number are unaffected. Returns 404 when the profile or account does not exist, 409 when the profile is YAML-managed or the account slot is taken, and 400 when accountNumber is blank or deliveryLocationId does not match the role. 
      * @endpoint put /v1/supplier/admin/profiles/{vendorProfileId}/accounts/{accountId}
      * @param vendorProfileId Owning vendor profile identifier (UUIDv7). Must reference an existing vendor profile.
      * @param accountId Commercial account identifier (UUIDv7). Must belong to the vendor profile in the path.
-     * @param commercialAccountRequest 
+     * @param commercialAccountRequest Commercial account to store in place of the existing one on the vendor profile.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public updateAccount(vendorProfileId: string, accountId: string, commercialAccountRequest: CommercialAccountRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<CommercialAccountView>;
-    public updateAccount(vendorProfileId: string, accountId: string, commercialAccountRequest: CommercialAccountRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<CommercialAccountView>>;
-    public updateAccount(vendorProfileId: string, accountId: string, commercialAccountRequest: CommercialAccountRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<CommercialAccountView>>;
-    public updateAccount(vendorProfileId: string, accountId: string, commercialAccountRequest: CommercialAccountRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public updateCommercialAccount(vendorProfileId: string, accountId: string, commercialAccountRequest: CommercialAccountRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<CommercialAccountView>;
+    public updateCommercialAccount(vendorProfileId: string, accountId: string, commercialAccountRequest: CommercialAccountRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<CommercialAccountView>>;
+    public updateCommercialAccount(vendorProfileId: string, accountId: string, commercialAccountRequest: CommercialAccountRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<CommercialAccountView>>;
+    public updateCommercialAccount(vendorProfileId: string, accountId: string, commercialAccountRequest: CommercialAccountRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (vendorProfileId === null || vendorProfileId === undefined) {
-            throw new Error('Required parameter vendorProfileId was null or undefined when calling updateAccount.');
+            throw new Error('Required parameter vendorProfileId was null or undefined when calling updateCommercialAccount.');
         }
         if (accountId === null || accountId === undefined) {
-            throw new Error('Required parameter accountId was null or undefined when calling updateAccount.');
+            throw new Error('Required parameter accountId was null or undefined when calling updateCommercialAccount.');
         }
         if (commercialAccountRequest === null || commercialAccountRequest === undefined) {
-            throw new Error('Required parameter commercialAccountRequest was null or undefined when calling updateAccount.');
+            throw new Error('Required parameter commercialAccountRequest was null or undefined when calling updateCommercialAccount.');
         }
 
         let localVarHeaders = this.defaultHeaders;

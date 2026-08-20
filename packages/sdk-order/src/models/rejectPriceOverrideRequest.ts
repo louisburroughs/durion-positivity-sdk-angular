@@ -14,13 +14,13 @@
  */
 export interface RejectPriceOverrideRequest { 
     /**
-     * Reason explaining why the override is being rejected
-     */
-    reason: string;
-    /**
      * Optional reviewer comments recorded with the rejection
      */
     comments?: string;
+    /**
+     * Reason explaining why the override is being rejected
+     */
+    reason: string;
 }
 
 function isOptionalRejectPriceOverrideRequestPropertyOfType(
@@ -62,7 +62,7 @@ export function instanceOfRejectPriceOverrideRequest(value: object): value is Re
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createRejectPriceOverrideRequestPropertyNames('reason', );
-    const optionalStringProperties = createRejectPriceOverrideRequestOptionalProperties({ name: 'reason', nullable: false }, { name: 'comments', nullable: false }, );
+    const optionalStringProperties = createRejectPriceOverrideRequestOptionalProperties({ name: 'comments', nullable: false }, { name: 'reason', nullable: false }, );
     const optionalNumberProperties = createRejectPriceOverrideRequestOptionalProperties();
     const optionalBooleanProperties = createRejectPriceOverrideRequestOptionalProperties();
 

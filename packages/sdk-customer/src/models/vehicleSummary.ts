@@ -14,14 +14,6 @@
  */
 export interface VehicleSummary { 
     /**
-     * Identifier of the vehicle
-     */
-    vehicleId: string;
-    /**
-     * Vehicle Identification Number
-     */
-    vin?: string;
-    /**
      * License plate
      */
     licensePlate?: string;
@@ -33,6 +25,14 @@ export interface VehicleSummary {
      * Vehicle model
      */
     model?: string;
+    /**
+     * Identifier of the vehicle
+     */
+    vehicleId: string;
+    /**
+     * Vehicle Identification Number
+     */
+    vin?: string;
     /**
      * Model year
      */
@@ -78,7 +78,7 @@ export function instanceOfVehicleSummary(value: object): value is VehicleSummary
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createVehicleSummaryPropertyNames('vehicleId', );
-    const optionalStringProperties = createVehicleSummaryOptionalProperties({ name: 'vehicleId', nullable: false }, { name: 'vin', nullable: false }, { name: 'licensePlate', nullable: false }, { name: 'make', nullable: false }, { name: 'model', nullable: false }, );
+    const optionalStringProperties = createVehicleSummaryOptionalProperties({ name: 'licensePlate', nullable: false }, { name: 'make', nullable: false }, { name: 'model', nullable: false }, { name: 'vehicleId', nullable: false }, { name: 'vin', nullable: false }, );
     const optionalNumberProperties = createVehicleSummaryOptionalProperties({ name: 'year', nullable: false }, );
     const optionalBooleanProperties = createVehicleSummaryOptionalProperties();
 

@@ -13,15 +13,19 @@
  * Line item received from vendor
  */
 export interface ReceivedLineItem { 
-    inventoryItem?: boolean;
-    /**
-     * Product/SKU UUID
-     */
-    productId: string;
     /**
      * Product description
      */
     description: string;
+    inventoryItem?: boolean;
+    /**
+     * Is this an inventory item (true) or expense item (false)
+     */
+    isInventoryItem?: boolean;
+    /**
+     * Product/SKU UUID
+     */
+    productId: string;
     /**
      * Quantity received
      */
@@ -30,10 +34,6 @@ export interface ReceivedLineItem {
      * Unit price from PO
      */
     unitPrice: number;
-    /**
-     * Is this an inventory item (true) or expense item (false)
-     */
-    isInventoryItem?: boolean;
 }
 
 function isOptionalReceivedLineItemPropertyOfType(
@@ -74,8 +74,8 @@ export function instanceOfReceivedLineItem(value: object): value is ReceivedLine
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createReceivedLineItemPropertyNames('productId', 'description', 'quantity', 'unitPrice', );
-    const optionalStringProperties = createReceivedLineItemOptionalProperties({ name: 'productId', nullable: false }, { name: 'description', nullable: false }, );
+    const requiredProperties = createReceivedLineItemPropertyNames('description', 'productId', 'quantity', 'unitPrice', );
+    const optionalStringProperties = createReceivedLineItemOptionalProperties({ name: 'description', nullable: false }, { name: 'productId', nullable: false }, );
     const optionalNumberProperties = createReceivedLineItemOptionalProperties({ name: 'quantity', nullable: false }, { name: 'unitPrice', nullable: false }, );
     const optionalBooleanProperties = createReceivedLineItemOptionalProperties({ name: 'inventoryItem', nullable: false }, { name: 'isInventoryItem', nullable: false }, );
 

@@ -22,17 +22,17 @@ export interface GLAccountCreateRequest {
      */
     accountName: string;
     /**
-     * Type of the GL account
-     */
-    accountType: GLAccountCreateRequestAccountTypeEnum;
-    /**
      * Optional subtype refining accountType for report grouping and posting-config plausibility checks (e.g. UNDEPOSITED_FUNDS for the cash-receipt clearing account). Null when no refinement applies.
      */
     accountSubtype?: GLAccountCreateRequestAccountSubtypeEnum;
     /**
-     * Whether journal entry lines on this account participate in reconciliation (e.g. settlement/bank reconciliation). Defaults to false when omitted.
+     * Type of the GL account
      */
-    reconcilable?: boolean;
+    accountType: GLAccountCreateRequestAccountTypeEnum;
+    /**
+     * Date and time the account becomes active (ISO 8601)
+     */
+    activationDate: string;
     /**
      * Optional description of the account
      */
@@ -42,17 +42,10 @@ export interface GLAccountCreateRequest {
      */
     parentAccountId?: string;
     /**
-     * Date and time the account becomes active (ISO 8601)
+     * Whether journal entry lines on this account participate in reconciliation (e.g. settlement/bank reconciliation). Defaults to false when omitted.
      */
-    activationDate: string;
+    reconcilable?: boolean;
 }
-export enum GLAccountCreateRequestAccountTypeEnum {
-    Asset = 'ASSET',
-    Liability = 'LIABILITY',
-    Equity = 'EQUITY',
-    Revenue = 'REVENUE',
-    Expense = 'EXPENSE'
-};
 export enum GLAccountCreateRequestAccountSubtypeEnum {
     Receivable = 'RECEIVABLE',
     Payable = 'PAYABLE',
@@ -66,6 +59,13 @@ export enum GLAccountCreateRequestAccountSubtypeEnum {
     CostOfSales = 'COST_OF_SALES',
     OperatingExpense = 'OPERATING_EXPENSE',
     Other = 'OTHER'
+};
+export enum GLAccountCreateRequestAccountTypeEnum {
+    Asset = 'ASSET',
+    Liability = 'LIABILITY',
+    Equity = 'EQUITY',
+    Revenue = 'REVENUE',
+    Expense = 'EXPENSE'
 };
 
 
@@ -109,7 +109,7 @@ export function instanceOfGLAccountCreateRequest(value: object): value is GLAcco
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createGLAccountCreateRequestPropertyNames('accountCode', 'accountName', 'accountType', 'activationDate', );
-    const optionalStringProperties = createGLAccountCreateRequestOptionalProperties({ name: 'accountCode', nullable: false }, { name: 'accountName', nullable: false }, { name: 'accountType', nullable: false }, { name: 'accountSubtype', nullable: false }, { name: 'description', nullable: false }, { name: 'parentAccountId', nullable: false }, { name: 'activationDate', nullable: false }, );
+    const optionalStringProperties = createGLAccountCreateRequestOptionalProperties({ name: 'accountCode', nullable: false }, { name: 'accountName', nullable: false }, { name: 'accountSubtype', nullable: false }, { name: 'accountType', nullable: false }, { name: 'activationDate', nullable: false }, { name: 'description', nullable: false }, { name: 'parentAccountId', nullable: false }, );
     const optionalNumberProperties = createGLAccountCreateRequestOptionalProperties();
     const optionalBooleanProperties = createGLAccountCreateRequestOptionalProperties({ name: 'reconcilable', nullable: false }, );
 

@@ -15,21 +15,21 @@ import { ReturnLineRequest } from './returnLineRequest';
  */
 export interface CreateReturnRequest { 
     /**
+     * Return lines
+     */
+    lines: Array<ReturnLineRequest>;
+    /**
      * The single COMPLETED order being returned against
      */
     originalOrderId: string;
-    /**
-     * How the refund is issued
-     */
-    refundMethod: CreateReturnRequestRefundMethodEnum;
     /**
      * Return reason code
      */
     reasonCode?: string;
     /**
-     * Return lines
+     * How the refund is issued
      */
-    lines: Array<ReturnLineRequest>;
+    refundMethod: CreateReturnRequestRefundMethodEnum;
 }
 export enum CreateReturnRequestRefundMethodEnum {
     OriginalTender = 'ORIGINAL_TENDER',
@@ -77,8 +77,8 @@ export function instanceOfCreateReturnRequest(value: object): value is CreateRet
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createCreateReturnRequestPropertyNames('originalOrderId', 'refundMethod', 'lines', );
-    const optionalStringProperties = createCreateReturnRequestOptionalProperties({ name: 'originalOrderId', nullable: false }, { name: 'refundMethod', nullable: false }, { name: 'reasonCode', nullable: false }, );
+    const requiredProperties = createCreateReturnRequestPropertyNames('lines', 'originalOrderId', 'refundMethod', );
+    const optionalStringProperties = createCreateReturnRequestOptionalProperties({ name: 'originalOrderId', nullable: false }, { name: 'reasonCode', nullable: false }, { name: 'refundMethod', nullable: false }, );
     const optionalNumberProperties = createCreateReturnRequestOptionalProperties();
     const optionalBooleanProperties = createCreateReturnRequestOptionalProperties();
 

@@ -14,21 +14,21 @@
  */
 export interface ItemCostsDto { 
     /**
+     * Weighted average cost
+     */
+    averageCost?: number;
+    /**
      * Item identifier
      */
     itemId: string;
-    /**
-     * Current standard cost
-     */
-    standardCost?: number;
     /**
      * Most recent purchase cost
      */
     lastCost?: number;
     /**
-     * Weighted average cost
+     * Current standard cost
      */
-    averageCost?: number;
+    standardCost?: number;
 }
 
 function isOptionalItemCostsDtoPropertyOfType(
@@ -71,7 +71,7 @@ export function instanceOfItemCostsDto(value: object): value is ItemCostsDto {
 
     const requiredProperties = createItemCostsDtoPropertyNames('itemId', );
     const optionalStringProperties = createItemCostsDtoOptionalProperties({ name: 'itemId', nullable: false }, );
-    const optionalNumberProperties = createItemCostsDtoOptionalProperties({ name: 'standardCost', nullable: false }, { name: 'lastCost', nullable: false }, { name: 'averageCost', nullable: false }, );
+    const optionalNumberProperties = createItemCostsDtoOptionalProperties({ name: 'averageCost', nullable: false }, { name: 'lastCost', nullable: false }, { name: 'standardCost', nullable: false }, );
     const optionalBooleanProperties = createItemCostsDtoOptionalProperties();
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

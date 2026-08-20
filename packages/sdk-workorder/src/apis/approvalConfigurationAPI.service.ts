@@ -38,20 +38,20 @@ export class ApprovalConfigurationAPIService extends BaseService {
     }
 
     /**
-     * Create a new approval configuration
-     * Add a new approval configuration.
+     * Create Approval Configuration
+     * Creates an approval configuration defining how approvals are captured for a location, a location-customer pair, or globally when both scoping ids are omitted. Use this tool when introducing a new approval rule; do not use updateApprovalConfiguration, which modifies an existing configuration by id. Preconditions: none — duplicates for the same scope are not rejected, and the most specific row wins at resolution time. Required inputs: approvalMethod, one of CLICK_CONFIRM, SIGNATURE, ELECTRONIC_SIGNATURE, or VERBAL_CONFIRMATION; locationId, customerId, declineExpiryDays, requireSignature, and priority are optional. Emits a WORKORDER_APPROVAL_CONFIG_CREATE event. Returns 200 with the persisted configuration, and 400 when approvalMethod is not one of the accepted values. 
      * @endpoint post /v1/workexec/approvalConfigurations
-     * @param approvalConfigurationRequest Configuration object to be created
+     * @param approvalConfigurationRequest Approval capture rule to create, scoped by optional location and customer ids.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public createConfiguration(approvalConfigurationRequest: ApprovalConfigurationRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ApprovalConfigurationResponse>;
-    public createConfiguration(approvalConfigurationRequest: ApprovalConfigurationRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ApprovalConfigurationResponse>>;
-    public createConfiguration(approvalConfigurationRequest: ApprovalConfigurationRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ApprovalConfigurationResponse>>;
-    public createConfiguration(approvalConfigurationRequest: ApprovalConfigurationRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public createApprovalConfiguration(approvalConfigurationRequest: ApprovalConfigurationRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ApprovalConfigurationResponse>;
+    public createApprovalConfiguration(approvalConfigurationRequest: ApprovalConfigurationRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ApprovalConfigurationResponse>>;
+    public createApprovalConfiguration(approvalConfigurationRequest: ApprovalConfigurationRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ApprovalConfigurationResponse>>;
+    public createApprovalConfiguration(approvalConfigurationRequest: ApprovalConfigurationRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (approvalConfigurationRequest === null || approvalConfigurationRequest === undefined) {
-            throw new Error('Required parameter approvalConfigurationRequest was null or undefined when calling createConfiguration.');
+            throw new Error('Required parameter approvalConfigurationRequest was null or undefined when calling createApprovalConfiguration.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -108,20 +108,20 @@ export class ApprovalConfigurationAPIService extends BaseService {
     }
 
     /**
-     * Delete an approval configuration
-     * Delete a configuration by its unique ID.
+     * Delete Approval Configuration
+     * Deletes an approval configuration by id, after which resolution falls through to broader scopes or the global default. Use this tool when retiring an approval rule; do not use updateApprovalConfiguration, which keeps the rule and changes its values. Preconditions: none — deletion is idempotent, and deleting an id that does not exist is a silent no-op. Required inputs: approvalId (UUID) as a path parameter; there is no request body. Emits a WORKORDER_APPROVAL_CONFIG_DELETE event. Returns 204 regardless of whether the configuration previously existed. 
      * @endpoint delete /v1/workexec/approvalConfigurations/{approvalId}
      * @param approvalId ID of the configuration to delete
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public deleteConfiguration(approvalId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public deleteConfiguration(approvalId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public deleteConfiguration(approvalId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public deleteConfiguration(approvalId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public deleteApprovalConfiguration(approvalId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
+    public deleteApprovalConfiguration(approvalId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
+    public deleteApprovalConfiguration(approvalId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
+    public deleteApprovalConfiguration(approvalId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (approvalId === null || approvalId === undefined) {
-            throw new Error('Required parameter approvalId was null or undefined when calling deleteConfiguration.');
+            throw new Error('Required parameter approvalId was null or undefined when calling deleteApprovalConfiguration.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -151,7 +151,7 @@ export class ApprovalConfigurationAPIService extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/workexec/approvalConfigurations/${this.configuration.encodeParam({name: "approvalId", value: approvalId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
+        let localVarPath = `/v1/workexec/approvalConfigurations/${this.configuration.encodeParam({name: "approvalId", value: approvalId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<any>('delete', `${basePath}${localVarPath}`,
             {
@@ -167,64 +167,8 @@ export class ApprovalConfigurationAPIService extends BaseService {
     }
 
     /**
-     * Get all approval configurations
-     * Retrieve a list of all approval configurations.
-     * @endpoint get /v1/workexec
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     * @param options additional options
-     */
-    public getAllConfigurations(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<ApprovalConfigurationResponse>>;
-    public getAllConfigurations(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<ApprovalConfigurationResponse>>>;
-    public getAllConfigurations(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<ApprovalConfigurationResponse>>>;
-    public getAllConfigurations(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
-
-        let localVarHeaders = this.defaultHeaders;
-
-        // authentication (bearerAuth) required
-        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
-
-        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
-            'application/json'
-        ]);
-        if (localVarHttpHeaderAcceptSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
-        }
-
-        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
-
-        const localVarTransferCache: boolean = options?.transferCache ?? true;
-
-
-        let responseType_: 'text' | 'json' | 'blob' = 'json';
-        if (localVarHttpHeaderAcceptSelected) {
-            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
-                responseType_ = 'text';
-            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
-                responseType_ = 'json';
-            } else {
-                responseType_ = 'blob';
-            }
-        }
-
-        let localVarPath = `/v1/workexec`;
-        const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<Array<ApprovalConfigurationResponse>>('get', `${basePath}${localVarPath}`,
-            {
-                context: localVarHttpContext,
-                responseType: <any>responseType_,
-                ...(withCredentials ? { withCredentials } : {}),
-                headers: localVarHeaders,
-                observe: observe,
-                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * Get applicable configuration
-     * Get the most specific configuration for a location and customer.
+     * Resolve Applicable Approval Configuration
+     * Resolves the most specific approval configuration for a location and customer, trying the location-plus-customer row first, then the location-wide row, then the global default with no location or customer. Use this tool when deciding how an approval must be captured for a specific job; use getApprovalConfiguration instead when the configuration id is already known. Preconditions: none — both filters are optional and narrower matches win. Required inputs: locationId (UUID) and customerId (UUID) as optional query parameters. No events are emitted and no state changes; this is a read-only projection. Returns 404 when no configuration matches at any specificity, in which case callers fall back to built-in defaults. 
      * @endpoint get /v1/workexec/approvalConfigurations/applicable
      * @param locationId Location ID
      * @param customerId Customer ID
@@ -232,10 +176,10 @@ export class ApprovalConfigurationAPIService extends BaseService {
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public getApplicableConfiguration(locationId?: string, customerId?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ApprovalConfigurationResponse>;
-    public getApplicableConfiguration(locationId?: string, customerId?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ApprovalConfigurationResponse>>;
-    public getApplicableConfiguration(locationId?: string, customerId?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ApprovalConfigurationResponse>>;
-    public getApplicableConfiguration(locationId?: string, customerId?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getApplicableApprovalConfiguration(locationId?: string, customerId?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ApprovalConfigurationResponse>;
+    public getApplicableApprovalConfiguration(locationId?: string, customerId?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ApprovalConfigurationResponse>>;
+    public getApplicableApprovalConfiguration(locationId?: string, customerId?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ApprovalConfigurationResponse>>;
+    public getApplicableApprovalConfiguration(locationId?: string, customerId?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
 
@@ -302,20 +246,20 @@ export class ApprovalConfigurationAPIService extends BaseService {
     }
 
     /**
-     * Get configuration by ID
-     * Retrieve an approval configuration by its unique ID.
+     * Get Approval Configuration by Id
+     * Returns a single approval configuration by its unique id. Use this tool when the configuration id is already known; use getApplicableApprovalConfiguration instead to resolve which configuration governs a given location and customer. Preconditions: the configuration must exist. Required inputs: approvalId (UUID) as a path parameter. No events are emitted and no state changes; this is a read-only projection. Returns 404 when no configuration exists for the id. 
      * @endpoint get /v1/workexec/approvalConfigurations/{approvalId}
      * @param approvalId ID of the configuration to retrieve
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public getConfigurationById(approvalId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ApprovalConfigurationResponse>;
-    public getConfigurationById(approvalId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ApprovalConfigurationResponse>>;
-    public getConfigurationById(approvalId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ApprovalConfigurationResponse>>;
-    public getConfigurationById(approvalId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getApprovalConfiguration(approvalId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ApprovalConfigurationResponse>;
+    public getApprovalConfiguration(approvalId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ApprovalConfigurationResponse>>;
+    public getApprovalConfiguration(approvalId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ApprovalConfigurationResponse>>;
+    public getApprovalConfiguration(approvalId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (approvalId === null || approvalId === undefined) {
-            throw new Error('Required parameter approvalId was null or undefined when calling getConfigurationById.');
+            throw new Error('Required parameter approvalId was null or undefined when calling getApprovalConfiguration.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -346,7 +290,7 @@ export class ApprovalConfigurationAPIService extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/workexec/approvalConfigurations/${this.configuration.encodeParam({name: "approvalId", value: approvalId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
+        let localVarPath = `/v1/workexec/approvalConfigurations/${this.configuration.encodeParam({name: "approvalId", value: approvalId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<ApprovalConfigurationResponse>('get', `${basePath}${localVarPath}`,
             {
@@ -362,24 +306,80 @@ export class ApprovalConfigurationAPIService extends BaseService {
     }
 
     /**
-     * Update an approval configuration
-     * Update an existing approval configuration.
-     * @endpoint put /v1/workexec/approvalConfigurations/{approvalId}
-     * @param approvalId ID of the configuration to update
-     * @param approvalConfigurationRequest Updated configuration object
+     * List All Approval Configurations
+     * Returns every approval configuration, covering location-specific, customer-specific, and global default rows that govern how estimate and workorder approvals are captured. Use this tool when administering approval rules; use getApplicableApprovalConfiguration instead to resolve the single configuration that applies to one location and customer. Preconditions: none beyond the caller holding workorder:approval_config:view. Required inputs: none — there are no filters or pagination parameters. Emits a WORKORDER_APPROVAL_CONFIG_LIST audit event; no configuration state changes — this is a read-only projection. Returns 200 with the full list, possibly empty. 
+     * @endpoint get /v1/workexec
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public updateConfiguration(approvalId: string, approvalConfigurationRequest: ApprovalConfigurationRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ApprovalConfigurationResponse>;
-    public updateConfiguration(approvalId: string, approvalConfigurationRequest: ApprovalConfigurationRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ApprovalConfigurationResponse>>;
-    public updateConfiguration(approvalId: string, approvalConfigurationRequest: ApprovalConfigurationRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ApprovalConfigurationResponse>>;
-    public updateConfiguration(approvalId: string, approvalConfigurationRequest: ApprovalConfigurationRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public listApprovalConfigurations(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<ApprovalConfigurationResponse>>;
+    public listApprovalConfigurations(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<ApprovalConfigurationResponse>>>;
+    public listApprovalConfigurations(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<ApprovalConfigurationResponse>>>;
+    public listApprovalConfigurations(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/workexec`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<Array<ApprovalConfigurationResponse>>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Update Approval Configuration
+     * Replaces every field of an existing approval configuration with the values in the request, including nulling fields that are omitted. Use this tool when changing an existing approval rule; do not use createApprovalConfiguration, which adds a new rule rather than replacing one. Preconditions: the configuration must exist; this is a full replacement, so send all fields that should remain set. Required inputs: approvalId (UUID) as a path parameter and approvalMethod (CLICK_CONFIRM, SIGNATURE, ELECTRONIC_SIGNATURE, or VERBAL_CONFIRMATION) in the body; locationId, customerId, declineExpiryDays, requireSignature, and priority are optional. Emits a WORKORDER_APPROVAL_CONFIG_UPDATE event. Returns 404 when the configuration does not exist and also when approvalMethod is not a valid value, because both surface as the same IllegalArgumentException in this operation. 
+     * @endpoint put /v1/workexec/approvalConfigurations/{approvalId}
+     * @param approvalId ID of the configuration to update
+     * @param approvalConfigurationRequest Full replacement values for the approval configuration.
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public updateApprovalConfiguration(approvalId: string, approvalConfigurationRequest: ApprovalConfigurationRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ApprovalConfigurationResponse>;
+    public updateApprovalConfiguration(approvalId: string, approvalConfigurationRequest: ApprovalConfigurationRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ApprovalConfigurationResponse>>;
+    public updateApprovalConfiguration(approvalId: string, approvalConfigurationRequest: ApprovalConfigurationRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ApprovalConfigurationResponse>>;
+    public updateApprovalConfiguration(approvalId: string, approvalConfigurationRequest: ApprovalConfigurationRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (approvalId === null || approvalId === undefined) {
-            throw new Error('Required parameter approvalId was null or undefined when calling updateConfiguration.');
+            throw new Error('Required parameter approvalId was null or undefined when calling updateApprovalConfiguration.');
         }
         if (approvalConfigurationRequest === null || approvalConfigurationRequest === undefined) {
-            throw new Error('Required parameter approvalConfigurationRequest was null or undefined when calling updateConfiguration.');
+            throw new Error('Required parameter approvalConfigurationRequest was null or undefined when calling updateApprovalConfiguration.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -419,7 +419,7 @@ export class ApprovalConfigurationAPIService extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/workexec/approvalConfigurations/${this.configuration.encodeParam({name: "approvalId", value: approvalId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
+        let localVarPath = `/v1/workexec/approvalConfigurations/${this.configuration.encodeParam({name: "approvalId", value: approvalId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<ApprovalConfigurationResponse>('put', `${basePath}${localVarPath}`,
             {

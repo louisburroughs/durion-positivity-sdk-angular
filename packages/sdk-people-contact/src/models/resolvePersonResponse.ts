@@ -14,26 +14,6 @@
  */
 export interface ResolvePersonResponse { 
     /**
-     * Canonical person ID
-     */
-    personId: string;
-    /**
-     * True when an existing person matched threshold
-     */
-    matchedExisting: boolean;
-    /**
-     * Score of selected match (0 when created)
-     */
-    score: number;
-    /**
-     * Threshold used for decision
-     */
-    thresholdApplied: number;
-    /**
-     * Which fields contributed to the winning match
-     */
-    matchedBy?: Array<string>;
-    /**
      * Resolved first name
      */
     firstName?: string;
@@ -42,13 +22,33 @@ export interface ResolvePersonResponse {
      */
     lastName?: string;
     /**
-     * Resolved primary email
+     * Which fields contributed to the winning match
      */
-    primaryEmail?: string;
+    matchedBy?: Array<string>;
+    /**
+     * True when an existing person matched threshold
+     */
+    matchedExisting: boolean;
+    /**
+     * Canonical person ID
+     */
+    personId: string;
     /**
      * Resolved phone numbers
      */
     phoneNumbers?: Array<string>;
+    /**
+     * Resolved primary email
+     */
+    primaryEmail?: string;
+    /**
+     * Score of selected match (0 when created)
+     */
+    score: number;
+    /**
+     * Threshold used for decision
+     */
+    thresholdApplied: number;
 }
 
 function isOptionalResolvePersonResponsePropertyOfType(
@@ -89,8 +89,8 @@ export function instanceOfResolvePersonResponse(value: object): value is Resolve
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createResolvePersonResponsePropertyNames('personId', 'matchedExisting', 'score', 'thresholdApplied', );
-    const optionalStringProperties = createResolvePersonResponseOptionalProperties({ name: 'personId', nullable: false }, { name: 'firstName', nullable: false }, { name: 'lastName', nullable: false }, { name: 'primaryEmail', nullable: false }, );
+    const requiredProperties = createResolvePersonResponsePropertyNames('matchedExisting', 'personId', 'score', 'thresholdApplied', );
+    const optionalStringProperties = createResolvePersonResponseOptionalProperties({ name: 'firstName', nullable: false }, { name: 'lastName', nullable: false }, { name: 'personId', nullable: false }, { name: 'primaryEmail', nullable: false }, );
     const optionalNumberProperties = createResolvePersonResponseOptionalProperties({ name: 'score', nullable: false }, { name: 'thresholdApplied', nullable: false }, );
     const optionalBooleanProperties = createResolvePersonResponseOptionalProperties({ name: 'matchedExisting', nullable: false }, );
 

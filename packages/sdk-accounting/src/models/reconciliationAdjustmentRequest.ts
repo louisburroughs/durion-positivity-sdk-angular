@@ -14,10 +14,6 @@
  */
 export interface ReconciliationAdjustmentRequest { 
     /**
-     * Adjustment type (decision D-6)
-     */
-    type: ReconciliationAdjustmentRequestTypeEnum;
-    /**
      * Signed adjustment amount; positive increases the reconciled cash account
      */
     amount: number;
@@ -25,6 +21,10 @@ export interface ReconciliationAdjustmentRequest {
      * Optional description recorded on the adjustment
      */
     description?: string;
+    /**
+     * Adjustment type (decision D-6)
+     */
+    type: ReconciliationAdjustmentRequestTypeEnum;
 }
 export enum ReconciliationAdjustmentRequestTypeEnum {
     BankFee = 'BANK_FEE',
@@ -73,8 +73,8 @@ export function instanceOfReconciliationAdjustmentRequest(value: object): value 
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createReconciliationAdjustmentRequestPropertyNames('type', 'amount', );
-    const optionalStringProperties = createReconciliationAdjustmentRequestOptionalProperties({ name: 'type', nullable: false }, { name: 'description', nullable: false }, );
+    const requiredProperties = createReconciliationAdjustmentRequestPropertyNames('amount', 'type', );
+    const optionalStringProperties = createReconciliationAdjustmentRequestOptionalProperties({ name: 'description', nullable: false }, { name: 'type', nullable: false }, );
     const optionalNumberProperties = createReconciliationAdjustmentRequestOptionalProperties({ name: 'amount', nullable: false }, );
     const optionalBooleanProperties = createReconciliationAdjustmentRequestOptionalProperties();
 

@@ -36,20 +36,20 @@ export class CatalogAPIService extends BaseService {
     }
 
     /**
-     * Add a new catalog
-     * Adds a new catalog.
+     * Create a New Catalog
+     * Creates a named catalog that groups existing products, services and non-inventory products for presentation; the catalog does not own the items, it only references them. Use this tool to define a new grouping; do not use updateCatalog, which replaces a catalog that already exists, and do not use createCatalogItem, which creates the underlying items themselves. Preconditions: any ids listed in productIds, serviceIds or nonInventoryProductIds should already exist; ids that do not resolve are silently dropped from the stored catalog rather than rejected. Required inputs: name; description and the three id lists are optional and default to empty. Emits a CATALOG_CATALOG_CREATE event; no product, service or non-inventory records are modified. Returns 201 with the stored catalog, whose id lists reflect only the references that resolved, so callers should compare them against what was sent. 
      * @endpoint post /v1/catalogs
-     * @param catalogDto Catalog object to be added
+     * @param catalogDto Catalog to create: a name plus optional lists of existing product, service and non-inventory product ids to group.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public addCatalog(catalogDto: CatalogDto, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<CatalogDto>;
-    public addCatalog(catalogDto: CatalogDto, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<CatalogDto>>;
-    public addCatalog(catalogDto: CatalogDto, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<CatalogDto>>;
-    public addCatalog(catalogDto: CatalogDto, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public createCatalog(catalogDto: CatalogDto, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<CatalogDto>;
+    public createCatalog(catalogDto: CatalogDto, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<CatalogDto>>;
+    public createCatalog(catalogDto: CatalogDto, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<CatalogDto>>;
+    public createCatalog(catalogDto: CatalogDto, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (catalogDto === null || catalogDto === undefined) {
-            throw new Error('Required parameter catalogDto was null or undefined when calling addCatalog.');
+            throw new Error('Required parameter catalogDto was null or undefined when calling createCatalog.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -106,8 +106,8 @@ export class CatalogAPIService extends BaseService {
     }
 
     /**
-     * Delete a catalog
-     * Deletes a catalog by its ID.
+     * Delete a Catalog
+     * Permanently deletes a catalog grouping; the products, services and non-inventory products it referenced are untouched and remain available. Use this tool to retire a grouping that is no longer needed; do not use deleteCatalogItem, which deletes the underlying items themselves. Preconditions: the catalog must exist; there is no soft delete or archive state, so the row is removed outright. Required inputs: catalogId (UUID) as a path parameter; there is no request body. Emits a CATALOG_CATALOG_DELETE event; member items are not cascaded. Returns 204 when the catalog is removed, and 404 when no catalog exists for the supplied id. 
      * @endpoint delete /v1/catalogs/{catalogId}
      * @param catalogId ID of the catalog to delete
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -165,8 +165,8 @@ export class CatalogAPIService extends BaseService {
     }
 
     /**
-     * Get a catalog by ID
-     * Retrieves a specific catalog by its unique ID.
+     * Get a Catalog by ID
+     * Returns one named catalog with the ids of the products, services and non-inventory products it groups. Use this tool when the catalogId is already known; use listCatalogsByName instead to find catalogs by a name fragment. Preconditions: the catalog must exist. Required inputs: catalogId (UUID) as a path parameter; there is no request body. No events are emitted and no state changes; this is a read-only projection. Returns 404 when no catalog exists for the supplied id. 
      * @endpoint get /v1/catalogs/{catalogId}
      * @param catalogId ID of the catalog to be obtained
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -225,20 +225,20 @@ export class CatalogAPIService extends BaseService {
     }
 
     /**
-     * Get catalogs by name
-     * Retrieves a list of catalogs matching the given name.
+     * List Catalogs by Name
+     * Returns every catalog whose name contains the supplied fragment, matched case-insensitively. Use this tool to discover a catalogId by name; use getCatalogById instead when the id is already known. Preconditions: none; an empty result simply means no catalog name contains the fragment. Required inputs: name (path parameter) as a case-insensitive substring; there is no paging and no request body. No events are emitted and no state changes; this is a read-only projection. Returns 200 with an empty array when nothing matches, so an empty result is not an error condition. 
      * @endpoint get /v1/catalogs/name/{name}
      * @param name Name of the catalogs to be obtained
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public getCatalogByName(name: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<CatalogDto>;
-    public getCatalogByName(name: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<CatalogDto>>;
-    public getCatalogByName(name: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<CatalogDto>>;
-    public getCatalogByName(name: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public listCatalogsByName(name: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<CatalogDto>;
+    public listCatalogsByName(name: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<CatalogDto>>;
+    public listCatalogsByName(name: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<CatalogDto>>;
+    public listCatalogsByName(name: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (name === null || name === undefined) {
-            throw new Error('Required parameter name was null or undefined when calling getCatalogByName.');
+            throw new Error('Required parameter name was null or undefined when calling listCatalogsByName.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -285,11 +285,11 @@ export class CatalogAPIService extends BaseService {
     }
 
     /**
-     * Update an existing catalog
-     * Updates an existing catalog.
+     * Update an Existing Catalog
+     * Replaces a catalog\&#39;s name, description and full membership lists with the supplied values; this is a full replacement, not a merge, so omitted item ids are removed from the catalog. Use this tool to rename a catalog or change which items it groups; do not use createCatalog, which adds a new catalog, and do not use updateCatalogItem, which edits the items themselves. Preconditions: the catalog must exist; ids in the three membership lists that do not resolve are silently dropped rather than rejected. Required inputs: catalogId (UUID) path parameter and the complete replacement body including name; an omitted id list clears that membership. Emits a CATALOG_CATALOG_UPDATE event; the referenced items themselves are not modified. Returns 404 when no catalog exists for the supplied id. 
      * @endpoint put /v1/catalogs/{catalogId}
      * @param catalogId ID of the catalog to update
-     * @param catalogDto Updated catalog object
+     * @param catalogDto Complete replacement state for the catalog; membership lists overwrite the existing ones rather than merging.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options

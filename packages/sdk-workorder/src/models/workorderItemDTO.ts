@@ -14,37 +14,37 @@
  */
 export interface WorkorderItemDTO { 
     /**
-     * Service catalog entity identifier for service items
+     * Emergency notes used when photo evidence is unavailable
      */
-    serviceEntityId?: string;
-    /**
-     * Product entity identifier for inventory part items
-     */
-    productEntityId?: string;
-    /**
-     * Product entity identifier for non-inventory part items
-     */
-    nonInventoryProductEntityId?: string;
-    /**
-     * Requested quantity for part line items
-     */
-    quantity?: number;
+    emergencyNotes?: string;
     /**
      * Whether this item is emergency/safety related
      */
     isEmergencySafety?: boolean;
     /**
+     * Product entity identifier for non-inventory part items
+     */
+    nonInventoryProductEntityId?: string;
+    /**
      * Photo evidence URL for emergency/safety documentation
      */
     photoEvidenceUrl?: string;
     /**
-     * Emergency notes used when photo evidence is unavailable
-     */
-    emergencyNotes?: string;
-    /**
      * Flag indicating photo capture was not possible
      */
     photoNotPossible?: boolean;
+    /**
+     * Product entity identifier for inventory part items
+     */
+    productEntityId?: string;
+    /**
+     * Requested quantity for part line items
+     */
+    quantity?: number;
+    /**
+     * Service catalog entity identifier for service items
+     */
+    serviceEntityId?: string;
 }
 
 function isOptionalWorkorderItemDTOPropertyOfType(
@@ -86,7 +86,7 @@ export function instanceOfWorkorderItemDTO(value: object): value is WorkorderIte
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createWorkorderItemDTOPropertyNames();
-    const optionalStringProperties = createWorkorderItemDTOOptionalProperties({ name: 'serviceEntityId', nullable: false }, { name: 'productEntityId', nullable: false }, { name: 'nonInventoryProductEntityId', nullable: false }, { name: 'photoEvidenceUrl', nullable: false }, { name: 'emergencyNotes', nullable: false }, );
+    const optionalStringProperties = createWorkorderItemDTOOptionalProperties({ name: 'emergencyNotes', nullable: false }, { name: 'nonInventoryProductEntityId', nullable: false }, { name: 'photoEvidenceUrl', nullable: false }, { name: 'productEntityId', nullable: false }, { name: 'serviceEntityId', nullable: false }, );
     const optionalNumberProperties = createWorkorderItemDTOOptionalProperties({ name: 'quantity', nullable: false }, );
     const optionalBooleanProperties = createWorkorderItemDTOOptionalProperties({ name: 'isEmergencySafety', nullable: false }, { name: 'photoNotPossible', nullable: false }, );
 

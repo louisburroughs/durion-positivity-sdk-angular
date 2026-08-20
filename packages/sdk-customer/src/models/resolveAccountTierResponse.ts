@@ -22,21 +22,21 @@ export interface ResolveAccountTierResponse {
      */
     currentTier: ResolveAccountTierResponseCurrentTierEnum;
     /**
-     * Recommended/resolved tier based on business rules
-     */
-    recommendedTier: ResolveAccountTierResponseRecommendedTierEnum;
-    /**
-     * Whether the tier was applied to the account
-     */
-    tierApplied: boolean;
-    /**
      * Whether the current tier was manually set and blocked auto-update
      */
     manualOverrideActive: boolean;
     /**
+     * Recommended/resolved tier based on business rules
+     */
+    recommendedTier: ResolveAccountTierResponseRecommendedTierEnum;
+    /**
      * Explanation of why this tier was recommended
      */
     resolutionReason?: string;
+    /**
+     * Whether the tier was applied to the account
+     */
+    tierApplied: boolean;
     /**
      * Score or metric used for tier calculation
      */
@@ -99,10 +99,10 @@ export function instanceOfResolveAccountTierResponse(value: object): value is Re
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createResolveAccountTierResponsePropertyNames('accountId', 'currentTier', 'recommendedTier', 'tierApplied', 'manualOverrideActive', );
+    const requiredProperties = createResolveAccountTierResponsePropertyNames('accountId', 'currentTier', 'manualOverrideActive', 'recommendedTier', 'tierApplied', );
     const optionalStringProperties = createResolveAccountTierResponseOptionalProperties({ name: 'accountId', nullable: false }, { name: 'currentTier', nullable: false }, { name: 'recommendedTier', nullable: false }, { name: 'resolutionReason', nullable: false }, );
     const optionalNumberProperties = createResolveAccountTierResponseOptionalProperties({ name: 'tierScore', nullable: false }, );
-    const optionalBooleanProperties = createResolveAccountTierResponseOptionalProperties({ name: 'tierApplied', nullable: false }, { name: 'manualOverrideActive', nullable: false }, );
+    const optionalBooleanProperties = createResolveAccountTierResponseOptionalProperties({ name: 'manualOverrideActive', nullable: false }, { name: 'tierApplied', nullable: false }, );
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
         && optionalStringProperties.every((property) => isOptionalResolveAccountTierResponsePropertyOfType(_v, property.name, 'string', property.nullable))

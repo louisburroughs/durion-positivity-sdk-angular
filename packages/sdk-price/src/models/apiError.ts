@@ -19,18 +19,6 @@ export interface ApiError {
      */
     code: string;
     /**
-     * Human-readable error message
-     */
-    message: string;
-    /**
-     * HTTP status code
-     */
-    status: number;
-    /**
-     * ISO 8601 UTC timestamp of the error
-     */
-    timestamp: string;
-    /**
      * Unique correlation ID for distributed request tracing
      */
     correlationId: string;
@@ -39,17 +27,29 @@ export interface ApiError {
      */
     fieldErrors?: Array<FieldError>;
     /**
-     * Workflow or review-case reference identifier, when applicable
+     * Human-readable error message
      */
-    referenceId?: string;
+    message: string;
     /**
      * Recommended next step for the caller, when applicable
      */
     nextAction?: string;
     /**
+     * Workflow or review-case reference identifier, when applicable
+     */
+    referenceId?: string;
+    /**
+     * HTTP status code
+     */
+    status: number;
+    /**
      * Support or admin investigation guidance, when applicable
      */
     supportAction?: string;
+    /**
+     * ISO 8601 UTC timestamp of the error
+     */
+    timestamp: string;
 }
 
 function isOptionalApiErrorPropertyOfType(
@@ -90,8 +90,8 @@ export function instanceOfApiError(value: object): value is ApiError {
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createApiErrorPropertyNames('code', 'message', 'status', 'timestamp', 'correlationId', );
-    const optionalStringProperties = createApiErrorOptionalProperties({ name: 'code', nullable: false }, { name: 'message', nullable: false }, { name: 'timestamp', nullable: false }, { name: 'correlationId', nullable: false }, { name: 'referenceId', nullable: false }, { name: 'nextAction', nullable: false }, { name: 'supportAction', nullable: false }, );
+    const requiredProperties = createApiErrorPropertyNames('code', 'correlationId', 'message', 'status', 'timestamp', );
+    const optionalStringProperties = createApiErrorOptionalProperties({ name: 'code', nullable: false }, { name: 'correlationId', nullable: false }, { name: 'message', nullable: false }, { name: 'nextAction', nullable: false }, { name: 'referenceId', nullable: false }, { name: 'supportAction', nullable: false }, { name: 'timestamp', nullable: false }, );
     const optionalNumberProperties = createApiErrorOptionalProperties({ name: 'status', nullable: false }, );
     const optionalBooleanProperties = createApiErrorOptionalProperties();
 

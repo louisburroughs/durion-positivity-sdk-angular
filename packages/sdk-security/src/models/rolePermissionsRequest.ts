@@ -14,13 +14,13 @@
  */
 export interface RolePermissionsRequest { 
     /**
-     * Identifier of the role to update
-     */
-    roleId: string;
-    /**
      * Replacement set of permission names in format domain:resource:action
      */
     permissionNames: Set<string>;
+    /**
+     * Identifier of the role to update
+     */
+    roleId: string;
 }
 
 function isOptionalRolePermissionsRequestPropertyOfType(
@@ -61,7 +61,7 @@ export function instanceOfRolePermissionsRequest(value: object): value is RolePe
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createRolePermissionsRequestPropertyNames('roleId', 'permissionNames', );
+    const requiredProperties = createRolePermissionsRequestPropertyNames('permissionNames', 'roleId', );
     const optionalStringProperties = createRolePermissionsRequestOptionalProperties({ name: 'roleId', nullable: false }, );
     const optionalNumberProperties = createRolePermissionsRequestOptionalProperties();
     const optionalBooleanProperties = createRolePermissionsRequestOptionalProperties();

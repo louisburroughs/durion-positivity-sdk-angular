@@ -44,83 +44,24 @@ export class CRMSegmentsService extends BaseService {
     }
 
     /**
-     * Delete segment
-     * Delete a segment and its pinned membership
-     * @endpoint delete /v1/crm/segments/{segmentId}
-     * @param segmentId 
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     * @param options additional options
-     */
-    public _delete(segmentId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public _delete(segmentId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public _delete(segmentId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public _delete(segmentId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
-        if (segmentId === null || segmentId === undefined) {
-            throw new Error('Required parameter segmentId was null or undefined when calling _delete.');
-        }
-
-        let localVarHeaders = this.defaultHeaders;
-
-        // authentication (bearerAuth) required
-        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
-
-        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
-        ]);
-        if (localVarHttpHeaderAcceptSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
-        }
-
-        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
-
-        const localVarTransferCache: boolean = options?.transferCache ?? true;
-
-
-        let responseType_: 'text' | 'json' | 'blob' = 'json';
-        if (localVarHttpHeaderAcceptSelected) {
-            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
-                responseType_ = 'text';
-            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
-                responseType_ = 'json';
-            } else {
-                responseType_ = 'blob';
-            }
-        }
-
-        let localVarPath = `/v1/crm/segments/${this.configuration.encodeParam({name: "segmentId", value: segmentId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
-        const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<any>('delete', `${basePath}${localVarPath}`,
-            {
-                context: localVarHttpContext,
-                responseType: <any>responseType_,
-                ...(withCredentials ? { withCredentials } : {}),
-                headers: localVarHeaders,
-                observe: observe,
-                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * Pin members
-     * Add parties to a static segment; already-present parties are ignored
+     * Pin Segment Members
+     * Pins parties onto a STATIC segment\&#39;s member list, recording who added them and when; parties already in the segment are silently skipped. Use this tool when curating a hand-picked audience; do not use it on a DYNAMIC segment, whose membership is computed from its predicate by resolveSegment. Preconditions: the segment must exist and be STATIC. Required inputs: segmentId (UUID) as a path parameter and partyIds, a non-empty list of up to 5000 UUIDs; duplicates in the list are collapsed. Emits a CRM_SEGMENT_MEMBERS_ADD event; only new membership rows are written. Returns 404 when the segment does not exist, and 422 when the segment is DYNAMIC. 
      * @endpoint post /v1/crm/segments/{segmentId}/members
      * @param segmentId 
-     * @param segmentMembersRequest 
+     * @param segmentMembersRequest The party ids to pin onto the static segment\&#39;s member list.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public addMembers(segmentId: string, segmentMembersRequest: SegmentMembersRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<SegmentResponse>;
-    public addMembers(segmentId: string, segmentMembersRequest: SegmentMembersRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<SegmentResponse>>;
-    public addMembers(segmentId: string, segmentMembersRequest: SegmentMembersRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<SegmentResponse>>;
-    public addMembers(segmentId: string, segmentMembersRequest: SegmentMembersRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public addSegmentMembers(segmentId: string, segmentMembersRequest: SegmentMembersRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<SegmentResponse>;
+    public addSegmentMembers(segmentId: string, segmentMembersRequest: SegmentMembersRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<SegmentResponse>>;
+    public addSegmentMembers(segmentId: string, segmentMembersRequest: SegmentMembersRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<SegmentResponse>>;
+    public addSegmentMembers(segmentId: string, segmentMembersRequest: SegmentMembersRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (segmentId === null || segmentId === undefined) {
-            throw new Error('Required parameter segmentId was null or undefined when calling addMembers.');
+            throw new Error('Required parameter segmentId was null or undefined when calling addSegmentMembers.');
         }
         if (segmentMembersRequest === null || segmentMembersRequest === undefined) {
-            throw new Error('Required parameter segmentMembersRequest was null or undefined when calling addMembers.');
+            throw new Error('Required parameter segmentMembersRequest was null or undefined when calling addSegmentMembers.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -177,76 +118,20 @@ export class CRMSegmentsService extends BaseService {
     }
 
     /**
-     * List the segment attribute catalog
-     * Every whitelisted attribute a dynamic predicate may reference, with operand kind, allowed operators, and description
-     * @endpoint get /v1/crm/segments/attributes
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     * @param options additional options
-     */
-    public attributeCatalog(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<SegmentAttributeResponse>>;
-    public attributeCatalog(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<SegmentAttributeResponse>>>;
-    public attributeCatalog(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<SegmentAttributeResponse>>>;
-    public attributeCatalog(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
-
-        let localVarHeaders = this.defaultHeaders;
-
-        // authentication (bearerAuth) required
-        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
-
-        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
-            'application/json'
-        ]);
-        if (localVarHttpHeaderAcceptSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
-        }
-
-        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
-
-        const localVarTransferCache: boolean = options?.transferCache ?? true;
-
-
-        let responseType_: 'text' | 'json' | 'blob' = 'json';
-        if (localVarHttpHeaderAcceptSelected) {
-            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
-                responseType_ = 'text';
-            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
-                responseType_ = 'json';
-            } else {
-                responseType_ = 'blob';
-            }
-        }
-
-        let localVarPath = `/v1/crm/segments/attributes`;
-        const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<Array<SegmentAttributeResponse>>('get', `${basePath}${localVarPath}`,
-            {
-                context: localVarHttpContext,
-                responseType: <any>responseType_,
-                ...(withCredentials ? { withCredentials } : {}),
-                headers: localVarHeaders,
-                observe: observe,
-                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * Create segment
-     * Create a static or dynamic segment. Dynamic predicates are validated against the attribute catalog.
+     * Create Audience Segment
+     * Creates a saved audience segment, either STATIC with an explicitly pinned member list or DYNAMIC with a predicate validated against the attribute catalog. Use this tool when defining a new audience; do not use updateSegment, which modifies an existing segment and cannot change its type or audience type. Preconditions: no existing segment may already use the same name case-insensitively; a DYNAMIC segment must carry a predicate and a STATIC one must not. Required inputs: name (max 150), audienceType (COMMERCIAL or INDIVIDUAL), and type (STATIC or DYNAMIC); description, predicate, and active are optional. Emits a CRM_SEGMENT_CREATE event and publishes the segment definition to consumers. Returns 409 when the name is already taken, and 422 when the predicate is missing on a DYNAMIC segment, present on a STATIC one, or references attributes outside the catalog. 
      * @endpoint post /v1/crm/segments
-     * @param upsertSegmentRequest 
+     * @param upsertSegmentRequest The segment definition; DYNAMIC segments carry a predicate tree over catalog attributes, STATIC ones do not.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public create(upsertSegmentRequest: UpsertSegmentRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<SegmentResponse>;
-    public create(upsertSegmentRequest: UpsertSegmentRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<SegmentResponse>>;
-    public create(upsertSegmentRequest: UpsertSegmentRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<SegmentResponse>>;
-    public create(upsertSegmentRequest: UpsertSegmentRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public createSegment(upsertSegmentRequest: UpsertSegmentRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<SegmentResponse>;
+    public createSegment(upsertSegmentRequest: UpsertSegmentRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<SegmentResponse>>;
+    public createSegment(upsertSegmentRequest: UpsertSegmentRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<SegmentResponse>>;
+    public createSegment(upsertSegmentRequest: UpsertSegmentRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (upsertSegmentRequest === null || upsertSegmentRequest === undefined) {
-            throw new Error('Required parameter upsertSegmentRequest was null or undefined when calling create.');
+            throw new Error('Required parameter upsertSegmentRequest was null or undefined when calling createSegment.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -303,20 +188,79 @@ export class CRMSegmentsService extends BaseService {
     }
 
     /**
-     * Get segment
-     * Retrieve a segment definition by id
+     * Delete Audience Segment
+     * Deletes a segment and all of its pinned membership rows permanently. Use this tool when a segment is no longer wanted at all; use updateSegment with active false instead to retire a segment while keeping its definition. Preconditions: the segment must exist; deletion is not reversible. Required inputs: segmentId (UUID) as a path parameter; there is no request body. Emits a CRM_SEGMENT_DELETE event and publishes a deletion notice so consumers drop the segment. Returns 404 when no segment exists for the supplied segmentId. 
+     * @endpoint delete /v1/crm/segments/{segmentId}
+     * @param segmentId 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public deleteSegment(segmentId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
+    public deleteSegment(segmentId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
+    public deleteSegment(segmentId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
+    public deleteSegment(segmentId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (segmentId === null || segmentId === undefined) {
+            throw new Error('Required parameter segmentId was null or undefined when calling deleteSegment.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/crm/segments/${this.configuration.encodeParam({name: "segmentId", value: segmentId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<any>('delete', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Get Segment Definition
+     * Returns one segment\&#39;s definition, including its type, audience type, predicate for DYNAMIC segments, active flag, and member count. Use this tool when the segment id is already known; use listSegments instead to browse segments, and resolveSegment to compute who currently matches. Preconditions: the segment must exist. Required inputs: segmentId (UUID) as a path parameter; there is no request body. Emits a CRM_SEGMENT_GET audit event; no state changes occur. Returns 404 when no segment exists for the supplied segmentId. 
      * @endpoint get /v1/crm/segments/{segmentId}
      * @param segmentId 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public get(segmentId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<SegmentResponse>;
-    public get(segmentId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<SegmentResponse>>;
-    public get(segmentId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<SegmentResponse>>;
-    public get(segmentId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getSegment(segmentId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<SegmentResponse>;
+    public getSegment(segmentId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<SegmentResponse>>;
+    public getSegment(segmentId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<SegmentResponse>>;
+    public getSegment(segmentId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (segmentId === null || segmentId === undefined) {
-            throw new Error('Required parameter segmentId was null or undefined when calling get.');
+            throw new Error('Required parameter segmentId was null or undefined when calling getSegment.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -363,18 +307,74 @@ export class CRMSegmentsService extends BaseService {
     }
 
     /**
-     * List segments
-     * List saved segments, optionally filtered by audience type
+     * List Segment Attribute Catalog
+     * Returns the whitelist of attributes a dynamic segment predicate may reference, each with its operand kind, allowed operators, and description. Use this tool before createSegment or updateSegment to build a valid DYNAMIC predicate; do not use listSegments, which lists saved segments rather than the predicate vocabulary. Preconditions: none; the catalog is fixed in code per audience type. Required inputs: none; there are no parameters and no request body. Emits a CRM_SEGMENT_ATTRIBUTES audit event; no state changes occur. Returns 200 with the full catalog in every successful call; there are no business error responses. 
+     * @endpoint get /v1/crm/segments/attributes
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public listSegmentAttributes(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<SegmentAttributeResponse>>;
+    public listSegmentAttributes(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<SegmentAttributeResponse>>>;
+    public listSegmentAttributes(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<SegmentAttributeResponse>>>;
+    public listSegmentAttributes(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/crm/segments/attributes`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<Array<SegmentAttributeResponse>>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * List Audience Segments
+     * Returns all saved audience segments with their type, audience type, active flag, and member counts, optionally filtered by audience type. Use this tool when browsing or picking a segment; use getSegment instead when the segment id is already known. Preconditions: none; an empty list is returned when no segment matches. Required inputs: none; audienceType optionally filters on COMMERCIAL or INDIVIDUAL, and there is no request body. Emits a CRM_SEGMENT_LIST audit event; no state changes occur. Returns 200 with an empty list rather than an error when no segments exist. 
      * @endpoint get /v1/crm/segments
      * @param audienceType 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public list1(audienceType?: 'COMMERCIAL' | 'INDIVIDUAL', observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<SegmentResponse>>;
-    public list1(audienceType?: 'COMMERCIAL' | 'INDIVIDUAL', observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<SegmentResponse>>>;
-    public list1(audienceType?: 'COMMERCIAL' | 'INDIVIDUAL', observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<SegmentResponse>>>;
-    public list1(audienceType?: 'COMMERCIAL' | 'INDIVIDUAL', observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public listSegments(audienceType?: 'COMMERCIAL' | 'INDIVIDUAL', observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<SegmentResponse>>;
+    public listSegments(audienceType?: 'COMMERCIAL' | 'INDIVIDUAL', observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<SegmentResponse>>>;
+    public listSegments(audienceType?: 'COMMERCIAL' | 'INDIVIDUAL', observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<SegmentResponse>>>;
+    public listSegments(audienceType?: 'COMMERCIAL' | 'INDIVIDUAL', observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
 
@@ -432,8 +432,8 @@ export class CRMSegmentsService extends BaseService {
     }
 
     /**
-     * Unpin member
-     * Remove a party from a static segment
+     * Unpin Segment Member
+     * Removes one party from a static segment\&#39;s pinned member list. Use this tool when a hand-picked party should leave the audience; do not use deleteSegment, which removes the whole segment and every member with it. Preconditions: none are enforced; removing a party that is not a member, or naming an unknown segment, is a silent no-op. Required inputs: segmentId and partyId (UUIDs) as path parameters; there is no request body. Emits a CRM_SEGMENT_MEMBER_REMOVE event; at most one membership row is deleted. Returns 204 in every authorized call, including when nothing was actually removed. 
      * @endpoint delete /v1/crm/segments/{segmentId}/members/{partyId}
      * @param segmentId 
      * @param partyId 
@@ -441,15 +441,15 @@ export class CRMSegmentsService extends BaseService {
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public removeMember(segmentId: string, partyId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public removeMember(segmentId: string, partyId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public removeMember(segmentId: string, partyId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public removeMember(segmentId: string, partyId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public removeSegmentMember(segmentId: string, partyId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
+    public removeSegmentMember(segmentId: string, partyId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
+    public removeSegmentMember(segmentId: string, partyId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
+    public removeSegmentMember(segmentId: string, partyId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (segmentId === null || segmentId === undefined) {
-            throw new Error('Required parameter segmentId was null or undefined when calling removeMember.');
+            throw new Error('Required parameter segmentId was null or undefined when calling removeSegmentMember.');
         }
         if (partyId === null || partyId === undefined) {
-            throw new Error('Required parameter partyId was null or undefined when calling removeMember.');
+            throw new Error('Required parameter partyId was null or undefined when calling removeSegmentMember.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -495,8 +495,8 @@ export class CRMSegmentsService extends BaseService {
     }
 
     /**
-     * Resolve segment
-     * Resolve a segment to a match count, an optional per-channel eligible count, and a masked sample
+     * Resolve Segment Audience
+     * Resolves a segment to its current match count, an optional per-channel eligible count that folds in consent and suppression, and a masked sample of members; the full recipient list is never returned, so the preview cannot become a bulk PII export. Use this tool when previewing an audience before a campaign; use getSegment instead for the stored definition without computing membership. Preconditions: the segment must exist; eligible counts are computed only when a channel is supplied. Required inputs: segmentId (UUID) as a path parameter; channel (EMAIL or SMS) is optional, and sampleSize defaults to 10 and is clamped to the server\&#39;s maximum. Emits a CRM_SEGMENT_RESOLVE audit event; no state changes occur. Returns 404 when no segment exists for the supplied segmentId, and 200 with a truncated flag when the match list was capped during resolution. 
      * @endpoint post /v1/crm/segments/{segmentId}/resolve
      * @param segmentId 
      * @param channel 
@@ -505,12 +505,12 @@ export class CRMSegmentsService extends BaseService {
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public resolve(segmentId: string, channel?: 'EMAIL' | 'SMS', sampleSize?: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<SegmentResolutionResponse>;
-    public resolve(segmentId: string, channel?: 'EMAIL' | 'SMS', sampleSize?: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<SegmentResolutionResponse>>;
-    public resolve(segmentId: string, channel?: 'EMAIL' | 'SMS', sampleSize?: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<SegmentResolutionResponse>>;
-    public resolve(segmentId: string, channel?: 'EMAIL' | 'SMS', sampleSize?: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public resolveSegment(segmentId: string, channel?: 'EMAIL' | 'SMS', sampleSize?: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<SegmentResolutionResponse>;
+    public resolveSegment(segmentId: string, channel?: 'EMAIL' | 'SMS', sampleSize?: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<SegmentResolutionResponse>>;
+    public resolveSegment(segmentId: string, channel?: 'EMAIL' | 'SMS', sampleSize?: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<SegmentResolutionResponse>>;
+    public resolveSegment(segmentId: string, channel?: 'EMAIL' | 'SMS', sampleSize?: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (segmentId === null || segmentId === undefined) {
-            throw new Error('Required parameter segmentId was null or undefined when calling resolve.');
+            throw new Error('Required parameter segmentId was null or undefined when calling resolveSegment.');
         }
 
         let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
@@ -578,24 +578,24 @@ export class CRMSegmentsService extends BaseService {
     }
 
     /**
-     * Update segment
-     * Update a segment\&#39;s name, description, predicate, or active flag. Type and audience type are immutable.
+     * Update Audience Segment
+     * Updates a segment\&#39;s name, description, predicate, or active flag; type and audienceType are immutable after creation because switching kinds would strand pinned members or a predicate. Use this tool when refining an existing segment; use createSegment instead when a different type or audience type is needed. Preconditions: the segment must exist, the new name must not collide with another segment case-insensitively, and the submitted type and audienceType must equal the stored values. Required inputs: segmentId (UUID) as a path parameter plus the full upsert body with name, audienceType, and type restated; predicate rules follow the segment\&#39;s type and active is optional. Emits a CRM_SEGMENT_UPDATE event and republishes the segment definition. Returns 404 when the segment does not exist, 409 when the name is taken, and 422 when type or audienceType differ from the stored segment or the predicate is invalid. 
      * @endpoint put /v1/crm/segments/{segmentId}
      * @param segmentId 
-     * @param upsertSegmentRequest 
+     * @param upsertSegmentRequest The revised segment definition; type and audienceType must match the stored segment.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public update(segmentId: string, upsertSegmentRequest: UpsertSegmentRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<SegmentResponse>;
-    public update(segmentId: string, upsertSegmentRequest: UpsertSegmentRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<SegmentResponse>>;
-    public update(segmentId: string, upsertSegmentRequest: UpsertSegmentRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<SegmentResponse>>;
-    public update(segmentId: string, upsertSegmentRequest: UpsertSegmentRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public updateSegment(segmentId: string, upsertSegmentRequest: UpsertSegmentRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<SegmentResponse>;
+    public updateSegment(segmentId: string, upsertSegmentRequest: UpsertSegmentRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<SegmentResponse>>;
+    public updateSegment(segmentId: string, upsertSegmentRequest: UpsertSegmentRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<SegmentResponse>>;
+    public updateSegment(segmentId: string, upsertSegmentRequest: UpsertSegmentRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (segmentId === null || segmentId === undefined) {
-            throw new Error('Required parameter segmentId was null or undefined when calling update.');
+            throw new Error('Required parameter segmentId was null or undefined when calling updateSegment.');
         }
         if (upsertSegmentRequest === null || upsertSegmentRequest === undefined) {
-            throw new Error('Required parameter upsertSegmentRequest was null or undefined when calling update.');
+            throw new Error('Required parameter upsertSegmentRequest was null or undefined when calling updateSegment.');
         }
 
         let localVarHeaders = this.defaultHeaders;

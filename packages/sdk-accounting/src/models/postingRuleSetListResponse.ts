@@ -15,6 +15,14 @@ import { PostingRuleSetResponse } from './postingRuleSetResponse';
  */
 export interface PostingRuleSetListResponse { 
     /**
+     * Zero-based index of the current page
+     */
+    currentPage?: number;
+    /**
+     * Number of items per page
+     */
+    pageSize?: number;
+    /**
      * Posting rule sets on the current page
      */
     ruleSets?: Array<PostingRuleSetResponse>;
@@ -26,14 +34,6 @@ export interface PostingRuleSetListResponse {
      * Total number of pages available
      */
     totalPages?: number;
-    /**
-     * Zero-based index of the current page
-     */
-    currentPage?: number;
-    /**
-     * Number of items per page
-     */
-    pageSize?: number;
 }
 
 function isOptionalPostingRuleSetListResponsePropertyOfType(
@@ -76,7 +76,7 @@ export function instanceOfPostingRuleSetListResponse(value: object): value is Po
 
     const requiredProperties = createPostingRuleSetListResponsePropertyNames();
     const optionalStringProperties = createPostingRuleSetListResponseOptionalProperties();
-    const optionalNumberProperties = createPostingRuleSetListResponseOptionalProperties({ name: 'totalElements', nullable: false }, { name: 'totalPages', nullable: false }, { name: 'currentPage', nullable: false }, { name: 'pageSize', nullable: false }, );
+    const optionalNumberProperties = createPostingRuleSetListResponseOptionalProperties({ name: 'currentPage', nullable: false }, { name: 'pageSize', nullable: false }, { name: 'totalElements', nullable: false }, { name: 'totalPages', nullable: false }, );
     const optionalBooleanProperties = createPostingRuleSetListResponseOptionalProperties();
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

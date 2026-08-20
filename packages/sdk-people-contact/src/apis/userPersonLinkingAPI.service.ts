@@ -42,10 +42,10 @@ export class UserPersonLinkingAPIService extends BaseService {
     }
 
     /**
-     * Create user-person link (admin)
-     * Create a link between an authentication user and a person record
+     * Create User Person Link as Admin
+     * Creates a user-person link from the minimal administrative payload of username and personId only; the link is stored with linkType PRIMARY. Use this tool for administrative linking when linkType and notes are not needed; do not use linkUserToPerson, which accepts the same pair plus an explicit linkType and notes. Preconditions: the person must exist, and the username must not already be linked to a different person; one username maps to at most one person. Required inputs: username and personId (UUID); both are mandatory and there are no other fields. Emits a PEOPLE_CONTACT_USER_LINK_CREATE event and queues a link-updated fact on the transactional outbox. Returns 201 when the link is created, 200 when the identical link already exists (the call is idempotent), 404 when the person does not exist, and 409 when the username is already linked to a different person. 
      * @endpoint post /v1/people/user-links
-     * @param createUserLinkRequest 
+     * @param createUserLinkRequest Minimal user-person pair to link; the link is stored as PRIMARY.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -112,8 +112,8 @@ export class UserPersonLinkingAPIService extends BaseService {
     }
 
     /**
-     * Get links by person ID
-     * Retrieve user-person links for person
+     * Get User Links for Person
+     * Returns the full user-person link records for a person, including linkType, notes, creator and creation time. Use this tool when link metadata is needed; use listUsernamesForPerson instead when only the usernames matter, and getPersonByUsername to go from a username to its person. Preconditions: the person record must exist; a person with no links yields an empty list. Required inputs: personId (UUID) as a path parameter; there is no request body. Emits a PEOPLE_CONTACT_USER_LINK_GET audit event; no state changes. Returns 404 when the person does not exist. 
      * @endpoint get /v1/people/user-links/{personId}
      * @param personId Person ID
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -172,8 +172,8 @@ export class UserPersonLinkingAPIService extends BaseService {
     }
 
     /**
-     * Get person by username
-     * Retrieve the person record linked to a user
+     * Get Person Linked to Username
+     * Returns the person record linked to a username, including emails, work phone numbers and the username itself. Use this tool to translate a login identity into its person record; use getCurrentPerson instead when the target is the authenticated caller, and getLinksByPersonId to go from a person to its links. Preconditions: a user-person link must exist for the username, and the linked person record must still exist. Required inputs: username as a path parameter; there is no request body. No events are emitted and no state changes; this is a read-only projection. Returns 404 when no link exists for the username or the linked person record is missing. 
      * @endpoint get /v1/people/users/{username}/person
      * @param username Username
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -232,70 +232,10 @@ export class UserPersonLinkingAPIService extends BaseService {
     }
 
     /**
-     * Get users linked to person
-     * Retrieve all usernames linked to a person record
-     * @endpoint get /v1/people/{personId}/users
-     * @param personId Person ID
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     * @param options additional options
-     */
-    public getUsernamesByPersonId(personId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<string>>;
-    public getUsernamesByPersonId(personId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<string>>>;
-    public getUsernamesByPersonId(personId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<string>>>;
-    public getUsernamesByPersonId(personId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
-        if (personId === null || personId === undefined) {
-            throw new Error('Required parameter personId was null or undefined when calling getUsernamesByPersonId.');
-        }
-
-        let localVarHeaders = this.defaultHeaders;
-
-        // authentication (bearerAuth) required
-        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
-
-        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
-            'application/json'
-        ]);
-        if (localVarHttpHeaderAcceptSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
-        }
-
-        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
-
-        const localVarTransferCache: boolean = options?.transferCache ?? true;
-
-
-        let responseType_: 'text' | 'json' | 'blob' = 'json';
-        if (localVarHttpHeaderAcceptSelected) {
-            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
-                responseType_ = 'text';
-            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
-                responseType_ = 'json';
-            } else {
-                responseType_ = 'blob';
-            }
-        }
-
-        let localVarPath = `/v1/people/${this.configuration.encodeParam({name: "personId", value: personId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/users`;
-        const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<Array<string>>('get', `${basePath}${localVarPath}`,
-            {
-                context: localVarHttpContext,
-                responseType: <any>responseType_,
-                ...(withCredentials ? { withCredentials } : {}),
-                headers: localVarHeaders,
-                observe: observe,
-                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * Link user to person
-     * Create a link between an authentication user and a person record
+     * Link User to Person Record
+     * Links a security user account to a person record, optionally recording a linkType and notes; the link is what lets a login act as that person. Use this tool when associating a user with a person, for example during onboarding; do not use createUserPersonLink, which is the minimal admin variant without linkType or notes, and do not use createPerson, which creates the identity record itself. Preconditions: the person must exist, and the username must not already be linked to a different person; one username maps to at most one person. Required inputs: username and personId (UUID); linkType defaults to PRIMARY and notes is optional. Emits a PEOPLE_CONTACT_USER_LINK_CREATE event and queues a link-updated fact on the transactional outbox. Returns 201 when the link is created, 200 when the identical link already exists (the call is idempotent), 404 when the person does not exist, and 409 when the username is already linked to a different person. 
      * @endpoint post /v1/people/users/link
-     * @param linkUserToPersonRequest 
+     * @param linkUserToPersonRequest User-person pair to link, with optional link classification and notes.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -362,8 +302,68 @@ export class UserPersonLinkingAPIService extends BaseService {
     }
 
     /**
-     * Unlink user from person
-     * Remove the link between a user and person
+     * List Usernames Linked to Person
+     * Lists every username linked to a person record as a flat array of strings. Use this tool to see which logins can act as a person; use getLinksByPersonId instead when the full link records with linkType, notes and audit fields are needed. Preconditions: the person record must exist; a person with no links yields an empty list. Required inputs: personId (UUID) as a path parameter; there is no request body. No events are emitted and no state changes; this is a read-only projection. Returns 404 when the person does not exist. 
+     * @endpoint get /v1/people/{personId}/users
+     * @param personId Person ID
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public listUsernamesForPerson(personId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<string>>;
+    public listUsernamesForPerson(personId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<string>>>;
+    public listUsernamesForPerson(personId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<string>>>;
+    public listUsernamesForPerson(personId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (personId === null || personId === undefined) {
+            throw new Error('Required parameter personId was null or undefined when calling listUsernamesForPerson.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/people/${this.configuration.encodeParam({name: "personId", value: personId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/users`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<Array<string>>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Unlink User from Person Record
+     * Removes the link between a security user and its person record, leaving both the user account and the person untouched. Use this tool to sever a login from an identity, including before deletePerson on a person that still has linked users; do not use revokePersonRoleAssignment, which removes a single role rather than the whole link. Preconditions: a user-person link must exist for the username. Required inputs: username as a path parameter; there is no request body. Emits a PEOPLE_CONTACT_USER_PERSON_LINK_DELETE event and queues a link-removed fact on the transactional outbox. Returns 204 on success, and 404 when no link exists for the username. 
      * @endpoint delete /v1/people/users/{username}/link
      * @param username Username
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.

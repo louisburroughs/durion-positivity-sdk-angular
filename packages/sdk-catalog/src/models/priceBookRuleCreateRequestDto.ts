@@ -14,18 +14,6 @@
  */
 export interface PriceBookRuleCreateRequestDto { 
     /**
-     * Target type the rule applies to
-     */
-    targetType: PriceBookRuleCreateRequestDtoTargetTypeEnum;
-    /**
-     * Identifier of the targeted entity (SKU or category)
-     */
-    targetId?: string;
-    /**
-     * Pricing logic expression applied by the rule
-     */
-    pricingLogic: string;
-    /**
      * Condition type gating the rule
      */
     conditionType?: PriceBookRuleCreateRequestDtoConditionTypeEnum;
@@ -34,35 +22,47 @@ export interface PriceBookRuleCreateRequestDto {
      */
     conditionValue?: string;
     /**
-     * Evaluation priority; lower wins
+     * Identifier of the user creating the rule
      */
-    priority?: number;
-    /**
-     * Instant the rule becomes effective
-     */
-    effectiveStartAt: string;
+    createdByUserId: string;
     /**
      * Instant the rule stops being effective
      */
     effectiveEndAt?: string;
     /**
-     * Identifier of the user creating the rule
+     * Instant the rule becomes effective
      */
-    createdByUserId: string;
+    effectiveStartAt: string;
+    /**
+     * Pricing logic expression applied by the rule
+     */
+    pricingLogic: string;
+    /**
+     * Evaluation priority; lower wins
+     */
+    priority?: number;
+    /**
+     * Identifier of the targeted entity (SKU or category)
+     */
+    targetId?: string;
+    /**
+     * Target type the rule applies to
+     */
+    targetType: PriceBookRuleCreateRequestDtoTargetTypeEnum;
     /**
      * Version for optimistic locking
      */
     version?: number;
 }
-export enum PriceBookRuleCreateRequestDtoTargetTypeEnum {
-    Sku = 'SKU',
-    Category = 'CATEGORY',
-    Global = 'GLOBAL'
-};
 export enum PriceBookRuleCreateRequestDtoConditionTypeEnum {
     CustomerTier = 'CUSTOMER_TIER',
     Location = 'LOCATION',
     None = 'NONE'
+};
+export enum PriceBookRuleCreateRequestDtoTargetTypeEnum {
+    Sku = 'SKU',
+    Category = 'CATEGORY',
+    Global = 'GLOBAL'
 };
 
 
@@ -105,8 +105,8 @@ export function instanceOfPriceBookRuleCreateRequestDto(value: object): value is
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createPriceBookRuleCreateRequestDtoPropertyNames('targetType', 'pricingLogic', 'effectiveStartAt', 'createdByUserId', );
-    const optionalStringProperties = createPriceBookRuleCreateRequestDtoOptionalProperties({ name: 'targetType', nullable: false }, { name: 'targetId', nullable: false }, { name: 'pricingLogic', nullable: false }, { name: 'conditionType', nullable: false }, { name: 'conditionValue', nullable: false }, { name: 'effectiveStartAt', nullable: false }, { name: 'effectiveEndAt', nullable: false }, { name: 'createdByUserId', nullable: false }, );
+    const requiredProperties = createPriceBookRuleCreateRequestDtoPropertyNames('createdByUserId', 'effectiveStartAt', 'pricingLogic', 'targetType', );
+    const optionalStringProperties = createPriceBookRuleCreateRequestDtoOptionalProperties({ name: 'conditionType', nullable: false }, { name: 'conditionValue', nullable: false }, { name: 'createdByUserId', nullable: false }, { name: 'effectiveEndAt', nullable: false }, { name: 'effectiveStartAt', nullable: false }, { name: 'pricingLogic', nullable: false }, { name: 'targetId', nullable: false }, { name: 'targetType', nullable: false }, );
     const optionalNumberProperties = createPriceBookRuleCreateRequestDtoOptionalProperties({ name: 'priority', nullable: false }, { name: 'version', nullable: false }, );
     const optionalBooleanProperties = createPriceBookRuleCreateRequestDtoOptionalProperties();
 

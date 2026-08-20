@@ -14,33 +14,33 @@
  */
 export interface PriceOverrideRequest { 
     /**
-     * Identifier of the order containing the line item
+     * Role of the actor performing the override
      */
-    orderId: string;
-    /**
-     * Identifier of the line item being overridden
-     */
-    lineItemId: string;
-    /**
-     * Original price before the override
-     */
-    originalPrice: number;
+    actorRole: string;
     /**
      * Adjusted price after the override
      */
     adjustedPrice: number;
     /**
-     * Role of the actor performing the override
+     * Optional forbidden category code (e.g., BELOW_COST, STACKING_VIOLATION)
      */
-    actorRole: string;
+    categoryCode?: string;
+    /**
+     * Identifier of the line item being overridden
+     */
+    lineItemId: string;
+    /**
+     * Identifier of the order containing the line item
+     */
+    orderId: string;
+    /**
+     * Original price before the override
+     */
+    originalPrice: number;
     /**
      * Reason for the price override
      */
     reason: string;
-    /**
-     * Optional forbidden category code (e.g., BELOW_COST, STACKING_VIOLATION)
-     */
-    categoryCode?: string;
 }
 
 function isOptionalPriceOverrideRequestPropertyOfType(
@@ -81,9 +81,9 @@ export function instanceOfPriceOverrideRequest(value: object): value is PriceOve
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createPriceOverrideRequestPropertyNames('orderId', 'lineItemId', 'originalPrice', 'adjustedPrice', 'actorRole', 'reason', );
-    const optionalStringProperties = createPriceOverrideRequestOptionalProperties({ name: 'orderId', nullable: false }, { name: 'lineItemId', nullable: false }, { name: 'actorRole', nullable: false }, { name: 'reason', nullable: false }, { name: 'categoryCode', nullable: false }, );
-    const optionalNumberProperties = createPriceOverrideRequestOptionalProperties({ name: 'originalPrice', nullable: false }, { name: 'adjustedPrice', nullable: false }, );
+    const requiredProperties = createPriceOverrideRequestPropertyNames('actorRole', 'adjustedPrice', 'lineItemId', 'orderId', 'originalPrice', 'reason', );
+    const optionalStringProperties = createPriceOverrideRequestOptionalProperties({ name: 'actorRole', nullable: false }, { name: 'categoryCode', nullable: false }, { name: 'lineItemId', nullable: false }, { name: 'orderId', nullable: false }, { name: 'reason', nullable: false }, );
+    const optionalNumberProperties = createPriceOverrideRequestOptionalProperties({ name: 'adjustedPrice', nullable: false }, { name: 'originalPrice', nullable: false }, );
     const optionalBooleanProperties = createPriceOverrideRequestOptionalProperties();
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

@@ -14,29 +14,25 @@
  */
 export interface VehicleResponse { 
     /**
-     * Vehicle identifier.
-     */
-    vehicleId: string;
-    /**
      * Owning account identifier.
      */
     accountId: string;
     /**
-     * Vehicle VIN.
+     * Record creation timestamp (UTC).
      */
-    vin: string;
+    createdAt: string;
     /**
-     * Normalized VIN used for lookup and uniqueness.
+     * Username of the actor who created this record.
      */
-    vinNormalized: string;
-    /**
-     * Fleet/unit number.
-     */
-    unitNumber: string;
+    createdBy?: string;
     /**
      * Human-readable vehicle description.
      */
     description: string;
+    /**
+     * Whether vehicle is active.
+     */
+    isActive: boolean;
     /**
      * License plate value.
      */
@@ -46,10 +42,6 @@ export interface VehicleResponse {
      */
     licensePlateJurisdiction?: string;
     /**
-     * Model year.
-     */
-    year?: number;
-    /**
      * Vehicle make.
      */
     make?: string;
@@ -58,41 +50,49 @@ export interface VehicleResponse {
      */
     model?: string;
     /**
-     * Vehicle trim.
+     * Unit of the odometer reading (MILES or KILOMETERS).
      */
-    trim?: string;
+    odometerUnit?: VehicleResponseOdometerUnitEnum;
     /**
      * Last recorded odometer reading value.
      */
     odometerValue?: number;
     /**
-     * Unit of the odometer reading (MILES or KILOMETERS).
+     * Vehicle trim.
      */
-    odometerUnit?: VehicleResponseOdometerUnitEnum;
+    trim?: string;
     /**
-     * Whether vehicle is active.
+     * Fleet/unit number.
      */
-    isActive: boolean;
-    /**
-     * Record creation timestamp (UTC).
-     */
-    createdAt: string;
+    unitNumber: string;
     /**
      * Last update timestamp (UTC).
      */
     updatedAt: string;
     /**
-     * Username of the actor who created this record.
-     */
-    createdBy?: string;
-    /**
      * Username of the actor who last modified this record.
      */
     updatedBy?: string;
     /**
+     * Vehicle identifier.
+     */
+    vehicleId: string;
+    /**
      * Optimistic lock version.
      */
     version: number;
+    /**
+     * Vehicle VIN.
+     */
+    vin: string;
+    /**
+     * Normalized VIN used for lookup and uniqueness.
+     */
+    vinNormalized: string;
+    /**
+     * Model year.
+     */
+    year?: number;
 }
 export enum VehicleResponseOdometerUnitEnum {
     Miles = 'MILES',
@@ -139,9 +139,9 @@ export function instanceOfVehicleResponse(value: object): value is VehicleRespon
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createVehicleResponsePropertyNames('vehicleId', 'accountId', 'vin', 'vinNormalized', 'unitNumber', 'description', 'isActive', 'createdAt', 'updatedAt', 'version', );
-    const optionalStringProperties = createVehicleResponseOptionalProperties({ name: 'vehicleId', nullable: false }, { name: 'accountId', nullable: false }, { name: 'vin', nullable: false }, { name: 'vinNormalized', nullable: false }, { name: 'unitNumber', nullable: false }, { name: 'description', nullable: false }, { name: 'licensePlate', nullable: false }, { name: 'licensePlateJurisdiction', nullable: false }, { name: 'make', nullable: false }, { name: 'model', nullable: false }, { name: 'trim', nullable: false }, { name: 'odometerUnit', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'updatedAt', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'updatedBy', nullable: false }, );
-    const optionalNumberProperties = createVehicleResponseOptionalProperties({ name: 'year', nullable: false }, { name: 'odometerValue', nullable: false }, { name: 'version', nullable: false }, );
+    const requiredProperties = createVehicleResponsePropertyNames('accountId', 'createdAt', 'description', 'isActive', 'unitNumber', 'updatedAt', 'vehicleId', 'version', 'vin', 'vinNormalized', );
+    const optionalStringProperties = createVehicleResponseOptionalProperties({ name: 'accountId', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'description', nullable: false }, { name: 'licensePlate', nullable: false }, { name: 'licensePlateJurisdiction', nullable: false }, { name: 'make', nullable: false }, { name: 'model', nullable: false }, { name: 'odometerUnit', nullable: false }, { name: 'trim', nullable: false }, { name: 'unitNumber', nullable: false }, { name: 'updatedAt', nullable: false }, { name: 'updatedBy', nullable: false }, { name: 'vehicleId', nullable: false }, { name: 'vin', nullable: false }, { name: 'vinNormalized', nullable: false }, );
+    const optionalNumberProperties = createVehicleResponseOptionalProperties({ name: 'odometerValue', nullable: false }, { name: 'version', nullable: false }, { name: 'year', nullable: false }, );
     const optionalBooleanProperties = createVehicleResponseOptionalProperties({ name: 'isActive', nullable: false }, );
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

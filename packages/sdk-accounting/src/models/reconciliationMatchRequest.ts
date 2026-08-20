@@ -14,13 +14,13 @@
  */
 export interface ReconciliationMatchRequest { 
     /**
-     * Statement line ids to match
-     */
-    statementLineIds: Array<string>;
-    /**
      * Posted GL journal-entry line ids to match against
      */
     glLineIds: Array<string>;
+    /**
+     * Statement line ids to match
+     */
+    statementLineIds: Array<string>;
 }
 
 function isOptionalReconciliationMatchRequestPropertyOfType(
@@ -61,7 +61,7 @@ export function instanceOfReconciliationMatchRequest(value: object): value is Re
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createReconciliationMatchRequestPropertyNames('statementLineIds', 'glLineIds', );
+    const requiredProperties = createReconciliationMatchRequestPropertyNames('glLineIds', 'statementLineIds', );
     const optionalStringProperties = createReconciliationMatchRequestOptionalProperties();
     const optionalNumberProperties = createReconciliationMatchRequestOptionalProperties();
     const optionalBooleanProperties = createReconciliationMatchRequestOptionalProperties();

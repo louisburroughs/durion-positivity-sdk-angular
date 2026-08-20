@@ -14,21 +14,25 @@
  */
 export interface RevaluationResponse { 
     /**
-     * Revaluation document identifier
+     * When the revaluation was applied to the cost state
      */
-    revaluationId?: string;
+    appliedAt?: string;
     /**
-     * SKU / stock item identifier that was revalued
+     * Actor who approved and applied the revaluation
      */
-    stockItemId?: string;
+    approvedBy?: string;
     /**
      * Resolved costing method whose cost was corrected
      */
     costingMethod?: RevaluationResponseCostingMethodEnum;
     /**
-     * Unit cost before the revaluation; null when the SKU was uncosted
+     * When the document was created
      */
-    previousUnitCost?: number;
+    createdAt?: string;
+    /**
+     * Actor who submitted the revaluation
+     */
+    createdBy?: string;
     /**
      * Corrected unit cost
      */
@@ -38,29 +42,17 @@ export interface RevaluationResponse {
      */
     onHandQuantity?: number;
     /**
-     * Signed inventory value change: (newUnitCost - previousUnitCost) x onHandQuantity
+     * Unit cost before the revaluation; null when the SKU was uncosted
      */
-    valueDelta?: number;
+    previousUnitCost?: number;
     /**
      * Justification for the correction
      */
     reason?: string;
     /**
-     * Lifecycle status
+     * When the revaluation was rejected
      */
-    status?: RevaluationResponseStatusEnum;
-    /**
-     * Required approval tier; null when auto-applied
-     */
-    requiredApprovalTier?: RevaluationResponseRequiredApprovalTierEnum;
-    /**
-     * Actor who submitted the revaluation
-     */
-    createdBy?: string;
-    /**
-     * Actor who approved and applied the revaluation
-     */
-    approvedBy?: string;
+    rejectedAt?: string;
     /**
      * Actor who rejected the revaluation
      */
@@ -70,35 +62,43 @@ export interface RevaluationResponse {
      */
     rejectionReason?: string;
     /**
-     * When the document was created
+     * Required approval tier; null when auto-applied
      */
-    createdAt?: string;
+    requiredApprovalTier?: RevaluationResponseRequiredApprovalTierEnum;
+    /**
+     * Revaluation document identifier
+     */
+    revaluationId?: string;
+    /**
+     * Lifecycle status
+     */
+    status?: RevaluationResponseStatusEnum;
+    /**
+     * SKU / stock item identifier that was revalued
+     */
+    stockItemId?: string;
     /**
      * When the document was last updated
      */
     updatedAt?: string;
     /**
-     * When the revaluation was applied to the cost state
+     * Signed inventory value change: (newUnitCost - previousUnitCost) x onHandQuantity
      */
-    appliedAt?: string;
-    /**
-     * When the revaluation was rejected
-     */
-    rejectedAt?: string;
+    valueDelta?: number;
 }
 export enum RevaluationResponseCostingMethodEnum {
     Standard = 'STANDARD',
     Average = 'AVERAGE'
+};
+export enum RevaluationResponseRequiredApprovalTierEnum {
+    Tier1Manager = 'TIER_1_MANAGER',
+    Tier2Director = 'TIER_2_DIRECTOR'
 };
 export enum RevaluationResponseStatusEnum {
     PendingApproval = 'PENDING_APPROVAL',
     AutoApplied = 'AUTO_APPLIED',
     Applied = 'APPLIED',
     Rejected = 'REJECTED'
-};
-export enum RevaluationResponseRequiredApprovalTierEnum {
-    Tier1Manager = 'TIER_1_MANAGER',
-    Tier2Director = 'TIER_2_DIRECTOR'
 };
 
 
@@ -142,8 +142,8 @@ export function instanceOfRevaluationResponse(value: object): value is Revaluati
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createRevaluationResponsePropertyNames();
-    const optionalStringProperties = createRevaluationResponseOptionalProperties({ name: 'revaluationId', nullable: false }, { name: 'stockItemId', nullable: false }, { name: 'costingMethod', nullable: false }, { name: 'reason', nullable: false }, { name: 'status', nullable: false }, { name: 'requiredApprovalTier', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'approvedBy', nullable: false }, { name: 'rejectedBy', nullable: false }, { name: 'rejectionReason', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'updatedAt', nullable: false }, { name: 'appliedAt', nullable: false }, { name: 'rejectedAt', nullable: false }, );
-    const optionalNumberProperties = createRevaluationResponseOptionalProperties({ name: 'previousUnitCost', nullable: false }, { name: 'newUnitCost', nullable: false }, { name: 'onHandQuantity', nullable: false }, { name: 'valueDelta', nullable: false }, );
+    const optionalStringProperties = createRevaluationResponseOptionalProperties({ name: 'appliedAt', nullable: false }, { name: 'approvedBy', nullable: false }, { name: 'costingMethod', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'reason', nullable: false }, { name: 'rejectedAt', nullable: false }, { name: 'rejectedBy', nullable: false }, { name: 'rejectionReason', nullable: false }, { name: 'requiredApprovalTier', nullable: false }, { name: 'revaluationId', nullable: false }, { name: 'status', nullable: false }, { name: 'stockItemId', nullable: false }, { name: 'updatedAt', nullable: false }, );
+    const optionalNumberProperties = createRevaluationResponseOptionalProperties({ name: 'newUnitCost', nullable: false }, { name: 'onHandQuantity', nullable: false }, { name: 'previousUnitCost', nullable: false }, { name: 'valueDelta', nullable: false }, );
     const optionalBooleanProperties = createRevaluationResponseOptionalProperties();
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

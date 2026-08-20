@@ -42,20 +42,20 @@ export class AccountingExportsService extends BaseService {
     }
 
     /**
-     * Get export job status
-     * Retrieve the current status of an export job.
+     * Get Export Job Status
+     * Returns the current status of one timekeeping or generic export job. Use this tool to poll a job created by requestExport; use listExportHistory instead to browse all past jobs. Preconditions: the export job must exist. Required inputs: jobId (UUID) as a path parameter; there is no request body. No events are emitted and no state changes; this is a read-only projection. Returns 404 EXPORT_JOB_NOT_FOUND when no export job exists for the supplied id. 
      * @endpoint get /v1/accounting/export/status/{jobId}
      * @param jobId Export job identifier
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public getExportStatus1(jobId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ExportJobResponse>;
-    public getExportStatus1(jobId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ExportJobResponse>>;
-    public getExportStatus1(jobId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ExportJobResponse>>;
-    public getExportStatus1(jobId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getExportStatus(jobId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ExportJobResponse>;
+    public getExportStatus(jobId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ExportJobResponse>>;
+    public getExportStatus(jobId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ExportJobResponse>>;
+    public getExportStatus(jobId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (jobId === null || jobId === undefined) {
-            throw new Error('Required parameter jobId was null or undefined when calling getExportStatus1.');
+            throw new Error('Required parameter jobId was null or undefined when calling getExportStatus.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -102,8 +102,8 @@ export class AccountingExportsService extends BaseService {
     }
 
     /**
-     * List export history
-     * Retrieve paginated export job history.
+     * List Export Job History
+     * Lists timekeeping and generic export jobs as a paginated projection, most recent first. Use this tool to review past export jobs; do not use getExportStatus, which polls one job by its id. Preconditions: none beyond the caller holding accounting:export:view. Required inputs: none; the page defaults to 20 items and only requestedAt is a supported sort property. No events are emitted and no state changes; this is a read-only projection. Returns 400 UNSUPPORTED_SORT_PROPERTY when an unsupported sort property is requested. 
      * @endpoint get /v1/accounting/export/history
      * @param pageable 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -174,20 +174,20 @@ export class AccountingExportsService extends BaseService {
     }
 
     /**
-     * Request timekeeping export
-     * Submit an export job request.
+     * Request Timekeeping Export
+     * Submits an asynchronous timekeeping or generic data export job and returns it in its initial accepted state. Use this tool to export timekeeping data; do not use requestReportExport, which renders financial-statement reports, and poll getExportStatus for completion. Preconditions: none; the job is queued for asynchronous processing. Required inputs: exportType and format (both non-blank strings); filters (JSON object) and deliveryMode are optional. Emits an ACCOUNTING_EXPORT_REQUEST event and returns 202 while the job runs asynchronously. Returns 400 when exportType or format is missing or blank. 
      * @endpoint post /v1/accounting/export
-     * @param exportJobRequest 
+     * @param exportJobRequest Export job definition with type, format and optional filters.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public requestExport1(exportJobRequest: ExportJobRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ExportJobResponse>;
-    public requestExport1(exportJobRequest: ExportJobRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ExportJobResponse>>;
-    public requestExport1(exportJobRequest: ExportJobRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ExportJobResponse>>;
-    public requestExport1(exportJobRequest: ExportJobRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public requestExport(exportJobRequest: ExportJobRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ExportJobResponse>;
+    public requestExport(exportJobRequest: ExportJobRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ExportJobResponse>>;
+    public requestExport(exportJobRequest: ExportJobRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ExportJobResponse>>;
+    public requestExport(exportJobRequest: ExportJobRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (exportJobRequest === null || exportJobRequest === undefined) {
-            throw new Error('Required parameter exportJobRequest was null or undefined when calling requestExport1.');
+            throw new Error('Required parameter exportJobRequest was null or undefined when calling requestExport.');
         }
 
         let localVarHeaders = this.defaultHeaders;

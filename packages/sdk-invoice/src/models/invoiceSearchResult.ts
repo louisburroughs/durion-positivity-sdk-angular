@@ -14,6 +14,14 @@
  */
 export interface InvoiceSearchResult { 
     /**
+     * Creation timestamp
+     */
+    createdAt?: string;
+    /**
+     * Resolved customer display name
+     */
+    customerName?: string;
+    /**
      * Invoice identifier
      */
     invoiceId: string;
@@ -21,18 +29,6 @@ export interface InvoiceSearchResult {
      * Human invoice number
      */
     invoiceNumber?: string;
-    /**
-     * Resolved customer display name
-     */
-    customerName?: string;
-    /**
-     * Linked workorder identifier
-     */
-    workorderId?: string;
-    /**
-     * Resolved human workorder number
-     */
-    workorderNumber?: string;
     /**
      * Current invoice status
      */
@@ -42,9 +38,13 @@ export interface InvoiceSearchResult {
      */
     total?: number;
     /**
-     * Creation timestamp
+     * Linked workorder identifier
      */
-    createdAt?: string;
+    workorderId?: string;
+    /**
+     * Resolved human workorder number
+     */
+    workorderNumber?: string;
 }
 export enum InvoiceSearchResultStatusEnum {
     Draft = 'DRAFT',
@@ -95,7 +95,7 @@ export function instanceOfInvoiceSearchResult(value: object): value is InvoiceSe
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createInvoiceSearchResultPropertyNames('invoiceId', 'status', );
-    const optionalStringProperties = createInvoiceSearchResultOptionalProperties({ name: 'invoiceId', nullable: false }, { name: 'invoiceNumber', nullable: false }, { name: 'customerName', nullable: false }, { name: 'workorderId', nullable: false }, { name: 'workorderNumber', nullable: false }, { name: 'status', nullable: false }, { name: 'createdAt', nullable: false }, );
+    const optionalStringProperties = createInvoiceSearchResultOptionalProperties({ name: 'createdAt', nullable: false }, { name: 'customerName', nullable: false }, { name: 'invoiceId', nullable: false }, { name: 'invoiceNumber', nullable: false }, { name: 'status', nullable: false }, { name: 'workorderId', nullable: false }, { name: 'workorderNumber', nullable: false }, );
     const optionalNumberProperties = createInvoiceSearchResultOptionalProperties({ name: 'total', nullable: false }, );
     const optionalBooleanProperties = createInvoiceSearchResultOptionalProperties();
 

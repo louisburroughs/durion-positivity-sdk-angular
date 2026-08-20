@@ -15,21 +15,21 @@ import { ScheduleEventView } from './scheduleEventView';
  */
 export interface ScheduleResourceView { 
     /**
+     * Events scheduled for this resource
+     */
+    events: Array<ScheduleEventView>;
+    /**
      * Resource identifier
      */
     resourceId: string;
-    /**
-     * Resource type (e.g. MECHANIC or BAY)
-     */
-    resourceType: string;
     /**
      * Display name of the resource
      */
     resourceName?: string;
     /**
-     * Events scheduled for this resource
+     * Resource type (e.g. MECHANIC or BAY)
      */
-    events: Array<ScheduleEventView>;
+    resourceType: string;
 }
 
 function isOptionalScheduleResourceViewPropertyOfType(
@@ -70,8 +70,8 @@ export function instanceOfScheduleResourceView(value: object): value is Schedule
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createScheduleResourceViewPropertyNames('resourceId', 'resourceType', 'events', );
-    const optionalStringProperties = createScheduleResourceViewOptionalProperties({ name: 'resourceId', nullable: false }, { name: 'resourceType', nullable: false }, { name: 'resourceName', nullable: false }, );
+    const requiredProperties = createScheduleResourceViewPropertyNames('events', 'resourceId', 'resourceType', );
+    const optionalStringProperties = createScheduleResourceViewOptionalProperties({ name: 'resourceId', nullable: false }, { name: 'resourceName', nullable: false }, { name: 'resourceType', nullable: false }, );
     const optionalNumberProperties = createScheduleResourceViewOptionalProperties();
     const optionalBooleanProperties = createScheduleResourceViewOptionalProperties();
 

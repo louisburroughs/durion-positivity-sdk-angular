@@ -14,41 +14,41 @@
  */
 export interface ProductCreateRequestDto { 
     /**
-     * Product name
+     * JSON object represented as string
      */
-    name: string;
-    /**
-     * Product description
-     */
-    description: string;
-    /**
-     * Unit of measure
-     */
-    unitOfMeasure: string;
-    /**
-     * Manufacturer identifier
-     */
-    manufacturerId?: string;
+    attributes?: string;
     /**
      * Category identifier
      */
     categoryId?: string;
     /**
-     * Stock keeping unit
+     * Product description
      */
-    sku: string;
+    description: string;
+    /**
+     * Manufacturer identifier
+     */
+    manufacturerId?: string;
     /**
      * Manufacturer part number
      */
     mpn: string;
     /**
+     * Product name
+     */
+    name: string;
+    /**
+     * Stock keeping unit
+     */
+    sku: string;
+    /**
+     * Unit of measure
+     */
+    unitOfMeasure: string;
+    /**
      * Universal product code
      */
     upc?: string;
-    /**
-     * JSON object represented as string
-     */
-    attributes?: string;
 }
 
 function isOptionalProductCreateRequestDtoPropertyOfType(
@@ -89,8 +89,8 @@ export function instanceOfProductCreateRequestDto(value: object): value is Produ
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createProductCreateRequestDtoPropertyNames('name', 'description', 'unitOfMeasure', 'sku', 'mpn', );
-    const optionalStringProperties = createProductCreateRequestDtoOptionalProperties({ name: 'name', nullable: false }, { name: 'description', nullable: false }, { name: 'unitOfMeasure', nullable: false }, { name: 'manufacturerId', nullable: false }, { name: 'categoryId', nullable: false }, { name: 'sku', nullable: false }, { name: 'mpn', nullable: false }, { name: 'upc', nullable: false }, { name: 'attributes', nullable: false }, );
+    const requiredProperties = createProductCreateRequestDtoPropertyNames('description', 'mpn', 'name', 'sku', 'unitOfMeasure', );
+    const optionalStringProperties = createProductCreateRequestDtoOptionalProperties({ name: 'attributes', nullable: false }, { name: 'categoryId', nullable: false }, { name: 'description', nullable: false }, { name: 'manufacturerId', nullable: false }, { name: 'mpn', nullable: false }, { name: 'name', nullable: false }, { name: 'sku', nullable: false }, { name: 'unitOfMeasure', nullable: false }, { name: 'upc', nullable: false }, );
     const optionalNumberProperties = createProductCreateRequestDtoOptionalProperties();
     const optionalBooleanProperties = createProductCreateRequestDtoOptionalProperties();
 

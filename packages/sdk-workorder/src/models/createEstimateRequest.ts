@@ -10,25 +10,33 @@
 
 
 /**
- * Request payload for creating an estimate
+ * Estimate creation request with customer and vehicle IDs
  */
 export interface CreateEstimateRequest { 
+    /**
+     * List of CRM contact identifiers (may be empty)
+     */
+    crmContactIds: Array<string>;
+    /**
+     * CRM party identifier (UUIDv7 string)
+     */
+    crmPartyId: string;
+    /**
+     * CRM vehicle identifier (UUIDv7 string)
+     */
+    crmVehicleId: string;
+    /**
+     * Optional currency code; defaults when omitted
+     */
+    currencyUomId?: string;
     /**
      * Customer identifier
      */
     customerId: string;
     /**
-     * Vehicle identifier
-     */
-    vehicleId: string;
-    /**
      * Optional location identifier; defaults from session when omitted
      */
     locationId?: string;
-    /**
-     * Optional currency code; defaults when omitted
-     */
-    currencyUomId?: string;
     /**
      * Optional subtotal amount before tax
      */
@@ -42,17 +50,9 @@ export interface CreateEstimateRequest {
      */
     total?: number;
     /**
-     * CRM party identifier (UUIDv7 string)
+     * Vehicle identifier
      */
-    crmPartyId: string;
-    /**
-     * CRM vehicle identifier (UUIDv7 string)
-     */
-    crmVehicleId: string;
-    /**
-     * List of CRM contact identifiers (may be empty)
-     */
-    crmContactIds: Array<string>;
+    vehicleId: string;
 }
 
 function isOptionalCreateEstimateRequestPropertyOfType(
@@ -93,8 +93,8 @@ export function instanceOfCreateEstimateRequest(value: object): value is CreateE
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createCreateEstimateRequestPropertyNames('customerId', 'vehicleId', 'crmPartyId', 'crmVehicleId', 'crmContactIds', );
-    const optionalStringProperties = createCreateEstimateRequestOptionalProperties({ name: 'customerId', nullable: false }, { name: 'vehicleId', nullable: false }, { name: 'locationId', nullable: false }, { name: 'currencyUomId', nullable: false }, { name: 'crmPartyId', nullable: false }, { name: 'crmVehicleId', nullable: false }, );
+    const requiredProperties = createCreateEstimateRequestPropertyNames('crmContactIds', 'crmPartyId', 'crmVehicleId', 'customerId', 'vehicleId', );
+    const optionalStringProperties = createCreateEstimateRequestOptionalProperties({ name: 'crmPartyId', nullable: false }, { name: 'crmVehicleId', nullable: false }, { name: 'currencyUomId', nullable: false }, { name: 'customerId', nullable: false }, { name: 'locationId', nullable: false }, { name: 'vehicleId', nullable: false }, );
     const optionalNumberProperties = createCreateEstimateRequestOptionalProperties({ name: 'subtotal', nullable: false }, { name: 'taxAmount', nullable: false }, { name: 'total', nullable: false }, );
     const optionalBooleanProperties = createCreateEstimateRequestOptionalProperties();
 
