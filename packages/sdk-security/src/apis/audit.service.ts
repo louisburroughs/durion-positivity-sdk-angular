@@ -438,14 +438,17 @@ export class AuditService extends BaseService {
      * @param reasonCode Reason code string
      * @param pageToken Cursor token for page navigation
      * @param locationIds Location UUID list - repeated query param
+     * @param page Zero-based page index (0..N)
+     * @param size The size of the page to be returned
+     * @param sort Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public searchAuditEvents(fromDate?: string, toDate?: string, actorId?: string, workorderId?: string, movementId?: string, productId?: string, sku?: string, eventType?: string, aggregateId?: string, correlationId?: string, reasonCode?: string, pageToken?: string, locationIds?: Array<string>, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PageAuditLogEventDto>;
-    public searchAuditEvents(fromDate?: string, toDate?: string, actorId?: string, workorderId?: string, movementId?: string, productId?: string, sku?: string, eventType?: string, aggregateId?: string, correlationId?: string, reasonCode?: string, pageToken?: string, locationIds?: Array<string>, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PageAuditLogEventDto>>;
-    public searchAuditEvents(fromDate?: string, toDate?: string, actorId?: string, workorderId?: string, movementId?: string, productId?: string, sku?: string, eventType?: string, aggregateId?: string, correlationId?: string, reasonCode?: string, pageToken?: string, locationIds?: Array<string>, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PageAuditLogEventDto>>;
-    public searchAuditEvents(fromDate?: string, toDate?: string, actorId?: string, workorderId?: string, movementId?: string, productId?: string, sku?: string, eventType?: string, aggregateId?: string, correlationId?: string, reasonCode?: string, pageToken?: string, locationIds?: Array<string>, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public searchAuditEvents(fromDate?: string, toDate?: string, actorId?: string, workorderId?: string, movementId?: string, productId?: string, sku?: string, eventType?: string, aggregateId?: string, correlationId?: string, reasonCode?: string, pageToken?: string, locationIds?: Array<string>, page?: number, size?: number, sort?: Array<string>, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PageAuditLogEventDto>;
+    public searchAuditEvents(fromDate?: string, toDate?: string, actorId?: string, workorderId?: string, movementId?: string, productId?: string, sku?: string, eventType?: string, aggregateId?: string, correlationId?: string, reasonCode?: string, pageToken?: string, locationIds?: Array<string>, page?: number, size?: number, sort?: Array<string>, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PageAuditLogEventDto>>;
+    public searchAuditEvents(fromDate?: string, toDate?: string, actorId?: string, workorderId?: string, movementId?: string, productId?: string, sku?: string, eventType?: string, aggregateId?: string, correlationId?: string, reasonCode?: string, pageToken?: string, locationIds?: Array<string>, page?: number, size?: number, sort?: Array<string>, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PageAuditLogEventDto>>;
+    public searchAuditEvents(fromDate?: string, toDate?: string, actorId?: string, workorderId?: string, movementId?: string, productId?: string, sku?: string, eventType?: string, aggregateId?: string, correlationId?: string, reasonCode?: string, pageToken?: string, locationIds?: Array<string>, page?: number, size?: number, sort?: Array<string>, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
 
@@ -561,6 +564,33 @@ export class AuditService extends BaseService {
             localVarQueryParameters,
             'locationIds',
             <any>locationIds,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'page',
+            <any>page,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'size',
+            <any>size,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'sort',
+            <any>sort,
             QueryParamStyle.Form,
             true,
         );

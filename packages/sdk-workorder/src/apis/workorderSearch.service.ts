@@ -19,8 +19,6 @@ import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 // @ts-ignore
 import { PageWorkorderSearchResult } from '../src/models/pageWorkorderSearchResult';
 // @ts-ignore
-import { Pageable } from '../src/models/pageable';
-// @ts-ignore
 import { WorkorderNumberRef } from '../src/models/workorderNumberRef';
 // @ts-ignore
 import { WorkorderNumberResolveRequest } from '../src/models/workorderNumberResolveRequest';
@@ -115,21 +113,20 @@ export class WorkorderSearchService extends BaseService {
      * Search Workorders With Filters
      * Searches workorders by free-text query against customer display names or a literal workorder id, optionally narrowed by exact customerId and vehicleId filters, returning a page of rows enriched with customer name, vehicle label, and VIN. Use this tool when finding workorders by customer or id fragments; use listWorkorders instead for an unfiltered listing, and resolveWorkorderNumbers to map known ids to human numbers. Preconditions: customer-name matching depends on the local customer replica; at most 10 name-matched customers are considered per query. Required inputs: none are mandatory — q defaults to an empty string and is treated as a workorder id when it parses as a UUID; page size defaults to 25. Emits a WORKORDER_SEARCH audit event; no workorder state changes — this is a read-only projection. Returns 200 with an empty page when nothing matches; no 404 is produced for empty results. 
      * @endpoint get /v1/workorders/search
-     * @param pageable 
      * @param q Free-text query matching customer name or workorder id (optional)
      * @param customerId Exact customer id filter, combinable with q (optional)
      * @param vehicleId Exact vehicle id filter, combinable with q (optional)
+     * @param page Zero-based page index (0..N)
+     * @param size The size of the page to be returned
+     * @param sort Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public searchWorkorders(pageable: Pageable, q?: string, customerId?: string, vehicleId?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PageWorkorderSearchResult>;
-    public searchWorkorders(pageable: Pageable, q?: string, customerId?: string, vehicleId?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PageWorkorderSearchResult>>;
-    public searchWorkorders(pageable: Pageable, q?: string, customerId?: string, vehicleId?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PageWorkorderSearchResult>>;
-    public searchWorkorders(pageable: Pageable, q?: string, customerId?: string, vehicleId?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
-        if (pageable === null || pageable === undefined) {
-            throw new Error('Required parameter pageable was null or undefined when calling searchWorkorders.');
-        }
+    public searchWorkorders(q?: string, customerId?: string, vehicleId?: string, page?: number, size?: number, sort?: Array<string>, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PageWorkorderSearchResult>;
+    public searchWorkorders(q?: string, customerId?: string, vehicleId?: string, page?: number, size?: number, sort?: Array<string>, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PageWorkorderSearchResult>>;
+    public searchWorkorders(q?: string, customerId?: string, vehicleId?: string, page?: number, size?: number, sort?: Array<string>, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PageWorkorderSearchResult>>;
+    public searchWorkorders(q?: string, customerId?: string, vehicleId?: string, page?: number, size?: number, sort?: Array<string>, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
 
@@ -162,8 +159,26 @@ export class WorkorderSearchService extends BaseService {
 
         localVarQueryParameters = this.addToHttpParams(
             localVarQueryParameters,
-            'pageable',
-            <any>pageable,
+            'page',
+            <any>page,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'size',
+            <any>size,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'sort',
+            <any>sort,
             QueryParamStyle.Form,
             true,
         );

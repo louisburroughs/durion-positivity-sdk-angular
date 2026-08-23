@@ -22,8 +22,6 @@ import { BulkLoadJobCreateRequest } from '../src/models/bulkLoadJobCreateRequest
 import { BulkLoadJobResponse } from '../src/models/bulkLoadJobResponse';
 // @ts-ignore
 import { PageBulkLoadJobResponse } from '../src/models/pageBulkLoadJobResponse';
-// @ts-ignore
-import { Pageable } from '../src/models/pageable';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
@@ -235,25 +233,42 @@ export class BulkLoadJobsAPIService extends BaseService {
      * List Bulk Load Jobs for Operator
      * Returns a paginated list of the authenticated operator\&#39;s bulk load jobs with their statuses and progress counters. Use this tool to find a job id or review import history; use getBulkLoadJob instead when a specific job id is already known. Preconditions: none beyond authentication; the listing is always scoped to the caller\&#39;s own jobs and other operators\&#39; jobs are never included. Required inputs: standard page, size and sort query parameters, all optional with Spring defaults (page 0, size 20). No events are emitted and no state changes; this is a read-only projection. Returns 200 with an empty page when the operator has no jobs; there are no operation-specific error responses. 
      * @endpoint get /v1/bulk-jobs
-     * @param pageable 
+     * @param page Zero-based page index (0..N)
+     * @param size The size of the page to be returned
+     * @param sort Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public listBulkLoadJobs(pageable: Pageable, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PageBulkLoadJobResponse>;
-    public listBulkLoadJobs(pageable: Pageable, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PageBulkLoadJobResponse>>;
-    public listBulkLoadJobs(pageable: Pageable, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PageBulkLoadJobResponse>>;
-    public listBulkLoadJobs(pageable: Pageable, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
-        if (pageable === null || pageable === undefined) {
-            throw new Error('Required parameter pageable was null or undefined when calling listBulkLoadJobs.');
-        }
+    public listBulkLoadJobs(page?: number, size?: number, sort?: Array<string>, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PageBulkLoadJobResponse>;
+    public listBulkLoadJobs(page?: number, size?: number, sort?: Array<string>, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PageBulkLoadJobResponse>>;
+    public listBulkLoadJobs(page?: number, size?: number, sort?: Array<string>, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PageBulkLoadJobResponse>>;
+    public listBulkLoadJobs(page?: number, size?: number, sort?: Array<string>, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
 
         localVarQueryParameters = this.addToHttpParams(
             localVarQueryParameters,
-            'pageable',
-            <any>pageable,
+            'page',
+            <any>page,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'size',
+            <any>size,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'sort',
+            <any>sort,
             QueryParamStyle.Form,
             true,
         );

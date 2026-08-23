@@ -28,8 +28,6 @@ import { CustomerCreditResponse } from '../src/models/customerCreditResponse';
 import { CustomerCreditTransactionResponse } from '../src/models/customerCreditTransactionResponse';
 // @ts-ignore
 import { PageCustomerCreditResponse } from '../src/models/pageCustomerCreditResponse';
-// @ts-ignore
-import { Pageable } from '../src/models/pageable';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
@@ -185,20 +183,19 @@ export class CustomerCreditsService extends BaseService {
      * List Customer Credits
      * Lists AR customer credits with their remaining open amounts as a paginated projection, optionally filtered by customer and consumption state. Use this tool to find open credit before applying or refunding; do not use getCustomerCredit, which fetches one credit by its known id. Preconditions: none beyond the caller holding accounting:customer-credit:view. Required inputs: none; customerId and status are optional filters, with standard page, size and sort parameters. Emits an ACCOUNTING_CUSTOMER_CREDIT_LIST audit event; no state changes. Returns 200 with an empty page when nothing matches the filters. 
      * @endpoint get /v1/accounting/customer-credits
-     * @param pageable 
      * @param customerId Filter by customer
      * @param status Filter by consumption state
+     * @param page Zero-based page index (0..N)
+     * @param size The size of the page to be returned
+     * @param sort Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public listCustomerCredits(pageable: Pageable, customerId?: string, status?: 'AVAILABLE' | 'PARTIALLY_CONSUMED' | 'CONSUMED', observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PageCustomerCreditResponse>;
-    public listCustomerCredits(pageable: Pageable, customerId?: string, status?: 'AVAILABLE' | 'PARTIALLY_CONSUMED' | 'CONSUMED', observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PageCustomerCreditResponse>>;
-    public listCustomerCredits(pageable: Pageable, customerId?: string, status?: 'AVAILABLE' | 'PARTIALLY_CONSUMED' | 'CONSUMED', observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PageCustomerCreditResponse>>;
-    public listCustomerCredits(pageable: Pageable, customerId?: string, status?: 'AVAILABLE' | 'PARTIALLY_CONSUMED' | 'CONSUMED', observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
-        if (pageable === null || pageable === undefined) {
-            throw new Error('Required parameter pageable was null or undefined when calling listCustomerCredits.');
-        }
+    public listCustomerCredits(customerId?: string, status?: 'AVAILABLE' | 'PARTIALLY_CONSUMED' | 'CONSUMED', page?: number, size?: number, sort?: Array<string>, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PageCustomerCreditResponse>;
+    public listCustomerCredits(customerId?: string, status?: 'AVAILABLE' | 'PARTIALLY_CONSUMED' | 'CONSUMED', page?: number, size?: number, sort?: Array<string>, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PageCustomerCreditResponse>>;
+    public listCustomerCredits(customerId?: string, status?: 'AVAILABLE' | 'PARTIALLY_CONSUMED' | 'CONSUMED', page?: number, size?: number, sort?: Array<string>, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PageCustomerCreditResponse>>;
+    public listCustomerCredits(customerId?: string, status?: 'AVAILABLE' | 'PARTIALLY_CONSUMED' | 'CONSUMED', page?: number, size?: number, sort?: Array<string>, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
 
@@ -222,8 +219,26 @@ export class CustomerCreditsService extends BaseService {
 
         localVarQueryParameters = this.addToHttpParams(
             localVarQueryParameters,
-            'pageable',
-            <any>pageable,
+            'page',
+            <any>page,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'size',
+            <any>size,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'sort',
+            <any>sort,
             QueryParamStyle.Form,
             true,
         );

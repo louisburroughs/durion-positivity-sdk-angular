@@ -416,7 +416,7 @@ export class WorkOrderAPIService extends BaseService {
 
     /**
      * Create a New Workorder
-     * Creates a DRAFT workorder from an estimate, copying the estimate\&#39;s customer, location, and CRM references and generating a workorder number. Use this tool when opening a workorder directly; do not use promoteEstimate, which is the estimate-side path that promotes an APPROVED estimate into a workorder. Preconditions: the referenced estimate must exist; the location falls back to the caller\&#39;s primary location when the estimate carries none. Required inputs: estimateId and customerId (UUIDs); an Idempotency-Key header is recommended — a repeated key returns the originally created workorder instead of a duplicate. Emits a WORKORDER_CREATE event and marks the workorder fact changed for downstream replication. Returns 200 with the created or replayed workorder, and 400 when the estimate cannot be found. 
+     * Creates a DRAFT workorder from an estimate, copying the estimate\&#39;s customer, location, and CRM references and generating a workorder number. Use this tool when opening a workorder directly; do not use promoteEstimate, which is the estimate-side path that promotes an APPROVED estimate into a workorder. Preconditions: the referenced estimate must exist, and the caller must hold workorder:workorder:create; the location falls back to the caller\&#39;s primary location when the estimate carries none. Required inputs: estimateId and customerId (UUIDs); an Idempotency-Key header is recommended — a repeated key returns the originally created workorder instead of a duplicate. Emits a WORKORDER_CREATE event and marks the workorder fact changed for downstream replication. Returns 200 with the created or replayed workorder, and 400 when the estimate cannot be found. 
      * @endpoint post /v1/workorders
      * @param createWorkorderRequest Estimate and customer the new workorder is created from.
      * @param idempotencyKey Optional idempotency key to prevent duplicate creation (recommended for retries)
@@ -490,7 +490,7 @@ export class WorkOrderAPIService extends BaseService {
 
     /**
      * Delete a Workorder
-     * Deletes a workorder row by id, a hard delete with no status guard or soft-delete fallback. Use this tool only to remove mistakenly created workorders; do not use completeWorkorder or reopenWorkorder, which drive the normal lifecycle without destroying history. Preconditions: none are enforced — deletion is idempotent and deleting an unknown id is a silent no-op. Required inputs: workorderId (UUID) as a path parameter; there is no request body. Emits a WORKORDER_DELETE event. Returns 204 regardless of whether the workorder previously existed. 
+     * Deletes a workorder row by id, a hard delete with no status guard or soft-delete fallback. Use this tool only to remove mistakenly created workorders; do not use completeWorkorder or reopenWorkorder, which drive the normal lifecycle without destroying history. Preconditions: the caller must hold workorder:workorder:delete; deletion is idempotent and deleting an unknown id is a silent no-op. Required inputs: workorderId (UUID) as a path parameter; there is no request body. Emits a WORKORDER_DELETE event. Returns 204 regardless of whether the workorder previously existed. 
      * @endpoint delete /v1/workorders/{workorderId}
      * @param workorderId ID of the work order to delete
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.

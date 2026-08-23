@@ -31,8 +31,6 @@ import { LocationValidationResponseDTO } from '../src/models/locationValidationR
 // @ts-ignore
 import { PageLocationRef } from '../src/models/pageLocationRef';
 // @ts-ignore
-import { Pageable } from '../src/models/pageable';
-// @ts-ignore
 import { PersonDTO } from '../src/models/personDTO';
 
 // @ts-ignore
@@ -384,20 +382,19 @@ export class LocationAPIService extends BaseService {
      * Get Paginated Location Roster for Sync
      * Returns a paginated roster of lightweight location references (id, name, code, status, hrLocationId, timezone, updatedAt) for sync consumers. Use this tool when incrementally synchronising locations into another system; do not use listLocations, which returns full unpaginated location payloads. Preconditions: none beyond the location:read authority. Required inputs: none are mandatory; status filters exactly on the stored status value such as ACTIVE, sinceUpdatedAt is an ISO-8601 instant returning only rows updated after it, and standard page, size and sort parameters control paging. Emits a LOCATION_ROSTER_GET event; no location state changes. Returns 200 with a page of location refs; an unknown status value yields an empty page rather than an error. 
      * @endpoint get /v1/locations/roster
-     * @param pageable 
      * @param status Optional status filter
      * @param sinceUpdatedAt Optional since-updated-at filter
+     * @param page Zero-based page index (0..N)
+     * @param size The size of the page to be returned
+     * @param sort Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public getLocationRoster(pageable: Pageable, status?: string, sinceUpdatedAt?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PageLocationRef>;
-    public getLocationRoster(pageable: Pageable, status?: string, sinceUpdatedAt?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PageLocationRef>>;
-    public getLocationRoster(pageable: Pageable, status?: string, sinceUpdatedAt?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PageLocationRef>>;
-    public getLocationRoster(pageable: Pageable, status?: string, sinceUpdatedAt?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
-        if (pageable === null || pageable === undefined) {
-            throw new Error('Required parameter pageable was null or undefined when calling getLocationRoster.');
-        }
+    public getLocationRoster(status?: string, sinceUpdatedAt?: string, page?: number, size?: number, sort?: Array<string>, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PageLocationRef>;
+    public getLocationRoster(status?: string, sinceUpdatedAt?: string, page?: number, size?: number, sort?: Array<string>, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PageLocationRef>>;
+    public getLocationRoster(status?: string, sinceUpdatedAt?: string, page?: number, size?: number, sort?: Array<string>, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PageLocationRef>>;
+    public getLocationRoster(status?: string, sinceUpdatedAt?: string, page?: number, size?: number, sort?: Array<string>, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
 
@@ -421,8 +418,26 @@ export class LocationAPIService extends BaseService {
 
         localVarQueryParameters = this.addToHttpParams(
             localVarQueryParameters,
-            'pageable',
-            <any>pageable,
+            'page',
+            <any>page,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'size',
+            <any>size,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'sort',
+            <any>sort,
             QueryParamStyle.Form,
             true,
         );

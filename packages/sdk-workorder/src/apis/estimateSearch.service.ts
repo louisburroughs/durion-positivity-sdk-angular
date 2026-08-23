@@ -18,8 +18,6 @@ import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
 // @ts-ignore
 import { PageEstimateSummaryResponse } from '../src/models/pageEstimateSummaryResponse';
-// @ts-ignore
-import { Pageable } from '../src/models/pageable';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
@@ -41,21 +39,20 @@ export class EstimateSearchService extends BaseService {
      * Search Estimates With Filters
      * Searches estimates and returns a page of estimate summaries, either by free-text query or by exact customer and vehicle filters. Use this tool when locating estimates by estimate number, customer name, estimate id, customer, or vehicle; use listEstimates instead for an unfiltered listing of every estimate. Preconditions: none beyond the caller holding workorder:estimate:view; unmatched queries return an empty page rather than an error. Required inputs: none are mandatory — a non-blank q takes precedence and causes customerId and vehicleId to be ignored; page size defaults to 25. Emits a WORKORDER_ESTIMATE_SEARCH audit event; no estimate state changes — this is a read-only projection. Returns 200 with an empty page when nothing matches; no 404 is produced for empty results. 
      * @endpoint get /v1/workexec/estimates/search
-     * @param pageable 
      * @param q Free-text query matching estimate number, customer name, or estimate id (optional)
      * @param customerId Filter by customer UUID (optional)
      * @param vehicleId Filter by vehicle UUID (optional)
+     * @param page Zero-based page index (0..N)
+     * @param size The size of the page to be returned
+     * @param sort Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public searchEstimates(pageable: Pageable, q?: string, customerId?: string, vehicleId?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PageEstimateSummaryResponse>;
-    public searchEstimates(pageable: Pageable, q?: string, customerId?: string, vehicleId?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PageEstimateSummaryResponse>>;
-    public searchEstimates(pageable: Pageable, q?: string, customerId?: string, vehicleId?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PageEstimateSummaryResponse>>;
-    public searchEstimates(pageable: Pageable, q?: string, customerId?: string, vehicleId?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
-        if (pageable === null || pageable === undefined) {
-            throw new Error('Required parameter pageable was null or undefined when calling searchEstimates.');
-        }
+    public searchEstimates(q?: string, customerId?: string, vehicleId?: string, page?: number, size?: number, sort?: Array<string>, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PageEstimateSummaryResponse>;
+    public searchEstimates(q?: string, customerId?: string, vehicleId?: string, page?: number, size?: number, sort?: Array<string>, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PageEstimateSummaryResponse>>;
+    public searchEstimates(q?: string, customerId?: string, vehicleId?: string, page?: number, size?: number, sort?: Array<string>, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PageEstimateSummaryResponse>>;
+    public searchEstimates(q?: string, customerId?: string, vehicleId?: string, page?: number, size?: number, sort?: Array<string>, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
 
@@ -88,8 +85,26 @@ export class EstimateSearchService extends BaseService {
 
         localVarQueryParameters = this.addToHttpParams(
             localVarQueryParameters,
-            'pageable',
-            <any>pageable,
+            'page',
+            <any>page,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'size',
+            <any>size,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'sort',
+            <any>sort,
             QueryParamStyle.Form,
             true,
         );

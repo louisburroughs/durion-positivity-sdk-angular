@@ -27,8 +27,6 @@ import { EventProcessingLogEntry } from '../src/models/eventProcessingLogEntry';
 // @ts-ignore
 import { PageAccountingEventResponse } from '../src/models/pageAccountingEventResponse';
 // @ts-ignore
-import { Pageable } from '../src/models/pageable';
-// @ts-ignore
 import { ReprocessEventRequest } from '../src/models/reprocessEventRequest';
 // @ts-ignore
 import { ReprocessingAttemptHistoryResponse } from '../src/models/reprocessingAttemptHistoryResponse';
@@ -289,7 +287,6 @@ export class AccountingEventsService extends BaseService {
      * List Accounting Events
      * Lists ingested accounting events as a paginated projection with rich optional filters: organization, event type, idempotency outcome, received-at range, event id, ingestion id, domain key, invoice id and processing status. Use this tool to monitor or triage the event pipeline; do not use getAccountingEvent, which fetches one event by its known id. Preconditions: none beyond the caller holding accounting:events:view; an unrecognized status value is silently ignored rather than rejected. Required inputs: none; all filters are optional and the page defaults to 20 items sorted by receivedAt descending. Emits an ACCOUNTING_EVENT_LIST audit event; no state changes. Returns 200 with an empty page when nothing matches the filters. 
      * @endpoint get /v1/accounting/events
-     * @param pageable 
      * @param organizationId Filter by organization
      * @param eventType Filter by event type
      * @param idempotencyOutcome Filter by idempotency outcome
@@ -300,17 +297,17 @@ export class AccountingEventsService extends BaseService {
      * @param domainKeyId Filter by domain key
      * @param invoiceId Filter by invoice UUID
      * @param status Filter by processing status
+     * @param page Zero-based page index (0..N)
+     * @param size The size of the page to be returned
+     * @param sort Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public listAccountingEvents(pageable: Pageable, organizationId?: string, eventType?: string, idempotencyOutcome?: string, receivedAtFrom?: string, receivedAtTo?: string, eventId?: string, ingestionId?: string, domainKeyId?: string, invoiceId?: string, status?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PageAccountingEventResponse>;
-    public listAccountingEvents(pageable: Pageable, organizationId?: string, eventType?: string, idempotencyOutcome?: string, receivedAtFrom?: string, receivedAtTo?: string, eventId?: string, ingestionId?: string, domainKeyId?: string, invoiceId?: string, status?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PageAccountingEventResponse>>;
-    public listAccountingEvents(pageable: Pageable, organizationId?: string, eventType?: string, idempotencyOutcome?: string, receivedAtFrom?: string, receivedAtTo?: string, eventId?: string, ingestionId?: string, domainKeyId?: string, invoiceId?: string, status?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PageAccountingEventResponse>>;
-    public listAccountingEvents(pageable: Pageable, organizationId?: string, eventType?: string, idempotencyOutcome?: string, receivedAtFrom?: string, receivedAtTo?: string, eventId?: string, ingestionId?: string, domainKeyId?: string, invoiceId?: string, status?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
-        if (pageable === null || pageable === undefined) {
-            throw new Error('Required parameter pageable was null or undefined when calling listAccountingEvents.');
-        }
+    public listAccountingEvents(organizationId?: string, eventType?: string, idempotencyOutcome?: string, receivedAtFrom?: string, receivedAtTo?: string, eventId?: string, ingestionId?: string, domainKeyId?: string, invoiceId?: string, status?: string, page?: number, size?: number, sort?: Array<string>, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PageAccountingEventResponse>;
+    public listAccountingEvents(organizationId?: string, eventType?: string, idempotencyOutcome?: string, receivedAtFrom?: string, receivedAtTo?: string, eventId?: string, ingestionId?: string, domainKeyId?: string, invoiceId?: string, status?: string, page?: number, size?: number, sort?: Array<string>, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PageAccountingEventResponse>>;
+    public listAccountingEvents(organizationId?: string, eventType?: string, idempotencyOutcome?: string, receivedAtFrom?: string, receivedAtTo?: string, eventId?: string, ingestionId?: string, domainKeyId?: string, invoiceId?: string, status?: string, page?: number, size?: number, sort?: Array<string>, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PageAccountingEventResponse>>;
+    public listAccountingEvents(organizationId?: string, eventType?: string, idempotencyOutcome?: string, receivedAtFrom?: string, receivedAtTo?: string, eventId?: string, ingestionId?: string, domainKeyId?: string, invoiceId?: string, status?: string, page?: number, size?: number, sort?: Array<string>, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
 
@@ -406,8 +403,26 @@ export class AccountingEventsService extends BaseService {
 
         localVarQueryParameters = this.addToHttpParams(
             localVarQueryParameters,
-            'pageable',
-            <any>pageable,
+            'page',
+            <any>page,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'size',
+            <any>size,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'sort',
+            <any>sort,
             QueryParamStyle.Form,
             true,
         );

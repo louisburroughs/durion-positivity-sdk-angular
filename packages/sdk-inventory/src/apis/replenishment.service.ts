@@ -19,8 +19,6 @@ import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 // @ts-ignore
 import { CreateReplenishmentPolicyRequest } from '../src/models/createReplenishmentPolicyRequest';
 // @ts-ignore
-import { Pageable } from '../src/models/pageable';
-// @ts-ignore
 import { ReplenishmentNeedResponse } from '../src/models/replenishmentNeedResponse';
 // @ts-ignore
 import { ReplenishmentPolicyResponse } from '../src/models/replenishmentPolicyResponse';
@@ -179,19 +177,18 @@ export class ReplenishmentService extends BaseService {
      * List replenishment policies
      * Lists configured replenishment policies as a page, optionally filtered to one location. Use this tool to discover a policyId before updating or snoozing a policy; use listReplenishmentNeeds instead to see which policies would currently trigger. Preconditions: none. Required inputs: none; locationId is an optional query filter and the standard page/size parameters default to a page size of 20. No events are emitted and no state changes; this is a read-only projection. Returns 200 with an empty page when nothing is configured, so an empty result is not an error condition. 
      * @endpoint get /v1/inventory/replenishment/policies
-     * @param pageable 
      * @param locationId Location identifier
+     * @param page Zero-based page index (0..N)
+     * @param size The size of the page to be returned
+     * @param sort Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public listReplenishmentPolicies(pageable: Pageable, locationId?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<string>;
-    public listReplenishmentPolicies(pageable: Pageable, locationId?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<string>>;
-    public listReplenishmentPolicies(pageable: Pageable, locationId?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<string>>;
-    public listReplenishmentPolicies(pageable: Pageable, locationId?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
-        if (pageable === null || pageable === undefined) {
-            throw new Error('Required parameter pageable was null or undefined when calling listReplenishmentPolicies.');
-        }
+    public listReplenishmentPolicies(locationId?: string, page?: number, size?: number, sort?: Array<string>, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<string>;
+    public listReplenishmentPolicies(locationId?: string, page?: number, size?: number, sort?: Array<string>, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<string>>;
+    public listReplenishmentPolicies(locationId?: string, page?: number, size?: number, sort?: Array<string>, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<string>>;
+    public listReplenishmentPolicies(locationId?: string, page?: number, size?: number, sort?: Array<string>, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
 
@@ -206,8 +203,26 @@ export class ReplenishmentService extends BaseService {
 
         localVarQueryParameters = this.addToHttpParams(
             localVarQueryParameters,
-            'pageable',
-            <any>pageable,
+            'page',
+            <any>page,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'size',
+            <any>size,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'sort',
+            <any>sort,
             QueryParamStyle.Form,
             true,
         );

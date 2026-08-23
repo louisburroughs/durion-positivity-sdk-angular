@@ -16,4 +16,3 @@ export * from './scheduleEventView';
 export * from './scheduleResourceView';
 export * from './scheduleViewResponse';
 export * from './shopAuditEntryResponse';
-export * from './shopAuditFilter';

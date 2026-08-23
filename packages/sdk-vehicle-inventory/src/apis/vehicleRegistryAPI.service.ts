@@ -21,6 +21,8 @@ import { CreateVehicleRequest } from '../src/models/createVehicleRequest';
 // @ts-ignore
 import { UpdateVehicleRequest } from '../src/models/updateVehicleRequest';
 // @ts-ignore
+import { VehicleFactReplayResultDto } from '../src/models/vehicleFactReplayResultDto';
+// @ts-ignore
 import { VehicleResponse } from '../src/models/vehicleResponse';
 
 // @ts-ignore
@@ -278,6 +280,95 @@ export class VehicleRegistryAPIService extends BaseService {
         return this.httpClient.request<VehicleResponse>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Re-emit Vehicle Facts for Replica Consumers
+     * Re-publishes vehicle.vehicle.updated facts for one bounded page of vehicles so that event-fed replicas in other modules can be seeded or repaired, returning what it emitted and a cursor for the next page. Use this tool to fill a consumer\&#39;s replica after publication was enabled on an environment that already held vehicles, or after a consumer outage longer than broker retention; do not use the outbox replay for that, which re-queues only rows already written and therefore cannot reach vehicles whose facts were never produced. Preconditions: Kafka publication must be enabled, or the facts queue in the outbox and reach nobody; replayed facts are indistinguishable from live ones, so consumers apply them through their normal path and their stale guard prevents an older fact regressing newer state. Required inputs: none; afterVehicleId resumes a previous page, updatedSince restricts to vehicles changed at or after an instant, and limit bounds the page at 1000. Emits a VEHICLE_FACT_REPLAY event and queues one vehicle fact per vehicle in the page; no vehicle state changes. Returns 200 with complete&#x3D;true and a null cursor once the last vehicle is reached, and 400 when a parameter is malformed. 
+     * @endpoint post /v1/vehicle-registry/facts/replay
+     * @param afterVehicleId Resume after this vehicle id.
+     * @param updatedSince Only vehicles updated at or after this instant.
+     * @param limit Page size, 1-1000.
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public replayVehicleFacts(afterVehicleId?: string, updatedSince?: string, limit?: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<VehicleFactReplayResultDto>;
+    public replayVehicleFacts(afterVehicleId?: string, updatedSince?: string, limit?: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<VehicleFactReplayResultDto>>;
+    public replayVehicleFacts(afterVehicleId?: string, updatedSince?: string, limit?: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<VehicleFactReplayResultDto>>;
+    public replayVehicleFacts(afterVehicleId?: string, updatedSince?: string, limit?: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+
+        let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'afterVehicleId',
+            <any>afterVehicleId,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'updatedSince',
+            <any>updatedSince,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'limit',
+            <any>limit,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/vehicle-registry/facts/replay`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<VehicleFactReplayResultDto>('post', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                params: localVarQueryParameters.toHttpParams(),
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,

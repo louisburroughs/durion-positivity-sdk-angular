@@ -23,3 +23,5 @@ npm run lint
 - `../durion/AGENTS.md` — shared workspace guidance
 - `../durion/knowledge-catalog/` — domain and module knowledge
 - `../durion-positivity-backend/` — source specs and backend contracts
+
+cd ~/IdeaProjects/durion-positivity-sdk-angular && npm run generate && npm run build && cd ~/IdeaProjects/durion-positivity-frontend && npm run sdk:install && npm run build

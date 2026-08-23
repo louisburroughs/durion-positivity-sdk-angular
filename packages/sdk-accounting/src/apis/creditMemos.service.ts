@@ -25,8 +25,6 @@ import { CreditMemoResponse } from '../src/models/creditMemoResponse';
 // @ts-ignore
 import { PageCreditMemoResponse } from '../src/models/pageCreditMemoResponse';
 // @ts-ignore
-import { Pageable } from '../src/models/pageable';
-// @ts-ignore
 import { VoidCreditMemoRequest } from '../src/models/voidCreditMemoRequest';
 
 // @ts-ignore
@@ -179,21 +177,20 @@ export class CreditMemosService extends BaseService {
      * List Credit Memos
      * Lists credit memos as a paginated projection, optionally filtered by customer, original invoice or lifecycle status. Use this tool when browsing or reconciling memos; do not use getCreditMemo, which fetches one memo by its known id. Preconditions: none beyond the caller holding accounting:credit-memo:read. Required inputs: none; customerId, originalInvoiceId and status (DRAFT, POSTED, APPLIED, VOIDED) are optional filters, with standard page, size and sort parameters. Emits an ACCOUNTING_CREDIT_MEMO_LIST audit event; no state changes. Returns 400 when pagination or filter parameters are invalid. 
      * @endpoint get /v1/accounting/credit-memos
-     * @param pageable 
      * @param customerId Filter by customer ID
      * @param originalInvoiceId Filter by original invoice ID
      * @param status Filter by status (DRAFT, POSTED, APPLIED, VOIDED)
+     * @param page Zero-based page index (0..N)
+     * @param size The size of the page to be returned
+     * @param sort Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public listCreditMemos(pageable: Pageable, customerId?: string, originalInvoiceId?: string, status?: 'DRAFT' | 'POSTED' | 'APPLIED' | 'VOIDED', observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PageCreditMemoResponse>;
-    public listCreditMemos(pageable: Pageable, customerId?: string, originalInvoiceId?: string, status?: 'DRAFT' | 'POSTED' | 'APPLIED' | 'VOIDED', observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PageCreditMemoResponse>>;
-    public listCreditMemos(pageable: Pageable, customerId?: string, originalInvoiceId?: string, status?: 'DRAFT' | 'POSTED' | 'APPLIED' | 'VOIDED', observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PageCreditMemoResponse>>;
-    public listCreditMemos(pageable: Pageable, customerId?: string, originalInvoiceId?: string, status?: 'DRAFT' | 'POSTED' | 'APPLIED' | 'VOIDED', observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
-        if (pageable === null || pageable === undefined) {
-            throw new Error('Required parameter pageable was null or undefined when calling listCreditMemos.');
-        }
+    public listCreditMemos(customerId?: string, originalInvoiceId?: string, status?: 'DRAFT' | 'POSTED' | 'APPLIED' | 'VOIDED', page?: number, size?: number, sort?: Array<string>, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PageCreditMemoResponse>;
+    public listCreditMemos(customerId?: string, originalInvoiceId?: string, status?: 'DRAFT' | 'POSTED' | 'APPLIED' | 'VOIDED', page?: number, size?: number, sort?: Array<string>, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PageCreditMemoResponse>>;
+    public listCreditMemos(customerId?: string, originalInvoiceId?: string, status?: 'DRAFT' | 'POSTED' | 'APPLIED' | 'VOIDED', page?: number, size?: number, sort?: Array<string>, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PageCreditMemoResponse>>;
+    public listCreditMemos(customerId?: string, originalInvoiceId?: string, status?: 'DRAFT' | 'POSTED' | 'APPLIED' | 'VOIDED', page?: number, size?: number, sort?: Array<string>, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
 
@@ -226,8 +223,26 @@ export class CreditMemosService extends BaseService {
 
         localVarQueryParameters = this.addToHttpParams(
             localVarQueryParameters,
-            'pageable',
-            <any>pageable,
+            'page',
+            <any>page,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'size',
+            <any>size,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'sort',
+            <any>sort,
             QueryParamStyle.Form,
             true,
         );

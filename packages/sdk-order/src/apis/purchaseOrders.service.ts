@@ -23,11 +23,7 @@ import { ApprovePurchaseOrderRequest } from '../src/models/approvePurchaseOrderR
 // @ts-ignore
 import { CreatePurchaseOrderRequest } from '../src/models/createPurchaseOrderRequest';
 // @ts-ignore
-import { ListPurchaseOrdersRequest } from '../src/models/listPurchaseOrdersRequest';
-// @ts-ignore
 import { PagePurchaseOrderResponse } from '../src/models/pagePurchaseOrderResponse';
-// @ts-ignore
-import { Pageable } from '../src/models/pageable';
 // @ts-ignore
 import { ProcurementAvailability } from '../src/models/procurementAvailability';
 // @ts-ignore
@@ -408,29 +404,28 @@ export class PurchaseOrdersService extends BaseService {
      * List Purchase Orders
      * Returns a page of purchase orders matching the optional filter criteria, with lifecycle status, totals and open balances. Use this tool to discover a poId or survey open orders; use getPurchaseOrder instead when the id is already known. Preconditions: none; every filter is optional and an unfiltered call pages over all orders. Required inputs: none; vendorId, status, currency and locationId narrow the result, and standard page, size and sort parameters control pagination. Emits an ORDER_PURCHASE_ORDER_LIST audit event; no stock state changes, this is a read-only projection. Returns 200 with an empty page when nothing matches, so an empty result is not an error condition. 
      * @endpoint get /v1/orders/purchase-orders
-     * @param filter 
-     * @param pageable 
+     * @param vendorId Filter to purchase orders placed with this vendor
+     * @param status Filter to purchase orders in this lifecycle status
+     * @param currency Filter to purchase orders denominated in this ISO 4217 currency code
+     * @param locationId Filter to purchase orders shipping to this location
+     * @param page Zero-based page index (0..N)
+     * @param size The size of the page to be returned
+     * @param sort Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public listPurchaseOrders(filter: ListPurchaseOrdersRequest, pageable: Pageable, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PagePurchaseOrderResponse>;
-    public listPurchaseOrders(filter: ListPurchaseOrdersRequest, pageable: Pageable, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PagePurchaseOrderResponse>>;
-    public listPurchaseOrders(filter: ListPurchaseOrdersRequest, pageable: Pageable, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PagePurchaseOrderResponse>>;
-    public listPurchaseOrders(filter: ListPurchaseOrdersRequest, pageable: Pageable, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
-        if (filter === null || filter === undefined) {
-            throw new Error('Required parameter filter was null or undefined when calling listPurchaseOrders.');
-        }
-        if (pageable === null || pageable === undefined) {
-            throw new Error('Required parameter pageable was null or undefined when calling listPurchaseOrders.');
-        }
+    public listPurchaseOrders(vendorId?: string, status?: 'DRAFT' | 'APPROVED' | 'PARTIALLY_RECEIVED' | 'FULLY_RECEIVED' | 'CLOSED' | 'CANCELLED', currency?: string, locationId?: string, page?: number, size?: number, sort?: Array<string>, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PagePurchaseOrderResponse>;
+    public listPurchaseOrders(vendorId?: string, status?: 'DRAFT' | 'APPROVED' | 'PARTIALLY_RECEIVED' | 'FULLY_RECEIVED' | 'CLOSED' | 'CANCELLED', currency?: string, locationId?: string, page?: number, size?: number, sort?: Array<string>, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PagePurchaseOrderResponse>>;
+    public listPurchaseOrders(vendorId?: string, status?: 'DRAFT' | 'APPROVED' | 'PARTIALLY_RECEIVED' | 'FULLY_RECEIVED' | 'CLOSED' | 'CANCELLED', currency?: string, locationId?: string, page?: number, size?: number, sort?: Array<string>, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PagePurchaseOrderResponse>>;
+    public listPurchaseOrders(vendorId?: string, status?: 'DRAFT' | 'APPROVED' | 'PARTIALLY_RECEIVED' | 'FULLY_RECEIVED' | 'CLOSED' | 'CANCELLED', currency?: string, locationId?: string, page?: number, size?: number, sort?: Array<string>, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
 
         localVarQueryParameters = this.addToHttpParams(
             localVarQueryParameters,
-            'filter',
-            <any>filter,
+            'vendorId',
+            <any>vendorId,
             QueryParamStyle.Form,
             true,
         );
@@ -438,8 +433,53 @@ export class PurchaseOrdersService extends BaseService {
 
         localVarQueryParameters = this.addToHttpParams(
             localVarQueryParameters,
-            'pageable',
-            <any>pageable,
+            'status',
+            <any>status,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'currency',
+            <any>currency,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'locationId',
+            <any>locationId,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'page',
+            <any>page,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'size',
+            <any>size,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'sort',
+            <any>sort,
             QueryParamStyle.Form,
             true,
         );

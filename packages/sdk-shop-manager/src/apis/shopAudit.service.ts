@@ -20,8 +20,6 @@ import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 import { ApiError } from '../src/models/apiError';
 // @ts-ignore
 import { ShopAuditEntryResponse } from '../src/models/shopAuditEntryResponse';
-// @ts-ignore
-import { ShopAuditFilter } from '../src/models/shopAuditFilter';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
@@ -103,25 +101,92 @@ export class ShopAuditService extends BaseService {
      * Search the Shop Audit Trail
      * Searches the immutable shop audit trail of schedule and assignment changes, returning matching entries in reverse-chronological order with actor, event type, change summary and reason. Use this tool when investigating who changed a schedule or assignment and why; use getShopAuditEntry instead when the audit entry id is already known. Preconditions: at least one filter criterion (workorderId, appointmentId, mechanicId, actorUserId, eventType or locationId) must be supplied; unbounded scans are rejected. Required inputs: any combination of the filter fields plus optional fromDateTime and toDateTime, which default to the last 90 days ending now; eventType is one of SCHEDULE_CREATED, SCHEDULE_UPDATED, SCHEDULE_CANCELLED, ASSIGNMENT_CREATED or ASSIGNMENT_REMOVED. No events are emitted and no state changes; this is a read-only projection of records retained for seven years. Returns 400 when no filter criterion is provided. 
      * @endpoint get /v1/shop/audit
-     * @param filter 
+     * @param workorderId Workorder UUID to filter by - one word per workspace naming policy
+     * @param appointmentId Appointment UUID to filter by
+     * @param mechanicId Mechanic user ID to filter by
+     * @param actorUserId Actor user ID to filter by
+     * @param eventType Specific audit event type to filter by
+     * @param locationId Location ID to filter by
+     * @param fromDateTime Inclusive start timestamp for date-time range filter
+     * @param toDateTime Inclusive end timestamp for date-time range filter
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public searchShopAudit(filter: ShopAuditFilter, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<ShopAuditEntryResponse>>;
-    public searchShopAudit(filter: ShopAuditFilter, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<ShopAuditEntryResponse>>>;
-    public searchShopAudit(filter: ShopAuditFilter, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<ShopAuditEntryResponse>>>;
-    public searchShopAudit(filter: ShopAuditFilter, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
-        if (filter === null || filter === undefined) {
-            throw new Error('Required parameter filter was null or undefined when calling searchShopAudit.');
-        }
+    public searchShopAudit(workorderId?: string, appointmentId?: string, mechanicId?: string, actorUserId?: string, eventType?: 'SCHEDULE_CREATED' | 'SCHEDULE_UPDATED' | 'SCHEDULE_CANCELLED' | 'ASSIGNMENT_CREATED' | 'ASSIGNMENT_REMOVED', locationId?: string, fromDateTime?: string, toDateTime?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<ShopAuditEntryResponse>>;
+    public searchShopAudit(workorderId?: string, appointmentId?: string, mechanicId?: string, actorUserId?: string, eventType?: 'SCHEDULE_CREATED' | 'SCHEDULE_UPDATED' | 'SCHEDULE_CANCELLED' | 'ASSIGNMENT_CREATED' | 'ASSIGNMENT_REMOVED', locationId?: string, fromDateTime?: string, toDateTime?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<ShopAuditEntryResponse>>>;
+    public searchShopAudit(workorderId?: string, appointmentId?: string, mechanicId?: string, actorUserId?: string, eventType?: 'SCHEDULE_CREATED' | 'SCHEDULE_UPDATED' | 'SCHEDULE_CANCELLED' | 'ASSIGNMENT_CREATED' | 'ASSIGNMENT_REMOVED', locationId?: string, fromDateTime?: string, toDateTime?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<ShopAuditEntryResponse>>>;
+    public searchShopAudit(workorderId?: string, appointmentId?: string, mechanicId?: string, actorUserId?: string, eventType?: 'SCHEDULE_CREATED' | 'SCHEDULE_UPDATED' | 'SCHEDULE_CANCELLED' | 'ASSIGNMENT_CREATED' | 'ASSIGNMENT_REMOVED', locationId?: string, fromDateTime?: string, toDateTime?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
 
         localVarQueryParameters = this.addToHttpParams(
             localVarQueryParameters,
-            'filter',
-            <any>filter,
+            'workorderId',
+            <any>workorderId,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'appointmentId',
+            <any>appointmentId,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'mechanicId',
+            <any>mechanicId,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'actorUserId',
+            <any>actorUserId,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'eventType',
+            <any>eventType,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'locationId',
+            <any>locationId,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'fromDateTime',
+            <any>fromDateTime,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'toDateTime',
+            <any>toDateTime,
             QueryParamStyle.Form,
             true,
         );

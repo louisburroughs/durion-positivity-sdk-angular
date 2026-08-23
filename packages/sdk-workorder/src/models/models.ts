@@ -52,7 +52,6 @@ export * from './operationalContextResponse';
 export * from './pageEstimateSummaryResponse';
 export * from './pageWorkorderSearchResult';
 export * from './pageWorkorderStatusView';
-export * from './pageable';
 export * from './pageableObject';
 export * from './ptoEntry';
 export * from './reassignTechnicianRequest';

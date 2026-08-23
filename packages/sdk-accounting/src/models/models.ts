@@ -90,7 +90,6 @@ export * from './pageCustomerCreditResponse';
 export * from './pageExportJobResponse';
 export * from './pageReportExportResponse';
 export * from './pageVendorBillSummaryResponse';
-export * from './pageable';
 export * from './pageableObject';
 export * from './pagedResponseJournalEntryResponse';
 export * from './paymentApplicationRequest';

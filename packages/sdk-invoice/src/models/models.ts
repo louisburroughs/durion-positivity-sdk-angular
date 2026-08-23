@@ -28,7 +28,6 @@ export * from './orderInvoiceCreationRequest';
 export * from './orderInvoiceLineItem';
 export * from './orderInvoiceResponse';
 export * from './pageInvoiceSearchResult';
-export * from './pageable';
 export * from './pageableObject';
 export * from './partyStandaloneRefundRequest';
 export * from './printDeliveryRequest';

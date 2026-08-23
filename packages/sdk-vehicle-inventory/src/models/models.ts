@@ -9,6 +9,7 @@ export * from './searchVehiclesResponse';
 export * from './updateVehicleRequest';
 export * from './vehicleBulkIngestRecord';
 export * from './vehicleCarePreferenceResponse';
+export * from './vehicleFactReplayResultDto';
 export * from './vehicleLegacyRequest';
 export * from './vehicleLegacyResponse';
 export * from './vehicleResponse';

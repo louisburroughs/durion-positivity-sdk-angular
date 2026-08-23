@@ -19,8 +19,6 @@ import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 // @ts-ignore
 import { PageWorkorderStatusView } from '../src/models/pageWorkorderStatusView';
 // @ts-ignore
-import { Pageable } from '../src/models/pageable';
-// @ts-ignore
 import { WorkorderStatusDetail } from '../src/models/workorderStatusDetail';
 
 // @ts-ignore
@@ -104,21 +102,20 @@ export class WIPDashboardService extends BaseService {
      * Returns a page of workorders in active work-in-progress statuses (APPROVED, ASSIGNED, WORK_IN_PROGRESS, AWAITING_PARTS, AWAITING_APPROVAL), enriched with customer and vehicle references. Use this tool for the WIP status board; do not use getDispatchDashboard, which aggregates mechanics, bays, and conflicts for one date, and use getWipDetail for a single workorder\&#39;s status history. Preconditions: multiLocation&#x3D;true requires the caller to hold workorder:wip:view_all_locations; otherwise results are scoped to the given location. Required inputs: locationId (UUID as a string) as a query parameter — ignored when multiLocation is true; multiLocation defaults to false and page size defaults to 25. Emits a WORKORDER_WIP_LIST audit event; no workorder state changes — this is a read-only projection. Returns 400 when locationId does not parse as a UUID, and 403 when multiLocation is requested without workorder:wip:view_all_locations. 
      * @endpoint get /v1/workexec/wip
      * @param locationId Location ID to filter workorders by
-     * @param pageable 
      * @param multiLocation Request cross-location results; requires workorder:wip:view_all_locations
+     * @param page Zero-based page index (0..N)
+     * @param size The size of the page to be returned
+     * @param sort Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public listWipWorkorders(locationId: string, pageable: Pageable, multiLocation?: boolean, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PageWorkorderStatusView>;
-    public listWipWorkorders(locationId: string, pageable: Pageable, multiLocation?: boolean, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PageWorkorderStatusView>>;
-    public listWipWorkorders(locationId: string, pageable: Pageable, multiLocation?: boolean, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PageWorkorderStatusView>>;
-    public listWipWorkorders(locationId: string, pageable: Pageable, multiLocation?: boolean, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public listWipWorkorders(locationId: string, multiLocation?: boolean, page?: number, size?: number, sort?: Array<string>, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PageWorkorderStatusView>;
+    public listWipWorkorders(locationId: string, multiLocation?: boolean, page?: number, size?: number, sort?: Array<string>, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PageWorkorderStatusView>>;
+    public listWipWorkorders(locationId: string, multiLocation?: boolean, page?: number, size?: number, sort?: Array<string>, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PageWorkorderStatusView>>;
+    public listWipWorkorders(locationId: string, multiLocation?: boolean, page?: number, size?: number, sort?: Array<string>, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (locationId === null || locationId === undefined) {
             throw new Error('Required parameter locationId was null or undefined when calling listWipWorkorders.');
-        }
-        if (pageable === null || pageable === undefined) {
-            throw new Error('Required parameter pageable was null or undefined when calling listWipWorkorders.');
         }
 
         let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
@@ -143,8 +140,26 @@ export class WIPDashboardService extends BaseService {
 
         localVarQueryParameters = this.addToHttpParams(
             localVarQueryParameters,
-            'pageable',
-            <any>pageable,
+            'page',
+            <any>page,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'size',
+            <any>size,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'sort',
+            <any>sort,
             QueryParamStyle.Form,
             true,
         );

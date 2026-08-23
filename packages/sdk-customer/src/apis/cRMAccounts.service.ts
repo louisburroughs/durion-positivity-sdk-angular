@@ -41,8 +41,6 @@ import { MergePartiesRequest } from '../src/models/mergePartiesRequest';
 // @ts-ignore
 import { MergePartiesResponse } from '../src/models/mergePartiesResponse';
 // @ts-ignore
-import { Pageable } from '../src/models/pageable';
-// @ts-ignore
 import { PartyNameRef } from '../src/models/partyNameRef';
 // @ts-ignore
 import { PartyNameResolveRequest } from '../src/models/partyNameResolveRequest';
@@ -81,7 +79,9 @@ export class CRMAccountsService extends BaseService {
      * Browse Customer Directory
      * Returns a paged customer directory that unifies commercial parties and standalone individual customers, with person names and contact points resolved from pos-people. Use this tool when listing or typeahead-filtering customers by name, status, party type, or customer number; do not use searchParties, which filters commercial parties only by structured criteria, and use getParty instead when the party id is already known. Preconditions: none; an empty page is returned when nothing matches, and a pos-people outage degrades person names to null rather than failing the request. Required inputs: none; page defaults to 0 with size 20, the name filter matches legal name, display name, or customer number case-insensitively, status matches ACTIVE, INACTIVE, ON_HOLD, or MERGED, sortField is name (default) or customerNumber, and sortOrder is asc (default) or desc with partyId as a stable tie-breaker. Emits a CUSTOMER_PARTY_BROWSE audit event; no state changes occur. Returns 200 with an empty results array rather than an error when no party matches the filters. 
      * @endpoint get /v1/crm/accounts/parties
-     * @param pageable Pagination parameters (page, size, sort). The service uses legalName,asc by default and appends partyId,asc as a stable tie-breaker whenever the requested sort list does not explicitly include partyId; legalName sorting is case-insensitive.
+     * @param page Zero-based page index (0..N)
+     * @param size The size of the page to be returned
+     * @param sort Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
      * @param name Filter by name (case-insensitive contains on legal/display name)
      * @param status Filter by account status (ACTIVE|PENDING|SUSPENDED|INACTIVE)
      * @param partyType Filter by party type (ORGANIZATION|INDIVIDUAL)
@@ -92,20 +92,35 @@ export class CRMAccountsService extends BaseService {
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public browseParties(pageable: Pageable, name?: string, status?: string, partyType?: string, customerNumber?: string, sortField?: string, sortOrder?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<SearchPartiesResponse>;
-    public browseParties(pageable: Pageable, name?: string, status?: string, partyType?: string, customerNumber?: string, sortField?: string, sortOrder?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<SearchPartiesResponse>>;
-    public browseParties(pageable: Pageable, name?: string, status?: string, partyType?: string, customerNumber?: string, sortField?: string, sortOrder?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<SearchPartiesResponse>>;
-    public browseParties(pageable: Pageable, name?: string, status?: string, partyType?: string, customerNumber?: string, sortField?: string, sortOrder?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
-        if (pageable === null || pageable === undefined) {
-            throw new Error('Required parameter pageable was null or undefined when calling browseParties.');
-        }
+    public browseParties(page?: number, size?: number, sort?: Array<string>, name?: string, status?: string, partyType?: string, customerNumber?: string, sortField?: string, sortOrder?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<SearchPartiesResponse>;
+    public browseParties(page?: number, size?: number, sort?: Array<string>, name?: string, status?: string, partyType?: string, customerNumber?: string, sortField?: string, sortOrder?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<SearchPartiesResponse>>;
+    public browseParties(page?: number, size?: number, sort?: Array<string>, name?: string, status?: string, partyType?: string, customerNumber?: string, sortField?: string, sortOrder?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<SearchPartiesResponse>>;
+    public browseParties(page?: number, size?: number, sort?: Array<string>, name?: string, status?: string, partyType?: string, customerNumber?: string, sortField?: string, sortOrder?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
 
         localVarQueryParameters = this.addToHttpParams(
             localVarQueryParameters,
-            'pageable',
-            <any>pageable,
+            'page',
+            <any>page,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'size',
+            <any>size,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'sort',
+            <any>sort,
             QueryParamStyle.Form,
             true,
         );

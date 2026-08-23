@@ -25,8 +25,6 @@ import { ConvertPurchaseSuggestionsResponse } from '../src/models/convertPurchas
 // @ts-ignore
 import { DismissPurchaseSuggestionRequest } from '../src/models/dismissPurchaseSuggestionRequest';
 // @ts-ignore
-import { Pageable } from '../src/models/pageable';
-// @ts-ignore
 import { PurchaseSuggestionResponse } from '../src/models/purchaseSuggestionResponse';
 
 // @ts-ignore
@@ -313,21 +311,20 @@ export class PurchaseSuggestionsService extends BaseService {
      * List Purchase Suggestions
      * Returns a page of replenishment purchase suggestions, newest first, with their lifecycle status, suggested quantity, vendor and pricing snapshot. Use this tool to discover suggestionIds or review what the replenishment scan proposed; use getPurchaseSuggestion instead when the id is already known. Preconditions: none; suggestions are created only by the replenishment scan, so an empty page means the scan proposed nothing matching the filters. Required inputs: none; status (SUGGESTED, ACCEPTED, CONVERTED or DISMISSED), sku and locationId are optional filters, and the page size defaults to 20. No events are emitted and no state changes; this is a read-only projection. Returns 400 when status is not a known lifecycle value, and 200 with an empty page when nothing matches. 
      * @endpoint get /v1/inventory/purchase-suggestions
-     * @param pageable 
      * @param status Lifecycle status filter (SUGGESTED, ACCEPTED, CONVERTED, DISMISSED)
      * @param sku Stock item (SKU) filter
      * @param locationId Destination location filter
+     * @param page Zero-based page index (0..N)
+     * @param size The size of the page to be returned
+     * @param sort Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public listPurchaseSuggestions(pageable: Pageable, status?: string, sku?: string, locationId?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<string>;
-    public listPurchaseSuggestions(pageable: Pageable, status?: string, sku?: string, locationId?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<string>>;
-    public listPurchaseSuggestions(pageable: Pageable, status?: string, sku?: string, locationId?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<string>>;
-    public listPurchaseSuggestions(pageable: Pageable, status?: string, sku?: string, locationId?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
-        if (pageable === null || pageable === undefined) {
-            throw new Error('Required parameter pageable was null or undefined when calling listPurchaseSuggestions.');
-        }
+    public listPurchaseSuggestions(status?: string, sku?: string, locationId?: string, page?: number, size?: number, sort?: Array<string>, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<string>;
+    public listPurchaseSuggestions(status?: string, sku?: string, locationId?: string, page?: number, size?: number, sort?: Array<string>, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<string>>;
+    public listPurchaseSuggestions(status?: string, sku?: string, locationId?: string, page?: number, size?: number, sort?: Array<string>, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<string>>;
+    public listPurchaseSuggestions(status?: string, sku?: string, locationId?: string, page?: number, size?: number, sort?: Array<string>, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
 
@@ -360,8 +357,26 @@ export class PurchaseSuggestionsService extends BaseService {
 
         localVarQueryParameters = this.addToHttpParams(
             localVarQueryParameters,
-            'pageable',
-            <any>pageable,
+            'page',
+            <any>page,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'size',
+            <any>size,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'sort',
+            <any>sort,
             QueryParamStyle.Form,
             true,
         );

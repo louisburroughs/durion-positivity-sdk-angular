@@ -35,8 +35,6 @@ import { JournalLineDrilldownResponse } from '../src/models/journalLineDrilldown
 // @ts-ignore
 import { PageReportExportResponse } from '../src/models/pageReportExportResponse';
 // @ts-ignore
-import { Pageable } from '../src/models/pageable';
-// @ts-ignore
 import { ReportExportRequest } from '../src/models/reportExportRequest';
 // @ts-ignore
 import { ReportExportResponse } from '../src/models/reportExportResponse';
@@ -1054,25 +1052,42 @@ export class FinancialReportingService extends BaseService {
      * List Report Export History
      * Lists all asynchronous report export jobs as a paginated projection, most recent first. Use this tool to review past exports and their statuses; do not use getReportExportStatus, which polls a single job by id. Preconditions: none beyond the caller holding accounting:report:export. Required inputs: none; the page defaults to 20 items and only requestedAt is a supported sort property. Emits an ACCOUNTING_REPORT_EXPORT_LIST audit event; no state changes. Returns 400 when an unsupported sort property is requested. 
      * @endpoint get /v1/accounting/reports/export
-     * @param pageable 
+     * @param page Zero-based page index (0..N)
+     * @param size The size of the page to be returned
+     * @param sort Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public listReportExports(pageable: Pageable, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PageReportExportResponse>;
-    public listReportExports(pageable: Pageable, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PageReportExportResponse>>;
-    public listReportExports(pageable: Pageable, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PageReportExportResponse>>;
-    public listReportExports(pageable: Pageable, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
-        if (pageable === null || pageable === undefined) {
-            throw new Error('Required parameter pageable was null or undefined when calling listReportExports.');
-        }
+    public listReportExports(page?: number, size?: number, sort?: Array<string>, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PageReportExportResponse>;
+    public listReportExports(page?: number, size?: number, sort?: Array<string>, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PageReportExportResponse>>;
+    public listReportExports(page?: number, size?: number, sort?: Array<string>, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PageReportExportResponse>>;
+    public listReportExports(page?: number, size?: number, sort?: Array<string>, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
 
         localVarQueryParameters = this.addToHttpParams(
             localVarQueryParameters,
-            'pageable',
-            <any>pageable,
+            'page',
+            <any>page,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'size',
+            <any>size,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'sort',
+            <any>sort,
             QueryParamStyle.Form,
             true,
         );

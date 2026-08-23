@@ -22,8 +22,6 @@ import { ApiError } from '../src/models/apiError';
 import { InvoiceLineSearchResult } from '../src/models/invoiceLineSearchResult';
 // @ts-ignore
 import { PageInvoiceSearchResult } from '../src/models/pageInvoiceSearchResult';
-// @ts-ignore
-import { Pageable } from '../src/models/pageable';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
@@ -127,19 +125,18 @@ export class InvoiceSearchService extends BaseService {
      * Search Invoices by Free Text
      * Searches invoices by a free-text term matched against the invoice number, the customer name (resolved via the customer service), or the workorder number, returning a page of finder rows. Use this tool to locate an invoice when its id is unknown; use getInvoice instead once the invoiceId is known, and searchInvoiceLines for line-level warranty correlation. Preconditions: none — but a blank or missing q short-circuits to an empty page rather than listing all invoices. Required inputs: q (free-text term) plus optional page, size and sort parameters; size defaults to 25, is hard-capped at 50, and the default sort is createdAt descending. Emits an INVOICE_SEARCH audit event; no state changes — this is a read-only projection. Returns 400 when pagination parameters are malformed. 
      * @endpoint get /v1/invoices/search
-     * @param pageable 
      * @param q Free-text query matching invoice number, customer name, or workorder number (optional)
+     * @param page Zero-based page index (0..N)
+     * @param size The size of the page to be returned
+     * @param sort Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public searchInvoices(pageable: Pageable, q?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PageInvoiceSearchResult>;
-    public searchInvoices(pageable: Pageable, q?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PageInvoiceSearchResult>>;
-    public searchInvoices(pageable: Pageable, q?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PageInvoiceSearchResult>>;
-    public searchInvoices(pageable: Pageable, q?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
-        if (pageable === null || pageable === undefined) {
-            throw new Error('Required parameter pageable was null or undefined when calling searchInvoices.');
-        }
+    public searchInvoices(q?: string, page?: number, size?: number, sort?: Array<string>, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PageInvoiceSearchResult>;
+    public searchInvoices(q?: string, page?: number, size?: number, sort?: Array<string>, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PageInvoiceSearchResult>>;
+    public searchInvoices(q?: string, page?: number, size?: number, sort?: Array<string>, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PageInvoiceSearchResult>>;
+    public searchInvoices(q?: string, page?: number, size?: number, sort?: Array<string>, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
 
@@ -154,8 +151,26 @@ export class InvoiceSearchService extends BaseService {
 
         localVarQueryParameters = this.addToHttpParams(
             localVarQueryParameters,
-            'pageable',
-            <any>pageable,
+            'page',
+            <any>page,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'size',
+            <any>size,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'sort',
+            <any>sort,
             QueryParamStyle.Form,
             true,
         );

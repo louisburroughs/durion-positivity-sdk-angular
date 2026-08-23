@@ -20,8 +20,6 @@ import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 import { CustomerDTO } from '../src/models/customerDTO';
 // @ts-ignore
 import { PageCustomerDTO } from '../src/models/pageCustomerDTO';
-// @ts-ignore
-import { Pageable } from '../src/models/pageable';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
@@ -232,21 +230,20 @@ export class CustomerAPIService extends BaseService {
      * List Customers By Type
      * Returns a page of customers of one party type, switching to a server-side typeahead search when a name or email filter is supplied. Use this tool for the legacy flat customer listing keyed by customerType; use browseParties instead for the unified directory that merges commercial and individual customers in one result. Preconditions: none; an empty page is returned when nothing matches. Required inputs: none; customerType defaults to PERSON and accepts PERSON or COMMERCIAL, name and email are optional case-insensitive filters, and paging defaults to page 0, size 20, sorted by customerNumber. No events are emitted and no state changes; this is a read-only projection. Returns 200 with an empty page rather than an error when no customer matches. 
      * @endpoint get /v1/crm
-     * @param pageable Pagination parameters (page, size, sort)
      * @param customerType Customer type filter: PERSON or COMMERCIAL
      * @param name Case-insensitive partial name filter for typeahead search
      * @param email Case-insensitive email filter for typeahead search
+     * @param page Zero-based page index (0..N)
+     * @param size The size of the page to be returned
+     * @param sort Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public listCustomers(pageable: Pageable, customerType?: string, name?: string, email?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PageCustomerDTO>;
-    public listCustomers(pageable: Pageable, customerType?: string, name?: string, email?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PageCustomerDTO>>;
-    public listCustomers(pageable: Pageable, customerType?: string, name?: string, email?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PageCustomerDTO>>;
-    public listCustomers(pageable: Pageable, customerType?: string, name?: string, email?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
-        if (pageable === null || pageable === undefined) {
-            throw new Error('Required parameter pageable was null or undefined when calling listCustomers.');
-        }
+    public listCustomers(customerType?: string, name?: string, email?: string, page?: number, size?: number, sort?: Array<string>, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PageCustomerDTO>;
+    public listCustomers(customerType?: string, name?: string, email?: string, page?: number, size?: number, sort?: Array<string>, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PageCustomerDTO>>;
+    public listCustomers(customerType?: string, name?: string, email?: string, page?: number, size?: number, sort?: Array<string>, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PageCustomerDTO>>;
+    public listCustomers(customerType?: string, name?: string, email?: string, page?: number, size?: number, sort?: Array<string>, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
 
@@ -279,8 +276,26 @@ export class CustomerAPIService extends BaseService {
 
         localVarQueryParameters = this.addToHttpParams(
             localVarQueryParameters,
-            'pageable',
-            <any>pageable,
+            'page',
+            <any>page,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'size',
+            <any>size,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'sort',
+            <any>sort,
             QueryParamStyle.Form,
             true,
         );

@@ -69,7 +69,6 @@ export * from './lotResponse';
 export * from './lotStatusUpdateRequest';
 export * from './lotTraceabilityResponse';
 export * from './movedItem';
-export * from './pageable';
 export * from './pickListResponse';
 export * from './pickTaskResponse';
 export * from './promoteAllocationRequest';

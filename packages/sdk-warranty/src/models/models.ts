@@ -12,7 +12,6 @@ export * from './claimUpdateRequest';
 export * from './lineDecision';
 export * from './noteView';
 export * from './pageClaimSummaryResponse';
-export * from './pageable';
 export * from './pageableObject';
 export * from './partReturnCreateRequest';
 export * from './partReturnResponse';

@@ -11,7 +11,6 @@ export * from './contentDetectionResult';
 export * from './correctionResultDto';
 export * from './fileUploadResponse';
 export * from './pageBulkLoadJobResponse';
-export * from './pageable';
 export * from './pageableObject';
 export * from './problemDetail';
 export * from './sortObject';

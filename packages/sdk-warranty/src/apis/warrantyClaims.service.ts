@@ -36,8 +36,6 @@ import { ClaimResponse } from '../src/models/claimResponse';
 import { ClaimUpdateRequest } from '../src/models/claimUpdateRequest';
 // @ts-ignore
 import { PageClaimSummaryResponse } from '../src/models/pageClaimSummaryResponse';
-// @ts-ignore
-import { Pageable } from '../src/models/pageable';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
@@ -929,23 +927,22 @@ export class WarrantyClaimsService extends BaseService {
      * Search claims
      * Searches warranty claims and returns a page of claim summaries filtered by customer, vehicle, status, claim code, and location. Use this tool to locate claims by criteria or to browse a worklist; do not use getClaim, which requires a known claim id and returns the full detail including lines, settlements, and history. Preconditions: none — an empty page is returned when nothing matches. Required inputs: every filter is optional; claimCode must be exact (for example WC-2026-000123) and short-circuits the other filters to at most one match, and paging defaults to size 20 sorted by createdAt descending. Emits a WARRANTY_CLAIM_SEARCH audit event; no claim state changes, this is a read-only projection. Returns 200 with the page, which is empty rather than 404 when no claim matches. 
      * @endpoint get /v1/warranty/claims
-     * @param pageable 
      * @param customerId Filter by customer id
      * @param vehicleId Filter by vehicle id
      * @param status Filter by claim status
      * @param claimCode Exact claim code, e.g. WC-2026-000123
      * @param locationId Filter by location id
+     * @param page Zero-based page index (0..N)
+     * @param size The size of the page to be returned
+     * @param sort Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public searchClaims(pageable: Pageable, customerId?: string, vehicleId?: string, status?: 'DRAFT' | 'SUBMITTED' | 'IN_REVIEW' | 'INFO_NEEDED' | 'APPROVED' | 'DENIED' | 'SETTLED' | 'CLOSED' | 'CANCELLED', claimCode?: string, locationId?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PageClaimSummaryResponse>;
-    public searchClaims(pageable: Pageable, customerId?: string, vehicleId?: string, status?: 'DRAFT' | 'SUBMITTED' | 'IN_REVIEW' | 'INFO_NEEDED' | 'APPROVED' | 'DENIED' | 'SETTLED' | 'CLOSED' | 'CANCELLED', claimCode?: string, locationId?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PageClaimSummaryResponse>>;
-    public searchClaims(pageable: Pageable, customerId?: string, vehicleId?: string, status?: 'DRAFT' | 'SUBMITTED' | 'IN_REVIEW' | 'INFO_NEEDED' | 'APPROVED' | 'DENIED' | 'SETTLED' | 'CLOSED' | 'CANCELLED', claimCode?: string, locationId?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PageClaimSummaryResponse>>;
-    public searchClaims(pageable: Pageable, customerId?: string, vehicleId?: string, status?: 'DRAFT' | 'SUBMITTED' | 'IN_REVIEW' | 'INFO_NEEDED' | 'APPROVED' | 'DENIED' | 'SETTLED' | 'CLOSED' | 'CANCELLED', claimCode?: string, locationId?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
-        if (pageable === null || pageable === undefined) {
-            throw new Error('Required parameter pageable was null or undefined when calling searchClaims.');
-        }
+    public searchClaims(customerId?: string, vehicleId?: string, status?: 'DRAFT' | 'SUBMITTED' | 'IN_REVIEW' | 'INFO_NEEDED' | 'APPROVED' | 'DENIED' | 'SETTLED' | 'CLOSED' | 'CANCELLED', claimCode?: string, locationId?: string, page?: number, size?: number, sort?: Array<string>, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PageClaimSummaryResponse>;
+    public searchClaims(customerId?: string, vehicleId?: string, status?: 'DRAFT' | 'SUBMITTED' | 'IN_REVIEW' | 'INFO_NEEDED' | 'APPROVED' | 'DENIED' | 'SETTLED' | 'CLOSED' | 'CANCELLED', claimCode?: string, locationId?: string, page?: number, size?: number, sort?: Array<string>, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PageClaimSummaryResponse>>;
+    public searchClaims(customerId?: string, vehicleId?: string, status?: 'DRAFT' | 'SUBMITTED' | 'IN_REVIEW' | 'INFO_NEEDED' | 'APPROVED' | 'DENIED' | 'SETTLED' | 'CLOSED' | 'CANCELLED', claimCode?: string, locationId?: string, page?: number, size?: number, sort?: Array<string>, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PageClaimSummaryResponse>>;
+    public searchClaims(customerId?: string, vehicleId?: string, status?: 'DRAFT' | 'SUBMITTED' | 'IN_REVIEW' | 'INFO_NEEDED' | 'APPROVED' | 'DENIED' | 'SETTLED' | 'CLOSED' | 'CANCELLED', claimCode?: string, locationId?: string, page?: number, size?: number, sort?: Array<string>, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
 
@@ -996,8 +993,26 @@ export class WarrantyClaimsService extends BaseService {
 
         localVarQueryParameters = this.addToHttpParams(
             localVarQueryParameters,
-            'pageable',
-            <any>pageable,
+            'page',
+            <any>page,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'size',
+            <any>size,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'sort',
+            <any>sort,
             QueryParamStyle.Form,
             true,
         );

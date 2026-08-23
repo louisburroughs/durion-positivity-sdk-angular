@@ -19,8 +19,6 @@ import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 // @ts-ignore
 import { PageStorageLocationResponse } from '../src/models/pageStorageLocationResponse';
 // @ts-ignore
-import { Pageable } from '../src/models/pageable';
-// @ts-ignore
 import { StorageLocationPatchRequest } from '../src/models/storageLocationPatchRequest';
 // @ts-ignore
 import { StorageLocationRequest } from '../src/models/storageLocationRequest';
@@ -248,22 +246,21 @@ export class StorageLocationAPIService extends BaseService {
      * Lists the storage locations of a site as a page, optionally filtered by type and status. Use this tool for paginated browsing; use getStorageLocationTopology instead when the complete unpaginated hierarchy of the site is needed. Preconditions: none; an unknown site id yields an empty page rather than an error. Required inputs: siteId (UUID) as a path parameter; type (FLOOR, SHELF, BIN, CAGE, TRUCK) and status (ACTIVE, INACTIVE, MAINTENANCE, QUARANTINED) filters are optional, and standard page, size and sort parameters control paging. Emits a LOCATION_STORAGE_LOCATION_LIST event; no state changes. Returns 200 with a page of storage locations regardless of whether any match the filters. 
      * @endpoint get /v1/locations/{siteId}/storage-locations
      * @param siteId 
-     * @param pageable 
      * @param type 
      * @param status 
+     * @param page Zero-based page index (0..N)
+     * @param size The size of the page to be returned
+     * @param sort Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public listStorageLocations(siteId: string, pageable: Pageable, type?: 'FLOOR' | 'SHELF' | 'BIN' | 'CAGE' | 'TRUCK', status?: 'ACTIVE' | 'INACTIVE' | 'MAINTENANCE' | 'QUARANTINED', observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PageStorageLocationResponse>;
-    public listStorageLocations(siteId: string, pageable: Pageable, type?: 'FLOOR' | 'SHELF' | 'BIN' | 'CAGE' | 'TRUCK', status?: 'ACTIVE' | 'INACTIVE' | 'MAINTENANCE' | 'QUARANTINED', observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PageStorageLocationResponse>>;
-    public listStorageLocations(siteId: string, pageable: Pageable, type?: 'FLOOR' | 'SHELF' | 'BIN' | 'CAGE' | 'TRUCK', status?: 'ACTIVE' | 'INACTIVE' | 'MAINTENANCE' | 'QUARANTINED', observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PageStorageLocationResponse>>;
-    public listStorageLocations(siteId: string, pageable: Pageable, type?: 'FLOOR' | 'SHELF' | 'BIN' | 'CAGE' | 'TRUCK', status?: 'ACTIVE' | 'INACTIVE' | 'MAINTENANCE' | 'QUARANTINED', observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public listStorageLocations(siteId: string, type?: 'FLOOR' | 'SHELF' | 'BIN' | 'CAGE' | 'TRUCK', status?: 'ACTIVE' | 'INACTIVE' | 'MAINTENANCE' | 'QUARANTINED', page?: number, size?: number, sort?: Array<string>, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PageStorageLocationResponse>;
+    public listStorageLocations(siteId: string, type?: 'FLOOR' | 'SHELF' | 'BIN' | 'CAGE' | 'TRUCK', status?: 'ACTIVE' | 'INACTIVE' | 'MAINTENANCE' | 'QUARANTINED', page?: number, size?: number, sort?: Array<string>, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PageStorageLocationResponse>>;
+    public listStorageLocations(siteId: string, type?: 'FLOOR' | 'SHELF' | 'BIN' | 'CAGE' | 'TRUCK', status?: 'ACTIVE' | 'INACTIVE' | 'MAINTENANCE' | 'QUARANTINED', page?: number, size?: number, sort?: Array<string>, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PageStorageLocationResponse>>;
+    public listStorageLocations(siteId: string, type?: 'FLOOR' | 'SHELF' | 'BIN' | 'CAGE' | 'TRUCK', status?: 'ACTIVE' | 'INACTIVE' | 'MAINTENANCE' | 'QUARANTINED', page?: number, size?: number, sort?: Array<string>, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (siteId === null || siteId === undefined) {
             throw new Error('Required parameter siteId was null or undefined when calling listStorageLocations.');
-        }
-        if (pageable === null || pageable === undefined) {
-            throw new Error('Required parameter pageable was null or undefined when calling listStorageLocations.');
         }
 
         let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
@@ -288,8 +285,26 @@ export class StorageLocationAPIService extends BaseService {
 
         localVarQueryParameters = this.addToHttpParams(
             localVarQueryParameters,
-            'pageable',
-            <any>pageable,
+            'page',
+            <any>page,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'size',
+            <any>size,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'sort',
+            <any>sort,
             QueryParamStyle.Form,
             true,
         );
