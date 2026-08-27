@@ -17,9 +17,13 @@ import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
 // @ts-ignore
+import { ApiError } from '../src/models/apiError';
+// @ts-ignore
 import { CatalogItemRequestDto } from '../src/models/catalogItemRequestDto';
 // @ts-ignore
 import { CatalogItemResponseDto } from '../src/models/catalogItemResponseDto';
+// @ts-ignore
+import { ServiceFactReplayResultDto } from '../src/models/serviceFactReplayResultDto';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
@@ -113,7 +117,7 @@ export class CatalogItemsAPIService extends BaseService {
 
     /**
      * Delete a Catalog Item
-     * Permanently deletes a product, service or non-inventory product row by id; this is a hard delete with no archive state. Use this tool to remove an item outright; use updateProductLifecycle instead when a product should stop selling but keep its history, and use deleteCatalog to remove a grouping rather than its items. Preconditions: an item of the given type must exist under the supplied id. Required inputs: type (product, service or noninventory, case-insensitive) and catalogId (UUID) as path parameters; there is no request body. Emits a CATALOG_ITEM_DELETE event; catalogs that referenced the item are not rewritten by this call. Returns 204 when the item is removed, 404 when no item of that type exists for the supplied id, and 400 when the type is not one of the three supported values. 
+     * Permanently deletes a product, service or non-inventory product row by id; this is a hard delete with no archive state. Use this tool to remove an item outright; use updateProductLifecycle instead when a product should stop selling but keep its history, and use deleteCatalog to remove a grouping rather than its items. Preconditions: an item of the given type must exist under the supplied id. Required inputs: type (product, service or noninventory, case-insensitive) and catalogId (UUID) as path parameters; there is no request body. Emits a CATALOG_ITEM_DELETE event, and for a product or a service queues a catalog fact marking it inactive so event-fed replicas in other modules stop resolving it; catalogs that referenced the item are not rewritten by this call. Returns 204 when the item is removed, 404 when no item of that type exists for the supplied id, and 400 when the type is not one of the three supported values. Authorization: type&#x3D;product requires catalog:product:delete; type&#x3D;service or noninventory requires the ADMIN role (unchanged pending a service_type delete permission). 
      * @endpoint delete /v1/catalog-items/{type}/{catalogId}
      * @param type Type of catalog item (product, service, noninventory)
      * @param catalogId ID of the catalog item to delete
@@ -164,6 +168,95 @@ export class CatalogItemsAPIService extends BaseService {
         return this.httpClient.request<any>('delete', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Re-emit Service Facts for Replica Consumers
+     * Re-publishes catalog.service.updated facts for one bounded page of services so that event-fed replicas in other modules can be seeded or repaired, returning what it emitted and a cursor for the next page. Use this tool to fill a consumer\&#39;s replica after a first deployment or a consumer outage longer than broker retention — pos-marketing resolves a campaign catalogFocusRef of the form service:&lt;name&gt; against such a replica; do not use it to fix one service, which republishes itself on its next ordinary update, and use replayProductFacts for the product half of the same replica. Preconditions: Kafka publication must be enabled — a replay with it off is refused rather than reported as a successful no-op; replayed facts are indistinguishable from live ones, so consumers apply them through their normal path and their stale guard prevents an older fact regressing newer state. A deleted service leaves no row to replay, so its tombstone exists only in the live stream. Required inputs: none; afterServiceId resumes a previous page, updatedSince restricts to services changed at or after an instant, and limit bounds the page at 1000. Emits a CATALOG_SERVICE_FACT_REPLAY event and queues one service fact per service in the page; no catalog state changes. Returns 200 with complete&#x3D;true and a null cursor once the end of the service catalog is reached, 400 when limit is out of range or a parameter is malformed, and 409 when fact publication is disabled. 
+     * @endpoint post /v1/catalog-items/services/facts/replay
+     * @param afterServiceId Resume cursor from a previous call; omit to start at the beginning.
+     * @param updatedSince Restrict to services changed at or after this instant; omit to replay all.
+     * @param limit Maximum facts to emit in this call (1–1000).
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public replayServiceFacts(afterServiceId?: string, updatedSince?: string, limit?: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ServiceFactReplayResultDto>;
+    public replayServiceFacts(afterServiceId?: string, updatedSince?: string, limit?: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ServiceFactReplayResultDto>>;
+    public replayServiceFacts(afterServiceId?: string, updatedSince?: string, limit?: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ServiceFactReplayResultDto>>;
+    public replayServiceFacts(afterServiceId?: string, updatedSince?: string, limit?: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+
+        let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'afterServiceId',
+            <any>afterServiceId,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'updatedSince',
+            <any>updatedSince,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'limit',
+            <any>limit,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/catalog-items/services/facts/replay`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<ServiceFactReplayResultDto>('post', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                params: localVarQueryParameters.toHttpParams(),
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,

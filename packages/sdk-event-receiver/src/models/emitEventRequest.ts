@@ -22,6 +22,10 @@ export interface EmitEventRequest {
      */
     elapsedMs: number;
     /**
+     * Optional identifier of the entity this event relates to, enabling later lookup via GET /v1/events?entityId=...; omit when the event has no single associated entity
+     */
+    entityId?: string;
+    /**
      * Preregistered event type code
      */
     id: string;
@@ -74,7 +78,7 @@ export function instanceOfEmitEventRequest(value: object): value is EmitEventReq
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createEmitEventRequestPropertyNames('apiVersion', 'elapsedMs', 'id', 'publishedAt', 'timestamp', );
-    const optionalStringProperties = createEmitEventRequestOptionalProperties({ name: 'apiVersion', nullable: false }, { name: 'id', nullable: false }, { name: 'publishedAt', nullable: false }, );
+    const optionalStringProperties = createEmitEventRequestOptionalProperties({ name: 'apiVersion', nullable: false }, { name: 'entityId', nullable: false }, { name: 'id', nullable: false }, { name: 'publishedAt', nullable: false }, );
     const optionalNumberProperties = createEmitEventRequestOptionalProperties({ name: 'elapsedMs', nullable: false }, { name: 'timestamp', nullable: false }, );
     const optionalBooleanProperties = createEmitEventRequestOptionalProperties();
 

@@ -14,6 +14,10 @@
  */
 export interface PermissionDefinition { 
     /**
+     * Whether this permission is retired and should no longer be granted
+     */
+    deprecated?: boolean;
+    /**
      * Human-readable description of the permission
      */
     description?: string;
@@ -21,6 +25,10 @@ export interface PermissionDefinition {
      * Permission name in format domain:resource:action
      */
     name: string;
+    /**
+     * Permission name that replaces this one; absent when there is no successor
+     */
+    supersededBy?: string;
 }
 
 function isOptionalPermissionDefinitionPropertyOfType(
@@ -62,9 +70,9 @@ export function instanceOfPermissionDefinition(value: object): value is Permissi
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createPermissionDefinitionPropertyNames('name', );
-    const optionalStringProperties = createPermissionDefinitionOptionalProperties({ name: 'description', nullable: false }, { name: 'name', nullable: false }, );
+    const optionalStringProperties = createPermissionDefinitionOptionalProperties({ name: 'description', nullable: false }, { name: 'name', nullable: false }, { name: 'supersededBy', nullable: false }, );
     const optionalNumberProperties = createPermissionDefinitionOptionalProperties();
-    const optionalBooleanProperties = createPermissionDefinitionOptionalProperties();
+    const optionalBooleanProperties = createPermissionDefinitionOptionalProperties({ name: 'deprecated', nullable: false }, );
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
         && optionalStringProperties.every((property) => isOptionalPermissionDefinitionPropertyOfType(_v, property.name, 'string', property.nullable))

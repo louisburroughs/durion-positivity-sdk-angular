@@ -73,6 +73,10 @@ export interface LocationRequestDTO {
      */
     parents?: object;
     /**
+     * Primary phone number for the location
+     */
+    phoneNumber?: string;
+    /**
      * Postal or ZIP code of the location
      */
     postalCode?: string;
@@ -130,7 +134,7 @@ export function instanceOfLocationRequestDTO(value: object): value is LocationRe
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createLocationRequestDTOPropertyNames('code', 'name', 'type', );
-    const optionalStringProperties = createLocationRequestDTOOptionalProperties({ name: 'addressLine1', nullable: false }, { name: 'addressLine2', nullable: false }, { name: 'city', nullable: false }, { name: 'code', nullable: false }, { name: 'country', nullable: false }, { name: 'geographicalLocationId', nullable: false }, { name: 'mailingAddress', nullable: false }, { name: 'name', nullable: false }, { name: 'postalCode', nullable: false }, { name: 'responsiblePersonId', nullable: false }, { name: 'state', nullable: false }, { name: 'timezone', nullable: false }, );
+    const optionalStringProperties = createLocationRequestDTOOptionalProperties({ name: 'addressLine1', nullable: false }, { name: 'addressLine2', nullable: false }, { name: 'city', nullable: false }, { name: 'code', nullable: false }, { name: 'country', nullable: false }, { name: 'geographicalLocationId', nullable: false }, { name: 'mailingAddress', nullable: false }, { name: 'name', nullable: false }, { name: 'phoneNumber', nullable: false }, { name: 'postalCode', nullable: false }, { name: 'responsiblePersonId', nullable: false }, { name: 'state', nullable: false }, { name: 'timezone', nullable: false }, );
     const optionalNumberProperties = createLocationRequestDTOOptionalProperties({ name: 'checkInBufferMinutes', nullable: false }, { name: 'cleanupBufferMinutes', nullable: false }, );
     const optionalBooleanProperties = createLocationRequestDTOOptionalProperties({ name: 'active', nullable: false }, );
 

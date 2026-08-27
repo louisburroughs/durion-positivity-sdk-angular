@@ -19,6 +19,10 @@ import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 // @ts-ignore
 import { ApiError } from '../src/models/apiError';
 // @ts-ignore
+import { CreateUserRequest } from '../src/models/createUserRequest';
+// @ts-ignore
+import { LinkUserPersonRequest } from '../src/models/linkUserPersonRequest';
+// @ts-ignore
 import { UserDto } from '../src/models/userDto';
 // @ts-ignore
 import { UserUpdateRequest } from '../src/models/userUpdateRequest';
@@ -115,19 +119,19 @@ export class UserAPIService extends BaseService {
 
     /**
      * Create a User With Roles
-     * Creates a user account with a username, a hashed password, and a set of directly attached roles. Use this tool for operator provisioning of accounts; do not use selfRegisterUser, the anonymous customer flow that fixes the role to SELF_SERVICE_CUSTOMER and runs identity resolution first. Preconditions: the caller must hold security:user:create, the username must be unused, and every named role must already exist. Required inputs: username, password, and roles, a non-empty array of existing role names. Emits a SECURITY_USER_CREATE event; the password is hashed before storage. Returns 400 when the username already exists or a named role is not found. 
+     * Creates a user account with a username, a hashed password, and a set of directly attached roles. Use this tool for operator provisioning of accounts; do not use selfRegisterUser, the anonymous customer flow that fixes the role to SELF_SERVICE_CUSTOMER and runs identity resolution first. Preconditions: the caller must hold security:user:create, the username must be unused, and every named role must already exist. Required inputs: username, password, and roles, a non-empty array of existing role names. Emits a SECURITY_USER_CREATE event; the password is hashed before storage. Returns 409 when the username already exists, and 400 when a field is missing or a named role is not found. 
      * @endpoint post /v1/users
-     * @param body Username, password, and role names of the account to create.
+     * @param createUserRequest Username, password, and role names of the account to create.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public createUser(body: object, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<UserDto>;
-    public createUser(body: object, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<UserDto>>;
-    public createUser(body: object, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<UserDto>>;
-    public createUser(body: object, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
-        if (body === null || body === undefined) {
-            throw new Error('Required parameter body was null or undefined when calling createUser.');
+    public createUser(createUserRequest: CreateUserRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<UserDto>;
+    public createUser(createUserRequest: CreateUserRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<UserDto>>;
+    public createUser(createUserRequest: CreateUserRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<UserDto>>;
+    public createUser(createUserRequest: CreateUserRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (createUserRequest === null || createUserRequest === undefined) {
+            throw new Error('Required parameter createUserRequest was null or undefined when calling createUser.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -172,7 +176,7 @@ export class UserAPIService extends BaseService {
         return this.httpClient.request<UserDto>('post', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
-                body: body,
+                body: createUserRequest,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,
@@ -293,6 +297,80 @@ export class UserAPIService extends BaseService {
         return this.httpClient.request<UserDto>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Link a User Account to Its Canonical Person
+     * Requests a PRIMARY link between a user account and a canonical person over the people-contact command channel; the users.person_id projection updates asynchronously when the confirming link fact arrives. Use this tool for operator provisioning of accounts created via createUser, which performs no identity resolution; do not use selfRegisterUser, which resolves and links its own person. Preconditions: the caller must hold security:user:edit and the user id must exist; the personId is not validated here — an unknown person is rejected by pos-people-contact when it processes the command. Required inputs: the user id as a path parameter and personId in the body. Emits a SECURITY_USER_PERSON_LINK_REQUEST event and queues the link-create command. Returns 202 because the link lands asynchronously, and 404 when the user does not exist. 
+     * @endpoint put /v1/users/{id}/person-link
+     * @param id 
+     * @param linkUserPersonRequest The canonical person identifier to link to the user account.
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public linkUserPerson(id: string, linkUserPersonRequest: LinkUserPersonRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any>;
+    public linkUserPerson(id: string, linkUserPersonRequest: LinkUserPersonRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
+    public linkUserPerson(id: string, linkUserPersonRequest: LinkUserPersonRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
+    public linkUserPerson(id: string, linkUserPersonRequest: LinkUserPersonRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (id === null || id === undefined) {
+            throw new Error('Required parameter id was null or undefined when calling linkUserPerson.');
+        }
+        if (linkUserPersonRequest === null || linkUserPersonRequest === undefined) {
+            throw new Error('Required parameter linkUserPersonRequest was null or undefined when calling linkUserPerson.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/users/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/person-link`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<any>('put', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                body: linkUserPersonRequest,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,

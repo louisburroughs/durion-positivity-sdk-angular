@@ -22,13 +22,25 @@ export interface ProductCreateRequestDto {
      */
     categoryId?: string;
     /**
+     * ISO country of origin
+     */
+    countryOfOrigin?: string;
+    /**
      * Product description
      */
     description: string;
     /**
+     * Manufacturer brand
+     */
+    manufacturerBrand?: string;
+    /**
      * Manufacturer identifier
      */
     manufacturerId?: string;
+    /**
+     * Manufacturer display name
+     */
+    manufacturerName?: string;
     /**
      * Manufacturer part number
      */
@@ -41,6 +53,10 @@ export interface ProductCreateRequestDto {
      * Stock keeping unit
      */
     sku: string;
+    /**
+     * Product type classification
+     */
+    type?: string;
     /**
      * Unit of measure
      */
@@ -90,7 +106,7 @@ export function instanceOfProductCreateRequestDto(value: object): value is Produ
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createProductCreateRequestDtoPropertyNames('description', 'mpn', 'name', 'sku', 'unitOfMeasure', );
-    const optionalStringProperties = createProductCreateRequestDtoOptionalProperties({ name: 'attributes', nullable: false }, { name: 'categoryId', nullable: false }, { name: 'description', nullable: false }, { name: 'manufacturerId', nullable: false }, { name: 'mpn', nullable: false }, { name: 'name', nullable: false }, { name: 'sku', nullable: false }, { name: 'unitOfMeasure', nullable: false }, { name: 'upc', nullable: false }, );
+    const optionalStringProperties = createProductCreateRequestDtoOptionalProperties({ name: 'attributes', nullable: false }, { name: 'categoryId', nullable: false }, { name: 'countryOfOrigin', nullable: false }, { name: 'description', nullable: false }, { name: 'manufacturerBrand', nullable: false }, { name: 'manufacturerId', nullable: false }, { name: 'manufacturerName', nullable: false }, { name: 'mpn', nullable: false }, { name: 'name', nullable: false }, { name: 'sku', nullable: false }, { name: 'type', nullable: false }, { name: 'unitOfMeasure', nullable: false }, { name: 'upc', nullable: false }, );
     const optionalNumberProperties = createProductCreateRequestDtoOptionalProperties();
     const optionalBooleanProperties = createProductCreateRequestDtoOptionalProperties();
 

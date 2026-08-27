@@ -33,6 +33,10 @@ export interface PermissionDto {
      * Permission name in format domain:resource:action
      */
     name: string;
+    /**
+     * Permission name that replaces this one; absent when there is no successor
+     */
+    supersededBy?: string;
 }
 
 function isOptionalPermissionDtoPropertyOfType(
@@ -74,7 +78,7 @@ export function instanceOfPermissionDto(value: object): value is PermissionDto {
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createPermissionDtoPropertyNames('deprecated', 'domain', 'id', 'name', );
-    const optionalStringProperties = createPermissionDtoOptionalProperties({ name: 'description', nullable: false }, { name: 'domain', nullable: false }, { name: 'id', nullable: false }, { name: 'name', nullable: false }, );
+    const optionalStringProperties = createPermissionDtoOptionalProperties({ name: 'description', nullable: false }, { name: 'domain', nullable: false }, { name: 'id', nullable: false }, { name: 'name', nullable: false }, { name: 'supersededBy', nullable: false }, );
     const optionalNumberProperties = createPermissionDtoOptionalProperties();
     const optionalBooleanProperties = createPermissionDtoOptionalProperties({ name: 'deprecated', nullable: false }, );
 

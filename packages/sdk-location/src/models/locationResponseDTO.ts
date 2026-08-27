@@ -55,6 +55,10 @@ export interface LocationResponseDTO {
      */
     name: string;
     /**
+     * Primary phone number for the location
+     */
+    phoneNumber?: string;
+    /**
      * Postal or ZIP code of the location
      */
     postalCode?: string;
@@ -108,7 +112,7 @@ export function instanceOfLocationResponseDTO(value: object): value is LocationR
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createLocationResponseDTOPropertyNames('active', 'id', 'name', );
-    const optionalStringProperties = createLocationResponseDTOOptionalProperties({ name: 'addressLine1', nullable: false }, { name: 'addressLine2', nullable: false }, { name: 'city', nullable: false }, { name: 'code', nullable: false }, { name: 'country', nullable: false }, { name: 'geographicalLocationId', nullable: false }, { name: 'id', nullable: false }, { name: 'mailingAddress', nullable: false }, { name: 'name', nullable: false }, { name: 'postalCode', nullable: false }, { name: 'responsiblePersonId', nullable: false }, { name: 'state', nullable: false }, );
+    const optionalStringProperties = createLocationResponseDTOOptionalProperties({ name: 'addressLine1', nullable: false }, { name: 'addressLine2', nullable: false }, { name: 'city', nullable: false }, { name: 'code', nullable: false }, { name: 'country', nullable: false }, { name: 'geographicalLocationId', nullable: false }, { name: 'id', nullable: false }, { name: 'mailingAddress', nullable: false }, { name: 'name', nullable: false }, { name: 'phoneNumber', nullable: false }, { name: 'postalCode', nullable: false }, { name: 'responsiblePersonId', nullable: false }, { name: 'state', nullable: false }, );
     const optionalNumberProperties = createLocationResponseDTOOptionalProperties();
     const optionalBooleanProperties = createLocationResponseDTOOptionalProperties({ name: 'active', nullable: false }, );
 

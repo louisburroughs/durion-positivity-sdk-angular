@@ -16,6 +16,8 @@ import { HttpClient, HttpHeaders, HttpParams,
 import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
+// @ts-ignore
+import { ApiError } from '../src/models/apiError';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
@@ -35,7 +37,7 @@ export class PriceNormalizationService extends BaseService {
 
     /**
      * Normalize Pricing Data
-     * Normalizes and standardizes pricing data across the system; this operation is a declared placeholder that is not yet implemented. Use this tool only to probe for the future normalization capability; use calculatePriceQuote instead for any real pricing work, since no normalization logic exists yet. Preconditions: none; any authenticated caller is accepted. Required inputs: none are read; the optional JSON body is accepted but ignored. Emits a PRICE_NORMALIZATION_NORMALIZE event even though no normalization is performed and no state changes. Returns 501 unconditionally until the operation is implemented. 
+     * Normalizes and standardizes pricing data across the system; this operation is a declared placeholder that is not yet implemented. Use this tool only to probe for the future normalization capability; use calculatePriceQuote instead for any real pricing work, since no normalization logic exists yet. Preconditions: none beyond the pricing:normalization:edit authority. Required inputs: none are read; the optional JSON body is accepted but ignored. Emits a PRICE_NORMALIZATION_NORMALIZE event even though no normalization is performed and no state changes. Returns 501 unconditionally until the operation is implemented. 
      * @endpoint post /v1/price/normalize
      * @param body Optional free-form normalization payload; currently ignored because the endpoint is unimplemented.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.

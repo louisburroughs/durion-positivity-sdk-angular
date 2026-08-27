@@ -14,6 +14,10 @@
  */
 export interface WorkorderPartResponse { 
     /**
+     * Backorder opened for this line\'s shortfall, when owned stock at the servicing site could not cover it. Present means the job is waiting on this part; query it through listBackorders (filter workorderLineId) for the SKU, location and quantity short. Cleared once the shortfall is covered.
+     */
+    backorderId?: string;
+    /**
      * Part description
      */
     description?: string;
@@ -53,6 +57,10 @@ export interface WorkorderPartResponse {
      * Quantity returned to inventory
      */
     quantityReturned?: number;
+    /**
+     * Reservation pos-inventory holds for this line, once the reservation request has been answered
+     */
+    reservationId?: string;
     /**
      * Part line status
      */
@@ -116,7 +124,7 @@ export function instanceOfWorkorderPartResponse(value: object): value is Workord
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createWorkorderPartResponsePropertyNames('id', );
-    const optionalStringProperties = createWorkorderPartResponseOptionalProperties({ name: 'description', nullable: false }, { name: 'id', nullable: false }, { name: 'photoEvidenceUrl', nullable: false }, { name: 'productEntityId', nullable: false }, { name: 'status', nullable: false }, { name: 'unitOfMeasure', nullable: false }, );
+    const optionalStringProperties = createWorkorderPartResponseOptionalProperties({ name: 'backorderId', nullable: false }, { name: 'description', nullable: false }, { name: 'id', nullable: false }, { name: 'photoEvidenceUrl', nullable: false }, { name: 'productEntityId', nullable: false }, { name: 'reservationId', nullable: false }, { name: 'status', nullable: false }, { name: 'unitOfMeasure', nullable: false }, );
     const optionalNumberProperties = createWorkorderPartResponseOptionalProperties({ name: 'lineTotal', nullable: false }, { name: 'partCost', nullable: false }, { name: 'quantity', nullable: false }, { name: 'quantityConsumed', nullable: false }, { name: 'quantityIssued', nullable: false }, { name: 'quantityReturned', nullable: false }, { name: 'unitPrice', nullable: false }, );
     const optionalBooleanProperties = createWorkorderPartResponseOptionalProperties();
 

@@ -7,5 +7,6 @@ export * from './peopleReportsAPI.service';
 export * from './peopleStaffingAssignments.service';
 export * from './peopleTimeEntries.service';
 export * from './timeEntryApprovalAPI.service';
+export * from './timePeriodManagementAPI.service';
 export * from './timekeepingApprovalAPI.service';
 export * from './workSessionsAPI.service';

@@ -18,9 +18,21 @@ export interface CatalogBulkIngestRecord {
      */
     categoryName?: string;
     /**
+     * ISO country of origin
+     */
+    countryOfOrigin?: string;
+    /**
      * Long description of the item
      */
     description?: string;
+    /**
+     * Manufacturer brand
+     */
+    manufacturerBrand?: string;
+    /**
+     * Manufacturer display name
+     */
+    manufacturerName?: string;
     /**
      * Manufacturer part number; falls back to the SKU when absent
      */
@@ -41,6 +53,10 @@ export interface CatalogBulkIngestRecord {
      * Subcategory name to associate the item with
      */
     subcategoryName?: string;
+    /**
+     * Product type classification
+     */
+    type?: string;
     /**
      * Unit of measure for the item; defaults to EA when absent
      */
@@ -90,7 +106,7 @@ export function instanceOfCatalogBulkIngestRecord(value: object): value is Catal
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createCatalogBulkIngestRecordPropertyNames('name', 'sku', );
-    const optionalStringProperties = createCatalogBulkIngestRecordOptionalProperties({ name: 'categoryName', nullable: false }, { name: 'description', nullable: false }, { name: 'mpn', nullable: false }, { name: 'name', nullable: false }, { name: 'sku', nullable: false }, { name: 'subcategoryName', nullable: false }, { name: 'unitOfMeasure', nullable: false }, { name: 'upc', nullable: false }, );
+    const optionalStringProperties = createCatalogBulkIngestRecordOptionalProperties({ name: 'categoryName', nullable: false }, { name: 'countryOfOrigin', nullable: false }, { name: 'description', nullable: false }, { name: 'manufacturerBrand', nullable: false }, { name: 'manufacturerName', nullable: false }, { name: 'mpn', nullable: false }, { name: 'name', nullable: false }, { name: 'sku', nullable: false }, { name: 'subcategoryName', nullable: false }, { name: 'type', nullable: false }, { name: 'unitOfMeasure', nullable: false }, { name: 'upc', nullable: false }, );
     const optionalNumberProperties = createCatalogBulkIngestRecordOptionalProperties({ name: 'price', nullable: false }, );
     const optionalBooleanProperties = createCatalogBulkIngestRecordOptionalProperties();
 

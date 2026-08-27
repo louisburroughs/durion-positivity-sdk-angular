@@ -1,6 +1,8 @@
+export * from './apiError';
 export * from './customerExemption';
 export * from './exemptionCertificateRequest';
 export * from './exemptionCertificateResponse';
+export * from './fieldError';
 export * from './jurisdictionTax';
 export * from './lineItemTax';
 export * from './modeResponse';
@@ -10,3 +12,5 @@ export * from './taxCalculationResponse';
 export * from './taxJurisdiction';
 export * from './taxLineItem';
 export * from './taxProviderTransactionResult';
+export * from './taxRateComponent';
+export * from './taxRateLookupResponse';

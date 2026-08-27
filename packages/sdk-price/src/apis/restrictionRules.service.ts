@@ -17,6 +17,8 @@ import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
 // @ts-ignore
+import { ApiError } from '../src/models/apiError';
+// @ts-ignore
 import { CreateRestrictionRuleRequest } from '../src/models/createRestrictionRuleRequest';
 // @ts-ignore
 import { RestrictionRuleResponse } from '../src/models/restrictionRuleResponse';
@@ -169,7 +171,7 @@ export class RestrictionRulesService extends BaseService {
 
     /**
      * Get A Restriction Rule By ID
-     * Returns a single sale-restriction rule, active or inactive, identified by its rule id. Use this tool when the rule id is already known, typically from an evaluation result\&#39;s ruleIds; use listRestrictionRules instead to browse the active rule set. Preconditions: the rule must exist; inactive rules remain readable through this operation. Required inputs: ruleId (UUID) as a path parameter; there is no request body. No events are emitted and no state changes; this is a read-only projection. Returns 404 when no restriction rule exists for the supplied id. 
+     * Returns a single sale-restriction rule, active or inactive, identified by its rule id. Use this tool when the rule id is already known, typically from an evaluation result\&#39;s ruleIds; use listRestrictionRules instead to browse the active rule set. Preconditions: none beyond the pricing:rule:view authority; the rule must also exist, and inactive rules remain readable through this operation. Required inputs: ruleId (UUID) as a path parameter; there is no request body. No events are emitted and no state changes; this is a read-only projection. Returns 404 when no restriction rule exists for the supplied id. 
      * @endpoint get /v1/price/restrictions/rules/{ruleId}
      * @param ruleId 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -229,7 +231,7 @@ export class RestrictionRulesService extends BaseService {
 
     /**
      * List All Active Restriction Rules
-     * Lists every currently active sale-restriction rule that can affect pricing and sale decisions. Use this tool to review the standing restriction policy; use getRestrictionRuleById instead to fetch one rule, including deactivated rules, which this listing omits. Preconditions: none beyond an authenticated caller. Required inputs: none; there is no request body, filtering, or paging. No events are emitted and no state changes; this is a read-only projection. Returns 200 with an empty array when no active restriction rules exist. 
+     * Lists every currently active sale-restriction rule that can affect pricing and sale decisions. Use this tool to review the standing restriction policy; use getRestrictionRuleById instead to fetch one rule, including deactivated rules, which this listing omits. Preconditions: none beyond the pricing:rule:view authority. Required inputs: none; there is no request body, filtering, or paging. No events are emitted and no state changes; this is a read-only projection. Returns 200 with an empty array when no active restriction rules exist. 
      * @endpoint get /v1/price/restrictions/rules
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.

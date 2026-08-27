@@ -35,6 +35,7 @@ export enum ContentDetectionResultDetectedDomainEnum {
     InventoryStockCount = 'INVENTORY_STOCK_COUNT',
     Location = 'LOCATION',
     Customer = 'CUSTOMER',
+    CommercialCustomer = 'COMMERCIAL_CUSTOMER',
     Person = 'PERSON',
     BasePrice = 'BASE_PRICE',
     Vehicle = 'VEHICLE',

@@ -57,6 +57,10 @@ export interface LocationBulkIngestRecord {
      * State or province of the location
      */
     stateOrProvince?: string;
+    /**
+     * IANA timezone of the location
+     */
+    timezone?: string;
 }
 
 function isOptionalLocationBulkIngestRecordPropertyOfType(
@@ -98,7 +102,7 @@ export function instanceOfLocationBulkIngestRecord(value: object): value is Loca
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createLocationBulkIngestRecordPropertyNames('code', 'name', );
-    const optionalStringProperties = createLocationBulkIngestRecordOptionalProperties({ name: 'addressLine1', nullable: false }, { name: 'addressLine2', nullable: false }, { name: 'city', nullable: false }, { name: 'code', nullable: false }, { name: 'countryCode', nullable: false }, { name: 'locationTypeName', nullable: false }, { name: 'name', nullable: false }, { name: 'phoneNumber', nullable: false }, { name: 'postalCode', nullable: false }, { name: 'stateOrProvince', nullable: false }, );
+    const optionalStringProperties = createLocationBulkIngestRecordOptionalProperties({ name: 'addressLine1', nullable: false }, { name: 'addressLine2', nullable: false }, { name: 'city', nullable: false }, { name: 'code', nullable: false }, { name: 'countryCode', nullable: false }, { name: 'locationTypeName', nullable: false }, { name: 'name', nullable: false }, { name: 'phoneNumber', nullable: false }, { name: 'postalCode', nullable: false }, { name: 'stateOrProvince', nullable: false }, { name: 'timezone', nullable: false }, );
     const optionalNumberProperties = createLocationBulkIngestRecordOptionalProperties();
     const optionalBooleanProperties = createLocationBulkIngestRecordOptionalProperties({ name: 'active', nullable: false }, );
 

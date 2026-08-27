@@ -14,6 +14,7 @@ export * from './cRMSnapshots.service';
 export * from './cRMSuppression.service';
 export * from './cRMTags.service';
 export * from './cRMVehicles.service';
+export * from './commercialBulkIngestAPI.service';
 export * from './customerAPI.service';
 export * from './customerBulkIngestAPI.service';
 export * from './customerRequirements.service';

@@ -17,6 +17,8 @@ import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
 // @ts-ignore
+import { ApiError } from '../src/models/apiError';
+// @ts-ignore
 import { RestrictionEvaluationRequest } from '../src/models/restrictionEvaluationRequest';
 // @ts-ignore
 import { RestrictionEvaluationResponse } from '../src/models/restrictionEvaluationResponse';
@@ -43,7 +45,7 @@ export class PriceRestrictionsService extends BaseService {
 
     /**
      * Evaluate Price Restrictions
-     * Evaluates each submitted product and context entry against active sale-restriction rules and returns a per-item decision of ALLOW, BLOCK, ALLOW_WITH_OVERRIDE, or RESTRICTION_UNKNOWN. Use this tool before quoting or selling a product to learn whether the sale is blocked or needs an override; do not use overridePriceRestriction, which records the override itself after a decision of ALLOW_WITH_OVERRIDE. Preconditions: none; items with no matching active rule resolve to ALLOW. Required inputs: items (at least one), each with productId (UUID), locationTag, serviceTag, and context (BROWSE, QUOTE, CHECKOUT, INVOICE_FINALIZE, or COMMIT_SALE); any matching rule with overrideable false forces BLOCK, otherwise matching rules yield ALLOW_WITH_OVERRIDE with the matched ruleIds. Emits a PRICE_RESTRICTIONS_EVALUATE event; the evaluation itself is read-only and each item is bounded by an 800 ms timeout. Returns 503 when evaluation fails or times out for an item in a commit-path context (CHECKOUT, INVOICE_FINALIZE, COMMIT_SALE), while the same failure on BROWSE or QUOTE degrades that item to a RESTRICTION_UNKNOWN decision instead of an error. 
+     * Evaluates each submitted product and context entry against active sale-restriction rules and returns a per-item decision of ALLOW, BLOCK, ALLOW_WITH_OVERRIDE, or RESTRICTION_UNKNOWN. Use this tool before quoting or selling a product to learn whether the sale is blocked or needs an override; do not use overridePriceRestriction, which records the override itself after a decision of ALLOW_WITH_OVERRIDE. Preconditions: none beyond the pricing:restrictions:view authority; items with no matching active rule resolve to ALLOW. Required inputs: items (at least one), each with productId (UUID), locationTag, serviceTag, and context (BROWSE, QUOTE, CHECKOUT, INVOICE_FINALIZE, or COMMIT_SALE); any matching rule with overrideable false forces BLOCK, otherwise matching rules yield ALLOW_WITH_OVERRIDE with the matched ruleIds. Emits a PRICE_RESTRICTIONS_EVALUATE event; the evaluation itself is read-only and each item is bounded by an 800 ms timeout. Returns 503 when evaluation fails or times out for an item in a commit-path context (CHECKOUT, INVOICE_FINALIZE, COMMIT_SALE), while the same failure on BROWSE or QUOTE degrades that item to a RESTRICTION_UNKNOWN decision instead of an error. 
      * @endpoint post /v1/price/restrictions:evaluate
      * @param restrictionEvaluationRequest Batch of product/location/service/context entries to test against the active restriction rules.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
