@@ -14,6 +14,10 @@
  */
 export interface StorageLocationResponse { 
     /**
+     * Whether the storage location will take stock of a product it is not already holding.
+     */
+    allowNewProduct: StorageLocationResponseAllowNewProductEnum;
+    /**
      * Barcode identifying the storage location
      */
     barcode?: string;
@@ -21,6 +25,10 @@ export interface StorageLocationResponse {
      * Capacity attributes of the storage location
      */
     capacity?: object;
+    /**
+     * Whether the storage location provides spill/hazard containment; required by battery and oil storage capabilities.
+     */
+    hazardContainment: boolean;
     /**
      * Unique identifier of the storage location
      */
@@ -46,6 +54,10 @@ export interface StorageLocationResponse {
      */
     status?: string;
     /**
+     * Putaway capability of the storage location — what it is fit to hold, independent of the physical type. Always populated: a location that has never declared one reports GENERAL, which accepts every catalog category.
+     */
+    storageCategoryCode: StorageLocationResponseStorageCategoryCodeEnum;
+    /**
      * Temperature attributes of the storage location
      */
     temperature?: object;
@@ -54,6 +66,21 @@ export interface StorageLocationResponse {
      */
     type?: StorageLocationResponseTypeEnum;
 }
+export enum StorageLocationResponseAllowNewProductEnum {
+    Mixed = 'MIXED',
+    SameProductOnly = 'SAME_PRODUCT_ONLY',
+    EmptyOnly = 'EMPTY_ONLY'
+};
+export enum StorageLocationResponseStorageCategoryCodeEnum {
+    TireRack = 'TIRE_RACK',
+    OilStorage = 'OIL_STORAGE',
+    BatteryRack = 'BATTERY_RACK',
+    SmallPartsBin = 'SMALL_PARTS_BIN',
+    BulkFloor = 'BULK_FLOOR',
+    Staging = 'STAGING',
+    Quarantine = 'QUARANTINE',
+    General = 'GENERAL'
+};
 export enum StorageLocationResponseTypeEnum {
     Floor = 'FLOOR',
     Shelf = 'SHELF',
@@ -102,10 +129,10 @@ export function instanceOfStorageLocationResponse(value: object): value is Stora
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createStorageLocationResponsePropertyNames('id', 'inventoryCount', );
-    const optionalStringProperties = createStorageLocationResponseOptionalProperties({ name: 'barcode', nullable: false }, { name: 'id', nullable: false }, { name: 'name', nullable: false }, { name: 'parentStorageLocationId', nullable: false }, { name: 'siteId', nullable: false }, { name: 'status', nullable: false }, { name: 'type', nullable: false }, );
+    const requiredProperties = createStorageLocationResponsePropertyNames('allowNewProduct', 'hazardContainment', 'id', 'inventoryCount', 'storageCategoryCode', );
+    const optionalStringProperties = createStorageLocationResponseOptionalProperties({ name: 'allowNewProduct', nullable: false }, { name: 'barcode', nullable: false }, { name: 'id', nullable: false }, { name: 'name', nullable: false }, { name: 'parentStorageLocationId', nullable: false }, { name: 'siteId', nullable: false }, { name: 'status', nullable: false }, { name: 'storageCategoryCode', nullable: false }, { name: 'type', nullable: false }, );
     const optionalNumberProperties = createStorageLocationResponseOptionalProperties({ name: 'inventoryCount', nullable: false }, );
-    const optionalBooleanProperties = createStorageLocationResponseOptionalProperties();
+    const optionalBooleanProperties = createStorageLocationResponseOptionalProperties({ name: 'hazardContainment', nullable: false }, );
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
         && optionalStringProperties.every((property) => isOptionalStorageLocationResponsePropertyOfType(_v, property.name, 'string', property.nullable))

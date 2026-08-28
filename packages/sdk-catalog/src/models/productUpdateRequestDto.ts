@@ -42,6 +42,10 @@ export interface ProductUpdateRequestDto {
      */
     sku?: string;
     /**
+     * Identifier of the product subcategory
+     */
+    subcategoryId?: string;
+    /**
      * Unit of measure for the product
      */
     unitOfMeasure?: string;
@@ -90,7 +94,7 @@ export function instanceOfProductUpdateRequestDto(value: object): value is Produ
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createProductUpdateRequestDtoPropertyNames();
-    const optionalStringProperties = createProductUpdateRequestDtoOptionalProperties({ name: 'attributes', nullable: false }, { name: 'categoryId', nullable: false }, { name: 'description', nullable: false }, { name: 'manufacturerId', nullable: false }, { name: 'mpn', nullable: false }, { name: 'name', nullable: false }, { name: 'sku', nullable: false }, { name: 'unitOfMeasure', nullable: false }, { name: 'upc', nullable: false }, );
+    const optionalStringProperties = createProductUpdateRequestDtoOptionalProperties({ name: 'attributes', nullable: false }, { name: 'categoryId', nullable: false }, { name: 'description', nullable: false }, { name: 'manufacturerId', nullable: false }, { name: 'mpn', nullable: false }, { name: 'name', nullable: false }, { name: 'sku', nullable: false }, { name: 'subcategoryId', nullable: false }, { name: 'unitOfMeasure', nullable: false }, { name: 'upc', nullable: false }, );
     const optionalNumberProperties = createProductUpdateRequestDtoOptionalProperties();
     const optionalBooleanProperties = createProductUpdateRequestDtoOptionalProperties();
 

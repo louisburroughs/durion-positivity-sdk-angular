@@ -14,6 +14,10 @@
  */
 export interface StorageLocationPatchRequest { 
     /**
+     * Whether the storage location will take stock of a product it is not already holding. Omit to leave it unchanged.
+     */
+    allowNewProduct?: StorageLocationPatchRequestAllowNewProductEnum;
+    /**
      * Barcode identifying the storage location
      */
     barcode?: string;
@@ -25,6 +29,10 @@ export interface StorageLocationPatchRequest {
      * Identifier of the destination storage location for relocation operations
      */
     destinationStorageLocationId?: string;
+    /**
+     * Whether the storage location provides spill/hazard containment; required by battery and oil storage capabilities. Omit to leave it unchanged.
+     */
+    hazardContainment?: boolean;
     /**
      * Display name of the storage location
      */
@@ -38,15 +46,34 @@ export interface StorageLocationPatchRequest {
      */
     status?: StorageLocationPatchRequestStatusEnum;
     /**
+     * Putaway capability of the storage location — what it is fit to hold, independent of the physical type. Omit to leave the current capability unchanged.
+     */
+    storageCategoryCode?: StorageLocationPatchRequestStorageCategoryCodeEnum;
+    /**
      * Temperature attributes of the storage location
      */
     temperature?: object;
 }
+export enum StorageLocationPatchRequestAllowNewProductEnum {
+    Mixed = 'MIXED',
+    SameProductOnly = 'SAME_PRODUCT_ONLY',
+    EmptyOnly = 'EMPTY_ONLY'
+};
 export enum StorageLocationPatchRequestStatusEnum {
     Active = 'ACTIVE',
     Inactive = 'INACTIVE',
     Maintenance = 'MAINTENANCE',
     Quarantined = 'QUARANTINED'
+};
+export enum StorageLocationPatchRequestStorageCategoryCodeEnum {
+    TireRack = 'TIRE_RACK',
+    OilStorage = 'OIL_STORAGE',
+    BatteryRack = 'BATTERY_RACK',
+    SmallPartsBin = 'SMALL_PARTS_BIN',
+    BulkFloor = 'BULK_FLOOR',
+    Staging = 'STAGING',
+    Quarantine = 'QUARANTINE',
+    General = 'GENERAL'
 };
 
 
@@ -90,9 +117,9 @@ export function instanceOfStorageLocationPatchRequest(value: object): value is S
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createStorageLocationPatchRequestPropertyNames();
-    const optionalStringProperties = createStorageLocationPatchRequestOptionalProperties({ name: 'barcode', nullable: false }, { name: 'destinationStorageLocationId', nullable: false }, { name: 'name', nullable: false }, { name: 'parentStorageLocationId', nullable: false }, { name: 'status', nullable: false }, );
+    const optionalStringProperties = createStorageLocationPatchRequestOptionalProperties({ name: 'allowNewProduct', nullable: false }, { name: 'barcode', nullable: false }, { name: 'destinationStorageLocationId', nullable: false }, { name: 'name', nullable: false }, { name: 'parentStorageLocationId', nullable: false }, { name: 'status', nullable: false }, { name: 'storageCategoryCode', nullable: false }, );
     const optionalNumberProperties = createStorageLocationPatchRequestOptionalProperties();
-    const optionalBooleanProperties = createStorageLocationPatchRequestOptionalProperties();
+    const optionalBooleanProperties = createStorageLocationPatchRequestOptionalProperties({ name: 'hazardContainment', nullable: false }, );
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
         && optionalStringProperties.every((property) => isOptionalStorageLocationPatchRequestPropertyOfType(_v, property.name, 'string', property.nullable))

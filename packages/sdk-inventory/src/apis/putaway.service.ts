@@ -21,6 +21,10 @@ import { ApiError } from '../src/models/apiError';
 // @ts-ignore
 import { GeneratePutawayTasksRequest } from '../src/models/generatePutawayTasksRequest';
 // @ts-ignore
+import { PutawayRuleRequest } from '../src/models/putawayRuleRequest';
+// @ts-ignore
+import { PutawayRuleResponse } from '../src/models/putawayRuleResponse';
+// @ts-ignore
 import { PutawayTaskResponse } from '../src/models/putawayTaskResponse';
 
 // @ts-ignore
@@ -100,8 +104,138 @@ export class PutawayService extends BaseService {
     }
 
     /**
+     * Create Putaway Rule
+     * Creates a putaway rule that routes matching received lines to a destination bin. Use this tool to configure where an item class should be stored; use updatePutawayRule to change a rule that already exists, and do not use it to move stock — a rule only affects which destination future generatePutawayTasks calls suggest. Preconditions: at most one enabled ANY rule may exist. ANY matches every line, so a second enabled one would be unreachable configuration and is refused with 409. Required inputs: priority (at least 0), matchType (SKU, SUBCATEGORY, CATEGORY or ANY), destinationLocationId (UUID), plus matchValue — a catalog product, subcategory or category id — which is required for every matchType except ANY and must be omitted for ANY. destinationStrategy defaults to FIXED and isEnabled defaults to true. Emits an INVENTORY_PUTAWAY_RULE_CREATE event; no stock moves and existing putaway tasks keep the destinations they were generated with. Returns 400 when matchValue is missing for a typed rule, supplied for an ANY rule, or is not a valid UUID, and 409 when an enabled ANY rule already exists. 
+     * @endpoint post /v1/inventory/putaway/rules
+     * @param putawayRuleRequest The rule to create.
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public createPutawayRule(putawayRuleRequest: PutawayRuleRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PutawayRuleResponse>;
+    public createPutawayRule(putawayRuleRequest: PutawayRuleRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PutawayRuleResponse>>;
+    public createPutawayRule(putawayRuleRequest: PutawayRuleRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PutawayRuleResponse>>;
+    public createPutawayRule(putawayRuleRequest: PutawayRuleRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (putawayRuleRequest === null || putawayRuleRequest === undefined) {
+            throw new Error('Required parameter putawayRuleRequest was null or undefined when calling createPutawayRule.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/inventory/putaway/rules`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<PutawayRuleResponse>('post', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                body: putawayRuleRequest,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Delete Putaway Rule
+     * Deletes a putaway rule permanently. Use this tool to retire configuration outright; do not use it to take a rule out of service temporarily — call updatePutawayRule with isEnabled false instead, since a disabled rule is unreachable but recoverable whereas this is not. Preconditions: the rule must exist. Deleting the only enabled ANY rule is permitted but removes the terminal fallback, after which generatePutawayTasks fails for any line no other rule matches. Required inputs: ruleId (UUID string) path parameter; there is no request body. Emits an INVENTORY_PUTAWAY_RULE_DELETE event; no stock moves and putaway tasks already generated under this rule are unaffected. Returns 404 when the rule does not exist, and 400 when ruleId is not a valid UUID. 
+     * @endpoint delete /v1/inventory/putaway/rules/{ruleId}
+     * @param ruleId Putaway rule identifier
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public deletePutawayRule(ruleId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any>;
+    public deletePutawayRule(ruleId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
+    public deletePutawayRule(ruleId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
+    public deletePutawayRule(ruleId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (ruleId === null || ruleId === undefined) {
+            throw new Error('Required parameter ruleId was null or undefined when calling deletePutawayRule.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/inventory/putaway/rules/${this.configuration.encodeParam({name: "ruleId", value: ruleId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<any>('delete', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
      * Generate Putaway Tasks
-     * Generates one UNASSIGNED putaway task per received line of a goods receipt, sourced from the staging location, with the suggested destination resolved by the highest-priority enabled putaway rule or the default location when no rule exists. Use this tool once staged goods need storage assignments; do not use executePutaway, which performs the physical move for one task, and do not use claimPutawayTask, which assigns an existing task to a worker. Preconditions: the goods receipt named by sourceReceiptId must exist; putaway rules are optional. Required inputs: sourceReceiptId (UUID string) plus either lineItems, each naming productId (UUID string) and a quantity of at least 1, or the legacy productId/quantity pair, but never both forms together. Emits an INVENTORY_PUTAWAY_TASK_GENERATE event; the tasks are created UNASSIGNED and no stock moves until executePutaway runs. Returns 404 when the goods receipt does not exist, and 400 when both line forms are supplied, neither is supplied, an id is not a valid UUID, or a quantity is below 1. 
+     * Generates one UNASSIGNED putaway task per received line of a goods receipt, sourced from the staging location, with the suggested destination resolved by the highest-priority enabled putaway rule or the default location when no rule exists. Use this tool once staged goods need storage assignments; do not use executePutaway, which performs the physical move for one task, and do not use claimPutawayTask, which assigns an existing task to a worker. Preconditions: the goods receipt named by sourceReceiptId must exist; putaway rules are optional. Required inputs: sourceReceiptId (UUID string) plus either lineItems, each naming productId (UUID string) and a quantity of at least 1, or the legacy productId/quantity pair, but never both forms together. Emits an INVENTORY_PUTAWAY_TASK_GENERATE event; the tasks are created UNASSIGNED and no stock moves until executePutaway runs. Returns 404 when the goods receipt does not exist, 400 when both line forms are supplied, neither is supplied, an id is not a valid UUID, or a quantity is below 1, and 422 when the receipt is not booked into the staging location (RECEIPT_NOT_STAGED), when no enabled rule matches a line and no ANY fallback rule exists (NO_PUTAWAY_RULE_MATCH), or when the resolved destination is not physically fit for the line\&#39;s catalog class (LOCATION_NOT_VALID_FOR_SKU). 
      * @endpoint post /v1/inventory/putaway/tasks/generate
      * @param generatePutawayTasksRequest The source goods receipt and the received lines needing storage.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -159,6 +293,122 @@ export class PutawayService extends BaseService {
             {
                 context: localVarHttpContext,
                 body: generatePutawayTasksRequest,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Get Putaway Rule
+     * Returns one putaway rule by id, with its match tier, match value, destination and strategy. Use this tool to read a single rule\&#39;s current state before replacing it with updatePutawayRule; do not use it to discover which rule governs a SKU, because that depends on tier precedence across all enabled rules — list them with listPutawayRules instead, which is also how you find ids. Preconditions: the rule must exist. Required inputs: ruleId (UUID string) path parameter; there is no request body. No events are emitted and no state changes; this is a read-only projection. Returns 404 when no rule exists for the supplied id, and 400 when ruleId is not a valid UUID. 
+     * @endpoint get /v1/inventory/putaway/rules/{ruleId}
+     * @param ruleId Putaway rule identifier
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public getPutawayRule(ruleId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PutawayRuleResponse>;
+    public getPutawayRule(ruleId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PutawayRuleResponse>>;
+    public getPutawayRule(ruleId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PutawayRuleResponse>>;
+    public getPutawayRule(ruleId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (ruleId === null || ruleId === undefined) {
+            throw new Error('Required parameter ruleId was null or undefined when calling getPutawayRule.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/inventory/putaway/rules/${this.configuration.encodeParam({name: "ruleId", value: ruleId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<PutawayRuleResponse>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * List Putaway Rules
+     * Returns every putaway rule, enabled or not, in the order the matcher tries them: tier precedence first (SKU, then SUBCATEGORY, then CATEGORY, then ANY), then ascending priority within a tier. Use this tool to see which rule will govern an item and to find a ruleId before updating or deleting one; do not use listPutawayTasks, which returns generated work rather than configuration. Preconditions: none. Required inputs: none; there is no request body, paging or filtering. No events are emitted and no state changes; this is a read-only projection. Returns 200 with an empty array when no rules are configured. That is not an error, but it does mean putaway task generation will fail for every line until at least an ANY rule exists. 
+     * @endpoint get /v1/inventory/putaway/rules
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public listPutawayRules(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<PutawayRuleResponse>>;
+    public listPutawayRules(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<PutawayRuleResponse>>>;
+    public listPutawayRules(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<PutawayRuleResponse>>>;
+    public listPutawayRules(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/inventory/putaway/rules`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<Array<PutawayRuleResponse>>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,
@@ -238,6 +488,80 @@ export class PutawayService extends BaseService {
             {
                 context: localVarHttpContext,
                 params: localVarQueryParameters.toHttpParams(),
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Update Putaway Rule
+     * Replaces every field of an existing putaway rule; this is a full replacement, not a patch, so an omitted destinationStrategy falls back to FIXED. The one exception is isEnabled: omitting it keeps the rule\&#39;s current enabled state, so a PUT that only retunes a priority cannot silently re-enable a rule somebody deliberately disabled. Use this tool to retarget, reprioritise, enable or disable a rule; do not use it to add a rule that does not exist yet — call createPutawayRule instead, and do not use it to redirect stock already on a generated task, which keeps the destination it was given. Preconditions: the rule must exist, and enabling an ANY rule while another enabled ANY rule exists is refused with 409. A rule never conflicts with itself. Required inputs: ruleId (UUID string) path parameter, plus the same body as createPutawayRule — priority, matchType, destinationLocationId and a matchValue required for every matchType except ANY. Emits an INVENTORY_PUTAWAY_RULE_UPDATE event; no stock moves and putaway tasks already generated keep their destinations. Returns 404 when the rule does not exist, 400 on the same validation failures as createPutawayRule, and 409 when another enabled ANY rule already exists. 
+     * @endpoint put /v1/inventory/putaway/rules/{ruleId}
+     * @param ruleId Putaway rule identifier
+     * @param putawayRuleRequest The rule\&#39;s replacement state.
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public updatePutawayRule(ruleId: string, putawayRuleRequest: PutawayRuleRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PutawayRuleResponse>;
+    public updatePutawayRule(ruleId: string, putawayRuleRequest: PutawayRuleRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PutawayRuleResponse>>;
+    public updatePutawayRule(ruleId: string, putawayRuleRequest: PutawayRuleRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PutawayRuleResponse>>;
+    public updatePutawayRule(ruleId: string, putawayRuleRequest: PutawayRuleRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (ruleId === null || ruleId === undefined) {
+            throw new Error('Required parameter ruleId was null or undefined when calling updatePutawayRule.');
+        }
+        if (putawayRuleRequest === null || putawayRuleRequest === undefined) {
+            throw new Error('Required parameter putawayRuleRequest was null or undefined when calling updatePutawayRule.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/inventory/putaway/rules/${this.configuration.encodeParam({name: "ruleId", value: ruleId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<PutawayRuleResponse>('put', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                body: putawayRuleRequest,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,

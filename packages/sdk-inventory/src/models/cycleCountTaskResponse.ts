@@ -46,6 +46,10 @@ export interface CycleCountTaskResponse {
      */
     latestCountEntryId?: string;
     /**
+     * Cycle count plan the task was generated from; null for tasks created outside a plan
+     */
+    planId?: string;
+    /**
      * Current status of the cycle count task
      */
     status: CycleCountTaskResponseStatusEnum;
@@ -113,7 +117,7 @@ export function instanceOfCycleCountTaskResponse(value: object): value is CycleC
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createCycleCountTaskResponsePropertyNames('binLocation', 'countEntriesCount', 'createdAt', 'expectedQuantity', 'itemSku', 'status', 'taskId', 'updatedAt', );
-    const optionalStringProperties = createCycleCountTaskResponseOptionalProperties({ name: 'auditorId', nullable: false }, { name: 'binLocation', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'itemDescription', nullable: false }, { name: 'itemSku', nullable: false }, { name: 'latestCountEntryId', nullable: false }, { name: 'status', nullable: false }, { name: 'taskId', nullable: false }, { name: 'unitOfMeasure', nullable: false }, { name: 'updatedAt', nullable: false }, );
+    const optionalStringProperties = createCycleCountTaskResponseOptionalProperties({ name: 'auditorId', nullable: false }, { name: 'binLocation', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'itemDescription', nullable: false }, { name: 'itemSku', nullable: false }, { name: 'latestCountEntryId', nullable: false }, { name: 'planId', nullable: false }, { name: 'status', nullable: false }, { name: 'taskId', nullable: false }, { name: 'unitOfMeasure', nullable: false }, { name: 'updatedAt', nullable: false }, );
     const optionalNumberProperties = createCycleCountTaskResponseOptionalProperties({ name: 'countEntriesCount', nullable: false }, { name: 'expectedQuantity', nullable: false }, );
     const optionalBooleanProperties = createCycleCountTaskResponseOptionalProperties();
 

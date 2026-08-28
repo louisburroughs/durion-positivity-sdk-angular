@@ -22,6 +22,8 @@ import { ApiError } from '../src/models/apiError';
 import { CostingMethodConfigRequest } from '../src/models/costingMethodConfigRequest';
 // @ts-ignore
 import { CostingMethodConfigResponse } from '../src/models/costingMethodConfigResponse';
+// @ts-ignore
+import { SkuCategoryImpactResponse } from '../src/models/skuCategoryImpactResponse';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
@@ -37,6 +39,66 @@ export class ValuationMethodsService extends BaseService {
 
     constructor(protected httpClient: HttpClient, @Optional() @Inject(BASE_PATH) basePath: string|string[], @Optional() configuration?: Configuration) {
         super(basePath, configuration);
+    }
+
+    /**
+     * Deactivate costing method configuration
+     * Deactivates one costing method configuration row so it stops participating in method resolution; this is a soft delete and the row is never removed. Use this tool to retire a scope override and fall back to the next precedence level — this is how a SKU_CATEGORY row is taken out of scope before enabling pos.inventory.sku-category.resolve-from-replica; do not use upsertCostingMethodConfig with a different method when the intent is to remove the override entirely. Preconditions: the configuration row must exist; deactivating an already inactive row is a no-op that returns the row and writes no second audit entry. Required inputs: configId (UUID) path parameter; there is no request body. Emits an INVENTORY_VALUATION_METHOD_DEACTIVATE event, and records a DEACTIVATED row in the cost method change log; subsequent postings fall back to DEFAULT or the deployment default pos.inventory.valuation.default-method. Returns 404 when no configuration exists for the supplied id. 
+     * @endpoint delete /v1/inventory/valuation/methods/{configId}
+     * @param configId Identifier of the costing method configuration row to deactivate
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public deactivateCostingMethodConfig(configId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<CostingMethodConfigResponse>;
+    public deactivateCostingMethodConfig(configId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<CostingMethodConfigResponse>>;
+    public deactivateCostingMethodConfig(configId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<CostingMethodConfigResponse>>;
+    public deactivateCostingMethodConfig(configId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (configId === null || configId === undefined) {
+            throw new Error('Required parameter configId was null or undefined when calling deactivateCostingMethodConfig.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/inventory/valuation/methods/${this.configuration.encodeParam({name: "configId", value: configId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<CostingMethodConfigResponse>('delete', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
     }
 
     /**
@@ -96,8 +158,64 @@ export class ValuationMethodsService extends BaseService {
     }
 
     /**
+     * Report the SKU_CATEGORY resolution impact
+     * Reports which SKUs would change costing method, from what to what, if pos.inventory.sku-category.resolve-from-replica were enabled, and which SKUs would start resolving their sourcing strategy from a SKU_CATEGORY row. Use this tool as the pre-flight for that flag: it is valid and meaningful while the flag is still OFF, which is the only moment the answer is actionable, because it reads the catalog replica directly instead of going through the SPI the flag gates. Do not use listCostingMethodConfigs for this — it lists what is configured, not what would change. Preconditions: none beyond the inventory:location:admin authority; the catalog product replica should be fully populated first, or the report understates the impact. Required inputs: none; there is no request body, paging or filtering. Emits an INVENTORY_VALUATION_METHOD_SKU_CATEGORY_IMPACT audit event; nothing is changed. Returns 200 with zero counts when no SKU_CATEGORY configuration exists; impactedSkuCount counts changes still pending and is computed against the flag\&#39;s current value, so it reaches zero once the cut-over is complete and categoryMatchedSkuCount is what reports how many SKUs the category step governs. When truncated is true the scan hit impactSkuCap and every row-derived count is a lower bound; the full cut-over procedure is in docs/OPERATIONS_RUNBOOK.md. 
+     * @endpoint get /v1/inventory/valuation/methods/sku-category-impact
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public reportSkuCategoryImpact(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<SkuCategoryImpactResponse>;
+    public reportSkuCategoryImpact(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<SkuCategoryImpactResponse>>;
+    public reportSkuCategoryImpact(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<SkuCategoryImpactResponse>>;
+    public reportSkuCategoryImpact(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/inventory/valuation/methods/sku-category-impact`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<SkuCategoryImpactResponse>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
      * Upsert costing method configuration
-     * Creates or updates the costing method (STANDARD or AVERAGE) for one scope — SKU, SKU_CATEGORY or DEFAULT — reactivating the row and keeping at most one row per scope. Use this tool to switch which method a scope resolves to going forward only; do not use it expecting opening values to be restated — that cut-over is createRevaluation, which this call deliberately does not perform. Preconditions: none; note that SKU_CATEGORY rows are stored but unresolvable until the catalog replica carries a category, so resolution skips them to DEFAULT. Required inputs: scopeType, method, and scopeValue — the stock item id for SKU, the category string for SKU_CATEGORY, and omitted for DEFAULT. Emits an INVENTORY_VALUATION_METHOD_UPSERT event, and an effective method change is recorded as a who/when/from/to row in the cost method change log. Returns 400 when scopeValue is supplied for DEFAULT scope or missing for SKU or SKU_CATEGORY scope. 
+     * Creates or updates the costing method (STANDARD or AVERAGE) for one scope — SKU, SKU_CATEGORY or DEFAULT — reactivating the row and keeping at most one row per scope. Use this tool to switch which method a scope resolves to going forward only; do not use it expecting opening values to be restated — that cut-over is createRevaluation, which this call deliberately does not perform. Preconditions: none; note that the catalog replica has carried the product\&#39;s category since #1514, and SKU_CATEGORY resolution is gated by pos.inventory.sku-category.resolve-from-replica, which defaults off — call reportSkuCategoryImpact before enabling it. Required inputs: scopeType, method, and scopeValue — the stock item id for SKU, the category string for SKU_CATEGORY, and omitted for DEFAULT. Emits an INVENTORY_VALUATION_METHOD_UPSERT event, and an effective method change is recorded as a who/when/from/to row in the cost method change log. Returns 400 when scopeValue is supplied for DEFAULT scope or missing for SKU or SKU_CATEGORY scope. 
      * @endpoint put /v1/inventory/valuation/methods
      * @param costingMethodConfigRequest Costing method to apply at one scope; the scope key rules depend on scopeType.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.

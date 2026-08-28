@@ -14,6 +14,10 @@
  */
 export interface StorageLocationRequest { 
     /**
+     * Whether the storage location will take stock of a product it is not already holding. Defaults to MIXED.
+     */
+    allowNewProduct?: StorageLocationRequestAllowNewProductEnum;
+    /**
      * Barcode identifying the storage location
      */
     barcode?: string;
@@ -21,6 +25,10 @@ export interface StorageLocationRequest {
      * Capacity attributes of the storage location
      */
     capacity?: object;
+    /**
+     * Whether the storage location provides spill/hazard containment; required by battery and oil storage capabilities. Omit for false.
+     */
+    hazardContainment?: boolean;
     /**
      * Display name of the storage location
      */
@@ -30,6 +38,10 @@ export interface StorageLocationRequest {
      */
     parentStorageLocationId?: string;
     /**
+     * Putaway capability of the storage location — what it is fit to hold, independent of the physical type. Omit to leave it undeclared, which reads back as GENERAL (accepts every catalog category).
+     */
+    storageCategoryCode?: StorageLocationRequestStorageCategoryCodeEnum;
+    /**
      * Temperature attributes of the storage location
      */
     temperature?: object;
@@ -38,6 +50,21 @@ export interface StorageLocationRequest {
      */
     type: StorageLocationRequestTypeEnum;
 }
+export enum StorageLocationRequestAllowNewProductEnum {
+    Mixed = 'MIXED',
+    SameProductOnly = 'SAME_PRODUCT_ONLY',
+    EmptyOnly = 'EMPTY_ONLY'
+};
+export enum StorageLocationRequestStorageCategoryCodeEnum {
+    TireRack = 'TIRE_RACK',
+    OilStorage = 'OIL_STORAGE',
+    BatteryRack = 'BATTERY_RACK',
+    SmallPartsBin = 'SMALL_PARTS_BIN',
+    BulkFloor = 'BULK_FLOOR',
+    Staging = 'STAGING',
+    Quarantine = 'QUARANTINE',
+    General = 'GENERAL'
+};
 export enum StorageLocationRequestTypeEnum {
     Floor = 'FLOOR',
     Shelf = 'SHELF',
@@ -87,9 +114,9 @@ export function instanceOfStorageLocationRequest(value: object): value is Storag
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createStorageLocationRequestPropertyNames('name', 'type', );
-    const optionalStringProperties = createStorageLocationRequestOptionalProperties({ name: 'barcode', nullable: false }, { name: 'name', nullable: false }, { name: 'parentStorageLocationId', nullable: false }, { name: 'type', nullable: false }, );
+    const optionalStringProperties = createStorageLocationRequestOptionalProperties({ name: 'allowNewProduct', nullable: false }, { name: 'barcode', nullable: false }, { name: 'name', nullable: false }, { name: 'parentStorageLocationId', nullable: false }, { name: 'storageCategoryCode', nullable: false }, { name: 'type', nullable: false }, );
     const optionalNumberProperties = createStorageLocationRequestOptionalProperties();
-    const optionalBooleanProperties = createStorageLocationRequestOptionalProperties();
+    const optionalBooleanProperties = createStorageLocationRequestOptionalProperties({ name: 'hazardContainment', nullable: false }, );
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
         && optionalStringProperties.every((property) => isOptionalStorageLocationRequestPropertyOfType(_v, property.name, 'string', property.nullable))
