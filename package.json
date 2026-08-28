@@ -10,7 +10,12 @@
     "build": "npm run build --workspaces",
     "test": "jest",
     "lint": "eslint . --ext .ts,.tsx",
-    "generate": "bash scripts/generate-openapi.sh"
+    "generate": "bash scripts/generate-openapi.sh",
+    "pack": "bash scripts/pack-sdk.sh",
+    "version:current": "node scripts/version.mjs current",
+    "version:next": "node scripts/version.mjs next",
+    "version:bump": "node scripts/version.mjs bump",
+    "version:set": "node scripts/version.mjs set"
   },
   "devDependencies": {
     "@angular/common": "^22.0.0",
