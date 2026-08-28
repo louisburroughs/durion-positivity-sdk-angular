@@ -17,7 +17,7 @@
     "build": "ng-packagr -p ng-package.json"
   },
   "peerDependencies": {
-    "@angular/core": "^21.0.0",
+    "@angular/core": "^22.0.0",
     "@durion-sdk/transport": "*",
     "rxjs": "^7.4.0"
   },
