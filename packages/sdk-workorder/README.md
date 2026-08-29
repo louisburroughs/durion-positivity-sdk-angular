@@ -1,4 +1,4 @@
-# @durion-sdk/workorder@0.1.0-alpha
+# @durion-sdk/workorder@0.2.0-alpha
 
 Workorder service for managing workorders and tasks
 
@@ -24,7 +24,7 @@ Navigate to the folder of your consuming project and run one of next commands.
 _published:_
 
 ```console
-npm install @durion-sdk/workorder@0.1.0-alpha --save
+npm install @durion-sdk/workorder@0.2.0-alpha --save
 ```
 
 _without publishing (not recommended):_

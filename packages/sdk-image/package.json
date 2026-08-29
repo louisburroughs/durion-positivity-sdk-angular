@@ -1,6 +1,6 @@
 {
   "name": "@durion-sdk/image",
-  "version": "0.1.0-alpha",
+  "version": "0.2.0-alpha",
   "description": "OpenAPI client for @durion-sdk/image",
   "author": "OpenAPI-Generator Contributors",
   "repository": {
