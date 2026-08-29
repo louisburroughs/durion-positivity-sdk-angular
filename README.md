@@ -37,9 +37,21 @@ npm run version:bump              # bump the minor version without packing
 npm run version:set -- 1.0.0      # set an explicit version without packing
 ```
 
-**Minor versions are automatic** — `npm run pack` bumps one on every run.
-`0.1.0-alpha` becomes `0.2.0-alpha`: minor increments, patch resets to `0`, and the
-prerelease suffix is kept.
+**Minor versions are automatic** — both `npm run generate` and `npm run pack` bump
+one on every run. `0.1.0-alpha` becomes `0.2.0-alpha`: minor increments, patch resets
+to `0`, and the prerelease suffix is kept.
+
+`generate` bumps *before* generating, because the generator stamps `npmVersion` from
+`openapitools.json` into every package.json it writes — a bump afterwards would be
+reverted by the next regeneration.
+
+Both commands take `--no-bump`. Since each bumps independently, a regenerate-then-pack
+release should bump once, in `generate`, and pack at that version:
+
+```bash
+npm run generate                  # bumps
+npm run pack -- --no-bump         # packs at the version generate produced
+```
 
 **Major versions are manual.** Nothing in the pack path ever touches the major
 component. To release one:
@@ -85,6 +97,7 @@ Regenerate, verify, pack, then install the tarballs into the consuming app:
 
 ```bash
 # 1. regenerate the clients from the backend specs and build them
+#    (generate bumps the minor version first)
 cd ~/IdeaProjects/durion-positivity-sdk-angular
 npm run generate
 npm run build
@@ -93,8 +106,8 @@ npm run build
 npm test
 npm run lint
 
-# 3. cut the tarballs (bumps the minor version)
-npm run pack
+# 3. cut the tarballs at the version step 1 produced
+npm run pack -- --no-bump
 
 # 4. consume them
 cd ~/IdeaProjects/durion-positivity-frontend
@@ -105,11 +118,21 @@ npm run build
 Commit the bumped version files together with the tarballs so the SDK version the
 frontend installs matches what is on the branch.
 
-Without cutting a new version, the regenerate-and-consume loop is:
+The regenerate-and-consume loop, which bumps the minor version on every pass:
 
 ```bash
 cd ~/IdeaProjects/durion-positivity-sdk-angular && npm run generate && npm run build && cd ~/IdeaProjects/durion-positivity-frontend && npm run sdk:install && npm run build
 ```
+
+To iterate without moving the version, add `--no-bump`:
+
+```bash
+cd ~/IdeaProjects/durion-positivity-sdk-angular && npm run generate -- --no-bump && npm run build && cd ~/IdeaProjects/durion-positivity-frontend && npm run sdk:install && npm run build
+```
+
+`npm run sdk:install` in the frontend repacks `packages/*/dist` itself rather than
+reusing the tarballs `npm run pack` writes, so the version it installs is whatever
+`generate` last stamped into the package manifests.
 
 ## Related Docs
 

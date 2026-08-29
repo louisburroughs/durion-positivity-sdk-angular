@@ -12,13 +12,16 @@ npm test
 ## Versioning and Tarballs
 
 ```bash
-npm run pack                  # bump the minor version, then pack the SDK packages
+npm run generate              # bump the minor version, then generate the clients
+npm run pack -- --no-bump     # pack at the version generate produced
 npm run version:set -- 1.0.0  # major bumps only, by hand
 ```
 
-- `npm run pack` owns version bumps: it increments the **minor** version once per run and packs at the new version.
+- `npm run generate` and `npm run pack` each bump the **minor** version once per run. A regenerate-then-pack release should bump once, in `generate`, and pack with `--no-bump`.
+- `generate` bumps first because the generator stamps `npmVersion` from `openapitools.json` into every package.json it writes; a later bump would be reverted by the next regeneration.
+- Both take `--no-bump` to run at the current version.
 - Never hand-edit a version in a single file. `scripts/version.mjs` writes all of them — root `package.json`, `packages/*/package.json`, `package-lock.json` and every `npmVersion` in `openapitools.json`.
-- Major versions are never automated; set them with `npm run version:set -- <major>.0.0`, then pack with `npm run pack -- --no-bump`.
+- Major versions are never automated; set them with `npm run version:set -- <major>.0.0`, then generate/pack with `--no-bump`.
 
 ## Critical Rules
 

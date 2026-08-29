@@ -5,19 +5,32 @@ set -euo pipefail
 # Generates Angular HttpClient services from backend OpenAPI specs (typescript-angular generator).
 # Generated services are @Injectable({ providedIn: 'root' }) and return Observable<T>.
 #
+# The repo-wide minor version is bumped once per run, before anything is
+# generated, so the regenerated package.json files (and the openapi-generator
+# `npmVersion` they are stamped from) carry the new number. Without the bump
+# generation would re-stamp the previous version and downstream consumers would
+# never see a version change. Major versions are never bumped here: do those by
+# hand with `npm run version:set -- <major>.0.0`.
+#
 # Usage:
-#   ./scripts/generate-openapi.sh                    # Generate all SDK modules
-#   ./scripts/generate-openapi.sh --module security  # Generate only the specified module
+#   ./scripts/generate-openapi.sh                    # Bump, then generate all SDK modules
+#   ./scripts/generate-openapi.sh --module security  # Bump, then generate only that module
+#   ./scripts/generate-openapi.sh --no-bump          # Regenerate at the current version
 #
 # Valid module names: security, order, inventory, workorder, supplier, accounting, catalog, customer, invoice, location, people, people-contact, price, shop-manager, image, event-receiver, vehicle-fitment, vehicle-inventory, internal, documents, inquiry, bulk-loader
 
 module=""
+bump="true"
 
 while [[ $# -gt 0 ]]; do
 	case "$1" in
 		--module)
 			module="$2"
 			shift 2
+			;;
+		--no-bump)
+			bump="false"
+			shift
 			;;
 		*)
 			echo "Unknown argument: $1" >&2
@@ -298,8 +311,8 @@ apply_gateway_base_path_default() {
 	echo "[generate] Patched sdk-${module_name} basePath default -> ${gateway_base_path}"
 }
 
+# Validate the provided module name before anything is bumped or written.
 if [[ -n "$module" ]]; then
-	# Validate the provided module name
 	valid=false
 	for m in "${MODULES[@]}"; do
 		if [[ "$m" == "$module" ]]; then
@@ -311,6 +324,18 @@ if [[ -n "$module" ]]; then
 		echo "Invalid --module value: '$module'. Valid modules: ${MODULES[*]}" >&2
 		exit 2
 	fi
+fi
+
+# Bump before generating: the generator stamps `npmVersion` from
+# openapitools.json into every package.json it writes, so bumping afterwards
+# would be reverted by the next regeneration.
+if [[ "$bump" == "true" ]]; then
+	node scripts/version.mjs bump
+else
+	echo "[generate] --no-bump: keeping version $(node scripts/version.mjs current)"
+fi
+
+if [[ -n "$module" ]]; then
 	echo "Generating sdk-${module}..."
 	npx @openapitools/openapi-generator-cli generate --generator-key "sdk-${module}"
 
@@ -359,4 +384,4 @@ else
 	done
 fi
 
-echo "Generation complete."
+echo "Generation complete at version $(node scripts/version.mjs current)."
