@@ -54,7 +54,7 @@ export interface BulkLoadJobResponse {
      */
     startedAt?: string;
     /**
-     * Current lifecycle status of the job
+     * Current lifecycle status of the job. COMPLETED means every row was accepted; PARTIAL means the run finished but some rows were rejected — inspect failureCount and the job\'s audit records; FAILED means the run itself did not finish. PARTIAL and FAILED both accept corrections and a retry.
      */
     status: BulkLoadJobResponseStatusEnum;
     /**
@@ -79,7 +79,16 @@ export enum BulkLoadJobResponseDomainTypeEnum {
     Person = 'PERSON',
     BasePrice = 'BASE_PRICE',
     Vehicle = 'VEHICLE',
-    VehicleFitment = 'VEHICLE_FITMENT'
+    VehicleFitment = 'VEHICLE_FITMENT',
+    StorageLocation = 'STORAGE_LOCATION',
+    Bay = 'BAY',
+    MobileUnit = 'MOBILE_UNIT',
+    StaffingAssignment = 'STAFFING_ASSIGNMENT',
+    PutawayRule = 'PUTAWAY_RULE',
+    CycleCountPlan = 'CYCLE_COUNT_PLAN',
+    SecurityUser = 'SECURITY_USER',
+    UserPersonLink = 'USER_PERSON_LINK',
+    MechanicSkill = 'MECHANIC_SKILL'
 };
 export enum BulkLoadJobResponseStatusEnum {
     Created = 'CREATED',
@@ -89,6 +98,7 @@ export enum BulkLoadJobResponseStatusEnum {
     Dedup = 'DEDUP',
     Processing = 'PROCESSING',
     Completed = 'COMPLETED',
+    Partial = 'PARTIAL',
     Failed = 'FAILED',
     Cancelled = 'CANCELLED'
 };

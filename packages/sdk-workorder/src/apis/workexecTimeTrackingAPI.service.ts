@@ -132,9 +132,9 @@ export class WorkexecTimeTrackingAPIService extends BaseService {
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public getActiveTimers(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<WorkexecTimerEntryResponse>;
-    public getActiveTimers(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<WorkexecTimerEntryResponse>>;
-    public getActiveTimers(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<WorkexecTimerEntryResponse>>;
+    public getActiveTimers(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<WorkexecTimerEntryResponse>>;
+    public getActiveTimers(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<WorkexecTimerEntryResponse>>>;
+    public getActiveTimers(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<WorkexecTimerEntryResponse>>>;
     public getActiveTimers(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarHeaders = this.defaultHeaders;
@@ -167,7 +167,7 @@ export class WorkexecTimeTrackingAPIService extends BaseService {
 
         let localVarPath = `/v1/workexec/time-entries/timer/active`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<WorkexecTimerEntryResponse>('get', `${basePath}${localVarPath}`,
+        return this.httpClient.request<Array<WorkexecTimerEntryResponse>>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,

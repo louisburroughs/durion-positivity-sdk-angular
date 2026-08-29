@@ -9,4 +9,6 @@ export * from './principalRoleManagement.service';
 export * from './roleManagement.service';
 export * from './selfRegistrationReviewAPI.service';
 export * from './userAPI.service';
+export * from './userBulkIngestAPI.service';
+export * from './userPersonLinkBulkIngestAPI.service';
 export * from './userRoleManagement.service';

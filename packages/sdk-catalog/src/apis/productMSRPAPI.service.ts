@@ -195,9 +195,9 @@ export class ProductMSRPAPIService extends BaseService {
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public listProductMsrpHistory(productId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ProductMsrpDto>;
-    public listProductMsrpHistory(productId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ProductMsrpDto>>;
-    public listProductMsrpHistory(productId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ProductMsrpDto>>;
+    public listProductMsrpHistory(productId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<ProductMsrpDto>>;
+    public listProductMsrpHistory(productId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<ProductMsrpDto>>>;
+    public listProductMsrpHistory(productId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<ProductMsrpDto>>>;
     public listProductMsrpHistory(productId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (productId === null || productId === undefined) {
             throw new Error('Required parameter productId was null or undefined when calling listProductMsrpHistory.');
@@ -233,7 +233,7 @@ export class ProductMSRPAPIService extends BaseService {
 
         let localVarPath = `/v1/products/${this.configuration.encodeParam({name: "productId", value: productId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/msrp`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<ProductMsrpDto>('get', `${basePath}${localVarPath}`,
+        return this.httpClient.request<Array<ProductMsrpDto>>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,

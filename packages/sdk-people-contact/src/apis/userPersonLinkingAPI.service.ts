@@ -120,9 +120,9 @@ export class UserPersonLinkingAPIService extends BaseService {
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public getLinksByPersonId(personId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<UserPersonLinkResponse>;
-    public getLinksByPersonId(personId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<UserPersonLinkResponse>>;
-    public getLinksByPersonId(personId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<UserPersonLinkResponse>>;
+    public getLinksByPersonId(personId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<UserPersonLinkResponse>>;
+    public getLinksByPersonId(personId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<UserPersonLinkResponse>>>;
+    public getLinksByPersonId(personId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<UserPersonLinkResponse>>>;
     public getLinksByPersonId(personId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (personId === null || personId === undefined) {
             throw new Error('Required parameter personId was null or undefined when calling getLinksByPersonId.');
@@ -158,7 +158,7 @@ export class UserPersonLinkingAPIService extends BaseService {
 
         let localVarPath = `/v1/people/user-links/${this.configuration.encodeParam({name: "personId", value: personId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<UserPersonLinkResponse>('get', `${basePath}${localVarPath}`,
+        return this.httpClient.request<Array<UserPersonLinkResponse>>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,

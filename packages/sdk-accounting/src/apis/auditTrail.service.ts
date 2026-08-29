@@ -52,9 +52,9 @@ export class AuditTrailService extends BaseService {
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public getAuditTrailByActor(actorId: string, startDate: string, endDate: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<AuditTrailResponse>;
-    public getAuditTrailByActor(actorId: string, startDate: string, endDate: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<AuditTrailResponse>>;
-    public getAuditTrailByActor(actorId: string, startDate: string, endDate: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<AuditTrailResponse>>;
+    public getAuditTrailByActor(actorId: string, startDate: string, endDate: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<AuditTrailResponse>>;
+    public getAuditTrailByActor(actorId: string, startDate: string, endDate: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<AuditTrailResponse>>>;
+    public getAuditTrailByActor(actorId: string, startDate: string, endDate: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<AuditTrailResponse>>>;
     public getAuditTrailByActor(actorId: string, startDate: string, endDate: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (actorId === null || actorId === undefined) {
             throw new Error('Required parameter actorId was null or undefined when calling getAuditTrailByActor.');
@@ -116,7 +116,7 @@ export class AuditTrailService extends BaseService {
 
         let localVarPath = `/v1/accounting/audit/actor/${this.configuration.encodeParam({name: "actorId", value: actorId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<AuditTrailResponse>('get', `${basePath}${localVarPath}`,
+        return this.httpClient.request<Array<AuditTrailResponse>>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 params: localVarQueryParameters.toHttpParams(),
@@ -140,9 +140,9 @@ export class AuditTrailService extends BaseService {
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public getAuditTrailByDateRange(startDate: string, endDate: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<AuditTrailResponse>;
-    public getAuditTrailByDateRange(startDate: string, endDate: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<AuditTrailResponse>>;
-    public getAuditTrailByDateRange(startDate: string, endDate: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<AuditTrailResponse>>;
+    public getAuditTrailByDateRange(startDate: string, endDate: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<AuditTrailResponse>>;
+    public getAuditTrailByDateRange(startDate: string, endDate: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<AuditTrailResponse>>>;
+    public getAuditTrailByDateRange(startDate: string, endDate: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<AuditTrailResponse>>>;
     public getAuditTrailByDateRange(startDate: string, endDate: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (startDate === null || startDate === undefined) {
             throw new Error('Required parameter startDate was null or undefined when calling getAuditTrailByDateRange.');
@@ -201,7 +201,7 @@ export class AuditTrailService extends BaseService {
 
         let localVarPath = `/v1/accounting/audit/range`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<AuditTrailResponse>('get', `${basePath}${localVarPath}`,
+        return this.httpClient.request<Array<AuditTrailResponse>>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 params: localVarQueryParameters.toHttpParams(),
@@ -224,9 +224,9 @@ export class AuditTrailService extends BaseService {
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public getAuditTrailByInvoice(invoiceId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<AuditTrailResponse>;
-    public getAuditTrailByInvoice(invoiceId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<AuditTrailResponse>>;
-    public getAuditTrailByInvoice(invoiceId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<AuditTrailResponse>>;
+    public getAuditTrailByInvoice(invoiceId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<AuditTrailResponse>>;
+    public getAuditTrailByInvoice(invoiceId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<AuditTrailResponse>>>;
+    public getAuditTrailByInvoice(invoiceId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<AuditTrailResponse>>>;
     public getAuditTrailByInvoice(invoiceId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (invoiceId === null || invoiceId === undefined) {
             throw new Error('Required parameter invoiceId was null or undefined when calling getAuditTrailByInvoice.');
@@ -262,7 +262,7 @@ export class AuditTrailService extends BaseService {
 
         let localVarPath = `/v1/accounting/audit/invoice/${this.configuration.encodeParam({name: "invoiceId", value: invoiceId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<AuditTrailResponse>('get', `${basePath}${localVarPath}`,
+        return this.httpClient.request<Array<AuditTrailResponse>>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,
@@ -284,9 +284,9 @@ export class AuditTrailService extends BaseService {
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public getAuditTrailByOrder(orderId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<AuditTrailResponse>;
-    public getAuditTrailByOrder(orderId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<AuditTrailResponse>>;
-    public getAuditTrailByOrder(orderId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<AuditTrailResponse>>;
+    public getAuditTrailByOrder(orderId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<AuditTrailResponse>>;
+    public getAuditTrailByOrder(orderId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<AuditTrailResponse>>>;
+    public getAuditTrailByOrder(orderId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<AuditTrailResponse>>>;
     public getAuditTrailByOrder(orderId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (orderId === null || orderId === undefined) {
             throw new Error('Required parameter orderId was null or undefined when calling getAuditTrailByOrder.');
@@ -322,7 +322,7 @@ export class AuditTrailService extends BaseService {
 
         let localVarPath = `/v1/accounting/audit/order/${this.configuration.encodeParam({name: "orderId", value: orderId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<AuditTrailResponse>('get', `${basePath}${localVarPath}`,
+        return this.httpClient.request<Array<AuditTrailResponse>>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,
@@ -344,9 +344,9 @@ export class AuditTrailService extends BaseService {
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public getAuditTrailByOrder1(orderId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<AuditTrailResponse>;
-    public getAuditTrailByOrder1(orderId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<AuditTrailResponse>>;
-    public getAuditTrailByOrder1(orderId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<AuditTrailResponse>>;
+    public getAuditTrailByOrder1(orderId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<AuditTrailResponse>>;
+    public getAuditTrailByOrder1(orderId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<AuditTrailResponse>>>;
+    public getAuditTrailByOrder1(orderId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<AuditTrailResponse>>>;
     public getAuditTrailByOrder1(orderId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (orderId === null || orderId === undefined) {
             throw new Error('Required parameter orderId was null or undefined when calling getAuditTrailByOrder1.');
@@ -382,7 +382,7 @@ export class AuditTrailService extends BaseService {
 
         let localVarPath = `/v1/accounting/audit/by-order/${this.configuration.encodeParam({name: "orderId", value: orderId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<AuditTrailResponse>('get', `${basePath}${localVarPath}`,
+        return this.httpClient.request<Array<AuditTrailResponse>>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,
@@ -406,9 +406,9 @@ export class AuditTrailService extends BaseService {
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public getAuditTrailByType(type: 'PRICE_OVERRIDE' | 'REFUND' | 'CANCELLATION', startDate: string, endDate: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<AuditTrailResponse>;
-    public getAuditTrailByType(type: 'PRICE_OVERRIDE' | 'REFUND' | 'CANCELLATION', startDate: string, endDate: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<AuditTrailResponse>>;
-    public getAuditTrailByType(type: 'PRICE_OVERRIDE' | 'REFUND' | 'CANCELLATION', startDate: string, endDate: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<AuditTrailResponse>>;
+    public getAuditTrailByType(type: 'PRICE_OVERRIDE' | 'REFUND' | 'CANCELLATION', startDate: string, endDate: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<AuditTrailResponse>>;
+    public getAuditTrailByType(type: 'PRICE_OVERRIDE' | 'REFUND' | 'CANCELLATION', startDate: string, endDate: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<AuditTrailResponse>>>;
+    public getAuditTrailByType(type: 'PRICE_OVERRIDE' | 'REFUND' | 'CANCELLATION', startDate: string, endDate: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<AuditTrailResponse>>>;
     public getAuditTrailByType(type: 'PRICE_OVERRIDE' | 'REFUND' | 'CANCELLATION', startDate: string, endDate: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (type === null || type === undefined) {
             throw new Error('Required parameter type was null or undefined when calling getAuditTrailByType.');
@@ -470,7 +470,7 @@ export class AuditTrailService extends BaseService {
 
         let localVarPath = `/v1/accounting/audit/type/${this.configuration.encodeParam({name: "type", value: type, in: "path", style: "simple", explode: false, dataType: "'PRICE_OVERRIDE' | 'REFUND' | 'CANCELLATION'", dataFormat: undefined})}`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<AuditTrailResponse>('get', `${basePath}${localVarPath}`,
+        return this.httpClient.request<Array<AuditTrailResponse>>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 params: localVarQueryParameters.toHttpParams(),

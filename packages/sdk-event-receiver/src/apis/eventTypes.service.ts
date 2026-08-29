@@ -282,9 +282,9 @@ export class EventTypesService extends BaseService {
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public listActiveEventTypes(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<EventTypeResponse>;
-    public listActiveEventTypes(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<EventTypeResponse>>;
-    public listActiveEventTypes(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<EventTypeResponse>>;
+    public listActiveEventTypes(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<Array<EventTypeResponse>>;
+    public listActiveEventTypes(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<EventTypeResponse>>>;
+    public listActiveEventTypes(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<EventTypeResponse>>>;
     public listActiveEventTypes(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarHeaders = this.defaultHeaders;
@@ -314,7 +314,7 @@ export class EventTypesService extends BaseService {
 
         let localVarPath = `/v1/eventTypes/active`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<EventTypeResponse>('get', `${basePath}${localVarPath}`,
+        return this.httpClient.request<Array<EventTypeResponse>>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,
@@ -335,9 +335,9 @@ export class EventTypesService extends BaseService {
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public listEventTypes(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<EventTypeResponse>;
-    public listEventTypes(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<EventTypeResponse>>;
-    public listEventTypes(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<EventTypeResponse>>;
+    public listEventTypes(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<Array<EventTypeResponse>>;
+    public listEventTypes(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<EventTypeResponse>>>;
+    public listEventTypes(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<EventTypeResponse>>>;
     public listEventTypes(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarHeaders = this.defaultHeaders;
@@ -367,7 +367,7 @@ export class EventTypesService extends BaseService {
 
         let localVarPath = `/v1/eventTypes`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<EventTypeResponse>('get', `${basePath}${localVarPath}`,
+        return this.httpClient.request<Array<EventTypeResponse>>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,

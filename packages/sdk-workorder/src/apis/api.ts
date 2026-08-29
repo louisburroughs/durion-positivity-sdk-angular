@@ -7,7 +7,6 @@ export * from './estimatesFromAppointments.service';
 export * from './operationalContext.service';
 export * from './substituteLinkAPI.service';
 export * from './technicianAssignmentAPI.service';
-export * from './timeEntryAPI.service';
 export * from './travelSegmentAPI.service';
 export * from './wIPDashboard.service';
 export * from './workOrderAPI.service';

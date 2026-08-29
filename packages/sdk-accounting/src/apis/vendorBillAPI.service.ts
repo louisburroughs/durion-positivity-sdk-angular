@@ -244,9 +244,9 @@ export class VendorBillAPIService extends BaseService {
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public listVendorBillMatchCandidates(invoiceEventId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<VendorBillMatchCandidateResponse>;
-    public listVendorBillMatchCandidates(invoiceEventId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<VendorBillMatchCandidateResponse>>;
-    public listVendorBillMatchCandidates(invoiceEventId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<VendorBillMatchCandidateResponse>>;
+    public listVendorBillMatchCandidates(invoiceEventId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<VendorBillMatchCandidateResponse>>;
+    public listVendorBillMatchCandidates(invoiceEventId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<VendorBillMatchCandidateResponse>>>;
+    public listVendorBillMatchCandidates(invoiceEventId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<VendorBillMatchCandidateResponse>>>;
     public listVendorBillMatchCandidates(invoiceEventId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (invoiceEventId === null || invoiceEventId === undefined) {
             throw new Error('Required parameter invoiceEventId was null or undefined when calling listVendorBillMatchCandidates.');
@@ -282,7 +282,7 @@ export class VendorBillAPIService extends BaseService {
 
         let localVarPath = `/v1/accounting/vendor-bills/match-candidates/${this.configuration.encodeParam({name: "invoiceEventId", value: invoiceEventId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<VendorBillMatchCandidateResponse>('get', `${basePath}${localVarPath}`,
+        return this.httpClient.request<Array<VendorBillMatchCandidateResponse>>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,

@@ -1,6 +1,7 @@
 export * from './appointmentAssignments.service';
 export * from './appointmentsAPI.service';
 export * from './conflictOverrideAPI.service';
+export * from './mechanicSkillBulkIngestAPI.service';
 export * from './mechanicSkillsAPI.service';
 export * from './scheduleAPI.service';
 export * from './shopAudit.service';

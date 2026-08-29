@@ -110,9 +110,9 @@ export class CycleCountQueryService extends BaseService {
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public listCycleCountAuditorTasks(auditorId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<CycleCountTaskResponse>;
-    public listCycleCountAuditorTasks(auditorId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<CycleCountTaskResponse>>;
-    public listCycleCountAuditorTasks(auditorId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<CycleCountTaskResponse>>;
+    public listCycleCountAuditorTasks(auditorId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<CycleCountTaskResponse>>;
+    public listCycleCountAuditorTasks(auditorId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<CycleCountTaskResponse>>>;
+    public listCycleCountAuditorTasks(auditorId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<CycleCountTaskResponse>>>;
     public listCycleCountAuditorTasks(auditorId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (auditorId === null || auditorId === undefined) {
             throw new Error('Required parameter auditorId was null or undefined when calling listCycleCountAuditorTasks.');
@@ -148,7 +148,7 @@ export class CycleCountQueryService extends BaseService {
 
         let localVarPath = `/v1/inventory/cycleCount/auditor/${this.configuration.encodeParam({name: "auditorId", value: auditorId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/tasks`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<CycleCountTaskResponse>('get', `${basePath}${localVarPath}`,
+        return this.httpClient.request<Array<CycleCountTaskResponse>>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,
@@ -170,9 +170,9 @@ export class CycleCountQueryService extends BaseService {
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public listCycleCountHistory(taskId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<CountEntryResponse>;
-    public listCycleCountHistory(taskId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<CountEntryResponse>>;
-    public listCycleCountHistory(taskId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<CountEntryResponse>>;
+    public listCycleCountHistory(taskId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<CountEntryResponse>>;
+    public listCycleCountHistory(taskId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<CountEntryResponse>>>;
+    public listCycleCountHistory(taskId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<CountEntryResponse>>>;
     public listCycleCountHistory(taskId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (taskId === null || taskId === undefined) {
             throw new Error('Required parameter taskId was null or undefined when calling listCycleCountHistory.');
@@ -208,7 +208,7 @@ export class CycleCountQueryService extends BaseService {
 
         let localVarPath = `/v1/inventory/cycleCount/task/${this.configuration.encodeParam({name: "taskId", value: taskId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/history`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<CountEntryResponse>('get', `${basePath}${localVarPath}`,
+        return this.httpClient.request<Array<CountEntryResponse>>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,

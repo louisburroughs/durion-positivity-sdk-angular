@@ -48,9 +48,9 @@ export class ItemCostAPIService extends BaseService {
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public getItemCostAuditHistory(itemId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ItemCostAuditDto>;
-    public getItemCostAuditHistory(itemId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ItemCostAuditDto>>;
-    public getItemCostAuditHistory(itemId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ItemCostAuditDto>>;
+    public getItemCostAuditHistory(itemId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<ItemCostAuditDto>>;
+    public getItemCostAuditHistory(itemId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<ItemCostAuditDto>>>;
+    public getItemCostAuditHistory(itemId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<ItemCostAuditDto>>>;
     public getItemCostAuditHistory(itemId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (itemId === null || itemId === undefined) {
             throw new Error('Required parameter itemId was null or undefined when calling getItemCostAuditHistory.');
@@ -86,7 +86,7 @@ export class ItemCostAPIService extends BaseService {
 
         let localVarPath = `/v1/products/items/${this.configuration.encodeParam({name: "itemId", value: itemId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/costs/audit`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<ItemCostAuditDto>('get', `${basePath}${localVarPath}`,
+        return this.httpClient.request<Array<ItemCostAuditDto>>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,

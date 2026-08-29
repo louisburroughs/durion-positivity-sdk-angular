@@ -321,9 +321,9 @@ export class PriceBookAPIService extends BaseService {
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public listPriceBookRules(priceBookId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PriceBookRuleDto>;
-    public listPriceBookRules(priceBookId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PriceBookRuleDto>>;
-    public listPriceBookRules(priceBookId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PriceBookRuleDto>>;
+    public listPriceBookRules(priceBookId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<PriceBookRuleDto>>;
+    public listPriceBookRules(priceBookId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<PriceBookRuleDto>>>;
+    public listPriceBookRules(priceBookId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<PriceBookRuleDto>>>;
     public listPriceBookRules(priceBookId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (priceBookId === null || priceBookId === undefined) {
             throw new Error('Required parameter priceBookId was null or undefined when calling listPriceBookRules.');
@@ -359,7 +359,7 @@ export class PriceBookAPIService extends BaseService {
 
         let localVarPath = `/v1/products/price-books/${this.configuration.encodeParam({name: "priceBookId", value: priceBookId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/rules`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<PriceBookRuleDto>('get', `${basePath}${localVarPath}`,
+        return this.httpClient.request<Array<PriceBookRuleDto>>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,

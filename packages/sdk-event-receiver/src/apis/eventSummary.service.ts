@@ -43,9 +43,9 @@ export class EventSummaryService extends BaseService {
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public getEventSummaryLastDay(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<EventSummaryResponse>;
-    public getEventSummaryLastDay(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<EventSummaryResponse>>;
-    public getEventSummaryLastDay(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<EventSummaryResponse>>;
+    public getEventSummaryLastDay(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<Array<EventSummaryResponse>>;
+    public getEventSummaryLastDay(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<EventSummaryResponse>>>;
+    public getEventSummaryLastDay(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<EventSummaryResponse>>>;
     public getEventSummaryLastDay(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarHeaders = this.defaultHeaders;
@@ -75,7 +75,7 @@ export class EventSummaryService extends BaseService {
 
         let localVarPath = `/v1/events/summary/lastDay`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<EventSummaryResponse>('get', `${basePath}${localVarPath}`,
+        return this.httpClient.request<Array<EventSummaryResponse>>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,
@@ -96,9 +96,9 @@ export class EventSummaryService extends BaseService {
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public getEventSummaryLastHour(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<EventSummaryResponse>;
-    public getEventSummaryLastHour(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<EventSummaryResponse>>;
-    public getEventSummaryLastHour(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<EventSummaryResponse>>;
+    public getEventSummaryLastHour(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<Array<EventSummaryResponse>>;
+    public getEventSummaryLastHour(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<EventSummaryResponse>>>;
+    public getEventSummaryLastHour(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<EventSummaryResponse>>>;
     public getEventSummaryLastHour(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarHeaders = this.defaultHeaders;
@@ -128,7 +128,7 @@ export class EventSummaryService extends BaseService {
 
         let localVarPath = `/v1/events/summary/lastHour`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<EventSummaryResponse>('get', `${basePath}${localVarPath}`,
+        return this.httpClient.request<Array<EventSummaryResponse>>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,
@@ -149,9 +149,9 @@ export class EventSummaryService extends BaseService {
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public getEventSummaryLastWeek(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<EventSummaryResponse>;
-    public getEventSummaryLastWeek(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<EventSummaryResponse>>;
-    public getEventSummaryLastWeek(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<EventSummaryResponse>>;
+    public getEventSummaryLastWeek(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<Array<EventSummaryResponse>>;
+    public getEventSummaryLastWeek(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<EventSummaryResponse>>>;
+    public getEventSummaryLastWeek(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<EventSummaryResponse>>>;
     public getEventSummaryLastWeek(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarHeaders = this.defaultHeaders;
@@ -181,7 +181,7 @@ export class EventSummaryService extends BaseService {
 
         let localVarPath = `/v1/events/summary/lastWeek`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<EventSummaryResponse>('get', `${basePath}${localVarPath}`,
+        return this.httpClient.request<Array<EventSummaryResponse>>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,

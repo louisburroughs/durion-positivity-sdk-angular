@@ -129,9 +129,9 @@ export class WorkorderPartAdjustmentsService extends BaseService {
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public getPartAdjustmentHistory(workorderId: string, partId?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<WorkorderPartAdjustmentEventResponse>;
-    public getPartAdjustmentHistory(workorderId: string, partId?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<WorkorderPartAdjustmentEventResponse>>;
-    public getPartAdjustmentHistory(workorderId: string, partId?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<WorkorderPartAdjustmentEventResponse>>;
+    public getPartAdjustmentHistory(workorderId: string, partId?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<WorkorderPartAdjustmentEventResponse>>;
+    public getPartAdjustmentHistory(workorderId: string, partId?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<WorkorderPartAdjustmentEventResponse>>>;
+    public getPartAdjustmentHistory(workorderId: string, partId?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<WorkorderPartAdjustmentEventResponse>>>;
     public getPartAdjustmentHistory(workorderId: string, partId?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (workorderId === null || workorderId === undefined) {
             throw new Error('Required parameter workorderId was null or undefined when calling getPartAdjustmentHistory.');
@@ -178,7 +178,7 @@ export class WorkorderPartAdjustmentsService extends BaseService {
 
         let localVarPath = `/v1/workorders/${this.configuration.encodeParam({name: "workorderId", value: workorderId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/parts/adjustments`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<WorkorderPartAdjustmentEventResponse>('get', `${basePath}${localVarPath}`,
+        return this.httpClient.request<Array<WorkorderPartAdjustmentEventResponse>>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 params: localVarQueryParameters.toHttpParams(),

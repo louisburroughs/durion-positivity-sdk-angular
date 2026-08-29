@@ -35,7 +35,16 @@ export enum BulkLoadJobCreateRequestDomainTypeEnum {
     Person = 'PERSON',
     BasePrice = 'BASE_PRICE',
     Vehicle = 'VEHICLE',
-    VehicleFitment = 'VEHICLE_FITMENT'
+    VehicleFitment = 'VEHICLE_FITMENT',
+    StorageLocation = 'STORAGE_LOCATION',
+    Bay = 'BAY',
+    MobileUnit = 'MOBILE_UNIT',
+    StaffingAssignment = 'STAFFING_ASSIGNMENT',
+    PutawayRule = 'PUTAWAY_RULE',
+    CycleCountPlan = 'CYCLE_COUNT_PLAN',
+    SecurityUser = 'SECURITY_USER',
+    UserPersonLink = 'USER_PERSON_LINK',
+    MechanicSkill = 'MECHANIC_SKILL'
 };
 
 
