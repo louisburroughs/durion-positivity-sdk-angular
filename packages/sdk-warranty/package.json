@@ -1,6 +1,6 @@
 {
   "name": "@durion-sdk/warranty",
-  "version": "0.2.0-alpha",
+  "version": "0.5.0-alpha",
   "description": "OpenAPI client for @durion-sdk/warranty",
   "author": "OpenAPI-Generator Contributors",
   "repository": {

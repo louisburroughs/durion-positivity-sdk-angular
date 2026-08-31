@@ -17,7 +17,11 @@ import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
 // @ts-ignore
+import { PagedResponseTimeEntrySummary } from '../src/models/pagedResponseTimeEntrySummary';
+// @ts-ignore
 import { TimeEntryDecisionBatchRequest } from '../src/models/timeEntryDecisionBatchRequest';
+// @ts-ignore
+import { TimeEntrySummary } from '../src/models/timeEntrySummary';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
@@ -99,6 +103,208 @@ export class TimeEntryApprovalAPIService extends BaseService {
             {
                 context: localVarHttpContext,
                 body: timeEntryDecisionBatchRequest,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Get One Attendance Time Entry
+     * Returns a single attendance time entry by id, with its clock-in, clock-out, break minutes, status and approval decision. Use this tool for the detail view opened from an approvals-queue row; do not use listTimeEntries, which pages over many entries, and do not use getTimeEntryAdjustments, which returns the proposed corrections attached to an entry rather than the entry itself. Preconditions: an entry must exist for the supplied timeEntryId. Required inputs: timeEntryId (UUID) path parameter; timeZone is optional and defaults to UTC, affecting only the derived workDate. Emits a PEOPLE_TIME_ENTRY_GET audit event but changes no state. Returns 404 when no entry has that id, and 400 when timeZone is not a known zone id. 
+     * @endpoint get /v1/people/timeEntries/{timeEntryId}
+     * @param timeEntryId 
+     * @param timeZone Zone the derived workDate is resolved in; defaults to UTC
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public getTimeEntry(timeEntryId: string, timeZone?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<TimeEntrySummary>;
+    public getTimeEntry(timeEntryId: string, timeZone?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<TimeEntrySummary>>;
+    public getTimeEntry(timeEntryId: string, timeZone?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<TimeEntrySummary>>;
+    public getTimeEntry(timeEntryId: string, timeZone?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (timeEntryId === null || timeEntryId === undefined) {
+            throw new Error('Required parameter timeEntryId was null or undefined when calling getTimeEntry.');
+        }
+
+        let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'timeZone',
+            <any>timeZone,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/people/timeEntries/${this.configuration.encodeParam({name: "timeEntryId", value: timeEntryId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<TimeEntrySummary>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                params: localVarQueryParameters.toHttpParams(),
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * List Attendance Time Entries For Approval
+     * Returns a page of attendance time entries — clock-in, clock-out and the break minutes inside that window — with each entry\&#39;s status and approval decision, oldest submission first. Use this tool to build the approvals queue or to find the timeEntryId an approve or reject call needs; do not use listWorkexecWorkSessions, which returns time a technician spent on a workorder task. A time entry is attendance only and carries no workorder reference, so this endpoint cannot answer how long a job took. Preconditions: none; a page with an empty items list is returned rather than an error when nothing matches. Required inputs: none are mandatory. status, workDate, employeeId and locationId each narrow the result and are unfiltered when omitted; workDate is a calendar day resolved in timeZone, which defaults to UTC; page defaults to 0 and size to 20 with a maximum of 100. Emits a PEOPLE_TIME_ENTRY_LIST audit event but changes no state. Returns 200 with the page envelope, and 400 when timeZone is not a known zone id or the paging parameters are out of range. 
+     * @endpoint get /v1/people/timeEntries
+     * @param status Keep only entries in this status; omit for every status
+     * @param workDate Calendar day of the clock-in, resolved in timeZone
+     * @param timeZone Zone whose calendar day workDate names; defaults to UTC
+     * @param employeeId Keep only this person\&#39;s entries
+     * @param locationId Keep only entries clocked at this location
+     * @param page Zero-based page index
+     * @param size Page size, up to 100
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public listTimeEntries(status?: 'DRAFT' | 'SUBMITTED' | 'PENDING_APPROVAL' | 'APPROVED' | 'REJECTED', workDate?: string, timeZone?: string, employeeId?: string, locationId?: string, page?: number, size?: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PagedResponseTimeEntrySummary>;
+    public listTimeEntries(status?: 'DRAFT' | 'SUBMITTED' | 'PENDING_APPROVAL' | 'APPROVED' | 'REJECTED', workDate?: string, timeZone?: string, employeeId?: string, locationId?: string, page?: number, size?: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PagedResponseTimeEntrySummary>>;
+    public listTimeEntries(status?: 'DRAFT' | 'SUBMITTED' | 'PENDING_APPROVAL' | 'APPROVED' | 'REJECTED', workDate?: string, timeZone?: string, employeeId?: string, locationId?: string, page?: number, size?: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PagedResponseTimeEntrySummary>>;
+    public listTimeEntries(status?: 'DRAFT' | 'SUBMITTED' | 'PENDING_APPROVAL' | 'APPROVED' | 'REJECTED', workDate?: string, timeZone?: string, employeeId?: string, locationId?: string, page?: number, size?: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+
+        let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'status',
+            <any>status,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'workDate',
+            <any>workDate,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'timeZone',
+            <any>timeZone,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'employeeId',
+            <any>employeeId,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'locationId',
+            <any>locationId,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'page',
+            <any>page,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'size',
+            <any>size,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/people/timeEntries`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<PagedResponseTimeEntrySummary>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                params: localVarQueryParameters.toHttpParams(),
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,

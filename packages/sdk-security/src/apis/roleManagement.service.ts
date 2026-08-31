@@ -25,6 +25,8 @@ import { RoleAssignmentDto } from '../src/models/roleAssignmentDto';
 // @ts-ignore
 import { RoleAssignmentRequest } from '../src/models/roleAssignmentRequest';
 // @ts-ignore
+import { RoleCreateRequest } from '../src/models/roleCreateRequest';
+// @ts-ignore
 import { RoleDefaultPermissionsResponse } from '../src/models/roleDefaultPermissionsResponse';
 // @ts-ignore
 import { RoleDto } from '../src/models/roleDto';
@@ -32,6 +34,10 @@ import { RoleDto } from '../src/models/roleDto';
 import { RolePermissionGrantRequest } from '../src/models/rolePermissionGrantRequest';
 // @ts-ignore
 import { RolePermissionsRequest } from '../src/models/rolePermissionsRequest';
+// @ts-ignore
+import { RolePersonasResponse } from '../src/models/rolePersonasResponse';
+// @ts-ignore
+import { RoleUpdateRequest } from '../src/models/roleUpdateRequest';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
@@ -212,17 +218,17 @@ export class RoleManagementService extends BaseService {
      * Create a New Role
      * Creates a new role with the given name and optional description; the role starts with no permissions and no user assignments. Use this tool to define a new role; do not use createRoleAssignment, which links an existing role to a user, and do not use updateRolePermissions, which changes an existing role\&#39;s grants. Preconditions: the caller must hold security:role:create and no role with the same name (compared case-insensitively) may already exist. Required inputs: name, non-blank; description is optional. Emits a SECURITY_ROLE_CREATE event and records the creating actor and timestamp. Returns 400 when name is missing or blank, and 409 with DUPLICATE_ROLE_NAME when the name is already taken regardless of case. 
      * @endpoint post /v1/roles
-     * @param requestBody Name and optional description of the role to create.
+     * @param roleCreateRequest Name, optional description, and optional MCP persona metadata.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public createRole(requestBody: { [key: string]: string; }, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<RoleDto>;
-    public createRole(requestBody: { [key: string]: string; }, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<RoleDto>>;
-    public createRole(requestBody: { [key: string]: string; }, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<RoleDto>>;
-    public createRole(requestBody: { [key: string]: string; }, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
-        if (requestBody === null || requestBody === undefined) {
-            throw new Error('Required parameter requestBody was null or undefined when calling createRole.');
+    public createRole(roleCreateRequest: RoleCreateRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<RoleDto>;
+    public createRole(roleCreateRequest: RoleCreateRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<RoleDto>>;
+    public createRole(roleCreateRequest: RoleCreateRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<RoleDto>>;
+    public createRole(roleCreateRequest: RoleCreateRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (roleCreateRequest === null || roleCreateRequest === undefined) {
+            throw new Error('Required parameter roleCreateRequest was null or undefined when calling createRole.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -267,7 +273,7 @@ export class RoleManagementService extends BaseService {
         return this.httpClient.request<RoleDto>('post', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
-                body: requestBody,
+                body: roleCreateRequest,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,
@@ -576,6 +582,62 @@ export class RoleManagementService extends BaseService {
         let localVarPath = `/v1/roles/${this.configuration.encodeParam({name: "role", value: role, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/default-permissions`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<RoleDefaultPermissionsResponse>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Get MCP Persona Metadata for Every Role
+     * Returns one row per role with its MCP persona slots, resolution rank, and eligibility flag, ordered by rank then name, plus the timestamp the snapshot was assembled. Use this tool to derive assistant personas and their priority order from role data, as pos-mcp-server does; do not use getAllRoles, which returns the full role graph including every permission grant and is far more expensive for this purpose. Preconditions: the caller must hold security:role:view. Required inputs: none. No events are emitted and no state changes; this is a read-only projection. Roles that are excluded from persona resolution are included and flagged rather than omitted, so a consumer can distinguish a role excluded by design from one it has never seen. Returns 200 with every role and never 404: an environment holding no roles yields an empty list rather than an error, so a consumer cannot mistake \&quot;not provisioned yet\&quot; for \&quot;endpoint missing\&quot;. 
+     * @endpoint get /v1/roles/personas
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public getRolePersonas(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<RolePersonasResponse>;
+    public getRolePersonas(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<RolePersonasResponse>>;
+    public getRolePersonas(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<RolePersonasResponse>>;
+    public getRolePersonas(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/roles/personas`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<RolePersonasResponse>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,
@@ -978,6 +1040,80 @@ export class RoleManagementService extends BaseService {
         return this.httpClient.request<any>('delete', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Update a Role\&#39;s Description and Persona Metadata
+     * Replaces a role\&#39;s description and its MCP persona metadata: the persona title, focus, and tone slots, the persona rank, and whether the role participates in persona resolution at all. Use this tool to correct or rank a role\&#39;s assistant persona; do not use updateRolePermissions, which changes the role\&#39;s permission grants, and do not use it to rename a role — the name keys authority resolution and permission grants and is not updatable here. Preconditions: the caller must hold security:role:edit and the role id must exist. Required inputs: role id as a path parameter. Every body field is optional, but an omitted field clears the stored value rather than leaving it unchanged, which is how a persona slot is returned to its derived default. Persona slots must describe the role rather than instruct the assistant: single line, within the length cap, and free of imperative control verbs. Emits a SECURITY_ROLE_UPDATE event and records the modifying actor and timestamp. Returns 400 when a persona slot fails validation and 404 when no role has that id. 
+     * @endpoint put /v1/roles/{id}
+     * @param id 
+     * @param roleUpdateRequest Replacement description and MCP persona metadata.
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public updateRole(id: string, roleUpdateRequest: RoleUpdateRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<RoleDto>;
+    public updateRole(id: string, roleUpdateRequest: RoleUpdateRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<RoleDto>>;
+    public updateRole(id: string, roleUpdateRequest: RoleUpdateRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<RoleDto>>;
+    public updateRole(id: string, roleUpdateRequest: RoleUpdateRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (id === null || id === undefined) {
+            throw new Error('Required parameter id was null or undefined when calling updateRole.');
+        }
+        if (roleUpdateRequest === null || roleUpdateRequest === undefined) {
+            throw new Error('Required parameter roleUpdateRequest was null or undefined when calling updateRole.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/roles/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<RoleDto>('put', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                body: roleUpdateRequest,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,

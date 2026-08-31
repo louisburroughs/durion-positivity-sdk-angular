@@ -24,7 +24,7 @@ export interface AgedReceivablesReport {
      */
     generatedAt: string;
     /**
-     * Per-customer aging rows ordered by customer name; empty when no open receivables exist
+     * Per-customer aging rows ordered by customer id; empty when no open receivables exist
      */
     rows: Array<AgedReceivablesRow>;
     totals: AgingSummary;

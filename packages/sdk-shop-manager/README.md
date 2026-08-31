@@ -1,4 +1,4 @@
-# @durion-sdk/shop-manager@0.2.0-alpha
+# @durion-sdk/shop-manager@0.5.0-alpha
 
 Shop Manager service for managing shop operations and staff
 
@@ -24,7 +24,7 @@ Navigate to the folder of your consuming project and run one of next commands.
 _published:_
 
 ```console
-npm install @durion-sdk/shop-manager@0.2.0-alpha --save
+npm install @durion-sdk/shop-manager@0.5.0-alpha --save
 ```
 
 _without publishing (not recommended):_

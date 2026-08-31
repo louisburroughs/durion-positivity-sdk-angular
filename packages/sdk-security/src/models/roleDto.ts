@@ -39,6 +39,14 @@ export interface RoleDto {
      */
     lastModifiedBy?: string;
     /**
+     * Whether the role participates in MCP persona resolution
+     */
+    mcpPersonaEligible?: boolean;
+    /**
+     * MCP persona resolution priority, lowest first; null leaves the role unranked
+     */
+    mcpPersonaRank?: number;
+    /**
      * Role name
      */
     name: string;
@@ -46,6 +54,18 @@ export interface RoleDto {
      * Permissions granted to the role
      */
     permissions?: Set<PermissionDto>;
+    /**
+     * MCP persona slot: what the caller works on
+     */
+    personaFocus?: string;
+    /**
+     * MCP persona slot: who the caller is, in the second person (#1613)
+     */
+    personaTitle?: string;
+    /**
+     * MCP persona slot: how to speak to the caller
+     */
+    personaTone?: string;
 }
 
 function isOptionalRoleDtoPropertyOfType(
@@ -87,9 +107,9 @@ export function instanceOfRoleDto(value: object): value is RoleDto {
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createRoleDtoPropertyNames('id', 'name', );
-    const optionalStringProperties = createRoleDtoOptionalProperties({ name: 'createdAt', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'description', nullable: false }, { name: 'id', nullable: false }, { name: 'lastModifiedAt', nullable: false }, { name: 'lastModifiedBy', nullable: false }, { name: 'name', nullable: false }, );
-    const optionalNumberProperties = createRoleDtoOptionalProperties();
-    const optionalBooleanProperties = createRoleDtoOptionalProperties();
+    const optionalStringProperties = createRoleDtoOptionalProperties({ name: 'createdAt', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'description', nullable: false }, { name: 'id', nullable: false }, { name: 'lastModifiedAt', nullable: false }, { name: 'lastModifiedBy', nullable: false }, { name: 'name', nullable: false }, { name: 'personaFocus', nullable: false }, { name: 'personaTitle', nullable: false }, { name: 'personaTone', nullable: false }, );
+    const optionalNumberProperties = createRoleDtoOptionalProperties({ name: 'mcpPersonaRank', nullable: false }, );
+    const optionalBooleanProperties = createRoleDtoOptionalProperties({ name: 'mcpPersonaEligible', nullable: false }, );
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
         && optionalStringProperties.every((property) => isOptionalRoleDtoPropertyOfType(_v, property.name, 'string', property.nullable))
