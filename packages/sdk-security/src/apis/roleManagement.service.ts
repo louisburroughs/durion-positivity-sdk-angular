@@ -652,7 +652,7 @@ export class RoleManagementService extends BaseService {
 
     /**
      * Get User Permissions at Legacy Path
-     * Returns the union of permissions granted through a user\&#39;s currently effective role assignments, served at the legacy /permissions/user/{userId} path. Use this tool only for legacy callers; use getUserPermissions instead, which returns the same data at the canonical /v1/users/{userId}/permissions path. Preconditions: the caller must hold security:permission:view and the user must exist. Required inputs: userId (UUID) as a path parameter. No events are emitted and no state changes; this is a read-only projection. Returns 404 when the user does not exist. 
+     * Returns the union of permissions granted through a user\&#39;s currently effective role assignments, served at the legacy /permissions/user/{userId} path. Use this tool only for legacy callers; use getUserPermissions instead, which returns the same data at the canonical /v1/users/{userId}/permissions path. Preconditions: the user must exist, and the caller must either hold security:permission:view or be asking about themselves. Required inputs: userId (UUID) as a path parameter. No events are emitted and no state changes; this is a read-only projection. Returns 403 when the caller is asking about another user without security:permission:view, and 404 when the user does not exist. 
      * @endpoint get /v1/roles/permissions/user/{userId}
      * @param userId 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.

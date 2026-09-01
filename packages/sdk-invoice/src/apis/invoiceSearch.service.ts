@@ -122,10 +122,14 @@ export class InvoiceSearchService extends BaseService {
     }
 
     /**
-     * Search Invoices by Free Text
-     * Searches invoices by a free-text term matched against the invoice number, the customer name (resolved via the customer service), or the workorder number, returning a page of finder rows. Use this tool to locate an invoice when its id is unknown; use getInvoice instead once the invoiceId is known, and searchInvoiceLines for line-level warranty correlation. Preconditions: none — but a blank or missing q short-circuits to an empty page rather than listing all invoices. Required inputs: q (free-text term) plus optional page, size and sort parameters; size defaults to 25, is hard-capped at 50, and the default sort is createdAt descending. Emits an INVOICE_SEARCH audit event; no state changes — this is a read-only projection. Returns 400 when pagination parameters are malformed. 
+     * Search Invoices by Free Text and Structured Filters
+     * Searches invoices by a free-text term matched against the invoice number, the customer name (resolved via the customer service), or the workorder number, returning a page of finder rows. Combinable with structured filters — status, an issued-date window, and customerId — each independently optional and ANDed against the free-text match and against each other. Use this tool to locate an invoice when its id is unknown; use getInvoice instead once the invoiceId is known, and searchInvoiceLines for line-level warranty correlation. Preconditions: none — but a blank/missing q with every structured filter also absent short-circuits to an empty page rather than listing all invoices; a blank q with at least one structured filter set performs a filtered listing instead. Required inputs: none are individually required — q, status, issuedFrom, issuedTo and customerId are all optional and combinable, plus optional page, size and sort parameters; size defaults to 25, is hard-capped at 50, and the default sort is createdAt descending. status must be one of the InvoiceStatus values (DRAFT, FINALIZED, POSTED, ERROR, CANCELLED); an unrecognized value returns 400 rather than an empty page. issuedFrom/issuedTo bound Invoice.finalizedAt (the timestamp an invoice was finalized/issued to the customer, inclusive on both ends) — a DRAFT invoice has no finalizedAt and is excluded whenever either bound is set. Emits an INVOICE_SEARCH audit event; no state changes — this is a read-only projection. Returns 400 when pagination parameters are malformed, when status is not a recognized InvoiceStatus value, or when issuedTo is before issuedFrom. 
      * @endpoint get /v1/invoices/search
      * @param q Free-text query matching invoice number, customer name, or workorder number (optional)
+     * @param status Exact invoice status match (optional)
+     * @param issuedFrom Issued-date window start, inclusive (YYYY-MM-DD); evaluated against Invoice.finalizedAt (optional)
+     * @param issuedTo Issued-date window end, inclusive (YYYY-MM-DD); evaluated against Invoice.finalizedAt (optional)
+     * @param customerId Exact customer (party) id match (optional)
      * @param page Zero-based page index (0..N)
      * @param size The size of the page to be returned
      * @param sort Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
@@ -133,10 +137,10 @@ export class InvoiceSearchService extends BaseService {
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public searchInvoices(q?: string, page?: number, size?: number, sort?: Array<string>, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PageInvoiceSearchResult>;
-    public searchInvoices(q?: string, page?: number, size?: number, sort?: Array<string>, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PageInvoiceSearchResult>>;
-    public searchInvoices(q?: string, page?: number, size?: number, sort?: Array<string>, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PageInvoiceSearchResult>>;
-    public searchInvoices(q?: string, page?: number, size?: number, sort?: Array<string>, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public searchInvoices(q?: string, status?: 'DRAFT' | 'FINALIZED' | 'POSTED' | 'ERROR' | 'CANCELLED', issuedFrom?: string, issuedTo?: string, customerId?: string, page?: number, size?: number, sort?: Array<string>, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PageInvoiceSearchResult>;
+    public searchInvoices(q?: string, status?: 'DRAFT' | 'FINALIZED' | 'POSTED' | 'ERROR' | 'CANCELLED', issuedFrom?: string, issuedTo?: string, customerId?: string, page?: number, size?: number, sort?: Array<string>, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PageInvoiceSearchResult>>;
+    public searchInvoices(q?: string, status?: 'DRAFT' | 'FINALIZED' | 'POSTED' | 'ERROR' | 'CANCELLED', issuedFrom?: string, issuedTo?: string, customerId?: string, page?: number, size?: number, sort?: Array<string>, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PageInvoiceSearchResult>>;
+    public searchInvoices(q?: string, status?: 'DRAFT' | 'FINALIZED' | 'POSTED' | 'ERROR' | 'CANCELLED', issuedFrom?: string, issuedTo?: string, customerId?: string, page?: number, size?: number, sort?: Array<string>, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
 
@@ -144,6 +148,42 @@ export class InvoiceSearchService extends BaseService {
             localVarQueryParameters,
             'q',
             <any>q,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'status',
+            <any>status,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'issuedFrom',
+            <any>issuedFrom,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'issuedTo',
+            <any>issuedTo,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'customerId',
+            <any>customerId,
             QueryParamStyle.Form,
             true,
         );

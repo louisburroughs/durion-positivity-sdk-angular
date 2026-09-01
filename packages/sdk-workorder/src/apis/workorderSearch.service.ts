@@ -111,11 +111,15 @@ export class WorkorderSearchService extends BaseService {
 
     /**
      * Search Workorders With Filters
-     * Searches workorders by free-text query against customer display names or a literal workorder id, optionally narrowed by exact customerId and vehicleId filters, returning a page of rows enriched with customer name, vehicle label, and VIN. Use this tool when finding workorders by customer or id fragments; use listWorkorders instead for an unfiltered listing, and resolveWorkorderNumbers to map known ids to human numbers. Preconditions: customer-name matching depends on the local customer replica; at most 10 name-matched customers are considered per query. Required inputs: none are mandatory — q defaults to an empty string and is treated as a workorder id when it parses as a UUID; page size defaults to 25. Emits a WORKORDER_SEARCH audit event; no workorder state changes — this is a read-only projection. Returns 200 with an empty page when nothing matches; no 404 is produced for empty results. 
+     * Searches workorders by free-text query against customer display names or a literal workorder id, optionally narrowed by exact customerId and vehicleId filters, an exact status, a createdAt date window (createdFrom/createdTo), and/or a technicianId, returning a page of rows enriched with customer name, vehicle label, and VIN. All filters are combinable with each other and with q. status must be an exact WorkorderStatus value (DRAFT, APPROVED, ASSIGNED, WORK_IN_PROGRESS, AWAITING_PARTS, AWAITING_APPROVAL, READY_FOR_PICKUP, COMPLETED, CANCELLED); an unrecognized value is rejected with 400 rather than silently matching nothing. There is no \&quot;open\&quot; alias — an \&quot;open work orders\&quot; query loops this call once per open status (APPROVED, ASSIGNED, WORK_IN_PROGRESS, AWAITING_PARTS, AWAITING_APPROVAL, READY_FOR_PICKUP), each call still fully server-side and combinable with customerId etc., the same way a caller loops a date window over several periods for other endpoints in this API. technicianId matches any technician who has logged a labor entry (WorkorderLaborEntry.technicianId) on the workorder — the same attribution basis as getTechnicianLaborAnalytics\&#39;s billedHours column — not the workorder\&#39;s currently assigned technician (TechnicianAssignment); a workorder assigned to one technician but worked by another surfaces under the working technician\&#39;s id. createdFrom/createdTo are inclusive calendar-date bounds (YYYY-MM-DD) on the workorder\&#39;s createdAt timestamp, evaluated in UTC. Use this tool when finding workorders by customer, id fragments, status, date, or technician; use listWorkorders instead for an unfiltered listing, and resolveWorkorderNumbers to map known ids to human numbers. Preconditions: customer-name matching depends on the local customer replica; at most 10 name-matched customers are considered per query. Required inputs: none are mandatory — q defaults to an empty string and is treated as a workorder id when it parses as a UUID; page size defaults to 25 and is hard-capped at 100 (a larger request is silently clamped, visible in the response\&#39;s own size/totalElements). Emits a WORKORDER_SEARCH audit event; no workorder state changes — this is a read-only projection. Returns 200 with an empty page when nothing matches, 400 when status is not a valid WorkorderStatus value, and no 404 for empty results. 
      * @endpoint get /v1/workorders/search
      * @param q Free-text query matching customer name or workorder id (optional)
      * @param customerId Exact customer id filter, combinable with q (optional)
      * @param vehicleId Exact vehicle id filter, combinable with q (optional)
+     * @param status Exact status filter (optional). Must be a real WorkorderStatus value; an unrecognized value returns 400. No \&quot;open\&quot; alias — loop this call once per open status to find open work orders.
+     * @param createdFrom Inclusive lower bound (YYYY-MM-DD, UTC) on the workorder\&#39;s createdAt (optional)
+     * @param createdTo Inclusive upper bound (YYYY-MM-DD, UTC) on the workorder\&#39;s createdAt (optional)
+     * @param technicianId Technician who logged a labor entry on the workorder (WorkorderLaborEntry.technicianId) — not the assigned technician (optional)
      * @param page Zero-based page index (0..N)
      * @param size The size of the page to be returned
      * @param sort Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
@@ -123,10 +127,10 @@ export class WorkorderSearchService extends BaseService {
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public searchWorkorders(q?: string, customerId?: string, vehicleId?: string, page?: number, size?: number, sort?: Array<string>, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PageWorkorderSearchResult>;
-    public searchWorkorders(q?: string, customerId?: string, vehicleId?: string, page?: number, size?: number, sort?: Array<string>, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PageWorkorderSearchResult>>;
-    public searchWorkorders(q?: string, customerId?: string, vehicleId?: string, page?: number, size?: number, sort?: Array<string>, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PageWorkorderSearchResult>>;
-    public searchWorkorders(q?: string, customerId?: string, vehicleId?: string, page?: number, size?: number, sort?: Array<string>, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public searchWorkorders(q?: string, customerId?: string, vehicleId?: string, status?: 'DRAFT' | 'APPROVED' | 'ASSIGNED' | 'WORK_IN_PROGRESS' | 'AWAITING_PARTS' | 'AWAITING_APPROVAL' | 'READY_FOR_PICKUP' | 'COMPLETED' | 'CANCELLED', createdFrom?: string, createdTo?: string, technicianId?: string, page?: number, size?: number, sort?: Array<string>, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PageWorkorderSearchResult>;
+    public searchWorkorders(q?: string, customerId?: string, vehicleId?: string, status?: 'DRAFT' | 'APPROVED' | 'ASSIGNED' | 'WORK_IN_PROGRESS' | 'AWAITING_PARTS' | 'AWAITING_APPROVAL' | 'READY_FOR_PICKUP' | 'COMPLETED' | 'CANCELLED', createdFrom?: string, createdTo?: string, technicianId?: string, page?: number, size?: number, sort?: Array<string>, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PageWorkorderSearchResult>>;
+    public searchWorkorders(q?: string, customerId?: string, vehicleId?: string, status?: 'DRAFT' | 'APPROVED' | 'ASSIGNED' | 'WORK_IN_PROGRESS' | 'AWAITING_PARTS' | 'AWAITING_APPROVAL' | 'READY_FOR_PICKUP' | 'COMPLETED' | 'CANCELLED', createdFrom?: string, createdTo?: string, technicianId?: string, page?: number, size?: number, sort?: Array<string>, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PageWorkorderSearchResult>>;
+    public searchWorkorders(q?: string, customerId?: string, vehicleId?: string, status?: 'DRAFT' | 'APPROVED' | 'ASSIGNED' | 'WORK_IN_PROGRESS' | 'AWAITING_PARTS' | 'AWAITING_APPROVAL' | 'READY_FOR_PICKUP' | 'COMPLETED' | 'CANCELLED', createdFrom?: string, createdTo?: string, technicianId?: string, page?: number, size?: number, sort?: Array<string>, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
 
@@ -152,6 +156,42 @@ export class WorkorderSearchService extends BaseService {
             localVarQueryParameters,
             'vehicleId',
             <any>vehicleId,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'status',
+            <any>status,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'createdFrom',
+            <any>createdFrom,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'createdTo',
+            <any>createdTo,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'technicianId',
+            <any>technicianId,
             QueryParamStyle.Form,
             true,
         );

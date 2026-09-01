@@ -1,6 +1,6 @@
 {
   "name": "@durion-sdk/people",
-  "version": "0.5.0-alpha",
+  "version": "0.7.0-alpha",
   "description": "OpenAPI client for @durion-sdk/people",
   "author": "OpenAPI-Generator Contributors",
   "repository": {

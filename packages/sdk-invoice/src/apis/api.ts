@@ -2,6 +2,7 @@ export * from './billingAuthorization.service';
 export * from './billingRules.service';
 export * from './depositCredits.service';
 export * from './invoice.service';
+export * from './invoiceAnalytics.service';
 export * from './invoiceArtifactController.service';
 export * from './invoiceArtifactDownloadController.service';
 export * from './invoiceSearch.service';

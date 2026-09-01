@@ -43,7 +43,7 @@ export class PaymentReversalService extends BaseService {
 
     /**
      * List Refunds for an Invoice
-     * Returns every refund record anchored to the invoice — refunds of captured payment intents and standalone invoice-anchored refunds alike — for warranty-settlement reconciliation. Use this tool to reconcile what has already been returned before issuing another refund; do not use refundPayment or createStandaloneInvoiceRefund, which create refunds rather than list them. Preconditions: the invoice must exist; the caller needs the invoice:manage authority. Required inputs: invoiceId (UUID) as a path parameter; there is no request body or filtering. Emits an INVOICE_REFUND_LIST audit event; no state changes — this is a read-only projection. Returns 404 when no invoice exists for the supplied id. 
+     * Returns every refund record anchored to the invoice — refunds of captured payment intents and standalone invoice-anchored refunds alike — for warranty-settlement reconciliation. Use this tool to reconcile what has already been returned before issuing another refund; do not use refundPayment or createStandaloneInvoiceRefund, which create refunds rather than list them. Preconditions: the invoice must exist; the caller needs the invoice:invoice:view authority. Required inputs: invoiceId (UUID) as a path parameter; there is no request body or filtering. Emits an INVOICE_REFUND_LIST audit event; no state changes — this is a read-only projection. Returns 404 when no invoice exists for the supplied id. 
      * @endpoint get /v1/invoices/{invoiceId}/refunds
      * @param invoiceId 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.

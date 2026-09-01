@@ -1,4 +1,4 @@
-# @durion-sdk/order@0.5.0-alpha
+# @durion-sdk/order@0.7.0-alpha
 
 API documentation for the Order service, accessible via the API Gateway.
 
@@ -24,7 +24,7 @@ Navigate to the folder of your consuming project and run one of next commands.
 _published:_
 
 ```console
-npm install @durion-sdk/order@0.5.0-alpha --save
+npm install @durion-sdk/order@0.7.0-alpha --save
 ```
 
 _without publishing (not recommended):_

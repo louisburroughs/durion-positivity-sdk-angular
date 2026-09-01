@@ -17,6 +17,8 @@ import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
 // @ts-ignore
+import { PagePaymentApplicationListRow } from '../src/models/pagePaymentApplicationListRow';
+// @ts-ignore
 import { PaymentApplicationRequest } from '../src/models/paymentApplicationRequest';
 // @ts-ignore
 import { PaymentApplicationResponse } from '../src/models/paymentApplicationResponse';
@@ -103,6 +105,131 @@ export class PaymentApplicationsService extends BaseService {
             {
                 context: localVarHttpContext,
                 body: paymentApplicationRequest,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * List Payment Applications By Applied Date
+     * Lists pos-accounting cash applications of customer payments to invoices whose applied date falls in [appliedFrom, appliedTo], ordered by appliedAt ascending. Use this tool to review A/R cash application activity in a period; do not use getPaymentLagCohorts or getCollectionsAnalytics for this, which are aggregate reports rather than a row-level application list, and note this endpoint is SCOPED TO pos-accounting cash applications only — it does not include pos-invoice deposit-credit draw-downs (DepositCreditApplication) or refunds (RefundRecord); see issue #1605 for that open cross-module question. Preconditions: none beyond the caller holding accounting:analytics:view. Required inputs: appliedFrom and appliedTo (ISO dates, appliedTo on or after appliedFrom); the window cannot exceed 366 days, to bound the scan. includeReversed is optional and defaults to false, in which case applications later reversed via PaymentApplicationReversal are EXCLUDED from the list entirely (not merely flagged); pass includeReversed&#x3D;true to include them, with each row\&#39;s reversed field then reporting whether that application was reversed. That exclusion default is a DELIBERATELY DIFFERENT basis from getCollectionsAnalytics, which nets reversals on a movement basis (reducing the window a reversal was recorded in rather than the window its application landed in) because it measures movement in a window while this endpoint answers the point-in-time question of which applications are currently live; do not unify the two. page/size/sort are standard, though the appliedAt-ascending sort is server-controlled and any caller-supplied sort is ignored. Emits an ACCOUNTING_PAYMENT_APPLICATION_LIST_VIEW audit event; no state changes. Returns 400 when appliedTo is before appliedFrom or the window exceeds 366 days. 
+     * @endpoint get /v1/accounting/payment-applications
+     * @param appliedFrom Applied-date window start (YYYY-MM-DD)
+     * @param appliedTo Applied-date window end (YYYY-MM-DD)
+     * @param includeReversed Include applications later reversed, flagged via the row\&#39;s reversed field (default false: reversed applications are excluded entirely)
+     * @param page Zero-based page index (0..N)
+     * @param size The size of the page to be returned
+     * @param sort Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public listPaymentApplications(appliedFrom: string, appliedTo: string, includeReversed?: boolean, page?: number, size?: number, sort?: Array<string>, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PagePaymentApplicationListRow>;
+    public listPaymentApplications(appliedFrom: string, appliedTo: string, includeReversed?: boolean, page?: number, size?: number, sort?: Array<string>, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PagePaymentApplicationListRow>>;
+    public listPaymentApplications(appliedFrom: string, appliedTo: string, includeReversed?: boolean, page?: number, size?: number, sort?: Array<string>, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PagePaymentApplicationListRow>>;
+    public listPaymentApplications(appliedFrom: string, appliedTo: string, includeReversed?: boolean, page?: number, size?: number, sort?: Array<string>, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (appliedFrom === null || appliedFrom === undefined) {
+            throw new Error('Required parameter appliedFrom was null or undefined when calling listPaymentApplications.');
+        }
+        if (appliedTo === null || appliedTo === undefined) {
+            throw new Error('Required parameter appliedTo was null or undefined when calling listPaymentApplications.');
+        }
+
+        let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'appliedFrom',
+            <any>appliedFrom,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'appliedTo',
+            <any>appliedTo,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'includeReversed',
+            <any>includeReversed,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'page',
+            <any>page,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'size',
+            <any>size,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'sort',
+            <any>sort,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/accounting/payment-applications`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<PagePaymentApplicationListRow>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                params: localVarQueryParameters.toHttpParams(),
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,

@@ -23,6 +23,8 @@ import { ExceptionResolutionRequest } from '../src/models/exceptionResolutionReq
 // @ts-ignore
 import { GoodsReceivedEvent } from '../src/models/goodsReceivedEvent';
 // @ts-ignore
+import { PageVendorBillListRow } from '../src/models/pageVendorBillListRow';
+// @ts-ignore
 import { VendorBillMatchCandidateResponse } from '../src/models/vendorBillMatchCandidateResponse';
 // @ts-ignore
 import { VendorBillResponse } from '../src/models/vendorBillResponse';
@@ -285,6 +287,131 @@ export class VendorBillAPIService extends BaseService {
         return this.httpClient.request<Array<VendorBillMatchCandidateResponse>>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * List Vendor Bills By Due Date
+     * Lists vendor bills whose due date falls in [dueFrom, dueTo], optionally filtered by status, ordered by due date ascending. Use this tool to browse or triage upcoming/overdue payables across vendors; do not use listApBills for this, which is scoped to APPROVED-only bills sorted for payment selection, and use getVendorBillById when the bill id is already known. Preconditions: none beyond the caller holding accounting:analytics:view. Required inputs: dueFrom and dueTo (ISO dates, dueTo on or after dueFrom); the window cannot exceed 366 days, to bound the scan. status is an optional filter (PENDING_RECEIPT_MATCH, MATCH_EXCEPTION, APPROVED, REJECTED, PAID, VOIDED); page/size/sort are standard, though the due-date-ascending sort is server-controlled and any caller-supplied sort is ignored. Emits an ACCOUNTING_VENDOR_BILL_LIST_VIEW audit event; no state changes. Returns 400 when dueTo is before dueFrom, the window exceeds 366 days, or status is not a recognized VendorBillStatus value. 
+     * @endpoint get /v1/accounting/vendor-bills
+     * @param dueFrom Due-date window start (YYYY-MM-DD)
+     * @param dueTo Due-date window end (YYYY-MM-DD)
+     * @param status Optional bill status filter
+     * @param page Zero-based page index (0..N)
+     * @param size The size of the page to be returned
+     * @param sort Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public listVendorBills(dueFrom: string, dueTo: string, status?: 'PENDING_RECEIPT_MATCH' | 'MATCH_EXCEPTION' | 'APPROVED' | 'REJECTED' | 'PAID' | 'VOIDED', page?: number, size?: number, sort?: Array<string>, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PageVendorBillListRow>;
+    public listVendorBills(dueFrom: string, dueTo: string, status?: 'PENDING_RECEIPT_MATCH' | 'MATCH_EXCEPTION' | 'APPROVED' | 'REJECTED' | 'PAID' | 'VOIDED', page?: number, size?: number, sort?: Array<string>, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PageVendorBillListRow>>;
+    public listVendorBills(dueFrom: string, dueTo: string, status?: 'PENDING_RECEIPT_MATCH' | 'MATCH_EXCEPTION' | 'APPROVED' | 'REJECTED' | 'PAID' | 'VOIDED', page?: number, size?: number, sort?: Array<string>, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PageVendorBillListRow>>;
+    public listVendorBills(dueFrom: string, dueTo: string, status?: 'PENDING_RECEIPT_MATCH' | 'MATCH_EXCEPTION' | 'APPROVED' | 'REJECTED' | 'PAID' | 'VOIDED', page?: number, size?: number, sort?: Array<string>, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (dueFrom === null || dueFrom === undefined) {
+            throw new Error('Required parameter dueFrom was null or undefined when calling listVendorBills.');
+        }
+        if (dueTo === null || dueTo === undefined) {
+            throw new Error('Required parameter dueTo was null or undefined when calling listVendorBills.');
+        }
+
+        let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'dueFrom',
+            <any>dueFrom,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'dueTo',
+            <any>dueTo,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'status',
+            <any>status,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'page',
+            <any>page,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'size',
+            <any>size,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'sort',
+            <any>sort,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/accounting/vendor-bills`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<PageVendorBillListRow>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                params: localVarQueryParameters.toHttpParams(),
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,
