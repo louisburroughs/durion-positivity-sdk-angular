@@ -14,6 +14,10 @@
  */
 export interface PrimaryLocationResponse { 
     /**
+     * True when the caller has no active primary assignment and locationId carries the platform\'s top-level default location instead
+     */
+    defaulted?: boolean;
+    /**
      * Location identifier of the user\'s primary active assignment
      */
     locationId: string;
@@ -60,7 +64,7 @@ export function instanceOfPrimaryLocationResponse(value: object): value is Prima
     const requiredProperties = createPrimaryLocationResponsePropertyNames('locationId', );
     const optionalStringProperties = createPrimaryLocationResponseOptionalProperties({ name: 'locationId', nullable: false }, );
     const optionalNumberProperties = createPrimaryLocationResponseOptionalProperties();
-    const optionalBooleanProperties = createPrimaryLocationResponseOptionalProperties();
+    const optionalBooleanProperties = createPrimaryLocationResponseOptionalProperties({ name: 'defaulted', nullable: false }, );
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
         && optionalStringProperties.every((property) => isOptionalPrimaryLocationResponsePropertyOfType(_v, property.name, 'string', property.nullable))

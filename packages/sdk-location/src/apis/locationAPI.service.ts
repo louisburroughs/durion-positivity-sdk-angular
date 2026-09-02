@@ -488,6 +488,62 @@ export class LocationAPIService extends BaseService {
     }
 
     /**
+     * Get Top-Level Default Location
+     * Returns the platform\&#39;s top-level location: the active root of the parent-child hierarchy (a location that is a parent of others but a child of none), falling back to the oldest active location when no hierarchy edges exist. The pick is deterministic (ties break on id). Use this tool when a caller needs a default location, e.g. resolving a fallback for users with no primary staffing assignment; use getLocationById when the id is already known. Preconditions: at least one active location must exist. Required inputs: none; there are no parameters and no request body. No events are emitted and no state changes; this is a read-only projection. Returns 404 when no active location exists. 
+     * @endpoint get /v1/locations/top-level
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public getTopLevelLocation(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<LocationResponseDTO>;
+    public getTopLevelLocation(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<LocationResponseDTO>>;
+    public getTopLevelLocation(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<LocationResponseDTO>>;
+    public getTopLevelLocation(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/locations/top-level`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<LocationResponseDTO>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
      * List Direct Children of a Location
      * Returns the direct child locations of a parent location, optionally restricted to one relationship type. Use this tool for one level of hierarchy; use listLocationDescendants instead when the whole subtree with depth information is needed. Preconditions: none; an unknown or childless parent id yields an empty list rather than an error. Required inputs: locationId (UUID) as a path parameter; parentType is optional and, when omitted, edges of every relationship type are returned. No events are emitted and no state changes; this is a read-only projection. Returns 400 when parentType is supplied but is not a recognized ParentType value. 
      * @endpoint get /v1/locations/{locationId}/children
