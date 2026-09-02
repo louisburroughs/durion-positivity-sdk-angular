@@ -1,4 +1,4 @@
-# @durion-sdk/documents@0.8.0-alpha
+# @durion-sdk/documents@0.9.0-alpha
 
 API documentation for document rendering and format conversion
 
@@ -24,7 +24,7 @@ Navigate to the folder of your consuming project and run one of next commands.
 _published:_
 
 ```console
-npm install @durion-sdk/documents@0.8.0-alpha --save
+npm install @durion-sdk/documents@0.9.0-alpha --save
 ```
 
 _without publishing (not recommended):_
