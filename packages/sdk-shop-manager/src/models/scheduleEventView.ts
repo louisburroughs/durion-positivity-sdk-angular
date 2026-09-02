@@ -13,7 +13,7 @@ import { ConflictDetails } from './conflictDetails';
 /**
  * A single event displayed within a resource lane
  */
-export interface ScheduleEventView { 
+export interface ScheduleEventView {
     conflictDetails?: ConflictDetails;
     /**
      * Event end instant in UTC (ISO-8601)

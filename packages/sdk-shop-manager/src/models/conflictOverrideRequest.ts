@@ -12,7 +12,7 @@
 /**
  * Request to bypass a scheduling conflict with manager permission
  */
-export interface ConflictOverrideRequest { 
+export interface ConflictOverrideRequest {
     /**
      * Appointment identifier whose conflict is being overridden
      */

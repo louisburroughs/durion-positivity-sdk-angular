@@ -9,7 +9,7 @@
  */
 
 
-export interface SkillInput { 
+export interface SkillInput {
     /**
      * Proficiency 1 (beginner) to 5 (master)
      */

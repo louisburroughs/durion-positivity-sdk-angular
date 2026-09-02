@@ -154,6 +154,12 @@ cleanup_orphan_js() {
 	rm -f "${package_dir}/src/index.js" "${package_dir}/src/runtime.ts" "${package_dir}/src/runtime.js" 2>/dev/null || true
 }
 
+cleanup_generated_trailing_whitespace() {
+	local module_name="$1"
+	local package_dir="packages/sdk-${module_name}"
+	find "${package_dir}/src" -type f -name '*.ts' -exec sed -i 's/[[:space:]]\+$//' {} +
+}
+
 ensure_models_are_modules() {
 	# When a service has no DTO models, the generator emits empty src/models/index.ts
 	# and src/models/models.ts. TS treats empty files as scripts (TS2306). Stamp an
@@ -352,6 +358,7 @@ if [[ -n "$module" ]]; then
 	cleanup_legacy_fetch_apis "$module"
 	optimize_api_aggregator_for_treeshaking "$module"
 	cleanup_orphan_js "$module"
+	cleanup_generated_trailing_whitespace "$module"
 	ensure_models_are_modules "$module"
 	apply_gateway_base_path_default "$module"
 	write_src_index "$module"
@@ -376,6 +383,7 @@ else
 		cleanup_legacy_fetch_apis "$m"
 		optimize_api_aggregator_for_treeshaking "$m"
 		cleanup_orphan_js "$m"
+		cleanup_generated_trailing_whitespace "$m"
 		ensure_models_are_modules "$m"
 		apply_gateway_base_path_default "$m"
 		write_src_index "$m"

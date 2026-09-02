@@ -12,7 +12,7 @@
 /**
  * Response returned after a successful scheduling conflict override
  */
-export interface ConflictOverrideResponse { 
+export interface ConflictOverrideResponse {
     /**
      * Appointment identifier whose conflict was overridden
      */

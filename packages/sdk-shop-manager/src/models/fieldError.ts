@@ -12,7 +12,7 @@
 /**
  * Validation error for a specific request field
  */
-export interface FieldError { 
+export interface FieldError {
     /**
      * Field name
      */

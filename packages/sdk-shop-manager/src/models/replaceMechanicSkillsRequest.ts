@@ -10,7 +10,7 @@
 import { SkillInput } from './skillInput';
 
 
-export interface ReplaceMechanicSkillsRequest { 
+export interface ReplaceMechanicSkillsRequest {
     /**
      * Full replacement skill set for the mechanic
      */

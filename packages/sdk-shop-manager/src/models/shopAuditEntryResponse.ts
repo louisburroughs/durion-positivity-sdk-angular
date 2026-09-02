@@ -12,7 +12,7 @@
 /**
  * Read-only shop audit trail entry recording a schedule or assignment change
  */
-export interface ShopAuditEntryResponse { 
+export interface ShopAuditEntryResponse {
     /**
      * User identifier of the actor who made the change
      */

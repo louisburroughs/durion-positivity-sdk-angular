@@ -13,7 +13,7 @@ import { MechanicAssignmentItem } from './mechanicAssignmentItem';
 /**
  * Request to assign mechanics and an optional resource to an appointment
  */
-export interface CreateAssignmentRequest { 
+export interface CreateAssignmentRequest {
     /**
      * Appointment identifier the mechanics are assigned to
      */

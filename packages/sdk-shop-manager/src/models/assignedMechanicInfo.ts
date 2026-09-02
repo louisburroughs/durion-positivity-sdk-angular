@@ -12,7 +12,7 @@
 /**
  * Summary of one mechanic included in an assignment response
  */
-export interface AssignedMechanicInfo { 
+export interface AssignedMechanicInfo {
     /**
      * Mechanic identifier
      */

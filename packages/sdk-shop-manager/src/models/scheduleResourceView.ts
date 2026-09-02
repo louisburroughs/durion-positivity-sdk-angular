@@ -13,7 +13,7 @@ import { ScheduleEventView } from './scheduleEventView';
 /**
  * A single resource lane within the schedule view
  */
-export interface ScheduleResourceView { 
+export interface ScheduleResourceView {
     /**
      * Events scheduled for this resource
      */

@@ -12,7 +12,7 @@
 /**
  * Response describing a created or retrieved appointment
  */
-export interface AppointmentResponse { 
+export interface AppointmentResponse {
     /**
      * Unique appointment identifier
      */

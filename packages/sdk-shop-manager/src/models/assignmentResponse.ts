@@ -13,7 +13,7 @@ import { AssignedMechanicInfo } from './assignedMechanicInfo';
 /**
  * Representation of a mechanic assignment returned from the API
  */
-export interface AssignmentResponse { 
+export interface AssignmentResponse {
     /**
      * Appointment identifier the assignment belongs to
      */

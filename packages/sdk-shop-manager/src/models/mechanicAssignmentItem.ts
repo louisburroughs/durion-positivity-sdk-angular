@@ -12,7 +12,7 @@
 /**
  * A single mechanic entry within an assignment request
  */
-export interface MechanicAssignmentItem { 
+export interface MechanicAssignmentItem {
     /**
      * Person identifier of the mechanic being assigned
      */

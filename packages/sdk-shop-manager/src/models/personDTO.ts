@@ -12,7 +12,7 @@
 /**
  * Person details for a technician
  */
-export interface PersonDTO { 
+export interface PersonDTO {
     /**
      * First name of the person
      */

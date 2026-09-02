@@ -12,7 +12,7 @@
 /**
  * Service catalog entry resolved from pos-catalog
  */
-export interface ServiceEntityDTO { 
+export interface ServiceEntityDTO {
     /**
      * Internal service identifier
      */

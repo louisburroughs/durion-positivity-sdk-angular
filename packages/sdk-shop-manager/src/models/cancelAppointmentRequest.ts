@@ -12,7 +12,7 @@
 /**
  * Request to cancel an existing appointment with a mandatory reason code
  */
-export interface CancelAppointmentRequest { 
+export interface CancelAppointmentRequest {
     /**
      * Mandatory cancellation reason code
      */
