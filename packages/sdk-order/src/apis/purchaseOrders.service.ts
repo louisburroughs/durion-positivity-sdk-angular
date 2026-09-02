@@ -25,6 +25,8 @@ import { CreatePurchaseOrderRequest } from '../src/models/createPurchaseOrderReq
 // @ts-ignore
 import { PagePurchaseOrderResponse } from '../src/models/pagePurchaseOrderResponse';
 // @ts-ignore
+import { PagePurchaseOrderTransmissionEvent } from '../src/models/pagePurchaseOrderTransmissionEvent';
+// @ts-ignore
 import { ProcurementAvailability } from '../src/models/procurementAvailability';
 // @ts-ignore
 import { PurchaseOrderResponse } from '../src/models/purchaseOrderResponse';
@@ -387,6 +389,99 @@ export class PurchaseOrdersService extends BaseService {
         let localVarPath = `/v1/orders/purchase-orders/${this.configuration.encodeParam({name: "poId", value: poId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/supplier-availability`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<ProcurementAvailability>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                params: localVarQueryParameters.toHttpParams(),
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * List Purchase Order Transmission Events
+     * Returns a page of the purchase order\&#39;s append-only vendor transmission timeline: every confirmation, rejection, status observation and review escalation heard about the order, including the despatchDate and estimatedDeliveryDate a status observation may carry. Use this tool when a buyer chasing an order needs what happened to it, not just where it stands; use getPurchaseOrder instead for the order\&#39;s current transmission state, which this timeline never collapses to. Preconditions: the purchase order must exist; an order that was never transmitted simply has an empty timeline. Required inputs: poId (UUIDv7) path parameter; standard page and size parameters control pagination, and the sort parameter is ignored because the ordering is the semantics of the timeline. Entries are ordered by the vendor\&#39;s clock (observedAt ascending), with ties broken by platform receipt time (recordedAt) and then by event id, so a late-arriving observation sits where the vendor observed it and the sequence is stable across reads. Emits an ORDER_PURCHASE_ORDER_TRANSMISSION_EVENTS audit event; no state changes, this is a read-only projection. Returns 200 with an empty page when the order has no timeline yet, and 404 when the purchase order does not exist. 
+     * @endpoint get /v1/orders/purchase-orders/{poId}/transmission-events
+     * @param poId Purchase order identifier
+     * @param page Zero-based page index (0..N)
+     * @param size The size of the page to be returned
+     * @param sort Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public listPurchaseOrderTransmissionEvents(poId: string, page?: number, size?: number, sort?: Array<string>, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PagePurchaseOrderTransmissionEvent>;
+    public listPurchaseOrderTransmissionEvents(poId: string, page?: number, size?: number, sort?: Array<string>, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PagePurchaseOrderTransmissionEvent>>;
+    public listPurchaseOrderTransmissionEvents(poId: string, page?: number, size?: number, sort?: Array<string>, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PagePurchaseOrderTransmissionEvent>>;
+    public listPurchaseOrderTransmissionEvents(poId: string, page?: number, size?: number, sort?: Array<string>, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (poId === null || poId === undefined) {
+            throw new Error('Required parameter poId was null or undefined when calling listPurchaseOrderTransmissionEvents.');
+        }
+
+        let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'page',
+            <any>page,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'size',
+            <any>size,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'sort',
+            <any>sort,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/orders/purchase-orders/${this.configuration.encodeParam({name: "poId", value: poId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/transmission-events`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<PagePurchaseOrderTransmissionEvent>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 params: localVarQueryParameters.toHttpParams(),

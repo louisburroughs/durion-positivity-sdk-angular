@@ -6,6 +6,7 @@ export * from './priceBookAPI.service';
 export * from './productMSRPAPI.service';
 export * from './productUoMAPI.service';
 export * from './productsAPI.service';
+export * from './serviceLaborStandards.service';
 export * from './substitutionGroupAPI.service';
 export * from './supplierArticleCodes.service';
 export * from './supplierPrices.service';

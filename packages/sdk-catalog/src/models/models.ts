@@ -49,6 +49,8 @@ export * from './resolvePriceRequestDto';
 export * from './resolvePriceResponseDto';
 export * from './serviceDto';
 export * from './serviceFactReplayResultDto';
+export * from './serviceLaborStandardRequestDto';
+export * from './serviceLaborStandardResponseDto';
 export * from './sortObject';
 export * from './subcategoryDto';
 export * from './substitutionGroupCreateRequestDto';

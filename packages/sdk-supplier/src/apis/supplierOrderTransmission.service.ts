@@ -21,6 +21,8 @@ import { ApiError } from '../src/models/apiError';
 // @ts-ignore
 import { OrderTransmissionStatus } from '../src/models/orderTransmissionStatus';
 // @ts-ignore
+import { PagedResponse } from '../src/models/pagedResponse';
+// @ts-ignore
 import { TransmissionResolutionRequest } from '../src/models/transmissionResolutionRequest';
 
 // @ts-ignore
@@ -223,6 +225,135 @@ export class SupplierOrderTransmissionService extends BaseService {
             {
                 context: localVarHttpContext,
                 body: transmissionResolutionRequest,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Search the transmission ledger across purchase orders
+     * Returns one page of transmission intents across every purchase order, newest first, filterable to the states, vendor and window an operator is working — above all attemptState&#x3D;MANUAL_REVIEW, which is the queue of transmissions waiting on a human (issue #1638 decision 6). Use this tool for the operator worklist and for ledger-wide searches by order reference; use listSupplierTransmissionsForPurchaseOrder instead for one purchase order\&#39;s history, and getSupplierTransmission when the intent id is already known. Preconditions: the caller must hold supplier:transmission:read; no filter is required and an unfiltered call pages the whole ledger. Optional inputs: attemptState (PENDING, DISPATCHING, SENT_AWAITING_RESULT, CONFIRMED, REJECTED, MANUAL_REVIEW, FAILED, CANCELLED); vendorProfileId (UUIDv7); search, matched case-insensitively as a contains-match against the purchase-order number and the vendor\&#39;s own order number — the two references either side of a phone call would quote; dateFrom (inclusive) and dateTo (exclusive), which bound the intent\&#39;s createdAt — the moment the order entered the vendor queue — chosen over the last-update time because it is immutable, so a row cannot move out of a window an operator has already searched, and adjacent half-open windows tile without listing an intent twice. Results are sorted newest-first on that same createdAt. page defaults to 0 and size to 50, at most 200. Emits a SUPPLIER_TRANSMISSION_SEARCH event. Read-only: nothing is transmitted, retried or changed — resolving a MANUAL_REVIEW row found here is resolveSupplierTransmission, and no endpoint re-sends. Returns 200 with an empty items array when nothing matches — a clear queue is the healthy answer, not an error — and 400 when the page size is outside the permitted range or dates are malformed. 
+     * @endpoint get /v1/supplier/transmissions
+     * @param attemptState Only transmissions currently in this state; MANUAL_REVIEW is the needs-a-human queue.
+     * @param vendorProfileId Only transmissions to this vendor profile (UUIDv7).
+     * @param search Case-insensitive contains-match against the purchase-order number and the vendor\&#39;s own order number. Blank is treated as absent.
+     * @param dateFrom Window start on the intent\&#39;s createdAt, INCLUSIVE. ISO-8601 instant.
+     * @param dateTo Window end on the intent\&#39;s createdAt, EXCLUSIVE. Half-open so adjacent windows tile without listing a boundary intent twice.
+     * @param page Zero-based page index.
+     * @param size Page size, 1–200.
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public searchSupplierTransmissions(attemptState?: 'PENDING' | 'DISPATCHING' | 'SENT_AWAITING_RESULT' | 'CONFIRMED' | 'REJECTED' | 'MANUAL_REVIEW' | 'FAILED' | 'CANCELLED', vendorProfileId?: string, search?: string, dateFrom?: string, dateTo?: string, page?: number, size?: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PagedResponse>;
+    public searchSupplierTransmissions(attemptState?: 'PENDING' | 'DISPATCHING' | 'SENT_AWAITING_RESULT' | 'CONFIRMED' | 'REJECTED' | 'MANUAL_REVIEW' | 'FAILED' | 'CANCELLED', vendorProfileId?: string, search?: string, dateFrom?: string, dateTo?: string, page?: number, size?: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PagedResponse>>;
+    public searchSupplierTransmissions(attemptState?: 'PENDING' | 'DISPATCHING' | 'SENT_AWAITING_RESULT' | 'CONFIRMED' | 'REJECTED' | 'MANUAL_REVIEW' | 'FAILED' | 'CANCELLED', vendorProfileId?: string, search?: string, dateFrom?: string, dateTo?: string, page?: number, size?: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PagedResponse>>;
+    public searchSupplierTransmissions(attemptState?: 'PENDING' | 'DISPATCHING' | 'SENT_AWAITING_RESULT' | 'CONFIRMED' | 'REJECTED' | 'MANUAL_REVIEW' | 'FAILED' | 'CANCELLED', vendorProfileId?: string, search?: string, dateFrom?: string, dateTo?: string, page?: number, size?: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+
+        let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'attemptState',
+            <any>attemptState,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'vendorProfileId',
+            <any>vendorProfileId,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'search',
+            <any>search,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'dateFrom',
+            <any>dateFrom,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'dateTo',
+            <any>dateTo,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'page',
+            <any>page,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'size',
+            <any>size,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/supplier/transmissions`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<PagedResponse>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                params: localVarQueryParameters.toHttpParams(),
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,

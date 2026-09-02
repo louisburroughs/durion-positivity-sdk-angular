@@ -7,5 +7,7 @@ export * from './supplierInvoices.service';
 export * from './supplierMarketingCatalog.service';
 export * from './supplierOrderTransmission.service';
 export * from './supplierPriceCatalog.service';
+export * from './supplierStockAvailability.service';
 export * from './supplierStockInquiry.service';
+export * from './supplierStockSnapshots.service';
 export * from './supplierVendorProfiles.service';

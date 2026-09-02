@@ -14,6 +14,18 @@
  */
 export interface PriceCatalogImportSummary { 
     /**
+     * Endpoint binding the run was fetched over. Null on runs recorded before the binding was persisted (forward-only) and on quarantine re-application manifests, which make no vendor call.
+     */
+    bindingId?: string;
+    /**
+     * When the checkpoint state was committed; null whenever checkpointState is null.
+     */
+    checkpointAt?: string;
+    /**
+     * Opaque continuation state committed for the next incremental run; null for full-snapshot protocols, which have nothing to resume from.
+     */
+    checkpointState?: string;
+    /**
      * Number of chunk events published for the import.
      */
     chunkCount?: number;
@@ -29,6 +41,10 @@ export interface PriceCatalogImportSummary {
      * Currency of the catalog, when stated.
      */
     currency?: string;
+    /**
+     * Stable machine-readable failure category for a failed import, alongside the free-text failureDetail. Null unless the run failed.
+     */
+    errorCode?: PriceCatalogImportSummaryErrorCodeEnum;
     /**
      * Operator-facing failure summary for a failed import.
      */
@@ -77,7 +93,19 @@ export interface PriceCatalogImportSummary {
      * Vendor profile the catalog was fetched for.
      */
     vendorProfileId?: string;
+    /**
+     * Inclusive start of the incremental retrieval interval requested for the run. Null for full-snapshot protocols — every current PRICAT protocol: B4.0 fetches the vendor\'s whole catalog, so there is no window.
+     */
+    windowFrom?: string;
+    /**
+     * Exclusive end of the requested retrieval interval; null for full-snapshot protocols.
+     */
+    windowTo?: string;
 }
+export enum PriceCatalogImportSummaryErrorCodeEnum {
+    FetchFailed = 'FETCH_FAILED',
+    DecodeFailed = 'DECODE_FAILED'
+};
 export enum PriceCatalogImportSummaryStatusEnum {
     InProgress = 'IN_PROGRESS',
     Completed = 'COMPLETED',
@@ -126,7 +154,7 @@ export function instanceOfPriceCatalogImportSummary(value: object): value is Pri
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createPriceCatalogImportSummaryPropertyNames();
-    const optionalStringProperties = createPriceCatalogImportSummaryOptionalProperties({ name: 'completedAt', nullable: false }, { name: 'countryCode', nullable: false }, { name: 'currency', nullable: false }, { name: 'failureDetail', nullable: false }, { name: 'fetchedAt', nullable: false }, { name: 'importManifestId', nullable: false }, { name: 'sourceDocumentDate', nullable: false }, { name: 'sourceDocumentId', nullable: false }, { name: 'status', nullable: false }, { name: 'supplierRef', nullable: false }, { name: 'vendorProfileId', nullable: false }, );
+    const optionalStringProperties = createPriceCatalogImportSummaryOptionalProperties({ name: 'bindingId', nullable: false }, { name: 'checkpointAt', nullable: false }, { name: 'checkpointState', nullable: false }, { name: 'completedAt', nullable: false }, { name: 'countryCode', nullable: false }, { name: 'currency', nullable: false }, { name: 'errorCode', nullable: false }, { name: 'failureDetail', nullable: false }, { name: 'fetchedAt', nullable: false }, { name: 'importManifestId', nullable: false }, { name: 'sourceDocumentDate', nullable: false }, { name: 'sourceDocumentId', nullable: false }, { name: 'status', nullable: false }, { name: 'supplierRef', nullable: false }, { name: 'vendorProfileId', nullable: false }, { name: 'windowFrom', nullable: false }, { name: 'windowTo', nullable: false }, );
     const optionalNumberProperties = createPriceCatalogImportSummaryOptionalProperties({ name: 'chunkCount', nullable: false }, { name: 'linesDuplicate', nullable: false }, { name: 'linesFetched', nullable: false }, { name: 'linesMatched', nullable: false }, { name: 'linesUnmatched', nullable: false }, );
     const optionalBooleanProperties = createPriceCatalogImportSummaryOptionalProperties();
 

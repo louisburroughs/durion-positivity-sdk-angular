@@ -22,6 +22,10 @@ export interface CatalogItemRequestDto {
      */
     countryOfOrigin?: string;
     /**
+     * Vehicle-agnostic fallback labor hours for service type, decimal hours in tenths (0.1 hr = 6 min); vehicle-specific times live on the service\'s labor standards instead
+     */
+    defaultLaborHours?: number;
+    /**
      * Product image URLs for product type
      */
     images?: Array<string>;
@@ -58,6 +62,14 @@ export interface CatalogItemRequestDto {
      */
     name?: string;
     /**
+     * Operation category for service type
+     */
+    operationCategory?: CatalogItemRequestDtoOperationCategoryEnum;
+    /**
+     * Durion operation code for service type; uppercase alphanumeric segments joined by single dashes, unique across services when present
+     */
+    operationCode?: string;
+    /**
      * Product code for product type
      */
     productCode?: string;
@@ -82,6 +94,14 @@ export interface CatalogItemRequestDto {
      */
     warranty?: string;
 }
+export enum CatalogItemRequestDtoOperationCategoryEnum {
+    Repair = 'REPAIR',
+    Diagnostic = 'DIAGNOSTIC',
+    Maintenance = 'MAINTENANCE',
+    TireService = 'TIRE_SERVICE'
+};
+
+
 
 function isOptionalCatalogItemRequestDtoPropertyOfType(
     value: Record<string, unknown>,
@@ -122,8 +142,8 @@ export function instanceOfCatalogItemRequestDto(value: object): value is Catalog
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createCatalogItemRequestDtoPropertyNames();
-    const optionalStringProperties = createCatalogItemRequestDtoOptionalProperties({ name: 'color', nullable: false }, { name: 'countryOfOrigin', nullable: false }, { name: 'longDescription', nullable: false }, { name: 'manufacturerBrand', nullable: false }, { name: 'manufacturerId', nullable: false }, { name: 'manufacturerName', nullable: false }, { name: 'manufacturerPartNumber', nullable: false }, { name: 'manufacturerWarranty', nullable: false }, { name: 'material', nullable: false }, { name: 'name', nullable: false }, { name: 'productCode', nullable: false }, { name: 'shortDescription', nullable: false }, { name: 'sku', nullable: false }, { name: 'specifications', nullable: false }, { name: 'type', nullable: false }, { name: 'warranty', nullable: false }, );
-    const optionalNumberProperties = createCatalogItemRequestDtoOptionalProperties();
+    const optionalStringProperties = createCatalogItemRequestDtoOptionalProperties({ name: 'color', nullable: false }, { name: 'countryOfOrigin', nullable: false }, { name: 'longDescription', nullable: false }, { name: 'manufacturerBrand', nullable: false }, { name: 'manufacturerId', nullable: false }, { name: 'manufacturerName', nullable: false }, { name: 'manufacturerPartNumber', nullable: false }, { name: 'manufacturerWarranty', nullable: false }, { name: 'material', nullable: false }, { name: 'name', nullable: false }, { name: 'operationCategory', nullable: false }, { name: 'operationCode', nullable: false }, { name: 'productCode', nullable: false }, { name: 'shortDescription', nullable: false }, { name: 'sku', nullable: false }, { name: 'specifications', nullable: false }, { name: 'type', nullable: false }, { name: 'warranty', nullable: false }, );
+    const optionalNumberProperties = createCatalogItemRequestDtoOptionalProperties({ name: 'defaultLaborHours', nullable: false }, );
     const optionalBooleanProperties = createCatalogItemRequestDtoOptionalProperties();
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

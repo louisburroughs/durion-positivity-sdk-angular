@@ -17,6 +17,8 @@ import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
 // @ts-ignore
+import { ApiError } from '../src/models/apiError';
+// @ts-ignore
 import { BillingRuleRefResponse } from '../src/models/billingRuleRefResponse';
 // @ts-ignore
 import { InvoiceGenerationResponse } from '../src/models/invoiceGenerationResponse';
@@ -103,7 +105,7 @@ export class InvoicePaymentsService extends BaseService {
 
     /**
      * Get Invoice Payment Status
-     * Returns the current payment status of an invoice as tracked by the accounting module\&#39;s invoice replica. Use this tool to check whether an invoice is open, partially paid or paid before applying payments or credits; do not use applyPayment, which changes the status. Preconditions: the invoice must be known to the accounting module. Required inputs: invoiceId (UUID) as a path parameter; there is no request body. No events are emitted and no state changes; this is a read-only projection. Returns 404 when the invoice is not found, and 400 when the identifier is rejected by the status service. 
+     * Returns the current payment status of an invoice as tracked by the accounting module\&#39;s invoice replica. Use this tool to check whether an invoice is open, partially paid or paid before applying payments or credits; do not use applyPayment, which changes the status. Preconditions: the invoice must be known to the accounting module. Required inputs: invoiceId (UUID) as a path parameter; there is no request body. No events are emitted and no state changes; this is a read-only projection. An invoice with no payment history answers 200 with status UNPAID, derived from the ext_invoice replica and accounting\&#39;s own application/credit records. Returns 404 only when accounting has no record of the invoice at all, and 400 when the identifier is rejected (malformed or invalid invoiceId). 
      * @endpoint get /v1/accounting/invoice/{invoiceId}/status
      * @param invoiceId Invoice identifier
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.

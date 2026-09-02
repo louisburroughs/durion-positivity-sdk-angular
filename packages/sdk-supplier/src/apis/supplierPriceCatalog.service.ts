@@ -21,6 +21,8 @@ import { ApiError } from '../src/models/apiError';
 // @ts-ignore
 import { PagedResponse } from '../src/models/pagedResponse';
 // @ts-ignore
+import { PriceCatalogFreshnessView } from '../src/models/priceCatalogFreshnessView';
+// @ts-ignore
 import { PriceCatalogImportSummary } from '../src/models/priceCatalogImportSummary';
 
 // @ts-ignore
@@ -40,25 +42,125 @@ export class SupplierPriceCatalogService extends BaseService {
     }
 
     /**
+     * Read a vendor price-catalog\&#39;s freshness
+     * Returns how fresh one vendor profile\&#39;s price catalog is: latestEffectiveDate — the newest catalog document date the vendor itself stated on a completed import, which is vendor document metadata — kept strictly apart from lastFetchedAt, the platform\&#39;s own last retrieval attempt over every run including failed and empty ones. Alongside them: lastCompletedAt, the open unmatched-line count, the backend-configured staleness threshold (ISO-8601 duration) with the stale verdict it implies, and each PRICE_CATALOG binding\&#39;s schedule plus its scheduler-lease state (checkpointAt, lastRunOutcome, lastRunStartedAt). Window and checkpoint fields are null for full-snapshot protocols — every current PRICAT protocol: B4.0 fetches the vendor\&#39;s whole catalog, so there is no retrieval window to advance. Use this tool to answer \&quot;can these vendor prices be trusted today\&quot; in one read; do not use it for run-by-run history, which is listSupplierPriceCatalogImports. Preconditions: the caller must hold supplier:pricecatalog:read; the profile need not have imported anything — a profile with no completed import reports stale&#x3D;true with null timestamps, not an error. Required inputs: vendorProfileId (UUIDv7) as a path parameter. Emits a SUPPLIER_PRICECATALOG_FRESHNESS_GET event; no state changes and no vendor call is made, and the stale verdict is computed server-side from lastCompletedAt, the last successful import, against the returned threshold — catalog-currency policy unrelated to any cache TTL — so every client behaves consistently. Returns 200 with the freshness view, and 404 only when the vendor profile does not exist. 
+     * @endpoint get /v1/supplier/admin/price-catalog/{vendorProfileId}/freshness
+     * @param vendorProfileId Vendor profile whose catalog freshness to read (UUIDv7).
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public getSupplierPriceCatalogFreshness(vendorProfileId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PriceCatalogFreshnessView>;
+    public getSupplierPriceCatalogFreshness(vendorProfileId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PriceCatalogFreshnessView>>;
+    public getSupplierPriceCatalogFreshness(vendorProfileId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PriceCatalogFreshnessView>>;
+    public getSupplierPriceCatalogFreshness(vendorProfileId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (vendorProfileId === null || vendorProfileId === undefined) {
+            throw new Error('Required parameter vendorProfileId was null or undefined when calling getSupplierPriceCatalogFreshness.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/supplier/admin/price-catalog/${this.configuration.encodeParam({name: "vendorProfileId", value: vendorProfileId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/freshness`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<PriceCatalogFreshnessView>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
      * List vendor price-catalog imports
-     * Returns a page of PRICAT import runs for one vendor profile, newest first, including failed and empty runs with their line counters. Use this tool to answer whether a catalog feed is healthy and how much of it matched; do not use it to see which specific lines are waiting on catalog work, which is listSupplierPriceCatalogUnmatchedLines instead. Preconditions: the caller must hold supplier:pricecatalog:read; the profile need not have imported anything, in which case the page is empty. Required inputs: vendorProfileId (UUIDv7) path parameter; page defaults to 0 and size defaults to 50 with a maximum of 200. Emits a SUPPLIER_PRICECATALOG_IMPORT_LIST event; no state changes and no vendor call is made. Returns 200 with an empty items array when the profile has never imported, so an empty result is not an error, and 400 when the page size is outside the permitted range. 
+     * Returns a page of PRICAT import runs for one vendor profile, newest first, including failed and empty runs with their line counters. Use this tool to answer whether a catalog feed is healthy and how much of it matched; do not use it to see which specific lines are waiting on catalog work, which is listSupplierPriceCatalogUnmatchedLines instead. Preconditions: the caller must hold supplier:pricecatalog:read; the profile need not have imported anything, in which case the page is empty. Required inputs: vendorProfileId (UUIDv7) path parameter; page defaults to 0 and size defaults to 50 with a maximum of 200. Optional filters: bindingId narrows a profile\&#39;s history to one endpoint binding (runs recorded before binding ids were persisted carry none and never match), status keeps one run status, and dateFrom/dateTo bound fetchedAt as a half-open window — dateFrom inclusive, dateTo exclusive. Emits a SUPPLIER_PRICECATALOG_IMPORT_LIST event; no state changes and no vendor call is made. Returns 200 with an empty items array when the profile has never imported or nothing matches the filters, so an empty result is not an error, and 400 when the page size is outside the permitted range or a filter value does not parse. 
      * @endpoint get /v1/supplier/admin/price-catalog/{vendorProfileId}/imports
      * @param vendorProfileId Vendor profile whose imports to list (UUIDv7).
+     * @param bindingId Narrow to runs fetched over one endpoint binding (UUIDv7). Runs recorded before binding ids were persisted carry none and never match this filter.
+     * @param status Narrow to one run status.
+     * @param dateFrom Inclusive lower bound on fetchedAt (ISO-8601 instant).
+     * @param dateTo Exclusive upper bound on fetchedAt (ISO-8601 instant); the window is half-open so adjacent windows tile without listing a boundary run twice.
      * @param page Zero-based page index.
      * @param size Page size, 1–200.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public listSupplierPriceCatalogImports(vendorProfileId: string, page?: number, size?: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PagedResponse>;
-    public listSupplierPriceCatalogImports(vendorProfileId: string, page?: number, size?: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PagedResponse>>;
-    public listSupplierPriceCatalogImports(vendorProfileId: string, page?: number, size?: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PagedResponse>>;
-    public listSupplierPriceCatalogImports(vendorProfileId: string, page?: number, size?: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public listSupplierPriceCatalogImports(vendorProfileId: string, bindingId?: string, status?: 'IN_PROGRESS' | 'COMPLETED' | 'EMPTY' | 'FAILED', dateFrom?: string, dateTo?: string, page?: number, size?: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PagedResponse>;
+    public listSupplierPriceCatalogImports(vendorProfileId: string, bindingId?: string, status?: 'IN_PROGRESS' | 'COMPLETED' | 'EMPTY' | 'FAILED', dateFrom?: string, dateTo?: string, page?: number, size?: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PagedResponse>>;
+    public listSupplierPriceCatalogImports(vendorProfileId: string, bindingId?: string, status?: 'IN_PROGRESS' | 'COMPLETED' | 'EMPTY' | 'FAILED', dateFrom?: string, dateTo?: string, page?: number, size?: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PagedResponse>>;
+    public listSupplierPriceCatalogImports(vendorProfileId: string, bindingId?: string, status?: 'IN_PROGRESS' | 'COMPLETED' | 'EMPTY' | 'FAILED', dateFrom?: string, dateTo?: string, page?: number, size?: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (vendorProfileId === null || vendorProfileId === undefined) {
             throw new Error('Required parameter vendorProfileId was null or undefined when calling listSupplierPriceCatalogImports.');
         }
 
         let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'bindingId',
+            <any>bindingId,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'status',
+            <any>status,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'dateFrom',
+            <any>dateFrom,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'dateTo',
+            <any>dateTo,
+            QueryParamStyle.Form,
+            true,
+        );
+
 
         localVarQueryParameters = this.addToHttpParams(
             localVarQueryParameters,
@@ -124,24 +226,74 @@ export class SupplierPriceCatalogService extends BaseService {
 
     /**
      * List quarantined price-catalog lines
-     * Returns a page of PRICAT lines that could not be attached to a catalog product and are still open, newest first, each with the reason it was quarantined. Use this tool to work the catalog-data backlog a vendor catalog exposes; do not use it for the run-level totals those lines roll up into, which is listSupplierPriceCatalogImports instead. Preconditions: the caller must hold supplier:pricecatalog:read; a line stays listed until a later import or re-application matches it, so an empty page means nothing is waiting. Required inputs: vendorProfileId (UUIDv7) path parameter; page defaults to 0 and size defaults to 50 with a maximum of 200. Emits a SUPPLIER_PRICECATALOG_UNMATCHED_LIST event; no state changes and no vendor call is made. Returns 200 with an empty items array when the quarantine is clear, and 400 when the page size is outside the permitted range. 
+     * Returns a page of PRICAT lines that could not be attached to a catalog product, newest first, each with the reason it was quarantined. By default only open lines are listed — a line stays listed until a later import or re-application matches it — and resolved&#x3D;true flips the listing to closed lines instead, for auditing what a catalog fix healed. Use this tool to work the catalog-data backlog a vendor catalog exposes; do not use it for the run-level totals those lines roll up into, which is listSupplierPriceCatalogImports instead. Preconditions: the caller must hold supplier:pricecatalog:read. Required inputs: vendorProfileId (UUIDv7) path parameter; page defaults to 0 and size defaults to 50 with a maximum of 200. Optional filters: reason keeps one quarantine reason, search is a case-insensitive contains-match over the line\&#39;s EAN, vendor article code and cross-reference code (LIKE metacharacters are treated literally), and dateFrom/dateTo bound fetchedAt as a half-open window — dateFrom inclusive, dateTo exclusive. Emits a SUPPLIER_PRICECATALOG_UNMATCHED_LIST event; no state changes and no vendor call is made. Returns 200 with an empty items array when the quarantine is clear or nothing matches the filters, and 400 when the page size is outside the permitted range or a filter value does not parse. 
      * @endpoint get /v1/supplier/admin/price-catalog/{vendorProfileId}/unmatched-lines
      * @param vendorProfileId Vendor profile whose quarantine to list (UUIDv7).
+     * @param reason Narrow to one quarantine reason.
+     * @param search Case-insensitive contains-match over the line\&#39;s EAN, vendor article code and cross-reference code. LIKE metacharacters are treated literally, so a pasted code containing an underscore matches itself, not a wildcard.
+     * @param dateFrom Inclusive lower bound on fetchedAt (ISO-8601 instant).
+     * @param dateTo Exclusive upper bound on fetchedAt (ISO-8601 instant); the window is half-open so adjacent windows tile without listing a boundary line twice.
+     * @param resolved True lists resolved lines instead of the open worklist. Omitted or false keeps the default the worklist has always had: open lines only.
      * @param page Zero-based page index.
      * @param size Page size, 1–200.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public listSupplierPriceCatalogUnmatchedLines(vendorProfileId: string, page?: number, size?: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PagedResponse>;
-    public listSupplierPriceCatalogUnmatchedLines(vendorProfileId: string, page?: number, size?: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PagedResponse>>;
-    public listSupplierPriceCatalogUnmatchedLines(vendorProfileId: string, page?: number, size?: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PagedResponse>>;
-    public listSupplierPriceCatalogUnmatchedLines(vendorProfileId: string, page?: number, size?: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public listSupplierPriceCatalogUnmatchedLines(vendorProfileId: string, reason?: 'NO_IDENTIFIER' | 'NO_CATALOG_MATCH' | 'AMBIGUOUS_CATALOG_MATCH' | 'CATALOG_UNAVAILABLE' | 'DUPLICATE_LINE' | 'MALFORMED_LINE', search?: string, dateFrom?: string, dateTo?: string, resolved?: boolean, page?: number, size?: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PagedResponse>;
+    public listSupplierPriceCatalogUnmatchedLines(vendorProfileId: string, reason?: 'NO_IDENTIFIER' | 'NO_CATALOG_MATCH' | 'AMBIGUOUS_CATALOG_MATCH' | 'CATALOG_UNAVAILABLE' | 'DUPLICATE_LINE' | 'MALFORMED_LINE', search?: string, dateFrom?: string, dateTo?: string, resolved?: boolean, page?: number, size?: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PagedResponse>>;
+    public listSupplierPriceCatalogUnmatchedLines(vendorProfileId: string, reason?: 'NO_IDENTIFIER' | 'NO_CATALOG_MATCH' | 'AMBIGUOUS_CATALOG_MATCH' | 'CATALOG_UNAVAILABLE' | 'DUPLICATE_LINE' | 'MALFORMED_LINE', search?: string, dateFrom?: string, dateTo?: string, resolved?: boolean, page?: number, size?: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PagedResponse>>;
+    public listSupplierPriceCatalogUnmatchedLines(vendorProfileId: string, reason?: 'NO_IDENTIFIER' | 'NO_CATALOG_MATCH' | 'AMBIGUOUS_CATALOG_MATCH' | 'CATALOG_UNAVAILABLE' | 'DUPLICATE_LINE' | 'MALFORMED_LINE', search?: string, dateFrom?: string, dateTo?: string, resolved?: boolean, page?: number, size?: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (vendorProfileId === null || vendorProfileId === undefined) {
             throw new Error('Required parameter vendorProfileId was null or undefined when calling listSupplierPriceCatalogUnmatchedLines.');
         }
 
         let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'reason',
+            <any>reason,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'search',
+            <any>search,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'dateFrom',
+            <any>dateFrom,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'dateTo',
+            <any>dateTo,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'resolved',
+            <any>resolved,
+            QueryParamStyle.Form,
+            true,
+        );
+
 
         localVarQueryParameters = this.addToHttpParams(
             localVarQueryParameters,

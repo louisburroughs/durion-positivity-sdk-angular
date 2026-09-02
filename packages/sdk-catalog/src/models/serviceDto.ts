@@ -14,6 +14,10 @@
  */
 export interface ServiceDto { 
     /**
+     * Vehicle-agnostic fallback labor hours in tenths
+     */
+    defaultLaborHours?: number;
+    /**
      * Service identifier
      */
     id?: string;
@@ -26,10 +30,26 @@ export interface ServiceDto {
      */
     name?: string;
     /**
+     * Operation category
+     */
+    operationCategory?: ServiceDtoOperationCategoryEnum;
+    /**
+     * Durion operation code
+     */
+    operationCode?: string;
+    /**
      * Short service description
      */
     shortDescription?: string;
 }
+export enum ServiceDtoOperationCategoryEnum {
+    Repair = 'REPAIR',
+    Diagnostic = 'DIAGNOSTIC',
+    Maintenance = 'MAINTENANCE',
+    TireService = 'TIRE_SERVICE'
+};
+
+
 
 function isOptionalServiceDtoPropertyOfType(
     value: Record<string, unknown>,
@@ -70,8 +90,8 @@ export function instanceOfServiceDto(value: object): value is ServiceDto {
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createServiceDtoPropertyNames();
-    const optionalStringProperties = createServiceDtoOptionalProperties({ name: 'id', nullable: false }, { name: 'longDescription', nullable: false }, { name: 'name', nullable: false }, { name: 'shortDescription', nullable: false }, );
-    const optionalNumberProperties = createServiceDtoOptionalProperties();
+    const optionalStringProperties = createServiceDtoOptionalProperties({ name: 'id', nullable: false }, { name: 'longDescription', nullable: false }, { name: 'name', nullable: false }, { name: 'operationCategory', nullable: false }, { name: 'operationCode', nullable: false }, { name: 'shortDescription', nullable: false }, );
+    const optionalNumberProperties = createServiceDtoOptionalProperties({ name: 'defaultLaborHours', nullable: false }, );
     const optionalBooleanProperties = createServiceDtoOptionalProperties();
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

@@ -14,6 +14,10 @@
  */
 export interface CatalogItemResponseDto { 
     /**
+     * Vehicle-agnostic fallback labor hours in tenths; service items only
+     */
+    defaultLaborHours?: number;
+    /**
      * Item identifier
      */
     id: string;
@@ -30,10 +34,26 @@ export interface CatalogItemResponseDto {
      */
     name?: string;
     /**
+     * Operation category; service items only
+     */
+    operationCategory?: CatalogItemResponseDtoOperationCategoryEnum;
+    /**
+     * Durion operation code; service items only
+     */
+    operationCode?: string;
+    /**
      * Short description
      */
     shortDescription?: string;
 }
+export enum CatalogItemResponseDtoOperationCategoryEnum {
+    Repair = 'REPAIR',
+    Diagnostic = 'DIAGNOSTIC',
+    Maintenance = 'MAINTENANCE',
+    TireService = 'TIRE_SERVICE'
+};
+
+
 
 function isOptionalCatalogItemResponseDtoPropertyOfType(
     value: Record<string, unknown>,
@@ -74,8 +94,8 @@ export function instanceOfCatalogItemResponseDto(value: object): value is Catalo
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createCatalogItemResponseDtoPropertyNames('id', 'itemType', );
-    const optionalStringProperties = createCatalogItemResponseDtoOptionalProperties({ name: 'id', nullable: false }, { name: 'itemType', nullable: false }, { name: 'longDescription', nullable: false }, { name: 'name', nullable: false }, { name: 'shortDescription', nullable: false }, );
-    const optionalNumberProperties = createCatalogItemResponseDtoOptionalProperties();
+    const optionalStringProperties = createCatalogItemResponseDtoOptionalProperties({ name: 'id', nullable: false }, { name: 'itemType', nullable: false }, { name: 'longDescription', nullable: false }, { name: 'name', nullable: false }, { name: 'operationCategory', nullable: false }, { name: 'operationCode', nullable: false }, { name: 'shortDescription', nullable: false }, );
+    const optionalNumberProperties = createCatalogItemResponseDtoOptionalProperties({ name: 'defaultLaborHours', nullable: false }, );
     const optionalBooleanProperties = createCatalogItemResponseDtoOptionalProperties();
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
