@@ -1,4 +1,4 @@
-# @durion-sdk/location@0.7.0-alpha
+# @durion-sdk/location@0.8.0-alpha
 
 API documentation for the Shop Location service, accessible via the API Gateway. Shop locations are Maintenance Bays and Mobile Shops.
 
@@ -24,7 +24,7 @@ Navigate to the folder of your consuming project and run one of next commands.
 _published:_
 
 ```console
-npm install @durion-sdk/location@0.7.0-alpha --save
+npm install @durion-sdk/location@0.8.0-alpha --save
 ```
 
 _without publishing (not recommended):_
