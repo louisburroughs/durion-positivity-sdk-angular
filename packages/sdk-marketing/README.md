@@ -1,4 +1,4 @@
-# @durion-sdk/marketing@0.7.0-alpha
+# @durion-sdk/marketing@0.8.0-alpha
 
 API for marketing campaigns, message templates, audience binding, send orchestration, and campaign analytics in the POS system
 
@@ -24,7 +24,7 @@ Navigate to the folder of your consuming project and run one of next commands.
 _published:_
 
 ```console
-npm install @durion-sdk/marketing@0.7.0-alpha --save
+npm install @durion-sdk/marketing@0.8.0-alpha --save
 ```
 
 _without publishing (not recommended):_
