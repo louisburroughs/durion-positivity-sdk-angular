@@ -12,7 +12,7 @@
 /**
  * One mechanic\'s proficiency in one skill
  */
-export interface MechanicSkillBulkIngestRecord { 
+export interface MechanicSkillBulkIngestRecord {
     /**
      * Canonical person id of the mechanic
      */

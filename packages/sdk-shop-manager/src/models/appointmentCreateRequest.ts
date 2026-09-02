@@ -12,7 +12,7 @@
 /**
  * Request to create an appointment from an estimate or workorder source document
  */
-export interface AppointmentCreateRequest { 
+export interface AppointmentCreateRequest {
     /**
      * CRM customer identifier the appointment is booked for
      */

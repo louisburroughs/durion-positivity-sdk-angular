@@ -12,7 +12,7 @@
 /**
  * Request to reschedule an appointment to a new time window with a mandatory reason
  */
-export interface RescheduleAppointmentRequest { 
+export interface RescheduleAppointmentRequest {
     /**
      * New appointment end instant in UTC (ISO-8601); must be after newStartAt
      */

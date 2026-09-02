@@ -12,7 +12,7 @@
 /**
  * Details about a conflict associated with a schedule event
  */
-export interface ConflictDetails { 
+export interface ConflictDetails {
     /**
      * Identifiers of events that conflict with this event
      */

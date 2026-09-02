@@ -12,7 +12,7 @@
 /**
  * Filter criteria for querying the shop audit trail. At least one field must be non-null.
  */
-export interface ShopAuditFilter { 
+export interface ShopAuditFilter {
     /**
      * Actor user ID to filter by
      */

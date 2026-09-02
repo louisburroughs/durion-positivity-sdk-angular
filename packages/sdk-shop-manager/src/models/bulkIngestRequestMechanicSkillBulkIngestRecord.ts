@@ -13,7 +13,7 @@ import { MechanicSkillBulkIngestRecord } from './mechanicSkillBulkIngestRecord';
 /**
  * Generic bulk ingest request: a batch of records for a job scoped to a location
  */
-export interface BulkIngestRequestMechanicSkillBulkIngestRecord { 
+export interface BulkIngestRequestMechanicSkillBulkIngestRecord {
     /**
      * Identifier of the bulk ingest job
      */

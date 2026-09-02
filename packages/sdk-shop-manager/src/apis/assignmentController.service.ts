@@ -11,7 +11,7 @@
 
 import { Inject, Injectable, Optional }                      from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams,
-         HttpResponse, HttpEvent, HttpContext 
+         HttpResponse, HttpEvent, HttpContext
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
@@ -39,8 +39,8 @@ export class AssignmentControllerService extends BaseService {
 
     /**
      * @endpoint post /v1/appointments/{appointmentId}/assignments
-     * @param appointmentId 
-     * @param createAssignmentRequest 
+     * @param appointmentId
+     * @param createAssignmentRequest
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -111,7 +111,7 @@ export class AssignmentControllerService extends BaseService {
 
     /**
      * @endpoint get /v1/appointments/{appointmentId}/assignments
-     * @param appointmentId 
+     * @param appointmentId
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options

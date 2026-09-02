@@ -13,7 +13,7 @@ import { ScheduleResourceView } from './scheduleResourceView';
 /**
  * Schedule view for a location and date, grouped by resource with their events
  */
-export interface ScheduleViewResponse { 
+export interface ScheduleViewResponse {
     /**
      * Status of the availability overlay (e.g. AVAILABLE, UNAVAILABLE, SKIPPED)
      */

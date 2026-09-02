@@ -11,7 +11,7 @@
 
 import { Inject, Injectable, Optional }                      from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams,
-         HttpResponse, HttpEvent, HttpContext 
+         HttpResponse, HttpEvent, HttpContext
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
@@ -39,7 +39,7 @@ export class MechanicSkillBulkIngestAPIService extends BaseService {
 
     /**
      * Set Mechanics\&#39; Skill Sets in Bulk
-     * Sets many mechanics\&#39; skill sets at once, folding the rows of each mechanic into a single replacement. Use this tool when seeding a workshop\&#39;s capabilities; use replaceMechanicSkills instead for a single mechanic. Preconditions: each person must already exist as a mechanic. Mechanics are projected from ACTIVE TECHNICIAN staffing assignments over Kafka, so run this after those assignments and allow the projection to catch up. Required inputs: jobId (UUID), locationId (UUID) and records, each with a personId, a skillCode and a proficiencyLevel from 1 to 5. A mechanic appears once per skill; the rows are grouped here. Emits a SHOP_MECHANIC_SKILLS_BULK_INGEST event, and routes each mechanic\&#39;s set through the same HR-feed path the Kafka projection uses, so dedupe, stale-guard and audit apply as usual; re-running the same file is safe, since each mechanic\&#39;s set is replaced rather than added to. Returns 200 with a per-record result; every row of one mechanic shares that mechanic\&#39;s outcome, since they were applied together. 
+     * Sets many mechanics\&#39; skill sets at once, folding the rows of each mechanic into a single replacement. Use this tool when seeding a workshop\&#39;s capabilities; use replaceMechanicSkills instead for a single mechanic. Preconditions: each person must already exist as a mechanic. Mechanics are projected from ACTIVE TECHNICIAN staffing assignments over Kafka, so run this after those assignments and allow the projection to catch up. Required inputs: jobId (UUID), locationId (UUID) and records, each with a personId, a skillCode and a proficiencyLevel from 1 to 5. A mechanic appears once per skill; the rows are grouped here. Emits a SHOP_MECHANIC_SKILLS_BULK_INGEST event, and routes each mechanic\&#39;s set through the same HR-feed path the Kafka projection uses, so dedupe, stale-guard and audit apply as usual; re-running the same file is safe, since each mechanic\&#39;s set is replaced rather than added to. Returns 200 with a per-record result; every row of one mechanic shares that mechanic\&#39;s outcome, since they were applied together.
      * @endpoint post /v1/shop-manager/mechanics/bulk-ingest
      * @param bulkIngestRequestMechanicSkillBulkIngestRecord Mechanic skills, one row per skill.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.

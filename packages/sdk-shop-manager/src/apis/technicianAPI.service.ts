@@ -11,11 +11,15 @@
 
 import { Inject, Injectable, Optional }                      from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams,
-         HttpResponse, HttpEvent, HttpContext 
+         HttpResponse, HttpEvent, HttpContext
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
+// @ts-ignore
+import { Pageable } from '../src/models/pageable';
+// @ts-ignore
+import { PagedModelLocationTechnicianRosterEntryResponse } from '../src/models/pagedModelLocationTechnicianRosterEntryResponse';
 // @ts-ignore
 import { PersonDTO } from '../src/models/personDTO';
 
@@ -37,7 +41,7 @@ export class TechnicianAPIService extends BaseService {
 
     /**
      * Get Person Details for a Technician
-     * Resolves the person identity (names, emails, phone numbers) of a technician working at a shop location from the local people-contact replica. Use this tool when displaying or contacting an assigned technician; use viewSchedule instead for the technician\&#39;s scheduled work. Preconditions: a technician record must link the personId to the locationId; replica identity fields can trail the people-contact authority by the event-propagation delay. Required inputs: locationId and personId (UUIDs) as path parameters; there is no request body. Emits a SHOPMGR_TECHNICIAN_PERSON_GET audit event; no state changes occur, and when the replica row has not yet arrived the response carries only the person id with name and contact fields null. Returns 404 when no technician links the person to the location. 
+     * Resolves the person identity (names, emails, phone numbers) of a technician working at a shop location from the local people-contact replica. Use this tool when displaying or contacting an assigned technician; use viewSchedule instead for the technician\&#39;s scheduled work. Preconditions: a technician record must link the personId to the locationId; replica identity fields can trail the people-contact authority by the event-propagation delay. Required inputs: locationId and personId (UUIDs) as path parameters; there is no request body. Emits a SHOPMGR_TECHNICIAN_PERSON_GET audit event; no state changes occur, and when the replica row has not yet arrived the response carries only the person id with name and contact fields null. Returns 404 when no technician links the person to the location.
      * @endpoint get /v1/shop-manager/{locationId}/technicians/{personId}/person
      * @param locationId Shop location ID
      * @param personId People-contact person ID
@@ -89,6 +93,102 @@ export class TechnicianAPIService extends BaseService {
         return this.httpClient.request<PersonDTO>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * List technicians assigned to a location
+     * Returns location assignments enriched from the eventually consistent HR mechanic read model.
+     * @endpoint get /v1/shop-manager/{locationId}/technicians
+     * @param locationId Shop location ID
+     * @param pageable
+     * @param status
+     * @param skillCode
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public listLocationTechnicians(locationId: string, pageable: Pageable, status?: 'ACTIVE' | 'INACTIVE' | 'ON_LEAVE', skillCode?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PagedModelLocationTechnicianRosterEntryResponse>;
+    public listLocationTechnicians(locationId: string, pageable: Pageable, status?: 'ACTIVE' | 'INACTIVE' | 'ON_LEAVE', skillCode?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PagedModelLocationTechnicianRosterEntryResponse>>;
+    public listLocationTechnicians(locationId: string, pageable: Pageable, status?: 'ACTIVE' | 'INACTIVE' | 'ON_LEAVE', skillCode?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PagedModelLocationTechnicianRosterEntryResponse>>;
+    public listLocationTechnicians(locationId: string, pageable: Pageable, status?: 'ACTIVE' | 'INACTIVE' | 'ON_LEAVE', skillCode?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (locationId === null || locationId === undefined) {
+            throw new Error('Required parameter locationId was null or undefined when calling listLocationTechnicians.');
+        }
+        if (pageable === null || pageable === undefined) {
+            throw new Error('Required parameter pageable was null or undefined when calling listLocationTechnicians.');
+        }
+
+        let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'status',
+            <any>status,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'skillCode',
+            <any>skillCode,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'pageable',
+            <any>pageable,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/shop-manager/${this.configuration.encodeParam({name: "locationId", value: locationId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/technicians`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<PagedModelLocationTechnicianRosterEntryResponse>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                params: localVarQueryParameters.toHttpParams(),
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,

@@ -11,7 +11,7 @@
 
 import { Inject, Injectable, Optional }                      from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams,
-         HttpResponse, HttpEvent, HttpContext 
+         HttpResponse, HttpEvent, HttpContext
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
@@ -39,9 +39,9 @@ export class ShopAuditService extends BaseService {
 
     /**
      * Get a Shop Audit Entry by ID
-     * Returns a single immutable shop audit entry, including actor, event type, change summary, change patch and reason fields. Use this tool when the audit entry id is already known; use searchShopAudit instead to find entries by workorder, appointment, mechanic, actor, event type or location. Preconditions: the audit entry must exist; entries are never updated or deleted once written. Required inputs: id (UUID) as a path parameter; there is no request body. No events are emitted and no state changes; this is a read-only projection. Returns 404 when no audit entry exists for the supplied id. 
+     * Returns a single immutable shop audit entry, including actor, event type, change summary, change patch and reason fields. Use this tool when the audit entry id is already known; use searchShopAudit instead to find entries by workorder, appointment, mechanic, actor, event type or location. Preconditions: the audit entry must exist; entries are never updated or deleted once written. Required inputs: id (UUID) as a path parameter; there is no request body. No events are emitted and no state changes; this is a read-only projection. Returns 404 when no audit entry exists for the supplied id.
      * @endpoint get /v1/shop/audit/{id}
-     * @param id 
+     * @param id
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -99,7 +99,7 @@ export class ShopAuditService extends BaseService {
 
     /**
      * Search the Shop Audit Trail
-     * Searches the immutable shop audit trail of schedule and assignment changes, returning matching entries in reverse-chronological order with actor, event type, change summary and reason. Use this tool when investigating who changed a schedule or assignment and why; use getShopAuditEntry instead when the audit entry id is already known. Preconditions: at least one filter criterion (workorderId, appointmentId, mechanicId, actorUserId, eventType or locationId) must be supplied; unbounded scans are rejected. Required inputs: any combination of the filter fields plus optional fromDateTime and toDateTime, which default to the last 90 days ending now; eventType is one of SCHEDULE_CREATED, SCHEDULE_UPDATED, SCHEDULE_CANCELLED, ASSIGNMENT_CREATED or ASSIGNMENT_REMOVED. No events are emitted and no state changes; this is a read-only projection of records retained for seven years. Returns 400 when no filter criterion is provided. 
+     * Searches the immutable shop audit trail of schedule and assignment changes, returning matching entries in reverse-chronological order with actor, event type, change summary and reason. Use this tool when investigating who changed a schedule or assignment and why; use getShopAuditEntry instead when the audit entry id is already known. Preconditions: at least one filter criterion (workorderId, appointmentId, mechanicId, actorUserId, eventType or locationId) must be supplied; unbounded scans are rejected. Required inputs: any combination of the filter fields plus optional fromDateTime and toDateTime, which default to the last 90 days ending now; eventType is one of SCHEDULE_CREATED, SCHEDULE_UPDATED, SCHEDULE_CANCELLED, ASSIGNMENT_CREATED or ASSIGNMENT_REMOVED. No events are emitted and no state changes; this is a read-only projection of records retained for seven years. Returns 400 when no filter criterion is provided.
      * @endpoint get /v1/shop/audit
      * @param workorderId Workorder UUID to filter by - one word per workspace naming policy
      * @param appointmentId Appointment UUID to filter by
