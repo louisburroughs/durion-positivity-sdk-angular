@@ -12,7 +12,7 @@
 /**
  * Result of completing a workorder line item
  */
-export interface WorkorderItemCompletionResponse { 
+export interface WorkorderItemCompletionResponse {
     /**
      * Line item identifier
      */

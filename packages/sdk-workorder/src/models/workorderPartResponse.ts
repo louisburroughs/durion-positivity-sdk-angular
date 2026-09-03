@@ -12,7 +12,7 @@
 /**
  * Workorder part line item with usage totals
  */
-export interface WorkorderPartResponse { 
+export interface WorkorderPartResponse {
     /**
      * Backorder opened for this line\'s shortfall, when owned stock at the servicing site could not cover it. Present means the job is waiting on this part; query it through listBackorders (filter workorderLineId) for the SKU, location and quantity short. Cleared once the shortfall is covered.
      */

@@ -12,7 +12,7 @@ import { SortObject } from './sortObject';
 import { BayResponse } from './bayResponse';
 
 
-export interface PageBayResponse { 
+export interface PageBayResponse {
     content?: Array<BayResponse>;
     empty?: boolean;
     first?: boolean;

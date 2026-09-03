@@ -12,7 +12,7 @@
 /**
  * Validation result for a storage location lookup
  */
-export interface StorageLocationValidationResponseDTO { 
+export interface StorageLocationValidationResponseDTO {
     /**
      * Whether the storage location is active
      */

@@ -12,7 +12,7 @@
 /**
  * One storage location to create at a site
  */
-export interface StorageLocationBulkIngestRecord { 
+export interface StorageLocationBulkIngestRecord {
     /**
      * Mixing policy for new products
      */

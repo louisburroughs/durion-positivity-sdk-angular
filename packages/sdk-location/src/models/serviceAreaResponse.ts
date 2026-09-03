@@ -13,7 +13,7 @@ import { PostalCodeEntry } from './postalCodeEntry';
 /**
  * Response payload describing a service area
  */
-export interface ServiceAreaResponse { 
+export interface ServiceAreaResponse {
     /**
      * Whether the service area is active
      */

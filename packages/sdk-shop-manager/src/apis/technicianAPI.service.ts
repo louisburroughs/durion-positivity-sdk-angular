@@ -17,7 +17,7 @@ import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
 // @ts-ignore
-import { Pageable } from '../src/models/pageable';
+import { ApiError } from '../src/models/apiError';
 // @ts-ignore
 import { PagedModelLocationTechnicianRosterEntryResponse } from '../src/models/pagedModelLocationTechnicianRosterEntryResponse';
 // @ts-ignore
@@ -105,25 +105,24 @@ export class TechnicianAPIService extends BaseService {
 
     /**
      * List technicians assigned to a location
-     * Returns location assignments enriched from the eventually consistent HR mechanic read model.
+     * Returns the technicians assigned to one shop location, enriched with mechanic identity and skills from the eventually consistent HR read model. Use this tool when staffing or dispatching work at a single location; use listMechanics instead for the shop-wide roster, and getTechnicianPerson instead for one technician\&#39;s contact details. Preconditions: the location must exist as a shop, and both the technician assignments and their mechanic projection must have arrived over Kafka. Required inputs: locationId (UUID) as a path parameter, and there is no request body; optionally narrow with status and skillCode, both exact matches, where an omitted status defaults to ACTIVE, and page with page and size, since sort is accepted but ignored and the location roster is returned in a fixed order. Emits a SHOPMGR_LOCATION_TECHNICIAN_LIST audit event; no state changes occur, and the enrichment trails the People/HR authority by the event-propagation delay. Returns 404 when no shop exists for the location id, 403 when the caller lacks shop:technician:view, and an empty page rather than an error when no technician matches the filters.
      * @endpoint get /v1/shop-manager/{locationId}/technicians
      * @param locationId Shop location ID
-     * @param pageable
      * @param status
      * @param skillCode
+     * @param page Zero-based page index (0..N)
+     * @param size The size of the page to be returned
+     * @param sort Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public listLocationTechnicians(locationId: string, pageable: Pageable, status?: 'ACTIVE' | 'INACTIVE' | 'ON_LEAVE', skillCode?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PagedModelLocationTechnicianRosterEntryResponse>;
-    public listLocationTechnicians(locationId: string, pageable: Pageable, status?: 'ACTIVE' | 'INACTIVE' | 'ON_LEAVE', skillCode?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PagedModelLocationTechnicianRosterEntryResponse>>;
-    public listLocationTechnicians(locationId: string, pageable: Pageable, status?: 'ACTIVE' | 'INACTIVE' | 'ON_LEAVE', skillCode?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PagedModelLocationTechnicianRosterEntryResponse>>;
-    public listLocationTechnicians(locationId: string, pageable: Pageable, status?: 'ACTIVE' | 'INACTIVE' | 'ON_LEAVE', skillCode?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public listLocationTechnicians(locationId: string, status?: 'ACTIVE' | 'INACTIVE' | 'ON_LEAVE', skillCode?: string, page?: number, size?: number, sort?: Array<string>, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PagedModelLocationTechnicianRosterEntryResponse>;
+    public listLocationTechnicians(locationId: string, status?: 'ACTIVE' | 'INACTIVE' | 'ON_LEAVE', skillCode?: string, page?: number, size?: number, sort?: Array<string>, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PagedModelLocationTechnicianRosterEntryResponse>>;
+    public listLocationTechnicians(locationId: string, status?: 'ACTIVE' | 'INACTIVE' | 'ON_LEAVE', skillCode?: string, page?: number, size?: number, sort?: Array<string>, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PagedModelLocationTechnicianRosterEntryResponse>>;
+    public listLocationTechnicians(locationId: string, status?: 'ACTIVE' | 'INACTIVE' | 'ON_LEAVE', skillCode?: string, page?: number, size?: number, sort?: Array<string>, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (locationId === null || locationId === undefined) {
             throw new Error('Required parameter locationId was null or undefined when calling listLocationTechnicians.');
-        }
-        if (pageable === null || pageable === undefined) {
-            throw new Error('Required parameter pageable was null or undefined when calling listLocationTechnicians.');
         }
 
         let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
@@ -148,8 +147,26 @@ export class TechnicianAPIService extends BaseService {
 
         localVarQueryParameters = this.addToHttpParams(
             localVarQueryParameters,
-            'pageable',
-            <any>pageable,
+            'page',
+            <any>page,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'size',
+            <any>size,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'sort',
+            <any>sort,
             QueryParamStyle.Form,
             true,
         );

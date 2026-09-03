@@ -12,7 +12,7 @@
 /**
  * Recorded labor-performed response
  */
-export interface WorkexecLaborPerformedResponse { 
+export interface WorkexecLaborPerformedResponse {
     /**
      * Labor performed record identifier
      */

@@ -13,7 +13,7 @@ import { ConsumedItemResult } from './consumedItemResult';
 /**
  * Result of consuming picked items into a workorder
  */
-export interface ConsumePickedItemsResponse { 
+export interface ConsumePickedItemsResponse {
     /**
      * Per-item consumption results
      */

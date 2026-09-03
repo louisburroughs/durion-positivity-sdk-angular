@@ -12,7 +12,7 @@
 /**
  * Configuration object to be created
  */
-export interface ApprovalConfigurationRequest { 
+export interface ApprovalConfigurationRequest {
     /**
      * Approval method
      */

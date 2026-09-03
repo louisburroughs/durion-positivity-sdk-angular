@@ -12,7 +12,7 @@
 /**
  * Response payload describing a travel buffer policy
  */
-export interface TravelBufferPolicyResponse { 
+export interface TravelBufferPolicyResponse {
     /**
      * Type of buffer the policy applies
      */

@@ -13,7 +13,7 @@ import { AssignmentHistoryEntry } from './assignmentHistoryEntry';
 /**
  * Technician assignment response
  */
-export interface TechnicianAssignmentResponse { 
+export interface TechnicianAssignmentResponse {
     /**
      * When the technician was assigned
      */

@@ -12,7 +12,7 @@
 /**
  * Validation result for a location lookup
  */
-export interface LocationValidationResponseDTO { 
+export interface LocationValidationResponseDTO {
     /**
      * Whether the location is active
      */

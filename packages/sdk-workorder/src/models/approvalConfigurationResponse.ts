@@ -12,7 +12,7 @@
 /**
  * Response DTO for approval configurations
  */
-export interface ApprovalConfigurationResponse { 
+export interface ApprovalConfigurationResponse {
     /**
      * Approval method
      */

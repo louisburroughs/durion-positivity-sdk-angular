@@ -12,7 +12,7 @@
 /**
  * Request payload for administratively correcting authorized part quantity
  */
-export interface CorrectPartQuantityRequest { 
+export interface CorrectPartQuantityRequest {
     /**
      * Corrected authorized quantity
      */

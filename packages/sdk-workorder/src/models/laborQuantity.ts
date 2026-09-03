@@ -12,7 +12,7 @@
 /**
  * Labor quantity and unit of measure
  */
-export interface LaborQuantity { 
+export interface LaborQuantity {
     /**
      * Amount of labor performed
      */

@@ -12,7 +12,7 @@
 /**
  * Request payload for stopping a work session
  */
-export interface StopWorkSessionRequest { 
+export interface StopWorkSessionRequest {
     /**
      * Optional mechanic ID for disambiguation when multiple sessions could match
      */

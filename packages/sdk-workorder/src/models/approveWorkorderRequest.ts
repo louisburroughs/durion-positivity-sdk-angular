@@ -13,7 +13,7 @@ import { LineItemApprovalDto } from './lineItemApprovalDto';
 /**
  * Approval request with customer ID and signature capture
  */
-export interface ApproveWorkorderRequest { 
+export interface ApproveWorkorderRequest {
     /**
      * Customer ID who is approving the work order
      */

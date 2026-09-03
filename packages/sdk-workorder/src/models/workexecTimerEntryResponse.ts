@@ -12,7 +12,7 @@
 /**
  * Timer entry response for workexec timer APIs
  */
-export interface WorkexecTimerEntryResponse { 
+export interface WorkexecTimerEntryResponse {
     /**
      * Computed duration in seconds
      */

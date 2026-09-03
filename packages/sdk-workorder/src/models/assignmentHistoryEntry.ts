@@ -12,7 +12,7 @@
 /**
  * Assignment history entry
  */
-export interface AssignmentHistoryEntry { 
+export interface AssignmentHistoryEntry {
     /**
      * When the technician was assigned
      */

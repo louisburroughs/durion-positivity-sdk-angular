@@ -13,7 +13,7 @@ import { TechnicianLaborRow } from './technicianLaborRow';
 /**
  * Per-technician labor summary rows for the window, with truncation signalling
  */
-export interface TechnicianLaborAnalyticsResponse { 
+export interface TechnicianLaborAnalyticsResponse {
     /**
      * The limit applied to this response
      */

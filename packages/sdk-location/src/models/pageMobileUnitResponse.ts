@@ -12,7 +12,7 @@ import { MobileUnitResponse } from './mobileUnitResponse';
 import { SortObject } from './sortObject';
 
 
-export interface PageMobileUnitResponse { 
+export interface PageMobileUnitResponse {
     content?: Array<MobileUnitResponse>;
     empty?: boolean;
     first?: boolean;

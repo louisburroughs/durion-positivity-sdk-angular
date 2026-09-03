@@ -11,7 +11,7 @@
 
 import { Inject, Injectable, Optional }                      from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams,
-         HttpResponse, HttpEvent, HttpContext 
+         HttpResponse, HttpEvent, HttpContext
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
@@ -37,7 +37,7 @@ export class StorageLocationValidationControllerService extends BaseService {
 
     /**
      * Validate Storage Location Reference State
-     * Returns existence, active status, owning site id and maximum unit capacity for a storage location id without requiring the site to be known. Use this tool for inter-service reference validation before storing a storageLocationId; use getStorageLocation instead when the full record is needed and the site id is known. Preconditions: none; unknown ids are a valid input. Required inputs: storageLocationId (UUID) as a path parameter. Emits a LOCATION_STORAGE_LOCATION_VALIDATE event; no state changes. Returns 200 always, with exists&#x3D;false and a null siteId when the id is unknown, and 400 when the path value is not a valid UUID. 
+     * Returns existence, active status, owning site id and maximum unit capacity for a storage location id without requiring the site to be known. Use this tool for inter-service reference validation before storing a storageLocationId; use getStorageLocation instead when the full record is needed and the site id is known. Preconditions: none; unknown ids are a valid input. Required inputs: storageLocationId (UUID) as a path parameter. Emits a LOCATION_STORAGE_LOCATION_VALIDATE event; no state changes. Returns 200 always, with exists&#x3D;false and a null siteId when the id is unknown, and 400 when the path value is not a valid UUID.
      * @endpoint get /v1/storage-locations/{storageLocationId}/validation
      * @param storageLocationId Storage location identifier
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.

@@ -12,7 +12,7 @@
 /**
  * Response payload for controlled workorder reopen
  */
-export interface ReopenWorkorderResponse { 
+export interface ReopenWorkorderResponse {
     /**
      * Current lifecycle status
      */

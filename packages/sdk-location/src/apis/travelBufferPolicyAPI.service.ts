@@ -11,7 +11,7 @@
 
 import { Inject, Injectable, Optional }                      from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams,
-         HttpResponse, HttpEvent, HttpContext 
+         HttpResponse, HttpEvent, HttpContext
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
@@ -39,7 +39,7 @@ export class TravelBufferPolicyAPIService extends BaseService {
 
     /**
      * Create a New Travel Buffer Policy
-     * Creates a travel buffer policy that adds slack time around mobile unit travel for scheduling decisions. Use this tool before assigning the policy to mobile units via createMobileUnit or patchMobileUnit; do not use patchTravelBufferPolicy, which edits an existing policy. Preconditions: the name must not collide with an existing policy. Required inputs: name and bufferType, one of FLAT_MINUTES, PERCENTAGE_OF_TRAVEL or DISTANCE_MULTIPLIER; bufferValue is optional, must be non-negative, and is interpreted according to the bufferType. Emits a LOCATION_TRAVEL_BUFFER_POLICY_CREATE event. Returns 201 with the created policy and 409 when the name is already taken. 
+     * Creates a travel buffer policy that adds slack time around mobile unit travel for scheduling decisions. Use this tool before assigning the policy to mobile units via createMobileUnit or patchMobileUnit; do not use patchTravelBufferPolicy, which edits an existing policy. Preconditions: the name must not collide with an existing policy. Required inputs: name and bufferType, one of FLAT_MINUTES, PERCENTAGE_OF_TRAVEL or DISTANCE_MULTIPLIER; bufferValue is optional, must be non-negative, and is interpreted according to the bufferType. Emits a LOCATION_TRAVEL_BUFFER_POLICY_CREATE event. Returns 201 with the created policy and 409 when the name is already taken.
      * @endpoint post /v1/travel-buffer-policies
      * @param travelBufferPolicyRequest Travel buffer policy to create, pairing a buffer type with its numeric value.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -109,7 +109,7 @@ export class TravelBufferPolicyAPIService extends BaseService {
 
     /**
      * List All Travel Buffer Policies
-     * Lists all travel buffer policies with their buffer type, value and notes. Use this tool to discover policy ids for createMobileUnit or patchMobileUnit; use patchTravelBufferPolicy instead to change one. Preconditions: none beyond the location:travel-buffer-policy:read authority. Required inputs: none; there are no parameters, no paging and no request body. No events are emitted and no state changes; this is a read-only projection. Returns 200 with the full unpaginated list. 
+     * Lists all travel buffer policies with their buffer type, value and notes. Use this tool to discover policy ids for createMobileUnit or patchMobileUnit; use patchTravelBufferPolicy instead to change one. Preconditions: none beyond the location:travel-buffer-policy:read authority. Required inputs: none; there are no parameters, no paging and no request body. No events are emitted and no state changes; this is a read-only projection. Returns 200 with the full unpaginated list.
      * @endpoint get /v1/travel-buffer-policies
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
@@ -165,9 +165,9 @@ export class TravelBufferPolicyAPIService extends BaseService {
 
     /**
      * Patch Fields of Travel Buffer Policy
-     * Applies a partial update to a travel buffer policy, accepting the keys bufferType, bufferValue and notes. Use this tool to tune buffer behavior; do not use it to rename a policy, whose name is immutable after createTravelBufferPolicy. Preconditions: the policy must exist; the resulting bufferType must remain one of FLAT_MINUTES, PERCENTAGE_OF_TRAVEL or DISTANCE_MULTIPLIER and the resulting bufferValue non-negative. Required inputs: id (UUID) as a path parameter and a JSON object of the fields to change; keys other than bufferType, bufferValue and notes are silently ignored. Emits a LOCATION_TRAVEL_BUFFER_POLICY_PATCH event. Returns 400 when the id is not a valid UUID and 404 when no policy exists for it. 
+     * Applies a partial update to a travel buffer policy, accepting the keys bufferType, bufferValue and notes. Use this tool to tune buffer behavior; do not use it to rename a policy, whose name is immutable after createTravelBufferPolicy. Preconditions: the policy must exist; the resulting bufferType must remain one of FLAT_MINUTES, PERCENTAGE_OF_TRAVEL or DISTANCE_MULTIPLIER and the resulting bufferValue non-negative. Required inputs: id (UUID) as a path parameter and a JSON object of the fields to change; keys other than bufferType, bufferValue and notes are silently ignored. Emits a LOCATION_TRAVEL_BUFFER_POLICY_PATCH event. Returns 400 when the id is not a valid UUID and 404 when no policy exists for it.
      * @endpoint patch /v1/travel-buffer-policies/{id}
-     * @param id 
+     * @param id
      * @param body Free-form patch object; only the keys bufferType, bufferValue and notes are recognized.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.

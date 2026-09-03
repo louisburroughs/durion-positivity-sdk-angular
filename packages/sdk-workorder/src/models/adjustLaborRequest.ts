@@ -12,7 +12,7 @@
 /**
  * Request to manually adjust labor hours
  */
-export interface AdjustLaborRequest { 
+export interface AdjustLaborRequest {
     /**
      * Reason for the adjustment
      */

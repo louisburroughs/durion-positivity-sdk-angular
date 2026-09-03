@@ -9,6 +9,7 @@
  */
 import { MechanicStatus } from './mechanicStatus';
 import { BayStatus } from './bayStatus';
+import { MobileUnitStatus } from './mobileUnitStatus';
 import { WorkorderSummary } from './workorderSummary';
 import { ConflictEntry } from './conflictEntry';
 
@@ -16,9 +17,9 @@ import { ConflictEntry } from './conflictEntry';
 /**
  * Daily Dispatch Board dashboard aggregate response
  */
-export interface DashboardResponse { 
+export interface DashboardResponse {
     /**
-     * Service bay statuses
+     * Service bay statuses — every active bay at the location, including idle ones
      */
     bays?: Array<BayStatus>;
     /**
@@ -45,6 +46,10 @@ export interface DashboardResponse {
      * Mechanic statuses
      */
     mechanics?: Array<MechanicStatus>;
+    /**
+     * Mobile service unit statuses — every active mobile unit based at the location, including idle ones. Reported alongside bays, not instead of them: a shop can dispatch to both.
+     */
+    mobileUnits?: Array<MobileUnitStatus>;
     /**
      * Workorder summaries for the day
      */

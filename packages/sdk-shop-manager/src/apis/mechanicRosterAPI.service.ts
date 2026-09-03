@@ -17,7 +17,7 @@ import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
 // @ts-ignore
-import { Pageable } from '../src/models/pageable';
+import { ApiError } from '../src/models/apiError';
 // @ts-ignore
 import { PagedModelMechanicRosterEntryResponse } from '../src/models/pagedModelMechanicRosterEntryResponse';
 
@@ -39,22 +39,21 @@ export class MechanicRosterAPIService extends BaseService {
 
     /**
      * List mechanics
-     * Returns the eventually consistent mechanic read model synchronized from People/HR.
+     * Returns the eventually consistent mechanic read model synchronized from People/HR, one page at a time. Use this tool when building a shop-wide mechanic picker or capability report; use listLocationTechnicians instead when the roster must be scoped to a single shop location, and getTechnicianPerson for one technician\&#39;s contact details. Preconditions: mechanics are projected from ACTIVE TECHNICIAN staffing assignments over Kafka, so a newly hired mechanic appears only once that projection has caught up. Required inputs: none, and there is no request body; optionally narrow with status and skillCode, both exact matches, where an omitted status defaults to ACTIVE, and page with the standard page, size and sort parameters, which default to a stable lastName, firstName, personId ordering. Emits a SHOPMGR_MECHANIC_ROSTER_LIST audit event; no state changes occur, and rows trail the People/HR authority by the event-propagation delay. Returns 403 when the caller lacks shop:technician:view, and an empty page rather than an error when no mechanic matches the filters.
      * @endpoint get /v1/shop-manager/mechanics
-     * @param pageable
      * @param status
      * @param skillCode
+     * @param page Zero-based page index (0..N)
+     * @param size The size of the page to be returned
+     * @param sort Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public listMechanics(pageable: Pageable, status?: 'ACTIVE' | 'INACTIVE' | 'ON_LEAVE', skillCode?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PagedModelMechanicRosterEntryResponse>;
-    public listMechanics(pageable: Pageable, status?: 'ACTIVE' | 'INACTIVE' | 'ON_LEAVE', skillCode?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PagedModelMechanicRosterEntryResponse>>;
-    public listMechanics(pageable: Pageable, status?: 'ACTIVE' | 'INACTIVE' | 'ON_LEAVE', skillCode?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PagedModelMechanicRosterEntryResponse>>;
-    public listMechanics(pageable: Pageable, status?: 'ACTIVE' | 'INACTIVE' | 'ON_LEAVE', skillCode?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
-        if (pageable === null || pageable === undefined) {
-            throw new Error('Required parameter pageable was null or undefined when calling listMechanics.');
-        }
+    public listMechanics(status?: 'ACTIVE' | 'INACTIVE' | 'ON_LEAVE', skillCode?: string, page?: number, size?: number, sort?: Array<string>, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PagedModelMechanicRosterEntryResponse>;
+    public listMechanics(status?: 'ACTIVE' | 'INACTIVE' | 'ON_LEAVE', skillCode?: string, page?: number, size?: number, sort?: Array<string>, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PagedModelMechanicRosterEntryResponse>>;
+    public listMechanics(status?: 'ACTIVE' | 'INACTIVE' | 'ON_LEAVE', skillCode?: string, page?: number, size?: number, sort?: Array<string>, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PagedModelMechanicRosterEntryResponse>>;
+    public listMechanics(status?: 'ACTIVE' | 'INACTIVE' | 'ON_LEAVE', skillCode?: string, page?: number, size?: number, sort?: Array<string>, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
 
@@ -78,8 +77,26 @@ export class MechanicRosterAPIService extends BaseService {
 
         localVarQueryParameters = this.addToHttpParams(
             localVarQueryParameters,
-            'pageable',
-            <any>pageable,
+            'page',
+            <any>page,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'size',
+            <any>size,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'sort',
+            <any>sort,
             QueryParamStyle.Form,
             true,
         );

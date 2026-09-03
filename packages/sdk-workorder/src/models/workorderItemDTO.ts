@@ -12,7 +12,7 @@
 /**
  * Service or part line item included in a change request
  */
-export interface WorkorderItemDTO { 
+export interface WorkorderItemDTO {
     /**
      * Emergency notes used when photo evidence is unavailable
      */

@@ -12,7 +12,7 @@
 /**
  * Paid time off entry affecting technician availability
  */
-export interface PtoEntry { 
+export interface PtoEntry {
     /**
      * End timestamp of the PTO period
      */

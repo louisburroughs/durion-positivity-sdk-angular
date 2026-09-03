@@ -12,7 +12,7 @@
 /**
  * A single keyed count within a breakdown.
  */
-export interface CountGroup { 
+export interface CountGroup {
     /**
      * Count for this key.
      */

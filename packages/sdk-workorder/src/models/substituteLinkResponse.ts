@@ -12,7 +12,7 @@
 /**
  * A substitute-part link associating a product with an approved substitute
  */
-export interface SubstituteLinkResponse { 
+export interface SubstituteLinkResponse {
     active?: boolean;
     autoSuggest?: boolean;
     /**

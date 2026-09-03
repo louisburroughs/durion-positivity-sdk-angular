@@ -12,7 +12,7 @@
 /**
  * Response describing a workorder pick list
  */
-export interface WorkorderPickListResponse { 
+export interface WorkorderPickListResponse {
     /**
      * Timestamp the pick list was created
      */

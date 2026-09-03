@@ -13,7 +13,7 @@ import { CountGroup } from './countGroup';
 /**
  * Aggregate count result with an optional per-key breakdown.
  */
-export interface CountResponse { 
+export interface CountResponse {
     /**
      * Optional per-key breakdown; empty when only a total is requested.
      */

@@ -13,7 +13,7 @@ import { PtoEntry } from './ptoEntry';
 /**
  * Current availability and status of a mechanic
  */
-export interface MechanicStatus { 
+export interface MechanicStatus {
     /**
      * Identifier of the workorder the mechanic is currently assigned to
      */

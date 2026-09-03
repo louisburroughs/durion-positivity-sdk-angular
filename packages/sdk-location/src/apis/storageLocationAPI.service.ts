@@ -11,7 +11,7 @@
 
 import { Inject, Injectable, Optional }                      from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams,
-         HttpResponse, HttpEvent, HttpContext 
+         HttpResponse, HttpEvent, HttpContext
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
@@ -45,9 +45,9 @@ export class StorageLocationAPIService extends BaseService {
 
     /**
      * Create a Storage Location Within Site
-     * Creates a storage location (FLOOR, SHELF, BIN, CAGE or TRUCK) inside a site, always starting in ACTIVE status. Use this tool when adding storage topology to a site; do not use patchStorageLocation, which modifies an existing node, and use createBay for vehicle service bays rather than inventory storage. Preconditions: the site must exist, the name must be unique within the site (case-insensitive), any barcode must be unique within the site, and a parentStorageLocationId must reference a storage location of the same site. Required inputs: name and type; barcode, parentStorageLocationId, capacity and temperature (free-form JSON objects) are optional. The optional storageCategoryCode declares the putaway capability — what the location is fit to hold (TIRE_RACK, OIL_STORAGE, BATTERY_RACK, SMALL_PARTS_BIN, BULK_FLOOR, STAGING, QUARANTINE, GENERAL) — which is independent of type: a tire rack and a bulk pallet area are both FLOOR. Omitting it leaves the capability undeclared, and the response reports GENERAL, which accepts every catalog category. hazardContainment (default false) and allowNewProduct (MIXED, SAME_PRODUCT_ONLY or EMPTY_ONLY; default MIXED) are the other putaway attributes. Emits a LOCATION_STORAGE_LOCATION_CREATE event and publishes a storage-location fact for replica consumers. Returns 404 when the site does not exist, 409 when the name or barcode is already used in the site, and 400 when the parent storage location is unknown or belongs to a different site. 
+     * Creates a storage location (FLOOR, SHELF, BIN, CAGE or TRUCK) inside a site, always starting in ACTIVE status. Use this tool when adding storage topology to a site; do not use patchStorageLocation, which modifies an existing node, and use createBay for vehicle service bays rather than inventory storage. Preconditions: the site must exist, the name must be unique within the site (case-insensitive), any barcode must be unique within the site, and a parentStorageLocationId must reference a storage location of the same site. Required inputs: name and type; barcode, parentStorageLocationId, capacity and temperature (free-form JSON objects) are optional. The optional storageCategoryCode declares the putaway capability — what the location is fit to hold (TIRE_RACK, OIL_STORAGE, BATTERY_RACK, SMALL_PARTS_BIN, BULK_FLOOR, STAGING, QUARANTINE, GENERAL) — which is independent of type: a tire rack and a bulk pallet area are both FLOOR. Omitting it leaves the capability undeclared, and the response reports GENERAL, which accepts every catalog category. hazardContainment (default false) and allowNewProduct (MIXED, SAME_PRODUCT_ONLY or EMPTY_ONLY; default MIXED) are the other putaway attributes. Emits a LOCATION_STORAGE_LOCATION_CREATE event and publishes a storage-location fact for replica consumers. Returns 404 when the site does not exist, 409 when the name or barcode is already used in the site, and 400 when the parent storage location is unknown or belongs to a different site.
      * @endpoint post /v1/locations/{siteId}/storage-locations
-     * @param siteId 
+     * @param siteId
      * @param storageLocationRequest Storage location to create, positioned in the site\&#39;s topology via its optional parent reference.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
@@ -119,10 +119,10 @@ export class StorageLocationAPIService extends BaseService {
 
     /**
      * Get a Storage Location by Identifier
-     * Returns a single storage location of a site, including capacity and temperature attributes and its parent reference. Use this tool when the storage location id and its site are both known; use validateStorageLocation instead when only existence, active state and site ownership must be checked without knowing the site. Preconditions: the storage location must exist and belong to the supplied site. Required inputs: siteId and storageLocationId (UUIDs) as path parameters. Emits a LOCATION_STORAGE_LOCATION_GET event; no state changes. Returns 404 when no storage location with that id exists under the site. 
+     * Returns a single storage location of a site, including capacity and temperature attributes and its parent reference. Use this tool when the storage location id and its site are both known; use validateStorageLocation instead when only existence, active state and site ownership must be checked without knowing the site. Preconditions: the storage location must exist and belong to the supplied site. Required inputs: siteId and storageLocationId (UUIDs) as path parameters. Emits a LOCATION_STORAGE_LOCATION_GET event; no state changes. Returns 404 when no storage location with that id exists under the site.
      * @endpoint get /v1/locations/{siteId}/storage-locations/{storageLocationId}
-     * @param siteId 
-     * @param storageLocationId 
+     * @param siteId
+     * @param storageLocationId
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -183,7 +183,7 @@ export class StorageLocationAPIService extends BaseService {
 
     /**
      * Get Full Storage Location Topology
-     * Returns every storage location of a site, regardless of status, as a flat unpaginated list with id, name, type, status and parentStorageLocationId. Use this tool when a rollup or topology consumer needs the whole storage tree in one call; use listStorageLocations instead for paginated, filtered browsing. Preconditions: the site must exist. Required inputs: siteId (UUID) as a path parameter; there is no filtering. Emits a LOCATION_STORAGE_LOCATION_TOPOLOGY event; no state changes. Returns 404 when the site does not exist. 
+     * Returns every storage location of a site, regardless of status, as a flat unpaginated list with id, name, type, status and parentStorageLocationId. Use this tool when a rollup or topology consumer needs the whole storage tree in one call; use listStorageLocations instead for paginated, filtered browsing. Preconditions: the site must exist. Required inputs: siteId (UUID) as a path parameter; there is no filtering. Emits a LOCATION_STORAGE_LOCATION_TOPOLOGY event; no state changes. Returns 404 when the site does not exist.
      * @endpoint get /v1/locations/{siteId}/storage-locations/topology
      * @param siteId Site identifier
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -243,11 +243,11 @@ export class StorageLocationAPIService extends BaseService {
 
     /**
      * List Storage Locations of a Site
-     * Lists the storage locations of a site as a page, optionally filtered by type and status. Use this tool for paginated browsing; use getStorageLocationTopology instead when the complete unpaginated hierarchy of the site is needed. Preconditions: none; an unknown site id yields an empty page rather than an error. Required inputs: siteId (UUID) as a path parameter; type (FLOOR, SHELF, BIN, CAGE, TRUCK) and status (ACTIVE, INACTIVE, MAINTENANCE, QUARANTINED) filters are optional, and standard page, size and sort parameters control paging. Emits a LOCATION_STORAGE_LOCATION_LIST event; no state changes. Returns 200 with a page of storage locations regardless of whether any match the filters. 
+     * Lists the storage locations of a site as a page, optionally filtered by type and status. Use this tool for paginated browsing; use getStorageLocationTopology instead when the complete unpaginated hierarchy of the site is needed. Preconditions: none; an unknown site id yields an empty page rather than an error. Required inputs: siteId (UUID) as a path parameter; type (FLOOR, SHELF, BIN, CAGE, TRUCK) and status (ACTIVE, INACTIVE, MAINTENANCE, QUARANTINED) filters are optional, and standard page, size and sort parameters control paging. Emits a LOCATION_STORAGE_LOCATION_LIST event; no state changes. Returns 200 with a page of storage locations regardless of whether any match the filters.
      * @endpoint get /v1/locations/{siteId}/storage-locations
-     * @param siteId 
-     * @param type 
-     * @param status 
+     * @param siteId
+     * @param type
+     * @param status
      * @param page Zero-based page index (0..N)
      * @param size The size of the page to be returned
      * @param sort Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
@@ -356,10 +356,10 @@ export class StorageLocationAPIService extends BaseService {
 
     /**
      * Patch Fields of a Storage Location
-     * Applies a partial update to a storage location, covering rename, barcode, reparenting, capacity, temperature, putaway capability and status transitions. Use this tool for all storage-location mutations after creation, including deactivation; do not use createStorageLocation, which adds a new node. Preconditions: the storage location must exist in the site; a new name or barcode must be unique within the site, a new parent must belong to the same site without creating a cycle, and deactivating a node that still holds on-hand stock requires a destinationStorageLocationId naming an ACTIVE storage location of the same site to receive the transferred inventory. Required inputs: siteId and storageLocationId (UUIDs) as path parameters and a body with at least one field; status accepts ACTIVE, INACTIVE, MAINTENANCE or QUARANTINED, storageCategoryCode accepts TIRE_RACK, OIL_STORAGE, BATTERY_RACK, SMALL_PARTS_BIN, BULK_FLOOR, STAGING, QUARANTINE or GENERAL, and allowNewProduct accepts MIXED, SAME_PRODUCT_ONLY or EMPTY_ONLY. Every capability field is independently omittable — an absent one is left unchanged rather than reset. Emits a LOCATION_STORAGE_LOCATION_UPDATE event, publishes a storage-location fact, and on deactivation with stock triggers an atomic inventory transfer to the destination. Returns 404 when the storage location or transfer destination does not exist, 409 when the name or barcode collides or the new parent would create a cycle, 400 when the parent is unknown or in another site, and 422 when deactivation needs a destination that is missing, inactive or the node itself. 
+     * Applies a partial update to a storage location, covering rename, barcode, reparenting, capacity, temperature, putaway capability and status transitions. Use this tool for all storage-location mutations after creation, including deactivation; do not use createStorageLocation, which adds a new node. Preconditions: the storage location must exist in the site; a new name or barcode must be unique within the site, a new parent must belong to the same site without creating a cycle, and deactivating a node that still holds on-hand stock requires a destinationStorageLocationId naming an ACTIVE storage location of the same site to receive the transferred inventory. Required inputs: siteId and storageLocationId (UUIDs) as path parameters and a body with at least one field; status accepts ACTIVE, INACTIVE, MAINTENANCE or QUARANTINED, storageCategoryCode accepts TIRE_RACK, OIL_STORAGE, BATTERY_RACK, SMALL_PARTS_BIN, BULK_FLOOR, STAGING, QUARANTINE or GENERAL, and allowNewProduct accepts MIXED, SAME_PRODUCT_ONLY or EMPTY_ONLY. Every capability field is independently omittable — an absent one is left unchanged rather than reset. Emits a LOCATION_STORAGE_LOCATION_UPDATE event, publishes a storage-location fact, and on deactivation with stock triggers an atomic inventory transfer to the destination. Returns 404 when the storage location or transfer destination does not exist, 409 when the name or barcode collides or the new parent would create a cycle, 400 when the parent is unknown or in another site, and 422 when deactivation needs a destination that is missing, inactive or the node itself.
      * @endpoint patch /v1/locations/{siteId}/storage-locations/{storageLocationId}
-     * @param siteId 
-     * @param storageLocationId 
+     * @param siteId
+     * @param storageLocationId
      * @param storageLocationPatchRequest Partial storage-location payload; only non-null fields are applied, and destinationStorageLocationId is consumed only when deactivating a node that still holds stock.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.

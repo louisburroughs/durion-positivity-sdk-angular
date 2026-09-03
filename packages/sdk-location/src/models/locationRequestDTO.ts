@@ -15,7 +15,7 @@ import { LocationTypeDTO } from './locationTypeDTO';
 /**
  * Request payload for creating or updating a location
  */
-export interface LocationRequestDTO { 
+export interface LocationRequestDTO {
     /**
      * Whether the location is active
      */

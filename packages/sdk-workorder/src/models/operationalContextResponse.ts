@@ -12,7 +12,7 @@
 /**
  * Operational context details for a workorder
  */
-export interface OperationalContextResponse { 
+export interface OperationalContextResponse {
     /**
      * Assigned mechanic identifiers
      */
@@ -21,10 +21,6 @@ export interface OperationalContextResponse {
      * Assigned resource identifiers
      */
     assignedResources?: Array<string>;
-    /**
-     * Bay identifier
-     */
-    bayId?: string;
     /**
      * Operational constraints
      */
@@ -38,6 +34,14 @@ export interface OperationalContextResponse {
      */
     locked: boolean;
     /**
+     * Identifier of the workorder\'s primary assigned resource; read together with resourceType, which says whether it is a bay or a mobile unit
+     */
+    resourceId?: string;
+    /**
+     * Kind of resource resourceId points at. Null exactly when resourceId is null
+     */
+    resourceType?: OperationalContextResponseResourceTypeEnum;
+    /**
      * Scheduled end time
      */
     scheduledEndAt?: string;
@@ -50,6 +54,12 @@ export interface OperationalContextResponse {
      */
     version?: string;
 }
+export enum OperationalContextResponseResourceTypeEnum {
+    Bay = 'BAY',
+    MobileUnit = 'MOBILE_UNIT'
+};
+
+
 
 function isOptionalOperationalContextResponsePropertyOfType(
     value: Record<string, unknown>,
@@ -90,7 +100,7 @@ export function instanceOfOperationalContextResponse(value: object): value is Op
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createOperationalContextResponsePropertyNames('locked', );
-    const optionalStringProperties = createOperationalContextResponseOptionalProperties({ name: 'bayId', nullable: false }, { name: 'locationId', nullable: false }, { name: 'scheduledEndAt', nullable: false }, { name: 'scheduledStartAt', nullable: false }, { name: 'version', nullable: false }, );
+    const optionalStringProperties = createOperationalContextResponseOptionalProperties({ name: 'locationId', nullable: false }, { name: 'resourceId', nullable: false }, { name: 'resourceType', nullable: false }, { name: 'scheduledEndAt', nullable: false }, { name: 'scheduledStartAt', nullable: false }, { name: 'version', nullable: false }, );
     const optionalNumberProperties = createOperationalContextResponseOptionalProperties();
     const optionalBooleanProperties = createOperationalContextResponseOptionalProperties({ name: 'locked', nullable: false }, );
 

@@ -13,7 +13,7 @@ import { BayCapacityRequest } from './bayCapacityRequest';
 /**
  * Request payload for creating a service bay
  */
-export interface BayRequest { 
+export interface BayRequest {
     /**
      * Type classification of the bay; must be a BayType value
      */

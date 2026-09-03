@@ -12,7 +12,7 @@
 /**
  * Request payload to adjust a travel segment\'s recorded times
  */
-export interface CreateTravelSegmentAdjustmentRequest { 
+export interface CreateTravelSegmentAdjustmentRequest {
     /**
      * Adjusted travel segment end timestamp
      */

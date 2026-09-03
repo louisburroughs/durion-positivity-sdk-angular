@@ -12,7 +12,7 @@
 /**
  * Person reference associated with a location
  */
-export interface PersonDTO { 
+export interface PersonDTO {
     /**
      * First name of the person
      */

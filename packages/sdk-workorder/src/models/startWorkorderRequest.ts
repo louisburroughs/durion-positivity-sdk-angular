@@ -12,7 +12,7 @@
 /**
  * Optional request payload used when starting a workorder
  */
-export interface StartWorkorderRequest { 
+export interface StartWorkorderRequest {
     /**
      * Optional reason associated with start transition
      */

@@ -12,7 +12,7 @@
 /**
  * One technician\'s labor summary for the window
  */
-export interface TechnicianLaborRow { 
+export interface TechnicianLaborRow {
     /**
      * Sum of WorkorderLaborEntry.hoursWorked for this technician\'s stopped labor entries whose startTime falls in the window (window = labor log time, not workorder completion date)
      */

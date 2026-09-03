@@ -14,7 +14,7 @@ import { HolidayClosureRequest } from './holidayClosureRequest';
 /**
  * Partial update payload for a location; null fields are left unchanged
  */
-export interface LocationPatchRequest { 
+export interface LocationPatchRequest {
     /**
      * Buffer minutes reserved before appointments for check-in
      */

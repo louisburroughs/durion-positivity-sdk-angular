@@ -11,7 +11,7 @@
 
 import { Inject, Injectable, Optional }                      from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams,
-         HttpResponse, HttpEvent, HttpContext 
+         HttpResponse, HttpEvent, HttpContext
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
@@ -39,7 +39,7 @@ export class SiteDefaultsAPIService extends BaseService {
 
     /**
      * Configure Default Storage Locations for Site
-     * Creates or replaces the default staging and quarantine storage locations of a site in a single idempotent upsert. Use this tool when commissioning a site\&#39;s receiving flow or moving its defaults; use getSiteDefaults instead to read the current assignment. Preconditions: the site must exist, and both referenced storage locations must belong to that site. Required inputs: locationId (UUID) as a path parameter and a body with both defaultStagingLocationId and defaultQuarantineLocationId; the two ids must differ. Emits a LOCATION_SITE_DEFAULTS_PUT event and republishes the location fact carrying the new defaults. Returns 404 when the site does not exist, 400 when either id is missing or both ids are the same, and 422 when a referenced storage location does not belong to the site. 
+     * Creates or replaces the default staging and quarantine storage locations of a site in a single idempotent upsert. Use this tool when commissioning a site\&#39;s receiving flow or moving its defaults; use getSiteDefaults instead to read the current assignment. Preconditions: the site must exist, and both referenced storage locations must belong to that site. Required inputs: locationId (UUID) as a path parameter and a body with both defaultStagingLocationId and defaultQuarantineLocationId; the two ids must differ. Emits a LOCATION_SITE_DEFAULTS_PUT event and republishes the location fact carrying the new defaults. Returns 404 when the site does not exist, 400 when either id is missing or both ids are the same, and 422 when a referenced storage location does not belong to the site.
      * @endpoint put /v1/locations/{locationId}/defaults
      * @param locationId ID of the location
      * @param siteDefaultsRequest Pair of storage location ids to install as the site\&#39;s staging and quarantine defaults.
@@ -113,7 +113,7 @@ export class SiteDefaultsAPIService extends BaseService {
 
     /**
      * Get Default Storage Locations for Site
-     * Returns the default staging and quarantine storage location ids configured for a site. Use this tool when routing received or quarantined inventory; do not use configureSiteDefaults, which overwrites the assignment. Preconditions: the site must exist; both ids are null when defaults were never configured. Required inputs: locationId (UUID) as a path parameter. Emits a LOCATION_SITE_DEFAULTS_GET event; no state changes. Returns 404 when the site does not exist. 
+     * Returns the default staging and quarantine storage location ids configured for a site. Use this tool when routing received or quarantined inventory; do not use configureSiteDefaults, which overwrites the assignment. Preconditions: the site must exist; both ids are null when defaults were never configured. Required inputs: locationId (UUID) as a path parameter. Emits a LOCATION_SITE_DEFAULTS_GET event; no state changes. Returns 404 when the site does not exist.
      * @endpoint get /v1/locations/{locationId}/defaults
      * @param locationId ID of the location
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.

@@ -12,7 +12,7 @@
 /**
  * Request body for stopping an in-progress travel segment
  */
-export interface StopTravelSegmentRequest { 
+export interface StopTravelSegmentRequest {
     /**
      * Optional notes recorded when stopping the travel segment
      */

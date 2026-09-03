@@ -13,7 +13,7 @@ import { WorkorderItemDTO } from './workorderItemDTO';
 /**
  * Change request details including items
  */
-export interface CreateChangeRequestDTO { 
+export interface CreateChangeRequestDTO {
     /**
      * Description of additional requested work
      */

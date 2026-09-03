@@ -11,7 +11,7 @@
 
 import { Inject, Injectable, Optional }                      from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams,
-         HttpResponse, HttpEvent, HttpContext 
+         HttpResponse, HttpEvent, HttpContext
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
@@ -39,9 +39,9 @@ export class SubstituteLinkAPIService extends BaseService {
 
     /**
      * Suggest Substitute Parts for Workorder
-     * Suggests substitute parts for a workorder by returning the active substitute links of the part named in the request, ordered by ascending priority. Use this tool when a pick is short and a stand-in part is needed; do not use listSubstituteLinks, which is the catalog view keyed by product rather than a workorder suggestion. Preconditions: suggestions require a partId scope — without a body or partId the result is currently an empty list, because workorder-wide suggestions are not implemented. Required inputs: workorderId (UUID) as a path parameter; the body is optional and carries partId (UUID) to scope suggestions to that part\&#39;s links. Emits a WORKORDER_SUBSTITUTE_SUGGEST audit event; no substitution is applied and no state changes — this is a read-only suggestion. Returns 200 with the suggested links, empty when no partId is given or no active links exist. 
+     * Suggests substitute parts for a workorder by returning the active substitute links of the part named in the request, ordered by ascending priority. Use this tool when a pick is short and a stand-in part is needed; do not use listSubstituteLinks, which is the catalog view keyed by product rather than a workorder suggestion. Preconditions: suggestions require a partId scope — without a body or partId the result is currently an empty list, because workorder-wide suggestions are not implemented. Required inputs: workorderId (UUID) as a path parameter; the body is optional and carries partId (UUID) to scope suggestions to that part\&#39;s links. Emits a WORKORDER_SUBSTITUTE_SUGGEST audit event; no substitution is applied and no state changes — this is a read-only suggestion. Returns 200 with the suggested links, empty when no partId is given or no active links exist.
      * @endpoint post /v1/workorders/{workorderId}/suggestSubstitutes
-     * @param workorderId 
+     * @param workorderId
      * @param suggestSubstitutesRequest Optional scope naming the workorder part to suggest substitutes for.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.

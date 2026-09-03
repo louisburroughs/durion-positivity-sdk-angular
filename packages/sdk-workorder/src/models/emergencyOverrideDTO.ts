@@ -12,7 +12,7 @@
 /**
  * Emergency override details including manager ID and reason
  */
-export interface EmergencyOverrideDTO { 
+export interface EmergencyOverrideDTO {
     /**
      * Reason justifying emergency override
      */

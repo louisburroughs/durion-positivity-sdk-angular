@@ -13,7 +13,7 @@ import { WorkorderStatusHistoryEntry } from './workorderStatusHistoryEntry';
 /**
  * Full WIP detail for a single workorder
  */
-export interface WorkorderStatusDetail { 
+export interface WorkorderStatusDetail {
     /**
      * ID of the technician currently assigned (null if unassigned)
      */

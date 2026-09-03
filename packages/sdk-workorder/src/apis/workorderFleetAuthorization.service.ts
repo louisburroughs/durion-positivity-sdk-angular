@@ -11,7 +11,7 @@
 
 import { Inject, Injectable, Optional }                      from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams,
-         HttpResponse, HttpEvent, HttpContext 
+         HttpResponse, HttpEvent, HttpContext
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
@@ -41,7 +41,7 @@ export class WorkorderFleetAuthorizationService extends BaseService {
 
     /**
      * Read A Workorder\&#39;s Fleet Payment Authorization
-     * Returns the fleet payment authorization recorded for a workorder, including the vendor\&#39;s own reason where it gave one. Use this tool to check why a fleet-covered workorder cannot start, or whether a re-request has been answered; do not use it to decide whether work may start, because startWorkorder enforces that itself and will refuse a start this endpoint would not have blocked. Preconditions: none. Required inputs: workorderId path parameter. Emits a WORKORDER_FLEET_AUTHORIZATION_READ event. Returns 200 with the authorization, and 404 when this workorder\&#39;s payer requires none or none has ever been requested. 
+     * Returns the fleet payment authorization recorded for a workorder, including the vendor\&#39;s own reason where it gave one. Use this tool to check why a fleet-covered workorder cannot start, or whether a re-request has been answered; do not use it to decide whether work may start, because startWorkorder enforces that itself and will refuse a start this endpoint would not have blocked. Preconditions: none. Required inputs: workorderId path parameter. Emits a WORKORDER_FLEET_AUTHORIZATION_READ event. Returns 200 with the authorization, and 404 when this workorder\&#39;s payer requires none or none has ever been requested.
      * @endpoint get /v1/workorders/{workorderId}/fleet-authorization
      * @param workorderId Workorder the authorization concerns
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -101,7 +101,7 @@ export class WorkorderFleetAuthorizationService extends BaseService {
 
     /**
      * Request Or Re-Request Fleet Payment Authorization
-     * Asks this workorder\&#39;s payer\&#39;s fleet program to authorize paying for it. The same endpoint that fires automatically on approval; calling it again is how an advisor retries after fixing whatever blocked the first attempt, such as a missing vehicle identity. Use this tool to retry a stuck authorization; do not call it while one is already PENDING or GRANTED, because it will not re-ask in either case and asking a fleet twice for the same workorder risks opening a second authorization at the vendor. Preconditions: this workorder\&#39;s payer must require fleet authorization; there is nothing to request otherwise. Required inputs: workorderId path parameter. Emits a WORKORDER_FLEET_AUTHORIZATION_REQUEST event, and where a vehicle can be identified, a workorder.fleetauth.requested command for pos-supplier to act on. Returns 200 with the authorization, whose status is PENDING when the vendor was asked, or MANUAL_REVIEW when no vehicle could be identified so nobody was asked; and 404 when this workorder\&#39;s payer does not require fleet authorization. 
+     * Asks this workorder\&#39;s payer\&#39;s fleet program to authorize paying for it. The same endpoint that fires automatically on approval; calling it again is how an advisor retries after fixing whatever blocked the first attempt, such as a missing vehicle identity. Use this tool to retry a stuck authorization; do not call it while one is already PENDING or GRANTED, because it will not re-ask in either case and asking a fleet twice for the same workorder risks opening a second authorization at the vendor. Preconditions: this workorder\&#39;s payer must require fleet authorization; there is nothing to request otherwise. Required inputs: workorderId path parameter. Emits a WORKORDER_FLEET_AUTHORIZATION_REQUEST event, and where a vehicle can be identified, a workorder.fleetauth.requested command for pos-supplier to act on. Returns 200 with the authorization, whose status is PENDING when the vendor was asked, or MANUAL_REVIEW when no vehicle could be identified so nobody was asked; and 404 when this workorder\&#39;s payer does not require fleet authorization.
      * @endpoint post /v1/workorders/{workorderId}/fleet-authorization/requests
      * @param workorderId Workorder to request authorization for
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -161,7 +161,7 @@ export class WorkorderFleetAuthorizationService extends BaseService {
 
     /**
      * Resolve A Refused Fleet Payment Authorization
-     * Records what an advisor decided to do about a fleet payment authorization that did not come back granted: revise the scope and try again, or cancel and find another payer. Use this tool after a fleet program refuses payment or no answer could be obtained; do not use it to select a different payer directly, because that needs a payer model this endpoint does not have -- cancel here and record the new payer through whatever assigns one. Preconditions: an authorization must be recorded for this workorder and must not already be GRANTED. Required inputs: workorderId path parameter; resolution (SCOPE_REVISED or CANCELLED) and reason in the request body. Emits a WORKORDER_FLEET_AUTHORIZATION_RESOLVE event. Returns 200 with the authorization, 404 when none is recorded for this workorder, and 409 when the recorded authorization is already GRANTED and needs no resolution. 
+     * Records what an advisor decided to do about a fleet payment authorization that did not come back granted: revise the scope and try again, or cancel and find another payer. Use this tool after a fleet program refuses payment or no answer could be obtained; do not use it to select a different payer directly, because that needs a payer model this endpoint does not have -- cancel here and record the new payer through whatever assigns one. Preconditions: an authorization must be recorded for this workorder and must not already be GRANTED. Required inputs: workorderId path parameter; resolution (SCOPE_REVISED or CANCELLED) and reason in the request body. Emits a WORKORDER_FLEET_AUTHORIZATION_RESOLVE event. Returns 200 with the authorization, 404 when none is recorded for this workorder, and 409 when the recorded authorization is already GRANTED and needs no resolution.
      * @endpoint post /v1/workorders/{workorderId}/fleet-authorization/resolution
      * @param workorderId Workorder whose authorization is being resolved
      * @param fleetAuthorizationResolutionRequest What the advisor decided to do about the refusal, and why. Do not use this to select a different payer directly, because that needs a payer model this endpoint does not have -- use CANCELLED here and record the new payer through whatever assigns one instead.

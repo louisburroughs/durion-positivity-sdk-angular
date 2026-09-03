@@ -11,7 +11,7 @@
 
 import { Inject, Injectable, Optional }                      from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams,
-         HttpResponse, HttpEvent, HttpContext 
+         HttpResponse, HttpEvent, HttpContext
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
@@ -39,7 +39,7 @@ export class MobileUnitBulkIngestAPIService extends BaseService {
 
     /**
      * Create Mobile Units in Bulk
-     * Creates many mobile units at once, one per record. Use this tool when commissioning a fleet or seeding an environment; use createMobileUnit instead for a single unit. Preconditions: each row\&#39;s base location must exist. A unit created ACTIVE must also carry a travel buffer policy, capabilities and coverage rules, which this record does not express — so seed units INACTIVE and activate them through createMobileUnit or a later update. Required inputs: jobId (UUID), locationId (UUID) and records, each with a name; a record\&#39;s own baseLocationId overrides the batch one. Emits a LOCATION_MOBILE_UNIT_MANAGE event and a unit-created event per row. Re-running the same file is safe: a name already present at its base location is reported as already existing rather than as a failure. Returns 200 with a per-record result; check each result rather than the status alone. 
+     * Creates many mobile units at once, one per record. Use this tool when commissioning a fleet or seeding an environment; use createMobileUnit instead for a single unit. Preconditions: each row\&#39;s base location must exist. A unit created ACTIVE must also carry a travel buffer policy, capabilities and coverage rules, which this record does not express — so seed units INACTIVE and activate them through createMobileUnit or a later update. Required inputs: jobId (UUID), locationId (UUID) and records, each with a name; a record\&#39;s own baseLocationId overrides the batch one. Emits a LOCATION_MOBILE_UNIT_MANAGE event and a unit-created event per row. Re-running the same file is safe: a name already present at its base location is reported as already existing rather than as a failure. Returns 200 with a per-record result; check each result rather than the status alone.
      * @endpoint post /v1/mobile-units/bulk-ingest
      * @param bulkIngestRequestMobileUnitBulkIngestRecord Mobile units to create.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.

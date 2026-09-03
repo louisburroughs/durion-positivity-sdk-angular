@@ -11,7 +11,7 @@
 
 import { Inject, Injectable, Optional }                      from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams,
-         HttpResponse, HttpEvent, HttpContext 
+         HttpResponse, HttpEvent, HttpContext
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
@@ -45,7 +45,7 @@ export class WorkSessionAPIService extends BaseService {
 
     /**
      * Start a Break Segment
-     * Opens a break segment inside an active work session, recording the break start time so break minutes are excluded from the session\&#39;s net duration. Use this tool when a technician pauses work; do not use stopWorkexecWorkSession, which ends the whole session rather than pausing it. Preconditions: the session must exist, be IN_PROGRESS, not be locked, and have no other break segment still open. Required inputs: workSessionId (UUID) as a path parameter; breakType (MEAL, REST, or OTHER) and notes are optional body fields. Emits a WORKORDER_WORK_SESSION_BREAK_START event. Returns 201 with the new break segment, 404 when the session does not exist, and 409 when the session is not IN_PROGRESS, is locked, or already has an open break. 
+     * Opens a break segment inside an active work session, recording the break start time so break minutes are excluded from the session\&#39;s net duration. Use this tool when a technician pauses work; do not use stopWorkexecWorkSession, which ends the whole session rather than pausing it. Preconditions: the session must exist, be IN_PROGRESS, not be locked, and have no other break segment still open. Required inputs: workSessionId (UUID) as a path parameter; breakType (MEAL, REST, or OTHER) and notes are optional body fields. Emits a WORKORDER_WORK_SESSION_BREAK_START event. Returns 201 with the new break segment, 404 when the session does not exist, and 409 when the session is not IN_PROGRESS, is locked, or already has an open break.
      * @endpoint post /v1/workorders/workSessions/{workSessionId}/breaks
      * @param workSessionId ID of the work session
      * @param addBreakSegmentRequest Break details classifying the pause within the running session.
@@ -119,7 +119,7 @@ export class WorkSessionAPIService extends BaseService {
 
     /**
      * Start a Technician Work Session
-     * Creates an IN_PROGRESS work session binding a mechanic to a workorder task, stamping the start time from the server clock. Use this tool when a technician clocks onto a task; do not use stopWorkexecWorkSession, which ends a running session, or addBreakSegment, which pauses one. Preconditions: the workorder must exist, and the mechanic must have no other IN_PROGRESS session unless overlapping sessions are enabled by configuration, the caller holds timekeeping:overlap_override, and an overlapOverrideReason is supplied. Required inputs: mechanicId, workOrderId, workOrderTaskId, and locationId (all UUIDs); resourceId and overlapOverrideReason are optional. Emits a WORKORDER_WORK_SESSION_START event; any overlap override is recorded with the overriding user and timestamp. Returns 201 with the new session, 404 when the workorder does not exist, and 409 when the mechanic already has an active session and no valid override applies. 
+     * Creates an IN_PROGRESS work session binding a mechanic to a workorder task, stamping the start time from the server clock. Use this tool when a technician clocks onto a task; do not use stopWorkexecWorkSession, which ends a running session, or addBreakSegment, which pauses one. Preconditions: the workorder must exist, and the mechanic must have no other IN_PROGRESS session unless overlapping sessions are enabled by configuration, the caller holds timekeeping:overlap_override, and an overlapOverrideReason is supplied. Required inputs: mechanicId, workOrderId, workOrderTaskId, and locationId (all UUIDs); resourceId and overlapOverrideReason are optional. Emits a WORKORDER_WORK_SESSION_START event; any overlap override is recorded with the overriding user and timestamp. Returns 201 with the new session, 404 when the workorder does not exist, and 409 when the mechanic already has an active session and no valid override applies.
      * @endpoint post /v1/workorders/workSessions/start
      * @param startWorkSessionRequest Session start details binding a mechanic to a workorder task and location.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -189,7 +189,7 @@ export class WorkSessionAPIService extends BaseService {
 
     /**
      * Stop a Break Segment
-     * Closes an open break segment within a work session, recording the break end time used to reduce the session\&#39;s net worked duration. Use this tool when a technician resumes work after a pause; do not use stopWorkexecWorkSession, which ends the entire session. Preconditions: the session and break segment must exist, the break must belong to that session and still be open, and the session must not be locked. Required inputs: workSessionId (UUID) and breakSegmentId (UUID) as path parameters; there is no request body. Emits a WORKORDER_WORK_SESSION_BREAK_STOP event. Returns 404 when the session or break segment cannot be found, and 409 when the break is already stopped or the session is locked. 
+     * Closes an open break segment within a work session, recording the break end time used to reduce the session\&#39;s net worked duration. Use this tool when a technician resumes work after a pause; do not use stopWorkexecWorkSession, which ends the entire session. Preconditions: the session and break segment must exist, the break must belong to that session and still be open, and the session must not be locked. Required inputs: workSessionId (UUID) and breakSegmentId (UUID) as path parameters; there is no request body. Emits a WORKORDER_WORK_SESSION_BREAK_STOP event. Returns 404 when the session or break segment cannot be found, and 409 when the break is already stopped or the session is locked.
      * @endpoint post /v1/workorders/workSessions/{workSessionId}/breaks/{breakSegmentId}/stop
      * @param workSessionId ID of the work session
      * @param breakSegmentId ID of the break segment to stop
@@ -253,7 +253,7 @@ export class WorkSessionAPIService extends BaseService {
 
     /**
      * Stop an Active Work Session
-     * Stops an IN_PROGRESS work session, transitioning it to COMPLETED and computing net worked seconds as elapsed time minus finished break segments. Use this tool when a technician clocks off a task; do not use stopBreakSegment, which only ends a break while the session keeps running. Preconditions: the session must exist, be IN_PROGRESS, and not be locked by payroll processing. Required inputs: workSessionId (UUID) as a path parameter; the body\&#39;s mechanicId is optional and not used to determine the session. Emits a WORKORDER_WORK_SESSION_STOP event carrying the net duration. Returns 404 when no session exists for the id, and 409 when the session is not IN_PROGRESS or is locked. 
+     * Stops an IN_PROGRESS work session, transitioning it to COMPLETED and computing net worked seconds as elapsed time minus finished break segments. Use this tool when a technician clocks off a task; do not use stopBreakSegment, which only ends a break while the session keeps running. Preconditions: the session must exist, be IN_PROGRESS, and not be locked by payroll processing. Required inputs: workSessionId (UUID) as a path parameter; the body\&#39;s mechanicId is optional and not used to determine the session. Emits a WORKORDER_WORK_SESSION_STOP event carrying the net duration. Returns 404 when no session exists for the id, and 409 when the session is not IN_PROGRESS or is locked.
      * @endpoint post /v1/workorders/workSessions/{workSessionId}/stop
      * @param workSessionId ID of the work session to stop
      * @param stopWorkSessionRequest Stop confirmation payload; the session is identified by the path id.

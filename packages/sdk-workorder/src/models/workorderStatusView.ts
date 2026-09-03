@@ -12,7 +12,7 @@
 /**
  * Summary view of a workorder\'s work-in-progress status
  */
-export interface WorkorderStatusView { 
+export interface WorkorderStatusView {
     /**
      * ID of the technician currently assigned (null if unassigned)
      */

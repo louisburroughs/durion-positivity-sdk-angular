@@ -12,7 +12,7 @@
 /**
  * Request to scope workorder substitute suggestions to a specific part
  */
-export interface SuggestSubstitutesRequest { 
+export interface SuggestSubstitutesRequest {
     /**
      * Identifier of the part (product) on the workorder to suggest substitutes for; omit for workorder-wide suggestions
      */

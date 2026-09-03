@@ -12,7 +12,7 @@ import { SortObject } from './sortObject';
 import { WorkorderStatusView } from './workorderStatusView';
 
 
-export interface PageWorkorderStatusView { 
+export interface PageWorkorderStatusView {
     content?: Array<WorkorderStatusView>;
     empty?: boolean;
     first?: boolean;

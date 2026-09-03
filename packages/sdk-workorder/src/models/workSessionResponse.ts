@@ -12,7 +12,7 @@
 /**
  * Response DTO for a work session
  */
-export interface WorkSessionResponse { 
+export interface WorkSessionResponse {
     /**
      * Notes provided at approval
      */

@@ -12,7 +12,7 @@ import { EstimateSummaryResponse } from './estimateSummaryResponse';
 import { SortObject } from './sortObject';
 
 
-export interface PageEstimateSummaryResponse { 
+export interface PageEstimateSummaryResponse {
     content?: Array<EstimateSummaryResponse>;
     empty?: boolean;
     first?: boolean;

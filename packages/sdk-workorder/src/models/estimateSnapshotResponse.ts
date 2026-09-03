@@ -12,7 +12,7 @@
 /**
  * Response payload for captured estimate snapshots
  */
-export interface EstimateSnapshotResponse { 
+export interface EstimateSnapshotResponse {
     /**
      * Snapshot capture timestamp
      */

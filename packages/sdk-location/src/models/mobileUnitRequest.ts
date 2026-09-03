@@ -13,7 +13,7 @@ import { CoverageRuleRequest } from './coverageRuleRequest';
 /**
  * Request payload for creating or updating a mobile unit
  */
-export interface MobileUnitRequest { 
+export interface MobileUnitRequest {
     /**
      * Identifier of the base location the mobile unit operates from
      */

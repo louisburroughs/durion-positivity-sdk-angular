@@ -12,7 +12,7 @@
 /**
  * A postal code entry within a service area
  */
-export interface PostalCodeEntry { 
+export interface PostalCodeEntry {
     /**
      * ISO 3166-1 alpha-2 country code
      */

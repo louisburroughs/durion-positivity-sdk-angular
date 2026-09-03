@@ -12,7 +12,7 @@
 /**
  * An advisor\'s resolution of a refused or unresolvable fleet payment authorization
  */
-export interface FleetAuthorizationResolutionRequest { 
+export interface FleetAuthorizationResolutionRequest {
     /**
      * Why, for the audit record
      */

@@ -12,7 +12,7 @@
 /**
  * Response representation of a travel segment
  */
-export interface TravelSegmentResponse { 
+export interface TravelSegmentResponse {
     /**
      * Identifier of the user who acted to record the segment
      */

@@ -12,7 +12,7 @@
 /**
  * A single entry in the workorder status history
  */
-export interface WorkorderStatusHistoryEntry { 
+export interface WorkorderStatusHistoryEntry {
     /**
      * Timestamp when the status change occurred
      */

@@ -12,7 +12,7 @@
 /**
  * A note about the customer, recorded against a workorder
  */
-export interface AddWorkorderNoteRequest { 
+export interface AddWorkorderNoteRequest {
     /**
      * The note as written.
      */

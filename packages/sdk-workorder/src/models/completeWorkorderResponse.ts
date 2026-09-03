@@ -12,7 +12,7 @@
 /**
  * Response payload for workorder completion
  */
-export interface CompleteWorkorderResponse { 
+export interface CompleteWorkorderResponse {
     /**
      * Timestamp when completion was recorded
      */

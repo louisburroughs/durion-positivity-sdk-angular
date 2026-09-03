@@ -12,7 +12,7 @@
 /**
  * One mobile unit to create
  */
-export interface MobileUnitBulkIngestRecord { 
+export interface MobileUnitBulkIngestRecord {
     /**
      * Location the unit is based at. Defaults to the request\'s locationId when omitted.
      */

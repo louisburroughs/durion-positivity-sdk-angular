@@ -11,7 +11,7 @@
 
 import { Inject, Injectable, Optional }                      from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams,
-         HttpResponse, HttpEvent, HttpContext 
+         HttpResponse, HttpEvent, HttpContext
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
@@ -39,7 +39,7 @@ export class ApprovalConfigurationAPIService extends BaseService {
 
     /**
      * Create Approval Configuration
-     * Creates an approval configuration defining how approvals are captured for a location, a location-customer pair, or globally when both scoping ids are omitted. Use this tool when introducing a new approval rule; do not use updateApprovalConfiguration, which modifies an existing configuration by id. Preconditions: none — duplicates for the same scope are not rejected, and the most specific row wins at resolution time. Required inputs: approvalMethod, one of CLICK_CONFIRM, SIGNATURE, ELECTRONIC_SIGNATURE, or VERBAL_CONFIRMATION; locationId, customerId, declineExpiryDays, requireSignature, and priority are optional. Emits a WORKORDER_APPROVAL_CONFIG_CREATE event. Returns 200 with the persisted configuration, and 400 when approvalMethod is not one of the accepted values. 
+     * Creates an approval configuration defining how approvals are captured for a location, a location-customer pair, or globally when both scoping ids are omitted. Use this tool when introducing a new approval rule; do not use updateApprovalConfiguration, which modifies an existing configuration by id. Preconditions: none — duplicates for the same scope are not rejected, and the most specific row wins at resolution time. Required inputs: approvalMethod, one of CLICK_CONFIRM, SIGNATURE, ELECTRONIC_SIGNATURE, or VERBAL_CONFIRMATION; locationId, customerId, declineExpiryDays, requireSignature, and priority are optional. Emits a WORKORDER_APPROVAL_CONFIG_CREATE event. Returns 200 with the persisted configuration, and 400 when approvalMethod is not one of the accepted values.
      * @endpoint post /v1/workexec/approvalConfigurations
      * @param approvalConfigurationRequest Approval capture rule to create, scoped by optional location and customer ids.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -109,7 +109,7 @@ export class ApprovalConfigurationAPIService extends BaseService {
 
     /**
      * Delete Approval Configuration
-     * Deletes an approval configuration by id, after which resolution falls through to broader scopes or the global default. Use this tool when retiring an approval rule; do not use updateApprovalConfiguration, which keeps the rule and changes its values. Preconditions: none — deletion is idempotent, and deleting an id that does not exist is a silent no-op. Required inputs: approvalId (UUID) as a path parameter; there is no request body. Emits a WORKORDER_APPROVAL_CONFIG_DELETE event. Returns 204 regardless of whether the configuration previously existed. 
+     * Deletes an approval configuration by id, after which resolution falls through to broader scopes or the global default. Use this tool when retiring an approval rule; do not use updateApprovalConfiguration, which keeps the rule and changes its values. Preconditions: none — deletion is idempotent, and deleting an id that does not exist is a silent no-op. Required inputs: approvalId (UUID) as a path parameter; there is no request body. Emits a WORKORDER_APPROVAL_CONFIG_DELETE event. Returns 204 regardless of whether the configuration previously existed.
      * @endpoint delete /v1/workexec/approvalConfigurations/{approvalId}
      * @param approvalId ID of the configuration to delete
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -168,7 +168,7 @@ export class ApprovalConfigurationAPIService extends BaseService {
 
     /**
      * Resolve Applicable Approval Configuration
-     * Resolves the most specific approval configuration for a location and customer, trying the location-plus-customer row first, then the location-wide row, then the global default with no location or customer. Use this tool when deciding how an approval must be captured for a specific job; use getApprovalConfiguration instead when the configuration id is already known. Preconditions: none — both filters are optional and narrower matches win. Required inputs: locationId (UUID) and customerId (UUID) as optional query parameters. No events are emitted and no state changes; this is a read-only projection. Returns 404 when no configuration matches at any specificity, in which case callers fall back to built-in defaults. 
+     * Resolves the most specific approval configuration for a location and customer, trying the location-plus-customer row first, then the location-wide row, then the global default with no location or customer. Use this tool when deciding how an approval must be captured for a specific job; use getApprovalConfiguration instead when the configuration id is already known. Preconditions: none — both filters are optional and narrower matches win. Required inputs: locationId (UUID) and customerId (UUID) as optional query parameters. No events are emitted and no state changes; this is a read-only projection. Returns 404 when no configuration matches at any specificity, in which case callers fall back to built-in defaults.
      * @endpoint get /v1/workexec/approvalConfigurations/applicable
      * @param locationId Location ID
      * @param customerId Customer ID
@@ -247,7 +247,7 @@ export class ApprovalConfigurationAPIService extends BaseService {
 
     /**
      * Get Approval Configuration by Id
-     * Returns a single approval configuration by its unique id. Use this tool when the configuration id is already known; use getApplicableApprovalConfiguration instead to resolve which configuration governs a given location and customer. Preconditions: the configuration must exist. Required inputs: approvalId (UUID) as a path parameter. No events are emitted and no state changes; this is a read-only projection. Returns 404 when no configuration exists for the id. 
+     * Returns a single approval configuration by its unique id. Use this tool when the configuration id is already known; use getApplicableApprovalConfiguration instead to resolve which configuration governs a given location and customer. Preconditions: the configuration must exist. Required inputs: approvalId (UUID) as a path parameter. No events are emitted and no state changes; this is a read-only projection. Returns 404 when no configuration exists for the id.
      * @endpoint get /v1/workexec/approvalConfigurations/{approvalId}
      * @param approvalId ID of the configuration to retrieve
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -307,7 +307,7 @@ export class ApprovalConfigurationAPIService extends BaseService {
 
     /**
      * List All Approval Configurations
-     * Returns every approval configuration, covering location-specific, customer-specific, and global default rows that govern how estimate and workorder approvals are captured. Use this tool when administering approval rules; use getApplicableApprovalConfiguration instead to resolve the single configuration that applies to one location and customer. Preconditions: none beyond the caller holding workorder:approval_config:view. Required inputs: none — there are no filters or pagination parameters. Emits a WORKORDER_APPROVAL_CONFIG_LIST audit event; no configuration state changes — this is a read-only projection. Returns 200 with the full list, possibly empty. 
+     * Returns every approval configuration, covering location-specific, customer-specific, and global default rows that govern how estimate and workorder approvals are captured. Use this tool when administering approval rules; use getApplicableApprovalConfiguration instead to resolve the single configuration that applies to one location and customer. Preconditions: none beyond the caller holding workorder:approval_config:view. Required inputs: none — there are no filters or pagination parameters. Emits a WORKORDER_APPROVAL_CONFIG_LIST audit event; no configuration state changes — this is a read-only projection. Returns 200 with the full list, possibly empty.
      * @endpoint get /v1/workexec
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
@@ -363,7 +363,7 @@ export class ApprovalConfigurationAPIService extends BaseService {
 
     /**
      * Update Approval Configuration
-     * Replaces every field of an existing approval configuration with the values in the request, including nulling fields that are omitted. Use this tool when changing an existing approval rule; do not use createApprovalConfiguration, which adds a new rule rather than replacing one. Preconditions: the configuration must exist; this is a full replacement, so send all fields that should remain set. Required inputs: approvalId (UUID) as a path parameter and approvalMethod (CLICK_CONFIRM, SIGNATURE, ELECTRONIC_SIGNATURE, or VERBAL_CONFIRMATION) in the body; locationId, customerId, declineExpiryDays, requireSignature, and priority are optional. Emits a WORKORDER_APPROVAL_CONFIG_UPDATE event. Returns 404 when the configuration does not exist and also when approvalMethod is not a valid value, because both surface as the same IllegalArgumentException in this operation. 
+     * Replaces every field of an existing approval configuration with the values in the request, including nulling fields that are omitted. Use this tool when changing an existing approval rule; do not use createApprovalConfiguration, which adds a new rule rather than replacing one. Preconditions: the configuration must exist; this is a full replacement, so send all fields that should remain set. Required inputs: approvalId (UUID) as a path parameter and approvalMethod (CLICK_CONFIRM, SIGNATURE, ELECTRONIC_SIGNATURE, or VERBAL_CONFIRMATION) in the body; locationId, customerId, declineExpiryDays, requireSignature, and priority are optional. Emits a WORKORDER_APPROVAL_CONFIG_UPDATE event. Returns 404 when the configuration does not exist and also when approvalMethod is not a valid value, because both surface as the same IllegalArgumentException in this operation.
      * @endpoint put /v1/workexec/approvalConfigurations/{approvalId}
      * @param approvalId ID of the configuration to update
      * @param approvalConfigurationRequest Full replacement values for the approval configuration.

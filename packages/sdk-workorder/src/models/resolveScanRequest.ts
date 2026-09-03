@@ -12,7 +12,7 @@
 /**
  * Request to resolve a scanned SKU and location against a pick task
  */
-export interface ResolveScanRequest { 
+export interface ResolveScanRequest {
     /**
      * Identifier of the location where the scan occurred
      */

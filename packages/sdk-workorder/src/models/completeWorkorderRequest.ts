@@ -12,7 +12,7 @@
 /**
  * Request payload to complete a workorder
  */
-export interface CompleteWorkorderRequest { 
+export interface CompleteWorkorderRequest {
     /**
      * Optional completion notes recorded for closeout
      */

@@ -12,7 +12,7 @@
 /**
  * Approval details including user ID and note
  */
-export interface ApproveChangeRequestDTO { 
+export interface ApproveChangeRequestDTO {
     /**
      * Approval note captured as the decision artifact
      */

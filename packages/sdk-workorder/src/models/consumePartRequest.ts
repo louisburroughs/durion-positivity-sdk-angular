@@ -12,7 +12,7 @@
 /**
  * Request payload to consume authorized part quantity on a workorder
  */
-export interface ConsumePartRequest { 
+export interface ConsumePartRequest {
     /**
      * Optional usage notes
      */

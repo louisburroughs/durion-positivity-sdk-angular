@@ -12,7 +12,7 @@
 /**
  * Request payload for returning unused authorized part quantity
  */
-export interface ReturnPartQuantityRequest { 
+export interface ReturnPartQuantityRequest {
     /**
      * Optional return notes
      */

@@ -12,7 +12,7 @@
 /**
  * Response payload describing a mobile unit coverage rule
  */
-export interface CoverageRuleResponse { 
+export interface CoverageRuleResponse {
     /**
      * Unique identifier of the coverage rule
      */

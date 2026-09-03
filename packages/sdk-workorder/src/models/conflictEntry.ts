@@ -12,7 +12,7 @@
 /**
  * A detected scheduling or resource conflict on the dispatch board
  */
-export interface ConflictEntry { 
+export interface ConflictEntry {
     /**
      * Identifier of the affected resource (mechanic or bay)
      */

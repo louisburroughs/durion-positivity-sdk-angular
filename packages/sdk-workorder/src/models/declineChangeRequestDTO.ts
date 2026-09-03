@@ -12,7 +12,7 @@
 /**
  * Decline details including note
  */
-export interface DeclineChangeRequestDTO { 
+export interface DeclineChangeRequestDTO {
     /**
      * Decline note captured as the decision artifact
      */

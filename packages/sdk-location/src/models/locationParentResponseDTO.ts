@@ -12,7 +12,7 @@
 /**
  * Response payload describing a parent relationship of a location
  */
-export interface LocationParentResponseDTO { 
+export interface LocationParentResponseDTO {
     /**
      * Identifier of the child location
      */

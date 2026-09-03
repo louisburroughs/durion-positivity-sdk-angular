@@ -12,7 +12,7 @@
 /**
  * Response payload describing a service bay
  */
-export interface BayResponse { 
+export interface BayResponse {
     /**
      * Type classification of the bay
      */

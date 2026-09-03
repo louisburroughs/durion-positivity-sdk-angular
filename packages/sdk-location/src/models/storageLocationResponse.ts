@@ -12,7 +12,7 @@
 /**
  * Response payload describing a storage location
  */
-export interface StorageLocationResponse { 
+export interface StorageLocationResponse {
     /**
      * Whether the storage location will take stock of a product it is not already holding.
      */
