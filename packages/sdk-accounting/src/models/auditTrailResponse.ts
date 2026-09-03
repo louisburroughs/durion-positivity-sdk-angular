@@ -12,7 +12,7 @@
 /**
  * Audit trail entry describing a recorded accounting exception event
  */
-export interface AuditTrailResponse { 
+export interface AuditTrailResponse {
     /**
      * Accounting intent of the event
      */

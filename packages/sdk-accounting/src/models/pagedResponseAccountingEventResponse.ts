@@ -10,7 +10,7 @@
 import { AccountingEventResponse } from './accountingEventResponse';
 
 
-export interface PagedResponseAccountingEventResponse { 
+export interface PagedResponseAccountingEventResponse {
     items?: Array<AccountingEventResponse>;
     pageNumber?: number;
     pageSize?: number;

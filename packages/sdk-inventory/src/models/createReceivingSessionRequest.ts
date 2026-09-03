@@ -12,7 +12,7 @@
 /**
  * Request to open a new inventory receiving session against a source document
  */
-export interface CreateReceivingSessionRequest { 
+export interface CreateReceivingSessionRequest {
     /**
      * Method used to enter receiving lines, such as SCAN or MANUAL
      */

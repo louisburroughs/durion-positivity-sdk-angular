@@ -12,7 +12,7 @@
 /**
  * Read model of a vendor commercial account.
  */
-export interface CommercialAccountView { 
+export interface CommercialAccountView {
     /**
      * Identity of the commercial account (UUIDv7).
      */

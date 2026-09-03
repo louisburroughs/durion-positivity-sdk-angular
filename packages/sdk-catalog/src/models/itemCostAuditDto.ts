@@ -12,7 +12,7 @@
 /**
  * Item cost audit event
  */
-export interface ItemCostAuditDto { 
+export interface ItemCostAuditDto {
     /**
      * Actor responsible for the change
      */

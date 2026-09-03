@@ -12,7 +12,7 @@
 /**
  * Vehicle summary within a CRM snapshot
  */
-export interface VehicleSummary { 
+export interface VehicleSummary {
     /**
      * License plate
      */

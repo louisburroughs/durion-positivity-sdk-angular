@@ -12,7 +12,7 @@
 /**
  * Current item costs
  */
-export interface ItemCostsDto { 
+export interface ItemCostsDto {
     /**
      * Weighted average cost
      */

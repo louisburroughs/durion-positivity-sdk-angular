@@ -12,7 +12,7 @@
 /**
  * Vendor reimbursement submission (NOT_SUBMITTED -> SUBMITTED)
  */
-export interface ReimbursementSubmitRequest { 
+export interface ReimbursementSubmitRequest {
     /**
      * Amount requested from the vendor
      */

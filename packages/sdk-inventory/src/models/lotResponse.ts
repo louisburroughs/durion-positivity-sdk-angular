@@ -12,7 +12,7 @@
 /**
  * An inventory lot master record (odoo-parity E1)
  */
-export interface LotResponse { 
+export interface LotResponse {
     /**
      * Creation timestamp
      */

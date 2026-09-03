@@ -12,7 +12,7 @@
 /**
  * Eligibility evaluation result for a promotion and context
  */
-export interface EligibilityDecisionResponse { 
+export interface EligibilityDecisionResponse {
     eligible?: boolean;
     /**
      * Whether the promotion is eligible for the provided context

@@ -9,7 +9,7 @@
  */
 
 
-export interface MarketingEnrichmentView { 
+export interface MarketingEnrichmentView {
     brand?: string;
     firstSeenAt?: string;
     lastPublishedAt?: string;

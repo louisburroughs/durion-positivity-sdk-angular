@@ -12,7 +12,7 @@
 /**
  * Product substitution suggestion
  */
-export interface SubstitutionHint { 
+export interface SubstitutionHint {
     /**
      * Substitute product ID
      */

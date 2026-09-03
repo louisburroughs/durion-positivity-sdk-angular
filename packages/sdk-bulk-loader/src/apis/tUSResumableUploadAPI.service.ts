@@ -11,7 +11,7 @@
 
 import { Inject, Injectable, Optional }                      from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams,
-         HttpResponse, HttpEvent, HttpContext 
+         HttpResponse, HttpEvent, HttpContext
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
@@ -35,13 +35,13 @@ export class TUSResumableUploadAPIService extends BaseService {
 
     /**
      * Upload a Chunk
-     * Appends a contiguous byte range to an in-progress TUS upload and, when the final byte arrives, moves the finished file into job storage. Use this tool repeatedly to stream the file in chunks after createTusUpload; do not guess the offset after a failure, and call getTusUploadOffset instead to learn the server-side offset. Preconditions: the upload must exist, not be complete, and not be expired; the Upload-Offset header must exactly equal the server\&#39;s current offset. Required inputs: uploadId (UUID) as a path parameter, a Content-Type of application/offset+octet-stream, Tus-Resumable, Upload-Offset and Content-Length headers, and the raw chunk bytes as the request body. Emits a BULK_LOADER_TUS_UPLOAD_CHUNK_APPEND event; when the new offset reaches Upload-Length the file is finalized into the job\&#39;s storage and the job records the upload, moving a CREATED job to UPLOADING (finalization fails with 404 when the job is gone or 409 when it is terminal). Returns 204 with the new Upload-Offset header on success, 409 when the offset does not match or the upload is already complete, 410 when the upload has expired, 415 when the Content-Type is wrong, 412 when the TUS version is unsupported, and 404 when the upload does not exist. 
+     * Appends a contiguous byte range to an in-progress TUS upload and, when the final byte arrives, moves the finished file into job storage. Use this tool repeatedly to stream the file in chunks after createTusUpload; do not guess the offset after a failure, and call getTusUploadOffset instead to learn the server-side offset. Preconditions: the upload must exist, not be complete, and not be expired; the Upload-Offset header must exactly equal the server\&#39;s current offset. Required inputs: uploadId (UUID) as a path parameter, a Content-Type of application/offset+octet-stream, Tus-Resumable, Upload-Offset and Content-Length headers, and the raw chunk bytes as the request body. Emits a BULK_LOADER_TUS_UPLOAD_CHUNK_APPEND event; when the new offset reaches Upload-Length the file is finalized into the job\&#39;s storage and the job records the upload, moving a CREATED job to UPLOADING (finalization fails with 404 when the job is gone or 409 when it is terminal). Returns 204 with the new Upload-Offset header on success, 409 when the offset does not match or the upload is already complete, 410 when the upload has expired, 415 when the Content-Type is wrong, 412 when the TUS version is unsupported, and 404 when the upload does not exist.
      * @endpoint patch /v1/tus/{uploadId}
-     * @param uploadId 
-     * @param uploadOffset 
-     * @param contentLength 
-     * @param tusResumable 
-     * @param contentType 
+     * @param uploadId
+     * @param uploadOffset
+     * @param contentLength
+     * @param tusResumable
+     * @param contentType
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -116,10 +116,10 @@ export class TUSResumableUploadAPIService extends BaseService {
 
     /**
      * Cancel a Resumable Upload
-     * Cancels a TUS upload session, permanently deleting both the session record and its temporary chunk file. Use this tool to abandon a partially transferred upload; do not use cancelBulkLoadJob, which cancels the bulk load job itself rather than an upload session. Preconditions: the upload session must exist and the caller must send a Tus-Resumable header of 1.0.0; a completed upload whose file has already been attached to the job is not detached by this call. Required inputs: uploadId (UUID) as a path parameter; there is no request body. Emits a BULK_LOADER_TUS_UPLOAD_CANCEL event and removes the temporary file; the deletion cannot be undone and the upload URL becomes invalid. Returns 204 on success, 404 when the upload does not exist, and 412 when the Tus-Resumable header is missing or not 1.0.0. 
+     * Cancels a TUS upload session, permanently deleting both the session record and its temporary chunk file. Use this tool to abandon a partially transferred upload; do not use cancelBulkLoadJob, which cancels the bulk load job itself rather than an upload session. Preconditions: the upload session must exist and the caller must send a Tus-Resumable header of 1.0.0; a completed upload whose file has already been attached to the job is not detached by this call. Required inputs: uploadId (UUID) as a path parameter; there is no request body. Emits a BULK_LOADER_TUS_UPLOAD_CANCEL event and removes the temporary file; the deletion cannot be undone and the upload URL becomes invalid. Returns 204 on success, 404 when the upload does not exist, and 412 when the Tus-Resumable header is missing or not 1.0.0.
      * @endpoint delete /v1/tus/{uploadId}
-     * @param uploadId 
-     * @param tusResumable 
+     * @param uploadId
+     * @param tusResumable
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -179,12 +179,12 @@ export class TUSResumableUploadAPIService extends BaseService {
 
     /**
      * Create a Resumable Upload
-     * Creates a resumable TUS upload session scoped to a bulk load job and returns its absolute upload URL in the Location header, rebuilt from the gateway\&#39;s X-Forwarded headers so it reflects the public address. Use this tool to start uploading a large file in chunks; use uploadJobFile instead when the file is small enough for a single multipart request, and do not send file bytes here because chunks go to appendTusUploadChunk. Preconditions: the caller must send a Tus-Resumable header of 1.0.0; the job id is recorded but not validated here, so a wrong job id only fails later when the finished file is attached to the job. Required inputs: Upload-Length header with the total file size in bytes (server maximum 536870912 by default), and optionally Upload-Metadata with a base64-encoded filename field, without which the file is stored as upload.bin. Emits a BULK_LOADER_TUS_UPLOAD_CREATE event and creates an empty temp file; the session expires after 24 hours by default (see the Upload-Expires header) and expired incomplete uploads are cleaned up automatically. Returns 201 with Location, Upload-Offset and Upload-Expires headers, 412 when the Tus-Resumable header is missing or not 1.0.0, and 413 when Upload-Length exceeds the server maximum. 
+     * Creates a resumable TUS upload session scoped to a bulk load job and returns its absolute upload URL in the Location header, rebuilt from the gateway\&#39;s X-Forwarded headers so it reflects the public address. Use this tool to start uploading a large file in chunks; use uploadJobFile instead when the file is small enough for a single multipart request, and do not send file bytes here because chunks go to appendTusUploadChunk. Preconditions: the caller must send a Tus-Resumable header of 1.0.0; the job id is recorded but not validated here, so a wrong job id only fails later when the finished file is attached to the job. Required inputs: Upload-Length header with the total file size in bytes (server maximum 536870912 by default), and optionally Upload-Metadata with a base64-encoded filename field, without which the file is stored as upload.bin. Emits a BULK_LOADER_TUS_UPLOAD_CREATE event and creates an empty temp file; the session expires after 24 hours by default (see the Upload-Expires header) and expired incomplete uploads are cleaned up automatically. Returns 201 with Location, Upload-Offset and Upload-Expires headers, 412 when the Tus-Resumable header is missing or not 1.0.0, and 413 when Upload-Length exceeds the server maximum.
      * @endpoint post /v1/bulk-jobs/{jobId}/tus
-     * @param jobId 
-     * @param uploadLength 
-     * @param tusResumable 
-     * @param uploadMetadata 
+     * @param jobId
+     * @param uploadLength
+     * @param tusResumable
+     * @param uploadMetadata
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -253,7 +253,7 @@ export class TUSResumableUploadAPIService extends BaseService {
 
     /**
      * Get TUS Server Capabilities
-     * Advertises the TUS resumable-upload capabilities of this server, namely protocol version 1.0.0, the creation, termination and expiration extensions, and the maximum upload size. Use this tool during the tus client handshake to discover limits before creating an upload; do not use it to check the progress of an existing upload, which is getTusUploadOffset. Preconditions: none; this endpoint requires no authentication. Required inputs: none; there are no parameters and no request body. No events are emitted and no state changes; the capabilities are returned in the Tus-Version, Tus-Max-Size and Tus-Extension response headers. Returns 204 in all cases, with the capability data carried in headers rather than a body. 
+     * Advertises the TUS resumable-upload capabilities of this server, namely protocol version 1.0.0, the creation, termination and expiration extensions, and the maximum upload size. Use this tool during the tus client handshake to discover limits before creating an upload; do not use it to check the progress of an existing upload, which is getTusUploadOffset. Preconditions: none; this endpoint requires no authentication. Required inputs: none; there are no parameters and no request body. No events are emitted and no state changes; the capabilities are returned in the Tus-Version, Tus-Max-Size and Tus-Extension response headers. Returns 204 in all cases, with the capability data carried in headers rather than a body.
      * @endpoint options /v1/tus
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
@@ -308,10 +308,10 @@ export class TUSResumableUploadAPIService extends BaseService {
 
     /**
      * Get Current Upload Offset
-     * Returns the current byte offset of a TUS upload in the Upload-Offset response header so a client can resume where the last transfer stopped. Use this tool after an interrupted transfer to learn where to resume; do not use getTusCapabilities, which reports server-wide limits rather than per-upload progress. Preconditions: the upload session must exist and the caller must send a Tus-Resumable header of 1.0.0. Required inputs: uploadId (UUID) as a path parameter; there is no request body. No events are emitted and no state changes; the response carries Upload-Offset, Upload-Length and Upload-Expires headers with an empty body. Returns 404 when the upload does not exist, and 412 when the Tus-Resumable header is missing or not 1.0.0. 
+     * Returns the current byte offset of a TUS upload in the Upload-Offset response header so a client can resume where the last transfer stopped. Use this tool after an interrupted transfer to learn where to resume; do not use getTusCapabilities, which reports server-wide limits rather than per-upload progress. Preconditions: the upload session must exist and the caller must send a Tus-Resumable header of 1.0.0. Required inputs: uploadId (UUID) as a path parameter; there is no request body. No events are emitted and no state changes; the response carries Upload-Offset, Upload-Length and Upload-Expires headers with an empty body. Returns 404 when the upload does not exist, and 412 when the Tus-Resumable header is missing or not 1.0.0.
      * @endpoint head /v1/tus/{uploadId}
-     * @param uploadId 
-     * @param tusResumable 
+     * @param uploadId
+     * @param tusResumable
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options

@@ -12,7 +12,7 @@
 /**
  * Request payload for applying an order-level discount (pro-rata across lines)
  */
-export interface OrderDiscountRequest { 
+export interface OrderDiscountRequest {
     /**
      * Business reason for the discount
      */

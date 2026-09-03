@@ -12,7 +12,7 @@
 /**
  * Response returned when an inventory adjustment request is created
  */
-export interface AdjustmentRequestResponse { 
+export interface AdjustmentRequestResponse {
     /**
      * Unique identifier of the created adjustment request
      */

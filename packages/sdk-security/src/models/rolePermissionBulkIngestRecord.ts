@@ -12,7 +12,7 @@
 /**
  * Permission grants for one existing role
  */
-export interface RolePermissionBulkIngestRecord { 
+export interface RolePermissionBulkIngestRecord {
     /**
      * Permission names to grant
      */

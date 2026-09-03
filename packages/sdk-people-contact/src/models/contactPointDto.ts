@@ -12,7 +12,7 @@
 /**
  * Typed contact point (email, phone) for a person
  */
-export interface ContactPointDto { 
+export interface ContactPointDto {
     /**
      * Type of contact point
      */

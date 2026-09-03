@@ -12,7 +12,7 @@
 /**
  * A substitution group: a set of mutually interchangeable products
  */
-export interface SubstitutionGroupDto { 
+export interface SubstitutionGroupDto {
     /**
      * Created timestamp
      */

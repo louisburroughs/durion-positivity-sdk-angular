@@ -11,7 +11,7 @@
 
 import { Inject, Injectable, Optional }                      from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams,
-         HttpResponse, HttpEvent, HttpContext 
+         HttpResponse, HttpEvent, HttpContext
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
@@ -47,7 +47,7 @@ export class TaxService extends BaseService {
 
     /**
      * Calculate tax
-     * Calculates tax for the supplied line items against the destination address and returns the per-line and total tax amounts. Use this tool whenever a quote, estimate or invoice needs tax figures; do not use it to make a calculation permanent, which is commitTaxDocument. Preconditions: none beyond an authenticated caller; when an exemption is claimed the referenced certificate must already exist in the registry and be ACTIVE for the destination state on the transaction date, otherwise tax is calculated as taxable. Required inputs: lineItems (at least one) and destinationAddress with countryCode and postalCode; currencyCode defaults to USD, calculationType defaults to SALE, and referenceId should carry the source document id so the result can later be committed. Emits a TAX_CALCULATE event and, in production mode, calls the configured external tax provider; no provider document is created until commitTaxDocument is called. Returns 400 when line items or the destination address are missing or malformed, and 500 when the provider is unreachable in production mode. 
+     * Calculates tax for the supplied line items against the destination address and returns the per-line and total tax amounts. Use this tool whenever a quote, estimate or invoice needs tax figures; do not use it to make a calculation permanent, which is commitTaxDocument. Preconditions: none beyond an authenticated caller; when an exemption is claimed the referenced certificate must already exist in the registry and be ACTIVE for the destination state on the transaction date, otherwise tax is calculated as taxable. Required inputs: lineItems (at least one) and destinationAddress with countryCode and postalCode; currencyCode defaults to USD, calculationType defaults to SALE, and referenceId should carry the source document id so the result can later be committed. Emits a TAX_CALCULATE event and, in production mode, calls the configured external tax provider; no provider document is created until commitTaxDocument is called. Returns 400 when line items or the destination address are missing or malformed, and 500 when the provider is unreachable in production mode.
      * @endpoint post /v1/tax/calculate
      * @param taxCalculationRequest International tax calculation request
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -117,10 +117,10 @@ export class TaxService extends BaseService {
 
     /**
      * Commit tax document
-     * Commits the provider tax document for a finalized invoice so the recorded tax becomes filing-visible at the provider. Use this tool when an invoice is finalized; do not use it to recalculate amounts, which is calculateTax, and do not use it to reverse a commit, which is voidTaxDocument. Preconditions: tax must already have been calculated for this referenceId with a committable request, so that a provider document exists to commit. Required inputs: referenceId (UUID) path parameter, which is the source invoice id; referenceType is an optional query parameter defaulting to INVOICE. Emits a TAX_COMMIT event and updates the stored provider transaction; the call is idempotent, so an already-COMMITTED document is returned unchanged. Returns 200 with status PENDING_COMMIT rather than an error when the provider call fails, because a sale is never blocked on the provider, so callers must read the returned status instead of treating 200 as a completed commit and leave the re-commit job to true it up. 
+     * Commits the provider tax document for a finalized invoice so the recorded tax becomes filing-visible at the provider. Use this tool when an invoice is finalized; do not use it to recalculate amounts, which is calculateTax, and do not use it to reverse a commit, which is voidTaxDocument. Preconditions: tax must already have been calculated for this referenceId with a committable request, so that a provider document exists to commit. Required inputs: referenceId (UUID) path parameter, which is the source invoice id; referenceType is an optional query parameter defaulting to INVOICE. Emits a TAX_COMMIT event and updates the stored provider transaction; the call is idempotent, so an already-COMMITTED document is returned unchanged. Returns 200 with status PENDING_COMMIT rather than an error when the provider call fails, because a sale is never blocked on the provider, so callers must read the returned status instead of treating 200 as a completed commit and leave the re-commit job to true it up.
      * @endpoint post /v1/tax/transactions/{referenceId}/commit
-     * @param referenceId 
-     * @param referenceType 
+     * @param referenceId
+     * @param referenceType
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -190,13 +190,13 @@ export class TaxService extends BaseService {
 
     /**
      * Look up jurisdiction tax rates
-     * Resolves the per-jurisdiction tax rates applicable to a destination address, without calculating tax for any line items. Use this tool to preview or display the rate breakdown for an address; do not use it to compute tax on a cart or invoice, which is calculateTax. Preconditions: this endpoint is internal-only (ADR-0021/ADR-0014) — it has no gateway route and is reached only by direct in-cluster calls, never through pos-api-gateway. Required inputs: countryCode (ISO 3166-1 alpha-2) and postalCode; regionCode and city narrow the match further, and asOf (ISO-8601 date) defaults to today. No events are emitted and no state changes; components are per-jurisdiction rates as decimal fractions (not a blended estimate), and SPECIAL/DISTRICT jurisdiction types appear only when a configured rule produces them — today\&#39;s test-mode rules emit STATE/COUNTY/CITY. Returns 400 when countryCode or postalCode are missing or malformed, and 501 when the configured tax provider does not support rate-only lookup (every production provider today; AvaTax rate-by-address is a documented follow-up, not yet implemented). 
+     * Resolves the per-jurisdiction tax rates applicable to a destination address, without calculating tax for any line items. Use this tool to preview or display the rate breakdown for an address; do not use it to compute tax on a cart or invoice, which is calculateTax. Preconditions: this endpoint is internal-only (ADR-0021/ADR-0014) — it has no gateway route and is reached only by direct in-cluster calls, never through pos-api-gateway. Required inputs: countryCode (ISO 3166-1 alpha-2) and postalCode; regionCode and city narrow the match further, and asOf (ISO-8601 date) defaults to today. No events are emitted and no state changes; components are per-jurisdiction rates as decimal fractions (not a blended estimate), and SPECIAL/DISTRICT jurisdiction types appear only when a configured rule produces them — today\&#39;s test-mode rules emit STATE/COUNTY/CITY. Returns 400 when countryCode or postalCode are missing or malformed, and 501 when the configured tax provider does not support rate-only lookup (every production provider today; AvaTax rate-by-address is a documented follow-up, not yet implemented).
      * @endpoint get /v1/tax/rates
-     * @param countryCode 
-     * @param postalCode 
-     * @param regionCode 
-     * @param city 
-     * @param asOf 
+     * @param countryCode
+     * @param postalCode
+     * @param regionCode
+     * @param city
+     * @param asOf
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -305,7 +305,7 @@ export class TaxService extends BaseService {
 
     /**
      * Get tax service mode
-     * Returns whether the tax service is running against the external provider or against the built-in test calculator. Use this tool to interpret a calculation result before relying on it; do not use it as a health check, which is the actuator health endpoint instead. Preconditions: none; the mode is service configuration and is readable at any time. Required inputs: none, and there is no request body or query parameter. No events are emitted and no state changes; this is a read-only configuration projection. Returns 200 in all cases, so an absent or unexpected mode value indicates a misconfigured deployment rather than a request error. 
+     * Returns whether the tax service is running against the external provider or against the built-in test calculator. Use this tool to interpret a calculation result before relying on it; do not use it as a health check, which is the actuator health endpoint instead. Preconditions: none; the mode is service configuration and is readable at any time. Required inputs: none, and there is no request body or query parameter. No events are emitted and no state changes; this is a read-only configuration projection. Returns 200 in all cases, so an absent or unexpected mode value indicates a misconfigured deployment rather than a request error.
      * @endpoint get /v1/tax/mode
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
@@ -361,9 +361,9 @@ export class TaxService extends BaseService {
 
     /**
      * Void tax document
-     * Voids the provider tax document for an invoice that has been reverted to DRAFT, withdrawing the committed tax from the provider. Use this tool when a finalized invoice reverts to DRAFT; do not use it for ordinary corrections, where calculateTax followed by commitTaxDocument replaces the figures instead. Preconditions: a provider transaction must already exist for this referenceId, which means tax was calculated and committed earlier. Required inputs: referenceId (UUID) path parameter, which is the source invoice id; there is no request body and no referenceType, because the existing transaction supplies it. Emits a TAX_VOID event and moves the stored provider transaction to VOIDED, or to FAILED when the provider rejects the void. Returns 200 with status FAILED when the provider call fails, so callers must read the returned status rather than treating 200 as a completed void. 
+     * Voids the provider tax document for an invoice that has been reverted to DRAFT, withdrawing the committed tax from the provider. Use this tool when a finalized invoice reverts to DRAFT; do not use it for ordinary corrections, where calculateTax followed by commitTaxDocument replaces the figures instead. Preconditions: a provider transaction must already exist for this referenceId, which means tax was calculated and committed earlier. Required inputs: referenceId (UUID) path parameter, which is the source invoice id; there is no request body and no referenceType, because the existing transaction supplies it. Emits a TAX_VOID event and moves the stored provider transaction to VOIDED, or to FAILED when the provider rejects the void. Returns 200 with status FAILED when the provider call fails, so callers must read the returned status rather than treating 200 as a completed void.
      * @endpoint post /v1/tax/transactions/{referenceId}/void
-     * @param referenceId 
+     * @param referenceId
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options

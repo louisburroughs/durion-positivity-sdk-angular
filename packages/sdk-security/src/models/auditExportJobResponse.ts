@@ -12,7 +12,7 @@
 /**
  * Audit export job status response
  */
-export interface AuditExportJobResponse { 
+export interface AuditExportJobResponse {
     /**
      * Timestamp when the export completed (null if not yet complete)
      */

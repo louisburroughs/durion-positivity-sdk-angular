@@ -12,7 +12,7 @@
 /**
  * Posting category details
  */
-export interface PostingCategoryResponse { 
+export interface PostingCategoryResponse {
     /**
      * Name of the posting category
      */

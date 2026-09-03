@@ -14,7 +14,7 @@ import { RollupQuantities } from './rollupQuantities';
 /**
  * Per-site entry of a parent-location rollup, optionally including the storage-location tree
  */
-export interface SiteRollupSummary { 
+export interface SiteRollupSummary {
     /**
      * Full storage-location rollup tree; present only with expand=tree
      */

@@ -12,7 +12,7 @@
 /**
  * One sampled audience member and why it was or was not counted as reachable
  */
-export interface SampleRecipient { 
+export interface SampleRecipient {
     /**
      * Party whose consent governed the decision and who would be addressed: the CRM\'s designated contact for a commercial account, the person themselves for an individual. Null when the CRM has reported no decision for this party.
      */

@@ -12,7 +12,7 @@
 /**
  * Request to record a cancellation audit event
  */
-export interface CancellationRequest { 
+export interface CancellationRequest {
     /**
      * Legacy client-provided actor identifier; service resolves authoritative actor from security context
      */

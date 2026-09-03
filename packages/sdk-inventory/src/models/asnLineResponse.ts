@@ -12,7 +12,7 @@
 /**
  * A single line item on an advance shipping notice (ASN) response, describing one SKU and its shipped/received quantities
  */
-export interface AsnLineResponse { 
+export interface AsnLineResponse {
     /**
      * Unique identifier of the ASN line item
      */

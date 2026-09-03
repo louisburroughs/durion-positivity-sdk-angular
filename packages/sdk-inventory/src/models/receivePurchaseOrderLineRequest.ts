@@ -12,7 +12,7 @@
 /**
  * Receipt detail for a single purchase order line
  */
-export interface ReceivePurchaseOrderLineRequest { 
+export interface ReceivePurchaseOrderLineRequest {
     /**
      * Identifier of the purchase order line being received
      */

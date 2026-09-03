@@ -11,7 +11,7 @@
 
 import { Inject, Injectable, Optional }                      from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams,
-         HttpResponse, HttpEvent, HttpContext 
+         HttpResponse, HttpEvent, HttpContext
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
@@ -43,9 +43,9 @@ export class ReturnsService extends BaseService {
 
     /**
      * Approve a Pending Return
-     * Approves a PENDING_APPROVAL return, stamping the approver and moving it to RETURN_REQUESTED so the refund saga can run. Use this tool for returns whose refund total exceeded the approval threshold; do not use processReturn, which executes the refund and only accepts a return already in RETURN_REQUESTED. Preconditions: the return order must exist and be in PENDING_APPROVAL. Required inputs: returnOrderId (UUID) as a path parameter; there is no request body — the approver is taken from the security context. Emits an ORDER_RETURN_APPROVE event; no refund or stock movement happens yet. Returns 404 when the return does not exist, and 409 when the return is not in PENDING_APPROVAL. 
+     * Approves a PENDING_APPROVAL return, stamping the approver and moving it to RETURN_REQUESTED so the refund saga can run. Use this tool for returns whose refund total exceeded the approval threshold; do not use processReturn, which executes the refund and only accepts a return already in RETURN_REQUESTED. Preconditions: the return order must exist and be in PENDING_APPROVAL. Required inputs: returnOrderId (UUID) as a path parameter; there is no request body — the approver is taken from the security context. Emits an ORDER_RETURN_APPROVE event; no refund or stock movement happens yet. Returns 404 when the return does not exist, and 409 when the return is not in PENDING_APPROVAL.
      * @endpoint post /v1/returns/{returnOrderId}/approve
-     * @param returnOrderId 
+     * @param returnOrderId
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -103,7 +103,7 @@ export class ReturnsService extends BaseService {
 
     /**
      * Create a Return Against a Completed Order
-     * Creates a return order against one COMPLETED sales order, capping each line at its un-refunded remainder (row-locked so concurrent returns serialize) and computing a pro-rata, tax-included refund per line. Use this tool to take goods back after a completed sale; do not use cancelOrder or voidOrder, which abandon an order before completion, and check listReturnableLines first to see each line\&#39;s remaining returnable quantity. Preconditions: the original order must be COMPLETED, every line must be returnable (workorder consumed lines without an imported returnable flag are not), and each sold line may appear at most once in the request. Required inputs: originalOrderId (UUID), refundMethod (ORIGINAL_TENDER, STORE_CREDIT or ON_ACCOUNT_CREDIT), and at least one line with originalOrderLineId, a positive returnQty, and condition (RESTOCK, SCRAP or WARRANTY); reasonCode, per-line serialNumbers, and the Idempotency-Key header (replays return the original return) are optional. Emits an ORDER_RETURN_CREATE event; a refund total above the approval threshold (default 250.00, configurable via pos.order.return.approval-threshold) parks the return at PENDING_APPROVAL, otherwise it starts at RETURN_REQUESTED ready for processReturn. Returns 201 on creation (idempotent replays included), 404 when the original order does not exist, 409 when the original order is not COMPLETED, and 422 when a line exceeds its returnable remainder (each offending line\&#39;s returnableQty is listed in fieldErrors), a WARRANTY-condition line must route to pos-warranty, or the lines are duplicated, unknown, or invalid. 
+     * Creates a return order against one COMPLETED sales order, capping each line at its un-refunded remainder (row-locked so concurrent returns serialize) and computing a pro-rata, tax-included refund per line. Use this tool to take goods back after a completed sale; do not use cancelOrder or voidOrder, which abandon an order before completion, and check listReturnableLines first to see each line\&#39;s remaining returnable quantity. Preconditions: the original order must be COMPLETED, every line must be returnable (workorder consumed lines without an imported returnable flag are not), and each sold line may appear at most once in the request. Required inputs: originalOrderId (UUID), refundMethod (ORIGINAL_TENDER, STORE_CREDIT or ON_ACCOUNT_CREDIT), and at least one line with originalOrderLineId, a positive returnQty, and condition (RESTOCK, SCRAP or WARRANTY); reasonCode, per-line serialNumbers, and the Idempotency-Key header (replays return the original return) are optional. Emits an ORDER_RETURN_CREATE event; a refund total above the approval threshold (default 250.00, configurable via pos.order.return.approval-threshold) parks the return at PENDING_APPROVAL, otherwise it starts at RETURN_REQUESTED ready for processReturn. Returns 201 on creation (idempotent replays included), 404 when the original order does not exist, 409 when the original order is not COMPLETED, and 422 when a line exceeds its returnable remainder (each offending line\&#39;s returnableQty is listed in fieldErrors), a WARRANTY-condition line must route to pos-warranty, or the lines are duplicated, unknown, or invalid.
      * @endpoint post /v1/returns
      * @param createReturnRequest The return: source order, refund method, and the lines coming back.
      * @param idempotencyKey Client idempotency key; replays return the original return
@@ -177,9 +177,9 @@ export class ReturnsService extends BaseService {
 
     /**
      * Get a Return by Id
-     * Returns a return order with its status, refund method and total, failure reason when present, and per-line quantities and refunds. Use this tool when the return order id is already known; use listReturns instead to find every return created from an original order. Preconditions: the return order must exist. Required inputs: returnOrderId (UUID) as a path parameter; there is no request body. Emits an ORDER_RETURN_GET audit event; no state changes — this is a read-only projection. Returns 404 when no return order exists for the supplied id. 
+     * Returns a return order with its status, refund method and total, failure reason when present, and per-line quantities and refunds. Use this tool when the return order id is already known; use listReturns instead to find every return created from an original order. Preconditions: the return order must exist. Required inputs: returnOrderId (UUID) as a path parameter; there is no request body. Emits an ORDER_RETURN_GET audit event; no state changes — this is a read-only projection. Returns 404 when no return order exists for the supplied id.
      * @endpoint get /v1/returns/{returnOrderId}
-     * @param returnOrderId 
+     * @param returnOrderId
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -237,9 +237,9 @@ export class ReturnsService extends BaseService {
 
     /**
      * List Returnable Lines for an Order
-     * Returns each line of a COMPLETED order with its sold quantity, already-returned quantity, remaining returnable quantity, and returnable flag. Use this tool before createReturn to size a valid return; do not use listReturns, which lists return orders already created rather than remaining capacity. Preconditions: the order must exist and be COMPLETED; workorder-consumed lines without an imported returnable flag report zero returnable quantity. Required inputs: orderId (UUID) as a query parameter; there is no request body. Emits an ORDER_RETURN_RETURNABLE audit event; no state changes — this is a read-only projection. Returns 404 when the order does not exist, and 409 when the order is not COMPLETED. 
+     * Returns each line of a COMPLETED order with its sold quantity, already-returned quantity, remaining returnable quantity, and returnable flag. Use this tool before createReturn to size a valid return; do not use listReturns, which lists return orders already created rather than remaining capacity. Preconditions: the order must exist and be COMPLETED; workorder-consumed lines without an imported returnable flag report zero returnable quantity. Required inputs: orderId (UUID) as a query parameter; there is no request body. Emits an ORDER_RETURN_RETURNABLE audit event; no state changes — this is a read-only projection. Returns 404 when the order does not exist, and 409 when the order is not COMPLETED.
      * @endpoint get /v1/returns/returnable
-     * @param orderId 
+     * @param orderId
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -309,9 +309,9 @@ export class ReturnsService extends BaseService {
 
     /**
      * List Returns for an Original Order
-     * Lists every return order created from one original sales order, newest first. Use this tool to review a sale\&#39;s return history; use getReturn instead when the return order id is known, or listReturnableLines to see what can still come back. Preconditions: none — an original order with no returns simply yields an empty list, and the original order\&#39;s existence is not checked. Required inputs: originalOrderId (UUID) as a query parameter; there is no request body. Emits an ORDER_RETURN_LIST audit event; no state changes — this is a read-only projection. Returns 200 with a possibly empty list; there are no business error conditions beyond authorization. 
+     * Lists every return order created from one original sales order, newest first. Use this tool to review a sale\&#39;s return history; use getReturn instead when the return order id is known, or listReturnableLines to see what can still come back. Preconditions: none — an original order with no returns simply yields an empty list, and the original order\&#39;s existence is not checked. Required inputs: originalOrderId (UUID) as a query parameter; there is no request body. Emits an ORDER_RETURN_LIST audit event; no state changes — this is a read-only projection. Returns 200 with a possibly empty list; there are no business error conditions beyond authorization.
      * @endpoint get /v1/returns
-     * @param originalOrderId 
+     * @param originalOrderId
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -381,9 +381,9 @@ export class ReturnsService extends BaseService {
 
     /**
      * Run the Return Refund Saga
-     * Runs the return orchestration saga from RETURN_REQUESTED: issues the refund (ORIGINAL_TENDER reverses the original order\&#39;s settled payments through pos-invoice up to the refund total; STORE_CREDIT and ON_ACCOUNT_CREDIT record the credit intent and require a customer on the return), then completes the return. Use this tool to execute an approved or under-threshold return; do not use retryReturn, which only re-drives a return already parked at REFUND_FAILED. Preconditions: the return must be in RETURN_REQUESTED (an already COMPLETED return is an idempotent no-op), and an ORIGINAL_TENDER refund needs an invoice and sufficient settled tender on the original order. Required inputs: returnOrderId (UUID) as a path parameter; there is no request body. Emits an ORDER_RETURN_PROCESS event and publishes an order.order.returned fact after completion, which pos-inventory consumes to restock RESTOCK-condition lines (SCRAP lines are skipped); a refund failure parks the return at REFUND_FAILED before any stock signal. Returns 200 when the saga completes (or the return was already COMPLETED), 404 when the return does not exist, and 409 when the status is not RETURN_REQUESTED or the refund leg fails. 
+     * Runs the return orchestration saga from RETURN_REQUESTED: issues the refund (ORIGINAL_TENDER reverses the original order\&#39;s settled payments through pos-invoice up to the refund total; STORE_CREDIT and ON_ACCOUNT_CREDIT record the credit intent and require a customer on the return), then completes the return. Use this tool to execute an approved or under-threshold return; do not use retryReturn, which only re-drives a return already parked at REFUND_FAILED. Preconditions: the return must be in RETURN_REQUESTED (an already COMPLETED return is an idempotent no-op), and an ORIGINAL_TENDER refund needs an invoice and sufficient settled tender on the original order. Required inputs: returnOrderId (UUID) as a path parameter; there is no request body. Emits an ORDER_RETURN_PROCESS event and publishes an order.order.returned fact after completion, which pos-inventory consumes to restock RESTOCK-condition lines (SCRAP lines are skipped); a refund failure parks the return at REFUND_FAILED before any stock signal. Returns 200 when the saga completes (or the return was already COMPLETED), 404 when the return does not exist, and 409 when the status is not RETURN_REQUESTED or the refund leg fails.
      * @endpoint post /v1/returns/{returnOrderId}/process
-     * @param returnOrderId 
+     * @param returnOrderId
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -441,9 +441,9 @@ export class ReturnsService extends BaseService {
 
     /**
      * Reject a Pending Return
-     * Rejects a PENDING_APPROVAL return with a recorded reason, moving it to the terminal REJECTED state and releasing its quantities back to the per-line returnable cap. Use this tool to decline an over-threshold return; do not use approveReturn, which releases it into the refund saga instead. Preconditions: the return order must exist and be in PENDING_APPROVAL. Required inputs: returnOrderId (UUID) as a path parameter and reason in the body. Emits an ORDER_RETURN_REJECT event; no refund is issued and no stock moves. Returns 404 when the return does not exist, and 409 when the return is not in PENDING_APPROVAL. 
+     * Rejects a PENDING_APPROVAL return with a recorded reason, moving it to the terminal REJECTED state and releasing its quantities back to the per-line returnable cap. Use this tool to decline an over-threshold return; do not use approveReturn, which releases it into the refund saga instead. Preconditions: the return order must exist and be in PENDING_APPROVAL. Required inputs: returnOrderId (UUID) as a path parameter and reason in the body. Emits an ORDER_RETURN_REJECT event; no refund is issued and no stock moves. Returns 404 when the return does not exist, and 409 when the return is not in PENDING_APPROVAL.
      * @endpoint post /v1/returns/{returnOrderId}/reject
-     * @param returnOrderId 
+     * @param returnOrderId
      * @param rejectReturnRequest The business reason the return is being declined.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
@@ -515,9 +515,9 @@ export class ReturnsService extends BaseService {
 
     /**
      * Retry a Failed Return Refund
-     * Re-runs the return refund saga for a return parked at REFUND_FAILED, using the same per-intent idempotency so already-reversed payments are never refunded twice. Use this tool after fixing the cause of a refund failure; do not use processReturn, which only accepts a return in RETURN_REQUESTED. Preconditions: the return must be in REFUND_FAILED; an already COMPLETED return is an idempotent no-op. Required inputs: returnOrderId (UUID) as a path parameter; there is no request body. Emits an ORDER_RETURN_RETRY event and, on success, publishes the order.order.returned fact that drives the pos-inventory restock of RESTOCK lines. Returns 200 when the retry completes (or the return was already COMPLETED), 404 when the return does not exist, and 409 when the status is not REFUND_FAILED or the refund fails again. 
+     * Re-runs the return refund saga for a return parked at REFUND_FAILED, using the same per-intent idempotency so already-reversed payments are never refunded twice. Use this tool after fixing the cause of a refund failure; do not use processReturn, which only accepts a return in RETURN_REQUESTED. Preconditions: the return must be in REFUND_FAILED; an already COMPLETED return is an idempotent no-op. Required inputs: returnOrderId (UUID) as a path parameter; there is no request body. Emits an ORDER_RETURN_RETRY event and, on success, publishes the order.order.returned fact that drives the pos-inventory restock of RESTOCK lines. Returns 200 when the retry completes (or the return was already COMPLETED), 404 when the return does not exist, and 409 when the status is not REFUND_FAILED or the refund fails again.
      * @endpoint post /v1/returns/{returnOrderId}/retry
-     * @param returnOrderId 
+     * @param returnOrderId
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options

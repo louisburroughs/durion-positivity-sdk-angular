@@ -12,7 +12,7 @@
 /**
  * Request payload for voiding an unsettled order
  */
-export interface VoidOrderRequest { 
+export interface VoidOrderRequest {
     /**
      * Reason the order is being voided
      */

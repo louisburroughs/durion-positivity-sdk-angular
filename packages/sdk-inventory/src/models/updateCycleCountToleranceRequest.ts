@@ -12,7 +12,7 @@
 /**
  * Request to update a tolerance configuration\'s bounds or active state
  */
-export interface UpdateCycleCountToleranceRequest { 
+export interface UpdateCycleCountToleranceRequest {
     /**
      * Maximum acceptable absolute variance, in the product\'s base UoM. Null clears it.
      */

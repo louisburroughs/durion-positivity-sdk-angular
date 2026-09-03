@@ -12,7 +12,7 @@
 /**
  * A hard address-level marketing block
  */
-export interface SuppressionEntryResponse { 
+export interface SuppressionEntryResponse {
     /**
      * Masked address; the raw value is never stored or returned
      */

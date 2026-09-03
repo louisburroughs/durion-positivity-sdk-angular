@@ -12,7 +12,7 @@
 /**
  * Response from GL mapping resolution
  */
-export interface GLMappingResolveResponse { 
+export interface GLMappingResolveResponse {
     /**
      * Resolved GL account UUID for the requested external code
      */

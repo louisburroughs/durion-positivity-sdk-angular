@@ -12,7 +12,7 @@
 /**
  * Bulk load job state and progress counters
  */
-export interface BulkLoadJobResponse { 
+export interface BulkLoadJobResponse {
     /**
      * Timestamp when processing completed (ISO 8601)
      */

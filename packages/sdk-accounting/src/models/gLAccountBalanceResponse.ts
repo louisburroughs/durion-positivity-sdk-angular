@@ -12,7 +12,7 @@
 /**
  * Balance of a GL account as of a point in time
  */
-export interface GLAccountBalanceResponse { 
+export interface GLAccountBalanceResponse {
     /**
      * Account code of the GL account
      */

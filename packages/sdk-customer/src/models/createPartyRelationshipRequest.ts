@@ -12,7 +12,7 @@
 /**
  * Request to create a relationship between a commercial account and an individual
  */
-export interface CreatePartyRelationshipRequest { 
+export interface CreatePartyRelationshipRequest {
     /**
      * Date when this relationship ends (null means no end date)
      */

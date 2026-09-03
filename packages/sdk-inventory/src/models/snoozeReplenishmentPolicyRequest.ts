@@ -12,7 +12,7 @@
 /**
  * Request to snooze a replenishment policy until a future instant, or clear an existing snooze by sending a null snoozedUntil
  */
-export interface SnoozeReplenishmentPolicyRequest { 
+export interface SnoozeReplenishmentPolicyRequest {
     /**
      * Future instant until which the policy is excluded from replenishment evaluation; null clears an existing snooze
      */

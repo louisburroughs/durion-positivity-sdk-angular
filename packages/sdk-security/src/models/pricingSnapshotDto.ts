@@ -13,7 +13,7 @@ import { PricingRuleTraceEntryDto } from './pricingRuleTraceEntryDto';
 /**
  * Pricing snapshot including its rule-evaluation trace
  */
-export interface PricingSnapshotDto { 
+export interface PricingSnapshotDto {
     /**
      * Ordered rule-evaluation steps that produced the price
      */

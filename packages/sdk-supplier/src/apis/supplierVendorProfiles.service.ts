@@ -11,7 +11,7 @@
 
 import { Inject, Injectable, Optional }                      from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams,
-         HttpResponse, HttpEvent, HttpContext 
+         HttpResponse, HttpEvent, HttpContext
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
@@ -41,7 +41,7 @@ export class SupplierVendorProfilesService extends BaseService {
 
     /**
      * Create vendor profile
-     * Creates an ADMIN-managed vendor profile, the row that carries one supplier connection and owns its accounts, auth config and endpoint bindings. Use this tool when onboarding a new supplier connection; do not use it to change an existing profile, which is updateVendorProfile, and note that YAML-managed profiles cannot be created here at all. Preconditions: supplierRef must not already be in use by another profile. Required inputs: supplierRef and displayName, both non-blank, plus the enabled and sandbox flags; timeouts, maxRetries, retryBackoff and sandboxBaseUrlOverride are optional and fall back to the deployment defaults when omitted. Emits a SUPPLIER_PROFILE_CREATE audit event; the profile is created with no bindings, so it resolves every capability to a not-configured outcome until bindings are added. Returns 409 when supplierRef is already in use, and 400 when supplierRef or displayName are blank or a timeout value is not greater than zero. 
+     * Creates an ADMIN-managed vendor profile, the row that carries one supplier connection and owns its accounts, auth config and endpoint bindings. Use this tool when onboarding a new supplier connection; do not use it to change an existing profile, which is updateVendorProfile, and note that YAML-managed profiles cannot be created here at all. Preconditions: supplierRef must not already be in use by another profile. Required inputs: supplierRef and displayName, both non-blank, plus the enabled and sandbox flags; timeouts, maxRetries, retryBackoff and sandboxBaseUrlOverride are optional and fall back to the deployment defaults when omitted. Emits a SUPPLIER_PROFILE_CREATE audit event; the profile is created with no bindings, so it resolves every capability to a not-configured outcome until bindings are added. Returns 409 when supplierRef is already in use, and 400 when supplierRef or displayName are blank or a timeout value is not greater than zero.
      * @endpoint post /v1/supplier/admin/profiles
      * @param vendorProfileRequest Vendor profile to create; the configuration source is always ADMIN.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -111,7 +111,7 @@ export class SupplierVendorProfilesService extends BaseService {
 
     /**
      * Delete vendor profile
-     * Deletes a vendor profile together with its accounts, auth config and endpoint bindings. Use this tool only when a supplier connection is being retired permanently; to stop traffic while keeping the configuration, call updateVendorProfile with enabled cleared instead. Preconditions: the profile must exist and must be ADMIN-managed, because YAML-managed profiles are owned by the deployment configuration. Required inputs: vendorProfileId (UUIDv7) path parameter; there is no request body and no confirmation flag. Emits a SUPPLIER_PROFILE_DELETE audit event and cascades to the profile\&#39;s child configuration; exchange audit records already written are retained. Returns 404 when the profile does not exist and 409 when it is YAML-managed. 
+     * Deletes a vendor profile together with its accounts, auth config and endpoint bindings. Use this tool only when a supplier connection is being retired permanently; to stop traffic while keeping the configuration, call updateVendorProfile with enabled cleared instead. Preconditions: the profile must exist and must be ADMIN-managed, because YAML-managed profiles are owned by the deployment configuration. Required inputs: vendorProfileId (UUIDv7) path parameter; there is no request body and no confirmation flag. Emits a SUPPLIER_PROFILE_DELETE audit event and cascades to the profile\&#39;s child configuration; exchange audit records already written are retained. Returns 404 when the profile does not exist and 409 when it is YAML-managed.
      * @endpoint delete /v1/supplier/admin/profiles/{vendorProfileId}
      * @param vendorProfileId Vendor profile identifier (UUIDv7). Must reference an existing vendor profile.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -171,7 +171,7 @@ export class SupplierVendorProfilesService extends BaseService {
 
     /**
      * Get vendor profile
-     * Returns one vendor profile with its timeouts, retry settings, sandbox overlay and whether it is ADMIN-managed or YAML-managed. Use this tool when the vendorProfileId is already known; use listVendorProfiles instead to search by supplierRef. Preconditions: the profile must exist. Required inputs: vendorProfileId (UUIDv7) path parameter; there is no request body. Emits a SUPPLIER_PROFILE_GET audit event; no configuration is changed. Returns 404 when no profile exists for the supplied id. 
+     * Returns one vendor profile with its timeouts, retry settings, sandbox overlay and whether it is ADMIN-managed or YAML-managed. Use this tool when the vendorProfileId is already known; use listVendorProfiles instead to search by supplierRef. Preconditions: the profile must exist. Required inputs: vendorProfileId (UUIDv7) path parameter; there is no request body. Emits a SUPPLIER_PROFILE_GET audit event; no configuration is changed. Returns 404 when no profile exists for the supplied id.
      * @endpoint get /v1/supplier/admin/profiles/{vendorProfileId}
      * @param vendorProfileId Vendor profile identifier (UUIDv7). Must reference an existing vendor profile.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -231,7 +231,7 @@ export class SupplierVendorProfilesService extends BaseService {
 
     /**
      * List vendor profiles
-     * Returns every configured vendor profile, ordered by supplierRef, with its enabled, sandbox and source-of-truth state. Use this tool to discover a vendorProfileId before working with accounts, auth config or bindings; use getVendorProfile instead when the id is already known. Preconditions: none; the list is unfiltered and includes both ADMIN-managed and YAML-managed profiles. Required inputs: none, and there is no request body, paging or filtering. Emits a SUPPLIER_PROFILE_LIST audit event; no configuration is changed. Returns 200 with an empty array when nothing is configured, so an empty result is not an error condition. 
+     * Returns every configured vendor profile, ordered by supplierRef, with its enabled, sandbox and source-of-truth state. Use this tool to discover a vendorProfileId before working with accounts, auth config or bindings; use getVendorProfile instead when the id is already known. Preconditions: none; the list is unfiltered and includes both ADMIN-managed and YAML-managed profiles. Required inputs: none, and there is no request body, paging or filtering. Emits a SUPPLIER_PROFILE_LIST audit event; no configuration is changed. Returns 200 with an empty array when nothing is configured, so an empty result is not an error condition.
      * @endpoint get /v1/supplier/admin/profiles
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
@@ -287,7 +287,7 @@ export class SupplierVendorProfilesService extends BaseService {
 
     /**
      * Update vendor profile
-     * Replaces every settable field of a vendor profile, including its alias, display name, enabled and sandbox flags and default timeouts. Use this tool to change connection defaults or take a supplier out of service by clearing enabled; do not use it on YAML-managed profiles, whose source of truth is the deployment configuration instead. Preconditions: the profile must exist, must be ADMIN-managed, and the supplierRef in the body must not belong to a different profile. Required inputs: vendorProfileId (UUIDv7) path parameter plus the full body, because every field is replaced; omitting an optional field resets it to the deployment default rather than leaving the stored value. Emits a SUPPLIER_PROFILE_UPDATE audit event; disabling a profile immediately makes its bindings resolve to a typed not-configured outcome. Returns 404 when the profile does not exist, 409 when it is YAML-managed or the supplierRef is taken, and 400 when a required field is blank or a timeout is not greater than zero. 
+     * Replaces every settable field of a vendor profile, including its alias, display name, enabled and sandbox flags and default timeouts. Use this tool to change connection defaults or take a supplier out of service by clearing enabled; do not use it on YAML-managed profiles, whose source of truth is the deployment configuration instead. Preconditions: the profile must exist, must be ADMIN-managed, and the supplierRef in the body must not belong to a different profile. Required inputs: vendorProfileId (UUIDv7) path parameter plus the full body, because every field is replaced; omitting an optional field resets it to the deployment default rather than leaving the stored value. Emits a SUPPLIER_PROFILE_UPDATE audit event; disabling a profile immediately makes its bindings resolve to a typed not-configured outcome. Returns 404 when the profile does not exist, 409 when it is YAML-managed or the supplierRef is taken, and 400 when a required field is blank or a timeout is not greater than zero.
      * @endpoint put /v1/supplier/admin/profiles/{vendorProfileId}
      * @param vendorProfileId Vendor profile identifier (UUIDv7). Must reference an existing vendor profile.
      * @param vendorProfileRequest Replacement values for every settable field of the vendor profile.

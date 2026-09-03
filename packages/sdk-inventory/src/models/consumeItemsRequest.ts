@@ -13,7 +13,7 @@ import { ConsumeItemLine } from './consumeItemLine';
 /**
  * Request payload to consume inventory items against a workorder, optionally drawn from a specific pick list
  */
-export interface ConsumeItemsRequest { 
+export interface ConsumeItemsRequest {
     /**
      * Line items identifying the SKUs and quantities to consume
      */

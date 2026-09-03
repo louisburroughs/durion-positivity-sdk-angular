@@ -12,7 +12,7 @@
 /**
  * A single per-jurisdiction tax rate, expressed as a decimal fraction
  */
-export interface TaxRateComponent { 
+export interface TaxRateComponent {
     /**
      * Jurisdiction level the rate applies at
      */

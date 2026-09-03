@@ -12,7 +12,7 @@
 /**
  * Request to assign a role to a user within a scope
  */
-export interface RoleAssignmentRequest { 
+export interface RoleAssignmentRequest {
     /**
      * Exclusive end of the effective window
      */

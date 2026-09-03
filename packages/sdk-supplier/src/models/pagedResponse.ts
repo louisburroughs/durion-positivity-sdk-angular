@@ -12,7 +12,7 @@
 /**
  * A page of results.
  */
-export interface PagedResponse { 
+export interface PagedResponse {
     /**
      * Items on this page, in the order documented by the endpoint.
      */

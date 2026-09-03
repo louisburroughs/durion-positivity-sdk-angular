@@ -15,7 +15,7 @@ import { TaxAddress } from './taxAddress';
 /**
  * International tax calculation request payload
  */
-export interface TaxCalculationRequest { 
+export interface TaxCalculationRequest {
     address?: string;
     /**
      * Calculation direction: SALE (default) or REFUND. REFUND amounts are positive and priced at the supplied transactionDate (the original sale date); callers negate at posting. Finalized-invoice credits must use the stored breakdown, not REFUND recompute.

@@ -12,7 +12,7 @@
 /**
  * Processor settlement line with its reconciliation match status
  */
-export interface SettlementLineResponse { 
+export interface SettlementLineResponse {
     /**
      * When the line was first ingested
      */

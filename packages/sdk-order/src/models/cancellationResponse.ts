@@ -12,7 +12,7 @@
 /**
  * Response returned after cancelling an order
  */
-export interface CancellationResponse { 
+export interface CancellationResponse {
     /**
      * Idempotency key associated with the cancellation request
      */

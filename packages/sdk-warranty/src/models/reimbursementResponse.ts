@@ -12,7 +12,7 @@
 /**
  * Vendor reimbursement — back-office money lifecycle for a claim
  */
-export interface ReimbursementResponse { 
+export interface ReimbursementResponse {
     amountApproved?: number;
     amountRequested?: number;
     claimId?: string;

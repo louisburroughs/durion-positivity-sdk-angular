@@ -11,7 +11,7 @@
 
 import { Inject, Injectable, Optional }                      from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams,
-         HttpResponse, HttpEvent, HttpContext 
+         HttpResponse, HttpEvent, HttpContext
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
@@ -41,10 +41,10 @@ export class PeopleTimeEntriesService extends BaseService {
 
     /**
      * Approve A Pending Time Entry Adjustment
-     * Approves a time entry adjustment, stamping the deciding user and decision time and writing an ADJUSTMENT_APPROVED audit row. Use this tool to accept a proposed correction; do not use approveTimeEntriesBatch, which approves the time entries themselves rather than adjustments. Preconditions: the adjustment must exist; no status gate is enforced, so re-approving an already decided adjustment overwrites the previous decision. Required inputs: adjustmentId (UUID) path parameter; an optional X-Correlation-Id header is carried into the audit trail. Emits a PEOPLE_TIME_ENTRY_ADJUSTMENT_APPROVE event; the underlying time entry\&#39;s own timestamps are not recalculated by this call. Returns 404 when no adjustment exists for the supplied id. 
+     * Approves a time entry adjustment, stamping the deciding user and decision time and writing an ADJUSTMENT_APPROVED audit row. Use this tool to accept a proposed correction; do not use approveTimeEntriesBatch, which approves the time entries themselves rather than adjustments. Preconditions: the adjustment must exist; no status gate is enforced, so re-approving an already decided adjustment overwrites the previous decision. Required inputs: adjustmentId (UUID) path parameter; an optional X-Correlation-Id header is carried into the audit trail. Emits a PEOPLE_TIME_ENTRY_ADJUSTMENT_APPROVE event; the underlying time entry\&#39;s own timestamps are not recalculated by this call. Returns 404 when no adjustment exists for the supplied id.
      * @endpoint post /v1/people/timeEntries/adjustments/{adjustmentId}/approve
-     * @param adjustmentId 
-     * @param xCorrelationId 
+     * @param adjustmentId
+     * @param xCorrelationId
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -105,7 +105,7 @@ export class PeopleTimeEntriesService extends BaseService {
 
     /**
      * Create A Pending Time Entry Adjustment
-     * Creates a PENDING adjustment against a time entry, proposing either replacement start and end timestamps or a signed minutes delta. Use this tool when a recorded time entry needs correction before approval; do not use approveTimeEntryAdjustment, which decides an already proposed adjustment. Preconditions: the time entry must exist and be in PENDING_APPROVAL status; entries already approved or rejected cannot be adjusted. Required inputs: timeEntryId (UUID), reasonCode, and exactly one of the pair proposedStartAt plus proposedEndAt (ISO-8601 offset timestamps) or minutesDelta (positive adds, negative subtracts); notes and createdBy are optional. Emits a PEOPLE_TIME_ENTRY_ADJUSTMENT_CREATE event; the time entry itself is not modified until the adjustment is approved. Returns 404 when the time entry does not exist, 409 when the entry is not in PENDING_APPROVAL status, and 400 when reasonCode is missing or the proposed-times versus minutesDelta rule is violated. 
+     * Creates a PENDING adjustment against a time entry, proposing either replacement start and end timestamps or a signed minutes delta. Use this tool when a recorded time entry needs correction before approval; do not use approveTimeEntryAdjustment, which decides an already proposed adjustment. Preconditions: the time entry must exist and be in PENDING_APPROVAL status; entries already approved or rejected cannot be adjusted. Required inputs: timeEntryId (UUID), reasonCode, and exactly one of the pair proposedStartAt plus proposedEndAt (ISO-8601 offset timestamps) or minutesDelta (positive adds, negative subtracts); notes and createdBy are optional. Emits a PEOPLE_TIME_ENTRY_ADJUSTMENT_CREATE event; the time entry itself is not modified until the adjustment is approved. Returns 404 when the time entry does not exist, 409 when the entry is not in PENDING_APPROVAL status, and 400 when reasonCode is missing or the proposed-times versus minutesDelta rule is violated.
      * @endpoint post /v1/people/timeEntries/adjustments
      * @param timeEntryAdjustmentRequest Proposed correction for one time entry: replacement start/end timestamps or a signed minutes delta, with a reason code.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -175,9 +175,9 @@ export class PeopleTimeEntriesService extends BaseService {
 
     /**
      * List Adjustments For A Time Entry
-     * Lists all adjustments recorded against one time entry, in any status. Use this tool to review an entry\&#39;s correction history; use createTimeEntryAdjustment instead to propose a new correction. Preconditions: none; an unknown timeEntryId simply yields no rows. Required inputs: timeEntryId (UUID) path parameter; there is no request body. No events are emitted and no state changes; this is a read-only projection. Returns 200 with an empty list when the time entry has no adjustments. 
+     * Lists all adjustments recorded against one time entry, in any status. Use this tool to review an entry\&#39;s correction history; use createTimeEntryAdjustment instead to propose a new correction. Preconditions: none; an unknown timeEntryId simply yields no rows. Required inputs: timeEntryId (UUID) path parameter; there is no request body. No events are emitted and no state changes; this is a read-only projection. Returns 200 with an empty list when the time entry has no adjustments.
      * @endpoint get /v1/people/timeEntries/{timeEntryId}/adjustments
-     * @param timeEntryId 
+     * @param timeEntryId
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options

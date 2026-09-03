@@ -12,7 +12,7 @@
 /**
  * Request to create a new inventory adjustment from a cycle count variance
  */
-export interface CreateAdjustmentRequest { 
+export interface CreateAdjustmentRequest {
     /**
      * Unit cost to capture at the time of the adjustment
      */

@@ -12,7 +12,7 @@
 /**
  * Request to resolve an external code to a GL account at a point in time
  */
-export interface GLMappingResolveRequest { 
+export interface GLMappingResolveRequest {
     /**
      * External code from the source system
      */

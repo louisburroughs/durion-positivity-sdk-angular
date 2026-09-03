@@ -12,7 +12,7 @@
 /**
  * Request to create a replenishment policy defining min/max stock thresholds for an item at a location
  */
-export interface CreateReplenishmentPolicyRequest { 
+export interface CreateReplenishmentPolicyRequest {
     /**
      * Whether the policy participates in replenishment evaluation; defaults to true
      */

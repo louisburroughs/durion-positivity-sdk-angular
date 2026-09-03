@@ -14,7 +14,7 @@ import { TrialBalanceRow } from './trialBalanceRow';
 /**
  * Trial Balance report with per-account debit/credit/balance rows from POSTED journal lines, grand totals proving sum(debit) == sum(credit), and an entry-number gap-check footnote
  */
-export interface TrialBalanceReport { 
+export interface TrialBalanceReport {
     /**
      * Date the trial balance is reported as of (inclusive)
      */

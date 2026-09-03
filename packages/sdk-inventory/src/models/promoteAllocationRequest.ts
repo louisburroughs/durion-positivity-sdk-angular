@@ -12,7 +12,7 @@
 /**
  * Request to promote a soft allocation to a hardened, location-pinned allocation
  */
-export interface PromoteAllocationRequest { 
+export interface PromoteAllocationRequest {
     /**
      * Reason the allocation is being hardened
      */

@@ -13,7 +13,7 @@ import { GeneralLedgerLine } from './generalLedgerLine';
 /**
  * General Ledger section for a single account with opening/closing balances and lines
  */
-export interface GeneralLedgerAccountSection { 
+export interface GeneralLedgerAccountSection {
     /**
      * GL account ID (UUID)
      */

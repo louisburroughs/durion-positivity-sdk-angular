@@ -12,7 +12,7 @@
 /**
  * Catalog item upsert request. Fields are type-dependent.
  */
-export interface CatalogItemRequestDto { 
+export interface CatalogItemRequestDto {
     /**
      * Color for product type
      */

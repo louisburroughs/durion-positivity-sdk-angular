@@ -12,7 +12,7 @@
 /**
  * Result of cross-docking received stock against a workorder line
  */
-export interface CrossDockResponse { 
+export interface CrossDockResponse {
     /**
      * Quantity of stock that was cross-docked
      */

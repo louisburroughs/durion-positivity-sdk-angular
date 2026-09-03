@@ -13,7 +13,7 @@ import { ReceivedLineItem } from './receivedLineItem';
 /**
  * Goods received event from inventory/purchasing system
  */
-export interface GoodsReceivedEvent { 
+export interface GoodsReceivedEvent {
     /**
      * Optional dimensional context for GL mapping
      */

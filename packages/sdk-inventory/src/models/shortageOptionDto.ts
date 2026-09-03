@@ -12,7 +12,7 @@
 /**
  * A computed option for resolving an inventory shortage on an allocation
  */
-export interface ShortageOptionDto { 
+export interface ShortageOptionDto {
     /**
      * Identifier of the allocation the option applies to
      */

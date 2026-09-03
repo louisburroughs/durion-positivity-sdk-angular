@@ -12,7 +12,7 @@
 /**
  * Single fitment record consumed during bulk part fitment ingest
  */
-export interface FitmentBulkIngestRecord { 
+export interface FitmentBulkIngestRecord {
     /**
      * Engine type for the vehicle
      */

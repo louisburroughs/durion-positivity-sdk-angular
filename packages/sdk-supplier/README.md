@@ -1,4 +1,4 @@
-# @durion-sdk/supplier@0.9.0-alpha
+# @durion-sdk/supplier@0.11.0-alpha
 
 API for supplier vendor profile administration — profiles, auth configs, commercial accounts, and capability endpoint bindings (ADR-0050)
 
@@ -24,7 +24,7 @@ Navigate to the folder of your consuming project and run one of next commands.
 _published:_
 
 ```console
-npm install @durion-sdk/supplier@0.9.0-alpha --save
+npm install @durion-sdk/supplier@0.11.0-alpha --save
 ```
 
 _without publishing (not recommended):_

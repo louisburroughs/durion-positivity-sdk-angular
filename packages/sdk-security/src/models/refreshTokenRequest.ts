@@ -12,7 +12,7 @@
 /**
  * Request to refresh an access token using a refresh token
  */
-export interface RefreshTokenRequest { 
+export interface RefreshTokenRequest {
     /**
      * Long-lived refresh token
      */

@@ -13,7 +13,7 @@ import { PermissionDto } from './permissionDto';
 /**
  * Role definition including its granted permissions and audit metadata
  */
-export interface RoleDto { 
+export interface RoleDto {
     /**
      * Creation timestamp
      */

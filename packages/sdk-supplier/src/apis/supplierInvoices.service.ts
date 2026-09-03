@@ -11,7 +11,7 @@
 
 import { Inject, Injectable, Optional }                      from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams,
-         HttpResponse, HttpEvent, HttpContext 
+         HttpResponse, HttpEvent, HttpContext
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
@@ -37,7 +37,7 @@ export class SupplierInvoicesService extends BaseService {
 
     /**
      * Fetch Vendor Invoices For A Window
-     * Asks a vendor for the invoices it issued between two dates and imports the ones not already held. Use this tool when somebody is chasing an invoice a vendor says it sent; do not use it to catch a schedule up, because it deliberately leaves the checkpoint alone and the scheduled run will still cover its own window. Preconditions: the vendor profile must be enabled and have an invoice-fetch binding configured; fromDate must not be after toDate. Required inputs: supplierRef path parameter, and fromDate and toDate query parameters as ISO dates. Emits a SUPPLIER_INVOICE_FETCH event and, for each invoice not already held, publishes it for the accounting domain to record as a vendor bill. Returns 200 with the number the vendor sent and the number newly imported, 422 when the vendor refused the window or could not be reached, 404 when the vendor profile is unknown, and 409 when the profile is disabled or has no invoice-fetch binding configured. 
+     * Asks a vendor for the invoices it issued between two dates and imports the ones not already held. Use this tool when somebody is chasing an invoice a vendor says it sent; do not use it to catch a schedule up, because it deliberately leaves the checkpoint alone and the scheduled run will still cover its own window. Preconditions: the vendor profile must be enabled and have an invoice-fetch binding configured; fromDate must not be after toDate. Required inputs: supplierRef path parameter, and fromDate and toDate query parameters as ISO dates. Emits a SUPPLIER_INVOICE_FETCH event and, for each invoice not already held, publishes it for the accounting domain to record as a vendor bill. Returns 200 with the number the vendor sent and the number newly imported, 422 when the vendor refused the window or could not be reached, 404 when the vendor profile is unknown, and 409 when the profile is disabled or has no invoice-fetch binding configured.
      * @endpoint post /v1/supplier/invoices/{supplierRef}/fetches
      * @param supplierRef Vendor profile alias
      * @param fromDate First issue date to fetch, inclusive

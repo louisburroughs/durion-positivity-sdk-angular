@@ -12,7 +12,7 @@
 /**
  * Transaction-level exemption claim applying to all lines
  */
-export interface CustomerExemption { 
+export interface CustomerExemption {
     /**
      * Optional exemption-certificate identifier backing the claim
      */

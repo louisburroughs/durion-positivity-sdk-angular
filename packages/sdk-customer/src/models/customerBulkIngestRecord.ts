@@ -12,7 +12,7 @@
 /**
  * A single customer record submitted as part of a bulk ingest request
  */
-export interface CustomerBulkIngestRecord { 
+export interface CustomerBulkIngestRecord {
     /**
      * Existing customer number, if known
      */

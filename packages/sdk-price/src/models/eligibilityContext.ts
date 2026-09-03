@@ -12,7 +12,7 @@
 /**
  * Optional account/vehicle/campaign context used to evaluate promotion eligibility
  */
-export interface EligibilityContext { 
+export interface EligibilityContext {
     /**
      * Customer account identifier
      */

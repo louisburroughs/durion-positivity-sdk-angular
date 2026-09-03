@@ -12,7 +12,7 @@
 /**
  * Request to create a new GL account
  */
-export interface GLAccountCreateRequest { 
+export interface GLAccountCreateRequest {
     /**
      * Account code in #### or ####-### format
      */

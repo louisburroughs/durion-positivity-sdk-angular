@@ -12,7 +12,7 @@
 /**
  * Request to assign a role to a person
  */
-export interface PersonRoleAssignmentRequest { 
+export interface PersonRoleAssignmentRequest {
     /**
      * Date and time the assignment ends
      */

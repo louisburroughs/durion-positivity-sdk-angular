@@ -12,7 +12,7 @@
 /**
  * A role assignment binding a user to a role within a scope
  */
-export interface RoleAssignmentDto { 
+export interface RoleAssignmentDto {
     /**
      * Creation timestamp
      */

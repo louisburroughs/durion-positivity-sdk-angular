@@ -12,7 +12,7 @@
 /**
  * Warranty provider create/update request
  */
-export interface ProviderRequest { 
+export interface ProviderRequest {
     /**
      * Optional pos-accounting ap_vendor.vendorId for credit matching
      */

@@ -10,7 +10,7 @@
 import { ReturnItemLine } from './returnItemLine';
 
 
-export interface ReturnItemsRequest { 
+export interface ReturnItemsRequest {
     workorderId: string;
     returnReason: string;
     items: Array<ReturnItemLine>;

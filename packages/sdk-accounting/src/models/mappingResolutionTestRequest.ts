@@ -12,7 +12,7 @@
 /**
  * Dry-run mapping/rule resolution request describing a hypothetical accounting event. Nothing is persisted by this operation.
  */
-export interface MappingResolutionTestRequest { 
+export interface MappingResolutionTestRequest {
     /**
      * Accounting event type to resolve posting rules for
      */

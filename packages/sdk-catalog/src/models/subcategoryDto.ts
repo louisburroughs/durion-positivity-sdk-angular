@@ -12,7 +12,7 @@
 /**
  * Product subcategory
  */
-export interface SubcategoryDto { 
+export interface SubcategoryDto {
     /**
      * Subcategory identifier
      */

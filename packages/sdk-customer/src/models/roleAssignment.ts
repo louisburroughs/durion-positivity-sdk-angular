@@ -12,7 +12,7 @@
 /**
  * Single role assignment detail
  */
-export interface RoleAssignment { 
+export interface RoleAssignment {
     /**
      * Flag: set this contact as primary for this role
      */

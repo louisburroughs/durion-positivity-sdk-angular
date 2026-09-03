@@ -13,7 +13,7 @@ import { StaffingAssignmentBulkIngestRecord } from './staffingAssignmentBulkInge
 /**
  * Generic bulk ingest request: a batch of records for a job scoped to a location
  */
-export interface BulkIngestRequestStaffingAssignmentBulkIngestRecord { 
+export interface BulkIngestRequestStaffingAssignmentBulkIngestRecord {
     /**
      * Identifier of the bulk ingest job
      */

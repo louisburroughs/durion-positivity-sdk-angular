@@ -12,7 +12,7 @@
 /**
  * Individual person details
  */
-export interface IndividualDetails { 
+export interface IndividualDetails {
     /**
      * Display name
      */

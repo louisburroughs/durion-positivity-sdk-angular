@@ -13,7 +13,7 @@ import { InvoiceLineItem } from './invoiceLineItem';
 /**
  * Internal service payload for creating invoice drafts.
  */
-export interface InvoiceCreationRequest { 
+export interface InvoiceCreationRequest {
     /**
      * Approval identifier used for billing authorization.
      */

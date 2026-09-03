@@ -12,7 +12,7 @@
 /**
  * Availability of a person at a location for a given date based on staffing assignments
  */
-export interface PeopleAvailabilityResponse { 
+export interface PeopleAvailabilityResponse {
     /**
      * Lifecycle status of the assignment
      */

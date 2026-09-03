@@ -11,7 +11,7 @@
 
 import { Inject, Injectable, Optional }                      from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams,
-         HttpResponse, HttpEvent, HttpContext 
+         HttpResponse, HttpEvent, HttpContext
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
@@ -37,7 +37,7 @@ export class CRMPersonLinkReconciliationService extends BaseService {
 
     /**
      * Reconcile Person Links
-     * Produces an integrity report verifying that every person_party.person_id in this module resolves to a canonical person in pos-people, the precondition for keeping person_party as a thin link under ADR-0015. Use this tool for admin integrity checks after imports or migrations; do not use searchPersons, which looks up individual customers rather than auditing link health. Preconditions: pos-people must be reachable to resolve the links being verified. Required inputs: none; there are no parameters and no request body. No events are emitted and no state changes; the report is computed on demand and nothing is repaired automatically. Returns 200 with the reconciliation report, including any person ids that failed to resolve. 
+     * Produces an integrity report verifying that every person_party.person_id in this module resolves to a canonical person in pos-people, the precondition for keeping person_party as a thin link under ADR-0015. Use this tool for admin integrity checks after imports or migrations; do not use searchPersons, which looks up individual customers rather than auditing link health. Preconditions: pos-people must be reachable to resolve the links being verified. Required inputs: none; there are no parameters and no request body. No events are emitted and no state changes; the report is computed on demand and nothing is repaired automatically. Returns 200 with the reconciliation report, including any person ids that failed to resolve.
      * @endpoint get /v1/crm/admin/person-links/reconcile
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.

@@ -12,7 +12,7 @@
 /**
  * Request to approve a pending cycle count adjustment
  */
-export interface ApproveAdjustmentRequest { 
+export interface ApproveAdjustmentRequest {
     /**
      * Legacy client-provided approver identifier; the authoritative actor is resolved server-side from the authenticated context
      */

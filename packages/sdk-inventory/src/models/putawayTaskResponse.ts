@@ -12,7 +12,7 @@
 /**
  * Putaway task describing a product to move from staging to a suggested storage location
  */
-export interface PutawayTaskResponse { 
+export interface PutawayTaskResponse {
     /**
      * Actual destination location where the goods were placed
      */

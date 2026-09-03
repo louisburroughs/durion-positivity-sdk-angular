@@ -12,7 +12,7 @@
 /**
  * Decoded permission code strings
  */
-export interface PermissionDecodeResponse { 
+export interface PermissionDecodeResponse {
     /**
      * List of decoded permission code strings
      */

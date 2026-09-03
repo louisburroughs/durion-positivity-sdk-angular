@@ -12,7 +12,7 @@
 /**
  * An individual decision for a specific time entry
  */
-export interface Decision { 
+export interface Decision {
     /**
      * The reason for rejection. Applicable if this is a rejection request.
      */

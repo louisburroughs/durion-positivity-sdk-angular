@@ -12,7 +12,7 @@
 /**
  * Result of converting accepted purchase suggestions into a DRAFT purchase order
  */
-export interface ConvertPurchaseSuggestionsResponse { 
+export interface ConvertPurchaseSuggestionsResponse {
     /**
      * Suggestions stamped CONVERTED by this call
      */

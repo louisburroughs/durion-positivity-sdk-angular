@@ -12,7 +12,7 @@ import { PurchaseOrderResponse } from './purchaseOrderResponse';
 import { SortObject } from './sortObject';
 
 
-export interface PagePurchaseOrderResponse { 
+export interface PagePurchaseOrderResponse {
     totalElements?: number;
     totalPages?: number;
     size?: number;

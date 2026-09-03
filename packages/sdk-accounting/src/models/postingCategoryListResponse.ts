@@ -13,7 +13,7 @@ import { PostingCategoryResponse } from './postingCategoryResponse';
 /**
  * Paginated list of posting categories
  */
-export interface PostingCategoryListResponse { 
+export interface PostingCategoryListResponse {
     /**
      * Zero-based index of the current page
      */

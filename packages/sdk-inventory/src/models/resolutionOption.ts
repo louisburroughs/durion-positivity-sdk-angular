@@ -9,7 +9,7 @@
  */
 
 
-export interface ResolutionOption { 
+export interface ResolutionOption {
     type?: ResolutionOptionTypeEnum;
     substitutePartNumber?: string;
     unitCost?: number;

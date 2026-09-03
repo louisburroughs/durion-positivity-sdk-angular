@@ -12,7 +12,7 @@
 /**
  * Request payload for reversing a journal entry
  */
-export interface JournalEntryReversalRequest { 
+export interface JournalEntryReversalRequest {
     /**
      * Optional justification for reversing into a CLOSED accounting period (story B2). When the resolved reversal date falls in a CLOSED period, supplying a non-blank justification together with the accounting:period:override permission allows the reversal to post into that period (audit-logged); without it the reversal is rejected with 422 PERIOD_CLOSED. Has no effect for dates in OPEN periods and can never bypass the hard lock (422 PERIOD_HARD_LOCKED).
      */

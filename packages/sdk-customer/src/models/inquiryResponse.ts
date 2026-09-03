@@ -12,7 +12,7 @@
 /**
  * A captured inbound inquiry
  */
-export interface InquiryResponse { 
+export interface InquiryResponse {
     /**
      * Owning CSR
      */

@@ -12,7 +12,7 @@
 /**
  * Invoice line item details.
  */
-export interface InvoiceLineItem { 
+export interface InvoiceLineItem {
     /**
      * Line amount (quantity x unit price).
      */

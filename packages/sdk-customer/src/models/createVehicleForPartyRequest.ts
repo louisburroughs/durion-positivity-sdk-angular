@@ -12,7 +12,7 @@
 /**
  * Request to create a vehicle record for a party
  */
-export interface CreateVehicleForPartyRequest { 
+export interface CreateVehicleForPartyRequest {
     /**
      * Vehicle description
      */

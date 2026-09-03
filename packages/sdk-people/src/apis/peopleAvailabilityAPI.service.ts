@@ -11,7 +11,7 @@
 
 import { Inject, Injectable, Optional }                      from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams,
-         HttpResponse, HttpEvent, HttpContext 
+         HttpResponse, HttpEvent, HttpContext
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
@@ -43,7 +43,7 @@ export class PeopleAvailabilityAPIService extends BaseService {
 
     /**
      * Get Current User Primary Location
-     * Resolves the authenticated caller\&#39;s primary active location from their staffing assignments as of today, defaulting to the platform\&#39;s top-level location when none is assigned. Use this tool when a UI or service needs the current user\&#39;s home location; use listMyLocations instead to see every active assignment, and getPersonPrimaryLocation for a different person. Preconditions: none beyond authentication; callers without a person link or a primary assignment receive the top-level default location with defaulted&#x3D;true. Required inputs: none; identity comes from the bearer token and there are no parameters. Emits a PEOPLE_PRIMARY_LOCATION_GET audit event but changes no state; this is a read-only projection. Returns 404 only when the caller has no primary assignment AND no top-level default location could be resolved from the location replica. 
+     * Resolves the authenticated caller\&#39;s primary active location from their staffing assignments as of today, defaulting to the platform\&#39;s top-level location when none is assigned. Use this tool when a UI or service needs the current user\&#39;s home location; use listMyLocations instead to see every active assignment, and getPersonPrimaryLocation for a different person. Preconditions: none beyond authentication; callers without a person link or a primary assignment receive the top-level default location with defaulted&#x3D;true. Required inputs: none; identity comes from the bearer token and there are no parameters. Emits a PEOPLE_PRIMARY_LOCATION_GET audit event but changes no state; this is a read-only projection. Returns 404 only when the caller has no primary assignment AND no top-level default location could be resolved from the location replica.
      * @endpoint get /v1/people/me/primary-location
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
@@ -100,7 +100,7 @@ export class PeopleAvailabilityAPIService extends BaseService {
 
     /**
      * Get Person Primary Location Assignment
-     * Resolves a person\&#39;s primary active location from their staffing assignments as of today. Use this tool for service-to-service location resolution by person id; use getMyPrimaryLocation instead for the authenticated caller. Preconditions: the person must have an ACTIVE staffing assignment flagged primary whose effective dates cover today. Required inputs: personId (UUID) path parameter; there is no request body. Emits a PEOPLE_PERSON_PRIMARY_LOCATION_GET audit event but changes no state; this is a read-only projection. Returns 404 when the person has no active assignment flagged as primary today. 
+     * Resolves a person\&#39;s primary active location from their staffing assignments as of today. Use this tool for service-to-service location resolution by person id; use getMyPrimaryLocation instead for the authenticated caller. Preconditions: the person must have an ACTIVE staffing assignment flagged primary whose effective dates cover today. Required inputs: personId (UUID) path parameter; there is no request body. Emits a PEOPLE_PERSON_PRIMARY_LOCATION_GET audit event but changes no state; this is a read-only projection. Returns 404 when the person has no active assignment flagged as primary today.
      * @endpoint get /v1/people/{personId}/primary-location
      * @param personId Person id
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -161,7 +161,7 @@ export class PeopleAvailabilityAPIService extends BaseService {
 
     /**
      * List Current User Active Location Assignments
-     * Lists the authenticated caller\&#39;s staffing assignments that are active today, primary first. Use this tool to populate a location switcher for the current user; use getMyPrimaryLocation instead when only the single primary location is needed. Preconditions: the caller must be linked to a person in the user-link replica; the link data is event-fed and can lag the link authority. Required inputs: none; identity comes from the bearer token and there are no parameters. Emits a PEOPLE_ME_LOCATIONS_LIST audit event but changes no state; this is a read-only projection. Returns 200 with an empty list when the person has no assignment active today, 404 when no person is linked to the current user, and 401 when the security context carries no username. 
+     * Lists the authenticated caller\&#39;s staffing assignments that are active today, primary first. Use this tool to populate a location switcher for the current user; use getMyPrimaryLocation instead when only the single primary location is needed. Preconditions: the caller must be linked to a person in the user-link replica; the link data is event-fed and can lag the link authority. Required inputs: none; identity comes from the bearer token and there are no parameters. Emits a PEOPLE_ME_LOCATIONS_LIST audit event but changes no state; this is a read-only projection. Returns 200 with an empty list when the person has no assignment active today, 404 when no person is linked to the current user, and 401 when the security context carries no username.
      * @endpoint get /v1/people/me/locations
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
@@ -218,7 +218,7 @@ export class PeopleAvailabilityAPIService extends BaseService {
 
     /**
      * List People Availability For A Location
-     * Lists people with staffing assignments active on a given date, joined with identity fields from the person replica, one row per assignment. Use this tool to see who is available to work at a location on a date; use getPersonPrimaryLocation instead to resolve a single person\&#39;s home location. Preconditions: when locationId is omitted the caller must be linked to a person with an active assignment, because the requester\&#39;s own location becomes the filter. Required inputs: none are mandatory; locationId (UUID) defaults to the requester\&#39;s location and date (yyyy-MM-dd) defaults to today. Emits a PEOPLE_AVAILABILITY_LIST audit event but changes no state; this is a read-only projection. Returns 404 when locationId is omitted and the requester has no active location assignment or no person link. 
+     * Lists people with staffing assignments active on a given date, joined with identity fields from the person replica, one row per assignment. Use this tool to see who is available to work at a location on a date; use getPersonPrimaryLocation instead to resolve a single person\&#39;s home location. Preconditions: when locationId is omitted the caller must be linked to a person with an active assignment, because the requester\&#39;s own location becomes the filter. Required inputs: none are mandatory; locationId (UUID) defaults to the requester\&#39;s location and date (yyyy-MM-dd) defaults to today. Emits a PEOPLE_AVAILABILITY_LIST audit event but changes no state; this is a read-only projection. Returns 404 when locationId is omitted and the requester has no active location assignment or no person link.
      * @endpoint get /v1/people/availability
      * @param locationId Filter by location ID. Defaults to requester location when omitted.
      * @param date Filter by date (ISO format: yyyy-MM-dd)
@@ -297,7 +297,7 @@ export class PeopleAvailabilityAPIService extends BaseService {
 
     /**
      * List Person Active Location Assignments
-     * Lists a given person\&#39;s staffing assignments that are active today, primary first. Use this tool when acting on another person by id; use listMyLocations instead for the authenticated caller, and listStaffingAssignments for full history including ended assignments. Preconditions: none beyond authentication; an unknown personId is not rejected. Required inputs: personId (UUID) path parameter; there is no request body. Emits a PEOPLE_PERSON_LOCATIONS_LIST audit event but changes no state; this is a read-only projection. Returns 200 with an empty list when the person has no assignment active today, including when the personId is unknown. 
+     * Lists a given person\&#39;s staffing assignments that are active today, primary first. Use this tool when acting on another person by id; use listMyLocations instead for the authenticated caller, and listStaffingAssignments for full history including ended assignments. Preconditions: none beyond authentication; an unknown personId is not rejected. Required inputs: personId (UUID) path parameter; there is no request body. Emits a PEOPLE_PERSON_LOCATIONS_LIST audit event but changes no state; this is a read-only projection. Returns 200 with an empty list when the person has no assignment active today, including when the personId is unknown.
      * @endpoint get /v1/people/{personId}/locations
      * @param personId Person id
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.

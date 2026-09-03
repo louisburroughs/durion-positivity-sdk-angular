@@ -12,7 +12,7 @@
 /**
  * Request to set a product\'s stock tracking level
  */
-export interface ProductTrackingLevelUpdateRequestDto { 
+export interface ProductTrackingLevelUpdateRequestDto {
     /**
      * Stock tracking level
      */

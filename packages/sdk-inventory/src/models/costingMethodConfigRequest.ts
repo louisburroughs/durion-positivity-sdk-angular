@@ -12,7 +12,7 @@
 /**
  * Upsert of the costing method configured for one scope (odoo-parity J1)
  */
-export interface CostingMethodConfigRequest { 
+export interface CostingMethodConfigRequest {
     /**
      * Costing method applied at this scope
      */

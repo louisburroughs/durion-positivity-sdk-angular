@@ -12,7 +12,7 @@
 /**
  * An item eligible to be returned, with the quantity still returnable
  */
-export interface ReturnableItemDto { 
+export interface ReturnableItemDto {
     /**
      * Human-readable description of the item
      */

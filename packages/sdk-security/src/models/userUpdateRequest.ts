@@ -12,7 +12,7 @@
 /**
  * Partial update of a user account; only supplied fields are applied
  */
-export interface UserUpdateRequest { 
+export interface UserUpdateRequest {
     /**
      * New password for the account
      */

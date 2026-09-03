@@ -12,7 +12,7 @@
 /**
  * Request payload for creating a new posting rule set
  */
-export interface PostingRuleSetCreateRequest { 
+export interface PostingRuleSetCreateRequest {
     /**
      * Identifier of the user creating the rule set
      */

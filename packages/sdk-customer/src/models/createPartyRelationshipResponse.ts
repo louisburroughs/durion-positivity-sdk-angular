@@ -12,7 +12,7 @@
 /**
  * Response after creating a party relationship
  */
-export interface CreatePartyRelationshipResponse { 
+export interface CreatePartyRelationshipResponse {
     /**
      * Timestamp when the relationship was created
      */

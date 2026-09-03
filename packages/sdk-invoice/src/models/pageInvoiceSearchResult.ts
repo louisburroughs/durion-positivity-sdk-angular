@@ -12,7 +12,7 @@ import { InvoiceSearchResult } from './invoiceSearchResult';
 import { SortObject } from './sortObject';
 
 
-export interface PageInvoiceSearchResult { 
+export interface PageInvoiceSearchResult {
     content?: Array<InvoiceSearchResult>;
     empty?: boolean;
     first?: boolean;

@@ -12,7 +12,7 @@
 /**
  * Grand-total aging buckets across all rows of an aged AR/AP report
  */
-export interface AgingSummary { 
+export interface AgingSummary {
     /**
      * Total outstanding 0-30 days past due (includes not-yet-due items)
      */

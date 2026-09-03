@@ -11,7 +11,7 @@
 
 import { Inject, Injectable, Optional }                      from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams,
-         HttpResponse, HttpEvent, HttpContext 
+         HttpResponse, HttpEvent, HttpContext
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
@@ -41,7 +41,7 @@ export class UserPersonLinkBulkIngestAPIService extends BaseService {
 
     /**
      * Link User Accounts to Persons in Bulk
-     * Queues many user-to-person links at once, resolving each row\&#39;s username to an account. Use this tool when connecting seeded accounts to their staff records; use linkUserPerson instead for a single account. Preconditions: each username must name an existing account. The person id is not validated here — pos-people-contact rejects an unknown person when it processes the command, which surfaces later rather than as a row failure. Required inputs: jobId (UUID), locationId (UUID) and records, each with a username and a personId. Emits a SECURITY_USER_PERSON_LINK_BULK_INGEST event and queues a link command per row; linking is asynchronous, so a successful row means the link was accepted rather than applied and the accounts should be read back to confirm the projection landed. Re-running the same file is safe: the consumer upserts by username. Returns 200 with a per-record result; check each result rather than the status alone. 
+     * Queues many user-to-person links at once, resolving each row\&#39;s username to an account. Use this tool when connecting seeded accounts to their staff records; use linkUserPerson instead for a single account. Preconditions: each username must name an existing account. The person id is not validated here — pos-people-contact rejects an unknown person when it processes the command, which surfaces later rather than as a row failure. Required inputs: jobId (UUID), locationId (UUID) and records, each with a username and a personId. Emits a SECURITY_USER_PERSON_LINK_BULK_INGEST event and queues a link command per row; linking is asynchronous, so a successful row means the link was accepted rather than applied and the accounts should be read back to confirm the projection landed. Re-running the same file is safe: the consumer upserts by username. Returns 200 with a per-record result; check each result rather than the status alone.
      * @endpoint post /v1/users/person-link/bulk-ingest
      * @param bulkIngestRequestUserPersonLinkBulkIngestRecord User-to-person links to queue.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.

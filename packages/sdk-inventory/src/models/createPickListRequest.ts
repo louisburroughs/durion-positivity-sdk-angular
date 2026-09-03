@@ -12,7 +12,7 @@
 /**
  * Request to create a pick list for a workorder, optionally linked to a parts reservation
  */
-export interface CreatePickListRequest { 
+export interface CreatePickListRequest {
     /**
      * Timestamp by which the pick list should be completed
      */

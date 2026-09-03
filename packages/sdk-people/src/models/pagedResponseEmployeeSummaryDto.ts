@@ -13,7 +13,7 @@ import { EmployeeSummaryDto } from './employeeSummaryDto';
 /**
  * A page of results
  */
-export interface PagedResponseEmployeeSummaryDto { 
+export interface PagedResponseEmployeeSummaryDto {
     /**
      * Items on this page
      */

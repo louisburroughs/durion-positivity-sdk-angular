@@ -12,7 +12,7 @@
 /**
  * A manual cost-revaluation document with its approval/application state
  */
-export interface RevaluationResponse { 
+export interface RevaluationResponse {
     /**
      * When the revaluation was applied to the cost state
      */

@@ -13,7 +13,7 @@ import { TimeEntrySummary } from './timeEntrySummary';
 /**
  * A page of results
  */
-export interface PagedResponseTimeEntrySummary { 
+export interface PagedResponseTimeEntrySummary {
     /**
      * Items on this page
      */

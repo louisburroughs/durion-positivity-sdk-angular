@@ -12,7 +12,7 @@
 /**
  * Mapping key details
  */
-export interface MappingKeyResponse { 
+export interface MappingKeyResponse {
     /**
      * Timestamp when the mapping key was created (ISO 8601)
      */

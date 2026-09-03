@@ -12,7 +12,7 @@
 /**
  * One outbound supplier attempt, without payload content. Reading the payload is a separate, individually audited call.
  */
-export interface ExchangeAuditSummary { 
+export interface ExchangeAuditSummary {
     /**
      * 1-based attempt number within one logical call. Retries are separate rows sharing a correlation id, so a sequence of 1,2,3 is one call retried twice.
      */

@@ -12,7 +12,7 @@
 /**
  * Inventory reservation with its allocation state for a workorder line
  */
-export interface ReservationResponse { 
+export interface ReservationResponse {
     /**
      * Quantity currently allocated against the reservation
      */

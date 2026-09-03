@@ -12,7 +12,7 @@
 /**
  * A serial unit master record for a SERIAL-tracked stock item (odoo-parity E4)
  */
-export interface SerialUnitResponse { 
+export interface SerialUnitResponse {
     /**
      * When the unit last left stock
      */

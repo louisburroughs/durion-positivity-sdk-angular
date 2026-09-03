@@ -12,7 +12,7 @@ import { SortObject } from './sortObject';
 import { CustomerDTO } from './customerDTO';
 
 
-export interface PageCustomerDTO { 
+export interface PageCustomerDTO {
     content?: Array<CustomerDTO>;
     empty?: boolean;
     first?: boolean;

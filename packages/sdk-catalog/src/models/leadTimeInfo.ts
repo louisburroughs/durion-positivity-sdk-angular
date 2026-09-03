@@ -12,7 +12,7 @@
 /**
  * Lead time information with source indicator
  */
-export interface LeadTimeInfo { 
+export interface LeadTimeInfo {
     /**
      * Timestamp of lead time data
      */

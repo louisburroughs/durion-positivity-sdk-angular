@@ -12,7 +12,7 @@
 /**
  * Request to initiate a card payment
  */
-export interface InitiatePaymentRequest { 
+export interface InitiatePaymentRequest {
     /**
      * Payment amount (must be positive)
      */

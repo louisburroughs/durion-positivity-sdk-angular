@@ -12,7 +12,7 @@
 /**
  * Request payload for creating a new mapping key
  */
-export interface MappingKeyCreateRequest { 
+export interface MappingKeyCreateRequest {
     /**
      * Identifier of the user creating the mapping key
      */

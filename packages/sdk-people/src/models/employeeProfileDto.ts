@@ -13,7 +13,7 @@ import { EmployeeContactInfoDto } from './employeeContactInfoDto';
 /**
  * Employee profile returned by employee read and write operations
  */
-export interface EmployeeProfileDto { 
+export interface EmployeeProfileDto {
     contactInfo?: EmployeeContactInfoDto;
     /**
      * Timestamp the employee record was created

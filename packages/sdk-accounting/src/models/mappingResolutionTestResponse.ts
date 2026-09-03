@@ -16,7 +16,7 @@ import { MatchedRule } from './matchedRule';
 /**
  * Dry-run mapping/rule resolution result. A no-match outcome is represented as matched=false with a reason, not as an error. Nothing is persisted.
  */
-export interface MappingResolutionTestResponse { 
+export interface MappingResolutionTestResponse {
     /**
      * Whether a published posting rule matched the supplied event. false means no rule matched; inspect noMatchReason/noMatchDetail.
      */

@@ -12,7 +12,7 @@
 /**
  * Product lifecycle update request
  */
-export interface ProductLifecycleUpdateRequest { 
+export interface ProductLifecycleUpdateRequest {
     /**
      * Username performing the lifecycle change
      */

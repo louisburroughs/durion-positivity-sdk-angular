@@ -12,7 +12,7 @@
 /**
  * Request payload for resolving a vendor bill match exception
  */
-export interface ExceptionResolutionRequest { 
+export interface ExceptionResolutionRequest {
     /**
      * Operator identifier performing resolution
      */

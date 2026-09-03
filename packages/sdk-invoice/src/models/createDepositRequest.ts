@@ -12,7 +12,7 @@
 /**
  * Request payload for registering a deposit / down-payment credit
  */
-export interface CreateDepositRequest { 
+export interface CreateDepositRequest {
     /**
      * Deposit amount
      */

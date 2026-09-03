@@ -12,7 +12,7 @@
 /**
  * Request to start or act on a work session for a person
  */
-export interface WorkSessionRequest { 
+export interface WorkSessionRequest {
     /**
      * Actor performing the action
      */

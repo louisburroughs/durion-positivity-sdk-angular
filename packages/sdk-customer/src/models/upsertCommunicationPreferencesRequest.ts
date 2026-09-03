@@ -12,7 +12,7 @@
 /**
  * Request to upsert communication preferences and consent flags for a party
  */
-export interface UpsertCommunicationPreferencesRequest { 
+export interface UpsertCommunicationPreferencesRequest {
     /**
      * Consent flags keyed by consent type; field names depend on legal requirements
      */

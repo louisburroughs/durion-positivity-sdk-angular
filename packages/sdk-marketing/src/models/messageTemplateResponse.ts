@@ -12,7 +12,7 @@
 /**
  * A channel-specific message template
  */
-export interface MessageTemplateResponse { 
+export interface MessageTemplateResponse {
     /**
      * Audience whose token vocabulary applies
      */

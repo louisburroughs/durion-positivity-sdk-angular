@@ -13,7 +13,7 @@ import { DefaultGLMappingResponse } from './defaultGLMappingResponse';
 /**
  * Paginated list of default GL account mappings
  */
-export interface DefaultGLMappingListResponse { 
+export interface DefaultGLMappingListResponse {
     /**
      * Default GL mappings on the current page
      */

@@ -12,7 +12,7 @@
 /**
  * A rule-evaluation step submitted while creating a pricing snapshot
  */
-export interface PricingRuleTraceEntryRequest { 
+export interface PricingRuleTraceEntryRequest {
     inputs?: any | null;
     outputs?: any | null;
     /**

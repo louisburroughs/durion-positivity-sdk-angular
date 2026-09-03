@@ -12,7 +12,7 @@
 /**
  * Result of a cycle count inventory adjustment, including approval state and posting outcome
  */
-export interface AdjustmentResponse { 
+export interface AdjustmentResponse {
     /**
      * Unique identifier of the adjustment record
      */

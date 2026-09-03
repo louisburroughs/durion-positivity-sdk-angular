@@ -12,7 +12,7 @@
 /**
  * Request to upsert billing rules for a commercial party
  */
-export interface UpsertBillingRulesRequest { 
+export interface UpsertBillingRulesRequest {
     /**
      * Whether auto-pay is enabled for this account
      */

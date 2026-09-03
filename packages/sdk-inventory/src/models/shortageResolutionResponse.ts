@@ -10,7 +10,7 @@
 import { ResolutionOption } from './resolutionOption';
 
 
-export interface ShortageResolutionResponse { 
+export interface ShortageResolutionResponse {
     allocationId?: string;
     sku?: string;
     options?: Array<ResolutionOption>;

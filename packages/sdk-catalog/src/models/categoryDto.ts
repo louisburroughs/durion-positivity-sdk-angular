@@ -12,7 +12,7 @@
 /**
  * Product category
  */
-export interface CategoryDto { 
+export interface CategoryDto {
     /**
      * Category identifier
      */

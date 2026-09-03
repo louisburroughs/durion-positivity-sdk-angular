@@ -13,7 +13,7 @@ import { VehicleSummary } from './vehicleSummary';
 /**
  * Paginated vehicle search results
  */
-export interface SearchVehiclesResponse { 
+export interface SearchVehiclesResponse {
     /**
      * Whether additional result pages are available beyond the current page
      */

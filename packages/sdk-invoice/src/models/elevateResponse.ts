@@ -12,7 +12,7 @@
 /**
  * Minted manager-approval elevation token
  */
-export interface ElevateResponse { 
+export interface ElevateResponse {
     /**
      * Signed, short-lived elevation token scoped to the invoice
      */

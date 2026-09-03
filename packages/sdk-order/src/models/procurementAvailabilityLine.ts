@@ -12,7 +12,7 @@
 /**
  * One purchase-order line and what the vendor said about it.
  */
-export interface ProcurementAvailabilityLine { 
+export interface ProcurementAvailabilityLine {
     /**
      * The article code the vendor was asked about; null when none could be resolved.
      */

@@ -9,7 +9,7 @@
  */
 
 
-export interface CreateUserRequest { 
+export interface CreateUserRequest {
     /**
      * Initial password; hashed server-side before storage
      */

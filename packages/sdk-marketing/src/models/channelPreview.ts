@@ -13,7 +13,7 @@ import { SampleRecipient } from './sampleRecipient';
 /**
  * Reach on one channel
  */
-export interface ChannelPreview { 
+export interface ChannelPreview {
     /**
      * Channel
      */

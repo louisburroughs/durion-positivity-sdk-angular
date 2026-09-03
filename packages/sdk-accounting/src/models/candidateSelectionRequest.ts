@@ -12,7 +12,7 @@
 /**
  * Request payload for selecting a match candidate
  */
-export interface CandidateSelectionRequest { 
+export interface CandidateSelectionRequest {
     /**
      * Operator identifier performing selection
      */

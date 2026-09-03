@@ -11,7 +11,7 @@
 
 import { Inject, Injectable, Optional }                      from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams,
-         HttpResponse, HttpEvent, HttpContext 
+         HttpResponse, HttpEvent, HttpContext
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
@@ -47,7 +47,7 @@ export class PriceBookAPIService extends BaseService {
 
     /**
      * Create Price Book
-     * Creates a price book — a scoped container of pricing rules — with scope COMPANY_DEFAULT, LOCATION or CUSTOMER_TIER and an initial status defaulting to ACTIVE. Use this tool to establish a rule container before adding rules; do not use createPriceBookRule, which adds rules to a book that already exists. Preconditions: none; no uniqueness is enforced, so creating a second default book for the same scope is possible and should be avoided by the caller. Required inputs: name and scope; scopeId is mandatory for LOCATION and CUSTOMER_TIER scopes, while isDefault defaults to false and status defaults to ACTIVE. Emits a CATALOG_PRICE_BOOK_CREATE event; no rules exist until they are added. Returns 400 when name is blank, scope is missing, or scopeId is absent for a LOCATION or CUSTOMER_TIER scope. 
+     * Creates a price book — a scoped container of pricing rules — with scope COMPANY_DEFAULT, LOCATION or CUSTOMER_TIER and an initial status defaulting to ACTIVE. Use this tool to establish a rule container before adding rules; do not use createPriceBookRule, which adds rules to a book that already exists. Preconditions: none; no uniqueness is enforced, so creating a second default book for the same scope is possible and should be avoided by the caller. Required inputs: name and scope; scopeId is mandatory for LOCATION and CUSTOMER_TIER scopes, while isDefault defaults to false and status defaults to ACTIVE. Emits a CATALOG_PRICE_BOOK_CREATE event; no rules exist until they are added. Returns 400 when name is blank, scope is missing, or scopeId is absent for a LOCATION or CUSTOMER_TIER scope.
      * @endpoint post /v1/products/price-books
      * @param priceBookCreateRequestDto Price book definition: a name, its scope, and for LOCATION or CUSTOMER_TIER scopes the id of the location or tier it prices.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -117,9 +117,9 @@ export class PriceBookAPIService extends BaseService {
 
     /**
      * Create Price Book Rule
-     * Adds an ACTIVE pricing rule to a price book, targeting a single SKU, a CATEGORY taxonomy node or GLOBAL, with an effective window and an optional LOCATION or CUSTOMER_TIER condition. Use this tool to define a reference price; do not use resolveProductPrice, which evaluates rules, and do not use updatePriceBookRule, which edits a rule that already exists. Preconditions: the price book must exist, and no ACTIVE rule with the same target, condition and an overlapping effective window may already exist in the book. Required inputs: targetType (SKU, CATEGORY or GLOBAL), targetId for non-GLOBAL targets, pricingLogic as JSON of the form {\&quot;amounts\&quot;:{\&quot;USD\&quot;:\&quot;10.00\&quot;},\&quot;defaultCurrency\&quot;:\&quot;USD\&quot;}, effectiveStartAt and createdByUserId; priority defaults to 0, conditionType defaults to NONE, and a LOCATION conditionValue must be a UUID string. Emits a CATALOG_PRICE_BOOK_RULE_CREATE event; the rule participates in resolution immediately once its window opens. Returns 404 when the price book does not exist, 409 when the rule conflicts with an existing rule in overlapping dates, and 400 when required fields are missing or the effective window is inverted. 
+     * Adds an ACTIVE pricing rule to a price book, targeting a single SKU, a CATEGORY taxonomy node or GLOBAL, with an effective window and an optional LOCATION or CUSTOMER_TIER condition. Use this tool to define a reference price; do not use resolveProductPrice, which evaluates rules, and do not use updatePriceBookRule, which edits a rule that already exists. Preconditions: the price book must exist, and no ACTIVE rule with the same target, condition and an overlapping effective window may already exist in the book. Required inputs: targetType (SKU, CATEGORY or GLOBAL), targetId for non-GLOBAL targets, pricingLogic as JSON of the form {\&quot;amounts\&quot;:{\&quot;USD\&quot;:\&quot;10.00\&quot;},\&quot;defaultCurrency\&quot;:\&quot;USD\&quot;}, effectiveStartAt and createdByUserId; priority defaults to 0, conditionType defaults to NONE, and a LOCATION conditionValue must be a UUID string. Emits a CATALOG_PRICE_BOOK_RULE_CREATE event; the rule participates in resolution immediately once its window opens. Returns 404 when the price book does not exist, 409 when the rule conflicts with an existing rule in overlapping dates, and 400 when required fields are missing or the effective window is inverted.
      * @endpoint post /v1/products/price-books/{priceBookId}/rules
-     * @param priceBookId 
+     * @param priceBookId
      * @param priceBookRuleCreateRequestDto Rule definition: target, JSON pricingLogic with per-currency amounts, optional condition, priority and effective window.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
@@ -191,10 +191,10 @@ export class PriceBookAPIService extends BaseService {
 
     /**
      * Deactivate Price Book Rule
-     * Sets a price book rule\&#39;s status to INACTIVE so price resolution stops considering it; the rule row is kept, not deleted. Use this tool to retire a rule; do not use updatePriceBookRule, which changes its values while leaving it active — there is no endpoint to reactivate a rule, so treat this as one-way. Preconditions: the rule must exist and belong to the given price book. Required inputs: priceBookId and ruleId (UUIDs) as path parameters; there is no request body. Emits a CATALOG_PRICE_BOOK_RULE_DEACTIVATE event; subsequent resolveProductPrice calls no longer match the rule. Returns 204 on success, and 404 when the rule does not exist under that price book. 
+     * Sets a price book rule\&#39;s status to INACTIVE so price resolution stops considering it; the rule row is kept, not deleted. Use this tool to retire a rule; do not use updatePriceBookRule, which changes its values while leaving it active — there is no endpoint to reactivate a rule, so treat this as one-way. Preconditions: the rule must exist and belong to the given price book. Required inputs: priceBookId and ruleId (UUIDs) as path parameters; there is no request body. Emits a CATALOG_PRICE_BOOK_RULE_DEACTIVATE event; subsequent resolveProductPrice calls no longer match the rule. Returns 204 on success, and 404 when the rule does not exist under that price book.
      * @endpoint delete /v1/products/price-books/{priceBookId}/rules/{ruleId}
-     * @param priceBookId 
-     * @param ruleId 
+     * @param priceBookId
+     * @param ruleId
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -254,9 +254,9 @@ export class PriceBookAPIService extends BaseService {
 
     /**
      * Get Price Book
-     * Returns one price book with its name, scope, default flag, status and optimistic-lock version. Use this tool when the priceBookId is already known; use listPriceBookRules instead to inspect the rules it contains, since there is no endpoint that lists price books. Preconditions: the price book must exist. Required inputs: priceBookId (UUID) as a path parameter; there is no request body. No events are emitted and no state changes; this is a read-only projection. Returns 404 when no price book exists for the supplied id. 
+     * Returns one price book with its name, scope, default flag, status and optimistic-lock version. Use this tool when the priceBookId is already known; use listPriceBookRules instead to inspect the rules it contains, since there is no endpoint that lists price books. Preconditions: the price book must exist. Required inputs: priceBookId (UUID) as a path parameter; there is no request body. No events are emitted and no state changes; this is a read-only projection. Returns 404 when no price book exists for the supplied id.
      * @endpoint get /v1/products/price-books/{priceBookId}
-     * @param priceBookId 
+     * @param priceBookId
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -314,9 +314,9 @@ export class PriceBookAPIService extends BaseService {
 
     /**
      * List Price Book Rules
-     * Returns every rule in a price book — ACTIVE and INACTIVE alike — with target, pricing logic, condition, priority, effective window, status and version. Use this tool to inspect a book\&#39;s rule set; use resolveProductPrice instead to evaluate which rule wins for a concrete product and context. Preconditions: the price book must exist. Required inputs: priceBookId (UUID) as a path parameter; there is no filtering or paging. No events are emitted and no state changes; this is a read-only projection. Returns 404 when no price book exists for the supplied id, and 200 with an empty array when the book has no rules. 
+     * Returns every rule in a price book — ACTIVE and INACTIVE alike — with target, pricing logic, condition, priority, effective window, status and version. Use this tool to inspect a book\&#39;s rule set; use resolveProductPrice instead to evaluate which rule wins for a concrete product and context. Preconditions: the price book must exist. Required inputs: priceBookId (UUID) as a path parameter; there is no filtering or paging. No events are emitted and no state changes; this is a read-only projection. Returns 404 when no price book exists for the supplied id, and 200 with an empty array when the book has no rules.
      * @endpoint get /v1/products/price-books/{priceBookId}/rules
-     * @param priceBookId 
+     * @param priceBookId
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -374,7 +374,7 @@ export class PriceBookAPIService extends BaseService {
 
     /**
      * Resolve Reference Product Price
-     * Resolves a product\&#39;s catalog reference or list price by picking one candidate price book — the explicit priceBookId first, otherwise the active LOCATION book, then the active CUSTOMER_TIER book, then the COMPANY_DEFAULT book — and selecting the winning ACTIVE rule by SKU over CATEGORY over GLOBAL specificity, then priority; when no rule matches, the active MSRP is returned with fallbackReason MSRP_FALLBACK. Use this tool for catalog reference pricing per ADR-0054; do not use it for transactional sell prices, which pos-price owns, and do not use getEffectiveLocationPrice, which reads location override records instead of price book rules. Preconditions: the product must exist; price books and rules are optional, since MSRP fallback covers their absence. Required inputs: productId (UUID); priceBookId, locationId, customerTierId, customerTier, currency and asOf are optional, with asOf defaulting to today and currency required only when a winning rule configures multiple currencies without a defaultCurrency. Emits a CATALOG_PRICE_BOOK_RESOLVE_PRICE audit event; no pricing data changes. Returns 404 when the product or an explicitly supplied priceBookId does not exist, 400 when the requested currency is not configured in the winning rule\&#39;s pricingLogic, and 200 with source UNAVAILABLE and fallbackReason PRICE_BASE_DATA_MISSING when neither a rule nor an MSRP applies. 
+     * Resolves a product\&#39;s catalog reference or list price by picking one candidate price book — the explicit priceBookId first, otherwise the active LOCATION book, then the active CUSTOMER_TIER book, then the COMPANY_DEFAULT book — and selecting the winning ACTIVE rule by SKU over CATEGORY over GLOBAL specificity, then priority; when no rule matches, the active MSRP is returned with fallbackReason MSRP_FALLBACK. Use this tool for catalog reference pricing per ADR-0054; do not use it for transactional sell prices, which pos-price owns, and do not use getEffectiveLocationPrice, which reads location override records instead of price book rules. Preconditions: the product must exist; price books and rules are optional, since MSRP fallback covers their absence. Required inputs: productId (UUID); priceBookId, locationId, customerTierId, customerTier, currency and asOf are optional, with asOf defaulting to today and currency required only when a winning rule configures multiple currencies without a defaultCurrency. Emits a CATALOG_PRICE_BOOK_RESOLVE_PRICE audit event; no pricing data changes. Returns 404 when the product or an explicitly supplied priceBookId does not exist, 400 when the requested currency is not configured in the winning rule\&#39;s pricingLogic, and 200 with source UNAVAILABLE and fallbackReason PRICE_BASE_DATA_MISSING when neither a rule nor an MSRP applies.
      * @endpoint post /v1/products/price-books/resolve-price
      * @param resolvePriceRequestDto Resolution context: the product plus optional book, location, customer tier, currency and as-of date that steer candidate book selection.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -444,9 +444,9 @@ export class PriceBookAPIService extends BaseService {
 
     /**
      * Update Price Book
-     * Updates a price book\&#39;s name, scope and scopeId, and optionally its default flag and status; isDefault and status are left unchanged when omitted, unlike the other fields which are replaced. Use this tool to rename, re-scope, deactivate or promote a book; do not use updatePriceBookRule, which edits an individual rule inside the book. Preconditions: the price book must exist. Required inputs: priceBookId (UUID) path parameter plus name and scope; scopeId is mandatory for LOCATION and CUSTOMER_TIER scopes. Emits a CATALOG_PRICE_BOOK_UPDATE event; the book\&#39;s rules are untouched. Returns 404 when no price book exists for the supplied id, and 400 when name is blank, scope is missing, or scopeId is absent for a LOCATION or CUSTOMER_TIER scope. 
+     * Updates a price book\&#39;s name, scope and scopeId, and optionally its default flag and status; isDefault and status are left unchanged when omitted, unlike the other fields which are replaced. Use this tool to rename, re-scope, deactivate or promote a book; do not use updatePriceBookRule, which edits an individual rule inside the book. Preconditions: the price book must exist. Required inputs: priceBookId (UUID) path parameter plus name and scope; scopeId is mandatory for LOCATION and CUSTOMER_TIER scopes. Emits a CATALOG_PRICE_BOOK_UPDATE event; the book\&#39;s rules are untouched. Returns 404 when no price book exists for the supplied id, and 400 when name is blank, scope is missing, or scopeId is absent for a LOCATION or CUSTOMER_TIER scope.
      * @endpoint put /v1/products/price-books/{priceBookId}
-     * @param priceBookId 
+     * @param priceBookId
      * @param priceBookCreateRequestDto Replacement name, scope and scopeId; isDefault and status only change when present in the body.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
@@ -518,10 +518,10 @@ export class PriceBookAPIService extends BaseService {
 
     /**
      * Update Price Book Rule
-     * Replaces the target, pricing logic, condition, priority and effective window of an existing price book rule, keeping its status. Use this tool to change a rule in place; do not use deactivatePriceBookRule, which retires the rule, and do not use createPriceBookRule, which adds a new one. Preconditions: the rule must exist and belong to the given price book; a version supplied in the body must match the rule\&#39;s current version, and the change must not conflict with another rule\&#39;s overlapping window. Required inputs: priceBookId and ruleId (UUIDs) path parameters plus targetType, pricingLogic, effectiveStartAt and createdByUserId; version is optional but recommended for optimistic locking. Emits a CATALOG_PRICE_BOOK_RULE_UPDATE event; resolution reflects the new values immediately. Returns 404 when the rule does not exist under that price book, 409 when the version mismatches or the change conflicts with an existing rule in overlapping dates, and 400 when required fields are missing or invalid. 
+     * Replaces the target, pricing logic, condition, priority and effective window of an existing price book rule, keeping its status. Use this tool to change a rule in place; do not use deactivatePriceBookRule, which retires the rule, and do not use createPriceBookRule, which adds a new one. Preconditions: the rule must exist and belong to the given price book; a version supplied in the body must match the rule\&#39;s current version, and the change must not conflict with another rule\&#39;s overlapping window. Required inputs: priceBookId and ruleId (UUIDs) path parameters plus targetType, pricingLogic, effectiveStartAt and createdByUserId; version is optional but recommended for optimistic locking. Emits a CATALOG_PRICE_BOOK_RULE_UPDATE event; resolution reflects the new values immediately. Returns 404 when the rule does not exist under that price book, 409 when the version mismatches or the change conflicts with an existing rule in overlapping dates, and 400 when required fields are missing or invalid.
      * @endpoint put /v1/products/price-books/{priceBookId}/rules/{ruleId}
-     * @param priceBookId 
-     * @param ruleId 
+     * @param priceBookId
+     * @param ruleId
      * @param priceBookRuleCreateRequestDto Replacement rule values; include version to guard against concurrent edits of the same rule.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.

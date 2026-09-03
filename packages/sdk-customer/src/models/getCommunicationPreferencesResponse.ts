@@ -12,7 +12,7 @@
 /**
  * Communication preferences and consent flags for a party
  */
-export interface GetCommunicationPreferencesResponse { 
+export interface GetCommunicationPreferencesResponse {
     /**
      * Consent flags keyed by consent type
      */

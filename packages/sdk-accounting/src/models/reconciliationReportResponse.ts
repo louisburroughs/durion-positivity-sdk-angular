@@ -14,7 +14,7 @@ import { BankReconciliationLineResponse } from './bankReconciliationLineResponse
 /**
  * Bank reconciliation report
  */
-export interface ReconciliationReportResponse { 
+export interface ReconciliationReportResponse {
     /**
      * Reconciled account code
      */

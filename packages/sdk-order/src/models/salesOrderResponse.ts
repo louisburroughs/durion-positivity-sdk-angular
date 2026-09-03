@@ -13,7 +13,7 @@ import { SalesOrderLineResponse } from './salesOrderLineResponse';
 /**
  * Response representing a sales order and its lines
  */
-export interface SalesOrderResponse { 
+export interface SalesOrderResponse {
     /**
      * Net settled amount (checkout onward)
      */

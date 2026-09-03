@@ -12,7 +12,7 @@
 /**
  * Request payload for creating a price book rule
  */
-export interface PriceBookRuleCreateRequestDto { 
+export interface PriceBookRuleCreateRequestDto {
     /**
      * Condition type gating the rule
      */

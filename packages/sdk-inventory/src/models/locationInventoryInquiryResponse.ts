@@ -12,7 +12,7 @@
 /**
  * Inventory summary for a storage location
  */
-export interface LocationInventoryInquiryResponse { 
+export interface LocationInventoryInquiryResponse {
     /**
      * Quantity available to promise after pending allocations. Note: reservation events are not yet factored in. Null for as-of (historical) requests: historical allocation state is not reliably reconstructable from ATP-neutral ledger events, so as-of responses carry on-hand only.
      */

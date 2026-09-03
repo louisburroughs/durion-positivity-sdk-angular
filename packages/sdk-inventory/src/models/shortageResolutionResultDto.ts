@@ -12,7 +12,7 @@
 /**
  * Result of applying a resolution to an inventory shortage
  */
-export interface ShortageResolutionResultDto { 
+export interface ShortageResolutionResultDto {
     /**
      * Identifier of the allocation that was resolved
      */

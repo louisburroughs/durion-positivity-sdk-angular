@@ -12,7 +12,7 @@
 /**
  * One aggregate row of workorder-creation-to-invoice-creation lag
  */
-export interface InvoicingLagRow { 
+export interface InvoicingLagRow {
     /**
      * Average days from workorder creation to invoice creation across `count` invoices; null when count is 0 (undefined, not zero)
      */

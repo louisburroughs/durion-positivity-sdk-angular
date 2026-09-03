@@ -12,7 +12,7 @@
 /**
  * Reach funnel for one channel
  */
-export interface ChannelFunnel { 
+export interface ChannelFunnel {
     /**
      * Hard bounces
      */

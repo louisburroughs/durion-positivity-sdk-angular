@@ -11,7 +11,7 @@
 
 import { Inject, Injectable, Optional }                      from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams,
-         HttpResponse, HttpEvent, HttpContext 
+         HttpResponse, HttpEvent, HttpContext
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
@@ -41,9 +41,9 @@ export class BulkLoadFileUploadAPIService extends BaseService {
 
     /**
      * Launch a Bulk Load Job
-     * Starts asynchronous Spring Batch processing for a bulk load job and transitions it to PROCESSING. Use this tool once the uploaded file is persisted and the mappings are acceptable; do not treat the 200 response as import completion, and poll getBulkLoadJob instead because the batch run continues in the background. Preconditions: the job must belong to the authenticated operator, be in CREATED, UPLOADING or MAPPING_REVIEW state, and already have both a persisted uploaded file and a locationId assigned. Required inputs: jobId (UUID) as a path parameter; there is no request body, and the caller\&#39;s Authorization bearer token is forwarded to downstream domain services for the row-level writes. Emits a BULK_LOADER_JOB_START event, launches the Spring Batch job, and stamps startedAt; row counters on the job update as chunks are processed. Returns 404 when the job does not exist, 403 when it belongs to another operator, and 409 when the state is not launchable or the uploaded file or locationId is missing. 
+     * Starts asynchronous Spring Batch processing for a bulk load job and transitions it to PROCESSING. Use this tool once the uploaded file is persisted and the mappings are acceptable; do not treat the 200 response as import completion, and poll getBulkLoadJob instead because the batch run continues in the background. Preconditions: the job must belong to the authenticated operator, be in CREATED, UPLOADING or MAPPING_REVIEW state, and already have both a persisted uploaded file and a locationId assigned. Required inputs: jobId (UUID) as a path parameter; there is no request body, and the caller\&#39;s Authorization bearer token is forwarded to downstream domain services for the row-level writes. Emits a BULK_LOADER_JOB_START event, launches the Spring Batch job, and stamps startedAt; row counters on the job update as chunks are processed. Returns 404 when the job does not exist, 403 when it belongs to another operator, and 409 when the state is not launchable or the uploaded file or locationId is missing.
      * @endpoint post /v1/bulk-jobs/{jobId}/process
-     * @param jobId 
+     * @param jobId
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -102,10 +102,10 @@ export class BulkLoadFileUploadAPIService extends BaseService {
 
     /**
      * Upload a File for Bulk Load Job
-     * Uploads the source data file for a bulk load job as a single multipart request, stores it, and runs content detection to propose column mappings. Use this tool for files small enough to send in one request; use createTusUpload instead for large files that need resumable, chunked upload. Preconditions: the job must exist, belong to the authenticated operator, and not be in a terminal state (COMPLETED, CANCELLED or FAILED); a CREATED job moves to UPLOADING. Required inputs: a multipart form part named file; formats understood by content detection are csv, tsv, txt, psv, xlsx, xlsm, xls, json, xml, yaml and yml, with the first row or record treated as the column headers. Emits a BULK_LOADER_FILE_UPLOAD event and persists suggested column mappings from detection; when detection fails the upload still succeeds with a null detection field in the response, and re-uploading replaces the file to be processed because only the latest upload is used. Returns 404 when the job does not exist for the authenticated operator, and 409 when the job is already in a terminal state. 
+     * Uploads the source data file for a bulk load job as a single multipart request, stores it, and runs content detection to propose column mappings. Use this tool for files small enough to send in one request; use createTusUpload instead for large files that need resumable, chunked upload. Preconditions: the job must exist, belong to the authenticated operator, and not be in a terminal state (COMPLETED, CANCELLED or FAILED); a CREATED job moves to UPLOADING. Required inputs: a multipart form part named file; formats understood by content detection are csv, tsv, txt, psv, xlsx, xlsm, xls, json, xml, yaml and yml, with the first row or record treated as the column headers. Emits a BULK_LOADER_FILE_UPLOAD event and persists suggested column mappings from detection; when detection fails the upload still succeeds with a null detection field in the response, and re-uploading replaces the file to be processed because only the latest upload is used. Returns 404 when the job does not exist for the authenticated operator, and 409 when the job is already in a terminal state.
      * @endpoint post /v1/bulk-jobs/{jobId}/upload
-     * @param jobId 
-     * @param file 
+     * @param jobId
+     * @param file
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options

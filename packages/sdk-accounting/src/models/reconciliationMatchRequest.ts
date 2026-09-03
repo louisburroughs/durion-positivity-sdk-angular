@@ -12,7 +12,7 @@
 /**
  * Request to match statement lines to GL journal-entry lines
  */
-export interface ReconciliationMatchRequest { 
+export interface ReconciliationMatchRequest {
     /**
      * Posted GL journal-entry line ids to match against
      */

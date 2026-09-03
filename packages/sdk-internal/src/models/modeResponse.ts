@@ -12,7 +12,7 @@
 /**
  * Current tax service operating mode
  */
-export interface ModeResponse { 
+export interface ModeResponse {
     /**
      * Human-readable tax service mode label
      */

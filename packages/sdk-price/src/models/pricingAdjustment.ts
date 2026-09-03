@@ -12,7 +12,7 @@
 /**
  * A single pricing adjustment applied to an estimate
  */
-export interface PricingAdjustment { 
+export interface PricingAdjustment {
     /**
      * Adjustment amount; negative values reduce total
      */

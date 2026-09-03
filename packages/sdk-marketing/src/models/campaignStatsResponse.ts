@@ -13,7 +13,7 @@ import { ChannelFunnel } from './channelFunnel';
 /**
  * Campaign reach funnel and attribution
  */
-export interface CampaignStatsResponse { 
+export interface CampaignStatsResponse {
     /**
      * Total discount value across attributed redemptions
      */

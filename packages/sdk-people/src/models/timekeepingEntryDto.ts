@@ -12,7 +12,7 @@
 /**
  * Timekeeping entry summarizing a worked session pending or resolved for approval
  */
-export interface TimekeepingEntryDto { 
+export interface TimekeepingEntryDto {
     /**
      * Approval status of the entry
      */

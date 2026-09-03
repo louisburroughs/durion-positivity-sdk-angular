@@ -12,7 +12,7 @@
 /**
  * Request to create or update a CRM party tag
  */
-export interface UpsertPartyTagRequest { 
+export interface UpsertPartyTagRequest {
     /**
      * Whether the tag can be assigned; defaults to true on create
      */

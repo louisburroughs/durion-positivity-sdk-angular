@@ -9,7 +9,7 @@
  */
 
 
-export interface FleetPolicy { 
+export interface FleetPolicy {
     blacklisted?: Array<string>;
     name?: string;
     policyId?: string;

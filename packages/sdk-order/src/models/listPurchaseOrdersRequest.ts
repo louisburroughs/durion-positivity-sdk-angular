@@ -12,7 +12,7 @@
 /**
  * Optional filter criteria for listing purchase orders
  */
-export interface ListPurchaseOrdersRequest { 
+export interface ListPurchaseOrdersRequest {
     /**
      * Filter to purchase orders denominated in this ISO 4217 currency code
      */

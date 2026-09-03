@@ -12,7 +12,7 @@
 /**
  * Result of a single correction record submission
  */
-export interface CorrectionResultDto { 
+export interface CorrectionResultDto {
     /**
      * ID of the audit record that was corrected
      */

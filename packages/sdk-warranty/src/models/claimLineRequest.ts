@@ -12,7 +12,7 @@
 /**
  * Warranty claim line — one failed part or service, with source provenance and snapshots
  */
-export interface ClaimLineRequest { 
+export interface ClaimLineRequest {
     /**
      * Line description snapshot
      */

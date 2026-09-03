@@ -12,7 +12,7 @@
 /**
  * Result of recording a promotion redemption for a customer
  */
-export interface PromotionRedemptionResponse { 
+export interface PromotionRedemptionResponse {
     /**
      * Campaign code the redemption is attributed to, if any
      */

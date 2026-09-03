@@ -12,7 +12,7 @@
 /**
  * A tax exemption certificate
  */
-export interface ExemptionCertificateResponse { 
+export interface ExemptionCertificateResponse {
     /**
      * External/paper certificate number
      */

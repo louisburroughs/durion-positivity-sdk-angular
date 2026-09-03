@@ -12,7 +12,7 @@
 /**
  * Request to move a pay period to a new lifecycle status
  */
-export interface TransitionTimePeriodRequest { 
+export interface TransitionTimePeriodRequest {
     /**
      * Target lifecycle status
      */

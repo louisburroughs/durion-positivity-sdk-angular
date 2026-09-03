@@ -11,7 +11,7 @@
 
 import { Inject, Injectable, Optional }                      from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams,
-         HttpResponse, HttpEvent, HttpContext 
+         HttpResponse, HttpEvent, HttpContext
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
@@ -41,7 +41,7 @@ export class CRMPersonsService extends BaseService {
 
     /**
      * Create Individual Person Record
-     * Creates an individual customer: the canonical person identity is resolved or created in pos-people (the source of truth for names and contact points), and a thin person-party link with a generated CUST-PER customer number is stored locally. Use this tool when onboarding an individual customer; do not use createCrmCommercialAccount, which creates an organization, and note that if the identity already has a local person-party the existing record is returned instead of a duplicate. Preconditions: none beyond authorization; contact points are validated before any identity is created so an invalid email persists nothing. Required inputs: firstName, lastName, and preferredContactMethod (EMAIL, PHONE_CALL, SMS, or NONE); emails and phones are optional lists whose entries carry a value and an isPrimary flag, phone type defaults to PHONE_MOBILE, and emails are stored lowercase. Emits a CRM_PERSON_CREATE event, publishes a party-changed customer fact, and writes the contact points to pos-people. Returns 400 when firstName, lastName, or preferredContactMethod is missing or an email value is malformed. 
+     * Creates an individual customer: the canonical person identity is resolved or created in pos-people (the source of truth for names and contact points), and a thin person-party link with a generated CUST-PER customer number is stored locally. Use this tool when onboarding an individual customer; do not use createCrmCommercialAccount, which creates an organization, and note that if the identity already has a local person-party the existing record is returned instead of a duplicate. Preconditions: none beyond authorization; contact points are validated before any identity is created so an invalid email persists nothing. Required inputs: firstName, lastName, and preferredContactMethod (EMAIL, PHONE_CALL, SMS, or NONE); emails and phones are optional lists whose entries carry a value and an isPrimary flag, phone type defaults to PHONE_MOBILE, and emails are stored lowercase. Emits a CRM_PERSON_CREATE event, publishes a party-changed customer fact, and writes the contact points to pos-people. Returns 400 when firstName, lastName, or preferredContactMethod is missing or an email value is malformed.
      * @endpoint post /v1/crm/persons
      * @param createPersonRequest The individual\&#39;s name, preferred contact method, and contact points to register.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -111,7 +111,7 @@ export class CRMPersonsService extends BaseService {
 
     /**
      * Get Person By Id
-     * Returns the CRM view of an individual person by their canonical pos-people person id, including their customer number and preferred contact method. Use this tool when the person id is already known; use searchPersons instead when locating a person by name or email. Preconditions: a local person-party link must exist for the canonical person id. Required inputs: personId (UUID, the canonical pos-people id) as a path parameter; there is no request body. Emits a CRM_PERSON_GET audit event; no state changes occur. Returns 404 when no person-party exists for the supplied personId. 
+     * Returns the CRM view of an individual person by their canonical pos-people person id, including their customer number and preferred contact method. Use this tool when the person id is already known; use searchPersons instead when locating a person by name or email. Preconditions: a local person-party link must exist for the canonical person id. Required inputs: personId (UUID, the canonical pos-people id) as a path parameter; there is no request body. Emits a CRM_PERSON_GET audit event; no state changes occur. Returns 404 when no person-party exists for the supplied personId.
      * @endpoint get /v1/crm/persons/{personId}
      * @param personId The person\&#39;s unique identifier
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -171,7 +171,7 @@ export class CRMPersonsService extends BaseService {
 
     /**
      * Search Individual Persons
-     * Searches individual customers by delegating the text query to pos-people, which matches first name, last name, primary email, and username, and returns only persons that also have a local CRM person-party. Use this tool when locating an individual by name or email; use getPerson instead when the person id is already known, and note phone search is best-effort only because pos-people does not index phone numbers. Preconditions: at least one of name, email, or phone should be supplied; when all are blank an empty list is returned without searching. Required inputs: none individually; the first non-blank of name, email, and phone becomes the query, limit defaults to 20, and offset defaults to 0. Emits a CRM_PERSON_SEARCH audit event; no state changes occur. Returns 200 with an empty list rather than an error when nothing matches or the offset is beyond the result set. 
+     * Searches individual customers by delegating the text query to pos-people, which matches first name, last name, primary email, and username, and returns only persons that also have a local CRM person-party. Use this tool when locating an individual by name or email; use getPerson instead when the person id is already known, and note phone search is best-effort only because pos-people does not index phone numbers. Preconditions: at least one of name, email, or phone should be supplied; when all are blank an empty list is returned without searching. Required inputs: none individually; the first non-blank of name, email, and phone becomes the query, limit defaults to 20, and offset defaults to 0. Emits a CRM_PERSON_SEARCH audit event; no state changes occur. Returns 200 with an empty list rather than an error when nothing matches or the offset is beyond the result set.
      * @endpoint get /v1/crm/persons
      * @param name Search by name (first or last)
      * @param email Search by email address

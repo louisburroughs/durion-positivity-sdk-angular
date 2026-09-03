@@ -11,7 +11,7 @@
 
 import { Inject, Injectable, Optional }                      from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams,
-         HttpResponse, HttpEvent, HttpContext 
+         HttpResponse, HttpEvent, HttpContext
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
@@ -37,7 +37,7 @@ export class PrincipalRoleManagementService extends BaseService {
 
     /**
      * Assign a Role to a Principal
-     * Links a free-form principal identifier to a role in the RBAC principal matrix consulted by getAuthorizationDecision. Use this tool for matrix principals that are not user UUIDs; do not use assignUserRole, which creates a role assignment for a real user account. Preconditions: the caller must hold security:role:assign and the role must exist; the principal is not validated against any store, and an existing identical link makes the call a no-op. Required inputs: principalId (arbitrary string) and roleId (UUID) as path parameters; there is no request body. Emits a SECURITY_PRINCIPAL_ROLE_ASSIGN event. Returns 404 when the role does not exist; repeat assignments still return 200. 
+     * Links a free-form principal identifier to a role in the RBAC principal matrix consulted by getAuthorizationDecision. Use this tool for matrix principals that are not user UUIDs; do not use assignUserRole, which creates a role assignment for a real user account. Preconditions: the caller must hold security:role:assign and the role must exist; the principal is not validated against any store, and an existing identical link makes the call a no-op. Required inputs: principalId (arbitrary string) and roleId (UUID) as path parameters; there is no request body. Emits a SECURITY_PRINCIPAL_ROLE_ASSIGN event. Returns 404 when the role does not exist; repeat assignments still return 200.
      * @endpoint post /v1/users/principals/{principalId}/roles/{roleId}
      * @param principalId Principal identifier receiving the role assignment
      * @param roleId Role identifier to assign to the principal

@@ -12,7 +12,7 @@
 /**
  * Request to transition a cycle count plan to a new lifecycle status
  */
-export interface UpdateCycleCountPlanStatusRequest { 
+export interface UpdateCycleCountPlanStatusRequest {
     /**
      * Target lifecycle status
      */

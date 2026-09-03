@@ -12,7 +12,7 @@
 /**
  * Request payload for cancelling an order
  */
-export interface CancelOrderRequest { 
+export interface CancelOrderRequest {
     /**
      * Reason explaining why the order is being cancelled
      */

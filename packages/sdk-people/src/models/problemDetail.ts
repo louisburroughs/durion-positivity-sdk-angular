@@ -9,7 +9,7 @@
  */
 
 
-export interface ProblemDetail { 
+export interface ProblemDetail {
     detail?: string;
     instance?: string;
     properties?: object;

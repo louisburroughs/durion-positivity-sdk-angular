@@ -13,7 +13,7 @@ import { GeneralLedgerAccountSection } from './generalLedgerAccountSection';
 /**
  * General Ledger report with per-account chronological POSTED lines and running balance
  */
-export interface GeneralLedgerReport { 
+export interface GeneralLedgerReport {
     /**
      * Account ID the report was filtered to; null when spanning all accounts
      */

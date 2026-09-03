@@ -11,7 +11,7 @@
 
 import { Inject, Injectable, Optional }                      from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams,
-         HttpResponse, HttpEvent, HttpContext 
+         HttpResponse, HttpEvent, HttpContext
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
@@ -41,9 +41,9 @@ export class MarketingAnalyticsService extends BaseService {
 
     /**
      * Get Campaign Stats
-     * Returns one campaign\&#39;s per-channel delivery funnel (targeted, suppressed, sent, delivered, bounced, complained, failed) plus the redemption count and discount value attributed to its campaign code; the sent figure is cumulative, counting delivered, bounced and complained messages as sent. Use this tool for aggregate campaign performance; use listCampaignSends instead to inspect individual recipient send rows, and use getProgramStats to compare the arms of a program. Preconditions: the campaign must exist; a campaign that has never dispatched reports zeroed funnels rather than an error. Required inputs: campaignId (UUID) as a path parameter; there is no request body. Emits a MARKETING_CAMPAIGN_STATS_GET audit event; no marketing state is changed and this is a read-only projection. Returns 404 when no campaign exists for the supplied id. 
+     * Returns one campaign\&#39;s per-channel delivery funnel (targeted, suppressed, sent, delivered, bounced, complained, failed) plus the redemption count and discount value attributed to its campaign code; the sent figure is cumulative, counting delivered, bounced and complained messages as sent. Use this tool for aggregate campaign performance; use listCampaignSends instead to inspect individual recipient send rows, and use getProgramStats to compare the arms of a program. Preconditions: the campaign must exist; a campaign that has never dispatched reports zeroed funnels rather than an error. Required inputs: campaignId (UUID) as a path parameter; there is no request body. Emits a MARKETING_CAMPAIGN_STATS_GET audit event; no marketing state is changed and this is a read-only projection. Returns 404 when no campaign exists for the supplied id.
      * @endpoint get /v1/marketing/campaigns/{campaignId}/stats
-     * @param campaignId 
+     * @param campaignId
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -101,9 +101,9 @@ export class MarketingAnalyticsService extends BaseService {
 
     /**
      * Get Campaign Program Stats
-     * Returns the full stats block for every campaign sharing one campaignProgramId, so the commercial and individual arms of an initiative can be compared side by side. Use this tool when comparing the arms of a program; use getCampaignStats instead for a single campaign. Preconditions: at least one campaign must reference the campaignProgramId, since the program has no record of its own in this module. Required inputs: campaignProgramId (UUID) as a path parameter; there is no request body. Emits a MARKETING_PROGRAM_STATS_GET audit event; no marketing state is changed and this is a read-only projection. Returns 404 when no campaign references the supplied campaignProgramId. 
+     * Returns the full stats block for every campaign sharing one campaignProgramId, so the commercial and individual arms of an initiative can be compared side by side. Use this tool when comparing the arms of a program; use getCampaignStats instead for a single campaign. Preconditions: at least one campaign must reference the campaignProgramId, since the program has no record of its own in this module. Required inputs: campaignProgramId (UUID) as a path parameter; there is no request body. Emits a MARKETING_PROGRAM_STATS_GET audit event; no marketing state is changed and this is a read-only projection. Returns 404 when no campaign references the supplied campaignProgramId.
      * @endpoint get /v1/marketing/programs/{campaignProgramId}/stats
-     * @param campaignProgramId 
+     * @param campaignProgramId
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options

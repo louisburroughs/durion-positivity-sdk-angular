@@ -11,7 +11,7 @@
 
 import { Inject, Injectable, Optional }                      from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams,
-         HttpResponse, HttpEvent, HttpContext 
+         HttpResponse, HttpEvent, HttpContext
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
@@ -39,7 +39,7 @@ export class CycleCountPlanBulkIngestAPIService extends BaseService {
 
     /**
      * Create Cycle Count Plans in Bulk
-     * Creates many cycle count plans at once, one per record, each in PLANNED status. Use this tool when standing up a counting programme or seeding an environment; use createCycleCountPlan instead for a single plan, and generateCycleCountTasks to turn a plan into work. Preconditions: each site must exist and each row must name at least one zone. Required inputs: jobId (UUID), locationId (UUID) and records, each with a planName and zoneIds; give either a scheduledDate strictly in the future or a scheduledDaysOut, which is counted from today so a replayed file never asks for a past date. Emits an INVENTORY_CYCLE_COUNT_PLAN_BULK_INGEST event and a plan-created event per row. Re-running the same file is safe: a plan whose name is already present at that site is recognised rather than duplicated, since nothing in the schema makes plan names unique. Returns 200 with a per-record result; check each result rather than the status alone. 
+     * Creates many cycle count plans at once, one per record, each in PLANNED status. Use this tool when standing up a counting programme or seeding an environment; use createCycleCountPlan instead for a single plan, and generateCycleCountTasks to turn a plan into work. Preconditions: each site must exist and each row must name at least one zone. Required inputs: jobId (UUID), locationId (UUID) and records, each with a planName and zoneIds; give either a scheduledDate strictly in the future or a scheduledDaysOut, which is counted from today so a replayed file never asks for a past date. Emits an INVENTORY_CYCLE_COUNT_PLAN_BULK_INGEST event and a plan-created event per row. Re-running the same file is safe: a plan whose name is already present at that site is recognised rather than duplicated, since nothing in the schema makes plan names unique. Returns 200 with a per-record result; check each result rather than the status alone.
      * @endpoint post /v1/inventory/cycleCountPlans/bulk-ingest
      * @param bulkIngestRequestCycleCountPlanBulkIngestRecord Cycle count plans to create.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.

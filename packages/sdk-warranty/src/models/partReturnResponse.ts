@@ -12,7 +12,7 @@
 /**
  * Part return (RMA) — defective-part return lifecycle for a claim line
  */
-export interface PartReturnResponse { 
+export interface PartReturnResponse {
     carrier?: string;
     claimId?: string;
     claimLineId?: string;

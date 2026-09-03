@@ -12,7 +12,7 @@
 /**
  * A single line of a return submission: item, quantity, reason and disposition location
  */
-export interface ReturnLineDto { 
+export interface ReturnLineDto {
     /**
      * Identifier of the item being returned
      */

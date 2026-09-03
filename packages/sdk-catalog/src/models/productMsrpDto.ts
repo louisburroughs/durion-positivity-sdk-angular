@@ -12,7 +12,7 @@
 /**
  * Product MSRP detail
  */
-export interface ProductMsrpDto { 
+export interface ProductMsrpDto {
     /**
      * MSRP amount
      */

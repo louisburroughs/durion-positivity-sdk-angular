@@ -12,7 +12,7 @@
 /**
  * Request to create or update a default GL account mapping
  */
-export interface DefaultGLMappingRequest { 
+export interface DefaultGLMappingRequest {
     /**
      * Whether the mapping is active
      */

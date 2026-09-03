@@ -12,7 +12,7 @@
 /**
  * Token validation result
  */
-export interface ValidateResponse { 
+export interface ValidateResponse {
     /**
      * Whether the token is valid
      */

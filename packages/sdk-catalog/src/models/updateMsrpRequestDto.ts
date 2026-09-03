@@ -12,7 +12,7 @@
 /**
  * Request to update the MSRP for a product
  */
-export interface UpdateMsrpRequestDto { 
+export interface UpdateMsrpRequestDto {
     /**
      * MSRP amount
      */

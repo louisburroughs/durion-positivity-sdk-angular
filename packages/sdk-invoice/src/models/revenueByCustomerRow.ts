@@ -12,7 +12,7 @@
 /**
  * One customer\'s aggregated revenue over the report window
  */
-export interface RevenueByCustomerRow { 
+export interface RevenueByCustomerRow {
     /**
      * revenue / invoiceCount, computed server-side (4 decimal places, HALF_UP)
      */

@@ -12,7 +12,7 @@
 /**
  * Request to generate count tasks for a cycle count plan
  */
-export interface GenerateCycleCountTasksRequest { 
+export interface GenerateCycleCountTasksRequest {
     /**
      * Identifier of the auditor the generated tasks are assigned to
      */

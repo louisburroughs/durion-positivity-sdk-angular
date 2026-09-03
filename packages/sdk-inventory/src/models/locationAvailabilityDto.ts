@@ -12,7 +12,7 @@
 /**
  * Per-location availability projection for inventory availability queries
  */
-export interface LocationAvailabilityDto { 
+export interface LocationAvailabilityDto {
     /**
      * Available-to-promise quantity at the location. Null for as-of (historical) requests: historical allocation state is not reliably reconstructable from ATP-neutral ledger events, so as-of responses carry on-hand only.
      */

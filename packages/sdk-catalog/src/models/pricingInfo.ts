@@ -12,7 +12,7 @@
 /**
  * Pricing information with availability status
  */
-export interface PricingInfo { 
+export interface PricingInfo {
     /**
      * Timestamp of pricing data
      */

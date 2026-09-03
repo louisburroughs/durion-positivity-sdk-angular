@@ -11,7 +11,7 @@
 
 import { Inject, Injectable, Optional }                      from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams,
-         HttpResponse, HttpEvent, HttpContext 
+         HttpResponse, HttpEvent, HttpContext
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
@@ -43,7 +43,7 @@ export class FinancialReportingForTaxLiabilityService extends BaseService {
 
     /**
      * Freeze Sales-Tax Liability Snapshot
-     * Generates the Sales-Tax Liability report over a closed accounting period\&#39;s exact date range and persists it as an immutable snapshot with a canonical SHA-256 content hash; snapshots are provider-neutral and carry no filing-provider identifiers. Use this tool at period close to fix filing figures; do not use generateTaxLiabilityReport, which computes the live report without freezing anything. Preconditions: the accounting period must exist and be CLOSED, and no ACTIVE snapshot may exist for the period unless supersede is set. Required inputs: periodCode (YYYY-MM) as a query parameter; supersede defaults to false and, when true, demotes the prior ACTIVE snapshot to SUPERSEDED while preserving history. Emits a TAX_LIABILITY_SNAPSHOT_FREEZE event. Returns 404 when the period does not exist, 409 when the period is not CLOSED or an ACTIVE snapshot exists without supersede, and 400 when the period code is malformed. 
+     * Generates the Sales-Tax Liability report over a closed accounting period\&#39;s exact date range and persists it as an immutable snapshot with a canonical SHA-256 content hash; snapshots are provider-neutral and carry no filing-provider identifiers. Use this tool at period close to fix filing figures; do not use generateTaxLiabilityReport, which computes the live report without freezing anything. Preconditions: the accounting period must exist and be CLOSED, and no ACTIVE snapshot may exist for the period unless supersede is set. Required inputs: periodCode (YYYY-MM) as a query parameter; supersede defaults to false and, when true, demotes the prior ACTIVE snapshot to SUPERSEDED while preserving history. Emits a TAX_LIABILITY_SNAPSHOT_FREEZE event. Returns 404 when the period does not exist, 409 when the period is not CLOSED or an ACTIVE snapshot exists without supersede, and 400 when the period code is malformed.
      * @endpoint post /v1/accounting/reports/financial/tax-liability/snapshots
      * @param periodCode Accounting period code (YYYY-MM)
      * @param supersede Supersede an existing ACTIVE snapshot for the period
@@ -125,7 +125,7 @@ export class FinancialReportingForTaxLiabilityService extends BaseService {
 
     /**
      * Get Sales-Tax Liability Snapshot
-     * Returns one frozen Sales-Tax Liability snapshot in full: per-jurisdiction rows, totals, reconciliation and the canonical content hash. Use this tool to read filing figures exactly as frozen; use listTaxLiabilitySnapshots instead when hunting for the right snapshot, and verifyTaxLiabilitySnapshot to check it against live data. Preconditions: the snapshot must exist. Required inputs: snapshotId (UUID) as a path parameter; there is no request body. Emits a TAX_LIABILITY_SNAPSHOT_GET audit event; the snapshot is immutable and never changed by reads. Returns 404 TAX_SNAPSHOT_NOT_FOUND when no snapshot exists for the supplied id. 
+     * Returns one frozen Sales-Tax Liability snapshot in full: per-jurisdiction rows, totals, reconciliation and the canonical content hash. Use this tool to read filing figures exactly as frozen; use listTaxLiabilitySnapshots instead when hunting for the right snapshot, and verifyTaxLiabilitySnapshot to check it against live data. Preconditions: the snapshot must exist. Required inputs: snapshotId (UUID) as a path parameter; there is no request body. Emits a TAX_LIABILITY_SNAPSHOT_GET audit event; the snapshot is immutable and never changed by reads. Returns 404 TAX_SNAPSHOT_NOT_FOUND when no snapshot exists for the supplied id.
      * @endpoint get /v1/accounting/reports/financial/tax-liability/snapshots/{snapshotId}
      * @param snapshotId Snapshot id
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -185,7 +185,7 @@ export class FinancialReportingForTaxLiabilityService extends BaseService {
 
     /**
      * List Sales-Tax Liability Snapshots
-     * Lists Sales-Tax Liability snapshot summaries without their row detail, newest freeze first, optionally filtered by period code. Use this tool to find which periods are frozen and which snapshot is ACTIVE; use getTaxLiabilitySnapshot instead for a snapshot\&#39;s full frozen content. Preconditions: none. Required inputs: none; periodCode (YYYY-MM) is an optional filter. Emits a TAX_LIABILITY_SNAPSHOT_LIST audit event; no state changes. Returns 200 with an empty list when no snapshots exist. 
+     * Lists Sales-Tax Liability snapshot summaries without their row detail, newest freeze first, optionally filtered by period code. Use this tool to find which periods are frozen and which snapshot is ACTIVE; use getTaxLiabilitySnapshot instead for a snapshot\&#39;s full frozen content. Preconditions: none. Required inputs: none; periodCode (YYYY-MM) is an optional filter. Emits a TAX_LIABILITY_SNAPSHOT_LIST audit event; no state changes. Returns 200 with an empty list when no snapshots exist.
      * @endpoint get /v1/accounting/reports/financial/tax-liability/snapshots
      * @param periodCode Optional accounting period code filter (YYYY-MM)
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -254,7 +254,7 @@ export class FinancialReportingForTaxLiabilityService extends BaseService {
 
     /**
      * Verify Sales-Tax Liability Snapshot
-     * Re-derives the Sales-Tax Liability report for a snapshot\&#39;s period from the live replicas and compares canonical hashes, reporting consistent&#x3D;true when they match. Use this tool to detect drift after a freeze; do not use freezeTaxLiabilitySnapshot to check consistency, since freezing creates state. Preconditions: the snapshot must exist; inconsistency means underlying data moved after the freeze, for example postings into a reopened period, and the remedy is re-freezing with supersede&#x3D;true once the period is closed again. Required inputs: snapshotId (UUID) as a path parameter; there is no request body. Emits a TAX_LIABILITY_SNAPSHOT_VERIFY audit event; the snapshot itself is never mutated. Returns 404 TAX_SNAPSHOT_NOT_FOUND when no snapshot exists for the supplied id. 
+     * Re-derives the Sales-Tax Liability report for a snapshot\&#39;s period from the live replicas and compares canonical hashes, reporting consistent&#x3D;true when they match. Use this tool to detect drift after a freeze; do not use freezeTaxLiabilitySnapshot to check consistency, since freezing creates state. Preconditions: the snapshot must exist; inconsistency means underlying data moved after the freeze, for example postings into a reopened period, and the remedy is re-freezing with supersede&#x3D;true once the period is closed again. Required inputs: snapshotId (UUID) as a path parameter; there is no request body. Emits a TAX_LIABILITY_SNAPSHOT_VERIFY audit event; the snapshot itself is never mutated. Returns 404 TAX_SNAPSHOT_NOT_FOUND when no snapshot exists for the supplied id.
      * @endpoint post /v1/accounting/reports/financial/tax-liability/snapshots/{snapshotId}/verify
      * @param snapshotId Snapshot id
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.

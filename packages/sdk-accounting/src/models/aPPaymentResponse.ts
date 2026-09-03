@@ -13,7 +13,7 @@ import { AllocationLineResponse } from './allocationLineResponse';
 /**
  * AP Payment response with allocations and GL status
  */
-export interface APPaymentResponse { 
+export interface APPaymentResponse {
     /**
      * Allocations to vendor bills
      */

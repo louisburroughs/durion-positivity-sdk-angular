@@ -12,7 +12,7 @@
 /**
  * Request to refund a captured payment
  */
-export interface RefundPaymentRequest { 
+export interface RefundPaymentRequest {
     /**
      * Amount to refund from the captured payment
      */

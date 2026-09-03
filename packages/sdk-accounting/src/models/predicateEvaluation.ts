@@ -12,7 +12,7 @@
 /**
  * Evaluation outcome of one rule condition predicate (E2 grammar)
  */
-export interface PredicateEvaluation { 
+export interface PredicateEvaluation {
     /**
      * Optional evaluation detail (e.g. which clause failed)
      */

@@ -12,7 +12,7 @@
 /**
  * Request to capture all or part of an authorized payment hold
  */
-export interface CaptureAmountRequest { 
+export interface CaptureAmountRequest {
     /**
      * Amount to capture from the authorized hold
      */

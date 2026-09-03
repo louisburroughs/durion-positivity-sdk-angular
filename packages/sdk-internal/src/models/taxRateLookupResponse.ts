@@ -13,7 +13,7 @@ import { TaxRateComponent } from './taxRateComponent';
 /**
  * Jurisdiction tax rates resolved for a destination address
  */
-export interface TaxRateLookupResponse { 
+export interface TaxRateLookupResponse {
     /**
      * Effective date the rates were resolved for
      */

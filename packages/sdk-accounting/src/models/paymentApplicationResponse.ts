@@ -14,7 +14,7 @@ import { CustomerCreditInfo } from './customerCreditInfo';
 /**
  * Result of applying a payment to one or more invoices
  */
-export interface PaymentApplicationResponse { 
+export interface PaymentApplicationResponse {
     /**
      * Idempotency key echoed from the application request
      */

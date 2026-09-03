@@ -12,7 +12,7 @@
 /**
  * Legacy request payload for creating or updating a vehicle
  */
-export interface VehicleLegacyRequest { 
+export interface VehicleLegacyRequest {
     /**
      * Identifier of the vehicle to update; omit to create a new vehicle
      */

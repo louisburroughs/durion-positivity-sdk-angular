@@ -12,7 +12,7 @@
 /**
  * Request to create a time entry exception
  */
-export interface TimeEntryExceptionRequest { 
+export interface TimeEntryExceptionRequest {
     /**
      * Timestamp when the exception was detected
      */

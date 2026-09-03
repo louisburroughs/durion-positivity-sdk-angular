@@ -12,7 +12,7 @@
 /**
  * One pos-accounting cash application of a customer payment to an invoice
  */
-export interface PaymentApplicationListRow { 
+export interface PaymentApplicationListRow {
     /**
      * Amount applied to the invoice
      */

@@ -13,7 +13,7 @@ import { GoodsReceiptLineResponse } from './goodsReceiptLineResponse';
 /**
  * Goods receipt representing inventory received against a purchase order, including its received line items and accrued totals
  */
-export interface GoodsReceiptResponse { 
+export interface GoodsReceiptResponse {
     /**
      * Identifier of the advance shipping notice (ASN) this receipt fulfilled, if applicable
      */

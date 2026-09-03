@@ -12,7 +12,7 @@
 /**
  * Async report export job state
  */
-export interface ReportExportResponse { 
+export interface ReportExportResponse {
     /**
      * ISO-8601 timestamp when export completed (null if not finished)
      */

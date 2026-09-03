@@ -14,7 +14,7 @@ import { SourcingImpactRow } from './sourcingImpactRow';
 /**
  * Impact of enabling SKU_CATEGORY costing and sourcing resolution (#1535)
  */
-export interface SkuCategoryImpactResponse { 
+export interface SkuCategoryImpactResponse {
     /**
      * Method of the active DEFAULT configuration row, or null when there is none
      */

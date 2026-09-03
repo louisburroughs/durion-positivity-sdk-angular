@@ -12,7 +12,7 @@
 /**
  * Request to approve a purchase order, optionally capturing approval notes
  */
-export interface ApprovePurchaseOrderRequest { 
+export interface ApprovePurchaseOrderRequest {
     /**
      * Free-text notes recorded by the approver explaining the approval decision
      */

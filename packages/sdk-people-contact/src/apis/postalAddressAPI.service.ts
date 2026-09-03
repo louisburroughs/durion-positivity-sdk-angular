@@ -11,7 +11,7 @@
 
 import { Inject, Injectable, Optional }                      from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams,
-         HttpResponse, HttpEvent, HttpContext 
+         HttpResponse, HttpEvent, HttpContext
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
@@ -39,7 +39,7 @@ export class PostalAddressAPIService extends BaseService {
 
     /**
      * Delete an Organization\&#39;s Postal Address
-     * Removes the postal address on file for a CRM organization party; the operation is idempotent and succeeds when none exists. Use this tool to clear an organization\&#39;s mailing address; use deletePersonPostalAddress instead for person parties. Preconditions: none; a missing address is treated as already deleted. Required inputs: organizationId (UUID) as a path parameter; there is no request body. Emits a PEOPLE_CONTACT_ORG_ADDRESS_DELETE event, and an organization-address-removed fact is published only when an address actually existed. Returns 204 whether or not an address was on file. 
+     * Removes the postal address on file for a CRM organization party; the operation is idempotent and succeeds when none exists. Use this tool to clear an organization\&#39;s mailing address; use deletePersonPostalAddress instead for person parties. Preconditions: none; a missing address is treated as already deleted. Required inputs: organizationId (UUID) as a path parameter; there is no request body. Emits a PEOPLE_CONTACT_ORG_ADDRESS_DELETE event, and an organization-address-removed fact is published only when an address actually existed. Returns 204 whether or not an address was on file.
      * @endpoint delete /v1/organizations/{organizationId}/postal-address
      * @param organizationId Organization party id
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -98,7 +98,7 @@ export class PostalAddressAPIService extends BaseService {
 
     /**
      * Delete a Person\&#39;s Postal Address
-     * Removes the postal address on file for a person; the operation is idempotent and succeeds when none exists. Use this tool to clear a person\&#39;s mailing address; do not use deletePerson, which removes the entire identity record. Preconditions: none; a missing address is treated as already deleted. Required inputs: personId (UUID) as a path parameter; there is no request body. Emits a PEOPLE_CONTACT_PERSON_ADDRESS_DELETE event, and queues a person.updated identity fact only when an address actually existed. Returns 204 whether or not an address was on file. 
+     * Removes the postal address on file for a person; the operation is idempotent and succeeds when none exists. Use this tool to clear a person\&#39;s mailing address; do not use deletePerson, which removes the entire identity record. Preconditions: none; a missing address is treated as already deleted. Required inputs: personId (UUID) as a path parameter; there is no request body. Emits a PEOPLE_CONTACT_PERSON_ADDRESS_DELETE event, and queues a person.updated identity fact only when an address actually existed. Returns 204 whether or not an address was on file.
      * @endpoint delete /v1/people/{personId}/postal-address
      * @param personId Person id
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -157,7 +157,7 @@ export class PostalAddressAPIService extends BaseService {
 
     /**
      * Get an Organization\&#39;s Postal Address
-     * Returns the structured postal address on file for a CRM organization party; the organization id is an external pos-customer party reference stored verbatim. Use this tool when reading an organization\&#39;s mailing address; use getPersonPostalAddress instead for person parties. Preconditions: an address must already have been stored for the organization with putOrganizationPostalAddress. Required inputs: organizationId (the pos-customer commercial party UUID) as a path parameter; there is no request body. Emits a PEOPLE_CONTACT_ORG_ADDRESS_GET audit event; no state changes. Returns 404 when no address is on file for the organization. 
+     * Returns the structured postal address on file for a CRM organization party; the organization id is an external pos-customer party reference stored verbatim. Use this tool when reading an organization\&#39;s mailing address; use getPersonPostalAddress instead for person parties. Preconditions: an address must already have been stored for the organization with putOrganizationPostalAddress. Required inputs: organizationId (the pos-customer commercial party UUID) as a path parameter; there is no request body. Emits a PEOPLE_CONTACT_ORG_ADDRESS_GET audit event; no state changes. Returns 404 when no address is on file for the organization.
      * @endpoint get /v1/organizations/{organizationId}/postal-address
      * @param organizationId Organization party id
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -218,7 +218,7 @@ export class PostalAddressAPIService extends BaseService {
 
     /**
      * Get a Person\&#39;s Postal Address
-     * Returns the single structured postal address on file for a person; pos-people-contact is the postal-address authority for person parties (FI-4). Use this tool when reading a person\&#39;s mailing address; use getOrganizationPostalAddress instead for CRM organization parties. Preconditions: an address must already have been stored for the person with putPersonPostalAddress. Required inputs: personId (UUID) as a path parameter; there is no request body. Emits a PEOPLE_CONTACT_PERSON_ADDRESS_GET audit event; no state changes. Returns 404 when no address is on file for the person. 
+     * Returns the single structured postal address on file for a person; pos-people-contact is the postal-address authority for person parties (FI-4). Use this tool when reading a person\&#39;s mailing address; use getOrganizationPostalAddress instead for CRM organization parties. Preconditions: an address must already have been stored for the person with putPersonPostalAddress. Required inputs: personId (UUID) as a path parameter; there is no request body. Emits a PEOPLE_CONTACT_PERSON_ADDRESS_GET audit event; no state changes. Returns 404 when no address is on file for the person.
      * @endpoint get /v1/people/{personId}/postal-address
      * @param personId Person id
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -279,7 +279,7 @@ export class PostalAddressAPIService extends BaseService {
 
     /**
      * Create or Replace Organization Postal Address
-     * Creates or replaces the single structured postal address for a CRM organization party. Use this tool for organization mailing addresses; use putPersonPostalAddress instead for person parties. Preconditions: none in this module; the organization id is an external pos-customer party reference stored verbatim without an existence check. Required inputs: organizationId (UUID) as a path parameter, plus line1 and an ISO 3166-1 alpha-2 countryCode in the body; line2, city, region and postalCode are optional free text. Emits a PEOPLE_CONTACT_ORG_ADDRESS_PUT event and an organization-address-updated fact for downstream consumers. Returns 200 with the stored address, and 422 when line1 is blank or countryCode is not a valid ISO 3166-1 alpha-2 code. 
+     * Creates or replaces the single structured postal address for a CRM organization party. Use this tool for organization mailing addresses; use putPersonPostalAddress instead for person parties. Preconditions: none in this module; the organization id is an external pos-customer party reference stored verbatim without an existence check. Required inputs: organizationId (UUID) as a path parameter, plus line1 and an ISO 3166-1 alpha-2 countryCode in the body; line2, city, region and postalCode are optional free text. Emits a PEOPLE_CONTACT_ORG_ADDRESS_PUT event and an organization-address-updated fact for downstream consumers. Returns 200 with the stored address, and 422 when line1 is blank or countryCode is not a valid ISO 3166-1 alpha-2 code.
      * @endpoint put /v1/organizations/{organizationId}/postal-address
      * @param organizationId Organization party id
      * @param postalAddressDto Country-agnostic structured postal address that replaces any address already on file for the organization party.
@@ -354,7 +354,7 @@ export class PostalAddressAPIService extends BaseService {
 
     /**
      * Create or Replace Person Postal Address
-     * Creates or replaces the single structured postal address for a person; the shape is country-agnostic, with free-text region and an optional postalCode. Use this tool for person mailing addresses; use putOrganizationPostalAddress instead for CRM organization parties, and do not use replaceContactPoints, which manages email and phone channels. Preconditions: the person record must exist; any previously stored address is overwritten in place. Required inputs: line1 and an ISO 3166-1 alpha-2 countryCode (stored upper-case); line2, city, region and postalCode are optional free text, trimmed, with blanks stored as null. Emits a PEOPLE_CONTACT_PERSON_ADDRESS_PUT event and queues a person.updated identity fact carrying the new address. Returns 200 with the stored address, 404 when the person does not exist, and 422 when line1 is blank or countryCode is not a valid ISO 3166-1 alpha-2 code. 
+     * Creates or replaces the single structured postal address for a person; the shape is country-agnostic, with free-text region and an optional postalCode. Use this tool for person mailing addresses; use putOrganizationPostalAddress instead for CRM organization parties, and do not use replaceContactPoints, which manages email and phone channels. Preconditions: the person record must exist; any previously stored address is overwritten in place. Required inputs: line1 and an ISO 3166-1 alpha-2 countryCode (stored upper-case); line2, city, region and postalCode are optional free text, trimmed, with blanks stored as null. Emits a PEOPLE_CONTACT_PERSON_ADDRESS_PUT event and queues a person.updated identity fact carrying the new address. Returns 200 with the stored address, 404 when the person does not exist, and 422 when line1 is blank or countryCode is not a valid ISO 3166-1 alpha-2 code.
      * @endpoint put /v1/people/{personId}/postal-address
      * @param personId Person id
      * @param postalAddressDto Country-agnostic structured postal address that replaces any address already on file for the person.

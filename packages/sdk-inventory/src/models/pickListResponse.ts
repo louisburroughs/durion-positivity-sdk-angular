@@ -12,7 +12,7 @@
 /**
  * Pick list details returned after creation, generation, or lookup
  */
-export interface PickListResponse { 
+export interface PickListResponse {
     /**
      * Timestamp when the pick list was created
      */

@@ -13,7 +13,7 @@ import { RoleAssignment } from './roleAssignment';
 /**
  * Request to update the set of role assignments for a contact
  */
-export interface UpdateContactRolesRequest { 
+export interface UpdateContactRolesRequest {
     /**
      * List of roles to assign to this contact
      */

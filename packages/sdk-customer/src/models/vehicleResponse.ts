@@ -12,7 +12,7 @@
 /**
  * Vehicle response payload.
  */
-export interface VehicleResponse { 
+export interface VehicleResponse {
     /**
      * Owning account identifier.
      */

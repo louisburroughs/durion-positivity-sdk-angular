@@ -13,7 +13,7 @@ import { SupplierStockAvailabilityVendor } from './supplierStockAvailabilityVend
 /**
  * Live availability of one catalog product across every enabled stock-inquiry vendor, for one receiving location. Partial by design: each vendor answers (or fails) independently, carried as a per-vendor status. An empty vendors list means no vendor is configured for stock inquiry — a valid answer, not an error.
  */
-export interface SupplierStockAvailability { 
+export interface SupplierStockAvailability {
     /**
      * The receiving location every vendor was asked about.
      */

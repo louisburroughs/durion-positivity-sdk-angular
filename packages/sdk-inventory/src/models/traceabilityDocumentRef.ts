@@ -12,7 +12,7 @@
 /**
  * An upstream source-document reference (PO / ASN / goods receipt)
  */
-export interface TraceabilityDocumentRef { 
+export interface TraceabilityDocumentRef {
     /**
      * Identifier of the source document
      */

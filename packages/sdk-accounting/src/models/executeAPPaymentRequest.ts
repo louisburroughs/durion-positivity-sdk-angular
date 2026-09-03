@@ -13,7 +13,7 @@ import { AllocationLineRequest } from './allocationLineRequest';
 /**
  * Request to execute an AP vendor payment
  */
-export interface ExecuteAPPaymentRequest { 
+export interface ExecuteAPPaymentRequest {
     /**
      * Optional explicit allocations to vendor bills. If omitted, automatic allocation applied.
      */

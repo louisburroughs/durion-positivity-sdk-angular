@@ -12,7 +12,7 @@
 /**
  * Replacement description and MCP persona metadata for an existing role
  */
-export interface RoleUpdateRequest { 
+export interface RoleUpdateRequest {
     /**
      * Human-readable description of the role. Doubles as the derived persona focus when personaFocus is omitted.
      */

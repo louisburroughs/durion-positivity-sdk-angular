@@ -13,7 +13,7 @@ import { TransferOrderLineRequest } from './transferOrderLineRequest';
 /**
  * Request to create a cross-site transfer order in DRAFT
  */
-export interface CreateTransferOrderRequest { 
+export interface CreateTransferOrderRequest {
     /**
      * Destination site the transfer ships to
      */

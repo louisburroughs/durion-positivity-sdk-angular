@@ -12,7 +12,7 @@
 /**
  * A fleet workorder authorization and its vendor-side sign-off state
  */
-export interface FleetAuthorizationResponse { 
+export interface FleetAuthorizationResponse {
     /**
      * NOT_REQUESTED, PENDING, APPROVED or MANUAL_REVIEW
      */

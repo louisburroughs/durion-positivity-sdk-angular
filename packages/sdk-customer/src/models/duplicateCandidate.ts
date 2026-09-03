@@ -12,7 +12,7 @@
 /**
  * Duplicate candidate summary returned on 409 or as advisory in 201
  */
-export interface DuplicateCandidate { 
+export interface DuplicateCandidate {
     /**
      * Candidate legal name
      */

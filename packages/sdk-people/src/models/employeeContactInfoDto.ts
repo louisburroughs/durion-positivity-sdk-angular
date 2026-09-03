@@ -14,7 +14,7 @@ import { EmployeeAddressDto } from './employeeAddressDto';
 /**
  * Contact information for an employee
  */
-export interface EmployeeContactInfoDto { 
+export interface EmployeeContactInfoDto {
     address?: EmployeeAddressDto;
     emergencyContact?: EmployeeEmergencyContactDto;
     /**

@@ -12,7 +12,7 @@
 /**
  * Request payload for updating an existing mapping key
  */
-export interface MappingKeyUpdateRequest { 
+export interface MappingKeyUpdateRequest {
     /**
      * Optional description of the mapping key
      */

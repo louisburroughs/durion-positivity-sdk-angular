@@ -12,7 +12,7 @@
 /**
  * Request payload for creating a product MSRP
  */
-export interface CreateMsrpRequestDto { 
+export interface CreateMsrpRequestDto {
     /**
      * MSRP amount
      */

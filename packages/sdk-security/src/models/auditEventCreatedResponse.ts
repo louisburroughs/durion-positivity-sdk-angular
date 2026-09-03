@@ -12,7 +12,7 @@
 /**
  * Minimal acknowledgement returned after creating an audit event
  */
-export interface AuditEventCreatedResponse { 
+export interface AuditEventCreatedResponse {
     /**
      * Identifier of the created audit event
      */

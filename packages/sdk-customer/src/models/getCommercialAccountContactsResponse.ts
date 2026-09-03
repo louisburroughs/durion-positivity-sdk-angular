@@ -13,7 +13,7 @@ import { ContactWithRole } from './contactWithRole';
 /**
  * Contacts with roles for a commercial account
  */
-export interface GetCommercialAccountContactsResponse { 
+export interface GetCommercialAccountContactsResponse {
     /**
      * ID of the commercial account
      */

@@ -12,7 +12,7 @@
 /**
  * Request to update a staffing assignment
  */
-export interface UpdateStaffingAssignmentRequest { 
+export interface UpdateStaffingAssignmentRequest {
     effectiveDateRangeValid?: boolean;
     /**
      * Assignment effective start date

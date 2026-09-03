@@ -13,7 +13,7 @@ import { CostTierDto } from './costTierDto';
 /**
  * Request payload for updating supplier-item cost tiers
  */
-export interface SupplierItemCostUpdateRequestDto { 
+export interface SupplierItemCostUpdateRequestDto {
     /**
      * Supplier identifier
      */

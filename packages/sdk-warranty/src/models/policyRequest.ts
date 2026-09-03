@@ -12,7 +12,7 @@
 /**
  * Warranty policy create/update request — structured coverage terms
  */
-export interface PolicyRequest { 
+export interface PolicyRequest {
     /**
      * pos-catalog category id; required when appliesToType=CATEGORY
      */

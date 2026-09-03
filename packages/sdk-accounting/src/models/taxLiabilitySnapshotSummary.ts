@@ -12,7 +12,7 @@
 /**
  * Sales-Tax Liability snapshot list item (no rows)
  */
-export interface TaxLiabilitySnapshotSummary { 
+export interface TaxLiabilitySnapshotSummary {
     /**
      * SHA-256 canonical content hash
      */

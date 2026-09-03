@@ -9,7 +9,7 @@
  */
 
 
-export interface ReturnItemLine { 
+export interface ReturnItemLine {
     skuId: string;
     quantityReturned?: number;
 }

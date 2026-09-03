@@ -12,7 +12,7 @@
 /**
  * Lightweight product summary for search results
  */
-export interface ProductSummary { 
+export interface ProductSummary {
     /**
      * Category name
      */

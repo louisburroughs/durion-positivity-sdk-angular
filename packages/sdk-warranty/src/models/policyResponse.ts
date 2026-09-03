@@ -12,7 +12,7 @@
 /**
  * Warranty policy — structured coverage terms
  */
-export interface PolicyResponse { 
+export interface PolicyResponse {
     appliesToCategoryId?: string;
     appliesToManufacturerId?: string;
     appliesToProductEntityIds?: Array<string>;

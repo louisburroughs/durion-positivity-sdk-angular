@@ -1,4 +1,4 @@
-# @durion-sdk/catalog@0.9.0-alpha
+# @durion-sdk/catalog@0.11.0-alpha
 
 API documentation for the Product service, accessible via the API Gateway.
 
@@ -24,7 +24,7 @@ Navigate to the folder of your consuming project and run one of next commands.
 _published:_
 
 ```console
-npm install @durion-sdk/catalog@0.9.0-alpha --save
+npm install @durion-sdk/catalog@0.11.0-alpha --save
 ```
 
 _without publishing (not recommended):_

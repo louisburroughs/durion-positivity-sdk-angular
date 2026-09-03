@@ -12,7 +12,7 @@
 /**
  * Request to deactivate a location, optionally moving its inventory to a destination location
  */
-export interface DeactivateLocationRequest { 
+export interface DeactivateLocationRequest {
     /**
      * Optional destination location to which remaining inventory is transferred on deactivation
      */

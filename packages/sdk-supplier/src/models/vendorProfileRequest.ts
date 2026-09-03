@@ -12,7 +12,7 @@
 /**
  * Create/update payload for a vendor profile — one configured supplier connection (ADR-0050 §1/§2). The configuration source is never client-settable: profiles created here are ADMIN-managed.
  */
-export interface VendorProfileRequest { 
+export interface VendorProfileRequest {
     /**
      * Default connect timeout for the profile\'s bindings, in milliseconds. Must be > 0 when present; omit to use the deployment default.
      */

@@ -11,7 +11,7 @@
 
 import { Inject, Injectable, Optional }                      from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams,
-         HttpResponse, HttpEvent, HttpContext 
+         HttpResponse, HttpEvent, HttpContext
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
@@ -41,7 +41,7 @@ export class CRMContactsService extends BaseService {
 
     /**
      * Get Party Contacts With Roles
-     * Returns every contact person assigned a role on a commercial account, with names, emails, and phones resolved from pos-people and each contact\&#39;s role assignments and primary flags. Use this tool when listing who represents a commercial account and in what capacity; do not use updateContactRoles, which rewrites one contact\&#39;s role assignments. Preconditions: a commercial party must exist for the supplied partyId; a pos-people outage degrades contact names and contact points to null rather than failing. Required inputs: partyId (UUID) as a path parameter; there is no request body. Emits a CRM_CONTACTS_LIST audit event; no state changes occur. Returns 404 when no commercial party exists for the supplied partyId, and 200 with an empty contacts list when the account has no role assignments. 
+     * Returns every contact person assigned a role on a commercial account, with names, emails, and phones resolved from pos-people and each contact\&#39;s role assignments and primary flags. Use this tool when listing who represents a commercial account and in what capacity; do not use updateContactRoles, which rewrites one contact\&#39;s role assignments. Preconditions: a commercial party must exist for the supplied partyId; a pos-people outage degrades contact names and contact points to null rather than failing. Required inputs: partyId (UUID) as a path parameter; there is no request body. Emits a CRM_CONTACTS_LIST audit event; no state changes occur. Returns 404 when no commercial party exists for the supplied partyId, and 200 with an empty contacts list when the account has no role assignments.
      * @endpoint get /v1/crm/parties/{partyId}/contacts
      * @param partyId Party ID
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -101,7 +101,7 @@ export class CRMContactsService extends BaseService {
 
     /**
      * Update Contact Role Assignments
-     * Replaces the full set of role assignments for one contact on a commercial account; existing assignments for that contact are deleted and the submitted list is written in their place. Use this tool when changing what a known contact does for an account; use getContactsWithRoles instead to read current assignments, and note that submitting an empty roles list removes the contact\&#39;s roles entirely. Preconditions: the commercial party and the contact person must both exist; assigning a role as primary automatically demotes any existing primary contact for that role. Required inputs: partyId and contactId (UUIDs) as path parameters, plus roles, a list where each entry has roleCode (BILLING, PAYMENT_AUTHORIZER, OPERATIONS, PRIMARY_BUSINESS_CONTACT, or TECHNICAL) and an optional isPrimary flag defaulting to false. Emits a CRM_CONTACT_ROLES_UPDATE event; assignments are rewritten in place. Returns 404 when the party or contact person cannot be found, and 400 when a roleCode is not a recognized role. 
+     * Replaces the full set of role assignments for one contact on a commercial account; existing assignments for that contact are deleted and the submitted list is written in their place. Use this tool when changing what a known contact does for an account; use getContactsWithRoles instead to read current assignments, and note that submitting an empty roles list removes the contact\&#39;s roles entirely. Preconditions: the commercial party and the contact person must both exist; assigning a role as primary automatically demotes any existing primary contact for that role. Required inputs: partyId and contactId (UUIDs) as path parameters, plus roles, a list where each entry has roleCode (BILLING, PAYMENT_AUTHORIZER, OPERATIONS, PRIMARY_BUSINESS_CONTACT, or TECHNICAL) and an optional isPrimary flag defaulting to false. Emits a CRM_CONTACT_ROLES_UPDATE event; assignments are rewritten in place. Returns 404 when the party or contact person cannot be found, and 400 when a roleCode is not a recognized role.
      * @endpoint put /v1/crm/parties/{partyId}/contacts/{contactId}/roles
      * @param partyId Party ID
      * @param contactId Contact ID

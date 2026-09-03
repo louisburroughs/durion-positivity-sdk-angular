@@ -12,7 +12,7 @@
 /**
  * One SKU whose costing method would change under SKU_CATEGORY resolution (#1535)
  */
-export interface SkuCategoryImpactRow { 
+export interface SkuCategoryImpactRow {
     /**
      * Running weighted-average unit cost; null when there is no cost state
      */

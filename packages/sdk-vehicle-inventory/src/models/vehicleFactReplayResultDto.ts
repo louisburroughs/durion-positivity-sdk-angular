@@ -12,7 +12,7 @@
 /**
  * Outcome of one page of a vehicle-fact replay.
  */
-export interface VehicleFactReplayResultDto { 
+export interface VehicleFactReplayResultDto {
     /**
      * True when no further pages remain for this filter.
      */

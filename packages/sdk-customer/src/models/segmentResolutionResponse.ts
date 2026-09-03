@@ -13,7 +13,7 @@ import { SegmentSampleEntry } from './segmentSampleEntry';
 /**
  * Result of resolving a segment to its matching parties
  */
-export interface SegmentResolutionResponse { 
+export interface SegmentResolutionResponse {
     /**
      * Targeted party kind
      */

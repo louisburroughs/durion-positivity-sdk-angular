@@ -12,7 +12,7 @@
 /**
  * A single commercial account record within a bulk ingest request
  */
-export interface CommercialBulkIngestRecord { 
+export interface CommercialBulkIngestRecord {
     /**
      * Billing terms identifier
      */

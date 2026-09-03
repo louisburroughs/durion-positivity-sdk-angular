@@ -11,7 +11,7 @@
 
 import { Inject, Injectable, Optional }                      from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams,
-         HttpResponse, HttpEvent, HttpContext 
+         HttpResponse, HttpEvent, HttpContext
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
@@ -39,7 +39,7 @@ export class CustomerAPIService extends BaseService {
 
     /**
      * Create Customer Record
-     * Creates a customer from a flat CustomerDTO, routed by customerType to either the commercial or person party store. Use this tool only for the legacy flat customer API; use createCrmCommercialAccount instead for commercial onboarding with duplicate checking, and createCrmPerson for individuals so the canonical identity lands in pos-people. Preconditions: none beyond authorization; no duplicate detection is performed. Required inputs: firstName and lastName (each max 100); customerType selects the store, where COMMERCIAL routes to the commercial service and anything else creates a person party, and customerNumber, primaryAddress, and vehicleVins are optional. Emits a CUSTOMER_CUSTOMER_CREATE event and publishes a party-changed customer fact. Returns 201 with the stored customer on success; returns 400 for a malformed JSON body or when firstName/lastName are blank or absent. 
+     * Creates a customer from a flat CustomerDTO, routed by customerType to either the commercial or person party store. Use this tool only for the legacy flat customer API; use createCrmCommercialAccount instead for commercial onboarding with duplicate checking, and createCrmPerson for individuals so the canonical identity lands in pos-people. Preconditions: none beyond authorization; no duplicate detection is performed. Required inputs: firstName and lastName (each max 100); customerType selects the store, where COMMERCIAL routes to the commercial service and anything else creates a person party, and customerNumber, primaryAddress, and vehicleVins are optional. Emits a CUSTOMER_CUSTOMER_CREATE event and publishes a party-changed customer fact. Returns 201 with the stored customer on success; returns 400 for a malformed JSON body or when firstName/lastName are blank or absent.
      * @endpoint post /v1/crm
      * @param customerDTO The flat customer record to store; customerType routes it to the commercial or person store.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -109,7 +109,7 @@ export class CustomerAPIService extends BaseService {
 
     /**
      * Delete Customer Record
-     * Hard-deletes a customer row, trying the commercial store first and then the person store, and publishes a party-deleted fact for the removed record. Use this tool only when a customer record must be physically removed; do not use it for duplicates — use mergeParties instead, whose MERGED status preserves history, since this deletion is not reversible. Preconditions: a commercial or person party must exist for the supplied id. Required inputs: id (UUID) as a path parameter; there is no request body. Emits a CUSTOMER_CUSTOMER_DELETE event and publishes a party-deleted customer fact. Returns 404 when neither store holds a party for the supplied id. 
+     * Hard-deletes a customer row, trying the commercial store first and then the person store, and publishes a party-deleted fact for the removed record. Use this tool only when a customer record must be physically removed; do not use it for duplicates — use mergeParties instead, whose MERGED status preserves history, since this deletion is not reversible. Preconditions: a commercial or person party must exist for the supplied id. Required inputs: id (UUID) as a path parameter; there is no request body. Emits a CUSTOMER_CUSTOMER_DELETE event and publishes a party-deleted customer fact. Returns 404 when neither store holds a party for the supplied id.
      * @endpoint delete /v1/crm/{id}
      * @param id ID of the customer to delete
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -168,7 +168,7 @@ export class CustomerAPIService extends BaseService {
 
     /**
      * Get Customer By Id
-     * Returns one customer as a flat CustomerDTO, checking commercial parties first and falling back to person parties. Use this tool for the legacy flat customer view; use getParty or getSnapshotByParty instead for the richer party projections. Preconditions: a commercial or person party must exist for the supplied id. Required inputs: id (UUID) as a path parameter; there is no request body. No events are emitted and no state changes; this is a read-only projection. Returns 404 when neither a commercial nor a person party exists for the supplied id. 
+     * Returns one customer as a flat CustomerDTO, checking commercial parties first and falling back to person parties. Use this tool for the legacy flat customer view; use getParty or getSnapshotByParty instead for the richer party projections. Preconditions: a commercial or person party must exist for the supplied id. Required inputs: id (UUID) as a path parameter; there is no request body. No events are emitted and no state changes; this is a read-only projection. Returns 404 when neither a commercial nor a person party exists for the supplied id.
      * @endpoint get /v1/crm/{id}
      * @param id ID of the customer to retrieve
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -228,7 +228,7 @@ export class CustomerAPIService extends BaseService {
 
     /**
      * List Customers By Type
-     * Returns a page of customers of one party type, switching to a server-side typeahead search when a name or email filter is supplied. Use this tool for the legacy flat customer listing keyed by customerType; use browseParties instead for the unified directory that merges commercial and individual customers in one result. Preconditions: none; an empty page is returned when nothing matches. Required inputs: none; customerType defaults to PERSON and accepts PERSON or COMMERCIAL, name and email are optional case-insensitive filters, and paging defaults to page 0, size 20, sorted by customerNumber. No events are emitted and no state changes; this is a read-only projection. Returns 200 with an empty page rather than an error when no customer matches. 
+     * Returns a page of customers of one party type, switching to a server-side typeahead search when a name or email filter is supplied. Use this tool for the legacy flat customer listing keyed by customerType; use browseParties instead for the unified directory that merges commercial and individual customers in one result. Preconditions: none; an empty page is returned when nothing matches. Required inputs: none; customerType defaults to PERSON and accepts PERSON or COMMERCIAL, name and email are optional case-insensitive filters, and paging defaults to page 0, size 20, sorted by customerNumber. No events are emitted and no state changes; this is a read-only projection. Returns 200 with an empty page rather than an error when no customer matches.
      * @endpoint get /v1/crm
      * @param customerType Customer type filter: PERSON or COMMERCIAL
      * @param name Case-insensitive partial name filter for typeahead search
@@ -347,7 +347,7 @@ export class CustomerAPIService extends BaseService {
 
     /**
      * Update Customer Record
-     * Updates an existing customer\&#39;s flat record, with the body\&#39;s customerType selecting whether the commercial or person store is searched for the id. Use this tool only for the legacy flat customer API; the customerType in the body must match the store the customer actually lives in, or the lookup misses, so do not use it to change a customer from PERSON to COMMERCIAL. Preconditions: a party of the type named by customerType must exist for the supplied id. Required inputs: id (UUID) as a path parameter and the CustomerDTO body including customerType; only fields present in the DTO mapping are applied. Emits a CUSTOMER_CUSTOMER_UPDATE event and publishes a party-changed customer fact. Returns 404 when no party of the selected type exists for the supplied id. 
+     * Updates an existing customer\&#39;s flat record, with the body\&#39;s customerType selecting whether the commercial or person store is searched for the id. Use this tool only for the legacy flat customer API; the customerType in the body must match the store the customer actually lives in, or the lookup misses, so do not use it to change a customer from PERSON to COMMERCIAL. Preconditions: a party of the type named by customerType must exist for the supplied id. Required inputs: id (UUID) as a path parameter and the CustomerDTO body including customerType; only fields present in the DTO mapping are applied. Emits a CUSTOMER_CUSTOMER_UPDATE event and publishes a party-changed customer fact. Returns 404 when no party of the selected type exists for the supplied id.
      * @endpoint put /v1/crm/{id}
      * @param id ID of the customer to update
      * @param customerDTO The revised customer fields; customerType must name the store the customer already lives in.

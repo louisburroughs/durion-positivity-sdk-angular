@@ -12,7 +12,7 @@
 /**
  * Upsert of the sourcing strategy configured for one scope (odoo-parity H1)
  */
-export interface SourcingStrategyConfigRequest { 
+export interface SourcingStrategyConfigRequest {
     /**
      * Configuration scope kind
      */

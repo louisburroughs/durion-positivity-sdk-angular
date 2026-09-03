@@ -12,7 +12,7 @@
 /**
  * Summary of one location sync run
  */
-export interface LocationSyncRunResponse { 
+export interface LocationSyncRunResponse {
     /**
      * When the run completed
      */

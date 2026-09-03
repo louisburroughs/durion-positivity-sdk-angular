@@ -12,7 +12,7 @@
 /**
  * Request payload for reopening a closed accounting period
  */
-export interface AccountingPeriodReopenRequest { 
+export interface AccountingPeriodReopenRequest {
     /**
      * Mandatory reason for reopening the period; recorded on the period and in the audit trail
      */

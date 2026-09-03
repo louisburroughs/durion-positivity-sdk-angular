@@ -12,7 +12,7 @@
 /**
  * Request payload for setting the org-level hard-lock date
  */
-export interface HardLockDateUpdateRequest { 
+export interface HardLockDateUpdateRequest {
     /**
      * New hard-lock date. Must be on or after the currently stored hard-lock date (monotonic forward only — a backward move is rejected with 422 HARD_LOCK_DATE_REGRESSION). Once set, journal entries dated strictly before this date are permanently rejected with no override path.
      */

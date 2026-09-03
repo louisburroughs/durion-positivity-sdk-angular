@@ -12,7 +12,7 @@
 /**
  * Result of a stock reallocation, summarizing reallocated quantities and resulting availability
  */
-export interface ReallocateResponse { 
+export interface ReallocateResponse {
     /**
      * Available-to-promise quantity for the stock item after reallocation
      */

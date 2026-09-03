@@ -11,7 +11,7 @@
 
 import { Inject, Injectable, Optional }                      from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams,
-         HttpResponse, HttpEvent, HttpContext 
+         HttpResponse, HttpEvent, HttpContext
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
@@ -43,7 +43,7 @@ export class CycleCountTolerancesService extends BaseService {
 
     /**
      * Create a cycle-count tolerance configuration
-     * Creates a tolerance configuration scoped by product, storage location, both, or neither (the global default), as an absolute quantity bound, a percentage bound, or both. Use this tool to configure how much variance a bulk product or location may show before a cycle count is flagged for investigation; do not use this for approval thresholds, which are a separate configuration governing who must sign off on an adjustment once one is created. Preconditions: no other active tolerance may already occupy the exact same scope. Required inputs: createdBy; productId, storageLocation, absoluteTolerance and percentageTolerance are all optional. Emits an INVENTORY_CYCLE_COUNT_TOLERANCE_CREATE event. Returns 400 when an active tolerance already exists for this scope. 
+     * Creates a tolerance configuration scoped by product, storage location, both, or neither (the global default), as an absolute quantity bound, a percentage bound, or both. Use this tool to configure how much variance a bulk product or location may show before a cycle count is flagged for investigation; do not use this for approval thresholds, which are a separate configuration governing who must sign off on an adjustment once one is created. Preconditions: no other active tolerance may already occupy the exact same scope. Required inputs: createdBy; productId, storageLocation, absoluteTolerance and percentageTolerance are all optional. Emits an INVENTORY_CYCLE_COUNT_TOLERANCE_CREATE event. Returns 400 when an active tolerance already exists for this scope.
      * @endpoint post /v1/inventory/cycleCountTolerances
      * @param createCycleCountToleranceRequest Tolerance scope (product, storage location, or both) and its absolute and/or percentage bounds.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -113,7 +113,7 @@ export class CycleCountTolerancesService extends BaseService {
 
     /**
      * Delete a cycle-count tolerance configuration
-     * Permanently removes a tolerance configuration. Use this tool to retire a tolerance no longer wanted; do not use updateCycleCountTolerance with active&#x3D;false instead unless the row should be kept around for its audit trail — delete removes it outright. Preconditions: the tolerance must exist. Required inputs: toleranceId (UUID) path parameter; there is no request body. Emits an INVENTORY_CYCLE_COUNT_TOLERANCE_DELETE event. Returns 404 when no tolerance exists for the supplied id. 
+     * Permanently removes a tolerance configuration. Use this tool to retire a tolerance no longer wanted; do not use updateCycleCountTolerance with active&#x3D;false instead unless the row should be kept around for its audit trail — delete removes it outright. Preconditions: the tolerance must exist. Required inputs: toleranceId (UUID) path parameter; there is no request body. Emits an INVENTORY_CYCLE_COUNT_TOLERANCE_DELETE event. Returns 404 when no tolerance exists for the supplied id.
      * @endpoint delete /v1/inventory/cycleCountTolerances/{toleranceId}
      * @param toleranceId Tolerance ID
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -173,7 +173,7 @@ export class CycleCountTolerancesService extends BaseService {
 
     /**
      * Get a cycle-count tolerance configuration
-     * Returns one tolerance configuration by id. Use this tool when the toleranceId is already known; use listCycleCountTolerances instead to browse all configured tolerances. Preconditions: the tolerance must exist. Required inputs: toleranceId (UUID) path parameter; there is no request body. No events are emitted; this is a read-only projection. Returns 404 when no tolerance exists for the supplied id. 
+     * Returns one tolerance configuration by id. Use this tool when the toleranceId is already known; use listCycleCountTolerances instead to browse all configured tolerances. Preconditions: the tolerance must exist. Required inputs: toleranceId (UUID) path parameter; there is no request body. No events are emitted; this is a read-only projection. Returns 404 when no tolerance exists for the supplied id.
      * @endpoint get /v1/inventory/cycleCountTolerances/{toleranceId}
      * @param toleranceId Tolerance ID
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -233,7 +233,7 @@ export class CycleCountTolerancesService extends BaseService {
 
     /**
      * List all cycle-count tolerance configurations
-     * Returns every tolerance configuration, active and inactive, newest first. Use this tool to browse or audit configured tolerances; use getCycleCountTolerance instead when the toleranceId is already known. Preconditions: none. Required inputs: none; there is no paging or filtering. No events are emitted; this is a read-only projection. Returns 200 with an empty array when none are configured. 
+     * Returns every tolerance configuration, active and inactive, newest first. Use this tool to browse or audit configured tolerances; use getCycleCountTolerance instead when the toleranceId is already known. Preconditions: none. Required inputs: none; there is no paging or filtering. No events are emitted; this is a read-only projection. Returns 200 with an empty array when none are configured.
      * @endpoint get /v1/inventory/cycleCountTolerances
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
@@ -289,7 +289,7 @@ export class CycleCountTolerancesService extends BaseService {
 
     /**
      * Replace a cycle-count tolerance\&#39;s bounds and active state
-     * Replaces a tolerance configuration\&#39;s absolute bound, percentage bound, and active flag; the scope (productId, storageLocation) is immutable — recreate the row to change scope. Use this tool to widen, tighten, or deactivate an existing tolerance; do not use this to change scope — create a new tolerance for the new scope instead. Preconditions: the tolerance must exist; reactivating (active&#x3D;false -&gt; true) requires no other active row already occupy the same scope. Required inputs: toleranceId (UUID) path parameter, active (boolean); absoluteTolerance and percentageTolerance are set verbatim from the request, null included (PUT semantics). Emits an INVENTORY_CYCLE_COUNT_TOLERANCE_UPDATE event. Returns 404 when no tolerance exists for the id, 400 when reactivation would collide with an already-active row at the same scope. 
+     * Replaces a tolerance configuration\&#39;s absolute bound, percentage bound, and active flag; the scope (productId, storageLocation) is immutable — recreate the row to change scope. Use this tool to widen, tighten, or deactivate an existing tolerance; do not use this to change scope — create a new tolerance for the new scope instead. Preconditions: the tolerance must exist; reactivating (active&#x3D;false -&gt; true) requires no other active row already occupy the same scope. Required inputs: toleranceId (UUID) path parameter, active (boolean); absoluteTolerance and percentageTolerance are set verbatim from the request, null included (PUT semantics). Emits an INVENTORY_CYCLE_COUNT_TOLERANCE_UPDATE event. Returns 404 when no tolerance exists for the id, 400 when reactivation would collide with an already-active row at the same scope.
      * @endpoint put /v1/inventory/cycleCountTolerances/{toleranceId}
      * @param toleranceId Tolerance ID
      * @param updateCycleCountToleranceRequest Replacement absolute/percentage bounds and active flag, applied verbatim (PUT semantics).

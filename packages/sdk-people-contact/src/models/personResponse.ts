@@ -12,7 +12,7 @@
 /**
  * Person summary returned by person read operations
  */
-export interface PersonResponse { 
+export interface PersonResponse {
     /**
      * First name of the person
      */

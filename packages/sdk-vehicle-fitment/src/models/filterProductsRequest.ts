@@ -12,7 +12,7 @@
 /**
  * Request payload for filtering products by vehicle attributes
  */
-export interface FilterProductsRequest { 
+export interface FilterProductsRequest {
     /**
      * Vehicle attributes used as matching criteria
      */

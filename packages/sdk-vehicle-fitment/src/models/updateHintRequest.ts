@@ -13,7 +13,7 @@ import { FitmentTagDto } from './fitmentTagDto';
 /**
  * Request payload for updating fitment tags on an existing hint
  */
-export interface UpdateHintRequest { 
+export interface UpdateHintRequest {
     /**
      * Updated fitment tags for the hint
      */

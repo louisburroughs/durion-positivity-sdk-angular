@@ -12,7 +12,7 @@
 /**
  * Timekeeping time period bounding a payroll or submission cycle
  */
-export interface TimePeriodDto { 
+export interface TimePeriodDto {
     /**
      * Last date of the period
      */

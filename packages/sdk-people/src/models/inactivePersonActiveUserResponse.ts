@@ -12,7 +12,7 @@
 /**
  * An active user-person link whose linked person is in an inactive status (ADR-0015 §4 violation)
  */
-export interface InactivePersonActiveUserResponse { 
+export interface InactivePersonActiveUserResponse {
     /**
      * User-person link identifier
      */

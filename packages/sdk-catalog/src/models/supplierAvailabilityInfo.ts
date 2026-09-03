@@ -12,7 +12,7 @@
 /**
  * Live vendor stock with a status indicator. A null quantity means the vendor stated nothing; zero means the vendor stated it has none, and only that justifies showing a customer that the vendor is out of stock.
  */
-export interface SupplierAvailabilityInfo { 
+export interface SupplierAvailabilityInfo {
     /**
      * When the supplier fact was obtained. Present only when the vendor answered — a degraded component carries no timestamp, because there is no vendor statement to date. A cached answer carries the age of the fact, not of the cache hit.
      */

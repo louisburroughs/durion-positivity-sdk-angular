@@ -12,7 +12,7 @@
 /**
  * Acknowledgement of a publicly submitted inquiry
  */
-export interface InquiryAcceptedResponse { 
+export interface InquiryAcceptedResponse {
     /**
      * Reference for the submitted inquiry
      */

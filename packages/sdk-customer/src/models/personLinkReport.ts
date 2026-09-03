@@ -12,7 +12,7 @@
 /**
  * Outcome of a person-link reconciliation pass against pos-people
  */
-export interface PersonLinkReport { 
+export interface PersonLinkReport {
     /**
      * Whether reconciliation is healthy: pos-people reachable and no unresolved orphan links
      */

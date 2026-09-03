@@ -12,7 +12,7 @@
 /**
  * Product dimension detail
  */
-export interface DimensionDto { 
+export interface DimensionDto {
     /**
      * Dimension description
      */

@@ -12,7 +12,7 @@
 /**
  * Vendor bill match candidate presented for manual selection during ambiguous matching
  */
-export interface VendorBillMatchCandidateResponse { 
+export interface VendorBillMatchCandidateResponse {
     /**
      * Bill number for display
      */

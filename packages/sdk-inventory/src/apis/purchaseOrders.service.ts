@@ -11,7 +11,7 @@
 
 import { Inject, Injectable, Optional }                      from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams,
-         HttpResponse, HttpEvent, HttpContext 
+         HttpResponse, HttpEvent, HttpContext
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
@@ -58,7 +58,7 @@ export class PurchaseOrdersService extends BaseService {
      * Approves a purchase order and transitions it to an approvable state
      * @endpoint post /v1/inventory/purchase-orders/{poId}/approve
      * @param poId Purchase order identifier
-     * @param approvePurchaseOrderRequest 
+     * @param approvePurchaseOrderRequest
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -191,7 +191,7 @@ export class PurchaseOrdersService extends BaseService {
      * Create purchase order
      * Creates a purchase order with requested line items
      * @endpoint post /v1/inventory/purchase-orders
-     * @param createPurchaseOrderRequest 
+     * @param createPurchaseOrderRequest
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -321,8 +321,8 @@ export class PurchaseOrdersService extends BaseService {
      * List purchase orders
      * Lists purchase orders using filter and pagination parameters
      * @endpoint get /v1/inventory/purchase-orders
-     * @param filter 
-     * @param pageable 
+     * @param filter
+     * @param pageable
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -407,7 +407,7 @@ export class PurchaseOrdersService extends BaseService {
      * Receives approved purchase order quantities and posts resulting ledger movements
      * @endpoint post /v1/inventory/purchase-orders/{poId}/receive
      * @param poId Purchase order identifier
-     * @param receivePurchaseOrderRequest 
+     * @param receivePurchaseOrderRequest
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -481,7 +481,7 @@ export class PurchaseOrdersService extends BaseService {
      * Creates a revision for an existing purchase order
      * @endpoint post /v1/inventory/purchase-orders/{poId}/revisions
      * @param poId Purchase order identifier
-     * @param revisePurchaseOrderRequest 
+     * @param revisePurchaseOrderRequest
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options

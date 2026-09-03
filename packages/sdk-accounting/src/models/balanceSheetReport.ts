@@ -12,7 +12,7 @@
 /**
  * Balance Sheet report response with assets, liabilities, and equity totals derived from POSTED journal entries
  */
-export interface BalanceSheetReport { 
+export interface BalanceSheetReport {
     /**
      * Date the balance sheet is reported as of
      */

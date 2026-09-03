@@ -12,7 +12,7 @@
 /**
  * Resolved reference/list price for a product in a given context. This is catalog reference data (list/MSRP role per ADR-0054), never a transactional sell price — transactional quoting is owned by pos-price
  */
-export interface ResolvePriceResponseDto { 
+export interface ResolvePriceResponseDto {
     /**
      * ISO currency code of the resolved amount (null when source is UNAVAILABLE)
      */

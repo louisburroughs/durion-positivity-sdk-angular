@@ -13,7 +13,7 @@ import { ContractField } from './contractField';
 /**
  * Describes the expected structure of accounting event envelopes
  */
-export interface EventEnvelopeContract { 
+export interface EventEnvelopeContract {
     /**
      * Example event payloads
      */

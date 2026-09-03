@@ -12,7 +12,7 @@
 /**
  * Application state of one supplier PRICAT import in this module.
  */
-export interface SupplierPriceImportStatusDto { 
+export interface SupplierPriceImportStatusDto {
     /**
      * Chunk events applied so far.
      */

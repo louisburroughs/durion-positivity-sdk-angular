@@ -12,7 +12,7 @@
 /**
  * Default authority codes granted by a role
  */
-export interface RoleDefaultPermissionsResponse { 
+export interface RoleDefaultPermissionsResponse {
     /**
      * Sorted authority codes the role expands to (ROLE_* plus domain permission codes)
      */

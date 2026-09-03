@@ -13,7 +13,7 @@ import { CatalogBulkIngestRecord } from './catalogBulkIngestRecord';
 /**
  * Generic bulk ingest request: a batch of records for a job scoped to a location
  */
-export interface BulkIngestRequestCatalogBulkIngestRecord { 
+export interface BulkIngestRequestCatalogBulkIngestRecord {
     /**
      * Identifier of the bulk ingest job
      */

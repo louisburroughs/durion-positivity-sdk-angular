@@ -12,7 +12,7 @@
 /**
  * Communication preferences for a contact
  */
-export interface ContactPreferences { 
+export interface ContactPreferences {
     /**
      * Whether the contact should not be contacted at all
      */

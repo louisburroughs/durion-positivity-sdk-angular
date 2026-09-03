@@ -13,7 +13,7 @@ import { SegmentPredicate } from './segmentPredicate';
 /**
  * A single attribute test
  */
-export interface Comparison extends SegmentPredicate { 
+export interface Comparison extends SegmentPredicate {
     /**
      * Attribute wire name
      */

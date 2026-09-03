@@ -12,7 +12,7 @@
 /**
  * A marketing campaign
  */
-export interface CampaignResponse { 
+export interface CampaignResponse {
     /**
      * Targeted party kind
      */

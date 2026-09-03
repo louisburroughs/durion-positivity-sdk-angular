@@ -12,7 +12,7 @@
 /**
  * Time entry adjustment representing a proposed or approved change to a time entry
  */
-export interface TimeEntryAdjustment { 
+export interface TimeEntryAdjustment {
     /**
      * Unique identifier for the adjustment
      */

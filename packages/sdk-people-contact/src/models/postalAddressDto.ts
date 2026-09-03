@@ -12,7 +12,7 @@
 /**
  * Structured international postal address
  */
-export interface PostalAddressDto { 
+export interface PostalAddressDto {
     /**
      * City, town, or locality
      */

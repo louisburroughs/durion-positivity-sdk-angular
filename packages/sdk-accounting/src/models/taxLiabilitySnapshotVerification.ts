@@ -12,7 +12,7 @@
 /**
  * Re-derivation check of a frozen Sales-Tax Liability snapshot against live data
  */
-export interface TaxLiabilitySnapshotVerification { 
+export interface TaxLiabilitySnapshotVerification {
     /**
      * True when the re-derived report hashes identically to the frozen snapshot
      */

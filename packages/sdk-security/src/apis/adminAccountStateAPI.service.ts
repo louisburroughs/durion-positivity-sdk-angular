@@ -11,7 +11,7 @@
 
 import { Inject, Injectable, Optional }                      from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams,
-         HttpResponse, HttpEvent, HttpContext 
+         HttpResponse, HttpEvent, HttpContext
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
@@ -39,9 +39,9 @@ export class AdminAccountStateAPIService extends BaseService {
 
     /**
      * Disable a User Account
-     * Marks a user account as disabled, records the disabling actor and time, and immediately revokes every token issued to the user. Use this tool for a reversible administrative block; do not use deleteUser, which removes the account, and do not use expireUserAccount, which marks the account expired instead. Preconditions: the caller must hold security:user_account_state:manage and the user must exist. Required inputs: id (UUID) as a path parameter; there is no request body. Emits a SECURITY_USER_DISABLE event and revokes all of the user\&#39;s access and refresh tokens. Returns 404 with USER_NOT_FOUND when the user does not exist. 
+     * Marks a user account as disabled, records the disabling actor and time, and immediately revokes every token issued to the user. Use this tool for a reversible administrative block; do not use deleteUser, which removes the account, and do not use expireUserAccount, which marks the account expired instead. Preconditions: the caller must hold security:user_account_state:manage and the user must exist. Required inputs: id (UUID) as a path parameter; there is no request body. Emits a SECURITY_USER_DISABLE event and revokes all of the user\&#39;s access and refresh tokens. Returns 404 with USER_NOT_FOUND when the user does not exist.
      * @endpoint post /v1/users/{id}/disable
-     * @param id 
+     * @param id
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -99,9 +99,9 @@ export class AdminAccountStateAPIService extends BaseService {
 
     /**
      * Enable a Disabled User Account
-     * Marks a user account as enabled so it is again accepted for sign-in and access checks. Use this tool to reverse disableUserAccount; do not use unlockUserAccount, which clears a failed-login lockout instead. Preconditions: the caller must hold security:user_account_state:manage and the user must exist. Required inputs: id (UUID) as a path parameter; there is no request body. Emits a SECURITY_USER_ENABLE event; no tokens are issued or restored, so the user must sign in again. Returns 404 with USER_NOT_FOUND when the user does not exist. 
+     * Marks a user account as enabled so it is again accepted for sign-in and access checks. Use this tool to reverse disableUserAccount; do not use unlockUserAccount, which clears a failed-login lockout instead. Preconditions: the caller must hold security:user_account_state:manage and the user must exist. Required inputs: id (UUID) as a path parameter; there is no request body. Emits a SECURITY_USER_ENABLE event; no tokens are issued or restored, so the user must sign in again. Returns 404 with USER_NOT_FOUND when the user does not exist.
      * @endpoint post /v1/users/{id}/enable
-     * @param id 
+     * @param id
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -159,9 +159,9 @@ export class AdminAccountStateAPIService extends BaseService {
 
     /**
      * Expire a User Account
-     * Marks a user account as expired, stamping the expiry time and immediately revoking every token issued to the user. Use this tool to end an account\&#39;s validity, for example at offboarding; do not use disableUserAccount, which signals a reversible administrative block, or expireUserCredentials, which only forces a credential reset. Preconditions: the caller must hold security:user_account_state:manage and the user must exist. Required inputs: id (UUID) as a path parameter; there is no request body. Emits a SECURITY_USER_EXPIRE_ACCOUNT event and revokes all of the user\&#39;s access and refresh tokens. Returns 404 with USER_NOT_FOUND when the user does not exist. 
+     * Marks a user account as expired, stamping the expiry time and immediately revoking every token issued to the user. Use this tool to end an account\&#39;s validity, for example at offboarding; do not use disableUserAccount, which signals a reversible administrative block, or expireUserCredentials, which only forces a credential reset. Preconditions: the caller must hold security:user_account_state:manage and the user must exist. Required inputs: id (UUID) as a path parameter; there is no request body. Emits a SECURITY_USER_EXPIRE_ACCOUNT event and revokes all of the user\&#39;s access and refresh tokens. Returns 404 with USER_NOT_FOUND when the user does not exist.
      * @endpoint post /v1/users/{id}/expire-account
-     * @param id 
+     * @param id
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -219,9 +219,9 @@ export class AdminAccountStateAPIService extends BaseService {
 
     /**
      * Expire a User\&#39;s Credentials
-     * Marks a user\&#39;s credentials as expired, stamping the expiry time and immediately revoking every token so a credential reset is required before further use. Use this tool to force a password rotation; do not use expireUserAccount, which expires the whole account rather than just its credentials. Preconditions: the caller must hold security:user_account_state:manage and the user must exist. Required inputs: id (UUID) as a path parameter; there is no request body. Emits a SECURITY_USER_EXPIRE_CREDENTIALS event and revokes all of the user\&#39;s access and refresh tokens. Returns 404 with USER_NOT_FOUND when the user does not exist. 
+     * Marks a user\&#39;s credentials as expired, stamping the expiry time and immediately revoking every token so a credential reset is required before further use. Use this tool to force a password rotation; do not use expireUserAccount, which expires the whole account rather than just its credentials. Preconditions: the caller must hold security:user_account_state:manage and the user must exist. Required inputs: id (UUID) as a path parameter; there is no request body. Emits a SECURITY_USER_EXPIRE_CREDENTIALS event and revokes all of the user\&#39;s access and refresh tokens. Returns 404 with USER_NOT_FOUND when the user does not exist.
      * @endpoint post /v1/users/{id}/expire-credentials
-     * @param id 
+     * @param id
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -279,9 +279,9 @@ export class AdminAccountStateAPIService extends BaseService {
 
     /**
      * Get a User\&#39;s Account-State Flags
-     * Returns the administrative account-state flags for a user: enabled, lock, account-expiry, and credential-expiry state with their timestamps, disabling actor, and failed-attempt count. Use this tool to diagnose why sign-in fails before choosing among unlockUserAccount, enableUserAccount, and the expiry endpoints; use getUserById instead for identity and role data. Preconditions: the caller must hold security:user_account_state:view and the user must exist. Required inputs: id (UUID) as a path parameter. No events are emitted and no state changes; this is a read-only projection. Returns 404 with USER_NOT_FOUND when the user does not exist. 
+     * Returns the administrative account-state flags for a user: enabled, lock, account-expiry, and credential-expiry state with their timestamps, disabling actor, and failed-attempt count. Use this tool to diagnose why sign-in fails before choosing among unlockUserAccount, enableUserAccount, and the expiry endpoints; use getUserById instead for identity and role data. Preconditions: the caller must hold security:user_account_state:view and the user must exist. Required inputs: id (UUID) as a path parameter. No events are emitted and no state changes; this is a read-only projection. Returns 404 with USER_NOT_FOUND when the user does not exist.
      * @endpoint get /v1/users/{id}/account-state
-     * @param id 
+     * @param id
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -339,9 +339,9 @@ export class AdminAccountStateAPIService extends BaseService {
 
     /**
      * Unlock a Locked User Account
-     * Clears the lockout state on a user account, resetting the failed-attempt counter and lock timestamps so the user can authenticate again. Use this tool after a lockout caused by repeated failed logins; do not use enableUserAccount, which reverses an administrative disable rather than a lockout. Preconditions: the caller must hold security:user_account_state:manage and the user must exist. Required inputs: id (UUID) as a path parameter; there is no request body. Emits a SECURITY_USER_UNLOCK event; existing tokens are not revoked. Returns 404 with USER_NOT_FOUND when the user does not exist. 
+     * Clears the lockout state on a user account, resetting the failed-attempt counter and lock timestamps so the user can authenticate again. Use this tool after a lockout caused by repeated failed logins; do not use enableUserAccount, which reverses an administrative disable rather than a lockout. Preconditions: the caller must hold security:user_account_state:manage and the user must exist. Required inputs: id (UUID) as a path parameter; there is no request body. Emits a SECURITY_USER_UNLOCK event; existing tokens are not revoked. Returns 404 with USER_NOT_FOUND when the user does not exist.
      * @endpoint post /v1/users/{id}/unlock
-     * @param id 
+     * @param id
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options

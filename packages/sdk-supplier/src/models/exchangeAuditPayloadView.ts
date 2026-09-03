@@ -12,7 +12,7 @@
 /**
  * Stored payload content of one exchange-audit row. Retrieving it writes an access record naming the caller; the content is served only if that record commits.
  */
-export interface ExchangeAuditPayloadView { 
+export interface ExchangeAuditPayloadView {
     /**
      * The payload capture level applied when this row was written. METADATA_ONLY rows carry no content at all.
      */

@@ -12,7 +12,7 @@
 /**
  * Response from creating or updating a time entry exception
  */
-export interface TimeEntryExceptionResponse { 
+export interface TimeEntryExceptionResponse {
     /**
      * Unique identifier of the created or updated exception
      */

@@ -11,7 +11,7 @@
 
 import { Inject, Injectable, Optional }                      from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams,
-         HttpResponse, HttpEvent, HttpContext 
+         HttpResponse, HttpEvent, HttpContext
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
@@ -41,9 +41,9 @@ export class ColumnMappingAPIService extends BaseService {
 
     /**
      * Approve and Finalize Column Mappings
-     * Replaces all stored column mappings for a bulk load job with the submitted set, marking every mapping operator-approved with confidence 1.0. Use this tool after reviewing the suggestions from getColumnMappings; do not use getColumnMappings, which only reads mappings, and note that the submitted list fully replaces prior mappings rather than merging with them. Preconditions: the job must exist and belong to the authenticated operator; the job state is not checked, but approved mappings only affect processing started afterwards. Required inputs: mappings, a non-empty list where each entry names a sourceColumn from the uploaded file and the targetField it maps to; mappingId is accepted but ignored because the set is replaced wholesale. Emits a BULK_LOADER_MAPPING_APPROVE event and deletes previously stored mappings, including auto-suggested ones, before saving the new set. Returns 404 when the job does not exist, and 403 when the job belongs to another operator. 
+     * Replaces all stored column mappings for a bulk load job with the submitted set, marking every mapping operator-approved with confidence 1.0. Use this tool after reviewing the suggestions from getColumnMappings; do not use getColumnMappings, which only reads mappings, and note that the submitted list fully replaces prior mappings rather than merging with them. Preconditions: the job must exist and belong to the authenticated operator; the job state is not checked, but approved mappings only affect processing started afterwards. Required inputs: mappings, a non-empty list where each entry names a sourceColumn from the uploaded file and the targetField it maps to; mappingId is accepted but ignored because the set is replaced wholesale. Emits a BULK_LOADER_MAPPING_APPROVE event and deletes previously stored mappings, including auto-suggested ones, before saving the new set. Returns 404 when the job does not exist, and 403 when the job belongs to another operator.
      * @endpoint put /v1/bulk-jobs/{jobId}/mappings
-     * @param jobId 
+     * @param jobId
      * @param columnMappingApproveRequest Full replacement set of column mappings, one entry per source column to import.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
@@ -116,9 +116,9 @@ export class ColumnMappingAPIService extends BaseService {
 
     /**
      * Get Proposed Column Mappings for Job
-     * Returns the column mappings currently stored for a bulk load job, covering both auto-suggested mappings from content detection and operator-approved overrides. Use this tool to review detected source-column to target-field mappings, their confidence and origin; use approveColumnMappings instead to finalize the set. Preconditions: the job must exist and belong to the authenticated operator; mappings are typically present only after a file upload has triggered content detection. Required inputs: jobId (UUID) as a path parameter; there is no request body. No events are emitted and no state changes; this is a read-only projection. Returns 404 when the job does not exist, and 403 when the job belongs to another operator. 
+     * Returns the column mappings currently stored for a bulk load job, covering both auto-suggested mappings from content detection and operator-approved overrides. Use this tool to review detected source-column to target-field mappings, their confidence and origin; use approveColumnMappings instead to finalize the set. Preconditions: the job must exist and belong to the authenticated operator; mappings are typically present only after a file upload has triggered content detection. Required inputs: jobId (UUID) as a path parameter; there is no request body. No events are emitted and no state changes; this is a read-only projection. Returns 404 when the job does not exist, and 403 when the job belongs to another operator.
      * @endpoint get /v1/bulk-jobs/{jobId}/mappings
-     * @param jobId 
+     * @param jobId
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options

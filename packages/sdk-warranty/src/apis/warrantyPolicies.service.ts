@@ -11,7 +11,7 @@
 
 import { Inject, Injectable, Optional }                      from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams,
-         HttpResponse, HttpEvent, HttpContext 
+         HttpResponse, HttpEvent, HttpContext
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
@@ -39,7 +39,7 @@ export class WarrantyPoliciesService extends BaseService {
 
     /**
      * Create policy
-     * Creates a warranty policy — one row of structured coverage terms owned by a provider, governing eligibility, proration, and evidence requirements for claims. Use this tool to configure a new coverage program; do not use updatePolicy, which fully replaces an existing policy, and do not use createRegistration, which records coverage sold to one customer under a policy. Preconditions: the owning provider must exist; the appliesTo scope must be internally consistent — PRODUCT_LIST needs a non-empty appliesToProductEntityIds, CATEGORY needs appliesToCategoryId, MANUFACTURER needs appliesToManufacturerId — and effectiveTo must not precede effectiveFrom. Required inputs: providerId (UUID), name, coverageType, appliesToType, effectiveFrom (ISO date), and prorationMethod (NONE, TREAD_DEPTH, MILEAGE, or TIME); laborCovered, requiresPartReturn, requiresPhotoEvidence, transferable, and autoRegister all default to false. Emits a WARRANTY_POLICY_CREATE event; no claims or registrations are touched. Returns 404 when the referenced provider cannot be resolved, and 400 when the appliesTo scope keys or the effective window are inconsistent. 
+     * Creates a warranty policy — one row of structured coverage terms owned by a provider, governing eligibility, proration, and evidence requirements for claims. Use this tool to configure a new coverage program; do not use updatePolicy, which fully replaces an existing policy, and do not use createRegistration, which records coverage sold to one customer under a policy. Preconditions: the owning provider must exist; the appliesTo scope must be internally consistent — PRODUCT_LIST needs a non-empty appliesToProductEntityIds, CATEGORY needs appliesToCategoryId, MANUFACTURER needs appliesToManufacturerId — and effectiveTo must not precede effectiveFrom. Required inputs: providerId (UUID), name, coverageType, appliesToType, effectiveFrom (ISO date), and prorationMethod (NONE, TREAD_DEPTH, MILEAGE, or TIME); laborCovered, requiresPartReturn, requiresPhotoEvidence, transferable, and autoRegister all default to false. Emits a WARRANTY_POLICY_CREATE event; no claims or registrations are touched. Returns 404 when the referenced provider cannot be resolved, and 400 when the appliesTo scope keys or the effective window are inconsistent.
      * @endpoint post /v1/warranty/policies
      * @param policyRequest Structured coverage terms of the program: scope, effective window, limits, proration method, and evidence requirements.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -109,7 +109,7 @@ export class WarrantyPoliciesService extends BaseService {
 
     /**
      * Find applicable policies
-     * Resolves the policies in effect on the original sale date whose appliesTo scope matches any provided catalog key, ordered most-specific-first (PRODUCT_LIST, then MANUFACTURER, then CATEGORY, then ALL). Use this tool during intake or eligibility work to find the governing policy for a product; do not use listPolicies, which lists policies without effective-date or scope matching. Preconditions: policies must exist with an effectiveFrom/effectiveTo window covering the sale date; ALL-scoped policies always match, while scoped policies match only when the corresponding key is provided and equal. Required inputs: saleDate (ISO-8601 date) is required; productEntityId, manufacturerId, and categoryId are optional pos-catalog keys, and coverageType optionally restricts the result to one coverage type. No events are emitted and no state changes; this is a read-only projection. Returns 200 with matching policies most specific first (empty when none match), and 400 when saleDate is missing or malformed. 
+     * Resolves the policies in effect on the original sale date whose appliesTo scope matches any provided catalog key, ordered most-specific-first (PRODUCT_LIST, then MANUFACTURER, then CATEGORY, then ALL). Use this tool during intake or eligibility work to find the governing policy for a product; do not use listPolicies, which lists policies without effective-date or scope matching. Preconditions: policies must exist with an effectiveFrom/effectiveTo window covering the sale date; ALL-scoped policies always match, while scoped policies match only when the corresponding key is provided and equal. Required inputs: saleDate (ISO-8601 date) is required; productEntityId, manufacturerId, and categoryId are optional pos-catalog keys, and coverageType optionally restricts the result to one coverage type. No events are emitted and no state changes; this is a read-only projection. Returns 200 with matching policies most specific first (empty when none match), and 400 when saleDate is missing or malformed.
      * @endpoint get /v1/warranty/policies/applicable
      * @param saleDate Original sale date (ISO-8601)
      * @param productEntityId pos-catalog productEntityId of the product sold
@@ -221,7 +221,7 @@ export class WarrantyPoliciesService extends BaseService {
 
     /**
      * Get policy
-     * Returns one warranty policy with its full structured coverage terms, including proration method, caps, and evidence requirements. Use this tool when the policy id is already known; use listPolicies or findApplicablePolicies instead to locate a policy. Preconditions: the policy must exist. Required inputs: id (UUID) as a path parameter; there is no request body. No events are emitted and no state changes; this is a read-only projection. Returns 404 when no policy exists for the supplied id. 
+     * Returns one warranty policy with its full structured coverage terms, including proration method, caps, and evidence requirements. Use this tool when the policy id is already known; use listPolicies or findApplicablePolicies instead to locate a policy. Preconditions: the policy must exist. Required inputs: id (UUID) as a path parameter; there is no request body. No events are emitted and no state changes; this is a read-only projection. Returns 404 when no policy exists for the supplied id.
      * @endpoint get /v1/warranty/policies/{id}
      * @param id Policy UUID
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -281,7 +281,7 @@ export class WarrantyPoliciesService extends BaseService {
 
     /**
      * List policies
-     * Returns warranty policies, optionally filtered by owning provider and/or coverage type. Use this tool to browse configured coverage programs; use findApplicablePolicies instead to resolve which policies cover a specific product on a specific sale date. Preconditions: none — an empty list is returned when nothing matches. Required inputs: providerId and coverageType are optional query parameters; when both are given the provider filter is applied first and coverage type filters the result. No events are emitted and no state changes; this is a read-only projection. Returns 200 with the list, which is empty rather than 404 when no policy matches. 
+     * Returns warranty policies, optionally filtered by owning provider and/or coverage type. Use this tool to browse configured coverage programs; use findApplicablePolicies instead to resolve which policies cover a specific product on a specific sale date. Preconditions: none — an empty list is returned when nothing matches. Required inputs: providerId and coverageType are optional query parameters; when both are given the provider filter is applied first and coverage type filters the result. No events are emitted and no state changes; this is a read-only projection. Returns 200 with the list, which is empty rather than 404 when no policy matches.
      * @endpoint get /v1/warranty/policies
      * @param providerId Filter by owning provider id
      * @param coverageType Filter by coverage type
@@ -360,7 +360,7 @@ export class WarrantyPoliciesService extends BaseService {
 
     /**
      * Update policy
-     * Fully replaces an existing warranty policy\&#39;s structured coverage terms; every field is rewritten from the request, and omitted optional booleans reset to false. Use this tool to change a coverage program; do not use createPolicy, which adds a new program — claims already decided keep their frozen proration inputs regardless of policy edits. Preconditions: the policy and the referenced provider must exist, the appliesTo scope keys must be consistent with appliesToType, and effectiveTo must not precede effectiveFrom. Required inputs: id (UUID) as a path parameter and the same full body as createPolicy — this is full-update semantics, so omitting an optional field clears it or resets its default. Emits a WARRANTY_POLICY_UPDATE event. Returns 404 when the policy or the referenced provider cannot be resolved, and 400 when the appliesTo scope keys or the effective window are inconsistent. 
+     * Fully replaces an existing warranty policy\&#39;s structured coverage terms; every field is rewritten from the request, and omitted optional booleans reset to false. Use this tool to change a coverage program; do not use createPolicy, which adds a new program — claims already decided keep their frozen proration inputs regardless of policy edits. Preconditions: the policy and the referenced provider must exist, the appliesTo scope keys must be consistent with appliesToType, and effectiveTo must not precede effectiveFrom. Required inputs: id (UUID) as a path parameter and the same full body as createPolicy — this is full-update semantics, so omitting an optional field clears it or resets its default. Emits a WARRANTY_POLICY_UPDATE event. Returns 404 when the policy or the referenced provider cannot be resolved, and 400 when the appliesTo scope keys or the effective window are inconsistent.
      * @endpoint put /v1/warranty/policies/{id}
      * @param id Policy UUID
      * @param policyRequest Full replacement of the policy\&#39;s structured coverage terms (full-update semantics).

@@ -12,7 +12,7 @@
 /**
  * Request to add a UoM conversion to a product
  */
-export interface ProductUomCreateRequestDto { 
+export interface ProductUomCreateRequestDto {
     /**
      * Multiplier converting one unit of this UoM into the product\'s base UoM
      */

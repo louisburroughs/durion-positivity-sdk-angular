@@ -9,7 +9,7 @@
  */
 
 
-export interface ShortageResolutionRequest { 
+export interface ShortageResolutionRequest {
     allocationId: string;
     sku: string;
     shortQuantity?: number;

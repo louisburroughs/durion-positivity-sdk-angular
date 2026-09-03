@@ -12,7 +12,7 @@
 /**
  * Effective location-specific price for a product
  */
-export interface EffectiveLocationPriceResponseDto { 
+export interface EffectiveLocationPriceResponseDto {
     /**
      * Base price before any override
      */

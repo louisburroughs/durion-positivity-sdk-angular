@@ -13,7 +13,7 @@ import { JurisdictionTax } from './jurisdictionTax';
 /**
  * Tax breakdown for a single line item
  */
-export interface LineItemTax { 
+export interface LineItemTax {
     /**
      * Whether a claimed exemption was denied (unbacked by a valid certificate) and the line taxed anyway
      */

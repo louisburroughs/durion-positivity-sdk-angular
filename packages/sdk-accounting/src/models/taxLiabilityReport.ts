@@ -14,7 +14,7 @@ import { TaxLiabilityReconciliation } from './taxLiabilityReconciliation';
 /**
  * Sales-Tax Liability report: per-jurisdiction taxable/exempt base, gross, credits, net tax, and GL drift
  */
-export interface TaxLiabilityReport { 
+export interface TaxLiabilityReport {
     /**
      * Period end date (inclusive)
      */

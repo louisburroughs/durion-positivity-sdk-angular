@@ -12,7 +12,7 @@
 /**
  * Status and metadata for an export job
  */
-export interface ExportJobResponse { 
+export interface ExportJobResponse {
     /**
      * When the export completed (ISO 8601)
      */

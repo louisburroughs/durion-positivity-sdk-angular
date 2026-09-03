@@ -12,7 +12,7 @@
 /**
  * Price book rule detail
  */
-export interface PriceBookRuleDto { 
+export interface PriceBookRuleDto {
     /**
      * Condition type gating the rule
      */

@@ -12,7 +12,7 @@
 /**
  * Vehicle type response for a make
  */
-export interface VehicleTypeResponse { 
+export interface VehicleTypeResponse {
     /**
      * Vehicle type identifier
      */

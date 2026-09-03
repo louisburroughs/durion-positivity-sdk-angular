@@ -11,7 +11,7 @@
 
 import { Inject, Injectable, Optional }                      from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams,
-         HttpResponse, HttpEvent, HttpContext 
+         HttpResponse, HttpEvent, HttpContext
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
@@ -43,9 +43,9 @@ export class CRMTagsService extends BaseService {
 
     /**
      * Assign Tag To Party
-     * Attaches a catalog tag to a party, recording the assigning user, timestamp, and source. Use this tool when labeling a party; do not use createTag, which adds a new tag to the catalog without attaching it to anyone. Preconditions: the tag must exist and, for a new assignment, be active; the call is idempotent, and re-assigning an already-attached tag returns the existing assignment even when the tag has since been retired. Required inputs: partyId (UUID) as a path parameter and tagId (UUID) in the body; source defaults to MANUAL and accepts MANUAL, CAMPAIGN, IMPORT, or RULE. Emits a CRM_PARTY_TAG_ASSIGN event and publishes a party-tag-changed fact when a new assignment is created. Returns 404 when the tag does not exist, and 400 when the tag is inactive and not already assigned. 
+     * Attaches a catalog tag to a party, recording the assigning user, timestamp, and source. Use this tool when labeling a party; do not use createTag, which adds a new tag to the catalog without attaching it to anyone. Preconditions: the tag must exist and, for a new assignment, be active; the call is idempotent, and re-assigning an already-attached tag returns the existing assignment even when the tag has since been retired. Required inputs: partyId (UUID) as a path parameter and tagId (UUID) in the body; source defaults to MANUAL and accepts MANUAL, CAMPAIGN, IMPORT, or RULE. Emits a CRM_PARTY_TAG_ASSIGN event and publishes a party-tag-changed fact when a new assignment is created. Returns 404 when the tag does not exist, and 400 when the tag is inactive and not already assigned.
      * @endpoint post /v1/crm/parties/{partyId}/tags
-     * @param partyId 
+     * @param partyId
      * @param assignPartyTagRequest The catalog tag to attach to the party and how the assignment originated.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
@@ -117,7 +117,7 @@ export class CRMTagsService extends BaseService {
 
     /**
      * Create Catalog Tag
-     * Adds a new tag to the CRM tag catalog for later assignment to parties. Use this tool when a new label is needed; do not use assignTagToParty, which attaches an existing catalog tag to a party. Preconditions: no existing tag may already use the same name case-insensitively. Required inputs: name (non-blank, max 100); category, color, and active (default true) are optional. Emits a CRM_TAG_CREATE event; the tag becomes immediately assignable when active. Returns 409 when a tag with the same name already exists, and 400 when name is blank. 
+     * Adds a new tag to the CRM tag catalog for later assignment to parties. Use this tool when a new label is needed; do not use assignTagToParty, which attaches an existing catalog tag to a party. Preconditions: no existing tag may already use the same name case-insensitively. Required inputs: name (non-blank, max 100); category, color, and active (default true) are optional. Emits a CRM_TAG_CREATE event; the tag becomes immediately assignable when active. Returns 409 when a tag with the same name already exists, and 400 when name is blank.
      * @endpoint post /v1/crm/tags
      * @param upsertPartyTagRequest The new tag\&#39;s name and optional presentation attributes.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -187,9 +187,9 @@ export class CRMTagsService extends BaseService {
 
     /**
      * Delete Catalog Tag
-     * Removes a tag from the catalog together with every assignment of it on every party. Use this tool only when the tag and its history should disappear entirely; use updateTag with active false instead to retire a tag while keeping existing assignments. Preconditions: the tag must exist; deletion is not reversible. Required inputs: tagId (UUID) as a path parameter; there is no request body. Emits a CRM_TAG_DELETE event; all assignment rows for the tag are removed. Returns 404 when no tag exists for the supplied tagId. 
+     * Removes a tag from the catalog together with every assignment of it on every party. Use this tool only when the tag and its history should disappear entirely; use updateTag with active false instead to retire a tag while keeping existing assignments. Preconditions: the tag must exist; deletion is not reversible. Required inputs: tagId (UUID) as a path parameter; there is no request body. Emits a CRM_TAG_DELETE event; all assignment rows for the tag are removed. Returns 404 when no tag exists for the supplied tagId.
      * @endpoint delete /v1/crm/tags/{tagId}
-     * @param tagId 
+     * @param tagId
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -246,9 +246,9 @@ export class CRMTagsService extends BaseService {
 
     /**
      * Get Tag By Id
-     * Returns one catalog tag with its name, category, color, active flag, and assignment count. Use this tool when the tag id is already known; use listTags instead to browse the catalog. Preconditions: the tag must exist in the catalog. Required inputs: tagId (UUID) as a path parameter; there is no request body. Emits a CRM_TAG_GET audit event; no state changes occur. Returns 404 when no tag exists for the supplied tagId. 
+     * Returns one catalog tag with its name, category, color, active flag, and assignment count. Use this tool when the tag id is already known; use listTags instead to browse the catalog. Preconditions: the tag must exist in the catalog. Required inputs: tagId (UUID) as a path parameter; there is no request body. Emits a CRM_TAG_GET audit event; no state changes occur. Returns 404 when no tag exists for the supplied tagId.
      * @endpoint get /v1/crm/tags/{tagId}
-     * @param tagId 
+     * @param tagId
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -306,9 +306,9 @@ export class CRMTagsService extends BaseService {
 
     /**
      * List Party Tag Assignments
-     * Returns the tags currently attached to one party, with who assigned each tag, when, and through which source. Use this tool when reviewing a party\&#39;s labels; use listTags instead for the full catalog of assignable tags. Preconditions: none; an unknown partyId yields an empty list rather than an error. Required inputs: partyId (UUID) as a path parameter; there is no request body. Emits a CRM_PARTY_TAG_LIST audit event; no state changes occur. Returns 200 with an empty list rather than an error when the party has no tags. 
+     * Returns the tags currently attached to one party, with who assigned each tag, when, and through which source. Use this tool when reviewing a party\&#39;s labels; use listTags instead for the full catalog of assignable tags. Preconditions: none; an unknown partyId yields an empty list rather than an error. Required inputs: partyId (UUID) as a path parameter; there is no request body. Emits a CRM_PARTY_TAG_LIST audit event; no state changes occur. Returns 200 with an empty list rather than an error when the party has no tags.
      * @endpoint get /v1/crm/parties/{partyId}/tags
-     * @param partyId 
+     * @param partyId
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -366,9 +366,9 @@ export class CRMTagsService extends BaseService {
 
     /**
      * List Tag Catalog
-     * Returns the CRM tag catalog with each tag\&#39;s category, color, active flag, and assignment count. Use this tool when browsing available tags before assigning one; use listPartyTags instead to see which tags a specific party carries. Preconditions: none; inactive tags are omitted unless explicitly requested. Required inputs: none; includeInactive defaults to false, and there is no request body. Emits a CRM_TAG_LIST audit event; no state changes occur. Returns 200 with an empty list rather than an error when the catalog is empty. 
+     * Returns the CRM tag catalog with each tag\&#39;s category, color, active flag, and assignment count. Use this tool when browsing available tags before assigning one; use listPartyTags instead to see which tags a specific party carries. Preconditions: none; inactive tags are omitted unless explicitly requested. Required inputs: none; includeInactive defaults to false, and there is no request body. Emits a CRM_TAG_LIST audit event; no state changes occur. Returns 200 with an empty list rather than an error when the catalog is empty.
      * @endpoint get /v1/crm/tags
-     * @param includeInactive 
+     * @param includeInactive
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -435,10 +435,10 @@ export class CRMTagsService extends BaseService {
 
     /**
      * Remove Tag From Party
-     * Detaches a tag from a party while leaving the tag itself in the catalog. Use this tool when a label no longer applies to a party; use deleteTag instead to remove the tag from the catalog and every party at once. Preconditions: none; removing a tag that is not assigned is an idempotent no-op. Required inputs: partyId and tagId (UUIDs) as path parameters; there is no request body. Emits a CRM_PARTY_TAG_REMOVE event and publishes a party-tag-changed fact when an assignment was actually removed. Returns 204 in every authorized call, including when nothing was assigned. 
+     * Detaches a tag from a party while leaving the tag itself in the catalog. Use this tool when a label no longer applies to a party; use deleteTag instead to remove the tag from the catalog and every party at once. Preconditions: none; removing a tag that is not assigned is an idempotent no-op. Required inputs: partyId and tagId (UUIDs) as path parameters; there is no request body. Emits a CRM_PARTY_TAG_REMOVE event and publishes a party-tag-changed fact when an assignment was actually removed. Returns 204 in every authorized call, including when nothing was assigned.
      * @endpoint delete /v1/crm/parties/{partyId}/tags/{tagId}
-     * @param partyId 
-     * @param tagId 
+     * @param partyId
+     * @param tagId
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -498,9 +498,9 @@ export class CRMTagsService extends BaseService {
 
     /**
      * Update Catalog Tag
-     * Renames, recolours, recategorizes, or retires a catalog tag; setting active false stops new assignments while keeping existing ones. Use this tool when changing how a tag looks or retiring it; use deleteTag instead to remove the tag and every assignment of it. Preconditions: the tag must exist, and the new name must not collide with another tag case-insensitively. Required inputs: tagId (UUID) as a path parameter and name in the body; category, color, and active are optional. Emits a CRM_TAG_UPDATE event; existing assignments are untouched. Returns 404 when the tag does not exist, and 409 when the new name is already taken. 
+     * Renames, recolours, recategorizes, or retires a catalog tag; setting active false stops new assignments while keeping existing ones. Use this tool when changing how a tag looks or retiring it; use deleteTag instead to remove the tag and every assignment of it. Preconditions: the tag must exist, and the new name must not collide with another tag case-insensitively. Required inputs: tagId (UUID) as a path parameter and name in the body; category, color, and active are optional. Emits a CRM_TAG_UPDATE event; existing assignments are untouched. Returns 404 when the tag does not exist, and 409 when the new name is already taken.
      * @endpoint put /v1/crm/tags/{tagId}
-     * @param tagId 
+     * @param tagId
      * @param upsertPartyTagRequest The revised tag attributes; omitted optional fields are cleared or left defaulted.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.

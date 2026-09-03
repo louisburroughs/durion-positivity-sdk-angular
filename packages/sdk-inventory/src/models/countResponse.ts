@@ -12,7 +12,7 @@
 /**
  * Result of submitting a count or recount for a cycle count task
  */
-export interface CountResponse { 
+export interface CountResponse {
     /**
      * Quantity counted, converted to the product\'s base UoM
      */

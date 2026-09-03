@@ -12,7 +12,7 @@
 /**
  * A replenishment task describing a recommended or in-progress stock movement between locations
  */
-export interface ReplenishmentTaskResponse { 
+export interface ReplenishmentTaskResponse {
     /**
      * Identifier or name of the user the replenishment task is assigned to
      */

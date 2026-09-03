@@ -12,7 +12,7 @@
 /**
  * SKU-level inventory valuation row
  */
-export interface ValuationRow { 
+export interface ValuationRow {
     /**
      * Resolved costing method for the SKU (AVERAGE or STANDARD)
      */

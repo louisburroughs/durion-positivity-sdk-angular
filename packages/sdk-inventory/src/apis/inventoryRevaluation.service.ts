@@ -11,7 +11,7 @@
 
 import { Inject, Injectable, Optional }                      from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams,
-         HttpResponse, HttpEvent, HttpContext 
+         HttpResponse, HttpEvent, HttpContext
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
@@ -43,7 +43,7 @@ export class InventoryRevaluationService extends BaseService {
 
     /**
      * Approve cost revaluation
-     * Approves a PENDING_APPROVAL revaluation and applies it: the SKU\&#39;s cost state is restated to the recorded new unit cost and a ProductValueChangedV1 fact is emitted for the accounting journal entry. Use this tool after reviewing an above-threshold revaluation; do not use rejectRevaluation, which discards it and leaves the cost state untouched. Preconditions: the revaluation must exist and be in PENDING_APPROVAL status; the approver need not differ from the submitter. Required inputs: revaluationId (UUID) as a path parameter; there is no request body. Emits an INVENTORY_REVALUATION_APPROVE event plus the ProductValueChangedV1 fact; the new cost applies from now on and no ledger entries are rewritten. Returns 404 when the revaluation does not exist, and 409 when it is not in PENDING_APPROVAL status. 
+     * Approves a PENDING_APPROVAL revaluation and applies it: the SKU\&#39;s cost state is restated to the recorded new unit cost and a ProductValueChangedV1 fact is emitted for the accounting journal entry. Use this tool after reviewing an above-threshold revaluation; do not use rejectRevaluation, which discards it and leaves the cost state untouched. Preconditions: the revaluation must exist and be in PENDING_APPROVAL status; the approver need not differ from the submitter. Required inputs: revaluationId (UUID) as a path parameter; there is no request body. Emits an INVENTORY_REVALUATION_APPROVE event plus the ProductValueChangedV1 fact; the new cost applies from now on and no ledger entries are rewritten. Returns 404 when the revaluation does not exist, and 409 when it is not in PENDING_APPROVAL status.
      * @endpoint post /v1/inventory/valuation/revaluations/{revaluationId}/approve
      * @param revaluationId Revaluation document ID
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -103,7 +103,7 @@ export class InventoryRevaluationService extends BaseService {
 
     /**
      * Submit cost revaluation
-     * Submits a manual cost revaluation for a SKU, correcting the cost its resolved costing method uses — the standard price under STANDARD, the running average under AVERAGE; below the configured value-delta thresholds it is AUTO_APPLIED (cost state restated and a ProductValueChangedV1 fact emitted) in the same transaction, and at or above them it enters PENDING_APPROVAL with no cost change. Use this tool to correct a wrong unit cost; do not use upsertCostingMethodConfig, which switches the costing method without restating values, and do not use approveRevaluation, which acts on a revaluation that already exists. Preconditions: the caller must be an authenticated user; the SKU\&#39;s cost state row is seeded automatically when absent, so no prior costing history is required. Required inputs: stockItemId plus exactly one of newUnitCost (absolute, zero or positive) or costDelta (signed, applied to the current cost), and a reason for the audit log; the value delta gating the approval tier is the cost change multiplied by current on-hand. Emits an INVENTORY_REVALUATION_CREATE event, and the auto-apply path additionally emits the ProductValueChangedV1 fact so accounting can post the revaluation journal entry. Returns 400 when neither or both of newUnitCost and costDelta are supplied, or when the resulting unit cost would be negative. 
+     * Submits a manual cost revaluation for a SKU, correcting the cost its resolved costing method uses — the standard price under STANDARD, the running average under AVERAGE; below the configured value-delta thresholds it is AUTO_APPLIED (cost state restated and a ProductValueChangedV1 fact emitted) in the same transaction, and at or above them it enters PENDING_APPROVAL with no cost change. Use this tool to correct a wrong unit cost; do not use upsertCostingMethodConfig, which switches the costing method without restating values, and do not use approveRevaluation, which acts on a revaluation that already exists. Preconditions: the caller must be an authenticated user; the SKU\&#39;s cost state row is seeded automatically when absent, so no prior costing history is required. Required inputs: stockItemId plus exactly one of newUnitCost (absolute, zero or positive) or costDelta (signed, applied to the current cost), and a reason for the audit log; the value delta gating the approval tier is the cost change multiplied by current on-hand. Emits an INVENTORY_REVALUATION_CREATE event, and the auto-apply path additionally emits the ProductValueChangedV1 fact so accounting can post the revaluation journal entry. Returns 400 when neither or both of newUnitCost and costDelta are supplied, or when the resulting unit cost would be negative.
      * @endpoint post /v1/inventory/valuation/revaluations
      * @param createRevaluationRequest Cost correction for one SKU: an absolute new unit cost or a signed delta, with the justification recorded in the audit log.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -173,7 +173,7 @@ export class InventoryRevaluationService extends BaseService {
 
     /**
      * Get revaluation details
-     * Returns one revaluation document with its old and new unit cost, on-hand snapshot, signed value delta, approval tier and lifecycle status. Use this tool when the revaluationId is already known; use listRevaluations instead to search by SKU or status. Preconditions: the revaluation must exist. Required inputs: revaluationId (UUID) as a path parameter; there is no request body. No events are emitted and no state changes; this is a read-only projection. Returns 404 when no revaluation exists for the supplied id. 
+     * Returns one revaluation document with its old and new unit cost, on-hand snapshot, signed value delta, approval tier and lifecycle status. Use this tool when the revaluationId is already known; use listRevaluations instead to search by SKU or status. Preconditions: the revaluation must exist. Required inputs: revaluationId (UUID) as a path parameter; there is no request body. No events are emitted and no state changes; this is a read-only projection. Returns 404 when no revaluation exists for the supplied id.
      * @endpoint get /v1/inventory/valuation/revaluations/{revaluationId}
      * @param revaluationId Revaluation document ID
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -233,7 +233,7 @@ export class InventoryRevaluationService extends BaseService {
 
     /**
      * List revaluations
-     * Returns revaluation documents, newest first, optionally filtered by SKU and/or lifecycle status (PENDING_APPROVAL, AUTO_APPLIED, APPLIED, REJECTED). Use this tool to find pending approvals or audit past cost corrections; use getRevaluation instead when the revaluationId is already known. Preconditions: none. Required inputs: stockItemId and status are optional query parameters; there is no paging — the full match set is returned. No events are emitted and no state changes; this is a read-only projection. Returns 200 with an empty array when no revaluations match, so an empty result is not an error condition. 
+     * Returns revaluation documents, newest first, optionally filtered by SKU and/or lifecycle status (PENDING_APPROVAL, AUTO_APPLIED, APPLIED, REJECTED). Use this tool to find pending approvals or audit past cost corrections; use getRevaluation instead when the revaluationId is already known. Preconditions: none. Required inputs: stockItemId and status are optional query parameters; there is no paging — the full match set is returned. No events are emitted and no state changes; this is a read-only projection. Returns 200 with an empty array when no revaluations match, so an empty result is not an error condition.
      * @endpoint get /v1/inventory/valuation/revaluations
      * @param stockItemId Filter by SKU / stock item identifier
      * @param status Filter by lifecycle status
@@ -312,7 +312,7 @@ export class InventoryRevaluationService extends BaseService {
 
     /**
      * Reject cost revaluation
-     * Rejects a PENDING_APPROVAL revaluation with a recorded reason; the SKU cost state is untouched and the record moves to the terminal REJECTED status. Use this tool to discard a disputed cost correction; do not use approveRevaluation, which restates the SKU cost state. Preconditions: the revaluation must exist and be in PENDING_APPROVAL status; the rejecting actor is taken from the authenticated context, not the body. Required inputs: revaluationId (UUID) path parameter and rejectionReason (non-blank, max 1000 characters) in the body. Emits an INVENTORY_REVALUATION_REJECT event; no cost or ledger change is made. Returns 404 when the revaluation does not exist, and 409 when it is not in PENDING_APPROVAL status. 
+     * Rejects a PENDING_APPROVAL revaluation with a recorded reason; the SKU cost state is untouched and the record moves to the terminal REJECTED status. Use this tool to discard a disputed cost correction; do not use approveRevaluation, which restates the SKU cost state. Preconditions: the revaluation must exist and be in PENDING_APPROVAL status; the rejecting actor is taken from the authenticated context, not the body. Required inputs: revaluationId (UUID) path parameter and rejectionReason (non-blank, max 1000 characters) in the body. Emits an INVENTORY_REVALUATION_REJECT event; no cost or ledger change is made. Returns 404 when the revaluation does not exist, and 409 when it is not in PENDING_APPROVAL status.
      * @endpoint post /v1/inventory/valuation/revaluations/{revaluationId}/reject
      * @param revaluationId Revaluation document ID
      * @param rejectRevaluationRequest Rejection context recording why the cost correction is discarded.

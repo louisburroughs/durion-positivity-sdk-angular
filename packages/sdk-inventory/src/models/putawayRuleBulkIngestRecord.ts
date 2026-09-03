@@ -12,7 +12,7 @@
 /**
  * One putaway rule: which received lines go where
  */
-export interface PutawayRuleBulkIngestRecord { 
+export interface PutawayRuleBulkIngestRecord {
     /**
      * Storage location matched lines are routed to
      */

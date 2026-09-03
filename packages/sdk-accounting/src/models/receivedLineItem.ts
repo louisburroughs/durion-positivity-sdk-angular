@@ -12,7 +12,7 @@
 /**
  * Line item received from vendor
  */
-export interface ReceivedLineItem { 
+export interface ReceivedLineItem {
     /**
      * Product description
      */

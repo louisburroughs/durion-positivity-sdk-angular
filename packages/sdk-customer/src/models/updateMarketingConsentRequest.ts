@@ -12,7 +12,7 @@
 /**
  * Request to update per-channel marketing consent for a party
  */
-export interface UpdateMarketingConsentRequest { 
+export interface UpdateMarketingConsentRequest {
     /**
      * New marketing consent for email
      */

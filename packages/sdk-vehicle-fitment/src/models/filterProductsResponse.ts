@@ -12,7 +12,7 @@
 /**
  * Response payload containing product IDs matching vehicle attributes
  */
-export interface FilterProductsResponse { 
+export interface FilterProductsResponse {
     /**
      * Count of matching products
      */

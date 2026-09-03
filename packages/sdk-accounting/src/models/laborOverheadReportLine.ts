@@ -12,7 +12,7 @@
 /**
  * A single Labor & Overhead cost line with monthly amounts and YTD
  */
-export interface LaborOverheadReportLine { 
+export interface LaborOverheadReportLine {
     /**
      * Canonical line code
      */

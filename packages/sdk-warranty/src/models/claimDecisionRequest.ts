@@ -13,7 +13,7 @@ import { LineDecision } from './lineDecision';
 /**
  * Approve/deny/request-info/appeal a warranty claim
  */
-export interface ClaimDecisionRequest { 
+export interface ClaimDecisionRequest {
     /**
      * Decision action
      */

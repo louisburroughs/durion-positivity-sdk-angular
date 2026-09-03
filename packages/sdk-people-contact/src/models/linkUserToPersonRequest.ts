@@ -12,7 +12,7 @@
 /**
  * Request to link a user account to a person record
  */
-export interface LinkUserToPersonRequest { 
+export interface LinkUserToPersonRequest {
     /**
      * Type of link between user and person
      */

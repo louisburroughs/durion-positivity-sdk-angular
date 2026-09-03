@@ -12,7 +12,7 @@
 /**
  * Metadata describing a CRM snapshot, including freshness and version
  */
-export interface SnapshotMetadata { 
+export interface SnapshotMetadata {
     /**
      * Timestamp when the snapshot was created (ISO 8601)
      */

@@ -12,7 +12,7 @@
 /**
  * Tax jurisdiction entry with normalized international location fields and calculated tax values
  */
-export interface TaxJurisdiction { 
+export interface TaxJurisdiction {
     /**
      * Locality/city/municipality name
      */

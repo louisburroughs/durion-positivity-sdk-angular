@@ -12,7 +12,7 @@
 /**
  * Catalog container
  */
-export interface CatalogDto { 
+export interface CatalogDto {
     /**
      * Catalog description
      */

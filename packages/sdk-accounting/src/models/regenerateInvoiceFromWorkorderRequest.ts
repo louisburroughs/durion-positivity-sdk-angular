@@ -12,7 +12,7 @@
 /**
  * Request to regenerate an invoice from a completed workorder
  */
-export interface RegenerateInvoiceFromWorkorderRequest { 
+export interface RegenerateInvoiceFromWorkorderRequest {
     /**
      * Optional idempotency key to safely retry regeneration
      */

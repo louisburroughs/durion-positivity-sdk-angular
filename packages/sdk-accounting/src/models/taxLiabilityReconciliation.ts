@@ -12,7 +12,7 @@
 /**
  * Reconciliation of report net tax against the Sales-Tax Payable (2200) GL account period activity
  */
-export interface TaxLiabilityReconciliation { 
+export interface TaxLiabilityReconciliation {
     /**
      * GL drift: reportNetTax - glNetActivity. Zero on a clean ledger; non-zero flags a mismatch
      */

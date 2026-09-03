@@ -13,7 +13,7 @@ import { OrderInvoiceLineItem } from './orderInvoiceLineItem';
 /**
  * Payload for creating an invoice from a sales order at checkout.
  */
-export interface OrderInvoiceCreationRequest { 
+export interface OrderInvoiceCreationRequest {
     /**
      * Customer party; null for anonymous counter sales.
      */

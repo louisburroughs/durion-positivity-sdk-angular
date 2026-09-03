@@ -12,7 +12,7 @@
 /**
  * Warranty registration — sold/instantiated coverage
  */
-export interface RegistrationResponse { 
+export interface RegistrationResponse {
     contractNumber?: string;
     createdAt?: string;
     customerId?: string;

@@ -12,7 +12,7 @@
 /**
  * Request to apply a monetary adjustment to an invoice
  */
-export interface AdjustmentRequest { 
+export interface AdjustmentRequest {
     /**
      * Adjustment amount (must be greater than zero)
      */

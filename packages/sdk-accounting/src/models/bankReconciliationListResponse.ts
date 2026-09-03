@@ -13,7 +13,7 @@ import { BankReconciliationResponse } from './bankReconciliationResponse';
 /**
  * Paginated list of bank reconciliations
  */
-export interface BankReconciliationListResponse { 
+export interface BankReconciliationListResponse {
     /**
      * Zero-based page index
      */

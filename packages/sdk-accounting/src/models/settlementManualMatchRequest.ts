@@ -12,7 +12,7 @@
 /**
  * Request payload for manually matching a settlement line to a receivable payment
  */
-export interface SettlementManualMatchRequest { 
+export interface SettlementManualMatchRequest {
     /**
      * The receivable payment to match the settlement line to
      */

@@ -12,7 +12,7 @@
 /**
  * Request body for recording a directional stock movement in the inventory ledger
  */
-export interface RecordMovementRequest { 
+export interface RecordMovementRequest {
     /**
      * Identifier of the location the stock moves from
      */

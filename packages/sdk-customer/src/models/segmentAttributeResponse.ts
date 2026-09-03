@@ -12,7 +12,7 @@
 /**
  * One whitelisted attribute a segment predicate may reference
  */
-export interface SegmentAttributeResponse { 
+export interface SegmentAttributeResponse {
     /**
      * Wire name used in predicates
      */

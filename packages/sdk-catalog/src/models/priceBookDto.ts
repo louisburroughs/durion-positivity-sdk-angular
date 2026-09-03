@@ -12,7 +12,7 @@
 /**
  * Price book detail
  */
-export interface PriceBookDto { 
+export interface PriceBookDto {
     /**
      * Timestamp the price book was created
      */

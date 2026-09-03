@@ -12,7 +12,7 @@
 /**
  * Per-line returnable remainder for a completed order
  */
-export interface ReturnableLineResponse { 
+export interface ReturnableLineResponse {
     alreadyReturned?: number;
     itemSku?: string;
     orderLineId?: string;

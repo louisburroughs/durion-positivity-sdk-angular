@@ -11,7 +11,7 @@
 
 import { Inject, Injectable, Optional }                      from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams,
-         HttpResponse, HttpEvent, HttpContext 
+         HttpResponse, HttpEvent, HttpContext
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
@@ -41,7 +41,7 @@ export class RolePermissionBulkIngestAPIService extends BaseService {
 
     /**
      * Grant Permissions to Roles in Bulk
-     * Grants named permissions to existing roles from a bulk-load batch. Use this tool to apply a role-to-permission grant file; do not use it to create roles, which is bulkIngestRoles, and note that both the role and each permission must already exist — permissions are registered by their owning module at startup. Preconditions: the caller must hold security:role:edit. Required inputs: jobId, locationId, and records; each record needs a roleName and at least one permission name. Re-granting a permission a role already holds is a success and does not rewrite who granted it originally, so a grant file is safe to re-apply. Emits a SECURITY_ROLE_PERMISSION_BULK_INGEST event. Returns 200 in all cases; a row naming an unknown role fails with ROLE_PERMISSION_ROLE_UNKNOWN while the rest of the batch continues. 
+     * Grants named permissions to existing roles from a bulk-load batch. Use this tool to apply a role-to-permission grant file; do not use it to create roles, which is bulkIngestRoles, and note that both the role and each permission must already exist — permissions are registered by their owning module at startup. Preconditions: the caller must hold security:role:edit. Required inputs: jobId, locationId, and records; each record needs a roleName and at least one permission name. Re-granting a permission a role already holds is a success and does not rewrite who granted it originally, so a grant file is safe to re-apply. Emits a SECURITY_ROLE_PERMISSION_BULK_INGEST event. Returns 200 in all cases; a row naming an unknown role fails with ROLE_PERMISSION_ROLE_UNKNOWN while the rest of the batch continues.
      * @endpoint post /v1/roles/permissions/bulk-ingest
      * @param bulkIngestRequestRolePermissionBulkIngestRecord Role-to-permission grants to apply.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.

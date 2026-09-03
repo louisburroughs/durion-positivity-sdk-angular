@@ -15,7 +15,7 @@ import { WarrantyHoldRef } from './warrantyHoldRef';
 /**
  * Upstream/downstream traceability for a serial unit (odoo-parity E5)
  */
-export interface SerialTraceabilityResponse { 
+export interface SerialTraceabilityResponse {
     /**
      * Downstream movement chain, oldest first
      */

@@ -12,7 +12,7 @@
 /**
  * One costing method configuration row (odoo-parity J1)
  */
-export interface CostingMethodConfigResponse { 
+export interface CostingMethodConfigResponse {
     /**
      * Whether this row participates in resolution
      */

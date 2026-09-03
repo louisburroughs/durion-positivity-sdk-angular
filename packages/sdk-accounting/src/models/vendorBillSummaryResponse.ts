@@ -12,7 +12,7 @@
 /**
  * Vendor bill summary for payment allocation
  */
-export interface VendorBillSummaryResponse { 
+export interface VendorBillSummaryResponse {
     /**
      * Bill date
      */

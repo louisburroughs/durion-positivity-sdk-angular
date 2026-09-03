@@ -14,7 +14,7 @@ import { TreadDesignTextDto } from './treadDesignTextDto';
 /**
  * Vendor-supplied tread-design marketing enrichment, distinct from catalog-owned product data.
  */
-export interface TreadDesignDto { 
+export interface TreadDesignDto {
     /**
      * Brand as stated by the vendor.
      */

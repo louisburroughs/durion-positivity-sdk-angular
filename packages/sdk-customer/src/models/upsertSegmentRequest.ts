@@ -13,7 +13,7 @@ import { UpsertSegmentRequestPredicate } from './upsertSegmentRequestPredicate';
 /**
  * Request to create or update an audience segment
  */
-export interface UpsertSegmentRequest { 
+export interface UpsertSegmentRequest {
     /**
      * Whether the segment can be bound to a campaign; defaults to true
      */

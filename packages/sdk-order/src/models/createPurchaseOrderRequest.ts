@@ -13,7 +13,7 @@ import { PurchaseOrderLineRequest } from './purchaseOrderLineRequest';
 /**
  * Request to create a new purchase order for a vendor with one or more order lines
  */
-export interface CreatePurchaseOrderRequest { 
+export interface CreatePurchaseOrderRequest {
     /**
      * Free-text comment providing additional context for the purchase order
      */

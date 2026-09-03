@@ -13,7 +13,7 @@ import { SegmentResponsePredicate } from './segmentResponsePredicate';
 /**
  * A saved audience segment
  */
-export interface SegmentResponse { 
+export interface SegmentResponse {
     /**
      * Whether the segment can be bound to a campaign
      */

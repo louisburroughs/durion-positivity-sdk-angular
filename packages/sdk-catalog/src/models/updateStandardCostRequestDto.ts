@@ -12,7 +12,7 @@
 /**
  * Request payload to update standard cost
  */
-export interface UpdateStandardCostRequestDto { 
+export interface UpdateStandardCostRequestDto {
     /**
      * New standard cost
      */

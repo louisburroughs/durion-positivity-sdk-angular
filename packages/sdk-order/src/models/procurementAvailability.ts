@@ -13,7 +13,7 @@ import { ProcurementAvailabilityLine } from './procurementAvailabilityLine';
 /**
  * Live vendor availability for a purchase order\'s lines. A supplier that could not be reached is reported through the document status, never as zero quantities: availableQuantity is null when the vendor stated nothing and zero only when it stated it has none, and only the second means an article is unavailable.
  */
-export interface ProcurementAvailability { 
+export interface ProcurementAvailability {
     /**
      * When the answer was obtained; null when there is no answer to date.
      */

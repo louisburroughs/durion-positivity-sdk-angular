@@ -14,7 +14,7 @@ import { AgedPayablesRow } from './agedPayablesRow';
 /**
  * Aged Payables report with per-vendor bucketed open vendor-bill balances
  */
-export interface AgedPayablesReport { 
+export interface AgedPayablesReport {
     /**
      * Date the payables aging is reported as of (inclusive)
      */

@@ -11,7 +11,7 @@
 
 import { Inject, Injectable, Optional }                      from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams,
-         HttpResponse, HttpEvent, HttpContext 
+         HttpResponse, HttpEvent, HttpContext
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
@@ -41,7 +41,7 @@ export class APPaymentsService extends BaseService {
 
     /**
      * Execute Vendor Payment
-     * Executes an AP vendor payment through the payment gateway, optionally allocating it across approved vendor bills, and posts the corresponding GL entries. Use this tool to pay a vendor; do not use applyPayment, which is the AR-side application of customer payments to invoices, and use listApBills first to find APPROVED bills to allocate against. Preconditions: every allocated bill must exist, be APPROVED and belong to the vendor, and the allocation total must not exceed the gross amount. Required inputs: vendorId (UUID), grossAmount (min 0.01), currency (3-char ISO code), paymentRef (max 100 chars, the idempotency key) and paymentMethod (e.g. ACH, CHECK); feeAmount, netAmount, paymentSource, memo and explicit allocations are optional. Emits an AP_PAYMENT_EXECUTE event; the call is idempotent on paymentRef, replaying the same ref with the same payload as a 200 instead of paying twice. Returns 200 on an idempotent replay, 409 IDEMPOTENCY_CONFLICT when the paymentRef exists with a different payload, 400 when a bill is missing, unapproved or over-allocated, and 500 PAYMENT_GATEWAY_FAILURE when the gateway cannot be reached. 
+     * Executes an AP vendor payment through the payment gateway, optionally allocating it across approved vendor bills, and posts the corresponding GL entries. Use this tool to pay a vendor; do not use applyPayment, which is the AR-side application of customer payments to invoices, and use listApBills first to find APPROVED bills to allocate against. Preconditions: every allocated bill must exist, be APPROVED and belong to the vendor, and the allocation total must not exceed the gross amount. Required inputs: vendorId (UUID), grossAmount (min 0.01), currency (3-char ISO code), paymentRef (max 100 chars, the idempotency key) and paymentMethod (e.g. ACH, CHECK); feeAmount, netAmount, paymentSource, memo and explicit allocations are optional. Emits an AP_PAYMENT_EXECUTE event; the call is idempotent on paymentRef, replaying the same ref with the same payload as a 200 instead of paying twice. Returns 200 on an idempotent replay, 409 IDEMPOTENCY_CONFLICT when the paymentRef exists with a different payload, 400 when a bill is missing, unapproved or over-allocated, and 500 PAYMENT_GATEWAY_FAILURE when the gateway cannot be reached.
      * @endpoint post /v1/accounting/ap/payments
      * @param executeAPPaymentRequest Vendor payment instruction with idempotency key and optional bill allocations.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -111,7 +111,7 @@ export class APPaymentsService extends BaseService {
 
     /**
      * Get AP Payment Details
-     * Returns one AP payment with its bill allocations and GL posting status. Use this tool when the payment id is already known; use getApPaymentByRef instead when only the idempotency reference is available. Preconditions: the payment must exist. Required inputs: paymentId (UUID) as a path parameter; there is no request body. No events are emitted and no state changes; this is a read-only projection. Returns 404 when no AP payment exists for the supplied id. 
+     * Returns one AP payment with its bill allocations and GL posting status. Use this tool when the payment id is already known; use getApPaymentByRef instead when only the idempotency reference is available. Preconditions: the payment must exist. Required inputs: paymentId (UUID) as a path parameter; there is no request body. No events are emitted and no state changes; this is a read-only projection. Returns 404 when no AP payment exists for the supplied id.
      * @endpoint get /v1/accounting/ap/payments/{paymentId}
      * @param paymentId Payment UUID
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -171,7 +171,7 @@ export class APPaymentsService extends BaseService {
 
     /**
      * Get AP Payment By Reference
-     * Returns one AP payment looked up by its paymentRef, the caller-chosen idempotency key supplied at execution time. Use this tool to check whether a payment reference was already executed before retrying executeApPayment; use getApPayment instead when the payment UUID is known. Preconditions: a payment must have been executed with this paymentRef. Required inputs: paymentRef (1-100 chars, no newlines) as a path parameter; there is no request body. No events are emitted and no state changes; this is a read-only projection. Returns 404 when no AP payment exists for the supplied reference. 
+     * Returns one AP payment looked up by its paymentRef, the caller-chosen idempotency key supplied at execution time. Use this tool to check whether a payment reference was already executed before retrying executeApPayment; use getApPayment instead when the payment UUID is known. Preconditions: a payment must have been executed with this paymentRef. Required inputs: paymentRef (1-100 chars, no newlines) as a path parameter; there is no request body. No events are emitted and no state changes; this is a read-only projection. Returns 404 when no AP payment exists for the supplied reference.
      * @endpoint get /v1/accounting/ap/payments/by-ref/{paymentRef}
      * @param paymentRef Payment reference (idempotency key)
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -231,7 +231,7 @@ export class APPaymentsService extends BaseService {
 
     /**
      * List Eligible Vendor Bills
-     * Lists vendor bills eligible for payment, meaning those in APPROVED status, ordered by due date oldest first with nulls last, then bill date, then bill id. Use this tool to pick bills before calling executeApPayment; do not use listVendorBills on the vendor-bill API, which returns bills of every status. Preconditions: none; the sort order is server-controlled and cannot be overridden. Required inputs: none; vendorId (UUID) is an optional filter and page size defaults to 20. No events are emitted and no state changes; this is a read-only projection. Returns 400 when the vendor id is malformed. 
+     * Lists vendor bills eligible for payment, meaning those in APPROVED status, ordered by due date oldest first with nulls last, then bill date, then bill id. Use this tool to pick bills before calling executeApPayment; do not use listVendorBills on the vendor-bill API, which returns bills of every status. Preconditions: none; the sort order is server-controlled and cannot be overridden. Required inputs: none; vendorId (UUID) is an optional filter and page size defaults to 20. No events are emitted and no state changes; this is a read-only projection. Returns 400 when the vendor id is malformed.
      * @endpoint get /v1/accounting/ap/bills
      * @param vendorId Vendor UUID
      * @param page Zero-based page index (0..N)

@@ -12,7 +12,7 @@
 /**
  * Partial update of a recurring cycle-count schedule; null fields are left unchanged
  */
-export interface UpdateCycleCountScheduleRequest { 
+export interface UpdateCycleCountScheduleRequest {
     /**
      * Whether the schedule is active
      */

@@ -12,7 +12,7 @@
 /**
  * Request to decode encoded permission bits into permission code strings
  */
-export interface PermissionDecodeRequest { 
+export interface PermissionDecodeRequest {
     /**
      * Base64URL-encoded BitSet of permission bits taken from an access token
      */

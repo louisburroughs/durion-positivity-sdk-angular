@@ -12,7 +12,7 @@
 /**
  * Defective-part return (RMA)
  */
-export interface PartReturnView { 
+export interface PartReturnView {
     carrier?: string;
     claimLineId?: string;
     disposition?: PartReturnViewDispositionEnum;

@@ -12,7 +12,7 @@
 /**
  * One masked entry in a segment resolution sample
  */
-export interface SegmentSampleEntry { 
+export interface SegmentSampleEntry {
     /**
      * Masked display label
      */

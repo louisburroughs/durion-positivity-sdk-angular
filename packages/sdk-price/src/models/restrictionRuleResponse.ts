@@ -12,7 +12,7 @@
 /**
  * Response payload representing a stored sale-restriction rule
  */
-export interface RestrictionRuleResponse { 
+export interface RestrictionRuleResponse {
     /**
      * Whether the restriction rule is currently active
      */

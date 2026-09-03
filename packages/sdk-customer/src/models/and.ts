@@ -14,7 +14,7 @@ import { AndAllOfNodes } from './andAllOfNodes';
 /**
  * All child predicates must match
  */
-export interface And extends SegmentPredicate { 
+export interface And extends SegmentPredicate {
     /**
      * Child predicates
      */

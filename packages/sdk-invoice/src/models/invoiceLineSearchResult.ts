@@ -12,7 +12,7 @@
 /**
  * Invoice line item with owning-invoice context, matched by customer party
  */
-export interface InvoiceLineSearchResult { 
+export interface InvoiceLineSearchResult {
     /**
      * Line total amount
      */

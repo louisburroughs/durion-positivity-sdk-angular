@@ -12,7 +12,7 @@
 /**
  * Fitment tag key/value pair used for product applicability matching
  */
-export interface FitmentTagDto { 
+export interface FitmentTagDto {
     /**
      * Tag category
      */

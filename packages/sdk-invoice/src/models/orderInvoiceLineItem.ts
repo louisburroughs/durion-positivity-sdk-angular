@@ -12,7 +12,7 @@
 /**
  * Sales order line for invoice creation.
  */
-export interface OrderInvoiceLineItem { 
+export interface OrderInvoiceLineItem {
     /**
      * Extended line amount (post-line-discount, pre-tax).
      */

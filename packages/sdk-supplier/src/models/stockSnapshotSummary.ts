@@ -12,7 +12,7 @@
 /**
  * Metadata of one vendor stock-report snapshot fetch; lines are served separately, paged.
  */
-export interface StockSnapshotSummary { 
+export interface StockSnapshotSummary {
     /**
      * Buyer account the vendor answered for; the report\'s commercial scope.
      */

@@ -12,7 +12,7 @@
 /**
  * Result of executing a putaway move, including the ledger entry and final placement
  */
-export interface PutawayExecutionResponse { 
+export interface PutawayExecutionResponse {
     /**
      * Identifier of the actor who executed the putaway
      */

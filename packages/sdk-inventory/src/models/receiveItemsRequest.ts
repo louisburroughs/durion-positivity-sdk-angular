@@ -13,7 +13,7 @@ import { ReceiveLineRequest } from './receiveLineRequest';
 /**
  * Request to record received quantities for one or more receiving session lines
  */
-export interface ReceiveItemsRequest { 
+export interface ReceiveItemsRequest {
     /**
      * Receiving lines with their received quantities; at least one line is required
      */

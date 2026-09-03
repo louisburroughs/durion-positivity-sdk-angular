@@ -13,7 +13,7 @@ import { PricingAdjustment } from './pricingAdjustment';
 /**
  * Response payload after applying a promotion to an estimate
  */
-export interface ApplyPromotionResponse { 
+export interface ApplyPromotionResponse {
     /**
      * Adjustments applied during promotion evaluation
      */

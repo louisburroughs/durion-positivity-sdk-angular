@@ -13,7 +13,7 @@ import { InvoiceLineItem } from './invoiceLineItem';
 /**
  * Vendor invoice received event from AP system
  */
-export interface VendorInvoiceReceivedEvent { 
+export interface VendorInvoiceReceivedEvent {
     /**
      * Invoice due date
      */

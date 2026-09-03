@@ -12,7 +12,7 @@
 /**
  * Request to capture an inbound service or fleet-quote inquiry
  */
-export interface SubmitInquiryRequest { 
+export interface SubmitInquiryRequest {
     /**
      * Whether this is a fleet or individual inquiry
      */

@@ -13,7 +13,7 @@ import { ColumnMappingUpdateRequest } from './columnMappingUpdateRequest';
 /**
  * Request to approve the finalized set of column mappings for a bulk load job
  */
-export interface ColumnMappingApproveRequest { 
+export interface ColumnMappingApproveRequest {
     /**
      * Column mappings to approve, one per source column
      */

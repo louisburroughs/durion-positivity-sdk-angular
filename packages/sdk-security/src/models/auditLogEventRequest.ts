@@ -12,7 +12,7 @@
 /**
  * Request to record an immutable audit event
  */
-export interface AuditLogEventRequest { 
+export interface AuditLogEventRequest {
     /**
      * Ignored; actor is resolved server-side from the security context per ADR-0018
      */

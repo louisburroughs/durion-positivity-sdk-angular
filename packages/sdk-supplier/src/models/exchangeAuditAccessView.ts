@@ -12,7 +12,7 @@
 /**
  * One recorded read of an exchange payload: who read which exchange, when (ADR-0050 §7).
  */
-export interface ExchangeAuditAccessView { 
+export interface ExchangeAuditAccessView {
     /**
      * What the caller reached. Only payload reads are recorded.
      */

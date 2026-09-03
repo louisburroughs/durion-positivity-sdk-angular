@@ -12,7 +12,7 @@
 /**
  * Optional reason for a claim lifecycle action
  */
-export interface ClaimActionRequest { 
+export interface ClaimActionRequest {
     /**
      * Reason recorded in the claim status history
      */

@@ -12,7 +12,7 @@
 /**
  * Monetary value object with amount and ISO-4217 currency code
  */
-export interface MoneyAmount { 
+export interface MoneyAmount {
     /**
      * Numeric monetary amount
      */

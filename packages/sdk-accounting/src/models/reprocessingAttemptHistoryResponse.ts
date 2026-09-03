@@ -12,7 +12,7 @@
 /**
  * Historical record of a single reprocessing attempt
  */
-export interface ReprocessingAttemptHistoryResponse { 
+export interface ReprocessingAttemptHistoryResponse {
     /**
      * Unique identifier of the reprocessing attempt
      */

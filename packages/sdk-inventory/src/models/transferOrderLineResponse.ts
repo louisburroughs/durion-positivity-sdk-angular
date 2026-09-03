@@ -12,7 +12,7 @@
 /**
  * SKU line of a transfer order with requested/dispatched/received quantities
  */
-export interface TransferOrderLineResponse { 
+export interface TransferOrderLineResponse {
     /**
      * Creation timestamp
      */

@@ -12,7 +12,7 @@
 /**
  * Response after creating a person record
  */
-export interface CreatePersonResponse { 
+export interface CreatePersonResponse {
     /**
      * Number of contact points created
      */

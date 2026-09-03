@@ -12,7 +12,7 @@
 /**
  * One entry on a purchase order\'s vendor transmission timeline: a confirmation, rejection, status observation or review escalation. Entries are ordered by the vendor\'s clock (observedAt), with ties broken by platform receipt time (recordedAt) and then by event id, so the sequence is stable across reads.
  */
-export interface PurchaseOrderTransmissionEvent { 
+export interface PurchaseOrderTransmissionEvent {
     /**
      * Earliest despatch date the vendor stated across the order\'s lines, when stated.
      */

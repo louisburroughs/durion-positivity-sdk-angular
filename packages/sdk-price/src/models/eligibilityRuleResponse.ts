@@ -12,7 +12,7 @@
 /**
  * Response payload representing a stored promotion eligibility rule
  */
-export interface EligibilityRuleResponse { 
+export interface EligibilityRuleResponse {
     /**
      * Rule condition type
      */

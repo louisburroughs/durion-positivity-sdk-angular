@@ -13,7 +13,7 @@ import { StockInquiryLine } from './stockInquiryLine';
 /**
  * Live vendor availability for the inquired articles. Vendor-side failure is reported as a status, never as an error: callers render without live stock rather than failing their own flow. A null quantity means the vendor stated nothing; a quantity of zero means the vendor stated it has none. Only the second justifies telling a customer an article is out of stock.
  */
-export interface StockInquiryResponse { 
+export interface StockInquiryResponse {
     /**
      * When this answer was obtained. Present when the status is OK; a cached answer carries the instant of the original inquiry, not of the cache hit.
      */

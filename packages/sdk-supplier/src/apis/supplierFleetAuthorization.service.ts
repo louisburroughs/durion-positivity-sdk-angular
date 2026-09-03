@@ -11,7 +11,7 @@
 
 import { Inject, Injectable, Optional }                      from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams,
-         HttpResponse, HttpEvent, HttpContext 
+         HttpResponse, HttpEvent, HttpContext
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
@@ -47,7 +47,7 @@ export class SupplierFleetAuthorizationService extends BaseService {
 
     /**
      * Read A Fleet Authorization
-     * Returns the fleet authorization recorded for a workorder at a vendor, including the vendor\&#39;s reason where it gave one. Use this tool to check the outcome of an authorization that came back PENDING; do not call requestFleetWorkorderAuthorization again for that, because it can open a second authorization. Preconditions: none. Required inputs: supplierRef and workorderId path parameters. Emits a SUPPLIER_WORKORDER_AUTHORIZATION_READ event. Returns 200 with the authorization, and 404 when the vendor profile is unknown or no authorization was ever requested for this workorder. 
+     * Returns the fleet authorization recorded for a workorder at a vendor, including the vendor\&#39;s reason where it gave one. Use this tool to check the outcome of an authorization that came back PENDING; do not call requestFleetWorkorderAuthorization again for that, because it can open a second authorization. Preconditions: none. Required inputs: supplierRef and workorderId path parameters. Emits a SUPPLIER_WORKORDER_AUTHORIZATION_READ event. Returns 200 with the authorization, and 404 when the vendor profile is unknown or no authorization was ever requested for this workorder.
      * @endpoint get /v1/supplier/fleet/{supplierRef}/authorizations/{workorderId}
      * @param supplierRef Vendor profile alias
      * @param workorderId Workorder the authorization concerns
@@ -111,7 +111,7 @@ export class SupplierFleetAuthorizationService extends BaseService {
 
     /**
      * List Fleet Authorizations Needing Review
-     * Lists fleet authorizations and completions that could not be resolved with a vendor and are waiting on a person, newest first. Use this tool to work the queue of stuck fleet jobs; the reviewReason says what went wrong and approvalStatus distinguishes an authorization nobody could obtain from a completion nobody could get signed off. Do not read a row here as a vendor decision — nothing in this list has been refused by a fleet, only left unresolved — and do not use it to check one workorder, because getFleetWorkorderAuthorization answers that directly instead. Preconditions: none. Required inputs: none; limit defaults to 100. Emits a SUPPLIER_WORKORDER_AUTHORIZATION_REVIEW_LIST event. Returns 200 with the rows waiting on a person, which is an empty list when nothing is stuck. 
+     * Lists fleet authorizations and completions that could not be resolved with a vendor and are waiting on a person, newest first. Use this tool to work the queue of stuck fleet jobs; the reviewReason says what went wrong and approvalStatus distinguishes an authorization nobody could obtain from a completion nobody could get signed off. Do not read a row here as a vendor decision — nothing in this list has been refused by a fleet, only left unresolved — and do not use it to check one workorder, because getFleetWorkorderAuthorization answers that directly instead. Preconditions: none. Required inputs: none; limit defaults to 100. Emits a SUPPLIER_WORKORDER_AUTHORIZATION_REVIEW_LIST event. Returns 200 with the rows waiting on a person, which is an empty list when nothing is stuck.
      * @endpoint get /v1/supplier/fleet/authorizations/reviews
      * @param limit Maximum rows to return
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -180,7 +180,7 @@ export class SupplierFleetAuthorizationService extends BaseService {
 
     /**
      * List Fleet Contracts
-     * Lists the fleet contracts this service provider may claim work under at a vendor. Use this tool to populate a contract choice before requesting authorization; do not use the contract dates to decide whether work is covered, because only the vendor decides that when authorization is requested. Preconditions: the vendor profile must be enabled with a workorder-authorization binding. Required inputs: supplierRef path parameter. Emits a SUPPLIER_FLEET_CONTRACT_LIST event. Returns 200 with the contracts as stated, 404 when the vendor profile is unknown, 409 when the profile is disabled or unconfigured, and 422 when the vendor could not be reached. 
+     * Lists the fleet contracts this service provider may claim work under at a vendor. Use this tool to populate a contract choice before requesting authorization; do not use the contract dates to decide whether work is covered, because only the vendor decides that when authorization is requested. Preconditions: the vendor profile must be enabled with a workorder-authorization binding. Required inputs: supplierRef path parameter. Emits a SUPPLIER_FLEET_CONTRACT_LIST event. Returns 200 with the contracts as stated, 404 when the vendor profile is unknown, 409 when the profile is disabled or unconfigured, and 422 when the vendor could not be reached.
      * @endpoint get /v1/supplier/fleet/{supplierRef}/contracts
      * @param supplierRef Vendor profile alias
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -240,7 +240,7 @@ export class SupplierFleetAuthorizationService extends BaseService {
 
     /**
      * List Fleet Policies
-     * Lists what a fleet program says it will and will not pay for. Use this tool to narrow what is offered to a fleet customer; do not use it as permission, because it is advisory and only requestFleetWorkorderAuthorization obtains a decision. Preconditions: the vendor profile must be enabled with a workorder-authorization binding. Required inputs: supplierRef path parameter. Emits a SUPPLIER_FLEET_POLICY_LIST event. Returns 200 with the policies as stated — an empty list when the vendor states none or answers in a shape this adapter does not recognise — 404 when the vendor profile is unknown, 409 when the profile is disabled or unconfigured, and 422 when the vendor could not be reached. 
+     * Lists what a fleet program says it will and will not pay for. Use this tool to narrow what is offered to a fleet customer; do not use it as permission, because it is advisory and only requestFleetWorkorderAuthorization obtains a decision. Preconditions: the vendor profile must be enabled with a workorder-authorization binding. Required inputs: supplierRef path parameter. Emits a SUPPLIER_FLEET_POLICY_LIST event. Returns 200 with the policies as stated — an empty list when the vendor states none or answers in a shape this adapter does not recognise — 404 when the vendor profile is unknown, 409 when the profile is disabled or unconfigured, and 422 when the vendor could not be reached.
      * @endpoint get /v1/supplier/fleet/{supplierRef}/policies
      * @param supplierRef Vendor profile alias
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -300,7 +300,7 @@ export class SupplierFleetAuthorizationService extends BaseService {
 
     /**
      * Look Up A Fleet Vehicle
-     * Asks a vendor\&#39;s fleet program what it knows about a vehicle, by license plate, VIN, fleet number or the vendor\&#39;s own vehicle id. Use this tool before requesting authorization, to confirm the vehicle is on a fleet contract and to obtain the vendor vehicle id; do not treat the answer as authorization, because only requestFleetWorkorderAuthorization obtains that. Preconditions: the vendor profile must be enabled with a workorder-authorization binding. Required inputs: supplierRef and vehicleIdent path parameters. Emits a SUPPLIER_FLEET_VEHICLE_LOOKUP event. Returns 200 with the vehicle as the fleet holds it, 404 when the fleet does not know the vehicle or the vendor profile is unknown, 409 when the profile is disabled or unconfigured, and 422 when the vendor could not be reached or answered unreadably. 
+     * Asks a vendor\&#39;s fleet program what it knows about a vehicle, by license plate, VIN, fleet number or the vendor\&#39;s own vehicle id. Use this tool before requesting authorization, to confirm the vehicle is on a fleet contract and to obtain the vendor vehicle id; do not treat the answer as authorization, because only requestFleetWorkorderAuthorization obtains that. Preconditions: the vendor profile must be enabled with a workorder-authorization binding. Required inputs: supplierRef and vehicleIdent path parameters. Emits a SUPPLIER_FLEET_VEHICLE_LOOKUP event. Returns 200 with the vehicle as the fleet holds it, 404 when the fleet does not know the vehicle or the vendor profile is unknown, 409 when the profile is disabled or unconfigured, and 422 when the vendor could not be reached or answered unreadably.
      * @endpoint get /v1/supplier/fleet/{supplierRef}/vehicles/{vehicleIdent}
      * @param supplierRef Vendor profile alias
      * @param vehicleIdent Plate, VIN, fleet number or vendor vehicle id
@@ -364,7 +364,7 @@ export class SupplierFleetAuthorizationService extends BaseService {
 
     /**
      * Request Fleet Authorization For A Workorder
-     * Asks a vendor\&#39;s fleet program to authorize the work on a workorder, and records what it said. Use this tool once the vehicle and the work are known; do not call it repeatedly to check for an answer, because asking again can open a second authorization against the same contract — use getFleetWorkorderAuthorization to read the outcome instead. Preconditions: the vendor profile must be enabled with a workorder-authorization binding and a billing account number, and the request must identify the vehicle by vendor vehicle id, license plate, VIN or fleet number. Required inputs: supplierRef path parameter, workorderId, and at least one vehicle identifier; contractId, odometerValue and lines are optional. Emits a SUPPLIER_WORKORDER_AUTHORIZATION_REQUEST event, and on a decision publishes supplier.workorderauth.granted or supplier.workorderauth.denied for the workorder domain. Returns 200 with the authorization, whose status is GRANTED, DENIED, NOT_FOUND, PENDING when the vendor accepted the request and will decide later, or MANUAL_REVIEW when no decision could be obtained at all; 400 when no vehicle identifier is given; 404 when the vendor profile is unknown; and 409 when the profile is disabled or has no workorder-authorization binding configured. 
+     * Asks a vendor\&#39;s fleet program to authorize the work on a workorder, and records what it said. Use this tool once the vehicle and the work are known; do not call it repeatedly to check for an answer, because asking again can open a second authorization against the same contract — use getFleetWorkorderAuthorization to read the outcome instead. Preconditions: the vendor profile must be enabled with a workorder-authorization binding and a billing account number, and the request must identify the vehicle by vendor vehicle id, license plate, VIN or fleet number. Required inputs: supplierRef path parameter, workorderId, and at least one vehicle identifier; contractId, odometerValue and lines are optional. Emits a SUPPLIER_WORKORDER_AUTHORIZATION_REQUEST event, and on a decision publishes supplier.workorderauth.granted or supplier.workorderauth.denied for the workorder domain. Returns 200 with the authorization, whose status is GRANTED, DENIED, NOT_FOUND, PENDING when the vendor accepted the request and will decide later, or MANUAL_REVIEW when no decision could be obtained at all; 400 when no vehicle identifier is given; 404 when the vendor profile is unknown; and 409 when the profile is disabled or has no workorder-authorization binding configured.
      * @endpoint post /v1/supplier/fleet/{supplierRef}/authorizations
      * @param supplierRef Vendor profile alias
      * @param fleetAuthorizationRequestBody The work being requested, and how the fleet vehicle is identified. At least one of vendorVehicleId, licensePlate, vin or fleetNumber must be given: a request that identifies no vehicle cannot be authorized by anyone.

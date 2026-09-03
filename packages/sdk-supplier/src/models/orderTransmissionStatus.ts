@@ -9,7 +9,7 @@
  */
 
 
-export interface OrderTransmissionStatus { 
+export interface OrderTransmissionStatus {
     dispatchAttempts?: number;
     documentId?: string;
     failureDetail?: string;

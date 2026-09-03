@@ -12,7 +12,7 @@
 /**
  * Lifecycle and lock state of a user account
  */
-export interface AccountStateResponse { 
+export interface AccountStateResponse {
     /**
      * Timestamp at which the account expires
      */

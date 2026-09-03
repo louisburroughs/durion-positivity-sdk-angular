@@ -12,7 +12,7 @@
 /**
  * Slim employee row for search results
  */
-export interface EmployeeSummaryDto { 
+export interface EmployeeSummaryDto {
     /**
      * True when the employee is in an ACTIVE employment status
      */

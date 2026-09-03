@@ -13,7 +13,7 @@ import { ContactPointDto } from './contactPointDto';
 /**
  * Person details response
  */
-export interface GetPersonResponse { 
+export interface GetPersonResponse {
     /**
      * Number of active commercial accounts where this person is a contact
      */

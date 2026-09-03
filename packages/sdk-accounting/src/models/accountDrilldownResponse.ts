@@ -12,7 +12,7 @@
 /**
  * GL account contribution to a financial statement line
  */
-export interface AccountDrilldownResponse { 
+export interface AccountDrilldownResponse {
     /**
      * Identifier of the GL account
      */

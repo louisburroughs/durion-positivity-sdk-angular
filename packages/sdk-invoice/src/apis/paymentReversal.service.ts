@@ -11,7 +11,7 @@
 
 import { Inject, Injectable, Optional }                      from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams,
-         HttpResponse, HttpEvent, HttpContext 
+         HttpResponse, HttpEvent, HttpContext
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
@@ -43,9 +43,9 @@ export class PaymentReversalService extends BaseService {
 
     /**
      * List Refunds for an Invoice
-     * Returns every refund record anchored to the invoice — refunds of captured payment intents and standalone invoice-anchored refunds alike — for warranty-settlement reconciliation. Use this tool to reconcile what has already been returned before issuing another refund; do not use refundPayment or createStandaloneInvoiceRefund, which create refunds rather than list them. Preconditions: the invoice must exist; the caller needs the invoice:invoice:view authority. Required inputs: invoiceId (UUID) as a path parameter; there is no request body or filtering. Emits an INVOICE_REFUND_LIST audit event; no state changes — this is a read-only projection. Returns 404 when no invoice exists for the supplied id. 
+     * Returns every refund record anchored to the invoice — refunds of captured payment intents and standalone invoice-anchored refunds alike — for warranty-settlement reconciliation. Use this tool to reconcile what has already been returned before issuing another refund; do not use refundPayment or createStandaloneInvoiceRefund, which create refunds rather than list them. Preconditions: the invoice must exist; the caller needs the invoice:invoice:view authority. Required inputs: invoiceId (UUID) as a path parameter; there is no request body or filtering. Emits an INVOICE_REFUND_LIST audit event; no state changes — this is a read-only projection. Returns 404 when no invoice exists for the supplied id.
      * @endpoint get /v1/invoices/{invoiceId}/refunds
-     * @param invoiceId 
+     * @param invoiceId
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -103,10 +103,10 @@ export class PaymentReversalService extends BaseService {
 
     /**
      * Refund a Captured Payment
-     * Refunds all or part of a CAPTURED invoice payment through the gateway and records the refund against the payment intent. Use this tool when the original card payment lives in this system; do not use voidPayment, which releases an uncaptured hold, and use createStandaloneInvoiceRefund instead when the original payment is not on file. Preconditions: the payment intent must belong to the invoice and be CAPTURED, the caller needs the REFUND_PAYMENT authority, less than 180 days may have elapsed since capture unless the caller holds SUPERVISOR_OVERRIDE, and cumulative refunds may not exceed the captured amount. Required inputs: amount (positive) and reason (a RefundReason such as CUSTOMER_RETURN or SERVICE_ERROR); notes and externalReference are optional, and a retry replaying the same externalReference returns the existing refund instead of paying twice. Emits an INVOICE_PAYMENT_REFUND event and publishes a payment-refunded notification on success; a gateway failure is persisted as a FAILED refund record, so callers must read the returned status rather than treating 201 as completed. Returns 201 with the refund record, 404 when the intent does not exist under the invoice, 409 when the intent is not CAPTURED, and 422 when the 180-day window has expired or the amount exceeds the remaining refundable balance. 
+     * Refunds all or part of a CAPTURED invoice payment through the gateway and records the refund against the payment intent. Use this tool when the original card payment lives in this system; do not use voidPayment, which releases an uncaptured hold, and use createStandaloneInvoiceRefund instead when the original payment is not on file. Preconditions: the payment intent must belong to the invoice and be CAPTURED, the caller needs the REFUND_PAYMENT authority, less than 180 days may have elapsed since capture unless the caller holds SUPERVISOR_OVERRIDE, and cumulative refunds may not exceed the captured amount. Required inputs: amount (positive) and reason (a RefundReason such as CUSTOMER_RETURN or SERVICE_ERROR); notes and externalReference are optional, and a retry replaying the same externalReference returns the existing refund instead of paying twice. Emits an INVOICE_PAYMENT_REFUND event and publishes a payment-refunded notification on success; a gateway failure is persisted as a FAILED refund record, so callers must read the returned status rather than treating 201 as completed. Returns 201 with the refund record, 404 when the intent does not exist under the invoice, 409 when the intent is not CAPTURED, and 422 when the 180-day window has expired or the amount exceeds the remaining refundable balance.
      * @endpoint post /v1/invoices/{invoiceId}/payments/{paymentId}/refunds
-     * @param invoiceId 
-     * @param paymentId 
+     * @param invoiceId
+     * @param paymentId
      * @param refundPaymentRequest Refund amount, business reason and optional external correlation for the captured payment.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
@@ -181,10 +181,10 @@ export class PaymentReversalService extends BaseService {
 
     /**
      * Void Authorized Payment Hold
-     * Voids a previously authorized invoice payment hold at the gateway before it is captured, releasing the customer\&#39;s funds without any money movement. Use this tool on an AUTHORIZED hold; do not use refundPayment, which returns funds from a payment that was already CAPTURED. Preconditions: the payment intent must belong to the invoice and be AUTHORIZED, the caller needs the VOID_PAYMENT authority, and less than 24 hours may have elapsed since authorization unless the caller also holds SUPERVISOR_OVERRIDE. Required inputs: reason (CUSTOMER_REQUEST, DUPLICATE_AUTHORIZATION, ENTRY_ERROR, FRAUD_PREVENTION, MANAGER_DISCRETION or OTHER); notes are optional free text. Emits an INVOICE_PAYMENT_VOID event, moves the intent to VOIDED, and publishes a payment-voided notification. Returns 200 with an empty body on success, 404 when the intent does not exist under the invoice, 409 when the intent is not AUTHORIZED, 422 when the 24-hour void window has expired, and 500 when the gateway rejects the void. 
+     * Voids a previously authorized invoice payment hold at the gateway before it is captured, releasing the customer\&#39;s funds without any money movement. Use this tool on an AUTHORIZED hold; do not use refundPayment, which returns funds from a payment that was already CAPTURED. Preconditions: the payment intent must belong to the invoice and be AUTHORIZED, the caller needs the VOID_PAYMENT authority, and less than 24 hours may have elapsed since authorization unless the caller also holds SUPERVISOR_OVERRIDE. Required inputs: reason (CUSTOMER_REQUEST, DUPLICATE_AUTHORIZATION, ENTRY_ERROR, FRAUD_PREVENTION, MANAGER_DISCRETION or OTHER); notes are optional free text. Emits an INVOICE_PAYMENT_VOID event, moves the intent to VOIDED, and publishes a payment-voided notification. Returns 200 with an empty body on success, 404 when the intent does not exist under the invoice, 409 when the intent is not AUTHORIZED, 422 when the 24-hour void window has expired, and 500 when the gateway rejects the void.
      * @endpoint post /v1/invoices/{invoiceId}/payments/{paymentId}/void
-     * @param invoiceId 
-     * @param paymentId 
+     * @param invoiceId
+     * @param paymentId
      * @param voidPaymentRequest Reason and optional notes explaining why the authorization is released.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.

@@ -12,7 +12,7 @@
 /**
  * Summary of a batch replenishment scan run over all replenishment policies
  */
-export interface ReplenishmentScanResultResponse { 
+export interface ReplenishmentScanResultResponse {
     /**
      * Number of policies whose on-hand quantity was below the configured minimum
      */

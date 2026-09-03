@@ -12,7 +12,7 @@
 /**
  * Request payload for creating a GL mapping
  */
-export interface GLMappingCreateRequest { 
+export interface GLMappingCreateRequest {
     /**
      * Dimensional context for this mapping (businessUnitId, locationId, etc.)
      */

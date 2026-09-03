@@ -13,7 +13,7 @@ import { BulkCorrectionItem } from './bulkCorrectionItem';
 /**
  * Request to submit corrected data records for a failed bulk load job
  */
-export interface BulkCorrectionRequest { 
+export interface BulkCorrectionRequest {
     /**
      * List of correction items, one per audit record to correct
      */

@@ -12,7 +12,7 @@
 /**
  * Request to render document content into a target output format
  */
-export interface RenderRequest { 
+export interface RenderRequest {
     /**
      * Raw content to be rendered into the target format
      */

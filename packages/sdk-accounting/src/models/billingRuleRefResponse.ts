@@ -12,7 +12,7 @@
 /**
  * Billing rules snapshot returned by pos-customer for a customer account
  */
-export interface BillingRuleRefResponse { 
+export interface BillingRuleRefResponse {
     /**
      * Whether automatic payment is enabled
      */

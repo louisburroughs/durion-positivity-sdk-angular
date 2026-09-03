@@ -12,7 +12,7 @@
 /**
  * Account tier information response
  */
-export interface GetAccountTierResponse { 
+export interface GetAccountTierResponse {
     /**
      * Account/party identifier
      */

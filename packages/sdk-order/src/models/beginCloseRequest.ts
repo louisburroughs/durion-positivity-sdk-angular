@@ -12,7 +12,7 @@
 /**
  * Request payload for beginning a register session close
  */
-export interface BeginCloseRequest { 
+export interface BeginCloseRequest {
     /**
      * Physical cash counted in the drawer
      */

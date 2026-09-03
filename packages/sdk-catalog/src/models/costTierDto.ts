@@ -12,7 +12,7 @@
 /**
  * Supplier item cost tier
  */
-export interface CostTierDto { 
+export interface CostTierDto {
     /**
      * Inclusive minimum quantity
      */

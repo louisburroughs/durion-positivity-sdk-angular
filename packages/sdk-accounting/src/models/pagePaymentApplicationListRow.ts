@@ -12,7 +12,7 @@ import { PaymentApplicationListRow } from './paymentApplicationListRow';
 import { SortObject } from './sortObject';
 
 
-export interface PagePaymentApplicationListRow { 
+export interface PagePaymentApplicationListRow {
     content?: Array<PaymentApplicationListRow>;
     empty?: boolean;
     first?: boolean;

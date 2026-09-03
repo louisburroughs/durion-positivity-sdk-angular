@@ -12,7 +12,7 @@
 /**
  * A single field definition in an event envelope contract
  */
-export interface ContractField { 
+export interface ContractField {
     /**
      * Human-readable description of the field
      */

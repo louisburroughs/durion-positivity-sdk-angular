@@ -14,7 +14,7 @@ import { LotLocationOnHand } from './lotLocationOnHand';
 /**
  * An inventory lot with its per-location on-hand balances (odoo-parity E1)
  */
-export interface LotDetailResponse { 
+export interface LotDetailResponse {
     /**
      * Per-location on-hand of this lot, from the per-lot stock summary rows; locations with fully consumed balances may report zero
      */

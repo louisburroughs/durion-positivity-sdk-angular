@@ -12,7 +12,7 @@
 /**
  * Marketing send eligibility decision for a party and channel
  */
-export interface MarketingConsentDecision { 
+export interface MarketingConsentDecision {
     /**
      * Whether a marketing send is permitted
      */

@@ -12,7 +12,7 @@
 /**
  * One returned line
  */
-export interface Line { 
+export interface Line {
     condition?: string;
     itemSku?: string;
     lineRefund?: number;

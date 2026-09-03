@@ -12,7 +12,7 @@
 /**
  * Request payload for writing off a small unmatched settlement line
  */
-export interface SettlementWriteOffRequest { 
+export interface SettlementWriteOffRequest {
     /**
      * Mandatory reason for the write-off; recorded on the line and in the audit trail
      */

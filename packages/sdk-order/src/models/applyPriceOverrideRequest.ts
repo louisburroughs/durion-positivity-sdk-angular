@@ -12,7 +12,7 @@
 /**
  * Request payload for applying a price override to an order line
  */
-export interface ApplyPriceOverrideRequest { 
+export interface ApplyPriceOverrideRequest {
     /**
      * Optional idempotency key for duplicate prevention
      */

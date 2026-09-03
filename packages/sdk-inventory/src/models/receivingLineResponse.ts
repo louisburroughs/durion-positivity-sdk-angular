@@ -12,7 +12,7 @@
 /**
  * A single line within a receiving session, with expected and received quantities
  */
-export interface ReceivingLineResponse { 
+export interface ReceivingLineResponse {
     /**
      * Effective base-per-document-unit conversion factor applied at posting time
      */

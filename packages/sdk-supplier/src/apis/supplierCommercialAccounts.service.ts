@@ -11,7 +11,7 @@
 
 import { Inject, Injectable, Optional }                      from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams,
-         HttpResponse, HttpEvent, HttpContext 
+         HttpResponse, HttpEvent, HttpContext
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
@@ -41,7 +41,7 @@ export class SupplierCommercialAccountsService extends BaseService {
 
     /**
      * Create commercial account
-     * Adds a commercial account to a vendor profile, either the profile\&#39;s single BILLING account or a DELIVERY account mapping one pos-location to its vendor account number. Use this tool when a location is first authorised to order from a supplier; do not use it to correct an account number, which is updateCommercialAccount. Preconditions: the vendor profile must exist and be ADMIN-managed, and the slot must be free — one BILLING account per profile and one DELIVERY account per profile and location pair. Required inputs: vendorProfileId (UUIDv7) path parameter plus role and accountNumber in the body; deliveryLocationId is required for DELIVERY and must be absent for BILLING, and agencyCode is optional. Emits a SUPPLIER_ACCOUNT_CREATE audit event; no order or invoice records are touched. Returns 404 when the profile does not exist, 409 when the profile is YAML-managed or the account slot is already taken, and 400 when accountNumber is blank or deliveryLocationId does not match the role. 
+     * Adds a commercial account to a vendor profile, either the profile\&#39;s single BILLING account or a DELIVERY account mapping one pos-location to its vendor account number. Use this tool when a location is first authorised to order from a supplier; do not use it to correct an account number, which is updateCommercialAccount. Preconditions: the vendor profile must exist and be ADMIN-managed, and the slot must be free — one BILLING account per profile and one DELIVERY account per profile and location pair. Required inputs: vendorProfileId (UUIDv7) path parameter plus role and accountNumber in the body; deliveryLocationId is required for DELIVERY and must be absent for BILLING, and agencyCode is optional. Emits a SUPPLIER_ACCOUNT_CREATE audit event; no order or invoice records are touched. Returns 404 when the profile does not exist, 409 when the profile is YAML-managed or the account slot is already taken, and 400 when accountNumber is blank or deliveryLocationId does not match the role.
      * @endpoint post /v1/supplier/admin/profiles/{vendorProfileId}/accounts
      * @param vendorProfileId Owning vendor profile identifier (UUIDv7). Must reference an existing vendor profile.
      * @param commercialAccountRequest Commercial account to create on the vendor profile.
@@ -115,7 +115,7 @@ export class SupplierCommercialAccountsService extends BaseService {
 
     /**
      * Delete commercial account
-     * Removes a commercial account from a vendor profile, freeing its BILLING or per-location DELIVERY slot. Use this tool when a location stops ordering from the supplier; to change the account number instead, call updateCommercialAccount, which preserves the slot. Preconditions: the profile must exist and be ADMIN-managed, and the account must belong to that profile. Required inputs: vendorProfileId and accountId (UUIDv7) path parameters; there is no request body. Emits a SUPPLIER_ACCOUNT_DELETE audit event; ordering for the mapped location resolves to a not-configured outcome from that point on. Returns 404 when the profile or account does not exist, and 409 when the profile is YAML-managed. 
+     * Removes a commercial account from a vendor profile, freeing its BILLING or per-location DELIVERY slot. Use this tool when a location stops ordering from the supplier; to change the account number instead, call updateCommercialAccount, which preserves the slot. Preconditions: the profile must exist and be ADMIN-managed, and the account must belong to that profile. Required inputs: vendorProfileId and accountId (UUIDv7) path parameters; there is no request body. Emits a SUPPLIER_ACCOUNT_DELETE audit event; ordering for the mapped location resolves to a not-configured outcome from that point on. Returns 404 when the profile or account does not exist, and 409 when the profile is YAML-managed.
      * @endpoint delete /v1/supplier/admin/profiles/{vendorProfileId}/accounts/{accountId}
      * @param vendorProfileId Owning vendor profile identifier (UUIDv7). Must reference an existing vendor profile.
      * @param accountId Commercial account identifier (UUIDv7). Must belong to the vendor profile in the path.
@@ -179,7 +179,7 @@ export class SupplierCommercialAccountsService extends BaseService {
 
     /**
      * List commercial accounts
-     * Returns the commercial accounts configured on a vendor profile, the BILLING account first and then the per-location DELIVERY accounts. Use this tool to find the accountId or the vendor account number for a location; do not use it to read credentials, which are never returned here because account numbers are ordinary configuration data. Preconditions: the vendor profile must exist. Required inputs: vendorProfileId (UUIDv7) path parameter; there is no request body or filtering. Emits a SUPPLIER_ACCOUNT_LIST audit event; no configuration is changed. Returns 404 when the vendor profile does not exist, and 200 with an empty array when the profile exists but has no accounts. 
+     * Returns the commercial accounts configured on a vendor profile, the BILLING account first and then the per-location DELIVERY accounts. Use this tool to find the accountId or the vendor account number for a location; do not use it to read credentials, which are never returned here because account numbers are ordinary configuration data. Preconditions: the vendor profile must exist. Required inputs: vendorProfileId (UUIDv7) path parameter; there is no request body or filtering. Emits a SUPPLIER_ACCOUNT_LIST audit event; no configuration is changed. Returns 404 when the vendor profile does not exist, and 200 with an empty array when the profile exists but has no accounts.
      * @endpoint get /v1/supplier/admin/profiles/{vendorProfileId}/accounts
      * @param vendorProfileId Owning vendor profile identifier (UUIDv7). Must reference an existing vendor profile.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -239,7 +239,7 @@ export class SupplierCommercialAccountsService extends BaseService {
 
     /**
      * Update commercial account
-     * Replaces the role, account number, agency code and location mapping of an existing commercial account. Use this tool to correct a vendor-assigned account number or move a DELIVERY account to another location; do not use it to add a second account, which is createCommercialAccount. Preconditions: the profile must exist and be ADMIN-managed, the account must belong to that profile, and the target slot must not already be occupied by another account. Required inputs: vendorProfileId and accountId (UUIDv7) path parameters plus the full body, because every field is replaced; omitting agencyCode clears it. Emits a SUPPLIER_ACCOUNT_UPDATE audit event; orders already transmitted under the previous account number are unaffected. Returns 404 when the profile or account does not exist, 409 when the profile is YAML-managed or the account slot is taken, and 400 when accountNumber is blank or deliveryLocationId does not match the role. 
+     * Replaces the role, account number, agency code and location mapping of an existing commercial account. Use this tool to correct a vendor-assigned account number or move a DELIVERY account to another location; do not use it to add a second account, which is createCommercialAccount. Preconditions: the profile must exist and be ADMIN-managed, the account must belong to that profile, and the target slot must not already be occupied by another account. Required inputs: vendorProfileId and accountId (UUIDv7) path parameters plus the full body, because every field is replaced; omitting agencyCode clears it. Emits a SUPPLIER_ACCOUNT_UPDATE audit event; orders already transmitted under the previous account number are unaffected. Returns 404 when the profile or account does not exist, 409 when the profile is YAML-managed or the account slot is taken, and 400 when accountNumber is blank or deliveryLocationId does not match the role.
      * @endpoint put /v1/supplier/admin/profiles/{vendorProfileId}/accounts/{accountId}
      * @param vendorProfileId Owning vendor profile identifier (UUIDv7). Must reference an existing vendor profile.
      * @param accountId Commercial account identifier (UUIDv7). Must belong to the vendor profile in the path.

@@ -12,7 +12,7 @@
 /**
  * Request payload describing a single line item to include when creating an advance shipping notice (ASN)
  */
-export interface CreateAsnLineRequest { 
+export interface CreateAsnLineRequest {
     /**
      * Quantity shipped expressed in documentUom; must be supplied together with documentUom
      */

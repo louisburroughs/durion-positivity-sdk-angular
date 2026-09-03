@@ -12,7 +12,7 @@
 /**
  * Request payload to add a new eligibility rule to a promotion
  */
-export interface AddEligibilityRuleRequest { 
+export interface AddEligibilityRuleRequest {
     /**
      * Rule condition type to evaluate
      */

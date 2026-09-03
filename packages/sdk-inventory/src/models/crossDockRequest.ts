@@ -12,7 +12,7 @@
 /**
  * Request to cross-dock received stock directly against a workorder line
  */
-export interface CrossDockRequest { 
+export interface CrossDockRequest {
     /**
      * Lot or batch number of the cross-docked stock. Required (422 LOT_NUMBER_REQUIRED) when the product is LOT-tracked (falls back to the lot number already keyed on the receiving line); the lot is found-or-created like any receipt and stamped on BOTH paired ledger entries. Ignored for untracked products
      */

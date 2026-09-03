@@ -13,7 +13,7 @@ import { ReplacementOption } from './replacementOption';
 /**
  * Product lifecycle details and replacement options
  */
-export interface ProductLifecycleResponse { 
+export interface ProductLifecycleResponse {
     /**
      * Last lifecycle state change instant
      */

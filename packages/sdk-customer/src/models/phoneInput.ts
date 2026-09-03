@@ -12,7 +12,7 @@
 /**
  * Phone number input
  */
-export interface PhoneInput { 
+export interface PhoneInput {
     primary?: boolean;
     /**
      * Phone type

@@ -12,7 +12,7 @@
 /**
  * Part return (RMA) lifecycle update; all fields optional
  */
-export interface PartReturnUpdateRequest { 
+export interface PartReturnUpdateRequest {
     /**
      * Shipping carrier
      */

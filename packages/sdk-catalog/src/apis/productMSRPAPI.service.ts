@@ -11,7 +11,7 @@
 
 import { Inject, Injectable, Optional }                      from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams,
-         HttpResponse, HttpEvent, HttpContext 
+         HttpResponse, HttpEvent, HttpContext
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
@@ -41,9 +41,9 @@ export class ProductMSRPAPIService extends BaseService {
 
     /**
      * Create Product MSRP
-     * Creates an MSRP record for a product with an effective date window; amounts are stored at four decimal places and the currency is normalised to upper case. Use this tool to schedule a new list price period; do not use updateProductMsrp, which edits an existing record, and note that only one open-ended record (no effectiveEndDate) may exist per product. Preconditions: the product must exist, the new window must not overlap any existing MSRP window, and no other open-ended record may exist when effectiveEndDate is omitted. Required inputs: productId (UUID) path parameter plus a positive amount, a 3-letter ISO currency and effectiveStartDate; effectiveEndDate and createdByUserId are optional. Emits a CATALOG_MSRP_CREATE event; the record participates in active-MSRP resolution and resolveProductPrice fallback from its start date. Returns 404 when the product does not exist, 409 when the dates overlap an existing record, and 400 when the amount is not positive, the currency is not a 3-letter code, the window is inverted, or a second open-ended record is attempted. 
+     * Creates an MSRP record for a product with an effective date window; amounts are stored at four decimal places and the currency is normalised to upper case. Use this tool to schedule a new list price period; do not use updateProductMsrp, which edits an existing record, and note that only one open-ended record (no effectiveEndDate) may exist per product. Preconditions: the product must exist, the new window must not overlap any existing MSRP window, and no other open-ended record may exist when effectiveEndDate is omitted. Required inputs: productId (UUID) path parameter plus a positive amount, a 3-letter ISO currency and effectiveStartDate; effectiveEndDate and createdByUserId are optional. Emits a CATALOG_MSRP_CREATE event; the record participates in active-MSRP resolution and resolveProductPrice fallback from its start date. Returns 404 when the product does not exist, 409 when the dates overlap an existing record, and 400 when the amount is not positive, the currency is not a 3-letter code, the window is inverted, or a second open-ended record is attempted.
      * @endpoint post /v1/products/{productId}/msrp
-     * @param productId 
+     * @param productId
      * @param createMsrpRequestDto New MSRP window: amount, ISO currency and effective dates; omit effectiveEndDate for an open-ended price.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
@@ -115,10 +115,10 @@ export class ProductMSRPAPIService extends BaseService {
 
     /**
      * Get Active Product MSRP
-     * Returns the single MSRP record whose effective window covers the requested date. Use this tool to read the list price in force on a date; use listProductMsrpHistory instead to see every past and scheduled record. Preconditions: the product must exist and an MSRP window must cover the date. Required inputs: productId (UUID) path parameter; asOf is an optional ISO date defaulting to today. No events are emitted and no state changes; this is a read-only projection. Returns 404 when the product does not exist or no MSRP window covers the requested date. 
+     * Returns the single MSRP record whose effective window covers the requested date. Use this tool to read the list price in force on a date; use listProductMsrpHistory instead to see every past and scheduled record. Preconditions: the product must exist and an MSRP window must cover the date. Required inputs: productId (UUID) path parameter; asOf is an optional ISO date defaulting to today. No events are emitted and no state changes; this is a read-only projection. Returns 404 when the product does not exist or no MSRP window covers the requested date.
      * @endpoint get /v1/products/{productId}/msrp/active
-     * @param productId 
-     * @param asOf 
+     * @param productId
+     * @param asOf
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -188,9 +188,9 @@ export class ProductMSRPAPIService extends BaseService {
 
     /**
      * List Product MSRP History
-     * Returns every MSRP record for a product — past, current and scheduled — ordered by effective start date, newest first. Use this tool to audit price history or find an msrpId to edit; use getActiveProductMsrp instead for just the record in force on a date. Preconditions: the product must exist. Required inputs: productId (UUID) as a path parameter; there is no filtering or paging. No events are emitted and no state changes; this is a read-only projection. Returns 404 when the product does not exist, and 200 with an empty array when it has no MSRP records. 
+     * Returns every MSRP record for a product — past, current and scheduled — ordered by effective start date, newest first. Use this tool to audit price history or find an msrpId to edit; use getActiveProductMsrp instead for just the record in force on a date. Preconditions: the product must exist. Required inputs: productId (UUID) as a path parameter; there is no filtering or paging. No events are emitted and no state changes; this is a read-only projection. Returns 404 when the product does not exist, and 200 with an empty array when it has no MSRP records.
      * @endpoint get /v1/products/{productId}/msrp
-     * @param productId 
+     * @param productId
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -248,10 +248,10 @@ export class ProductMSRPAPIService extends BaseService {
 
     /**
      * Update Product MSRP
-     * Rewrites a current or future MSRP record\&#39;s amount, currency and effective window; records whose window already ended are immutable history. Use this tool to correct or reschedule an existing record; do not use createProductMsrp, which adds a new window alongside the existing ones. Preconditions: the record must exist, belong to the given product, and not have an effectiveEndDate in the past; a version in the body must match the record\&#39;s current version, and the new window must not overlap other records. Required inputs: productId and msrpId (UUIDs) path parameters plus a positive amount, a 3-letter ISO currency and effectiveStartDate; version is optional but recommended. Emits a CATALOG_MSRP_UPDATE event; active-MSRP resolution reflects the change immediately. Returns 404 when the record does not exist under that product, 409 when the version mismatches or the dates overlap another record, and 400 when the record is historical or the amount, currency or window is invalid. 
+     * Rewrites a current or future MSRP record\&#39;s amount, currency and effective window; records whose window already ended are immutable history. Use this tool to correct or reschedule an existing record; do not use createProductMsrp, which adds a new window alongside the existing ones. Preconditions: the record must exist, belong to the given product, and not have an effectiveEndDate in the past; a version in the body must match the record\&#39;s current version, and the new window must not overlap other records. Required inputs: productId and msrpId (UUIDs) path parameters plus a positive amount, a 3-letter ISO currency and effectiveStartDate; version is optional but recommended. Emits a CATALOG_MSRP_UPDATE event; active-MSRP resolution reflects the change immediately. Returns 404 when the record does not exist under that product, 409 when the version mismatches or the dates overlap another record, and 400 when the record is historical or the amount, currency or window is invalid.
      * @endpoint put /v1/products/{productId}/msrp/{msrpId}
-     * @param productId 
-     * @param msrpId 
+     * @param productId
+     * @param msrpId
      * @param updateMsrpRequestDto Replacement amount, currency and effective window for the record; include version to guard against concurrent edits.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.

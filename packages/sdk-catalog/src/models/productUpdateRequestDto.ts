@@ -12,7 +12,7 @@
 /**
  * Update product request
  */
-export interface ProductUpdateRequestDto { 
+export interface ProductUpdateRequestDto {
     /**
      * JSON object represented as string
      */

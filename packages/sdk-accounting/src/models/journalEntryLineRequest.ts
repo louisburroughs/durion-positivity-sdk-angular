@@ -12,7 +12,7 @@
 /**
  * Journal entry line request
  */
-export interface JournalEntryLineRequest { 
+export interface JournalEntryLineRequest {
     /**
      * Credit amount for this line
      */

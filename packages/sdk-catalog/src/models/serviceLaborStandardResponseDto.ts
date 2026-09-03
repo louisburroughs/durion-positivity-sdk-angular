@@ -12,7 +12,7 @@
 /**
  * A labor standard row with its provenance. supersededAt null means the row is active.
  */
-export interface ServiceLaborStandardResponseDto { 
+export interface ServiceLaborStandardResponseDto {
     /**
      * Row creation instant
      */

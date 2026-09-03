@@ -12,7 +12,7 @@
 /**
  * Product specification entry
  */
-export interface ProductSpecification { 
+export interface ProductSpecification {
     /**
      * Specification name
      */

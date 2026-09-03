@@ -12,7 +12,7 @@ import { PurchaseOrderTransmissionEvent } from './purchaseOrderTransmissionEvent
 import { SortObject } from './sortObject';
 
 
-export interface PagePurchaseOrderTransmissionEvent { 
+export interface PagePurchaseOrderTransmissionEvent {
     content?: Array<PurchaseOrderTransmissionEvent>;
     empty?: boolean;
     first?: boolean;

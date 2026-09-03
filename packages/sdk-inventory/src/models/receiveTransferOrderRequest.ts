@@ -13,7 +13,7 @@ import { TransferQuantityLineRequest } from './transferQuantityLineRequest';
 /**
  * Request to receive a transfer order; omitted lines receive their full remainder
  */
-export interface ReceiveTransferOrderRequest { 
+export interface ReceiveTransferOrderRequest {
     /**
      * Explicit per-line received quantities; omitted lines receive their full remainder
      */

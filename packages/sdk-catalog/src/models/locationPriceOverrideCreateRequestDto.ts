@@ -12,7 +12,7 @@
 /**
  * Request payload for creating a location price override
  */
-export interface LocationPriceOverrideCreateRequestDto { 
+export interface LocationPriceOverrideCreateRequestDto {
     /**
      * Base price before override
      */

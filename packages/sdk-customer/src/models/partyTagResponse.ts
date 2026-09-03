@@ -12,7 +12,7 @@
 /**
  * A CRM classification tag that can be attached to parties
  */
-export interface PartyTagResponse { 
+export interface PartyTagResponse {
     /**
      * Whether the tag can still be assigned
      */

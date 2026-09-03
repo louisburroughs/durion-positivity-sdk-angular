@@ -11,7 +11,7 @@ import { PageableObject } from './pageableObject';
 import { SortObject } from './sortObject';
 
 
-export interface Page { 
+export interface Page {
     content?: Array<any>;
     empty?: boolean;
     first?: boolean;

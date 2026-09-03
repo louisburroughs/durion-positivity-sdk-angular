@@ -12,7 +12,7 @@
 /**
  * Update a warranty claim while DRAFT or INFO_NEEDED
  */
-export interface ClaimUpdateRequest { 
+export interface ClaimUpdateRequest {
     /**
      * Claim type; unchanged when null
      */

@@ -12,7 +12,7 @@
 /**
  * A scan-generated suggestion to purchase stock for a PURCHASE-preferring replenishment policy. Lifecycle SUGGESTED → ACCEPTED → CONVERTED | DISMISSED; acceptance is human-mandatory and conversion produces a DRAFT purchase order subject to the normal approval workflow
  */
-export interface PurchaseSuggestionResponse { 
+export interface PurchaseSuggestionResponse {
     /**
      * The DRAFT purchase order the suggestion was converted into
      */

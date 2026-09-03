@@ -14,7 +14,7 @@ import { AgedReceivablesRow } from './agedReceivablesRow';
 /**
  * Aged Receivables report with per-customer bucketed open invoice balances
  */
-export interface AgedReceivablesReport { 
+export interface AgedReceivablesReport {
     /**
      * Date the receivables aging is reported as of (inclusive)
      */

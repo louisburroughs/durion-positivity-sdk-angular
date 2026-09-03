@@ -12,7 +12,7 @@
 /**
  * Resolve person request with weighted matching inputs
  */
-export interface ResolvePersonRequest { 
+export interface ResolvePersonRequest {
     /**
      * Email used for matching
      */

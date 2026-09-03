@@ -13,7 +13,7 @@ import { Decision } from './decision';
 /**
  * Batch request payload for making decisions (approve/reject) on multiple time entries
  */
-export interface TimeEntryDecisionBatchRequest { 
+export interface TimeEntryDecisionBatchRequest {
     /**
      * List of decisions for the time entries
      */

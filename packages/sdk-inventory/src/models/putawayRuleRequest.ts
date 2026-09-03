@@ -12,7 +12,7 @@
 /**
  * A putaway rule: what a received line must be for this rule to govern it, and where that line should then be suggested to go
  */
-export interface PutawayRuleRequest { 
+export interface PutawayRuleRequest {
     /**
      * The bin this rule points at. For FIXED it is the suggested destination outright; for LAST_USED and CLOSEST_AVAILABLE it is the anchor the strategy searches from and the fallback when the strategy cannot be honoured.
      */

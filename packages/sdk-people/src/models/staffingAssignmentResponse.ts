@@ -12,7 +12,7 @@
 /**
  * Staffing assignment response
  */
-export interface StaffingAssignmentResponse { 
+export interface StaffingAssignmentResponse {
     /**
      * Assignment identifier
      */

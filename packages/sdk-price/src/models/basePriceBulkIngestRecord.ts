@@ -12,7 +12,7 @@
 /**
  * Single base-price record within a bulk ingest payload
  */
-export interface BasePriceBulkIngestRecord { 
+export interface BasePriceBulkIngestRecord {
     /**
      * ISO-4217 currency code
      */

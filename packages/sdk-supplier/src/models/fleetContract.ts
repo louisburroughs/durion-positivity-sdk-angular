@@ -9,7 +9,7 @@
  */
 
 
-export interface FleetContract { 
+export interface FleetContract {
     contractorId?: string;
     contractorName?: string;
     endDate?: string;

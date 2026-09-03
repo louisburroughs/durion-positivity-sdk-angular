@@ -13,7 +13,7 @@ import { ContactWithRoles } from './contactWithRoles';
 /**
  * Contacts with their assigned roles and primary flags for a party
  */
-export interface GetContactsWithRolesResponse { 
+export interface GetContactsWithRolesResponse {
     /**
      * List of contacts with assigned roles
      */

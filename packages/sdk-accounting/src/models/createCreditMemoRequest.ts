@@ -12,7 +12,7 @@
 /**
  * Request to create a credit memo against a finalized invoice
  */
-export interface CreateCreditMemoRequest { 
+export interface CreateCreditMemoRequest {
     /**
      * Credit amount; must not exceed the invoice outstanding balance
      */

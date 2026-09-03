@@ -13,7 +13,7 @@ import { CreateAsnLineRequest } from './createAsnLineRequest';
 /**
  * Request payload to create an advance shipping notice (ASN) for an inbound vendor shipment
  */
-export interface CreateAsnRequest { 
+export interface CreateAsnRequest {
     /**
      * Human-readable reference number assigned to the ASN by the vendor
      */

@@ -12,7 +12,7 @@
 /**
  * Read-only billing rule reference surfaced in a CRM snapshot
  */
-export interface BillingRuleRef { 
+export interface BillingRuleRef {
     /**
      * Whether auto-pay is enabled for this account
      */

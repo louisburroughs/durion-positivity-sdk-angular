@@ -12,7 +12,7 @@
 /**
  * A single line item on an invoice
  */
-export interface InvoiceItemResponse { 
+export interface InvoiceItemResponse {
     /**
      * Extended amount (quantity x unit price)
      */

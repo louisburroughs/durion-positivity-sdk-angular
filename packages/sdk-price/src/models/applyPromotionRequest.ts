@@ -13,7 +13,7 @@ import { EstimateContext } from './estimateContext';
 /**
  * Request payload for applying a promotion code to an estimate context
  */
-export interface ApplyPromotionRequest { 
+export interface ApplyPromotionRequest {
     estimateContext: EstimateContext;
     /**
      * Promotion code to apply

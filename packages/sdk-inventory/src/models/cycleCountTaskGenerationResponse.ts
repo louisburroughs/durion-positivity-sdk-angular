@@ -13,7 +13,7 @@ import { CycleCountTaskResponse } from './cycleCountTaskResponse';
 /**
  * Summary of one cycle-count task generation pass for a plan
  */
-export interface CycleCountTaskGenerationResponse { 
+export interface CycleCountTaskGenerationResponse {
     /**
      * Storage locations scanned for book stock
      */

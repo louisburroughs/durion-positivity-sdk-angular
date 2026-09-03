@@ -12,7 +12,7 @@
 /**
  * One vendor\'s answer about the product. Carries no EAN/UPC/vendor article codes — product identity mapping is a backend implementation detail. availableQuantity is the canonical item/piece count: no unit of measure travels because none exists in the supplier wire data.
  */
-export interface SupplierStockAvailabilityLine { 
+export interface SupplierStockAvailabilityLine {
     /**
      * Quantity the vendor can supply, as a canonical item/piece count. Null when the vendor stated no quantity; zero only when the status is UNAVAILABLE, meaning the vendor stated it has none.
      */

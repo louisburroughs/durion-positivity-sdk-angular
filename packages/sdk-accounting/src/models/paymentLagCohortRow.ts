@@ -12,7 +12,7 @@
 /**
  * One payment-lag cohort: invoice count and total invoice amount for invoices whose full-payment lag (or non-payment) falls in this band
  */
-export interface PaymentLagCohortRow { 
+export interface PaymentLagCohortRow {
     /**
      * Sum of invoice totals in this cohort — the invoice\'s full amount, not its remaining open balance
      */

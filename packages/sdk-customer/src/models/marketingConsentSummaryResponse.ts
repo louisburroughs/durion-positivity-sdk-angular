@@ -13,7 +13,7 @@ import { MarketingConsentDecision } from './marketingConsentDecision';
 /**
  * Per-channel marketing consent and suppression state for a party
  */
-export interface MarketingConsentSummaryResponse { 
+export interface MarketingConsentSummaryResponse {
     /**
      * Account-level hard gate; only meaningful for commercial parties, null for individuals
      */

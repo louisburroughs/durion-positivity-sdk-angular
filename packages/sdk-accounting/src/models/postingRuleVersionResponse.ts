@@ -12,7 +12,7 @@
 /**
  * A single version of a posting rule set
  */
-export interface PostingRuleVersionResponse { 
+export interface PostingRuleVersionResponse {
     /**
      * Timestamp when the version was created (ISO 8601)
      */

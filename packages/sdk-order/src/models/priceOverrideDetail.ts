@@ -12,7 +12,7 @@
 /**
  * Detailed view of a price override including approval workflow state
  */
-export interface PriceOverrideDetail { 
+export interface PriceOverrideDetail {
     /**
      * Whether the override affects sales commission
      */

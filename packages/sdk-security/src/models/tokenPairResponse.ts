@@ -12,7 +12,7 @@
 /**
  * Response containing both access and refresh JWT tokens
  */
-export interface TokenPairResponse { 
+export interface TokenPairResponse {
     /**
      * Short-lived JWT access token (1 hour expiration)
      */

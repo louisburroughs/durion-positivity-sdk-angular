@@ -11,7 +11,7 @@
 
 import { Inject, Injectable, Optional }                      from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams,
-         HttpResponse, HttpEvent, HttpContext 
+         HttpResponse, HttpEvent, HttpContext
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
@@ -39,7 +39,7 @@ export class StaffingAssignmentBulkIngestAPIService extends BaseService {
 
     /**
      * Assign People to Locations in Bulk
-     * Creates many staffing assignments at once, resolving each row\&#39;s employee number to a person. Use this tool when standing up a location\&#39;s roster or seeding an environment; use createStaffingAssignment instead for a single assignment. Preconditions: each employee number must resolve to a person with an ACTIVE employee record, each location must be active, and no assignment may overlap an existing one for the same person, location and role. Required inputs: jobId (UUID), locationId (UUID) and records, each with an employeeNumber and a role; a record\&#39;s own locationId overrides the batch one, and effectiveFrom defaults to today. Emits a PEOPLE_STAFFING_ASSIGNMENT_BULK_INGEST event and a staffing-assignment fact per row. Note two side effects that make this not simply additive: a new primary demotes and end-dates an overlapping existing primary, and a person\&#39;s first active assignment is forced primary whatever the flag says. Returns 200 with a per-record result; check each result rather than the status alone. 
+     * Creates many staffing assignments at once, resolving each row\&#39;s employee number to a person. Use this tool when standing up a location\&#39;s roster or seeding an environment; use createStaffingAssignment instead for a single assignment. Preconditions: each employee number must resolve to a person with an ACTIVE employee record, each location must be active, and no assignment may overlap an existing one for the same person, location and role. Required inputs: jobId (UUID), locationId (UUID) and records, each with an employeeNumber and a role; a record\&#39;s own locationId overrides the batch one, and effectiveFrom defaults to today. Emits a PEOPLE_STAFFING_ASSIGNMENT_BULK_INGEST event and a staffing-assignment fact per row. Note two side effects that make this not simply additive: a new primary demotes and end-dates an overlapping existing primary, and a person\&#39;s first active assignment is forced primary whatever the flag says. Returns 200 with a per-record result; check each result rather than the status alone.
      * @endpoint post /v1/people/staffing/bulk-ingest
      * @param bulkIngestRequestStaffingAssignmentBulkIngestRecord Staffing assignments to create.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.

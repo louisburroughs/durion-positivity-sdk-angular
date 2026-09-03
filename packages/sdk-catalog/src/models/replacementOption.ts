@@ -12,7 +12,7 @@
 /**
  * Replacement option details
  */
-export interface ReplacementOption { 
+export interface ReplacementOption {
     /**
      * Replacement option effective instant
      */

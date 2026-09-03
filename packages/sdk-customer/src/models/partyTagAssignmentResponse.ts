@@ -12,7 +12,7 @@
 /**
  * A tag attached to a party
  */
-export interface PartyTagAssignmentResponse { 
+export interface PartyTagAssignmentResponse {
     /**
      * When the tag was attached
      */

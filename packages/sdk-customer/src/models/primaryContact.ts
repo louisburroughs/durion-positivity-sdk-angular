@@ -12,7 +12,7 @@
 /**
  * Lightweight primary-contact projection for directory rows
  */
-export interface PrimaryContact { 
+export interface PrimaryContact {
     /**
      * Contact email address
      */

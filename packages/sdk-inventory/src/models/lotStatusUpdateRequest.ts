@@ -12,7 +12,7 @@
 /**
  * Lot status change: QUARANTINE/RECALL a lot or release it back to ACTIVE
  */
-export interface LotStatusUpdateRequest { 
+export interface LotStatusUpdateRequest {
     /**
      * Reason for the status change (mandatory; recorded for traceability)
      */

@@ -12,7 +12,7 @@
 /**
  * Vendor-supplied marketing copy in one language.
  */
-export interface TreadDesignTextDto { 
+export interface TreadDesignTextDto {
     /**
      * Marketing description in that language.
      */

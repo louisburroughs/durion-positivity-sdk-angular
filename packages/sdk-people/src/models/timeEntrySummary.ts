@@ -12,7 +12,7 @@
 /**
  * An attendance time entry (clock-in, clock-out, breaks) with its approval decision
  */
-export interface TimeEntrySummary { 
+export interface TimeEntrySummary {
     /**
      * Break minutes taken inside the attendance window; the window is gross time
      */

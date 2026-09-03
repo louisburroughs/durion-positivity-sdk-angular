@@ -12,7 +12,7 @@
 /**
  * One PRICE_CATALOG binding\'s schedule and scheduler-lease state.
  */
-export interface PriceCatalogBindingFreshness { 
+export interface PriceCatalogBindingFreshness {
     /**
      * The endpoint binding.
      */

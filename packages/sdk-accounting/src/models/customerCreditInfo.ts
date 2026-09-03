@@ -12,7 +12,7 @@
 /**
  * Customer credit created from an overpayment
  */
-export interface CustomerCreditInfo { 
+export interface CustomerCreditInfo {
     /**
      * Credit amount created from overpayment
      */

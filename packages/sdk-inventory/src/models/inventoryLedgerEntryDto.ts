@@ -12,7 +12,7 @@
 /**
  * Inventory ledger entry record capturing a single stock movement or allocation event
  */
-export interface InventoryLedgerEntryDto { 
+export interface InventoryLedgerEntryDto {
     /**
      * Identifier of the adjustment that produced this entry, if any
      */

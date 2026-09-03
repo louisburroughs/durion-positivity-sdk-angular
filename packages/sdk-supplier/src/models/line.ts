@@ -12,7 +12,7 @@
 /**
  * One requested operation or part
  */
-export interface Line { 
+export interface Line {
     /**
      * Free text for a human reading the request at the fleet
      */

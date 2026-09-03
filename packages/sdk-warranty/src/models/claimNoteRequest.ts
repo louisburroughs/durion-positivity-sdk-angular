@@ -12,7 +12,7 @@
 /**
  * Staff note to append to a warranty claim
  */
-export interface ClaimNoteRequest { 
+export interface ClaimNoteRequest {
     /**
      * Note text
      */

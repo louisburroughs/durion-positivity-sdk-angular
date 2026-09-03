@@ -12,7 +12,7 @@
 /**
  * Billing rules and invoicing preferences for a billing party
  */
-export interface BillingRulesDTO { 
+export interface BillingRulesDTO {
     /**
      * Timestamp when the record was created
      */

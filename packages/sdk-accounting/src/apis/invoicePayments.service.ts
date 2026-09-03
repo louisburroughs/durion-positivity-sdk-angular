@@ -11,7 +11,7 @@
 
 import { Inject, Injectable, Optional }                      from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams,
-         HttpResponse, HttpEvent, HttpContext 
+         HttpResponse, HttpEvent, HttpContext
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
@@ -45,7 +45,7 @@ export class InvoicePaymentsService extends BaseService {
 
     /**
      * Get Customer Billing Rules
-     * Returns the billing rule references configured for a customer, fetched from the customer service. Use this tool to inspect how a customer is billed before generating or regenerating invoices; do not use regenerateInvoiceFromWorkorder, which performs the regeneration itself. Preconditions: the customer must exist in the customer service. Required inputs: customerId (UUID) as a path parameter; there is no request body. No events are emitted and no state changes; this is a read-only projection over a cross-service call. Returns 404 when the customer is not found, and 503 when the customer service is unavailable. 
+     * Returns the billing rule references configured for a customer, fetched from the customer service. Use this tool to inspect how a customer is billed before generating or regenerating invoices; do not use regenerateInvoiceFromWorkorder, which performs the regeneration itself. Preconditions: the customer must exist in the customer service. Required inputs: customerId (UUID) as a path parameter; there is no request body. No events are emitted and no state changes; this is a read-only projection over a cross-service call. Returns 404 when the customer is not found, and 503 when the customer service is unavailable.
      * @endpoint get /v1/accounting/invoice/rules/{customerId}
      * @param customerId Customer identifier
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -105,7 +105,7 @@ export class InvoicePaymentsService extends BaseService {
 
     /**
      * Get Invoice Payment Status
-     * Returns the current payment status of an invoice as tracked by the accounting module\&#39;s invoice replica. Use this tool to check whether an invoice is open, partially paid or paid before applying payments or credits; do not use applyPayment, which changes the status. Preconditions: the invoice must be known to the accounting module. Required inputs: invoiceId (UUID) as a path parameter; there is no request body. No events are emitted and no state changes; this is a read-only projection. An invoice with no payment history answers 200 with status UNPAID, derived from the ext_invoice replica and accounting\&#39;s own application/credit records. Returns 404 only when accounting has no record of the invoice at all, and 400 when the identifier is rejected (malformed or invalid invoiceId). 
+     * Returns the current payment status of an invoice as tracked by the accounting module\&#39;s invoice replica. Use this tool to check whether an invoice is open, partially paid or paid before applying payments or credits; do not use applyPayment, which changes the status. Preconditions: the invoice must be known to the accounting module. Required inputs: invoiceId (UUID) as a path parameter; there is no request body. No events are emitted and no state changes; this is a read-only projection. An invoice with no payment history answers 200 with status UNPAID, derived from the ext_invoice replica and accounting\&#39;s own application/credit records. Returns 404 only when accounting has no record of the invoice at all, and 400 when the identifier is rejected (malformed or invalid invoiceId).
      * @endpoint get /v1/accounting/invoice/{invoiceId}/status
      * @param invoiceId Invoice identifier
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -165,7 +165,7 @@ export class InvoicePaymentsService extends BaseService {
 
     /**
      * Regenerate Invoice From Workorder
-     * Requests regeneration of an invoice from a completed workorder, either synchronously or via the asynchronous command path. Use this tool when an invoice must be rebuilt from its source workorder; do not use getInvoiceStatus, which only reads the current payment status. Preconditions: the workorder must exist and be in COMPLETED state. Required inputs: workorderId (UUID); idempotencyKey is optional and de-duplicates repeated regeneration commands. Emits an ACCOUNTING_INVOICE_REGENERATE event; on the async path the call returns 202 with status PENDING and the invoice arrives later via invoice.events.v1. Returns 202 when the command is accepted asynchronously, 404 when the workorder is not found, 409 when it is not COMPLETED, and 503 when the workorder service is unavailable. 
+     * Requests regeneration of an invoice from a completed workorder, either synchronously or via the asynchronous command path. Use this tool when an invoice must be rebuilt from its source workorder; do not use getInvoiceStatus, which only reads the current payment status. Preconditions: the workorder must exist and be in COMPLETED state. Required inputs: workorderId (UUID); idempotencyKey is optional and de-duplicates repeated regeneration commands. Emits an ACCOUNTING_INVOICE_REGENERATE event; on the async path the call returns 202 with status PENDING and the invoice arrives later via invoice.events.v1. Returns 202 when the command is accepted asynchronously, 404 when the workorder is not found, 409 when it is not COMPLETED, and 503 when the workorder service is unavailable.
      * @endpoint post /v1/accounting/invoice/invoices
      * @param regenerateInvoiceFromWorkorderRequest Workorder to rebuild the invoice from, with an optional idempotency key.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.

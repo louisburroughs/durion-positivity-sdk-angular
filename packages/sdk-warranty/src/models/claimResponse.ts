@@ -18,7 +18,7 @@ import { PartReturnView } from './partReturnView';
 /**
  * Full warranty claim detail
  */
-export interface ClaimResponse { 
+export interface ClaimResponse {
     claimCode?: string;
     claimType?: ClaimResponseClaimTypeEnum;
     createdAt?: string;

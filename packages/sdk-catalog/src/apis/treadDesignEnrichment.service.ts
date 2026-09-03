@@ -11,7 +11,7 @@
 
 import { Inject, Injectable, Optional }                      from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams,
-         HttpResponse, HttpEvent, HttpContext 
+         HttpResponse, HttpEvent, HttpContext
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
@@ -41,7 +41,7 @@ export class TreadDesignEnrichmentService extends BaseService {
 
     /**
      * Get Vendor Tread-Design Enrichment for a Product
-     * Returns the manufacturer marketing content matched to a product — names, copy per language, artwork — distinguishable from catalog-owned product data because it lives here rather than on the product itself. Use this tool to show manufacturer marketing copy alongside a product; do not use it as a source for any structural or identity field, since a supplier fact never changes what a product is. Preconditions: the product must exist and must have matched a tread design; fuzzy matching on vendor brand and design names means many products, especially newly priced ones, match nothing yet. Required inputs: productId path parameter; there is no request body. Emits a CATALOG_TREAD_DESIGN_FOR_PRODUCT event; no state changes. Returns 404 when the product does not exist or matches no tread design — an ordinary outcome, not an error condition. 
+     * Returns the manufacturer marketing content matched to a product — names, copy per language, artwork — distinguishable from catalog-owned product data because it lives here rather than on the product itself. Use this tool to show manufacturer marketing copy alongside a product; do not use it as a source for any structural or identity field, since a supplier fact never changes what a product is. Preconditions: the product must exist and must have matched a tread design; fuzzy matching on vendor brand and design names means many products, especially newly priced ones, match nothing yet. Required inputs: productId path parameter; there is no request body. Emits a CATALOG_TREAD_DESIGN_FOR_PRODUCT event; no state changes. Returns 404 when the product does not exist or matches no tread design — an ordinary outcome, not an error condition.
      * @endpoint get /v1/catalog/tread-designs/for-product/{productId}
      * @param productId Product to look up enrichment for.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -101,7 +101,7 @@ export class TreadDesignEnrichmentService extends BaseService {
 
     /**
      * List Vendor Tread Designs Matched to No Product
-     * Returns tread designs that fuzzy matching, scoped to each design\&#39;s own vendor\&#39;s priced products, could not resolve to any catalog product, newest applied first. Use this tool to review enrichment a person needs to connect manually; do not use it to look up one product\&#39;s enrichment, which is getTreadDesignForProduct. A design matching nothing is an ordinary outcome here, not a failure of ingestion. Preconditions: none; an empty result means every applied design has matched at least one product. Required inputs: none; page and size are optional, with size defaulting to 50 and capped at 200. Emits a CATALOG_TREAD_DESIGN_UNMATCHED_LIST event; no state changes. Returns 200 with an empty items array when nothing is unmatched. 
+     * Returns tread designs that fuzzy matching, scoped to each design\&#39;s own vendor\&#39;s priced products, could not resolve to any catalog product, newest applied first. Use this tool to review enrichment a person needs to connect manually; do not use it to look up one product\&#39;s enrichment, which is getTreadDesignForProduct. A design matching nothing is an ordinary outcome here, not a failure of ingestion. Preconditions: none; an empty result means every applied design has matched at least one product. Required inputs: none; page and size are optional, with size defaulting to 50 and capped at 200. Emits a CATALOG_TREAD_DESIGN_UNMATCHED_LIST event; no state changes. Returns 200 with an empty items array when nothing is unmatched.
      * @endpoint get /v1/catalog/tread-designs/unmatched
      * @param page Zero-based page index.
      * @param size Page size, 1-200.

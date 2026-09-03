@@ -12,7 +12,7 @@
 /**
  * An email address for a contact
  */
-export interface EmailAddressDTO { 
+export interface EmailAddressDTO {
     /**
      * Email address value
      */

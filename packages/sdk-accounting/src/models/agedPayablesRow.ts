@@ -12,7 +12,7 @@
 /**
  * Per-vendor aged payables row with bucketed open vendor-bill balances. Age is measured from the bill due date, falling back to the bill date when no due date is recorded; not-yet-due bills are reported in the current bucket.
  */
-export interface AgedPayablesRow { 
+export interface AgedPayablesRow {
     /**
      * Outstanding 0-30 days past due (includes not-yet-due)
      */

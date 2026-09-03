@@ -13,7 +13,7 @@ import { MoneyAmount } from './moneyAmount';
 /**
  * Single pricing-rule application entry within a quote breakdown
  */
-export interface PricingBreakdownEntry { 
+export interface PricingBreakdownEntry {
     adjustment: MoneyAmount;
     resultingValue: MoneyAmount;
     /**

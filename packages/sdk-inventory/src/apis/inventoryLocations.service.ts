@@ -11,7 +11,7 @@
 
 import { Inject, Injectable, Optional }                      from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams,
-         HttpResponse, HttpEvent, HttpContext 
+         HttpResponse, HttpEvent, HttpContext
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
@@ -41,7 +41,7 @@ export class InventoryLocationsService extends BaseService {
 
     /**
      * Get location inventory summary
-     * Returns the aggregated on-hand quantity for one storage location, optionally filtered to a single SKU, or the historical on-hand as of a past instant by direct ledger aggregation. Use this tool for a quantity summary of one location; use listLocationInventoryItems instead for the per-SKU contents, and use getSiteInventoryRollup for hierarchy subtotals across a whole site. Preconditions: none for the current view; an asOf query additionally requires the inventory:ledger:view authority. Required inputs: locationId (UUID) path parameter; sku and asOf (ISO-8601 instant) are optional, and with asOf the availableToPromiseQuantity is null because historical allocation state is not reliably reconstructable from ATP-neutral ledger events. No events are emitted and no state changes; this is a read-only projection. Returns 422 with AS_OF_IN_FUTURE when asOf lies in the future, 403 when asOf is used without inventory:ledger:view, and 400 for an invalid location identifier. 
+     * Returns the aggregated on-hand quantity for one storage location, optionally filtered to a single SKU, or the historical on-hand as of a past instant by direct ledger aggregation. Use this tool for a quantity summary of one location; use listLocationInventoryItems instead for the per-SKU contents, and use getSiteInventoryRollup for hierarchy subtotals across a whole site. Preconditions: none for the current view; an asOf query additionally requires the inventory:ledger:view authority. Required inputs: locationId (UUID) path parameter; sku and asOf (ISO-8601 instant) are optional, and with asOf the availableToPromiseQuantity is null because historical allocation state is not reliably reconstructable from ATP-neutral ledger events. No events are emitted and no state changes; this is a read-only projection. Returns 422 with AS_OF_IN_FUTURE when asOf lies in the future, 403 when asOf is used without inventory:ledger:view, and 400 for an invalid location identifier.
      * @endpoint get /v1/inventory/locations/{locationId}/inventory-inquiry
      * @param locationId Storage location identifier
      * @param sku Product SKU filter
@@ -124,7 +124,7 @@ export class InventoryLocationsService extends BaseService {
 
     /**
      * List location inventory contents
-     * Returns the stock items with positive on-hand at one storage location, or the historical contents as of a past instant by direct ledger aggregation. Use this tool to see what a location holds per SKU; use getLocationInventory instead for the aggregated quantity summary of the location. Preconditions: none for the current view; an asOf query additionally requires the inventory:ledger:view authority. Required inputs: locationId (UUID) path parameter; asOf (ISO-8601 instant) is optional. No events are emitted and no state changes; this is a read-only projection. Returns 422 with AS_OF_IN_FUTURE when asOf lies in the future, 403 when asOf is used without inventory:ledger:view, and 400 for an invalid location identifier. 
+     * Returns the stock items with positive on-hand at one storage location, or the historical contents as of a past instant by direct ledger aggregation. Use this tool to see what a location holds per SKU; use getLocationInventory instead for the aggregated quantity summary of the location. Preconditions: none for the current view; an asOf query additionally requires the inventory:ledger:view authority. Required inputs: locationId (UUID) path parameter; asOf (ISO-8601 instant) is optional. No events are emitted and no state changes; this is a read-only projection. Returns 422 with AS_OF_IN_FUTURE when asOf lies in the future, 403 when asOf is used without inventory:ledger:view, and 400 for an invalid location identifier.
      * @endpoint get /v1/inventory/locations/{locationId}/inventory-items
      * @param locationId Storage location identifier
      * @param asOf Optional historical instant (ISO-8601). Returns the location contents as of this instant by direct ledger aggregation. Requires \&#39;inventory:ledger:view\&#39;; future instants are rejected (422).

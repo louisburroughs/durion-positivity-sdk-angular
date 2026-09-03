@@ -13,7 +13,7 @@ import { CreateGoodsReceiptLineRequest } from './createGoodsReceiptLineRequest';
 /**
  * Request payload to record a goods receipt for inventory received against a purchase order, optionally linked to an ASN
  */
-export interface CreateGoodsReceiptRequest { 
+export interface CreateGoodsReceiptRequest {
     /**
      * Identifier of the advance shipping notice (ASN) this receipt fulfills, if applicable
      */

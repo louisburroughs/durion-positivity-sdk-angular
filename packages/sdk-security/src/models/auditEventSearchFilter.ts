@@ -12,7 +12,7 @@
 /**
  * Filter criteria for audit event search; all fields are optional
  */
-export interface AuditEventSearchFilter { 
+export interface AuditEventSearchFilter {
     /**
      * Actor username/service principal
      */

@@ -12,7 +12,7 @@
 /**
  * Request payload for searching vehicles by free-text query with optional pagination
  */
-export interface SearchVehiclesRequest { 
+export interface SearchVehiclesRequest {
     /**
      * Opaque pagination cursor for retrieving subsequent result pages (reserved for future use)
      */

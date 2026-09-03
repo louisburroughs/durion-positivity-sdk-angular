@@ -12,7 +12,7 @@
 /**
  * Single record in a catalog bulk-ingest request
  */
-export interface CatalogBulkIngestRecord { 
+export interface CatalogBulkIngestRecord {
     /**
      * Category name to associate the item with
      */

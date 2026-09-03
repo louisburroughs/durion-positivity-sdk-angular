@@ -12,7 +12,7 @@
 /**
  * A phone number for a contact
  */
-export interface PhoneNumberDTO { 
+export interface PhoneNumberDTO {
     /**
      * Phone number value
      */

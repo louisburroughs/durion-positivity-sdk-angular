@@ -14,7 +14,7 @@ import { RollupQuantities } from './rollupQuantities';
 /**
  * Site inventory rollup with quantities subtotaled along the storage-location hierarchy
  */
-export interface SiteInventoryRollupResponse { 
+export interface SiteInventoryRollupResponse {
     /**
      * Root storage locations of the site topology
      */

@@ -12,7 +12,7 @@
 /**
  * Request to resolve a time entry exception
  */
-export interface TimeEntryExceptionResolveRequest { 
+export interface TimeEntryExceptionResolveRequest {
     /**
      * Notes explaining the resolution
      */

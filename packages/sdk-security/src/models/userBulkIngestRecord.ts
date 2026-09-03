@@ -12,7 +12,7 @@
 /**
  * One user account to provision, without password material
  */
-export interface UserBulkIngestRecord { 
+export interface UserBulkIngestRecord {
     /**
      * Existing role names to attach
      */

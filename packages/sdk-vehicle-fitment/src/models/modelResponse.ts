@@ -12,7 +12,7 @@
 /**
  * Vehicle model response
  */
-export interface ModelResponse { 
+export interface ModelResponse {
     /**
      * Model identifier
      */

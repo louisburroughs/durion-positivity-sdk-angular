@@ -12,7 +12,7 @@
 /**
  * One vendor bill in a due-date-window listing
  */
-export interface VendorBillListRow { 
+export interface VendorBillListRow {
     /**
      * Total bill amount
      */

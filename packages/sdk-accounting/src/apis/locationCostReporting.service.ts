@@ -11,7 +11,7 @@
 
 import { Inject, Injectable, Optional }                      from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams,
-         HttpResponse, HttpEvent, HttpContext 
+         HttpResponse, HttpEvent, HttpContext
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
@@ -37,7 +37,7 @@ export class LocationCostReportingService extends BaseService {
 
     /**
      * Generate Labor Overhead Cost Report
-     * Generates the read-only Location Labor and Overhead Cost Report: the canonical cost-line matrix of 12 monthly amounts plus YTD with section subtotals, for one location and fiscal year, derived entirely from posted GL data. Use this tool for location-level labor and overhead cost review; do not use generateIncomeStatement, which is the org-wide statement without the location dimension. Preconditions: none; a location with no posted activity yields zeroed lines. Required inputs: locationId (the accounting locationId dimension, e.g. LOC-107) and fiscalYear (four-digit year); asOfMonth (1-12) is optional and defaults to 12, bounding the YTD column. Emits a REPORT_LABOR_OVERHEAD_GENERATE audit event; no state changes. Returns 400 when fiscalYear is not a four-digit year or asOfMonth is outside 1 to 12. 
+     * Generates the read-only Location Labor and Overhead Cost Report: the canonical cost-line matrix of 12 monthly amounts plus YTD with section subtotals, for one location and fiscal year, derived entirely from posted GL data. Use this tool for location-level labor and overhead cost review; do not use generateIncomeStatement, which is the org-wide statement without the location dimension. Preconditions: none; a location with no posted activity yields zeroed lines. Required inputs: locationId (the accounting locationId dimension, e.g. LOC-107) and fiscalYear (four-digit year); asOfMonth (1-12) is optional and defaults to 12, bounding the YTD column. Emits a REPORT_LABOR_OVERHEAD_GENERATE audit event; no state changes. Returns 400 when fiscalYear is not a four-digit year or asOfMonth is outside 1 to 12.
      * @endpoint get /v1/accounting/reports/location/labor-overhead
      * @param locationId Location/dealer identifier (accounting locationId dimension)
      * @param fiscalYear Fiscal year

@@ -14,7 +14,7 @@ import { PricingBreakdownEntry } from './pricingBreakdownEntry';
 /**
  * Calculated contextual price quote response
  */
-export interface PriceQuoteResponse { 
+export interface PriceQuoteResponse {
     extendedPrice: MoneyAmount;
     msrp: MoneyAmount;
     /**

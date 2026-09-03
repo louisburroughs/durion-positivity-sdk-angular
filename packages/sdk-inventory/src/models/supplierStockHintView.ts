@@ -12,7 +12,7 @@
 /**
  * A vendor\'s reported availability for one article: an advisory hint carrying its own age, never owned stock and never an ATP figure.
  */
-export interface SupplierStockHintView { 
+export interface SupplierStockHintView {
     /**
      * EAN/GTIN as the vendor stated it.
      */

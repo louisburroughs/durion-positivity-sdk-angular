@@ -12,7 +12,7 @@
 /**
  * Primary location resolved from the authenticated user\'s active staffing assignments
  */
-export interface PrimaryLocationResponse { 
+export interface PrimaryLocationResponse {
     /**
      * True when the caller has no active primary assignment and locationId carries the platform\'s top-level default location instead
      */

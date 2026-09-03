@@ -12,7 +12,7 @@
 /**
  * Request to create a recurring cycle-count schedule for a location
  */
-export interface CreateCycleCountScheduleRequest { 
+export interface CreateCycleCountScheduleRequest {
     /**
      * Whether the scheduled runner auto-creates the next cycle-count plan when due (false = the schedule only appears in the due-for-count view); defaults to false
      */

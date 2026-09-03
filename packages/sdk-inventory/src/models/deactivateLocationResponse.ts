@@ -13,7 +13,7 @@ import { Transfer } from './transfer';
 /**
  * Response describing the outcome of deactivating a location and any inventory transfer performed
  */
-export interface DeactivateLocationResponse { 
+export interface DeactivateLocationResponse {
     /**
      * Identifier of the destination location inventory was moved to, if any
      */

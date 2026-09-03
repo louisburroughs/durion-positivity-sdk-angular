@@ -13,7 +13,7 @@ import { SegmentPredicate } from './segmentPredicate';
 /**
  * At least one child predicate must match
  */
-export interface Or extends SegmentPredicate { 
+export interface Or extends SegmentPredicate {
     nodes?: any | null;
 }
 

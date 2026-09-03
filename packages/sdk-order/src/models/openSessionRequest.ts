@@ -12,7 +12,7 @@
 /**
  * Request payload for opening a register session
  */
-export interface OpenSessionRequest { 
+export interface OpenSessionRequest {
     /**
      * Shop location; defaults from the terminal\'s previous session when omitted
      */

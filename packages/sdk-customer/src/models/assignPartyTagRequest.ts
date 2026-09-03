@@ -12,7 +12,7 @@
 /**
  * Request to attach a tag to a party
  */
-export interface AssignPartyTagRequest { 
+export interface AssignPartyTagRequest {
     /**
      * How the assignment was made; defaults to MANUAL
      */

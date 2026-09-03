@@ -11,7 +11,7 @@
 
 import { Inject, Injectable, Optional }                      from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams,
-         HttpResponse, HttpEvent, HttpContext 
+         HttpResponse, HttpEvent, HttpContext
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
@@ -45,9 +45,9 @@ export class MarketingCampaignsService extends BaseService {
 
     /**
      * Cancel Campaign Permanently
-     * Moves a campaign to CANCELLED, a terminal state from which no further transition exists. Use this tool to abandon a campaign for good; do not use pauseCampaign, which halts dispatch reversibly and keeps the queue intact. Preconditions: the campaign must exist and be in DRAFT, SCHEDULED, SENDING or PAUSED; a SENT campaign can only be CLOSED, and CANCELLED and CLOSED campaigns cannot transition at all. Required inputs: campaignId (UUID) as a path parameter; there is no request body. Emits a MARKETING_CAMPAIGN_CANCEL event; messages already delivered are not recalled. Returns 404 when the campaign does not exist, and 422 when its current status does not allow cancellation. 
+     * Moves a campaign to CANCELLED, a terminal state from which no further transition exists. Use this tool to abandon a campaign for good; do not use pauseCampaign, which halts dispatch reversibly and keeps the queue intact. Preconditions: the campaign must exist and be in DRAFT, SCHEDULED, SENDING or PAUSED; a SENT campaign can only be CLOSED, and CANCELLED and CLOSED campaigns cannot transition at all. Required inputs: campaignId (UUID) as a path parameter; there is no request body. Emits a MARKETING_CAMPAIGN_CANCEL event; messages already delivered are not recalled. Returns 404 when the campaign does not exist, and 422 when its current status does not allow cancellation.
      * @endpoint post /v1/marketing/campaigns/{campaignId}/cancel
-     * @param campaignId 
+     * @param campaignId
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -105,7 +105,7 @@ export class MarketingCampaignsService extends BaseService {
 
     /**
      * Create Campaign
-     * Creates a marketing campaign in DRAFT status; nothing is targeted or sent until it is scheduled and dispatched. Use this tool when defining a new campaign; do not use updateCampaign, which edits an existing DRAFT campaign. Preconditions: no campaign may already use the same code (compared case-insensitively); segment and templates may be attached later, since readiness is only enforced by scheduleCampaign. Required inputs: code, name, audienceType (COMMERCIAL or INDIVIDUAL, immutable after creation) and a non-empty channels set (EMAIL, SMS); scheduleType defaults to IMMEDIATE, and scheduledAt is required only when scheduleType is SCHEDULED. Emits a MARKETING_CAMPAIGN_CREATE event; no recipients are contacted. Returns 409 when the code is already in use, and 422 when scheduleType is SCHEDULED without scheduledAt or windowEnd precedes windowStart. 
+     * Creates a marketing campaign in DRAFT status; nothing is targeted or sent until it is scheduled and dispatched. Use this tool when defining a new campaign; do not use updateCampaign, which edits an existing DRAFT campaign. Preconditions: no campaign may already use the same code (compared case-insensitively); segment and templates may be attached later, since readiness is only enforced by scheduleCampaign. Required inputs: code, name, audienceType (COMMERCIAL or INDIVIDUAL, immutable after creation) and a non-empty channels set (EMAIL, SMS); scheduleType defaults to IMMEDIATE, and scheduledAt is required only when scheduleType is SCHEDULED. Emits a MARKETING_CAMPAIGN_CREATE event; no recipients are contacted. Returns 409 when the code is already in use, and 422 when scheduleType is SCHEDULED without scheduledAt or windowEnd precedes windowStart.
      * @endpoint post /v1/marketing/campaigns
      * @param upsertCampaignRequest Campaign definition: code, name, audience, channels, and the optional segment, templates, offer and schedule to attach.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -175,9 +175,9 @@ export class MarketingCampaignsService extends BaseService {
 
     /**
      * Dispatch Campaign To Audience
-     * Materializes the campaign\&#39;s resolved audience into one PENDING send row per recipient and channel, moves a SCHEDULED campaign to SENDING, and returns 202 with the queued count while the send worker delivers asynchronously. Use this tool to start or retry delivery; do not use scheduleCampaign, which only validates readiness, and do not use previewCampaignAudience, which reports reach without queueing anything. Preconditions: the campaign must exist, be SCHEDULED or SENDING, and have a segment bound; the audience is the last snapshot replicated from pos-customer. Required inputs: campaignId (UUID) as a path parameter; there is no request body. Emits a MARKETING_CAMPAIGN_SEND event; the call is idempotent because each recipient-channel pair is unique per campaign, so re-invoking never double-sends, and when no audience snapshot has arrived yet it queues nothing, asynchronously requests resolution from pos-customer, and reports queued 0 for a later retry. Returns 404 when the campaign does not exist, and 422 when it is not SCHEDULED or SENDING or has no segment bound. 
+     * Materializes the campaign\&#39;s resolved audience into one PENDING send row per recipient and channel, moves a SCHEDULED campaign to SENDING, and returns 202 with the queued count while the send worker delivers asynchronously. Use this tool to start or retry delivery; do not use scheduleCampaign, which only validates readiness, and do not use previewCampaignAudience, which reports reach without queueing anything. Preconditions: the campaign must exist, be SCHEDULED or SENDING, and have a segment bound; the audience is the last snapshot replicated from pos-customer. Required inputs: campaignId (UUID) as a path parameter; there is no request body. Emits a MARKETING_CAMPAIGN_SEND event; the call is idempotent because each recipient-channel pair is unique per campaign, so re-invoking never double-sends, and when no audience snapshot has arrived yet it queues nothing, asynchronously requests resolution from pos-customer, and reports queued 0 for a later retry. Returns 404 when the campaign does not exist, and 422 when it is not SCHEDULED or SENDING or has no segment bound.
      * @endpoint post /v1/marketing/campaigns/{campaignId}/send
-     * @param campaignId 
+     * @param campaignId
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -235,9 +235,9 @@ export class MarketingCampaignsService extends BaseService {
 
     /**
      * Get Campaign By Id
-     * Returns one campaign\&#39;s full definition, including status, channels, bound segment, templates, schedule and delivery window. Use this tool when the campaign id is already known; use listCampaigns instead when searching by status or program. Preconditions: the campaign must exist. Required inputs: campaignId (UUID) as a path parameter; there is no request body. Emits a MARKETING_CAMPAIGN_GET audit event; no marketing state is changed and this is a read-only projection. Returns 404 when no campaign exists for the supplied id. 
+     * Returns one campaign\&#39;s full definition, including status, channels, bound segment, templates, schedule and delivery window. Use this tool when the campaign id is already known; use listCampaigns instead when searching by status or program. Preconditions: the campaign must exist. Required inputs: campaignId (UUID) as a path parameter; there is no request body. Emits a MARKETING_CAMPAIGN_GET audit event; no marketing state is changed and this is a read-only projection. Returns 404 when no campaign exists for the supplied id.
      * @endpoint get /v1/marketing/campaigns/{campaignId}
-     * @param campaignId 
+     * @param campaignId
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -295,11 +295,11 @@ export class MarketingCampaignsService extends BaseService {
 
     /**
      * List Campaign Send Records
-     * Lists the per-recipient, per-channel send rows a campaign dispatch queued, including status, failure reason, provider message id, attempts and timestamps. Use this tool to inspect individual delivery outcomes; use getCampaignStats instead for aggregate funnel and attribution numbers. Preconditions: none; an unknown campaignId yields an empty page rather than an error. Required inputs: campaignId (UUID) as a path parameter; page defaults to 0 and size defaults to 50, clamped between 1 and 200, ordered by queuedAt ascending. Emits a MARKETING_CAMPAIGN_SENDS_LIST audit event; no marketing state is changed and this is a read-only projection. Returns 200 with an empty page when the campaign has no send rows, so an empty result is not an error condition. 
+     * Lists the per-recipient, per-channel send rows a campaign dispatch queued, including status, failure reason, provider message id, attempts and timestamps. Use this tool to inspect individual delivery outcomes; use getCampaignStats instead for aggregate funnel and attribution numbers. Preconditions: none; an unknown campaignId yields an empty page rather than an error. Required inputs: campaignId (UUID) as a path parameter; page defaults to 0 and size defaults to 50, clamped between 1 and 200, ordered by queuedAt ascending. Emits a MARKETING_CAMPAIGN_SENDS_LIST audit event; no marketing state is changed and this is a read-only projection. Returns 200 with an empty page when the campaign has no send rows, so an empty result is not an error condition.
      * @endpoint get /v1/marketing/campaigns/{campaignId}/sends
-     * @param campaignId 
-     * @param page 
-     * @param size 
+     * @param campaignId
+     * @param page
+     * @param size
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -378,10 +378,10 @@ export class MarketingCampaignsService extends BaseService {
 
     /**
      * List Campaigns
-     * Lists marketing campaigns ordered by newest first, optionally filtered by lifecycle status and campaign program. Use this tool when browsing or searching campaigns; do not use getCampaignById, which requires a known campaign id and returns exactly one campaign. Preconditions: none; an empty result simply means no campaign matches the filters. Required inputs: none; status (DRAFT, SCHEDULED, SENDING, SENT, PAUSED, CANCELLED or CLOSED) and campaignProgramId (UUID) are optional query filters that combine when both are supplied. Emits a MARKETING_CAMPAIGN_LIST audit event; no marketing state is changed. Returns 200 with an empty array when nothing matches, so an empty result is not an error condition. 
+     * Lists marketing campaigns ordered by newest first, optionally filtered by lifecycle status and campaign program. Use this tool when browsing or searching campaigns; do not use getCampaignById, which requires a known campaign id and returns exactly one campaign. Preconditions: none; an empty result simply means no campaign matches the filters. Required inputs: none; status (DRAFT, SCHEDULED, SENDING, SENT, PAUSED, CANCELLED or CLOSED) and campaignProgramId (UUID) are optional query filters that combine when both are supplied. Emits a MARKETING_CAMPAIGN_LIST audit event; no marketing state is changed. Returns 200 with an empty array when nothing matches, so an empty result is not an error condition.
      * @endpoint get /v1/marketing/campaigns
-     * @param status 
-     * @param campaignProgramId 
+     * @param status
+     * @param campaignProgramId
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -457,9 +457,9 @@ export class MarketingCampaignsService extends BaseService {
 
     /**
      * Pause Campaign Dispatch
-     * Moves a campaign to PAUSED so the send worker stops draining its queued recipients. Use this tool to halt an in-flight or scheduled campaign without losing it; do not use cancelCampaign, which is terminal and cannot be undone. Preconditions: the campaign must exist and be in SCHEDULED or SENDING, the only statuses that permit the PAUSED transition. Required inputs: campaignId (UUID) as a path parameter; there is no request body. Emits a MARKETING_CAMPAIGN_PAUSE event; already-delivered messages are unaffected and queued send rows remain PENDING for a later resume. Returns 404 when the campaign does not exist, and 422 when its current status does not allow pausing. 
+     * Moves a campaign to PAUSED so the send worker stops draining its queued recipients. Use this tool to halt an in-flight or scheduled campaign without losing it; do not use cancelCampaign, which is terminal and cannot be undone. Preconditions: the campaign must exist and be in SCHEDULED or SENDING, the only statuses that permit the PAUSED transition. Required inputs: campaignId (UUID) as a path parameter; there is no request body. Emits a MARKETING_CAMPAIGN_PAUSE event; already-delivered messages are unaffected and queued send rows remain PENDING for a later resume. Returns 404 when the campaign does not exist, and 422 when its current status does not allow pausing.
      * @endpoint post /v1/marketing/campaigns/{campaignId}/pause
-     * @param campaignId 
+     * @param campaignId
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -517,9 +517,9 @@ export class MarketingCampaignsService extends BaseService {
 
     /**
      * Preview Campaign Audience
-     * Reports the campaign\&#39;s last resolved audience snapshot: total segment members, whether that snapshot was truncated by the CRM\&#39;s candidate ceiling, per-channel eligible counts after consent, staleness and suppression checks, a bounded per-channel sample of the individual decisions behind those counts, whether each channel has a template, and the readiness problems that would block scheduling. Use this tool to gauge reach before scheduling or dispatch; do not use dispatchCampaign, which actually queues messages for delivery. Preconditions: the campaign must exist and have a segmentId bound; membership is replicated asynchronously from pos-customer, so the counts reflect the snapshot taken at resolvedAt rather than live CRM data. Required inputs: campaignId (UUID) as a path parameter; there is no request body. Emits a MARKETING_AUDIENCE_PREVIEW audit event and, while the campaign is still DRAFT, SCHEDULED or PAUSED, asynchronously requests a fresher membership snapshot from pos-customer; the campaign itself is not modified. Each sample entry carries the party id, the contact resolved to receive the message (the CRM\&#39;s designated contact for a commercial account, the person themselves for an individual), and the machine-readable decision code; it never carries names, addresses or contact details, which this module does not hold. Problems with the campaign\&#39;s promotionOfferId or catalogFocusRef are reported in warnings rather than as errors, because a preview is where a marketer goes to find out what is wrong. Returns 404 when the campaign does not exist, and 422 when no segment is bound so there is nothing to preview. 
+     * Reports the campaign\&#39;s last resolved audience snapshot: total segment members, whether that snapshot was truncated by the CRM\&#39;s candidate ceiling, per-channel eligible counts after consent, staleness and suppression checks, a bounded per-channel sample of the individual decisions behind those counts, whether each channel has a template, and the readiness problems that would block scheduling. Use this tool to gauge reach before scheduling or dispatch; do not use dispatchCampaign, which actually queues messages for delivery. Preconditions: the campaign must exist and have a segmentId bound; membership is replicated asynchronously from pos-customer, so the counts reflect the snapshot taken at resolvedAt rather than live CRM data. Required inputs: campaignId (UUID) as a path parameter; there is no request body. Emits a MARKETING_AUDIENCE_PREVIEW audit event and, while the campaign is still DRAFT, SCHEDULED or PAUSED, asynchronously requests a fresher membership snapshot from pos-customer; the campaign itself is not modified. Each sample entry carries the party id, the contact resolved to receive the message (the CRM\&#39;s designated contact for a commercial account, the person themselves for an individual), and the machine-readable decision code; it never carries names, addresses or contact details, which this module does not hold. Problems with the campaign\&#39;s promotionOfferId or catalogFocusRef are reported in warnings rather than as errors, because a preview is where a marketer goes to find out what is wrong. Returns 404 when the campaign does not exist, and 422 when no segment is bound so there is nothing to preview.
      * @endpoint post /v1/marketing/campaigns/{campaignId}/audience-preview
-     * @param campaignId 
+     * @param campaignId
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -577,9 +577,9 @@ export class MarketingCampaignsService extends BaseService {
 
     /**
      * Resume Paused Campaign
-     * Returns a PAUSED campaign to SCHEDULED so it re-enters the dispatch queue; the send worker decides when delivery actually restarts rather than jumping straight back into SENDING. Use this tool to continue a campaign that pauseCampaign halted; do not use scheduleCampaign, which re-runs readiness validation on a DRAFT or PAUSED campaign. Preconditions: the campaign must exist and be PAUSED. Required inputs: campaignId (UUID) as a path parameter; there is no request body. Emits a MARKETING_CAMPAIGN_RESUME event; recipients already recorded as sent are never re-queued, because each recipient-channel pair is unique per campaign. Returns 404 when the campaign does not exist, and 422 when its current status does not allow resuming. 
+     * Returns a PAUSED campaign to SCHEDULED so it re-enters the dispatch queue; the send worker decides when delivery actually restarts rather than jumping straight back into SENDING. Use this tool to continue a campaign that pauseCampaign halted; do not use scheduleCampaign, which re-runs readiness validation on a DRAFT or PAUSED campaign. Preconditions: the campaign must exist and be PAUSED. Required inputs: campaignId (UUID) as a path parameter; there is no request body. Emits a MARKETING_CAMPAIGN_RESUME event; recipients already recorded as sent are never re-queued, because each recipient-channel pair is unique per campaign. Returns 404 when the campaign does not exist, and 422 when its current status does not allow resuming.
      * @endpoint post /v1/marketing/campaigns/{campaignId}/resume
-     * @param campaignId 
+     * @param campaignId
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -637,9 +637,9 @@ export class MarketingCampaignsService extends BaseService {
 
     /**
      * Schedule Campaign For Dispatch
-     * Validates a campaign\&#39;s readiness and moves it to SCHEDULED, the state from which dispatch is allowed. Use this tool when a DRAFT campaign is complete; do not use dispatchCampaign, which queues the actual sends and only accepts a campaign that is already SCHEDULED or SENDING. Preconditions: the campaign must exist and be in DRAFT or PAUSED; it must have at least one channel, a bound segment that is known to this module, active, and matching the campaign\&#39;s audienceType, and an existing template attached for every selected channel; any promotionOfferId must resolve in pos-price to an ACTIVE offer whose date window includes today, and any catalogFocusRef must be written as kind:value using one of product, sku, service or category. Required inputs: campaignId (UUID) as a path parameter; there is no request body. Emits a MARKETING_CAMPAIGN_SCHEDULE event and publishes a campaign-scheduled fact through the transactional outbox. Returns 404 when the campaign does not exist, and 422 listing every readiness problem at once when the campaign is not ready or the transition is not legal from its current status. 
+     * Validates a campaign\&#39;s readiness and moves it to SCHEDULED, the state from which dispatch is allowed. Use this tool when a DRAFT campaign is complete; do not use dispatchCampaign, which queues the actual sends and only accepts a campaign that is already SCHEDULED or SENDING. Preconditions: the campaign must exist and be in DRAFT or PAUSED; it must have at least one channel, a bound segment that is known to this module, active, and matching the campaign\&#39;s audienceType, and an existing template attached for every selected channel; any promotionOfferId must resolve in pos-price to an ACTIVE offer whose date window includes today, and any catalogFocusRef must be written as kind:value using one of product, sku, service or category. Required inputs: campaignId (UUID) as a path parameter; there is no request body. Emits a MARKETING_CAMPAIGN_SCHEDULE event and publishes a campaign-scheduled fact through the transactional outbox. Returns 404 when the campaign does not exist, and 422 listing every readiness problem at once when the campaign is not ready or the transition is not legal from its current status.
      * @endpoint post /v1/marketing/campaigns/{campaignId}/schedule
-     * @param campaignId 
+     * @param campaignId
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -697,9 +697,9 @@ export class MarketingCampaignsService extends BaseService {
 
     /**
      * Update Draft Campaign
-     * Replaces the definition of a DRAFT campaign, including its code, channels, segment, templates, schedule and delivery window. Use this tool to revise a campaign before it is scheduled; do not use createCampaign, which makes a new campaign, and use the lifecycle tools (scheduleCampaign, pauseCampaign, cancelCampaign) rather than this one to change status. Preconditions: the campaign must exist and still be in DRAFT, since once dispatch may have begun the definition is frozen; audienceType must equal the stored value because it is immutable. Required inputs: campaignId (UUID) path parameter plus the full replacement body (code, name, audienceType, channels); scheduleType defaults to IMMEDIATE when omitted, and omitted optional fields are cleared rather than preserved. Emits a MARKETING_CAMPAIGN_UPDATE event; no recipients are contacted. Returns 404 when the campaign does not exist, 409 when the code belongs to another campaign, and 422 when the campaign is no longer editable, audienceType is changed, or the schedule and window fields are inconsistent. 
+     * Replaces the definition of a DRAFT campaign, including its code, channels, segment, templates, schedule and delivery window. Use this tool to revise a campaign before it is scheduled; do not use createCampaign, which makes a new campaign, and use the lifecycle tools (scheduleCampaign, pauseCampaign, cancelCampaign) rather than this one to change status. Preconditions: the campaign must exist and still be in DRAFT, since once dispatch may have begun the definition is frozen; audienceType must equal the stored value because it is immutable. Required inputs: campaignId (UUID) path parameter plus the full replacement body (code, name, audienceType, channels); scheduleType defaults to IMMEDIATE when omitted, and omitted optional fields are cleared rather than preserved. Emits a MARKETING_CAMPAIGN_UPDATE event; no recipients are contacted. Returns 404 when the campaign does not exist, 409 when the code belongs to another campaign, and 422 when the campaign is no longer editable, audienceType is changed, or the schedule and window fields are inconsistent.
      * @endpoint put /v1/marketing/campaigns/{campaignId}
-     * @param campaignId 
+     * @param campaignId
      * @param upsertCampaignRequest Full replacement campaign definition; audienceType must match the stored value, and omitted optional fields are cleared.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.

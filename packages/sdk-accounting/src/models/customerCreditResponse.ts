@@ -12,7 +12,7 @@
 /**
  * AR customer credit with its remaining open amount
  */
-export interface CustomerCreditResponse { 
+export interface CustomerCreditResponse {
     /**
      * Amount originally issued
      */

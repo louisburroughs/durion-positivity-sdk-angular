@@ -12,7 +12,7 @@
 /**
  * A vendor price for a product in one market, effective from a date.
  */
-export interface SupplierPriceEntryDto { 
+export interface SupplierPriceEntryDto {
     /**
      * EAN the vendor stated.
      */

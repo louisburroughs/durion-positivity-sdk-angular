@@ -12,7 +12,7 @@
 /**
  * An assigned role with its primary flag
  */
-export interface AssignedRole { 
+export interface AssignedRole {
     /**
      * Whether this contact is primary for this role
      */

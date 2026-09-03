@@ -12,7 +12,7 @@
 /**
  * One SKU whose sourcing strategy would start resolving from SKU_CATEGORY (#1535)
  */
-export interface SourcingImpactRow { 
+export interface SourcingImpactRow {
     /**
      * Replicated catalog category name the SKU_CATEGORY row is matched on
      */

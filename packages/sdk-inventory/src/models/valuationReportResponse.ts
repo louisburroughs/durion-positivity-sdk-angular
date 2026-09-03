@@ -13,7 +13,7 @@ import { ValuationRow } from './valuationRow';
 /**
  * Inventory valuation report with SKU-level rows and a total
  */
-export interface ValuationReportResponse { 
+export interface ValuationReportResponse {
     /**
      * Historical instant the valuation was reconstructed at, or null for current state
      */

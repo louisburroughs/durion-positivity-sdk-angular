@@ -9,7 +9,7 @@
  */
 
 
-export interface FleetVehicle { 
+export interface FleetVehicle {
     brand?: string;
     fleetNumber?: string;
     identifiable?: boolean;

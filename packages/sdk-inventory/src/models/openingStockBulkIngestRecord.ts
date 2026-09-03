@@ -12,7 +12,7 @@
 /**
  * One product\'s opening on-hand quantity at one storage location
  */
-export interface OpeningStockBulkIngestRecord { 
+export interface OpeningStockBulkIngestRecord {
     /**
      * Storage location the stock sits in. Defaults to the request\'s locationId when omitted, which is only useful for a site with no storage topology.
      */

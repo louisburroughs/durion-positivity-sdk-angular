@@ -12,7 +12,7 @@
 /**
  * Party id resolved to its display name and best-effort phone
  */
-export interface PartyNameRef { 
+export interface PartyNameRef {
     /**
      * Resolved display name (commercial display/legal name or person full name)
      */

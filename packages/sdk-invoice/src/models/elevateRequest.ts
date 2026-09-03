@@ -12,7 +12,7 @@
 /**
  * Request payload for minting a manager-approval elevation token
  */
-export interface ElevateRequest { 
+export interface ElevateRequest {
     /**
      * Invoice the elevation token will authorise
      */

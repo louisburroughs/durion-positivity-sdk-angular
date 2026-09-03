@@ -12,7 +12,7 @@ import { CreditMemoResponse } from './creditMemoResponse';
 import { SortObject } from './sortObject';
 
 
-export interface PageCreditMemoResponse { 
+export interface PageCreditMemoResponse {
     content?: Array<CreditMemoResponse>;
     empty?: boolean;
     first?: boolean;

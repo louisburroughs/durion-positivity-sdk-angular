@@ -12,7 +12,7 @@ import { SortObject } from './sortObject';
 import { VendorBillListRow } from './vendorBillListRow';
 
 
-export interface PageVendorBillListRow { 
+export interface PageVendorBillListRow {
     content?: Array<VendorBillListRow>;
     empty?: boolean;
     first?: boolean;

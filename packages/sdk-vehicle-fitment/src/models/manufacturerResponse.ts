@@ -12,7 +12,7 @@
 /**
  * Vehicle manufacturer response
  */
-export interface ManufacturerResponse { 
+export interface ManufacturerResponse {
     /**
      * Manufacturer identifier
      */

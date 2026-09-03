@@ -12,7 +12,7 @@
 /**
  * Work session representing a tracked period of work for a person
  */
-export interface WorkSessionDto { 
+export interface WorkSessionDto {
     /**
      * Total billable minutes for the session
      */

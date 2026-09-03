@@ -11,7 +11,7 @@
 
 import { Inject, Injectable, Optional }                      from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams,
-         HttpResponse, HttpEvent, HttpContext 
+         HttpResponse, HttpEvent, HttpContext
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
@@ -43,7 +43,7 @@ export class SupplierItemCostListAPIService extends BaseService {
      * List supplier cost structures
      * Returns a paginated list of supplier cost structures. At least one of itemId or supplierId must be provided.
      * @endpoint get /v1/catalog/supplier-item-costs
-     * @param pageable 
+     * @param pageable
      * @param itemId Filter by catalog item ID
      * @param supplierId Filter by supplier ID
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.

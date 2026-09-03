@@ -12,7 +12,7 @@
 /**
  * Role definition as exposed by the security service
  */
-export interface RoleDto { 
+export interface RoleDto {
     /**
      * Whether the role is active
      */

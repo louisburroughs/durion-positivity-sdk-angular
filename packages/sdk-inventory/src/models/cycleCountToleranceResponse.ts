@@ -12,7 +12,7 @@
 /**
  * A tolerance configuration for cycle-count reconciliation
  */
-export interface CycleCountToleranceResponse { 
+export interface CycleCountToleranceResponse {
     /**
      * Maximum acceptable absolute variance, in the product\'s base UoM
      */

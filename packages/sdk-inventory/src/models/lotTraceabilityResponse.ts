@@ -14,7 +14,7 @@ import { TraceabilityUpstream } from './traceabilityUpstream';
 /**
  * Upstream/downstream traceability for a lot (odoo-parity E5)
  */
-export interface LotTraceabilityResponse { 
+export interface LotTraceabilityResponse {
     /**
      * Downstream movement chain, oldest first
      */

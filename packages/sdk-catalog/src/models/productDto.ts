@@ -15,7 +15,7 @@ import { DimensionDto } from './dimensionDto';
 /**
  * Catalog product
  */
-export interface ProductDto { 
+export interface ProductDto {
     /**
      * Attributes JSON
      */

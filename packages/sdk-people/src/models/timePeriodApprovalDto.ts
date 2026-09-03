@@ -12,7 +12,7 @@
 /**
  * Aggregated approval state for a person within a time period
  */
-export interface TimePeriodApprovalDto { 
+export interface TimePeriodApprovalDto {
     /**
      * Number of approved entries
      */

@@ -11,7 +11,7 @@
 
 import { Inject, Injectable, Optional }                      from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams,
-         HttpResponse, HttpEvent, HttpContext 
+         HttpResponse, HttpEvent, HttpContext
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
@@ -41,10 +41,10 @@ export class TimeEntryApprovalAPIService extends BaseService {
 
     /**
      * Batch Approve Submitted Time Entries
-     * Approves a batch of time entries, marking each SUBMITTED or PENDING_APPROVAL entry APPROVED and stamping the approver and approval time; pos-people is authoritative for approval execution. Use this tool for supervisor approval of individually selected time entries; do not use rejectTimeEntriesBatch, which rejects them, and do not use approveTimePeriod, which approves a whole pay period per person. Preconditions: each entry must exist and be in SUBMITTED or PENDING_APPROVAL status, and the caller needs the people:timeEntry:approve authority for individual entries to succeed. Required inputs: decisions, a non-empty list of objects each carrying timeEntryId (UUID string); an optional X-Correlation-Id header is recorded in the audit trail. Emits a PEOPLE_TIME_ENTRY_APPROVE event and writes an audit row per decision. Returns 200 with a per-entry result list (failure codes NOT_FOUND, ENTRY_NOT_PENDING, FORBIDDEN) rather than failing the whole batch, and 400 when the decisions list is missing or empty. 
+     * Approves a batch of time entries, marking each SUBMITTED or PENDING_APPROVAL entry APPROVED and stamping the approver and approval time; pos-people is authoritative for approval execution. Use this tool for supervisor approval of individually selected time entries; do not use rejectTimeEntriesBatch, which rejects them, and do not use approveTimePeriod, which approves a whole pay period per person. Preconditions: each entry must exist and be in SUBMITTED or PENDING_APPROVAL status, and the caller needs the people:timeEntry:approve authority for individual entries to succeed. Required inputs: decisions, a non-empty list of objects each carrying timeEntryId (UUID string); an optional X-Correlation-Id header is recorded in the audit trail. Emits a PEOPLE_TIME_ENTRY_APPROVE event and writes an audit row per decision. Returns 200 with a per-entry result list (failure codes NOT_FOUND, ENTRY_NOT_PENDING, FORBIDDEN) rather than failing the whole batch, and 400 when the decisions list is missing or empty.
      * @endpoint post /v1/people/timeEntries/approve
      * @param timeEntryDecisionBatchRequest Batch of approval decisions, one element per time entry to approve; rejectionReason is ignored here.
-     * @param xCorrelationId 
+     * @param xCorrelationId
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -115,9 +115,9 @@ export class TimeEntryApprovalAPIService extends BaseService {
 
     /**
      * Get One Attendance Time Entry
-     * Returns a single attendance time entry by id, with its clock-in, clock-out, break minutes, status and approval decision. Use this tool for the detail view opened from an approvals-queue row; do not use listTimeEntries, which pages over many entries, and do not use getTimeEntryAdjustments, which returns the proposed corrections attached to an entry rather than the entry itself. Preconditions: an entry must exist for the supplied timeEntryId. Required inputs: timeEntryId (UUID) path parameter; timeZone is optional and defaults to UTC, affecting only the derived workDate. Emits a PEOPLE_TIME_ENTRY_GET audit event but changes no state. Returns 404 when no entry has that id, and 400 when timeZone is not a known zone id. 
+     * Returns a single attendance time entry by id, with its clock-in, clock-out, break minutes, status and approval decision. Use this tool for the detail view opened from an approvals-queue row; do not use listTimeEntries, which pages over many entries, and do not use getTimeEntryAdjustments, which returns the proposed corrections attached to an entry rather than the entry itself. Preconditions: an entry must exist for the supplied timeEntryId. Required inputs: timeEntryId (UUID) path parameter; timeZone is optional and defaults to UTC, affecting only the derived workDate. Emits a PEOPLE_TIME_ENTRY_GET audit event but changes no state. Returns 404 when no entry has that id, and 400 when timeZone is not a known zone id.
      * @endpoint get /v1/people/timeEntries/{timeEntryId}
-     * @param timeEntryId 
+     * @param timeEntryId
      * @param timeZone Zone the derived workDate is resolved in; defaults to UTC
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
@@ -188,7 +188,7 @@ export class TimeEntryApprovalAPIService extends BaseService {
 
     /**
      * List Attendance Time Entries For Approval
-     * Returns a page of attendance time entries — clock-in, clock-out and the break minutes inside that window — with each entry\&#39;s status and approval decision, oldest submission first. Use this tool to build the approvals queue or to find the timeEntryId an approve or reject call needs; do not use listWorkexecWorkSessions, which returns time a technician spent on a workorder task. A time entry is attendance only and carries no workorder reference, so this endpoint cannot answer how long a job took. Preconditions: none; a page with an empty items list is returned rather than an error when nothing matches. Required inputs: none are mandatory. status, workDate, employeeId and locationId each narrow the result and are unfiltered when omitted; workDate is a calendar day resolved in timeZone, which defaults to UTC; page defaults to 0 and size to 20 with a maximum of 100. Emits a PEOPLE_TIME_ENTRY_LIST audit event but changes no state. Returns 200 with the page envelope, and 400 when timeZone is not a known zone id or the paging parameters are out of range. 
+     * Returns a page of attendance time entries — clock-in, clock-out and the break minutes inside that window — with each entry\&#39;s status and approval decision, oldest submission first. Use this tool to build the approvals queue or to find the timeEntryId an approve or reject call needs; do not use listWorkexecWorkSessions, which returns time a technician spent on a workorder task. A time entry is attendance only and carries no workorder reference, so this endpoint cannot answer how long a job took. Preconditions: none; a page with an empty items list is returned rather than an error when nothing matches. Required inputs: none are mandatory. status, workDate, employeeId and locationId each narrow the result and are unfiltered when omitted; workDate is a calendar day resolved in timeZone, which defaults to UTC; page defaults to 0 and size to 20 with a maximum of 100. Emits a PEOPLE_TIME_ENTRY_LIST audit event but changes no state. Returns 200 with the page envelope, and 400 when timeZone is not a known zone id or the paging parameters are out of range.
      * @endpoint get /v1/people/timeEntries
      * @param status Keep only entries in this status; omit for every status
      * @param workDate Calendar day of the clock-in, resolved in timeZone
@@ -317,10 +317,10 @@ export class TimeEntryApprovalAPIService extends BaseService {
 
     /**
      * Batch Reject Submitted Time Entries
-     * Rejects a batch of time entries, marking each SUBMITTED or PENDING_APPROVAL entry REJECTED with the supplied reason stored on the entry. Use this tool to send individually selected entries back with a reason; do not use approveTimeEntriesBatch, which approves them, and do not use rejectTimePeriod, which rejects a whole pay period per person. Preconditions: each entry must exist and be in SUBMITTED or PENDING_APPROVAL status, and the caller needs the people:timeEntry:reject authority for individual entries to succeed. Required inputs: decisions, a non-empty list where every element carries timeEntryId and a non-blank rejectionReason; one missing reason fails the entire request before any entry is touched. Emits a PEOPLE_TIME_ENTRY_REJECT event and writes an audit row per decision. Returns 200 with a per-entry result list (failure codes NOT_FOUND, ENTRY_NOT_PENDING, FORBIDDEN), and 400 when any decision lacks a rejectionReason. 
+     * Rejects a batch of time entries, marking each SUBMITTED or PENDING_APPROVAL entry REJECTED with the supplied reason stored on the entry. Use this tool to send individually selected entries back with a reason; do not use approveTimeEntriesBatch, which approves them, and do not use rejectTimePeriod, which rejects a whole pay period per person. Preconditions: each entry must exist and be in SUBMITTED or PENDING_APPROVAL status, and the caller needs the people:timeEntry:reject authority for individual entries to succeed. Required inputs: decisions, a non-empty list where every element carries timeEntryId and a non-blank rejectionReason; one missing reason fails the entire request before any entry is touched. Emits a PEOPLE_TIME_ENTRY_REJECT event and writes an audit row per decision. Returns 200 with a per-entry result list (failure codes NOT_FOUND, ENTRY_NOT_PENDING, FORBIDDEN), and 400 when any decision lacks a rejectionReason.
      * @endpoint post /v1/people/timeEntries/reject
      * @param timeEntryDecisionBatchRequest Batch of rejection decisions; every element must carry a non-blank rejectionReason.
-     * @param xCorrelationId 
+     * @param xCorrelationId
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options

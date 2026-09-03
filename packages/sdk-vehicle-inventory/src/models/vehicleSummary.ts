@@ -12,7 +12,7 @@
 /**
  * Condensed vehicle representation returned in search results
  */
-export interface VehicleSummary { 
+export interface VehicleSummary {
     /**
      * Human-readable description of the vehicle
      */

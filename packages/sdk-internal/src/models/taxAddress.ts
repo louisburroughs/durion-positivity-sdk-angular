@@ -12,7 +12,7 @@
 /**
  * International destination address
  */
-export interface TaxAddress { 
+export interface TaxAddress {
     /**
      * Locality/city/municipality name
      */

@@ -12,7 +12,7 @@
 /**
  * Contact point details
  */
-export interface ContactPointDto { 
+export interface ContactPointDto {
     /**
      * Contact point ID
      */

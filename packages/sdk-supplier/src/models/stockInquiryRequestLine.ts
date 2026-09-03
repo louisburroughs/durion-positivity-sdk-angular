@@ -12,7 +12,7 @@
 /**
  * One inquired article. Named explicitly because an unqualified \"Line\" collides with other modules\' schemas of the same name when specs are merged for SDK generation.
  */
-export interface StockInquiryRequestLine { 
+export interface StockInquiryRequestLine {
     articleEan?: string;
     requestedQuantity?: number;
     supplierArticleCode?: string;

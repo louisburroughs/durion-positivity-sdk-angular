@@ -11,7 +11,7 @@
 
 import { Inject, Injectable, Optional }                      from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams,
-         HttpResponse, HttpEvent, HttpContext 
+         HttpResponse, HttpEvent, HttpContext
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
@@ -43,7 +43,7 @@ export class UserPersonLinkingAPIService extends BaseService {
 
     /**
      * Create User Person Link as Admin
-     * Creates a user-person link from the minimal administrative payload of username and personId only; the link is stored with linkType PRIMARY. Use this tool for administrative linking when linkType and notes are not needed; do not use linkUserToPerson, which accepts the same pair plus an explicit linkType and notes. Preconditions: the person must exist, and the username must not already be linked to a different person; one username maps to at most one person. Required inputs: username and personId (UUID); both are mandatory and there are no other fields. Emits a PEOPLE_CONTACT_USER_LINK_CREATE event and queues a link-updated fact on the transactional outbox. Returns 201 when the link is created, 200 when the identical link already exists (the call is idempotent), 404 when the person does not exist, and 409 when the username is already linked to a different person. 
+     * Creates a user-person link from the minimal administrative payload of username and personId only; the link is stored with linkType PRIMARY. Use this tool for administrative linking when linkType and notes are not needed; do not use linkUserToPerson, which accepts the same pair plus an explicit linkType and notes. Preconditions: the person must exist, and the username must not already be linked to a different person; one username maps to at most one person. Required inputs: username and personId (UUID); both are mandatory and there are no other fields. Emits a PEOPLE_CONTACT_USER_LINK_CREATE event and queues a link-updated fact on the transactional outbox. Returns 201 when the link is created, 200 when the identical link already exists (the call is idempotent), 404 when the person does not exist, and 409 when the username is already linked to a different person.
      * @endpoint post /v1/people/user-links
      * @param createUserLinkRequest Minimal user-person pair to link; the link is stored as PRIMARY.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -113,7 +113,7 @@ export class UserPersonLinkingAPIService extends BaseService {
 
     /**
      * Get User Links for Person
-     * Returns the full user-person link records for a person, including linkType, notes, creator and creation time. Use this tool when link metadata is needed; use listUsernamesForPerson instead when only the usernames matter, and getPersonByUsername to go from a username to its person. Preconditions: the person record must exist; a person with no links yields an empty list. Required inputs: personId (UUID) as a path parameter; there is no request body. Emits a PEOPLE_CONTACT_USER_LINK_GET audit event; no state changes. Returns 404 when the person does not exist. 
+     * Returns the full user-person link records for a person, including linkType, notes, creator and creation time. Use this tool when link metadata is needed; use listUsernamesForPerson instead when only the usernames matter, and getPersonByUsername to go from a username to its person. Preconditions: the person record must exist; a person with no links yields an empty list. Required inputs: personId (UUID) as a path parameter; there is no request body. Emits a PEOPLE_CONTACT_USER_LINK_GET audit event; no state changes. Returns 404 when the person does not exist.
      * @endpoint get /v1/people/user-links/{personId}
      * @param personId Person ID
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -173,7 +173,7 @@ export class UserPersonLinkingAPIService extends BaseService {
 
     /**
      * Get Person Linked to Username
-     * Returns the person record linked to a username, including emails, work phone numbers and the username itself. Use this tool to translate a login identity into its person record; use getCurrentPerson instead when the target is the authenticated caller, and getLinksByPersonId to go from a person to its links. Preconditions: a user-person link must exist for the username, and the linked person record must still exist. Required inputs: username as a path parameter; there is no request body. No events are emitted and no state changes; this is a read-only projection. Returns 404 when no link exists for the username or the linked person record is missing. 
+     * Returns the person record linked to a username, including emails, work phone numbers and the username itself. Use this tool to translate a login identity into its person record; use getCurrentPerson instead when the target is the authenticated caller, and getLinksByPersonId to go from a person to its links. Preconditions: a user-person link must exist for the username, and the linked person record must still exist. Required inputs: username as a path parameter; there is no request body. No events are emitted and no state changes; this is a read-only projection. Returns 404 when no link exists for the username or the linked person record is missing.
      * @endpoint get /v1/people/users/{username}/person
      * @param username Username
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -233,7 +233,7 @@ export class UserPersonLinkingAPIService extends BaseService {
 
     /**
      * Link User to Person Record
-     * Links a security user account to a person record, optionally recording a linkType and notes; the link is what lets a login act as that person. Use this tool when associating a user with a person, for example during onboarding; do not use createUserPersonLink, which is the minimal admin variant without linkType or notes, and do not use createPerson, which creates the identity record itself. Preconditions: the person must exist, and the username must not already be linked to a different person; one username maps to at most one person. Required inputs: username and personId (UUID); linkType defaults to PRIMARY and notes is optional. Emits a PEOPLE_CONTACT_USER_LINK_CREATE event and queues a link-updated fact on the transactional outbox. Returns 201 when the link is created, 200 when the identical link already exists (the call is idempotent), 404 when the person does not exist, and 409 when the username is already linked to a different person. 
+     * Links a security user account to a person record, optionally recording a linkType and notes; the link is what lets a login act as that person. Use this tool when associating a user with a person, for example during onboarding; do not use createUserPersonLink, which is the minimal admin variant without linkType or notes, and do not use createPerson, which creates the identity record itself. Preconditions: the person must exist, and the username must not already be linked to a different person; one username maps to at most one person. Required inputs: username and personId (UUID); linkType defaults to PRIMARY and notes is optional. Emits a PEOPLE_CONTACT_USER_LINK_CREATE event and queues a link-updated fact on the transactional outbox. Returns 201 when the link is created, 200 when the identical link already exists (the call is idempotent), 404 when the person does not exist, and 409 when the username is already linked to a different person.
      * @endpoint post /v1/people/users/link
      * @param linkUserToPersonRequest User-person pair to link, with optional link classification and notes.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -303,7 +303,7 @@ export class UserPersonLinkingAPIService extends BaseService {
 
     /**
      * List Usernames Linked to Person
-     * Lists every username linked to a person record as a flat array of strings. Use this tool to see which logins can act as a person; use getLinksByPersonId instead when the full link records with linkType, notes and audit fields are needed. Preconditions: the person record must exist; a person with no links yields an empty list. Required inputs: personId (UUID) as a path parameter; there is no request body. No events are emitted and no state changes; this is a read-only projection. Returns 404 when the person does not exist. 
+     * Lists every username linked to a person record as a flat array of strings. Use this tool to see which logins can act as a person; use getLinksByPersonId instead when the full link records with linkType, notes and audit fields are needed. Preconditions: the person record must exist; a person with no links yields an empty list. Required inputs: personId (UUID) as a path parameter; there is no request body. No events are emitted and no state changes; this is a read-only projection. Returns 404 when the person does not exist.
      * @endpoint get /v1/people/{personId}/users
      * @param personId Person ID
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -363,7 +363,7 @@ export class UserPersonLinkingAPIService extends BaseService {
 
     /**
      * Unlink User from Person Record
-     * Removes the link between a security user and its person record, leaving both the user account and the person untouched. Use this tool to sever a login from an identity, including before deletePerson on a person that still has linked users; do not use revokePersonRoleAssignment, which removes a single role rather than the whole link. Preconditions: a user-person link must exist for the username. Required inputs: username as a path parameter; there is no request body. Emits a PEOPLE_CONTACT_USER_PERSON_LINK_DELETE event and queues a link-removed fact on the transactional outbox. Returns 204 on success, and 404 when no link exists for the username. 
+     * Removes the link between a security user and its person record, leaving both the user account and the person untouched. Use this tool to sever a login from an identity, including before deletePerson on a person that still has linked users; do not use revokePersonRoleAssignment, which removes a single role rather than the whole link. Preconditions: a user-person link must exist for the username. Required inputs: username as a path parameter; there is no request body. Emits a PEOPLE_CONTACT_USER_PERSON_LINK_DELETE event and queues a link-removed fact on the transactional outbox. Returns 204 on success, and 404 when no link exists for the username.
      * @endpoint delete /v1/people/users/{username}/link
      * @param username Username
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.

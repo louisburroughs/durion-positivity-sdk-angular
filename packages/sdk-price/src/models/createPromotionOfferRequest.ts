@@ -12,7 +12,7 @@
 /**
  * Request payload for creating a promotion offer
  */
-export interface CreatePromotionOfferRequest { 
+export interface CreatePromotionOfferRequest {
     /**
      * Optional promotion description
      */

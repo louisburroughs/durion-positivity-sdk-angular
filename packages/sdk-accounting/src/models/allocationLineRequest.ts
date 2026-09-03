@@ -12,7 +12,7 @@
 /**
  * Allocation line for a specific vendor bill
  */
-export interface AllocationLineRequest { 
+export interface AllocationLineRequest {
     /**
      * Amount to apply to this bill
      */

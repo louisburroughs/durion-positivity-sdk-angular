@@ -11,7 +11,7 @@
 
 import { Inject, Injectable, Optional }                      from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams,
-         HttpResponse, HttpEvent, HttpContext 
+         HttpResponse, HttpEvent, HttpContext
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
@@ -47,7 +47,7 @@ export class PickListsService extends BaseService {
 
     /**
      * Cancel pick list
-     * Cancels a pick list by setting its status to CANCELLED; individual task statuses are left unchanged. Use this tool to abandon picking for a workorder; do not use cancelReservation, which releases the reservation and its allocations — cancelling a pick list neither releases allocations nor writes ledger entries. Preconditions: none are enforced; cancelling an unknown pick list is a silent no-op. Required inputs: pickListId (UUID) path parameter; there is no request body. Emits an INVENTORY_PICK_LIST_CANCEL event; no ledger entries are written. Returns 204 even when the pick list does not exist, because the cancel is then a no-op. 
+     * Cancels a pick list by setting its status to CANCELLED; individual task statuses are left unchanged. Use this tool to abandon picking for a workorder; do not use cancelReservation, which releases the reservation and its allocations — cancelling a pick list neither releases allocations nor writes ledger entries. Preconditions: none are enforced; cancelling an unknown pick list is a silent no-op. Required inputs: pickListId (UUID) path parameter; there is no request body. Emits an INVENTORY_PICK_LIST_CANCEL event; no ledger entries are written. Returns 204 even when the pick list does not exist, because the cancel is then a no-op.
      * @endpoint delete /v1/inventory/pick-lists/{pickListId}
      * @param pickListId Pick list identifier
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -107,7 +107,7 @@ export class PickListsService extends BaseService {
 
     /**
      * Confirm pick task
-     * Confirms one pick task against scanned data, marking it PICKED with the quantity picked and the lot the units were taken from; when every task on the list is PICKED the pick list flips to COMPLETED. Use this tool once per physical pick; do not use confirmPickingList on the pickingLists path, which is an unimplemented stub that always returns 501, and do not use consumePickedItems until after confirmation — consumption posts the stock decrement, while confirmation posts no ledger entries. Preconditions: the pick task must exist and belong to the pick list; for a LOT-tracked SKU the lot must be keyed and resolve to an existing ACTIVE lot. Required inputs: pickListId and taskId (UUIDs) as path parameters, plus scannedSkuId (UUID), scannedLocationId (UUID) and quantityPicked (positive, at most the task\&#39;s required quantity); lotNumber is required for LOT-tracked SKUs, ignored for untracked ones, and overrides the task\&#39;s advisory suggestedLotNumber. Emits an INVENTORY_PICK_TASK_CONFIRM event; the resolved pickedLotId is stored on the task and travels to the consumption posting. Returns 404 when the pick list or task is unknown or the task belongs to another list, 422 with PICK_SCAN_MISMATCH when scannedSkuId differs from the task\&#39;s product, 422 with LOT_NUMBER_REQUIRED, LOT_UNKNOWN or LOT_NOT_AVAILABLE for lot failures, and 400 when quantityPicked exceeds the required quantity. 
+     * Confirms one pick task against scanned data, marking it PICKED with the quantity picked and the lot the units were taken from; when every task on the list is PICKED the pick list flips to COMPLETED. Use this tool once per physical pick; do not use confirmPickingList on the pickingLists path, which is an unimplemented stub that always returns 501, and do not use consumePickedItems until after confirmation — consumption posts the stock decrement, while confirmation posts no ledger entries. Preconditions: the pick task must exist and belong to the pick list; for a LOT-tracked SKU the lot must be keyed and resolve to an existing ACTIVE lot. Required inputs: pickListId and taskId (UUIDs) as path parameters, plus scannedSkuId (UUID), scannedLocationId (UUID) and quantityPicked (positive, at most the task\&#39;s required quantity); lotNumber is required for LOT-tracked SKUs, ignored for untracked ones, and overrides the task\&#39;s advisory suggestedLotNumber. Emits an INVENTORY_PICK_TASK_CONFIRM event; the resolved pickedLotId is stored on the task and travels to the consumption posting. Returns 404 when the pick list or task is unknown or the task belongs to another list, 422 with PICK_SCAN_MISMATCH when scannedSkuId differs from the task\&#39;s product, 422 with LOT_NUMBER_REQUIRED, LOT_UNKNOWN or LOT_NOT_AVAILABLE for lot failures, and 400 when quantityPicked exceeds the required quantity.
      * @endpoint post /v1/inventory/pick-lists/{pickListId}/tasks/{taskId}/confirm
      * @param pickListId Pick list identifier
      * @param taskId Pick task identifier
@@ -185,7 +185,7 @@ export class PickListsService extends BaseService {
 
     /**
      * Create pick list
-     * Creates a pick list for a workorder in DRAFT status; pick tasks are not generated by this call — they are attached by the pick-list generation flow, and releasePickList later opens the list for execution. Use this tool to start pick planning for a workorder; do not use releasePickList, which only transitions an existing list to READY_TO_PICK, and do not use updatePickListStatus for creation even though it tolerates unknown ids. Preconditions: none are checked — the workorder id is not validated against the workorder service. Required inputs: workorderId (UUID); dueAt (ISO-8601 instant), priority (non-negative integer, default 0) and reservationId (UUID) are optional. Emits an INVENTORY_PICK_LIST_CREATE event; no ledger entries or allocations are written. Returns 201 with the created pick list, and 400 when workorderId is missing or priority is negative. 
+     * Creates a pick list for a workorder in DRAFT status; pick tasks are not generated by this call — they are attached by the pick-list generation flow, and releasePickList later opens the list for execution. Use this tool to start pick planning for a workorder; do not use releasePickList, which only transitions an existing list to READY_TO_PICK, and do not use updatePickListStatus for creation even though it tolerates unknown ids. Preconditions: none are checked — the workorder id is not validated against the workorder service. Required inputs: workorderId (UUID); dueAt (ISO-8601 instant), priority (non-negative integer, default 0) and reservationId (UUID) are optional. Emits an INVENTORY_PICK_LIST_CREATE event; no ledger entries or allocations are written. Returns 201 with the created pick list, and 400 when workorderId is missing or priority is negative.
      * @endpoint post /v1/inventory/pick-lists
      * @param createPickListRequest The workorder to pick for, with optional due time, priority and backing reservation.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -255,7 +255,7 @@ export class PickListsService extends BaseService {
 
     /**
      * Get pick list
-     * Returns one pick list header with its workorder linkage, lifecycle status, priority and due timestamp. Use this tool when the pickListId is already known; use listPickListsForWorkorder instead to find lists by workorder, and listPickTasksForPickList for the list\&#39;s tasks. Preconditions: the pick list must exist. Required inputs: pickListId (UUID) path parameter; there is no request body. No events are emitted and no state changes; this is a read-only projection. Returns 404 when no pick list exists for the supplied id. 
+     * Returns one pick list header with its workorder linkage, lifecycle status, priority and due timestamp. Use this tool when the pickListId is already known; use listPickListsForWorkorder instead to find lists by workorder, and listPickTasksForPickList for the list\&#39;s tasks. Preconditions: the pick list must exist. Required inputs: pickListId (UUID) path parameter; there is no request body. No events are emitted and no state changes; this is a read-only projection. Returns 404 when no pick list exists for the supplied id.
      * @endpoint get /v1/inventory/pick-lists/{pickListId}
      * @param pickListId Pick list identifier
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -315,7 +315,7 @@ export class PickListsService extends BaseService {
 
     /**
      * List pick lists for workorder
-     * Returns every pick list linked to a workorder. Use this tool to find a workorder\&#39;s pick lists and their statuses; use getPickList instead when the pickListId is already known. Preconditions: none; an unknown workorderId simply yields an empty array. Required inputs: workorderId (UUID) as a query parameter; there is no request body. No events are emitted and no state changes; this is a read-only projection. Returns 200 with an empty array when the workorder has no pick lists. 
+     * Returns every pick list linked to a workorder. Use this tool to find a workorder\&#39;s pick lists and their statuses; use getPickList instead when the pickListId is already known. Preconditions: none; an unknown workorderId simply yields an empty array. Required inputs: workorderId (UUID) as a query parameter; there is no request body. No events are emitted and no state changes; this is a read-only projection. Returns 200 with an empty array when the workorder has no pick lists.
      * @endpoint get /v1/inventory/pick-lists
      * @param workorderId Workorder identifier
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -387,7 +387,7 @@ export class PickListsService extends BaseService {
 
     /**
      * List pick tasks for pick list
-     * Returns the pick tasks of a pick list with their status, quantities, suggested location and lot fields. Use this tool to drive a picking screen after releasePickList; use getPickList instead for the list header only. Preconditions: none are enforced — an unknown pickListId yields an empty array rather than a 404. Required inputs: pickListId (UUID) path parameter; there is no request body. No events are emitted and no state changes; this is a read-only projection. Returns 200 with an empty array when the pick list has no tasks or does not exist. 
+     * Returns the pick tasks of a pick list with their status, quantities, suggested location and lot fields. Use this tool to drive a picking screen after releasePickList; use getPickList instead for the list header only. Preconditions: none are enforced — an unknown pickListId yields an empty array rather than a 404. Required inputs: pickListId (UUID) path parameter; there is no request body. No events are emitted and no state changes; this is a read-only projection. Returns 200 with an empty array when the pick list has no tasks or does not exist.
      * @endpoint get /v1/inventory/pick-lists/{pickListId}/tasks
      * @param pickListId Pick list identifier
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -447,7 +447,7 @@ export class PickListsService extends BaseService {
 
     /**
      * Release pick list
-     * Releases a pick list by setting its status to READY_TO_PICK so its pick tasks can be executed. Use this tool when planning is done and picking should start, then confirm each task with confirmPickTask; do not use updatePickListStatus for release — it applies any status without this operation\&#39;s intent. Preconditions: the pick list must exist; no prior-status guard is enforced, so releasing an already released or completed list simply re-applies READY_TO_PICK. Required inputs: pickListId (UUID) path parameter; there is no request body. Emits an INVENTORY_PICK_LIST_RELEASE event; no ledger entries are written. Returns 404 when no pick list exists for the supplied id. 
+     * Releases a pick list by setting its status to READY_TO_PICK so its pick tasks can be executed. Use this tool when planning is done and picking should start, then confirm each task with confirmPickTask; do not use updatePickListStatus for release — it applies any status without this operation\&#39;s intent. Preconditions: the pick list must exist; no prior-status guard is enforced, so releasing an already released or completed list simply re-applies READY_TO_PICK. Required inputs: pickListId (UUID) path parameter; there is no request body. Emits an INVENTORY_PICK_LIST_RELEASE event; no ledger entries are written. Returns 404 when no pick list exists for the supplied id.
      * @endpoint post /v1/inventory/pick-lists/{pickListId}/release
      * @param pickListId Pick list identifier
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -507,7 +507,7 @@ export class PickListsService extends BaseService {
 
     /**
      * Update pick list status
-     * Applies a lifecycle status (DRAFT, READY_TO_PICK, IN_PROGRESS, COMPLETED or CANCELLED) to a pick list. Use this tool for manual status corrections; do not use it in place of releasePickList, the intended release transition, or cancelPickList, the intended cancel. Preconditions: none are enforced — no transition rules apply, and an unknown pickListId is not rejected: a new pick list row is created under that id with the requested status. Required inputs: pickListId (UUID) path parameter and status in the body. Emits an INVENTORY_PICK_LIST_STATUS_UPDATE event; no ledger entries are written and task statuses are not touched. Returns 400 when status is missing; it never returns 404 because an unknown id upserts a new row. 
+     * Applies a lifecycle status (DRAFT, READY_TO_PICK, IN_PROGRESS, COMPLETED or CANCELLED) to a pick list. Use this tool for manual status corrections; do not use it in place of releasePickList, the intended release transition, or cancelPickList, the intended cancel. Preconditions: none are enforced — no transition rules apply, and an unknown pickListId is not rejected: a new pick list row is created under that id with the requested status. Required inputs: pickListId (UUID) path parameter and status in the body. Emits an INVENTORY_PICK_LIST_STATUS_UPDATE event; no ledger entries are written and task statuses are not touched. Returns 400 when status is missing; it never returns 404 because an unknown id upserts a new row.
      * @endpoint patch /v1/inventory/pick-lists/{pickListId}/status
      * @param pickListId Pick list identifier
      * @param updatePickListStatusRequest The target lifecycle status to apply to the pick list.

@@ -12,7 +12,7 @@
 /**
  * Billing term reference entry
  */
-export interface BillingTermsRef { 
+export interface BillingTermsRef {
     /**
      * Billing term code identifier
      */

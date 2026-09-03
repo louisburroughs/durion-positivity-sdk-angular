@@ -12,7 +12,7 @@
 /**
  * Single record within a bulk inventory ingest request
  */
-export interface InventoryBulkIngestRecord { 
+export interface InventoryBulkIngestRecord {
     /**
      * Identifier of the location the quantity applies to
      */

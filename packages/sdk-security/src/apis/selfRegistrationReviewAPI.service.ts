@@ -11,7 +11,7 @@
 
 import { Inject, Injectable, Optional }                      from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams,
-         HttpResponse, HttpEvent, HttpContext 
+         HttpResponse, HttpEvent, HttpContext
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
@@ -41,9 +41,9 @@ export class SelfRegistrationReviewAPIService extends BaseService {
 
     /**
      * Get One Self-Registration Review Case
-     * Returns the full detail of one blocked self-registration case, including reason codes, CRM match summary, and any linked person or user ids. Use this tool when the case id is known, typically from the referenceId of a 409 selfRegisterUser conflict; use listSelfRegistrationReviewCases instead to browse the queue. Preconditions: the caller must hold security:user_account_state:view and the case must exist. Required inputs: caseId (UUID) as a path parameter. No events are emitted and no state changes; this is a read-only projection. Returns 404 when no review case exists for the supplied id. 
+     * Returns the full detail of one blocked self-registration case, including reason codes, CRM match summary, and any linked person or user ids. Use this tool when the case id is known, typically from the referenceId of a 409 selfRegisterUser conflict; use listSelfRegistrationReviewCases instead to browse the queue. Preconditions: the caller must hold security:user_account_state:view and the case must exist. Required inputs: caseId (UUID) as a path parameter. No events are emitted and no state changes; this is a read-only projection. Returns 404 when no review case exists for the supplied id.
      * @endpoint get /v1/self-registration/review-cases/{caseId}
-     * @param caseId 
+     * @param caseId
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -101,10 +101,10 @@ export class SelfRegistrationReviewAPIService extends BaseService {
 
     /**
      * List Self-Registration Review Cases
-     * Returns blocked self-registration review cases, newest first, optionally filtered by status and case type. Use this tool to work the recovery and identity-review queue; use getSelfRegistrationReviewCase instead for one known case. Preconditions: the caller must hold security:user_account_state:view. Required inputs: none are mandatory; status filters on OPEN or RESOLVED and caseType on ACCOUNT_RECOVERY or IDENTITY_REVIEW. No events are emitted and no state changes; this is a read-only projection. Returns 200 with an empty list when nothing matches, and 400 when a filter value is not a valid enum constant. 
+     * Returns blocked self-registration review cases, newest first, optionally filtered by status and case type. Use this tool to work the recovery and identity-review queue; use getSelfRegistrationReviewCase instead for one known case. Preconditions: the caller must hold security:user_account_state:view. Required inputs: none are mandatory; status filters on OPEN or RESOLVED and caseType on ACCOUNT_RECOVERY or IDENTITY_REVIEW. No events are emitted and no state changes; this is a read-only projection. Returns 200 with an empty list when nothing matches, and 400 when a filter value is not a valid enum constant.
      * @endpoint get /v1/self-registration/review-cases
-     * @param status 
-     * @param caseType 
+     * @param status
+     * @param caseType
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -180,9 +180,9 @@ export class SelfRegistrationReviewAPIService extends BaseService {
 
     /**
      * Resolve a Self-Registration Review Case
-     * Marks a blocked self-registration case RESOLVED, recording the resolving operator, timestamp, and resolution notes. Use this tool after the underlying recovery or identity review is finished; do not use it to recover the account itself, which is done first with account-state endpoints such as enableUserAccount. Preconditions: the caller must hold security:user_account_state:manage and be authenticated (the resolver is taken from the request principal); the case must exist, and re-resolving an already RESOLVED case overwrites the resolution fields. Required inputs: caseId (UUID) as a path parameter and resolutionNotes, non-blank, in the body. Emits a SECURITY_SELF_REGISTRATION_REVIEW_RESOLVE event. Returns 404 when no review case exists for the supplied id. 
+     * Marks a blocked self-registration case RESOLVED, recording the resolving operator, timestamp, and resolution notes. Use this tool after the underlying recovery or identity review is finished; do not use it to recover the account itself, which is done first with account-state endpoints such as enableUserAccount. Preconditions: the caller must hold security:user_account_state:manage and be authenticated (the resolver is taken from the request principal); the case must exist, and re-resolving an already RESOLVED case overwrites the resolution fields. Required inputs: caseId (UUID) as a path parameter and resolutionNotes, non-blank, in the body. Emits a SECURITY_SELF_REGISTRATION_REVIEW_RESOLVE event. Returns 404 when no review case exists for the supplied id.
      * @endpoint post /v1/self-registration/review-cases/{caseId}/resolve
-     * @param caseId 
+     * @param caseId
      * @param resolveSelfRegistrationReviewCaseRequest The resolution note recorded against the case.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.

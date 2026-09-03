@@ -12,7 +12,7 @@
 /**
  * Request to raise a follow-up task against a party
  */
-export interface CreateFollowUpTaskRequest { 
+export interface CreateFollowUpTaskRequest {
     /**
      * CSR to own the task; unassigned tasks sit in the shared queue
      */

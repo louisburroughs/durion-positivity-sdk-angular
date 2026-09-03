@@ -13,7 +13,7 @@ import { JournalEntryResponse } from './journalEntryResponse';
 /**
  * Generic paginated list response wrapper
  */
-export interface PagedResponseJournalEntryResponse { 
+export interface PagedResponseJournalEntryResponse {
     content?: Array<JournalEntryResponse>;
     /**
      * Items on the current page

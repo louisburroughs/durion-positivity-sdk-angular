@@ -12,7 +12,7 @@
 /**
  * A single potential duplicate party match
  */
-export interface PartyMatch { 
+export interface PartyMatch {
     /**
      * Legal name of the party
      */

@@ -13,7 +13,7 @@ import { PartySummary } from './partySummary';
 /**
  * Paged response of matching party summaries
  */
-export interface SearchPartiesResponse { 
+export interface SearchPartiesResponse {
     /**
      * Current page number
      */

@@ -13,7 +13,7 @@ import { ClaimLineRequest } from './claimLineRequest';
 /**
  * Create a DRAFT warranty claim
  */
-export interface ClaimCreateRequest { 
+export interface ClaimCreateRequest {
     /**
      * Claim type
      */

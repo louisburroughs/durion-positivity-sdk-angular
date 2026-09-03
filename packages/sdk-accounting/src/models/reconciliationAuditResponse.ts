@@ -13,7 +13,7 @@ import { Entry } from './entry';
 /**
  * Audit trail of a reconciliation\'s actions
  */
-export interface ReconciliationAuditResponse { 
+export interface ReconciliationAuditResponse {
     /**
      * Audit entries ordered by time
      */

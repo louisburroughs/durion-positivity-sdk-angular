@@ -12,7 +12,7 @@
 /**
  * Request to record a price override audit event
  */
-export interface PriceOverrideRequest { 
+export interface PriceOverrideRequest {
     /**
      * Role of the actor performing the override
      */

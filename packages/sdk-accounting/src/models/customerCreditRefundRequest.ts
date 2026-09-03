@@ -12,7 +12,7 @@
 /**
  * Refund an open customer credit as cash back to the customer
  */
-export interface CustomerCreditRefundRequest { 
+export interface CustomerCreditRefundRequest {
     /**
      * Amount to refund. Must not exceed the credit\'s open amount
      */

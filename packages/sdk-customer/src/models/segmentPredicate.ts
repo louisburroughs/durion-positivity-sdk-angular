@@ -12,7 +12,7 @@
 /**
  * Boolean predicate tree over the whitelisted segment attribute catalog
  */
-export interface SegmentPredicate { 
+export interface SegmentPredicate {
     nodeType: string;
 }
 

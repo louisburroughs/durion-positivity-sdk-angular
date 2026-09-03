@@ -12,7 +12,7 @@
 /**
  * Request to resolve the reference/list price for a product in a given context (catalog reference role per ADR-0054; transactional sell prices are resolved by pos-price)
  */
-export interface ResolvePriceRequestDto { 
+export interface ResolvePriceRequestDto {
     /**
      * Date for which the price should be resolved (defaults to today when omitted)
      */

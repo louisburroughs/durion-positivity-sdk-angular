@@ -11,7 +11,7 @@
 
 import { Inject, Injectable, Optional }                      from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams,
-         HttpResponse, HttpEvent, HttpContext 
+         HttpResponse, HttpEvent, HttpContext
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
@@ -35,7 +35,7 @@ export class PickingListsService extends BaseService {
 
     /**
      * Confirm picking list
-     * Rejects picking-list confirmation with 501 NOT_IMPLEMENTED; this legacy pickingLists path has no backing implementation and commits nothing. Use this tool for nothing; confirm individual picks with confirmPickTask on the pick-lists path and commit consumption with consumePickedItems instead — do not expect this stub to change any state. Preconditions: none are evaluated. Required inputs: id path parameter; any request body is ignored. Emits an INVENTORY_PICKING_LIST_CONFIRM event recording the rejected attempt; no inventory state changes. Returns 501 for every call. 
+     * Rejects picking-list confirmation with 501 NOT_IMPLEMENTED; this legacy pickingLists path has no backing implementation and commits nothing. Use this tool for nothing; confirm individual picks with confirmPickTask on the pick-lists path and commit consumption with consumePickedItems instead — do not expect this stub to change any state. Preconditions: none are evaluated. Required inputs: id path parameter; any request body is ignored. Emits an INVENTORY_PICKING_LIST_CONFIRM event recording the rejected attempt; no inventory state changes. Returns 501 for every call.
      * @endpoint post /v1/inventory/pickingLists/{id}/confirm
      * @param id Picking list identifier
      * @param body Ignored; the endpoint rejects every call with 501 before reading the body.

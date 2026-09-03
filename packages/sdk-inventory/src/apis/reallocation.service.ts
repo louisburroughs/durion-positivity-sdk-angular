@@ -11,7 +11,7 @@
 
 import { Inject, Injectable, Optional }                      from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams,
-         HttpResponse, HttpEvent, HttpContext 
+         HttpResponse, HttpEvent, HttpContext
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
@@ -41,7 +41,7 @@ export class ReallocationService extends BaseService {
 
     /**
      * Reallocate inventory allocations
-     * Rebalances the allocated quantities of every reservation of one stock item, redistributing the reservations\&#39; current total allocated pool by effective priority. Use this tool after a supply or priority change to re-decide which reservations hold stock; do not use promoteReservationAllocation, which hardens a single allocation, and do not use resolveShortage, which creates resolution artifacts for one short allocation. Preconditions: none beyond reservations existing for the stock item; the pool redistributed is the current total allocated quantity across those reservations, not ledger on-hand. Required inputs: stockItemId (UUID); triggerType (an AllocationAuditReasonCode name, falling back to MANUAL_OVERRIDE when absent or unrecognized) and triggerReferenceId are optional audit fields. Emits an INVENTORY_ALLOCATION_REALLOCATE event and writes one allocation-audit row per reservation; ordering is effective priority ascending (1 is critical, and priority ages one step per 24 hours after a 24-hour grace period), then due date, waiting-since, schedule start and creation time, each reservation receives its full required quantity or zero (no partial awards), and no ledger entries are written. Returns 400 when stockItemId is missing, and 200 with atpAfterReallocation (ledger on-hand minus total allocated) otherwise. 
+     * Rebalances the allocated quantities of every reservation of one stock item, redistributing the reservations\&#39; current total allocated pool by effective priority. Use this tool after a supply or priority change to re-decide which reservations hold stock; do not use promoteReservationAllocation, which hardens a single allocation, and do not use resolveShortage, which creates resolution artifacts for one short allocation. Preconditions: none beyond reservations existing for the stock item; the pool redistributed is the current total allocated quantity across those reservations, not ledger on-hand. Required inputs: stockItemId (UUID); triggerType (an AllocationAuditReasonCode name, falling back to MANUAL_OVERRIDE when absent or unrecognized) and triggerReferenceId are optional audit fields. Emits an INVENTORY_ALLOCATION_REALLOCATE event and writes one allocation-audit row per reservation; ordering is effective priority ascending (1 is critical, and priority ages one step per 24 hours after a 24-hour grace period), then due date, waiting-since, schedule start and creation time, each reservation receives its full required quantity or zero (no partial awards), and no ledger entries are written. Returns 400 when stockItemId is missing, and 200 with atpAfterReallocation (ledger on-hand minus total allocated) otherwise.
      * @endpoint post /v1/inventory/allocations/reallocate
      * @param reallocateRequest The stock item to rebalance, with optional audit fields naming what triggered the reallocation.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.

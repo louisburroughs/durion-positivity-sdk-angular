@@ -12,7 +12,7 @@
 /**
  * A customer follow-up task
  */
-export interface FollowUpTaskResponse { 
+export interface FollowUpTaskResponse {
     /**
      * Owning CSR; null means unassigned
      */

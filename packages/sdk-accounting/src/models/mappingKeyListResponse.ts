@@ -13,7 +13,7 @@ import { MappingKeyResponse } from './mappingKeyResponse';
 /**
  * Paginated list of mapping keys
  */
-export interface MappingKeyListResponse { 
+export interface MappingKeyListResponse {
     /**
      * Zero-based index of the current page
      */

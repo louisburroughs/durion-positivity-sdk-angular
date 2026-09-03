@@ -12,7 +12,7 @@
 /**
  * Read-only view of on-hand and available-to-promise quantities for a product at a specific location scope
  */
-export interface AvailabilityView { 
+export interface AvailabilityView {
     /**
      * Net allocated quantity (ALLOCATION_CREATED minus ALLOCATION_RELEASED)
      */

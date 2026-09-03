@@ -12,7 +12,7 @@
 /**
  * A single entry in an accounting event\'s processing audit log
  */
-export interface EventProcessingLogEntry { 
+export interface EventProcessingLogEntry {
     /**
      * Optional JSON context for debugging
      */

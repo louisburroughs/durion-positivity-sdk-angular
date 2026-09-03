@@ -12,7 +12,7 @@
 /**
  * Request body for a timekeeping export job
  */
-export interface ExportJobRequest { 
+export interface ExportJobRequest {
     /**
      * How the export will be delivered
      */

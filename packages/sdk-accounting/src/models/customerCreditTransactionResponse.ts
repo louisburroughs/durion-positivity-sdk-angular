@@ -12,7 +12,7 @@
 /**
  * A single customer-credit draw-down and the credit state it left behind
  */
-export interface CustomerCreditTransactionResponse { 
+export interface CustomerCreditTransactionResponse {
     /**
      * Amount drawn down
      */

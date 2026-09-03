@@ -12,7 +12,7 @@
 /**
  * Break taken within a work session
  */
-export interface BreakDto { 
+export interface BreakDto {
     /**
      * Timestamp the break ended
      */

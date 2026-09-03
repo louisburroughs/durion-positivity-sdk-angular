@@ -12,7 +12,7 @@
 /**
  * One vendor\'s spend over the report window; see field descriptions for the paidAmount vs billCount/avgBillAmount population split
  */
-export interface VendorSpendRow { 
+export interface VendorSpendRow {
     /**
      * Sum of VendorBill.totalAmount for this vendor\'s bills in the window divided by billCount; 0 (never null) when billCount is 0 — there is nothing to average, and 0 keeps this field a well-defined BigDecimal for every row
      */

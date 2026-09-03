@@ -12,7 +12,7 @@
 /**
  * Apply an open customer credit to an outstanding invoice
  */
-export interface CustomerCreditApplicationRequest { 
+export interface CustomerCreditApplicationRequest {
     /**
      * Amount to apply. Must not exceed the credit\'s open amount, nor the invoice\'s remaining balance
      */

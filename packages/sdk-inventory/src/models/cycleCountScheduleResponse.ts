@@ -12,7 +12,7 @@
 /**
  * A recurring cycle-count schedule and its current due state
  */
-export interface CycleCountScheduleResponse { 
+export interface CycleCountScheduleResponse {
     /**
      * Whether the schedule is active
      */

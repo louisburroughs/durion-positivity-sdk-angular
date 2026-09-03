@@ -12,7 +12,7 @@
 /**
  * Request to create a pay period for timekeeping approval
  */
-export interface CreateTimePeriodRequest { 
+export interface CreateTimePeriodRequest {
     /**
      * Last date of the period (inclusive)
      */

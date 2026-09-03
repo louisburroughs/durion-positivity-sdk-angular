@@ -12,7 +12,7 @@
 /**
  * Net settled amount for one tender method
  */
-export interface TenderTotal { 
+export interface TenderTotal {
     amount?: number;
     methodType?: string;
 }

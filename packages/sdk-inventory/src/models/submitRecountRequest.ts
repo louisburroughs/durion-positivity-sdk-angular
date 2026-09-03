@@ -12,7 +12,7 @@
 /**
  * Request to submit a recount for a cycle count task, including the caller\'s permission context
  */
-export interface SubmitRecountRequest { 
+export interface SubmitRecountRequest {
     /**
      * Quantity physically measured on the recount, in unitOfMeasure (or the product\'s base UoM when unitOfMeasure is omitted). Converted to base UoM before variance is computed.
      */

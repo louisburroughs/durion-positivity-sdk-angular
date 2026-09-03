@@ -12,7 +12,7 @@
 /**
  * Vendor reimbursement
  */
-export interface ReimbursementView { 
+export interface ReimbursementView {
     amountApproved?: number;
     amountRequested?: number;
     creditReceivedAt?: string;

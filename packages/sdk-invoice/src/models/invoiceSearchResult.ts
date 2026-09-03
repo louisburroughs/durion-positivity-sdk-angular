@@ -12,7 +12,7 @@
 /**
  * Lightweight invoice search result enriched with customer name and workorder number
  */
-export interface InvoiceSearchResult { 
+export interface InvoiceSearchResult {
     /**
      * Creation timestamp
      */

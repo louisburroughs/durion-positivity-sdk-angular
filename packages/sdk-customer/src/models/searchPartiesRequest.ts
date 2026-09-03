@@ -12,7 +12,7 @@
 /**
  * Request to search parties with optional filters and pagination
  */
-export interface SearchPartiesRequest { 
+export interface SearchPartiesRequest {
     /**
      * Search by email address
      */

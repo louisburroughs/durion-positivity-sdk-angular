@@ -12,7 +12,7 @@
 /**
  * Response containing credit memo details
  */
-export interface CreditMemoResponse { 
+export interface CreditMemoResponse {
     /**
      * Identifier of the user who created the credit memo
      */

@@ -10,7 +10,7 @@
 import { StockInquiryRequestLine } from './stockInquiryRequestLine';
 
 
-export interface StockInquiryRequest { 
+export interface StockInquiryRequest {
     deliveryLocationId?: string;
     inquiryId?: string;
     lines?: Array<StockInquiryRequestLine>;

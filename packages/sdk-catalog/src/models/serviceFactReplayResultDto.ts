@@ -12,7 +12,7 @@
 /**
  * Outcome of one page of a service-fact replay.
  */
-export interface ServiceFactReplayResultDto { 
+export interface ServiceFactReplayResultDto {
     /**
      * True when no further pages remain for this filter.
      */

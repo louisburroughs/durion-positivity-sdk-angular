@@ -12,7 +12,7 @@
 /**
  * One cycle count plan: which zones are counted, and when
  */
-export interface CycleCountPlanBulkIngestRecord { 
+export interface CycleCountPlanBulkIngestRecord {
     /**
      * Site the plan belongs to. Defaults to the request\'s locationId when omitted.
      */

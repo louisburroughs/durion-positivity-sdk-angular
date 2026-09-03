@@ -12,7 +12,7 @@
 /**
  * Request to reverse a match by matchId or by statement line ids
  */
-export interface ReconciliationUnmatchRequest { 
+export interface ReconciliationUnmatchRequest {
     /**
      * Match group id to reverse
      */

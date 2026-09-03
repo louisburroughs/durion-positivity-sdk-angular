@@ -11,7 +11,7 @@
 
 import { Inject, Injectable, Optional }                      from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams,
-         HttpResponse, HttpEvent, HttpContext 
+         HttpResponse, HttpEvent, HttpContext
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
@@ -39,7 +39,7 @@ export class AuthorizationService extends BaseService {
 
     /**
      * Get Authorization Decision for a Principal
-     * Returns an allow or deny decision for a principal identifier and permission key, evaluated against the principal-role matrix populated by assignPrincipalRole. Use this tool for matrix-based checks keyed by principal string; use getPersonAuthorizationDecision instead when the caller has a personId, and checkUserPermission when it has a user UUID and location. Preconditions: the caller must hold security:authorization:decide; the principal needs no prior registration. Required inputs: principalId and permission (domain:resource:action) as query parameters. No events are emitted and no state changes; this is a read-only evaluation. Returns 200 with decision allow or deny; an unknown principal or permission yields deny rather than an error. 
+     * Returns an allow or deny decision for a principal identifier and permission key, evaluated against the principal-role matrix populated by assignPrincipalRole. Use this tool for matrix-based checks keyed by principal string; use getPersonAuthorizationDecision instead when the caller has a personId, and checkUserPermission when it has a user UUID and location. Preconditions: the caller must hold security:authorization:decide; the principal needs no prior registration. Required inputs: principalId and permission (domain:resource:action) as query parameters. No events are emitted and no state changes; this is a read-only evaluation. Returns 200 with decision allow or deny; an unknown principal or permission yields deny rather than an error.
      * @endpoint get /v1/users/authorization/decision
      * @param principalId Principal identifier to evaluate
      * @param permission Permission key to evaluate
@@ -124,7 +124,7 @@ export class AuthorizationService extends BaseService {
 
     /**
      * Get Authorization Decision for a Person
-     * Returns an allow or deny decision for the user account linked to a personId, evaluated against that user\&#39;s directly assigned roles. Use this tool to verify an off-session approver, such as a manager identified by employee number, holds a required permission; use getAuthorizationDecision instead for matrix principals. Preconditions: the caller must hold security:authorization:decide; a user should be linked to the person via the user-person link projection. Required inputs: personId (UUID) and permission (domain:resource:action) as query parameters. No events are emitted and no state changes; this is a read-only evaluation. Returns 200 with decision allow or deny; a person with no linked user or without the permission yields deny rather than an error. 
+     * Returns an allow or deny decision for the user account linked to a personId, evaluated against that user\&#39;s directly assigned roles. Use this tool to verify an off-session approver, such as a manager identified by employee number, holds a required permission; use getAuthorizationDecision instead for matrix principals. Preconditions: the caller must hold security:authorization:decide; a user should be linked to the person via the user-person link projection. Required inputs: personId (UUID) and permission (domain:resource:action) as query parameters. No events are emitted and no state changes; this is a read-only evaluation. Returns 200 with decision allow or deny; a person with no linked user or without the permission yields deny rather than an error.
      * @endpoint get /v1/users/authorization/person-decision
      * @param personId Person identifier whose backing user is evaluated
      * @param permission Permission key to evaluate

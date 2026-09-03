@@ -12,7 +12,7 @@
 /**
  * Request payload for creating a price book
  */
-export interface PriceBookCreateRequestDto { 
+export interface PriceBookCreateRequestDto {
     /**
      * Whether this is the default price book for the scope
      */

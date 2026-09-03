@@ -13,7 +13,7 @@ import { PermissionDefinition } from './permissionDefinition';
 /**
  * Request to register the permission catalog published by a domain service
  */
-export interface PermissionRegistrationRequest { 
+export interface PermissionRegistrationRequest {
     /**
      * Domain that owns the permissions being registered
      */

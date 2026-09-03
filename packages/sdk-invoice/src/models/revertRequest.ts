@@ -12,7 +12,7 @@
 /**
  * Request payload for reverting a finalized invoice back to DRAFT
  */
-export interface RevertRequest { 
+export interface RevertRequest {
     /**
      * Manager approval code authorizing the reversion
      */

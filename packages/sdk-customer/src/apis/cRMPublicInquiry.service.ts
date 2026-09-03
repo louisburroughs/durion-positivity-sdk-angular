@@ -11,7 +11,7 @@
 
 import { Inject, Injectable, Optional }                      from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams,
-         HttpResponse, HttpEvent, HttpContext 
+         HttpResponse, HttpEvent, HttpContext
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
@@ -39,7 +39,7 @@ export class CRMPublicInquiryService extends BaseService {
 
     /**
      * Submit Public Inquiry
-     * Accepts an anonymous service or fleet-quote inquiry from the public web form, rate-limited per hashed submitter fingerprint, and returns only a reference id and NEW status so the endpoint cannot be used to enumerate existing customers. Use this tool only for the unauthenticated public form when the deployment has enabled it via pos.customer.inquiry.public.enabled; do not use captureInquiry here, which is the authenticated staff path and is not rate-limited. Preconditions: the public-inquiry feature flag must be enabled and the submitter must be under the per-source rate ceiling; the raw source address is never stored, only a truncated SHA-256 fingerprint. Required inputs: channel, audienceType (COMMERCIAL or INDIVIDUAL), contactName, and at least one of email or phone; message and interest fields are optional. Emits a CRM_PUBLIC_INQUIRY_SUBMIT event and persists the inquiry in NEW status, unassigned in the shared triage queue. Returns 429 when the submitter has exceeded the rate limit, and 400 when required fields are missing or neither email nor phone is supplied. 
+     * Accepts an anonymous service or fleet-quote inquiry from the public web form, rate-limited per hashed submitter fingerprint, and returns only a reference id and NEW status so the endpoint cannot be used to enumerate existing customers. Use this tool only for the unauthenticated public form when the deployment has enabled it via pos.customer.inquiry.public.enabled; do not use captureInquiry here, which is the authenticated staff path and is not rate-limited. Preconditions: the public-inquiry feature flag must be enabled and the submitter must be under the per-source rate ceiling; the raw source address is never stored, only a truncated SHA-256 fingerprint. Required inputs: channel, audienceType (COMMERCIAL or INDIVIDUAL), contactName, and at least one of email or phone; message and interest fields are optional. Emits a CRM_PUBLIC_INQUIRY_SUBMIT event and persists the inquiry in NEW status, unassigned in the shared triage queue. Returns 429 when the submitter has exceeded the rate limit, and 400 when required fields are missing or neither email nor phone is supplied.
      * @endpoint post /v1/crm/public/inquiries
      * @param submitInquiryRequest The public web-form inquiry, carrying who is asking and how to reach them.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.

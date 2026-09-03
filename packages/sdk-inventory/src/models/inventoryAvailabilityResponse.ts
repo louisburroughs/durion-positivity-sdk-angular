@@ -12,7 +12,7 @@
 /**
  * Inventory availability response including on-hand, allocations, and ATP
  */
-export interface InventoryAvailabilityResponse { 
+export interface InventoryAvailabilityResponse {
     /**
      * Total quantity allocated (hard commitments)
      */

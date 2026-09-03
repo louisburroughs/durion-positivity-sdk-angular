@@ -13,7 +13,7 @@ import { ExchangeAuditAccessView } from './exchangeAuditAccessView';
 /**
  * A page of results.
  */
-export interface PagedResponseExchangeAuditAccessView { 
+export interface PagedResponseExchangeAuditAccessView {
     /**
      * Items on this page, in the order documented by the endpoint.
      */

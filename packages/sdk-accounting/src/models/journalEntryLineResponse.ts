@@ -12,7 +12,7 @@
 /**
  * Journal entry line response
  */
-export interface JournalEntryLineResponse { 
+export interface JournalEntryLineResponse {
     /**
      * GL account code
      */

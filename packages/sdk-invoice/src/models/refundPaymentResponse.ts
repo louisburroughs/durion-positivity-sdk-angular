@@ -12,7 +12,7 @@
 /**
  * Result of processing a refund against an invoice payment
  */
-export interface RefundPaymentResponse { 
+export interface RefundPaymentResponse {
     /**
      * Refunded amount
      */

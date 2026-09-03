@@ -12,7 +12,7 @@
 /**
  * Single invoice application within a payment application request
  */
-export interface InvoiceApplication { 
+export interface InvoiceApplication {
     /**
      * Amount of the payment to apply to this invoice
      */

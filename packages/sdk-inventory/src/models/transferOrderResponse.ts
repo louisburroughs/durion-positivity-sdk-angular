@@ -13,7 +13,7 @@ import { TransferOrderLineResponse } from './transferOrderLineResponse';
 /**
  * Cross-site transfer order with lifecycle status and quantity lines
  */
-export interface TransferOrderResponse { 
+export interface TransferOrderResponse {
     /**
      * User who approved the order, when the approval step is enabled
      */

@@ -12,7 +12,7 @@
 /**
  * Time entry exception representing a discrepancy or issue with time tracking
  */
-export interface TimeEntryException { 
+export interface TimeEntryException {
     /**
      * Timestamp when the exception was detected
      */

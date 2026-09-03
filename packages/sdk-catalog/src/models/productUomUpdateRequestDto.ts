@@ -12,7 +12,7 @@
 /**
  * Request to update a product UoM conversion (the UoM code is immutable)
  */
-export interface ProductUomUpdateRequestDto { 
+export interface ProductUomUpdateRequestDto {
     /**
      * Multiplier converting one unit of this UoM into the product\'s base UoM
      */

@@ -12,7 +12,7 @@
 /**
  * Read model of a capability endpoint binding.
  */
-export interface EndpointBindingView { 
+export interface EndpointBindingView {
     /**
      * Name of the auth config on the same profile that this binding authenticates with. Must already exist.
      */

@@ -11,7 +11,7 @@
 
 import { Inject, Injectable, Optional }                      from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams,
-         HttpResponse, HttpEvent, HttpContext 
+         HttpResponse, HttpEvent, HttpContext
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
@@ -39,10 +39,10 @@ export class UserRoleManagementService extends BaseService {
 
     /**
      * Assign a Role to a User
-     * Creates a GLOBAL-scoped role assignment linking a user to a role, effective immediately with no end date. Use this tool for the common unscoped grant; do not use createRoleAssignment, which supports LOCATION scope and effective date windows, and do not use assignPrincipalRole, which targets the string-keyed RBAC principal matrix. Preconditions: the caller must hold security:role:assign and both the user and role must exist; no overlap check is performed here, so repeated calls create duplicate assignments. Required inputs: userId and roleId (UUIDs) as path parameters; there is no request body. Emits a SECURITY_USER_ROLE_ASSIGN event and writes a RoleAssignedToUser audit record. Returns 404 when the user or role does not exist. 
+     * Creates a GLOBAL-scoped role assignment linking a user to a role, effective immediately with no end date. Use this tool for the common unscoped grant; do not use createRoleAssignment, which supports LOCATION scope and effective date windows, and do not use assignPrincipalRole, which targets the string-keyed RBAC principal matrix. Preconditions: the caller must hold security:role:assign and both the user and role must exist; no overlap check is performed here, so repeated calls create duplicate assignments. Required inputs: userId and roleId (UUIDs) as path parameters; there is no request body. Emits a SECURITY_USER_ROLE_ASSIGN event and writes a RoleAssignedToUser audit record. Returns 404 when the user or role does not exist.
      * @endpoint put /v1/users/{userId}/roles/{roleId}
-     * @param userId 
-     * @param roleId 
+     * @param userId
+     * @param roleId
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -103,9 +103,9 @@ export class UserRoleManagementService extends BaseService {
 
     /**
      * Get a User\&#39;s Effective Permissions
-     * Returns the union of permissions granted through a user\&#39;s currently effective role assignments. Use this tool for a user\&#39;s flattened effective permission set; use listUserRoleAssignments instead to see the assignments and scopes behind it. Preconditions: the user must exist, and the caller must either hold security:permission:view or be asking about themselves. Required inputs: userId (UUID) as a path parameter. No events are emitted and no state changes; this is a read-only projection. Returns 403 when the caller is asking about another user without security:permission:view, and 404 when the user does not exist. 
+     * Returns the union of permissions granted through a user\&#39;s currently effective role assignments. Use this tool for a user\&#39;s flattened effective permission set; use listUserRoleAssignments instead to see the assignments and scopes behind it. Preconditions: the user must exist, and the caller must either hold security:permission:view or be asking about themselves. Required inputs: userId (UUID) as a path parameter. No events are emitted and no state changes; this is a read-only projection. Returns 403 when the caller is asking about another user without security:permission:view, and 404 when the user does not exist.
      * @endpoint get /v1/users/{userId}/permissions
-     * @param userId 
+     * @param userId
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -163,10 +163,10 @@ export class UserRoleManagementService extends BaseService {
 
     /**
      * Revoke a Role From a User
-     * Ends the first currently effective assignment of a role for a user by setting its end date to now, preserving the row for history. Use this tool for the common immediate revocation; do not use revokeRoleAssignment, which targets a specific assignment id and supports past or future end dates. Preconditions: the caller must hold security:role:assign, the user and role must exist, and at least one effective assignment must link them. Required inputs: userId and roleId (UUIDs) as path parameters; there is no request body. Emits a SECURITY_USER_ROLE_REVOKE event and writes a RoleRevokedFromUser audit record. Returns 404 when the user or role does not exist, or when no active assignment links them. 
+     * Ends the first currently effective assignment of a role for a user by setting its end date to now, preserving the row for history. Use this tool for the common immediate revocation; do not use revokeRoleAssignment, which targets a specific assignment id and supports past or future end dates. Preconditions: the caller must hold security:role:assign, the user and role must exist, and at least one effective assignment must link them. Required inputs: userId and roleId (UUIDs) as path parameters; there is no request body. Emits a SECURITY_USER_ROLE_REVOKE event and writes a RoleRevokedFromUser audit record. Returns 404 when the user or role does not exist, or when no active assignment links them.
      * @endpoint delete /v1/users/{userId}/roles/{roleId}
-     * @param userId 
-     * @param roleId 
+     * @param userId
+     * @param roleId
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options

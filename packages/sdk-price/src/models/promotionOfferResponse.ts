@@ -12,7 +12,7 @@
 /**
  * Response payload representing a promotion offer
  */
-export interface PromotionOfferResponse { 
+export interface PromotionOfferResponse {
     /**
      * Record creation timestamp
      */

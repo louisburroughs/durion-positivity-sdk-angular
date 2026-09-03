@@ -14,7 +14,7 @@ import { SegmentPredicate } from './segmentPredicate';
 /**
  * Inverts the child predicate
  */
-export interface Not extends SegmentPredicate { 
+export interface Not extends SegmentPredicate {
     node?: NotAllOfNode;
 }
 

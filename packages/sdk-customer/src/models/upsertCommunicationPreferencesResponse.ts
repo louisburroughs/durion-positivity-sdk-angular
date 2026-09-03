@@ -12,7 +12,7 @@
 /**
  * Response after upserting communication preferences
  */
-export interface UpsertCommunicationPreferencesResponse { 
+export interface UpsertCommunicationPreferencesResponse {
     /**
      * Operation type (CREATED|UPDATED)
      */

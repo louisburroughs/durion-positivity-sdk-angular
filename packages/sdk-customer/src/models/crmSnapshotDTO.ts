@@ -20,7 +20,7 @@ import { VehicleSummary } from './vehicleSummary';
 /**
  * Read-only CRM snapshot of an account, its contacts, vehicles, and billing configuration
  */
-export interface CrmSnapshotDTO { 
+export interface CrmSnapshotDTO {
     account: AccountSummary;
     billingRules?: BillingRuleRef;
     /**

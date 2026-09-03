@@ -12,7 +12,7 @@
 /**
  * Warranty registration create/update request — sold/instantiated coverage
  */
-export interface RegistrationRequest { 
+export interface RegistrationRequest {
     /**
      * Provider contract number
      */

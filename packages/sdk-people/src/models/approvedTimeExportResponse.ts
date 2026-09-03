@@ -12,7 +12,7 @@
 /**
  * Approved time row for accounting/payroll export orchestration
  */
-export interface ApprovedTimeExportResponse { 
+export interface ApprovedTimeExportResponse {
     /**
      * Approval timestamp
      */

@@ -12,7 +12,7 @@
 /**
  * Request to short-close a transfer order, resolving the undelivered remainder with a whole-order disposition
  */
-export interface ShortCloseTransferOrderRequest { 
+export interface ShortCloseTransferOrderRequest {
     /**
      * Disposition of the undelivered remainder: LOST_IN_TRANSIT writes it off (SCRAP_OUT, reason LOST); RETURNED_TO_SOURCE restores it to source on-hand
      */

@@ -12,7 +12,7 @@
 /**
  * Per-account trial balance row aggregated from POSTED journal lines
  */
-export interface TrialBalanceRow { 
+export interface TrialBalanceRow {
     /**
      * GL account ID (UUID)
      */

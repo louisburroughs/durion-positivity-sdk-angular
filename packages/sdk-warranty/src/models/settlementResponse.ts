@@ -12,7 +12,7 @@
 /**
  * Claim settlement — how the customer was made whole
  */
-export interface SettlementResponse { 
+export interface SettlementResponse {
     claimId?: string;
     /**
      * Claim status after this settlement executed

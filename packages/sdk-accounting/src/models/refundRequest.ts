@@ -12,7 +12,7 @@
 /**
  * Request to record a refund audit event
  */
-export interface RefundRequest { 
+export interface RefundRequest {
     /**
      * Legacy client-provided actor identifier; service resolves authoritative actor from security context
      */

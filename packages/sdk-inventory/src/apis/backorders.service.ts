@@ -11,7 +11,7 @@
 
 import { Inject, Injectable, Optional }                      from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams,
-         HttpResponse, HttpEvent, HttpContext 
+         HttpResponse, HttpEvent, HttpContext
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
@@ -39,7 +39,7 @@ export class BackordersService extends BaseService {
 
     /**
      * Get backorder details
-     * Returns one backorder with its shortage quantity, lifecycle status, resolution source and timestamps. Use this tool when the backorderId is already known; use listBackorders instead to search by status, SKU, site or workorder line. Preconditions: the backorder must exist. Required inputs: backorderId (UUID) path parameter; there is no request body. No events are emitted and no state changes; auto-resolution happens asynchronously when inbound stock raises ATP at the backorder\&#39;s site — oldest-priority-first, and only when the full quantityShort fits the remaining ATP budget (whole-backorder resolution, no partials). Returns 404 when no backorder exists for the supplied id. 
+     * Returns one backorder with its shortage quantity, lifecycle status, resolution source and timestamps. Use this tool when the backorderId is already known; use listBackorders instead to search by status, SKU, site or workorder line. Preconditions: the backorder must exist. Required inputs: backorderId (UUID) path parameter; there is no request body. No events are emitted and no state changes; auto-resolution happens asynchronously when inbound stock raises ATP at the backorder\&#39;s site — oldest-priority-first, and only when the full quantityShort fits the remaining ATP budget (whole-backorder resolution, no partials). Returns 404 when no backorder exists for the supplied id.
      * @endpoint get /v1/inventory/backorders/{backorderId}
      * @param backorderId Backorder ID
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -99,7 +99,7 @@ export class BackordersService extends BaseService {
 
     /**
      * List backorders
-     * Lists backorders — unfulfilled demand (a workorder line or, since CAP #1315, a sales-order line) held open until availability covers it — newest first. Use this tool to monitor open shortages awaiting stock; use getBackorder instead when the backorderId is already known, and note backorders are opened by the shortage flows (resolveShortage with BACKORDER) or the sales-order checkout gate, not by any direct create endpoint. Preconditions: none; an empty result is not an error. Required inputs: none — status (OPEN, RESOLVED or CANCELLED), sku, locationId, workorderLineId and salesOrderLineId are optional filters combined with AND. No events are emitted and no state changes; this is a read-only projection. Returns 200 with an empty array when nothing matches. 
+     * Lists backorders — unfulfilled demand (a workorder line or, since CAP #1315, a sales-order line) held open until availability covers it — newest first. Use this tool to monitor open shortages awaiting stock; use getBackorder instead when the backorderId is already known, and note backorders are opened by the shortage flows (resolveShortage with BACKORDER) or the sales-order checkout gate, not by any direct create endpoint. Preconditions: none; an empty result is not an error. Required inputs: none — status (OPEN, RESOLVED or CANCELLED), sku, locationId, workorderLineId and salesOrderLineId are optional filters combined with AND. No events are emitted and no state changes; this is a read-only projection. Returns 200 with an empty array when nothing matches.
      * @endpoint get /v1/inventory/backorders
      * @param status Filter by lifecycle status
      * @param sku Filter by SKU / stock-item identifier

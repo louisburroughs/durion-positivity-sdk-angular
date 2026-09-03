@@ -12,7 +12,7 @@
 /**
  * A backorder: unfulfilled workorder-line demand held open until availability covers it
  */
-export interface BackorderResponse { 
+export interface BackorderResponse {
     /**
      * Backorder record identifier
      */

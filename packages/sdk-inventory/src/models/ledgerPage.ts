@@ -12,7 +12,7 @@
 /**
  * A single page of ledger entries with an optional cursor to the next page
  */
-export interface LedgerPage { 
+export interface LedgerPage {
     /**
      * Ledger entries contained in this page
      */

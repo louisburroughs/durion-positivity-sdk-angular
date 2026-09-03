@@ -12,7 +12,7 @@
 /**
  * Request to create a new bulk load job
  */
-export interface BulkLoadJobCreateRequest { 
+export interface BulkLoadJobCreateRequest {
     /**
      * Target domain for the bulk load
      */

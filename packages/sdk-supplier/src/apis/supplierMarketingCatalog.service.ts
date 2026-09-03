@@ -11,7 +11,7 @@
 
 import { Inject, Injectable, Optional }                      from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams,
-         HttpResponse, HttpEvent, HttpContext 
+         HttpResponse, HttpEvent, HttpContext
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
@@ -39,7 +39,7 @@ export class SupplierMarketingCatalogService extends BaseService {
 
     /**
      * Import The Marketing Catalog
-     * Reads the manufacturer marketing catalogue and publishes enrichment for every tread design variant whose content has changed since the last run. Use this tool to bring a newly configured catalogue in without waiting for its first scheduled sweep, or after fixing a configuration problem; do not use it to force republication of unchanged content, because publication is decided by content and an unchanged variant emits nothing however often it is imported. Preconditions: the vendor profile must be enabled and have a marketing-catalogue binding configured. Required inputs: supplierRef path parameter. Emits a SUPPLIER_MKTCAT_IMPORT event, and for each changed variant publishes supplier.catalog.updated for the catalog domain to attach. Returns 200 with how many variants were seen, published and skipped; 404 when the vendor profile is unknown; 409 when the profile is disabled or has no marketing-catalogue binding; and 422 when the catalogue could not be read at all. 
+     * Reads the manufacturer marketing catalogue and publishes enrichment for every tread design variant whose content has changed since the last run. Use this tool to bring a newly configured catalogue in without waiting for its first scheduled sweep, or after fixing a configuration problem; do not use it to force republication of unchanged content, because publication is decided by content and an unchanged variant emits nothing however often it is imported. Preconditions: the vendor profile must be enabled and have a marketing-catalogue binding configured. Required inputs: supplierRef path parameter. Emits a SUPPLIER_MKTCAT_IMPORT event, and for each changed variant publishes supplier.catalog.updated for the catalog domain to attach. Returns 200 with how many variants were seen, published and skipped; 404 when the vendor profile is unknown; 409 when the profile is disabled or has no marketing-catalogue binding; and 422 when the catalogue could not be read at all.
      * @endpoint post /v1/supplier/mktcat/{supplierRef}/imports
      * @param supplierRef Vendor profile alias
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -99,7 +99,7 @@ export class SupplierMarketingCatalogService extends BaseService {
 
     /**
      * List Staged Marketing Enrichment
-     * Lists the tread design variants a marketing catalogue last sent, most recently seen first, including which of them are still missing artwork. Use this tool when a product\&#39;s marketing copy is not what was expected, to see what the catalogue actually published; do not read this as catalog content, because nothing here has been attached to a product and a variant may match no product at all. Preconditions: none. Required inputs: supplierRef path parameter; limit defaults to 100. Emits a SUPPLIER_MKTCAT_VARIANT_LIST event. Returns 200 with the staged variants, which is an empty list when the catalogue has never been imported, and 404 when the vendor profile is unknown. 
+     * Lists the tread design variants a marketing catalogue last sent, most recently seen first, including which of them are still missing artwork. Use this tool when a product\&#39;s marketing copy is not what was expected, to see what the catalogue actually published; do not read this as catalog content, because nothing here has been attached to a product and a variant may match no product at all. Preconditions: none. Required inputs: supplierRef path parameter; limit defaults to 100. Emits a SUPPLIER_MKTCAT_VARIANT_LIST event. Returns 200 with the staged variants, which is an empty list when the catalogue has never been imported, and 404 when the vendor profile is unknown.
      * @endpoint get /v1/supplier/mktcat/{supplierRef}/variants
      * @param supplierRef Vendor profile alias
      * @param limit Maximum rows to return

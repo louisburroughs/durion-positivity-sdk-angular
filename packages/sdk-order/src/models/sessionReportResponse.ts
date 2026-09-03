@@ -14,7 +14,7 @@ import { CashMovementResponse } from './cashMovementResponse';
 /**
  * X-report (mid-day) or Z-report (close summary) for a register session
  */
-export interface SessionReportResponse { 
+export interface SessionReportResponse {
     cashMovements?: number;
     cashSettlements?: number;
     countedCash?: number;

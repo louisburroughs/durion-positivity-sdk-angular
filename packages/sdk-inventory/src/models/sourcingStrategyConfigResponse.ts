@@ -12,7 +12,7 @@
 /**
  * One sourcing strategy configuration row (odoo-parity H1)
  */
-export interface SourcingStrategyConfigResponse { 
+export interface SourcingStrategyConfigResponse {
     /**
      * Whether this row participates in resolution
      */

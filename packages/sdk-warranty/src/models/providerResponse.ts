@@ -12,7 +12,7 @@
 /**
  * Warranty provider
  */
-export interface ProviderResponse { 
+export interface ProviderResponse {
     apVendorId?: string;
     claimSubmissionMethod?: string;
     contactEmail?: string;

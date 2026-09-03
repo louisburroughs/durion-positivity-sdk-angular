@@ -12,7 +12,7 @@
 /**
  * Vehicle make response
  */
-export interface MakeResponse { 
+export interface MakeResponse {
     /**
      * Make identifier
      */

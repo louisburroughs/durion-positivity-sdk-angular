@@ -11,7 +11,7 @@
 
 import { Inject, Injectable, Optional }                      from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams,
-         HttpResponse, HttpEvent, HttpContext 
+         HttpResponse, HttpEvent, HttpContext
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
@@ -43,7 +43,7 @@ export class AuditTrailService extends BaseService {
 
     /**
      * Get Audit Trail By Actor
-     * Returns audit trail entries recorded by one actor (user) within a date range, across all exception types. Use this tool to review a specific user\&#39;s overrides, refunds and cancellations; use getAuditTrailByType instead to slice by exception category. Preconditions: none; an unknown actor yields an empty list. Required inputs: actorId (user identifier string) as a path parameter plus startDate and endDate (ISO-8601 instants) as query parameters. No events are emitted and no state changes; this is a read-only projection. Returns 400 when the dates cannot be parsed. 
+     * Returns audit trail entries recorded by one actor (user) within a date range, across all exception types. Use this tool to review a specific user\&#39;s overrides, refunds and cancellations; use getAuditTrailByType instead to slice by exception category. Preconditions: none; an unknown actor yields an empty list. Required inputs: actorId (user identifier string) as a path parameter plus startDate and endDate (ISO-8601 instants) as query parameters. No events are emitted and no state changes; this is a read-only projection. Returns 400 when the dates cannot be parsed.
      * @endpoint get /v1/accounting/audit/actor/{actorId}
      * @param actorId Actor (User) ID
      * @param startDate Start date in ISO 8601 format
@@ -132,7 +132,7 @@ export class AuditTrailService extends BaseService {
 
     /**
      * Get Audit Trail By Date Range
-     * Returns all audit trail entries of every exception type within a date range. Use this tool for a broad period review; use getAuditTrailByType or getAuditTrailByActor instead when a narrower slice is wanted. Preconditions: none; a quiet range yields an empty list. Required inputs: startDate and endDate (ISO-8601 instants) as query parameters. No events are emitted and no state changes; this is a read-only projection. Returns 400 when the dates cannot be parsed. 
+     * Returns all audit trail entries of every exception type within a date range. Use this tool for a broad period review; use getAuditTrailByType or getAuditTrailByActor instead when a narrower slice is wanted. Preconditions: none; a quiet range yields an empty list. Required inputs: startDate and endDate (ISO-8601 instants) as query parameters. No events are emitted and no state changes; this is a read-only projection. Returns 400 when the dates cannot be parsed.
      * @endpoint get /v1/accounting/audit/range
      * @param startDate Start date in ISO 8601 format
      * @param endDate End date in ISO 8601 format
@@ -217,7 +217,7 @@ export class AuditTrailService extends BaseService {
 
     /**
      * Get Audit Trail For Invoice
-     * Returns all audit trail entries recorded against one invoice, covering refunds and cancellations. Use this tool when the invoice id is known; use getAuditTrailByOrder for order-scoped entries instead. Preconditions: none; an invoice with no exceptions yields an empty list. Required inputs: invoiceId (UUID) as a path parameter; there is no request body. No events are emitted and no state changes; this is a read-only projection. Returns 200 with an empty list when no audit entries exist for the invoice. 
+     * Returns all audit trail entries recorded against one invoice, covering refunds and cancellations. Use this tool when the invoice id is known; use getAuditTrailByOrder for order-scoped entries instead. Preconditions: none; an invoice with no exceptions yields an empty list. Required inputs: invoiceId (UUID) as a path parameter; there is no request body. No events are emitted and no state changes; this is a read-only projection. Returns 200 with an empty list when no audit entries exist for the invoice.
      * @endpoint get /v1/accounting/audit/invoice/{invoiceId}
      * @param invoiceId Invoice ID
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -277,7 +277,7 @@ export class AuditTrailService extends BaseService {
 
     /**
      * Get Audit Trail For Order
-     * Returns all audit trail entries recorded against one order, covering price overrides and cancellations. Use this tool when the order id is known; use getAuditTrailByType or getAuditTrailByDateRange instead for cross-document review. Preconditions: none; an order with no exceptions yields an empty list. Required inputs: orderId (UUID) as a path parameter; there is no request body. No events are emitted and no state changes; this is a read-only projection. Returns 200 with an empty list when no audit entries exist for the order. 
+     * Returns all audit trail entries recorded against one order, covering price overrides and cancellations. Use this tool when the order id is known; use getAuditTrailByType or getAuditTrailByDateRange instead for cross-document review. Preconditions: none; an order with no exceptions yields an empty list. Required inputs: orderId (UUID) as a path parameter; there is no request body. No events are emitted and no state changes; this is a read-only projection. Returns 200 with an empty list when no audit entries exist for the order.
      * @endpoint get /v1/accounting/audit/order/{orderId}
      * @param orderId Order ID
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -337,7 +337,7 @@ export class AuditTrailService extends BaseService {
 
     /**
      * Get Audit Trail For Order
-     * Returns all audit trail entries recorded against one order, covering price overrides and cancellations. Use this tool when the order id is known; use getAuditTrailByType or getAuditTrailByDateRange instead for cross-document review. Preconditions: none; an order with no exceptions yields an empty list. Required inputs: orderId (UUID) as a path parameter; there is no request body. No events are emitted and no state changes; this is a read-only projection. Returns 200 with an empty list when no audit entries exist for the order. 
+     * Returns all audit trail entries recorded against one order, covering price overrides and cancellations. Use this tool when the order id is known; use getAuditTrailByType or getAuditTrailByDateRange instead for cross-document review. Preconditions: none; an order with no exceptions yields an empty list. Required inputs: orderId (UUID) as a path parameter; there is no request body. No events are emitted and no state changes; this is a read-only projection. Returns 200 with an empty list when no audit entries exist for the order.
      * @endpoint get /v1/accounting/audit/by-order/{orderId}
      * @param orderId Order ID
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -397,7 +397,7 @@ export class AuditTrailService extends BaseService {
 
     /**
      * Get Audit Trail By Exception Type
-     * Returns audit trail entries of one exception type (PRICE_OVERRIDE, REFUND or CANCELLATION) within a date range. Use this tool to review one exception category across documents; use getAuditTrailByActor instead when reviewing one user\&#39;s activity. Preconditions: none; an empty range yields an empty list. Required inputs: type as a path parameter plus startDate and endDate (ISO-8601 instants) as query parameters. No events are emitted and no state changes; this is a read-only projection. Returns 400 when the type or dates cannot be parsed. 
+     * Returns audit trail entries of one exception type (PRICE_OVERRIDE, REFUND or CANCELLATION) within a date range. Use this tool to review one exception category across documents; use getAuditTrailByActor instead when reviewing one user\&#39;s activity. Preconditions: none; an empty range yields an empty list. Required inputs: type as a path parameter plus startDate and endDate (ISO-8601 instants) as query parameters. No events are emitted and no state changes; this is a read-only projection. Returns 400 when the type or dates cannot be parsed.
      * @endpoint get /v1/accounting/audit/type/{type}
      * @param type Exception type
      * @param startDate Start date in ISO 8601 format
@@ -486,7 +486,7 @@ export class AuditTrailService extends BaseService {
 
     /**
      * Record Cancellation Audit Entry
-     * Records an audit trail entry for an order or invoice cancellation, capturing before and after document snapshots. Use this tool when an order or invoice is cancelled upstream; do not use recordRefundAudit, which covers money returned on a retained document. Preconditions: none enforced beyond validation; either orderId or invoiceId should identify the cancelled document. Required inputs: cancellationType (ORDER_CANCELLED, INVOICE_CANCELLED or PAYMENT_FAILED), beforeSnapshot and afterSnapshot (JSON strings), actorRole and reason; orderId, invoiceId, actorId and partialPaymentInfo are optional. Emits an ACCOUNTING_AUDIT_CANCELLATION event. Returns 400 when required fields are missing. 
+     * Records an audit trail entry for an order or invoice cancellation, capturing before and after document snapshots. Use this tool when an order or invoice is cancelled upstream; do not use recordRefundAudit, which covers money returned on a retained document. Preconditions: none enforced beyond validation; either orderId or invoiceId should identify the cancelled document. Required inputs: cancellationType (ORDER_CANCELLED, INVOICE_CANCELLED or PAYMENT_FAILED), beforeSnapshot and afterSnapshot (JSON strings), actorRole and reason; orderId, invoiceId, actorId and partialPaymentInfo are optional. Emits an ACCOUNTING_AUDIT_CANCELLATION event. Returns 400 when required fields are missing.
      * @endpoint post /v1/accounting/audit/cancellation
      * @param cancellationRequest Cancellation exception with before and after document snapshots.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -556,7 +556,7 @@ export class AuditTrailService extends BaseService {
 
     /**
      * Record Price Override Audit Entry
-     * Records an audit trail entry for a price override exception, validating the acting role\&#39;s authorization level against the override amount before persisting. Use this tool when an order line price is overridden at the point of sale; do not use recordRefundAudit or recordCancellationAudit, which cover those other exception types. Preconditions: the actor\&#39;s role must be authorized for the override delta; a denied authorization publishes an AuthorizationDenied event and records nothing. Required inputs: orderId (UUID), lineItemId (UUID), originalPrice, adjustedPrice, actorRole and reason; categoryCode is optional. Emits an ACCOUNTING_AUDIT_PRICE_OVERRIDE event. Returns 403 AUTHORIZATION_DENIED when the role\&#39;s limit does not cover the override, and 400 when required fields are missing. 
+     * Records an audit trail entry for a price override exception, validating the acting role\&#39;s authorization level against the override amount before persisting. Use this tool when an order line price is overridden at the point of sale; do not use recordRefundAudit or recordCancellationAudit, which cover those other exception types. Preconditions: the actor\&#39;s role must be authorized for the override delta; a denied authorization publishes an AuthorizationDenied event and records nothing. Required inputs: orderId (UUID), lineItemId (UUID), originalPrice, adjustedPrice, actorRole and reason; categoryCode is optional. Emits an ACCOUNTING_AUDIT_PRICE_OVERRIDE event. Returns 403 AUTHORIZATION_DENIED when the role\&#39;s limit does not cover the override, and 400 when required fields are missing.
      * @endpoint post /v1/accounting/audit/price-override
      * @param priceOverrideRequest Price override exception with the acting role and audit reason.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -626,7 +626,7 @@ export class AuditTrailService extends BaseService {
 
     /**
      * Record Refund Audit Entry
-     * Records an audit trail entry for a refund exception, validating refund policy and settlement handling for the original payment before persisting. Use this tool when a customer refund is granted; do not use refundCustomerCredit, which actually moves money out of a standing credit, and do not use recordPriceOverrideAudit for price changes. Preconditions: the refund must pass the refund authorization policy for its type and amount; a denial records nothing. Required inputs: invoiceId (UUID), paymentId (UUID), refundType, refundAmount and originalPaymentStatus; actorId is optional. Emits an ACCOUNTING_AUDIT_REFUND event. Returns 403 AUTHORIZATION_DENIED when separate authorization is required and absent, and 400 when required fields are missing. 
+     * Records an audit trail entry for a refund exception, validating refund policy and settlement handling for the original payment before persisting. Use this tool when a customer refund is granted; do not use refundCustomerCredit, which actually moves money out of a standing credit, and do not use recordPriceOverrideAudit for price changes. Preconditions: the refund must pass the refund authorization policy for its type and amount; a denial records nothing. Required inputs: invoiceId (UUID), paymentId (UUID), refundType, refundAmount and originalPaymentStatus; actorId is optional. Emits an ACCOUNTING_AUDIT_REFUND event. Returns 403 AUTHORIZATION_DENIED when separate authorization is required and absent, and 400 when required fields are missing.
      * @endpoint post /v1/accounting/audit/refund
      * @param refundRequest Refund exception details with type, amount and original payment status.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.

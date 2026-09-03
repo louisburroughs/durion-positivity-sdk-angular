@@ -12,7 +12,7 @@
 /**
  * Request to email a receipt and record the delivery status
  */
-export interface EmailDeliveryRequest { 
+export interface EmailDeliveryRequest {
     /**
      * Recipient email address for the receipt
      */

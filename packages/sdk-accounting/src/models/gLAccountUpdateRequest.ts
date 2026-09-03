@@ -12,7 +12,7 @@
 /**
  * Request payload for updating mutable GL account fields
  */
-export interface GLAccountUpdateRequest { 
+export interface GLAccountUpdateRequest {
     /**
      * Updated account name
      */

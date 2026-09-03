@@ -11,7 +11,7 @@
 
 import { Inject, Injectable, Optional }                      from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams,
-         HttpResponse, HttpEvent, HttpContext 
+         HttpResponse, HttpEvent, HttpContext
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
@@ -37,9 +37,9 @@ export class InventoryReferenceDataService extends BaseService {
 
     /**
      * List inventory location zones
-     * Lists inventory location zones as a page; the current implementation is a placeholder that always returns an empty page until the pos-location client integration lands. Use this tool only to probe the future location-zone contract; use listInventoryLocations instead for reference data that is actually served. Preconditions: none. Required inputs: none; locationId and the page/size parameters (default size 20) are accepted but no data is served yet. No events are emitted and no state changes; this is a read-only projection. Returns 200 with an empty page unconditionally in the current implementation. 
+     * Lists inventory location zones as a page; the current implementation is a placeholder that always returns an empty page until the pos-location client integration lands. Use this tool only to probe the future location-zone contract; use listInventoryLocations instead for reference data that is actually served. Preconditions: none. Required inputs: none; locationId and the page/size parameters (default size 20) are accepted but no data is served yet. No events are emitted and no state changes; this is a read-only projection. Returns 200 with an empty page unconditionally in the current implementation.
      * @endpoint get /v1/inventory/location-zones
-     * @param locationId 
+     * @param locationId
      * @param page Zero-based page index (0..N)
      * @param size The size of the page to be returned
      * @param sort Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
@@ -136,9 +136,9 @@ export class InventoryReferenceDataService extends BaseService {
 
     /**
      * List inventory locations
-     * Lists inventory locations as a page, served from the local location roster that is continuously synced from pos-location. Use this tool to browse the roster the inventory module actually posts against; use listInventoryStorageLocations instead for bin-level records, and use triggerLocationSync when the roster looks stale. Preconditions: none; the roster reflects the last synced state, not a live pos-location call. Required inputs: none; the standard page/size parameters default to a page size of 20, and the siteId parameter is accepted but not yet applied because the roster carries no site linkage. No events are emitted and no state changes; this is a read-only projection. Returns 200 with an empty page when the roster is empty, so an empty result is not an error condition. 
+     * Lists inventory locations as a page, served from the local location roster that is continuously synced from pos-location. Use this tool to browse the roster the inventory module actually posts against; use listInventoryStorageLocations instead for bin-level records, and use triggerLocationSync when the roster looks stale. Preconditions: none; the roster reflects the last synced state, not a live pos-location call. Required inputs: none; the standard page/size parameters default to a page size of 20, and the siteId parameter is accepted but not yet applied because the roster carries no site linkage. No events are emitted and no state changes; this is a read-only projection. Returns 200 with an empty page when the roster is empty, so an empty result is not an error condition.
      * @endpoint get /v1/inventory/locations
-     * @param siteId 
+     * @param siteId
      * @param page Zero-based page index (0..N)
      * @param size The size of the page to be returned
      * @param sort Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
@@ -235,9 +235,9 @@ export class InventoryReferenceDataService extends BaseService {
 
     /**
      * List inventory storage locations
-     * Lists inventory storage locations as a page; the current implementation is a placeholder that always returns an empty page until the pos-location client integration lands. Use this tool only to probe the future storage-location contract; use listInventoryLocations instead for the site-level roster that is actually populated. Preconditions: none. Required inputs: none; locationId and the page/size parameters (default size 20) are accepted but no data is served yet. No events are emitted and no state changes; this is a read-only projection. Returns 200 with an empty page unconditionally in the current implementation. 
+     * Lists inventory storage locations as a page; the current implementation is a placeholder that always returns an empty page until the pos-location client integration lands. Use this tool only to probe the future storage-location contract; use listInventoryLocations instead for the site-level roster that is actually populated. Preconditions: none. Required inputs: none; locationId and the page/size parameters (default size 20) are accepted but no data is served yet. No events are emitted and no state changes; this is a read-only projection. Returns 200 with an empty page unconditionally in the current implementation.
      * @endpoint get /v1/inventory/storage-locations
-     * @param locationId 
+     * @param locationId
      * @param page Zero-based page index (0..N)
      * @param size The size of the page to be returned
      * @param sort Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
@@ -334,7 +334,7 @@ export class InventoryReferenceDataService extends BaseService {
 
     /**
      * List storage location types
-     * Returns the supported storage location type codes — FLOOR, SHELF, BIN, CAGE and TRUCK — a static mirror of the vocabulary owned by pos-location. Use this tool to populate storage-type pickers; do not use listInventoryStorageLocations, which lists storage-location records rather than the type vocabulary. Preconditions: none; the list is pinned by the CAP-214 frontend contract and requires no lookup. Required inputs: none; there is no request body, paging or filtering. No events are emitted and no state changes; this is a read-only constant projection. Returns 200 with the full five-code list on every call. 
+     * Returns the supported storage location type codes — FLOOR, SHELF, BIN, CAGE and TRUCK — a static mirror of the vocabulary owned by pos-location. Use this tool to populate storage-type pickers; do not use listInventoryStorageLocations, which lists storage-location records rather than the type vocabulary. Preconditions: none; the list is pinned by the CAP-214 frontend contract and requires no lookup. Required inputs: none; there is no request body, paging or filtering. No events are emitted and no state changes; this is a read-only constant projection. Returns 200 with the full five-code list on every call.
      * @endpoint get /v1/inventory/meta/storage-types
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.

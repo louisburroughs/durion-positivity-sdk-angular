@@ -12,7 +12,7 @@
 /**
  * A single on-hand stock item line
  */
-export interface LocationInventoryItem { 
+export interface LocationInventoryItem {
     /**
      * On-hand quantity of this stock item at the location
      */

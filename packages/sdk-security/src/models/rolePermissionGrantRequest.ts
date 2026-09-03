@@ -12,7 +12,7 @@
 /**
  * Request to grant or revoke a single permission on a role
  */
-export interface RolePermissionGrantRequest { 
+export interface RolePermissionGrantRequest {
     /**
      * Permission key in format domain:resource:action
      */

@@ -12,7 +12,7 @@
 /**
  * Full-replace update of a replenishment policy\'s thresholds and tuning fields. Omitted optional fields are cleared or reset to defaults; location, SKU, and snooze state are not updatable here.
  */
-export interface UpdateReplenishmentPolicyRequest { 
+export interface UpdateReplenishmentPolicyRequest {
     /**
      * Whether the policy participates in replenishment evaluation; omit to reset to true
      */

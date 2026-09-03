@@ -12,7 +12,7 @@
 /**
  * Request to reject a pending scrap document; no inventory changes are made
  */
-export interface RejectScrapRequest { 
+export interface RejectScrapRequest {
     /**
      * Reason explaining why the scrap is being rejected
      */

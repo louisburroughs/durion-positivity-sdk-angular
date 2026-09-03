@@ -12,7 +12,7 @@
 /**
  * Request to submit the initial physical count for a cycle count task
  */
-export interface SubmitCountRequest { 
+export interface SubmitCountRequest {
     /**
      * Quantity physically measured, in unitOfMeasure (or the product\'s base UoM when unitOfMeasure is omitted). Converted to base UoM before variance is computed.
      */

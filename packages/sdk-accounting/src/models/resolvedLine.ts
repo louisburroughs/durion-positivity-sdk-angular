@@ -12,7 +12,7 @@
 /**
  * One journal entry line the dry-run evaluator would post
  */
-export interface ResolvedLine { 
+export interface ResolvedLine {
     /**
      * Resolved GL account code
      */

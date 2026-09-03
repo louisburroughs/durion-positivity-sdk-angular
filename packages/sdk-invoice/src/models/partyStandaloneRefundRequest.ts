@@ -12,7 +12,7 @@
 /**
  * Request to record a standalone refund anchored to a customer party
  */
-export interface PartyStandaloneRefundRequest { 
+export interface PartyStandaloneRefundRequest {
     /**
      * Amount to refund
      */

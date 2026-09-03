@@ -12,7 +12,7 @@
 /**
  * Request payload for approving or rejecting a location price override
  */
-export interface LocationPriceOverrideDecisionRequestDto { 
+export interface LocationPriceOverrideDecisionRequestDto {
     /**
      * Identifier of the user making the decision
      */

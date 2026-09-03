@@ -12,7 +12,7 @@
 /**
  * Create a part return (RMA) for a claim line; starts AWAITING_PART
  */
-export interface PartReturnCreateRequest { 
+export interface PartReturnCreateRequest {
     /**
      * Claim line whose failed part is being returned/held
      */

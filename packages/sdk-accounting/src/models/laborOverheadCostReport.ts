@@ -13,7 +13,7 @@ import { LaborOverheadReportLine } from './laborOverheadReportLine';
 /**
  * Read-only Labor & Overhead Cost Report (CAP-316) for a location and fiscal year
  */
-export interface LaborOverheadCostReport { 
+export interface LaborOverheadCostReport {
     /**
      * Highest elapsed month bounding YTD (1-12)
      */

@@ -12,7 +12,7 @@
 /**
  * Register session state
  */
-export interface RegisterSessionResponse { 
+export interface RegisterSessionResponse {
     closedAt?: string;
     closedByClerkId?: string;
     closingStartedAt?: string;

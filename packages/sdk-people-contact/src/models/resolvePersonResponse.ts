@@ -12,7 +12,7 @@
 /**
  * Resolve person result
  */
-export interface ResolvePersonResponse { 
+export interface ResolvePersonResponse {
     /**
      * Resolved first name
      */

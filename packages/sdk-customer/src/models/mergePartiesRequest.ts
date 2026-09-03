@@ -12,7 +12,7 @@
 /**
  * Request to merge a duplicate (losing) party into a survivor party
  */
-export interface MergePartiesRequest { 
+export interface MergePartiesRequest {
     /**
      * Justification for the merge
      */

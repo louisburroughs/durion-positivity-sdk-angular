@@ -12,7 +12,7 @@
 /**
  * A cycle count task describing an item to be counted at a location and its current state
  */
-export interface CycleCountTaskResponse { 
+export interface CycleCountTaskResponse {
     /**
      * Identifier of the auditor assigned to the task, if assigned
      */

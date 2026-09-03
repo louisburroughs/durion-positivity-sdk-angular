@@ -11,7 +11,7 @@
 
 import { Inject, Injectable, Optional }                      from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams,
-         HttpResponse, HttpEvent, HttpContext 
+         HttpResponse, HttpEvent, HttpContext
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
@@ -39,10 +39,10 @@ export class InvoiceArtifactControllerService extends BaseService {
 
     /**
      * Create Artifact Download Token
-     * Issues a short-lived signed token bound to one invoice artifact, so a browser can fetch the PDF through the public download link without an Authorization header. Use this tool after listInvoiceArtifacts has supplied an artifactRefId; do not use downloadInvoiceArtifact without a token — it rejects unsigned requests. Preconditions: the invoice must exist and the artifact reference must belong to that invoice (an invoice ref must match the path invoice, a receipt ref must be one of its receipts). Required inputs: invoiceId (UUID) and artifactRefId (opaque reference from listInvoiceArtifacts) as path parameters; there is no request body. No events are emitted and no record is stored; the token is stateless, signed, and expires after 300 seconds by default (invoice.artifacts.token-ttl-seconds). Returns 404 when the invoice does not exist or the artifact does not belong to it. 
+     * Issues a short-lived signed token bound to one invoice artifact, so a browser can fetch the PDF through the public download link without an Authorization header. Use this tool after listInvoiceArtifacts has supplied an artifactRefId; do not use downloadInvoiceArtifact without a token — it rejects unsigned requests. Preconditions: the invoice must exist and the artifact reference must belong to that invoice (an invoice ref must match the path invoice, a receipt ref must be one of its receipts). Required inputs: invoiceId (UUID) and artifactRefId (opaque reference from listInvoiceArtifacts) as path parameters; there is no request body. No events are emitted and no record is stored; the token is stateless, signed, and expires after 300 seconds by default (invoice.artifacts.token-ttl-seconds). Returns 404 when the invoice does not exist or the artifact does not belong to it.
      * @endpoint post /v1/invoices/{invoiceId}/artifacts/{artifactRefId}/download-token
-     * @param invoiceId 
-     * @param artifactRefId 
+     * @param invoiceId
+     * @param artifactRefId
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -103,9 +103,9 @@ export class InvoiceArtifactControllerService extends BaseService {
 
     /**
      * List Downloadable Invoice Artifacts
-     * Returns the downloadable documents for an invoice — always the invoice document itself, plus one entry per generated receipt — as opaque URL-safe artifact references with suggested file names and application/pdf MIME types. Use this tool to discover artifactRefId values before minting a download token; do not use downloadInvoiceArtifact directly, which requires a signed token from createArtifactDownloadToken. Preconditions: the invoice must exist; receipts appear only after generateReceipt has created them. Required inputs: invoiceId (UUID) as a path parameter; there is no request body. No events are emitted and no state changes; this is a read-only projection. Returns 404 when no invoice exists for the supplied id. 
+     * Returns the downloadable documents for an invoice — always the invoice document itself, plus one entry per generated receipt — as opaque URL-safe artifact references with suggested file names and application/pdf MIME types. Use this tool to discover artifactRefId values before minting a download token; do not use downloadInvoiceArtifact directly, which requires a signed token from createArtifactDownloadToken. Preconditions: the invoice must exist; receipts appear only after generateReceipt has created them. Required inputs: invoiceId (UUID) as a path parameter; there is no request body. No events are emitted and no state changes; this is a read-only projection. Returns 404 when no invoice exists for the supplied id.
      * @endpoint get /v1/invoices/{invoiceId}/artifacts
-     * @param invoiceId 
+     * @param invoiceId
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options

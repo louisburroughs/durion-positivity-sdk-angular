@@ -12,7 +12,7 @@
 /**
  * Request to execute a putaway move from staging to storage, with optional business-rule overrides
  */
-export interface PutawayExecutionRequest { 
+export interface PutawayExecutionRequest {
     /**
      * Identifier of the supervisor who approved the override
      */

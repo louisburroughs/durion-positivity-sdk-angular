@@ -13,7 +13,7 @@ import { DuplicateCandidate } from './duplicateCandidate';
 /**
  * Response after creating a commercial account
  */
-export interface CreateCommercialAccountResponse { 
+export interface CreateCommercialAccountResponse {
     /**
      * Billing terms identifier associated with the account, if set
      */

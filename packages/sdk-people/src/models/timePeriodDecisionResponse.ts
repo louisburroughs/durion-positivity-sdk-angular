@@ -12,7 +12,7 @@
 /**
  * Result of an approve/reject decision applied across a person\'s time period entries
  */
-export interface TimePeriodDecisionResponse { 
+export interface TimePeriodDecisionResponse {
     /**
      * Person identifier
      */

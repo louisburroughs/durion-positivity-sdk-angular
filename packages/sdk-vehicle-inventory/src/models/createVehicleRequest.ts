@@ -12,7 +12,7 @@
 /**
  * Request payload for creating a vehicle record.
  */
-export interface CreateVehicleRequest { 
+export interface CreateVehicleRequest {
     /**
      * Owning account identifier.
      */

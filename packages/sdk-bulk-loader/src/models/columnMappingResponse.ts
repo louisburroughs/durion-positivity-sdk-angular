@@ -12,7 +12,7 @@
 /**
  * Inferred or user-overridden mapping from a source column to a target field
  */
-export interface ColumnMappingResponse { 
+export interface ColumnMappingResponse {
     /**
      * Confidence score of the inferred mapping, between 0 and 1
      */

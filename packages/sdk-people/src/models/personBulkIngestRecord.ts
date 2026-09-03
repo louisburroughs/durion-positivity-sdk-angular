@@ -12,7 +12,7 @@
 /**
  * Single person record within a bulk ingest payload
  */
-export interface PersonBulkIngestRecord { 
+export interface PersonBulkIngestRecord {
     /**
      * Unique employee number
      */

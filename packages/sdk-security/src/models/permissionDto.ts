@@ -12,7 +12,7 @@
 /**
  * A permission entry exposed by user-facing RBAC endpoints
  */
-export interface PermissionDto { 
+export interface PermissionDto {
     /**
      * True when the permission is deprecated
      */

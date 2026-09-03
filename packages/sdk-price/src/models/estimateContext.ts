@@ -13,7 +13,7 @@ import { LineItemContext } from './lineItemContext';
 /**
  * Estimate context used for applying promotion rules and calculations
  */
-export interface EstimateContext { 
+export interface EstimateContext {
     /**
      * Promotion codes already applied to this estimate
      */

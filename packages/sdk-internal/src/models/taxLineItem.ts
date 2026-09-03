@@ -12,7 +12,7 @@
 /**
  * Single line item to be evaluated for tax calculation
  */
-export interface TaxLineItem { 
+export interface TaxLineItem {
     /**
      * Description of the item being taxed
      */

@@ -11,7 +11,7 @@
 
 import { Inject, Injectable, Optional }                      from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams,
-         HttpResponse, HttpEvent, HttpContext 
+         HttpResponse, HttpEvent, HttpContext
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
@@ -45,7 +45,7 @@ export class LotsService extends BaseService {
 
     /**
      * Get lot details
-     * Returns one lot master record together with its per-location on-hand and in-transit balances, served from the per-lot stock summary rows rather than by aggregating the ledger. Use this tool when the lotId is already known; use listInventoryLots instead to search by stock item, status or lot number. Preconditions: the lot must exist. Required inputs: lotId (UUID) as a path parameter; there is no request body. Emits an INVENTORY_LOT_GET event; no state changes. Returns 404 when no lot exists for the supplied id. 
+     * Returns one lot master record together with its per-location on-hand and in-transit balances, served from the per-lot stock summary rows rather than by aggregating the ledger. Use this tool when the lotId is already known; use listInventoryLots instead to search by stock item, status or lot number. Preconditions: the lot must exist. Required inputs: lotId (UUID) as a path parameter; there is no request body. Emits an INVENTORY_LOT_GET event; no state changes. Returns 404 when no lot exists for the supplied id.
      * @endpoint get /v1/inventory/lots/{lotId}
      * @param lotId Lot ID
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -105,7 +105,7 @@ export class LotsService extends BaseService {
 
     /**
      * List lots
-     * Lists lot master records newest received first, optionally filtered by stock item, lifecycle status and exact lot number. Use this tool to discover a lotId or survey lot statuses; use getInventoryLot instead when the id is known and per-location on-hand is needed, and use traceInventoryLot for the movement history. Preconditions: none; lots are created only by the inbound receipt paths, never through this API. Required inputs: none; stockItemId (catalog product id), status (ACTIVE, QUARANTINED, RECALLED, CONSUMED) and lotNumber are optional query filters. Emits an INVENTORY_LOT_LIST event; no state changes. Returns 200 with an empty array when nothing matches, so an empty result is not an error condition. 
+     * Lists lot master records newest received first, optionally filtered by stock item, lifecycle status and exact lot number. Use this tool to discover a lotId or survey lot statuses; use getInventoryLot instead when the id is known and per-location on-hand is needed, and use traceInventoryLot for the movement history. Preconditions: none; lots are created only by the inbound receipt paths, never through this API. Required inputs: none; stockItemId (catalog product id), status (ACTIVE, QUARANTINED, RECALLED, CONSUMED) and lotNumber are optional query filters. Emits an INVENTORY_LOT_LIST event; no state changes. Returns 200 with an empty array when nothing matches, so an empty result is not an error condition.
      * @endpoint get /v1/inventory/lots
      * @param stockItemId Filter by stock item (catalog product id)
      * @param status Filter by lifecycle status
@@ -194,7 +194,7 @@ export class LotsService extends BaseService {
 
     /**
      * Set lot expiration
-     * Sets or clears a lot\&#39;s expiration date and expiring-soon alert-window date. Use this tool to re-date a lot after inspection or vendor correction; do not use updateInventoryLotStatus, which changes the lifecycle status rather than the dates. Preconditions: the lot must exist. Required inputs: lotId (UUID) path parameter plus a body with optional expirationDate and alertDate (ISO dates); a null clears the corresponding date, and alertDate null means no early alert. Emits an INVENTORY_LOT_EXPIRATION_SET event and resets the emit-once alert bookkeeping so the daily expiry scan can alert the new dates afresh. Returns 404 when the lot does not exist. 
+     * Sets or clears a lot\&#39;s expiration date and expiring-soon alert-window date. Use this tool to re-date a lot after inspection or vendor correction; do not use updateInventoryLotStatus, which changes the lifecycle status rather than the dates. Preconditions: the lot must exist. Required inputs: lotId (UUID) path parameter plus a body with optional expirationDate and alertDate (ISO dates); a null clears the corresponding date, and alertDate null means no early alert. Emits an INVENTORY_LOT_EXPIRATION_SET event and resets the emit-once alert bookkeeping so the daily expiry scan can alert the new dates afresh. Returns 404 when the lot does not exist.
      * @endpoint put /v1/inventory/lots/{lotId}/expiration
      * @param lotId Lot ID
      * @param lotExpirationUpdateRequest Expiration and alert-window dates to set; a null clears the corresponding date.
@@ -268,7 +268,7 @@ export class LotsService extends BaseService {
 
     /**
      * Change lot status
-     * Changes a lot\&#39;s lifecycle status: quarantines or recalls it, or releases it back to ACTIVE; QUARANTINED and RECALLED lots are blocked from lot suggestion and outbound movement. Use this tool to gate a lot for quality or recall reasons; do not use updateInventoryLotExpiration, which only re-dates the lot, and note the status flip does not move stock — relocating units to a quarantine bin is a separate operator-driven transfer. Preconditions: the lot must exist and must not already be CONSUMED, because a CONSUMED lot holds no stock and its status is owned by the posting-funnel reconciler. Required inputs: lotId (UUID) path parameter plus a body with status (ACTIVE, QUARANTINED or RECALLED; CONSUMED is rejected) and a mandatory reason recorded for traceability. Emits an INVENTORY_LOT_STATUS_UPDATE event; no ledger entries are posted. Returns 404 when the lot does not exist, and 400 when the target status is CONSUMED, the lot is already CONSUMED, or reason is missing. 
+     * Changes a lot\&#39;s lifecycle status: quarantines or recalls it, or releases it back to ACTIVE; QUARANTINED and RECALLED lots are blocked from lot suggestion and outbound movement. Use this tool to gate a lot for quality or recall reasons; do not use updateInventoryLotExpiration, which only re-dates the lot, and note the status flip does not move stock — relocating units to a quarantine bin is a separate operator-driven transfer. Preconditions: the lot must exist and must not already be CONSUMED, because a CONSUMED lot holds no stock and its status is owned by the posting-funnel reconciler. Required inputs: lotId (UUID) path parameter plus a body with status (ACTIVE, QUARANTINED or RECALLED; CONSUMED is rejected) and a mandatory reason recorded for traceability. Emits an INVENTORY_LOT_STATUS_UPDATE event; no ledger entries are posted. Returns 404 when the lot does not exist, and 400 when the target status is CONSUMED, the lot is already CONSUMED, or reason is missing.
      * @endpoint post /v1/inventory/lots/{lotId}/status
      * @param lotId Lot ID
      * @param lotStatusUpdateRequest Target lifecycle status with the mandatory traceability reason.

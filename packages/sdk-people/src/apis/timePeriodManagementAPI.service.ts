@@ -11,7 +11,7 @@
 
 import { Inject, Injectable, Optional }                      from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams,
-         HttpResponse, HttpEvent, HttpContext 
+         HttpResponse, HttpEvent, HttpContext
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
@@ -43,7 +43,7 @@ export class TimePeriodManagementAPIService extends BaseService {
 
     /**
      * Create Pay Period
-     * Creates a pay period for a tenant with an inclusive start and end date and an initial lifecycle status. Use this tool for corrections and off-grid periods; do not create routine periods manually, the scheduled rollover opens those on the configured cadence instead. Preconditions: the range must not overlap any existing period for the tenant, and endDate must not be before startDate. Required inputs: a body with tenantId (UUID), startDate, and endDate; status is optional and defaults to OPEN. Emits PEOPLE_TIME_PERIOD_CREATE. Returns 400 when the range is invalid, and 409 when the range overlaps an existing period. 
+     * Creates a pay period for a tenant with an inclusive start and end date and an initial lifecycle status. Use this tool for corrections and off-grid periods; do not create routine periods manually, the scheduled rollover opens those on the configured cadence instead. Preconditions: the range must not overlap any existing period for the tenant, and endDate must not be before startDate. Required inputs: a body with tenantId (UUID), startDate, and endDate; status is optional and defaults to OPEN. Emits PEOPLE_TIME_PERIOD_CREATE. Returns 400 when the range is invalid, and 409 when the range overlaps an existing period.
      * @endpoint post /v1/people/time-periods
      * @param createTimePeriodRequest Tenant, inclusive date range, and optional initial status of the new period.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -114,9 +114,9 @@ export class TimePeriodManagementAPIService extends BaseService {
 
     /**
      * Transition Pay Period Status
-     * Moves a pay period to a new lifecycle status along the allowed transitions, including reopening a SUBMISSION_CLOSED period for corrections. Use this tool for manual corrections; do not drive routine closure with it, the scheduled rollover advances statuses on the configured cadence instead. Preconditions: allowed transitions are OPEN to SUBMISSION_CLOSED or PAYROLL_CLOSED, SUBMISSION_CLOSED to PAYROLL_CLOSED or back to OPEN; PAYROLL_CLOSED is terminal. Required inputs: timePeriodId (UUID) path parameter and a body with the target status. Emits PEOPLE_TIME_PERIOD_TRANSITION. Returns 404 when the period does not exist, and 409 when the transition is not allowed. 
+     * Moves a pay period to a new lifecycle status along the allowed transitions, including reopening a SUBMISSION_CLOSED period for corrections. Use this tool for manual corrections; do not drive routine closure with it, the scheduled rollover advances statuses on the configured cadence instead. Preconditions: allowed transitions are OPEN to SUBMISSION_CLOSED or PAYROLL_CLOSED, SUBMISSION_CLOSED to PAYROLL_CLOSED or back to OPEN; PAYROLL_CLOSED is terminal. Required inputs: timePeriodId (UUID) path parameter and a body with the target status. Emits PEOPLE_TIME_PERIOD_TRANSITION. Returns 404 when the period does not exist, and 409 when the transition is not allowed.
      * @endpoint post /v1/people/time-periods/{timePeriodId}/status
-     * @param timePeriodId 
+     * @param timePeriodId
      * @param transitionTimePeriodRequest Target lifecycle status for the period.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.

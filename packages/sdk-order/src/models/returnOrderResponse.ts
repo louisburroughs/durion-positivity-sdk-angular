@@ -13,7 +13,7 @@ import { Line } from './line';
 /**
  * A return order and its lines
  */
-export interface ReturnOrderResponse { 
+export interface ReturnOrderResponse {
     createdAt?: string;
     customerId?: string;
     failureReason?: string;

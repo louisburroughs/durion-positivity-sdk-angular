@@ -12,7 +12,7 @@
 /**
  * Request to reject a pending revaluation; the SKU cost state is untouched
  */
-export interface RejectRevaluationRequest { 
+export interface RejectRevaluationRequest {
     /**
      * Reason explaining why the revaluation is being rejected
      */

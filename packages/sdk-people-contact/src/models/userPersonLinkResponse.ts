@@ -12,7 +12,7 @@
 /**
  * Response describing a link between a user account and a person record
  */
-export interface UserPersonLinkResponse { 
+export interface UserPersonLinkResponse {
     /**
      * Creation timestamp in UTC
      */

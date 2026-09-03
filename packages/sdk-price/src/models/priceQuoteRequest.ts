@@ -12,7 +12,7 @@
 /**
  * Request payload for calculating contextual price quotes
  */
-export interface PriceQuoteRequest { 
+export interface PriceQuoteRequest {
     /**
      * Optional ISO 4217 currency code for the quote; defaults to the company default currency (pos.price.default-currency) when omitted. Base price and location override selection are filtered to this currency
      */

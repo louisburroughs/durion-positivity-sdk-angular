@@ -13,7 +13,7 @@ import { LocationInventoryItem } from './locationInventoryItem';
 /**
  * On-hand inventory contents for a storage location
  */
-export interface LocationInventoryItemsResponse { 
+export interface LocationInventoryItemsResponse {
     /**
      * Stock items currently on hand at the location
      */

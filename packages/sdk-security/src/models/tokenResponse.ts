@@ -12,7 +12,7 @@
 /**
  * Response containing a JWT access token
  */
-export interface TokenResponse { 
+export interface TokenResponse {
     /**
      * JWT token (Bearer token for Authorization header)
      */

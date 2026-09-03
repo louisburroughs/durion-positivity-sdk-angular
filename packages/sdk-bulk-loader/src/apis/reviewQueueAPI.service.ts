@@ -11,7 +11,7 @@
 
 import { Inject, Injectable, Optional }                      from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams,
-         HttpResponse, HttpEvent, HttpContext 
+         HttpResponse, HttpEvent, HttpContext
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
@@ -47,9 +47,9 @@ export class ReviewQueueAPIService extends BaseService {
 
     /**
      * Download Error Report as CSV
-     * Generates a CSV export of the audit records for a bulk load job and returns it as a text/csv attachment. Use this tool to hand failed rows to a spreadsheet for offline correction; use listAuditRecords instead when the records are needed as JSON for programmatic handling. Preconditions: the job must exist and belong to the authenticated operator. Required inputs: jobId (UUID) as a path parameter; the response is a CSV with header columns row_number, entity_type, review_status, reason_codes and original_values, covering every audit record for the job rather than only errored rows. No events are emitted and no state changes; this is a read-only projection. Returns 404 when no job exists with the supplied id for the authenticated operator. 
+     * Generates a CSV export of the audit records for a bulk load job and returns it as a text/csv attachment. Use this tool to hand failed rows to a spreadsheet for offline correction; use listAuditRecords instead when the records are needed as JSON for programmatic handling. Preconditions: the job must exist and belong to the authenticated operator. Required inputs: jobId (UUID) as a path parameter; the response is a CSV with header columns row_number, entity_type, review_status, reason_codes and original_values, covering every audit record for the job rather than only errored rows. No events are emitted and no state changes; this is a read-only projection. Returns 404 when no job exists with the supplied id for the authenticated operator.
      * @endpoint get /v1/bulk-jobs/{jobId}/error-report
-     * @param jobId 
+     * @param jobId
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -97,9 +97,9 @@ export class ReviewQueueAPIService extends BaseService {
 
     /**
      * Get Audit Records for Job
-     * Returns every row-level audit record captured for a bulk load job, including review status, reason codes and the original source values. Use this tool to inspect which rows failed and why after processing; use downloadErrorReport instead when a CSV export of the same records is needed. Preconditions: the job must exist and belong to the authenticated operator; audit records exist only after processing has run. Required inputs: jobId (UUID) as a path parameter; there is no request body and no pagination, so the full list is returned in one response. No events are emitted and no state changes; this is a read-only projection. Returns 404 when no job exists with the supplied id for the authenticated operator. 
+     * Returns every row-level audit record captured for a bulk load job, including review status, reason codes and the original source values. Use this tool to inspect which rows failed and why after processing; use downloadErrorReport instead when a CSV export of the same records is needed. Preconditions: the job must exist and belong to the authenticated operator; audit records exist only after processing has run. Required inputs: jobId (UUID) as a path parameter; there is no request body and no pagination, so the full list is returned in one response. No events are emitted and no state changes; this is a read-only projection. Returns 404 when no job exists with the supplied id for the authenticated operator.
      * @endpoint get /v1/bulk-jobs/{jobId}/audit
-     * @param jobId 
+     * @param jobId
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -158,9 +158,9 @@ export class ReviewQueueAPIService extends BaseService {
 
     /**
      * Submit Corrected Records for Job
-     * Submits corrected field values for one or more audit records of a FAILED bulk load job, marking each accepted record CORRECTED. Use this tool to fix several failed rows in one call; use submitSingleCorrection instead when correcting exactly one record and a per-record accept or reject status is wanted. Preconditions: the job must belong to the authenticated operator and be in FAILED state; each auditRecordId must belong to that job. Required inputs: corrections, a non-empty list where each item carries auditRecordId (UUID) and correctedData, a map of field names to corrected string values. Emits a BULK_LOADER_CORRECTION_SUBMIT event and stores the corrected values on each audit record; items whose audit record is missing or belongs to another job are rejected individually and reported in the response\&#39;s rejections list without failing the call. Correcting records does not re-run the import; call retryBulkLoadJob and then startJobProcessing to process the job again. Returns 201 with accepted and rejected counts, 409 when the job is not in FAILED state, 404 when the job does not exist, and 403 when it belongs to another operator. 
+     * Submits corrected field values for one or more audit records of a FAILED bulk load job, marking each accepted record CORRECTED. Use this tool to fix several failed rows in one call; use submitSingleCorrection instead when correcting exactly one record and a per-record accept or reject status is wanted. Preconditions: the job must belong to the authenticated operator and be in FAILED state; each auditRecordId must belong to that job. Required inputs: corrections, a non-empty list where each item carries auditRecordId (UUID) and correctedData, a map of field names to corrected string values. Emits a BULK_LOADER_CORRECTION_SUBMIT event and stores the corrected values on each audit record; items whose audit record is missing or belongs to another job are rejected individually and reported in the response\&#39;s rejections list without failing the call. Correcting records does not re-run the import; call retryBulkLoadJob and then startJobProcessing to process the job again. Returns 201 with accepted and rejected counts, 409 when the job is not in FAILED state, 404 when the job does not exist, and 403 when it belongs to another operator.
      * @endpoint post /v1/bulk-jobs/{jobId}/corrections
-     * @param jobId 
+     * @param jobId
      * @param bulkCorrectionRequest Batch of corrected values, one item per failed audit record to be marked CORRECTED.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
@@ -233,7 +233,7 @@ export class ReviewQueueAPIService extends BaseService {
 
     /**
      * Submit a Single Correction Record
-     * Submits corrected field values for exactly one audit record of a FAILED bulk load job and reports whether the correction was accepted. Use this tool for interactive row-by-row fixing; use submitCorrections instead to correct a batch of records in one call. Preconditions: the job must belong to the authenticated operator and be in FAILED state; the auditRecordId must belong to that job. Required inputs: auditRecordId (UUID) and correctedData, a map of field names to corrected string values. Emits a BULK_LOADER_CORRECTION_SUBMIT_SINGLE event and stores the corrected values on the audit record, setting its review status to CORRECTED when accepted; correcting a record does not re-run the import. Returns 201 with status ACCEPTED or REJECTED plus a rejectionReason when rejected, 409 when the job is not in FAILED state, 404 when the job does not exist, and 403 when it belongs to another operator. 
+     * Submits corrected field values for exactly one audit record of a FAILED bulk load job and reports whether the correction was accepted. Use this tool for interactive row-by-row fixing; use submitCorrections instead to correct a batch of records in one call. Preconditions: the job must belong to the authenticated operator and be in FAILED state; the auditRecordId must belong to that job. Required inputs: auditRecordId (UUID) and correctedData, a map of field names to corrected string values. Emits a BULK_LOADER_CORRECTION_SUBMIT_SINGLE event and stores the corrected values on the audit record, setting its review status to CORRECTED when accepted; correcting a record does not re-run the import. Returns 201 with status ACCEPTED or REJECTED plus a rejectionReason when rejected, 409 when the job is not in FAILED state, 404 when the job does not exist, and 403 when it belongs to another operator.
      * @endpoint post /v1/bulk-jobs/{jobId}/corrections/single
      * @param jobId ID of the bulk load job
      * @param bulkCorrectionItem Single corrected record naming the audit record and the field values that replace the failed ones.

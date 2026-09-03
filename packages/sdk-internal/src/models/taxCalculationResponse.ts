@@ -14,7 +14,7 @@ import { LineItemTax } from './lineItemTax';
 /**
  * Tax calculation response containing totals and jurisdiction/line-level tax breakdown
  */
-export interface TaxCalculationResponse { 
+export interface TaxCalculationResponse {
     /**
      * Timestamp when calculation completed
      */

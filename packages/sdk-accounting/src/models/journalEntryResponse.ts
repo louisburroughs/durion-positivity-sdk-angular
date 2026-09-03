@@ -13,7 +13,7 @@ import { JournalEntryLineResponse } from './journalEntryLineResponse';
 /**
  * Journal entry response payload
  */
-export interface JournalEntryResponse { 
+export interface JournalEntryResponse {
     /**
      * Created timestamp
      */

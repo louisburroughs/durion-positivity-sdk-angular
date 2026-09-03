@@ -13,7 +13,7 @@ import { FitmentTagDto } from './fitmentTagDto';
 /**
  * Request payload for creating a vehicle applicability hint
  */
-export interface CreateHintRequest { 
+export interface CreateHintRequest {
     /**
      * Fitment tags used to determine product applicability
      */

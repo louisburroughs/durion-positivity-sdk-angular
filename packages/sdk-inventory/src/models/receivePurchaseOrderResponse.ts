@@ -13,7 +13,7 @@ import { ReceivePurchaseOrderLineDetail } from './receivePurchaseOrderLineDetail
 /**
  * Result of receiving goods against a purchase order, including updated status and open balances
  */
-export interface ReceivePurchaseOrderResponse { 
+export interface ReceivePurchaseOrderResponse {
     /**
      * Identifier of the purchase order that was received against
      */

@@ -12,7 +12,7 @@
 /**
  * A single received line item on a goods receipt response, describing one SKU, its received quantity, and accrued cost
  */
-export interface GoodsReceiptLineResponse { 
+export interface GoodsReceiptLineResponse {
     /**
      * Effective base-per-document-unit conversion factor applied at posting time
      */

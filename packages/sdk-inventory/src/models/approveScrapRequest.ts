@@ -12,7 +12,7 @@
 /**
  * Request to approve a pending scrap document and post it to the ledger
  */
-export interface ApproveScrapRequest { 
+export interface ApproveScrapRequest {
     /**
      * Explicit negative-stock override for the posting; honored only when the caller holds inventory:adjustment:override
      */

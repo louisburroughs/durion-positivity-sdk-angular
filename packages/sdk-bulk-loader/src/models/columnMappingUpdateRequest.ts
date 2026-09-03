@@ -12,7 +12,7 @@
 /**
  * A single column mapping to create or update for a bulk load job
  */
-export interface ColumnMappingUpdateRequest { 
+export interface ColumnMappingUpdateRequest {
     /**
      * Identifier of the existing mapping to update; omit to create a new mapping
      */

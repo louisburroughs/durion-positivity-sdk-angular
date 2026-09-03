@@ -11,7 +11,7 @@
 
 import { Inject, Injectable, Optional }                      from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams,
-         HttpResponse, HttpEvent, HttpContext 
+         HttpResponse, HttpEvent, HttpContext
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
@@ -49,7 +49,7 @@ export class GLMappingAPIService extends BaseService {
 
     /**
      * Create GL Mapping
-     * Creates a date-effective mapping from a source-system external code to a GL account, used when posting events that carry external codes. Use this tool to register how an upstream system\&#39;s code lands in the ledger; do not use createDefaultMapping, which sets the fallback debit and credit pair for an event type without explicit rules. Preconditions: the target GL account must exist and be active, and the new effective date range must not overlap an existing mapping for the same sourceSystem and externalCode. Required inputs: sourceSystem, externalCode, glAccountId (UUID) and effectiveStartDate; effectiveEndDate defaults to null (open-ended) and dimensions are optional. Emits an ACCOUNTING_GL_MAPPING_CREATE event; a cash-receipt code mapped to an implausible account subtype logs a non-blocking warning. Returns 400 when the GL account is missing or inactive, or when the effective dates overlap an existing mapping. 
+     * Creates a date-effective mapping from a source-system external code to a GL account, used when posting events that carry external codes. Use this tool to register how an upstream system\&#39;s code lands in the ledger; do not use createDefaultMapping, which sets the fallback debit and credit pair for an event type without explicit rules. Preconditions: the target GL account must exist and be active, and the new effective date range must not overlap an existing mapping for the same sourceSystem and externalCode. Required inputs: sourceSystem, externalCode, glAccountId (UUID) and effectiveStartDate; effectiveEndDate defaults to null (open-ended) and dimensions are optional. Emits an ACCOUNTING_GL_MAPPING_CREATE event; a cash-receipt code mapped to an implausible account subtype logs a non-blocking warning. Returns 400 when the GL account is missing or inactive, or when the effective dates overlap an existing mapping.
      * @endpoint post /v1/accounting/mappings
      * @param gLMappingCreateRequest Date-effective external-code-to-GL-account mapping to create.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -119,7 +119,7 @@ export class GLMappingAPIService extends BaseService {
 
     /**
      * Resolve GL Mapping
-     * Resolves a source-system external code to the GL account whose mapping is effective on the supplied transaction date. Use this tool to look up where a coded transaction will post; do not use resolveTestMapping, which dry-runs full posting-rule evaluation for an event payload rather than a single code lookup. Preconditions: a mapping must exist for the sourceSystem and externalCode whose effective date range covers the transaction date. Required inputs: sourceSystem, externalCode and transactionDate (ISO date-time); there are no optional fields. Emits an ACCOUNTING_GL_MAPPING_RESOLVE audit event; no mappings or entries are created. Returns 400 when no mapping is effective for the code on that date. 
+     * Resolves a source-system external code to the GL account whose mapping is effective on the supplied transaction date. Use this tool to look up where a coded transaction will post; do not use resolveTestMapping, which dry-runs full posting-rule evaluation for an event payload rather than a single code lookup. Preconditions: a mapping must exist for the sourceSystem and externalCode whose effective date range covers the transaction date. Required inputs: sourceSystem, externalCode and transactionDate (ISO date-time); there are no optional fields. Emits an ACCOUNTING_GL_MAPPING_RESOLVE audit event; no mappings or entries are created. Returns 400 when no mapping is effective for the code on that date.
      * @endpoint post /v1/accounting/mappings/resolve
      * @param gLMappingResolveRequest External code and transaction date to resolve against effective mappings.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -189,7 +189,7 @@ export class GLMappingAPIService extends BaseService {
 
     /**
      * Dry-Run Mapping Rule Resolution
-     * Resolves a hypothetical accounting event against the published posting rules and GL mappings, returning the matched rule (id, name, version), the exact journal entry lines the evaluator would post including proportional split-line shares and residual distribution, and per-predicate evaluation outcomes. Use this tool to inspect what a rule set would do before real events arrive; do not use resolveGLMapping, which only resolves a single external code to one account. Preconditions: a PUBLISHED posting rule set should exist, though a no-match outcome is a normal 200 response with matched&#x3D;false rather than an error. Required inputs: eventType and transactionDate (ISO date); samplePayload is an optional JSON object evaluated by the rule predicates. Emits an ACCOUNTING_MAPPING_RESOLVE_TEST audit event only; nothing is persisted, and no accounting event, journal entry or outbox record is created. Returns 400 when the sample payload cannot be interpreted by the rules. 
+     * Resolves a hypothetical accounting event against the published posting rules and GL mappings, returning the matched rule (id, name, version), the exact journal entry lines the evaluator would post including proportional split-line shares and residual distribution, and per-predicate evaluation outcomes. Use this tool to inspect what a rule set would do before real events arrive; do not use resolveGLMapping, which only resolves a single external code to one account. Preconditions: a PUBLISHED posting rule set should exist, though a no-match outcome is a normal 200 response with matched&#x3D;false rather than an error. Required inputs: eventType and transactionDate (ISO date); samplePayload is an optional JSON object evaluated by the rule predicates. Emits an ACCOUNTING_MAPPING_RESOLVE_TEST audit event only; nothing is persisted, and no accounting event, journal entry or outbox record is created. Returns 400 when the sample payload cannot be interpreted by the rules.
      * @endpoint post /v1/accounting/mappings/resolve-test
      * @param mappingResolutionTestRequest Hypothetical event type, sample payload and date to evaluate against published rules.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.

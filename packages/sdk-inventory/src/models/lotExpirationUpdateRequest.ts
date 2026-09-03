@@ -12,7 +12,7 @@
 /**
  * Set or clear a lot\'s expiration date and alert-window date
  */
-export interface LotExpirationUpdateRequest { 
+export interface LotExpirationUpdateRequest {
     /**
      * Date the lot enters its expiring-soon alert window (null means no early alert)
      */

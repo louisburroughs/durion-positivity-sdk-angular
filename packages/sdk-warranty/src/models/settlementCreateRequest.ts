@@ -12,7 +12,7 @@
 /**
  * Execute a settlement on an approved warranty claim
  */
-export interface SettlementCreateRequest { 
+export interface SettlementCreateRequest {
     /**
      * Amount coverage pays
      */

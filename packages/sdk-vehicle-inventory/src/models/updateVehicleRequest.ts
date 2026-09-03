@@ -12,7 +12,7 @@
 /**
  * Request payload for partially updating mutable vehicle fields.
  */
-export interface UpdateVehicleRequest { 
+export interface UpdateVehicleRequest {
     /**
      * Owning party (account) id. Providing a different accountId transfers the vehicle to that party; the vehicle-party association follows via vehicle.events.v1 (ADR-0044 §6).
      */

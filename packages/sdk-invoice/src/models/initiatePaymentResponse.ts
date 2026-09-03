@@ -12,7 +12,7 @@
 /**
  * Payment intent result
  */
-export interface InitiatePaymentResponse { 
+export interface InitiatePaymentResponse {
     /**
      * Amount authorized on the card
      */

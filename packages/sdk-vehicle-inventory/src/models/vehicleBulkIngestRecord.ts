@@ -12,7 +12,7 @@
 /**
  * Single vehicle record within a bulk ingest request
  */
-export interface VehicleBulkIngestRecord { 
+export interface VehicleBulkIngestRecord {
     /**
      * Identifier of the account that owns the vehicle
      */

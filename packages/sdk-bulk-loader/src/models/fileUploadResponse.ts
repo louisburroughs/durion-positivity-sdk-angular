@@ -13,7 +13,7 @@ import { ContentDetectionResult } from './contentDetectionResult';
 /**
  * Result of uploading a source file for a bulk load job
  */
-export interface FileUploadResponse { 
+export interface FileUploadResponse {
     detection?: ContentDetectionResult;
     /**
      * Original name of the uploaded file

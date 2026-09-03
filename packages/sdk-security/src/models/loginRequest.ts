@@ -12,7 +12,7 @@
 /**
  * Request to authenticate a user with username and password
  */
-export interface LoginRequest { 
+export interface LoginRequest {
     /**
      * The user\'s login password
      */

@@ -12,7 +12,7 @@
 /**
  * Account tier resolution result
  */
-export interface ResolveAccountTierResponse { 
+export interface ResolveAccountTierResponse {
     /**
      * Account/party identifier
      */

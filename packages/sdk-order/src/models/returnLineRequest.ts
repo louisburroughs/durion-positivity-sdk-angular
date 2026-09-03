@@ -12,7 +12,7 @@
 /**
  * One requested return line
  */
-export interface ReturnLineRequest { 
+export interface ReturnLineRequest {
     /**
      * Disposition of the returned item
      */

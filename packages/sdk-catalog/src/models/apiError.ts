@@ -13,7 +13,7 @@ import { FieldError } from './fieldError';
 /**
  * Standard error response envelope returned by all Durion backend APIs
  */
-export interface ApiError { 
+export interface ApiError {
     /**
      * Machine-readable error code
      */

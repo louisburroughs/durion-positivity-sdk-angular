@@ -12,7 +12,7 @@
 /**
  * Request to disable an employee and govern handling of their staffing assignments
  */
-export interface DisableEmployeeRequestDto { 
+export interface DisableEmployeeRequestDto {
     /**
      * End date to apply to assignments when the policy is GRACE_PERIOD
      */

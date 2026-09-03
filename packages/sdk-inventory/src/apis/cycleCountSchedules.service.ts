@@ -11,7 +11,7 @@
 
 import { Inject, Injectable, Optional }                      from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams,
-         HttpResponse, HttpEvent, HttpContext 
+         HttpResponse, HttpEvent, HttpContext
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
@@ -41,7 +41,7 @@ export class CycleCountSchedulesService extends BaseService {
 
     /**
      * Create cycle count schedule
-     * Creates an active recurring cycle-count schedule for a location, optionally filtered to one zone and/or SKU category, that comes due every frequencyDays. Use this tool to institutionalise periodic counting; do not use createCycleCountPlan, which creates a single one-off plan. Preconditions: the caller must be an authenticated user (recorded as the schedule creator). Required inputs: locationId (UUID), frequencyDays (positive integer) and nextDueDate (ISO date); zoneId and skuCategory are optional filters, and autoCreatePlan defaults to false, meaning the schedule only surfaces in the due-for-count view instead of auto-creating plans. Emits an INVENTORY_CYCLE_COUNT_SCHEDULE_CREATE event; the schedule starts active and no plan is created by this call. Returns 400 when locationId or nextDueDate is missing or frequencyDays is not positive. 
+     * Creates an active recurring cycle-count schedule for a location, optionally filtered to one zone and/or SKU category, that comes due every frequencyDays. Use this tool to institutionalise periodic counting; do not use createCycleCountPlan, which creates a single one-off plan. Preconditions: the caller must be an authenticated user (recorded as the schedule creator). Required inputs: locationId (UUID), frequencyDays (positive integer) and nextDueDate (ISO date); zoneId and skuCategory are optional filters, and autoCreatePlan defaults to false, meaning the schedule only surfaces in the due-for-count view instead of auto-creating plans. Emits an INVENTORY_CYCLE_COUNT_SCHEDULE_CREATE event; the schedule starts active and no plan is created by this call. Returns 400 when locationId or nextDueDate is missing or frequencyDays is not positive.
      * @endpoint post /v1/inventory/cycleCountSchedules
      * @param createCycleCountScheduleRequest Recurring schedule to create, with its location, cadence, first due date, and optional zone/category filters.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -111,7 +111,7 @@ export class CycleCountSchedulesService extends BaseService {
 
     /**
      * Deactivate cycle count schedule
-     * Deactivates a recurring cycle-count schedule — a soft delete that clears its active flag so it stops firing and drops out of the due-for-count view; the row is never removed. Use this tool to retire a schedule; to change its cadence or filters while keeping it running (or to re-activate it), use updateCycleCountSchedule instead. Preconditions: the schedule must exist; deactivating an already-inactive schedule succeeds unchanged. Required inputs: scheduleId (UUID) as a path parameter; there is no request body or confirmation flag. Emits an INVENTORY_CYCLE_COUNT_SCHEDULE_DEACTIVATE event; plans already created from the schedule are untouched. Returns 404 when no cycle count schedule exists for the supplied id. 
+     * Deactivates a recurring cycle-count schedule — a soft delete that clears its active flag so it stops firing and drops out of the due-for-count view; the row is never removed. Use this tool to retire a schedule; to change its cadence or filters while keeping it running (or to re-activate it), use updateCycleCountSchedule instead. Preconditions: the schedule must exist; deactivating an already-inactive schedule succeeds unchanged. Required inputs: scheduleId (UUID) as a path parameter; there is no request body or confirmation flag. Emits an INVENTORY_CYCLE_COUNT_SCHEDULE_DEACTIVATE event; plans already created from the schedule are untouched. Returns 404 when no cycle count schedule exists for the supplied id.
      * @endpoint delete /v1/inventory/cycleCountSchedules/{scheduleId}
      * @param scheduleId Cycle count schedule identifier
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -171,7 +171,7 @@ export class CycleCountSchedulesService extends BaseService {
 
     /**
      * Get cycle count schedule
-     * Returns one recurring cycle-count schedule with its filters, frequency, next due date, and active and auto-create flags. Use this tool when the scheduleId is already known; use listCycleCountSchedules instead to search by location or due state. Preconditions: the schedule must exist. Required inputs: scheduleId (UUID) as a path parameter; there is no request body. No events are emitted and no state changes; this is a read-only projection. Returns 404 when no cycle count schedule exists for the supplied id. 
+     * Returns one recurring cycle-count schedule with its filters, frequency, next due date, and active and auto-create flags. Use this tool when the scheduleId is already known; use listCycleCountSchedules instead to search by location or due state. Preconditions: the schedule must exist. Required inputs: scheduleId (UUID) as a path parameter; there is no request body. No events are emitted and no state changes; this is a read-only projection. Returns 404 when no cycle count schedule exists for the supplied id.
      * @endpoint get /v1/inventory/cycleCountSchedules/{scheduleId}
      * @param scheduleId Cycle count schedule identifier
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -231,7 +231,7 @@ export class CycleCountSchedulesService extends BaseService {
 
     /**
      * List cycle count schedules
-     * Returns one page of recurring cycle-count schedules, newest first, optionally filtered by location and/or active flag. Use this tool to discover scheduleIds or drive the due-for-count view via due&#x3D;true, which restricts to active schedules whose nextDueDate has arrived; use getCycleCountSchedule instead when the scheduleId is already known. Preconditions: none. Required inputs: all query parameters are optional — locationId (UUID), active (boolean), due (boolean, default false), page (0-based, default 0) and size (default 50). Emits an INVENTORY_CYCLE_COUNT_SCHEDULE_LIST audit event; no schedule state changes. Returns 200 with an empty array when no schedules match, so an empty result is not an error condition. 
+     * Returns one page of recurring cycle-count schedules, newest first, optionally filtered by location and/or active flag. Use this tool to discover scheduleIds or drive the due-for-count view via due&#x3D;true, which restricts to active schedules whose nextDueDate has arrived; use getCycleCountSchedule instead when the scheduleId is already known. Preconditions: none. Required inputs: all query parameters are optional — locationId (UUID), active (boolean), due (boolean, default false), page (0-based, default 0) and size (default 50). Emits an INVENTORY_CYCLE_COUNT_SCHEDULE_LIST audit event; no schedule state changes. Returns 200 with an empty array when no schedules match, so an empty result is not an error condition.
      * @endpoint get /v1/inventory/cycleCountSchedules
      * @param locationId Filter by location identifier
      * @param active Filter by active flag
@@ -340,7 +340,7 @@ export class CycleCountSchedulesService extends BaseService {
 
     /**
      * Update cycle count schedule
-     * Partially updates a recurring cycle-count schedule: frequencyDays, zoneId, skuCategory, nextDueDate, autoCreatePlan and active can each be changed, and null fields are left unchanged. Use this tool to retune an existing schedule; do not use updateCycleCountPlanStatus, which moves an individual plan through its lifecycle, and note that v1 offers no way to clear the zone or SKU-category filters — recreate the schedule instead. Preconditions: the schedule must exist. Required inputs: scheduleId (UUID) path parameter and a body carrying only the fields to change; frequencyDays, when supplied, must be positive. Emits an INVENTORY_CYCLE_COUNT_SCHEDULE_UPDATE event; the change takes effect on the next scheduler pass. Returns 404 when the schedule does not exist, and 400 when a supplied frequencyDays is not positive. 
+     * Partially updates a recurring cycle-count schedule: frequencyDays, zoneId, skuCategory, nextDueDate, autoCreatePlan and active can each be changed, and null fields are left unchanged. Use this tool to retune an existing schedule; do not use updateCycleCountPlanStatus, which moves an individual plan through its lifecycle, and note that v1 offers no way to clear the zone or SKU-category filters — recreate the schedule instead. Preconditions: the schedule must exist. Required inputs: scheduleId (UUID) path parameter and a body carrying only the fields to change; frequencyDays, when supplied, must be positive. Emits an INVENTORY_CYCLE_COUNT_SCHEDULE_UPDATE event; the change takes effect on the next scheduler pass. Returns 404 when the schedule does not exist, and 400 when a supplied frequencyDays is not positive.
      * @endpoint put /v1/inventory/cycleCountSchedules/{scheduleId}
      * @param scheduleId Cycle count schedule identifier
      * @param updateCycleCountScheduleRequest Partial update; only non-null fields are applied to the schedule.

@@ -13,7 +13,7 @@ import { EmployeeContactInfoDto } from './employeeContactInfoDto';
 /**
  * Request to create an employee record
  */
-export interface CreateEmployeeRequest { 
+export interface CreateEmployeeRequest {
     contactInfo?: EmployeeContactInfoDto;
     /**
      * Policy controlling how potential duplicate employee records are handled during creation

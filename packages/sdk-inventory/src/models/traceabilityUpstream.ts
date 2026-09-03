@@ -13,7 +13,7 @@ import { TraceabilityDocumentRef } from './traceabilityDocumentRef';
 /**
  * Upstream origin: vendor, receipt date, and source documents (PO / ASN / goods receipt)
  */
-export interface TraceabilityUpstream { 
+export interface TraceabilityUpstream {
     /**
      * Upstream source documents, PO first then ASN then goods receipt
      */

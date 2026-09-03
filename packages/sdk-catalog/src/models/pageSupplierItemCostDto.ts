@@ -12,7 +12,7 @@ import { SupplierItemCostDto } from './supplierItemCostDto';
 import { SortObject } from './sortObject';
 
 
-export interface PageSupplierItemCostDto { 
+export interface PageSupplierItemCostDto {
     totalPages?: number;
     totalElements?: number;
     size?: number;

@@ -11,7 +11,7 @@
 
 import { Inject, Injectable, Optional }                      from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams,
-         HttpResponse, HttpEvent, HttpContext 
+         HttpResponse, HttpEvent, HttpContext
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
@@ -41,7 +41,7 @@ export class RestrictionRulesService extends BaseService {
 
     /**
      * Create A Restriction Rule
-     * Creates an active sale-restriction rule that blocks or gates a product for a location tag and service tag combination. Use this tool to configure a standing restriction policy; do not use overridePriceRestriction, which grants a one-time transaction exemption from an existing rule. Preconditions: none are checked beyond authorization; duplicate rules for the same product and tag combination are not rejected, so each call appends a new rule. Required inputs: productId (UUID), locationTag (ALL_LOCATIONS, RETAIL_STORE, WAREHOUSE, MOBILE_SERVICE, FRANCHISE, or TEST_LOCATION), serviceTag (POS_SALE, WORKORDER, ESTIMATE, INVOICE, or DELIVERY), effectiveFrom (date), and overrideable; effectiveTo is optional, and policyVersion defaults to 1 when omitted. Emits a PRICE_RESTRICTION_RULE_CREATE event and the rule participates in evaluation immediately; a rule with overrideable false forces a BLOCK decision that cannot be overridden. Returns 201 with the stored rule, and 400 when a required field is missing or a tag is not a valid enum value. 
+     * Creates an active sale-restriction rule that blocks or gates a product for a location tag and service tag combination. Use this tool to configure a standing restriction policy; do not use overridePriceRestriction, which grants a one-time transaction exemption from an existing rule. Preconditions: none are checked beyond authorization; duplicate rules for the same product and tag combination are not rejected, so each call appends a new rule. Required inputs: productId (UUID), locationTag (ALL_LOCATIONS, RETAIL_STORE, WAREHOUSE, MOBILE_SERVICE, FRANCHISE, or TEST_LOCATION), serviceTag (POS_SALE, WORKORDER, ESTIMATE, INVOICE, or DELIVERY), effectiveFrom (date), and overrideable; effectiveTo is optional, and policyVersion defaults to 1 when omitted. Emits a PRICE_RESTRICTION_RULE_CREATE event and the rule participates in evaluation immediately; a rule with overrideable false forces a BLOCK decision that cannot be overridden. Returns 201 with the stored rule, and 400 when a required field is missing or a tag is not a valid enum value.
      * @endpoint post /v1/price/restrictions/rules
      * @param createRestrictionRuleRequest Restriction rule definition scoping a product restriction to location and service tags.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -111,9 +111,9 @@ export class RestrictionRulesService extends BaseService {
 
     /**
      * Deactivate A Restriction Rule
-     * Deactivates a sale-restriction rule so it no longer participates in restriction evaluation. Use this tool to retire a standing restriction for everyone; do not use overridePriceRestriction, which leaves the rule active and exempts only a single transaction. Preconditions: the rule must exist and still be active; deactivation is not idempotent, so repeating it fails. Required inputs: ruleId (UUID) as a path parameter; there is no request body. Emits a PRICE_RESTRICTION_RULE_DEACTIVATE event, sets active to false, and stamps effectiveTo with the current date. Returns 404 when no restriction rule exists for the supplied id; calling it on an already inactive rule produces a server error rather than a no-op. 
+     * Deactivates a sale-restriction rule so it no longer participates in restriction evaluation. Use this tool to retire a standing restriction for everyone; do not use overridePriceRestriction, which leaves the rule active and exempts only a single transaction. Preconditions: the rule must exist and still be active; deactivation is not idempotent, so repeating it fails. Required inputs: ruleId (UUID) as a path parameter; there is no request body. Emits a PRICE_RESTRICTION_RULE_DEACTIVATE event, sets active to false, and stamps effectiveTo with the current date. Returns 404 when no restriction rule exists for the supplied id; calling it on an already inactive rule produces a server error rather than a no-op.
      * @endpoint delete /v1/price/restrictions/rules/{ruleId}
-     * @param ruleId 
+     * @param ruleId
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -171,9 +171,9 @@ export class RestrictionRulesService extends BaseService {
 
     /**
      * Get A Restriction Rule By ID
-     * Returns a single sale-restriction rule, active or inactive, identified by its rule id. Use this tool when the rule id is already known, typically from an evaluation result\&#39;s ruleIds; use listRestrictionRules instead to browse the active rule set. Preconditions: none beyond the pricing:rule:view authority; the rule must also exist, and inactive rules remain readable through this operation. Required inputs: ruleId (UUID) as a path parameter; there is no request body. No events are emitted and no state changes; this is a read-only projection. Returns 404 when no restriction rule exists for the supplied id. 
+     * Returns a single sale-restriction rule, active or inactive, identified by its rule id. Use this tool when the rule id is already known, typically from an evaluation result\&#39;s ruleIds; use listRestrictionRules instead to browse the active rule set. Preconditions: none beyond the pricing:rule:view authority; the rule must also exist, and inactive rules remain readable through this operation. Required inputs: ruleId (UUID) as a path parameter; there is no request body. No events are emitted and no state changes; this is a read-only projection. Returns 404 when no restriction rule exists for the supplied id.
      * @endpoint get /v1/price/restrictions/rules/{ruleId}
-     * @param ruleId 
+     * @param ruleId
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -231,7 +231,7 @@ export class RestrictionRulesService extends BaseService {
 
     /**
      * List All Active Restriction Rules
-     * Lists every currently active sale-restriction rule that can affect pricing and sale decisions. Use this tool to review the standing restriction policy; use getRestrictionRuleById instead to fetch one rule, including deactivated rules, which this listing omits. Preconditions: none beyond the pricing:rule:view authority. Required inputs: none; there is no request body, filtering, or paging. No events are emitted and no state changes; this is a read-only projection. Returns 200 with an empty array when no active restriction rules exist. 
+     * Lists every currently active sale-restriction rule that can affect pricing and sale decisions. Use this tool to review the standing restriction policy; use getRestrictionRuleById instead to fetch one rule, including deactivated rules, which this listing omits. Preconditions: none beyond the pricing:rule:view authority. Required inputs: none; there is no request body, filtering, or paging. No events are emitted and no state changes; this is a read-only projection. Returns 200 with an empty array when no active restriction rules exist.
      * @endpoint get /v1/price/restrictions/rules
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.

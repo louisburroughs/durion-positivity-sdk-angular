@@ -12,7 +12,7 @@
 /**
  * Request to record a CSR-initiated interaction on a party\'s timeline
  */
-export interface RecordInteractionRequest { 
+export interface RecordInteractionRequest {
     /**
      * Body text
      */

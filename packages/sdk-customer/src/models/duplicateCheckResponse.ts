@@ -13,7 +13,7 @@ import { PartyMatch } from './partyMatch';
 /**
  * Response containing potential duplicate party matches
  */
-export interface DuplicateCheckResponse { 
+export interface DuplicateCheckResponse {
     /**
      * Whether any duplicate matches were found
      */

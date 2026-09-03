@@ -12,7 +12,7 @@
 /**
  * User role assignment as exposed by the security service
  */
-export interface UserRoleDto { 
+export interface UserRoleDto {
     /**
      * Whether the assignment is active
      */

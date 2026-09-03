@@ -12,7 +12,7 @@
 /**
  * Request payload for rejecting a pending return
  */
-export interface RejectReturnRequest { 
+export interface RejectReturnRequest {
     /**
      * Reason for the rejection
      */

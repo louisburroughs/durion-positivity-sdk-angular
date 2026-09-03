@@ -12,7 +12,7 @@
 /**
  * Optional request payload for posting a journal entry
  */
-export interface JournalEntryPostRequest { 
+export interface JournalEntryPostRequest {
     /**
      * Optional justification for posting into a CLOSED accounting period. When the entry\'s transaction date falls in a CLOSED period, supplying a non-blank justification together with the accounting:period:override permission allows the posting to proceed (audit-logged); without it the post is rejected with 422 PERIOD_CLOSED. Has no effect for dates in OPEN periods and can never bypass the hard lock (422 PERIOD_HARD_LOCKED).
      */

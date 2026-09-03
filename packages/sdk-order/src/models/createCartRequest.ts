@@ -12,7 +12,7 @@
 /**
  * Request payload for creating a new cart
  */
-export interface CreateCartRequest { 
+export interface CreateCartRequest {
     /**
      * Identifier of the clerk creating the cart
      */

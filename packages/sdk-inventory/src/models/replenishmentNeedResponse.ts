@@ -12,7 +12,7 @@
 /**
  * Current computed replenishment state of one active, non-snoozed policy: the same orderpoint evaluation the batch scan applies, with no side effects
  */
-export interface ReplenishmentNeedResponse { 
+export interface ReplenishmentNeedResponse {
     /**
      * Earliest date at which the projected available quantity goes below zero; absent when the policy is not triggered or no stock-out is projected within the lead-time horizon
      */

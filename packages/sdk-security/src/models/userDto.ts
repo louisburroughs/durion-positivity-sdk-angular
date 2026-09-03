@@ -12,7 +12,7 @@
 /**
  * User account view returned by user-management endpoints
  */
-export interface UserDto { 
+export interface UserDto {
     /**
      * User identifier
      */

@@ -13,7 +13,7 @@ import { CostTierDto } from './costTierDto';
 /**
  * Supplier-item cost structure with optional quantity-based tiers
  */
-export interface SupplierItemCostDto { 
+export interface SupplierItemCostDto {
     /**
      * Supplier-item cost identifier
      */

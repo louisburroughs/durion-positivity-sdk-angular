@@ -12,7 +12,7 @@
 /**
  * Request payload for linking an order to an originating source
  */
-export interface LinkSourceRequest { 
+export interface LinkSourceRequest {
     /**
      * Identifier of the originating source record
      */

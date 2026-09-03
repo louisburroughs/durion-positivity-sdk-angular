@@ -12,7 +12,7 @@
 /**
  * Request to complete or dismiss a follow-up task
  */
-export interface CloseFollowUpTaskRequest { 
+export interface CloseFollowUpTaskRequest {
     /**
      * Appointment created from the hand-off, when booking followed
      */

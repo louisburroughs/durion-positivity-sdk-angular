@@ -12,7 +12,7 @@
 /**
  * One role to provision, with optional MCP persona metadata
  */
-export interface RoleBulkIngestRecord { 
+export interface RoleBulkIngestRecord {
     /**
      * Human-readable description
      */

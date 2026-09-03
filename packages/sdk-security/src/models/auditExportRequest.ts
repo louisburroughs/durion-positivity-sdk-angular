@@ -13,7 +13,7 @@ import { AuditEventSearchFilter } from './auditEventSearchFilter';
 /**
  * Audit export job submission request
  */
-export interface AuditExportRequest { 
+export interface AuditExportRequest {
     /**
      * Delivery mode for the exported file
      */

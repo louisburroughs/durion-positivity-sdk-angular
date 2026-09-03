@@ -12,7 +12,7 @@
 /**
  * Imported bank statement line
  */
-export interface BankReconciliationLineResponse { 
+export interface BankReconciliationLineResponse {
     /**
      * Signed statement amount
      */

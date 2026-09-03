@@ -11,7 +11,7 @@
 
 import { Inject, Injectable, Optional }                      from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams,
-         HttpResponse, HttpEvent, HttpContext 
+         HttpResponse, HttpEvent, HttpContext
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
@@ -47,7 +47,7 @@ export class CustomerCreditsService extends BaseService {
 
     /**
      * Apply Customer Credit To Invoice
-     * Draws an open customer credit down against an outstanding invoice, posting debit Customer Credit Liability, credit Accounts Receivable for the applied amount. Use this tool to consume standing credit against an invoice; do not use refundCustomerCredit, which pays the credit back as cash, and do not use createCreditMemo, which issues new credit against an invoice. Preconditions: the credit must have sufficient open amount, the invoice must be AR-eligible and belong to the same customer, the amount must not exceed the invoice balance, and the accounting period must be open. Required inputs: creditId (UUID) as a path parameter, requestId (max 100 chars, the idempotency key), invoiceId (UUID) and amount (min 0.01). Emits an ACCOUNTING_CUSTOMER_CREDIT_APPLY event; replaying the same requestId returns the original application instead of double-applying. Returns 404 when the credit or invoice is not found, 409 for insufficient open credit, an ineligible or foreign invoice, an amount over the invoice balance, a closed period, or a requestId reused for a different operation, and 400 when the amount is missing or non-positive. 
+     * Draws an open customer credit down against an outstanding invoice, posting debit Customer Credit Liability, credit Accounts Receivable for the applied amount. Use this tool to consume standing credit against an invoice; do not use refundCustomerCredit, which pays the credit back as cash, and do not use createCreditMemo, which issues new credit against an invoice. Preconditions: the credit must have sufficient open amount, the invoice must be AR-eligible and belong to the same customer, the amount must not exceed the invoice balance, and the accounting period must be open. Required inputs: creditId (UUID) as a path parameter, requestId (max 100 chars, the idempotency key), invoiceId (UUID) and amount (min 0.01). Emits an ACCOUNTING_CUSTOMER_CREDIT_APPLY event; replaying the same requestId returns the original application instead of double-applying. Returns 404 when the credit or invoice is not found, 409 for insufficient open credit, an ineligible or foreign invoice, an amount over the invoice balance, a closed period, or a requestId reused for a different operation, and 400 when the amount is missing or non-positive.
      * @endpoint post /v1/accounting/customer-credits/{creditId}/applications
      * @param creditId Credit identifier
      * @param customerCreditApplicationRequest Idempotent draw-down of the credit against one outstanding invoice.
@@ -121,7 +121,7 @@ export class CustomerCreditsService extends BaseService {
 
     /**
      * Get Customer Credit
-     * Returns one AR customer credit with its applied and refunded totals and the remaining open amount. Use this tool when the credit id is already known; use listCustomerCredits instead when searching by customer or consumption state. Preconditions: the customer credit must exist. Required inputs: creditId (UUID) as a path parameter; there is no request body. Emits an ACCOUNTING_CUSTOMER_CREDIT_GET audit event; no state changes. Returns 404 when no customer credit exists for the supplied id. 
+     * Returns one AR customer credit with its applied and refunded totals and the remaining open amount. Use this tool when the credit id is already known; use listCustomerCredits instead when searching by customer or consumption state. Preconditions: the customer credit must exist. Required inputs: creditId (UUID) as a path parameter; there is no request body. Emits an ACCOUNTING_CUSTOMER_CREDIT_GET audit event; no state changes. Returns 404 when no customer credit exists for the supplied id.
      * @endpoint get /v1/accounting/customer-credits/{creditId}
      * @param creditId Credit identifier
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -181,7 +181,7 @@ export class CustomerCreditsService extends BaseService {
 
     /**
      * List Customer Credits
-     * Lists AR customer credits with their remaining open amounts as a paginated projection, optionally filtered by customer and consumption state. Use this tool to find open credit before applying or refunding; do not use getCustomerCredit, which fetches one credit by its known id. Preconditions: none beyond the caller holding accounting:customer-credit:view. Required inputs: none; customerId and status are optional filters, with standard page, size and sort parameters. Emits an ACCOUNTING_CUSTOMER_CREDIT_LIST audit event; no state changes. Returns 200 with an empty page when nothing matches the filters. 
+     * Lists AR customer credits with their remaining open amounts as a paginated projection, optionally filtered by customer and consumption state. Use this tool to find open credit before applying or refunding; do not use getCustomerCredit, which fetches one credit by its known id. Preconditions: none beyond the caller holding accounting:customer-credit:view. Required inputs: none; customerId and status are optional filters, with standard page, size and sort parameters. Emits an ACCOUNTING_CUSTOMER_CREDIT_LIST audit event; no state changes. Returns 200 with an empty page when nothing matches the filters.
      * @endpoint get /v1/accounting/customer-credits
      * @param customerId Filter by customer
      * @param status Filter by consumption state
@@ -290,7 +290,7 @@ export class CustomerCreditsService extends BaseService {
 
     /**
      * Refund Customer Credit
-     * Refunds an open customer credit as cash back to the customer, posting debit Customer Credit Liability, credit Undeposited Funds for the refunded amount. Use this tool to pay standing credit out; do not use applyCustomerCredit, which consumes the credit against an invoice instead. Preconditions: the credit must have sufficient open amount and the accounting period must be open. Required inputs: creditId (UUID) as a path parameter, requestId (max 100 chars, the idempotency key) and amount (min 0.01); note (max 500 chars) is optional. Emits an ACCOUNTING_CUSTOMER_CREDIT_REFUND event; replaying the same requestId returns the original refund instead of double-paying. Returns 404 when the credit is not found, 409 for insufficient open credit, a closed period, or a requestId reused for a different operation, and 400 when the amount is missing or non-positive. 
+     * Refunds an open customer credit as cash back to the customer, posting debit Customer Credit Liability, credit Undeposited Funds for the refunded amount. Use this tool to pay standing credit out; do not use applyCustomerCredit, which consumes the credit against an invoice instead. Preconditions: the credit must have sufficient open amount and the accounting period must be open. Required inputs: creditId (UUID) as a path parameter, requestId (max 100 chars, the idempotency key) and amount (min 0.01); note (max 500 chars) is optional. Emits an ACCOUNTING_CUSTOMER_CREDIT_REFUND event; replaying the same requestId returns the original refund instead of double-paying. Returns 404 when the credit is not found, 409 for insufficient open credit, a closed period, or a requestId reused for a different operation, and 400 when the amount is missing or non-positive.
      * @endpoint post /v1/accounting/customer-credits/{creditId}/refunds
      * @param creditId Credit identifier
      * @param customerCreditRefundRequest Idempotent cash refund of part or all of the open credit.

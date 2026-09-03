@@ -13,7 +13,7 @@ import { ReceivePurchaseOrderLineRequest } from './receivePurchaseOrderLineReque
 /**
  * Request to record receipt of goods against one or more purchase order lines
  */
-export interface ReceivePurchaseOrderRequest { 
+export interface ReceivePurchaseOrderRequest {
     /**
      * Line-level receipts describing the quantity received against each purchase order line
      */

@@ -12,7 +12,7 @@
 /**
  * GL mapping response payload
  */
-export interface GLMappingResponse { 
+export interface GLMappingResponse {
     /**
      * GL account code
      */

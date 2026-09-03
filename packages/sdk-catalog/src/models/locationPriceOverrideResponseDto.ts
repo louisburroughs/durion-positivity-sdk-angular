@@ -12,7 +12,7 @@
 /**
  * Location price override detail
  */
-export interface LocationPriceOverrideResponseDto { 
+export interface LocationPriceOverrideResponseDto {
     /**
      * Timestamp the override was approved
      */

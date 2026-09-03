@@ -13,7 +13,7 @@ import { CrmMatchSummaryDto } from './crmMatchSummaryDto';
 /**
  * Result of a successful self-registration
  */
-export interface SelfRegistrationResponse { 
+export interface SelfRegistrationResponse {
     crmMatchSummary?: CrmMatchSummaryDto;
     /**
      * Idempotency key echoed back when the caller supplied one

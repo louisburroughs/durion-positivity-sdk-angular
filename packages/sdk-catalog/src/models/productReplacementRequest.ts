@@ -12,7 +12,7 @@
 /**
  * Product replacement option request
  */
-export interface ProductReplacementRequest { 
+export interface ProductReplacementRequest {
     /**
      * Replacement effective instant
      */

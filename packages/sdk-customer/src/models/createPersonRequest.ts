@@ -14,7 +14,7 @@ import { PhoneInput } from './phoneInput';
 /**
  * Request to create an individual person record
  */
-export interface CreatePersonRequest { 
+export interface CreatePersonRequest {
     /**
      * Email addresses for this person
      */

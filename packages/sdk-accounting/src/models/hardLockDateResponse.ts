@@ -12,7 +12,7 @@
 /**
  * Org-level hard-lock date payload
  */
-export interface HardLockDateResponse { 
+export interface HardLockDateResponse {
     /**
      * The org-level hard-lock date. Journal entries dated strictly before this date are permanently rejected (422 PERIOD_HARD_LOCKED) with no override path. Null when no hard lock has been configured yet.
      */

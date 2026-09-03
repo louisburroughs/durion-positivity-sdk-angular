@@ -11,7 +11,7 @@
 
 import { Inject, Injectable, Optional }                      from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams,
-         HttpResponse, HttpEvent, HttpContext 
+         HttpResponse, HttpEvent, HttpContext
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
@@ -39,7 +39,7 @@ export class InventoryOpeningStockAPIService extends BaseService {
 
     /**
      * Establish Opening On-Hand Stock in Bulk
-     * Establishes opening on-hand quantities for many products at once, filing an adjustment per line and approving it so the ledger entry posts and the stock actually exists. Use this tool when commissioning a site or seeding an environment; use bulkIngestInventoryAdjustments instead to file adjustments that a human must review and approve. Preconditions: the caller holds both inventory:adjustment:create and inventory:adjustment:approve, and each line\&#39;s storage location exists. Required inputs: jobId (UUID), locationId (UUID) and records, each with sku and a positive quantity; a record\&#39;s own locationId names the storage location the stock sits in and overrides the batch one. Emits an INVENTORY_OPENING_STOCK_BULK_INGEST event, and one ADJUSTMENT_IN ledger entry per line, which is what hydrates the availability and replica views. Re-running the same file is safe: a line whose product already has on-hand at its destination is skipped, because adjustments are deltas and posting again would double the stock. Returns 200 with a per-record result; check each result rather than the status alone. 
+     * Establishes opening on-hand quantities for many products at once, filing an adjustment per line and approving it so the ledger entry posts and the stock actually exists. Use this tool when commissioning a site or seeding an environment; use bulkIngestInventoryAdjustments instead to file adjustments that a human must review and approve. Preconditions: the caller holds both inventory:adjustment:create and inventory:adjustment:approve, and each line\&#39;s storage location exists. Required inputs: jobId (UUID), locationId (UUID) and records, each with sku and a positive quantity; a record\&#39;s own locationId names the storage location the stock sits in and overrides the batch one. Emits an INVENTORY_OPENING_STOCK_BULK_INGEST event, and one ADJUSTMENT_IN ledger entry per line, which is what hydrates the availability and replica views. Re-running the same file is safe: a line whose product already has on-hand at its destination is skipped, because adjustments are deltas and posting again would double the stock. Returns 200 with a per-record result; check each result rather than the status alone.
      * @endpoint post /v1/inventory/opening-stock/bulk-ingest
      * @param bulkIngestRequestOpeningStockBulkIngestRecord Opening stock lines to establish.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.

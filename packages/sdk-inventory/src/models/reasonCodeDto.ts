@@ -12,7 +12,7 @@
 /**
  * Reference entry describing a valid reason a returned item can be assigned
  */
-export interface ReasonCodeDto { 
+export interface ReasonCodeDto {
     /**
      * Grouping category the reason code belongs to
      */

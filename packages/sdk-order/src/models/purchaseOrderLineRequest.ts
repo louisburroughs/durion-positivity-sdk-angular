@@ -12,7 +12,7 @@
 /**
  * A single line item on a purchase order request, identifying the SKU, quantity, and unit cost
  */
-export interface PurchaseOrderLineRequest { 
+export interface PurchaseOrderLineRequest {
     /**
      * Human-readable description of the item being ordered
      */

@@ -12,7 +12,7 @@ import { SortObject } from './sortObject';
 import { AuditLogEventDto } from './auditLogEventDto';
 
 
-export interface PageAuditLogEventDto { 
+export interface PageAuditLogEventDto {
     content?: Array<AuditLogEventDto>;
     empty?: boolean;
     first?: boolean;

@@ -13,7 +13,7 @@ import { VarianceSummaryResponse } from './varianceSummaryResponse';
 /**
  * Result of recording received quantities for a receiving session
  */
-export interface ReceiveItemsResponse { 
+export interface ReceiveItemsResponse {
     /**
      * Number of receiving lines processed in this request
      */

@@ -12,7 +12,7 @@
 /**
  * Claim status transition
  */
-export interface StatusHistoryView { 
+export interface StatusHistoryView {
     actor?: string;
     createdAt?: string;
     fromStatus?: StatusHistoryViewFromStatusEnum;

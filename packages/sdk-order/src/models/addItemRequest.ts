@@ -12,7 +12,7 @@
 /**
  * Request payload for adding an item line to a cart
  */
-export interface AddItemRequest { 
+export interface AddItemRequest {
     /**
      * Customer-visible line note
      */

@@ -11,7 +11,7 @@
 
 import { Inject, Injectable, Optional }                      from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams,
-         HttpResponse, HttpEvent, HttpContext 
+         HttpResponse, HttpEvent, HttpContext
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
@@ -41,7 +41,7 @@ export class AccountingExportsService extends BaseService {
 
     /**
      * Get Export Job Status
-     * Returns the current status of one timekeeping or generic export job. Use this tool to poll a job created by requestExport; use listExportHistory instead to browse all past jobs. Preconditions: the export job must exist. Required inputs: jobId (UUID) as a path parameter; there is no request body. No events are emitted and no state changes; this is a read-only projection. Returns 404 EXPORT_JOB_NOT_FOUND when no export job exists for the supplied id. 
+     * Returns the current status of one timekeeping or generic export job. Use this tool to poll a job created by requestExport; use listExportHistory instead to browse all past jobs. Preconditions: the export job must exist. Required inputs: jobId (UUID) as a path parameter; there is no request body. No events are emitted and no state changes; this is a read-only projection. Returns 404 EXPORT_JOB_NOT_FOUND when no export job exists for the supplied id.
      * @endpoint get /v1/accounting/export/status/{jobId}
      * @param jobId Export job identifier
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -101,7 +101,7 @@ export class AccountingExportsService extends BaseService {
 
     /**
      * List Export Job History
-     * Lists timekeeping and generic export jobs as a paginated projection, most recent first. Use this tool to review past export jobs; do not use getExportStatus, which polls one job by its id. Preconditions: none beyond the caller holding accounting:export:view. Required inputs: none; the page defaults to 20 items and only requestedAt is a supported sort property. No events are emitted and no state changes; this is a read-only projection. Returns 400 UNSUPPORTED_SORT_PROPERTY when an unsupported sort property is requested. 
+     * Lists timekeeping and generic export jobs as a paginated projection, most recent first. Use this tool to review past export jobs; do not use getExportStatus, which polls one job by its id. Preconditions: none beyond the caller holding accounting:export:view. Required inputs: none; the page defaults to 20 items and only requestedAt is a supported sort property. No events are emitted and no state changes; this is a read-only projection. Returns 400 UNSUPPORTED_SORT_PROPERTY when an unsupported sort property is requested.
      * @endpoint get /v1/accounting/export/history
      * @param page Zero-based page index (0..N)
      * @param size The size of the page to be returned
@@ -190,7 +190,7 @@ export class AccountingExportsService extends BaseService {
 
     /**
      * Request Timekeeping Export
-     * Submits an asynchronous timekeeping or generic data export job and returns it in its initial accepted state. Use this tool to export timekeeping data; do not use requestReportExport, which renders financial-statement reports, and poll getExportStatus for completion. Preconditions: none; the job is queued for asynchronous processing. Required inputs: exportType and format (both non-blank strings); filters (JSON object) and deliveryMode are optional. Emits an ACCOUNTING_EXPORT_REQUEST event and returns 202 while the job runs asynchronously. Returns 400 when exportType or format is missing or blank. 
+     * Submits an asynchronous timekeeping or generic data export job and returns it in its initial accepted state. Use this tool to export timekeeping data; do not use requestReportExport, which renders financial-statement reports, and poll getExportStatus for completion. Preconditions: none; the job is queued for asynchronous processing. Required inputs: exportType and format (both non-blank strings); filters (JSON object) and deliveryMode are optional. Emits an ACCOUNTING_EXPORT_REQUEST event and returns 202 while the job runs asynchronously. Returns 400 when exportType or format is missing or blank.
      * @endpoint post /v1/accounting/export
      * @param exportJobRequest Export job definition with type, format and optional filters.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.

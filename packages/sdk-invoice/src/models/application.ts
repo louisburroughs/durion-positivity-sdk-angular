@@ -12,7 +12,7 @@
 /**
  * One draw-down of the credit against a settlement invoice
  */
-export interface Application { 
+export interface Application {
     amountApplied?: number;
     appliedAt?: string;
     invoiceId?: string;

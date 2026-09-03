@@ -12,7 +12,7 @@
 /**
  * A single recorded count entry in a cycle count task\'s history
  */
-export interface CountEntryResponse { 
+export interface CountEntryResponse {
     /**
      * Quantity counted, converted to the product\'s base UoM — what expectedQuantity and variance are computed against
      */

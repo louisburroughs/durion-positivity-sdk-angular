@@ -12,7 +12,7 @@
 /**
  * AP vendor directory entry (name to vendorId resolution)
  */
-export interface VendorResponse { 
+export interface VendorResponse {
     /**
      * Vendor display name
      */

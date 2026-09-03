@@ -12,7 +12,7 @@
 /**
  * Scrap document with its approval and posting state
  */
-export interface ScrapResponse { 
+export interface ScrapResponse {
     /**
      * Approval timestamp
      */

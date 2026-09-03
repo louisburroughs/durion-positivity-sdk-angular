@@ -12,7 +12,7 @@
 /**
  * Location sync audit log entry
  */
-export interface SyncLogResponse { 
+export interface SyncLogResponse {
     /**
      * When the run completed
      */

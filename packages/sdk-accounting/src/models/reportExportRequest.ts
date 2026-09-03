@@ -12,7 +12,7 @@
 /**
  * Request payload for exporting a financial report
  */
-export interface ReportExportRequest { 
+export interface ReportExportRequest {
     /**
      * Optional GL account UUID filter, honored by GENERAL_LEDGER exports only; null spans all accounts
      */

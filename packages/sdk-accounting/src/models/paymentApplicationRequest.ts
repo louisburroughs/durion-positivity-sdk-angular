@@ -13,7 +13,7 @@ import { InvoiceApplication } from './invoiceApplication';
 /**
  * Request payload for applying a payment to one or more invoices
  */
-export interface PaymentApplicationRequest { 
+export interface PaymentApplicationRequest {
     /**
      * Optional allocation strategy. CALLER_ORDER (default when absent) applies amounts in the order supplied by the caller; OLDEST_FIRST allocates by ascending invoice date. Omitting this field is equivalent to CALLER_ORDER.
      */

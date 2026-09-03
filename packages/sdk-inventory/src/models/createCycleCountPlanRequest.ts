@@ -12,7 +12,7 @@
 /**
  * Request to create a cycle count plan scheduling counts across a location and zones
  */
-export interface CreateCycleCountPlanRequest { 
+export interface CreateCycleCountPlanRequest {
     /**
      * Identifier of the location the plan applies to
      */

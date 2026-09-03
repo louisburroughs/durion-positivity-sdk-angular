@@ -12,7 +12,7 @@
 /**
  * Restriction-evaluation outcome for a single product context
  */
-export interface RestrictionEvaluationResult { 
+export interface RestrictionEvaluationResult {
     /**
      * Restriction decision for the product context
      */

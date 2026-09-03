@@ -12,7 +12,7 @@
 /**
  * A single inventory item moved during location deactivation
  */
-export interface MovedItem { 
+export interface MovedItem {
     /**
      * Identifier of the moved inventory item
      */

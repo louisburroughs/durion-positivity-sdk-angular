@@ -12,7 +12,7 @@
 /**
  * Immutable audit event record
  */
-export interface AuditLogEventDto { 
+export interface AuditLogEventDto {
     /**
      * Actor that triggered the event
      */

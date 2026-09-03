@@ -12,7 +12,7 @@
 /**
  * Summary of CRM person-search candidates evaluated during registration
  */
-export interface CrmMatchSummaryDto { 
+export interface CrmMatchSummaryDto {
     /**
      * True when any candidate matched
      */

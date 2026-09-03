@@ -12,7 +12,7 @@
 /**
  * Response returned after creating (or replaying) an invoice from a sales order.
  */
-export interface OrderInvoiceResponse { 
+export interface OrderInvoiceResponse {
     /**
      * Deposit / down-payment credit applied to this invoice at creation (odoo-parity story E4); zero when no deposit was held against the source.
      */

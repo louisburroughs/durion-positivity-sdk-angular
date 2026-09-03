@@ -14,7 +14,7 @@ import { InvoiceItemResponse } from './invoiceItemResponse';
 /**
  * Full details of an invoice including line items and adjustments
  */
-export interface InvoiceDetailsResponse { 
+export interface InvoiceDetailsResponse {
     /**
      * Monetary adjustment entries applied to the invoice
      */

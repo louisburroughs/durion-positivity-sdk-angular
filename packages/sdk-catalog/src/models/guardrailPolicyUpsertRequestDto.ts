@@ -12,7 +12,7 @@
 /**
  * Request payload for upserting a pricing guardrail policy
  */
-export interface GuardrailPolicyUpsertRequestDto { 
+export interface GuardrailPolicyUpsertRequestDto {
     /**
      * Threshold percent below which overrides are auto-approved
      */

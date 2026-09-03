@@ -12,7 +12,7 @@
 /**
  * Outcome of a permission catalog registration request
  */
-export interface PermissionRegistrationResponse { 
+export interface PermissionRegistrationResponse {
     /**
      * Per-permission error messages, when any occurred
      */

@@ -13,7 +13,7 @@ import { GLMappingResponse } from './gLMappingResponse';
 /**
  * Wrapper response for GL mapping creation
  */
-export interface GLMappingCreateResponse { 
+export interface GLMappingCreateResponse {
     mapping: GLMappingResponse;
 }
 

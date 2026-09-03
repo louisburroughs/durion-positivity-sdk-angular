@@ -12,7 +12,7 @@
 /**
  * Pick task details describing a single SKU-and-location pick within a pick list
  */
-export interface PickTaskResponse { 
+export interface PickTaskResponse {
     /**
      * Identifier of the location the SKU is picked from
      */

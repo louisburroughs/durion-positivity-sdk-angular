@@ -12,7 +12,7 @@
 /**
  * Invoice line item from vendor
  */
-export interface InvoiceLineItem { 
+export interface InvoiceLineItem {
     /**
      * Product description
      */

@@ -12,7 +12,7 @@
 /**
  * Attendance vs job time discrepancy row
  */
-export interface AttendanceDiscrepancyReportResponse { 
+export interface AttendanceDiscrepancyReportResponse {
     /**
      * Attendance minus job time in decimal hours
      */

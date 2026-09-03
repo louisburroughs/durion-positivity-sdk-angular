@@ -12,7 +12,7 @@
 /**
  * Optional filter criteria for listing purchase orders
  */
-export interface ListPurchaseOrdersRequest { 
+export interface ListPurchaseOrdersRequest {
     /**
      * Filter to purchase orders placed with this vendor
      */

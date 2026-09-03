@@ -12,7 +12,7 @@
 /**
  * Product resolved by an exact, per-type-unique product-code match.
  */
-export interface ProductCodeMatch { 
+export interface ProductCodeMatch {
     /**
      * Exact code value that was matched.
      */

@@ -12,7 +12,7 @@
 /**
  * Email address input
  */
-export interface EmailInput { 
+export interface EmailInput {
     primary?: boolean;
     /**
      * Email address

@@ -12,7 +12,7 @@
 /**
  * Account summary surfaced in a CRM snapshot
  */
-export interface AccountSummary { 
+export interface AccountSummary {
     /**
      * Account display name
      */

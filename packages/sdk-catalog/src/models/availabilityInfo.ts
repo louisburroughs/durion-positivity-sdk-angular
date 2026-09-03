@@ -13,7 +13,7 @@ import { LeadTimeInfo } from './leadTimeInfo';
 /**
  * Availability information with status indicator
  */
-export interface AvailabilityInfo { 
+export interface AvailabilityInfo {
     /**
      * Timestamp of availability data
      */

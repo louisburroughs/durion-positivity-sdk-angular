@@ -12,7 +12,7 @@
 /**
  * Invoiced-vs-collected analytics for one date window. invoiced and collected are different invoice cohorts (see field descriptions) — do not present collectionRatePct as a cohort collection rate. collected is applied-to-A/R net of reversals recorded in the window, not cash received: it excludes deposit-credit and customer-credit settlement. refunded is gross completed refunds (cash out); netCashCollected = collected - refunded but mixes bases and under-counts when a refund also reversed an application, so prefer received - refunded for a clean cash-in-vs-cash-out pair. received is cash actually taken in (cash basis), independent of application. nonCashSettled is invoice settlement without new cash (deposit/customer credit draw-downs); settled = collected + nonCashSettled and settlementRatePct = settled/invoiced is the \"billed vs settled by any means\" pair, distinct from the cash-only collectionRatePct.
  */
-export interface CollectionsAnalyticsReport { 
+export interface CollectionsAnalyticsReport {
     /**
      * GROSS sum of PaymentApplicationReversal.amount whose reversedAt falls in the window, as a positive number; this amount has already been subtracted from collected. Reported so a consumer seeing a dip in collected can attribute it to reversals without a second call. 0 when no reversals were recorded in the window
      */

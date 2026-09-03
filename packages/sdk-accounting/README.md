@@ -1,4 +1,4 @@
-# @durion-sdk/accounting@0.9.0-alpha
+# @durion-sdk/accounting@0.11.0-alpha
 
 Accounting service for invoice, journal entry, and GL account management
 
@@ -24,7 +24,7 @@ Navigate to the folder of your consuming project and run one of next commands.
 _published:_
 
 ```console
-npm install @durion-sdk/accounting@0.9.0-alpha --save
+npm install @durion-sdk/accounting@0.11.0-alpha --save
 ```
 
 _without publishing (not recommended):_

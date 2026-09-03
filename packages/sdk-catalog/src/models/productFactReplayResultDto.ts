@@ -12,7 +12,7 @@
 /**
  * Outcome of one page of a product-fact replay.
  */
-export interface ProductFactReplayResultDto { 
+export interface ProductFactReplayResultDto {
     /**
      * True when no further pages remain for this filter.
      */

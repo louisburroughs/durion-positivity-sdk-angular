@@ -12,7 +12,7 @@
 /**
  * Vendor reimbursement lifecycle update (vendor decision / credit / write-off)
  */
-export interface ReimbursementUpdateRequest { 
+export interface ReimbursementUpdateRequest {
     /**
      * Amount the vendor approved (required for APPROVED / PARTIALLY_APPROVED)
      */

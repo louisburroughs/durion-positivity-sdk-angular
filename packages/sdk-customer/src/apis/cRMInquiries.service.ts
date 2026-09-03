@@ -11,7 +11,7 @@
 
 import { Inject, Injectable, Optional }                      from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams,
-         HttpResponse, HttpEvent, HttpContext 
+         HttpResponse, HttpEvent, HttpContext
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
@@ -41,10 +41,10 @@ export class CRMInquiriesService extends BaseService {
 
     /**
      * Assign Inquiry
-     * Assigns an inquiry to a staff member for follow-through, or returns it to the shared queue when assignedTo is omitted. Use this tool when routing a triaged inquiry to an owner; do not use updateInquiryStatus, which moves the lifecycle state rather than ownership. Preconditions: the inquiry must exist; assignment is allowed in any status. Required inputs: inquiryId (UUID) as a path parameter; assignedTo is an optional query parameter whose omission unassigns the inquiry, and there is no request body. Emits a CRM_INQUIRY_ASSIGN event; only the inquiry\&#39;s assignee changes. Returns 404 when no inquiry exists for the supplied inquiryId. 
+     * Assigns an inquiry to a staff member for follow-through, or returns it to the shared queue when assignedTo is omitted. Use this tool when routing a triaged inquiry to an owner; do not use updateInquiryStatus, which moves the lifecycle state rather than ownership. Preconditions: the inquiry must exist; assignment is allowed in any status. Required inputs: inquiryId (UUID) as a path parameter; assignedTo is an optional query parameter whose omission unassigns the inquiry, and there is no request body. Emits a CRM_INQUIRY_ASSIGN event; only the inquiry\&#39;s assignee changes. Returns 404 when no inquiry exists for the supplied inquiryId.
      * @endpoint put /v1/crm/inquiries/{inquiryId}/assignee
-     * @param inquiryId 
-     * @param assignedTo 
+     * @param inquiryId
+     * @param assignedTo
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -114,7 +114,7 @@ export class CRMInquiriesService extends BaseService {
 
     /**
      * Capture Staff-Taken Inquiry
-     * Records an inbound inquiry taken by staff over phone, walk-in, email, or referral, creating it in NEW status and deliberately unassigned so it lands in the shared queue. Use this tool for staff-entered inquiries on the authenticated API; do not use submitPublicInquiry, which is the anonymous rate-limited public web-form path. Preconditions: none beyond authorization; no party needs to exist yet. Required inputs: channel (WEB_FORM, PHONE, WALK_IN, EMAIL, REFERRAL, or CAMPAIGN), audienceType (COMMERCIAL or INDIVIDUAL), contactName, and at least one of email or phone; organizationName, vehicleOfInterest, serviceOfInterest, message, and campaignCode are optional. Emits a CRM_INQUIRY_CAPTURE event and persists the inquiry. Returns 400 when required fields are missing or when neither email nor phone is supplied, since an unreachable enquirer cannot be actioned. 
+     * Records an inbound inquiry taken by staff over phone, walk-in, email, or referral, creating it in NEW status and deliberately unassigned so it lands in the shared queue. Use this tool for staff-entered inquiries on the authenticated API; do not use submitPublicInquiry, which is the anonymous rate-limited public web-form path. Preconditions: none beyond authorization; no party needs to exist yet. Required inputs: channel (WEB_FORM, PHONE, WALK_IN, EMAIL, REFERRAL, or CAMPAIGN), audienceType (COMMERCIAL or INDIVIDUAL), contactName, and at least one of email or phone; organizationName, vehicleOfInterest, serviceOfInterest, message, and campaignCode are optional. Emits a CRM_INQUIRY_CAPTURE event and persists the inquiry. Returns 400 when required fields are missing or when neither email nor phone is supplied, since an unreachable enquirer cannot be actioned.
      * @endpoint post /v1/crm/inquiries
      * @param submitInquiryRequest The inquiry as taken by staff, including how it arrived and how to reach the enquirer.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -184,10 +184,10 @@ export class CRMInquiriesService extends BaseService {
 
     /**
      * Convert Inquiry To Party
-     * Converts an inquiry into CRM state: a commercial inquiry with no existingPartyId creates a new commercial party in lifecycle stage PROSPECT, while supplying existingPartyId links the inquiry to that party instead; either way the inquiry becomes CONVERTED. Use this tool when an enquirer becomes a prospect or is recognized as an existing customer; do not use updateInquiryStatus, which rejects CONVERTED as a direct status change. Preconditions: the inquiry must exist in an open status (NEW or CONTACTED); an INDIVIDUAL-audience inquiry can only be converted by linking an existing party, because creating a person party requires a verified identity in pos-people-contact. Required inputs: inquiryId (UUID) as a path parameter; existingPartyId (UUID) is an optional query parameter naming a known party to link, and there is no request body. Emits a CRM_INQUIRY_CONVERT event; a new PROSPECT commercial party may be created and the inquiry is stamped with the resulting partyId. Returns 404 when the inquiry or the supplied existingPartyId cannot be found, and 422 when the inquiry is already CONVERTED or CLOSED, or when an individual inquiry has no party to link. 
+     * Converts an inquiry into CRM state: a commercial inquiry with no existingPartyId creates a new commercial party in lifecycle stage PROSPECT, while supplying existingPartyId links the inquiry to that party instead; either way the inquiry becomes CONVERTED. Use this tool when an enquirer becomes a prospect or is recognized as an existing customer; do not use updateInquiryStatus, which rejects CONVERTED as a direct status change. Preconditions: the inquiry must exist in an open status (NEW or CONTACTED); an INDIVIDUAL-audience inquiry can only be converted by linking an existing party, because creating a person party requires a verified identity in pos-people-contact. Required inputs: inquiryId (UUID) as a path parameter; existingPartyId (UUID) is an optional query parameter naming a known party to link, and there is no request body. Emits a CRM_INQUIRY_CONVERT event; a new PROSPECT commercial party may be created and the inquiry is stamped with the resulting partyId. Returns 404 when the inquiry or the supplied existingPartyId cannot be found, and 422 when the inquiry is already CONVERTED or CLOSED, or when an individual inquiry has no party to link.
      * @endpoint post /v1/crm/inquiries/{inquiryId}/convert
-     * @param inquiryId 
-     * @param existingPartyId 
+     * @param inquiryId
+     * @param existingPartyId
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -257,9 +257,9 @@ export class CRMInquiriesService extends BaseService {
 
     /**
      * Get Inquiry
-     * Returns one inbound inquiry with its channel, audience type, contact details, interest fields, status, assignee, and any linked party. Use this tool when the inquiry id is already known; use listInquiries instead to find inquiries by status. Preconditions: the inquiry must exist. Required inputs: inquiryId (UUID) as a path parameter; there is no request body. Emits a CRM_INQUIRY_GET audit event; no state changes occur. Returns 404 when no inquiry exists for the supplied inquiryId. 
+     * Returns one inbound inquiry with its channel, audience type, contact details, interest fields, status, assignee, and any linked party. Use this tool when the inquiry id is already known; use listInquiries instead to find inquiries by status. Preconditions: the inquiry must exist. Required inputs: inquiryId (UUID) as a path parameter; there is no request body. Emits a CRM_INQUIRY_GET audit event; no state changes occur. Returns 404 when no inquiry exists for the supplied inquiryId.
      * @endpoint get /v1/crm/inquiries/{inquiryId}
-     * @param inquiryId 
+     * @param inquiryId
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -317,11 +317,11 @@ export class CRMInquiriesService extends BaseService {
 
     /**
      * List Inbound Inquiries
-     * Returns inbound service and fleet-quote inquiries newest first, optionally filtered by lifecycle status. Use this tool when triaging the inquiry queue; use getInquiry instead when the inquiry id is already known. Preconditions: none; an empty page is returned when nothing matches. Required inputs: none; status optionally filters on NEW, CONTACTED, CONVERTED, or CLOSED, page defaults to 0, and size defaults to 50 clamped between 1 and 200. Emits a CRM_INQUIRY_LIST audit event; no state changes occur. Returns 200 with an empty page rather than an error when no inquiry matches. 
+     * Returns inbound service and fleet-quote inquiries newest first, optionally filtered by lifecycle status. Use this tool when triaging the inquiry queue; use getInquiry instead when the inquiry id is already known. Preconditions: none; an empty page is returned when nothing matches. Required inputs: none; status optionally filters on NEW, CONTACTED, CONVERTED, or CLOSED, page defaults to 0, and size defaults to 50 clamped between 1 and 200. Emits a CRM_INQUIRY_LIST audit event; no state changes occur. Returns 200 with an empty page rather than an error when no inquiry matches.
      * @endpoint get /v1/crm/inquiries
-     * @param status 
-     * @param page 
-     * @param size 
+     * @param status
+     * @param page
+     * @param size
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -406,11 +406,11 @@ export class CRMInquiriesService extends BaseService {
 
     /**
      * Update Inquiry Status
-     * Moves an inquiry through its lifecycle to CONTACTED or CLOSED, optionally recording a resolution note. Use this tool for ordinary status progression; do not use it to reach CONVERTED, which is only reachable through convertInquiry because conversion creates or links a party. Preconditions: the inquiry must exist and the transition must be legal — NEW may move to CONTACTED or CLOSED, CONTACTED may move to CLOSED, and CONVERTED and CLOSED are terminal. Required inputs: inquiryId (UUID) as a path parameter and status (CONTACTED or CLOSED) as a required query parameter; resolutionNote is optional and there is no request body. Emits a CRM_INQUIRY_STATUS_UPDATE event; only the inquiry record changes. Returns 404 when the inquiry does not exist, and 422 when CONVERTED is requested directly or the transition is illegal from the current status. 
+     * Moves an inquiry through its lifecycle to CONTACTED or CLOSED, optionally recording a resolution note. Use this tool for ordinary status progression; do not use it to reach CONVERTED, which is only reachable through convertInquiry because conversion creates or links a party. Preconditions: the inquiry must exist and the transition must be legal — NEW may move to CONTACTED or CLOSED, CONTACTED may move to CLOSED, and CONVERTED and CLOSED are terminal. Required inputs: inquiryId (UUID) as a path parameter and status (CONTACTED or CLOSED) as a required query parameter; resolutionNote is optional and there is no request body. Emits a CRM_INQUIRY_STATUS_UPDATE event; only the inquiry record changes. Returns 404 when the inquiry does not exist, and 422 when CONVERTED is requested directly or the transition is illegal from the current status.
      * @endpoint put /v1/crm/inquiries/{inquiryId}/status
-     * @param inquiryId 
-     * @param status 
-     * @param resolutionNote 
+     * @param inquiryId
+     * @param status
+     * @param resolutionNote
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options

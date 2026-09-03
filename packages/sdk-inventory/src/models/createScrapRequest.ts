@@ -12,7 +12,7 @@
 /**
  * Request to scrap (write off) stock at a location
  */
-export interface CreateScrapRequest { 
+export interface CreateScrapRequest {
     /**
      * Photo/attachment reference (storage out of scope)
      */

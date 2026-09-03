@@ -12,7 +12,7 @@
 /**
  * Request to reallocate available-to-promise stock for a stock item
  */
-export interface ReallocateRequest { 
+export interface ReallocateRequest {
     /**
      * Identifier of the stock item to reallocate
      */

@@ -12,7 +12,7 @@
 /**
  * FAILED settlement reconciled against pos-invoice — the double-pay-risk worklist
  */
-export interface SettlementReconciliationRow { 
+export interface SettlementReconciliationRow {
     checkStatus?: SettlementReconciliationRowCheckStatusEnum;
     claimId?: string;
     /**

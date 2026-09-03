@@ -12,7 +12,7 @@
 /**
  * Drilldown of an individual journal line affecting an account
  */
-export interface JournalLineDrilldownResponse { 
+export interface JournalLineDrilldownResponse {
     /**
      * Credit amount (null if debit)
      */

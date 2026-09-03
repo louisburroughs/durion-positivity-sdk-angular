@@ -13,7 +13,7 @@ import { AssignedRole } from './assignedRole';
 /**
  * A single contact with its assigned roles
  */
-export interface ContactWithRoles { 
+export interface ContactWithRoles {
     /**
      * Contact point identifier (person/contact)
      */

@@ -13,7 +13,7 @@ import { RolePersonaDto } from './rolePersonaDto';
 /**
  * Snapshot of MCP persona metadata for every role
  */
-export interface RolePersonasResponse { 
+export interface RolePersonasResponse {
     /**
      * When this snapshot was assembled, for staleness reporting by the consumer
      */

@@ -13,7 +13,7 @@ import { PurchaseOrderLineResponse } from './purchaseOrderLineResponse';
 /**
  * Full representation of a purchase order, including header totals and line items
  */
-export interface PurchaseOrderResponse { 
+export interface PurchaseOrderResponse {
     /**
      * Unique identifier of the purchase order
      */

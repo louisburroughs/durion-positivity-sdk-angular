@@ -11,7 +11,7 @@
 
 import { Inject, Injectable, Optional }                      from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams,
-         HttpResponse, HttpEvent, HttpContext 
+         HttpResponse, HttpEvent, HttpContext
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
@@ -41,7 +41,7 @@ export class ProductUoMAPIService extends BaseService {
 
     /**
      * Add Product UoM Conversion
-     * Adds a unit-of-measure entry to a product\&#39;s conversion set, binding a UoM code to its factor relative to the product\&#39;s base unit; the code is normalised to upper case and the factor stored at six decimal places. Use this tool to define how a purchase or pack unit converts for one product; do not use createUomConversion, which defines global cross-unit conversions not tied to a product. Preconditions: the product must exist and must not already define the UoM code; a BASE-type entry must carry factorToBase exactly 1. Required inputs: productId (UUID) path parameter plus uomCode, uomType (BASE, PURCHASE or PACK) and a positive factorToBase; precisionScale is optional. Emits a CATALOG_PRODUCT_UOM_CREATE event and re-publishes the product fact with a bumped aggregate version so downstream replicas refresh. Returns 404 when the product does not exist, 409 when the UoM code is already defined for the product, and 400 when factorToBase is not positive or a BASE entry\&#39;s factor is not 1. 
+     * Adds a unit-of-measure entry to a product\&#39;s conversion set, binding a UoM code to its factor relative to the product\&#39;s base unit; the code is normalised to upper case and the factor stored at six decimal places. Use this tool to define how a purchase or pack unit converts for one product; do not use createUomConversion, which defines global cross-unit conversions not tied to a product. Preconditions: the product must exist and must not already define the UoM code; a BASE-type entry must carry factorToBase exactly 1. Required inputs: productId (UUID) path parameter plus uomCode, uomType (BASE, PURCHASE or PACK) and a positive factorToBase; precisionScale is optional. Emits a CATALOG_PRODUCT_UOM_CREATE event and re-publishes the product fact with a bumped aggregate version so downstream replicas refresh. Returns 404 when the product does not exist, 409 when the UoM code is already defined for the product, and 400 when factorToBase is not positive or a BASE entry\&#39;s factor is not 1.
      * @endpoint post /v1/products/{productId}/uoms
      * @param productId Product ID
      * @param productUomCreateRequestDto UoM entry to add: the code, its role for this product, and how many base units one such unit represents.
@@ -115,7 +115,7 @@ export class ProductUoMAPIService extends BaseService {
 
     /**
      * Delete Product UoM Conversion
-     * Removes one unit-of-measure entry from a product\&#39;s conversion set permanently; there is no soft delete. Use this tool when a purchase or pack unit no longer applies to the product; do not use updateProductUom, which changes an entry\&#39;s factor or type while keeping it. Preconditions: the product must exist and the UoM entry must belong to it; no guard prevents deleting the BASE entry, so callers must not orphan the conversion set. Required inputs: productId and uomId (UUIDs) as path parameters; there is no request body. Emits a CATALOG_PRODUCT_UOM_DELETE event and re-publishes the product fact with a bumped aggregate version so downstream replicas refresh. Returns 204 on success, and 404 when the product or the UoM entry does not exist under that product. 
+     * Removes one unit-of-measure entry from a product\&#39;s conversion set permanently; there is no soft delete. Use this tool when a purchase or pack unit no longer applies to the product; do not use updateProductUom, which changes an entry\&#39;s factor or type while keeping it. Preconditions: the product must exist and the UoM entry must belong to it; no guard prevents deleting the BASE entry, so callers must not orphan the conversion set. Required inputs: productId and uomId (UUIDs) as path parameters; there is no request body. Emits a CATALOG_PRODUCT_UOM_DELETE event and re-publishes the product fact with a bumped aggregate version so downstream replicas refresh. Returns 204 on success, and 404 when the product or the UoM entry does not exist under that product.
      * @endpoint delete /v1/products/{productId}/uoms/{uomId}
      * @param productId Product ID
      * @param uomId Product UoM ID
@@ -178,7 +178,7 @@ export class ProductUoMAPIService extends BaseService {
 
     /**
      * List Product UoM Conversions
-     * Returns the product\&#39;s unit-of-measure conversion set ordered by UoM code, each entry carrying its type, factor to base and precision scale. Use this tool to read a product\&#39;s unit conversions; use listUomConversions instead for the global, product-independent conversion table. Preconditions: the product must exist. Required inputs: productId (UUID) as a path parameter; there is no request body. No events are emitted and no state changes; this is a read-only projection. Returns 404 when the product does not exist, and 200 with an empty array when the product defines no UoM entries. 
+     * Returns the product\&#39;s unit-of-measure conversion set ordered by UoM code, each entry carrying its type, factor to base and precision scale. Use this tool to read a product\&#39;s unit conversions; use listUomConversions instead for the global, product-independent conversion table. Preconditions: the product must exist. Required inputs: productId (UUID) as a path parameter; there is no request body. No events are emitted and no state changes; this is a read-only projection. Returns 404 when the product does not exist, and 200 with an empty array when the product defines no UoM entries.
      * @endpoint get /v1/products/{productId}/uoms
      * @param productId Product ID
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -238,7 +238,7 @@ export class ProductUoMAPIService extends BaseService {
 
     /**
      * Update Product UoM Conversion
-     * Updates the conversion factor, precision scale and optionally the type of one product UoM entry; the UoM code itself is immutable. Use this tool to correct a factor or reclassify an entry; do not use addProductUom, which adds a new code, or deleteProductUom, which removes one. Preconditions: the product must exist and the UoM entry must belong to it; changing the type to BASE requires factorToBase exactly 1, and omitting uomType keeps the current type. Required inputs: productId and uomId (UUIDs) path parameters plus a positive factorToBase; uomType and precisionScale are optional. Emits a CATALOG_PRODUCT_UOM_UPDATE event and re-publishes the product fact with a bumped aggregate version so downstream replicas refresh. Returns 404 when the product or the UoM entry does not exist under that product, and 400 when factorToBase is not positive or a BASE entry\&#39;s factor is not 1. 
+     * Updates the conversion factor, precision scale and optionally the type of one product UoM entry; the UoM code itself is immutable. Use this tool to correct a factor or reclassify an entry; do not use addProductUom, which adds a new code, or deleteProductUom, which removes one. Preconditions: the product must exist and the UoM entry must belong to it; changing the type to BASE requires factorToBase exactly 1, and omitting uomType keeps the current type. Required inputs: productId and uomId (UUIDs) path parameters plus a positive factorToBase; uomType and precisionScale are optional. Emits a CATALOG_PRODUCT_UOM_UPDATE event and re-publishes the product fact with a bumped aggregate version so downstream replicas refresh. Returns 404 when the product or the UoM entry does not exist under that product, and 400 when factorToBase is not positive or a BASE entry\&#39;s factor is not 1.
      * @endpoint put /v1/products/{productId}/uoms/{uomId}
      * @param productId Product ID
      * @param uomId Product UoM ID

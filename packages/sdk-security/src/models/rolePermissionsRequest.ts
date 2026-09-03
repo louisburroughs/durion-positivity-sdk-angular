@@ -12,7 +12,7 @@
 /**
  * Request to replace the permission set granted to a role
  */
-export interface RolePermissionsRequest { 
+export interface RolePermissionsRequest {
     /**
      * Replacement set of permission names in format domain:resource:action
      */

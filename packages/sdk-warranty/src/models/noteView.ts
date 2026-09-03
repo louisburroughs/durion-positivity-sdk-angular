@@ -12,7 +12,7 @@
 /**
  * Staff note
  */
-export interface NoteView { 
+export interface NoteView {
     createdAt?: string;
     createdBy?: string;
     id?: string;

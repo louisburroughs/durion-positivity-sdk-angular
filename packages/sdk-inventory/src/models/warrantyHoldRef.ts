@@ -12,7 +12,7 @@
 /**
  * A warranty part-return hold linked to the serial
  */
-export interface WarrantyHoldRef { 
+export interface WarrantyHoldRef {
     /**
      * Warranty claim the part return belongs to
      */

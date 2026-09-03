@@ -12,7 +12,7 @@
 /**
  * Request to generate a receipt for an invoice payment
  */
-export interface GenerateReceiptRequest { 
+export interface GenerateReceiptRequest {
     /**
      * Payment intent the receipt is generated for
      */

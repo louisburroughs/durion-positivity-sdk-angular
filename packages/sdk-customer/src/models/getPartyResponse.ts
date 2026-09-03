@@ -12,7 +12,7 @@
 /**
  * Party details for a commercial account or individual party
  */
-export interface GetPartyResponse { 
+export interface GetPartyResponse {
     /**
      * Billing terms ID
      */

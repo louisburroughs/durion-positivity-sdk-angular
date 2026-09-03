@@ -12,7 +12,7 @@
 /**
  * Request to waive a time entry exception
  */
-export interface TimeEntryExceptionWaiveRequest { 
+export interface TimeEntryExceptionWaiveRequest {
     /**
      * Reason for waiving the exception
      */

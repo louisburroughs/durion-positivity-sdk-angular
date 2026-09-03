@@ -13,7 +13,7 @@ import { JournalEntryLineRequest } from './journalEntryLineRequest';
 /**
  * Request payload for creating or updating a journal entry
  */
-export interface JournalEntryCreateRequest { 
+export interface JournalEntryCreateRequest {
     /**
      * Journal entry description
      */

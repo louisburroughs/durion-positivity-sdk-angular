@@ -12,7 +12,7 @@
 /**
  * Response after updating contact role assignments
  */
-export interface UpdateContactRolesResponse { 
+export interface UpdateContactRolesResponse {
     /**
      * Identifier of the contact that was updated
      */

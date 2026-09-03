@@ -13,7 +13,7 @@ import { PricingRuleTraceEntryRequest } from './pricingRuleTraceEntryRequest';
 /**
  * Request to create a pricing snapshot with its rule-evaluation trace
  */
-export interface PricingSnapshotRequest { 
+export interface PricingSnapshotRequest {
     /**
      * Ordered rule-evaluation steps that produced the price
      */

@@ -12,7 +12,7 @@
 /**
  * Request to create or update a marketing campaign
  */
-export interface UpsertCampaignRequest { 
+export interface UpsertCampaignRequest {
     /**
      * Targeted party kind; immutable after creation
      */

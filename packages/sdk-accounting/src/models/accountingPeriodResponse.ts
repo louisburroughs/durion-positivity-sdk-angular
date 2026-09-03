@@ -12,7 +12,7 @@
 /**
  * Accounting period response payload
  */
-export interface AccountingPeriodResponse { 
+export interface AccountingPeriodResponse {
     /**
      * When the period was closed (null while OPEN)
      */

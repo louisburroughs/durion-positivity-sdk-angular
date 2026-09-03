@@ -11,7 +11,7 @@
 
 import { Inject, Injectable, Optional }                      from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams,
-         HttpResponse, HttpEvent, HttpContext 
+         HttpResponse, HttpEvent, HttpContext
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
@@ -39,9 +39,9 @@ export class PromotionRedemptionsService extends BaseService {
 
     /**
      * List Customer Promotion Redemptions
-     * Returns every promotion redemption recorded for one customer, including discount amounts, codes, statuses, and timestamps. Use this tool when reviewing a customer\&#39;s redemption history, for example to enforce per-customer limits; use recordPromotionRedemption instead to record a new redemption. Preconditions: none; an unknown customerId yields an empty list rather than an error. Required inputs: customerId (UUID) as a path parameter; there is no request body. Emits a PROMOTION_REDEMPTION_LIST audit event; no state changes occur. Returns 200 with an empty list rather than an error when the customer has no redemptions. 
+     * Returns every promotion redemption recorded for one customer, including discount amounts, codes, statuses, and timestamps. Use this tool when reviewing a customer\&#39;s redemption history, for example to enforce per-customer limits; use recordPromotionRedemption instead to record a new redemption. Preconditions: none; an unknown customerId yields an empty list rather than an error. Required inputs: customerId (UUID) as a path parameter; there is no request body. Emits a PROMOTION_REDEMPTION_LIST audit event; no state changes occur. Returns 200 with an empty list rather than an error when the customer has no redemptions.
      * @endpoint get /v1/promotions/redemptions/by-customer/{customerId}
-     * @param customerId 
+     * @param customerId
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -99,7 +99,7 @@ export class PromotionRedemptionsService extends BaseService {
 
     /**
      * Record Promotion Redemption
-     * Records that a promotion was redeemed on a workorder, increments the promotion\&#39;s usage counter, and stamps the recording user; the pair of promotionId and workorderId is the idempotency key. Use this tool when a discount is actually applied at checkout or invoicing; use listPromotionRedemptionsByCustomer instead to read what a customer has redeemed. Preconditions: no redemption may already exist for the same promotionId and workorderId pair; the referenced promotion, customer, and workorder ids are recorded as supplied without cross-service validation. Required inputs: promotionId, customerId, and workorderId (UUIDs), discountAmount, discountType (max 50), and promotionCode (max 100); invoiceId, campaignCode, and redemptionTimestamp (defaulting to now) are optional, and recordedOverLimit defaults to false and switches the stored status to RECORDED_OVER_LIMIT. Emits a PROMOTION_REDEMPTION_RECORD event and publishes a redemption-recorded fact for every redemption so marketing keeps a non-attributed baseline. Returns 409 when the promotion has already been redeemed on that workorder, and 400 when a required field is missing. 
+     * Records that a promotion was redeemed on a workorder, increments the promotion\&#39;s usage counter, and stamps the recording user; the pair of promotionId and workorderId is the idempotency key. Use this tool when a discount is actually applied at checkout or invoicing; use listPromotionRedemptionsByCustomer instead to read what a customer has redeemed. Preconditions: no redemption may already exist for the same promotionId and workorderId pair; the referenced promotion, customer, and workorder ids are recorded as supplied without cross-service validation. Required inputs: promotionId, customerId, and workorderId (UUIDs), discountAmount, discountType (max 50), and promotionCode (max 100); invoiceId, campaignCode, and redemptionTimestamp (defaulting to now) are optional, and recordedOverLimit defaults to false and switches the stored status to RECORDED_OVER_LIMIT. Emits a PROMOTION_REDEMPTION_RECORD event and publishes a redemption-recorded fact for every redemption so marketing keeps a non-attributed baseline. Returns 409 when the promotion has already been redeemed on that workorder, and 400 when a required field is missing.
      * @endpoint post /v1/promotions/redemptions
      * @param recordRedemptionRequest The redemption to record, keyed for idempotency by promotionId and workorderId.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.

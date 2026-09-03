@@ -12,7 +12,7 @@
 /**
  * Result of an authorization decision check
  */
-export interface AuthorizationDecisionResponse { 
+export interface AuthorizationDecisionResponse {
     /**
      * Authorization decision (PERMIT|DENY)
      */

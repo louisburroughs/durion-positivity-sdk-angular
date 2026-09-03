@@ -12,7 +12,7 @@
 /**
  * A configured putaway rule
  */
-export interface PutawayRuleResponse { 
+export interface PutawayRuleResponse {
     /**
      * When the rule was created
      */

@@ -11,7 +11,7 @@
 
 import { Inject, Injectable, Optional }                      from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams,
-         HttpResponse, HttpEvent, HttpContext 
+         HttpResponse, HttpEvent, HttpContext
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
@@ -39,7 +39,7 @@ export class TaxExemptionCertificatesService extends BaseService {
 
     /**
      * Create an exemption certificate
-     * Registers a tax exemption certificate for a customer so that later calculations can treat their line items as exempt. Use this tool when a customer supplies a new certificate; do not use it to correct an existing registration, which is updateExemptionCertificate. Preconditions: none are enforced against other services, so the customerId is accepted as an opaque identifier and is not verified against the customer registry. Required inputs: customerId, reasonCode (RESALE, GOVERNMENT, NONPROFIT, AGRICULTURAL or OTHER) and effectiveFrom; stateScope null means every state, expiresAt null means no expiry, and status defaults to ACTIVE. Emits a TAX_EXEMPTION_CERT_CREATE approval-preset audit event; no existing certificate is superseded, so overlapping certificates for the same customer can coexist. Returns 400 when customerId, reasonCode or effectiveFrom are missing or the reason code is not a recognised value. 
+     * Registers a tax exemption certificate for a customer so that later calculations can treat their line items as exempt. Use this tool when a customer supplies a new certificate; do not use it to correct an existing registration, which is updateExemptionCertificate. Preconditions: none are enforced against other services, so the customerId is accepted as an opaque identifier and is not verified against the customer registry. Required inputs: customerId, reasonCode (RESALE, GOVERNMENT, NONPROFIT, AGRICULTURAL or OTHER) and effectiveFrom; stateScope null means every state, expiresAt null means no expiry, and status defaults to ACTIVE. Emits a TAX_EXEMPTION_CERT_CREATE approval-preset audit event; no existing certificate is superseded, so overlapping certificates for the same customer can coexist. Returns 400 when customerId, reasonCode or effectiveFrom are missing or the reason code is not a recognised value.
      * @endpoint post /v1/tax/exemption-certificates
      * @param exemptionCertificateRequest Exemption certificate to register for a customer.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -109,9 +109,9 @@ export class TaxExemptionCertificatesService extends BaseService {
 
     /**
      * Get an exemption certificate
-     * Returns a single tax exemption certificate, including its scope, reason code and validity window. Use this tool when the certificate id is already known; use listExemptionCertificates instead when searching by customer. Preconditions: the certificate must exist in the registry. Required inputs: id (UUID) path parameter; there is no request body and no filtering. No events are emitted and no state changes; this is a read-only registry projection. Returns 404 when no certificate exists for the supplied id. 
+     * Returns a single tax exemption certificate, including its scope, reason code and validity window. Use this tool when the certificate id is already known; use listExemptionCertificates instead when searching by customer. Preconditions: the certificate must exist in the registry. Required inputs: id (UUID) path parameter; there is no request body and no filtering. No events are emitted and no state changes; this is a read-only registry projection. Returns 404 when no certificate exists for the supplied id.
      * @endpoint get /v1/tax/exemption-certificates/{id}
-     * @param id 
+     * @param id
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -169,9 +169,9 @@ export class TaxExemptionCertificatesService extends BaseService {
 
     /**
      * List exemption certificates
-     * Returns the registered tax exemption certificates, newest effective date first, optionally narrowed to a single customer. Use this tool to discover a certificate id before calculating tax with an exemption; do not use it to test whether an exemption applies on a given date, which calculateTax resolves itself. Preconditions: none; an unknown or unmatched customerId yields an empty list rather than an error. Required inputs: none, and customerId is an optional query parameter matched exactly, not as a substring. No events are emitted and no state changes; this is a read-only registry projection. Returns 200 with an empty array when no certificate matches, so an empty result is not an error condition. 
+     * Returns the registered tax exemption certificates, newest effective date first, optionally narrowed to a single customer. Use this tool to discover a certificate id before calculating tax with an exemption; do not use it to test whether an exemption applies on a given date, which calculateTax resolves itself. Preconditions: none; an unknown or unmatched customerId yields an empty list rather than an error. Required inputs: none, and customerId is an optional query parameter matched exactly, not as a substring. No events are emitted and no state changes; this is a read-only registry projection. Returns 200 with an empty array when no certificate matches, so an empty result is not an error condition.
      * @endpoint get /v1/tax/exemption-certificates
-     * @param customerId 
+     * @param customerId
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -238,9 +238,9 @@ export class TaxExemptionCertificatesService extends BaseService {
 
     /**
      * Update an exemption certificate
-     * Replaces the stored details of an exemption certificate, including its customer, scope, reason code and validity window. Use this tool to correct or expire an existing registration; do not use it to register a further certificate for the same customer, which is createExemptionCertificate. Preconditions: the certificate must exist; expiring a certificate is done by setting expiresAt or moving status to INACTIVE or REVOKED rather than by deleting it, because there is no delete endpoint. Required inputs: id (UUID) path parameter plus the full body, since every supplied field replaces the stored value; an omitted status leaves the current status unchanged. Emits a TAX_EXEMPTION_CERT_UPDATE approval-preset audit event; tax already calculated against the old values is not recalculated. Returns 404 when no certificate exists for the supplied id, and 400 when customerId, reasonCode or effectiveFrom are missing from the body. 
+     * Replaces the stored details of an exemption certificate, including its customer, scope, reason code and validity window. Use this tool to correct or expire an existing registration; do not use it to register a further certificate for the same customer, which is createExemptionCertificate. Preconditions: the certificate must exist; expiring a certificate is done by setting expiresAt or moving status to INACTIVE or REVOKED rather than by deleting it, because there is no delete endpoint. Required inputs: id (UUID) path parameter plus the full body, since every supplied field replaces the stored value; an omitted status leaves the current status unchanged. Emits a TAX_EXEMPTION_CERT_UPDATE approval-preset audit event; tax already calculated against the old values is not recalculated. Returns 404 when no certificate exists for the supplied id, and 400 when customerId, reasonCode or effectiveFrom are missing from the body.
      * @endpoint put /v1/tax/exemption-certificates/{id}
-     * @param id 
+     * @param id
      * @param exemptionCertificateRequest Replacement details for the exemption certificate.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.

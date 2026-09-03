@@ -11,7 +11,7 @@
 
 import { Inject, Injectable, Optional }                      from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams,
-         HttpResponse, HttpEvent, HttpContext 
+         HttpResponse, HttpEvent, HttpContext
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
@@ -35,11 +35,11 @@ export class InvoiceArtifactDownloadControllerService extends BaseService {
 
     /**
      * Download Invoice Artifact as PDF
-     * Streams an invoice or receipt artifact as an application/pdf attachment, rendering it on demand through the document service. Use this tool (or a browser direct link) with a token minted by createArtifactDownloadToken; do not call it with a bearer token alone — the endpoint is public and authorized solely by the signed download token. Preconditions: a valid unexpired download token bound to exactly this invoiceId and artifactRefId, and the artifact must still belong to the invoice. Required inputs: invoiceId (UUID) and artifactRefId as path parameters plus the token query parameter; there is no request body. No events are emitted and no state changes; this is a read-only render of the stored document data. Returns 403 when the token is missing, malformed, expired, or bound to a different artifact, and 404 when the invoice or artifact cannot be resolved. 
+     * Streams an invoice or receipt artifact as an application/pdf attachment, rendering it on demand through the document service. Use this tool (or a browser direct link) with a token minted by createArtifactDownloadToken; do not call it with a bearer token alone — the endpoint is public and authorized solely by the signed download token. Preconditions: a valid unexpired download token bound to exactly this invoiceId and artifactRefId, and the artifact must still belong to the invoice. Required inputs: invoiceId (UUID) and artifactRefId as path parameters plus the token query parameter; there is no request body. No events are emitted and no state changes; this is a read-only render of the stored document data. Returns 403 when the token is missing, malformed, expired, or bound to a different artifact, and 404 when the invoice or artifact cannot be resolved.
      * @endpoint get /v1/invoices/{invoiceId}/artifacts/{artifactRefId}/download
-     * @param invoiceId 
-     * @param artifactRefId 
-     * @param token 
+     * @param invoiceId
+     * @param artifactRefId
+     * @param token
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options

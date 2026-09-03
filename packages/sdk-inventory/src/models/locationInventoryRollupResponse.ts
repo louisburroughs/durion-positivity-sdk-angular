@@ -14,7 +14,7 @@ import { SiteRollupSummary } from './siteRollupSummary';
 /**
  * Parent-location inventory rollup aggregating site totals across all descendant sites
  */
-export interface LocationInventoryRollupResponse { 
+export interface LocationInventoryRollupResponse {
     /**
      * Parent location identifier (building/place/region)
      */

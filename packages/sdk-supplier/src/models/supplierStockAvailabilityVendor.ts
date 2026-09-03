@@ -13,7 +13,7 @@ import { SupplierStockAvailabilityLine } from './supplierStockAvailabilityLine';
 /**
  * One vendor\'s live answer about the product, or the reason it gave none. fetchedAt is when this platform obtained the answer (a cached answer keeps its original fetch instant); asOf is the observation time the vendor stated, and staleness is judged from asOf alone.
  */
-export interface SupplierStockAvailabilityVendor { 
+export interface SupplierStockAvailabilityVendor {
     /**
      * The observation instant the vendor stated for its answer; the fetch instant when the vendor norm states none. Null when the vendor gave no answer. This is a different fact from fetchedAt.
      */

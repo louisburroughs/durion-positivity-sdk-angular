@@ -13,7 +13,7 @@ import { Line } from './line';
 /**
  * A request to have a fleet program authorize the work on a workorder
  */
-export interface FleetAuthorizationRequestBody { 
+export interface FleetAuthorizationRequestBody {
     /**
      * Fleet contract claimed, when known
      */

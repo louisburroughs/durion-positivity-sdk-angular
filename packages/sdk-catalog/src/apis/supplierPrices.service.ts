@@ -11,7 +11,7 @@
 
 import { Inject, Injectable, Optional }                      from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams,
-         HttpResponse, HttpEvent, HttpContext 
+         HttpResponse, HttpEvent, HttpContext
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
@@ -43,7 +43,7 @@ export class SupplierPricesService extends BaseService {
 
     /**
      * Get the Applicable Vendor Price for a Product
-     * Returns the vendor price that applies to a product in one market as at a day: the greatest effective-from date not after that day, with ties broken by the vendor document\&#39;s date and then by fetch time so two readers never disagree about today\&#39;s cost. Use this tool for purchasing and margin context; do not use it as a pricing input — supplier cost participates in no sell-price resolution, and the suggested retail price it carries is vendor reference data that must be labelled with its PRICAT source wherever it is shown. Preconditions: a PRICAT import must have applied for that vendor, product and market; a product with no vendor price simply has none, which is not an error. Required inputs: productId, countryCode and currency; vendorProfileId narrows to one vendor and asOf evaluates a past day, both optional, with asOf defaulting to today. Emits a CATALOG_SUPPLIER_PRICE_LATEST event; no state changes. Returns 404 when no entry applies, and 400 when a parameter is malformed. Money fields may be null, meaning the vendor did not state that value — null is never zero. 
+     * Returns the vendor price that applies to a product in one market as at a day: the greatest effective-from date not after that day, with ties broken by the vendor document\&#39;s date and then by fetch time so two readers never disagree about today\&#39;s cost. Use this tool for purchasing and margin context; do not use it as a pricing input — supplier cost participates in no sell-price resolution, and the suggested retail price it carries is vendor reference data that must be labelled with its PRICAT source wherever it is shown. Preconditions: a PRICAT import must have applied for that vendor, product and market; a product with no vendor price simply has none, which is not an error. Required inputs: productId, countryCode and currency; vendorProfileId narrows to one vendor and asOf evaluates a past day, both optional, with asOf defaulting to today. Emits a CATALOG_SUPPLIER_PRICE_LATEST event; no state changes. Returns 404 when no entry applies, and 400 when a parameter is malformed. Money fields may be null, meaning the vendor did not state that value — null is never zero.
      * @endpoint get /v1/catalog/supplier-prices/latest
      * @param productId Product to price.
      * @param countryCode Market of interest (ISO 3166-1 alpha-2).
@@ -161,7 +161,7 @@ export class SupplierPricesService extends BaseService {
 
     /**
      * List Vendor Price Imports This Module Could Not Complete
-     * Returns PRICAT imports whose completion event declared more chunks than this module applied, newest first, each with the counts that disagree. Use this tool when vendor prices look stale or partial; do not use it to check a specific product, which is listSupplierPriceHistory. Preconditions: none; an empty list is the healthy state and means every import applied whole. Required inputs: none. Emits a CATALOG_SUPPLIER_PRICE_IMPORT_GAPS event; no state changes. A re-emit was already requested on the supplier command topic when each gap was detected, so an entry here is a feed that did not self-heal rather than one nobody has chased. Returns 200 with an empty array when there are no gaps. 
+     * Returns PRICAT imports whose completion event declared more chunks than this module applied, newest first, each with the counts that disagree. Use this tool when vendor prices look stale or partial; do not use it to check a specific product, which is listSupplierPriceHistory. Preconditions: none; an empty list is the healthy state and means every import applied whole. Required inputs: none. Emits a CATALOG_SUPPLIER_PRICE_IMPORT_GAPS event; no state changes. A re-emit was already requested on the supplier command topic when each gap was detected, so an entry here is a feed that did not self-heal rather than one nobody has chased. Returns 200 with an empty array when there are no gaps.
      * @endpoint get /v1/catalog/supplier-prices/imports/incomplete
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
@@ -217,7 +217,7 @@ export class SupplierPricesService extends BaseService {
 
     /**
      * List Vendor Price History for a Product
-     * Returns every vendor price recorded for a product, newest effective date first, including superseded entries with the vendor document and import each came from. Use this tool to answer what a vendor charged over time and where a cost came from; do not use it to find today\&#39;s cost, which is getLatestSupplierPrice and applies the effective-dating rules. Preconditions: none; a product with no imported vendor prices returns an empty page. Required inputs: productId; vendorProfileId narrows to one vendor, and page and size are optional with size defaulting to 50 and capped at 200. Emits a CATALOG_SUPPLIER_PRICE_HISTORY event; no state changes. Returns 200 with an empty items array when nothing has been imported, so an empty result is not an error condition, and 400 when the page size is out of range. 
+     * Returns every vendor price recorded for a product, newest effective date first, including superseded entries with the vendor document and import each came from. Use this tool to answer what a vendor charged over time and where a cost came from; do not use it to find today\&#39;s cost, which is getLatestSupplierPrice and applies the effective-dating rules. Preconditions: none; a product with no imported vendor prices returns an empty page. Required inputs: productId; vendorProfileId narrows to one vendor, and page and size are optional with size defaulting to 50 and capped at 200. Emits a CATALOG_SUPPLIER_PRICE_HISTORY event; no state changes. Returns 200 with an empty items array when nothing has been imported, so an empty result is not an error condition, and 400 when the page size is out of range.
      * @endpoint get /v1/catalog/supplier-prices/history
      * @param productId Product whose vendor price history to list.
      * @param vendorProfileId Restrict to one vendor profile; omit for every vendor.

@@ -12,7 +12,7 @@
 /**
  * Person summary shown in timekeeping approval workflows
  */
-export interface ApprovalPersonDto { 
+export interface ApprovalPersonDto {
     /**
      * Person display name
      */

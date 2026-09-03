@@ -12,7 +12,7 @@
 /**
  * Void a POSTED credit memo, restoring AR and the reversed tax liability
  */
-export interface VoidCreditMemoRequest { 
+export interface VoidCreditMemoRequest {
     /**
      * Reason the memo is being voided (audit trail)
      */

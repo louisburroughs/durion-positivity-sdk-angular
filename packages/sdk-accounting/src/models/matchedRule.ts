@@ -12,7 +12,7 @@
 /**
  * Identity of the posting rule that matched the dry-run event
  */
-export interface MatchedRule { 
+export interface MatchedRule {
     /**
      * Posting rule set identifier
      */

@@ -11,7 +11,7 @@
 
 import { Inject, Injectable, Optional }                      from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams,
-         HttpResponse, HttpEvent, HttpContext 
+         HttpResponse, HttpEvent, HttpContext
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
@@ -39,7 +39,7 @@ export class WarrantyRegistrationsService extends BaseService {
 
     /**
      * Create registration
-     * Records sold/instantiated coverage — a registration binding a governing policy to a customer, and optionally to a vehicle and the originating invoice line. Use this tool when coverage such as a road-hazard add-on or extended plan is sold; do not use createPolicy, which defines the reusable program a registration instantiates. Preconditions: the governing policy must exist; policies flagged autoRegister create registrations automatically from invoiced sales, so manual creation covers the remaining cases. Required inputs: policyId (UUID), customerId (UUID), and purchaseDate (ISO date); vehicleId, source invoice references, contractNumber, and expiresAt are optional, and status defaults to ACTIVE. Emits a WARRANTY_REGISTRATION_CREATE event. Returns 404 when the referenced policy cannot be resolved. 
+     * Records sold/instantiated coverage — a registration binding a governing policy to a customer, and optionally to a vehicle and the originating invoice line. Use this tool when coverage such as a road-hazard add-on or extended plan is sold; do not use createPolicy, which defines the reusable program a registration instantiates. Preconditions: the governing policy must exist; policies flagged autoRegister create registrations automatically from invoiced sales, so manual creation covers the remaining cases. Required inputs: policyId (UUID), customerId (UUID), and purchaseDate (ISO date); vehicleId, source invoice references, contractNumber, and expiresAt are optional, and status defaults to ACTIVE. Emits a WARRANTY_REGISTRATION_CREATE event. Returns 404 when the referenced policy cannot be resolved.
      * @endpoint post /v1/warranty/registrations
      * @param registrationRequest Sold coverage to record: governing policy, covered customer and vehicle, and the originating sale references.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -109,7 +109,7 @@ export class WarrantyRegistrationsService extends BaseService {
 
     /**
      * Get registration
-     * Returns one warranty registration — the sold/instantiated coverage binding a policy to a customer, and optionally to a vehicle and its originating invoice line. Use this tool when the registration id is already known; use searchRegistrations instead to locate coverage by customer, vehicle, or status. Preconditions: the registration must exist. Required inputs: id (UUID) as a path parameter; there is no request body. No events are emitted and no state changes; this is a read-only projection. Returns 404 when no registration exists for the supplied id. 
+     * Returns one warranty registration — the sold/instantiated coverage binding a policy to a customer, and optionally to a vehicle and its originating invoice line. Use this tool when the registration id is already known; use searchRegistrations instead to locate coverage by customer, vehicle, or status. Preconditions: the registration must exist. Required inputs: id (UUID) as a path parameter; there is no request body. No events are emitted and no state changes; this is a read-only projection. Returns 404 when no registration exists for the supplied id.
      * @endpoint get /v1/warranty/registrations/{id}
      * @param id Registration UUID
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -169,7 +169,7 @@ export class WarrantyRegistrationsService extends BaseService {
 
     /**
      * Search registrations
-     * Searches sold-coverage registrations, optionally filtered by customer, vehicle, and lifecycle status. Use this tool to find a customer\&#39;s road-hazard or extended-plan coverage; use getRegistration instead when the registration id is already known. Preconditions: none — an empty list is returned when nothing matches. Required inputs: customerId, vehicleId, and status (ACTIVE, EXPIRED, CANCELLED, EXHAUSTED) are all optional query parameters; with no filters every registration is returned. No events are emitted and no state changes; this is a read-only projection. Returns 200 with the list, which is empty rather than 404 when nothing matches. 
+     * Searches sold-coverage registrations, optionally filtered by customer, vehicle, and lifecycle status. Use this tool to find a customer\&#39;s road-hazard or extended-plan coverage; use getRegistration instead when the registration id is already known. Preconditions: none — an empty list is returned when nothing matches. Required inputs: customerId, vehicleId, and status (ACTIVE, EXPIRED, CANCELLED, EXHAUSTED) are all optional query parameters; with no filters every registration is returned. No events are emitted and no state changes; this is a read-only projection. Returns 200 with the list, which is empty rather than 404 when nothing matches.
      * @endpoint get /v1/warranty/registrations
      * @param customerId Filter by customer id
      * @param vehicleId Filter by vehicle id
@@ -258,7 +258,7 @@ export class WarrantyRegistrationsService extends BaseService {
 
     /**
      * Update registration
-     * Fully replaces an existing warranty registration\&#39;s fields, including the policy binding, source references, and coverage dates. Use this tool to correct or expire sold coverage; do not use createRegistration, which records new coverage. Preconditions: the registration and the referenced policy must exist; omitting status keeps the current value, while the other fields are rewritten from the request and null clears them. Required inputs: id (UUID) as a path parameter, plus policyId, customerId, and purchaseDate; vehicleId, source invoice references, contractNumber, expiresAt, and status (ACTIVE, EXPIRED, CANCELLED, EXHAUSTED) are optional. Emits a WARRANTY_REGISTRATION_UPDATE event. Returns 404 when the registration or the referenced policy cannot be resolved. 
+     * Fully replaces an existing warranty registration\&#39;s fields, including the policy binding, source references, and coverage dates. Use this tool to correct or expire sold coverage; do not use createRegistration, which records new coverage. Preconditions: the registration and the referenced policy must exist; omitting status keeps the current value, while the other fields are rewritten from the request and null clears them. Required inputs: id (UUID) as a path parameter, plus policyId, customerId, and purchaseDate; vehicleId, source invoice references, contractNumber, expiresAt, and status (ACTIVE, EXPIRED, CANCELLED, EXHAUSTED) are optional. Emits a WARRANTY_REGISTRATION_UPDATE event. Returns 404 when the registration or the referenced policy cannot be resolved.
      * @endpoint put /v1/warranty/registrations/{id}
      * @param id Registration UUID
      * @param registrationRequest Full replacement of the registration\&#39;s fields (omitting status keeps the current value).

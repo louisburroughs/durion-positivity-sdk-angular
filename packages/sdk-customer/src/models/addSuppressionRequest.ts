@@ -12,7 +12,7 @@
 /**
  * Request to hard-block an address from marketing
  */
-export interface AddSuppressionRequest { 
+export interface AddSuppressionRequest {
     /**
      * Raw address to suppress; stored only as a normalized hash plus a masked hint
      */

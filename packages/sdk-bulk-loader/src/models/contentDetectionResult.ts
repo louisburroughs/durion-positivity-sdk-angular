@@ -12,7 +12,7 @@
 /**
  * Result of content detection over an uploaded file, used to infer the target domain and mappings
  */
-export interface ContentDetectionResult { 
+export interface ContentDetectionResult {
     /**
      * Confidence score of the detection, between 0 and 1
      */

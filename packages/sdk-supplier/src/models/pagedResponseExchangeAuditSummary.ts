@@ -13,7 +13,7 @@ import { ExchangeAuditSummary } from './exchangeAuditSummary';
 /**
  * A page of results.
  */
-export interface PagedResponseExchangeAuditSummary { 
+export interface PagedResponseExchangeAuditSummary {
     /**
      * Items on this page, in the order documented by the endpoint.
      */

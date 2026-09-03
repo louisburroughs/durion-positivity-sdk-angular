@@ -12,7 +12,7 @@
 /**
  * Request to create a unit-of-measure conversion
  */
-export interface UomConversionCreateRequestDto { 
+export interface UomConversionCreateRequestDto {
     /**
      * Multiplier to convert one unit of the source UOM into the target UOM
      */

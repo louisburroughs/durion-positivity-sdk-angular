@@ -12,7 +12,7 @@
 /**
  * Explicit per-line quantity for a transfer dispatch or receive
  */
-export interface TransferQuantityLineRequest { 
+export interface TransferQuantityLineRequest {
     /**
      * Transfer order line identifier
      */

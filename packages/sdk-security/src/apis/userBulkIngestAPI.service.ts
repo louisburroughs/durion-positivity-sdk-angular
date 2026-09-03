@@ -11,7 +11,7 @@
 
 import { Inject, Injectable, Optional }                      from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams,
-         HttpResponse, HttpEvent, HttpContext 
+         HttpResponse, HttpEvent, HttpContext
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
@@ -41,7 +41,7 @@ export class UserBulkIngestAPIService extends BaseService {
 
     /**
      * Provision User Accounts in Bulk
-     * Provisions many user accounts at once, each with its roles attached and a password generated inside the service. Use this tool when standing up an environment\&#39;s accounts; use createUser instead when the account needs a known password. Preconditions: every role named must already exist. Required inputs: jobId (UUID), locationId (UUID) and records, each with a username and at least one role. There is deliberately no password field: a bulk file is stored, and a password in it would exist at rest for as long as the upload does. Emits a SECURITY_USER_BULK_INGEST event and a user-created event per row; the generated passwords are returned to no one, so these accounts have no usable login until someone goes through the password reset path. Re-running the same file is safe: an existing username is reported as already provisioned rather than as a failure. Returns 200 with a per-record result; check each result rather than the status alone. 
+     * Provisions many user accounts at once, each with its roles attached and a password generated inside the service. Use this tool when standing up an environment\&#39;s accounts; use createUser instead when the account needs a known password. Preconditions: every role named must already exist. Required inputs: jobId (UUID), locationId (UUID) and records, each with a username and at least one role. There is deliberately no password field: a bulk file is stored, and a password in it would exist at rest for as long as the upload does. Emits a SECURITY_USER_BULK_INGEST event and a user-created event per row; the generated passwords are returned to no one, so these accounts have no usable login until someone goes through the password reset path. Re-running the same file is safe: an existing username is reported as already provisioned rather than as a failure. Returns 200 with a per-record result; check each result rather than the status alone.
      * @endpoint post /v1/users/bulk-ingest
      * @param bulkIngestRequestUserBulkIngestRecord User accounts to provision. No password material is accepted.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.

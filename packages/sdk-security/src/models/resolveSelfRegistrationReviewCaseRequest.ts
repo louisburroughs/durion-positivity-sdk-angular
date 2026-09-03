@@ -12,7 +12,7 @@
 /**
  * Administrative request to resolve a blocked self-registration case
  */
-export interface ResolveSelfRegistrationReviewCaseRequest { 
+export interface ResolveSelfRegistrationReviewCaseRequest {
     /**
      * Resolution note recorded with the case
      */

@@ -12,7 +12,7 @@
 /**
  * Summary of a quantity variance detected on a single receiving line
  */
-export interface VarianceSummaryResponse { 
+export interface VarianceSummaryResponse {
     /**
      * Quantity originally expected on the receiving line
      */

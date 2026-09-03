@@ -9,7 +9,7 @@
  */
 
 
-export interface TransmissionResolutionRequest { 
+export interface TransmissionResolutionRequest {
     action: TransmissionResolutionRequestActionEnum;
     evidence: string;
     supplierOrderNumber?: string;

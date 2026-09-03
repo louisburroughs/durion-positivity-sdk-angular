@@ -13,7 +13,7 @@ import { AsnLineResponse } from './asnLineResponse';
 /**
  * Advance shipping notice (ASN) representing an inbound shipment from a vendor, including its line items and lifecycle status
  */
-export interface AsnResponse { 
+export interface AsnResponse {
     /**
      * Unique identifier of the ASN
      */

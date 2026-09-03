@@ -12,7 +12,7 @@
 /**
  * A single line in a consumption request, identifying a SKU and quantity to consume against a pick task
  */
-export interface ConsumeItemLine { 
+export interface ConsumeItemLine {
     /**
      * Optional lot override for LOT-tracked SKUs: must reference an existing (422 LOT_UNKNOWN) ACTIVE (422 LOT_NOT_AVAILABLE) lot. When absent, the lot recorded at pick confirmation is used; a LOT-tracked SKU with neither is rejected (422 LOT_NUMBER_REQUIRED). Ignored for untracked SKUs
      */

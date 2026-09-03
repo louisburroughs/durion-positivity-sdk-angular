@@ -11,7 +11,7 @@
 
 import { Inject, Injectable, Optional }                      from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams,
-         HttpResponse, HttpEvent, HttpContext 
+         HttpResponse, HttpEvent, HttpContext
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
@@ -41,7 +41,7 @@ export class LocationSyncService extends BaseService {
 
     /**
      * Get a location sync log entry
-     * Returns one location sync audit entry with its outcome, per-location counters, timing and any error message. Use this tool when the syncLogId is already known; use listSyncLogs instead to page through the audit trail. Preconditions: the sync log entry must exist. Required inputs: syncLogId (UUID) as a path parameter; there is no request body. Emits an INVENTORY_LOCATION_SYNC_LOG_GET event; no state changes. Returns 404 when no sync log entry exists for the supplied id. 
+     * Returns one location sync audit entry with its outcome, per-location counters, timing and any error message. Use this tool when the syncLogId is already known; use listSyncLogs instead to page through the audit trail. Preconditions: the sync log entry must exist. Required inputs: syncLogId (UUID) as a path parameter; there is no request body. Emits an INVENTORY_LOCATION_SYNC_LOG_GET event; no state changes. Returns 404 when no sync log entry exists for the supplied id.
      * @endpoint get /v1/inventory/sync-logs/{syncLogId}
      * @param syncLogId Sync log identifier
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -101,7 +101,7 @@ export class LocationSyncService extends BaseService {
 
     /**
      * List location sync logs
-     * Lists one page of location sync audit entries newest first, optionally filtered by outcome. Use this tool to audit roster sync activity or find a syncLogId; use getSyncLog instead when the id is known, and use triggerLocationSync to request a new re-emit. Preconditions: none. Required inputs: none; outcome (OK, PARTIAL, FAILED, INVALID_PAYLOAD, REQUESTED) is optional, page defaults to 0 and size to 50, and pageIndex/pageSize are accepted as aliases; the response is a plain array, not a page envelope. Emits an INVENTORY_LOCATION_SYNC_LOG_LIST event; no state changes. Returns 200 with an empty array when no entries match, so an empty result is not an error condition. 
+     * Lists one page of location sync audit entries newest first, optionally filtered by outcome. Use this tool to audit roster sync activity or find a syncLogId; use getSyncLog instead when the id is known, and use triggerLocationSync to request a new re-emit. Preconditions: none. Required inputs: none; outcome (OK, PARTIAL, FAILED, INVALID_PAYLOAD, REQUESTED) is optional, page defaults to 0 and size to 50, and pageIndex/pageSize are accepted as aliases; the response is a plain array, not a page envelope. Emits an INVENTORY_LOCATION_SYNC_LOG_LIST event; no state changes. Returns 200 with an empty array when no entries match, so an empty result is not an error condition.
      * @endpoint get /v1/inventory/sync-logs
      * @param outcome Filter by outcome
      * @param page Page index (0-based)
@@ -210,10 +210,10 @@ export class LocationSyncService extends BaseService {
 
     /**
      * Trigger a location roster re-sync
-     * Requests an administrative re-emit of pos-location\&#39;s outbox on the location.commands.v1 topic so the location.events.v1 consumer idempotently repairs the local location roster replica. Use this tool when the roster replica looks stale or damaged; use listSyncLogs instead to inspect past runs — the repair completes asynchronously, so this call never returns repaired counts. Preconditions: the Kafka location event feed must be enabled; with the feed disabled the run is recorded as FAILED instead of REQUESTED. Required inputs: none in the body; an optional Idempotency-Key header makes retries safe — re-sending the same key returns the original run — and an optional X-Correlation-Id header is recorded on the run log. Emits an INVENTORY_LOCATION_SYNC_TRIGGER event and writes one sync-log run entry; the re-emit covers the configured lookback window (pos.inventory.location.replay-lookback, default P30D). Returns 202 with outcome REQUESTED when the replay command was published, and 202 with outcome FAILED and the error recorded in the sync log when publishing was not possible. 
+     * Requests an administrative re-emit of pos-location\&#39;s outbox on the location.commands.v1 topic so the location.events.v1 consumer idempotently repairs the local location roster replica. Use this tool when the roster replica looks stale or damaged; use listSyncLogs instead to inspect past runs — the repair completes asynchronously, so this call never returns repaired counts. Preconditions: the Kafka location event feed must be enabled; with the feed disabled the run is recorded as FAILED instead of REQUESTED. Required inputs: none in the body; an optional Idempotency-Key header makes retries safe — re-sending the same key returns the original run — and an optional X-Correlation-Id header is recorded on the run log. Emits an INVENTORY_LOCATION_SYNC_TRIGGER event and writes one sync-log run entry; the re-emit covers the configured lookback window (pos.inventory.location.replay-lookback, default P30D). Returns 202 with outcome REQUESTED when the replay command was published, and 202 with outcome FAILED and the error recorded in the sync log when publishing was not possible.
      * @endpoint post /v1/inventory/locations/sync
      * @param idempotencyKey Client-generated key that makes retries idempotent
-     * @param xCorrelationId 
+     * @param xCorrelationId
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options

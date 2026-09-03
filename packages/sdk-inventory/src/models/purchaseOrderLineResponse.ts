@@ -12,7 +12,7 @@
 /**
  * A single line item returned as part of a purchase order
  */
-export interface PurchaseOrderLineResponse { 
+export interface PurchaseOrderLineResponse {
     /**
      * Unique identifier of this purchase order line
      */

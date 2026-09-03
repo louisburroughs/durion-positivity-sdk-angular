@@ -11,7 +11,7 @@
 
 import { Inject, Injectable, Optional }                      from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams,
-         HttpResponse, HttpEvent, HttpContext 
+         HttpResponse, HttpEvent, HttpContext
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
@@ -41,7 +41,7 @@ export class AuditExportsService extends BaseService {
 
     /**
      * Get Audit Export Job Status
-     * Returns the current status of a previously submitted audit export job, including completion time, download URL, and error message when present. Use this tool to poll a job created by requestAuditExport; do not resubmit the export while a job is still PENDING. Preconditions: the caller must hold security:audit:export and the job must exist in the in-memory store, which is cleared on service restart. Required inputs: jobId (UUID) as a path parameter. No events are emitted and no state changes; this is a read-only status projection. Returns 404 when the job id is unknown or the store was cleared by a restart. 
+     * Returns the current status of a previously submitted audit export job, including completion time, download URL, and error message when present. Use this tool to poll a job created by requestAuditExport; do not resubmit the export while a job is still PENDING. Preconditions: the caller must hold security:audit:export and the job must exist in the in-memory store, which is cleared on service restart. Required inputs: jobId (UUID) as a path parameter. No events are emitted and no state changes; this is a read-only status projection. Returns 404 when the job id is unknown or the store was cleared by a restart.
      * @endpoint get /v1/audit/exports/{jobId}
      * @param jobId Export job UUID
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -101,7 +101,7 @@ export class AuditExportsService extends BaseService {
 
     /**
      * Request an Asynchronous Audit Export
-     * Submits an asynchronous audit export job and answers 202 Accepted with the job id and an initial PENDING status. Use this tool for bulk extraction of audit data as a file; use searchAuditEvents instead for interactive paged queries. Preconditions: the caller must hold security:audit:export; jobs are currently held in an in-memory store, so they do not survive a service restart. Required inputs: format (CSV or JSON) and deliveryMode (DOWNLOAD or WEBHOOK); filters is optional and scopes the export with the same criteria as searchAuditEvents. Emits a SECURITY_AUDIT_EXPORT_REQUEST event; execution is deferred, so callers must poll getAuditExportJob for status and the eventual download URL. Returns 400 when format or deliveryMode is missing or not a valid enum value. 
+     * Submits an asynchronous audit export job and answers 202 Accepted with the job id and an initial PENDING status. Use this tool for bulk extraction of audit data as a file; use searchAuditEvents instead for interactive paged queries. Preconditions: the caller must hold security:audit:export; jobs are currently held in an in-memory store, so they do not survive a service restart. Required inputs: format (CSV or JSON) and deliveryMode (DOWNLOAD or WEBHOOK); filters is optional and scopes the export with the same criteria as searchAuditEvents. Emits a SECURITY_AUDIT_EXPORT_REQUEST event; execution is deferred, so callers must poll getAuditExportJob for status and the eventual download URL. Returns 400 when format or deliveryMode is missing or not a valid enum value.
      * @endpoint post /v1/audit/exports
      * @param auditExportRequest Format, delivery mode, and optional filter scope of the export job.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.

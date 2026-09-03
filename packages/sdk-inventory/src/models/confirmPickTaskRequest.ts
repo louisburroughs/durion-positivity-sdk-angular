@@ -12,7 +12,7 @@
 /**
  * Request to confirm a pick task by recording the scanned SKU, scanned location, and quantity picked
  */
-export interface ConfirmPickTaskRequest { 
+export interface ConfirmPickTaskRequest {
     /**
      * Lot number the units were picked from. Required (422 LOT_NUMBER_REQUIRED) when the SKU is LOT-tracked; must reference an existing (422 LOT_UNKNOWN) ACTIVE (422 LOT_NOT_AVAILABLE) lot. May differ from the task\'s advisory suggestedLotNumber. Ignored for untracked SKUs
      */

@@ -12,7 +12,7 @@
 /**
  * Request to create or fully replace vehicle care preferences
  */
-export interface PreferencesUpsertDto { 
+export interface PreferencesUpsertDto {
     /**
      * Identifier of the user creating the preferences
      */

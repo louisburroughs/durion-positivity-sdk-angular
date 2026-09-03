@@ -12,7 +12,7 @@
 /**
  * Mapping evaluation details for the matched rule
  */
-export interface MatchedMapping { 
+export interface MatchedMapping {
     /**
      * All mapping keys evaluated during the search, in evaluation order
      */

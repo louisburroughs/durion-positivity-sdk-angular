@@ -12,7 +12,7 @@
 /**
  * Request to submit a completed work session for review
  */
-export interface WorkSessionSubmitRequest { 
+export interface WorkSessionSubmitRequest {
     /**
      * Total billable minutes for the session
      */

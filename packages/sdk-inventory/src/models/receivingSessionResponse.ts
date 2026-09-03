@@ -13,7 +13,7 @@ import { ReceivingLineResponse } from './receivingLineResponse';
 /**
  * Inventory receiving session with its lines and source document context
  */
-export interface ReceivingSessionResponse { 
+export interface ReceivingSessionResponse {
     /**
      * Timestamp when the receiving session was created
      */

@@ -11,7 +11,7 @@
 
 import { Inject, Injectable, Optional }                      from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams,
-         HttpResponse, HttpEvent, HttpContext 
+         HttpResponse, HttpEvent, HttpContext
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
@@ -39,7 +39,7 @@ export class VehicleFitmentBulkIngestAPIService extends BaseService {
 
     /**
      * Bulk Ingest Part Fitment Records
-     * Bulk-imports part fitment records, creating one part-to-vehicle fitment row per record and resolving manufacturer, make, model and vehicle-type names to reference rows. Use this tool for catalog-scale fitment loads from a prepared batch; do not use createVehicleHint, which manages per-product applicability hint tags rather than part fitment rows. Preconditions: the caller must hold vehicle-fitment:hint:create; referenced manufacturer, make, model and vehicle-type names need not pre-exist, because each is matched case-insensitively and created on the fly when missing. Required inputs: jobId (UUID), locationId (UUID) and records, a non-empty list where each record requires partNumberId (numeric); manufacturerName, makeName, modelName, vehicleTypeName, vehicleYear, engineType, submodel and notes are optional, and jobId, locationId and operatorId are accepted for the envelope but not persisted by this module. Emits a VEHICLE_FITMENT_BULK_INGEST event covering the whole batch; rows are processed independently, so one failed row does not roll back the others. Returns 200 even when every row fails, so callers must inspect each result\&#39;s success flag and FITMENT_INGEST_FAILED errorCode rather than trusting the status alone. 
+     * Bulk-imports part fitment records, creating one part-to-vehicle fitment row per record and resolving manufacturer, make, model and vehicle-type names to reference rows. Use this tool for catalog-scale fitment loads from a prepared batch; do not use createVehicleHint, which manages per-product applicability hint tags rather than part fitment rows. Preconditions: the caller must hold vehicle-fitment:hint:create; referenced manufacturer, make, model and vehicle-type names need not pre-exist, because each is matched case-insensitively and created on the fly when missing. Required inputs: jobId (UUID), locationId (UUID) and records, a non-empty list where each record requires partNumberId (numeric); manufacturerName, makeName, modelName, vehicleTypeName, vehicleYear, engineType, submodel and notes are optional, and jobId, locationId and operatorId are accepted for the envelope but not persisted by this module. Emits a VEHICLE_FITMENT_BULK_INGEST event covering the whole batch; rows are processed independently, so one failed row does not roll back the others. Returns 200 even when every row fails, so callers must inspect each result\&#39;s success flag and FITMENT_INGEST_FAILED errorCode rather than trusting the status alone.
      * @endpoint post /v1/fitments/bulk-ingest
      * @param bulkIngestRequestFitmentBulkIngestRecord Batch envelope of part fitment records to import, each naming the vehicle the part applies to.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.

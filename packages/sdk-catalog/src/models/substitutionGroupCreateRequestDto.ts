@@ -12,7 +12,7 @@
 /**
  * Request to create a substitution group
  */
-export interface SubstitutionGroupCreateRequestDto { 
+export interface SubstitutionGroupCreateRequestDto {
     /**
      * Group name
      */

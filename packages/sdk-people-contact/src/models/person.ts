@@ -10,7 +10,7 @@
 import { ContactPointDto } from './contactPointDto';
 
 
-export interface Person { 
+export interface Person {
     /**
      * Typed contact points (email, phone). Populated on batch by-id lookups.
      */

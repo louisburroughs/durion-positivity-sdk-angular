@@ -12,7 +12,7 @@
 /**
  * Reconciliation adjustment with its posted journal entry
  */
-export interface BankReconciliationAdjustmentResponse { 
+export interface BankReconciliationAdjustmentResponse {
     /**
      * Adjustment id
      */

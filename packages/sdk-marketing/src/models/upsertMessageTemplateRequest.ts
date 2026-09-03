@@ -12,7 +12,7 @@
 /**
  * Request to create or update a message template
  */
-export interface UpsertMessageTemplateRequest { 
+export interface UpsertMessageTemplateRequest {
     /**
      * Audience whose token vocabulary applies
      */

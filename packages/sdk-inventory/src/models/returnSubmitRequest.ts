@@ -13,7 +13,7 @@ import { ReturnLineDto } from './returnLineDto';
 /**
  * Request to submit a set of return lines against a workorder
  */
-export interface ReturnSubmitRequest { 
+export interface ReturnSubmitRequest {
     /**
      * Return lines describing each item, quantity and reason
      */

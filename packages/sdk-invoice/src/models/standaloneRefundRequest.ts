@@ -12,7 +12,7 @@
 /**
  * Request to record a standalone refund against an invoice
  */
-export interface StandaloneRefundRequest { 
+export interface StandaloneRefundRequest {
     /**
      * Amount to refund
      */

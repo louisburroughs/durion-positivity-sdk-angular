@@ -12,7 +12,7 @@
 /**
  * Request to reject a pending cycle count adjustment
  */
-export interface RejectAdjustmentRequest { 
+export interface RejectAdjustmentRequest {
     /**
      * Reason explaining why the adjustment is being rejected
      */

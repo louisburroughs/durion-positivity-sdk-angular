@@ -12,7 +12,7 @@
 /**
  * Single estimate line item used for promotion and pricing calculations
  */
-export interface LineItemContext { 
+export interface LineItemContext {
     /**
      * Line item quantity
      */

@@ -12,7 +12,7 @@
 /**
  * Create/update payload for a vendor auth config (ADR-0050 §4). Every secret field is a scheme-prefixed REFERENCE (e.g. env:VAR_NAME) resolved at call time — plaintext credentials are rejected, and references are write-only: they never appear in any response.
  */
-export interface AuthConfigRequest { 
+export interface AuthConfigRequest {
     /**
      * Header NAME the API key is sent in — configuration data, not a secret reference. Omit to use the adapter default.
      */

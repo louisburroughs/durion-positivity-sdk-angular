@@ -11,7 +11,7 @@
 
 import { Inject, Injectable, Optional }                      from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams,
-         HttpResponse, HttpEvent, HttpContext 
+         HttpResponse, HttpEvent, HttpContext
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
@@ -41,7 +41,7 @@ export class PeopleStaffingAssignmentsService extends BaseService {
 
     /**
      * Create Person To Location Staffing Assignment
-     * Creates a staffing assignment linking a person to a location with a role, effective dates, and a primary flag. Use this tool when a person starts working at a location; do not use updateStaffingAssignment, which modifies an existing assignment by id. Preconditions: the person must exist in the identity replica with an ACTIVE employee record, the location must be active, and no assignment for the same person, location, and role may overlap the effective dates. Required inputs: personId (UUID), locationId (UUID), role, isPrimary, and effectiveFrom (yyyy-MM-dd); effectiveTo is optional and open-ended when null. Emits a PEOPLE_STAFFING_ASSIGNMENT_CREATE event and publishes a staffing-assignment fact; a new primary demotes and ends any overlapping existing primary, and a person\&#39;s first active assignment is forced primary regardless of the flag. Returns 409 when an overlapping assignment exists for the person, location, and role, 404 when the person, employee record, or active location cannot be resolved, and 400 when the person\&#39;s employee status is not ACTIVE. 
+     * Creates a staffing assignment linking a person to a location with a role, effective dates, and a primary flag. Use this tool when a person starts working at a location; do not use updateStaffingAssignment, which modifies an existing assignment by id. Preconditions: the person must exist in the identity replica with an ACTIVE employee record, the location must be active, and no assignment for the same person, location, and role may overlap the effective dates. Required inputs: personId (UUID), locationId (UUID), role, isPrimary, and effectiveFrom (yyyy-MM-dd); effectiveTo is optional and open-ended when null. Emits a PEOPLE_STAFFING_ASSIGNMENT_CREATE event and publishes a staffing-assignment fact; a new primary demotes and ends any overlapping existing primary, and a person\&#39;s first active assignment is forced primary regardless of the flag. Returns 409 when an overlapping assignment exists for the person, location, and role, 404 when the person, employee record, or active location cannot be resolved, and 400 when the person\&#39;s employee status is not ACTIVE.
      * @endpoint post /v1/people/staffing/assignments
      * @param createStaffingAssignmentRequest Staffing assignment to create, binding one person to one location for a role over an effective date range.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -111,9 +111,9 @@ export class PeopleStaffingAssignmentsService extends BaseService {
 
     /**
      * End An Active Staffing Assignment
-     * Ends a staffing assignment by setting its status to ENDED without physically deleting the row. Use this tool when a person stops working at a location; do not use disableEmployee, which offboards the whole employee, and do not use updateStaffingAssignment to shorten dates manually. Preconditions: the assignment must exist; ending an already ENDED assignment is accepted and republishes the fact. Required inputs: assignmentId (UUID) path parameter; there is no request body. Emits a PEOPLE_STAFFING_ASSIGNMENT_END event and publishes a staffing-assignment fact; a null effectiveTo is stamped with today\&#39;s date. Returns 204 on success, and 404 when no assignment exists for the supplied id. 
+     * Ends a staffing assignment by setting its status to ENDED without physically deleting the row. Use this tool when a person stops working at a location; do not use disableEmployee, which offboards the whole employee, and do not use updateStaffingAssignment to shorten dates manually. Preconditions: the assignment must exist; ending an already ENDED assignment is accepted and republishes the fact. Required inputs: assignmentId (UUID) path parameter; there is no request body. Emits a PEOPLE_STAFFING_ASSIGNMENT_END event and publishes a staffing-assignment fact; a null effectiveTo is stamped with today\&#39;s date. Returns 204 on success, and 404 when no assignment exists for the supplied id.
      * @endpoint delete /v1/people/staffing/assignments/{assignmentId}
-     * @param assignmentId 
+     * @param assignmentId
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -170,9 +170,9 @@ export class PeopleStaffingAssignmentsService extends BaseService {
 
     /**
      * Get Staffing Assignment By Id
-     * Returns a single staffing assignment by its unique assignment id. Use this tool when the assignment id is already known; use listStaffingAssignments instead to discover a person\&#39;s assignments. Preconditions: the assignment must exist; both ACTIVE and ENDED assignments are returned. Required inputs: assignmentId (UUID) path parameter; there is no request body. No events are emitted and no state changes; this is a read-only projection. Returns 404 when no assignment exists for the supplied id. 
+     * Returns a single staffing assignment by its unique assignment id. Use this tool when the assignment id is already known; use listStaffingAssignments instead to discover a person\&#39;s assignments. Preconditions: the assignment must exist; both ACTIVE and ENDED assignments are returned. Required inputs: assignmentId (UUID) path parameter; there is no request body. No events are emitted and no state changes; this is a read-only projection. Returns 404 when no assignment exists for the supplied id.
      * @endpoint get /v1/people/staffing/assignments/{assignmentId}
-     * @param assignmentId 
+     * @param assignmentId
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -230,9 +230,9 @@ export class PeopleStaffingAssignmentsService extends BaseService {
 
     /**
      * List Staffing Assignments For A Person
-     * Lists every staffing assignment for a person, including ENDED ones, across all locations and roles. Use this tool for assignment history and administration; use listPersonLocations instead when only the assignments active today are wanted. Preconditions: none beyond authentication; an unknown personId simply yields no rows. Required inputs: personId (UUID) as a query parameter; there is no request body. No events are emitted and no state changes; this is a read-only projection. Returns 200 with an empty list when the person has no assignments. 
+     * Lists every staffing assignment for a person, including ENDED ones, across all locations and roles. Use this tool for assignment history and administration; use listPersonLocations instead when only the assignments active today are wanted. Preconditions: none beyond authentication; an unknown personId simply yields no rows. Required inputs: personId (UUID) as a query parameter; there is no request body. No events are emitted and no state changes; this is a read-only projection. Returns 200 with an empty list when the person has no assignments.
      * @endpoint get /v1/people/staffing/assignments
-     * @param personId 
+     * @param personId
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -302,9 +302,9 @@ export class PeopleStaffingAssignmentsService extends BaseService {
 
     /**
      * List Staffing Assignments By Person Path
-     * Lists every staffing assignment for the person given in the path, including ENDED ones; the data is identical to listStaffingAssignments. Use this tool when a path-style URL is preferred; use listStaffingAssignments instead for the query-parameter form, which returns the same rows. Preconditions: none beyond authentication; an unknown personId simply yields no rows. Required inputs: personId (UUID) path parameter; there is no request body. No events are emitted and no state changes; this is a read-only projection. Returns 200 with an empty list when the person has no assignments. 
+     * Lists every staffing assignment for the person given in the path, including ENDED ones; the data is identical to listStaffingAssignments. Use this tool when a path-style URL is preferred; use listStaffingAssignments instead for the query-parameter form, which returns the same rows. Preconditions: none beyond authentication; an unknown personId simply yields no rows. Required inputs: personId (UUID) path parameter; there is no request body. No events are emitted and no state changes; this is a read-only projection. Returns 200 with an empty list when the person has no assignments.
      * @endpoint get /v1/people/{personId}/staffing/assignments
-     * @param personId 
+     * @param personId
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -362,9 +362,9 @@ export class PeopleStaffingAssignmentsService extends BaseService {
 
     /**
      * Update An Existing Staffing Assignment
-     * Replaces a staffing assignment\&#39;s person, location, role, primary flag, and effective dates. Use this tool to correct or reshape an existing assignment; do not use endStaffingAssignment, which only closes an assignment, and do not use createStaffingAssignment for a new one. Preconditions: the assignment must exist, the person must exist with an ACTIVE employee record, the location must be active, and no other assignment for the same person, location, and role may overlap the effective dates. Required inputs: assignmentId (UUID) path parameter plus the full body (personId, locationId, role, isPrimary, effectiveFrom); this is a full replacement, not a patch. Emits a PEOPLE_STAFFING_ASSIGNMENT_UPDATE event and publishes a staffing-assignment fact; setting isPrimary true demotes and ends any other overlapping primary assignment. Returns 404 when the assignment, person, employee record, or active location cannot be resolved, 409 when another assignment overlaps for the person, location, and role, and 400 when the person\&#39;s employee status is not ACTIVE. 
+     * Replaces a staffing assignment\&#39;s person, location, role, primary flag, and effective dates. Use this tool to correct or reshape an existing assignment; do not use endStaffingAssignment, which only closes an assignment, and do not use createStaffingAssignment for a new one. Preconditions: the assignment must exist, the person must exist with an ACTIVE employee record, the location must be active, and no other assignment for the same person, location, and role may overlap the effective dates. Required inputs: assignmentId (UUID) path parameter plus the full body (personId, locationId, role, isPrimary, effectiveFrom); this is a full replacement, not a patch. Emits a PEOPLE_STAFFING_ASSIGNMENT_UPDATE event and publishes a staffing-assignment fact; setting isPrimary true demotes and ends any other overlapping primary assignment. Returns 404 when the assignment, person, employee record, or active location cannot be resolved, 409 when another assignment overlaps for the person, location, and role, and 400 when the person\&#39;s employee status is not ACTIVE.
      * @endpoint put /v1/people/staffing/assignments/{assignmentId}
-     * @param assignmentId 
+     * @param assignmentId
      * @param updateStaffingAssignmentRequest Full replacement values for the assignment\&#39;s person, location, role, primary flag, and effective dates.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.

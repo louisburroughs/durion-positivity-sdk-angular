@@ -12,7 +12,7 @@
 /**
  * Invoice payment status response
  */
-export interface InvoiceStatusResponse { 
+export interface InvoiceStatusResponse {
     /**
      * Invoice UUID
      */

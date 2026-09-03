@@ -12,7 +12,7 @@
 /**
  * Result of generating a payment receipt
  */
-export interface ReceiptResponse { 
+export interface ReceiptResponse {
     /**
      * Unique identifier of the generated receipt
      */

@@ -12,7 +12,7 @@
 /**
  * Optional checkout options
  */
-export interface CheckoutRequest { 
+export interface CheckoutRequest {
     /**
      * Tender intent: DEFAULT (asynchronous settlement via payments) or ON_ACCOUNT (charge a validated commercial customer\'s account; requires order:order:charge_on_account and the order completes with the balance carried by the AR invoice)
      */

@@ -11,7 +11,7 @@
 
 import { Inject, Injectable, Optional }                      from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams,
-         HttpResponse, HttpEvent, HttpContext 
+         HttpResponse, HttpEvent, HttpContext
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
@@ -39,7 +39,7 @@ export class CRMSnapshotsService extends BaseService {
 
     /**
      * Get Party Billing Rules
-     * Returns the billing-rules reference for a party, falling back to default rules when a commercial party has no explicitly configured rules and for person parties, which have no configurable rules; enforcement of the rules belongs to downstream services. Use this tool when reading how an account should be billed; use upsertPartyBillingRules instead to change the configuration. Preconditions: a commercial or person party must exist for the supplied partyId. Required inputs: partyId (UUID) as a path parameter; there is no request body. Emits a CRM_SNAPSHOT_BILLING_RULES_GET audit event; no state changes occur. Returns 404 when no party exists for the supplied partyId, and 200 with defaults rather than an error when rules were never configured. 
+     * Returns the billing-rules reference for a party, falling back to default rules when a commercial party has no explicitly configured rules and for person parties, which have no configurable rules; enforcement of the rules belongs to downstream services. Use this tool when reading how an account should be billed; use upsertPartyBillingRules instead to change the configuration. Preconditions: a commercial or person party must exist for the supplied partyId. Required inputs: partyId (UUID) as a path parameter; there is no request body. Emits a CRM_SNAPSHOT_BILLING_RULES_GET audit event; no state changes occur. Returns 404 when no party exists for the supplied partyId, and 200 with defaults rather than an error when rules were never configured.
      * @endpoint get /v1/crm/snapshot/party/{partyId}/billing-rules
      * @param partyId Party ID (UUID)
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -99,7 +99,7 @@ export class CRMSnapshotsService extends BaseService {
 
     /**
      * Get CRM Snapshot By Party
-     * Returns a consolidated CRM snapshot for a party — account summary, contacts, vehicle summaries, and preferences — assembled for commercial or person parties and served from a cache when a fresh copy exists. Use this tool when a caller needs the whole customer picture in one call; use getParty instead for just the identity fields, and getSnapshotByVehicle when only a vehicle id is known. Preconditions: a commercial or person party must exist for the supplied partyId. Required inputs: partyId (UUID) as a path parameter; there is no request body, and the snapshotMetadata.source field reports CACHE or CRM_API depending on where the data came from. Emits a CRM_SNAPSHOT_PARTY_RETRIEVE audit event; the snapshot cache may be populated but no domain state changes. Returns 404 when neither a commercial nor a person party exists for the supplied partyId. 
+     * Returns a consolidated CRM snapshot for a party — account summary, contacts, vehicle summaries, and preferences — assembled for commercial or person parties and served from a cache when a fresh copy exists. Use this tool when a caller needs the whole customer picture in one call; use getParty instead for just the identity fields, and getSnapshotByVehicle when only a vehicle id is known. Preconditions: a commercial or person party must exist for the supplied partyId. Required inputs: partyId (UUID) as a path parameter; there is no request body, and the snapshotMetadata.source field reports CACHE or CRM_API depending on where the data came from. Emits a CRM_SNAPSHOT_PARTY_RETRIEVE audit event; the snapshot cache may be populated but no domain state changes. Returns 404 when neither a commercial nor a person party exists for the supplied partyId.
      * @endpoint get /v1/crm/snapshot/party/{partyId}
      * @param partyId Party ID
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -159,7 +159,7 @@ export class CRMSnapshotsService extends BaseService {
 
     /**
      * Get CRM Snapshot By Vehicle
-     * Returns the CRM snapshot of the commercial party that owns a vehicle, resolved through the vehicle-to-party association replicated from vehicle events. Use this tool when only a vehicle id is known, for example at service check-in; use getSnapshotByParty instead when the party id is already known. Preconditions: the vehicle must be associated with a commercial party in the local replica; recently registered vehicles may not have been replicated yet. Required inputs: vehicleId (UUID) as a path parameter; there is no request body. Emits a CRM_SNAPSHOT_VEHICLE_RETRIEVE audit event; no state changes occur. Returns 404 when no owning party can be resolved for the supplied vehicleId. 
+     * Returns the CRM snapshot of the commercial party that owns a vehicle, resolved through the vehicle-to-party association replicated from vehicle events. Use this tool when only a vehicle id is known, for example at service check-in; use getSnapshotByParty instead when the party id is already known. Preconditions: the vehicle must be associated with a commercial party in the local replica; recently registered vehicles may not have been replicated yet. Required inputs: vehicleId (UUID) as a path parameter; there is no request body. Emits a CRM_SNAPSHOT_VEHICLE_RETRIEVE audit event; no state changes occur. Returns 404 when no owning party can be resolved for the supplied vehicleId.
      * @endpoint get /v1/crm/snapshot/vehicle/{vehicleId}
      * @param vehicleId Vehicle ID
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.

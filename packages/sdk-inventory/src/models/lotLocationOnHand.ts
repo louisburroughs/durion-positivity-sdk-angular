@@ -12,7 +12,7 @@
 /**
  * On-hand quantity of a lot at one location
  */
-export interface LotLocationOnHand { 
+export interface LotLocationOnHand {
     /**
      * Quantity of the lot in transit toward the location
      */

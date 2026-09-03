@@ -12,7 +12,7 @@
 /**
  * Create/update payload for a capability endpoint binding (ADR-0050 §3): at most one binding per capability per profile. An absent or disabled binding means the capability is disabled for the supplier and resolves to the typed CAPABILITY_NOT_CONFIGURED status -- a value of the capability response\'s own status enum, returned with HTTP 200, not an error. Do not confuse it with the ApiError code SUPPLIER_CAPABILITY_NOT_CONFIGURED, which is the same condition escaping as a 4xx and indicates a defect, not a normal outcome.
  */
-export interface EndpointBindingRequest { 
+export interface EndpointBindingRequest {
     /**
      * Name of the auth config on the same profile that this binding authenticates with. Must already exist.
      */

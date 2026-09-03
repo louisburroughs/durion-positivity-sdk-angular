@@ -13,7 +13,7 @@ import { PurchaseOrderLineRequest } from './purchaseOrderLineRequest';
 /**
  * Request to revise an existing purchase order, replacing its lines and recording a revision reason
  */
-export interface RevisePurchaseOrderRequest { 
+export interface RevisePurchaseOrderRequest {
     /**
      * Free-text comment providing additional context for the revised purchase order
      */

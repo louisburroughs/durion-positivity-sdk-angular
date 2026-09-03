@@ -12,7 +12,7 @@
 /**
  * Employee identity resolved from an employee number
  */
-export interface EmployeeIdentityDto { 
+export interface EmployeeIdentityDto {
     /**
      * True when the employee is in an ACTIVE employment status
      */

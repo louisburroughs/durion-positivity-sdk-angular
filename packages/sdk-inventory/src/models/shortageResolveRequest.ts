@@ -12,7 +12,7 @@
 /**
  * Request to resolve an inventory shortage by executing a chosen option
  */
-export interface ShortageResolveRequest { 
+export interface ShortageResolveRequest {
     /**
      * Identifier of the allocation to resolve
      */

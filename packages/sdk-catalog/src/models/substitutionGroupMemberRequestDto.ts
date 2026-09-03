@@ -12,7 +12,7 @@
 /**
  * Request to add a product to a substitution group
  */
-export interface SubstitutionGroupMemberRequestDto { 
+export interface SubstitutionGroupMemberRequestDto {
     /**
      * Identifier of the product to add
      */

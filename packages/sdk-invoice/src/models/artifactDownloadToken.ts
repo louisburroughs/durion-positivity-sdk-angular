@@ -12,7 +12,7 @@
 /**
  * Short-lived signed token for downloading an invoice artifact
  */
-export interface ArtifactDownloadToken { 
+export interface ArtifactDownloadToken {
     /**
      * Opaque signed download token
      */

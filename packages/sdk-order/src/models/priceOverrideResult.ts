@@ -12,7 +12,7 @@
 /**
  * Result of applying a price override to an order line
  */
-export interface PriceOverrideResult { 
+export interface PriceOverrideResult {
     /**
      * Whether the override affects sales commission
      */

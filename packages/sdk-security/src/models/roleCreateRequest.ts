@@ -12,7 +12,7 @@
 /**
  * Name, description, and optional MCP persona metadata for a new role
  */
-export interface RoleCreateRequest { 
+export interface RoleCreateRequest {
     /**
      * Human-readable description of the role. Doubles as the derived persona focus when personaFocus is omitted.
      */

@@ -13,7 +13,7 @@ import { PutawayLineItemRequest } from './putawayLineItemRequest';
 /**
  * Request to generate putaway tasks for goods received against a source receipt
  */
-export interface GeneratePutawayTasksRequest { 
+export interface GeneratePutawayTasksRequest {
     /**
      * Line items describing the products and quantities to be put away
      */

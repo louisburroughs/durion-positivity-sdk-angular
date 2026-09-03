@@ -11,7 +11,7 @@
 
 import { Inject, Injectable, Optional }                      from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams,
-         HttpResponse, HttpEvent, HttpContext 
+         HttpResponse, HttpEvent, HttpContext
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
@@ -41,7 +41,7 @@ export class RoleBulkIngestAPIService extends BaseService {
 
     /**
      * Provision Roles in Bulk
-     * Creates roles from a bulk-load batch, each with an optional description and optional MCP persona metadata; every role starts with no permissions and no user assignments. Use this tool to provision a set of roles from a load file; do not use it to grant permissions, which is bulkIngestRolePermissions, and do not use createRole, which creates one role at a time. Preconditions: the caller must hold security:role:create. Required inputs: jobId, locationId, and records; each record needs a non-blank name. A role that already exists counts as a success — provisioning is expected to be re-runnable against an environment that is already partly seeded. Persona slots must describe the role rather than instruct the assistant: single line, within the length cap, and free of imperative control verbs. Emits a SECURITY_ROLE_BULK_INGEST event. Returns 200 in all cases; inspect per-record success and failure in the response. 
+     * Creates roles from a bulk-load batch, each with an optional description and optional MCP persona metadata; every role starts with no permissions and no user assignments. Use this tool to provision a set of roles from a load file; do not use it to grant permissions, which is bulkIngestRolePermissions, and do not use createRole, which creates one role at a time. Preconditions: the caller must hold security:role:create. Required inputs: jobId, locationId, and records; each record needs a non-blank name. A role that already exists counts as a success — provisioning is expected to be re-runnable against an environment that is already partly seeded. Persona slots must describe the role rather than instruct the assistant: single line, within the length cap, and free of imperative control verbs. Emits a SECURITY_ROLE_BULK_INGEST event. Returns 200 in all cases; inspect per-record success and failure in the response.
      * @endpoint post /v1/roles/bulk-ingest
      * @param bulkIngestRequestRoleBulkIngestRecord Roles to provision, with optional persona metadata.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.

@@ -2,6 +2,8 @@ export * from './catalogAPI.service';
 export * from './catalogBulkIngestAPI.service';
 export * from './catalogItemsAPI.service';
 export * from './itemCostAPI.service';
+export * from './laborGuideImports.service';
+export * from './laborTimeResolution.service';
 export * from './priceBookAPI.service';
 export * from './productMSRPAPI.service';
 export * from './productUoMAPI.service';

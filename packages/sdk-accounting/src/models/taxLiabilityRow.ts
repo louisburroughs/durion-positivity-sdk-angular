@@ -12,7 +12,7 @@
 /**
  * Per-jurisdiction sales-tax liability row (taxable/exempt base, gross, credits netted, net tax)
  */
-export interface TaxLiabilityRow { 
+export interface TaxLiabilityRow {
     /**
      * Credit/refund tax netted against this jurisdiction — POSTED credit-memo reversals allocated pro-rata to collected tax
      */

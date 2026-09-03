@@ -12,7 +12,7 @@
 /**
  * Details of a single invoice application
  */
-export interface ApplicationDetail { 
+export interface ApplicationDetail {
     /**
      * Amount applied to this invoice
      */

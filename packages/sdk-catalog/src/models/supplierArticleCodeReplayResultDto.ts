@@ -12,7 +12,7 @@
 /**
  * Outcome of one page of a vendor-article-code fact replay.
  */
-export interface SupplierArticleCodeReplayResultDto { 
+export interface SupplierArticleCodeReplayResultDto {
     /**
      * True when no further pages remain for this filter.
      */

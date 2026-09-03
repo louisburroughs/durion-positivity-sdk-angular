@@ -12,7 +12,7 @@
 /**
  * Request to pin parties into a static segment
  */
-export interface SegmentMembersRequest { 
+export interface SegmentMembersRequest {
     /**
      * Parties to add; already-present parties are ignored
      */

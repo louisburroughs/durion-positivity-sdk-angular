@@ -12,7 +12,7 @@
 /**
  * Ledger movement recorded between cycle-count task creation and now for the task\'s SKU/location
  */
-export interface InterferingMovementResponse { 
+export interface InterferingMovementResponse {
     /**
      * Signed change in quantity applied by this entry (positive inbound, negative outbound)
      */

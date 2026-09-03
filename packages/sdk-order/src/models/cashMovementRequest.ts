@@ -12,7 +12,7 @@
 /**
  * Request payload for recording a drawer cash movement
  */
-export interface CashMovementRequest { 
+export interface CashMovementRequest {
     /**
      * Positive cash amount moved
      */

@@ -12,7 +12,7 @@
 /**
  * Request to import a bank statement CSV and start a reconciliation
  */
-export interface BankReconciliationImportRequest { 
+export interface BankReconciliationImportRequest {
     /**
      * Bank statement CSV (columns: date, description, amount, reference), raw text lines or base64
      */

@@ -12,7 +12,7 @@
 /**
  * A cycle count plan describing scheduled counts for a location and its current state
  */
-export interface CycleCountPlanResponse { 
+export interface CycleCountPlanResponse {
     /**
      * Timestamp when the plan was created
      */

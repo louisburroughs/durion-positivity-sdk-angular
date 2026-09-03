@@ -12,7 +12,7 @@
 /**
  * Legacy vehicle representation returned by vehicle endpoints
  */
-export interface VehicleLegacyResponse { 
+export interface VehicleLegacyResponse {
     /**
      * Timestamp when the vehicle record was created
      */

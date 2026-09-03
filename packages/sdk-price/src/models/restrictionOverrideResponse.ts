@@ -12,7 +12,7 @@
 /**
  * Response payload confirming a created sale-restriction override
  */
-export interface RestrictionOverrideResponse { 
+export interface RestrictionOverrideResponse {
     /**
      * Timestamp when the override expires
      */

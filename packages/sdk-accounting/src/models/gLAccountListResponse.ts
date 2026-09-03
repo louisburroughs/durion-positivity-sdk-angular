@@ -13,7 +13,7 @@ import { GLAccountResponse } from './gLAccountResponse';
 /**
  * Paginated list of GL accounts
  */
-export interface GLAccountListResponse { 
+export interface GLAccountListResponse {
     /**
      * GL accounts on the current page
      */

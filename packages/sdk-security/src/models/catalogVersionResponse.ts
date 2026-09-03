@@ -12,7 +12,7 @@
 /**
  * Current permission catalog version and size
  */
-export interface CatalogVersionResponse { 
+export interface CatalogVersionResponse {
     /**
      * Total number of permissions in the catalog
      */

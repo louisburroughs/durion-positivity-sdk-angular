@@ -12,7 +12,7 @@
 /**
  * Request payload for submitting an accounting event for ingestion
  */
-export interface AccountingEventSubmitRequest { 
+export interface AccountingEventSubmitRequest {
     /**
      * Optional event UUID (idempotency key). If omitted, service computes idempotency hash.
      */

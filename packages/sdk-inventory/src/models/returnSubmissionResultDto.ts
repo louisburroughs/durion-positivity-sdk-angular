@@ -12,7 +12,7 @@
 /**
  * Outcome of a return submission, summarizing how many lines were processed
  */
-export interface ReturnSubmissionResultDto { 
+export interface ReturnSubmissionResultDto {
     /**
      * Timestamp when the return was processed
      */

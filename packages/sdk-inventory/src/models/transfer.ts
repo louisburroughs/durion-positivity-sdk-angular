@@ -13,7 +13,7 @@ import { MovedItem } from './movedItem';
 /**
  * Details of inventory moved from the deactivated location to the destination location
  */
-export interface Transfer { 
+export interface Transfer {
     /**
      * Timestamp when the inventory was moved
      */

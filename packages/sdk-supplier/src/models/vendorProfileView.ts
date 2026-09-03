@@ -12,7 +12,7 @@
 /**
  * Read model of a vendor profile. Child collections (auth configs, commercial accounts, endpoint bindings) are read through their own list operations.
  */
-export interface VendorProfileView { 
+export interface VendorProfileView {
     /**
      * Default connect timeout for the profile\'s bindings, in milliseconds. Must be > 0 when present; omit to use the deployment default.
      */

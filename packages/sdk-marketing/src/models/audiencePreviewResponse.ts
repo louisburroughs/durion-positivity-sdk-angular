@@ -13,7 +13,7 @@ import { ChannelPreview } from './channelPreview';
 /**
  * Per-channel audience preview after consent and suppression filtering
  */
-export interface AudiencePreviewResponse { 
+export interface AudiencePreviewResponse {
     /**
      * Targeted party kind
      */

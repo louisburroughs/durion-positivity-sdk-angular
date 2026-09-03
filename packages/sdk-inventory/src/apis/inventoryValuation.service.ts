@@ -11,7 +11,7 @@
 
 import { Inject, Injectable, Optional }                      from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams,
-         HttpResponse, HttpEvent, HttpContext 
+         HttpResponse, HttpEvent, HttpContext
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
@@ -39,7 +39,7 @@ export class InventoryValuationService extends BaseService {
 
     /**
      * Get inventory valuation
-     * Returns on-hand inventory value per SKU with a total, computing on-hand times the current unit cost derived from each SKU\&#39;s resolved costing method — the running average under AVERAGE, the standard price (falling back to the latest-receipt memo) under STANDARD — with uncosted SKUs reported at null unit cost and zero value rather than as errors. Use this tool for valuation reporting; use listInventoryLedger instead for the raw movements behind the numbers, and createRevaluation to change a cost rather than read it. Preconditions: none for a current valuation; an asOf request additionally requires the inventory:ledger:view authority because it replays ledger history. Required inputs: none are mandatory — locationId scopes to one site, sku restricts to one stock item, and asOf (ISO-8601 instant) reconstructs both on-hand and unit cost from the ledger as of that instant. No events are emitted and no state changes; this is a read-only projection computed on demand and never persisted. Returns 422 when asOf is in the future (AS_OF_IN_FUTURE) or when an uncapped full-catalog asOf request exceeds the configured SKU safety cap (default 1000), and 403 when asOf is requested without inventory:ledger:view. 
+     * Returns on-hand inventory value per SKU with a total, computing on-hand times the current unit cost derived from each SKU\&#39;s resolved costing method — the running average under AVERAGE, the standard price (falling back to the latest-receipt memo) under STANDARD — with uncosted SKUs reported at null unit cost and zero value rather than as errors. Use this tool for valuation reporting; use listInventoryLedger instead for the raw movements behind the numbers, and createRevaluation to change a cost rather than read it. Preconditions: none for a current valuation; an asOf request additionally requires the inventory:ledger:view authority because it replays ledger history. Required inputs: none are mandatory — locationId scopes to one site, sku restricts to one stock item, and asOf (ISO-8601 instant) reconstructs both on-hand and unit cost from the ledger as of that instant. No events are emitted and no state changes; this is a read-only projection computed on demand and never persisted. Returns 422 when asOf is in the future (AS_OF_IN_FUTURE) or when an uncapped full-catalog asOf request exceeds the configured SKU safety cap (default 1000), and 403 when asOf is requested without inventory:ledger:view.
      * @endpoint get /v1/inventory/valuation
      * @param locationId Restrict valuation to one site
      * @param sku Restrict valuation to one SKU / stock-item identifier

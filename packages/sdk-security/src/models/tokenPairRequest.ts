@@ -12,7 +12,7 @@
 /**
  * Request to generate an access token and refresh token pair
  */
-export interface TokenPairRequest { 
+export interface TokenPairRequest {
     /**
      * Optional set of role names to include in token
      */

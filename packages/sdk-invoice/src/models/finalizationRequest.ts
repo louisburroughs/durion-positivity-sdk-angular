@@ -12,7 +12,7 @@
 /**
  * Request payload for finalizing an invoice
  */
-export interface FinalizationRequest { 
+export interface FinalizationRequest {
     /**
      * Manager approval code, required when approval threshold is exceeded
      */

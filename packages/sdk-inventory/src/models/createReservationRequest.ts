@@ -12,7 +12,7 @@
 /**
  * Request to create an inventory reservation against a demand line (a workorder line or a sales-order line, CAP #1315) for a stock item. Exactly one of workorderLineId/salesOrderLineId must be set; the service rejects a request that sets both or neither.
  */
-export interface CreateReservationRequest { 
+export interface CreateReservationRequest {
     /**
      * Quantity of the stock item required by the reservation. Decimal-capable, and permitted decimals only to the precision_scale the product\'s catalog declaration allows (ADR-0055)
      */

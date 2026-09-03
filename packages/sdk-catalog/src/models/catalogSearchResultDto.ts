@@ -13,7 +13,7 @@ import { ProductSummary } from './productSummary';
 /**
  * Cursor-based catalog search result
  */
-export interface CatalogSearchResultDto { 
+export interface CatalogSearchResultDto {
     /**
      * Page of matching product summaries
      */

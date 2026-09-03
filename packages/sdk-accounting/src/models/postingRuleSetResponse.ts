@@ -13,7 +13,7 @@ import { PostingRuleVersionResponse } from './postingRuleVersionResponse';
 /**
  * Posting rule set with its versions and audit metadata
  */
-export interface PostingRuleSetResponse { 
+export interface PostingRuleSetResponse {
     /**
      * Timestamp when the rule set was created (ISO 8601)
      */

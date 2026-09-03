@@ -12,7 +12,7 @@
 /**
  * Catalog item response
  */
-export interface CatalogItemResponseDto { 
+export interface CatalogItemResponseDto {
     /**
      * Vehicle-agnostic fallback labor hours in tenths; service items only
      */

@@ -12,7 +12,7 @@
 /**
  * Photo evidence URL to attach to a warranty claim
  */
-export interface ClaimPhotoRequest { 
+export interface ClaimPhotoRequest {
     /**
      * Photo URL
      */

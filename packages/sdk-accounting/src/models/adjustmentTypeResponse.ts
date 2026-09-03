@@ -12,7 +12,7 @@
 /**
  * A supported reconciliation adjustment type
  */
-export interface AdjustmentTypeResponse { 
+export interface AdjustmentTypeResponse {
     /**
      * Adjustment type code
      */

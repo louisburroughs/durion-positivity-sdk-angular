@@ -12,7 +12,7 @@
 /**
  * Open-quantity detail for a single purchase order line after a receipt
  */
-export interface ReceivePurchaseOrderLineDetail { 
+export interface ReceivePurchaseOrderLineDetail {
     /**
      * Identifier of the purchase order line
      */

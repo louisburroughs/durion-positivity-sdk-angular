@@ -12,7 +12,7 @@
 /**
  * Vendor-supplied artwork reference.
  */
-export interface TreadDesignImageDto { 
+export interface TreadDesignImageDto {
     /**
      * pos-image identifier for the stored bytes; absent when unresolved.
      */

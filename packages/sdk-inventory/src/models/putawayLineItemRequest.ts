@@ -12,7 +12,7 @@
 /**
  * A single product and quantity line for a putaway tasks generation request
  */
-export interface PutawayLineItemRequest { 
+export interface PutawayLineItemRequest {
     /**
      * Identifier of the product to be put away
      */

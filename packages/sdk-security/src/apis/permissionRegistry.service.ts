@@ -11,7 +11,7 @@
 
 import { Inject, Injectable, Optional }                      from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams,
-         HttpResponse, HttpEvent, HttpContext 
+         HttpResponse, HttpEvent, HttpContext
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
@@ -51,9 +51,9 @@ export class PermissionRegistryService extends BaseService {
 
     /**
      * Check Whether a Permission Is Registered
-     * Checks whether a permission with the given name is registered in the central registry. Use this tool to test registration state; use validatePermissionName instead for a pure format check that ignores the database. Preconditions: the caller must hold security:permission:view. Required inputs: permissionName as a path parameter in domain:resource:action format. No events are emitted and no state changes; this is a read-only existence check. Returns 200 with a plain boolean body; an unregistered name yields false, never an error status. 
+     * Checks whether a permission with the given name is registered in the central registry. Use this tool to test registration state; use validatePermissionName instead for a pure format check that ignores the database. Preconditions: the caller must hold security:permission:view. Required inputs: permissionName as a path parameter in domain:resource:action format. No events are emitted and no state changes; this is a read-only existence check. Returns 200 with a plain boolean body; an unregistered name yields false, never an error status.
      * @endpoint get /v1/permissions/exists/{permissionName}
-     * @param permissionName 
+     * @param permissionName
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -111,7 +111,7 @@ export class PermissionRegistryService extends BaseService {
 
     /**
      * Decode Permission Bits for Diagnostics
-     * Decodes a Base64URL perm_bits bitset taken from an access token back into sorted permission code strings for diagnostics. Use this tool to inspect what a token\&#39;s perm_bits claim grants; do not use getUserPermissions, which reads a user\&#39;s effective permissions from role assignments instead of from a token. Preconditions: the caller must hold security:permission:view, and perm_ver must equal the catalog version currently compiled into the service (see getPermissionCatalogVersion). Required inputs: perm_bits, the Base64URL-encoded BitSet string, and perm_ver, a positive integer catalog version. Emits a SECURITY_PERMISSION_DECODE_EXECUTE event; no records are changed. Returns 400 when perm_bits is blank, perm_ver is not positive, or perm_ver does not match the current catalog version. 
+     * Decodes a Base64URL perm_bits bitset taken from an access token back into sorted permission code strings for diagnostics. Use this tool to inspect what a token\&#39;s perm_bits claim grants; do not use getUserPermissions, which reads a user\&#39;s effective permissions from role assignments instead of from a token. Preconditions: the caller must hold security:permission:view, and perm_ver must equal the catalog version currently compiled into the service (see getPermissionCatalogVersion). Required inputs: perm_bits, the Base64URL-encoded BitSet string, and perm_ver, a positive integer catalog version. Emits a SECURITY_PERMISSION_DECODE_EXECUTE event; no records are changed. Returns 400 when perm_bits is blank, perm_ver is not positive, or perm_ver does not match the current catalog version.
      * @endpoint post /v1/permissions/decode
      * @param permissionDecodeRequest Encoded permission bitset and the catalog version it was encoded with.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -181,9 +181,9 @@ export class PermissionRegistryService extends BaseService {
 
     /**
      * Get Permission by Identifier
-     * Returns a single registered permission by its UUID identifier, including name, domain, description, and deprecation flag. Use this tool when the permission id is already known; use listPermissions instead to search by domain or page through the registry. Preconditions: the caller must hold security:permission:view and the permission must exist in the registry. Required inputs: id (UUID) as a path parameter. No events are emitted and no state changes; this is a read-only projection. Returns 404 when no permission exists for the supplied id. 
+     * Returns a single registered permission by its UUID identifier, including name, domain, description, and deprecation flag. Use this tool when the permission id is already known; use listPermissions instead to search by domain or page through the registry. Preconditions: the caller must hold security:permission:view and the permission must exist in the registry. Required inputs: id (UUID) as a path parameter. No events are emitted and no state changes; this is a read-only projection. Returns 404 when no permission exists for the supplied id.
      * @endpoint get /v1/permissions/{id}
-     * @param id 
+     * @param id
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -241,7 +241,7 @@ export class PermissionRegistryService extends BaseService {
 
     /**
      * Get Current Permission Catalog Version
-     * Returns the permission catalog version compiled into this service build and the total number of permission codes in that catalog. Use this tool to check whether a cached perm_bits decoding is stale before calling decodePermissionBits; do not use listPermissions, which pages the database registry rather than the compiled catalog. Preconditions: none; the endpoint is public and requires no authentication. Required inputs: none; there are no parameters and no request body. No events are emitted and no state changes; this is a read-only projection of the compiled PermissionCode catalog. Returns 200 in all cases; there are no business error conditions. 
+     * Returns the permission catalog version compiled into this service build and the total number of permission codes in that catalog. Use this tool to check whether a cached perm_bits decoding is stale before calling decodePermissionBits; do not use listPermissions, which pages the database registry rather than the compiled catalog. Preconditions: none; the endpoint is public and requires no authentication. Required inputs: none; there are no parameters and no request body. No events are emitted and no state changes; this is a read-only projection of the compiled PermissionCode catalog. Returns 200 in all cases; there are no business error conditions.
      * @endpoint get /v1/permissions/catalog-version
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
@@ -294,7 +294,7 @@ export class PermissionRegistryService extends BaseService {
 
     /**
      * List Registered Permissions
-     * Returns a paged list of registered permissions, optionally filtered to a single domain. Use this tool to browse or search the permission registry; use getPermissionById instead when the UUID is already known, and getRoleDefaultPermissions to see what a role name expands to. Preconditions: the caller must hold security:permission:view. Required inputs: none are mandatory; domain is an optional filter, and page, size, and sort follow Spring pageable defaults (page 0, size 20). No events are emitted and no state changes; this is a read-only projection. Returns 200 with an empty page when nothing matches, and 400 when pagination parameters are malformed. 
+     * Returns a paged list of registered permissions, optionally filtered to a single domain. Use this tool to browse or search the permission registry; use getPermissionById instead when the UUID is already known, and getRoleDefaultPermissions to see what a role name expands to. Preconditions: the caller must hold security:permission:view. Required inputs: none are mandatory; domain is an optional filter, and page, size, and sort follow Spring pageable defaults (page 0, size 20). No events are emitted and no state changes; this is a read-only projection. Returns 200 with an empty page when nothing matches, and 400 when pagination parameters are malformed.
      * @endpoint get /v1/permissions
      * @param domain Optional domain filter
      * @param page Zero-based page index (0..N)
@@ -393,9 +393,9 @@ export class PermissionRegistryService extends BaseService {
 
     /**
      * List Permissions for One Domain
-     * Returns every registered permission for one domain as an unpaged list. Use this tool when a complete domain snapshot is needed; use listPermissions instead when paging or when no domain filter applies. Preconditions: the caller must hold security:permission:view. Required inputs: domain as a path parameter, matching the first segment of the permission name (for example catalog in catalog:product:view). No events are emitted and no state changes; this is a read-only projection. Returns 200 with an empty list when the domain has no registered permissions; an unknown domain is not an error. 
+     * Returns every registered permission for one domain as an unpaged list. Use this tool when a complete domain snapshot is needed; use listPermissions instead when paging or when no domain filter applies. Preconditions: the caller must hold security:permission:view. Required inputs: domain as a path parameter, matching the first segment of the permission name (for example catalog in catalog:product:view). No events are emitted and no state changes; this is a read-only projection. Returns 200 with an empty list when the domain has no registered permissions; an unknown domain is not an error.
      * @endpoint get /v1/permissions/domain/{domain}
-     * @param domain 
+     * @param domain
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -453,7 +453,7 @@ export class PermissionRegistryService extends BaseService {
 
     /**
      * Register Module Permission Manifest
-     * Registers or updates a module\&#39;s permission manifest in the central registry; this is the endpoint every pos module\&#39;s permission-registry initializer calls at startup. Use this tool for idempotent bulk manifest registration that tolerates partial failure; do not use registerPermissionsContract, which rejects the entire payload on the first invalid key. Preconditions: the caller must hold security:permission:register (module initializers authenticate with an internal service token). Required inputs: serviceName and a non-empty permissions list of name and description entries; names must match domain:resource:action, while domain and version are informational. Emits a SECURITY_PERMISSION_REGISTER event; new names are inserted (with a bit index when the compiled catalog defines one), changed descriptions are updated, and unchanged or invalid entries are counted as skipped. Returns 400 when serviceName is blank or permissions is empty, and 400 with success&#x3D;false and a per-entry errors list when every entry failed; partial failures still return 200 with the errors listed in the response. 
+     * Registers or updates a module\&#39;s permission manifest in the central registry; this is the endpoint every pos module\&#39;s permission-registry initializer calls at startup. Use this tool for idempotent bulk manifest registration that tolerates partial failure; do not use registerPermissionsContract, which rejects the entire payload on the first invalid key. Preconditions: the caller must hold security:permission:register (module initializers authenticate with an internal service token). Required inputs: serviceName and a non-empty permissions list of name and description entries; names must match domain:resource:action, while domain and version are informational. Emits a SECURITY_PERMISSION_REGISTER event; new names are inserted (with a bit index when the compiled catalog defines one), changed descriptions are updated, and unchanged or invalid entries are counted as skipped. Returns 400 when serviceName is blank or permissions is empty, and 400 with success&#x3D;false and a per-entry errors list when every entry failed; partial failures still return 200 with the errors listed in the response.
      * @endpoint post /v1/permissions/register
      * @param permissionRegistrationRequest Permission manifest published by one domain service at startup.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -523,7 +523,7 @@ export class PermissionRegistryService extends BaseService {
 
     /**
      * Register Permissions via RBAC Contract
-     * Registers or updates permissions from an RBAC contract payload, upserting each named permission and returning the resulting permission list. Use this tool for strict all-or-nothing permission upserts; do not use registerModulePermissions, the lenient startup manifest endpoint that skips invalid entries and reports per-entry counters instead of failing the request. Preconditions: the caller must hold security:permission:register, and every permission name must match domain:resource:action (or the legacy domain:action form). Required inputs: permissions, a list of name and description definitions; serviceName is optional here and defaults to pos-security-service as the registering service. Emits a SECURITY_PERMISSION_REGISTER event; existing permissions with the same name are overwritten in place, including description and registering service. Returns 400 when any permission key fails the format check, rejecting the entire request. 
+     * Registers or updates permissions from an RBAC contract payload, upserting each named permission and returning the resulting permission list. Use this tool for strict all-or-nothing permission upserts; do not use registerModulePermissions, the lenient startup manifest endpoint that skips invalid entries and reports per-entry counters instead of failing the request. Preconditions: the caller must hold security:permission:register, and every permission name must match domain:resource:action (or the legacy domain:action form). Required inputs: permissions, a list of name and description definitions; serviceName is optional here and defaults to pos-security-service as the registering service. Emits a SECURITY_PERMISSION_REGISTER event; existing permissions with the same name are overwritten in place, including description and registering service. Returns 400 when any permission key fails the format check, rejecting the entire request.
      * @endpoint post /v1/permissions/registerPermissions
      * @param permissionRegistrationRequest RBAC contract payload of permission definitions to upsert.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -593,9 +593,9 @@ export class PermissionRegistryService extends BaseService {
 
     /**
      * Validate Permission Name Format
-     * Checks whether a permission name string matches the required domain:resource:action format (or the legacy two-segment domain:action form) without touching the database. Use this tool to pre-validate a name before registration; use checkPermissionExists instead to test whether the name is actually registered. Preconditions: the caller must hold security:permission:view. Required inputs: permissionName as a path parameter; each segment must start with a letter and may contain letters, digits, underscores, and hyphens. No events are emitted and no state changes; this is a pure format check. Returns 200 with a plain boolean body; a malformed name yields false, never an error status. 
+     * Checks whether a permission name string matches the required domain:resource:action format (or the legacy two-segment domain:action form) without touching the database. Use this tool to pre-validate a name before registration; use checkPermissionExists instead to test whether the name is actually registered. Preconditions: the caller must hold security:permission:view. Required inputs: permissionName as a path parameter; each segment must start with a letter and may contain letters, digits, underscores, and hyphens. No events are emitted and no state changes; this is a pure format check. Returns 200 with a plain boolean body; a malformed name yields false, never an error status.
      * @endpoint get /v1/permissions/validate/{permissionName}
-     * @param permissionName 
+     * @param permissionName
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options

@@ -12,7 +12,7 @@
 /**
  * Request payload for rejecting a pending price override
  */
-export interface RejectPriceOverrideRequest { 
+export interface RejectPriceOverrideRequest {
     /**
      * Optional reviewer comments recorded with the rejection
      */

@@ -12,7 +12,7 @@
 /**
  * A unit-of-measure conversion between two UOM codes
  */
-export interface UomConversionDto { 
+export interface UomConversionDto {
     /**
      * Whether this conversion is currently active
      */

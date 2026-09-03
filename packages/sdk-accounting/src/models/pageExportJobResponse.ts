@@ -12,7 +12,7 @@ import { SortObject } from './sortObject';
 import { ExportJobResponse } from './exportJobResponse';
 
 
-export interface PageExportJobResponse { 
+export interface PageExportJobResponse {
     content?: Array<ExportJobResponse>;
     empty?: boolean;
     first?: boolean;

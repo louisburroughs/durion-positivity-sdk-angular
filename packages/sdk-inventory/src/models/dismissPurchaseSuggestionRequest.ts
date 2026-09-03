@@ -12,7 +12,7 @@
 /**
  * Request to dismiss a purchase suggestion; the reason is mandatory
  */
-export interface DismissPurchaseSuggestionRequest { 
+export interface DismissPurchaseSuggestionRequest {
     /**
      * Why the suggestion is being dismissed
      */

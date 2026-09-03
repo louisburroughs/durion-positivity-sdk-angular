@@ -12,7 +12,7 @@
 /**
  * Vendor bill details
  */
-export interface VendorBillResponse { 
+export interface VendorBillResponse {
     /**
      * Approval justification (if status = APPROVED)
      */

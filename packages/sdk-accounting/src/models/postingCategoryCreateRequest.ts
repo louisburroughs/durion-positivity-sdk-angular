@@ -12,7 +12,7 @@
 /**
  * Request payload for creating a new posting category
  */
-export interface PostingCategoryCreateRequest { 
+export interface PostingCategoryCreateRequest {
     /**
      * Name of the posting category
      */

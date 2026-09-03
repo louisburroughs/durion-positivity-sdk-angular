@@ -12,7 +12,7 @@
 /**
  * Response representing a single line on a sales order
  */
-export interface SalesOrderLineResponse { 
+export interface SalesOrderLineResponse {
     /**
      * Customer-visible line note
      */

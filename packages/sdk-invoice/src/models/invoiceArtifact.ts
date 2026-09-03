@@ -12,7 +12,7 @@
 /**
  * A downloadable document associated with an invoice
  */
-export interface InvoiceArtifact { 
+export interface InvoiceArtifact {
     /**
      * Opaque, URL-safe artifact reference
      */

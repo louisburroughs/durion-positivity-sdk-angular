@@ -12,7 +12,7 @@
 /**
  * One link between a user account and its canonical person
  */
-export interface UserPersonLinkBulkIngestRecord { 
+export interface UserPersonLinkBulkIngestRecord {
     /**
      * Canonical person the account belongs to
      */

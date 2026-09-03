@@ -12,7 +12,7 @@
 /**
  * Request to create a time entry adjustment
  */
-export interface TimeEntryAdjustmentRequest { 
+export interface TimeEntryAdjustmentRequest {
     /**
      * User creating the adjustment request
      */

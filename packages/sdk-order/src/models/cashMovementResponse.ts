@@ -12,7 +12,7 @@
 /**
  * A drawer cash movement
  */
-export interface CashMovementResponse { 
+export interface CashMovementResponse {
     amount?: number;
     clerkId?: string;
     movementId?: string;

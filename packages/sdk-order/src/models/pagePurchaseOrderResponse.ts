@@ -12,7 +12,7 @@ import { PurchaseOrderResponse } from './purchaseOrderResponse';
 import { SortObject } from './sortObject';
 
 
-export interface PagePurchaseOrderResponse { 
+export interface PagePurchaseOrderResponse {
     content?: Array<PurchaseOrderResponse>;
     empty?: boolean;
     first?: boolean;

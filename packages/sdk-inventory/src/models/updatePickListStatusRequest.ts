@@ -12,7 +12,7 @@
 /**
  * Request to transition a pick list to a new lifecycle status
  */
-export interface UpdatePickListStatusRequest { 
+export interface UpdatePickListStatusRequest {
     /**
      * Target status to apply to the pick list
      */

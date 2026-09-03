@@ -12,7 +12,7 @@
 /**
  * Requested SKU line of a transfer order
  */
-export interface TransferOrderLineRequest { 
+export interface TransferOrderLineRequest {
     /**
      * Quantity requested for transfer; must be positive
      */

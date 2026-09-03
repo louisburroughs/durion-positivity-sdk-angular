@@ -13,7 +13,7 @@ import { PaymentLagCohortRow } from './paymentLagCohortRow';
 /**
  * Payment-lag cohorts for invoices issued (finalized) in a date window
  */
-export interface PaymentLagCohortsReport { 
+export interface PaymentLagCohortsReport {
     /**
      * Cohort rows in fixed order (<=30, 31-60, 61-90, unpaid), truncated to the requested limit
      */

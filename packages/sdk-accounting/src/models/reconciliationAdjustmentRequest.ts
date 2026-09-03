@@ -12,7 +12,7 @@
 /**
  * Request to record a reconciliation adjustment (posts a real JE)
  */
-export interface ReconciliationAdjustmentRequest { 
+export interface ReconciliationAdjustmentRequest {
     /**
      * Signed adjustment amount; positive increases the reconciled cash account
      */

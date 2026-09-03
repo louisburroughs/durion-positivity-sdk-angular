@@ -12,7 +12,7 @@
 /**
  * One reconciliation audit entry
  */
-export interface Entry { 
+export interface Entry {
     /**
      * Action
      */

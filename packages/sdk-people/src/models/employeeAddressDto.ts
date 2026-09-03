@@ -12,7 +12,7 @@
 /**
  * Postal address for an employee
  */
-export interface EmployeeAddressDto { 
+export interface EmployeeAddressDto {
     /**
      * City
      */

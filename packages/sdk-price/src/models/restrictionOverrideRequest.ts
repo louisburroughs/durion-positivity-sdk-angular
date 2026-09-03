@@ -12,7 +12,7 @@
 /**
  * Request payload to override a sale-restriction rule for a transaction
  */
-export interface RestrictionOverrideRequest { 
+export interface RestrictionOverrideRequest {
     /**
      * Optional identifier of the approver who authorized the override
      */

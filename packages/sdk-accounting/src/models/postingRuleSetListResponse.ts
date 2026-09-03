@@ -13,7 +13,7 @@ import { PostingRuleSetResponse } from './postingRuleSetResponse';
 /**
  * Paginated list of posting rule sets
  */
-export interface PostingRuleSetListResponse { 
+export interface PostingRuleSetListResponse {
     /**
      * Zero-based index of the current page
      */

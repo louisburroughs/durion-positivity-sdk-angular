@@ -13,7 +13,7 @@ import { FitmentTagDto } from './fitmentTagDto';
 /**
  * Response payload for a vehicle applicability hint
  */
-export interface HintResponse { 
+export interface HintResponse {
     /**
      * Hint creation timestamp
      */

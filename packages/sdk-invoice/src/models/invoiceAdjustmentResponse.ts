@@ -12,7 +12,7 @@
 /**
  * A monetary adjustment applied to an invoice
  */
-export interface InvoiceAdjustmentResponse { 
+export interface InvoiceAdjustmentResponse {
     /**
      * Adjustment amount
      */

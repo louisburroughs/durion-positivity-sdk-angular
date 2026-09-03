@@ -11,7 +11,7 @@
 
 import { Inject, Injectable, Optional }                      from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams,
-         HttpResponse, HttpEvent, HttpContext 
+         HttpResponse, HttpEvent, HttpContext
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
@@ -41,7 +41,7 @@ export class ServiceLaborStandardsService extends BaseService {
 
     /**
      * Author a Labor Standard for a Service
-     * Creates an active DURION-source labor standard: the estimated (book) time for this service operation on the vehicles the key fields describe, in decimal hours in tenths (0.1 hr &#x3D; 6 min). Use this tool for hand-authored times — dealer-created operations or shop-decided standards; do not use it to transcribe a licensed labor guide, which enters through the guide import path with its own provenance. Preconditions: the service must exist, and no active standard may already cover the same vehicle key and time type — correct a wrong number by superseding it, not by adding a duplicate. Required inputs: serviceId path parameter and a body with laborHours; vehicle-key fields left null are wildcards, and timeType defaults to DURION_STANDARD. Emits a CATALOG_LABOR_STANDARD_CREATE event. Returns 400 for malformed hours (not in tenths, non-positive) or codes, 404 for an unknown service, and 409 when an active row already covers the same vehicle key and time type. 
+     * Creates an active DURION-source labor standard: the estimated (book) time for this service operation on the vehicles the key fields describe, in decimal hours in tenths (0.1 hr &#x3D; 6 min). Use this tool for hand-authored times — dealer-created operations or shop-decided standards; do not use it to transcribe a licensed labor guide, which enters through the guide import path with its own provenance. Preconditions: the service must exist, and no active standard may already cover the same vehicle key and time type — correct a wrong number by superseding it, not by adding a duplicate. Required inputs: serviceId path parameter and a body with laborHours; vehicle-key fields left null are wildcards, and timeType defaults to DURION_STANDARD. Emits a CATALOG_LABOR_STANDARD_CREATE event. Returns 400 for malformed hours (not in tenths, non-positive) or codes, 404 for an unknown service, and 409 when an active row already covers the same vehicle key and time type.
      * @endpoint post /v1/catalog-items/service/{serviceId}/labor-standards
      * @param serviceId Service the standard belongs to.
      * @param serviceLaborStandardRequestDto The standard to author: laborHours (decimal hours in tenths) plus optional vehicle-key fields (null &#x3D; any vehicle), timeType, overlap metadata and published date.
@@ -115,7 +115,7 @@ export class ServiceLaborStandardsService extends BaseService {
 
     /**
      * List a Service\&#39;s Labor Standards
-     * Returns the service\&#39;s labor standards — vehicle-keyed book times with source and revision — active rows only by default, oldest first. Use this tool to see what estimated times exist for an operation and where each came from; do not use it to resolve the one applicable time for a specific vehicle, which is the resolution endpoint\&#39;s job once it exists (sourcing plan §3.4). Preconditions: the service must exist. Required inputs: serviceId path parameter; includeSuperseded&#x3D;true adds replaced rows for audit. Emits a CATALOG_LABOR_STANDARD_LIST event; no state changes. Returns 404 when the service does not exist. 
+     * Returns the service\&#39;s labor standards — vehicle-keyed book times with source and revision — active rows only by default, oldest first. Use this tool to see what estimated times exist for an operation and where each came from; do not use it to resolve the one applicable time for a specific vehicle, which is the resolution endpoint\&#39;s job once it exists (sourcing plan §3.4). Preconditions: the service must exist. Required inputs: serviceId path parameter; includeSuperseded&#x3D;true adds replaced rows for audit. Emits a CATALOG_LABOR_STANDARD_LIST event; no state changes. Returns 404 when the service does not exist.
      * @endpoint get /v1/catalog-items/service/{serviceId}/labor-standards
      * @param serviceId Service whose standards to list.
      * @param includeSuperseded Include superseded rows for audit history.
@@ -188,7 +188,7 @@ export class ServiceLaborStandardsService extends BaseService {
 
     /**
      * Supersede a Labor Standard with a Correction
-     * Replaces an active DURION-source standard: the old row is marked superseded and kept for audit, and the body becomes the new active row, returned with fresh provenance. Use this tool to correct a hand-authored time; do not use it on imported guide rows, which are corrected by their source\&#39;s next import — the API refuses them. Preconditions: the standard must belong to the service, still be active, and carry source DURION. Required inputs: serviceId and standardId path parameters, plus a full replacement body — this is a replacement, not a patch, so omitted vehicle-key fields become wildcards. Emits a CATALOG_LABOR_STANDARD_SUPERSEDE event. Returns 400 for a malformed body, 404 when the standard is not this service\&#39;s, and 409 when the row is already superseded or not DURION-source. 
+     * Replaces an active DURION-source standard: the old row is marked superseded and kept for audit, and the body becomes the new active row, returned with fresh provenance. Use this tool to correct a hand-authored time; do not use it on imported guide rows, which are corrected by their source\&#39;s next import — the API refuses them. Preconditions: the standard must belong to the service, still be active, and carry source DURION. Required inputs: serviceId and standardId path parameters, plus a full replacement body — this is a replacement, not a patch, so omitted vehicle-key fields become wildcards. Emits a CATALOG_LABOR_STANDARD_SUPERSEDE event. Returns 400 for a malformed body, 404 when the standard is not this service\&#39;s, and 409 when the row is already superseded or not DURION-source.
      * @endpoint post /v1/catalog-items/service/{serviceId}/labor-standards/{standardId}/supersede
      * @param serviceId Service the standard belongs to.
      * @param standardId Standard being replaced.

@@ -12,7 +12,7 @@
 /**
  * Request to reprocess a suspended accounting event
  */
-export interface ReprocessEventRequest { 
+export interface ReprocessEventRequest {
     /**
      * Specific mapping version to use; defaults to latest when omitted
      */

@@ -12,7 +12,7 @@
 /**
  * Bookkeeping summary of one vendor PRICAT import run.
  */
-export interface PriceCatalogImportSummary { 
+export interface PriceCatalogImportSummary {
     /**
      * Endpoint binding the run was fetched over. Null on runs recorded before the binding was persisted (forward-only) and on quarantine re-application manifests, which make no vendor call.
      */

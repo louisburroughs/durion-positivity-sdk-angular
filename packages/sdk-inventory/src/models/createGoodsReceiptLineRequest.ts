@@ -12,7 +12,7 @@
 /**
  * Request payload describing a single received line item when recording a goods receipt against a purchase order
  */
-export interface CreateGoodsReceiptLineRequest { 
+export interface CreateGoodsReceiptLineRequest {
     /**
      * Quantity received expressed in documentUom; must be supplied together with documentUom
      */

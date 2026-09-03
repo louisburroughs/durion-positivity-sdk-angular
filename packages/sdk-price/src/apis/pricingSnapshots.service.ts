@@ -11,7 +11,7 @@
 
 import { Inject, Injectable, Optional }                      from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams,
-         HttpResponse, HttpEvent, HttpContext 
+         HttpResponse, HttpEvent, HttpContext
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
@@ -37,9 +37,9 @@ export class PricingSnapshotsService extends BaseService {
 
     /**
      * Get Pricing Snapshot By ID
-     * Returns an immutable pricing snapshot that captured the prices, applied rules, and policy version of a past pricing decision. Use this tool to audit or re-display exactly what was priced at capture time; do not use calculatePriceQuote, which computes a fresh price that may differ from the recorded one. Preconditions: a snapshot with the supplied id must have been persisted by an earlier pricing flow. Required inputs: snapshotId (UUID) as a path parameter; there is no request body. No events are emitted and no state changes; snapshots are immutable and this is a read-only projection. Returns 404 with code SNAPSHOT_NOT_FOUND when no snapshot exists for the supplied id. 
+     * Returns an immutable pricing snapshot that captured the prices, applied rules, and policy version of a past pricing decision. Use this tool to audit or re-display exactly what was priced at capture time; do not use calculatePriceQuote, which computes a fresh price that may differ from the recorded one. Preconditions: a snapshot with the supplied id must have been persisted by an earlier pricing flow. Required inputs: snapshotId (UUID) as a path parameter; there is no request body. No events are emitted and no state changes; snapshots are immutable and this is a read-only projection. Returns 404 with code SNAPSHOT_NOT_FOUND when no snapshot exists for the supplied id.
      * @endpoint get /v1/price/snapshots/{snapshotId}
-     * @param snapshotId 
+     * @param snapshotId
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options

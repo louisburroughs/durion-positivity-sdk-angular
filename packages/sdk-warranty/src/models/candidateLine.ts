@@ -9,7 +9,7 @@
  */
 
 
-export interface CandidateLine { 
+export interface CandidateLine {
     description?: string;
     lineTotal?: number;
     photoEvidenceUrl?: string;

@@ -13,7 +13,7 @@ import { IndividualDetails } from './individualDetails';
 /**
  * Contact information with role assignments
  */
-export interface ContactWithRole { 
+export interface ContactWithRole {
     /**
      * Effective start date
      */

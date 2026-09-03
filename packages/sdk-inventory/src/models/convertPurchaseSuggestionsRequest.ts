@@ -12,7 +12,7 @@
 /**
  * Request to convert one or more ACCEPTED purchase suggestions into a single multi-line DRAFT purchase order. All suggestions must be ACCEPTED and share one vendor
  */
-export interface ConvertPurchaseSuggestionsRequest { 
+export interface ConvertPurchaseSuggestionsRequest {
     /**
      * Identifiers of the ACCEPTED suggestions to convert; all must share one vendor
      */

@@ -12,7 +12,7 @@
 /**
  * Request to void an authorized payment before capture
  */
-export interface VoidPaymentRequest { 
+export interface VoidPaymentRequest {
     /**
      * Optional free-text notes explaining the void
      */

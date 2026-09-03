@@ -12,7 +12,7 @@
 /**
  * Result of a bulk correction submission
  */
-export interface BulkCorrectionResponse { 
+export interface BulkCorrectionResponse {
     /**
      * Number of corrections accepted for processing
      */

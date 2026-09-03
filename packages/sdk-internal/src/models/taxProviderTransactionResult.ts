@@ -12,7 +12,7 @@
 /**
  * Outcome of a provider tax-document lifecycle call
  */
-export interface TaxProviderTransactionResult { 
+export interface TaxProviderTransactionResult {
     /**
      * Provider transaction id when known; null in test mode
      */

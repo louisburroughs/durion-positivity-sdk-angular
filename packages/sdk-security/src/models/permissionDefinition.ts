@@ -12,7 +12,7 @@
 /**
  * A single permission definition within a registration manifest
  */
-export interface PermissionDefinition { 
+export interface PermissionDefinition {
     /**
      * Whether this permission is retired and should no longer be granted
      */

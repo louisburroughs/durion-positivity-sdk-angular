@@ -12,7 +12,7 @@
 /**
  * Warranty claim summary (search result row)
  */
-export interface ClaimSummaryResponse { 
+export interface ClaimSummaryResponse {
     claimCode?: string;
     claimType?: ClaimSummaryResponseClaimTypeEnum;
     createdAt?: string;

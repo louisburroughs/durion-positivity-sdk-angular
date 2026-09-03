@@ -12,7 +12,7 @@
 /**
  * Anonymous self-registration request
  */
-export interface SelfRegistrationRequest { 
+export interface SelfRegistrationRequest {
     /**
      * Primary email address
      */

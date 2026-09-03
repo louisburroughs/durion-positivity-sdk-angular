@@ -12,7 +12,7 @@
 /**
  * Request to create a commercial account (party)
  */
-export interface CreateCommercialAccountRequest { 
+export interface CreateCommercialAccountRequest {
     /**
      * Billing terms ID (foreign key to Billing domain)
      */

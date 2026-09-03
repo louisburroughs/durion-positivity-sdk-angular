@@ -11,7 +11,7 @@
 
 import { Inject, Injectable, Optional }                      from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams,
-         HttpResponse, HttpEvent, HttpContext 
+         HttpResponse, HttpEvent, HttpContext
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
@@ -39,7 +39,7 @@ export class SupplierArticleCodesService extends BaseService {
 
     /**
      * Re-emit Vendor Article Code Facts for Replica Consumers
-     * Re-publishes catalog.supplier-article-code.updated facts for one bounded page of vendor-article-code rows so that event-fed replicas in other modules can be seeded or repaired, returning what it emitted and a cursor for the next page. Use this tool to fill a consumer\&#39;s replica after a first deployment or a consumer outage longer than broker retention; do not use it to fix one row, which republishes itself on its next PRICAT import. Preconditions: Kafka publication must be enabled, or the facts queue in the outbox and reach nobody; replayed facts are indistinguishable from live ones, so consumers apply them through their normal path and their stale guard prevents an older fact regressing newer state. Required inputs: none; afterId resumes a previous page, updatedSince restricts to rows changed at or after an instant, and limit bounds the page at 1000. Emits a CATALOG_SUPPLIER_ARTICLE_CODE_REPLAY event and queues one fact per row in the page; no catalog state changes. Returns 200 with complete&#x3D;true and a null cursor once the table end is reached, and 400 when limit is out of range or a parameter is malformed. 
+     * Re-publishes catalog.supplier-article-code.updated facts for one bounded page of vendor-article-code rows so that event-fed replicas in other modules can be seeded or repaired, returning what it emitted and a cursor for the next page. Use this tool to fill a consumer\&#39;s replica after a first deployment or a consumer outage longer than broker retention; do not use it to fix one row, which republishes itself on its next PRICAT import. Preconditions: Kafka publication must be enabled, or the facts queue in the outbox and reach nobody; replayed facts are indistinguishable from live ones, so consumers apply them through their normal path and their stale guard prevents an older fact regressing newer state. Required inputs: none; afterId resumes a previous page, updatedSince restricts to rows changed at or after an instant, and limit bounds the page at 1000. Emits a CATALOG_SUPPLIER_ARTICLE_CODE_REPLAY event and queues one fact per row in the page; no catalog state changes. Returns 200 with complete&#x3D;true and a null cursor once the table end is reached, and 400 when limit is out of range or a parameter is malformed.
      * @endpoint post /v1/catalog/supplier-article-codes/replay
      * @param afterId Resume cursor from a previous call; omit to start at the beginning.
      * @param updatedSince Restrict to rows changed at or after this instant; omit to replay all.

@@ -15,7 +15,7 @@ import { ContactPreferences } from './contactPreferences';
 /**
  * Contact summary surfaced in a CRM snapshot
  */
-export interface ContactSummary { 
+export interface ContactSummary {
     /**
      * Identifier of the contact
      */

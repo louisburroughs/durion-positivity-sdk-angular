@@ -12,7 +12,7 @@
 /**
  * Per-record outcome of a bulk ingest submission
  */
-export interface BulkIngestResult { 
+export interface BulkIngestResult {
     /**
      * Identifier of the entity created/updated for this record, when successful
      */

@@ -12,7 +12,7 @@
 /**
  * Customer data transfer object for API operations
  */
-export interface CustomerDTO { 
+export interface CustomerDTO {
     /**
      * Unique customer number
      */

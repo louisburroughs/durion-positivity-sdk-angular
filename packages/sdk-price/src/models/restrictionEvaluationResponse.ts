@@ -13,7 +13,7 @@ import { RestrictionEvaluationResult } from './restrictionEvaluationResult';
 /**
  * Batch response containing one restriction-evaluation result per requested item
  */
-export interface RestrictionEvaluationResponse { 
+export interface RestrictionEvaluationResponse {
     /**
      * Per-item restriction evaluation results
      */

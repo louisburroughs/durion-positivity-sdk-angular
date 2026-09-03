@@ -12,7 +12,7 @@
 /**
  * GL account response with computed status
  */
-export interface GLAccountResponse { 
+export interface GLAccountResponse {
     /**
      * GL account code
      */

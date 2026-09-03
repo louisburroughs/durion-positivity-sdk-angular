@@ -12,7 +12,7 @@
 /**
  * Non-inventory product
  */
-export interface NonInventoryProductDto { 
+export interface NonInventoryProductDto {
     /**
      * Non-inventory identifier
      */

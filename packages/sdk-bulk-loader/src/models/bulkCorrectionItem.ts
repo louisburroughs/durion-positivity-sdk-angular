@@ -12,7 +12,7 @@
 /**
  * A single corrected data record for a failed audit entry
  */
-export interface BulkCorrectionItem { 
+export interface BulkCorrectionItem {
     /**
      * ID of the audit record being corrected
      */

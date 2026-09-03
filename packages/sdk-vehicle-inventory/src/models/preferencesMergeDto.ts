@@ -12,7 +12,7 @@
 /**
  * Request to partially merge fields into existing vehicle care preferences
  */
-export interface PreferencesMergeDto { 
+export interface PreferencesMergeDto {
     /**
      * Subset of preference fields to merge into existing preferences
      */

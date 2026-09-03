@@ -12,7 +12,7 @@
 /**
  * Chronological POSTED journal line with running balance for a GL account
  */
-export interface GeneralLedgerLine { 
+export interface GeneralLedgerLine {
     /**
      * Credit amount (null if debit)
      */

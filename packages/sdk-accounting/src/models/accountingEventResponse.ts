@@ -12,7 +12,7 @@
 /**
  * Accounting event ingestion record and its processing outcome
  */
-export interface AccountingEventResponse { 
+export interface AccountingEventResponse {
     /**
      * Number of processing attempts made
      */

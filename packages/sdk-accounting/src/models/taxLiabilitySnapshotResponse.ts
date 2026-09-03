@@ -14,7 +14,7 @@ import { TaxLiabilityReconciliation } from './taxLiabilityReconciliation';
 /**
  * Frozen Sales-Tax Liability snapshot for a closed accounting period
  */
-export interface TaxLiabilitySnapshotResponse { 
+export interface TaxLiabilitySnapshotResponse {
     /**
      * SHA-256 (lowercase hex) over the canonical report serialization
      */

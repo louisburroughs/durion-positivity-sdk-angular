@@ -12,7 +12,7 @@
 /**
  * Income statement (Profit & Loss) report built from POSTED journal entries
  */
-export interface IncomeStatementReport { 
+export interface IncomeStatementReport {
     /**
      * Report period end date (inclusive)
      */

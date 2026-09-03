@@ -9,7 +9,7 @@
  */
 
 
-export interface LinkUserPersonRequest { 
+export interface LinkUserPersonRequest {
     /**
      * Canonical person id (pos-people-contact) to link the account to
      */

@@ -12,7 +12,7 @@
 /**
  * The vendor\'s answer about one inquired article.
  */
-export interface StockInquiryLine { 
+export interface StockInquiryLine {
     /**
      * EAN/GTIN of the article, as the vendor stated it.
      */

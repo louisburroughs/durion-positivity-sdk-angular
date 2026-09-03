@@ -12,7 +12,7 @@
 /**
  * Request payload for updating an existing cart item line
  */
-export interface UpdateItemRequest { 
+export interface UpdateItemRequest {
     /**
      * Updated quantity for the item line
      */

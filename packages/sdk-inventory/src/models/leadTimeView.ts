@@ -12,7 +12,7 @@
 /**
  * Lead-time view returned by inventory for product detail aggregation
  */
-export interface LeadTimeView { 
+export interface LeadTimeView {
     /**
      * Timestamp when lead-time data was last refreshed
      */

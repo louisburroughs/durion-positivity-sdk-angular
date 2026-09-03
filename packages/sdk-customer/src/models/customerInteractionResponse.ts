@@ -12,7 +12,7 @@
 /**
  * One recorded touch on a party\'s interaction timeline
  */
-export interface CustomerInteractionResponse { 
+export interface CustomerInteractionResponse {
     /**
      * Actor that recorded the touch
      */

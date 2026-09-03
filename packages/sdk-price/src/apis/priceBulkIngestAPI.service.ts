@@ -11,7 +11,7 @@
 
 import { Inject, Injectable, Optional }                      from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams,
-         HttpResponse, HttpEvent, HttpContext 
+         HttpResponse, HttpEvent, HttpContext
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
@@ -39,7 +39,7 @@ export class PriceBulkIngestAPIService extends BaseService {
 
     /**
      * Bulk Import Base Price Records
-     * Bulk-imports base price (MSRP) records, appending an effective-dated price window per product and currency. Use this tool for batch price loads from an upstream catalog; use calculatePriceQuote instead to read the price effective at a pricing instant, since quoting resolves these windows. Preconditions: each record\&#39;s effectiveFrom must start after the product\&#39;s current window begins; re-submitting the current open window\&#39;s unchanged price is idempotent and returns the existing id. Required inputs: jobId and locationId (UUIDs) and records (at least one), each record carrying productId (UUID string), msrp (decimal string), currency (ISO 4217 code), and effectiveFrom as an ISO-8601 instant such as 2026-03-01T00:00:00Z; operatorId is optional. Emits a PRICE_BULK_INGEST event; a new window closes the previous open window at its effectiveFrom and rows are processed independently, so one bad row does not abort the batch. Returns 200 with per-row results even when rows fail, marking failed rows with errorCode PRICE_INGEST_FAILED (including overlapping-window conflicts and unparseable values), and 400 when the batch envelope itself is invalid. 
+     * Bulk-imports base price (MSRP) records, appending an effective-dated price window per product and currency. Use this tool for batch price loads from an upstream catalog; use calculatePriceQuote instead to read the price effective at a pricing instant, since quoting resolves these windows. Preconditions: each record\&#39;s effectiveFrom must start after the product\&#39;s current window begins; re-submitting the current open window\&#39;s unchanged price is idempotent and returns the existing id. Required inputs: jobId and locationId (UUIDs) and records (at least one), each record carrying productId (UUID string), msrp (decimal string), currency (ISO 4217 code), and effectiveFrom as an ISO-8601 instant such as 2026-03-01T00:00:00Z; operatorId is optional. Emits a PRICE_BULK_INGEST event; a new window closes the previous open window at its effectiveFrom and rows are processed independently, so one bad row does not abort the batch. Returns 200 with per-row results even when rows fail, marking failed rows with errorCode PRICE_INGEST_FAILED (including overlapping-window conflicts and unparseable values), and 400 when the batch envelope itself is invalid.
      * @endpoint post /v1/price/bulk-ingest
      * @param bulkIngestRequestBasePriceBulkIngestRecord Batch envelope of base-price records to ingest, scoped to a job and location.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.

@@ -11,7 +11,7 @@
 
 import { Inject, Injectable, Optional }                      from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams,
-         HttpResponse, HttpEvent, HttpContext 
+         HttpResponse, HttpEvent, HttpContext
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
@@ -45,7 +45,7 @@ export class VehicleApplicabilityHintsService extends BaseService {
 
     /**
      * Create Vehicle Applicability Hint
-     * Creates a vehicle applicability hint that attaches a set of fitment tags to one product, making the product discoverable through filterProductsByVehicleAttributes. Use this tool when declaring which vehicles a product fits for the first time; do not use updateVehicleHint, which replaces the tags on a hint that already exists. Preconditions: none are checked against other services; productId is stored as given and is not verified against the catalog, so callers must supply a valid product id themselves. Required inputs: productId (UUID) and fitmentTags, a non-empty list of tagType/tagValue pairs; tagType is one of MAKE, MODEL, YEAR_RANGE, TIRE_SIZE, AXLE_POSITION, ENGINE_SIZE or TRIM_LEVEL, tagValue is at most 120 characters, and YEAR_RANGE values use \&quot;2018-2022\&quot; or a single year like \&quot;2020\&quot;. Emits a VEHICLE_HINT_CREATED event and persists the hint with its tags in one transaction. Returns 201 with the stored hint on success; because productId is not validated, an unknown product id still returns 201 rather than 404. 
+     * Creates a vehicle applicability hint that attaches a set of fitment tags to one product, making the product discoverable through filterProductsByVehicleAttributes. Use this tool when declaring which vehicles a product fits for the first time; do not use updateVehicleHint, which replaces the tags on a hint that already exists. Preconditions: none are checked against other services; productId is stored as given and is not verified against the catalog, so callers must supply a valid product id themselves. Required inputs: productId (UUID) and fitmentTags, a non-empty list of tagType/tagValue pairs; tagType is one of MAKE, MODEL, YEAR_RANGE, TIRE_SIZE, AXLE_POSITION, ENGINE_SIZE or TRIM_LEVEL, tagValue is at most 120 characters, and YEAR_RANGE values use \&quot;2018-2022\&quot; or a single year like \&quot;2020\&quot;. Emits a VEHICLE_HINT_CREATED event and persists the hint with its tags in one transaction. Returns 201 with the stored hint on success; because productId is not validated, an unknown product id still returns 201 rather than 404.
      * @endpoint post /v1/vehicle-fitment/hints
      * @param createHintRequest Hint to create: the product identifier and the fitment tags that describe which vehicles the product applies to.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -115,7 +115,7 @@ export class VehicleApplicabilityHintsService extends BaseService {
 
     /**
      * Delete Vehicle Applicability Hint
-     * Deletes a vehicle applicability hint together with all fitment tags attached to it, removing those match criteria from product filtering. Use this tool when a hint\&#39;s vehicle coverage should no longer apply to the product at all; do not use updateVehicleHint, which keeps the hint and replaces its tags instead. Preconditions: the hint must exist under the supplied hintId. Required inputs: hintId (UUID) as a path parameter; there is no request body. Emits a VEHICLE_HINT_DELETED event; the delete is permanent, with no soft-delete or restore. Returns 204 on successful deletion, and 404 when no hint exists for the supplied id. 
+     * Deletes a vehicle applicability hint together with all fitment tags attached to it, removing those match criteria from product filtering. Use this tool when a hint\&#39;s vehicle coverage should no longer apply to the product at all; do not use updateVehicleHint, which keeps the hint and replaces its tags instead. Preconditions: the hint must exist under the supplied hintId. Required inputs: hintId (UUID) as a path parameter; there is no request body. Emits a VEHICLE_HINT_DELETED event; the delete is permanent, with no soft-delete or restore. Returns 204 on successful deletion, and 404 when no hint exists for the supplied id.
      * @endpoint delete /v1/vehicle-fitment/hints/{hintId}
      * @param hintId ID of the hint to delete
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -174,7 +174,7 @@ export class VehicleApplicabilityHintsService extends BaseService {
 
     /**
      * Filter Products by Vehicle Attributes
-     * Finds product ids whose applicability hints are compatible with a supplied set of vehicle attributes such as make, model and year. Use this tool to answer which products fit a given vehicle; use listVehicleHintsByProduct instead to go the other direction, from a product to its vehicle coverage. Preconditions: hints must already exist, and attribute keys must match tag types case-insensitively (make, model, year_range, tire_size, axle_position, engine_size, trim_level); unknown keys are ignored rather than rejected. Required inputs: vehicleAttributes, a non-empty map of attribute name to value; value matching is case-insensitive, a hint that lacks a given tag type is treated as compatible with that attribute, and a year value like \&quot;2020\&quot; matches YEAR_RANGE tags stored as \&quot;2018-2022\&quot; or as a single year. Emits a FITMENT_PRODUCTS_FILTER event; no hint or product records are modified. Returns 200 with the matching productIds and their count, which may be empty, and 400 when vehicleAttributes is missing, empty, or contains blank keys or values. 
+     * Finds product ids whose applicability hints are compatible with a supplied set of vehicle attributes such as make, model and year. Use this tool to answer which products fit a given vehicle; use listVehicleHintsByProduct instead to go the other direction, from a product to its vehicle coverage. Preconditions: hints must already exist, and attribute keys must match tag types case-insensitively (make, model, year_range, tire_size, axle_position, engine_size, trim_level); unknown keys are ignored rather than rejected. Required inputs: vehicleAttributes, a non-empty map of attribute name to value; value matching is case-insensitive, a hint that lacks a given tag type is treated as compatible with that attribute, and a year value like \&quot;2020\&quot; matches YEAR_RANGE tags stored as \&quot;2018-2022\&quot; or as a single year. Emits a FITMENT_PRODUCTS_FILTER event; no hint or product records are modified. Returns 200 with the matching productIds and their count, which may be empty, and 400 when vehicleAttributes is missing, empty, or contains blank keys or values.
      * @endpoint post /v1/vehicle-fitment/hints/filter-products
      * @param filterProductsRequest Vehicle attributes to match against stored fitment tags; keys name a tag type and values describe the vehicle being fitted.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -244,7 +244,7 @@ export class VehicleApplicabilityHintsService extends BaseService {
 
     /**
      * Get Vehicle Applicability Hint
-     * Returns one vehicle applicability hint, including its productId, fitment tags and audit fields. Use this tool when the hintId is already known; use listVehicleHintsByProduct instead to find all hints attached to a product. Preconditions: the hint must exist under the supplied hintId. Required inputs: hintId (UUID) as a path parameter. No events are emitted and no state changes; this is a read-only projection. Returns 200 with the hint, and 404 when no hint exists for the supplied id. 
+     * Returns one vehicle applicability hint, including its productId, fitment tags and audit fields. Use this tool when the hintId is already known; use listVehicleHintsByProduct instead to find all hints attached to a product. Preconditions: the hint must exist under the supplied hintId. Required inputs: hintId (UUID) as a path parameter. No events are emitted and no state changes; this is a read-only projection. Returns 200 with the hint, and 404 when no hint exists for the supplied id.
      * @endpoint get /v1/vehicle-fitment/hints/{hintId}
      * @param hintId ID of the hint to retrieve
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -304,7 +304,7 @@ export class VehicleApplicabilityHintsService extends BaseService {
 
     /**
      * List Hints for a Product
-     * Returns every vehicle applicability hint recorded for one product, each with its full fitment tag list. Use this tool to review a product\&#39;s declared vehicle coverage; use getVehicleHint instead when a specific hintId is already known. Preconditions: none; an unknown productId or one without hints simply yields an empty list rather than an error. Required inputs: productId (UUID) as a path parameter. No events are emitted and no state changes; this is a read-only projection. Returns 200 with the hint list, which is empty when the product has no hints. 
+     * Returns every vehicle applicability hint recorded for one product, each with its full fitment tag list. Use this tool to review a product\&#39;s declared vehicle coverage; use getVehicleHint instead when a specific hintId is already known. Preconditions: none; an unknown productId or one without hints simply yields an empty list rather than an error. Required inputs: productId (UUID) as a path parameter. No events are emitted and no state changes; this is a read-only projection. Returns 200 with the hint list, which is empty when the product has no hints.
      * @endpoint get /v1/vehicle-fitment/hints/product/{productId}
      * @param productId ID of the product
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -364,7 +364,7 @@ export class VehicleApplicabilityHintsService extends BaseService {
 
     /**
      * Update Vehicle Applicability Hint
-     * Replaces the full set of fitment tags on an existing vehicle applicability hint; the previous tags are deleted and the submitted list becomes the hint\&#39;s only tags. Use this tool to correct or extend the vehicles a product fits; do not use createVehicleHint, which adds a second hint to the product instead of changing this one. Preconditions: the hint must already exist under the supplied hintId; the owning productId cannot be changed here. Required inputs: hintId (UUID) as a path parameter and fitmentTags, a non-empty list of tagType/tagValue pairs; the list is a full replacement, so tags to keep must be resubmitted. Emits a VEHICLE_HINT_UPDATED event and records the caller as updatedBy. Returns 200 with the updated hint, and 404 when no hint exists for the supplied id. 
+     * Replaces the full set of fitment tags on an existing vehicle applicability hint; the previous tags are deleted and the submitted list becomes the hint\&#39;s only tags. Use this tool to correct or extend the vehicles a product fits; do not use createVehicleHint, which adds a second hint to the product instead of changing this one. Preconditions: the hint must already exist under the supplied hintId; the owning productId cannot be changed here. Required inputs: hintId (UUID) as a path parameter and fitmentTags, a non-empty list of tagType/tagValue pairs; the list is a full replacement, so tags to keep must be resubmitted. Emits a VEHICLE_HINT_UPDATED event and records the caller as updatedBy. Returns 200 with the updated hint, and 404 when no hint exists for the supplied id.
      * @endpoint put /v1/vehicle-fitment/hints/{hintId}
      * @param hintId ID of the hint to update
      * @param updateHintRequest Replacement fitment tag list for the hint; it fully supersedes the tags currently stored.

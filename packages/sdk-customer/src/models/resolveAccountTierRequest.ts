@@ -12,7 +12,7 @@
 /**
  * Request to compute account tier based on business rules
  */
-export interface ResolveAccountTierRequest { 
+export interface ResolveAccountTierRequest {
     /**
      * Account age in months
      */

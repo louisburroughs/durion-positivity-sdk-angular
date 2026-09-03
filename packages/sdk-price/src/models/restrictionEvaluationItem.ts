@@ -12,7 +12,7 @@
 /**
  * Single product/context entry to evaluate against sale-restriction rules
  */
-export interface RestrictionEvaluationItem { 
+export interface RestrictionEvaluationItem {
     /**
      * Transaction lifecycle context for the evaluation
      */

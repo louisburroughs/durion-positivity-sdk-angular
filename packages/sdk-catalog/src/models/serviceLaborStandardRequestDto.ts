@@ -12,7 +12,7 @@
 /**
  * A hand-authored (DURION-source) labor standard for a service operation. Vehicle-key fields left null are wildcards: the time applies to any vehicle the more specific fields do not narrow.
  */
-export interface ServiceLaborStandardRequestDto { 
+export interface ServiceLaborStandardRequestDto {
     /**
      * Engine code
      */

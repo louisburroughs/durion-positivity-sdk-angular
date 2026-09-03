@@ -12,7 +12,7 @@
 /**
  * Create/update payload for a vendor commercial account (ADR-0050 §5): one BILLING account per profile, one DELIVERY account per (profile, pos-location). Account numbers are ordinary profile data, not credentials.
  */
-export interface CommercialAccountRequest { 
+export interface CommercialAccountRequest {
     /**
      * Vendor-assigned account number. Never blank. Ordinary configuration data, not a credential.
      */

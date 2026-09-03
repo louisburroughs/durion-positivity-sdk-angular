@@ -12,7 +12,7 @@
 /**
  * One ledger movement in a lot/serial downstream chain
  */
-export interface TraceabilityMovement { 
+export interface TraceabilityMovement {
     /**
      * Signed quantity change (positive inbound, negative outbound)
      */

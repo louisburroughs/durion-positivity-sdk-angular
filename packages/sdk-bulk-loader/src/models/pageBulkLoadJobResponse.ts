@@ -12,7 +12,7 @@ import { SortObject } from './sortObject';
 import { BulkLoadJobResponse } from './bulkLoadJobResponse';
 
 
-export interface PageBulkLoadJobResponse { 
+export interface PageBulkLoadJobResponse {
     content?: Array<BulkLoadJobResponse>;
     empty?: boolean;
     first?: boolean;

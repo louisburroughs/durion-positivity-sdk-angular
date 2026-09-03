@@ -13,7 +13,7 @@ import { RevenueByCustomerRow } from './revenueByCustomerRow';
 /**
  * Per-customer revenue report for one date window, ordered by revenue descending
  */
-export interface RevenueByCustomerReport { 
+export interface RevenueByCustomerReport {
     /**
      * Window end date (inclusive)
      */

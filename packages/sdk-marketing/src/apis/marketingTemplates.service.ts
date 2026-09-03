@@ -11,7 +11,7 @@
 
 import { Inject, Injectable, Optional }                      from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams,
-         HttpResponse, HttpEvent, HttpContext 
+         HttpResponse, HttpEvent, HttpContext
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
@@ -41,7 +41,7 @@ export class MarketingTemplatesService extends BaseService {
 
     /**
      * Create Message Template
-     * Creates a channel-specific message template whose {{token}} placeholders are validated against the closed vocabulary for its audience at save time, so a typo costs a validation error rather than a batch of broken messages. Use this tool when authoring a new template; do not use updateMessageTemplate, which revises an existing template and cannot change its channel or audienceType. Preconditions: no template may already use the same name (compared case-insensitively); commercial-only tokens such as accountName are rejected for INDIVIDUAL audiences and vehicle tokens for COMMERCIAL ones. Required inputs: name, channel (EMAIL or SMS), audienceType (COMMERCIAL or INDIVIDUAL) and body; subject is required for EMAIL, and for SMS it must be absent and any supplied value is discarded. Emits a MARKETING_TEMPLATE_CREATE event; no campaign is affected until the template is attached to one. Returns 409 when the name is already in use, and 422 when a token is unknown or outside the audience\&#39;s vocabulary, an email template lacks a subject, an SMS template has one, or an SMS body exceeds 320 characters. 
+     * Creates a channel-specific message template whose {{token}} placeholders are validated against the closed vocabulary for its audience at save time, so a typo costs a validation error rather than a batch of broken messages. Use this tool when authoring a new template; do not use updateMessageTemplate, which revises an existing template and cannot change its channel or audienceType. Preconditions: no template may already use the same name (compared case-insensitively); commercial-only tokens such as accountName are rejected for INDIVIDUAL audiences and vehicle tokens for COMMERCIAL ones. Required inputs: name, channel (EMAIL or SMS), audienceType (COMMERCIAL or INDIVIDUAL) and body; subject is required for EMAIL, and for SMS it must be absent and any supplied value is discarded. Emits a MARKETING_TEMPLATE_CREATE event; no campaign is affected until the template is attached to one. Returns 409 when the name is already in use, and 422 when a token is unknown or outside the audience\&#39;s vocabulary, an email template lacks a subject, an SMS template has one, or an SMS body exceeds 320 characters.
      * @endpoint post /v1/marketing/templates
      * @param upsertMessageTemplateRequest Template to create: name, channel, audience, subject (EMAIL only) and a body whose {{token}} placeholders must belong to the audience\&#39;s vocabulary.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -111,9 +111,9 @@ export class MarketingTemplatesService extends BaseService {
 
     /**
      * Delete Unused Message Template
-     * Permanently deletes a message template that no campaign references. Use this tool to retire an unused template; detach it from every campaign first via updateCampaign rather than expecting the delete to cascade. Preconditions: the template must exist and must not be referenced as the email or SMS template of any campaign, because a campaign whose template vanished would fail at dispatch across its whole audience. Required inputs: templateId (UUID) as a path parameter; there is no request body and no confirmation flag. Emits a MARKETING_TEMPLATE_DELETE event; the deletion is irreversible. Returns 404 when the template does not exist, and 422 when it is still attached to at least one campaign. 
+     * Permanently deletes a message template that no campaign references. Use this tool to retire an unused template; detach it from every campaign first via updateCampaign rather than expecting the delete to cascade. Preconditions: the template must exist and must not be referenced as the email or SMS template of any campaign, because a campaign whose template vanished would fail at dispatch across its whole audience. Required inputs: templateId (UUID) as a path parameter; there is no request body and no confirmation flag. Emits a MARKETING_TEMPLATE_DELETE event; the deletion is irreversible. Returns 404 when the template does not exist, and 422 when it is still attached to at least one campaign.
      * @endpoint delete /v1/marketing/templates/{templateId}
-     * @param templateId 
+     * @param templateId
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -171,9 +171,9 @@ export class MarketingTemplatesService extends BaseService {
 
     /**
      * Get Message Template By Id
-     * Returns one message template with its name, channel, audience type, subject, body, and the substitution tokens available to its audience. Use this tool when the template id is already known; use listMessageTemplates instead when searching by channel or audience. Preconditions: the template must exist. Required inputs: templateId (UUID) as a path parameter; there is no request body. Emits a MARKETING_TEMPLATE_GET audit event; no marketing state is changed and this is a read-only projection. Returns 404 when no template exists for the supplied id. 
+     * Returns one message template with its name, channel, audience type, subject, body, and the substitution tokens available to its audience. Use this tool when the template id is already known; use listMessageTemplates instead when searching by channel or audience. Preconditions: the template must exist. Required inputs: templateId (UUID) as a path parameter; there is no request body. Emits a MARKETING_TEMPLATE_GET audit event; no marketing state is changed and this is a read-only projection. Returns 404 when no template exists for the supplied id.
      * @endpoint get /v1/marketing/templates/{templateId}
-     * @param templateId 
+     * @param templateId
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -231,10 +231,10 @@ export class MarketingTemplatesService extends BaseService {
 
     /**
      * List Message Templates
-     * Lists message templates ordered by name, optionally filtered by delivery channel and audience type. Use this tool when browsing templates or finding one to attach to a campaign; do not use getMessageTemplateById, which requires a known template id and returns exactly one template. Preconditions: none; an empty result simply means no template matches the filters. Required inputs: none; channel (EMAIL or SMS) and audienceType (COMMERCIAL or INDIVIDUAL) are optional query filters that combine when both are supplied. Emits a MARKETING_TEMPLATE_LIST audit event; no marketing state is changed. Returns 200 with an empty array when nothing matches, so an empty result is not an error condition. 
+     * Lists message templates ordered by name, optionally filtered by delivery channel and audience type. Use this tool when browsing templates or finding one to attach to a campaign; do not use getMessageTemplateById, which requires a known template id and returns exactly one template. Preconditions: none; an empty result simply means no template matches the filters. Required inputs: none; channel (EMAIL or SMS) and audienceType (COMMERCIAL or INDIVIDUAL) are optional query filters that combine when both are supplied. Emits a MARKETING_TEMPLATE_LIST audit event; no marketing state is changed. Returns 200 with an empty array when nothing matches, so an empty result is not an error condition.
      * @endpoint get /v1/marketing/templates
-     * @param channel 
-     * @param audienceType 
+     * @param channel
+     * @param audienceType
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -310,9 +310,9 @@ export class MarketingTemplatesService extends BaseService {
 
     /**
      * Update Message Template
-     * Updates a template\&#39;s name, subject and body, re-validating every {{token}} against the audience\&#39;s vocabulary. Use this tool to revise wording; do not use createMessageTemplate for a different channel or audience, because channel and audienceType are immutable and changing either requires a new template. Preconditions: the template must exist, the channel and audienceType in the body must equal the stored values, and no other template may hold the new name. Required inputs: templateId (UUID) path parameter plus the full body (name, channel, audienceType, body); subject is required for EMAIL and discarded for SMS. Emits a MARKETING_TEMPLATE_UPDATE event; campaigns already bound to the template pick up the new wording at their next dispatch. Returns 404 when the template does not exist, 409 when the name belongs to another template, and 422 when channel or audienceType is changed or the token, subject or SMS length rules fail. 
+     * Updates a template\&#39;s name, subject and body, re-validating every {{token}} against the audience\&#39;s vocabulary. Use this tool to revise wording; do not use createMessageTemplate for a different channel or audience, because channel and audienceType are immutable and changing either requires a new template. Preconditions: the template must exist, the channel and audienceType in the body must equal the stored values, and no other template may hold the new name. Required inputs: templateId (UUID) path parameter plus the full body (name, channel, audienceType, body); subject is required for EMAIL and discarded for SMS. Emits a MARKETING_TEMPLATE_UPDATE event; campaigns already bound to the template pick up the new wording at their next dispatch. Returns 404 when the template does not exist, 409 when the name belongs to another template, and 422 when channel or audienceType is changed or the token, subject or SMS length rules fail.
      * @endpoint put /v1/marketing/templates/{templateId}
-     * @param templateId 
+     * @param templateId
      * @param upsertMessageTemplateRequest Full replacement template; channel and audienceType must match the stored values because both are immutable.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.

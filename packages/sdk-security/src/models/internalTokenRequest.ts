@@ -12,7 +12,7 @@
 /**
  * Request to generate a single JWT token for an internal trusted caller
  */
-export interface InternalTokenRequest { 
+export interface InternalTokenRequest {
     /**
      * Optional set of role names to include in token
      */

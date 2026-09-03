@@ -11,7 +11,7 @@
 
 import { Inject, Injectable, Optional }                      from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams,
-         HttpResponse, HttpEvent, HttpContext 
+         HttpResponse, HttpEvent, HttpContext
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
@@ -43,7 +43,7 @@ export class VehicleFitmentAPIService extends BaseService {
 
     /**
      * List Makes for a Manufacturer
-     * Returns all vehicle makes recorded for one manufacturer, served from a local cache of the NHTSA vPIC registry. Use this tool after picking a manufacturer from listManufacturers; do not use listModelsByMake, which descends one level further and needs a makeId taken from this response. Preconditions: the manufacturer must already exist in the local cache under the supplied id; ids are the UUIDs returned by listManufacturers, not raw NHTSA numeric ids. Required inputs: manufacturerId (UUID) as a path parameter. No events are emitted; a cache refresh may rewrite the local make rows for the manufacturer, but nothing else changes. Returns 200 with the make list, and 500 when the manufacturer id cannot be resolved or the NHTSA refresh fails, because the not-found case is not currently mapped to 404. 
+     * Returns all vehicle makes recorded for one manufacturer, served from a local cache of the NHTSA vPIC registry. Use this tool after picking a manufacturer from listManufacturers; do not use listModelsByMake, which descends one level further and needs a makeId taken from this response. Preconditions: the manufacturer must already exist in the local cache under the supplied id; ids are the UUIDs returned by listManufacturers, not raw NHTSA numeric ids. Required inputs: manufacturerId (UUID) as a path parameter. No events are emitted; a cache refresh may rewrite the local make rows for the manufacturer, but nothing else changes. Returns 200 with the make list, and 500 when the manufacturer id cannot be resolved or the NHTSA refresh fails, because the not-found case is not currently mapped to 404.
      * @endpoint get /v1/vehicle-fitment/makes/{manufacturerId}
      * @param manufacturerId ID of the manufacturer
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -103,7 +103,7 @@ export class VehicleFitmentAPIService extends BaseService {
 
     /**
      * List Vehicle Manufacturers
-     * Returns the list of vehicle manufacturers known to the fitment service, served from a local cache of the NHTSA vPIC registry. Use this tool to start the manufacturer-make-model selection chain; do not use listMakesByManufacturer, which requires a manufacturerId taken from this response. Preconditions: none beyond authentication; when the local cache is empty or stale the list is re-fetched from the public NHTSA vPIC service, so outbound connectivity is required for a refresh. Required inputs: none; there are no parameters, no paging and no filtering. No events are emitted; a refresh rewrites the local manufacturer cache rows, but the response is otherwise a read-only projection. Returns 200 with the manufacturer list, which may be empty, and 500 when the NHTSA refresh cannot be fetched or parsed. 
+     * Returns the list of vehicle manufacturers known to the fitment service, served from a local cache of the NHTSA vPIC registry. Use this tool to start the manufacturer-make-model selection chain; do not use listMakesByManufacturer, which requires a manufacturerId taken from this response. Preconditions: none beyond authentication; when the local cache is empty or stale the list is re-fetched from the public NHTSA vPIC service, so outbound connectivity is required for a refresh. Required inputs: none; there are no parameters, no paging and no filtering. No events are emitted; a refresh rewrites the local manufacturer cache rows, but the response is otherwise a read-only projection. Returns 200 with the manufacturer list, which may be empty, and 500 when the NHTSA refresh cannot be fetched or parsed.
      * @endpoint get /v1/vehicle-fitment/manufacturers
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
@@ -159,7 +159,7 @@ export class VehicleFitmentAPIService extends BaseService {
 
     /**
      * List Models for a Make
-     * Returns all vehicle models recorded for one make, served from a local cache of the NHTSA vPIC registry. Use this tool after picking a make from listMakesByManufacturer; do not use listVehicleTypesByMake, which returns body classes such as Passenger Car rather than named models. Preconditions: the make must already exist in the local cache under the supplied id. Required inputs: makeId (UUID) as a path parameter. No events are emitted; a cache refresh may rewrite the local model rows for the make, but nothing else changes. Returns 200 with the model list, and 500 when the make id cannot be resolved or the NHTSA refresh fails, because the not-found case is not currently mapped to 404. 
+     * Returns all vehicle models recorded for one make, served from a local cache of the NHTSA vPIC registry. Use this tool after picking a make from listMakesByManufacturer; do not use listVehicleTypesByMake, which returns body classes such as Passenger Car rather than named models. Preconditions: the make must already exist in the local cache under the supplied id. Required inputs: makeId (UUID) as a path parameter. No events are emitted; a cache refresh may rewrite the local model rows for the make, but nothing else changes. Returns 200 with the model list, and 500 when the make id cannot be resolved or the NHTSA refresh fails, because the not-found case is not currently mapped to 404.
      * @endpoint get /v1/vehicle-fitment/models/{makeId}
      * @param makeId ID of the make
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -219,7 +219,7 @@ export class VehicleFitmentAPIService extends BaseService {
 
     /**
      * List Vehicle Types for a Make
-     * Returns the vehicle types, meaning body classes such as Passenger Car or Truck, recorded for one make, served from a local cache of the NHTSA vPIC registry. Use this tool when a make\&#39;s body classes are needed; do not use listModelsByMake, which returns the make\&#39;s named models instead. Preconditions: the make must already exist in the local cache under the supplied id. Required inputs: makeId (UUID) as a path parameter. No events are emitted; a cache refresh may rewrite the local vehicle-type rows for the make, but nothing else changes. Returns 200 with the vehicle-type list, and 500 when the make id cannot be resolved or the NHTSA refresh fails, because the not-found case is not currently mapped to 404. 
+     * Returns the vehicle types, meaning body classes such as Passenger Car or Truck, recorded for one make, served from a local cache of the NHTSA vPIC registry. Use this tool when a make\&#39;s body classes are needed; do not use listModelsByMake, which returns the make\&#39;s named models instead. Preconditions: the make must already exist in the local cache under the supplied id. Required inputs: makeId (UUID) as a path parameter. No events are emitted; a cache refresh may rewrite the local vehicle-type rows for the make, but nothing else changes. Returns 200 with the vehicle-type list, and 500 when the make id cannot be resolved or the NHTSA refresh fails, because the not-found case is not currently mapped to 404.
      * @endpoint get /v1/vehicle-fitment/vehicle-types/{makeId}
      * @param makeId ID of the make
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.

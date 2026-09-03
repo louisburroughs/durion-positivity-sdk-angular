@@ -12,7 +12,7 @@ import { AccountingEventResponse } from './accountingEventResponse';
 import { SortObject } from './sortObject';
 
 
-export interface PageAccountingEventResponse { 
+export interface PageAccountingEventResponse {
     content?: Array<AccountingEventResponse>;
     empty?: boolean;
     first?: boolean;

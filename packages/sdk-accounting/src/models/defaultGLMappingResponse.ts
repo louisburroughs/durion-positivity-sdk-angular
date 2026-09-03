@@ -12,7 +12,7 @@
 /**
  * Response describing a default GL account mapping
  */
-export interface DefaultGLMappingResponse { 
+export interface DefaultGLMappingResponse {
     /**
      * Whether the mapping is active
      */

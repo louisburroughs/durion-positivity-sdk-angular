@@ -9,7 +9,7 @@
  */
 
 
-export interface InvoiceRefundResponse { 
+export interface InvoiceRefundResponse {
     amount?: number;
     completedAt?: string;
     externalReference?: string;

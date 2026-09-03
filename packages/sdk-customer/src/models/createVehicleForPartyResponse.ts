@@ -12,7 +12,7 @@
 /**
  * Response returned after creating a vehicle record for a party
  */
-export interface CreateVehicleForPartyResponse { 
+export interface CreateVehicleForPartyResponse {
     /**
      * Timestamp of creation (ISO 8601)
      */

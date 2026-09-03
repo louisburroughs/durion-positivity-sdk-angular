@@ -12,7 +12,7 @@
 /**
  * Entry-number gap-check result for one monthly sequence scope; absent gaps mean a clean ledger
  */
-export interface EntryNumberGapCheck { 
+export interface EntryNumberGapCheck {
     /**
      * Ascending sequence numbers handed out but missing from the ledger for this scope
      */

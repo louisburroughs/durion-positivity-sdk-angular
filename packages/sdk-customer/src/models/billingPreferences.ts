@@ -12,7 +12,7 @@
 /**
  * Account-level billing preferences within a CRM snapshot
  */
-export interface BillingPreferences { 
+export interface BillingPreferences {
     /**
      * Whether the account should not be contacted at all
      */

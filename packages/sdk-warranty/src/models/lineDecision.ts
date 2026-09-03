@@ -12,7 +12,7 @@
 /**
  * Per-line approved amount and disposition
  */
-export interface LineDecision { 
+export interface LineDecision {
     /**
      * Approved amount; defaults to the computed amountRequested on APPROVE
      */

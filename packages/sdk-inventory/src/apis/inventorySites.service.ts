@@ -11,7 +11,7 @@
 
 import { Inject, Injectable, Optional }                      from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams,
-         HttpResponse, HttpEvent, HttpContext 
+         HttpResponse, HttpEvent, HttpContext
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
@@ -35,7 +35,7 @@ export class InventorySitesService extends BaseService {
 
     /**
      * Get site default locations
-     * Returns the configured default storage locations for a site; this endpoint is a stub that currently always answers 501 Not Implemented. Use this tool only to probe the future site-defaults contract; use getSiteInventoryRollup instead for actual site inventory data, and do not expect updateSiteDefaultLocations to have stored anything readable here. Preconditions: none are evaluated; no configuration store exists yet. Required inputs: siteId (UUID) as a path parameter; there is no request body. No events are emitted and no state changes; the stub performs no lookup. Returns 501 unconditionally until the configuration store is implemented. 
+     * Returns the configured default storage locations for a site; this endpoint is a stub that currently always answers 501 Not Implemented. Use this tool only to probe the future site-defaults contract; use getSiteInventoryRollup instead for actual site inventory data, and do not expect updateSiteDefaultLocations to have stored anything readable here. Preconditions: none are evaluated; no configuration store exists yet. Required inputs: siteId (UUID) as a path parameter; there is no request body. No events are emitted and no state changes; the stub performs no lookup. Returns 501 unconditionally until the configuration store is implemented.
      * @endpoint get /v1/inventory/sites/{siteId}/defaultLocations
      * @param siteId Site identifier
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -95,7 +95,7 @@ export class InventorySitesService extends BaseService {
 
     /**
      * Replace site default locations
-     * Replaces the configured default storage locations for a site; this endpoint is a stub that currently always answers 501 Not Implemented. Use this tool only to probe the future site-defaults contract; use getSiteDefaultLocations instead to read the configuration once implemented. Preconditions: none are evaluated; no configuration store exists yet. Required inputs: siteId (UUID) path parameter and an optional JSON array of storage-location UUIDs as the body. Emits an INVENTORY_SITE_DEFAULT_LOCATIONS_UPDATE event when invoked; no configuration is stored. Returns 501 unconditionally until the configuration store is implemented. 
+     * Replaces the configured default storage locations for a site; this endpoint is a stub that currently always answers 501 Not Implemented. Use this tool only to probe the future site-defaults contract; use getSiteDefaultLocations instead to read the configuration once implemented. Preconditions: none are evaluated; no configuration store exists yet. Required inputs: siteId (UUID) path parameter and an optional JSON array of storage-location UUIDs as the body. Emits an INVENTORY_SITE_DEFAULT_LOCATIONS_UPDATE event when invoked; no configuration is stored. Returns 501 unconditionally until the configuration store is implemented.
      * @endpoint put /v1/inventory/sites/{siteId}/defaultLocations
      * @param siteId Site identifier
      * @param requestBody Storage-location ids to install as the site\&#39;s defaults, replacing any previous configuration.

@@ -11,7 +11,7 @@
 
 import { Inject, Injectable, Optional }                      from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams,
-         HttpResponse, HttpEvent, HttpContext 
+         HttpResponse, HttpEvent, HttpContext
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
@@ -51,7 +51,7 @@ export class AuditService extends BaseService {
 
     /**
      * Record an Immutable Audit Event
-     * Records an immutable audit event and returns the generated event id and server timestamp. Use this tool to persist a write-once audit fact; do not use createPricingSnapshot, which records a pricing rule trace, and note that updates and deletes of audit events are rejected with 405 by design. Preconditions: the caller must hold security:audit:create; the actor is resolved server-side from the security context, so any actorId in the body is ignored. Required inputs: eventType, entityId, entityType, oldValue, and newValue (empty strings are accepted, null is not); context is optional and stored as serialized JSON. Emits a SECURITY_AUDIT_EVENT_CREATE event; the stored record can never be modified or deleted. Returns 400 when any required field is missing or a value cannot be serialized to JSON. 
+     * Records an immutable audit event and returns the generated event id and server timestamp. Use this tool to persist a write-once audit fact; do not use createPricingSnapshot, which records a pricing rule trace, and note that updates and deletes of audit events are rejected with 405 by design. Preconditions: the caller must hold security:audit:create; the actor is resolved server-side from the security context, so any actorId in the body is ignored. Required inputs: eventType, entityId, entityType, oldValue, and newValue (empty strings are accepted, null is not); context is optional and stored as serialized JSON. Emits a SECURITY_AUDIT_EVENT_CREATE event; the stored record can never be modified or deleted. Returns 400 when any required field is missing or a value cannot be serialized to JSON.
      * @endpoint post /v1/audit/events
      * @param auditLogEventRequest The audit fact to record: what changed, on which entity, from and to what.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -121,7 +121,7 @@ export class AuditService extends BaseService {
 
     /**
      * Record an Immutable Pricing Snapshot
-     * Records an immutable pricing snapshot with its ordered rule-evaluation trace and returns the generated snapshot id. Use this tool to preserve how a price was computed for later audit; do not use createAuditEvent, which records generic entity-change events without a rule trace. Preconditions: the caller must hold security:audit:create; the snapshot is write-once and cannot be modified afterwards. Required inputs: quoteContext, finalPrice, and evaluationSteps, where every step needs ruleId, status, inputs, and outputs; evaluationSteps may be an empty list but not null. Emits a SECURITY_AUDIT_PRICING_SNAPSHOT_CREATE event. Returns 400 when quoteContext, finalPrice, evaluationSteps, or any per-step field is missing, or when a JSON field cannot be serialized. 
+     * Records an immutable pricing snapshot with its ordered rule-evaluation trace and returns the generated snapshot id. Use this tool to preserve how a price was computed for later audit; do not use createAuditEvent, which records generic entity-change events without a rule trace. Preconditions: the caller must hold security:audit:create; the snapshot is write-once and cannot be modified afterwards. Required inputs: quoteContext, finalPrice, and evaluationSteps, where every step needs ruleId, status, inputs, and outputs; evaluationSteps may be an empty list but not null. Emits a SECURITY_AUDIT_PRICING_SNAPSHOT_CREATE event. Returns 400 when quoteContext, finalPrice, evaluationSteps, or any per-step field is missing, or when a JSON field cannot be serialized.
      * @endpoint post /v1/audit/pricing-snapshots
      * @param pricingSnapshotRequest The evaluated quote context, final price, and rule trace to preserve.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -191,9 +191,9 @@ export class AuditService extends BaseService {
 
     /**
      * Get One Audit Event by Id
-     * Returns a previously recorded audit event by its event id. Use this tool when the event id is known; use searchAuditEvents instead to filter by time window, actor, event type, or aggregate. Preconditions: the caller must hold security:audit:view and the event must exist. Required inputs: eventId (UUID) as a path parameter. No events are emitted and no state changes; audit records are immutable. Returns 404 when no audit event exists for the supplied id. 
+     * Returns a previously recorded audit event by its event id. Use this tool when the event id is known; use searchAuditEvents instead to filter by time window, actor, event type, or aggregate. Preconditions: the caller must hold security:audit:view and the event must exist. Required inputs: eventId (UUID) as a path parameter. No events are emitted and no state changes; audit records are immutable. Returns 404 when no audit event exists for the supplied id.
      * @endpoint get /v1/audit/events/{eventId}
-     * @param eventId 
+     * @param eventId
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -251,9 +251,9 @@ export class AuditService extends BaseService {
 
     /**
      * Get One Pricing Snapshot by Id
-     * Returns an immutable pricing snapshot with its rule-evaluation steps ordered by rule id. Use this tool when the snapshot id is known; use searchAuditEvents instead for general audit queries, since snapshots have no search endpoint. Preconditions: the caller must hold security:audit:view and the snapshot must exist. Required inputs: snapshotId (UUID) as a path parameter. No events are emitted and no state changes; snapshots are read-only after creation. Returns 400 with INVALID_REQUEST, not 404, when no snapshot exists for the supplied id; callers must treat that 400 as a miss. 
+     * Returns an immutable pricing snapshot with its rule-evaluation steps ordered by rule id. Use this tool when the snapshot id is known; use searchAuditEvents instead for general audit queries, since snapshots have no search endpoint. Preconditions: the caller must hold security:audit:view and the snapshot must exist. Required inputs: snapshotId (UUID) as a path parameter. No events are emitted and no state changes; snapshots are read-only after creation. Returns 400 with INVALID_REQUEST, not 404, when no snapshot exists for the supplied id; callers must treat that 400 as a miss.
      * @endpoint get /v1/audit/pricing-snapshots/{snapshotId}
-     * @param snapshotId 
+     * @param snapshotId
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -311,7 +311,7 @@ export class AuditService extends BaseService {
 
     /**
      * Reject Audit Event Deletion
-     * Rejects every attempt to delete audit events, unconditionally answering 405 Method Not Allowed. Use this tool never; audit events are write-once, so use createAuditEvent to record facts and searchAuditEvents to read them instead. Preconditions: none that permit success; the operation fails by design for any path under the audit events resource. Required inputs: none are honored; the request is rejected regardless of path or payload. No events are emitted and no state changes; the endpoint exists only to make immutability explicit. Returns 405 in all cases. 
+     * Rejects every attempt to delete audit events, unconditionally answering 405 Method Not Allowed. Use this tool never; audit events are write-once, so use createAuditEvent to record facts and searchAuditEvents to read them instead. Preconditions: none that permit success; the operation fails by design for any path under the audit events resource. Required inputs: none are honored; the request is rejected regardless of path or payload. No events are emitted and no state changes; the endpoint exists only to make immutability explicit. Returns 405 in all cases.
      * @endpoint delete /v1/audit/events/**
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
@@ -367,7 +367,7 @@ export class AuditService extends BaseService {
 
     /**
      * Reject Audit Event Modification
-     * Rejects every attempt to modify audit events, unconditionally answering 405 Method Not Allowed. Use this tool never; audit events are write-once, so record a new fact with createAuditEvent instead of editing an existing one. Preconditions: none that permit success; the operation fails by design for any path under the audit events resource. Required inputs: none are honored; the request is rejected regardless of path or payload. No events are emitted and no state changes; the endpoint exists only to make immutability explicit. Returns 405 in all cases. 
+     * Rejects every attempt to modify audit events, unconditionally answering 405 Method Not Allowed. Use this tool never; audit events are write-once, so record a new fact with createAuditEvent instead of editing an existing one. Preconditions: none that permit success; the operation fails by design for any path under the audit events resource. Required inputs: none are honored; the request is rejected regardless of path or payload. No events are emitted and no state changes; the endpoint exists only to make immutability explicit. Returns 405 in all cases.
      * @endpoint put /v1/audit/events/**
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
@@ -423,7 +423,7 @@ export class AuditService extends BaseService {
 
     /**
      * Search Audit Events With Filters
-     * Searches audit events with pagination, filtering by time window, actor, event type, and aggregate identifier. Use this tool to query the audit trail; use getAuditEvent instead when the event id is known, and requestAuditExport for bulk extraction as a file. Preconditions: the caller must hold security:audit:view; when both bounds are given, fromDate must be strictly before toDate (fromDate inclusive, toDate exclusive). Required inputs: none are mandatory; fromDate, toDate, actorId, eventType, and aggregateId are applied as filters, while workorderId, movementId, productId, sku, correlationId, reasonCode, pageToken, and locationIds are accepted for contract compatibility but not yet applied. No events are emitted and no state changes; this is a read-only projection. Returns 400 when fromDate is not before toDate or a parameter fails type conversion. 
+     * Searches audit events with pagination, filtering by time window, actor, event type, and aggregate identifier. Use this tool to query the audit trail; use getAuditEvent instead when the event id is known, and requestAuditExport for bulk extraction as a file. Preconditions: the caller must hold security:audit:view; when both bounds are given, fromDate must be strictly before toDate (fromDate inclusive, toDate exclusive). Required inputs: none are mandatory; fromDate, toDate, actorId, eventType, and aggregateId are applied as filters, while workorderId, movementId, productId, sku, correlationId, reasonCode, pageToken, and locationIds are accepted for contract compatibility but not yet applied. No events are emitted and no state changes; this is a read-only projection. Returns 400 when fromDate is not before toDate or a parameter fails type conversion.
      * @endpoint get /v1/audit/events
      * @param fromDate Inclusive start timestamp (ISO-8601)
      * @param toDate Exclusive end timestamp (ISO-8601)

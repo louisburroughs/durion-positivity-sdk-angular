@@ -13,7 +13,7 @@ import { CampaignStatsResponse } from './campaignStatsResponse';
 /**
  * Campaign program rollup comparing commercial and individual arms
  */
-export interface ProgramStatsResponse { 
+export interface ProgramStatsResponse {
     /**
      * One entry per campaign in the program
      */

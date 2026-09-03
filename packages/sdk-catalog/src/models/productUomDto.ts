@@ -12,7 +12,7 @@
 /**
  * A per-product unit-of-measure conversion to the product\'s base UoM
  */
-export interface ProductUomDto { 
+export interface ProductUomDto {
     /**
      * Created timestamp
      */

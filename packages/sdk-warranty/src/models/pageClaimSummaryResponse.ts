@@ -12,7 +12,7 @@ import { ClaimSummaryResponse } from './claimSummaryResponse';
 import { SortObject } from './sortObject';
 
 
-export interface PageClaimSummaryResponse { 
+export interface PageClaimSummaryResponse {
     content?: Array<ClaimSummaryResponse>;
     empty?: boolean;
     first?: boolean;

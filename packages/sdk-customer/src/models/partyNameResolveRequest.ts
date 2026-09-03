@@ -12,7 +12,7 @@
 /**
  * Batch request to resolve party ids to display names
  */
-export interface PartyNameResolveRequest { 
+export interface PartyNameResolveRequest {
     /**
      * Party identifiers to resolve
      */

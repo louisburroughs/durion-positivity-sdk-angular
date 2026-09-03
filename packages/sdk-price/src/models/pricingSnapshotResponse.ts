@@ -12,7 +12,7 @@
 /**
  * Response payload for immutable pricing snapshot retrieval
  */
-export interface PricingSnapshotResponse { 
+export interface PricingSnapshotResponse {
     /**
      * Serialized applied-rule details
      */

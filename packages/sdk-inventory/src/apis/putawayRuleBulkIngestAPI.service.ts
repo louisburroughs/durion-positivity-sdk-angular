@@ -11,7 +11,7 @@
 
 import { Inject, Injectable, Optional }                      from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams,
-         HttpResponse, HttpEvent, HttpContext 
+         HttpResponse, HttpEvent, HttpContext
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
@@ -39,7 +39,7 @@ export class PutawayRuleBulkIngestAPIService extends BaseService {
 
     /**
      * Create Putaway Rules in Bulk
-     * Creates many putaway rules at once, one per record. Use this tool when configuring a site\&#39;s routing or seeding an environment; use createPutawayRule instead for a single rule. Preconditions: every tier except ANY must carry a matchValue, ANY must not, and an enabled rule\&#39;s destination must exist in the storage-location replica unless that replica is still empty. Required inputs: jobId (UUID), locationId (UUID) and records, each with a priority, a matchType and a destinationLocationId. Emits an INVENTORY_PUTAWAY_RULE_BULK_INGEST event and a rule-created event per row. At most one enabled ANY rule may exist; a second is reported as already configured, carrying the existing rule\&#39;s id so it can be checked — an ANY rule pointing somewhere unintended refuses every unclassified line rather than catching it. Returns 200 with a per-record result; check each result rather than the status alone. 
+     * Creates many putaway rules at once, one per record. Use this tool when configuring a site\&#39;s routing or seeding an environment; use createPutawayRule instead for a single rule. Preconditions: every tier except ANY must carry a matchValue, ANY must not, and an enabled rule\&#39;s destination must exist in the storage-location replica unless that replica is still empty. Required inputs: jobId (UUID), locationId (UUID) and records, each with a priority, a matchType and a destinationLocationId. Emits an INVENTORY_PUTAWAY_RULE_BULK_INGEST event and a rule-created event per row. At most one enabled ANY rule may exist; a second is reported as already configured, carrying the existing rule\&#39;s id so it can be checked — an ANY rule pointing somewhere unintended refuses every unclassified line rather than catching it. Returns 200 with a per-record result; check each result rather than the status alone.
      * @endpoint post /v1/inventory/putaway/bulk-ingest
      * @param bulkIngestRequestPutawayRuleBulkIngestRecord Putaway rules to create.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.

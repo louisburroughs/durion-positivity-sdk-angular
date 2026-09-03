@@ -12,7 +12,7 @@
 /**
  * Allocation of payment to a vendor bill
  */
-export interface AllocationLineResponse { 
+export interface AllocationLineResponse {
     /**
      * Allocation UUID
      */

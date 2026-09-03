@@ -11,7 +11,7 @@
 
 import { Inject, Injectable, Optional }                      from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams,
-         HttpResponse, HttpEvent, HttpContext 
+         HttpResponse, HttpEvent, HttpContext
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
@@ -39,9 +39,9 @@ export class OrderCancellationService extends BaseService {
 
     /**
      * Cancel a Sales Order
-     * Runs the order cancellation saga: transitions the order through CANCEL_REQUESTED, cancels a linked workorder at pos-workexec when workOrderId is supplied, reverses every net-settled payment as refunds through pos-invoice, and finishes at CANCELLED, publishing an order-cancelled fact. Use this tool for DRAFT or QUOTED orders and to re-drive CANCEL_FAILED_WORKEXEC or CANCEL_FAILED_BILLING orders from the start; do not use voidOrder, which is the terminal void for an unsettled PENDING_PAYMENT order, and do not use retryOrderCancellation, which re-runs only the billing leg from CANCEL_FAILED_BILLING. Preconditions: the order must be DRAFT, QUOTED, CANCEL_FAILED_WORKEXEC or CANCEL_FAILED_BILLING, and settled payments require an invoice reference to refund against. Required inputs: cancellationReason; workOrderId is optional and triggers the workorder-cancellation leg, and idempotencyKey is optional (one is generated when absent) — replaying it against an already CANCELLED order returns the original result. Emits an ORDER_CART_CANCEL_REQUEST event; refunds are idempotent per payment intent at pos-invoice, and a failed leg parks the order at CANCEL_FAILED_WORKEXEC or CANCEL_FAILED_BILLING. Returns 201 when the cancellation completes (or already had for the replayed key), 404 when the order does not exist, and 409 when the current status is not cancellable or a workorder or payment-reversal leg fails. 
+     * Runs the order cancellation saga: transitions the order through CANCEL_REQUESTED, cancels a linked workorder at pos-workexec when workOrderId is supplied, reverses every net-settled payment as refunds through pos-invoice, and finishes at CANCELLED, publishing an order-cancelled fact. Use this tool for DRAFT or QUOTED orders and to re-drive CANCEL_FAILED_WORKEXEC or CANCEL_FAILED_BILLING orders from the start; do not use voidOrder, which is the terminal void for an unsettled PENDING_PAYMENT order, and do not use retryOrderCancellation, which re-runs only the billing leg from CANCEL_FAILED_BILLING. Preconditions: the order must be DRAFT, QUOTED, CANCEL_FAILED_WORKEXEC or CANCEL_FAILED_BILLING, and settled payments require an invoice reference to refund against. Required inputs: cancellationReason; workOrderId is optional and triggers the workorder-cancellation leg, and idempotencyKey is optional (one is generated when absent) — replaying it against an already CANCELLED order returns the original result. Emits an ORDER_CART_CANCEL_REQUEST event; refunds are idempotent per payment intent at pos-invoice, and a failed leg parks the order at CANCEL_FAILED_WORKEXEC or CANCEL_FAILED_BILLING. Returns 201 when the cancellation completes (or already had for the replayed key), 404 when the order does not exist, and 409 when the current status is not cancellable or a workorder or payment-reversal leg fails.
      * @endpoint post /v1/orders/carts/{orderId}/cancel
-     * @param orderId 
+     * @param orderId
      * @param cancelOrderRequest Cancellation context: the business reason plus optional workorder linkage and replay key.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
@@ -113,10 +113,10 @@ export class OrderCancellationService extends BaseService {
 
     /**
      * Retry a Failed Cancellation
-     * Retries the billing leg of a failed order cancellation, re-running the settled-payment reversals and completing the transition to CANCELLED. Use this tool after a cancellation parked at CANCEL_FAILED_BILLING; do not use cancelOrder, which starts the saga from the beginning and re-checks the workorder leg as well. Preconditions: the order must be in CANCEL_FAILED_BILLING. Required inputs: orderId (UUID) as a path parameter and idempotencyKey as a query parameter — the original cancellation key, from which per-intent refund idempotency at pos-invoice is derived. Emits an ORDER_CART_CANCEL_RETRY event; a retry that fails again transitions the order to CANCEL_REQUIRES_MANUAL_REVIEW and publishes a review-required fact instead of looping. Returns 200 when the cancellation completes on retry, 404 when the order does not exist, and 409 when the order is not in CANCEL_FAILED_BILLING or the reversal fails again. 
+     * Retries the billing leg of a failed order cancellation, re-running the settled-payment reversals and completing the transition to CANCELLED. Use this tool after a cancellation parked at CANCEL_FAILED_BILLING; do not use cancelOrder, which starts the saga from the beginning and re-checks the workorder leg as well. Preconditions: the order must be in CANCEL_FAILED_BILLING. Required inputs: orderId (UUID) as a path parameter and idempotencyKey as a query parameter — the original cancellation key, from which per-intent refund idempotency at pos-invoice is derived. Emits an ORDER_CART_CANCEL_RETRY event; a retry that fails again transitions the order to CANCEL_REQUIRES_MANUAL_REVIEW and publishes a review-required fact instead of looping. Returns 200 when the cancellation completes on retry, 404 when the order does not exist, and 409 when the order is not in CANCEL_FAILED_BILLING or the reversal fails again.
      * @endpoint post /v1/orders/carts/{orderId}/cancel/retry
-     * @param orderId 
-     * @param idempotencyKey 
+     * @param orderId
+     * @param idempotencyKey
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options

@@ -12,7 +12,7 @@
 /**
  * Request to record a promotion redemption for a customer
  */
-export interface RecordRedemptionRequest { 
+export interface RecordRedemptionRequest {
     /**
      * Campaign code that drove the redemption, when the offer was reached through a campaign
      */

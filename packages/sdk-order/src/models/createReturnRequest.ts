@@ -13,7 +13,7 @@ import { ReturnLineRequest } from './returnLineRequest';
 /**
  * Request payload for creating a return against a completed order
  */
-export interface CreateReturnRequest { 
+export interface CreateReturnRequest {
     /**
      * Return lines
      */

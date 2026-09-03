@@ -12,7 +12,7 @@
 /**
  * Request to reprint an existing receipt
  */
-export interface ReprintReceiptRequest { 
+export interface ReprintReceiptRequest {
     /**
      * Reason the receipt is being reprinted
      */

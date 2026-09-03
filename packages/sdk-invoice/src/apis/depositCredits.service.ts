@@ -11,7 +11,7 @@
 
 import { Inject, Injectable, Optional }                      from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams,
-         HttpResponse, HttpEvent, HttpContext 
+         HttpResponse, HttpEvent, HttpContext
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
@@ -39,7 +39,7 @@ export class DepositCreditsService extends BaseService {
 
     /**
      * Register a Deposit Credit
-     * Creates an AVAILABLE deposit credit for a down-payment taken at pos-order checkout, holding the amount against its source document until a settlement invoice draws it down. Use this tool when a deposit was tendered against an estimate, workorder, or order; do not use refundDepositCredit, which returns a credit\&#39;s remaining balance when the source is cancelled. Preconditions: none beyond a priced source document — the call is idempotent on orderId, so a replay for an order that already registered a credit returns the existing record unchanged. Required inputs: orderId (UUID, idempotency anchor), sourceType (ESTIMATE, WORKORDER or ORDER), sourceId (UUID) and amount (positive); partyId is optional and currencyCode defaults to USD. Emits an INVOICE_DEPOSIT_CREATE event; no invoice records are touched until settlement applies the credit. Returns 201 with the credit (existing or new), and 422 when the amount is not positive or the sourceType is not a known value. 
+     * Creates an AVAILABLE deposit credit for a down-payment taken at pos-order checkout, holding the amount against its source document until a settlement invoice draws it down. Use this tool when a deposit was tendered against an estimate, workorder, or order; do not use refundDepositCredit, which returns a credit\&#39;s remaining balance when the source is cancelled. Preconditions: none beyond a priced source document — the call is idempotent on orderId, so a replay for an order that already registered a credit returns the existing record unchanged. Required inputs: orderId (UUID, idempotency anchor), sourceType (ESTIMATE, WORKORDER or ORDER), sourceId (UUID) and amount (positive); partyId is optional and currencyCode defaults to USD. Emits an INVOICE_DEPOSIT_CREATE event; no invoice records are touched until settlement applies the credit. Returns 201 with the credit (existing or new), and 422 when the amount is not positive or the sourceType is not a known value.
      * @endpoint post /v1/invoices/deposits
      * @param createDepositRequest Deposit taken at checkout to register as a credit against its source document.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -109,9 +109,9 @@ export class DepositCreditsService extends BaseService {
 
     /**
      * Get a Deposit Credit
-     * Returns a single deposit credit with its status (AVAILABLE, PARTIALLY_APPLIED, FULLY_APPLIED or REFUNDED), original amount and remaining balance. Use this tool when the depositCreditId is already known; use listDepositCreditsBySource instead to find the credits held against an estimate, workorder or order. Preconditions: the deposit credit must exist. Required inputs: depositCreditId (UUID) as a path parameter; there is no request body. No events are emitted and no state changes; this is a read-only projection. Returns 404 when no deposit credit exists for the supplied id. 
+     * Returns a single deposit credit with its status (AVAILABLE, PARTIALLY_APPLIED, FULLY_APPLIED or REFUNDED), original amount and remaining balance. Use this tool when the depositCreditId is already known; use listDepositCreditsBySource instead to find the credits held against an estimate, workorder or order. Preconditions: the deposit credit must exist. Required inputs: depositCreditId (UUID) as a path parameter; there is no request body. No events are emitted and no state changes; this is a read-only projection. Returns 404 when no deposit credit exists for the supplied id.
      * @endpoint get /v1/invoices/deposits/{depositCreditId}
-     * @param depositCreditId 
+     * @param depositCreditId
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -169,10 +169,10 @@ export class DepositCreditsService extends BaseService {
 
     /**
      * List Deposit Credits by Source
-     * Lists every deposit credit held against one source document, identified by its type and id. Use this tool when checking what down-payments a settlement can draw on; use getDepositCredit instead when a specific depositCreditId is already known. Preconditions: none — an unknown or credit-free source returns an empty list rather than an error. Required inputs: sourceType query parameter (ESTIMATE, WORKORDER or ORDER, case-insensitive) and sourceId (UUID) query parameter; there is no request body. No events are emitted and no state changes; this is a read-only projection. Returns 422 when sourceType is not one of the known values. 
+     * Lists every deposit credit held against one source document, identified by its type and id. Use this tool when checking what down-payments a settlement can draw on; use getDepositCredit instead when a specific depositCreditId is already known. Preconditions: none — an unknown or credit-free source returns an empty list rather than an error. Required inputs: sourceType query parameter (ESTIMATE, WORKORDER or ORDER, case-insensitive) and sourceId (UUID) query parameter; there is no request body. No events are emitted and no state changes; this is a read-only projection. Returns 422 when sourceType is not one of the known values.
      * @endpoint get /v1/invoices/deposits
-     * @param sourceType 
-     * @param sourceId 
+     * @param sourceType
+     * @param sourceId
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -254,10 +254,10 @@ export class DepositCreditsService extends BaseService {
 
     /**
      * Refund a Deposit Credit Balance
-     * Zeroes the remaining balance of a deposit credit and marks it REFUNDED, recording that the deposit is returned because its source document was cancelled after the deposit was taken. Use this tool on source cancellation (spec R7.4); do not use createDepositCredit, which registers a new deposit, and note the cash disbursement itself is not performed here. Preconditions: the deposit credit must exist; a credit already REFUNDED is left unchanged, so the call is idempotent. Required inputs: depositCreditId (UUID) as a path parameter; the reason query parameter is optional and defaults to \&quot;source cancelled\&quot;; there is no request body. Emits an INVOICE_DEPOSIT_REFUND event and sets the credit\&#39;s status to REFUNDED with a zero remaining balance. Returns 200 with the refunded credit, and 404 when no deposit credit exists for the supplied id. 
+     * Zeroes the remaining balance of a deposit credit and marks it REFUNDED, recording that the deposit is returned because its source document was cancelled after the deposit was taken. Use this tool on source cancellation (spec R7.4); do not use createDepositCredit, which registers a new deposit, and note the cash disbursement itself is not performed here. Preconditions: the deposit credit must exist; a credit already REFUNDED is left unchanged, so the call is idempotent. Required inputs: depositCreditId (UUID) as a path parameter; the reason query parameter is optional and defaults to \&quot;source cancelled\&quot;; there is no request body. Emits an INVOICE_DEPOSIT_REFUND event and sets the credit\&#39;s status to REFUNDED with a zero remaining balance. Returns 200 with the refunded credit, and 404 when no deposit credit exists for the supplied id.
      * @endpoint post /v1/invoices/deposits/{depositCreditId}/refund
-     * @param depositCreditId 
-     * @param reason 
+     * @param depositCreditId
+     * @param reason
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options

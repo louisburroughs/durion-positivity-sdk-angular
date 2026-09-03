@@ -13,7 +13,7 @@ import { PrimaryContact } from './primaryContact';
 /**
  * Party summary record for a directory row
  */
-export interface PartySummary { 
+export interface PartySummary {
     /**
      * Creation timestamp (ISO 8601)
      */

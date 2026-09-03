@@ -12,7 +12,7 @@
 /**
  * Warranty claim line
  */
-export interface ClaimLineResponse { 
+export interface ClaimLineResponse {
     amountApproved?: number;
     amountRequested?: number;
     description?: string;

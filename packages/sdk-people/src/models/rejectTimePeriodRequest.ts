@@ -12,7 +12,7 @@
 /**
  * Request to reject a time period approval
  */
-export interface RejectTimePeriodRequest { 
+export interface RejectTimePeriodRequest {
     /**
      * Reason the time period is being rejected
      */

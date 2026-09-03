@@ -12,7 +12,7 @@
 /**
  * MCP persona metadata for a single role
  */
-export interface RolePersonaDto { 
+export interface RolePersonaDto {
     /**
      * Human-readable description, used to derive the persona focus when personaFocus is absent
      */

@@ -12,7 +12,7 @@
 /**
  * Request body for creating a draft inventory adjustment request
  */
-export interface CreateAdjustmentRequestDto { 
+export interface CreateAdjustmentRequestDto {
     /**
      * Identifier of the location where the adjustment applies
      */

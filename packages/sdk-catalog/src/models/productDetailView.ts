@@ -17,7 +17,7 @@ import { ProductSpecification } from './productSpecification';
 /**
  * Consolidated product detail view with pricing and availability
  */
-export interface ProductDetailView { 
+export interface ProductDetailView {
     availability?: AvailabilityInfo;
     /**
      * Overall confidence in the data completeness

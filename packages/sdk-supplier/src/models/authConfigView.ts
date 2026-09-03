@@ -12,7 +12,7 @@
 /**
  * Read model of a vendor auth config. Carries no secret reference fields at all, by shape — credential references never serialize into responses (ADR-0050 §4).
  */
-export interface AuthConfigView { 
+export interface AuthConfigView {
     /**
      * Header NAME the API key is sent in — configuration data, not a secret reference. Omit to use the adapter default.
      */

@@ -12,7 +12,7 @@
 /**
  * Claim settlement
  */
-export interface SettlementView { 
+export interface SettlementView {
     coveredAmount?: number;
     createdAt?: string;
     customerAmount?: number;

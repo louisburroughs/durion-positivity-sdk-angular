@@ -12,7 +12,7 @@
 /**
  * A single line item returned as part of a purchase order
  */
-export interface PurchaseOrderLineResponse { 
+export interface PurchaseOrderLineResponse {
     /**
      * Effective base-per-document-unit conversion factor applied at derivation time
      */

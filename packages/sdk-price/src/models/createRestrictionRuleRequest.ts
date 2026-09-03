@@ -12,7 +12,7 @@
 /**
  * Request payload to create a product sale-restriction rule
  */
-export interface CreateRestrictionRuleRequest { 
+export interface CreateRestrictionRuleRequest {
     /**
      * Date the restriction rule becomes effective
      */

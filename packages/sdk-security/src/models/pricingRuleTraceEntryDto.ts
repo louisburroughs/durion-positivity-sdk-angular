@@ -12,7 +12,7 @@
 /**
  * A single rule-evaluation step recorded in a pricing snapshot trace
  */
-export interface PricingRuleTraceEntryDto { 
+export interface PricingRuleTraceEntryDto {
     /**
      * Trace entry identifier
      */

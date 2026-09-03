@@ -13,7 +13,7 @@ import { JournalEntryResponse } from './journalEntryResponse';
 /**
  * Traceability response linking a journal entry to its source and related entries
  */
-export interface JournalEntryTraceabilityResponse { 
+export interface JournalEntryTraceabilityResponse {
     journalEntry?: JournalEntryResponse;
     /**
      * Journal entry UUID

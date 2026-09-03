@@ -12,7 +12,7 @@
 /**
  * Request to manually revalue a SKU\'s inventory unit cost
  */
-export interface CreateRevaluationRequest { 
+export interface CreateRevaluationRequest {
     /**
      * Signed adjustment applied to the SKU\'s current cost (may be negative for a write-down). Supply exactly one of newUnitCost or costDelta
      */

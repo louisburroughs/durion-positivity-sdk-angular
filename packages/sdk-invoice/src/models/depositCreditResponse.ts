@@ -13,7 +13,7 @@ import { Application } from './application';
 /**
  * A deposit / down-payment credit and its application-audit trail
  */
-export interface DepositCreditResponse { 
+export interface DepositCreditResponse {
     applications?: Array<Application>;
     createdAt?: string;
     currencyCode?: string;

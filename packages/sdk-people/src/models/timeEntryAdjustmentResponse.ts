@@ -12,7 +12,7 @@
 /**
  * Response from creating or updating a time entry adjustment
  */
-export interface TimeEntryAdjustmentResponse { 
+export interface TimeEntryAdjustmentResponse {
     /**
      * Unique identifier of the created or updated adjustment
      */

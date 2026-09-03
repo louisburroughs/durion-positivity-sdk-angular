@@ -13,7 +13,7 @@ import { BulkIngestResult } from './bulkIngestResult';
 /**
  * Summary outcome of a bulk ingest job: per-record results plus aggregate counts
  */
-export interface BulkIngestResponse { 
+export interface BulkIngestResponse {
     /**
      * Number of records that failed ingest
      */

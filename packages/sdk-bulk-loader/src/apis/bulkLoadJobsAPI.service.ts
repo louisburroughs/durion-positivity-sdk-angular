@@ -11,7 +11,7 @@
 
 import { Inject, Injectable, Optional }                      from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams,
-         HttpResponse, HttpEvent, HttpContext 
+         HttpResponse, HttpEvent, HttpContext
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
@@ -41,9 +41,9 @@ export class BulkLoadJobsAPIService extends BaseService {
 
     /**
      * Cancel a Running Bulk Load Job
-     * Cancels an in-flight bulk load job by moving it to the terminal CANCELLED state. Use this tool to abandon a job that is no longer wanted; do not use retryBulkLoadJob, which re-queues a FAILED or PARTIAL job rather than stopping one. Preconditions: the job must belong to the authenticated operator and must not already be in a terminal state (COMPLETED, PARTIAL, CANCELLED or FAILED). Required inputs: jobId (UUID) as a path parameter; there is no request body. Emits a BULK_LOADER_JOB_CANCEL event and sets the job status to CANCELLED; rows already imported are not rolled back. Returns 404 when the job does not exist, 403 when it belongs to another operator, and 409 when the job is already COMPLETED, PARTIAL, CANCELLED or FAILED. 
+     * Cancels an in-flight bulk load job by moving it to the terminal CANCELLED state. Use this tool to abandon a job that is no longer wanted; do not use retryBulkLoadJob, which re-queues a FAILED or PARTIAL job rather than stopping one. Preconditions: the job must belong to the authenticated operator and must not already be in a terminal state (COMPLETED, PARTIAL, CANCELLED or FAILED). Required inputs: jobId (UUID) as a path parameter; there is no request body. Emits a BULK_LOADER_JOB_CANCEL event and sets the job status to CANCELLED; rows already imported are not rolled back. Returns 404 when the job does not exist, 403 when it belongs to another operator, and 409 when the job is already COMPLETED, PARTIAL, CANCELLED or FAILED.
      * @endpoint post /v1/bulk-jobs/{jobId}/cancel
-     * @param jobId 
+     * @param jobId
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -101,7 +101,7 @@ export class BulkLoadJobsAPIService extends BaseService {
 
     /**
      * Create a New Bulk Load Job
-     * Creates a bulk load import job owned by the authenticated operator, starting in CREATED state with the target domain and expected file name recorded. Use this tool when starting a new bulk import from a file; do not use uploadJobFile, which attaches the file to a job that already exists, and do not use retryBulkLoadJob, which re-queues a FAILED or PARTIAL job. Preconditions: the operator must have no other job in an active state (CREATED, UPLOADING, DETECTING, MAPPING_REVIEW, DEDUP or PROCESSING); only one active job per operator is allowed. Required inputs: fileName (name of the source file that will be uploaded later) and domainType (one of CATALOG_PRODUCT, INVENTORY_STOCK_COUNT, LOCATION, CUSTOMER, COMMERCIAL_CUSTOMER, PERSON, BASE_PRICE, VEHICLE or VEHICLE_FITMENT); locationId (UUID) is optional at creation but must be set before processing can start. INVENTORY_STOCK_COUNT establishes opening on-hand stock: each line is filed and approved, so the token must carry inventory:adjustment:approve as well as inventory:adjustment:create. Emits a BULK_LOADER_JOB_CREATE event; no file content is stored by this call. Returns 201 with the new job, and 409 when the operator already has an active bulk load job in progress. 
+     * Creates a bulk load import job owned by the authenticated operator, starting in CREATED state with the target domain and expected file name recorded. Use this tool when starting a new bulk import from a file; do not use uploadJobFile, which attaches the file to a job that already exists, and do not use retryBulkLoadJob, which re-queues a FAILED or PARTIAL job. Preconditions: the operator must have no other job in an active state (CREATED, UPLOADING, DETECTING, MAPPING_REVIEW, DEDUP or PROCESSING); only one active job per operator is allowed. Required inputs: fileName (name of the source file that will be uploaded later) and domainType (one of CATALOG_PRODUCT, INVENTORY_STOCK_COUNT, LOCATION, CUSTOMER, COMMERCIAL_CUSTOMER, PERSON, BASE_PRICE, VEHICLE or VEHICLE_FITMENT); locationId (UUID) is optional at creation but must be set before processing can start. INVENTORY_STOCK_COUNT establishes opening on-hand stock: each line is filed and approved, so the token must carry inventory:adjustment:approve as well as inventory:adjustment:create. Emits a BULK_LOADER_JOB_CREATE event; no file content is stored by this call. Returns 201 with the new job, and 409 when the operator already has an active bulk load job in progress.
      * @endpoint post /v1/bulk-jobs
      * @param bulkLoadJobCreateRequest Bulk load job to create, naming the source file and the target import domain.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -171,9 +171,9 @@ export class BulkLoadJobsAPIService extends BaseService {
 
     /**
      * Get a Bulk Load Job by ID
-     * Returns the current state of a single bulk load job, including status, row counts and success and failure totals. Use this tool to poll job progress after startJobProcessing, or whenever the job id is already known; use listBulkLoadJobs instead when the id is unknown. Preconditions: the job must exist and belong to the authenticated operator; jobs owned by other operators are reported as not found rather than forbidden. Required inputs: jobId (UUID) as a path parameter; there is no request body. No events are emitted and no state changes; this is a read-only projection. Returns 404 when no job exists with the supplied id for the authenticated operator. 
+     * Returns the current state of a single bulk load job, including status, row counts and success and failure totals. Use this tool to poll job progress after startJobProcessing, or whenever the job id is already known; use listBulkLoadJobs instead when the id is unknown. Preconditions: the job must exist and belong to the authenticated operator; jobs owned by other operators are reported as not found rather than forbidden. Required inputs: jobId (UUID) as a path parameter; there is no request body. No events are emitted and no state changes; this is a read-only projection. Returns 404 when no job exists with the supplied id for the authenticated operator.
      * @endpoint get /v1/bulk-jobs/{jobId}
-     * @param jobId 
+     * @param jobId
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -231,7 +231,7 @@ export class BulkLoadJobsAPIService extends BaseService {
 
     /**
      * List Bulk Load Jobs for Operator
-     * Returns a paginated list of the authenticated operator\&#39;s bulk load jobs with their statuses and progress counters. Use this tool to find a job id or review import history; use getBulkLoadJob instead when a specific job id is already known. Preconditions: none beyond authentication; the listing is always scoped to the caller\&#39;s own jobs and other operators\&#39; jobs are never included. Required inputs: standard page, size and sort query parameters, all optional with Spring defaults (page 0, size 20). No events are emitted and no state changes; this is a read-only projection. Returns 200 with an empty page when the operator has no jobs; there are no operation-specific error responses. 
+     * Returns a paginated list of the authenticated operator\&#39;s bulk load jobs with their statuses and progress counters. Use this tool to find a job id or review import history; use getBulkLoadJob instead when a specific job id is already known. Preconditions: none beyond authentication; the listing is always scoped to the caller\&#39;s own jobs and other operators\&#39; jobs are never included. Required inputs: standard page, size and sort query parameters, all optional with Spring defaults (page 0, size 20). No events are emitted and no state changes; this is a read-only projection. Returns 200 with an empty page when the operator has no jobs; there are no operation-specific error responses.
      * @endpoint get /v1/bulk-jobs
      * @param page Zero-based page index (0..N)
      * @param size The size of the page to be returned
@@ -320,7 +320,7 @@ export class BulkLoadJobsAPIService extends BaseService {
 
     /**
      * Retry a Failed Bulk Load Job
-     * Resets a FAILED or PARTIAL bulk load job back to CREATED and clears its progress counters so it can be processed again. Use this tool after fixing the cause of a failure, typically via submitCorrections; do not use cancelBulkLoadJob, which terminates a job instead of re-queuing it. Preconditions: the job must belong to the authenticated operator, must be in FAILED or PARTIAL state, and the operator must have no other active job. Required inputs: jobId (UUID) as a path parameter; there is no request body. Emits a BULK_LOADER_JOB_RETRY event and resets startedAt, completedAt, totalRows and all row counters; processing does not start until startJobProcessing is called again. Returns 404 when the job does not exist, 403 when it belongs to another operator, and 409 when the job is not in FAILED or PARTIAL state or the operator already has an active job. 
+     * Resets a FAILED or PARTIAL bulk load job back to CREATED and clears its progress counters so it can be processed again. Use this tool after fixing the cause of a failure, typically via submitCorrections; do not use cancelBulkLoadJob, which terminates a job instead of re-queuing it. Preconditions: the job must belong to the authenticated operator, must be in FAILED or PARTIAL state, and the operator must have no other active job. Required inputs: jobId (UUID) as a path parameter; there is no request body. Emits a BULK_LOADER_JOB_RETRY event and resets startedAt, completedAt, totalRows and all row counters; processing does not start until startJobProcessing is called again. Returns 404 when the job does not exist, 403 when it belongs to another operator, and 409 when the job is not in FAILED or PARTIAL state or the operator already has an active job.
      * @endpoint post /v1/bulk-jobs/{jobId}/retry
      * @param jobId ID of the failed or partially-failed bulk load job to retry
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.

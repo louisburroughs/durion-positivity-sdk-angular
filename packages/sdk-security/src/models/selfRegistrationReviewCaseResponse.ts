@@ -12,7 +12,7 @@
 /**
  * Administrative view of a blocked self-registration case
  */
-export interface SelfRegistrationReviewCaseResponse { 
+export interface SelfRegistrationReviewCaseResponse {
     /**
      * Review case identifier
      */

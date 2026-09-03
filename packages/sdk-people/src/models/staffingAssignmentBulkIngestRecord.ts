@@ -12,7 +12,7 @@
 /**
  * One person\'s assignment to a location for a role
  */
-export interface StaffingAssignmentBulkIngestRecord { 
+export interface StaffingAssignmentBulkIngestRecord {
     /**
      * First day of the assignment; defaults to today when omitted, since a seeded roster is current as of the load rather than backdated.
      */

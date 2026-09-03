@@ -13,7 +13,7 @@ import { PriceCatalogBindingFreshness } from './priceCatalogBindingFreshness';
 /**
  * Freshness of one vendor profile\'s price catalog: what the vendor last stated (latestEffectiveDate, vendor document metadata) versus when this platform last retrieved it (lastFetchedAt), judged against the backend-owned staleness threshold.
  */
-export interface PriceCatalogFreshnessView { 
+export interface PriceCatalogFreshnessView {
     /**
      * The profile\'s PRICE_CATALOG bindings with their schedule and lease state; empty when none is configured.
      */

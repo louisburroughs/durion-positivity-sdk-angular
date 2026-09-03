@@ -12,7 +12,7 @@
 /**
  * Audit record for a single row processed during a bulk load job
  */
-export interface AuditRecordResponse { 
+export interface AuditRecordResponse {
     /**
      * Timestamp when the audit record was created (ISO 8601)
      */

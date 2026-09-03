@@ -12,7 +12,7 @@
 /**
  * Request payload for updating an existing posting category
  */
-export interface PostingCategoryUpdateRequest { 
+export interface PostingCategoryUpdateRequest {
     /**
      * Name of the posting category
      */

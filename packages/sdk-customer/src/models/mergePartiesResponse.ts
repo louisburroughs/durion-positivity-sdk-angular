@@ -12,7 +12,7 @@
 /**
  * Result of a party merge operation
  */
-export interface MergePartiesResponse { 
+export interface MergePartiesResponse {
     /**
      * Timestamp of merge completion (ISO 8601)
      */

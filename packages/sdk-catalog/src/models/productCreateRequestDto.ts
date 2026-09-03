@@ -12,7 +12,7 @@
 /**
  * Create product request
  */
-export interface ProductCreateRequestDto { 
+export interface ProductCreateRequestDto {
     /**
      * JSON object represented as string
      */

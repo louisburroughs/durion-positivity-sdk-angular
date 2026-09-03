@@ -13,7 +13,7 @@ import { InvoicingLagRow } from './invoicingLagRow';
 /**
  * Workorder-creation-to-invoice-creation lag report for one date window
  */
-export interface InvoicingLagReport { 
+export interface InvoicingLagReport {
     /**
      * Window end date (inclusive)
      */

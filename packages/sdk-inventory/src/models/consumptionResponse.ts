@@ -12,7 +12,7 @@
 /**
  * Response describing the outcome of consuming inventory items against a workorder, including the ledger entries created
  */
-export interface ConsumptionResponse { 
+export interface ConsumptionResponse {
     /**
      * Unique identifier of the consumption record
      */

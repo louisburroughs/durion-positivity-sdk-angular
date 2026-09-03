@@ -12,7 +12,7 @@
 /**
  * Minimal acknowledgement returned after creating a pricing snapshot
  */
-export interface PricingSnapshotCreatedResponse { 
+export interface PricingSnapshotCreatedResponse {
     /**
      * Identifier of the created pricing snapshot
      */

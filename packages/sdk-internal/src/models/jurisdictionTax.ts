@@ -12,7 +12,7 @@
 /**
  * Per-jurisdiction tax breakdown for a single line item
  */
-export interface JurisdictionTax { 
+export interface JurisdictionTax {
     /**
      * Tax amount calculated for this jurisdiction on this line item
      */

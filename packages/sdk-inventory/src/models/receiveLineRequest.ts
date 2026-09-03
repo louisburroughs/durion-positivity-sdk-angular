@@ -12,7 +12,7 @@
 /**
  * Received quantity recorded against a single receiving session line
  */
-export interface ReceiveLineRequest { 
+export interface ReceiveLineRequest {
     /**
      * Quantity received expressed in documentUom; must be supplied together with documentUom
      */

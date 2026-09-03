@@ -11,7 +11,7 @@
 
 import { Inject, Injectable, Optional }                      from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams,
-         HttpResponse, HttpEvent, HttpContext 
+         HttpResponse, HttpEvent, HttpContext
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
@@ -41,7 +41,7 @@ export class SourcingStrategiesService extends BaseService {
 
     /**
      * Deactivate sourcing strategy configuration
-     * Deactivates one sourcing-strategy configuration row so it stops participating in strategy resolution; this is a soft delete and the row is never removed. Use this tool to retire a scope override and fall back to the next precedence level; do not use upsertSourcingStrategyConfig with a different strategy when the intent is to remove the override entirely. Preconditions: the configuration row must exist; deactivating an already inactive row is a no-op that returns the row. Required inputs: configId (UUID) path parameter; there is no request body. Emits an INVENTORY_SOURCING_STRATEGY_DEACTIVATE event; subsequent decisions fall back to SITE, DEFAULT or the platform default FIFO. Returns 404 when no configuration exists for the supplied id. 
+     * Deactivates one sourcing-strategy configuration row so it stops participating in strategy resolution; this is a soft delete and the row is never removed. Use this tool to retire a scope override and fall back to the next precedence level; do not use upsertSourcingStrategyConfig with a different strategy when the intent is to remove the override entirely. Preconditions: the configuration row must exist; deactivating an already inactive row is a no-op that returns the row. Required inputs: configId (UUID) path parameter; there is no request body. Emits an INVENTORY_SOURCING_STRATEGY_DEACTIVATE event; subsequent decisions fall back to SITE, DEFAULT or the platform default FIFO. Returns 404 when no configuration exists for the supplied id.
      * @endpoint delete /v1/inventory/sourcing-strategies/{configId}
      * @param configId Sourcing strategy configuration identifier
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -101,7 +101,7 @@ export class SourcingStrategiesService extends BaseService {
 
     /**
      * List sourcing strategy configurations
-     * Lists every sourcing-strategy configuration row, active and inactive, ordered by scope type then scope value. Use this tool to inspect removal-strategy configuration; use upsertSourcingStrategyConfig instead to change a scope, and deactivateSourcingStrategyConfig instead to retire one. Preconditions: none; at most one row exists per scope. Required inputs: none, and there is no paging or filtering. Emits an INVENTORY_SOURCING_STRATEGY_LIST audit event; no configuration is changed. Returns 200 with an empty array when nothing is configured, in which case decision-time resolution falls through SKU_CATEGORY, SITE and DEFAULT to the platform default FIFO. 
+     * Lists every sourcing-strategy configuration row, active and inactive, ordered by scope type then scope value. Use this tool to inspect removal-strategy configuration; use upsertSourcingStrategyConfig instead to change a scope, and deactivateSourcingStrategyConfig instead to retire one. Preconditions: none; at most one row exists per scope. Required inputs: none, and there is no paging or filtering. Emits an INVENTORY_SOURCING_STRATEGY_LIST audit event; no configuration is changed. Returns 200 with an empty array when nothing is configured, in which case decision-time resolution falls through SKU_CATEGORY, SITE and DEFAULT to the platform default FIFO.
      * @endpoint get /v1/inventory/sourcing-strategies
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
@@ -157,7 +157,7 @@ export class SourcingStrategiesService extends BaseService {
 
     /**
      * Upsert sourcing strategy configuration
-     * Creates or updates the sourcing strategy for one scope and reactivates the row; at most one row exists per scopeType and scopeValue pair. Use this tool to set FIFO, FEFO, PROXIMITY or HIGHEST_STOCK at a scope; do not use deactivateSourcingStrategyConfig to change a strategy — an upsert on an inactive row reactivates it with the new strategy. Preconditions: none beyond scope-value shape; note that FEFO falls back to FIFO while the SKU has no lot-expiry data, PROXIMITY falls back to FIFO when a decision has no reference location, and SKU_CATEGORY rows resolve only when pos.inventory.sku-category.resolve-from-replica is enabled, which defaults off — call reportSkuCategoryImpact before enabling it, since SKU_CATEGORY is the highest-precedence scope and would override SITE rows. Required inputs: scopeType (SKU_CATEGORY, SITE or DEFAULT) and strategy; scopeValue must be the category string for SKU_CATEGORY, the site UUID as text for SITE, and must be omitted for DEFAULT. Emits an INVENTORY_SOURCING_STRATEGY_UPSERT event; the change affects subsequent sourcing decisions immediately. Returns 400 when scopeValue is missing for SITE or SKU_CATEGORY, is not a UUID for SITE, or is present for DEFAULT. 
+     * Creates or updates the sourcing strategy for one scope and reactivates the row; at most one row exists per scopeType and scopeValue pair. Use this tool to set FIFO, FEFO, PROXIMITY or HIGHEST_STOCK at a scope; do not use deactivateSourcingStrategyConfig to change a strategy — an upsert on an inactive row reactivates it with the new strategy. Preconditions: none beyond scope-value shape; note that FEFO falls back to FIFO while the SKU has no lot-expiry data, PROXIMITY falls back to FIFO when a decision has no reference location, and SKU_CATEGORY rows resolve only when pos.inventory.sku-category.resolve-from-replica is enabled, which defaults off — call reportSkuCategoryImpact before enabling it, since SKU_CATEGORY is the highest-precedence scope and would override SITE rows. Required inputs: scopeType (SKU_CATEGORY, SITE or DEFAULT) and strategy; scopeValue must be the category string for SKU_CATEGORY, the site UUID as text for SITE, and must be omitted for DEFAULT. Emits an INVENTORY_SOURCING_STRATEGY_UPSERT event; the change affects subsequent sourcing decisions immediately. Returns 400 when scopeValue is missing for SITE or SKU_CATEGORY, is not a UUID for SITE, or is present for DEFAULT.
      * @endpoint put /v1/inventory/sourcing-strategies
      * @param sourcingStrategyConfigRequest The scope being configured and the sourcing strategy to apply at it.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.

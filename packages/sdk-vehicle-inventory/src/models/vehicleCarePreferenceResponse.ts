@@ -12,7 +12,7 @@
 /**
  * Vehicle care preferences record
  */
-export interface VehicleCarePreferenceResponse { 
+export interface VehicleCarePreferenceResponse {
     /**
      * Timestamp when the preference record was created
      */
