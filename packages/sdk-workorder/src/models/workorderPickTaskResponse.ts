@@ -12,7 +12,7 @@
 /**
  * Response describing a single pick task within a pick list
  */
-export interface WorkorderPickTaskResponse { 
+export interface WorkorderPickTaskResponse {
     /**
      * Identifier of the location to pick from
      */

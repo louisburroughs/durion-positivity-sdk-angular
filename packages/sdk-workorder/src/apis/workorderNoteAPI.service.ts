@@ -11,7 +11,7 @@
 
 import { Inject, Injectable, Optional }                      from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams,
-         HttpResponse, HttpEvent, HttpContext 
+         HttpResponse, HttpEvent, HttpContext
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
@@ -39,7 +39,7 @@ export class WorkorderNoteAPIService extends BaseService {
 
     /**
      * Record a Note About the Customer
-     * Records a free-text note about the customer against a workorder, such as something the customer said while the job was open, and publishes it so it lands on the customer\&#39;s CRM timeline. Use this tool for a note about the CUSTOMER; do not use it for notes about the work itself or about a decision on it — completion notes and approval notes are fields on the workorder and the change request respectively. Preconditions: the workorder must exist; the author is taken from the authenticated caller rather than the request body. Required inputs: workorderId (UUID) as a path parameter and noteText (max 2000 characters); noteType is an optional free-text classification such as CUSTOMER_REQUEST. Emits a WORKORDER_NOTE_ADD event and publishes the workorder.note.added.v1 fact, which pos-customer projects onto the party\&#39;s timeline. Returns 201 with the saved note, and 404 when the workorder does not exist. 
+     * Records a free-text note about the customer against a workorder, such as something the customer said while the job was open, and publishes it so it lands on the customer\&#39;s CRM timeline. Use this tool for a note about the CUSTOMER; do not use it for notes about the work itself or about a decision on it — completion notes and approval notes are fields on the workorder and the change request respectively. Preconditions: the workorder must exist; the author is taken from the authenticated caller rather than the request body. Required inputs: workorderId (UUID) as a path parameter and noteText (max 2000 characters); noteType is an optional free-text classification such as CUSTOMER_REQUEST. Emits a WORKORDER_NOTE_ADD event and publishes the workorder.note.added.v1 fact, which pos-customer projects onto the party\&#39;s timeline. Returns 201 with the saved note, and 404 when the workorder does not exist.
      * @endpoint post /v1/workorders/{workorderId}/notes
      * @param workorderId Workorder ID
      * @param addWorkorderNoteRequest The note to record.
@@ -113,7 +113,7 @@ export class WorkorderNoteAPIService extends BaseService {
 
     /**
      * List a Workorder\&#39;s Customer Notes
-     * Returns the notes recorded about the customer on one workorder, most recent first. Use this tool to read one workorder\&#39;s own notes; read the customer\&#39;s CRM interaction timeline instead when the question spans every workorder for that customer. Preconditions: the workorder must exist. Required inputs: workorderId (UUID) as a path parameter. Emits a WORKORDER_NOTE_LIST audit event; no domain events are published and no state changes, since this is a read-only query. Returns 200 with the notes (an empty list when none were recorded), and 404 when the workorder does not exist. 
+     * Returns the notes recorded about the customer on one workorder, most recent first. Use this tool to read one workorder\&#39;s own notes; read the customer\&#39;s CRM interaction timeline instead when the question spans every workorder for that customer. Preconditions: the workorder must exist. Required inputs: workorderId (UUID) as a path parameter. Emits a WORKORDER_NOTE_LIST audit event; no domain events are published and no state changes, since this is a read-only query. Returns 200 with the notes (an empty list when none were recorded), and 404 when the workorder does not exist.
      * @endpoint get /v1/workorders/{workorderId}/notes
      * @param workorderId Workorder ID
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.

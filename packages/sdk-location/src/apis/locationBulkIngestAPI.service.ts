@@ -11,7 +11,7 @@
 
 import { Inject, Injectable, Optional }                      from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams,
-         HttpResponse, HttpEvent, HttpContext 
+         HttpResponse, HttpEvent, HttpContext
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
@@ -39,7 +39,7 @@ export class LocationBulkIngestAPIService extends BaseService {
 
     /**
      * Bulk Import a Batch of Locations
-     * Imports a batch of location records in one call, creating each row independently and reporting per-record success or failure. Use this tool for initial data loads or migrations; do not use createLocation, which creates a single location per call. Preconditions: names and codes must be unique against existing locations; each record is validated independently, so one failure does not abort the batch. Required inputs: jobId, locationId and a non-empty records array, each record with name and code; active defaults to true and locationTypeName defaults to STORE when omitted. Emits a LOCATION_BULK_INGEST event, and every successfully created location also publishes a location fact for replica consumers. Returns 200 with per-record results even when some records fail (failed rows carry errorCode LOCATION_INGEST_FAILED), and 400 when the batch envelope itself is invalid. 
+     * Imports a batch of location records in one call, creating each row independently and reporting per-record success or failure. Use this tool for initial data loads or migrations; do not use createLocation, which creates a single location per call. Preconditions: names and codes must be unique against existing locations; each record is validated independently, so one failure does not abort the batch. Required inputs: jobId, locationId and a non-empty records array, each record with name and code; active defaults to true and locationTypeName defaults to STORE when omitted. Emits a LOCATION_BULK_INGEST event, and every successfully created location also publishes a location fact for replica consumers. Returns 200 with per-record results even when some records fail (failed rows carry errorCode LOCATION_INGEST_FAILED), and 400 when the batch envelope itself is invalid.
      * @endpoint post /v1/locations/bulk-ingest
      * @param bulkIngestRequestLocationBulkIngestRecord Batch envelope of location records to import, scoped to a bulk ingest job and submitting operator.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.

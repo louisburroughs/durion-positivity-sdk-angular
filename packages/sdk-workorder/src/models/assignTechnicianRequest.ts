@@ -12,7 +12,7 @@
 /**
  * Request to assign a technician to a workorder
  */
-export interface AssignTechnicianRequest { 
+export interface AssignTechnicianRequest {
     /**
      * ID of the user performing the assignment (defaults from X-User-Id header if not provided)
      */

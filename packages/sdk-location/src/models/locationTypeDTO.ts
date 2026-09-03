@@ -12,7 +12,7 @@
 /**
  * Location type classification reference
  */
-export interface LocationTypeDTO { 
+export interface LocationTypeDTO {
     /**
      * Description of the location type
      */

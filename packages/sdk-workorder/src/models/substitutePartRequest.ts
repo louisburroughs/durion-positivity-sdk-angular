@@ -12,7 +12,7 @@
 /**
  * Request payload for substituting an authorized part
  */
-export interface SubstitutePartRequest { 
+export interface SubstitutePartRequest {
     /**
      * Optional substitution notes
      */

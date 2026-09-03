@@ -13,7 +13,7 @@ import { MobileUnitBulkIngestRecord } from './mobileUnitBulkIngestRecord';
 /**
  * Generic bulk ingest request: a batch of records for a job scoped to a location
  */
-export interface BulkIngestRequestMobileUnitBulkIngestRecord { 
+export interface BulkIngestRequestMobileUnitBulkIngestRecord {
     /**
      * Identifier of the bulk ingest job
      */

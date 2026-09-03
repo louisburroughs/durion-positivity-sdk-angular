@@ -12,7 +12,7 @@
 /**
  * Updated item fields
  */
-export interface UpdateEstimateItemRequest { 
+export interface UpdateEstimateItemRequest {
     /**
      * Updated description
      */

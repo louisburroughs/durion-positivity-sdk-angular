@@ -11,7 +11,7 @@
 
 import { Inject, Injectable, Optional }                      from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams,
-         HttpResponse, HttpEvent, HttpContext 
+         HttpResponse, HttpEvent, HttpContext
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
@@ -39,7 +39,7 @@ export class StorageLocationBulkIngestAPIService extends BaseService {
 
     /**
      * Create a Site\&#39;s Storage Topology in Bulk
-     * Creates many storage locations at once, resolving each row\&#39;s parent by name and applying a non-default status as a follow-up update. Use this tool when commissioning a site or seeding an environment; use createStorageLocation instead for a single location, and patchStorageLocation to change one that already exists. Preconditions: each row\&#39;s site must exist, and a row naming a parent must either follow that parent in the same batch or name one already at the site. Required inputs: jobId (UUID), locationId (UUID) and records, each with a name and a type; a record\&#39;s own siteId overrides the batch one. Emits a LOCATION_STORAGE_LOCATION_BULK_INGEST event, and a storage-location fact per created row, which is what hydrates the pos-inventory replica. Re-running the same file is safe: a name already present at its site is skipped, not failed, and an existing location is never modified — applying a changed status or capacity to a live location is an operator\&#39;s update, not a reseed. Returns 200 with a per-record result; check each result rather than the status alone. 
+     * Creates many storage locations at once, resolving each row\&#39;s parent by name and applying a non-default status as a follow-up update. Use this tool when commissioning a site or seeding an environment; use createStorageLocation instead for a single location, and patchStorageLocation to change one that already exists. Preconditions: each row\&#39;s site must exist, and a row naming a parent must either follow that parent in the same batch or name one already at the site. Required inputs: jobId (UUID), locationId (UUID) and records, each with a name and a type; a record\&#39;s own siteId overrides the batch one. Emits a LOCATION_STORAGE_LOCATION_BULK_INGEST event, and a storage-location fact per created row, which is what hydrates the pos-inventory replica. Re-running the same file is safe: a name already present at its site is skipped, not failed, and an existing location is never modified — applying a changed status or capacity to a live location is an operator\&#39;s update, not a reseed. Returns 200 with a per-record result; check each result rather than the status alone.
      * @endpoint post /v1/locations/storage-locations/bulk-ingest
      * @param bulkIngestRequestStorageLocationBulkIngestRecord Storage locations to create, parents before their children.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.

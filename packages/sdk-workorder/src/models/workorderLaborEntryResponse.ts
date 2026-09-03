@@ -12,7 +12,7 @@
 /**
  * Labor entry response
  */
-export interface WorkorderLaborEntryResponse { 
+export interface WorkorderLaborEntryResponse {
     /**
      * Whether this session is still active (not stopped)
      */

@@ -12,7 +12,7 @@ import { SortObject } from './sortObject';
 import { LocationRef } from './locationRef';
 
 
-export interface PageLocationRef { 
+export interface PageLocationRef {
     content?: Array<LocationRef>;
     empty?: boolean;
     first?: boolean;

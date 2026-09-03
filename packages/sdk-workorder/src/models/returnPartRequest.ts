@@ -12,7 +12,7 @@
 /**
  * Request payload to return unused issued parts to inventory
  */
-export interface ReturnPartRequest { 
+export interface ReturnPartRequest {
     /**
      * Optional return notes
      */

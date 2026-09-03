@@ -12,7 +12,7 @@
 /**
  * Response describing a picked item resulting from a pick task
  */
-export interface WorkorderPickedItemResponse { 
+export interface WorkorderPickedItemResponse {
     /**
      * Identifier of the pick list the task belongs to
      */

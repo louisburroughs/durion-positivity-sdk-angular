@@ -12,7 +12,7 @@ import { SortObject } from './sortObject';
 import { WorkorderSearchResult } from './workorderSearchResult';
 
 
-export interface PageWorkorderSearchResult { 
+export interface PageWorkorderSearchResult {
     content?: Array<WorkorderSearchResult>;
     empty?: boolean;
     first?: boolean;

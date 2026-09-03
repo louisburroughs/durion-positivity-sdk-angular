@@ -12,7 +12,7 @@
 /**
  * One service bay to create at a location
  */
-export interface BayBulkIngestRecord { 
+export interface BayBulkIngestRecord {
     /**
      * Bay type
      */

@@ -12,7 +12,7 @@
 /**
  * Request payload for creating a storage location
  */
-export interface StorageLocationRequest { 
+export interface StorageLocationRequest {
     /**
      * Whether the storage location will take stock of a product it is not already holding. Defaults to MIXED.
      */

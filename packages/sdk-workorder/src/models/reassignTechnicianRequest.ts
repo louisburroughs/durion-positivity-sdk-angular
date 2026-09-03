@@ -12,7 +12,7 @@
 /**
  * Request to reassign a workorder to a different technician
  */
-export interface ReassignTechnicianRequest { 
+export interface ReassignTechnicianRequest {
     /**
      * ID of the new technician
      */

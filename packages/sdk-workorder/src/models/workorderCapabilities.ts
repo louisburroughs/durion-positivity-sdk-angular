@@ -12,7 +12,7 @@
 /**
  * Capability flags for workorder actions based on user authorities
  */
-export interface WorkorderCapabilities { 
+export interface WorkorderCapabilities {
     /**
      * User can approve workorder
      */

@@ -12,7 +12,7 @@
 /**
  * Response payload for estimate creation from appointment
  */
-export interface CreateEstimateFromAppointmentResponse { 
+export interface CreateEstimateFromAppointmentResponse {
     /**
      * Whether a new estimate was created (false when idempotency returns existing record)
      */

@@ -12,9 +12,9 @@
 /**
  * Current status of a service bay
  */
-export interface BayStatus { 
+export interface BayStatus {
     /**
-     * Identifier of the workorder currently assigned to the bay
+     * Identifier of the workorder currently assigned to the bay, or null when idle
      */
     assignedWorkorderId?: string;
     /**
@@ -26,7 +26,7 @@ export interface BayStatus {
      */
     bayId: string;
     /**
-     * Human-readable bay name
+     * Human-readable bay name, resolved from the location replica. Null when the bay\'s own replica row has not arrived yet.
      */
     bayName?: string;
     /**

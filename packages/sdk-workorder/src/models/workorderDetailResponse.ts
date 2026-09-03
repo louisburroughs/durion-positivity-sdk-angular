@@ -15,7 +15,11 @@ import { WorkorderPartResponse } from './workorderPartResponse';
 /**
  * Comprehensive workorder detail with role-based visibility
  */
-export interface WorkorderDetailResponse { 
+export interface WorkorderDetailResponse {
+    /**
+     * Actual technician hours clocked across all service lines, in hours.
+     */
+    actualLaborHours?: number;
     /**
      * Assigned technician ID
      */
@@ -38,6 +42,10 @@ export interface WorkorderDetailResponse {
      */
     customerName?: string;
     /**
+     * Overlap-aware sum of the agreed labor hours across active service lines, in tenths. Null when no line carries hours.
+     */
+    estimatedLaborHours?: number;
+    /**
      * Estimated total (conditionally included based on canViewFinancials)
      */
     estimatedTotal?: number;
@@ -57,6 +65,14 @@ export interface WorkorderDetailResponse {
      * Total labor cost (conditionally included)
      */
     laborTotal?: number;
+    /**
+     * actualLaborHours minus estimatedLaborHours; positive means the job ran over the estimate. Null unless both operands exist.
+     */
+    laborVarianceHours?: number;
+    /**
+     * Labor variance as a percentage of the estimate. Null unless both operands exist and the estimate is non-zero.
+     */
+    laborVariancePct?: number;
     /**
      * Part line items with usage totals
      */
@@ -152,7 +168,7 @@ export function instanceOfWorkorderDetailResponse(value: object): value is Worko
 
     const requiredProperties = createWorkorderDetailResponsePropertyNames('capabilities', 'createdAt', 'createdBy', 'customerId', 'status', 'vehicleId', 'workorderId', );
     const optionalStringProperties = createWorkorderDetailResponseOptionalProperties({ name: 'assignedTechnicianId', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'customerId', nullable: false }, { name: 'customerName', nullable: false }, { name: 'isCompleted', nullable: false }, { name: 'isInProgress', nullable: false }, { name: 'isStarted', nullable: false }, { name: 'startedAt', nullable: false }, { name: 'status', nullable: false }, { name: 'vehicleDescription', nullable: false }, { name: 'vehicleId', nullable: false }, { name: 'workorderId', nullable: false }, { name: 'workorderNumber', nullable: false }, );
-    const optionalNumberProperties = createWorkorderDetailResponseOptionalProperties({ name: 'estimatedTotal', nullable: false }, { name: 'laborTotal', nullable: false }, { name: 'partsTotal', nullable: false }, { name: 'taxTotal', nullable: false }, );
+    const optionalNumberProperties = createWorkorderDetailResponseOptionalProperties({ name: 'actualLaborHours', nullable: false }, { name: 'estimatedLaborHours', nullable: false }, { name: 'estimatedTotal', nullable: false }, { name: 'laborTotal', nullable: false }, { name: 'laborVarianceHours', nullable: false }, { name: 'laborVariancePct', nullable: false }, { name: 'partsTotal', nullable: false }, { name: 'taxTotal', nullable: false }, );
     const optionalBooleanProperties = createWorkorderDetailResponseOptionalProperties();
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

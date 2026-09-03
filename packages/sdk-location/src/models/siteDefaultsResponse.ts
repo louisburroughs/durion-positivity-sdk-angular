@@ -12,7 +12,7 @@
 /**
  * Response payload describing default storage location configuration for a site
  */
-export interface SiteDefaultsResponse { 
+export interface SiteDefaultsResponse {
     /**
      * Identifier of the default quarantine storage location
      */

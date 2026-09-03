@@ -12,11 +12,15 @@
 /**
  * Lightweight location reference for reconciliation roster consumers
  */
-export interface LocationRef { 
+export interface LocationRef {
     /**
      * Unique business code of the location
      */
     code?: string;
+    /**
+     * Whether the location can perform repairs, true when it has at least one ACTIVE bay or at least one ACTIVE mobile unit based there; always false for an inactive location
+     */
+    hasRepairCapability: boolean;
     /**
      * Identifier of the location in the HR system of record
      */
@@ -81,10 +85,10 @@ export function instanceOfLocationRef(value: object): value is LocationRef {
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createLocationRefPropertyNames('id', );
+    const requiredProperties = createLocationRefPropertyNames('hasRepairCapability', 'id', );
     const optionalStringProperties = createLocationRefOptionalProperties({ name: 'code', nullable: false }, { name: 'hrLocationId', nullable: false }, { name: 'id', nullable: false }, { name: 'name', nullable: false }, { name: 'status', nullable: false }, { name: 'timezone', nullable: false }, { name: 'updatedAt', nullable: false }, );
     const optionalNumberProperties = createLocationRefOptionalProperties();
-    const optionalBooleanProperties = createLocationRefOptionalProperties();
+    const optionalBooleanProperties = createLocationRefOptionalProperties({ name: 'hasRepairCapability', nullable: false }, );
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
         && optionalStringProperties.every((property) => isOptionalLocationRefPropertyOfType(_v, property.name, 'string', property.nullable))

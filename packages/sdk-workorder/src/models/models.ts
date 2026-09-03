@@ -48,6 +48,7 @@ export * from './issuePartRequest';
 export * from './laborQuantity';
 export * from './lineItemApprovalDto';
 export * from './mechanicStatus';
+export * from './mobileUnitStatus';
 export * from './operationalContextOverrideRequest';
 export * from './operationalContextResponse';
 export * from './pageEstimateSummaryResponse';

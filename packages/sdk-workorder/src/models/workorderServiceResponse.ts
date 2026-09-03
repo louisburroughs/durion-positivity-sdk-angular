@@ -12,7 +12,7 @@
 /**
  * Workorder service line item with labor totals
  */
-export interface WorkorderServiceResponse { 
+export interface WorkorderServiceResponse {
     /**
      * Service description
      */

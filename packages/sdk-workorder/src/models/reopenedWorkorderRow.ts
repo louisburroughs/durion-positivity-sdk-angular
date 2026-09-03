@@ -12,7 +12,7 @@
 /**
  * A single work-order reopen event within withinDays of its completion
  */
-export interface ReopenedWorkorderRow { 
+export interface ReopenedWorkorderRow {
     /**
      * When the work order was completed (the event this reopen is anchored to)
      */

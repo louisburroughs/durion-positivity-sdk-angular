@@ -12,7 +12,7 @@
 /**
  * A single picked item to consume
  */
-export interface ConsumeItem { 
+export interface ConsumeItem {
     /**
      * Identifier of the pick task to consume from
      */

@@ -12,7 +12,7 @@
 /**
  * Request payload for adding a break segment to a work session
  */
-export interface AddBreakSegmentRequest { 
+export interface AddBreakSegmentRequest {
     /**
      * Type of break
      */

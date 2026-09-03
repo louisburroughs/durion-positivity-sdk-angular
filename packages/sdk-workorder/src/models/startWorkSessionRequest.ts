@@ -12,7 +12,7 @@
 /**
  * Request payload for starting a work session
  */
-export interface StartWorkSessionRequest { 
+export interface StartWorkSessionRequest {
     /**
      * ID of the work location
      */

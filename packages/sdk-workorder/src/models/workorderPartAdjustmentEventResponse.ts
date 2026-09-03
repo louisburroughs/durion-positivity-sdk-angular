@@ -12,7 +12,7 @@
 /**
  * Response payload for workorder part adjustment events
  */
-export interface WorkorderPartAdjustmentEventResponse { 
+export interface WorkorderPartAdjustmentEventResponse {
     /**
      * Adjustment type
      */

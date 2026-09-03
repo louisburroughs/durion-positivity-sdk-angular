@@ -12,7 +12,7 @@
 /**
  * Completion precondition evaluation response
  */
-export interface CompletionPreconditionsResponse { 
+export interface CompletionPreconditionsResponse {
     /**
      * Blocking reasons that prevent completion
      */

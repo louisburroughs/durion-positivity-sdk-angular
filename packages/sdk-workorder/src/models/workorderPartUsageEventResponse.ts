@@ -12,7 +12,7 @@
 /**
  * Response payload for workorder part usage events
  */
-export interface WorkorderPartUsageEventResponse { 
+export interface WorkorderPartUsageEventResponse {
     /**
      * Event type
      */

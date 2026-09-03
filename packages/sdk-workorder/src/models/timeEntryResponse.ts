@@ -12,7 +12,7 @@
 /**
  * Response representation of a time entry
  */
-export interface TimeEntryResponse { 
+export interface TimeEntryResponse {
     /**
      * Timestamp when the time entry was created
      */

@@ -13,7 +13,7 @@ import { WorkorderStateTransitionResponse } from './workorderStateTransitionResp
 /**
  * Date-range (or single-workorder) status transition history, with truncation signalling
  */
-export interface WorkorderStatusTransitionsResponse { 
+export interface WorkorderStatusTransitionsResponse {
     /**
      * The limit applied to this response
      */

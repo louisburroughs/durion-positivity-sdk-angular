@@ -12,7 +12,7 @@
 /**
  * Request payload for creating or updating a travel buffer policy
  */
-export interface TravelBufferPolicyRequest { 
+export interface TravelBufferPolicyRequest {
     /**
      * Type of buffer the policy applies; one of FLAT_MINUTES, PERCENTAGE_OF_TRAVEL or DISTANCE_MULTIPLIER
      */

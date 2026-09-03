@@ -11,7 +11,7 @@
 
 import { Inject, Injectable, Optional }                      from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams,
-         HttpResponse, HttpEvent, HttpContext 
+         HttpResponse, HttpEvent, HttpContext
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
@@ -37,11 +37,11 @@ export class MobileUnitEligibilityControllerService extends BaseService {
 
     /**
      * Find Eligible Mobile Units for Address
-     * Finds the ACTIVE mobile units whose coverage rules include a postal code on a given date, ordered by ascending rule priority. Use this tool when dispatching a mobile service request to a customer address; use listMobileUnits instead for plain enumeration without eligibility matching. Preconditions: coverage rules must already link units to service areas containing the postal code; units whose status is not ACTIVE are excluded. Required inputs: postalCode, countryCode and at (an ISO-8601 instant), all mandatory; the instant is reduced to a UTC calendar date for validFrom and validTo matching. No events are emitted and no state changes; this is a read-only projection. Returns 200 with the eligible units, empty when nothing covers the address on that date. 
+     * Finds the ACTIVE mobile units whose coverage rules include a postal code on a given date, ordered by ascending rule priority. Use this tool when dispatching a mobile service request to a customer address; use listMobileUnits instead for plain enumeration without eligibility matching. Preconditions: coverage rules must already link units to service areas containing the postal code; units whose status is not ACTIVE are excluded. Required inputs: postalCode, countryCode and at (an ISO-8601 instant), all mandatory; the instant is reduced to a UTC calendar date for validFrom and validTo matching. No events are emitted and no state changes; this is a read-only projection. Returns 200 with the eligible units, empty when nothing covers the address on that date.
      * @endpoint get /v1/mobile-units:eligible
-     * @param postalCode 
-     * @param countryCode 
-     * @param at 
+     * @param postalCode
+     * @param countryCode
+     * @param at
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options

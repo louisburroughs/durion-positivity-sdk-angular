@@ -12,7 +12,7 @@
 /**
  * Request body for rejecting a time entry
  */
-export interface RejectTimeEntryRequest { 
+export interface RejectTimeEntryRequest {
     /**
      * Mandatory reason for rejection
      */

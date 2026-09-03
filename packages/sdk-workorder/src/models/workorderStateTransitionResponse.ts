@@ -12,7 +12,7 @@
 /**
  * Work order state transition history entry
  */
-export interface WorkorderStateTransitionResponse { 
+export interface WorkorderStateTransitionResponse {
     /**
      * The status the work order transitioned FROM
      */

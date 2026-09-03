@@ -12,7 +12,7 @@
 /**
  * Request payload defining a coverage rule for a mobile unit
  */
-export interface CoverageRuleRequest { 
+export interface CoverageRuleRequest {
     /**
      * Maximum service distance in kilometres covered by the rule
      */

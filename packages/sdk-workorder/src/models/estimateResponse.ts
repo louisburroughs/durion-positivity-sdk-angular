@@ -12,7 +12,7 @@
 /**
  * Response DTO for estimates
  */
-export interface EstimateResponse { 
+export interface EstimateResponse {
     /**
      * Additional notes provided at approval time
      */

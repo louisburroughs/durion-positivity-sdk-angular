@@ -12,7 +12,7 @@
 /**
  * Approval or rejection status for a specific line item
  */
-export interface LineItemApprovalDto { 
+export interface LineItemApprovalDto {
     /**
      * Whether this line item is approved (true) or rejected (false)
      */

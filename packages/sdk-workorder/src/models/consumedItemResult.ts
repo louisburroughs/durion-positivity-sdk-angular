@@ -12,7 +12,7 @@
 /**
  * Outcome of consuming a single picked item
  */
-export interface ConsumedItemResult { 
+export interface ConsumedItemResult {
     /**
      * Identifier of the pick task consumed
      */

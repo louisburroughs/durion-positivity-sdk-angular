@@ -12,7 +12,7 @@
 /**
  * Result of resolving a scanned SKU and location against a pick task
  */
-export interface ResolveScanResponse { 
+export interface ResolveScanResponse {
     /**
      * Human-readable status describing the match outcome
      */

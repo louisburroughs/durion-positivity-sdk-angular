@@ -12,7 +12,7 @@
 /**
  * Response representation of a travel segment time adjustment
  */
-export interface TravelSegmentAdjustmentResponse { 
+export interface TravelSegmentAdjustmentResponse {
     /**
      * Identifier of the user who made the adjustment
      */

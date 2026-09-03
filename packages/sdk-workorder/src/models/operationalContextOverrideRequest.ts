@@ -12,7 +12,7 @@
 /**
  * Manager override payload for workorder operational context
  */
-export interface OperationalContextOverrideRequest { 
+export interface OperationalContextOverrideRequest {
     /**
      * Assigned mechanic identifiers
      */
@@ -22,10 +22,6 @@ export interface OperationalContextOverrideRequest {
      */
     assignedResources?: Array<string>;
     /**
-     * Optional bay identifier
-     */
-    bayId?: string;
-    /**
      * Optional execution constraints
      */
     constraints?: Array<string>;
@@ -33,7 +29,17 @@ export interface OperationalContextOverrideRequest {
      * Location identifier to set on the workorder
      */
     locationId: string;
+    /**
+     * Kind of resource the first assignedResources entry points at. Optional: an absent value is interpreted as BAY.
+     */
+    resourceType?: OperationalContextOverrideRequestResourceTypeEnum;
 }
+export enum OperationalContextOverrideRequestResourceTypeEnum {
+    Bay = 'BAY',
+    MobileUnit = 'MOBILE_UNIT'
+};
+
+
 
 function isOptionalOperationalContextOverrideRequestPropertyOfType(
     value: Record<string, unknown>,
@@ -74,7 +80,7 @@ export function instanceOfOperationalContextOverrideRequest(value: object): valu
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createOperationalContextOverrideRequestPropertyNames('locationId', );
-    const optionalStringProperties = createOperationalContextOverrideRequestOptionalProperties({ name: 'bayId', nullable: false }, { name: 'locationId', nullable: false }, );
+    const optionalStringProperties = createOperationalContextOverrideRequestOptionalProperties({ name: 'locationId', nullable: false }, { name: 'resourceType', nullable: false }, );
     const optionalNumberProperties = createOperationalContextOverrideRequestOptionalProperties();
     const optionalBooleanProperties = createOperationalContextOverrideRequestOptionalProperties();
 

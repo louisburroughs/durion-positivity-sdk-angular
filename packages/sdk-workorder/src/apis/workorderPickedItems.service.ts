@@ -11,7 +11,7 @@
 
 import { Inject, Injectable, Optional }                      from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams,
-         HttpResponse, HttpEvent, HttpContext 
+         HttpResponse, HttpEvent, HttpContext
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
@@ -43,7 +43,7 @@ export class WorkorderPickedItemsService extends BaseService {
 
     /**
      * Consume Picked Items into Workorder
-     * Queues asynchronous consumption of picked items into the workorder over the Kafka command feed per ADR-0044; each item is acknowledged with status PENDING, and the inventory consumption-recorded fact later updates the pick replicas. Use this tool when staged picked parts are installed on the job; do not use consumeParts, which operates on workorder part lines outside the pick flow. Preconditions: a pick list replica must exist for the workorder and every referenced pickTaskId must belong to it. Required inputs: workorderId (UUID) as a path parameter and a non-empty items list, each entry carrying pickTaskId (UUID) and quantityToConsume (integer). Emits a WORKORDER_PICKED_ITEMS_CONSUME event and publishes a consume command; callers must poll getPickedItems to observe the consumed quantities. Returns 202 with per-item PENDING results, 404 when the pick list or a referenced pick task is missing, and 503 when the command feed is unavailable. 
+     * Queues asynchronous consumption of picked items into the workorder over the Kafka command feed per ADR-0044; each item is acknowledged with status PENDING, and the inventory consumption-recorded fact later updates the pick replicas. Use this tool when staged picked parts are installed on the job; do not use consumeParts, which operates on workorder part lines outside the pick flow. Preconditions: a pick list replica must exist for the workorder and every referenced pickTaskId must belong to it. Required inputs: workorderId (UUID) as a path parameter and a non-empty items list, each entry carrying pickTaskId (UUID) and quantityToConsume (integer). Emits a WORKORDER_PICKED_ITEMS_CONSUME event and publishes a consume command; callers must poll getPickedItems to observe the consumed quantities. Returns 202 with per-item PENDING results, 404 when the pick list or a referenced pick task is missing, and 503 when the command feed is unavailable.
      * @endpoint post /v1/workorders/{workorderId}/picked-items:consume
      * @param workorderId Workorder ID
      * @param consumePickedItemsRequest Picked pick-task quantities to consume into the workorder.
@@ -117,7 +117,7 @@ export class WorkorderPickedItemsService extends BaseService {
 
     /**
      * Get Picked Items for Workorder
-     * Returns the items already picked for a workorder from the local pick replica, showing picked and consumed quantities before installation. Use this tool to see what is staged and available to consume; use consumeWorkorderPickedItems to actually record consumption, and getPickTasks for lines still being picked. Preconditions: none — a workorder without a pick list yields an empty list rather than an error. Required inputs: workorderId (UUID) as a path parameter. No events are emitted and no state changes; this is a read-only replica projection. Returns 200 with the picked items, possibly empty. 
+     * Returns the items already picked for a workorder from the local pick replica, showing picked and consumed quantities before installation. Use this tool to see what is staged and available to consume; use consumeWorkorderPickedItems to actually record consumption, and getPickTasks for lines still being picked. Preconditions: none — a workorder without a pick list yields an empty list rather than an error. Required inputs: workorderId (UUID) as a path parameter. No events are emitted and no state changes; this is a read-only replica projection. Returns 200 with the picked items, possibly empty.
      * @endpoint get /v1/workorders/{workorderId}/picked-items
      * @param workorderId Workorder ID
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.

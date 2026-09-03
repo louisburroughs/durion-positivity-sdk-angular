@@ -12,7 +12,7 @@
 /**
  * Line item details
  */
-export interface AddEstimateItemRequest { 
+export interface AddEstimateItemRequest {
     /**
      * Human-readable description when no catalog reference is provided
      */
@@ -26,9 +26,9 @@ export interface AddEstimateItemRequest {
      */
     productId?: string;
     /**
-     * Requested quantity
+     * Requested quantity (hours for LABOR). Required, EXCEPT on a LABOR item that names a serviceId: omitting it there asks the labor guide to prefill the book time (#1569); when no guide time is available the request is rejected and an explicit quantity must be sent. A supplied quantity always wins over the guide.
      */
-    quantity: number;
+    quantity?: number;
     /**
      * Referenced service identifier for LABOR items
      */
@@ -91,7 +91,7 @@ export function instanceOfAddEstimateItemRequest(value: object): value is AddEst
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createAddEstimateItemRequestPropertyNames('itemType', 'quantity', 'unitPrice', );
+    const requiredProperties = createAddEstimateItemRequestPropertyNames('itemType', 'unitPrice', );
     const optionalStringProperties = createAddEstimateItemRequestOptionalProperties({ name: 'description', nullable: false }, { name: 'itemType', nullable: false }, { name: 'productId', nullable: false }, { name: 'serviceId', nullable: false }, { name: 'taxCode', nullable: false }, { name: 'uomCode', nullable: false }, );
     const optionalNumberProperties = createAddEstimateItemRequestOptionalProperties({ name: 'quantity', nullable: false }, { name: 'unitPrice', nullable: false }, );
     const optionalBooleanProperties = createAddEstimateItemRequestOptionalProperties();

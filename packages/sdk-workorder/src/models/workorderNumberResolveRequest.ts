@@ -12,7 +12,7 @@
 /**
  * Batch request to resolve workorder ids to human workorder numbers
  */
-export interface WorkorderNumberResolveRequest { 
+export interface WorkorderNumberResolveRequest {
     /**
      * Workorder identifiers to resolve
      */

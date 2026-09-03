@@ -13,7 +13,7 @@ import { EstimateItemResponse } from './estimateItemResponse';
 /**
  * Customer-facing estimate summary with grouped items and totals
  */
-export interface EstimateSummaryResponse { 
+export interface EstimateSummaryResponse {
     /**
      * Creation timestamp
      */

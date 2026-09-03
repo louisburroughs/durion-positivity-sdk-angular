@@ -12,7 +12,7 @@
 /**
  * Request body for starting a travel segment
  */
-export interface StartTravelSegmentRequest { 
+export interface StartTravelSegmentRequest {
     /**
      * Identifier of the person on whose behalf this segment is entered, if applicable
      */

@@ -12,7 +12,7 @@
 /**
  * Request to start a labor session on a workorder service
  */
-export interface StartLaborRequest { 
+export interface StartLaborRequest {
     /**
      * Optional notes about the labor session
      */

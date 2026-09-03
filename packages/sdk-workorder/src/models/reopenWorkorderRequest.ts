@@ -12,7 +12,7 @@
 /**
  * Request payload for controlled workorder reopen
  */
-export interface ReopenWorkorderRequest { 
+export interface ReopenWorkorderRequest {
     /**
      * Mandatory reason for reopening completed workorder
      */

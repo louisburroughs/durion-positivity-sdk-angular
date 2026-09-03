@@ -12,7 +12,7 @@
 /**
  * Response DTO for change requests
  */
-export interface ChangeRequestResponse { 
+export interface ChangeRequestResponse {
     /**
      * Approval notes
      */

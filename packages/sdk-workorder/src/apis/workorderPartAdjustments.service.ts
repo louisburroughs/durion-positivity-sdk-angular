@@ -11,7 +11,7 @@
 
 import { Inject, Injectable, Optional }                      from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams,
-         HttpResponse, HttpEvent, HttpContext 
+         HttpResponse, HttpEvent, HttpContext
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
@@ -43,11 +43,11 @@ export class WorkorderPartAdjustmentsService extends BaseService {
 
     /**
      * Correct Part Quantity
-     * Applies an administrative correction to a part line\&#39;s quantity, recording the correction and its reason as an adjustment event for data-entry fixes. Use this tool only to repair mistaken quantities; do not use consumeParts or returnParts, which record real physical movement of stock. Preconditions: the workorder and part must exist and the part must belong to the workorder. Required inputs: workorderId (UUID) as a path parameter, plus workorderPartId (UUID), a positive newQuantity, and a reason in the body; notes and uomCode are optional (uomCode is the unit newQuantity is expressed in; omit to leave the part\&#39;s existing unit unchanged) and an Idempotency-Key header deduplicates retries. Emits a WORKORDER_PART_CORRECT event. Returns 201 with the adjustment event, 404 when the workorder or part cannot be found, 400 when newQuantity is not positive or the part does not belong to the workorder, and 422 when uomCode has no conversion row for the product or the converted quantity exceeds its declared decimal scale. 
+     * Applies an administrative correction to a part line\&#39;s quantity, recording the correction and its reason as an adjustment event for data-entry fixes. Use this tool only to repair mistaken quantities; do not use consumeParts or returnParts, which record real physical movement of stock. Preconditions: the workorder and part must exist and the part must belong to the workorder. Required inputs: workorderId (UUID) as a path parameter, plus workorderPartId (UUID), a positive newQuantity, and a reason in the body; notes and uomCode are optional (uomCode is the unit newQuantity is expressed in; omit to leave the part\&#39;s existing unit unchanged) and an Idempotency-Key header deduplicates retries. Emits a WORKORDER_PART_CORRECT event. Returns 201 with the adjustment event, 404 when the workorder or part cannot be found, 400 when newQuantity is not positive or the part does not belong to the workorder, and 422 when uomCode has no conversion row for the product or the converted quantity exceeds its declared decimal scale.
      * @endpoint post /v1/workorders/{workorderId}/parts/correct
-     * @param workorderId 
+     * @param workorderId
      * @param correctPartQuantityRequest Part line, corrected quantity, and the reason for the administrative fix.
-     * @param idempotencyKey 
+     * @param idempotencyKey
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -121,9 +121,9 @@ export class WorkorderPartAdjustmentsService extends BaseService {
 
     /**
      * Get Part Adjustment History
-     * Returns the substitution, reasoned-return, and correction adjustment events for a workorder\&#39;s parts, newest first, either for the whole workorder or filtered to one part. Use this tool when auditing part swaps and corrections; use getPartsUsageHistory instead for the plain issue, consume, and return quantity movements. Preconditions: none — an unknown workorder or part simply yields an empty list, and the partId filter is not validated against the workorder in the path. Required inputs: workorderId (UUID) as a path parameter; partId (UUID) is an optional query filter. No events are emitted and no state changes; this is a read-only projection. Returns 200 with the adjustment events, possibly empty. 
+     * Returns the substitution, reasoned-return, and correction adjustment events for a workorder\&#39;s parts, newest first, either for the whole workorder or filtered to one part. Use this tool when auditing part swaps and corrections; use getPartsUsageHistory instead for the plain issue, consume, and return quantity movements. Preconditions: none — an unknown workorder or part simply yields an empty list, and the partId filter is not validated against the workorder in the path. Required inputs: workorderId (UUID) as a path parameter; partId (UUID) is an optional query filter. No events are emitted and no state changes; this is a read-only projection. Returns 200 with the adjustment events, possibly empty.
      * @endpoint get /v1/workorders/{workorderId}/parts/adjustments
-     * @param workorderId 
+     * @param workorderId
      * @param partId Optional part ID to filter history for a specific part
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
@@ -194,11 +194,11 @@ export class WorkorderPartAdjustmentsService extends BaseService {
 
     /**
      * Return Unused Part Quantity
-     * Returns unused part quantity through the adjustment flow, recording a reasoned return adjustment event alongside the quantity change. Use this tool when a return needs an explicit reason and audit trail; use returnParts instead for the plain usage-flow return without a reason. Preconditions: the workorder and part must exist, the part must belong to the workorder, and the return cannot exceed the quantity still available on the line. Required inputs: workorderId (UUID) as a path parameter, plus workorderPartId (UUID), a positive quantity, and a reason in the body; notes are optional and an Idempotency-Key header deduplicates retries. Emits a WORKORDER_PART_RETURN_UNUSED event. Returns 201 with the adjustment event, 404 when the workorder or part cannot be found, and 400 when the quantity is not positive, exceeds the available quantity, or the part does not belong to the workorder. 
+     * Returns unused part quantity through the adjustment flow, recording a reasoned return adjustment event alongside the quantity change. Use this tool when a return needs an explicit reason and audit trail; use returnParts instead for the plain usage-flow return without a reason. Preconditions: the workorder and part must exist, the part must belong to the workorder, and the return cannot exceed the quantity still available on the line. Required inputs: workorderId (UUID) as a path parameter, plus workorderPartId (UUID), a positive quantity, and a reason in the body; notes are optional and an Idempotency-Key header deduplicates retries. Emits a WORKORDER_PART_RETURN_UNUSED event. Returns 201 with the adjustment event, 404 when the workorder or part cannot be found, and 400 when the quantity is not positive, exceeds the available quantity, or the part does not belong to the workorder.
      * @endpoint post /v1/workorders/{workorderId}/parts/returnUnused
-     * @param workorderId 
+     * @param workorderId
      * @param returnPartQuantityRequest Part line, quantity going back, and the reason for the reasoned return.
-     * @param idempotencyKey 
+     * @param idempotencyKey
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -272,11 +272,11 @@ export class WorkorderPartAdjustmentsService extends BaseService {
 
     /**
      * Substitute Part on Workorder
-     * Substitutes one part line with a different part, preserving the original line for audit history, capturing a pricing snapshot, and recording a substitution adjustment event. Use this tool when the planned part is replaced by an alternative; use suggestWorkorderSubstitutes first to find candidate parts, and do not use correctPartQuantity, which fixes quantities rather than parts. Preconditions: the workorder and original part must exist, the original part must belong to the workorder and must not have any consumed quantity, and the substitute must differ from the original. Required inputs: workorderId (UUID) as a path parameter, plus originalPartId and substitutePartId (UUIDs) and a reason in the body; notes are optional and an Idempotency-Key header deduplicates retries. Emits a WORKORDER_PART_SUBSTITUTE event. Returns 201 with the adjustment event, 404 when the workorder or part cannot be found, and 400 when the part is already consumed, does not belong to the workorder, or the substitute equals the original. 
+     * Substitutes one part line with a different part, preserving the original line for audit history, capturing a pricing snapshot, and recording a substitution adjustment event. Use this tool when the planned part is replaced by an alternative; use suggestWorkorderSubstitutes first to find candidate parts, and do not use correctPartQuantity, which fixes quantities rather than parts. Preconditions: the workorder and original part must exist, the original part must belong to the workorder and must not have any consumed quantity, and the substitute must differ from the original. Required inputs: workorderId (UUID) as a path parameter, plus originalPartId and substitutePartId (UUIDs) and a reason in the body; notes are optional and an Idempotency-Key header deduplicates retries. Emits a WORKORDER_PART_SUBSTITUTE event. Returns 201 with the adjustment event, 404 when the workorder or part cannot be found, and 400 when the part is already consumed, does not belong to the workorder, or the substitute equals the original.
      * @endpoint post /v1/workorders/{workorderId}/parts/substitute
-     * @param workorderId 
+     * @param workorderId
      * @param substitutePartRequest Original part, replacement part, and the reason for the swap.
-     * @param idempotencyKey 
+     * @param idempotencyKey
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options

@@ -12,7 +12,7 @@
 /**
  * Response payload for estimate line items
  */
-export interface EstimateItemResponse { 
+export interface EstimateItemResponse {
     /**
      * Record creation timestamp
      */

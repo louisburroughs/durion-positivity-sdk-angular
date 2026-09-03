@@ -12,7 +12,7 @@
 /**
  * Request payload for submitting travel segments for a work date
  */
-export interface SubmitTravelSegmentsRequest { 
+export interface SubmitTravelSegmentsRequest {
     /**
      * Optional notes accompanying the travel segment submission
      */

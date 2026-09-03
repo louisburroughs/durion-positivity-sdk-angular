@@ -11,7 +11,7 @@
 
 import { Inject, Injectable, Optional }                      from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams,
-         HttpResponse, HttpEvent, HttpContext 
+         HttpResponse, HttpEvent, HttpContext
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
@@ -45,8 +45,8 @@ export class StorageLocationControllerService extends BaseService {
 
     /**
      * @endpoint post /v1/locations/{siteId}/storage-locations
-     * @param siteId 
-     * @param storageLocationRequest 
+     * @param siteId
+     * @param storageLocationRequest
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -117,8 +117,8 @@ export class StorageLocationControllerService extends BaseService {
 
     /**
      * @endpoint get /v1/locations/{siteId}/storage-locations/{storageLocationId}
-     * @param siteId 
-     * @param storageLocationId 
+     * @param siteId
+     * @param storageLocationId
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -179,10 +179,10 @@ export class StorageLocationControllerService extends BaseService {
 
     /**
      * @endpoint get /v1/locations/{siteId}/storage-locations
-     * @param siteId 
-     * @param pageable 
-     * @param type 
-     * @param status 
+     * @param siteId
+     * @param pageable
+     * @param type
+     * @param status
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -273,9 +273,9 @@ export class StorageLocationControllerService extends BaseService {
 
     /**
      * @endpoint patch /v1/locations/{siteId}/storage-locations/{storageLocationId}
-     * @param siteId 
-     * @param storageLocationId 
-     * @param storageLocationPatchRequest 
+     * @param siteId
+     * @param storageLocationId
+     * @param storageLocationPatchRequest
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options

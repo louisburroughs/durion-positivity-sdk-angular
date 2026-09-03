@@ -12,7 +12,7 @@
 /**
  * Response payload returned after invoice generation.
  */
-export interface InvoiceGenerationResponse { 
+export interface InvoiceGenerationResponse {
     /**
      * Approval identifier used for generation.
      */

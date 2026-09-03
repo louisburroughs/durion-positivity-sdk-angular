@@ -13,11 +13,19 @@ import { LocationTypeDTO } from './locationTypeDTO';
 /**
  * Response payload describing a location
  */
-export interface LocationResponseDTO { 
+export interface LocationResponseDTO {
     /**
      * Whether the location is active
      */
     active: boolean;
+    /**
+     * Number of bays owned by the location with status ACTIVE; OUT_OF_SERVICE bays are excluded and an inactive location always reports 0
+     */
+    activeBayCount: number;
+    /**
+     * Number of mobile units based at the location with status ACTIVE; INACTIVE units are excluded and an inactive location always reports 0
+     */
+    activeMobileUnitCount: number;
     /**
      * First line of the street address
      */
@@ -42,6 +50,10 @@ export interface LocationResponseDTO {
      * Identifier of the associated geographical location
      */
     geographicalLocationId?: string;
+    /**
+     * Whether the location can perform repairs, true when it has at least one ACTIVE bay or at least one ACTIVE mobile unit based there; always false for an inactive location
+     */
+    hasRepairCapability: boolean;
     /**
      * Unique identifier of the location
      */
@@ -111,10 +123,10 @@ export function instanceOfLocationResponseDTO(value: object): value is LocationR
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createLocationResponseDTOPropertyNames('active', 'id', 'name', );
+    const requiredProperties = createLocationResponseDTOPropertyNames('active', 'activeBayCount', 'activeMobileUnitCount', 'hasRepairCapability', 'id', 'name', );
     const optionalStringProperties = createLocationResponseDTOOptionalProperties({ name: 'addressLine1', nullable: false }, { name: 'addressLine2', nullable: false }, { name: 'city', nullable: false }, { name: 'code', nullable: false }, { name: 'country', nullable: false }, { name: 'geographicalLocationId', nullable: false }, { name: 'id', nullable: false }, { name: 'mailingAddress', nullable: false }, { name: 'name', nullable: false }, { name: 'phoneNumber', nullable: false }, { name: 'postalCode', nullable: false }, { name: 'responsiblePersonId', nullable: false }, { name: 'state', nullable: false }, );
-    const optionalNumberProperties = createLocationResponseDTOOptionalProperties();
-    const optionalBooleanProperties = createLocationResponseDTOOptionalProperties({ name: 'active', nullable: false }, );
+    const optionalNumberProperties = createLocationResponseDTOOptionalProperties({ name: 'activeBayCount', nullable: false }, { name: 'activeMobileUnitCount', nullable: false }, );
+    const optionalBooleanProperties = createLocationResponseDTOOptionalProperties({ name: 'active', nullable: false }, { name: 'hasRepairCapability', nullable: false }, );
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
         && optionalStringProperties.every((property) => isOptionalLocationResponseDTOPropertyOfType(_v, property.name, 'string', property.nullable))

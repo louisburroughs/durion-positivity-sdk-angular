@@ -12,7 +12,7 @@
 /**
  * Work order creation request
  */
-export interface CreateWorkorderRequest { 
+export interface CreateWorkorderRequest {
     /**
      * Customer ID
      */

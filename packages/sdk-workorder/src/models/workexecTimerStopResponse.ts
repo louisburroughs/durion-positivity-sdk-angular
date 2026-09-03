@@ -13,7 +13,7 @@ import { WorkexecTimerEntryResponse } from './workexecTimerEntryResponse';
 /**
  * Stop timer response containing all stopped timers
  */
-export interface WorkexecTimerStopResponse { 
+export interface WorkexecTimerStopResponse {
     /**
      * Stopped timer entries
      */

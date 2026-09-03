@@ -12,7 +12,7 @@ import { SortObject } from './sortObject';
 import { StorageLocationResponse } from './storageLocationResponse';
 
 
-export interface PageStorageLocationResponse { 
+export interface PageStorageLocationResponse {
     content?: Array<StorageLocationResponse>;
     empty?: boolean;
     first?: boolean;

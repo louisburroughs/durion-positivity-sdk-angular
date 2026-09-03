@@ -12,7 +12,7 @@
 /**
  * A note about the customer, recorded against a workorder
  */
-export interface WorkorderNoteResponse { 
+export interface WorkorderNoteResponse {
     authoredBy?: string;
     createdAt?: string;
     noteId?: string;

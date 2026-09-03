@@ -12,7 +12,7 @@
 /**
  * Lightweight flat projection of a storage location for topology consumers
  */
-export interface StorageLocationTopologyResponse { 
+export interface StorageLocationTopologyResponse {
     /**
      * Unique identifier of the storage location
      */

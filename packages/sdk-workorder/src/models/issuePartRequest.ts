@@ -12,7 +12,7 @@
 /**
  * Request payload to issue authorized part quantity to a workorder
  */
-export interface IssuePartRequest { 
+export interface IssuePartRequest {
     /**
      * Optional issue notes
      */

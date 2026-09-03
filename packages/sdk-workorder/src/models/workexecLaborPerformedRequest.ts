@@ -14,7 +14,7 @@ import { LaborQuantity } from './laborQuantity';
 /**
  * Request payload for recording labor performed from external systems
  */
-export interface WorkexecLaborPerformedRequest { 
+export interface WorkexecLaborPerformedRequest {
     labor: LaborQuantity;
     /**
      * Timestamp when labor was performed

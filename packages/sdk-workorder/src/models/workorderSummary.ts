@@ -12,15 +12,15 @@
 /**
  * Summary view of a workorder for list displays
  */
-export interface WorkorderSummary { 
-    /**
-     * Identifier of the assigned bay
-     */
-    assignedBayId?: string;
+export interface WorkorderSummary {
     /**
      * Identifier of the assigned mechanic
      */
     assignedMechanicId?: string;
+    /**
+     * Identifier of the resource assigned to the workorder; read together with resourceType, which says whether it is a bay or a mobile unit
+     */
+    assignedResourceId?: string;
     /**
      * Name of the customer
      */
@@ -29,6 +29,10 @@ export interface WorkorderSummary {
      * Estimated labor hours for the workorder
      */
     estimatedLaborHours?: number;
+    /**
+     * Kind of resource assignedResourceId points at. Null exactly when assignedResourceId is null
+     */
+    resourceType?: WorkorderSummaryResourceTypeEnum;
     /**
      * Date the workorder is scheduled for
      */
@@ -50,6 +54,12 @@ export interface WorkorderSummary {
      */
     workorderNumber?: string;
 }
+export enum WorkorderSummaryResourceTypeEnum {
+    Bay = 'BAY',
+    MobileUnit = 'MOBILE_UNIT'
+};
+
+
 
 function isOptionalWorkorderSummaryPropertyOfType(
     value: Record<string, unknown>,
@@ -90,7 +100,7 @@ export function instanceOfWorkorderSummary(value: object): value is WorkorderSum
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createWorkorderSummaryPropertyNames('workorderId', );
-    const optionalStringProperties = createWorkorderSummaryOptionalProperties({ name: 'assignedBayId', nullable: false }, { name: 'assignedMechanicId', nullable: false }, { name: 'customerName', nullable: false }, { name: 'scheduledDate', nullable: false }, { name: 'status', nullable: false }, { name: 'vehicleDescription', nullable: false }, { name: 'workorderId', nullable: false }, { name: 'workorderNumber', nullable: false }, );
+    const optionalStringProperties = createWorkorderSummaryOptionalProperties({ name: 'assignedMechanicId', nullable: false }, { name: 'assignedResourceId', nullable: false }, { name: 'customerName', nullable: false }, { name: 'resourceType', nullable: false }, { name: 'scheduledDate', nullable: false }, { name: 'status', nullable: false }, { name: 'vehicleDescription', nullable: false }, { name: 'workorderId', nullable: false }, { name: 'workorderNumber', nullable: false }, );
     const optionalNumberProperties = createWorkorderSummaryOptionalProperties({ name: 'estimatedLaborHours', nullable: false }, );
     const optionalBooleanProperties = createWorkorderSummaryOptionalProperties();
 

@@ -12,7 +12,7 @@
 /**
  * A single operating-hours entry for a day of the week
  */
-export interface OperatingHoursRequest { 
+export interface OperatingHoursRequest {
     /**
      * Closing time (local time)
      */

@@ -12,7 +12,7 @@
 /**
  * Workorder id resolved to its human workorder number
  */
-export interface WorkorderNumberRef { 
+export interface WorkorderNumberRef {
     /**
      * Workorder identifier
      */

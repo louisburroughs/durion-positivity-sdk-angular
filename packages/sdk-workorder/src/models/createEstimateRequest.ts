@@ -12,7 +12,7 @@
 /**
  * Estimate creation request with customer and vehicle IDs
  */
-export interface CreateEstimateRequest { 
+export interface CreateEstimateRequest {
     /**
      * List of CRM contact identifiers (may be empty)
      */

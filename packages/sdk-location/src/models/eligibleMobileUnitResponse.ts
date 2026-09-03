@@ -12,7 +12,7 @@
 /**
  * Response payload describing a mobile unit eligible to cover a request
  */
-export interface EligibleMobileUnitResponse { 
+export interface EligibleMobileUnitResponse {
     /**
      * Identifier of the base location the mobile unit operates from
      */

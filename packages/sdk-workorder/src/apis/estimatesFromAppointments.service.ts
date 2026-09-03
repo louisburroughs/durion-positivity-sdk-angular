@@ -11,7 +11,7 @@
 
 import { Inject, Injectable, Optional }                      from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams,
-         HttpResponse, HttpEvent, HttpContext 
+         HttpResponse, HttpEvent, HttpContext
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
@@ -39,7 +39,7 @@ export class EstimatesFromAppointmentsService extends BaseService {
 
     /**
      * Create Draft Estimate From Appointment
-     * Creates a DRAFT estimate seeded from a shop appointment, linking the appointment, customer, vehicle, and location ids onto the new estimate. Use this tool when an appointment arrives and needs an estimate started; do not use createEstimate, which builds an estimate from scratch without an appointment link or idempotency guarantee. Preconditions: the caller must hold workorder:estimate:create; the appointment id is not verified against the scheduling service, and an estimate already linked to the appointmentId short-circuits creation. Required inputs: idempotencyKey, appointmentId, customerId, vehicleId, and locationId (all UUIDs); requestedServices is an optional list of free-text service descriptions. Emits a WORKORDER_ESTIMATE_CREATE_FROM_APPOINTMENT event; the call is idempotent on appointmentId, so retries never create duplicates. Returns 201 with created&#x3D;true when a new estimate is persisted, and 200 with created&#x3D;false and the existing estimateId when the appointment already has one. 
+     * Creates a DRAFT estimate seeded from a shop appointment, linking the appointment, customer, vehicle, and location ids onto the new estimate. Use this tool when an appointment arrives and needs an estimate started; do not use createEstimate, which builds an estimate from scratch without an appointment link or idempotency guarantee. Preconditions: the caller must hold workorder:estimate:create; the appointment id is not verified against the scheduling service, and an estimate already linked to the appointmentId short-circuits creation. Required inputs: idempotencyKey, appointmentId, customerId, vehicleId, and locationId (all UUIDs); requestedServices is an optional list of free-text service descriptions. Emits a WORKORDER_ESTIMATE_CREATE_FROM_APPOINTMENT event; the call is idempotent on appointmentId, so retries never create duplicates. Returns 201 with created&#x3D;true when a new estimate is persisted, and 200 with created&#x3D;false and the existing estimateId when the appointment already has one.
      * @endpoint post /v1/workorders/estimates/from-appointment
      * @param createEstimateFromAppointmentRequest Appointment reference and party identifiers used to seed the new draft estimate.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.

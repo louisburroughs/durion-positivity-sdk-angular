@@ -6,4 +6,5 @@ export * from './mechanicSkillBulkIngestAPI.service';
 export * from './mechanicSkillsAPI.service';
 export * from './scheduleAPI.service';
 export * from './shopAudit.service';
+export * from './shopDashboardAPI.service';
 export * from './technicianAPI.service';

@@ -12,7 +12,7 @@
 /**
  * Response DTO for a break segment
  */
-export interface BreakSegmentResponse { 
+export interface BreakSegmentResponse {
     /**
      * Break end timestamp
      */

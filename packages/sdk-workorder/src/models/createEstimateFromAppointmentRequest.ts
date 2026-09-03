@@ -12,7 +12,7 @@
 /**
  * Request payload to create an estimate from an appointment
  */
-export interface CreateEstimateFromAppointmentRequest { 
+export interface CreateEstimateFromAppointmentRequest {
     /**
      * Appointment identifier
      */

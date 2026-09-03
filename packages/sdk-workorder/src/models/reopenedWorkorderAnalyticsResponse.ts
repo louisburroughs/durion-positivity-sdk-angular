@@ -13,7 +13,7 @@ import { ReopenedWorkorderRow } from './reopenedWorkorderRow';
 /**
  * Per-event reopened-workorder rows within the window, with truncation signalling
  */
-export interface ReopenedWorkorderAnalyticsResponse { 
+export interface ReopenedWorkorderAnalyticsResponse {
     /**
      * The limit applied to this response
      */

@@ -12,7 +12,7 @@
 /**
  * Partial update payload for a storage location; null fields are left unchanged
  */
-export interface StorageLocationPatchRequest { 
+export interface StorageLocationPatchRequest {
     /**
      * Whether the storage location will take stock of a product it is not already holding. Omit to leave it unchanged.
      */

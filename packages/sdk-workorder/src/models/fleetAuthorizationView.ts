@@ -12,7 +12,7 @@
 /**
  * A workorder\'s fleet payment authorization
  */
-export interface FleetAuthorizationView { 
+export interface FleetAuthorizationView {
     authorizedAmount?: number;
     contractReference?: string;
     currency?: string;

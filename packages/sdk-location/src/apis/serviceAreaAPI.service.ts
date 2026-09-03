@@ -11,7 +11,7 @@
 
 import { Inject, Injectable, Optional }                      from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams,
-         HttpResponse, HttpEvent, HttpContext 
+         HttpResponse, HttpEvent, HttpContext
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
@@ -39,7 +39,7 @@ export class ServiceAreaAPIService extends BaseService {
 
     /**
      * Create a Postal Code Service Area
-     * Creates a service area, a named set of postal codes that defines where mobile coverage can be offered. Use this tool before wiring coverage rules that reference the area; do not use patchServiceArea, which edits an existing area. Preconditions: at least one postal code entry must be supplied and every entry must carry a countryCode; the name must not collide with an existing service area. Required inputs: name and postalCodes, each entry with postalCode and countryCode; description is optional and active defaults to true. Emits a LOCATION_SERVICE_AREA_CREATE event. Returns 201 with the created area and 409 when the name is already taken. 
+     * Creates a service area, a named set of postal codes that defines where mobile coverage can be offered. Use this tool before wiring coverage rules that reference the area; do not use patchServiceArea, which edits an existing area. Preconditions: at least one postal code entry must be supplied and every entry must carry a countryCode; the name must not collide with an existing service area. Required inputs: name and postalCodes, each entry with postalCode and countryCode; description is optional and active defaults to true. Emits a LOCATION_SERVICE_AREA_CREATE event. Returns 201 with the created area and 409 when the name is already taken.
      * @endpoint post /v1/service-areas
      * @param serviceAreaRequest Service area to create, defined by its postal code and country code entries.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -109,7 +109,7 @@ export class ServiceAreaAPIService extends BaseService {
 
     /**
      * List All Configured Service Areas
-     * Lists all configured service areas with their postal code sets and active flags. Use this tool to discover area ids for coverage rules; use listCoverageRules instead to see which areas a specific mobile unit uses. Preconditions: none beyond the location:service-area:read authority. Required inputs: none; there are no parameters, no paging and no request body. No events are emitted and no state changes; this is a read-only projection. Returns 200 with the full unpaginated list. 
+     * Lists all configured service areas with their postal code sets and active flags. Use this tool to discover area ids for coverage rules; use listCoverageRules instead to see which areas a specific mobile unit uses. Preconditions: none beyond the location:service-area:read authority. Required inputs: none; there are no parameters, no paging and no request body. No events are emitted and no state changes; this is a read-only projection. Returns 200 with the full unpaginated list.
      * @endpoint get /v1/service-areas
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
@@ -165,9 +165,9 @@ export class ServiceAreaAPIService extends BaseService {
 
     /**
      * Patch Fields of a Service Area
-     * Applies a partial update to a service area, accepting only the keys description and active. Use this tool to retire an area with active&#x3D;false or amend its description; do not use it to rename an area or change its postal codes, which are immutable after createServiceArea. Preconditions: the service area must exist. Required inputs: id (UUID) as a path parameter and a JSON object; keys other than description and active are silently ignored. Emits a LOCATION_SERVICE_AREA_PATCH event. Returns 400 when the id is not a valid UUID and 404 when no service area exists for it. 
+     * Applies a partial update to a service area, accepting only the keys description and active. Use this tool to retire an area with active&#x3D;false or amend its description; do not use it to rename an area or change its postal codes, which are immutable after createServiceArea. Preconditions: the service area must exist. Required inputs: id (UUID) as a path parameter and a JSON object; keys other than description and active are silently ignored. Emits a LOCATION_SERVICE_AREA_PATCH event. Returns 400 when the id is not a valid UUID and 404 when no service area exists for it.
      * @endpoint patch /v1/service-areas/{id}
-     * @param id 
+     * @param id
      * @param body Free-form patch object; only the keys description and active are recognized.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.

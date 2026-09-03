@@ -11,7 +11,7 @@
 
 import { Inject, Injectable, Optional }                      from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams,
-         HttpResponse, HttpEvent, HttpContext 
+         HttpResponse, HttpEvent, HttpContext
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
@@ -39,7 +39,7 @@ export class BayBulkIngestAPIService extends BaseService {
 
     /**
      * Create Service Bays in Bulk
-     * Creates many service bays at once, one per record. Use this tool when commissioning a location or seeding an environment; use createBay instead for a single bay. Preconditions: each row\&#39;s location must exist, and bayType must name a known bay type. Required inputs: jobId (UUID), locationId (UUID) and records, each with a name, a bayType and maxConcurrentVehicles; a record\&#39;s own locationId overrides the batch one. Emits a LOCATION_BAY_BULK_INGEST event and a bay-created event per row. Re-running the same file is safe: a bay name already present at its location is reported as already existing rather than as a failure. Returns 200 with a per-record result; check each result rather than the status alone. 
+     * Creates many service bays at once, one per record. Use this tool when commissioning a location or seeding an environment; use createBay instead for a single bay. Preconditions: each row\&#39;s location must exist, and bayType must name a known bay type. Required inputs: jobId (UUID), locationId (UUID) and records, each with a name, a bayType and maxConcurrentVehicles; a record\&#39;s own locationId overrides the batch one. Emits a LOCATION_BAY_BULK_INGEST event and a bay-created event per row. Re-running the same file is safe: a bay name already present at its location is reported as already existing rather than as a failure. Returns 200 with a per-record result; check each result rather than the status alone.
      * @endpoint post /v1/locations/bays/bulk-ingest
      * @param bulkIngestRequestBayBulkIngestRecord Service bays to create.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.

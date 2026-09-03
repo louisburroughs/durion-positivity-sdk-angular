@@ -11,7 +11,7 @@
 
 import { Inject, Injectable, Optional }                      from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams,
-         HttpResponse, HttpEvent, HttpContext 
+         HttpResponse, HttpEvent, HttpContext
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
@@ -43,11 +43,11 @@ export class WorkorderPartsUsageService extends BaseService {
 
     /**
      * Record Part Consumption on Workorder
-     * Records actual consumption of an issued part, incrementing the line\&#39;s quantityConsumed and writing a CONSUME usage event. Use this tool when a part is actually installed on the vehicle; do not use issueParts, which only reserves quantity, or returnParts, which sends unused quantity back. Preconditions: the part must belong to the workorder and cumulative consumption must not exceed the quantity already issued. Required inputs: workorderId (UUID) as a path parameter, plus workorderPartId (UUID) and a positive quantity in the body; uomCode is the optional unit quantity is expressed in (omit for the product\&#39;s base unit); an Idempotency-Key header makes retries return the original usage event. Emits a WORKORDER_PART_CONSUME event and marks the workorder fact changed. Returns 201 with the CONSUME event, 400 when the quantity is not positive, exceeds the issued quantity, or the part cannot be found, 404 when the workorder does not exist, 422 when uomCode has no conversion row for the product or the converted quantity exceeds its declared decimal scale, and 409 when the part belongs to a different workorder. 
+     * Records actual consumption of an issued part, incrementing the line\&#39;s quantityConsumed and writing a CONSUME usage event. Use this tool when a part is actually installed on the vehicle; do not use issueParts, which only reserves quantity, or returnParts, which sends unused quantity back. Preconditions: the part must belong to the workorder and cumulative consumption must not exceed the quantity already issued. Required inputs: workorderId (UUID) as a path parameter, plus workorderPartId (UUID) and a positive quantity in the body; uomCode is the optional unit quantity is expressed in (omit for the product\&#39;s base unit); an Idempotency-Key header makes retries return the original usage event. Emits a WORKORDER_PART_CONSUME event and marks the workorder fact changed. Returns 201 with the CONSUME event, 400 when the quantity is not positive, exceeds the issued quantity, or the part cannot be found, 404 when the workorder does not exist, 422 when uomCode has no conversion row for the product or the converted quantity exceeds its declared decimal scale, and 409 when the part belongs to a different workorder.
      * @endpoint post /v1/workorders/{workorderId}/parts/consume
-     * @param workorderId 
+     * @param workorderId
      * @param consumePartRequest Part line and quantity actually consumed on the job.
-     * @param idempotencyKey 
+     * @param idempotencyKey
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -121,9 +121,9 @@ export class WorkorderPartsUsageService extends BaseService {
 
     /**
      * Get Parts Usage History
-     * Returns the ISSUE, CONSUME, and RETURN usage events for a workorder\&#39;s parts, either for the whole workorder or filtered to one part line. Use this tool when auditing how part quantities moved; use getPartAdjustmentHistory instead for substitutions, corrections, and reasoned returns from the adjustment flow. Preconditions: when partLineId is supplied, the part must belong to the workorder. Required inputs: workorderId (UUID) as a path parameter; partLineId (UUID) is an optional query filter. No events are emitted and no state changes; this is a read-only projection. Returns 200 with the events, 400 when the filtered part cannot be found, 404 when the workorder does not exist, and 409 when the filtered part belongs to a different workorder. 
+     * Returns the ISSUE, CONSUME, and RETURN usage events for a workorder\&#39;s parts, either for the whole workorder or filtered to one part line. Use this tool when auditing how part quantities moved; use getPartAdjustmentHistory instead for substitutions, corrections, and reasoned returns from the adjustment flow. Preconditions: when partLineId is supplied, the part must belong to the workorder. Required inputs: workorderId (UUID) as a path parameter; partLineId (UUID) is an optional query filter. No events are emitted and no state changes; this is a read-only projection. Returns 200 with the events, 400 when the filtered part cannot be found, 404 when the workorder does not exist, and 409 when the filtered part belongs to a different workorder.
      * @endpoint get /v1/workorders/{workorderId}/parts/usageHistory
-     * @param workorderId 
+     * @param workorderId
      * @param partLineId Optional part line ID to filter history for a specific part
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
@@ -194,11 +194,11 @@ export class WorkorderPartsUsageService extends BaseService {
 
     /**
      * Issue Parts to Workorder
-     * Issues a quantity of a part line to the workorder, incrementing the line\&#39;s quantityIssued and recording an ISSUE usage event with the acting user. Use this tool when stock is handed to the job; do not use consumeParts, which records actual installation against previously issued quantity. Preconditions: the workorder and part line must exist, the part must belong to the workorder, and the caller must have an authenticated username. Required inputs: workorderId (UUID) as a path parameter, plus workorderPartId (UUID) and a positive quantity in the body; uomCode is the optional unit quantity is expressed in (omit for the product\&#39;s base unit) and travels with the reservation request; an Idempotency-Key header makes retries return the original usage event. Emits a WORKORDER_PART_ISSUE event and marks the workorder fact changed for downstream replication. Returns 201 with the ISSUE event, 400 when the quantity is not positive or the part cannot be found, 404 when the workorder does not exist, 422 when uomCode has no conversion row for the product or the converted quantity exceeds its declared decimal scale, and 409 when the part belongs to a different workorder. 
+     * Issues a quantity of a part line to the workorder, incrementing the line\&#39;s quantityIssued and recording an ISSUE usage event with the acting user. Use this tool when stock is handed to the job; do not use consumeParts, which records actual installation against previously issued quantity. Preconditions: the workorder and part line must exist, the part must belong to the workorder, and the caller must have an authenticated username. Required inputs: workorderId (UUID) as a path parameter, plus workorderPartId (UUID) and a positive quantity in the body; uomCode is the optional unit quantity is expressed in (omit for the product\&#39;s base unit) and travels with the reservation request; an Idempotency-Key header makes retries return the original usage event. Emits a WORKORDER_PART_ISSUE event and marks the workorder fact changed for downstream replication. Returns 201 with the ISSUE event, 400 when the quantity is not positive or the part cannot be found, 404 when the workorder does not exist, 422 when uomCode has no conversion row for the product or the converted quantity exceeds its declared decimal scale, and 409 when the part belongs to a different workorder.
      * @endpoint post /v1/workorders/{workorderId}/parts/issue
-     * @param workorderId 
+     * @param workorderId
      * @param issuePartRequest Part line and quantity being issued from inventory to the job.
-     * @param idempotencyKey 
+     * @param idempotencyKey
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -272,11 +272,11 @@ export class WorkorderPartsUsageService extends BaseService {
 
     /**
      * Return Unused Parts to Inventory
-     * Returns unused issued quantity of a part line to inventory, incrementing quantityReturned and writing a RETURN usage event. Use this tool for the normal return of leftover stock after partial consumption; do not use returnUnusedPartQuantity, which is the adjustment-flow return that also records a reason. Preconditions: the part must belong to the workorder, and the return cannot exceed the available quantity — issued minus consumed minus already returned. Required inputs: workorderId (UUID) as a path parameter, plus workorderPartId (UUID) and a positive quantity in the body; uomCode is the optional unit quantity is expressed in (omit for the product\&#39;s base unit); an Idempotency-Key header makes retries return the original usage event. Emits a WORKORDER_PART_RETURN event and marks the workorder fact changed. Returns 201 with the RETURN event, 400 when the quantity is not positive, exceeds the available quantity, or the part cannot be found, 404 when the workorder does not exist, 422 when uomCode has no conversion row for the product or the converted quantity exceeds its declared decimal scale, and 409 when the part belongs to a different workorder. 
+     * Returns unused issued quantity of a part line to inventory, incrementing quantityReturned and writing a RETURN usage event. Use this tool for the normal return of leftover stock after partial consumption; do not use returnUnusedPartQuantity, which is the adjustment-flow return that also records a reason. Preconditions: the part must belong to the workorder, and the return cannot exceed the available quantity — issued minus consumed minus already returned. Required inputs: workorderId (UUID) as a path parameter, plus workorderPartId (UUID) and a positive quantity in the body; uomCode is the optional unit quantity is expressed in (omit for the product\&#39;s base unit); an Idempotency-Key header makes retries return the original usage event. Emits a WORKORDER_PART_RETURN event and marks the workorder fact changed. Returns 201 with the RETURN event, 400 when the quantity is not positive, exceeds the available quantity, or the part cannot be found, 404 when the workorder does not exist, 422 when uomCode has no conversion row for the product or the converted quantity exceeds its declared decimal scale, and 409 when the part belongs to a different workorder.
      * @endpoint post /v1/workorders/{workorderId}/parts/return
-     * @param workorderId 
+     * @param workorderId
      * @param returnPartRequest Part line and unused quantity going back to inventory.
-     * @param idempotencyKey 
+     * @param idempotencyKey
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options

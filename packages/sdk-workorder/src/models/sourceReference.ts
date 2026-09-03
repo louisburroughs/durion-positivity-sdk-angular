@@ -12,7 +12,7 @@
 /**
  * External source system reference metadata
  */
-export interface SourceReference { 
+export interface SourceReference {
     /**
      * Reference identifier of the record in the source system
      */

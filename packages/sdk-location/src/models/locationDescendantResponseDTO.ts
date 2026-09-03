@@ -12,7 +12,7 @@
 /**
  * Flat projection of a descendant location within a hierarchy traversal
  */
-export interface LocationDescendantResponseDTO { 
+export interface LocationDescendantResponseDTO {
     /**
      * Unique business code of the location
      */

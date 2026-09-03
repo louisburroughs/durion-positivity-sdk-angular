@@ -13,7 +13,7 @@ import { PostalCodeEntry } from './postalCodeEntry';
 /**
  * Request payload for creating or updating a service area
  */
-export interface ServiceAreaRequest { 
+export interface ServiceAreaRequest {
     /**
      * Whether the service area is active
      */

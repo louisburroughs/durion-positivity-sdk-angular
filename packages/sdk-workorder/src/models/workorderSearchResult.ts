@@ -12,7 +12,7 @@
 /**
  * Lightweight workorder search result enriched with customer name
  */
-export interface WorkorderSearchResult { 
+export interface WorkorderSearchResult {
     /**
      * Creation timestamp
      */

@@ -12,7 +12,7 @@
 /**
  * Response payload describing a mobile unit
  */
-export interface MobileUnitResponse { 
+export interface MobileUnitResponse {
     /**
      * Identifier of the base location the mobile unit operates from
      */

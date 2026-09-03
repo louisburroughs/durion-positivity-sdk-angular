@@ -12,7 +12,7 @@
 /**
  * Start timer request for workexec time entries
  */
-export interface WorkexecTimerStartRequest { 
+export interface WorkexecTimerStartRequest {
     /**
      * Optional labor code associated with timer
      */

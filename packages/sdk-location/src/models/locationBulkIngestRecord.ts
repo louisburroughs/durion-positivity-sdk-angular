@@ -12,7 +12,7 @@
 /**
  * A single location record within a bulk ingest request
  */
-export interface LocationBulkIngestRecord { 
+export interface LocationBulkIngestRecord {
     /**
      * Whether the location is active
      */

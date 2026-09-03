@@ -12,7 +12,7 @@
 /**
  * Response returned after starting work on a workorder
  */
-export interface WorkorderStartResponse { 
+export interface WorkorderStartResponse {
     /**
      * Workorder status after the start transition
      */

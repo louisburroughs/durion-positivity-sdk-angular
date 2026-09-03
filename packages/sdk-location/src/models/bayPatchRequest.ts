@@ -13,7 +13,7 @@ import { BayCapacityRequest } from './bayCapacityRequest';
 /**
  * Partial update payload for a service bay; null fields are left unchanged
  */
-export interface BayPatchRequest { 
+export interface BayPatchRequest {
     /**
      * Type classification of the bay; must be a BayType value
      */

@@ -12,7 +12,7 @@
 /**
  * Work order snapshot history entry
  */
-export interface WorkorderSnapshotResponse { 
+export interface WorkorderSnapshotResponse {
     /**
      * Timestamp when the snapshot was captured
      */

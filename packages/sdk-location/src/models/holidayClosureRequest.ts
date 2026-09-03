@@ -12,7 +12,7 @@
 /**
  * A single holiday closure entry for a location
  */
-export interface HolidayClosureRequest { 
+export interface HolidayClosureRequest {
     /**
      * Date on which the location is closed
      */

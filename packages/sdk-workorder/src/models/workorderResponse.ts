@@ -12,7 +12,7 @@
 /**
  * Response DTO for workorders
  */
-export interface WorkorderResponse { 
+export interface WorkorderResponse {
     /**
      * Date and time the workorder was approved
      */

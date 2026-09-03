@@ -11,7 +11,7 @@
 
 import { Inject, Injectable, Optional }                      from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams,
-         HttpResponse, HttpEvent, HttpContext 
+         HttpResponse, HttpEvent, HttpContext
         }       from '@angular/common/http';
 import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
@@ -43,9 +43,9 @@ export class OperationalContextService extends BaseService {
 
     /**
      * Get Workorder Operational Context
-     * Returns the workorder\&#39;s current operational context — location, bay (derived from the assigned resource), assigned mechanics, assigned resources, and a locked flag that is true once work has started. Use this tool when checking execution context before dispatch or override; do not use overrideOperationalContext, which mutates the context rather than reading it. Preconditions: the workorder must exist; the context is served from the workorder\&#39;s own assignment state, not from the shop-management service. Required inputs: workorderId (UUID) as a path parameter. No events are emitted and no state changes; this is a read-only projection. Returns 404 when no workorder exists for the id. 
+     * Returns the workorder\&#39;s current operational context — location, the primary assigned resourceId with the resourceType that says whether it is a bay or a mobile unit, assigned mechanics, assigned resources, and a locked flag that is true once work has started. Use this tool when checking execution context before dispatch or override; do not use overrideOperationalContext, which mutates the context rather than reading it. Preconditions: the workorder must exist; the context is served from the workorder\&#39;s own assignment state, not from the shop-management service. Required inputs: workorderId (UUID) as a path parameter. No events are emitted and no state changes; this is a read-only projection. Returns 404 when no workorder exists for the id.
      * @endpoint get /v1/workorders/{workorderId}/operationalContext
-     * @param workorderId 
+     * @param workorderId
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -103,10 +103,10 @@ export class OperationalContextService extends BaseService {
 
     /**
      * Override Workorder Operational Context
-     * Applies a manager-authorized override of the workorder\&#39;s operational context, replacing the location, assigned mechanics, and assigned resources (the first assigned resource becomes the bay) before work starts. Use this tool when a manager must re-slot a workorder to a different bay, crew, or location prior to execution; do not use getOperationalContext, which only reads the current context. Preconditions: the workorder must exist and work must not have started — once workStartedAt is set the context is locked and overrides are rejected. Required inputs: workorderId (UUID) as a path parameter and a body with locationId (UUID, required); bayId, assignedMechanics, assignedResources, and constraints are optional, and constraints are echoed back but not persisted. Emits a WORKORDER_OPERATIONAL_CONTEXT_OVERRIDE event and marks the workorder fact changed for downstream replication. Returns 404 when no workorder exists for the id, and 409 when work has already started and the context is locked. 
+     * Applies a manager-authorized override of the workorder\&#39;s operational context, replacing the location, assigned mechanics, and assigned resources (the first assigned resource, typed by resourceType, becomes the workorder\&#39;s resource) before work starts. Use this tool when a manager must re-slot a workorder to a different bay, crew, or location prior to execution; do not use getOperationalContext, which only reads the current context. Preconditions: the workorder must exist and work must not have started — once workStartedAt is set the context is locked and overrides are rejected. Required inputs: workorderId (UUID) as a path parameter and a body with locationId (UUID, required); resourceType, assignedMechanics, assignedResources, and constraints are optional, an absent resourceType is applied as BAY, and constraints are echoed back but not persisted. Emits a WORKORDER_OPERATIONAL_CONTEXT_OVERRIDE event and marks the workorder fact changed for downstream replication. Returns 404 when no workorder exists for the id, and 409 when work has already started and the context is locked.
      * @endpoint post /v1/workorders/{workorderId}/operationalContext/override
-     * @param workorderId 
-     * @param operationalContextOverrideRequest Replacement operational context values — location, bay, mechanics, and resources.
+     * @param workorderId
+     * @param operationalContextOverrideRequest Replacement operational context values — location, mechanics, resources, and the resource type.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -177,9 +177,9 @@ export class OperationalContextService extends BaseService {
 
     /**
      * Start Workorder Execution and Lock Context
-     * Transitions the workorder to WORK_IN_PROGRESS, stamps workStartedAt, assigns a new operational context version, and locks the context against further overrides. Use this tool when the technician actually begins work; do not use overrideOperationalContext, which adjusts context and is only possible before this call. Preconditions: the workorder must exist in APPROVED or ASSIGNED status, work must not already have started, and no change requests may be awaiting advisor review. Required inputs: workorderId (UUID) as a path parameter; the body is optional and may carry a reason (defaults to \&quot;Work started\&quot;) — the acting user is taken from the security context. Emits a WORKORDER_START event, captures a state snapshot, and records the status transition. Returns 400 when pending change requests block the start, 404 when no workorder exists for the id, and 409 when work has already started or the status is not start-eligible. 
+     * Transitions the workorder to WORK_IN_PROGRESS, stamps workStartedAt, assigns a new operational context version, and locks the context against further overrides. Use this tool when the technician actually begins work; do not use overrideOperationalContext, which adjusts context and is only possible before this call. Preconditions: the workorder must exist in APPROVED or ASSIGNED status, work must not already have started, and no change requests may be awaiting advisor review. Required inputs: workorderId (UUID) as a path parameter; the body is optional and may carry a reason (defaults to \&quot;Work started\&quot;) — the acting user is taken from the security context. Emits a WORKORDER_START event, captures a state snapshot, and records the status transition. Returns 400 when pending change requests block the start, 404 when no workorder exists for the id, and 409 when work has already started or the status is not start-eligible.
      * @endpoint post /v1/workorders/{workorderId}/start
-     * @param workorderId 
+     * @param workorderId
      * @param startWorkorderRequest Optional start metadata; reason is recorded on the state transition.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
