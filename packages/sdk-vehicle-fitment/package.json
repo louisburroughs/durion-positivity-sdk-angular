@@ -1,6 +1,6 @@
 {
   "name": "@durion-sdk/vehicle-fitment",
-  "version": "0.11.0-alpha",
+  "version": "0.12.0-alpha",
   "description": "OpenAPI client for @durion-sdk/vehicle-fitment",
   "author": "OpenAPI-Generator Contributors",
   "repository": {

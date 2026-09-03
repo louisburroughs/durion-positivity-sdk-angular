@@ -10,23 +10,23 @@
 
 
 /**
- * One vendor\'s spend over the report window; see field descriptions for the paidAmount vs billCount/avgBillAmount population split
+ * One vendor\'s spend over the report window; see field descriptions for the paidAmount vs billsIssuedInWindow/avgIssuedBillAmount population split
  */
 export interface VendorSpendRow {
     /**
-     * Sum of VendorBill.totalAmount for this vendor\'s bills in the window divided by billCount; 0 (never null) when billCount is 0 — there is nothing to average, and 0 keeps this field a well-defined BigDecimal for every row
+     * Sum of VendorBill.totalAmount for this vendor\'s bills in the window divided by billsIssuedInWindow; 0 (never null) when billsIssuedInWindow is 0 — there is nothing to average, and 0 keeps this field a well-defined BigDecimal for every row
      */
-    avgBillAmount: number;
+    avgIssuedBillAmount: number;
     /**
-     * Count of VendorBill records for this vendor whose billDate falls in the window, regardless of status; 0 when none billed in the window. Bill-side figure, a DIFFERENT population from paidAmount above — see class Javadoc.
+     * Count of VendorBill records for this vendor whose billDate falls in the window, regardless of payment status; 0 when none issued in the window. Bill-side figure, a DIFFERENT population from paidAmount above — see class Javadoc.
      */
-    billCount: number;
+    billsIssuedInWindow: number;
     /**
      * Resolved vendor display name, from the AP vendor directory; falls back to the vendor name snapshot recorded on the vendor\'s own bills/payments when the vendor has no directory entry, and is null only if neither source has a name
      */
     name?: string | null;
     /**
-     * Sum of APPayment.grossAmount for settled payments (status GATEWAY_SUCCEEDED or later) to this vendor whose paymentDate falls in the window; 0 when none settled in the window. This is A/P cash, a DIFFERENT population from billCount/avgBillAmount below — see class Javadoc.
+     * Sum of APPayment.grossAmount for settled payments (status GATEWAY_SUCCEEDED or later) to this vendor whose paymentDate falls in the window; 0 when none settled in the window. This is A/P cash, a DIFFERENT population from billsIssuedInWindow/avgIssuedBillAmount below — see class Javadoc.
      */
     paidAmount: number;
     /**
@@ -73,9 +73,9 @@ export function instanceOfVendorSpendRow(value: object): value is VendorSpendRow
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createVendorSpendRowPropertyNames('avgBillAmount', 'billCount', 'paidAmount', 'vendorId', );
+    const requiredProperties = createVendorSpendRowPropertyNames('avgIssuedBillAmount', 'billsIssuedInWindow', 'paidAmount', 'vendorId', );
     const optionalStringProperties = createVendorSpendRowOptionalProperties({ name: 'name', nullable: true }, { name: 'vendorId', nullable: false }, );
-    const optionalNumberProperties = createVendorSpendRowOptionalProperties({ name: 'avgBillAmount', nullable: false }, { name: 'billCount', nullable: false }, { name: 'paidAmount', nullable: false }, );
+    const optionalNumberProperties = createVendorSpendRowOptionalProperties({ name: 'avgIssuedBillAmount', nullable: false }, { name: 'billsIssuedInWindow', nullable: false }, { name: 'paidAmount', nullable: false }, );
     const optionalBooleanProperties = createVendorSpendRowOptionalProperties();
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

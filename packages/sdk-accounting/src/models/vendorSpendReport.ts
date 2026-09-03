@@ -11,7 +11,7 @@ import { VendorSpendRow } from './vendorSpendRow';
 
 
 /**
- * Per-vendor spend report for one date window, ordered by paidAmount descending. paidAmount (settled A/P cash) and billCount/avgBillAmount (bill records) are different populations — see VendorSpendRow field descriptions.
+ * Per-vendor spend report for one date window, ordered by paidAmount descending. paidAmount (settled A/P cash) and billsIssuedInWindow/avgIssuedBillAmount (bill records) are different populations — see VendorSpendRow field descriptions.
  */
 export interface VendorSpendReport {
     /**

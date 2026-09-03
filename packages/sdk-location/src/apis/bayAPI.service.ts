@@ -116,6 +116,69 @@ export class BayAPIService extends BaseService {
     }
 
     /**
+     * Delete a Service Bay
+     * Deletes a bay permanently by id and publishes a deletion fact so replica consumers drop the row from their dispatch and roster views. Use this tool only when a bay was created in error; use patchBay with status OUT_OF_SERVICE instead to take a real bay out of service, which keeps it visible as inactive rather than removing it. Preconditions: the location must exist and the bay must belong to it; there is no usage check, so callers must confirm the bay is not referenced by scheduled work first. Required inputs: locationId and bayId (UUIDs) as path parameters; there is no request body. Emits a LOCATION_BAY_DELETE event; the row is hard-deleted, not soft-deleted. Returns 204 on success and 404 when the location or bay does not exist.
+     * @endpoint delete /v1/locations/{locationId}/bays/{bayId}
+     * @param locationId Location ID
+     * @param bayId ID of the bay to delete
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public deleteBay(locationId: string, bayId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
+    public deleteBay(locationId: string, bayId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
+    public deleteBay(locationId: string, bayId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
+    public deleteBay(locationId: string, bayId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (locationId === null || locationId === undefined) {
+            throw new Error('Required parameter locationId was null or undefined when calling deleteBay.');
+        }
+        if (bayId === null || bayId === undefined) {
+            throw new Error('Required parameter bayId was null or undefined when calling deleteBay.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/locations/${this.configuration.encodeParam({name: "locationId", value: locationId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/bays/${this.configuration.encodeParam({name: "bayId", value: bayId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<any>('delete', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
      * Get a Service Bay by Identifier
      * Returns a single service bay of a location, including its capacity, capability and skill requirement details. Use this tool when both the location id and bay id are known; use listBays instead to search or enumerate. Preconditions: the location must exist and the bay must belong to it. Required inputs: locationId and bayId (UUIDs) as path parameters. No events are emitted and no state changes; this is a read-only projection. Returns 404 when the location does not exist or the bay is not found under that location.
      * @endpoint get /v1/locations/{locationId}/bays/{bayId}

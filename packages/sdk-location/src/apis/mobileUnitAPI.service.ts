@@ -112,6 +112,65 @@ export class MobileUnitAPIService extends BaseService {
     }
 
     /**
+     * Delete a Mobile Unit
+     * Deletes a mobile unit permanently by id, removing its coverage rules and capability assignments, and publishes a deletion fact so replica consumers drop the row from their dispatch and roster views. Use this tool only when a unit was created in error; use patchMobileUnit with status INACTIVE instead to stand down a real unit, which keeps it visible as inactive rather than removing it. Preconditions: the unit must exist; there is no usage check, so callers must confirm the unit is not referenced by scheduled work first. Required inputs: id (UUID) as a path parameter; there is no request body. Emits a LOCATION_MOBILE_UNIT_DELETE event; the row is hard-deleted, not soft-deleted, and its coverage rules are deleted with it. Returns 204 on success and 404 when the mobile unit does not exist.
+     * @endpoint delete /v1/mobile-units/{id}
+     * @param id ID of the mobile unit to delete
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public deleteMobileUnit(id: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
+    public deleteMobileUnit(id: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
+    public deleteMobileUnit(id: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
+    public deleteMobileUnit(id: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (id === null || id === undefined) {
+            throw new Error('Required parameter id was null or undefined when calling deleteMobileUnit.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/mobile-units/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<any>('delete', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
      * Get a Mobile Unit by Identifier
      * Returns a single mobile unit with its status, base location, capability ids and travel buffer policy reference. Use this tool when the unit id is already known; use listMobileUnits instead to enumerate, and listCoverageRules to read the unit\&#39;s coverage separately. Preconditions: the mobile unit must exist. Required inputs: id (UUID) as a path parameter. No events are emitted and no state changes; this is a read-only projection. Returns 404 when no mobile unit exists for the supplied id.
      * @endpoint get /v1/mobile-units/{id}
