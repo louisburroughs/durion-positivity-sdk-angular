@@ -1,4 +1,4 @@
-# @durion-sdk/inquiry@0.13.0-alpha
+# @durion-sdk/inquiry@0.14.0-alpha
 
 API documentation for the Inquiry service
 
@@ -24,7 +24,7 @@ Navigate to the folder of your consuming project and run one of next commands.
 _published:_
 
 ```console
-npm install @durion-sdk/inquiry@0.13.0-alpha --save
+npm install @durion-sdk/inquiry@0.14.0-alpha --save
 ```
 
 _without publishing (not recommended):_

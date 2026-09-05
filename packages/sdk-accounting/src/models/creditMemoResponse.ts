@@ -30,13 +30,25 @@ export interface CreditMemoResponse {
      */
     creditMemoId: string;
     /**
+     * Short human-readable reference for the credit memo, shown in place of the raw creditMemoId UUID (CM-{YYYYMM}-{n}). Assigned at creation, and backfilled for memos that predate the field, so it is normally present. Nullable because assignment is a service-layer concern rather than a database invariant; when absent, render nothing rather than falling back to the UUID.
+     */
+    creditMemoReference?: string | null;
+    /**
      * ISO 4217 currency code
      */
     currency?: string;
     /**
+     * Customer display name resolved from accounting\'s customer-party replica. Null when the owner knows no name for the party or the replica has not seen it; never the customer UUID as fallback text.
+     */
+    customerDisplayName?: string | null;
+    /**
      * Identifier of the customer the credit memo applies to
      */
     customerId?: string;
+    /**
+     * Stable human-facing customer number resolved from accounting\'s customer-party replica. Null when the owner never numbered the party or the replica has not seen it; never the customer UUID as fallback text.
+     */
+    customerReference?: string | null;
     /**
      * Invoice outstanding balance after the credit was applied
      */
@@ -49,6 +61,10 @@ export interface CreditMemoResponse {
      * Identifier of the original invoice the credit memo references
      */
     originalInvoiceId: string;
+    /**
+     * Human-readable number of the original invoice, resolved from accounting\'s invoice replica. Null when the replica holds no number for the invoice; never the invoice UUID as fallback text.
+     */
+    originalInvoiceReference?: string | null;
     /**
      * Identifier of the original accounting period
      */
@@ -138,7 +154,7 @@ export function instanceOfCreditMemoResponse(value: object): value is CreditMemo
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createCreditMemoResponsePropertyNames('creationTimestamp', 'creditAmount', 'creditMemoId', 'originalInvoiceId', 'status', );
-    const optionalStringProperties = createCreditMemoResponseOptionalProperties({ name: 'createdByUserId', nullable: false }, { name: 'creationTimestamp', nullable: false }, { name: 'creditMemoId', nullable: false }, { name: 'currency', nullable: false }, { name: 'customerId', nullable: false }, { name: 'justificationNote', nullable: false }, { name: 'originalInvoiceId', nullable: false }, { name: 'originalPeriodId', nullable: false }, { name: 'postedTimestamp', nullable: false }, { name: 'reasonCode', nullable: false }, { name: 'status', nullable: false }, { name: 'voidReason', nullable: false }, { name: 'voidedByUserId', nullable: false }, { name: 'voidedTimestamp', nullable: false }, );
+    const optionalStringProperties = createCreditMemoResponseOptionalProperties({ name: 'createdByUserId', nullable: false }, { name: 'creationTimestamp', nullable: false }, { name: 'creditMemoId', nullable: false }, { name: 'creditMemoReference', nullable: true }, { name: 'currency', nullable: false }, { name: 'customerDisplayName', nullable: true }, { name: 'customerId', nullable: false }, { name: 'customerReference', nullable: true }, { name: 'justificationNote', nullable: false }, { name: 'originalInvoiceId', nullable: false }, { name: 'originalInvoiceReference', nullable: true }, { name: 'originalPeriodId', nullable: false }, { name: 'postedTimestamp', nullable: false }, { name: 'reasonCode', nullable: false }, { name: 'status', nullable: false }, { name: 'voidReason', nullable: false }, { name: 'voidedByUserId', nullable: false }, { name: 'voidedTimestamp', nullable: false }, );
     const optionalNumberProperties = createCreditMemoResponseOptionalProperties({ name: 'creditAmount', nullable: false }, { name: 'invoiceBalanceAfter', nullable: false }, { name: 'taxAmountReversed', nullable: false }, { name: 'totalAmount', nullable: false }, );
     const optionalBooleanProperties = createCreditMemoResponseOptionalProperties({ name: 'priorPeriodAdjustment', nullable: false }, );
 

@@ -17,6 +17,8 @@ import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
 // @ts-ignore
+import { ApiError } from '../src/models/apiError';
+// @ts-ignore
 import { TimeEntryAdjustment } from '../src/models/timeEntryAdjustment';
 // @ts-ignore
 import { TimeEntryAdjustmentRequest } from '../src/models/timeEntryAdjustmentRequest';

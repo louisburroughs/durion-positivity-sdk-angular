@@ -19,6 +19,8 @@ import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 // @ts-ignore
 import { AddItemRequest } from '../src/models/addItemRequest';
 // @ts-ignore
+import { ApiError } from '../src/models/apiError';
+// @ts-ignore
 import { CheckoutRequest } from '../src/models/checkoutRequest';
 // @ts-ignore
 import { CreateCartRequest } from '../src/models/createCartRequest';
@@ -127,7 +129,7 @@ export class SalesOrdersService extends BaseService {
 
     /**
      * Apply an Order-Level Discount
-     * Applies or replaces the single order-level discount on a DRAFT cart, allocated pro-rata across lines when totals are recomputed. Use this tool for a whole-order concession; do not use applyPriceOverride, which changes one line\&#39;s unit price through the price-override approval workflow. Preconditions: the order must exist and be DRAFT. Required inputs: type (PERCENT or AMOUNT) and a positive value — a PERCENT value must not exceed 100; reasonCode is optional. Emits an ORDER_CART_DISCOUNT_APPLY event, recomputes order totals, and marks tax stale. Returns 404 when the order does not exist, 409 when the order is not DRAFT, and 422 when the type or value is invalid.
+     * Applies or replaces the single order-level discount on a DRAFT cart, allocated pro-rata across lines when totals are recomputed. Use this tool for a whole-order concession; do not use applyPriceOverride, which changes one line\&#39;s unit price through the price-override approval workflow. Preconditions: the order must exist and be DRAFT. Required inputs: type (PERCENT or AMOUNT) and a positive value — a PERCENT value must not exceed 100; reasonCode is optional. Emits an ORDER_CART_DISCOUNT_APPLY event, recomputes order totals, and marks tax stale. Returns 404 when the order does not exist, 409 when the order is not DRAFT, and 400 when the type is not PERCENT or AMOUNT or the value is not positive (and, for PERCENT, at most 100).
      * @endpoint put /v1/orders/carts/{orderId}/discount
      * @param orderId
      * @param orderDiscountRequest The order-level discount to set, replacing any existing one.
@@ -339,7 +341,7 @@ export class SalesOrdersService extends BaseService {
 
     /**
      * Create a Sales Order Cart
-     * Creates a DRAFT sales order cart bound to a clerk and terminal, with optional customer, vehicle, and deposit-source context; a register session open on the terminal binds the cart to it and supplies the location when locationId is omitted. Use this tool to start a new sale at the counter; do not use addCartItem, which adds line items to a cart that already exists. Preconditions: the terminal must not have a register session in CLOSING, the customer and vehicle must exist in CRM when supplied, and a location must be resolvable from the request or the open session. Required inputs: clerkId and terminalId; customerId and vehicleId are optional UUID strings, depositSourceType (ESTIMATE, WORKORDER or ORDER) and depositSourceId must be supplied together, and the optional Idempotency-Key header makes creation replay-safe. Emits an ORDER_CART_CREATE event and records the initial DRAFT status-history row. Returns 201 on creation, 200 when a replayed Idempotency-Key returns the original cart, 400 when locationId cannot be resolved or depositSourceType/depositSourceId is only half supplied, 409 when the key was previously used with a different payload, and 422 when the customer or vehicle cannot be validated or the terminal\&#39;s session is being closed.
+     * Creates a DRAFT sales order cart bound to a clerk and terminal, with optional customer, vehicle, and deposit-source context; a register session open on the terminal binds the cart to it and supplies the location when locationId is omitted. Use this tool to start a new sale at the counter; do not use addCartItem, which adds line items to a cart that already exists. Preconditions: the terminal must not have a register session in CLOSING, the customer and vehicle must exist in CRM when supplied, and a location must be resolvable from the request or the open session. Required inputs: clerkId and terminalId; customerId and vehicleId are optional UUID strings, depositSourceType (ESTIMATE, WORKORDER or ORDER) and depositSourceId must be supplied together, and the optional Idempotency-Key header makes creation replay-safe. Emits an ORDER_CART_CREATE event and records the initial DRAFT status-history row. Returns 201 on creation, 200 when a replayed Idempotency-Key returns the original cart, 400 when locationId cannot be resolved or depositSourceType/depositSourceId is only half supplied, 409 when the key was previously used with a different payload, and 422 when the customer or vehicle cannot be validated or the terminal\&#39;s register session is being closed.
      * @endpoint post /v1/orders/carts
      * @param createCartRequest Cart-creation context: who is selling, where, and for whom.
      * @param idempotencyKey Client idempotency key; replays return the original cart
@@ -473,7 +475,7 @@ export class SalesOrdersService extends BaseService {
 
     /**
      * Link a Source Document to an Order
-     * Imports the line items of a source document (an ESTIMATE or WORKORDER) into a DRAFT cart, merging into same-SKU same-price lines where possible; imported source prices are contractual and are never repriced. Use this tool to pull approved estimate or workorder lines onto a sale; do not use addCartItem, which adds individually priced counter lines. Preconditions: the order must be DRAFT, a WORKORDER source requires a customer already on the cart, and source lines already linked to the cart are skipped, making the call replay-safe. Required inputs: sourceType (ESTIMATE or WORKORDER) and sourceId, both in the body. Emits an ORDER_LINK_SOURCE event, recomputes order totals, and marks tax stale. Returns 404 when the order does not exist, 400 when sourceType is unknown, 409 when the order is not DRAFT, and 422 when a WORKORDER link is attempted without a customer on the cart.
+     * Imports the line items of a source document (an ESTIMATE or WORKORDER) into a DRAFT cart, merging into same-SKU same-price lines where possible; imported source prices are contractual and are never repriced. Use this tool to pull approved estimate or workorder lines onto a sale; do not use addCartItem, which adds individually priced counter lines. Preconditions: the order must be DRAFT, a WORKORDER source requires a customer already on the cart, and source lines already linked to the cart are skipped, making the call replay-safe. Required inputs: sourceType (ESTIMATE or WORKORDER) and sourceId, both in the body. Emits an ORDER_LINK_SOURCE event, recomputes order totals, and marks tax stale. Returns 404 when the order does not exist, 400 when sourceType is unknown or sourceId is not a UUID, 409 when the order is not DRAFT, and 422 when a WORKORDER link is attempted without a customer on the cart or when the source document does not resolve in the replica.
      * @endpoint patch /v1/orders/carts/{orderId}/source
      * @param orderId
      * @param linkSourceRequest The source document whose lines are imported into the cart.

@@ -1,5 +1,5 @@
 /**
- * Positivity Product API
+ * POS Human Resources Service API
  *
  * Contact: louis.burroughs@gmail.com
  *

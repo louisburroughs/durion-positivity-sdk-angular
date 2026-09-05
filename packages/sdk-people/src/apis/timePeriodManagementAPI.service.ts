@@ -17,9 +17,9 @@ import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
 // @ts-ignore
-import { CreateTimePeriodRequest } from '../src/models/createTimePeriodRequest';
+import { ApiError } from '../src/models/apiError';
 // @ts-ignore
-import { ProblemDetail } from '../src/models/problemDetail';
+import { CreateTimePeriodRequest } from '../src/models/createTimePeriodRequest';
 // @ts-ignore
 import { TimePeriodDto } from '../src/models/timePeriodDto';
 // @ts-ignore
@@ -50,10 +50,10 @@ export class TimePeriodManagementAPIService extends BaseService {
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public createTimePeriod(createTimePeriodRequest: CreateTimePeriodRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<TimePeriodDto>;
-    public createTimePeriod(createTimePeriodRequest: CreateTimePeriodRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<TimePeriodDto>>;
-    public createTimePeriod(createTimePeriodRequest: CreateTimePeriodRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<TimePeriodDto>>;
-    public createTimePeriod(createTimePeriodRequest: CreateTimePeriodRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public createTimePeriod(createTimePeriodRequest: CreateTimePeriodRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<TimePeriodDto>;
+    public createTimePeriod(createTimePeriodRequest: CreateTimePeriodRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<TimePeriodDto>>;
+    public createTimePeriod(createTimePeriodRequest: CreateTimePeriodRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<TimePeriodDto>>;
+    public createTimePeriod(createTimePeriodRequest: CreateTimePeriodRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (createTimePeriodRequest === null || createTimePeriodRequest === undefined) {
             throw new Error('Required parameter createTimePeriodRequest was null or undefined when calling createTimePeriod.');
         }
@@ -64,8 +64,7 @@ export class TimePeriodManagementAPIService extends BaseService {
         localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
 
         const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
-            'application/json',
-            'application/problem+json'
+            'application/json'
         ]);
         if (localVarHttpHeaderAcceptSelected !== undefined) {
             localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
@@ -122,10 +121,10 @@ export class TimePeriodManagementAPIService extends BaseService {
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public transitionTimePeriod(timePeriodId: string, transitionTimePeriodRequest: TransitionTimePeriodRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<TimePeriodDto>;
-    public transitionTimePeriod(timePeriodId: string, transitionTimePeriodRequest: TransitionTimePeriodRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<TimePeriodDto>>;
-    public transitionTimePeriod(timePeriodId: string, transitionTimePeriodRequest: TransitionTimePeriodRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<TimePeriodDto>>;
-    public transitionTimePeriod(timePeriodId: string, transitionTimePeriodRequest: TransitionTimePeriodRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public transitionTimePeriod(timePeriodId: string, transitionTimePeriodRequest: TransitionTimePeriodRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<TimePeriodDto>;
+    public transitionTimePeriod(timePeriodId: string, transitionTimePeriodRequest: TransitionTimePeriodRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<TimePeriodDto>>;
+    public transitionTimePeriod(timePeriodId: string, transitionTimePeriodRequest: TransitionTimePeriodRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<TimePeriodDto>>;
+    public transitionTimePeriod(timePeriodId: string, transitionTimePeriodRequest: TransitionTimePeriodRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (timePeriodId === null || timePeriodId === undefined) {
             throw new Error('Required parameter timePeriodId was null or undefined when calling transitionTimePeriod.');
         }
@@ -139,8 +138,7 @@ export class TimePeriodManagementAPIService extends BaseService {
         localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
 
         const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
-            'application/json',
-            'application/problem+json'
+            'application/json'
         ]);
         if (localVarHttpHeaderAcceptSelected !== undefined) {
             localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);

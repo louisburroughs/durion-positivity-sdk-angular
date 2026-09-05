@@ -7,6 +7,7 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { EventPayloadReference } from './eventPayloadReference';
 
 
 /**
@@ -77,6 +78,10 @@ export interface AccountingEventResponse {
      * Event-specific payload content
      */
     payload?: object;
+    /**
+     * Display projection for the UUID-backed values recognized inside the raw payload (issue #1778). The payload above is unchanged and remains the audit record; this list carries the human-readable identity of each recognized reference, with null display values where accounting cannot resolve one. Populated on the event detail endpoint only — list responses omit it.
+     */
+    payloadReferences?: Array<EventPayloadReference> | null;
     /**
      * Timestamp when the event was processed (ISO 8601)
      */
