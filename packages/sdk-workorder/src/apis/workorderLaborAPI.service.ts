@@ -19,6 +19,8 @@ import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 // @ts-ignore
 import { AdjustLaborRequest } from '../src/models/adjustLaborRequest';
 // @ts-ignore
+import { ApiError } from '../src/models/apiError';
+// @ts-ignore
 import { StartLaborRequest } from '../src/models/startLaborRequest';
 // @ts-ignore
 import { WorkorderLaborEntryResponse } from '../src/models/workorderLaborEntryResponse';

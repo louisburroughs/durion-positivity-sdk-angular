@@ -17,6 +17,8 @@ import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
 // @ts-ignore
+import { ApiError } from '../src/models/apiError';
+// @ts-ignore
 import { DefaultGLMappingListResponse } from '../src/models/defaultGLMappingListResponse';
 // @ts-ignore
 import { DefaultGLMappingRequest } from '../src/models/defaultGLMappingRequest';
@@ -41,7 +43,7 @@ export class DefaultGLMappingsService extends BaseService {
 
     /**
      * Create Default GL Mapping
-     * Creates a fallback debit and credit account pair for an event type, used by the posting engine when no explicit posting rule matches; resolution order is explicit rule, then org-scoped default, then global default, then UNMAPPED_EVENT_TYPE failure. Use this tool to guarantee an event type always posts somewhere; do not use createGLMapping, which maps a source-system external code to a single account. Preconditions: the debit and credit GL accounts must exist. Required inputs: eventType (max 100 chars), debitAccountId (UUID) and creditAccountId (UUID); organizationId is optional (null makes the default global) and active defaults to true. Emits an ACCOUNTING_DEFAULT_MAPPING_CREATE event. Returns 400 when a referenced GL account cannot be resolved.
+     * Creates a fallback debit and credit account pair for an event type, used by the posting engine when no explicit posting rule matches; resolution order is explicit rule, then org-scoped default, then global default, then UNMAPPED_EVENT_TYPE failure. Use this tool to guarantee an event type always posts somewhere; do not use createGLMapping, which maps a source-system external code to a single account. Preconditions: the debit and credit GL accounts must exist. Required inputs: eventType (max 100 chars), debitAccountId (UUID) and creditAccountId (UUID); organizationId is optional (null makes the default global) and active defaults to true. Emits an ACCOUNTING_DEFAULT_MAPPING_CREATE event. Returns 400 for an invalid request, 404 GL_ACCOUNT_NOT_FOUND when a referenced GL account does not exist, and 422 GL_ACCOUNT_NOT_ACTIVE when it exists but is not active on the current date.
      * @endpoint post /v1/accounting/default-mappings
      * @param defaultGLMappingRequest Fallback debit and credit account pair for one event type.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -111,17 +113,17 @@ export class DefaultGLMappingsService extends BaseService {
 
     /**
      * Deactivate Default GL Mapping
-     * Soft deletes a default GL mapping by marking it inactive; the row is retained for history and stops participating in fallback resolution. Use this tool to retire a fallback pair; do not use updateDefaultMapping with active&#x3D;false only when other fields must change at the same time, and note there is no reactivation endpoint other than updateDefaultMapping. Preconditions: the default mapping must exist. Required inputs: id (UUID) as a path parameter; there is no request body. Emits an ACCOUNTING_DEFAULT_MAPPING_DELETE event. Returns 400 when no default mapping exists for the supplied id (mapped as VALIDATION_ERROR, not 404), and 204 with no body on success.
+     * Soft deletes a default GL mapping by marking it inactive; the row is retained for history and stops participating in fallback resolution. Use this tool to retire a fallback pair; do not use updateDefaultMapping with active&#x3D;false only when other fields must change at the same time, and note there is no reactivation endpoint other than updateDefaultMapping. Preconditions: the default mapping must exist. Required inputs: id (UUID) as a path parameter; there is no request body. Emits an ACCOUNTING_DEFAULT_MAPPING_DELETE event. Returns 204 with no body on success, and 404 DEFAULT_GL_MAPPING_NOT_FOUND when no default mapping exists for the supplied id.
      * @endpoint delete /v1/accounting/default-mappings/{id}
      * @param id Default mapping identifier
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public deactivateDefaultMapping(id: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public deactivateDefaultMapping(id: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public deactivateDefaultMapping(id: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public deactivateDefaultMapping(id: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public deactivateDefaultMapping(id: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any>;
+    public deactivateDefaultMapping(id: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
+    public deactivateDefaultMapping(id: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
+    public deactivateDefaultMapping(id: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (id === null || id === undefined) {
             throw new Error('Required parameter id was null or undefined when calling deactivateDefaultMapping.');
         }
@@ -132,6 +134,7 @@ export class DefaultGLMappingsService extends BaseService {
         localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
 
         const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
         ]);
         if (localVarHttpHeaderAcceptSelected !== undefined) {
             localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
@@ -170,7 +173,7 @@ export class DefaultGLMappingsService extends BaseService {
 
     /**
      * Get Default GL Mapping
-     * Returns one default GL mapping with its event type, debit and credit accounts, scope and active flag. Use this tool when the mapping id is already known; use searchDefaultMappings or listDefaultMappings instead when hunting by event type or organization. Preconditions: the default mapping must exist. Required inputs: id (UUID) as a path parameter; there is no request body. No events are emitted and no state changes; this is a read-only projection. Returns 400 when no default mapping exists for the supplied id (mapped as VALIDATION_ERROR, not 404).
+     * Returns one default GL mapping with its event type, debit and credit accounts, scope and active flag. Use this tool when the mapping id is already known; use searchDefaultMappings or listDefaultMappings instead when hunting by event type or organization. Preconditions: the default mapping must exist. Required inputs: id (UUID) as a path parameter; there is no request body. No events are emitted and no state changes; this is a read-only projection. Returns 404 DEFAULT_GL_MAPPING_NOT_FOUND when no default mapping exists for the supplied id.
      * @endpoint get /v1/accounting/default-mappings/{id}
      * @param id Default mapping identifier
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -526,7 +529,7 @@ export class DefaultGLMappingsService extends BaseService {
 
     /**
      * Update Default GL Mapping
-     * Updates an existing default GL mapping\&#39;s event type, accounts, scope, description or active flag. Use this tool to repoint or rescope an existing fallback; do not use createDefaultMapping, which adds a new one, or deactivateDefaultMapping, which soft deletes. Preconditions: the default mapping must exist. Required inputs: id (UUID) as a path parameter plus the full replacement body with eventType, debitAccountId and creditAccountId; organizationId null means global scope. Emits an ACCOUNTING_DEFAULT_MAPPING_UPDATE event; future postings resolve against the updated pair while already-posted entries are untouched. Returns 400 when no default mapping exists for the supplied id (mapped as VALIDATION_ERROR, not 404).
+     * Updates an existing default GL mapping\&#39;s event type, accounts, scope, description or active flag. Use this tool to repoint or rescope an existing fallback; do not use createDefaultMapping, which adds a new one, or deactivateDefaultMapping, which soft deletes. Preconditions: the default mapping must exist. Required inputs: id (UUID) as a path parameter plus the full replacement body with eventType, debitAccountId and creditAccountId; organizationId null means global scope. Emits an ACCOUNTING_DEFAULT_MAPPING_UPDATE event; future postings resolve against the updated pair while already-posted entries are untouched. Returns 404 DEFAULT_GL_MAPPING_NOT_FOUND when no default mapping exists for the supplied id, 404 GL_ACCOUNT_NOT_FOUND when a referenced GL account does not exist, and 422 GL_ACCOUNT_NOT_ACTIVE when it exists but is not active on the current date.
      * @endpoint put /v1/accounting/default-mappings/{id}
      * @param id Default mapping identifier
      * @param defaultGLMappingRequest Replacement fallback mapping definition for the event type.

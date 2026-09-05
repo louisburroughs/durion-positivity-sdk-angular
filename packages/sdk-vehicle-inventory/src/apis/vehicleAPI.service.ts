@@ -17,6 +17,8 @@ import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
 // @ts-ignore
+import { ApiError } from '../src/models/apiError';
+// @ts-ignore
 import { VehicleLegacyRequest } from '../src/models/vehicleLegacyRequest';
 // @ts-ignore
 import { VehicleLegacyResponse } from '../src/models/vehicleLegacyResponse';
@@ -179,17 +181,17 @@ export class VehicleAPIService extends BaseService {
 
     /**
      * Delete vehicle by ID
-     * Permanently deletes a vehicle from the legacy vehicle store; the row is removed rather than deactivated. Use this tool to purge a legacy record by id; do not use deleteVehicle, which soft-deactivates a registry vehicle and keeps it readable. Preconditions: the vehicle must exist in the legacy store; deletion is not recoverable through this API. Required inputs: id (UUID) as a path parameter; there is no request body. Emits a VEHICLE_DELETE event; no replica fact is published from the legacy surface. Returns 204 on successful deletion, and 404 with an empty body when the id is unknown.
+     * Permanently deletes a vehicle from the legacy vehicle store; the row is removed rather than deactivated. Use this tool to purge a legacy record by id; do not use deleteVehicle, which soft-deactivates a registry vehicle and keeps it readable. Preconditions: the vehicle must exist in the legacy store; deletion is not recoverable through this API. Required inputs: id (UUID) as a path parameter; there is no request body. Emits a VEHICLE_DELETE event; no replica fact is published from the legacy surface. Returns 204 on successful deletion, and 404 with a RESOURCE_NOT_FOUND ApiError when the id is unknown.
      * @endpoint delete /v1/vehicles-legacy/{id}
      * @param id ID of the vehicle to delete
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public deleteVehicleLegacy(id: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public deleteVehicleLegacy(id: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public deleteVehicleLegacy(id: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public deleteVehicleLegacy(id: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public deleteVehicleLegacy(id: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any>;
+    public deleteVehicleLegacy(id: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
+    public deleteVehicleLegacy(id: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
+    public deleteVehicleLegacy(id: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (id === null || id === undefined) {
             throw new Error('Required parameter id was null or undefined when calling deleteVehicleLegacy.');
         }
@@ -200,6 +202,7 @@ export class VehicleAPIService extends BaseService {
         localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
 
         const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
         ]);
         if (localVarHttpHeaderAcceptSelected !== undefined) {
             localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
@@ -238,17 +241,17 @@ export class VehicleAPIService extends BaseService {
 
     /**
      * Delete vehicle by VIN
-     * Permanently deletes a vehicle from the legacy vehicle store located by VIN; the row is removed rather than deactivated. Use this tool to purge a legacy record when only the VIN is known; use deleteVehicleLegacy instead when the id is known, and do not use deleteVehicle, which soft-deactivates registry vehicles. Preconditions: a vehicle with the trimmed VIN must exist in the legacy store; deletion is not recoverable through this API. Required inputs: vin as a non-blank path parameter; there is no request body. Emits a VEHICLE_DELETE event; no replica fact is published from the legacy surface. Returns 204 on successful deletion, and 404 with an empty body when no legacy vehicle carries the VIN.
+     * Permanently deletes a vehicle from the legacy vehicle store located by VIN; the row is removed rather than deactivated. Use this tool to purge a legacy record when only the VIN is known; use deleteVehicleLegacy instead when the id is known, and do not use deleteVehicle, which soft-deactivates registry vehicles. Preconditions: a vehicle with the trimmed VIN must exist in the legacy store; deletion is not recoverable through this API. Required inputs: vin as a non-blank path parameter; there is no request body. Emits a VEHICLE_DELETE event; no replica fact is published from the legacy surface. Returns 204 on successful deletion, and 404 with a RESOURCE_NOT_FOUND ApiError when no legacy vehicle carries the VIN.
      * @endpoint delete /v1/vehicles-legacy/vin/{vin}
      * @param vin VIN of the vehicle to delete
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public deleteVehicleLegacyByVin(vin: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public deleteVehicleLegacyByVin(vin: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public deleteVehicleLegacyByVin(vin: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public deleteVehicleLegacyByVin(vin: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public deleteVehicleLegacyByVin(vin: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any>;
+    public deleteVehicleLegacyByVin(vin: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
+    public deleteVehicleLegacyByVin(vin: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
+    public deleteVehicleLegacyByVin(vin: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (vin === null || vin === undefined) {
             throw new Error('Required parameter vin was null or undefined when calling deleteVehicleLegacyByVin.');
         }
@@ -259,6 +262,7 @@ export class VehicleAPIService extends BaseService {
         localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
 
         const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
         ]);
         if (localVarHttpHeaderAcceptSelected !== undefined) {
             localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
@@ -297,7 +301,7 @@ export class VehicleAPIService extends BaseService {
 
     /**
      * Get vehicle by ID
-     * Returns a single vehicle from the legacy vehicle store by its UUID primary key. Use this tool when the legacy vehicle id is already known; use getVehicleLegacyByVin instead when only the VIN is known, and do not use getVehicle, which reads the separate registry store. Preconditions: the vehicle must exist in the legacy store; legacy deletes are hard deletes, so a deleted vehicle is gone rather than flagged inactive. Required inputs: id (UUID) as a path parameter; there is no request body. No events are emitted and no state changes; this is a read-only projection. Returns 404 with an empty body when no legacy vehicle exists for the supplied id.
+     * Returns a single vehicle from the legacy vehicle store by its UUID primary key. Use this tool when the legacy vehicle id is already known; use getVehicleLegacyByVin instead when only the VIN is known, and do not use getVehicle, which reads the separate registry store. Preconditions: the vehicle must exist in the legacy store; legacy deletes are hard deletes, so a deleted vehicle is gone rather than flagged inactive. Required inputs: id (UUID) as a path parameter; there is no request body. No events are emitted and no state changes; this is a read-only projection. Returns 404 with a RESOURCE_NOT_FOUND ApiError when no legacy vehicle exists for the supplied id.
      * @endpoint get /v1/vehicles-legacy/{id}
      * @param id ID of the vehicle to retrieve
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -357,7 +361,7 @@ export class VehicleAPIService extends BaseService {
 
     /**
      * Get vehicle by VIN
-     * Returns a single vehicle from the legacy vehicle store by VIN, trimming the supplied value before the lookup. Use this tool when only the VIN of a legacy record is known; use getVehicleLegacy instead when the id is known, and do not use getVehicleByVin, which reads the registry store with normalized VINs. Preconditions: the vehicle must exist in the legacy store; the lookup is an exact match on the trimmed VIN, not a normalized or partial match. Required inputs: vin as a non-blank path parameter; there is no request body. No events are emitted and no state changes; this is a read-only projection. Returns 404 with an empty body when no legacy vehicle carries the VIN, and 400 with a VALIDATION_ERROR ApiError when the VIN is blank.
+     * Returns a single vehicle from the legacy vehicle store by VIN, trimming the supplied value before the lookup. Use this tool when only the VIN of a legacy record is known; use getVehicleLegacy instead when the id is known, and do not use getVehicleByVin, which reads the registry store with normalized VINs. Preconditions: the vehicle must exist in the legacy store; the lookup is an exact match on the trimmed VIN, not a normalized or partial match. Required inputs: vin as a non-blank path parameter; there is no request body. No events are emitted and no state changes; this is a read-only projection. Returns 404 with a RESOURCE_NOT_FOUND ApiError when no legacy vehicle carries the VIN, and 400 with a VALIDATION_ERROR ApiError when the VIN is blank.
      * @endpoint get /v1/vehicles-legacy/vin/{vin}
      * @param vin VIN of the vehicle to retrieve
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -473,7 +477,7 @@ export class VehicleAPIService extends BaseService {
 
     /**
      * Update vehicle by ID
-     * Replaces the core fields of an existing legacy vehicle identified by its UUID, applying make, model, year, VIN and vehicleType from the request. Use this tool to correct a legacy record by id; use updateVehicleLegacyByVin instead when only the VIN is known, and do not use updateVehicle, which patches registry vehicles field by field. Preconditions: the vehicle must already exist in the legacy store; the request is a full replacement of core fields rather than a partial patch. Required inputs: id (UUID) as a path parameter plus make, model and year in the body (year between 1886 and the current year plus one); vin and vehicleType are optional. Emits a VEHICLE_UPDATE event; no replica fact is published from the legacy surface. Returns 404 with an empty body when the id is unknown, and 400 with a VALIDATION_ERROR ApiError when make, model or year is missing or invalid.
+     * Replaces the core fields of an existing legacy vehicle identified by its UUID, applying make, model, year, VIN and vehicleType from the request. Use this tool to correct a legacy record by id; use updateVehicleLegacyByVin instead when only the VIN is known, and do not use updateVehicle, which patches registry vehicles field by field. Preconditions: the vehicle must already exist in the legacy store; the request is a full replacement of core fields rather than a partial patch. Required inputs: id (UUID) as a path parameter plus make, model and year in the body (year between 1886 and the current year plus one); vin and vehicleType are optional. Emits a VEHICLE_UPDATE event; no replica fact is published from the legacy surface. Returns 404 with a RESOURCE_NOT_FOUND ApiError when the id is unknown, and 400 with a VALIDATION_ERROR ApiError when make, model or year is missing or invalid.
      * @endpoint put /v1/vehicles-legacy/{id}
      * @param id ID of the vehicle to update
      * @param vehicleLegacyRequest Full replacement values for the legacy vehicle\&#39;s core fields.
@@ -547,7 +551,7 @@ export class VehicleAPIService extends BaseService {
 
     /**
      * Update vehicle by VIN
-     * Replaces the core fields of an existing legacy vehicle located by VIN, applying make, model, year and vehicleType from the request. Use this tool to correct a legacy record when only the VIN is known; use updateVehicleLegacy instead when the id is known, and do not use updateVehicle, which patches registry vehicles. Preconditions: a vehicle with the trimmed VIN must already exist in the legacy store; the request fully replaces core fields rather than patching them. Required inputs: vin as a path parameter plus make, model and year in the body (year between 1886 and the current year plus one); vehicleType is optional. Emits a VEHICLE_UPDATE event; no replica fact is published from the legacy surface. Returns 404 with an empty body when no legacy vehicle carries the VIN, and 400 with a VALIDATION_ERROR ApiError when a required body field is missing or invalid.
+     * Replaces the core fields of an existing legacy vehicle located by VIN, applying make, model, year and vehicleType from the request. Use this tool to correct a legacy record when only the VIN is known; use updateVehicleLegacy instead when the id is known, and do not use updateVehicle, which patches registry vehicles. Preconditions: a vehicle with the trimmed VIN must already exist in the legacy store; the request fully replaces core fields rather than patching them. Required inputs: vin as a path parameter plus make, model and year in the body (year between 1886 and the current year plus one); vehicleType is optional. Emits a VEHICLE_UPDATE event; no replica fact is published from the legacy surface. Returns 404 with a RESOURCE_NOT_FOUND ApiError when no legacy vehicle carries the VIN, and 400 with a VALIDATION_ERROR ApiError when a required body field is missing or invalid.
      * @endpoint put /v1/vehicles-legacy/vin/{vin}
      * @param vin VIN of the vehicle to update
      * @param vehicleLegacyRequest Full replacement values for the legacy vehicle\&#39;s core fields.

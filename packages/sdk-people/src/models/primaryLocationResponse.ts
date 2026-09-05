@@ -21,6 +21,10 @@ export interface PrimaryLocationResponse {
      * Location identifier of the user\'s primary active assignment
      */
     locationId: string;
+    /**
+     * Denormalized display name of locationId, resolved from the location replica. Null when the replica has no matching row yet or the name is blank; never falls back to the raw id.
+     */
+    locationName?: string | null;
 }
 
 function isOptionalPrimaryLocationResponsePropertyOfType(
@@ -62,7 +66,7 @@ export function instanceOfPrimaryLocationResponse(value: object): value is Prima
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createPrimaryLocationResponsePropertyNames('locationId', );
-    const optionalStringProperties = createPrimaryLocationResponseOptionalProperties({ name: 'locationId', nullable: false }, );
+    const optionalStringProperties = createPrimaryLocationResponseOptionalProperties({ name: 'locationId', nullable: false }, { name: 'locationName', nullable: true }, );
     const optionalNumberProperties = createPrimaryLocationResponseOptionalProperties();
     const optionalBooleanProperties = createPrimaryLocationResponseOptionalProperties({ name: 'defaulted', nullable: false }, );
 

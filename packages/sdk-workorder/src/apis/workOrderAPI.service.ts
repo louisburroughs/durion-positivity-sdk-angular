@@ -17,6 +17,8 @@ import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
 // @ts-ignore
+import { ApiError } from '../src/models/apiError';
+// @ts-ignore
 import { ApproveWorkorderRequest } from '../src/models/approveWorkorderRequest';
 // @ts-ignore
 import { CompleteWorkorderRequest } from '../src/models/completeWorkorderRequest';
@@ -61,7 +63,7 @@ export class WorkOrderAPIService extends BaseService {
 
     /**
      * Approve Workorder With Customer Signature
-     * Approves a DRAFT workorder, transitioning it to APPROVED and storing the captured customer signature, signer name, and approval notes. Use this tool for workorder-level customer authorization; do not use approveEstimate, which approves the estimate before a workorder exists, or approveChangeRequest, which approves mid-job additional work. Preconditions: the workorder must exist, be in DRAFT status, and belong to the customerId in the request — a mismatched customer is rejected. Required inputs: workorderId (UUID) as a path parameter and customerId (UUID) in the body; signatureData (base64 image), signerName, and notes are optional, and signatureMimeType defaults to image/png. Emits a WORKORDER_APPROVE event and marks the workorder fact changed for downstream replication. Returns 400 when the workorder is missing, the customer does not match, or the status is not DRAFT — all failures surface as 400 in this operation.
+     * Approves a DRAFT workorder, transitioning it to APPROVED and storing the captured customer signature, signer name, and approval notes. Use this tool for workorder-level customer authorization; do not use approveEstimate, which approves the estimate before a workorder exists, or approveChangeRequest, which approves mid-job additional work. Preconditions: the workorder must exist, be in DRAFT status, and belong to the customerId in the request — a mismatched customer is rejected. Required inputs: workorderId (UUID) as a path parameter and customerId (UUID) in the body; signatureData (base64 image), signerName, and notes are optional, and signatureMimeType defaults to image/png. Emits a WORKORDER_APPROVE event and marks the workorder fact changed for downstream replication. Returns 404 when the workorder does not exist, and 400 when the status is not DRAFT or the customerId in the request does not match the workorder\&#39;s own customer.
      * @endpoint post /v1/workorders/{workorderId}/approval
      * @param workorderId ID of the work order to approve
      * @param approveWorkorderRequest Approving customer\&#39;s identity and captured signature artifacts.

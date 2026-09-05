@@ -251,7 +251,7 @@ export class AuditService extends BaseService {
 
     /**
      * Get One Pricing Snapshot by Id
-     * Returns an immutable pricing snapshot with its rule-evaluation steps ordered by rule id. Use this tool when the snapshot id is known; use searchAuditEvents instead for general audit queries, since snapshots have no search endpoint. Preconditions: the caller must hold security:audit:view and the snapshot must exist. Required inputs: snapshotId (UUID) as a path parameter. No events are emitted and no state changes; snapshots are read-only after creation. Returns 400 with INVALID_REQUEST, not 404, when no snapshot exists for the supplied id; callers must treat that 400 as a miss.
+     * Returns an immutable pricing snapshot with its rule-evaluation steps ordered by rule id. Use this tool when the snapshot id is known; use searchAuditEvents instead for general audit queries, since snapshots have no search endpoint. Preconditions: the caller must hold security:audit:view and the snapshot must exist. Required inputs: snapshotId (UUID) as a path parameter. No events are emitted and no state changes; snapshots are read-only after creation. Returns 404 when no snapshot exists for the supplied id.
      * @endpoint get /v1/audit/pricing-snapshots/{snapshotId}
      * @param snapshotId
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.

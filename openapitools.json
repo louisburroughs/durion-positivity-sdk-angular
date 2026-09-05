@@ -10,7 +10,7 @@
         "inputSpec": "../durion-positivity-backend/pos-security-service/openapi.yaml",
         "additionalProperties": {
           "npmName": "@durion-sdk/security",
-          "npmVersion": "0.12.0-alpha",
+          "npmVersion": "0.13.0-alpha",
           "ngVersion": "22",
           "ngPackagrVersion": "22.0.0",
           "tsVersion": ">=6.0.0 <6.1.0",
@@ -31,7 +31,7 @@
         "inputSpec": "../durion-positivity-backend/pos-order/openapi.yaml",
         "additionalProperties": {
           "npmName": "@durion-sdk/order",
-          "npmVersion": "0.12.0-alpha",
+          "npmVersion": "0.13.0-alpha",
           "ngVersion": "22",
           "ngPackagrVersion": "22.0.0",
           "tsVersion": ">=6.0.0 <6.1.0",
@@ -52,7 +52,7 @@
         "inputSpec": "../durion-positivity-backend/pos-inventory/openapi.yaml",
         "additionalProperties": {
           "npmName": "@durion-sdk/inventory",
-          "npmVersion": "0.12.0-alpha",
+          "npmVersion": "0.13.0-alpha",
           "ngVersion": "22",
           "ngPackagrVersion": "22.0.0",
           "tsVersion": ">=6.0.0 <6.1.0",
@@ -73,7 +73,7 @@
         "inputSpec": "../durion-positivity-backend/pos-workorder/openapi.yaml",
         "additionalProperties": {
           "npmName": "@durion-sdk/workorder",
-          "npmVersion": "0.12.0-alpha",
+          "npmVersion": "0.13.0-alpha",
           "ngVersion": "22",
           "ngPackagrVersion": "22.0.0",
           "tsVersion": ">=6.0.0 <6.1.0",
@@ -94,7 +94,7 @@
         "inputSpec": "../durion-positivity-backend/pos-supplier/openapi.yaml",
         "additionalProperties": {
           "npmName": "@durion-sdk/supplier",
-          "npmVersion": "0.12.0-alpha",
+          "npmVersion": "0.13.0-alpha",
           "ngVersion": "22",
           "ngPackagrVersion": "22.0.0",
           "tsVersion": ">=6.0.0 <6.1.0",
@@ -115,7 +115,7 @@
         "inputSpec": "../durion-positivity-backend/pos-accounting/openapi.yaml",
         "additionalProperties": {
           "npmName": "@durion-sdk/accounting",
-          "npmVersion": "0.12.0-alpha",
+          "npmVersion": "0.13.0-alpha",
           "ngVersion": "22",
           "ngPackagrVersion": "22.0.0",
           "tsVersion": ">=6.0.0 <6.1.0",
@@ -136,7 +136,7 @@
         "inputSpec": "../durion-positivity-backend/pos-catalog/openapi.yaml",
         "additionalProperties": {
           "npmName": "@durion-sdk/catalog",
-          "npmVersion": "0.12.0-alpha",
+          "npmVersion": "0.13.0-alpha",
           "ngVersion": "22",
           "ngPackagrVersion": "22.0.0",
           "tsVersion": ">=6.0.0 <6.1.0",
@@ -157,7 +157,7 @@
         "inputSpec": "../durion-positivity-backend/pos-customer/openapi.yaml",
         "additionalProperties": {
           "npmName": "@durion-sdk/customer",
-          "npmVersion": "0.12.0-alpha",
+          "npmVersion": "0.13.0-alpha",
           "ngVersion": "22",
           "ngPackagrVersion": "22.0.0",
           "tsVersion": ">=6.0.0 <6.1.0",
@@ -178,7 +178,7 @@
         "inputSpec": "../durion-positivity-backend/pos-invoice/openapi.yaml",
         "additionalProperties": {
           "npmName": "@durion-sdk/invoice",
-          "npmVersion": "0.12.0-alpha",
+          "npmVersion": "0.13.0-alpha",
           "ngVersion": "22",
           "ngPackagrVersion": "22.0.0",
           "tsVersion": ">=6.0.0 <6.1.0",
@@ -199,7 +199,7 @@
         "inputSpec": "../durion-positivity-backend/pos-location/openapi.yaml",
         "additionalProperties": {
           "npmName": "@durion-sdk/location",
-          "npmVersion": "0.12.0-alpha",
+          "npmVersion": "0.13.0-alpha",
           "ngVersion": "22",
           "ngPackagrVersion": "22.0.0",
           "tsVersion": ">=6.0.0 <6.1.0",
@@ -220,7 +220,7 @@
         "inputSpec": "../durion-positivity-backend/pos-people-contact/openapi.yaml",
         "additionalProperties": {
           "npmName": "@durion-sdk/people-contact",
-          "npmVersion": "0.12.0-alpha",
+          "npmVersion": "0.13.0-alpha",
           "ngVersion": "22",
           "ngPackagrVersion": "22.0.0",
           "tsVersion": ">=6.0.0 <6.1.0",
@@ -241,7 +241,7 @@
         "inputSpec": "../durion-positivity-backend/pos-people/openapi.yaml",
         "additionalProperties": {
           "npmName": "@durion-sdk/people",
-          "npmVersion": "0.12.0-alpha",
+          "npmVersion": "0.13.0-alpha",
           "ngVersion": "22",
           "ngPackagrVersion": "22.0.0",
           "tsVersion": ">=6.0.0 <6.1.0",
@@ -262,7 +262,7 @@
         "inputSpec": "../durion-positivity-backend/pos-price/openapi.yaml",
         "additionalProperties": {
           "npmName": "@durion-sdk/price",
-          "npmVersion": "0.12.0-alpha",
+          "npmVersion": "0.13.0-alpha",
           "ngVersion": "22",
           "ngPackagrVersion": "22.0.0",
           "tsVersion": ">=6.0.0 <6.1.0",
@@ -283,7 +283,7 @@
         "inputSpec": "../durion-positivity-backend/pos-shop-manager/openapi.yaml",
         "additionalProperties": {
           "npmName": "@durion-sdk/shop-manager",
-          "npmVersion": "0.12.0-alpha",
+          "npmVersion": "0.13.0-alpha",
           "ngVersion": "22",
           "ngPackagrVersion": "22.0.0",
           "tsVersion": ">=6.0.0 <6.1.0",
@@ -304,7 +304,7 @@
         "inputSpec": "../durion-positivity-backend/pos-image/openapi.yaml",
         "additionalProperties": {
           "npmName": "@durion-sdk/image",
-          "npmVersion": "0.12.0-alpha",
+          "npmVersion": "0.13.0-alpha",
           "ngVersion": "22",
           "ngPackagrVersion": "22.0.0",
           "tsVersion": ">=6.0.0 <6.1.0",
@@ -325,7 +325,7 @@
         "inputSpec": "../durion-positivity-backend/pos-event-receiver/openapi.yaml",
         "additionalProperties": {
           "npmName": "@durion-sdk/event-receiver",
-          "npmVersion": "0.12.0-alpha",
+          "npmVersion": "0.13.0-alpha",
           "ngVersion": "22",
           "ngPackagrVersion": "22.0.0",
           "tsVersion": ">=6.0.0 <6.1.0",
@@ -346,7 +346,7 @@
         "inputSpec": "../durion-positivity-backend/pos-vehicle-fitment/openapi.yaml",
         "additionalProperties": {
           "npmName": "@durion-sdk/vehicle-fitment",
-          "npmVersion": "0.12.0-alpha",
+          "npmVersion": "0.13.0-alpha",
           "ngVersion": "22",
           "ngPackagrVersion": "22.0.0",
           "tsVersion": ">=6.0.0 <6.1.0",
@@ -367,7 +367,7 @@
         "inputSpec": "../durion-positivity-backend/pos-vehicle-inventory/openapi.yaml",
         "additionalProperties": {
           "npmName": "@durion-sdk/vehicle-inventory",
-          "npmVersion": "0.12.0-alpha",
+          "npmVersion": "0.13.0-alpha",
           "ngVersion": "22",
           "ngPackagrVersion": "22.0.0",
           "tsVersion": ">=6.0.0 <6.1.0",
@@ -388,7 +388,7 @@
         "inputSpec": "../durion-positivity-backend/pos-tax/openapi.yaml",
         "additionalProperties": {
           "npmName": "@durion-sdk/internal",
-          "npmVersion": "0.12.0-alpha",
+          "npmVersion": "0.13.0-alpha",
           "ngVersion": "22",
           "ngPackagrVersion": "22.0.0",
           "tsVersion": ">=6.0.0 <6.1.0",
@@ -409,7 +409,7 @@
         "inputSpec": "../durion-positivity-backend/pos-documents/openapi.yaml",
         "additionalProperties": {
           "npmName": "@durion-sdk/documents",
-          "npmVersion": "0.12.0-alpha",
+          "npmVersion": "0.13.0-alpha",
           "ngVersion": "22",
           "ngPackagrVersion": "22.0.0",
           "tsVersion": ">=6.0.0 <6.1.0",
@@ -430,7 +430,7 @@
         "inputSpec": "../durion-positivity-backend/pos-inquiry/openapi.yaml",
         "additionalProperties": {
           "npmName": "@durion-sdk/inquiry",
-          "npmVersion": "0.12.0-alpha",
+          "npmVersion": "0.13.0-alpha",
           "ngVersion": "22",
           "ngPackagrVersion": "22.0.0",
           "tsVersion": ">=6.0.0 <6.1.0",
@@ -451,7 +451,7 @@
         "inputSpec": "../durion-positivity-backend/pos-warranty/openapi.yaml",
         "additionalProperties": {
           "npmName": "@durion-sdk/warranty",
-          "npmVersion": "0.12.0-alpha",
+          "npmVersion": "0.13.0-alpha",
           "ngVersion": "22",
           "ngPackagrVersion": "22.0.0",
           "tsVersion": ">=6.0.0 <6.1.0",
@@ -472,7 +472,7 @@
         "inputSpec": "../durion-positivity-backend/pos-marketing/openapi.yaml",
         "additionalProperties": {
           "npmName": "@durion-sdk/marketing",
-          "npmVersion": "0.12.0-alpha",
+          "npmVersion": "0.13.0-alpha",
           "ngVersion": "22",
           "ngPackagrVersion": "22.0.0",
           "tsVersion": ">=6.0.0 <6.1.0",
@@ -493,7 +493,7 @@
         "inputSpec": "../durion-positivity-backend/pos-bulk-loader/openapi.yaml",
         "additionalProperties": {
           "npmName": "@durion-sdk/bulk-loader",
-          "npmVersion": "0.12.0-alpha",
+          "npmVersion": "0.13.0-alpha",
           "ngVersion": "22",
           "ngPackagrVersion": "22.0.0",
           "tsVersion": ">=6.0.0 <6.1.0",

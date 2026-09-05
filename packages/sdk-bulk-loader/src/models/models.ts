@@ -1,3 +1,4 @@
+export * from './apiError';
 export * from './auditRecordResponse';
 export * from './bulkCorrectionItem';
 export * from './bulkCorrectionRequest';
@@ -9,8 +10,8 @@ export * from './columnMappingResponse';
 export * from './columnMappingUpdateRequest';
 export * from './contentDetectionResult';
 export * from './correctionResultDto';
+export * from './fieldError';
 export * from './fileUploadResponse';
 export * from './pageBulkLoadJobResponse';
 export * from './pageableObject';
-export * from './problemDetail';
 export * from './sortObject';

@@ -563,7 +563,7 @@ export class RegisterSessionsService extends BaseService {
 
     /**
      * Record a Drawer Cash Movement
-     * Records a PAID_IN or PAID_OUT cash movement against an OPEN register session; movements feed the theoretical-cash calculation at close. Use this tool for non-sale drawer cash such as petty cash or bank drops; do not use beginSessionClose, which records the final counted drawer instead. Preconditions: the session must exist and be OPEN — movements are rejected once closing has begun. Required inputs: movementType (PAID_IN or PAID_OUT), a positive amount, reason, and clerkId. Emits an ORDER_SESSION_CASH_MOVEMENT event. Returns 201 with the recorded movement, 404 when the session does not exist, 409 when the session is not OPEN, and 422 when the amount is not positive or the movement type is unknown.
+     * Records a PAID_IN or PAID_OUT cash movement against an OPEN register session; movements feed the theoretical-cash calculation at close. Use this tool for non-sale drawer cash such as petty cash or bank drops; do not use beginSessionClose, which records the final counted drawer instead. Preconditions: the session must exist and be OPEN — movements are rejected once closing has begun. Required inputs: movementType (PAID_IN or PAID_OUT), a positive amount, reason, and clerkId. Emits an ORDER_SESSION_CASH_MOVEMENT event. Returns 201 with the recorded movement, 400 when the amount is not positive or the movement type is unknown, 404 when the session does not exist, and 409 when the session is not OPEN.
      * @endpoint post /v1/orders/sessions/{sessionId}/cash-movements
      * @param sessionId
      * @param cashMovementRequest The cash movement: direction, positive amount, reason, and clerk.

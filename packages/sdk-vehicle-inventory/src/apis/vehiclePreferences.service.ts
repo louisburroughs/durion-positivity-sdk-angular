@@ -17,6 +17,8 @@ import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
 // @ts-ignore
+import { ApiError } from '../src/models/apiError';
+// @ts-ignore
 import { PreferencesMergeDto } from '../src/models/preferencesMergeDto';
 // @ts-ignore
 import { PreferencesUpsertDto } from '../src/models/preferencesUpsertDto';
@@ -100,7 +102,7 @@ export class VehiclePreferencesService extends BaseService {
 
     /**
      * Get vehicle care preferences
-     * Returns the care-preference document for a vehicle, including the free-form preferences map, the structured service interval in months and any service notes. Use this tool to read what a customer wants for vehicle care; do not use getVehicle, which returns the registry record itself and carries no preferences. Preconditions: a preference document must already have been stored for the vehicle, because vehicles start with no preferences. Required inputs: vehicleId (UUID) as a path parameter; there is no request body. No events are emitted and no state changes; this is a read-only projection. Returns 404 with an empty body when no preference document exists for the vehicle.
+     * Returns the care-preference document for a vehicle, including the free-form preferences map, the structured service interval in months and any service notes. Use this tool to read what a customer wants for vehicle care; do not use getVehicle, which returns the registry record itself and carries no preferences. Preconditions: a preference document must already have been stored for the vehicle, because vehicles start with no preferences. Required inputs: vehicleId (UUID) as a path parameter; there is no request body. No events are emitted and no state changes; this is a read-only projection. Returns 404 with a RESOURCE_NOT_FOUND ApiError when no preference document exists for the vehicle.
      * @endpoint get /v1/vehicles/{vehicleId}/preferences
      * @param vehicleId Vehicle ID
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.

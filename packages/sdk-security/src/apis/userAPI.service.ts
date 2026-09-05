@@ -45,7 +45,7 @@ export class UserAPIService extends BaseService {
 
     /**
      * Replace a User\&#39;s Direct Role Set
-     * Replaces a user\&#39;s directly attached role set with the supplied role names, looking the user up by username. Use this tool for wholesale role replacement by username; do not use assignUserRole, which adds a single scoped role assignment by UUID without touching the direct set. Preconditions: the caller must hold security:role:assign, the username must resolve to a user, and every named role must exist. Required inputs: username as a path parameter and roles, an array of existing role names, in the body; the set replaces all current direct roles. Emits a SECURITY_USER_ASSIGN_ROLES event. Returns 400 with INVALID_REQUEST when the user or a named role cannot be found; the miss surfaces as 400 rather than 404.
+     * Replaces a user\&#39;s directly attached role set with the supplied role names, looking the user up by username. Use this tool for wholesale role replacement by username; do not use assignUserRole, which adds a single scoped role assignment by UUID without touching the direct set. Preconditions: the caller must hold security:role:assign, the username must resolve to a user, and every named role must exist. Required inputs: username as a path parameter and roles, an array of existing role names, in the body; the set replaces all current direct roles. Emits a SECURITY_USER_ASSIGN_ROLES event. Returns 400 with VALIDATION_ERROR when the user or a named role cannot be found; the miss surfaces as 400 rather than 404.
      * @endpoint put /v1/users/{username}/roles
      * @param username Username of the user whose roles are being assigned
      * @param body The replacement set of role names for the user.
@@ -189,7 +189,7 @@ export class UserAPIService extends BaseService {
 
     /**
      * Delete a User Account
-     * Deletes a user account and queues removal of its user-person link so downstream projections follow the account out. Use this tool to remove an account permanently; do not use disableUserAccount, which blocks sign-in reversibly and keeps the record. Preconditions: the caller must hold security:user:delete; deleting an id that does not exist is a silent no-op. Required inputs: id (UUID) as a path parameter. Emits a SECURITY_USER_DELETE event and sends a UserPersonLinkRemoveRequested command to the people-contact domain in the same transaction. Returns 204 in all cases, including when the user was already absent.
+     * Deletes a user account and queues removal of its user-person link so downstream projections follow the account out. Use this tool to remove an account permanently; do not use disableUserAccount, which blocks sign-in reversibly and keeps the record. Preconditions: the caller must hold security:user:delete and the user must exist. Required inputs: id (UUID) as a path parameter. Emits a SECURITY_USER_DELETE event and sends a UserPersonLinkRemoveRequested command to the people-contact domain in the same transaction. Returns 404 when the user does not exist.
      * @endpoint delete /v1/users/{id}
      * @param id ID of the user to delete
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -439,7 +439,7 @@ export class UserAPIService extends BaseService {
 
     /**
      * Partially Update a User Account
-     * Applies a partial update to a user account: username, password, and the direct role set are each replaced only when supplied. Use this tool to change account fields; do not use assignUserRolesByUsername, which only replaces roles, and do not use the account-state endpoints such as disableUserAccount, which flip administrative flags. Preconditions: the caller must hold security:user:edit, the user must exist, and any named role must already exist. Required inputs: id (UUID) as a path parameter; username, password, and roles are all optional, and omitted or blank fields are left unchanged. Emits a SECURITY_USER_UPDATE event; a supplied password is re-hashed before storage. Returns 400 with INVALID_REQUEST when the user or a named role cannot be found; the miss surfaces as 400 rather than 404.
+     * Applies a partial update to a user account: username, password, and the direct role set are each replaced only when supplied. Use this tool to change account fields; do not use assignUserRolesByUsername, which only replaces roles, and do not use the account-state endpoints such as disableUserAccount, which flip administrative flags. Preconditions: the caller must hold security:user:edit, the user must exist, and any named role must already exist. Required inputs: id (UUID) as a path parameter; username, password, and roles are all optional, and omitted or blank fields are left unchanged. Emits a SECURITY_USER_UPDATE event; a supplied password is re-hashed before storage. Returns 400 with VALIDATION_ERROR when the user or a named role cannot be found; the miss surfaces as 400 rather than 404.
      * @endpoint put /v1/users/{id}
      * @param id ID of the user to update
      * @param userUpdateRequest The account fields to change; omitted fields are left untouched.

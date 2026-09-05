@@ -26,9 +26,9 @@ export interface LocationAvailabilityDto {
      */
     locationId: string;
     /**
-     * Human-readable name of the location
+     * Human-readable name of the location; null when the location replica has no matching row (e.g. replica lag or unknown location)
      */
-    locationName: string;
+    locationName?: string | null;
     /**
      * On-hand quantity at the location
      */
@@ -81,8 +81,8 @@ export function instanceOfLocationAvailabilityDto(value: object): value is Locat
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createLocationAvailabilityDtoPropertyNames('locationId', 'locationName', 'onHandQuantity', );
-    const optionalStringProperties = createLocationAvailabilityDtoOptionalProperties({ name: 'locationId', nullable: false }, { name: 'locationName', nullable: false }, );
+    const requiredProperties = createLocationAvailabilityDtoPropertyNames('locationId', 'onHandQuantity', );
+    const optionalStringProperties = createLocationAvailabilityDtoOptionalProperties({ name: 'locationId', nullable: false }, { name: 'locationName', nullable: true }, );
     const optionalNumberProperties = createLocationAvailabilityDtoOptionalProperties({ name: 'availableToPromiseQuantity', nullable: false }, { name: 'incomingQty', nullable: false }, { name: 'onHandQuantity', nullable: false }, { name: 'outgoingQty', nullable: false }, { name: 'projectedAvailable', nullable: false }, );
     const optionalBooleanProperties = createLocationAvailabilityDtoOptionalProperties();
 

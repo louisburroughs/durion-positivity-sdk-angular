@@ -1,4 +1,4 @@
-# @durion-sdk/internal@0.12.0-alpha
+# @durion-sdk/internal@0.13.0-alpha
 
 Tax calculation service with external API passthrough and test mode support
 
@@ -24,7 +24,7 @@ Navigate to the folder of your consuming project and run one of next commands.
 _published:_
 
 ```console
-npm install @durion-sdk/internal@0.12.0-alpha --save
+npm install @durion-sdk/internal@0.13.0-alpha --save
 ```
 
 _without publishing (not recommended):_

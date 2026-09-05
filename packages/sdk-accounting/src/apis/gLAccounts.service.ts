@@ -17,6 +17,8 @@ import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
 // @ts-ignore
+import { ApiError } from '../src/models/apiError';
+// @ts-ignore
 import { GLAccountActivateRequest } from '../src/models/gLAccountActivateRequest';
 // @ts-ignore
 import { GLAccountBalanceResponse } from '../src/models/gLAccountBalanceResponse';
@@ -121,7 +123,7 @@ export class GLAccountsService extends BaseService {
 
     /**
      * Archive GL Account
-     * Archives an inactive GL account as a soft delete, tagging it [ARCHIVED] while keeping the record and its posting history. Use this tool only after deactivateGLAccount has succeeded; do not use it on an ACTIVE account, which must be deactivated to zero balance first. Preconditions: the GL account must exist and its derived status must be INACTIVE. Required inputs: glAccountId (UUID) as a path parameter; the request body is optional and ignored. Emits an ACCOUNTING_GL_ACCOUNT_ARCHIVE event; the row is never physically deleted. Returns 404 when no GL account exists for the supplied id, and 400 when the account is not INACTIVE.
+     * Archives an inactive GL account as a soft delete, tagging it [ARCHIVED] while keeping the record and its posting history. Use this tool only after deactivateGLAccount has succeeded; do not use it on an ACTIVE account, which must be deactivated to zero balance first. Preconditions: the GL account must exist and its derived status must be INACTIVE. Required inputs: glAccountId (UUID) as a path parameter; the request body is optional and ignored. Emits an ACCOUNTING_GL_ACCOUNT_ARCHIVE event; the row is never physically deleted. Returns 404 when no GL account exists for the supplied id, and 409 ACCOUNT_NOT_INACTIVE when the account is not INACTIVE.
      * @endpoint post /v1/accounting/gl-accounts/{glAccountId}/archive
      * @param glAccountId GL account identifier
      * @param body Optional and ignored; send an empty object or omit the body entirely.
@@ -262,7 +264,7 @@ export class GLAccountsService extends BaseService {
 
     /**
      * Deactivate GL Account
-     * Deactivates a GL account by stamping its deactivation date now, preventing future postings to it. Use this tool when retiring an account from active use; do not use archiveGLAccount, which additionally flags an already-INACTIVE account as archived, and do not use it while the account still carries a balance. Preconditions: the GL account must exist and its posted balance must be exactly zero. Required inputs: glAccountId (UUID) as a path parameter; the request body is optional and ignored. Emits an ACCOUNTING_GL_ACCOUNT_DEACTIVATE event; historical journal entries remain intact. Returns 404 when no GL account exists for the supplied id, and 400 when the account balance is not zero.
+     * Deactivates a GL account by stamping its deactivation date now, preventing future postings to it. Use this tool when retiring an account from active use; do not use archiveGLAccount, which additionally flags an already-INACTIVE account as archived, and do not use it while the account still carries a balance. Preconditions: the GL account must exist and its posted balance must be exactly zero. Required inputs: glAccountId (UUID) as a path parameter; the request body is optional and ignored. Emits an ACCOUNTING_GL_ACCOUNT_DEACTIVATE event; historical journal entries remain intact. Returns 404 when no GL account exists for the supplied id, and 409 ACCOUNT_NOT_ZERO_BALANCE when the account balance is not zero.
      * @endpoint post /v1/accounting/gl-accounts/{glAccountId}/deactivate
      * @param glAccountId GL account identifier
      * @param body Optional and ignored; send an empty object or omit the body entirely.

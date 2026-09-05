@@ -17,6 +17,8 @@ import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
 // @ts-ignore
+import { ApiError } from '../src/models/apiError';
+// @ts-ignore
 import { BulkIngestRequestVehicleBulkIngestRecord } from '../src/models/bulkIngestRequestVehicleBulkIngestRecord';
 // @ts-ignore
 import { BulkIngestResponse } from '../src/models/bulkIngestResponse';

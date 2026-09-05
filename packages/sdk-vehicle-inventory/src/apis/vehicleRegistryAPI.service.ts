@@ -17,6 +17,8 @@ import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
 // @ts-ignore
+import { ApiError } from '../src/models/apiError';
+// @ts-ignore
 import { CreateVehicleRequest } from '../src/models/createVehicleRequest';
 // @ts-ignore
 import { UpdateVehicleRequest } from '../src/models/updateVehicleRequest';
@@ -43,7 +45,7 @@ export class VehicleRegistryAPIService extends BaseService {
 
     /**
      * Create vehicle
-     * Creates an active vehicle registry record after validating and normalizing the VIN, which must be globally unique among active vehicles. Use this tool to register a single vehicle whose changes replicate to consumer services; do not use bulkIngestVehicles, which loads batches with per-row results, and do not use createVehicleLegacy, which writes the unreplicated legacy store. Preconditions: no active vehicle may already hold the same normalized VIN; a deactivated vehicle releases its VIN for reuse. Required inputs: accountId (UUID) and vin (17 characters after separators are stripped, with letters I, O and Q rejected); unitNumber and description are optional and stored as empty strings when omitted, and licensePlate, licensePlateJurisdiction, year, make, model and trim are optional. Emits a VEHICLE_CREATE event and queues a vehicle.vehicle.updated fact on the vehicle.events.v1 outbox for downstream replicas. Returns 201 with the created record, and 400 with a VALIDATION_ERROR ApiError when the VIN is malformed or an active vehicle already holds the same normalized VIN; the duplicate-VIN case is reported as 400, not 409.
+     * Creates an active vehicle registry record after validating and normalizing the VIN, which must be globally unique among active vehicles. Use this tool to register a single vehicle whose changes replicate to consumer services; do not use bulkIngestVehicles, which loads batches with per-row results, and do not use createVehicleLegacy, which writes the unreplicated legacy store. Preconditions: no active vehicle may already hold the same normalized VIN; a deactivated vehicle releases its VIN for reuse. Required inputs: accountId (UUID) and vin (17 characters after separators are stripped, with letters I, O and Q rejected); unitNumber and description are optional and stored as empty strings when omitted, and licensePlate, licensePlateJurisdiction, year, make, model and trim are optional. Emits a VEHICLE_CREATE event and queues a vehicle.vehicle.updated fact on the vehicle.events.v1 outbox for downstream replicas. Returns 201 with the created record, 400 with a VALIDATION_ERROR ApiError when the VIN is malformed, and 409 with a VEHICLE_VIN_CONFLICT ApiError when an active vehicle already holds the same normalized VIN, since that is a collision with existing state rather than a malformed request.
      * @endpoint post /v1/vehicle-registry
      * @param createVehicleRequest Registry vehicle to create, owned by one account and identified by a globally unique VIN.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -120,10 +122,10 @@ export class VehicleRegistryAPIService extends BaseService {
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public deleteVehicle(vehicleId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public deleteVehicle(vehicleId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public deleteVehicle(vehicleId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public deleteVehicle(vehicleId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public deleteVehicle(vehicleId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any>;
+    public deleteVehicle(vehicleId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
+    public deleteVehicle(vehicleId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
+    public deleteVehicle(vehicleId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (vehicleId === null || vehicleId === undefined) {
             throw new Error('Required parameter vehicleId was null or undefined when calling deleteVehicle.');
         }
@@ -134,6 +136,7 @@ export class VehicleRegistryAPIService extends BaseService {
         localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
 
         const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
         ]);
         if (localVarHttpHeaderAcceptSelected !== undefined) {
             localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
@@ -172,7 +175,7 @@ export class VehicleRegistryAPIService extends BaseService {
 
     /**
      * Get vehicle by ID
-     * Returns a single vehicle registry record by its vehicleId, whether the vehicle is active or deactivated. Use this tool when the registry id is already known; use getVehicleByVin instead for VIN lookups, use searchVehicles for free-text discovery, and do not use getVehicleLegacy, which reads the legacy store. Preconditions: the record must exist in the registry; deactivated vehicles are still returned, so callers must check the isActive flag. Required inputs: vehicleId (UUID) as a path parameter; there is no request body. No events are emitted and no state changes; this is a read-only projection. Returns 404 with an empty body when no registry record exists for the supplied vehicleId.
+     * Returns a single vehicle registry record by its vehicleId, whether the vehicle is active or deactivated. Use this tool when the registry id is already known; use getVehicleByVin instead for VIN lookups, use searchVehicles for free-text discovery, and do not use getVehicleLegacy, which reads the legacy store. Preconditions: the record must exist in the registry; deactivated vehicles are still returned, so callers must check the isActive flag. Required inputs: vehicleId (UUID) as a path parameter; there is no request body. No events are emitted and no state changes; this is a read-only projection. Returns 404 with a RESOURCE_NOT_FOUND ApiError when no registry record exists for the supplied vehicleId.
      * @endpoint get /v1/vehicle-registry/{vehicleId}
      * @param vehicleId Vehicle UUID
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -232,7 +235,7 @@ export class VehicleRegistryAPIService extends BaseService {
 
     /**
      * Get vehicle by VIN
-     * Returns a single vehicle registry record by VIN, normalizing the supplied value by trimming, uppercasing and stripping separators before the lookup. Use this tool when the full 17-character VIN is known; use searchVehicles instead for partial VIN prefixes, and do not use getVehicleLegacyByVin, which reads the legacy store. Preconditions: a record with the normalized VIN must exist in the registry; active and deactivated vehicles are both returned. Required inputs: vin as a path parameter, exactly 17 characters; there is no request body. No events are emitted and no state changes; this is a read-only projection. Returns 404 with an empty body when no registry record carries the normalized VIN, and 400 with a VALIDATION_FAILED ApiError when the path VIN is not exactly 17 characters.
+     * Returns a single vehicle registry record by VIN, normalizing the supplied value by trimming, uppercasing and stripping separators before the lookup. Use this tool when the full 17-character VIN is known; use searchVehicles instead for partial VIN prefixes, and do not use getVehicleLegacyByVin, which reads the legacy store. Preconditions: a record with the normalized VIN must exist in the registry; active and deactivated vehicles are both returned. Required inputs: vin as a path parameter, exactly 17 characters; there is no request body. No events are emitted and no state changes; this is a read-only projection. Returns 404 with a RESOURCE_NOT_FOUND ApiError when no registry record carries the normalized VIN, and 400 with a VALIDATION_FAILED ApiError when the path VIN is not exactly 17 characters.
      * @endpoint get /v1/vehicle-registry/vin/{vin}
      * @param vin Vehicle VIN
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.

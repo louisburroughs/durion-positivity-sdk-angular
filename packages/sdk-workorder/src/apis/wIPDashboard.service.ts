@@ -17,6 +17,8 @@ import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
 // @ts-ignore
+import { ApiError } from '../src/models/apiError';
+// @ts-ignore
 import { PageWorkorderStatusView } from '../src/models/pageWorkorderStatusView';
 // @ts-ignore
 import { WorkorderStatusDetail } from '../src/models/workorderStatusDetail';
@@ -39,7 +41,7 @@ export class WIPDashboardService extends BaseService {
 
     /**
      * Get WIP Detail for Workorder
-     * Returns the full work-in-progress detail for one workorder: current status, the complete status transition history with actors and reasons, blocking part numbers, and the currently assigned technician. Use this tool when drilling into a single workorder from the WIP board; use listWipWorkorders instead for the paginated board itself. Preconditions: the workorder must exist; it does not need to be in an active WIP status to be viewed. Required inputs: workorderId (UUID) as a path parameter. Emits a WORKORDER_WIP_VIEW audit event; no workorder state changes — this is a read-only projection. Returns 400 with code INVALID_ARGUMENT when no workorder exists for the id — the not-found case surfaces as 400 rather than 404 in this operation.
+     * Returns the full work-in-progress detail for one workorder: current status, the complete status transition history with actors and reasons, blocking part numbers, and the currently assigned technician. Use this tool when drilling into a single workorder from the WIP board; use listWipWorkorders instead for the paginated board itself. Preconditions: the workorder must exist; it does not need to be in an active WIP status to be viewed. Required inputs: workorderId (UUID) as a path parameter. Emits a WORKORDER_WIP_VIEW audit event; no workorder state changes — this is a read-only projection. Returns 404 when no workorder exists for the id.
      * @endpoint get /v1/workexec/wip/{workorderId}
      * @param workorderId UUID of the workorder
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.

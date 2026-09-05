@@ -17,9 +17,9 @@ import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
 // @ts-ignore
-import { PersonRoleAssignmentRequest } from '../src/models/personRoleAssignmentRequest';
+import { ApiError } from '../src/models/apiError';
 // @ts-ignore
-import { ProblemDetail } from '../src/models/problemDetail';
+import { PersonRoleAssignmentRequest } from '../src/models/personRoleAssignmentRequest';
 // @ts-ignore
 import { RoleDto } from '../src/models/roleDto';
 // @ts-ignore
@@ -51,10 +51,10 @@ export class PeopleAccessControlService extends BaseService {
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public assignRoleToPerson(personUuid: string, personRoleAssignmentRequest: PersonRoleAssignmentRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<UserRoleDto>;
-    public assignRoleToPerson(personUuid: string, personRoleAssignmentRequest: PersonRoleAssignmentRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<UserRoleDto>>;
-    public assignRoleToPerson(personUuid: string, personRoleAssignmentRequest: PersonRoleAssignmentRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<UserRoleDto>>;
-    public assignRoleToPerson(personUuid: string, personRoleAssignmentRequest: PersonRoleAssignmentRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public assignRoleToPerson(personUuid: string, personRoleAssignmentRequest: PersonRoleAssignmentRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<UserRoleDto>;
+    public assignRoleToPerson(personUuid: string, personRoleAssignmentRequest: PersonRoleAssignmentRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<UserRoleDto>>;
+    public assignRoleToPerson(personUuid: string, personRoleAssignmentRequest: PersonRoleAssignmentRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<UserRoleDto>>;
+    public assignRoleToPerson(personUuid: string, personRoleAssignmentRequest: PersonRoleAssignmentRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (personUuid === null || personUuid === undefined) {
             throw new Error('Required parameter personUuid was null or undefined when calling assignRoleToPerson.');
         }
@@ -68,8 +68,7 @@ export class PeopleAccessControlService extends BaseService {
         localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
 
         const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
-            'application/json',
-            'application/problem+json'
+            'application/json'
         ]);
         if (localVarHttpHeaderAcceptSelected !== undefined) {
             localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
@@ -270,10 +269,10 @@ export class PeopleAccessControlService extends BaseService {
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public revokePersonRoleAssignment(personUuid: string, roleCode: string, endDate?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public revokePersonRoleAssignment(personUuid: string, roleCode: string, endDate?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public revokePersonRoleAssignment(personUuid: string, roleCode: string, endDate?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public revokePersonRoleAssignment(personUuid: string, roleCode: string, endDate?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public revokePersonRoleAssignment(personUuid: string, roleCode: string, endDate?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any>;
+    public revokePersonRoleAssignment(personUuid: string, roleCode: string, endDate?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
+    public revokePersonRoleAssignment(personUuid: string, roleCode: string, endDate?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
+    public revokePersonRoleAssignment(personUuid: string, roleCode: string, endDate?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (personUuid === null || personUuid === undefined) {
             throw new Error('Required parameter personUuid was null or undefined when calling revokePersonRoleAssignment.');
         }
@@ -298,7 +297,7 @@ export class PeopleAccessControlService extends BaseService {
         localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
 
         const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
-            'application/problem+json'
+            'application/json'
         ]);
         if (localVarHttpHeaderAcceptSelected !== undefined) {
             localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);

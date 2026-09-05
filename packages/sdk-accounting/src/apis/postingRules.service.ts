@@ -17,6 +17,8 @@ import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
 // @ts-ignore
+import { ApiError } from '../src/models/apiError';
+// @ts-ignore
 import { PostingRuleSetCreateRequest } from '../src/models/postingRuleSetCreateRequest';
 // @ts-ignore
 import { PostingRuleSetListResponse } from '../src/models/postingRuleSetListResponse';
@@ -43,7 +45,7 @@ export class PostingRulesService extends BaseService {
 
     /**
      * Archive Posting Rule Set
-     * Archives the rule set\&#39;s PUBLISHED version (PUBLISHED to ARCHIVED), taking it out of live event-to-journal-entry conversion. Use this tool to retire live rules deliberately; do not use publishPostingRuleSet, which already archives the old version automatically when a replacement draft is published. Preconditions: the rule set must have a PUBLISHED version; after archiving, events of this type fall back to default GL mappings or fail as UNMAPPED_EVENT_TYPE. Required inputs: postingRuleSetId (UUID) as a path parameter; there is no request body. Emits an ACCOUNTING_POSTING_RULE_ARCHIVE event. Returns 400 when no PUBLISHED version exists to archive.
+     * Archives the rule set\&#39;s PUBLISHED version (PUBLISHED to ARCHIVED), taking it out of live event-to-journal-entry conversion. Use this tool to retire live rules deliberately; do not use publishPostingRuleSet, which already archives the old version automatically when a replacement draft is published. Preconditions: the rule set must have a PUBLISHED version; after archiving, events of this type fall back to default GL mappings or fail as UNMAPPED_EVENT_TYPE. Required inputs: postingRuleSetId (UUID) as a path parameter; there is no request body. Emits an ACCOUNTING_POSTING_RULE_ARCHIVE event. Returns 400 when no PUBLISHED version exists to archive, and 404 POSTING_RULE_SET_NOT_FOUND when no posting rule set exists for the supplied id.
      * @endpoint post /v1/accounting/posting-rules/{postingRuleSetId}/archive
      * @param postingRuleSetId Posting rule set identifier
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -173,7 +175,7 @@ export class PostingRulesService extends BaseService {
 
     /**
      * Get Posting Rule Set
-     * Returns one posting rule set with its metadata and current version state. Use this tool when the rule set id is already known; use listPostingRuleSets instead when searching, or listPostingRuleVersions for the full version history. Preconditions: the posting rule set must exist. Required inputs: postingRuleSetId (UUID) as a path parameter; there is no request body. No events are emitted and no state changes; this is a read-only projection. Returns 400 when no posting rule set exists for the supplied id (mapped as VALIDATION_ERROR, not 404).
+     * Returns one posting rule set with its metadata and current version state. Use this tool when the rule set id is already known; use listPostingRuleSets instead when searching, or listPostingRuleVersions for the full version history. Preconditions: the posting rule set must exist. Required inputs: postingRuleSetId (UUID) as a path parameter; there is no request body. No events are emitted and no state changes; this is a read-only projection. Returns 404 POSTING_RULE_SET_NOT_FOUND when no posting rule set exists for the supplied id.
      * @endpoint get /v1/accounting/posting-rules/{postingRuleSetId}
      * @param postingRuleSetId Posting rule set identifier
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -325,7 +327,7 @@ export class PostingRulesService extends BaseService {
 
     /**
      * List Posting Rule Versions
-     * Lists the version history of one posting rule set with each version\&#39;s DRAFT, PUBLISHED or ARCHIVED state and timestamps. Use this tool to audit how a rule set evolved; use getPostingRuleSet instead for the set\&#39;s current metadata only. Preconditions: the posting rule set must exist; a set always has at least its initial version. Required inputs: postingRuleSetId (UUID) as a path parameter; page defaults to 0 and size to 10. No events are emitted and no state changes; this is a read-only projection. Returns 200 with an empty list when the page index is beyond the version history.
+     * Lists the version history of one posting rule set with each version\&#39;s DRAFT, PUBLISHED or ARCHIVED state and timestamps. Use this tool to audit how a rule set evolved; use getPostingRuleSet instead for the set\&#39;s current metadata only. Preconditions: the posting rule set must exist; a set always has at least its initial version. Required inputs: postingRuleSetId (UUID) as a path parameter; page defaults to 0 and size to 10. No events are emitted and no state changes; this is a read-only projection. Returns 200 with an empty list when the page index is beyond the version history, and 404 POSTING_RULE_SET_NOT_FOUND when no posting rule set exists for the supplied id.
      * @endpoint get /v1/accounting/posting-rules/{postingRuleSetId}/versions
      * @param postingRuleSetId Posting rule set identifier
      * @param page Page index (0-based)
@@ -408,7 +410,7 @@ export class PostingRulesService extends BaseService {
 
     /**
      * Publish Posting Rule Set
-     * Publishes the rule set\&#39;s DRAFT version (DRAFT to PUBLISHED), making it the live conversion definition for its event type; any previously PUBLISHED version is archived atomically in the same call. Use this tool to activate reviewed rules; do not use archivePostingRuleSet, which retires the live version without a replacement, and use resolveTestMapping to dry-run the rules first. Preconditions: the set must have a DRAFT version with a non-empty rules definition that passes split-group and condition-predicate validation. Required inputs: postingRuleSetId (UUID) as a path parameter; there is no request body. Emits an ACCOUNTING_POSTING_RULE_PUBLISH event; subsequent accounting events for the event type post through the new version. Returns 400 when no DRAFT version exists or its definition is empty, and 422 UNBALANCED_RULES listing every offending condition, group or line in fieldErrors when publish-time validation fails.
+     * Publishes the rule set\&#39;s DRAFT version (DRAFT to PUBLISHED), making it the live conversion definition for its event type; any previously PUBLISHED version is archived atomically in the same call. Use this tool to activate reviewed rules; do not use archivePostingRuleSet, which retires the live version without a replacement, and use resolveTestMapping to dry-run the rules first. Preconditions: the set must have a DRAFT version with a non-empty rules definition that passes split-group and condition-predicate validation. Required inputs: postingRuleSetId (UUID) as a path parameter; there is no request body. Emits an ACCOUNTING_POSTING_RULE_PUBLISH event; subsequent accounting events for the event type post through the new version. Returns 400 when no DRAFT version exists or its definition is empty, 404 POSTING_RULE_SET_NOT_FOUND when no posting rule set exists for the supplied id, and 422 UNBALANCED_RULES listing every offending condition, group or line in fieldErrors when publish-time validation fails.
      * @endpoint post /v1/accounting/posting-rules/{postingRuleSetId}/publish
      * @param postingRuleSetId Posting rule set identifier
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -468,7 +470,7 @@ export class PostingRulesService extends BaseService {
 
     /**
      * Update Posting Rule Set
-     * Updates a posting rule set\&#39;s metadata and draft rules definition while no PUBLISHED version exists. Use this tool to iterate on a draft before publishing; do not use it once a version is PUBLISHED, and do not use publishPostingRuleSet, which is the activation step. Preconditions: the rule set must exist and must not have a PUBLISHED version. Required inputs: postingRuleSetId (UUID) as a path parameter plus the same body shape as createPostingRuleSet (name, eventType, rulesDefinition, createdBy). Emits an ACCOUNTING_POSTING_RULE_UPDATE event. Returns 409 when a PUBLISHED version already exists, and 400 when the rule set id cannot be resolved (mapped as VALIDATION_ERROR, not 404).
+     * Updates a posting rule set\&#39;s metadata and draft rules definition while no PUBLISHED version exists. Use this tool to iterate on a draft before publishing; do not use it once a version is PUBLISHED, and do not use publishPostingRuleSet, which is the activation step. Preconditions: the rule set must exist and must not have a PUBLISHED version. Required inputs: postingRuleSetId (UUID) as a path parameter plus the same body shape as createPostingRuleSet (name, eventType, rulesDefinition, createdBy). Emits an ACCOUNTING_POSTING_RULE_UPDATE event. Returns 404 POSTING_RULE_SET_NOT_FOUND when the rule set id cannot be resolved, and 409 when a PUBLISHED version already exists.
      * @endpoint put /v1/accounting/posting-rules/{postingRuleSetId}
      * @param postingRuleSetId Posting rule set identifier
      * @param postingRuleSetCreateRequest Replacement rule set metadata and draft rules definition.

@@ -1,4 +1,4 @@
-# @durion-sdk/people@0.12.0-alpha
+# @durion-sdk/people@0.13.0-alpha
 
 Human Resources service for employee management, payroll, and benefits administration
 
@@ -24,7 +24,7 @@ Navigate to the folder of your consuming project and run one of next commands.
 _published:_
 
 ```console
-npm install @durion-sdk/people@0.12.0-alpha --save
+npm install @durion-sdk/people@0.13.0-alpha --save
 ```
 
 _without publishing (not recommended):_

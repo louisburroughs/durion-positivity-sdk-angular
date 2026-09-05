@@ -30,6 +30,10 @@ export interface CycleCountPlanResponse {
      */
     locationId: string;
     /**
+     * Human-readable name of the location the plan applies to; null when the location replica has no matching row (e.g. replica lag or unknown location)
+     */
+    locationName?: string | null;
+    /**
      * Unique identifier of the cycle count plan
      */
     planId: string;
@@ -98,7 +102,7 @@ export function instanceOfCycleCountPlanResponse(value: object): value is CycleC
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createCycleCountPlanResponsePropertyNames('createdAt', 'createdBy', 'locationId', 'planId', 'planName', 'scheduledDate', 'status', 'updatedAt', );
-    const optionalStringProperties = createCycleCountPlanResponseOptionalProperties({ name: 'createdAt', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'dueDate', nullable: false }, { name: 'locationId', nullable: false }, { name: 'planId', nullable: false }, { name: 'planName', nullable: false }, { name: 'scheduleId', nullable: false }, { name: 'scheduledDate', nullable: false }, { name: 'status', nullable: false }, { name: 'updatedAt', nullable: false }, );
+    const optionalStringProperties = createCycleCountPlanResponseOptionalProperties({ name: 'createdAt', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'dueDate', nullable: false }, { name: 'locationId', nullable: false }, { name: 'locationName', nullable: true }, { name: 'planId', nullable: false }, { name: 'planName', nullable: false }, { name: 'scheduleId', nullable: false }, { name: 'scheduledDate', nullable: false }, { name: 'status', nullable: false }, { name: 'updatedAt', nullable: false }, );
     const optionalNumberProperties = createCycleCountPlanResponseOptionalProperties();
     const optionalBooleanProperties = createCycleCountPlanResponseOptionalProperties();
 

@@ -17,6 +17,8 @@ import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
 // @ts-ignore
+import { ApiError } from '../src/models/apiError';
+// @ts-ignore
 import { CreateDepositRequest } from '../src/models/createDepositRequest';
 // @ts-ignore
 import { DepositCreditResponse } from '../src/models/depositCreditResponse';
@@ -39,7 +41,7 @@ export class DepositCreditsService extends BaseService {
 
     /**
      * Register a Deposit Credit
-     * Creates an AVAILABLE deposit credit for a down-payment taken at pos-order checkout, holding the amount against its source document until a settlement invoice draws it down. Use this tool when a deposit was tendered against an estimate, workorder, or order; do not use refundDepositCredit, which returns a credit\&#39;s remaining balance when the source is cancelled. Preconditions: none beyond a priced source document — the call is idempotent on orderId, so a replay for an order that already registered a credit returns the existing record unchanged. Required inputs: orderId (UUID, idempotency anchor), sourceType (ESTIMATE, WORKORDER or ORDER), sourceId (UUID) and amount (positive); partyId is optional and currencyCode defaults to USD. Emits an INVOICE_DEPOSIT_CREATE event; no invoice records are touched until settlement applies the credit. Returns 201 with the credit (existing or new), and 422 when the amount is not positive or the sourceType is not a known value.
+     * Creates an AVAILABLE deposit credit for a down-payment taken at pos-order checkout, holding the amount against its source document until a settlement invoice draws it down. Use this tool when a deposit was tendered against an estimate, workorder, or order; do not use refundDepositCredit, which returns a credit\&#39;s remaining balance when the source is cancelled. Preconditions: none beyond a priced source document — the call is idempotent on orderId, so a replay for an order that already registered a credit returns the existing record unchanged. Required inputs: orderId (UUID, idempotency anchor), sourceType (ESTIMATE, WORKORDER or ORDER), sourceId (UUID) and amount (positive); partyId is optional and currencyCode defaults to USD. Emits an INVOICE_DEPOSIT_CREATE event; no invoice records are touched until settlement applies the credit. Returns 201 with the credit (existing or new), and 400 when amount is missing or not positive, or sourceType is not a known value.
      * @endpoint post /v1/invoices/deposits
      * @param createDepositRequest Deposit taken at checkout to register as a credit against its source document.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -169,7 +171,7 @@ export class DepositCreditsService extends BaseService {
 
     /**
      * List Deposit Credits by Source
-     * Lists every deposit credit held against one source document, identified by its type and id. Use this tool when checking what down-payments a settlement can draw on; use getDepositCredit instead when a specific depositCreditId is already known. Preconditions: none — an unknown or credit-free source returns an empty list rather than an error. Required inputs: sourceType query parameter (ESTIMATE, WORKORDER or ORDER, case-insensitive) and sourceId (UUID) query parameter; there is no request body. No events are emitted and no state changes; this is a read-only projection. Returns 422 when sourceType is not one of the known values.
+     * Lists every deposit credit held against one source document, identified by its type and id. Use this tool when checking what down-payments a settlement can draw on; use getDepositCredit instead when a specific depositCreditId is already known. Preconditions: none — an unknown or credit-free source returns an empty list rather than an error. Required inputs: sourceType query parameter (ESTIMATE, WORKORDER or ORDER, case-insensitive) and sourceId (UUID) query parameter; there is no request body. No events are emitted and no state changes; this is a read-only projection. Returns 400 when sourceType is not one of the known values.
      * @endpoint get /v1/invoices/deposits
      * @param sourceType
      * @param sourceId

@@ -17,6 +17,8 @@ import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
 // @ts-ignore
+import { ApiError } from '../src/models/apiError';
+// @ts-ignore
 import { AssignmentResponse } from '../src/models/assignmentResponse';
 // @ts-ignore
 import { CreateAssignmentRequest } from '../src/models/createAssignmentRequest';
@@ -39,7 +41,7 @@ export class AppointmentAssignmentsService extends BaseService {
 
     /**
      * Create Mechanic Assignments for an Appointment
-     * Creates the mechanic assignment for a scheduled appointment in CONFIRMED status, linking one LEAD mechanic and optional ASSIST mechanics and optionally reserving a bay or mobile-unit resource. Use this tool when staffing a booked appointment; do not use executeConflictOverride, which records a schedule-conflict bypass without assigning anyone, and use listAssignments to read what is already assigned. Preconditions: the appointment must exist and be in SCHEDULED status, no CONFIRMED or IN_PROGRESS assignment may already exist for it, and every mechanicPersonId must resolve to a known mechanic. Required inputs: mechanics with exactly one LEAD role (a single mechanic with a null role defaults to LEAD); resourceId and resourceType are optional, and override&#x3D;true requires the shop:schedule:edit authority plus a non-blank overrideReason. Emits a SHOPMGR_ASSIGNMENT_CREATED event and persists the assignment and its mechanic links. Returns 400 when the appointment or a mechanic cannot be resolved, the LEAD constraint is violated, or overrideReason is blank with override&#x3D;true, and 403 when override is requested without the shop:schedule:edit authority.
+     * Creates the mechanic assignment for a scheduled appointment in CONFIRMED status, linking one LEAD mechanic and optional ASSIST mechanics and optionally reserving a bay or mobile-unit resource. Use this tool when staffing a booked appointment; do not use executeConflictOverride, which records a schedule-conflict bypass without assigning anyone, and use listAssignments to read what is already assigned. Preconditions: the appointment must exist and be in SCHEDULED status, no CONFIRMED or IN_PROGRESS assignment may already exist for it, and every mechanicPersonId must resolve to a known mechanic. Required inputs: mechanics with exactly one LEAD role (a single mechanic with a null role defaults to LEAD); resourceId and resourceType are optional, and override&#x3D;true requires the shop:schedule:edit authority plus a non-blank overrideReason. Emits a SHOPMGR_ASSIGNMENT_CREATED event and persists the assignment and its mechanic links. Returns 400 when a mechanic cannot be resolved, the LEAD constraint is violated, or overrideReason is blank with override&#x3D;true, 404 when the appointment cannot be resolved, and 403 when override is requested without the shop:schedule:edit authority.
      * @endpoint post /v1/appointments/{appointmentId}/assignments
      * @param appointmentId Appointment identifier
      * @param createAssignmentRequest Mechanics to assign with their roles plus an optional bay or mobile-unit resource; the appointmentId in the path takes precedence over the body.

@@ -17,6 +17,8 @@ import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
 // @ts-ignore
+import { ApiError } from '../src/models/apiError';
+// @ts-ignore
 import { ApprovalConfigurationRequest } from '../src/models/approvalConfigurationRequest';
 // @ts-ignore
 import { ApprovalConfigurationResponse } from '../src/models/approvalConfigurationResponse';
@@ -363,7 +365,7 @@ export class ApprovalConfigurationAPIService extends BaseService {
 
     /**
      * Update Approval Configuration
-     * Replaces every field of an existing approval configuration with the values in the request, including nulling fields that are omitted. Use this tool when changing an existing approval rule; do not use createApprovalConfiguration, which adds a new rule rather than replacing one. Preconditions: the configuration must exist; this is a full replacement, so send all fields that should remain set. Required inputs: approvalId (UUID) as a path parameter and approvalMethod (CLICK_CONFIRM, SIGNATURE, ELECTRONIC_SIGNATURE, or VERBAL_CONFIRMATION) in the body; locationId, customerId, declineExpiryDays, requireSignature, and priority are optional. Emits a WORKORDER_APPROVAL_CONFIG_UPDATE event. Returns 404 when the configuration does not exist and also when approvalMethod is not a valid value, because both surface as the same IllegalArgumentException in this operation.
+     * Replaces every field of an existing approval configuration with the values in the request, including nulling fields that are omitted. Use this tool when changing an existing approval rule; do not use createApprovalConfiguration, which adds a new rule rather than replacing one. Preconditions: the configuration must exist; this is a full replacement, so send all fields that should remain set. Required inputs: approvalId (UUID) as a path parameter and approvalMethod (CLICK_CONFIRM, SIGNATURE, ELECTRONIC_SIGNATURE, or VERBAL_CONFIRMATION) in the body; locationId, customerId, declineExpiryDays, requireSignature, and priority are optional. Emits a WORKORDER_APPROVAL_CONFIG_UPDATE event. Returns 404 when the configuration does not exist, and 400 when approvalMethod is not one of the accepted values.
      * @endpoint put /v1/workexec/approvalConfigurations/{approvalId}
      * @param approvalId ID of the configuration to update
      * @param approvalConfigurationRequest Full replacement values for the approval configuration.

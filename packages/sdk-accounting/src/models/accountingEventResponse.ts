@@ -30,6 +30,10 @@ export interface AccountingEventResponse {
      */
     eventId: string;
     /**
+     * Short human-readable reference for display in place of the raw event UUID
+     */
+    eventReference?: string | null;
+    /**
      * Event type identifier
      */
     eventType: string;
@@ -151,7 +155,7 @@ export function instanceOfAccountingEventResponse(value: object): value is Accou
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createAccountingEventResponsePropertyNames('eventId', 'eventType', 'organizationId', 'receivedAt', 'status', );
-    const optionalStringProperties = createAccountingEventResponseOptionalProperties({ name: 'domainKeyId', nullable: false }, { name: 'errorMessage', nullable: false }, { name: 'eventId', nullable: false }, { name: 'eventType', nullable: false }, { name: 'failureDetails', nullable: false }, { name: 'failureReasonCode', nullable: false }, { name: 'finalPostingReferenceId', nullable: false }, { name: 'idempotencyOutcome', nullable: false }, { name: 'ingestionId', nullable: false }, { name: 'invoiceId', nullable: false }, { name: 'journalEntryId', nullable: false }, { name: 'mappingVersionAttempted', nullable: false }, { name: 'organizationId', nullable: false }, { name: 'processedAt', nullable: false }, { name: 'receivedAt', nullable: false }, { name: 'resolvedByUserId', nullable: false }, { name: 'sourceSystem', nullable: false }, { name: 'status', nullable: false }, { name: 'transactionDate', nullable: false }, );
+    const optionalStringProperties = createAccountingEventResponseOptionalProperties({ name: 'domainKeyId', nullable: false }, { name: 'errorMessage', nullable: false }, { name: 'eventId', nullable: false }, { name: 'eventReference', nullable: true }, { name: 'eventType', nullable: false }, { name: 'failureDetails', nullable: false }, { name: 'failureReasonCode', nullable: false }, { name: 'finalPostingReferenceId', nullable: false }, { name: 'idempotencyOutcome', nullable: false }, { name: 'ingestionId', nullable: false }, { name: 'invoiceId', nullable: false }, { name: 'journalEntryId', nullable: false }, { name: 'mappingVersionAttempted', nullable: false }, { name: 'organizationId', nullable: false }, { name: 'processedAt', nullable: false }, { name: 'receivedAt', nullable: false }, { name: 'resolvedByUserId', nullable: false }, { name: 'sourceSystem', nullable: false }, { name: 'status', nullable: false }, { name: 'transactionDate', nullable: false }, );
     const optionalNumberProperties = createAccountingEventResponseOptionalProperties({ name: 'attemptCount', nullable: false }, { name: 'sequenceNumber', nullable: false }, );
     const optionalBooleanProperties = createAccountingEventResponseOptionalProperties();
 
