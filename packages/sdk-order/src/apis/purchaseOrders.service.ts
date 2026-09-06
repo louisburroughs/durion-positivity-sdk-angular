@@ -31,6 +31,8 @@ import { ProcurementAvailability } from '../src/models/procurementAvailability';
 // @ts-ignore
 import { PurchaseOrderResponse } from '../src/models/purchaseOrderResponse';
 // @ts-ignore
+import { PurchaseOrderSummaryResponse } from '../src/models/purchaseOrderSummaryResponse';
+// @ts-ignore
 import { RevisePurchaseOrderRequest } from '../src/models/revisePurchaseOrderRequest';
 
 // @ts-ignore
@@ -688,6 +690,85 @@ export class PurchaseOrdersService extends BaseService {
             {
                 context: localVarHttpContext,
                 body: revisePurchaseOrderRequest,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Summarize Purchase Orders
+     * Returns totals across every purchase order matching the optional filters: order and line counts, units ordered, units still open (ordered but not yet received), units received, and grand-total and open-balance money, with the same figures broken down by lifecycle status. Use this tool for any aggregate question — how many units are on order, how much is outstanding with a vendor, how many orders are open. Do not use listPurchaseOrders for a total: it returns one page and any sum over it is partial; call this endpoint instead, and use listPurchaseOrders only to see individual orders. Preconditions: none; vendorId and status are optional and independent. Required inputs: none; vendorId (UUID) restricts to one vendor and status (repeatable, or comma-separated) to the named lifecycle statuses. Without a status filter the population is the incoming-supply set, APPROVED and PARTIALLY_RECEIVED, so unitsOpen is what is genuinely outstanding with vendors; cancelled and draft lines keep an open quantity on the row and are only counted when named explicitly (for example status&#x3D;CANCELLED). Emits an ORDER_PURCHASE_ORDER_SUMMARY audit event; read-only. Returns 200 with zero totals and an empty byStatus when nothing matches.
+     * @endpoint get /v1/orders/purchase-orders/summary
+     * @param vendorId
+     * @param status
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public summarizePurchaseOrders(vendorId?: string, status?: Array<'DRAFT' | 'APPROVED' | 'PARTIALLY_RECEIVED' | 'FULLY_RECEIVED' | 'CLOSED' | 'CANCELLED'>, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PurchaseOrderSummaryResponse>;
+    public summarizePurchaseOrders(vendorId?: string, status?: Array<'DRAFT' | 'APPROVED' | 'PARTIALLY_RECEIVED' | 'FULLY_RECEIVED' | 'CLOSED' | 'CANCELLED'>, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PurchaseOrderSummaryResponse>>;
+    public summarizePurchaseOrders(vendorId?: string, status?: Array<'DRAFT' | 'APPROVED' | 'PARTIALLY_RECEIVED' | 'FULLY_RECEIVED' | 'CLOSED' | 'CANCELLED'>, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PurchaseOrderSummaryResponse>>;
+    public summarizePurchaseOrders(vendorId?: string, status?: Array<'DRAFT' | 'APPROVED' | 'PARTIALLY_RECEIVED' | 'FULLY_RECEIVED' | 'CLOSED' | 'CANCELLED'>, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+
+        let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'vendorId',
+            <any>vendorId,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'status',
+            <any>status,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/orders/purchase-orders/summary`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<PurchaseOrderSummaryResponse>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                params: localVarQueryParameters.toHttpParams(),
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,

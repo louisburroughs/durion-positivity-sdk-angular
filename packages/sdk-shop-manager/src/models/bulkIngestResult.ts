@@ -14,6 +14,10 @@
  */
 export interface BulkIngestResult {
     /**
+     * Correlation id to quote when reporting a row that failed for a server-side reason. Present only alongside errorCode INTERNAL_ERROR, where it is the whole of what the caller can act on: the exception itself is logged at ERROR against this id and never returned (ADR-0056). Every failed row of one request carries the same id.
+     */
+    correlationId?: string;
+    /**
      * Identifier of the entity created/updated for this record, when successful
      */
     entityId?: string;
@@ -74,7 +78,7 @@ export function instanceOfBulkIngestResult(value: object): value is BulkIngestRe
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createBulkIngestResultPropertyNames('rowIndex', 'success', );
-    const optionalStringProperties = createBulkIngestResultOptionalProperties({ name: 'entityId', nullable: false }, { name: 'errorCode', nullable: false }, { name: 'errorMessage', nullable: false }, );
+    const optionalStringProperties = createBulkIngestResultOptionalProperties({ name: 'correlationId', nullable: false }, { name: 'entityId', nullable: false }, { name: 'errorCode', nullable: false }, { name: 'errorMessage', nullable: false }, );
     const optionalNumberProperties = createBulkIngestResultOptionalProperties({ name: 'rowIndex', nullable: false }, );
     const optionalBooleanProperties = createBulkIngestResultOptionalProperties({ name: 'success', nullable: false }, );
 

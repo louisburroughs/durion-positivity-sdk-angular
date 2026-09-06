@@ -10,7 +10,7 @@
 
 
 /**
- * Display projection for one UUID-backed value found in the event\'s raw payload. Display values are null when unavailable and are never replaced by the UUID.
+ * Display projection for one reference found in the event\'s raw payload. Display values are null when unavailable and are never replaced by the identifier.
  */
 export interface EventPayloadReference {
     /**
@@ -18,17 +18,21 @@ export interface EventPayloadReference {
      */
     displayName?: string | null;
     /**
-     * Stable business reference or number for the reference, e.g. an invoice number, customer number or journal-entry number. Null when accounting holds none.
+     * Stable business reference or number for the reference, e.g. an invoice number, customer number, journal-entry number or the canonical location code. Null when accounting holds none.
      */
     displayReference?: string | null;
     /**
-     * The identifier as it appears in the raw payload. Always present — this is the value the display fields describe, and it stays available for routing and audit.
+     * rawValue parsed as a UUID, for routing and audit. Null when the raw value is not in canonical UUID form — the normal case for LOCATION, whose accounting dimension is a code rather than a UUID.
      */
-    id: string;
+    id?: string | null;
     /**
      * Dot-separated path of the value inside the raw payload, e.g. \"billDetails.vendorId\". Array elements are indexed, e.g. \"lines[0].locationId\".
      */
     path: string;
+    /**
+     * The identifier as it appears in the raw payload, trimmed. Always present — this is the value the display fields describe, and it correlates the entry back to the payload. A UUID string for UUID-backed types; an accounting location code such as \"LOC-107\" for LOCATION.
+     */
+    rawValue: string;
     /**
      * Kind of entity the identifier refers to, as recognized from the payload key.
      */
@@ -84,8 +88,8 @@ export function instanceOfEventPayloadReference(value: object): value is EventPa
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createEventPayloadReferencePropertyNames('id', 'path', 'referenceType', );
-    const optionalStringProperties = createEventPayloadReferenceOptionalProperties({ name: 'displayName', nullable: true }, { name: 'displayReference', nullable: true }, { name: 'id', nullable: false }, { name: 'path', nullable: false }, { name: 'referenceType', nullable: false }, );
+    const requiredProperties = createEventPayloadReferencePropertyNames('path', 'rawValue', 'referenceType', );
+    const optionalStringProperties = createEventPayloadReferenceOptionalProperties({ name: 'displayName', nullable: true }, { name: 'displayReference', nullable: true }, { name: 'id', nullable: true }, { name: 'path', nullable: false }, { name: 'rawValue', nullable: false }, { name: 'referenceType', nullable: false }, );
     const optionalNumberProperties = createEventPayloadReferenceOptionalProperties();
     const optionalBooleanProperties = createEventPayloadReferenceOptionalProperties();
 
