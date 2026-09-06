@@ -2,6 +2,7 @@ export * from './aPPayments.service';
 export * from './accountingAnalytics.service';
 export * from './accountingEvents.service';
 export * from './accountingExports.service';
+export * from './accountingGL.service';
 export * from './accountingPeriods.service';
 export * from './auditTrail.service';
 export * from './bankReconciliation.service';
