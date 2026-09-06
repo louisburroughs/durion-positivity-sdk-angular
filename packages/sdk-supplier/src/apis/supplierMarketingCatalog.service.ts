@@ -99,18 +99,19 @@ export class SupplierMarketingCatalogService extends BaseService {
 
     /**
      * List Staged Marketing Enrichment
-     * Lists the tread design variants a marketing catalogue last sent, most recently seen first, including which of them are still missing artwork. Use this tool when a product\&#39;s marketing copy is not what was expected, to see what the catalogue actually published; do not read this as catalog content, because nothing here has been attached to a product and a variant may match no product at all. Preconditions: none. Required inputs: supplierRef path parameter; limit defaults to 100. Emits a SUPPLIER_MKTCAT_VARIANT_LIST event. Returns 200 with the staged variants, which is an empty list when the catalogue has never been imported, and 404 when the vendor profile is unknown.
+     * Lists the tread design variants a marketing catalogue last sent, most recently seen first, including which of them are still missing artwork. Use this tool when a product\&#39;s marketing copy is not what was expected, to see what the catalogue actually published; do not read this as catalog content, because nothing here has been attached to a product and a variant may match no product at all. This list is supplier-scoped staged enrichment — one vendor\&#39;s own catalogue submission — and is NOT the unmatched-product queue: that worklist, matched by design against products, is pos-catalog\&#39;s listUnmatchedTreadDesigns. Preconditions: none. Required inputs: supplierRef path parameter; limit defaults to 100. Optional hasUnresolvedImages filters to variants still missing artwork (true) or not (false); omitted, every staged row is returned regardless of image state. Emits a SUPPLIER_MKTCAT_VARIANT_LIST event. Returns 200 with the staged variants, which is an empty list when the catalogue has never been imported or nothing matches the filter, 400 when hasUnresolvedImages is not a boolean, and 404 when the vendor profile is unknown.
      * @endpoint get /v1/supplier/mktcat/{supplierRef}/variants
      * @param supplierRef Vendor profile alias
      * @param limit Maximum rows to return
+     * @param hasUnresolvedImages Filter to variants still missing artwork (true) or not (false); omitted returns every staged row regardless of image state. This is a supplier-scoped filter, not the pos-catalog unmatched-product queue.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public listMarketingCatalogVariants(supplierRef: string, limit?: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<MarketingEnrichmentView>>;
-    public listMarketingCatalogVariants(supplierRef: string, limit?: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<MarketingEnrichmentView>>>;
-    public listMarketingCatalogVariants(supplierRef: string, limit?: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<MarketingEnrichmentView>>>;
-    public listMarketingCatalogVariants(supplierRef: string, limit?: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public listMarketingCatalogVariants(supplierRef: string, limit?: number, hasUnresolvedImages?: boolean, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<MarketingEnrichmentView>>;
+    public listMarketingCatalogVariants(supplierRef: string, limit?: number, hasUnresolvedImages?: boolean, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<MarketingEnrichmentView>>>;
+    public listMarketingCatalogVariants(supplierRef: string, limit?: number, hasUnresolvedImages?: boolean, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<MarketingEnrichmentView>>>;
+    public listMarketingCatalogVariants(supplierRef: string, limit?: number, hasUnresolvedImages?: boolean, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (supplierRef === null || supplierRef === undefined) {
             throw new Error('Required parameter supplierRef was null or undefined when calling listMarketingCatalogVariants.');
         }
@@ -121,6 +122,15 @@ export class SupplierMarketingCatalogService extends BaseService {
             localVarQueryParameters,
             'limit',
             <any>limit,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'hasUnresolvedImages',
+            <any>hasUnresolvedImages,
             QueryParamStyle.Form,
             true,
         );

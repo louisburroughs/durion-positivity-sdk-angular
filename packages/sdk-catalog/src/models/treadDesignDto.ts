@@ -7,6 +7,7 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { TreadDesignCandidateDto } from './treadDesignCandidateDto';
 import { TreadDesignImageDto } from './treadDesignImageDto';
 import { TreadDesignTextDto } from './treadDesignTextDto';
 
@@ -20,6 +21,14 @@ export interface TreadDesignDto {
      */
     brand?: string;
     /**
+     * Products the matcher scored against this design, best first. Empty on the product-scoped read, which is about one resolved match rather than about a pending decision.
+     */
+    candidates?: Array<TreadDesignCandidateDto>;
+    /**
+     * When a deferred design should return to the worklist, when set.
+     */
+    deferUntil?: string;
+    /**
      * Whether any artwork on this design is still missing and awaiting retry.
      */
     hasUnresolvedImages?: boolean;
@@ -32,9 +41,25 @@ export interface TreadDesignDto {
      */
     images?: Array<TreadDesignImageDto>;
     /**
+     * Where this design stands in the enrichment review cycle.
+     */
+    matchState?: TreadDesignDtoMatchStateEnum;
+    /**
+     * When the review state last changed.
+     */
+    matchStateAt?: string;
+    /**
      * Vendor\'s product name, where given.
      */
     productName?: string;
+    /**
+     * Note the reviewer left with that resolution.
+     */
+    resolutionNote?: string;
+    /**
+     * Reviewer who last resolved this design, when one has.
+     */
+    resolvedBy?: string;
     /**
      * Seasonality as the vendor states it, not mapped to a Durion vocabulary.
      */
@@ -72,6 +97,15 @@ export interface TreadDesignDto {
      */
     vendorVariantId?: string;
 }
+export enum TreadDesignDtoMatchStateEnum {
+    Unmatched = 'UNMATCHED',
+    Review = 'REVIEW',
+    Matched = 'MATCHED',
+    Rejected = 'REJECTED',
+    Deferred = 'DEFERRED'
+};
+
+
 
 function isOptionalTreadDesignDtoPropertyOfType(
     value: Record<string, unknown>,
@@ -112,7 +146,7 @@ export function instanceOfTreadDesignDto(value: object): value is TreadDesignDto
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createTreadDesignDtoPropertyNames();
-    const optionalStringProperties = createTreadDesignDtoOptionalProperties({ name: 'brand', nullable: false }, { name: 'id', nullable: false }, { name: 'productName', nullable: false }, { name: 'seasonality', nullable: false }, { name: 'supplierRef', nullable: false }, { name: 'treadDesign', nullable: false }, { name: 'treadDesign2', nullable: false }, { name: 'updatedAt', nullable: false }, { name: 'vehicleType', nullable: false }, { name: 'vendorProfileId', nullable: false }, { name: 'vendorVariantId', nullable: false }, );
+    const optionalStringProperties = createTreadDesignDtoOptionalProperties({ name: 'brand', nullable: false }, { name: 'deferUntil', nullable: false }, { name: 'id', nullable: false }, { name: 'matchState', nullable: false }, { name: 'matchStateAt', nullable: false }, { name: 'productName', nullable: false }, { name: 'resolutionNote', nullable: false }, { name: 'resolvedBy', nullable: false }, { name: 'seasonality', nullable: false }, { name: 'supplierRef', nullable: false }, { name: 'treadDesign', nullable: false }, { name: 'treadDesign2', nullable: false }, { name: 'updatedAt', nullable: false }, { name: 'vehicleType', nullable: false }, { name: 'vendorProfileId', nullable: false }, { name: 'vendorVariantId', nullable: false }, );
     const optionalNumberProperties = createTreadDesignDtoOptionalProperties();
     const optionalBooleanProperties = createTreadDesignDtoOptionalProperties({ name: 'hasUnresolvedImages', nullable: false }, );
 
