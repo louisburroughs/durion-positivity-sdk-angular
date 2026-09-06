@@ -21,7 +21,11 @@ import { ApiError } from '../src/models/apiError';
 // @ts-ignore
 import { Page } from '../src/models/page';
 // @ts-ignore
+import { TreadDesignCandidateDto } from '../src/models/treadDesignCandidateDto';
+// @ts-ignore
 import { TreadDesignDto } from '../src/models/treadDesignDto';
+// @ts-ignore
+import { TreadDesignResolveRequest } from '../src/models/treadDesignResolveRequest';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
@@ -100,21 +104,101 @@ export class TreadDesignEnrichmentService extends BaseService {
     }
 
     /**
-     * List Vendor Tread Designs Matched to No Product
-     * Returns tread designs that fuzzy matching, scoped to each design\&#39;s own vendor\&#39;s priced products, could not resolve to any catalog product, newest applied first. Use this tool to review enrichment a person needs to connect manually; do not use it to look up one product\&#39;s enrichment, which is getTreadDesignForProduct. A design matching nothing is an ordinary outcome here, not a failure of ingestion. Preconditions: none; an empty result means every applied design has matched at least one product. Required inputs: none; page and size are optional, with size defaulting to 50 and capped at 200. Emits a CATALOG_TREAD_DESIGN_UNMATCHED_LIST event; no state changes. Returns 200 with an empty items array when nothing is unmatched.
+     * List the Products Scored Against a Tread Design
+     * Returns every catalog product the matcher scored against one tread design, best score first, with the confidence tier each score fell in. Use this tool to show a reviewer what the matcher saw before they attach, reject or defer a design; do not use it as a product search, since the candidates are only ever products the design\&#39;s own vendor has priced. Preconditions: the design must exist. An empty array is a real answer — nothing resembled it closely enough to be worth recording — and is not the same as an unknown design. Required inputs: treadDesignId path parameter; there is no request body. Emits a CATALOG_TREAD_DESIGN_CANDIDATES_LIST event; no state changes. Returns 404 when no such design exists.
+     * @endpoint get /v1/catalog/tread-designs/{treadDesignId}/candidates
+     * @param treadDesignId The tread design whose candidates to list.
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public listTreadDesignCandidates(treadDesignId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<TreadDesignCandidateDto>>;
+    public listTreadDesignCandidates(treadDesignId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<TreadDesignCandidateDto>>>;
+    public listTreadDesignCandidates(treadDesignId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<TreadDesignCandidateDto>>>;
+    public listTreadDesignCandidates(treadDesignId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (treadDesignId === null || treadDesignId === undefined) {
+            throw new Error('Required parameter treadDesignId was null or undefined when calling listTreadDesignCandidates.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/catalog/tread-designs/${this.configuration.encodeParam({name: "treadDesignId", value: treadDesignId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/candidates`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<Array<TreadDesignCandidateDto>>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * List Tread Designs Awaiting Enrichment Review (review worklist)
+     * Returns the enrichment review worklist: tread designs in the requested match states, most recently changed first, each with the products the matcher scored against it and how confident it was. Use this tool to work a queue of enrichment decisions a person has to make; do not use it to look up one product\&#39;s enrichment, which is getTreadDesignForProduct. A design matching nothing is an ordinary outcome here, not a failure of ingestion. Preconditions: none; an empty result means nothing is waiting in the requested states. Required inputs: none. matchState defaults to UNMATCHED,REVIEW — the designs actually awaiting a decision — and accepts any of UNMATCHED, REVIEW, MATCHED, REJECTED, DEFERRED, repeated or comma separated. vendorProfileId narrows the worklist to one vendor profile. page and size are optional, with size defaulting to 50 and capped at 200. Emits a CATALOG_TREAD_DESIGN_UNMATCHED_LIST event; no state changes. Returns 200 with an empty items array when nothing is waiting, and 400 when a match state is not one of the five above or the page size is out of range.
      * @endpoint get /v1/catalog/tread-designs/unmatched
+     * @param matchState Match states to include. Defaults to the states awaiting a decision.
+     * @param vendorProfileId Narrow the worklist to one vendor profile.
      * @param page Zero-based page index.
      * @param size Page size, 1-200.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public listUnmatchedTreadDesigns(page?: number, size?: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Page>;
-    public listUnmatchedTreadDesigns(page?: number, size?: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Page>>;
-    public listUnmatchedTreadDesigns(page?: number, size?: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Page>>;
-    public listUnmatchedTreadDesigns(page?: number, size?: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public listUnmatchedTreadDesigns(matchState?: Array<'UNMATCHED' | 'REVIEW' | 'MATCHED' | 'REJECTED' | 'DEFERRED'>, vendorProfileId?: string, page?: number, size?: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Page>;
+    public listUnmatchedTreadDesigns(matchState?: Array<'UNMATCHED' | 'REVIEW' | 'MATCHED' | 'REJECTED' | 'DEFERRED'>, vendorProfileId?: string, page?: number, size?: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Page>>;
+    public listUnmatchedTreadDesigns(matchState?: Array<'UNMATCHED' | 'REVIEW' | 'MATCHED' | 'REJECTED' | 'DEFERRED'>, vendorProfileId?: string, page?: number, size?: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Page>>;
+    public listUnmatchedTreadDesigns(matchState?: Array<'UNMATCHED' | 'REVIEW' | 'MATCHED' | 'REJECTED' | 'DEFERRED'>, vendorProfileId?: string, page?: number, size?: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'matchState',
+            <any>matchState,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'vendorProfileId',
+            <any>vendorProfileId,
+            QueryParamStyle.Form,
+            true,
+        );
+
 
         localVarQueryParameters = this.addToHttpParams(
             localVarQueryParameters,
@@ -168,6 +252,80 @@ export class TreadDesignEnrichmentService extends BaseService {
             {
                 context: localVarHttpContext,
                 params: localVarQueryParameters.toHttpParams(),
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Resolve a Tread Design Awaiting Review
+     * Records a person\&#39;s decision about a tread design: ATTACH it to named products, REJECT the matcher\&#39;s suggestions, or DEFER the decision. Use this tool when a reviewer has judged a worklist row; do not use it to correct the vendor\&#39;s marketing content, which this module never edits — only the association is decided here. An ATTACH marks each product as manually attached, and a manual attachment is never re-pointed by a later automatic pass, so this is how a human decision is made to stick. A REJECT detaches nothing that a person attached earlier — rejecting the machine\&#39;s suggestions says nothing about a human decision. Preconditions: the design must exist; ATTACH requires at least one existing product and none of them may already be manually attached to a different design. Required inputs: treadDesignId path parameter and a body carrying action; productIds is required for ATTACH and rejected otherwise, deferUntil is accepted for DEFER only, note is always optional. Emits a CATALOG_TREAD_DESIGN_RESOLVE event and changes the design\&#39;s match state. Returns 400 for an action and payload that cannot go together, 404 for an unknown design or product, and 409 when a named product is already manually attached to a different design.
+     * @endpoint post /v1/catalog/tread-designs/{treadDesignId}/resolve
+     * @param treadDesignId The tread design being resolved.
+     * @param treadDesignResolveRequest The reviewer\&#39;s decision: ATTACH with the products this design describes, REJECT when none of the candidates is right, or DEFER to decide later. productIds is required for ATTACH and rejected otherwise; deferUntil is accepted for DEFER only; note is always optional.
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public resolveTreadDesign(treadDesignId: string, treadDesignResolveRequest: TreadDesignResolveRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<TreadDesignDto>;
+    public resolveTreadDesign(treadDesignId: string, treadDesignResolveRequest: TreadDesignResolveRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<TreadDesignDto>>;
+    public resolveTreadDesign(treadDesignId: string, treadDesignResolveRequest: TreadDesignResolveRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<TreadDesignDto>>;
+    public resolveTreadDesign(treadDesignId: string, treadDesignResolveRequest: TreadDesignResolveRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (treadDesignId === null || treadDesignId === undefined) {
+            throw new Error('Required parameter treadDesignId was null or undefined when calling resolveTreadDesign.');
+        }
+        if (treadDesignResolveRequest === null || treadDesignResolveRequest === undefined) {
+            throw new Error('Required parameter treadDesignResolveRequest was null or undefined when calling resolveTreadDesign.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/catalog/tread-designs/${this.configuration.encodeParam({name: "treadDesignId", value: treadDesignId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/resolve`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<TreadDesignDto>('post', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                body: treadDesignResolveRequest,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,
