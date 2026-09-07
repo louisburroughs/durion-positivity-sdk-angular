@@ -4,6 +4,7 @@ export * from './dailyDispatchBoardDashboard.service';
 export * from './estimateAPI.service';
 export * from './estimateSearch.service';
 export * from './estimatesFromAppointments.service';
+export * from './laborIntelligence.service';
 export * from './operationalContext.service';
 export * from './substituteLinkAPI.service';
 export * from './technicianAssignmentAPI.service';
