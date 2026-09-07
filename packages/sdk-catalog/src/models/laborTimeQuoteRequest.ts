@@ -18,6 +18,10 @@ export interface LaborTimeQuoteRequest {
      */
     engineCode?: string;
     /**
+     * Location quoting the work; its own authored times win. Null = platform only.
+     */
+    locationId?: string;
+    /**
      * Vehicle make; null = unknown.
      */
     make?: string;
@@ -90,7 +94,7 @@ export function instanceOfLaborTimeQuoteRequest(value: object): value is LaborTi
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createLaborTimeQuoteRequestPropertyNames('serviceId', );
-    const optionalStringProperties = createLaborTimeQuoteRequestOptionalProperties({ name: 'engineCode', nullable: false }, { name: 'make', nullable: false }, { name: 'model', nullable: false }, { name: 'preferredTimeType', nullable: false }, { name: 'serviceId', nullable: false }, { name: 'submodel', nullable: false }, { name: 'vehicleYear', nullable: false }, );
+    const optionalStringProperties = createLaborTimeQuoteRequestOptionalProperties({ name: 'engineCode', nullable: false }, { name: 'locationId', nullable: false }, { name: 'make', nullable: false }, { name: 'model', nullable: false }, { name: 'preferredTimeType', nullable: false }, { name: 'serviceId', nullable: false }, { name: 'submodel', nullable: false }, { name: 'vehicleYear', nullable: false }, );
     const optionalNumberProperties = createLaborTimeQuoteRequestOptionalProperties();
     const optionalBooleanProperties = createLaborTimeQuoteRequestOptionalProperties();
 

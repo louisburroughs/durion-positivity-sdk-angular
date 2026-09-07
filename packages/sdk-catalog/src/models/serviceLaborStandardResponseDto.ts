@@ -46,6 +46,14 @@ export interface ServiceLaborStandardResponseDto {
      */
     overlapGroup?: string;
     /**
+     * Owning location when ownerScope is SHOP; null for PLATFORM
+     */
+    ownerLocationId?: string;
+    /**
+     * PLATFORM (every location resolves it) or SHOP (one location\'s own number)
+     */
+    ownerScope: string;
+    /**
      * Date the source published the time
      */
     publishedAt?: string;
@@ -117,8 +125,8 @@ export function instanceOfServiceLaborStandardResponseDto(value: object): value 
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createServiceLaborStandardResponseDtoPropertyNames('createdAt', 'id', 'laborHours', 'serviceId', 'sourceCode', 'sourceRevision', 'timeType', );
-    const optionalStringProperties = createServiceLaborStandardResponseDtoOptionalProperties({ name: 'createdAt', nullable: false }, { name: 'engineCode', nullable: false }, { name: 'id', nullable: false }, { name: 'make', nullable: false }, { name: 'model', nullable: false }, { name: 'overlapGroup', nullable: false }, { name: 'publishedAt', nullable: false }, { name: 'serviceId', nullable: false }, { name: 'sourceCode', nullable: false }, { name: 'sourceRevision', nullable: false }, { name: 'submodel', nullable: false }, { name: 'supersededAt', nullable: false }, { name: 'timeType', nullable: false }, { name: 'vehicleYear', nullable: false }, );
+    const requiredProperties = createServiceLaborStandardResponseDtoPropertyNames('createdAt', 'id', 'laborHours', 'ownerScope', 'serviceId', 'sourceCode', 'sourceRevision', 'timeType', );
+    const optionalStringProperties = createServiceLaborStandardResponseDtoOptionalProperties({ name: 'createdAt', nullable: false }, { name: 'engineCode', nullable: false }, { name: 'id', nullable: false }, { name: 'make', nullable: false }, { name: 'model', nullable: false }, { name: 'overlapGroup', nullable: false }, { name: 'ownerLocationId', nullable: false }, { name: 'ownerScope', nullable: false }, { name: 'publishedAt', nullable: false }, { name: 'serviceId', nullable: false }, { name: 'sourceCode', nullable: false }, { name: 'sourceRevision', nullable: false }, { name: 'submodel', nullable: false }, { name: 'supersededAt', nullable: false }, { name: 'timeType', nullable: false }, { name: 'vehicleYear', nullable: false }, );
     const optionalNumberProperties = createServiceLaborStandardResponseDtoOptionalProperties({ name: 'laborHours', nullable: false }, );
     const optionalBooleanProperties = createServiceLaborStandardResponseDtoOptionalProperties();
 
