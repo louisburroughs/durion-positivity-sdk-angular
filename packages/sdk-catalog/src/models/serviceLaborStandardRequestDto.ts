@@ -38,6 +38,14 @@ export interface ServiceLaborStandardRequestDto {
      */
     overlapGroup?: string;
     /**
+     * Owning location; required when ownerScope is SHOP, rejected otherwise
+     */
+    ownerLocationId?: string;
+    /**
+     * Who owns this time: PLATFORM (every location resolves it) or SHOP (one location\'s own number, which outranks platform rows for that location); defaults to PLATFORM
+     */
+    ownerScope?: ServiceLaborStandardRequestDtoOwnerScopeEnum;
+    /**
      * Date the time was published or decided; omitted means undated
      */
     publishedAt?: string;
@@ -54,6 +62,10 @@ export interface ServiceLaborStandardRequestDto {
      */
     vehicleYear?: string;
 }
+export enum ServiceLaborStandardRequestDtoOwnerScopeEnum {
+    Platform = 'PLATFORM',
+    Shop = 'SHOP'
+};
 export enum ServiceLaborStandardRequestDtoTimeTypeEnum {
     RetailFlatRate = 'RETAIL_FLAT_RATE',
     OemWarranty = 'OEM_WARRANTY',
@@ -102,7 +114,7 @@ export function instanceOfServiceLaborStandardRequestDto(value: object): value i
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createServiceLaborStandardRequestDtoPropertyNames('laborHours', );
-    const optionalStringProperties = createServiceLaborStandardRequestDtoOptionalProperties({ name: 'engineCode', nullable: false }, { name: 'make', nullable: false }, { name: 'model', nullable: false }, { name: 'overlapGroup', nullable: false }, { name: 'publishedAt', nullable: false }, { name: 'submodel', nullable: false }, { name: 'timeType', nullable: false }, { name: 'vehicleYear', nullable: false }, );
+    const optionalStringProperties = createServiceLaborStandardRequestDtoOptionalProperties({ name: 'engineCode', nullable: false }, { name: 'make', nullable: false }, { name: 'model', nullable: false }, { name: 'overlapGroup', nullable: false }, { name: 'ownerLocationId', nullable: false }, { name: 'ownerScope', nullable: false }, { name: 'publishedAt', nullable: false }, { name: 'submodel', nullable: false }, { name: 'timeType', nullable: false }, { name: 'vehicleYear', nullable: false }, );
     const optionalNumberProperties = createServiceLaborStandardRequestDtoOptionalProperties({ name: 'laborHours', nullable: false }, );
     const optionalBooleanProperties = createServiceLaborStandardRequestDtoOptionalProperties();
 
