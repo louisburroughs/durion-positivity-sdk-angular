@@ -19,6 +19,8 @@ import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 // @ts-ignore
 import { ApiError } from '../src/models/apiError';
 // @ts-ignore
+import { OpenWorkordersByCustomerResponse } from '../src/models/openWorkordersByCustomerResponse';
+// @ts-ignore
 import { ReopenedWorkorderAnalyticsResponse } from '../src/models/reopenedWorkorderAnalyticsResponse';
 // @ts-ignore
 import { TechnicianLaborAnalyticsResponse } from '../src/models/technicianLaborAnalyticsResponse';
@@ -39,6 +41,75 @@ export class WorkorderAnalyticsService extends BaseService {
 
     constructor(protected httpClient: HttpClient, @Optional() @Inject(BASE_PATH) basePath: string|string[], @Optional() configuration?: Configuration) {
         super(basePath, configuration);
+    }
+
+    /**
+     * Get Open Work Order Counts By Customer
+     * Returns one row per customer who currently holds at least one open work order, with the customer\&#39;s display name and their open count, ordered by count descending, plus the totals before the limit was applied. Use this tool to answer questions about open work across the whole book — which customers have work in progress, how many customers have open jobs, or the work-order half of a cross-domain question such as customers with both an open job and an unpaid invoice; it returns COUNTS, so do not use it when the answer needs the individual work orders, which is searchWorkorders (status&#x3D;OPEN, optionally customerId), or getWorkorder for one work order\&#39;s detail. Open means the six non-terminal statuses APPROVED, ASSIGNED, WORK_IN_PROGRESS, AWAITING_PARTS, AWAITING_APPROVAL and READY_FOR_PICKUP — the same set searchWorkorders accepts under its OPEN alias — while DRAFT is deliberately excluded, because a draft has not been approved into work; the workorder count endpoint (GET /v1/workorders/count?openOnly&#x3D;true) counts DRAFT as open, so the two deliberately disagree, and this one matches what a status&#x3D;OPEN search returns. Preconditions: none; required inputs: none, and limit is optional (default 100, hard-capped at 500). Emits a WORKORDER_ANALYTICS_OPEN_BY_CUSTOMER_VIEW audit event; no state changes. Returns 200 with truncated&#x3D;true and the true totalCustomers/totalOpenWorkorders when more customers had open work than the limit allowed.
+     * @endpoint get /v1/workorders/analytics/open-by-customer
+     * @param limit Maximum customers to return (default 100, capped at 500)
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public getOpenWorkordersByCustomer(limit?: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<OpenWorkordersByCustomerResponse>;
+    public getOpenWorkordersByCustomer(limit?: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<OpenWorkordersByCustomerResponse>>;
+    public getOpenWorkordersByCustomer(limit?: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<OpenWorkordersByCustomerResponse>>;
+    public getOpenWorkordersByCustomer(limit?: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+
+        let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'limit',
+            <any>limit,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/workorders/analytics/open-by-customer`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<OpenWorkordersByCustomerResponse>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                params: localVarQueryParameters.toHttpParams(),
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
     }
 
     /**
