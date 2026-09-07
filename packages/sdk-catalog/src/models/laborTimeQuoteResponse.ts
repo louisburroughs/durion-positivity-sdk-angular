@@ -30,6 +30,10 @@ export interface LaborTimeQuoteResponse {
      */
     overlapGroup?: string;
     /**
+     * SHOP when the quoting location\'s own authored time answered, else PLATFORM.
+     */
+    ownerScope?: string;
+    /**
      * Provenance source.
      */
     sourceCode?: string;
@@ -99,7 +103,7 @@ export function instanceOfLaborTimeQuoteResponse(value: object): value is LaborT
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createLaborTimeQuoteResponsePropertyNames();
-    const optionalStringProperties = createLaborTimeQuoteResponseOptionalProperties({ name: 'matchGrade', nullable: false }, { name: 'overlapGroup', nullable: false }, { name: 'sourceCode', nullable: false }, { name: 'sourceRevision', nullable: false }, { name: 'status', nullable: false }, { name: 'timeType', nullable: false }, );
+    const optionalStringProperties = createLaborTimeQuoteResponseOptionalProperties({ name: 'matchGrade', nullable: false }, { name: 'overlapGroup', nullable: false }, { name: 'ownerScope', nullable: false }, { name: 'sourceCode', nullable: false }, { name: 'sourceRevision', nullable: false }, { name: 'status', nullable: false }, { name: 'timeType', nullable: false }, );
     const optionalNumberProperties = createLaborTimeQuoteResponseOptionalProperties({ name: 'laborHours', nullable: false }, );
     const optionalBooleanProperties = createLaborTimeQuoteResponseOptionalProperties();
 
