@@ -8,8 +8,15 @@ set -euo pipefail
 # tarball produced by a run carries the same new version. Major versions are
 # never bumped here: do those by hand with `npm run version:set -- <major>.0.0`.
 #
-# `npm pack` runs each package's `prepare` hook, so the ng-packagr build happens
-# as part of packing (npm ignores --ignore-scripts for that hook).
+# Each package is built first, then its build output is packed: `npm pack` on a
+# workspace packs the workspace *source* directory, which produces a tarball of
+# raw .ts files that no consumer can build against. The publishable package is
+# what the build writes to <package>/dist (ng-packagr for the generated clients,
+# tsc for sdk-transport), so that is the directory handed to `npm pack`. This
+# matches how the frontend's scripts/sdk/install-sdk-packages.mjs packs the SDK.
+#
+# dist/ is removed before each build so a stale file from an earlier build (a
+# module since deleted from src/) cannot survive into the tarball.
 #
 # Usage:
 #   ./scripts/pack-sdk.sh                     # bump minor, pack every SDK package
@@ -123,13 +130,23 @@ for package_dir in "${packages[@]}"; do
 	tarball="${out_dir}/${prefix}-${version}.tgz"
 
 	if [[ "$dry_run" == "true" ]]; then
-		echo "[pack] would pack ${package_dir} -> ${tarball}"
+		echo "[pack] would build and pack ${package_dir}/dist -> ${tarball}"
 		continue
 	fi
 
-	# The package's `prepare` hook builds it (ng-packagr / tsc) as part of packing.
-	echo "[pack] Building and packing ${package_dir}..."
-	npm pack --workspace "$package_dir" --pack-destination "$out_dir" >/dev/null
+	dist_dir="${repo_root}/${package_dir}/dist"
+
+	echo "[pack] Building ${package_dir}..."
+	rm -rf "$dist_dir"
+	npm run build --workspace "$package_dir" >/dev/null
+
+	if [[ ! -f "${dist_dir}/package.json" ]]; then
+		echo "[pack] Build produced no ${package_dir}/dist/package.json; nothing to pack." >&2
+		exit 1
+	fi
+
+	echo "[pack] Packing ${package_dir}/dist..."
+	npm pack "$dist_dir" --pack-destination "$out_dir" >/dev/null
 
 	if [[ ! -f "$tarball" ]]; then
 		echo "[pack] Expected tarball not found: ${tarball}" >&2
