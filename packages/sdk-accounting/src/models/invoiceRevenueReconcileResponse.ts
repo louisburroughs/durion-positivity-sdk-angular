@@ -7,7 +7,7 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { InvoiceRevenueReconcileOutcome } from './invoiceRevenueReconcileOutcome';
+import { Outcome } from './outcome';
 
 
 /**
@@ -29,7 +29,7 @@ export interface InvoiceRevenueReconcileResponse {
     /**
      * One entry per candidate, in the order examined
      */
-    outcomes?: Array<InvoiceRevenueReconcileOutcome>;
+    outcomes?: Array<Outcome>;
     /**
      * Postings created (or, on a dry run, that would be created)
      */
