@@ -177,19 +177,18 @@ export class PeopleAccessControlService extends BaseService {
 
     /**
      * List a Person\&#39;s Role Assignments
-     * Lists the role assignments a person holds in pos-security, resolved through the person\&#39;s active user-person link. Use this tool to inspect the access a person already has; do not use listAssignableRoles, which returns the catalog of roles available for assignment. Preconditions: the person must have an active user-person link, and the linked username must resolve to a pos-security user. Required inputs: personUuid (UUID) as a path parameter; includeHistory defaults to false and adds ended assignments when true, and endDate (ISO date-time) optionally evaluates assignments as of that moment. Emits a PEOPLE_CONTACT_ACCESS_ASSIGNMENTS_LIST audit event; no state changes. Returns 404 when the person has no user link or the linked username has no security user.
+     * Lists the role assignments a person holds in pos-security, resolved through the person\&#39;s active user-person link. Use this tool to inspect the access a person already has; do not use listAssignableRoles, which returns the catalog of roles available for assignment. Preconditions: the person must have an active user-person link, and the linked username must resolve to a pos-security user. Required inputs: personUuid (UUID) as a path parameter; includeHistory defaults to false and adds ended and revoked assignments when true. There is no as-of filter: the listing is always evaluated as of now, and each entry carries its own effective window plus an active flag. Each entry carries the role code, which is the value revokePersonRoleAssignment addresses an assignment by. Emits a PEOPLE_CONTACT_ACCESS_ASSIGNMENTS_LIST audit event; no state changes. Returns 404 when the person has no user link or the linked username has no security user.
      * @endpoint get /v1/people/{personUuid}/access/assignments
      * @param personUuid
      * @param includeHistory
-     * @param endDate
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public listRoleAssignments(personUuid: string, includeHistory?: boolean, endDate?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<UserRoleDto>>;
-    public listRoleAssignments(personUuid: string, includeHistory?: boolean, endDate?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<UserRoleDto>>>;
-    public listRoleAssignments(personUuid: string, includeHistory?: boolean, endDate?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<UserRoleDto>>>;
-    public listRoleAssignments(personUuid: string, includeHistory?: boolean, endDate?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public listRoleAssignments(personUuid: string, includeHistory?: boolean, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<UserRoleDto>>;
+    public listRoleAssignments(personUuid: string, includeHistory?: boolean, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<UserRoleDto>>>;
+    public listRoleAssignments(personUuid: string, includeHistory?: boolean, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<UserRoleDto>>>;
+    public listRoleAssignments(personUuid: string, includeHistory?: boolean, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (personUuid === null || personUuid === undefined) {
             throw new Error('Required parameter personUuid was null or undefined when calling listRoleAssignments.');
         }
@@ -200,15 +199,6 @@ export class PeopleAccessControlService extends BaseService {
             localVarQueryParameters,
             'includeHistory',
             <any>includeHistory,
-            QueryParamStyle.Form,
-            true,
-        );
-
-
-        localVarQueryParameters = this.addToHttpParams(
-            localVarQueryParameters,
-            'endDate',
-            <any>endDate,
             QueryParamStyle.Form,
             true,
         );

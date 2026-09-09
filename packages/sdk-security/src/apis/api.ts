@@ -5,7 +5,6 @@ export * from './authAPI.service';
 export * from './authorization.service';
 export * from './jWTAPI.service';
 export * from './permissionRegistry.service';
-export * from './principalRoleManagement.service';
 export * from './roleBulkIngestAPI.service';
 export * from './roleManagement.service';
 export * from './rolePermissionBulkIngestAPI.service';
