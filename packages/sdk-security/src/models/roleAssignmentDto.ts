@@ -46,7 +46,7 @@ export interface RoleAssignmentDto {
      */
     revokedAt?: string;
     /**
-     * Stable code of the assigned role, identical to the role\'s name
+     * Stable code of the assigned role, identical to the role's name
      */
     roleCode: string;
     /**
