@@ -120,101 +120,6 @@ export class RoleManagementService extends BaseService {
     }
 
     /**
-     * Check One User Permission at a Location
-     * Checks whether a user holds a specific permission through a currently effective role assignment whose scope covers the given location. Use this tool for a point authorization probe by user UUID; use getAuthorizationDecision instead when the caller has a principal identifier from the RBAC matrix rather than a user id. Preconditions: the caller must hold security:permission:view and the user must exist. Required inputs: userId (UUID) and permission (domain:resource:action) as query parameters; locationId is optional and defaults to GLOBAL. No events are emitted and no state changes; this is a read-only check. Returns 200 with a plain boolean body, and 404 when the user does not exist.
-     * @endpoint get /v1/roles/check-permission
-     * @param userId
-     * @param permission
-     * @param locationId
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     * @param options additional options
-     */
-    public checkUserPermission(userId: string, permission: string, locationId?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<boolean>;
-    public checkUserPermission(userId: string, permission: string, locationId?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<boolean>>;
-    public checkUserPermission(userId: string, permission: string, locationId?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<boolean>>;
-    public checkUserPermission(userId: string, permission: string, locationId?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
-        if (userId === null || userId === undefined) {
-            throw new Error('Required parameter userId was null or undefined when calling checkUserPermission.');
-        }
-        if (permission === null || permission === undefined) {
-            throw new Error('Required parameter permission was null or undefined when calling checkUserPermission.');
-        }
-
-        let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
-
-        localVarQueryParameters = this.addToHttpParams(
-            localVarQueryParameters,
-            'userId',
-            <any>userId,
-            QueryParamStyle.Form,
-            true,
-        );
-
-
-        localVarQueryParameters = this.addToHttpParams(
-            localVarQueryParameters,
-            'permission',
-            <any>permission,
-            QueryParamStyle.Form,
-            true,
-        );
-
-
-        localVarQueryParameters = this.addToHttpParams(
-            localVarQueryParameters,
-            'locationId',
-            <any>locationId,
-            QueryParamStyle.Form,
-            true,
-        );
-
-
-        let localVarHeaders = this.defaultHeaders;
-
-        // authentication (bearerAuth) required
-        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
-
-        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
-            'application/json'
-        ]);
-        if (localVarHttpHeaderAcceptSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
-        }
-
-        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
-
-        const localVarTransferCache: boolean = options?.transferCache ?? true;
-
-
-        let responseType_: 'text' | 'json' | 'blob' = 'json';
-        if (localVarHttpHeaderAcceptSelected) {
-            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
-                responseType_ = 'text';
-            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
-                responseType_ = 'json';
-            } else {
-                responseType_ = 'blob';
-            }
-        }
-
-        let localVarPath = `/v1/roles/check-permission`;
-        const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<boolean>('get', `${basePath}${localVarPath}`,
-            {
-                context: localVarHttpContext,
-                params: localVarQueryParameters.toHttpParams(),
-                responseType: <any>responseType_,
-                ...(withCredentials ? { withCredentials } : {}),
-                headers: localVarHeaders,
-                observe: observe,
-                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
      * Create a New Role
      * Creates a new role with the given name and optional description; the role starts with no permissions and no user assignments. Use this tool to define a new role; do not use createRoleAssignment, which links an existing role to a user, and do not use updateRolePermissions, which changes an existing role\&#39;s grants. Preconditions: the caller must hold security:role:create and no role with the same name (compared case-insensitively) may already exist. Required inputs: name, non-blank; description is optional. Emits a SECURITY_ROLE_CREATE event and records the creating actor and timestamp. Returns 400 when name is missing or blank, and 409 with DUPLICATE_ROLE_NAME when the name is already taken regardless of case.
      * @endpoint post /v1/roles
@@ -285,10 +190,10 @@ export class RoleManagementService extends BaseService {
     }
 
     /**
-     * Create a Scoped Role Assignment
-     * Assigns a role to a user with a scope (GLOBAL or LOCATION) and an optional effective date window. Use this tool when the assignment needs scope or dates; do not use assignUserRole, the simple path-parameter variant that always creates a GLOBAL assignment starting now. Preconditions: the caller must hold security:role:assign, the user and role must exist, and no overlapping assignment may exist for the same role, scope, and (for LOCATION scope) location. Required inputs: userId and roleId (UUIDs); scopeType defaults to GLOBAL, scopeLocationIds is required for LOCATION scope and forbidden for GLOBAL, and effectiveStartDate defaults to now with an open-ended effectiveEndDate. Emits a SECURITY_ROLE_ASSIGNMENT_CREATE event. Returns 400 when the scope and location combination is invalid, 404 when the user or role does not exist, and 409 with ROLE_ASSIGNMENT_CONFLICT when the date window overlaps an existing assignment.
+     * Create an Effective-Dated Role Assignment
+     * Assigns a role to a user with an optional effective date window. Use this tool when the assignment needs dates; do not use assignUserRole, the simple path-parameter variant that always creates an assignment starting now. Location reach is not set here: it is a property of the role (location_scope) resolved against the user\&#39;s pos-people staffing assignment at token issuance. Preconditions: the caller must hold security:role:assign, the user and role must exist, and no overlapping assignment may exist for the same user and role. Required inputs: userId and roleId (UUIDs); effectiveStartDate defaults to now with an open-ended effectiveEndDate. Emits a SECURITY_ROLE_ASSIGNMENT_CREATE event. Returns 404 when the user or role does not exist, and 409 with ROLE_ASSIGNMENT_CONFLICT when the date window overlaps an existing assignment.
      * @endpoint post /v1/roles/assignments
-     * @param roleAssignmentRequest The user, role, scope, and effective window of the assignment to create.
+     * @param roleAssignmentRequest The user, role, and effective window of the assignment to create.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -536,7 +441,7 @@ export class RoleManagementService extends BaseService {
 
     /**
      * Get a Role\&#39;s Default Authority Expansion
-     * Returns the authority codes a role name expands to: the ROLE_ prefixed authority plus every permission code granted to that role in role_permissions. Use this tool to prebuild per-role permission or tool caches, as pos-mcp-server does; do not use getUserPermissions, which reads one specific user\&#39;s scoped role assignments rather than the authority set a role carries. Preconditions: the caller must hold security:role:view; the role name does not need to exist in the database. Required inputs: role name as a path parameter, for example SHOP_MGR. No events are emitted and no state changes; this is a read-only lookup of the role\&#39;s persisted permission grants. Returns 200 in all cases; an unrecognized role, or a role with no grants, yields only its ROLE_ authority with no domain codes rather than an error.
+     * Returns the authority codes a role name expands to: the ROLE_ prefixed authority plus every permission code granted to that role in role_permissions. Use this tool to prebuild per-role permission or tool caches, as pos-mcp-server does; do not use getUserPermissions, which reads one specific user\&#39;s effective role assignments rather than the authority set a role carries. Preconditions: the caller must hold security:role:view; the role name does not need to exist in the database. Required inputs: role name as a path parameter, for example SHOP_MGR. No events are emitted and no state changes; this is a read-only lookup of the role\&#39;s persisted permission grants. Returns 200 in all cases; an unrecognized role, or a role with no grants, yields only its ROLE_ authority with no domain codes rather than an error.
      * @endpoint get /v1/roles/{role}/default-permissions
      * @param role
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -842,7 +747,7 @@ export class RoleManagementService extends BaseService {
 
     /**
      * List a User\&#39;s Role Assignments
-     * Returns a user\&#39;s role assignments with their scope and effective window, limited to currently effective assignments by default. Use this tool to inspect who holds which roles and in what scope; use getUserPermissions instead when only the flattened permission set matters. Preconditions: the caller must hold security:role:view and the user must exist. Required inputs: userId (UUID) as a path parameter; includeHistory defaults to false and, when true, also returns expired and revoked assignments. No events are emitted and no state changes; this is a read-only projection. Returns 404 when the user does not exist.
+     * Returns a user\&#39;s role assignments with their effective window, limited to currently effective assignments by default. Use this tool to inspect who holds which roles and for what window; use getUserPermissions instead when only the flattened permission set matters. Preconditions: the caller must hold security:role:view and the user must exist. Required inputs: userId (UUID) as a path parameter; includeHistory defaults to false and, when true, also returns expired and revoked assignments. No events are emitted and no state changes; this is a read-only projection. Returns 404 when the user does not exist.
      * @endpoint get /v1/roles/assignments/user/{userId}
      * @param userId User ID
      * @param includeHistory Include historical assignments (expired/revoked)

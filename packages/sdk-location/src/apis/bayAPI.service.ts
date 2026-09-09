@@ -17,6 +17,8 @@ import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
 // @ts-ignore
+import { ApiError } from '../src/models/apiError';
+// @ts-ignore
 import { BayPatchRequest } from '../src/models/bayPatchRequest';
 // @ts-ignore
 import { BayRequest } from '../src/models/bayRequest';
@@ -43,7 +45,7 @@ export class BayAPIService extends BaseService {
 
     /**
      * Create a Service Bay for Location
-     * Creates a service bay under a location with a type classification, concurrency capacity and optional capability and skill requirements. Use this tool when adding physical work capacity to a shop; do not use patchBay, which modifies a bay that already exists, and use createStorageLocation for inventory storage rather than vehicle bays. Preconditions: the location must exist, no bay of that location may already use the name (case-insensitive), and any serviceCapabilityIds must match registered service capability codes. Required inputs: name, bayType (one of GENERAL_SERVICE, ALIGNMENT, TIRE_SERVICE, HEAVY_DUTY, INSPECTION or WASH_DETAIL) and capacity.maxConcurrentVehicles of at least 1; status is optional, defaults to ACTIVE and only also accepts OUT_OF_SERVICE. Emits a LOCATION_BAY_CREATE event; no other records are touched. Returns 404 when the location does not exist and 409 when the bay name is already taken at that location.
+     * Creates a service bay under a location with a type classification, concurrency capacity and optional capability and skill requirements. Use this tool when adding physical work capacity to a shop; do not use patchBay, which modifies a bay that already exists, and use createStorageLocation for inventory storage rather than vehicle bays. Preconditions: the location must exist, no bay of that location may already use the name (case-insensitive), and any serviceCapabilityIds must match registered service capability codes. Required inputs: name, bayType (one of GENERAL_SERVICE, ALIGNMENT, TIRE_SERVICE, HEAVY_DUTY, INSPECTION or WASH_DETAIL) and capacity.maxConcurrentVehicles of at least 1; status is optional, defaults to ACTIVE and only also accepts OUT_OF_SERVICE. Emits a LOCATION_BAY_CREATE event; no other records are touched. Returns 400 when locationId does not parse as a UUID, 403 LOCATION_SCOPE_DENIED when a location-scoped location:bay:manage grant does not cover locationId (ADR-0061), 404 when the location does not exist and 409 when the bay name is already taken at that location.
      * @endpoint post /v1/locations/{locationId}/bays
      * @param locationId Location ID
      * @param bayRequest Service bay to create, with its type classification and concurrent vehicle capacity.
@@ -117,7 +119,7 @@ export class BayAPIService extends BaseService {
 
     /**
      * Delete a Service Bay
-     * Deletes a bay permanently by id and publishes a deletion fact so replica consumers drop the row from their dispatch and roster views. Use this tool only when a bay was created in error; use patchBay with status OUT_OF_SERVICE instead to take a real bay out of service, which keeps it visible as inactive rather than removing it. Preconditions: the location must exist and the bay must belong to it; there is no usage check, so callers must confirm the bay is not referenced by scheduled work first. Required inputs: locationId and bayId (UUIDs) as path parameters; there is no request body. Emits a LOCATION_BAY_DELETE event; the row is hard-deleted, not soft-deleted. Returns 204 on success and 404 when the location or bay does not exist.
+     * Deletes a bay permanently by id and publishes a deletion fact so replica consumers drop the row from their dispatch and roster views. Use this tool only when a bay was created in error; use patchBay with status OUT_OF_SERVICE instead to take a real bay out of service, which keeps it visible as inactive rather than removing it. Preconditions: the location must exist and the bay must belong to it; there is no usage check, so callers must confirm the bay is not referenced by scheduled work first. Required inputs: locationId and bayId (UUIDs) as path parameters; there is no request body. Emits a LOCATION_BAY_DELETE event; the row is hard-deleted, not soft-deleted. Returns 204 on success, 400 when either id does not parse as a UUID, 403 LOCATION_SCOPE_DENIED when a location-scoped location:bay:manage grant does not cover locationId (ADR-0061), and 404 when the location or bay does not exist.
      * @endpoint delete /v1/locations/{locationId}/bays/{bayId}
      * @param locationId Location ID
      * @param bayId ID of the bay to delete
@@ -125,10 +127,10 @@ export class BayAPIService extends BaseService {
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public deleteBay(locationId: string, bayId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public deleteBay(locationId: string, bayId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public deleteBay(locationId: string, bayId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public deleteBay(locationId: string, bayId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public deleteBay(locationId: string, bayId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any>;
+    public deleteBay(locationId: string, bayId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
+    public deleteBay(locationId: string, bayId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
+    public deleteBay(locationId: string, bayId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (locationId === null || locationId === undefined) {
             throw new Error('Required parameter locationId was null or undefined when calling deleteBay.');
         }
@@ -142,6 +144,7 @@ export class BayAPIService extends BaseService {
         localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
 
         const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
         ]);
         if (localVarHttpHeaderAcceptSelected !== undefined) {
             localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
@@ -180,7 +183,7 @@ export class BayAPIService extends BaseService {
 
     /**
      * Get a Service Bay by Identifier
-     * Returns a single service bay of a location, including its capacity, capability and skill requirement details. Use this tool when both the location id and bay id are known; use listBays instead to search or enumerate. Preconditions: the location must exist and the bay must belong to it. Required inputs: locationId and bayId (UUIDs) as path parameters. No events are emitted and no state changes; this is a read-only projection. Returns 404 when the location does not exist or the bay is not found under that location.
+     * Returns a single service bay of a location, including its capacity, capability and skill requirement details. Use this tool when both the location id and bay id are known; use listBays instead to search or enumerate. Preconditions: the location must exist and the bay must belong to it. Required inputs: locationId and bayId (UUIDs) as path parameters. No events are emitted and no state changes; this is a read-only projection. Returns 400 when either id does not parse as a UUID, 403 LOCATION_SCOPE_DENIED when a location-scoped location:bay:read grant does not cover locationId (ADR-0061), and 404 when the location does not exist or the bay is not found under that location.
      * @endpoint get /v1/locations/{locationId}/bays/{bayId}
      * @param locationId Location ID
      * @param bayId Bay ID
@@ -244,7 +247,7 @@ export class BayAPIService extends BaseService {
 
     /**
      * List Service Bays of a Location
-     * Lists the service bays of a location as a page, optionally filtered by status and bayType. Use this tool to see bay capacity and status for a shop; use getBay instead when the bay id is already known. Preconditions: the location must exist. Required inputs: locationId (UUID) as a path parameter; status (ACTIVE or OUT_OF_SERVICE) and bayType filters are optional, and page defaults to 0 with size 20. No events are emitted and no state changes; this is a read-only projection. Returns 404 when the location does not exist; an unrecognized status or bayType filter value fails the request rather than returning an empty page.
+     * Lists the service bays of a location as a page, optionally filtered by status and bayType. Use this tool to see bay capacity and status for a shop; use getBay instead when the bay id is already known. Preconditions: the location must exist. Required inputs: locationId (UUID) as a path parameter; status (ACTIVE or OUT_OF_SERVICE) and bayType filters are optional, and page defaults to 0 with size 20. No events are emitted and no state changes; this is a read-only projection. Returns 400 when locationId does not parse as a UUID, 403 LOCATION_SCOPE_DENIED when a location-scoped location:bay:read grant does not cover locationId (ADR-0061), and 404 when the location does not exist; an unrecognized status or bayType filter value fails the request rather than returning an empty page.
      * @endpoint get /v1/locations/{locationId}/bays
      * @param locationId Location ID
      * @param status
@@ -347,7 +350,7 @@ export class BayAPIService extends BaseService {
 
     /**
      * Patch Fields of a Service Bay
-     * Applies a partial update to a bay, changing only the supplied fields: name, bayType, status, capacity and the capability or skill requirement lists. Use this tool for status transitions between ACTIVE and OUT_OF_SERVICE and for capacity changes; do not use createBay, which adds a new bay. Preconditions: the location must exist, the bay must belong to it, and a new name must not collide with another bay at the same location. Required inputs: locationId and bayId (UUIDs) as path parameters and a body with at least one field; capacity.maxConcurrentVehicles, when supplied, must be at least 1. Emits a LOCATION_BAY_UPDATE event; no other records are touched. Returns 404 when the location or bay does not exist and 409 when the new name is already taken at that location.
+     * Applies a partial update to a bay, changing only the supplied fields: name, bayType, status, capacity and the capability or skill requirement lists. Use this tool for status transitions between ACTIVE and OUT_OF_SERVICE and for capacity changes; do not use createBay, which adds a new bay. Preconditions: the location must exist, the bay must belong to it, and a new name must not collide with another bay at the same location. Required inputs: locationId and bayId (UUIDs) as path parameters and a body with at least one field; capacity.maxConcurrentVehicles, when supplied, must be at least 1. Emits a LOCATION_BAY_UPDATE event; no other records are touched. Returns 400 when either id does not parse as a UUID, 403 LOCATION_SCOPE_DENIED when a location-scoped location:bay:manage grant does not cover locationId (ADR-0061), 404 when the location or bay does not exist and 409 when the new name is already taken at that location.
      * @endpoint patch /v1/locations/{locationId}/bays/{bayId}
      * @param locationId
      * @param bayId

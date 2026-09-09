@@ -605,7 +605,7 @@ export class EstimateAPIService extends BaseService {
 
     /**
      * Generate Estimate PDF Document
-     * Renders the estimate as a PDF via the pos-documents service, containing header details, line items grouped into parts and labor, and financial totals, returned as an attachment. Use this tool when a printable or emailable document is needed; use getEstimateSummary instead for the same content as JSON. Preconditions: the estimate must exist and the pos-documents service must be reachable. Required inputs: estimateId (UUID) as a path parameter. Emits an ESTIMATE_PDF_GENERATE audit event; no estimate state changes — the render is performed on demand and not stored. Returns 404 when the estimate does not exist, and 502 when the document service fails to render the PDF.
+     * Renders the estimate as a PDF via the pos-documents service, containing header details, line items grouped into parts and labor, and financial totals, returned as an attachment. Use this tool when a printable or emailable document is needed; use getEstimateSummary instead for the same content as JSON. Preconditions: the estimate must exist and the pos-documents service must be reachable. A caller whose workorder:estimate:view grant is location-scoped must have the estimate\&#39;s location within reach (ADR-0061). Required inputs: estimateId (UUID) as a path parameter. Emits an ESTIMATE_PDF_GENERATE audit event; no estimate state changes — the render is performed on demand and not stored. Returns 404 when the estimate does not exist, 403 LOCATION_SCOPE_DENIED when it exists but its location is outside the caller\&#39;s scope, and 502 when the document service fails to render the PDF.
      * @endpoint get /v1/workorders/estimates/{estimateId}/pdf
      * @param estimateId Estimate ID
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -654,7 +654,7 @@ export class EstimateAPIService extends BaseService {
 
     /**
      * Get Estimate by Id
-     * Returns one estimate with its status, customer, vehicle, financial totals, and approval-related fields. Use this tool when the estimate id is known; use getEstimateSummary instead for the customer-facing grouped view, or searchEstimates to find estimates by text. Preconditions: the estimate must exist. Required inputs: estimateId (UUID) as a path parameter. No events are emitted and no state changes; this is a read-only projection. Returns 404 when no estimate exists for the id.
+     * Returns one estimate with its status, customer, vehicle, financial totals, and approval-related fields. Use this tool when the estimate id is known; use getEstimateSummary instead for the customer-facing grouped view, or searchEstimates to find estimates by text. Preconditions: the estimate must exist. A caller whose workorder:estimate:view grant is location-scoped must have the estimate\&#39;s location within reach (ADR-0061). Required inputs: estimateId (UUID) as a path parameter. No events are emitted and no state changes; this is a read-only projection. Returns 404 when no estimate exists for the id, and 403 LOCATION_SCOPE_DENIED when the estimate exists but its location is outside the caller\&#39;s scope.
      * @endpoint get /v1/workorders/estimates/{estimateId}
      * @param estimateId ID of the estimate to retrieve
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -714,7 +714,7 @@ export class EstimateAPIService extends BaseService {
 
     /**
      * Get Customer-Facing Estimate Summary
-     * Returns the customer-facing summary of an estimate with line items grouped into parts and labor plus the financial breakdown. Use this tool for presentation to the customer; use getEstimate instead for the raw record, and generateEstimatePdf to render the same content as a PDF document. Preconditions: the estimate must exist; totals reflect the last calculateEstimateTotals run. Required inputs: estimateId (UUID) as a path parameter. Emits an ESTIMATE_SUMMARY_VIEW audit event; no estimate state changes — this is a read-only projection. Returns 404 when no estimate exists for the id.
+     * Returns the customer-facing summary of an estimate with line items grouped into parts and labor plus the financial breakdown. Use this tool for presentation to the customer; use getEstimate instead for the raw record, and generateEstimatePdf to render the same content as a PDF document. Preconditions: the estimate must exist; totals reflect the last calculateEstimateTotals run. A caller whose workorder:estimate:view grant is location-scoped must have the estimate\&#39;s location within reach (ADR-0061). Required inputs: estimateId (UUID) as a path parameter. Emits an ESTIMATE_SUMMARY_VIEW audit event; no estimate state changes — this is a read-only projection. Returns 404 when no estimate exists for the id, and 403 LOCATION_SCOPE_DENIED when the estimate exists but its location is outside the caller\&#39;s scope.
      * @endpoint get /v1/workorders/estimates/{estimateId}/summary
      * @param estimateId Estimate ID
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -774,7 +774,7 @@ export class EstimateAPIService extends BaseService {
 
     /**
      * List All Estimates
-     * Returns every estimate in the system as an unpaginated list, in all statuses from DRAFT through APPROVED, DECLINED, and EXPIRED. Use this tool only for small datasets or admin views; use searchEstimates instead for paginated, filtered lookup by query, customer, or vehicle. Preconditions: none beyond the caller holding workorder:estimate:view. Required inputs: none — there are no filters or pagination parameters. Emits a WORKORDER_ESTIMATE_LIST audit event; no estimate state changes — this is a read-only projection. Returns 200 with the full list, possibly empty.
+     * Returns every estimate in the system as an unpaginated list, in all statuses from DRAFT through APPROVED, DECLINED, and EXPIRED. Use this tool only for small datasets or admin views; use searchEstimates instead for paginated, filtered lookup by query, customer, or vehicle. Preconditions: none beyond the caller holding workorder:estimate:view; a caller whose grant is location-scoped sees only estimates at locations within reach (ADR-0061), and an empty reach is an empty list. Required inputs: none — there are no filters or pagination parameters. Emits a WORKORDER_ESTIMATE_LIST audit event; no estimate state changes — this is a read-only projection. Returns 200 with the full list, possibly empty.
      * @endpoint get /v1/workorders/estimates
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
@@ -890,7 +890,7 @@ export class EstimateAPIService extends BaseService {
 
     /**
      * List Estimates for a Location
-     * Returns all estimates recorded against one location, unpaginated and in every status. Use this tool for a location\&#39;s estimate book; do not use listEstimatesByShop, which is the legacy alias of this same lookup. Preconditions: none — an unknown locationId simply yields an empty list. Required inputs: locationId (UUID) as a path parameter. Emits a WORKORDER_ESTIMATE_SEARCH_BY_LOCATION audit event; no estimate state changes — this is a read-only projection. Returns 200 with the estimates, possibly empty.
+     * Returns all estimates recorded against one location, unpaginated and in every status. Use this tool for a location\&#39;s estimate book; do not use listEstimatesByShop, which is the legacy alias of this same lookup. Preconditions: an unknown locationId simply yields an empty list; a caller whose workorder:estimate:view grant is location-scoped must have locationId within reach (ADR-0061). Required inputs: locationId (UUID) as a path parameter. Emits a WORKORDER_ESTIMATE_SEARCH_BY_LOCATION audit event; no estimate state changes — this is a read-only projection. Returns 200 with the estimates, possibly empty, and 403 LOCATION_SCOPE_DENIED when the caller\&#39;s location scope does not cover locationId.
      * @endpoint get /v1/workorders/estimates/location/{locationId}
      * @param locationId ID of the location
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -950,7 +950,7 @@ export class EstimateAPIService extends BaseService {
 
     /**
      * List Estimates for a Shop
-     * Returns all estimates recorded against one shop location, unpaginated and in every status. Use this tool when the caller\&#39;s route vocabulary says shop; it is a legacy alias of listEstimatesByLocation and returns identical results, so use listEstimatesByLocation instead in new integrations. Preconditions: none — an unknown locationId simply yields an empty list. Required inputs: locationId (UUID) as a path parameter. Emits a WORKORDER_ESTIMATE_SEARCH_BY_SHOP audit event; no estimate state changes — this is a read-only projection. Returns 200 with the estimates, possibly empty.
+     * Returns all estimates recorded against one shop location, unpaginated and in every status. Use this tool when the caller\&#39;s route vocabulary says shop; it is a legacy alias of listEstimatesByLocation and returns identical results, so use listEstimatesByLocation instead in new integrations. Preconditions: an unknown locationId simply yields an empty list; a caller whose workorder:estimate:view grant is location-scoped must have locationId within reach (ADR-0061). Required inputs: locationId (UUID) as a path parameter. Emits a WORKORDER_ESTIMATE_SEARCH_BY_SHOP audit event; no estimate state changes — this is a read-only projection. Returns 200 with the estimates, possibly empty, and 403 LOCATION_SCOPE_DENIED when the caller\&#39;s location scope does not cover locationId.
      * @endpoint get /v1/workorders/estimates/shop/{locationId}
      * @param locationId ID of the shop
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.

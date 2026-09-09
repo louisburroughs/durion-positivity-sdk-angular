@@ -22,6 +22,10 @@ export interface VendorBillListRow {
      */
     billId: string;
     /**
+     * The vendor\'s own bill/invoice number, shown in place of the raw billId UUID (issue #1892).
+     */
+    billNumber: string;
+    /**
      * Bill due date; bills matched by this endpoint always have a due date in the requested window
      */
     dueDate?: string;
@@ -33,6 +37,10 @@ export interface VendorBillListRow {
      * Vendor identifier
      */
     vendorId: string;
+    /**
+     * Vendor display name, so the list can name the vendor instead of showing the raw vendorId UUID (issue #1892). Null when the bill carries no vendor name; render nothing rather than falling back to the UUID.
+     */
+    vendorName?: string | null;
 }
 export enum VendorBillListRowStatusEnum {
     PendingReceiptMatch = 'PENDING_RECEIPT_MATCH',
@@ -83,8 +91,8 @@ export function instanceOfVendorBillListRow(value: object): value is VendorBillL
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createVendorBillListRowPropertyNames('amount', 'billId', 'status', 'vendorId', );
-    const optionalStringProperties = createVendorBillListRowOptionalProperties({ name: 'billId', nullable: false }, { name: 'dueDate', nullable: false }, { name: 'status', nullable: false }, { name: 'vendorId', nullable: false }, );
+    const requiredProperties = createVendorBillListRowPropertyNames('amount', 'billId', 'billNumber', 'status', 'vendorId', );
+    const optionalStringProperties = createVendorBillListRowOptionalProperties({ name: 'billId', nullable: false }, { name: 'billNumber', nullable: false }, { name: 'dueDate', nullable: false }, { name: 'status', nullable: false }, { name: 'vendorId', nullable: false }, { name: 'vendorName', nullable: true }, );
     const optionalNumberProperties = createVendorBillListRowOptionalProperties({ name: 'amount', nullable: false }, );
     const optionalBooleanProperties = createVendorBillListRowOptionalProperties();
 

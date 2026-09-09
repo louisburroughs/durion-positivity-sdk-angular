@@ -17,6 +17,8 @@ import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
 // @ts-ignore
+import { ApiError } from '../src/models/apiError';
+// @ts-ignore
 import { BeginCloseRequest } from '../src/models/beginCloseRequest';
 // @ts-ignore
 import { CashMovementRequest } from '../src/models/cashMovementRequest';
@@ -253,7 +255,7 @@ export class RegisterSessionsService extends BaseService {
 
     /**
      * Get a Register Session
-     * Returns a register session with its status, opening float, counted and theoretical cash, over/short, and lifecycle timestamps. Use this tool when the session id is already known; use getCurrentRegisterSession instead to resolve the active session from a terminal id. Preconditions: the session must exist. Required inputs: sessionId (UUID) as a path parameter; there is no request body. No events are emitted and no state changes; this is a read-only projection. Returns 404 when no register session exists for the supplied id.
+     * Returns a register session with its status, opening float, counted and theoretical cash, over/short, and lifecycle timestamps. Use this tool when the session id is already known; use getCurrentRegisterSession instead to resolve the active session from a terminal id. Preconditions: the session must exist. A caller whose order:session:view grant is location-scoped must have the session\&#39;s location within reach (ADR-0061). Required inputs: sessionId (UUID) as a path parameter; there is no request body. No events are emitted and no state changes; this is a read-only projection. Returns 404 when no register session exists for the supplied id, and 403 LOCATION_SCOPE_DENIED when the session exists but its location is outside the caller\&#39;s scope.
      * @endpoint get /v1/orders/sessions/{sessionId}
      * @param sessionId
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -493,7 +495,7 @@ export class RegisterSessionsService extends BaseService {
 
     /**
      * Open a Register Session
-     * Opens an OPEN register (drawer) session on a terminal; sales orders created on the terminal while it is open bind to it, and it supplies their location by default. Use this tool at the start of a drawer shift; do not use recordCashMovement, which requires a session that is already open. Preconditions: the terminal must have no session in OPEN or CLOSING — one drawer per terminal. Required inputs: terminalId and openedByClerkId; openingFloat defaults to the terminal\&#39;s previous counted close (else zero) when omitted, and locationId defaults from the terminal\&#39;s previous session. Emits an ORDER_SESSION_OPEN event. Returns 201 with the new session, and 409 when the terminal already has an active session.
+     * Opens an OPEN register (drawer) session on a terminal; sales orders created on the terminal while it is open bind to it, and it supplies their location by default. Use this tool at the start of a drawer shift; do not use recordCashMovement, which requires a session that is already open. Preconditions: the terminal must have no session in OPEN or CLOSING — one drawer per terminal. A caller whose order:session:open grant is location-scoped must have the resolved location within reach (ADR-0061); for such a caller a session that resolves to no location is denied. Required inputs: terminalId and openedByClerkId; openingFloat defaults to the terminal\&#39;s previous counted close (else zero) when omitted, and locationId defaults from the terminal\&#39;s previous session. Emits an ORDER_SESSION_OPEN event. Returns 201 with the new session, 403 LOCATION_SCOPE_DENIED when the caller\&#39;s location scope does not cover the resolved location, and 409 when the terminal already has an active session.
      * @endpoint post /v1/orders/sessions
      * @param openSessionRequest The terminal, clerk, and optional opening-float context for the shift.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.

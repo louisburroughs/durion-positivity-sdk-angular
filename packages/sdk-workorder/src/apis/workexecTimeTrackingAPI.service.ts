@@ -17,6 +17,8 @@ import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
 // @ts-ignore
+import { ApiError } from '../src/models/apiError';
+// @ts-ignore
 import { WorkexecLaborPerformedRequest } from '../src/models/workexecLaborPerformedRequest';
 // @ts-ignore
 import { WorkexecLaborPerformedResponse } from '../src/models/workexecLaborPerformedResponse';
@@ -182,7 +184,7 @@ export class WorkexecTimeTrackingAPIService extends BaseService {
 
     /**
      * Get Aggregated Job Time Totals
-     * Returns tracked job minutes aggregated per technician, location, and local calendar day over an inclusive date range interpreted in the supplied timezone. Use this tool for payroll or utilization reporting across days; do not use getLaborHistory, which lists individual labor entries for one workorder. Preconditions: none beyond the caller holding workorder:labor:view; totals derive from recorded labor entries. Required inputs: startDate and endDate (ISO dates, endDate on or after startDate) and timezone (IANA name); locationId and technicianIds are optional filters. No events are emitted and no state changes; this is a read-only aggregation. Returns 400 when the timezone is invalid or endDate precedes startDate, and 200 with an empty list when no time was tracked in the range.
+     * Returns tracked job minutes aggregated per technician, location, and local calendar day over an inclusive date range interpreted in the supplied timezone. Use this tool for payroll or utilization reporting across days; do not use getLaborHistory, which lists individual labor entries for one workorder. Preconditions: none beyond the caller holding workorder:labor:view; totals derive from recorded labor entries. A caller whose workorder:labor:view grant is location-scoped must have a supplied locationId within reach, and without one sees only the locations within reach (ADR-0061). Required inputs: startDate and endDate (ISO dates, endDate on or after startDate) and timezone (IANA name); locationId and technicianIds are optional filters. No events are emitted and no state changes; this is a read-only aggregation. Returns 400 when the timezone is invalid or endDate precedes startDate, 403 LOCATION_SCOPE_DENIED when the caller\&#39;s location scope does not cover the supplied locationId, and 200 with an empty list when no time was tracked in the range.
      * @endpoint get /v1/workexec/job-time-totals
      * @param startDate Start date (inclusive)
      * @param endDate End date (inclusive)
