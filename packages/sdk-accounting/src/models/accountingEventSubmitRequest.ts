@@ -22,9 +22,10 @@ export interface AccountingEventSubmitRequest {
      */
     eventType: string;
     /**
-     * Organization UUID
+     * Deprecated and ignored. Vestigial multi-tenancy scope key retained only for producers that still send one: nothing resolves or displays it. Omit it.
+     * @deprecated
      */
-    organizationId: string;
+    organizationId?: string | null;
     /**
      * Event-specific payload content
      */
@@ -77,8 +78,8 @@ export function instanceOfAccountingEventSubmitRequest(value: object): value is 
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createAccountingEventSubmitRequestPropertyNames('eventType', 'organizationId', 'payload', );
-    const optionalStringProperties = createAccountingEventSubmitRequestOptionalProperties({ name: 'eventId', nullable: false }, { name: 'eventType', nullable: false }, { name: 'organizationId', nullable: false }, { name: 'sourceSystem', nullable: false }, { name: 'transactionDate', nullable: false }, );
+    const requiredProperties = createAccountingEventSubmitRequestPropertyNames('eventType', 'payload', );
+    const optionalStringProperties = createAccountingEventSubmitRequestOptionalProperties({ name: 'eventId', nullable: false }, { name: 'eventType', nullable: false }, { name: 'organizationId', nullable: true }, { name: 'sourceSystem', nullable: false }, { name: 'transactionDate', nullable: false }, );
     const optionalNumberProperties = createAccountingEventSubmitRequestOptionalProperties();
     const optionalBooleanProperties = createAccountingEventSubmitRequestOptionalProperties();
 
