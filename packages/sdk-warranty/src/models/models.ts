@@ -1,3 +1,4 @@
+export * from './apiError';
 export * from './candidateLine';
 export * from './claimActionRequest';
 export * from './claimCreateRequest';
@@ -9,6 +10,7 @@ export * from './claimPhotoRequest';
 export * from './claimResponse';
 export * from './claimSummaryResponse';
 export * from './claimUpdateRequest';
+export * from './fieldError';
 export * from './lineDecision';
 export * from './noteView';
 export * from './pageClaimSummaryResponse';
