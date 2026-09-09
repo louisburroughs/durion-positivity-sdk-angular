@@ -17,6 +17,8 @@ import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
 // @ts-ignore
+import { ApiError } from '../src/models/apiError';
+// @ts-ignore
 import { CandidateLine } from '../src/models/candidateLine';
 // @ts-ignore
 import { ClaimActionRequest } from '../src/models/claimActionRequest';
@@ -925,7 +927,7 @@ export class WarrantyClaimsService extends BaseService {
 
     /**
      * Search claims
-     * Searches warranty claims and returns a page of claim summaries filtered by customer, vehicle, status, claim code, and location. Use this tool to locate claims by criteria or to browse a worklist; do not use getClaim, which requires a known claim id and returns the full detail including lines, settlements, and history. Preconditions: none — an empty page is returned when nothing matches. Required inputs: every filter is optional; claimCode must be exact (for example WC-2026-000123) and short-circuits the other filters to at most one match, and paging defaults to size 20 sorted by createdAt descending. Emits a WARRANTY_CLAIM_SEARCH audit event; no claim state changes, this is a read-only projection. Returns 200 with the page, which is empty rather than 404 when no claim matches.
+     * Searches warranty claims and returns a page of claim summaries filtered by customer, vehicle, status, claim code, and location. Use this tool to locate claims by criteria or to browse a worklist; do not use getClaim, which requires a known claim id and returns the full detail including lines, settlements, and history. Preconditions: none — an empty page is returned when nothing matches. Required inputs: every filter is optional; claimCode must be exact (for example WC-2026-000123) and short-circuits the other filters to at most one match, and paging defaults to size 20 sorted by createdAt descending. Emits a WARRANTY_CLAIM_SEARCH audit event; no claim state changes, this is a read-only projection. A caller whose warranty:claim:view grant is location-scoped (ADR-0061) sees only claims at locations their assigned nodes cover: a supplied locationId outside that reach is 403 LOCATION_SCOPE_DENIED, and without one the page is narrowed rather than refused, so a caller who reaches no replicated location gets an empty page. Returns 200 with the page, which is empty rather than 404 when no claim matches.
      * @endpoint get /v1/warranty/claims
      * @param customerId Filter by customer id
      * @param vehicleId Filter by vehicle id
