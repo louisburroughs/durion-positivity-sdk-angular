@@ -17,6 +17,8 @@ import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
 // @ts-ignore
+import { ApiError } from '../src/models/apiError';
+// @ts-ignore
 import { BillingRuleRef } from '../src/models/billingRuleRef';
 // @ts-ignore
 import { BillingTermsRef } from '../src/models/billingTermsRef';
@@ -40,6 +42,8 @@ import { GetPartyResponse } from '../src/models/getPartyResponse';
 import { MergePartiesRequest } from '../src/models/mergePartiesRequest';
 // @ts-ignore
 import { MergePartiesResponse } from '../src/models/mergePartiesResponse';
+// @ts-ignore
+import { PartyFactReplayResultDto } from '../src/models/partyFactReplayResultDto';
 // @ts-ignore
 import { PartyNameRef } from '../src/models/partyNameRef';
 // @ts-ignore
@@ -740,6 +744,95 @@ export class CRMAccountsService extends BaseService {
             {
                 context: localVarHttpContext,
                 body: mergePartiesRequest,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Re-emit Party Facts for Replica Consumers
+     * Re-publishes customer.party.updated facts for one bounded page of parties so that event-fed replicas in other modules can be seeded or repaired, returning what it emitted and a cursor for the next page. Use this tool to fill a consumer\&#39;s replica after a first deployment or a consumer outage longer than broker retention; do not use it to fix one party, which republishes itself on its next ordinary update. Preconditions: fact publication must be enabled — a replay with it off is refused rather than reported as a successful no-op; replayed facts are indistinguishable from live ones, so consumers apply them through their normal path and their stale guard prevents an older fact regressing newer state. Required inputs: none; afterPartyId resumes a previous page, updatedSince restricts to parties changed at or after an instant, and limit bounds the page — it is clamped into 1..1000 rather than rejected, so a mistyped limit still replays a sane page. Emits a CUSTOMER_PARTY_FACT_REPLAY event and queues one party fact per party in the page; no CRM state changes. Returns 200 with complete&#x3D;true and a null cursor once the customer base end is reached, 400 when a parameter is malformed, and 409 when fact publication is disabled.
+     * @endpoint post /v1/crm/accounts/facts/replay
+     * @param afterPartyId Resume cursor from a previous call; omit to start at the beginning.
+     * @param updatedSince Restrict to parties changed at or after this instant; omit to replay all.
+     * @param limit Maximum facts to emit in this call; clamped into 1–1000.
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public replayPartyFacts(afterPartyId?: string, updatedSince?: string, limit?: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PartyFactReplayResultDto>;
+    public replayPartyFacts(afterPartyId?: string, updatedSince?: string, limit?: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PartyFactReplayResultDto>>;
+    public replayPartyFacts(afterPartyId?: string, updatedSince?: string, limit?: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PartyFactReplayResultDto>>;
+    public replayPartyFacts(afterPartyId?: string, updatedSince?: string, limit?: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+
+        let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'afterPartyId',
+            <any>afterPartyId,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'updatedSince',
+            <any>updatedSince,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'limit',
+            <any>limit,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/crm/accounts/facts/replay`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<PartyFactReplayResultDto>('post', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                params: localVarQueryParameters.toHttpParams(),
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,

@@ -17,6 +17,8 @@ import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
 // @ts-ignore
+import { ApiError } from '../src/models/apiError';
+// @ts-ignore
 import { CreateCycleCountPlanRequest } from '../src/models/createCycleCountPlanRequest';
 // @ts-ignore
 import { CycleCountPlanResponse } from '../src/models/cycleCountPlanResponse';

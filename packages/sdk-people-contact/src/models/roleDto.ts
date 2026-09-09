@@ -14,25 +14,21 @@
  */
 export interface RoleDto {
     /**
-     * Whether the role is active
+     * Stable role code, identical to the name
      */
-    active?: boolean;
-    /**
-     * Stable role code
-     */
-    code?: string;
+    code: string;
     /**
      * Description of the role
      */
     description?: string;
     /**
-     * Human-readable role name
+     * Role identifier
      */
-    name?: string;
+    id: string;
     /**
-     * Scope at which the role applies
+     * Role name, which is also its stable code
      */
-    scopeType?: string;
+    name: string;
 }
 
 function isOptionalRoleDtoPropertyOfType(
@@ -73,10 +69,10 @@ export function instanceOfRoleDto(value: object): value is RoleDto {
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createRoleDtoPropertyNames();
-    const optionalStringProperties = createRoleDtoOptionalProperties({ name: 'code', nullable: false }, { name: 'description', nullable: false }, { name: 'name', nullable: false }, { name: 'scopeType', nullable: false }, );
+    const requiredProperties = createRoleDtoPropertyNames('code', 'id', 'name', );
+    const optionalStringProperties = createRoleDtoOptionalProperties({ name: 'code', nullable: false }, { name: 'description', nullable: false }, { name: 'id', nullable: false }, { name: 'name', nullable: false }, );
     const optionalNumberProperties = createRoleDtoOptionalProperties();
-    const optionalBooleanProperties = createRoleDtoOptionalProperties({ name: 'active', nullable: false }, );
+    const optionalBooleanProperties = createRoleDtoOptionalProperties();
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
         && optionalStringProperties.every((property) => isOptionalRoleDtoPropertyOfType(_v, property.name, 'string', property.nullable))

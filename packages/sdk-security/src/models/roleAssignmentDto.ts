@@ -10,7 +10,7 @@
 
 
 /**
- * A role assignment binding a user to a role within a scope
+ * An effective-dated role assignment binding a user to a role
  */
 export interface RoleAssignmentDto {
     /**
@@ -50,24 +50,10 @@ export interface RoleAssignmentDto {
      */
     roleId: string;
     /**
-     * Location identifiers the assignment applies to when scopeType is LOCATION
-     */
-    scopeLocationIds?: Set<string>;
-    /**
-     * Scope type that constrains the assignment
-     */
-    scopeType: RoleAssignmentDtoScopeTypeEnum;
-    /**
      * Identifier of the user the role is assigned to
      */
     userId: string;
 }
-export enum RoleAssignmentDtoScopeTypeEnum {
-    Global = 'GLOBAL',
-    Location = 'LOCATION'
-};
-
-
 
 function isOptionalRoleAssignmentDtoPropertyOfType(
     value: Record<string, unknown>,
@@ -107,8 +93,8 @@ export function instanceOfRoleAssignmentDto(value: object): value is RoleAssignm
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createRoleAssignmentDtoPropertyNames('id', 'roleId', 'scopeType', 'userId', );
-    const optionalStringProperties = createRoleAssignmentDtoOptionalProperties({ name: 'createdAt', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'effectiveEndDate', nullable: false }, { name: 'effectiveStartDate', nullable: false }, { name: 'id', nullable: false }, { name: 'lastModifiedAt', nullable: false }, { name: 'lastModifiedBy', nullable: false }, { name: 'revokedAt', nullable: false }, { name: 'roleId', nullable: false }, { name: 'scopeType', nullable: false }, { name: 'userId', nullable: false }, );
+    const requiredProperties = createRoleAssignmentDtoPropertyNames('id', 'roleId', 'userId', );
+    const optionalStringProperties = createRoleAssignmentDtoOptionalProperties({ name: 'createdAt', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'effectiveEndDate', nullable: false }, { name: 'effectiveStartDate', nullable: false }, { name: 'id', nullable: false }, { name: 'lastModifiedAt', nullable: false }, { name: 'lastModifiedBy', nullable: false }, { name: 'revokedAt', nullable: false }, { name: 'roleId', nullable: false }, { name: 'userId', nullable: false }, );
     const optionalNumberProperties = createRoleAssignmentDtoOptionalProperties();
     const optionalBooleanProperties = createRoleAssignmentDtoOptionalProperties();
 

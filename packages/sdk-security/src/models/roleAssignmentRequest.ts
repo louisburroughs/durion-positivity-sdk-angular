@@ -10,7 +10,7 @@
 
 
 /**
- * Request to assign a role to a user within a scope
+ * Request to assign a role to a user for an effective window
  */
 export interface RoleAssignmentRequest {
     /**
@@ -26,24 +26,10 @@ export interface RoleAssignmentRequest {
      */
     roleId: string;
     /**
-     * Location identifiers the assignment applies to when scopeType is LOCATION
-     */
-    scopeLocationIds?: Set<string>;
-    /**
-     * Scope type that constrains the assignment
-     */
-    scopeType?: RoleAssignmentRequestScopeTypeEnum;
-    /**
      * Identifier of the user to assign the role to
      */
     userId: string;
 }
-export enum RoleAssignmentRequestScopeTypeEnum {
-    Global = 'GLOBAL',
-    Location = 'LOCATION'
-};
-
-
 
 function isOptionalRoleAssignmentRequestPropertyOfType(
     value: Record<string, unknown>,
@@ -84,7 +70,7 @@ export function instanceOfRoleAssignmentRequest(value: object): value is RoleAss
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createRoleAssignmentRequestPropertyNames('roleId', 'userId', );
-    const optionalStringProperties = createRoleAssignmentRequestOptionalProperties({ name: 'effectiveEndDate', nullable: false }, { name: 'effectiveStartDate', nullable: false }, { name: 'roleId', nullable: false }, { name: 'scopeType', nullable: false }, { name: 'userId', nullable: false }, );
+    const optionalStringProperties = createRoleAssignmentRequestOptionalProperties({ name: 'effectiveEndDate', nullable: false }, { name: 'effectiveStartDate', nullable: false }, { name: 'roleId', nullable: false }, { name: 'userId', nullable: false }, );
     const optionalNumberProperties = createRoleAssignmentRequestOptionalProperties();
     const optionalBooleanProperties = createRoleAssignmentRequestOptionalProperties();
 

@@ -18,10 +18,6 @@ export interface PersonRoleAssignmentRequest {
      */
     endDate?: string;
     /**
-     * Location identifier the role is scoped to
-     */
-    locationId?: string;
-    /**
      * Stable role code to assign
      */
     roleCode: string;
@@ -70,7 +66,7 @@ export function instanceOfPersonRoleAssignmentRequest(value: object): value is P
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createPersonRoleAssignmentRequestPropertyNames('roleCode', );
-    const optionalStringProperties = createPersonRoleAssignmentRequestOptionalProperties({ name: 'endDate', nullable: false }, { name: 'locationId', nullable: false }, { name: 'roleCode', nullable: false }, { name: 'startDate', nullable: false }, );
+    const optionalStringProperties = createPersonRoleAssignmentRequestOptionalProperties({ name: 'endDate', nullable: false }, { name: 'roleCode', nullable: false }, { name: 'startDate', nullable: false }, );
     const optionalNumberProperties = createPersonRoleAssignmentRequestOptionalProperties();
     const optionalBooleanProperties = createPersonRoleAssignmentRequestOptionalProperties();
 

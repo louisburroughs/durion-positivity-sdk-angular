@@ -18,19 +18,15 @@ export interface UserRoleDto {
      */
     active?: boolean;
     /**
-     * Date the assignment ends
+     * Exclusive end of the effective window
      */
     endDate?: string;
-    /**
-     * Location identifier the role is scoped to
-     */
-    locationId?: string;
     /**
      * Stable role code
      */
     roleCode?: string;
     /**
-     * Date the assignment becomes effective
+     * Inclusive start of the effective window
      */
     startDate?: string;
     /**
@@ -78,7 +74,7 @@ export function instanceOfUserRoleDto(value: object): value is UserRoleDto {
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createUserRoleDtoPropertyNames();
-    const optionalStringProperties = createUserRoleDtoOptionalProperties({ name: 'endDate', nullable: false }, { name: 'locationId', nullable: false }, { name: 'roleCode', nullable: false }, { name: 'startDate', nullable: false }, { name: 'userId', nullable: false }, );
+    const optionalStringProperties = createUserRoleDtoOptionalProperties({ name: 'endDate', nullable: false }, { name: 'roleCode', nullable: false }, { name: 'startDate', nullable: false }, { name: 'userId', nullable: false }, );
     const optionalNumberProperties = createUserRoleDtoOptionalProperties();
     const optionalBooleanProperties = createUserRoleDtoOptionalProperties({ name: 'active', nullable: false }, );
 
