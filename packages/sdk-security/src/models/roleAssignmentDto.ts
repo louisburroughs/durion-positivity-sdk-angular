@@ -46,6 +46,10 @@ export interface RoleAssignmentDto {
      */
     revokedAt?: string;
     /**
+     * Stable code of the assigned role, identical to the role's name
+     */
+    roleCode: string;
+    /**
      * Identifier of the assigned role
      */
     roleId: string;
@@ -93,8 +97,8 @@ export function instanceOfRoleAssignmentDto(value: object): value is RoleAssignm
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createRoleAssignmentDtoPropertyNames('id', 'roleId', 'userId', );
-    const optionalStringProperties = createRoleAssignmentDtoOptionalProperties({ name: 'createdAt', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'effectiveEndDate', nullable: false }, { name: 'effectiveStartDate', nullable: false }, { name: 'id', nullable: false }, { name: 'lastModifiedAt', nullable: false }, { name: 'lastModifiedBy', nullable: false }, { name: 'revokedAt', nullable: false }, { name: 'roleId', nullable: false }, { name: 'userId', nullable: false }, );
+    const requiredProperties = createRoleAssignmentDtoPropertyNames('id', 'roleCode', 'roleId', 'userId', );
+    const optionalStringProperties = createRoleAssignmentDtoOptionalProperties({ name: 'createdAt', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'effectiveEndDate', nullable: false }, { name: 'effectiveStartDate', nullable: false }, { name: 'id', nullable: false }, { name: 'lastModifiedAt', nullable: false }, { name: 'lastModifiedBy', nullable: false }, { name: 'revokedAt', nullable: false }, { name: 'roleCode', nullable: false }, { name: 'roleId', nullable: false }, { name: 'userId', nullable: false }, );
     const optionalNumberProperties = createRoleAssignmentDtoOptionalProperties();
     const optionalBooleanProperties = createRoleAssignmentDtoOptionalProperties();
 
