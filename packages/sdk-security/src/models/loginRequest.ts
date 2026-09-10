@@ -18,6 +18,10 @@ export interface LoginRequest {
      */
     password: string;
     /**
+     * Slug of the tenant to sign in to; optional when the request host already names it
+     */
+    tenantSlug?: string;
+    /**
      * The user\'s login username
      */
     username: string;
@@ -62,7 +66,7 @@ export function instanceOfLoginRequest(value: object): value is LoginRequest {
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createLoginRequestPropertyNames('password', 'username', );
-    const optionalStringProperties = createLoginRequestOptionalProperties({ name: 'password', nullable: false }, { name: 'username', nullable: false }, );
+    const optionalStringProperties = createLoginRequestOptionalProperties({ name: 'password', nullable: false }, { name: 'tenantSlug', nullable: false }, { name: 'username', nullable: false }, );
     const optionalNumberProperties = createLoginRequestOptionalProperties();
     const optionalBooleanProperties = createLoginRequestOptionalProperties();
 
