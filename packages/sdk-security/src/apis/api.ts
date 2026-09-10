@@ -9,6 +9,7 @@ export * from './roleBulkIngestAPI.service';
 export * from './roleManagement.service';
 export * from './rolePermissionBulkIngestAPI.service';
 export * from './selfRegistrationReviewAPI.service';
+export * from './tenantAPI.service';
 export * from './userAPI.service';
 export * from './userBulkIngestAPI.service';
 export * from './userPersonLinkBulkIngestAPI.service';

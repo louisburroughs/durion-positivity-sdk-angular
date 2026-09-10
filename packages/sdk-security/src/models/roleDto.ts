@@ -66,6 +66,10 @@ export interface RoleDto {
      * MCP persona slot: how to speak to the caller
      */
     personaTone?: string;
+    /**
+     * ADR-0062: key of the platform template role this role was provisioned from (its canonical name); null for a custom role. Template roles cannot be deleted.
+     */
+    templateKey?: string | null;
 }
 
 function isOptionalRoleDtoPropertyOfType(
@@ -107,7 +111,7 @@ export function instanceOfRoleDto(value: object): value is RoleDto {
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createRoleDtoPropertyNames('id', 'name', );
-    const optionalStringProperties = createRoleDtoOptionalProperties({ name: 'createdAt', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'description', nullable: false }, { name: 'id', nullable: false }, { name: 'lastModifiedAt', nullable: false }, { name: 'lastModifiedBy', nullable: false }, { name: 'name', nullable: false }, { name: 'personaFocus', nullable: false }, { name: 'personaTitle', nullable: false }, { name: 'personaTone', nullable: false }, );
+    const optionalStringProperties = createRoleDtoOptionalProperties({ name: 'createdAt', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'description', nullable: false }, { name: 'id', nullable: false }, { name: 'lastModifiedAt', nullable: false }, { name: 'lastModifiedBy', nullable: false }, { name: 'name', nullable: false }, { name: 'personaFocus', nullable: false }, { name: 'personaTitle', nullable: false }, { name: 'personaTone', nullable: false }, { name: 'templateKey', nullable: true }, );
     const optionalNumberProperties = createRoleDtoOptionalProperties({ name: 'mcpPersonaRank', nullable: false }, );
     const optionalBooleanProperties = createRoleDtoOptionalProperties({ name: 'mcpPersonaEligible', nullable: false }, );
 
