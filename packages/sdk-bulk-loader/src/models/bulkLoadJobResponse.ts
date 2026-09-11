@@ -62,6 +62,10 @@ export interface BulkLoadJobResponse {
      */
     successCount?: number;
     /**
+     * Tenant the job loads into (ADR-0062): the tenant every row it writes and every sibling call it makes is bound to
+     */
+    tenantId: string;
+    /**
      * Total number of data rows detected in the source file
      */
     totalRows?: number;
@@ -151,8 +155,8 @@ export function instanceOfBulkLoadJobResponse(value: object): value is BulkLoadJ
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createBulkLoadJobResponsePropertyNames('createdAt', 'domainType', 'fileName', 'id', 'status', );
-    const optionalStringProperties = createBulkLoadJobResponseOptionalProperties({ name: 'completedAt', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'domainType', nullable: false }, { name: 'fileName', nullable: false }, { name: 'id', nullable: false }, { name: 'locationId', nullable: false }, { name: 'operatorId', nullable: false }, { name: 'startedAt', nullable: false }, { name: 'status', nullable: false }, { name: 'updatedAt', nullable: false }, );
+    const requiredProperties = createBulkLoadJobResponsePropertyNames('createdAt', 'domainType', 'fileName', 'id', 'status', 'tenantId', );
+    const optionalStringProperties = createBulkLoadJobResponseOptionalProperties({ name: 'completedAt', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'domainType', nullable: false }, { name: 'fileName', nullable: false }, { name: 'id', nullable: false }, { name: 'locationId', nullable: false }, { name: 'operatorId', nullable: false }, { name: 'startedAt', nullable: false }, { name: 'status', nullable: false }, { name: 'tenantId', nullable: false }, { name: 'updatedAt', nullable: false }, );
     const optionalNumberProperties = createBulkLoadJobResponseOptionalProperties({ name: 'failureCount', nullable: false }, { name: 'processedRows', nullable: false }, { name: 'successCount', nullable: false }, { name: 'totalRows', nullable: false }, );
     const optionalBooleanProperties = createBulkLoadJobResponseOptionalProperties();
 

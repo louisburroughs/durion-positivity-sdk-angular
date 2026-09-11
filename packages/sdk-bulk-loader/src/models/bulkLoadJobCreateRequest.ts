@@ -25,6 +25,10 @@ export interface BulkLoadJobCreateRequest {
      * Identifier of the location to scope the load to, if applicable
      */
     locationId?: string;
+    /**
+     * Tenant the job loads into (ADR-0062). Every row the job writes and every call it makes to a sibling service is bound to this tenant. Must be an active tenant of the cell, or the platform tenant for platform data such as the role template\'s roles.csv. A bound caller may only name its own tenant, the platform operator included. Omitting it is a 400 BULK_JOB_TENANT_REQUIRED unless the transitional default tenant is configured, in which case the default is used and logged at WARN.
+     */
+    tenantId?: string;
 }
 export enum BulkLoadJobCreateRequestDomainTypeEnum {
     CatalogProduct = 'CATALOG_PRODUCT',
@@ -96,7 +100,7 @@ export function instanceOfBulkLoadJobCreateRequest(value: object): value is Bulk
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createBulkLoadJobCreateRequestPropertyNames('domainType', 'fileName', );
-    const optionalStringProperties = createBulkLoadJobCreateRequestOptionalProperties({ name: 'domainType', nullable: false }, { name: 'fileName', nullable: false }, { name: 'locationId', nullable: false }, );
+    const optionalStringProperties = createBulkLoadJobCreateRequestOptionalProperties({ name: 'domainType', nullable: false }, { name: 'fileName', nullable: false }, { name: 'locationId', nullable: false }, { name: 'tenantId', nullable: false }, );
     const optionalNumberProperties = createBulkLoadJobCreateRequestOptionalProperties();
     const optionalBooleanProperties = createBulkLoadJobCreateRequestOptionalProperties();
 

@@ -17,6 +17,8 @@ import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
 // @ts-ignore
+import { ActivateAccountRequest } from '../src/models/activateAccountRequest';
+// @ts-ignore
 import { ApiError } from '../src/models/apiError';
 // @ts-ignore
 import { LoginRequest } from '../src/models/loginRequest';
@@ -41,6 +43,73 @@ export class AuthAPIService extends BaseService {
 
     constructor(protected httpClient: HttpClient, @Optional() @Inject(BASE_PATH) basePath: string|string[], @Optional() configuration?: Configuration) {
         super(basePath, configuration);
+    }
+
+    /**
+     * Activate an Account with a One-Time Token
+     * Exchanges a one-time activation token for the account\&#39;s first password: sets the password, clears the credential expiry provisioning left on the account, and marks the token used, all in one transaction under the token\&#39;s tenant. Use this tool when a tenant\&#39;s first administrator has received an activation token from a platform operator (mintAdministratorActivationToken); do not use loginUser, which cannot succeed until the account is activated, and do not use updateUser, which needs an authenticated caller. Preconditions: none on the caller — the endpoint is unauthenticated and binds no tenant; the token must be unexpired (72 hours from minting) and unused. Required inputs: token and newPassword, both non-blank. Emits a SECURITY_AUTH_ACTIVATE event; no tokens are issued, so a follow-up loginUser call is required. Returns 204 on success; 400 on a blank field; 401 with ACTIVATION_TOKEN_INVALID when the token is unknown, expired or already used (one code on purpose, so nothing about the account or the token\&#39;s history is revealed).
+     * @endpoint post /v1/auth/activate
+     * @param activateAccountRequest The activation token and the password to set.
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public activateAccount(activateAccountRequest: ActivateAccountRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any>;
+    public activateAccount(activateAccountRequest: ActivateAccountRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
+    public activateAccount(activateAccountRequest: ActivateAccountRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
+    public activateAccount(activateAccountRequest: ActivateAccountRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (activateAccountRequest === null || activateAccountRequest === undefined) {
+            throw new Error('Required parameter activateAccountRequest was null or undefined when calling activateAccount.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/auth/activate`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<any>('post', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                body: activateAccountRequest,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
     }
 
     /**
