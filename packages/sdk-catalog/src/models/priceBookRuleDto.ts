@@ -81,7 +81,8 @@ export enum PriceBookRuleDtoConditionTypeEnum {
 };
 export enum PriceBookRuleDtoStatusEnum {
     Active = 'ACTIVE',
-    Inactive = 'INACTIVE'
+    Inactive = 'INACTIVE',
+    NotApplicableMissingBase = 'NOT_APPLICABLE_MISSING_BASE'
 };
 export enum PriceBookRuleDtoTargetTypeEnum {
     Sku = 'SKU',
