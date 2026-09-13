@@ -19,8 +19,6 @@ import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 // @ts-ignore
 import { ActivateAccountRequest } from '../src/models/activateAccountRequest';
 // @ts-ignore
-import { ActivateWithStarterRequest } from '../src/models/activateWithStarterRequest';
-// @ts-ignore
 import { ApiError } from '../src/models/apiError';
 // @ts-ignore
 import { LoginRequest } from '../src/models/loginRequest';
@@ -28,6 +26,8 @@ import { LoginRequest } from '../src/models/loginRequest';
 import { SelfRegistrationRequest } from '../src/models/selfRegistrationRequest';
 // @ts-ignore
 import { SelfRegistrationResponse } from '../src/models/selfRegistrationResponse';
+// @ts-ignore
+import { TenantSearchResponse } from '../src/models/tenantSearchResponse';
 // @ts-ignore
 import { TokenPairResponse } from '../src/models/tokenPairResponse';
 
@@ -115,77 +115,6 @@ export class AuthAPIService extends BaseService {
     }
 
     /**
-     * Claim a Bulk-Provisioned Account with Its Starter Password
-     * Trades the shared starter password an account was loaded with for a password of its own: sets the password, clears the starter hash and the credential expiry provisioning left on the account, and releases any lockout, all in one transaction under the account\&#39;s tenant. Use this tool when an operator has bulk-loaded accounts from users.csv and handed their holders the one starter password those accounts share; do not use loginUser, which cannot succeed until the exchange has run, do not use activateAccount, which needs a one-time token no bulk-provisioned account is given, and do not use updateUser, which needs an authenticated caller. Preconditions: none on the caller — the endpoint is unauthenticated; the account must still be awaiting activation, and the starter password must match the hash it was loaded with. Required inputs: username, starterPassword and newPassword, all non-blank; tenantSlug only when the request host does not already name the tenant. Emits a SECURITY_AUTH_ACTIVATE_STARTER event and revokes every token already minted for the account; no token is issued, so a follow-up loginUser call with the new password is required. Returns 204 on success; 400 on a blank field; 401 with ACTIVATION_TOKEN_INVALID when the account is unknown, the starter password is wrong, or the account has already been claimed (one code on purpose, so an unauthenticated caller learns nothing about which accounts exist or are still unclaimed).
-     * @endpoint post /v1/auth/activate-starter
-     * @param activateWithStarterRequest The account to claim, the starter password it was loaded with, and the password to set.
-     * @param xTenantSlug
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     * @param options additional options
-     */
-    public activateAccountWithStarterPassword(activateWithStarterRequest: ActivateWithStarterRequest, xTenantSlug?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public activateAccountWithStarterPassword(activateWithStarterRequest: ActivateWithStarterRequest, xTenantSlug?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public activateAccountWithStarterPassword(activateWithStarterRequest: ActivateWithStarterRequest, xTenantSlug?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public activateAccountWithStarterPassword(activateWithStarterRequest: ActivateWithStarterRequest, xTenantSlug?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
-        if (activateWithStarterRequest === null || activateWithStarterRequest === undefined) {
-            throw new Error('Required parameter activateWithStarterRequest was null or undefined when calling activateAccountWithStarterPassword.');
-        }
-
-        let localVarHeaders = this.defaultHeaders;
-        if (xTenantSlug !== undefined && xTenantSlug !== null) {
-            localVarHeaders = localVarHeaders.set('X-Tenant-Slug', String(xTenantSlug));
-        }
-
-        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
-            'application/json'
-        ]);
-        if (localVarHttpHeaderAcceptSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
-        }
-
-        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
-
-        const localVarTransferCache: boolean = options?.transferCache ?? true;
-
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-            'application/json'
-        ];
-        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
-        if (httpContentTypeSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
-        }
-
-        let responseType_: 'text' | 'json' | 'blob' = 'json';
-        if (localVarHttpHeaderAcceptSelected) {
-            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
-                responseType_ = 'text';
-            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
-                responseType_ = 'json';
-            } else {
-                responseType_ = 'blob';
-            }
-        }
-
-        let localVarPath = `/v1/auth/activate-starter`;
-        const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<any>('post', `${basePath}${localVarPath}`,
-            {
-                context: localVarHttpContext,
-                body: activateWithStarterRequest,
-                responseType: <any>responseType_,
-                ...(withCredentials ? { withCredentials } : {}),
-                headers: localVarHeaders,
-                observe: observe,
-                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
      * Authenticate User and Issue Tokens
      * Authenticates a user with username and password and returns a JWT access token (1-hour) and refresh token (7-day) carrying uid, roles, perm_bits, and perm_ver claims. Use this tool when a person signs in with credentials; do not use refreshTokenPair, which exchanges an existing refresh token, and do not use issueInternalToken, which mints tokens for trusted internal callers without a password. Preconditions: the user account must exist, be enabled, non-expired, hold unexpired credentials, and not be inside an active failed-login lockout window. Required inputs: username and password, both non-blank. Emits a SECURITY_AUTH_LOGIN event, resets the failed-attempt counter on success, and persists the issued token pair for later validation and revocation. Returns 401 with code ACCOUNT_LOCKED while the lockout window is active, INVALID_CREDENTIALS on a bad password, and ACCOUNT_DISABLED, ACCOUNT_EXPIRED, or CREDENTIALS_EXPIRED for the matching account states; and 403 with USER_HAS_NO_ROLES when the credentials are valid but the account currently has no roles assigned.
      * @endpoint post /v1/auth/login
@@ -242,6 +171,72 @@ export class AuthAPIService extends BaseService {
             {
                 context: localVarHttpContext,
                 body: loginRequest,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Search Organizations for the Login Form
+     * Returns the organizations whose name starts with the query, or one of whose words does, so a user can pick theirs at sign-in instead of typing a tenant slug. Use this tool to populate the login form\&#39;s organization field; do not use it to enumerate tenants, which the result cap, the minimum query length and the prefix-only matching all exist to limit, and do not use it to check whether an organization exists before logging in — loginUser answers the same 401 either way. Preconditions: none; the endpoint is anonymous. Required inputs: q, the text the user has typed so far. A q shorter than the configured minimum (3 characters by default) is not searched and answers an empty list, which is the normal state while someone is still typing. Emits a SECURITY_TENANT_SEARCH event. Returns 200 with at most 10 ACTIVE organizations, each carrying only its display name and the slug to submit, and 404 when the directory is switched off, in which case the form asks for the slug instead.
+     * @endpoint get /v1/auth/tenants
+     * @param q Text the user has typed so far
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public searchTenants(q?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<TenantSearchResponse>>;
+    public searchTenants(q?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<TenantSearchResponse>>>;
+    public searchTenants(q?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<TenantSearchResponse>>>;
+    public searchTenants(q?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+
+        let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'q',
+            <any>q,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        let localVarHeaders = this.defaultHeaders;
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/auth/tenants`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<Array<TenantSearchResponse>>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                params: localVarQueryParameters.toHttpParams(),
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,
