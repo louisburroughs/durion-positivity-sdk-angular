@@ -1,5 +1,6 @@
 export * from './accountStateResponse';
 export * from './activateAccountRequest';
+export * from './activateWithStarterRequest';
 export * from './activationTokenResponse';
 export * from './apiError';
 export * from './auditEventCreatedResponse';
@@ -58,7 +59,6 @@ export * from './selfRegistrationResponse';
 export * from './selfRegistrationReviewCaseResponse';
 export * from './sortObject';
 export * from './tenantMeResponse';
-export * from './tenantSearchResponse';
 export * from './tokenPairRequest';
 export * from './tokenPairResponse';
 export * from './tokenResponse';
