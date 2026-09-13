@@ -19,6 +19,8 @@ import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 // @ts-ignore
 import { ActivateAccountRequest } from '../src/models/activateAccountRequest';
 // @ts-ignore
+import { ActivateWithStarterRequest } from '../src/models/activateWithStarterRequest';
+// @ts-ignore
 import { ApiError } from '../src/models/apiError';
 // @ts-ignore
 import { LoginRequest } from '../src/models/loginRequest';
@@ -102,6 +104,77 @@ export class AuthAPIService extends BaseService {
             {
                 context: localVarHttpContext,
                 body: activateAccountRequest,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Claim a Bulk-Provisioned Account with Its Starter Password
+     * Trades the shared starter password an account was loaded with for a password of its own: sets the password, clears the starter hash and the credential expiry provisioning left on the account, and releases any lockout, all in one transaction under the account\&#39;s tenant. Use this tool when an operator has bulk-loaded accounts from users.csv and handed their holders the one starter password those accounts share; do not use loginUser, which cannot succeed until the exchange has run, do not use activateAccount, which needs a one-time token no bulk-provisioned account is given, and do not use updateUser, which needs an authenticated caller. Preconditions: none on the caller — the endpoint is unauthenticated; the account must still be awaiting activation, and the starter password must match the hash it was loaded with. Required inputs: username, starterPassword and newPassword, all non-blank; tenantSlug only when the request host does not already name the tenant. Emits a SECURITY_AUTH_ACTIVATE_STARTER event and revokes every token already minted for the account; no token is issued, so a follow-up loginUser call with the new password is required. Returns 204 on success; 400 on a blank field; 401 with ACTIVATION_TOKEN_INVALID when the account is unknown, the starter password is wrong, or the account has already been claimed (one code on purpose, so an unauthenticated caller learns nothing about which accounts exist or are still unclaimed).
+     * @endpoint post /v1/auth/activate-starter
+     * @param activateWithStarterRequest The account to claim, the starter password it was loaded with, and the password to set.
+     * @param xTenantSlug
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public activateAccountWithStarterPassword(activateWithStarterRequest: ActivateWithStarterRequest, xTenantSlug?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any>;
+    public activateAccountWithStarterPassword(activateWithStarterRequest: ActivateWithStarterRequest, xTenantSlug?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
+    public activateAccountWithStarterPassword(activateWithStarterRequest: ActivateWithStarterRequest, xTenantSlug?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
+    public activateAccountWithStarterPassword(activateWithStarterRequest: ActivateWithStarterRequest, xTenantSlug?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (activateWithStarterRequest === null || activateWithStarterRequest === undefined) {
+            throw new Error('Required parameter activateWithStarterRequest was null or undefined when calling activateAccountWithStarterPassword.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+        if (xTenantSlug !== undefined && xTenantSlug !== null) {
+            localVarHeaders = localVarHeaders.set('X-Tenant-Slug', String(xTenantSlug));
+        }
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/auth/activate-starter`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<any>('post', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                body: activateWithStarterRequest,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,

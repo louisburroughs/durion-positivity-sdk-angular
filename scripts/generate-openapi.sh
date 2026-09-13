@@ -17,7 +17,7 @@ set -euo pipefail
 #   ./scripts/generate-openapi.sh --module security  # Bump, then generate only that module
 #   ./scripts/generate-openapi.sh --no-bump          # Regenerate at the current version
 #
-# Valid module names: security, order, inventory, workorder, supplier, accounting, catalog, customer, invoice, location, people, people-contact, price, shop-manager, image, event-receiver, vehicle-fitment, vehicle-inventory, internal, documents, inquiry, bulk-loader
+# Valid module names: security, order, inventory, workorder, supplier, accounting, catalog, customer, invoice, location, people, people-contact, price, shop-manager, image, event-receiver, vehicle-fitment, vehicle-inventory, internal, documents, inquiry, bulk-loader, warranty, marketing, tenant
 
 module=""
 bump="true"
@@ -39,7 +39,7 @@ while [[ $# -gt 0 ]]; do
 	esac
 done
 
-MODULES=(security order inventory workorder supplier accounting catalog customer invoice location people people-contact price shop-manager image event-receiver vehicle-fitment vehicle-inventory internal documents inquiry bulk-loader warranty marketing)
+MODULES=(security order inventory workorder supplier accounting catalog customer invoice location people people-contact price shop-manager image event-receiver vehicle-fitment vehicle-inventory internal documents inquiry bulk-loader warranty marketing tenant)
 
 patch_package_tsconfig() {
 	# The custom tsconfig.mustache (templates/typescript-angular/tsconfig.mustache) now
@@ -294,6 +294,7 @@ gateway_base_path_for_module() {
 		workorder) echo "http://api-gateway.local/workorder" ;;
 		warranty) echo "http://api-gateway.local/warranty" ;;
 		marketing) echo "http://api-gateway.local/marketing" ;;
+		tenant) echo "http://api-gateway.local/tenant" ;;
 		*) return 1 ;;
 	esac
 }

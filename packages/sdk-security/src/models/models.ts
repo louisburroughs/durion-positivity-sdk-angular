@@ -1,5 +1,6 @@
 export * from './accountStateResponse';
 export * from './activateAccountRequest';
+export * from './activateWithStarterRequest';
 export * from './activationTokenResponse';
 export * from './apiError';
 export * from './auditEventCreatedResponse';
