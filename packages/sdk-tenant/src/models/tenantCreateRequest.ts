@@ -22,9 +22,9 @@ export interface TenantCreateRequest {
      */
     cell?: string;
     /**
-     * Human-readable name users pick this organization by when signing in; unique across the registry, case- and whitespace-insensitively. Omit it and the owning account\'s legal name is used, suffixed \" #2\", \" #3\" and so on only where that would collide — a fallback, not the intended outcome, so supply a name that distinguishes this tenant from the account\'s others.
+     * Human-readable name
      */
-    displayName?: string;
+    displayName: string;
     /**
      * Email of the initial administrator pos-security-service creates while provisioning
      */
@@ -73,7 +73,7 @@ export function instanceOfTenantCreateRequest(value: object): value is TenantCre
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createTenantCreateRequestPropertyNames('accountId', 'initialAdminEmail', 'slug', );
+    const requiredProperties = createTenantCreateRequestPropertyNames('accountId', 'displayName', 'initialAdminEmail', 'slug', );
     const optionalStringProperties = createTenantCreateRequestOptionalProperties({ name: 'accountId', nullable: false }, { name: 'cell', nullable: false }, { name: 'displayName', nullable: false }, { name: 'initialAdminEmail', nullable: false }, { name: 'slug', nullable: false }, );
     const optionalNumberProperties = createTenantCreateRequestOptionalProperties();
     const optionalBooleanProperties = createTenantCreateRequestOptionalProperties();

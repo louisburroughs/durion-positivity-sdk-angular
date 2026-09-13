@@ -16,6 +16,10 @@ import { PhoneInput } from './phoneInput';
  */
 export interface CreatePersonRequest {
     /**
+     * Customer number to assign to this person, if the caller already has one. It is the person\'s business key: a second create quoting a number already in use is refused as a duplicate rather than making a second party for the same customer. Omit it and the service generates one.
+     */
+    customerNumber?: string;
+    /**
      * Email addresses for this person
      */
     emails?: Array<EmailInput>;
@@ -84,7 +88,7 @@ export function instanceOfCreatePersonRequest(value: object): value is CreatePer
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createCreatePersonRequestPropertyNames('firstName', 'lastName', 'preferredContactMethod', );
-    const optionalStringProperties = createCreatePersonRequestOptionalProperties({ name: 'firstName', nullable: false }, { name: 'lastName', nullable: false }, { name: 'preferredContactMethod', nullable: false }, );
+    const optionalStringProperties = createCreatePersonRequestOptionalProperties({ name: 'customerNumber', nullable: false }, { name: 'firstName', nullable: false }, { name: 'lastName', nullable: false }, { name: 'preferredContactMethod', nullable: false }, );
     const optionalNumberProperties = createCreatePersonRequestOptionalProperties();
     const optionalBooleanProperties = createCreatePersonRequestOptionalProperties();
 

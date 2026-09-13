@@ -17,6 +17,8 @@ import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
 // @ts-ignore
+import { ApiError } from '../src/models/apiError';
+// @ts-ignore
 import { CreatePersonRequest } from '../src/models/createPersonRequest';
 // @ts-ignore
 import { CreatePersonResponse } from '../src/models/createPersonResponse';
@@ -41,7 +43,7 @@ export class CRMPersonsService extends BaseService {
 
     /**
      * Create Individual Person Record
-     * Creates an individual customer: the canonical person identity is resolved or created in pos-people (the source of truth for names and contact points), and a thin person-party link with a generated CUST-PER customer number is stored locally. Use this tool when onboarding an individual customer; do not use createCrmCommercialAccount, which creates an organization, and note that if the identity already has a local person-party the existing record is returned instead of a duplicate. Preconditions: none beyond authorization; contact points are validated before any identity is created so an invalid email persists nothing. Required inputs: firstName, lastName, and preferredContactMethod (EMAIL, PHONE_CALL, SMS, or NONE); emails and phones are optional lists whose entries carry a value and an isPrimary flag, phone type defaults to PHONE_MOBILE, and emails are stored lowercase. Emits a CRM_PERSON_CREATE event, publishes a party-changed customer fact, and writes the contact points to pos-people. Returns 400 when firstName, lastName, or preferredContactMethod is missing or an email value is malformed.
+     * Creates an individual customer: the canonical person identity is resolved or created in pos-people (the source of truth for names and contact points), and a thin person-party link with a generated CUST-PER customer number is stored locally. Use this tool when onboarding an individual customer; do not use createCrmCommercialAccount, which creates an organization, and note that if the identity already has a local person-party the existing record is returned instead of a duplicate. Preconditions: none beyond authorization; contact points are validated before any identity is created so an invalid email persists nothing. Required inputs: firstName, lastName, and preferredContactMethod (EMAIL, PHONE_CALL, SMS, or NONE); emails and phones are optional lists whose entries carry a value and an isPrimary flag, phone type defaults to PHONE_MOBILE, and emails are stored lowercase. customerNumber is optional: supply one to claim it as the person\&#39;s business key and it is stored as given; omit it and a CUST-PER number is generated. Emits a CRM_PERSON_CREATE event, publishes a party-changed customer fact, and writes the contact points to pos-people. Returns 400 when firstName, lastName, or preferredContactMethod is missing or an email value is malformed, and 409 when the supplied customerNumber already belongs to another party.
      * @endpoint post /v1/crm/persons
      * @param createPersonRequest The individual\&#39;s name, preferred contact method, and contact points to register.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
