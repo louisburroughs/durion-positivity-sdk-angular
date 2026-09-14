@@ -59,6 +59,7 @@ export * from './selfRegistrationResponse';
 export * from './selfRegistrationReviewCaseResponse';
 export * from './sortObject';
 export * from './tenantMeResponse';
+export * from './tenantSearchResponse';
 export * from './tokenPairRequest';
 export * from './tokenPairResponse';
 export * from './tokenResponse';

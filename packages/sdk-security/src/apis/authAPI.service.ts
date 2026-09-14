@@ -29,6 +29,8 @@ import { SelfRegistrationRequest } from '../src/models/selfRegistrationRequest';
 // @ts-ignore
 import { SelfRegistrationResponse } from '../src/models/selfRegistrationResponse';
 // @ts-ignore
+import { TenantSearchResponse } from '../src/models/tenantSearchResponse';
+// @ts-ignore
 import { TokenPairResponse } from '../src/models/tokenPairResponse';
 
 // @ts-ignore
@@ -242,6 +244,72 @@ export class AuthAPIService extends BaseService {
             {
                 context: localVarHttpContext,
                 body: loginRequest,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Search Organizations for the Login Form
+     * Returns the organizations whose name starts with the query, or one of whose words does, so a user can pick theirs at sign-in instead of typing a tenant slug. Use this tool to populate the login form\&#39;s organization field; do not use it to enumerate tenants, which the result cap, the minimum query length and the prefix-only matching all exist to limit, and do not use it to check whether an organization exists before logging in — loginUser answers the same 401 either way. Preconditions: none; the endpoint is anonymous. Required inputs: q, the text the user has typed so far. A q shorter than the configured minimum (3 characters by default) is not searched and answers an empty list, which is the normal state while someone is still typing. Emits a SECURITY_TENANT_SEARCH event. Returns 200 with at most 10 ACTIVE organizations, each carrying only its display name and the slug to submit, and 404 when the directory is switched off, in which case the form asks for the slug instead.
+     * @endpoint get /v1/auth/tenants
+     * @param q Text the user has typed so far
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public searchTenants(q?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<TenantSearchResponse>>;
+    public searchTenants(q?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<TenantSearchResponse>>>;
+    public searchTenants(q?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<TenantSearchResponse>>>;
+    public searchTenants(q?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+
+        let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'q',
+            <any>q,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        let localVarHeaders = this.defaultHeaders;
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/auth/tenants`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<Array<TenantSearchResponse>>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                params: localVarQueryParameters.toHttpParams(),
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,

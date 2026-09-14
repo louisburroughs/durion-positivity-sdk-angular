@@ -41,9 +41,9 @@ export class PlatformTenantAPIService extends BaseService {
 
     /**
      * Register a Tenant
-     * Registers a tenant under an existing account in status PENDING and publishes tenant.created on tenant.events.v1; pos-security-service provisions the role template and the initial administrator named by initialAdminEmail, then answers tenant.provisioned, which moves the tenant to ACTIVE. Use this tool once per customer tenancy, after createAccount when the owning account does not exist; do not use it to change an existing tenant, use updateTenant or the lifecycle operations instead. Preconditions: the account exists and the slug is not taken. Required inputs: slug, displayName, accountId and initialAdminEmail; cell is optional. Emits a TENANT_CREATE event. Returns 201 with the tenant, 404 when the account is unknown and 409 when the slug is taken.
+     * Registers a tenant under an existing account in status PENDING and publishes tenant.created on tenant.events.v1; pos-security-service provisions the role template and the initial administrator named by initialAdminEmail, then answers tenant.provisioned, which moves the tenant to ACTIVE. Use this tool once per customer tenancy, after createAccount when the owning account does not exist; do not use it to change an existing tenant, use updateTenant or the lifecycle operations instead. Preconditions: the account exists, and neither the slug nor the display name is taken. Required inputs: slug, accountId and initialAdminEmail; cell and displayName are optional. Omitting displayName seeds it from the account\&#39;s legal name, suffixed \&quot; #2\&quot;, \&quot; #3\&quot; and so on only where that would collide — a fallback, so prefer naming the tenant explicitly. Emits a TENANT_CREATE event. Returns 201 with the tenant, 404 when the account is unknown and 409 when the slug or the display name is taken.
      * @endpoint post /v1/platform/tenants
-     * @param tenantCreateRequest Tenant to register: slug, display name, owning account and the initial administrator.
+     * @param tenantCreateRequest Tenant to register: slug, owning account, the initial administrator and, preferably, the display name users will sign in by.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -420,7 +420,7 @@ export class PlatformTenantAPIService extends BaseService {
 
     /**
      * Update a Tenant
-     * Changes a tenant\&#39;s display name or cell and publishes tenant.updated; slug, account and status are never changed here. Use this tool for descriptive edits; do not use it to change status, use suspendTenant, reactivateTenant or decommissionTenant instead. Preconditions: the tenant exists and is not DECOMMISSIONED. Required inputs: id (UUID) as a path parameter and a body with displayName and/or cell; a null field leaves the value unchanged. Emits a TENANT_UPDATE event. Returns 200 with the tenant, 404 when it does not exist and 409 when it is decommissioned.
+     * Changes a tenant\&#39;s display name or cell and publishes tenant.updated; slug, account and status are never changed here. Use this tool for descriptive edits; do not use it to change status, use suspendTenant, reactivateTenant or decommissionTenant instead. Preconditions: the tenant exists, is not DECOMMISSIONED, and the new display name is not already held by another tenant. Required inputs: id (UUID) as a path parameter and a body with displayName and/or cell; a null field leaves the value unchanged. Emits a TENANT_UPDATE event. Returns 200 with the tenant, 404 when it does not exist and 409 when it is decommissioned or the display name is taken.
      * @endpoint patch /v1/platform/tenants/{id}
      * @param id
      * @param tenantUpdateRequest Fields to change; a null field leaves the value unchanged.
