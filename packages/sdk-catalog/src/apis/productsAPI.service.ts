@@ -1291,11 +1291,12 @@ export class ProductsAPIService extends BaseService {
 
     /**
      * Search Catalog Products
-     * Searches products with an optional free-text query over name and description plus exact case-insensitive filters for brand, category and SKU, paged by an opaque cursor. Use this tool to find products by partial text or filters; use getProductById instead when the id is known, and listProductsByName only for exact whole-name matches. Preconditions: none; a malformed or missing cursor silently restarts at the first page rather than failing. Required inputs: all parameters are optional; limit defaults to 20 and is clamped to 1-100, and detailed defaults to false — pass detailed&#x3D;true to enrich each row with lifecycle state, its effective instant and the active MSRP, with null price fields for products lacking an active MSRP. No events are emitted and no state changes; this is a read-only projection. Returns 200 with an empty items array when nothing matches, so an empty result is not an error condition.
+     * Searches products with an optional free-text query over name and description plus exact case-insensitive filters for brand, category, subcategory and SKU, paged by an opaque cursor. Use this tool to find products by partial text or filters; use getProductById instead when the id is known, and listProductsByName only for exact whole-name matches. Preconditions: none; a malformed or missing cursor silently restarts at the first page rather than failing. Required inputs: all parameters are optional; limit defaults to 20 and is clamped to 1-100, and detailed defaults to false — pass detailed&#x3D;true to enrich each row with lifecycle state, its effective instant and the active MSRP, with null price fields for products lacking an active MSRP. No events are emitted and no state changes; this is a read-only projection. Returns 200 with an empty items array when nothing matches, so an empty result is not an error condition.
      * @endpoint get /v1/products/search
      * @param q Free-text search query (matches product name and description)
      * @param brand Filter by manufacturer brand (exact, case-insensitive)
      * @param category Filter by category name (exact, case-insensitive)
+     * @param subcategory Filter by subcategory name (exact match, case-insensitive)
      * @param sku Filter by SKU (exact match, case-insensitive)
      * @param cursor Pagination cursor from previous response
      * @param limit Maximum number of results (1–100)
@@ -1304,10 +1305,10 @@ export class ProductsAPIService extends BaseService {
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public searchCatalogProducts(q?: string, brand?: string, category?: string, sku?: string, cursor?: string, limit?: number, detailed?: boolean, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<CatalogSearchResultDto>;
-    public searchCatalogProducts(q?: string, brand?: string, category?: string, sku?: string, cursor?: string, limit?: number, detailed?: boolean, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<CatalogSearchResultDto>>;
-    public searchCatalogProducts(q?: string, brand?: string, category?: string, sku?: string, cursor?: string, limit?: number, detailed?: boolean, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<CatalogSearchResultDto>>;
-    public searchCatalogProducts(q?: string, brand?: string, category?: string, sku?: string, cursor?: string, limit?: number, detailed?: boolean, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public searchCatalogProducts(q?: string, brand?: string, category?: string, subcategory?: string, sku?: string, cursor?: string, limit?: number, detailed?: boolean, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<CatalogSearchResultDto>;
+    public searchCatalogProducts(q?: string, brand?: string, category?: string, subcategory?: string, sku?: string, cursor?: string, limit?: number, detailed?: boolean, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<CatalogSearchResultDto>>;
+    public searchCatalogProducts(q?: string, brand?: string, category?: string, subcategory?: string, sku?: string, cursor?: string, limit?: number, detailed?: boolean, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<CatalogSearchResultDto>>;
+    public searchCatalogProducts(q?: string, brand?: string, category?: string, subcategory?: string, sku?: string, cursor?: string, limit?: number, detailed?: boolean, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
 
@@ -1333,6 +1334,15 @@ export class ProductsAPIService extends BaseService {
             localVarQueryParameters,
             'category',
             <any>category,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'subcategory',
+            <any>subcategory,
             QueryParamStyle.Form,
             true,
         );
