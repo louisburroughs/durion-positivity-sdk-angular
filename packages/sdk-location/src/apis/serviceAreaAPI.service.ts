@@ -17,6 +17,8 @@ import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
 // @ts-ignore
+import { ServiceAreaPostalCodesRequest } from '../src/models/serviceAreaPostalCodesRequest';
+// @ts-ignore
 import { ServiceAreaRequest } from '../src/models/serviceAreaRequest';
 // @ts-ignore
 import { ServiceAreaResponse } from '../src/models/serviceAreaResponse';
@@ -165,7 +167,7 @@ export class ServiceAreaAPIService extends BaseService {
 
     /**
      * Patch Fields of a Service Area
-     * Applies a partial update to a service area, accepting only the keys description and active. Use this tool to retire an area with active&#x3D;false or amend its description; do not use it to rename an area or change its postal codes, which are immutable after createServiceArea. Preconditions: the service area must exist. Required inputs: id (UUID) as a path parameter and a JSON object; keys other than description and active are silently ignored. Emits a LOCATION_SERVICE_AREA_PATCH event. Returns 400 when the id is not a valid UUID and 404 when no service area exists for it.
+     * Applies a partial update to a service area, accepting only the keys description and active. Use this tool to retire an area with active&#x3D;false or amend its description; do not use it to change which postal codes an area covers, use replaceServiceAreaPostalCodes instead. An area cannot be renamed. Preconditions: the service area must exist. Required inputs: id (UUID) as a path parameter and a JSON object; keys other than description and active are silently ignored. Emits a LOCATION_SERVICE_AREA_PATCH event. Returns 400 when the id is not a valid UUID and 404 when no service area exists for it.
      * @endpoint patch /v1/service-areas/{id}
      * @param id
      * @param body Free-form patch object; only the keys description and active are recognized.
@@ -227,6 +229,80 @@ export class ServiceAreaAPIService extends BaseService {
             {
                 context: localVarHttpContext,
                 body: body,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Replace the Postal Codes a Service Area Covers
+     * Replaces the whole postal code set of a service area, so the area afterwards covers exactly the codes supplied and nothing else. Use this tool whenever coverage changes — a market expands, a rural route is dropped, or an area was created with the wrong codes; patchServiceArea cannot touch postal codes and there is no way to delete an area and start again. Preconditions: the service area must exist; at least one postal code entry must be supplied and every entry must carry a countryCode. Sending an empty set is refused rather than treated as \&quot;covers nothing\&quot; — retire an area with patchServiceArea active&#x3D;false instead. Required inputs: id (UUID) as a path parameter and a body of the form {\&quot;postalCodes\&quot;: [...]}, each entry carrying postalCode and countryCode. Emits a LOCATION_SERVICE_AREA_POSTAL_CODES_REPLACE event. Returns 200 with the area as it stands afterwards, 400 when the id is not a valid UUID or the set is empty or missing a countryCode, and 404 when no service area exists for the id. Coverage resolution reads these rows directly: findEligibleMobileUnits matches an address through them, so removing a code stops every mobile unit covering that address.
+     * @endpoint put /v1/service-areas/{id}/postal-codes
+     * @param id
+     * @param serviceAreaPostalCodesRequest The complete postal code set the area should cover afterwards; any code absent here stops being covered.
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public replaceServiceAreaPostalCodes(id: string, serviceAreaPostalCodesRequest: ServiceAreaPostalCodesRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ServiceAreaResponse>;
+    public replaceServiceAreaPostalCodes(id: string, serviceAreaPostalCodesRequest: ServiceAreaPostalCodesRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ServiceAreaResponse>>;
+    public replaceServiceAreaPostalCodes(id: string, serviceAreaPostalCodesRequest: ServiceAreaPostalCodesRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ServiceAreaResponse>>;
+    public replaceServiceAreaPostalCodes(id: string, serviceAreaPostalCodesRequest: ServiceAreaPostalCodesRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (id === null || id === undefined) {
+            throw new Error('Required parameter id was null or undefined when calling replaceServiceAreaPostalCodes.');
+        }
+        if (serviceAreaPostalCodesRequest === null || serviceAreaPostalCodesRequest === undefined) {
+            throw new Error('Required parameter serviceAreaPostalCodesRequest was null or undefined when calling replaceServiceAreaPostalCodes.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/service-areas/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/postal-codes`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<ServiceAreaResponse>('put', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                body: serviceAreaPostalCodesRequest,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,

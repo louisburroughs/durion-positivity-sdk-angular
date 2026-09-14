@@ -17,6 +17,8 @@ import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
 // @ts-ignore
+import { ApiError } from '../src/models/apiError';
+// @ts-ignore
 import { ReplaceMechanicSkillsRequest } from '../src/models/replaceMechanicSkillsRequest';
 
 // @ts-ignore
@@ -37,7 +39,7 @@ export class MechanicSkillsAPIService extends BaseService {
 
     /**
      * Replace a Mechanic\&#39;s Skill Set
-     * Replaces the full skill set of the mechanic linked to a person with the supplied codes and proficiency levels. Use this tool for operator maintenance of skills, which are shop-manager-owned enrichment the HR feed never carries; do not use this tool to edit the mechanic record itself, which is projected from people.events.v1. Preconditions: the caller must hold shop:schedule:edit and a mechanic must exist for the personId (technicians are projected from ACTIVE TECHNICIAN staffing assignments). Required inputs: personId as a path parameter and skills, a non-empty array where each entry has skillCode and proficiencyLevel between 1 and 5; the array replaces all current skills. Emits a SHOP_MECHANIC_SKILLS_REPLACE event and records a mechanic audit-log entry; the edit rides the HR-feed path as a synthetic skills event stamped with the current timestamp, advancing the sync version so ordering against in-flight feed events is last-write-wins. Returns 204 on success, 404 when no mechanic exists for the person, and 400 when the body is invalid.
+     * Replaces the full skill set of the mechanic linked to a person with the supplied codes and proficiency levels. Use this tool for operator maintenance of skills, which are shop-manager-owned enrichment the HR feed never carries; do not use this tool to edit the mechanic record itself, which is projected from people.events.v1. Preconditions: the caller must hold shop:schedule:edit and a mechanic must exist for the personId (technicians are projected from ACTIVE TECHNICIAN staffing assignments over Kafka; this endpoint waits briefly for that projection rather than refusing immediately). Required inputs: personId as a path parameter and skills, a non-empty array where each entry has skillCode and proficiencyLevel between 1 and 5; the array replaces all current skills. Emits a SHOP_MECHANIC_SKILLS_REPLACE event and records a mechanic audit-log entry; the edit rides the HR-feed path as a synthetic skills event, so dedupe and audit apply as usual, but it does not advance the mechanic\&#39;s feed-ordering version: skills are shop-manager-owned enrichment the feed never carries, so an operator edit is ordered against other operator edits and leaves the feed\&#39;s own sequence untouched. Returns 204 on success, 400 when the body is invalid or personId is not a UUID, and 503 MECHANIC_REPLICATION_PENDING with a Retry-After when no mechanic exists for the person: the service waits briefly for the staffing assignment that creates one, and where it still finds none it answers 503 rather than 404 because it cannot tell an unreplicated mechanic from a person who has no active TECHNICIAN assignment at all. Retry a 503; if it persists, check that the person holds an active TECHNICIAN assignment.
      * @endpoint put /v1/shop-manager/mechanics/by-person/{personId}/skills
      * @param personId
      * @param replaceMechanicSkillsRequest The full replacement skill set for the mechanic.
@@ -45,10 +47,10 @@ export class MechanicSkillsAPIService extends BaseService {
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public replaceMechanicSkills(personId: string, replaceMechanicSkillsRequest: ReplaceMechanicSkillsRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public replaceMechanicSkills(personId: string, replaceMechanicSkillsRequest: ReplaceMechanicSkillsRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public replaceMechanicSkills(personId: string, replaceMechanicSkillsRequest: ReplaceMechanicSkillsRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public replaceMechanicSkills(personId: string, replaceMechanicSkillsRequest: ReplaceMechanicSkillsRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public replaceMechanicSkills(personId: string, replaceMechanicSkillsRequest: ReplaceMechanicSkillsRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any>;
+    public replaceMechanicSkills(personId: string, replaceMechanicSkillsRequest: ReplaceMechanicSkillsRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
+    public replaceMechanicSkills(personId: string, replaceMechanicSkillsRequest: ReplaceMechanicSkillsRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
+    public replaceMechanicSkills(personId: string, replaceMechanicSkillsRequest: ReplaceMechanicSkillsRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (personId === null || personId === undefined) {
             throw new Error('Required parameter personId was null or undefined when calling replaceMechanicSkills.');
         }
@@ -62,6 +64,7 @@ export class MechanicSkillsAPIService extends BaseService {
         localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
 
         const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
         ]);
         if (localVarHttpHeaderAcceptSelected !== undefined) {
             localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);

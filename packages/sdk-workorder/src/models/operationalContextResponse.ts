@@ -56,7 +56,8 @@ export interface OperationalContextResponse {
 }
 export enum OperationalContextResponseResourceTypeEnum {
     Bay = 'BAY',
-    MobileUnit = 'MOBILE_UNIT'
+    MobileUnit = 'MOBILE_UNIT',
+    Hold = 'HOLD'
 };
 
 

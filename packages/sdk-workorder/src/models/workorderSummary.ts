@@ -56,7 +56,8 @@ export interface WorkorderSummary {
 }
 export enum WorkorderSummaryResourceTypeEnum {
     Bay = 'BAY',
-    MobileUnit = 'MOBILE_UNIT'
+    MobileUnit = 'MOBILE_UNIT',
+    Hold = 'HOLD'
 };
 
 

@@ -17,6 +17,8 @@ import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
 // @ts-ignore
+import { ApiError } from '../src/models/apiError';
+// @ts-ignore
 import { AssignTechnicianRequest } from '../src/models/assignTechnicianRequest';
 // @ts-ignore
 import { ReassignTechnicianRequest } from '../src/models/reassignTechnicianRequest';
@@ -41,7 +43,7 @@ export class TechnicianAssignmentAPIService extends BaseService {
 
     /**
      * Assign Technician to Workorder
-     * Assigns a technician to a workorder as the current assignment, retiring any previous assignment into history and transitioning the workorder from APPROVED to ASSIGNED when applicable. Use this tool for the first assignment on a workorder; do not use reassignTechnician, which requires an existing current assignment and records a reassignment reason. Preconditions: the workorder must exist and be in APPROVED, ASSIGNED, or WORK_IN_PROGRESS status. Required inputs: workorderId (UUID) as a path parameter and technicianId (UUID) in the body; notes are optional, the assignedByUserId body field is ignored in favor of the security context, and the Idempotency-Key header is accepted but not currently used to deduplicate. Emits a WORKORDER_TECHNICIAN_ASSIGN event; an APPROVED workorder is transitioned to ASSIGNED with a recorded state transition. Returns 404 when the workorder does not exist, and 400 with the failure reason when the workorder status does not allow assignment.
+     * Assigns a technician to a workorder that has none, transitioning the workorder from APPROVED to ASSIGNED when applicable. Use this tool for the first assignment on a workorder; do not use it to change technicians — reassignTechnician requires an existing current assignment and records a reassignment reason, and releaseTechnician takes the current one off without a replacement. Preconditions: the workorder must exist, be in APPROVED, ASSIGNED, or WORK_IN_PROGRESS status, and have no current technician. Required inputs: workorderId (UUID) as a path parameter and technicianId (UUID) in the body; notes are optional, the assignedByUserId body field is ignored in favor of the security context, and the Idempotency-Key header is accepted but not currently used to deduplicate. Emits a WORKORDER_TECHNICIAN_ASSIGN event; an APPROVED workorder is transitioned to ASSIGNED with a recorded state transition. Returns 404 when the workorder does not exist, 400 with the failure reason when the workorder status does not allow assignment, and 409 TECHNICIAN_ALREADY_ASSIGNED when the workorder already has a current technician — use reassignTechnician to change it.
      * @endpoint post /v1/workorders/{workorderId}/technician
      * @param workorderId ID of the workorder
      * @param assignTechnicianRequest Technician to place on the workorder, with optional assignment notes.
@@ -179,7 +181,7 @@ export class TechnicianAssignmentAPIService extends BaseService {
 
     /**
      * Reassign Workorder to Different Technician
-     * Reassigns a workorder to a different technician, retiring the current assignment with the given reason and creating a new current assignment that preserves the full history. Use this tool when a workorder already has a technician and must change hands; do not use assignTechnician, which is for the initial assignment and records no reassignment reason. Preconditions: the workorder must exist, be in APPROVED, ASSIGNED, or WORK_IN_PROGRESS status, and have a current technician assignment to reassign from. Required inputs: workorderId (UUID) as a path parameter and newTechnicianId (UUID) in the body; reason and notes are optional, the reassignedByUserId body field is ignored in favor of the security context, and the Idempotency-Key header is accepted but not currently used. Emits a WORKORDER_TECHNICIAN_REASSIGN event. Returns 404 when the workorder does not exist, and 400 with the failure reason when there is no current assignment or the workorder status does not allow reassignment.
+     * Reassigns a workorder to a different technician, retiring the current assignment with the given reason and creating a new current assignment that preserves the full history. Use this tool when a workorder already has a technician and must change hands; do not use assignTechnician, which is for the initial assignment and records no reassignment reason. Preconditions: the workorder must exist, be in APPROVED, ASSIGNED, or WORK_IN_PROGRESS status, and have a current technician assignment to reassign from. Required inputs: workorderId (UUID) as a path parameter and newTechnicianId (UUID) in the body; reason and notes are optional, the reassignedByUserId body field is ignored in favor of the security context, and the Idempotency-Key header is accepted but not currently used. Emits a WORKORDER_TECHNICIAN_REASSIGN event. Returns 404 when the workorder does not exist, 400 with the failure reason when the workorder status does not allow reassignment, and 409 TECHNICIAN_NOT_ASSIGNED when the workorder has no current technician to reassign from — use assignTechnician for the first assignment.
      * @endpoint put /v1/workorders/{workorderId}/technician
      * @param workorderId ID of the workorder
      * @param reassignTechnicianRequest Replacement technician plus the reason the workorder is changing hands.
@@ -245,6 +247,79 @@ export class TechnicianAssignmentAPIService extends BaseService {
             {
                 context: localVarHttpContext,
                 body: reassignTechnicianRequest,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Release a Workorder\&#39;s Current Technician
+     * Releases the workorder\&#39;s current technician, closing the assignment in history and leaving the workorder with nobody on it. Use this tool when a technician comes off a job without a replacement — capacity freed for a workorder that is blocked or parked; do not use reassignTechnician, which requires a replacement, and do not use it to change technicians. Preconditions: the workorder must exist and must not be COMPLETED or CANCELLED; releasing a workorder that has no current technician succeeds and writes nothing, so the call is idempotent. Required inputs: workorderId (UUID) as a path parameter; reason is an optional query parameter recorded on the closed assignment. Emits a WORKORDER_TECHNICIAN_RELEASE event. Returns 404 when the workorder does not exist, and 409 WORKORDER_CLOSED when it is COMPLETED or CANCELLED.
+     * @endpoint delete /v1/workorders/{workorderId}/technician
+     * @param workorderId ID of the workorder
+     * @param reason Why the technician is coming off the workorder
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public releaseTechnician(workorderId: string, reason?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any>;
+    public releaseTechnician(workorderId: string, reason?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
+    public releaseTechnician(workorderId: string, reason?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
+    public releaseTechnician(workorderId: string, reason?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (workorderId === null || workorderId === undefined) {
+            throw new Error('Required parameter workorderId was null or undefined when calling releaseTechnician.');
+        }
+
+        let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'reason',
+            <any>reason,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/workorders/${this.configuration.encodeParam({name: "workorderId", value: workorderId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/technician`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<any>('delete', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                params: localVarQueryParameters.toHttpParams(),
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,

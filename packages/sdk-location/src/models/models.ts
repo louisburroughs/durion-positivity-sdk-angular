@@ -36,6 +36,7 @@ export * from './pageableObject';
 export * from './personDTO';
 export * from './postalCodeEntry';
 export * from './problemDetail';
+export * from './serviceAreaPostalCodesRequest';
 export * from './serviceAreaRequest';
 export * from './serviceAreaResponse';
 export * from './siteDefaultsRequest';

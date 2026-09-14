@@ -6,6 +6,7 @@ export * from './estimateSearch.service';
 export * from './estimatesFromAppointments.service';
 export * from './laborIntelligence.service';
 export * from './operationalContext.service';
+export * from './servicePositionAPI.service';
 export * from './substituteLinkAPI.service';
 export * from './technicianAssignmentAPI.service';
 export * from './travelSegmentAPI.service';
