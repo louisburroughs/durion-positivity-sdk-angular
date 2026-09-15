@@ -14,6 +14,10 @@
  */
 export interface WorkorderSummary {
     /**
+     * Hours worked on the workorder\'s service lines so far; null when none are logged
+     */
+    actualLaborHours?: number;
+    /**
      * Identifier of the assigned mechanic
      */
     assignedMechanicId?: string;
@@ -21,6 +25,10 @@ export interface WorkorderSummary {
      * Identifier of the resource assigned to the workorder; read together with resourceType, which says whether it is a bay or a mobile unit
      */
     assignedResourceId?: string;
+    /**
+     * How many of the serviceCount lines are completed
+     */
+    completedServiceCount?: number;
     /**
      * Name of the customer
      */
@@ -37,6 +45,14 @@ export interface WorkorderSummary {
      * Date the workorder is scheduled for
      */
     scheduledDate?: string;
+    /**
+     * Service lines in play on the workorder: every line that is neither cancelled nor declined by the customer
+     */
+    serviceCount?: number;
+    /**
+     * Descriptions of the lines counted by serviceCount, in line order, at most three; blank descriptions are skipped
+     */
+    serviceDescriptions?: Array<string>;
     /**
      * Current workorder status
      */
@@ -102,7 +118,7 @@ export function instanceOfWorkorderSummary(value: object): value is WorkorderSum
 
     const requiredProperties = createWorkorderSummaryPropertyNames('workorderId', );
     const optionalStringProperties = createWorkorderSummaryOptionalProperties({ name: 'assignedMechanicId', nullable: false }, { name: 'assignedResourceId', nullable: false }, { name: 'customerName', nullable: false }, { name: 'resourceType', nullable: false }, { name: 'scheduledDate', nullable: false }, { name: 'status', nullable: false }, { name: 'vehicleDescription', nullable: false }, { name: 'workorderId', nullable: false }, { name: 'workorderNumber', nullable: false }, );
-    const optionalNumberProperties = createWorkorderSummaryOptionalProperties({ name: 'estimatedLaborHours', nullable: false }, );
+    const optionalNumberProperties = createWorkorderSummaryOptionalProperties({ name: 'actualLaborHours', nullable: false }, { name: 'completedServiceCount', nullable: false }, { name: 'estimatedLaborHours', nullable: false }, { name: 'serviceCount', nullable: false }, );
     const optionalBooleanProperties = createWorkorderSummaryOptionalProperties();
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
