@@ -1,6 +1,6 @@
 {
   "name": "@durion-sdk/workorder",
-  "version": "0.35.0-alpha",
+  "version": "0.36.0-alpha",
   "description": "OpenAPI client for @durion-sdk/workorder",
   "author": "OpenAPI-Generator Contributors",
   "repository": {
