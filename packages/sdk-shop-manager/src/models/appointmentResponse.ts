@@ -14,6 +14,14 @@
  */
 export interface AppointmentResponse {
     /**
+     * When work actually finished, resolved the same way as actualStartAt (#2021). Null while the linked workorder is still open, or when there is no link. endAt above stays the planned window regardless.
+     */
+    actualEndAt?: string;
+    /**
+     * When work actually began, resolved from the linked workorder\'s actual-time block through WorkOrderAppointmentMapping (issue #2021). Null when the appointment has no linked workorder, the link has not replicated yet, or work has not started. startAt above stays the planned window regardless.
+     */
+    actualStartAt?: string;
+    /**
      * Unique appointment identifier
      */
     appointmentId: string;
@@ -45,6 +53,10 @@ export interface AppointmentResponse {
      * Appointment end instant in UTC (ISO-8601)
      */
     endAt: string;
+    /**
+     * The workorder owner\'s projection of when a still-running job will finish (#2021). Null in every response today by design: a projected finish needs estimated remaining labour (ADR-0058/ADR-0059, both PROPOSED, not accepted) and this field is never synthesised from the current time. A caller states \"N minutes over planned\" from actualStartAt, endAt and status instead of waiting on this field.
+     */
+    expectedEndAt?: string;
     /**
      * Facility/location identifier of the appointment
      */
@@ -110,7 +122,7 @@ export function instanceOfAppointmentResponse(value: object): value is Appointme
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createAppointmentResponsePropertyNames('appointmentId', 'createdAt', 'crmCustomerId', 'crmVehicleId', 'endAt', 'locationId', 'startAt', 'status', );
-    const optionalStringProperties = createAppointmentResponseOptionalProperties({ name: 'appointmentId', nullable: false }, { name: 'cancellationNotes', nullable: false }, { name: 'cancellationReason', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'crmCustomerId', nullable: false }, { name: 'crmVehicleId', nullable: false }, { name: 'endAt', nullable: false }, { name: 'locationId', nullable: false }, { name: 'resourceId', nullable: false }, { name: 'startAt', nullable: false }, { name: 'status', nullable: false }, );
+    const optionalStringProperties = createAppointmentResponseOptionalProperties({ name: 'actualEndAt', nullable: false }, { name: 'actualStartAt', nullable: false }, { name: 'appointmentId', nullable: false }, { name: 'cancellationNotes', nullable: false }, { name: 'cancellationReason', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'crmCustomerId', nullable: false }, { name: 'crmVehicleId', nullable: false }, { name: 'endAt', nullable: false }, { name: 'expectedEndAt', nullable: false }, { name: 'locationId', nullable: false }, { name: 'resourceId', nullable: false }, { name: 'startAt', nullable: false }, { name: 'status', nullable: false }, );
     const optionalNumberProperties = createAppointmentResponseOptionalProperties();
     const optionalBooleanProperties = createAppointmentResponseOptionalProperties();
 
