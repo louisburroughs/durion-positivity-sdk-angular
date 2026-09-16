@@ -19,6 +19,8 @@ import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 // @ts-ignore
 import { ApiError } from '../src/models/apiError';
 // @ts-ignore
+import { ScheduleCapacityResponse } from '../src/models/scheduleCapacityResponse';
+// @ts-ignore
 import { ScheduleViewResponse } from '../src/models/scheduleViewResponse';
 
 // @ts-ignore
@@ -35,6 +37,108 @@ export class ScheduleAPIService extends BaseService {
 
     constructor(protected httpClient: HttpClient, @Optional() @Inject(BASE_PATH) basePath: string|string[], @Optional() configuration?: Configuration) {
         super(basePath, configuration);
+    }
+
+    /**
+     * Get per-day, per-bay occupancy for a location across a date range
+     * Returns, for every date in [from, to], the location\&#39;s day status (OK, CLOSED, HOLIDAY or UNAVAILABLE) and, on an OK date, every active bay with its occupied-minutes total and an hourly occupancy count array — never appointment identifiers, customer snapshots, titles or conflict details. Use this tool to render a week or month capacity calendar in one call; use viewSchedule instead when a single day\&#39;s full appointment board, including conflicts, is needed. Preconditions: the day window and hours come from the location\&#39;s replicated timezone and weekly operating hours (fed by pos-location facts), not from this module\&#39;s Shop.timezone column; a location this module has not yet replicated, or whose timezone is unknown or blank, reports every requested date UNAVAILABLE rather than assuming UTC. Required inputs: locationId (UUID), and from and to (YYYY-MM-DD, inclusive, to on or after from) spanning at most 42 days — a longer span, including a full year, is rejected. Emits exactly one SHOPMGR_SCHEDULE_CAPACITY_VIEW audit event per call, never one per day; no state changes occur. A bay with zero appointments on a date is still listed with occupiedMinutes 0 — free capacity is the reason this endpoint exists — and a date is never omitted from the response, even when it cannot be assembled. A caller whose shop:schedule:view grant is location-scoped must have locationId within reach (ADR-0061). Returns 400 when locationId, from or to is malformed or to is before from, 403 LOCATION_SCOPE_DENIED when the caller\&#39;s location scope does not cover locationId, and 422 CAPACITY_RANGE_EXCEEDED when the span exceeds 42 days.
+     * @endpoint get /v1/schedules/capacity
+     * @param locationId Location ID
+     * @param from First date in the range, inclusive (YYYY-MM-DD)
+     * @param to Last date in the range, inclusive (YYYY-MM-DD)
+     * @param xCorrelationId Correlation ID for request tracing
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public getScheduleCapacity(locationId: string, from: string, to: string, xCorrelationId?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ScheduleCapacityResponse>;
+    public getScheduleCapacity(locationId: string, from: string, to: string, xCorrelationId?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ScheduleCapacityResponse>>;
+    public getScheduleCapacity(locationId: string, from: string, to: string, xCorrelationId?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ScheduleCapacityResponse>>;
+    public getScheduleCapacity(locationId: string, from: string, to: string, xCorrelationId?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (locationId === null || locationId === undefined) {
+            throw new Error('Required parameter locationId was null or undefined when calling getScheduleCapacity.');
+        }
+        if (from === null || from === undefined) {
+            throw new Error('Required parameter from was null or undefined when calling getScheduleCapacity.');
+        }
+        if (to === null || to === undefined) {
+            throw new Error('Required parameter to was null or undefined when calling getScheduleCapacity.');
+        }
+
+        let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'locationId',
+            <any>locationId,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'from',
+            <any>from,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'to',
+            <any>to,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        let localVarHeaders = this.defaultHeaders;
+        if (xCorrelationId !== undefined && xCorrelationId !== null) {
+            localVarHeaders = localVarHeaders.set('X-Correlation-Id', String(xCorrelationId));
+        }
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/schedules/capacity`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<ScheduleCapacityResponse>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                params: localVarQueryParameters.toHttpParams(),
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
     }
 
     /**
