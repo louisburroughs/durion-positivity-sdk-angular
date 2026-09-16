@@ -22,6 +22,10 @@ export interface UpdateVehicleRequest {
      */
     description?: string;
     /**
+     * FHWA GVWR class 1-8 (CAP-327). Null leaves the current class unchanged; a value replaces it and records the source as OPERATOR_SET, which a later decode never overrides.
+     */
+    gvwrClass?: number;
+    /**
      * License plate value.
      */
     licensePlate?: string;
@@ -91,7 +95,7 @@ export function instanceOfUpdateVehicleRequest(value: object): value is UpdateVe
 
     const requiredProperties = createUpdateVehicleRequestPropertyNames();
     const optionalStringProperties = createUpdateVehicleRequestOptionalProperties({ name: 'accountId', nullable: false }, { name: 'description', nullable: false }, { name: 'licensePlate', nullable: false }, { name: 'licensePlateJurisdiction', nullable: false }, { name: 'make', nullable: false }, { name: 'model', nullable: false }, { name: 'trim', nullable: false }, { name: 'unitNumber', nullable: false }, );
-    const optionalNumberProperties = createUpdateVehicleRequestOptionalProperties({ name: 'year', nullable: false }, );
+    const optionalNumberProperties = createUpdateVehicleRequestOptionalProperties({ name: 'gvwrClass', nullable: false }, { name: 'year', nullable: false }, );
     const optionalBooleanProperties = createUpdateVehicleRequestOptionalProperties();
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
