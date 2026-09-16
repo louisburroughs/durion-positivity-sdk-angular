@@ -1,0 +1,66 @@
+# .github/workflows/pr-checks.yml
+#
+# The check every pull request into main has to pass. This repository had no
+# workflows at all, so its pull requests carried no checks — including the
+# api-artifacts-sync pull requests from durion-positivity-backend, which
+# rewrite packages/*/src wholesale on every regeneration. GitHub auto-merge
+# cannot "merge when green" against an empty check set, which is why those
+# pull requests sat open and had to be merged by hand.
+#
+# What it proves: the regenerated clients lint, compile under ng-packagr and
+# pack into the tarballs the frontend installs from — the same steps the
+# api-artifacts-sync sdk-angular stage runs before it opens the pull request.
+#
+# `npm test` is deliberately not here yet. The suite is red on main: the
+# hand-written helpers under packages/*/src/workflows still call operation ids
+# the backend has since renamed (SecurityAuthWorkflow -> authApi.login and
+# jwtApi.refreshAccessToken, AccountingEventWorkflow -> submitEvent and
+# retryEventProcessing, OrderPriceOverrideWorkflow -> getPendingApprovals,
+# WorkorderEstimateWorkflow -> submitForApproval and
+# promoteEstimateToWorkorder, InventoryProcureToReceiveWorkflow ->
+# getInventoryAvailability). Add `npm test` to this job once those helpers are
+# realigned with the generated services.
+name: PR Checks
+
+on:
+  pull_request:
+    branches: [main]
+    types: [opened, synchronize, reopened]
+
+# No token scopes: nothing here reads or writes the API.
+permissions: {}
+
+concurrency:
+  group: pr-checks-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    name: Lint, build and pack
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+
+      - name: Install dependencies
+        # Each package's `prepare` hook builds it, so this already compiles
+        # every client with ng-packagr.
+        run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Build and pack
+        # --no-bump: a pull request validates the version it carries. Bumping
+        # is the release step, and api-artifacts-sync already did it before it
+        # opened the pull request.
+        run: npm run pack -- --no-bump --out-dir dist/tarballs
