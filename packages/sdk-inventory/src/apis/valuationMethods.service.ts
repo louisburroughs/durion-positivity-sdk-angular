@@ -17,13 +17,13 @@ import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
 // @ts-ignore
-import { ApiError } from '../src/models/apiError';
+import { ApiError } from '../models/apiError';
 // @ts-ignore
-import { CostingMethodConfigRequest } from '../src/models/costingMethodConfigRequest';
+import { CostingMethodConfigRequest } from '../models/costingMethodConfigRequest';
 // @ts-ignore
-import { CostingMethodConfigResponse } from '../src/models/costingMethodConfigResponse';
+import { CostingMethodConfigResponse } from '../models/costingMethodConfigResponse';
 // @ts-ignore
-import { SkuCategoryImpactResponse } from '../src/models/skuCategoryImpactResponse';
+import { SkuCategoryImpactResponse } from '../models/skuCategoryImpactResponse';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';

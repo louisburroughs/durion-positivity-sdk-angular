@@ -17,13 +17,13 @@ import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
 // @ts-ignore
-import { ApiError } from '../src/models/apiError';
+import { ApiError } from '../models/apiError';
 // @ts-ignore
-import { PersonRoleAssignmentRequest } from '../src/models/personRoleAssignmentRequest';
+import { PersonRoleAssignmentRequest } from '../models/personRoleAssignmentRequest';
 // @ts-ignore
-import { RoleDto } from '../src/models/roleDto';
+import { RoleDto } from '../models/roleDto';
 // @ts-ignore
-import { UserRoleDto } from '../src/models/userRoleDto';
+import { UserRoleDto } from '../models/userRoleDto';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';

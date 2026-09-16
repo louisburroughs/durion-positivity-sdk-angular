@@ -17,17 +17,17 @@ import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
 // @ts-ignore
-import { CreateTravelSegmentAdjustmentRequest } from '../src/models/createTravelSegmentAdjustmentRequest';
+import { CreateTravelSegmentAdjustmentRequest } from '../models/createTravelSegmentAdjustmentRequest';
 // @ts-ignore
-import { StartTravelSegmentRequest } from '../src/models/startTravelSegmentRequest';
+import { StartTravelSegmentRequest } from '../models/startTravelSegmentRequest';
 // @ts-ignore
-import { StopTravelSegmentRequest } from '../src/models/stopTravelSegmentRequest';
+import { StopTravelSegmentRequest } from '../models/stopTravelSegmentRequest';
 // @ts-ignore
-import { SubmitTravelSegmentsRequest } from '../src/models/submitTravelSegmentsRequest';
+import { SubmitTravelSegmentsRequest } from '../models/submitTravelSegmentsRequest';
 // @ts-ignore
-import { TravelSegmentAdjustmentResponse } from '../src/models/travelSegmentAdjustmentResponse';
+import { TravelSegmentAdjustmentResponse } from '../models/travelSegmentAdjustmentResponse';
 // @ts-ignore
-import { TravelSegmentResponse } from '../src/models/travelSegmentResponse';
+import { TravelSegmentResponse } from '../models/travelSegmentResponse';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';

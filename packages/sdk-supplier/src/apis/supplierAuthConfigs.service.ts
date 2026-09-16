@@ -17,11 +17,11 @@ import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
 // @ts-ignore
-import { ApiError } from '../src/models/apiError';
+import { ApiError } from '../models/apiError';
 // @ts-ignore
-import { AuthConfigRequest } from '../src/models/authConfigRequest';
+import { AuthConfigRequest } from '../models/authConfigRequest';
 // @ts-ignore
-import { AuthConfigView } from '../src/models/authConfigView';
+import { AuthConfigView } from '../models/authConfigView';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';

@@ -17,9 +17,9 @@ import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
 // @ts-ignore
-import { PolicyRequest } from '../src/models/policyRequest';
+import { PolicyRequest } from '../models/policyRequest';
 // @ts-ignore
-import { PolicyResponse } from '../src/models/policyResponse';
+import { PolicyResponse } from '../models/policyResponse';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';

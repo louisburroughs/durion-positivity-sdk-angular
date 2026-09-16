@@ -17,19 +17,19 @@ import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
 // @ts-ignore
-import { AccountingEventResponse } from '../src/models/accountingEventResponse';
+import { AccountingEventResponse } from '../models/accountingEventResponse';
 // @ts-ignore
-import { AccountingEventSubmitRequest } from '../src/models/accountingEventSubmitRequest';
+import { AccountingEventSubmitRequest } from '../models/accountingEventSubmitRequest';
 // @ts-ignore
-import { EventEnvelopeContract } from '../src/models/eventEnvelopeContract';
+import { EventEnvelopeContract } from '../models/eventEnvelopeContract';
 // @ts-ignore
-import { EventProcessingLogEntry } from '../src/models/eventProcessingLogEntry';
+import { EventProcessingLogEntry } from '../models/eventProcessingLogEntry';
 // @ts-ignore
-import { PageAccountingEventResponse } from '../src/models/pageAccountingEventResponse';
+import { PageAccountingEventResponse } from '../models/pageAccountingEventResponse';
 // @ts-ignore
-import { ReprocessEventRequest } from '../src/models/reprocessEventRequest';
+import { ReprocessEventRequest } from '../models/reprocessEventRequest';
 // @ts-ignore
-import { ReprocessingAttemptHistoryResponse } from '../src/models/reprocessingAttemptHistoryResponse';
+import { ReprocessingAttemptHistoryResponse } from '../models/reprocessingAttemptHistoryResponse';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';

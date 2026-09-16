@@ -17,11 +17,11 @@ import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
 // @ts-ignore
-import { ApiError } from '../src/models/apiError';
+import { ApiError } from '../models/apiError';
 // @ts-ignore
-import { BulkIngestRequestUserPersonLinkBulkIngestRecord } from '../src/models/bulkIngestRequestUserPersonLinkBulkIngestRecord';
+import { BulkIngestRequestUserPersonLinkBulkIngestRecord } from '../models/bulkIngestRequestUserPersonLinkBulkIngestRecord';
 // @ts-ignore
-import { BulkIngestResponse } from '../src/models/bulkIngestResponse';
+import { BulkIngestResponse } from '../models/bulkIngestResponse';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';

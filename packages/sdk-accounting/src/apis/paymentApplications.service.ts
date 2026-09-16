@@ -17,13 +17,13 @@ import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
 // @ts-ignore
-import { PagePaymentApplicationListRow } from '../src/models/pagePaymentApplicationListRow';
+import { PagePaymentApplicationListRow } from '../models/pagePaymentApplicationListRow';
 // @ts-ignore
-import { PaymentApplicationRequest } from '../src/models/paymentApplicationRequest';
+import { PaymentApplicationRequest } from '../models/paymentApplicationRequest';
 // @ts-ignore
-import { PaymentApplicationResponse } from '../src/models/paymentApplicationResponse';
+import { PaymentApplicationResponse } from '../models/paymentApplicationResponse';
 // @ts-ignore
-import { PaymentApplicationReversalRequest } from '../src/models/paymentApplicationReversalRequest';
+import { PaymentApplicationReversalRequest } from '../models/paymentApplicationReversalRequest';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';

@@ -17,9 +17,9 @@ import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
 // @ts-ignore
-import { AddWorkorderNoteRequest } from '../src/models/addWorkorderNoteRequest';
+import { AddWorkorderNoteRequest } from '../models/addWorkorderNoteRequest';
 // @ts-ignore
-import { WorkorderNoteResponse } from '../src/models/workorderNoteResponse';
+import { WorkorderNoteResponse } from '../models/workorderNoteResponse';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';

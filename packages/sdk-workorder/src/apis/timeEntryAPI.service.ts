@@ -17,9 +17,9 @@ import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
 // @ts-ignore
-import { RejectTimeEntryRequest } from '../src/models/rejectTimeEntryRequest';
+import { RejectTimeEntryRequest } from '../models/rejectTimeEntryRequest';
 // @ts-ignore
-import { TimeEntryResponse } from '../src/models/timeEntryResponse';
+import { TimeEntryResponse } from '../models/timeEntryResponse';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';

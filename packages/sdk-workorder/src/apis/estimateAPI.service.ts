@@ -17,25 +17,25 @@ import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
 // @ts-ignore
-import { AddEstimateItemRequest } from '../src/models/addEstimateItemRequest';
+import { AddEstimateItemRequest } from '../models/addEstimateItemRequest';
 // @ts-ignore
-import { ApiError } from '../src/models/apiError';
+import { ApiError } from '../models/apiError';
 // @ts-ignore
-import { ApproveEstimateRequest } from '../src/models/approveEstimateRequest';
+import { ApproveEstimateRequest } from '../models/approveEstimateRequest';
 // @ts-ignore
-import { CreateEstimateRequest } from '../src/models/createEstimateRequest';
+import { CreateEstimateRequest } from '../models/createEstimateRequest';
 // @ts-ignore
-import { EstimateItemResponse } from '../src/models/estimateItemResponse';
+import { EstimateItemResponse } from '../models/estimateItemResponse';
 // @ts-ignore
-import { EstimateResponse } from '../src/models/estimateResponse';
+import { EstimateResponse } from '../models/estimateResponse';
 // @ts-ignore
-import { EstimateSnapshotResponse } from '../src/models/estimateSnapshotResponse';
+import { EstimateSnapshotResponse } from '../models/estimateSnapshotResponse';
 // @ts-ignore
-import { EstimateSummaryResponse } from '../src/models/estimateSummaryResponse';
+import { EstimateSummaryResponse } from '../models/estimateSummaryResponse';
 // @ts-ignore
-import { UpdateEstimateItemRequest } from '../src/models/updateEstimateItemRequest';
+import { UpdateEstimateItemRequest } from '../models/updateEstimateItemRequest';
 // @ts-ignore
-import { WorkorderResponse } from '../src/models/workorderResponse';
+import { WorkorderResponse } from '../models/workorderResponse';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';

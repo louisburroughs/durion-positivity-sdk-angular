@@ -17,7 +17,7 @@ import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
 // @ts-ignore
-import { LaborOverheadCostReport } from '../src/models/laborOverheadCostReport';
+import { LaborOverheadCostReport } from '../models/laborOverheadCostReport';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';

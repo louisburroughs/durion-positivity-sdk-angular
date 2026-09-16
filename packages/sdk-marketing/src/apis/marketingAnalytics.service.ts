@@ -17,11 +17,11 @@ import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
 // @ts-ignore
-import { ApiError } from '../src/models/apiError';
+import { ApiError } from '../models/apiError';
 // @ts-ignore
-import { CampaignStatsResponse } from '../src/models/campaignStatsResponse';
+import { CampaignStatsResponse } from '../models/campaignStatsResponse';
 // @ts-ignore
-import { ProgramStatsResponse } from '../src/models/programStatsResponse';
+import { ProgramStatsResponse } from '../models/programStatsResponse';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';

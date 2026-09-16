@@ -17,15 +17,15 @@ import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
 // @ts-ignore
-import { ApplyPriceOverrideRequest } from '../src/models/applyPriceOverrideRequest';
+import { ApplyPriceOverrideRequest } from '../models/applyPriceOverrideRequest';
 // @ts-ignore
-import { ApprovePriceOverrideRequest } from '../src/models/approvePriceOverrideRequest';
+import { ApprovePriceOverrideRequest } from '../models/approvePriceOverrideRequest';
 // @ts-ignore
-import { PriceOverrideDetail } from '../src/models/priceOverrideDetail';
+import { PriceOverrideDetail } from '../models/priceOverrideDetail';
 // @ts-ignore
-import { PriceOverrideResult } from '../src/models/priceOverrideResult';
+import { PriceOverrideResult } from '../models/priceOverrideResult';
 // @ts-ignore
-import { RejectPriceOverrideRequest } from '../src/models/rejectPriceOverrideRequest';
+import { RejectPriceOverrideRequest } from '../models/rejectPriceOverrideRequest';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';

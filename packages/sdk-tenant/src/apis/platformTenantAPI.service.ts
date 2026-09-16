@@ -17,11 +17,11 @@ import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
 // @ts-ignore
-import { TenantCreateRequest } from '../src/models/tenantCreateRequest';
+import { TenantCreateRequest } from '../models/tenantCreateRequest';
 // @ts-ignore
-import { TenantResponse } from '../src/models/tenantResponse';
+import { TenantResponse } from '../models/tenantResponse';
 // @ts-ignore
-import { TenantUpdateRequest } from '../src/models/tenantUpdateRequest';
+import { TenantUpdateRequest } from '../models/tenantUpdateRequest';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';

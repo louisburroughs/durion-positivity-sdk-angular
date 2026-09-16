@@ -17,9 +17,9 @@ import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
 // @ts-ignore
-import { BillingRuleRef } from '../src/models/billingRuleRef';
+import { BillingRuleRef } from '../models/billingRuleRef';
 // @ts-ignore
-import { CrmSnapshotDTO } from '../src/models/crmSnapshotDTO';
+import { CrmSnapshotDTO } from '../models/crmSnapshotDTO';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';

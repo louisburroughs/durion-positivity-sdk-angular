@@ -17,25 +17,25 @@ import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
 // @ts-ignore
-import { AdjustmentTypeResponse } from '../src/models/adjustmentTypeResponse';
+import { AdjustmentTypeResponse } from '../models/adjustmentTypeResponse';
 // @ts-ignore
-import { ApiError } from '../src/models/apiError';
+import { ApiError } from '../models/apiError';
 // @ts-ignore
-import { BankReconciliationImportRequest } from '../src/models/bankReconciliationImportRequest';
+import { BankReconciliationImportRequest } from '../models/bankReconciliationImportRequest';
 // @ts-ignore
-import { BankReconciliationListResponse } from '../src/models/bankReconciliationListResponse';
+import { BankReconciliationListResponse } from '../models/bankReconciliationListResponse';
 // @ts-ignore
-import { BankReconciliationResponse } from '../src/models/bankReconciliationResponse';
+import { BankReconciliationResponse } from '../models/bankReconciliationResponse';
 // @ts-ignore
-import { ReconciliationAdjustmentRequest } from '../src/models/reconciliationAdjustmentRequest';
+import { ReconciliationAdjustmentRequest } from '../models/reconciliationAdjustmentRequest';
 // @ts-ignore
-import { ReconciliationAuditResponse } from '../src/models/reconciliationAuditResponse';
+import { ReconciliationAuditResponse } from '../models/reconciliationAuditResponse';
 // @ts-ignore
-import { ReconciliationMatchRequest } from '../src/models/reconciliationMatchRequest';
+import { ReconciliationMatchRequest } from '../models/reconciliationMatchRequest';
 // @ts-ignore
-import { ReconciliationReportResponse } from '../src/models/reconciliationReportResponse';
+import { ReconciliationReportResponse } from '../models/reconciliationReportResponse';
 // @ts-ignore
-import { ReconciliationUnmatchRequest } from '../src/models/reconciliationUnmatchRequest';
+import { ReconciliationUnmatchRequest } from '../models/reconciliationUnmatchRequest';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';

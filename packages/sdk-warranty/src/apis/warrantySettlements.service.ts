@@ -17,11 +17,11 @@ import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
 // @ts-ignore
-import { SettlementCreateRequest } from '../src/models/settlementCreateRequest';
+import { SettlementCreateRequest } from '../models/settlementCreateRequest';
 // @ts-ignore
-import { SettlementReconciliationRow } from '../src/models/settlementReconciliationRow';
+import { SettlementReconciliationRow } from '../models/settlementReconciliationRow';
 // @ts-ignore
-import { SettlementResponse } from '../src/models/settlementResponse';
+import { SettlementResponse } from '../models/settlementResponse';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';

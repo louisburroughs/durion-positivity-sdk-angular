@@ -17,17 +17,17 @@ import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
 // @ts-ignore
-import { ApiError } from '../src/models/apiError';
+import { ApiError } from '../models/apiError';
 // @ts-ignore
-import { TimeEntryException } from '../src/models/timeEntryException';
+import { TimeEntryException } from '../models/timeEntryException';
 // @ts-ignore
-import { TimeEntryExceptionRequest } from '../src/models/timeEntryExceptionRequest';
+import { TimeEntryExceptionRequest } from '../models/timeEntryExceptionRequest';
 // @ts-ignore
-import { TimeEntryExceptionResolveRequest } from '../src/models/timeEntryExceptionResolveRequest';
+import { TimeEntryExceptionResolveRequest } from '../models/timeEntryExceptionResolveRequest';
 // @ts-ignore
-import { TimeEntryExceptionResponse } from '../src/models/timeEntryExceptionResponse';
+import { TimeEntryExceptionResponse } from '../models/timeEntryExceptionResponse';
 // @ts-ignore
-import { TimeEntryExceptionWaiveRequest } from '../src/models/timeEntryExceptionWaiveRequest';
+import { TimeEntryExceptionWaiveRequest } from '../models/timeEntryExceptionWaiveRequest';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';

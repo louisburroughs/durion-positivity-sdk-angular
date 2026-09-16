@@ -17,15 +17,15 @@ import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
 // @ts-ignore
-import { AccountingPeriodReopenRequest } from '../src/models/accountingPeriodReopenRequest';
+import { AccountingPeriodReopenRequest } from '../models/accountingPeriodReopenRequest';
 // @ts-ignore
-import { AccountingPeriodResponse } from '../src/models/accountingPeriodResponse';
+import { AccountingPeriodResponse } from '../models/accountingPeriodResponse';
 // @ts-ignore
-import { ApiError } from '../src/models/apiError';
+import { ApiError } from '../models/apiError';
 // @ts-ignore
-import { HardLockDateResponse } from '../src/models/hardLockDateResponse';
+import { HardLockDateResponse } from '../models/hardLockDateResponse';
 // @ts-ignore
-import { HardLockDateUpdateRequest } from '../src/models/hardLockDateUpdateRequest';
+import { HardLockDateUpdateRequest } from '../models/hardLockDateUpdateRequest';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';

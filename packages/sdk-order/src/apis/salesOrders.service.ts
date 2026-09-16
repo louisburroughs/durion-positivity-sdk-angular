@@ -17,25 +17,25 @@ import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
 // @ts-ignore
-import { AddItemRequest } from '../src/models/addItemRequest';
+import { AddItemRequest } from '../models/addItemRequest';
 // @ts-ignore
-import { ApiError } from '../src/models/apiError';
+import { ApiError } from '../models/apiError';
 // @ts-ignore
-import { CheckoutRequest } from '../src/models/checkoutRequest';
+import { CheckoutRequest } from '../models/checkoutRequest';
 // @ts-ignore
-import { CreateCartRequest } from '../src/models/createCartRequest';
+import { CreateCartRequest } from '../models/createCartRequest';
 // @ts-ignore
-import { LinkSourceRequest } from '../src/models/linkSourceRequest';
+import { LinkSourceRequest } from '../models/linkSourceRequest';
 // @ts-ignore
-import { OrderDiscountRequest } from '../src/models/orderDiscountRequest';
+import { OrderDiscountRequest } from '../models/orderDiscountRequest';
 // @ts-ignore
-import { SalesOrderLineResponse } from '../src/models/salesOrderLineResponse';
+import { SalesOrderLineResponse } from '../models/salesOrderLineResponse';
 // @ts-ignore
-import { SalesOrderResponse } from '../src/models/salesOrderResponse';
+import { SalesOrderResponse } from '../models/salesOrderResponse';
 // @ts-ignore
-import { UpdateItemRequest } from '../src/models/updateItemRequest';
+import { UpdateItemRequest } from '../models/updateItemRequest';
 // @ts-ignore
-import { VoidOrderRequest } from '../src/models/voidOrderRequest';
+import { VoidOrderRequest } from '../models/voidOrderRequest';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';

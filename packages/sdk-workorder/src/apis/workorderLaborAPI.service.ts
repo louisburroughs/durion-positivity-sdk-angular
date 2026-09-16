@@ -17,13 +17,13 @@ import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
 // @ts-ignore
-import { AdjustLaborRequest } from '../src/models/adjustLaborRequest';
+import { AdjustLaborRequest } from '../models/adjustLaborRequest';
 // @ts-ignore
-import { ApiError } from '../src/models/apiError';
+import { ApiError } from '../models/apiError';
 // @ts-ignore
-import { StartLaborRequest } from '../src/models/startLaborRequest';
+import { StartLaborRequest } from '../models/startLaborRequest';
 // @ts-ignore
-import { WorkorderLaborEntryResponse } from '../src/models/workorderLaborEntryResponse';
+import { WorkorderLaborEntryResponse } from '../models/workorderLaborEntryResponse';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';

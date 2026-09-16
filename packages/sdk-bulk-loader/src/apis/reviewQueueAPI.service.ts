@@ -17,17 +17,17 @@ import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
 // @ts-ignore
-import { ApiError } from '../src/models/apiError';
+import { ApiError } from '../models/apiError';
 // @ts-ignore
-import { AuditRecordResponse } from '../src/models/auditRecordResponse';
+import { AuditRecordResponse } from '../models/auditRecordResponse';
 // @ts-ignore
-import { BulkCorrectionItem } from '../src/models/bulkCorrectionItem';
+import { BulkCorrectionItem } from '../models/bulkCorrectionItem';
 // @ts-ignore
-import { BulkCorrectionRequest } from '../src/models/bulkCorrectionRequest';
+import { BulkCorrectionRequest } from '../models/bulkCorrectionRequest';
 // @ts-ignore
-import { BulkCorrectionResponse } from '../src/models/bulkCorrectionResponse';
+import { BulkCorrectionResponse } from '../models/bulkCorrectionResponse';
 // @ts-ignore
-import { CorrectionResultDto } from '../src/models/correctionResultDto';
+import { CorrectionResultDto } from '../models/correctionResultDto';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';

@@ -17,17 +17,17 @@ import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
 // @ts-ignore
-import { ApiError } from '../src/models/apiError';
+import { ApiError } from '../models/apiError';
 // @ts-ignore
-import { WorkexecLaborPerformedRequest } from '../src/models/workexecLaborPerformedRequest';
+import { WorkexecLaborPerformedRequest } from '../models/workexecLaborPerformedRequest';
 // @ts-ignore
-import { WorkexecLaborPerformedResponse } from '../src/models/workexecLaborPerformedResponse';
+import { WorkexecLaborPerformedResponse } from '../models/workexecLaborPerformedResponse';
 // @ts-ignore
-import { WorkexecTimerEntryResponse } from '../src/models/workexecTimerEntryResponse';
+import { WorkexecTimerEntryResponse } from '../models/workexecTimerEntryResponse';
 // @ts-ignore
-import { WorkexecTimerStartRequest } from '../src/models/workexecTimerStartRequest';
+import { WorkexecTimerStartRequest } from '../models/workexecTimerStartRequest';
 // @ts-ignore
-import { WorkexecTimerStopResponse } from '../src/models/workexecTimerStopResponse';
+import { WorkexecTimerStopResponse } from '../models/workexecTimerStopResponse';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';

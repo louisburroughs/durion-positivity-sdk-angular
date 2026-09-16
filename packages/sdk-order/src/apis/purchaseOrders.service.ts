@@ -17,23 +17,23 @@ import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
 // @ts-ignore
-import { ApiError } from '../src/models/apiError';
+import { ApiError } from '../models/apiError';
 // @ts-ignore
-import { ApprovePurchaseOrderRequest } from '../src/models/approvePurchaseOrderRequest';
+import { ApprovePurchaseOrderRequest } from '../models/approvePurchaseOrderRequest';
 // @ts-ignore
-import { CreatePurchaseOrderRequest } from '../src/models/createPurchaseOrderRequest';
+import { CreatePurchaseOrderRequest } from '../models/createPurchaseOrderRequest';
 // @ts-ignore
-import { PagePurchaseOrderResponse } from '../src/models/pagePurchaseOrderResponse';
+import { PagePurchaseOrderResponse } from '../models/pagePurchaseOrderResponse';
 // @ts-ignore
-import { PagePurchaseOrderTransmissionEvent } from '../src/models/pagePurchaseOrderTransmissionEvent';
+import { PagePurchaseOrderTransmissionEvent } from '../models/pagePurchaseOrderTransmissionEvent';
 // @ts-ignore
-import { ProcurementAvailability } from '../src/models/procurementAvailability';
+import { ProcurementAvailability } from '../models/procurementAvailability';
 // @ts-ignore
-import { PurchaseOrderResponse } from '../src/models/purchaseOrderResponse';
+import { PurchaseOrderResponse } from '../models/purchaseOrderResponse';
 // @ts-ignore
-import { PurchaseOrderSummaryResponse } from '../src/models/purchaseOrderSummaryResponse';
+import { PurchaseOrderSummaryResponse } from '../models/purchaseOrderSummaryResponse';
 // @ts-ignore
-import { RevisePurchaseOrderRequest } from '../src/models/revisePurchaseOrderRequest';
+import { RevisePurchaseOrderRequest } from '../models/revisePurchaseOrderRequest';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';

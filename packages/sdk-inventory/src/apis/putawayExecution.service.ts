@@ -17,9 +17,9 @@ import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
 // @ts-ignore
-import { PutawayExecutionRequest } from '../src/models/putawayExecutionRequest';
+import { PutawayExecutionRequest } from '../models/putawayExecutionRequest';
 // @ts-ignore
-import { PutawayExecutionResponse } from '../src/models/putawayExecutionResponse';
+import { PutawayExecutionResponse } from '../models/putawayExecutionResponse';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';

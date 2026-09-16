@@ -17,17 +17,17 @@ import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
 // @ts-ignore
-import { ApiError } from '../src/models/apiError';
+import { ApiError } from '../models/apiError';
 // @ts-ignore
-import { FleetAuthorizationRequestBody } from '../src/models/fleetAuthorizationRequestBody';
+import { FleetAuthorizationRequestBody } from '../models/fleetAuthorizationRequestBody';
 // @ts-ignore
-import { FleetAuthorizationResponse } from '../src/models/fleetAuthorizationResponse';
+import { FleetAuthorizationResponse } from '../models/fleetAuthorizationResponse';
 // @ts-ignore
-import { FleetContract } from '../src/models/fleetContract';
+import { FleetContract } from '../models/fleetContract';
 // @ts-ignore
-import { FleetPolicy } from '../src/models/fleetPolicy';
+import { FleetPolicy } from '../models/fleetPolicy';
 // @ts-ignore
-import { FleetVehicle } from '../src/models/fleetVehicle';
+import { FleetVehicle } from '../models/fleetVehicle';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';

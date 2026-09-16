@@ -17,19 +17,19 @@ import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
 // @ts-ignore
-import { ApiError } from '../src/models/apiError';
+import { ApiError } from '../models/apiError';
 // @ts-ignore
-import { GLAccountActivateRequest } from '../src/models/gLAccountActivateRequest';
+import { GLAccountActivateRequest } from '../models/gLAccountActivateRequest';
 // @ts-ignore
-import { GLAccountBalanceResponse } from '../src/models/gLAccountBalanceResponse';
+import { GLAccountBalanceResponse } from '../models/gLAccountBalanceResponse';
 // @ts-ignore
-import { GLAccountCreateRequest } from '../src/models/gLAccountCreateRequest';
+import { GLAccountCreateRequest } from '../models/gLAccountCreateRequest';
 // @ts-ignore
-import { GLAccountListResponse } from '../src/models/gLAccountListResponse';
+import { GLAccountListResponse } from '../models/gLAccountListResponse';
 // @ts-ignore
-import { GLAccountResponse } from '../src/models/gLAccountResponse';
+import { GLAccountResponse } from '../models/gLAccountResponse';
 // @ts-ignore
-import { GLAccountUpdateRequest } from '../src/models/gLAccountUpdateRequest';
+import { GLAccountUpdateRequest } from '../models/gLAccountUpdateRequest';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';

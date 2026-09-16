@@ -17,13 +17,13 @@ import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
 // @ts-ignore
-import { CoverageRuleResponse } from '../src/models/coverageRuleResponse';
+import { CoverageRuleResponse } from '../models/coverageRuleResponse';
 // @ts-ignore
-import { MobileUnitRequest } from '../src/models/mobileUnitRequest';
+import { MobileUnitRequest } from '../models/mobileUnitRequest';
 // @ts-ignore
-import { MobileUnitResponse } from '../src/models/mobileUnitResponse';
+import { MobileUnitResponse } from '../models/mobileUnitResponse';
 // @ts-ignore
-import { PageMobileUnitResponse } from '../src/models/pageMobileUnitResponse';
+import { PageMobileUnitResponse } from '../models/pageMobileUnitResponse';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';

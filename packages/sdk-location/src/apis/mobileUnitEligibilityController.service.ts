@@ -17,7 +17,7 @@ import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
 // @ts-ignore
-import { EligibleMobileUnitResponse } from '../src/models/eligibleMobileUnitResponse';
+import { EligibleMobileUnitResponse } from '../models/eligibleMobileUnitResponse';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';

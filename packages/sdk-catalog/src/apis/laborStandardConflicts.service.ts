@@ -17,7 +17,7 @@ import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
 // @ts-ignore
-import { LaborStandardConflictDto } from '../src/models/laborStandardConflictDto';
+import { LaborStandardConflictDto } from '../models/laborStandardConflictDto';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';

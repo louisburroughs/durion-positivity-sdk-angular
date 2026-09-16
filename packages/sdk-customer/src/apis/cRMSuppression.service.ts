@@ -17,11 +17,11 @@ import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
 // @ts-ignore
-import { AddSuppressionRequest } from '../src/models/addSuppressionRequest';
+import { AddSuppressionRequest } from '../models/addSuppressionRequest';
 // @ts-ignore
-import { PagedResponse } from '../src/models/pagedResponse';
+import { PagedResponse } from '../models/pagedResponse';
 // @ts-ignore
-import { SuppressionEntryResponse } from '../src/models/suppressionEntryResponse';
+import { SuppressionEntryResponse } from '../models/suppressionEntryResponse';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';

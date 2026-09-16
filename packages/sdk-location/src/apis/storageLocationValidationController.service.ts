@@ -17,7 +17,7 @@ import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
 // @ts-ignore
-import { StorageLocationValidationResponseDTO } from '../src/models/storageLocationValidationResponseDTO';
+import { StorageLocationValidationResponseDTO } from '../models/storageLocationValidationResponseDTO';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';

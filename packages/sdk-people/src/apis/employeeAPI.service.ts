@@ -17,19 +17,19 @@ import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
 // @ts-ignore
-import { ApiError } from '../src/models/apiError';
+import { ApiError } from '../models/apiError';
 // @ts-ignore
-import { CreateEmployeeRequest } from '../src/models/createEmployeeRequest';
+import { CreateEmployeeRequest } from '../models/createEmployeeRequest';
 // @ts-ignore
-import { DisableEmployeeRequestDto } from '../src/models/disableEmployeeRequestDto';
+import { DisableEmployeeRequestDto } from '../models/disableEmployeeRequestDto';
 // @ts-ignore
-import { EmployeeIdentityDto } from '../src/models/employeeIdentityDto';
+import { EmployeeIdentityDto } from '../models/employeeIdentityDto';
 // @ts-ignore
-import { EmployeeProfileDto } from '../src/models/employeeProfileDto';
+import { EmployeeProfileDto } from '../models/employeeProfileDto';
 // @ts-ignore
-import { PagedResponseEmployeeSummaryDto } from '../src/models/pagedResponseEmployeeSummaryDto';
+import { PagedResponseEmployeeSummaryDto } from '../models/pagedResponseEmployeeSummaryDto';
 // @ts-ignore
-import { UpdateEmployeeRequest } from '../src/models/updateEmployeeRequest';
+import { UpdateEmployeeRequest } from '../models/updateEmployeeRequest';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';

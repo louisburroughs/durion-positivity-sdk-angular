@@ -17,13 +17,13 @@ import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
 // @ts-ignore
-import { AssignPartyTagRequest } from '../src/models/assignPartyTagRequest';
+import { AssignPartyTagRequest } from '../models/assignPartyTagRequest';
 // @ts-ignore
-import { PartyTagAssignmentResponse } from '../src/models/partyTagAssignmentResponse';
+import { PartyTagAssignmentResponse } from '../models/partyTagAssignmentResponse';
 // @ts-ignore
-import { PartyTagResponse } from '../src/models/partyTagResponse';
+import { PartyTagResponse } from '../models/partyTagResponse';
 // @ts-ignore
-import { UpsertPartyTagRequest } from '../src/models/upsertPartyTagRequest';
+import { UpsertPartyTagRequest } from '../models/upsertPartyTagRequest';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';

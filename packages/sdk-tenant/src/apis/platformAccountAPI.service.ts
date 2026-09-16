@@ -17,19 +17,19 @@ import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
 // @ts-ignore
-import { AccountContactRequest } from '../src/models/accountContactRequest';
+import { AccountContactRequest } from '../models/accountContactRequest';
 // @ts-ignore
-import { AccountContactResponse } from '../src/models/accountContactResponse';
+import { AccountContactResponse } from '../models/accountContactResponse';
 // @ts-ignore
-import { AccountCreateRequest } from '../src/models/accountCreateRequest';
+import { AccountCreateRequest } from '../models/accountCreateRequest';
 // @ts-ignore
-import { AccountResponse } from '../src/models/accountResponse';
+import { AccountResponse } from '../models/accountResponse';
 // @ts-ignore
-import { AccountUpdateRequest } from '../src/models/accountUpdateRequest';
+import { AccountUpdateRequest } from '../models/accountUpdateRequest';
 // @ts-ignore
-import { BillingProfileRequest } from '../src/models/billingProfileRequest';
+import { BillingProfileRequest } from '../models/billingProfileRequest';
 // @ts-ignore
-import { BillingProfileResponse } from '../src/models/billingProfileResponse';
+import { BillingProfileResponse } from '../models/billingProfileResponse';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';

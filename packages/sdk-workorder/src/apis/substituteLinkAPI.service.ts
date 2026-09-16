@@ -17,9 +17,9 @@ import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
 // @ts-ignore
-import { SubstituteLinkResponse } from '../src/models/substituteLinkResponse';
+import { SubstituteLinkResponse } from '../models/substituteLinkResponse';
 // @ts-ignore
-import { SuggestSubstitutesRequest } from '../src/models/suggestSubstitutesRequest';
+import { SuggestSubstitutesRequest } from '../models/suggestSubstitutesRequest';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';

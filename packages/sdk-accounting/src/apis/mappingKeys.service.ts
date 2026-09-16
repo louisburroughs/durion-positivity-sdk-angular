@@ -17,13 +17,13 @@ import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
 // @ts-ignore
-import { MappingKeyCreateRequest } from '../src/models/mappingKeyCreateRequest';
+import { MappingKeyCreateRequest } from '../models/mappingKeyCreateRequest';
 // @ts-ignore
-import { MappingKeyListResponse } from '../src/models/mappingKeyListResponse';
+import { MappingKeyListResponse } from '../models/mappingKeyListResponse';
 // @ts-ignore
-import { MappingKeyResponse } from '../src/models/mappingKeyResponse';
+import { MappingKeyResponse } from '../models/mappingKeyResponse';
 // @ts-ignore
-import { MappingKeyUpdateRequest } from '../src/models/mappingKeyUpdateRequest';
+import { MappingKeyUpdateRequest } from '../models/mappingKeyUpdateRequest';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';

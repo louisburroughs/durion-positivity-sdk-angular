@@ -17,15 +17,15 @@ import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
 // @ts-ignore
-import { ApiError } from '../src/models/apiError';
+import { ApiError } from '../models/apiError';
 // @ts-ignore
-import { ApproveScrapRequest } from '../src/models/approveScrapRequest';
+import { ApproveScrapRequest } from '../models/approveScrapRequest';
 // @ts-ignore
-import { CreateScrapRequest } from '../src/models/createScrapRequest';
+import { CreateScrapRequest } from '../models/createScrapRequest';
 // @ts-ignore
-import { RejectScrapRequest } from '../src/models/rejectScrapRequest';
+import { RejectScrapRequest } from '../models/rejectScrapRequest';
 // @ts-ignore
-import { ScrapResponse } from '../src/models/scrapResponse';
+import { ScrapResponse } from '../models/scrapResponse';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';

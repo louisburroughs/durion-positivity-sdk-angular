@@ -17,11 +17,11 @@ import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
 // @ts-ignore
-import { ServiceAreaPostalCodesRequest } from '../src/models/serviceAreaPostalCodesRequest';
+import { ServiceAreaPostalCodesRequest } from '../models/serviceAreaPostalCodesRequest';
 // @ts-ignore
-import { ServiceAreaRequest } from '../src/models/serviceAreaRequest';
+import { ServiceAreaRequest } from '../models/serviceAreaRequest';
 // @ts-ignore
-import { ServiceAreaResponse } from '../src/models/serviceAreaResponse';
+import { ServiceAreaResponse } from '../models/serviceAreaResponse';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';

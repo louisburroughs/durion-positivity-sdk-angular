@@ -17,27 +17,27 @@ import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
 // @ts-ignore
-import { ApiError } from '../src/models/apiError';
+import { ApiError } from '../models/apiError';
 // @ts-ignore
-import { PermissionDto } from '../src/models/permissionDto';
+import { PermissionDto } from '../models/permissionDto';
 // @ts-ignore
-import { RoleAssignmentDto } from '../src/models/roleAssignmentDto';
+import { RoleAssignmentDto } from '../models/roleAssignmentDto';
 // @ts-ignore
-import { RoleAssignmentRequest } from '../src/models/roleAssignmentRequest';
+import { RoleAssignmentRequest } from '../models/roleAssignmentRequest';
 // @ts-ignore
-import { RoleCreateRequest } from '../src/models/roleCreateRequest';
+import { RoleCreateRequest } from '../models/roleCreateRequest';
 // @ts-ignore
-import { RoleDefaultPermissionsResponse } from '../src/models/roleDefaultPermissionsResponse';
+import { RoleDefaultPermissionsResponse } from '../models/roleDefaultPermissionsResponse';
 // @ts-ignore
-import { RoleDto } from '../src/models/roleDto';
+import { RoleDto } from '../models/roleDto';
 // @ts-ignore
-import { RolePermissionGrantRequest } from '../src/models/rolePermissionGrantRequest';
+import { RolePermissionGrantRequest } from '../models/rolePermissionGrantRequest';
 // @ts-ignore
-import { RolePermissionsRequest } from '../src/models/rolePermissionsRequest';
+import { RolePermissionsRequest } from '../models/rolePermissionsRequest';
 // @ts-ignore
-import { RolePersonasResponse } from '../src/models/rolePersonasResponse';
+import { RolePersonasResponse } from '../models/rolePersonasResponse';
 // @ts-ignore
-import { RoleUpdateRequest } from '../src/models/roleUpdateRequest';
+import { RoleUpdateRequest } from '../models/roleUpdateRequest';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';

@@ -17,33 +17,33 @@ import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
 // @ts-ignore
-import { ApiError } from '../src/models/apiError';
+import { ApiError } from '../models/apiError';
 // @ts-ignore
-import { ApproveWorkorderRequest } from '../src/models/approveWorkorderRequest';
+import { ApproveWorkorderRequest } from '../models/approveWorkorderRequest';
 // @ts-ignore
-import { CompleteWorkorderRequest } from '../src/models/completeWorkorderRequest';
+import { CompleteWorkorderRequest } from '../models/completeWorkorderRequest';
 // @ts-ignore
-import { CompleteWorkorderResponse } from '../src/models/completeWorkorderResponse';
+import { CompleteWorkorderResponse } from '../models/completeWorkorderResponse';
 // @ts-ignore
-import { CompletionPreconditionsResponse } from '../src/models/completionPreconditionsResponse';
+import { CompletionPreconditionsResponse } from '../models/completionPreconditionsResponse';
 // @ts-ignore
-import { CountResponse } from '../src/models/countResponse';
+import { CountResponse } from '../models/countResponse';
 // @ts-ignore
-import { CreateWorkorderRequest } from '../src/models/createWorkorderRequest';
+import { CreateWorkorderRequest } from '../models/createWorkorderRequest';
 // @ts-ignore
-import { InvoiceGenerationResponse } from '../src/models/invoiceGenerationResponse';
+import { InvoiceGenerationResponse } from '../models/invoiceGenerationResponse';
 // @ts-ignore
-import { ReopenWorkorderRequest } from '../src/models/reopenWorkorderRequest';
+import { ReopenWorkorderRequest } from '../models/reopenWorkorderRequest';
 // @ts-ignore
-import { ReopenWorkorderResponse } from '../src/models/reopenWorkorderResponse';
+import { ReopenWorkorderResponse } from '../models/reopenWorkorderResponse';
 // @ts-ignore
-import { WorkorderItemCompletionResponse } from '../src/models/workorderItemCompletionResponse';
+import { WorkorderItemCompletionResponse } from '../models/workorderItemCompletionResponse';
 // @ts-ignore
-import { WorkorderResponse } from '../src/models/workorderResponse';
+import { WorkorderResponse } from '../models/workorderResponse';
 // @ts-ignore
-import { WorkorderSnapshotResponse } from '../src/models/workorderSnapshotResponse';
+import { WorkorderSnapshotResponse } from '../models/workorderSnapshotResponse';
 // @ts-ignore
-import { WorkorderStateTransitionResponse } from '../src/models/workorderStateTransitionResponse';
+import { WorkorderStateTransitionResponse } from '../models/workorderStateTransitionResponse';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';

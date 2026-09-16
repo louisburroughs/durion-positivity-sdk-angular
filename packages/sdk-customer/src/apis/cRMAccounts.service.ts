@@ -17,51 +17,51 @@ import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
 // @ts-ignore
-import { ApiError } from '../src/models/apiError';
+import { ApiError } from '../models/apiError';
 // @ts-ignore
-import { BillingRuleRef } from '../src/models/billingRuleRef';
+import { BillingRuleRef } from '../models/billingRuleRef';
 // @ts-ignore
-import { BillingTermsRef } from '../src/models/billingTermsRef';
+import { BillingTermsRef } from '../models/billingTermsRef';
 // @ts-ignore
-import { CreateCommercialAccountRequest } from '../src/models/createCommercialAccountRequest';
+import { CreateCommercialAccountRequest } from '../models/createCommercialAccountRequest';
 // @ts-ignore
-import { CreateCommercialAccountResponse } from '../src/models/createCommercialAccountResponse';
+import { CreateCommercialAccountResponse } from '../models/createCommercialAccountResponse';
 // @ts-ignore
-import { CreateVehicleForPartyRequest } from '../src/models/createVehicleForPartyRequest';
+import { CreateVehicleForPartyRequest } from '../models/createVehicleForPartyRequest';
 // @ts-ignore
-import { CreateVehicleForPartyResponse } from '../src/models/createVehicleForPartyResponse';
+import { CreateVehicleForPartyResponse } from '../models/createVehicleForPartyResponse';
 // @ts-ignore
-import { DuplicateCheckResponse } from '../src/models/duplicateCheckResponse';
+import { DuplicateCheckResponse } from '../models/duplicateCheckResponse';
 // @ts-ignore
-import { GetAccountTierResponse } from '../src/models/getAccountTierResponse';
+import { GetAccountTierResponse } from '../models/getAccountTierResponse';
 // @ts-ignore
-import { GetCommunicationPreferencesResponse } from '../src/models/getCommunicationPreferencesResponse';
+import { GetCommunicationPreferencesResponse } from '../models/getCommunicationPreferencesResponse';
 // @ts-ignore
-import { GetPartyResponse } from '../src/models/getPartyResponse';
+import { GetPartyResponse } from '../models/getPartyResponse';
 // @ts-ignore
-import { MergePartiesRequest } from '../src/models/mergePartiesRequest';
+import { MergePartiesRequest } from '../models/mergePartiesRequest';
 // @ts-ignore
-import { MergePartiesResponse } from '../src/models/mergePartiesResponse';
+import { MergePartiesResponse } from '../models/mergePartiesResponse';
 // @ts-ignore
-import { PartyFactReplayResultDto } from '../src/models/partyFactReplayResultDto';
+import { PartyFactReplayResultDto } from '../models/partyFactReplayResultDto';
 // @ts-ignore
-import { PartyNameRef } from '../src/models/partyNameRef';
+import { PartyNameRef } from '../models/partyNameRef';
 // @ts-ignore
-import { PartyNameResolveRequest } from '../src/models/partyNameResolveRequest';
+import { PartyNameResolveRequest } from '../models/partyNameResolveRequest';
 // @ts-ignore
-import { ResolveAccountTierRequest } from '../src/models/resolveAccountTierRequest';
+import { ResolveAccountTierRequest } from '../models/resolveAccountTierRequest';
 // @ts-ignore
-import { ResolveAccountTierResponse } from '../src/models/resolveAccountTierResponse';
+import { ResolveAccountTierResponse } from '../models/resolveAccountTierResponse';
 // @ts-ignore
-import { SearchPartiesRequest } from '../src/models/searchPartiesRequest';
+import { SearchPartiesRequest } from '../models/searchPartiesRequest';
 // @ts-ignore
-import { SearchPartiesResponse } from '../src/models/searchPartiesResponse';
+import { SearchPartiesResponse } from '../models/searchPartiesResponse';
 // @ts-ignore
-import { UpsertBillingRulesRequest } from '../src/models/upsertBillingRulesRequest';
+import { UpsertBillingRulesRequest } from '../models/upsertBillingRulesRequest';
 // @ts-ignore
-import { UpsertCommunicationPreferencesRequest } from '../src/models/upsertCommunicationPreferencesRequest';
+import { UpsertCommunicationPreferencesRequest } from '../models/upsertCommunicationPreferencesRequest';
 // @ts-ignore
-import { UpsertCommunicationPreferencesResponse } from '../src/models/upsertCommunicationPreferencesResponse';
+import { UpsertCommunicationPreferencesResponse } from '../models/upsertCommunicationPreferencesResponse';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';

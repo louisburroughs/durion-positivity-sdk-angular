@@ -17,19 +17,19 @@ import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
 // @ts-ignore
-import { ApiError } from '../src/models/apiError';
+import { ApiError } from '../models/apiError';
 // @ts-ignore
-import { GLMappingCreateRequest } from '../src/models/gLMappingCreateRequest';
+import { GLMappingCreateRequest } from '../models/gLMappingCreateRequest';
 // @ts-ignore
-import { GLMappingCreateResponse } from '../src/models/gLMappingCreateResponse';
+import { GLMappingCreateResponse } from '../models/gLMappingCreateResponse';
 // @ts-ignore
-import { GLMappingResolveRequest } from '../src/models/gLMappingResolveRequest';
+import { GLMappingResolveRequest } from '../models/gLMappingResolveRequest';
 // @ts-ignore
-import { GLMappingResolveResponse } from '../src/models/gLMappingResolveResponse';
+import { GLMappingResolveResponse } from '../models/gLMappingResolveResponse';
 // @ts-ignore
-import { MappingResolutionTestRequest } from '../src/models/mappingResolutionTestRequest';
+import { MappingResolutionTestRequest } from '../models/mappingResolutionTestRequest';
 // @ts-ignore
-import { MappingResolutionTestResponse } from '../src/models/mappingResolutionTestResponse';
+import { MappingResolutionTestResponse } from '../models/mappingResolutionTestResponse';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';

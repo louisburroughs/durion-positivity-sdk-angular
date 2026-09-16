@@ -17,15 +17,15 @@ import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
 // @ts-ignore
-import { PageStorageLocationResponse } from '../src/models/pageStorageLocationResponse';
+import { PageStorageLocationResponse } from '../models/pageStorageLocationResponse';
 // @ts-ignore
-import { Pageable } from '../src/models/pageable';
+import { Pageable } from '../models/pageable';
 // @ts-ignore
-import { StorageLocationPatchRequest } from '../src/models/storageLocationPatchRequest';
+import { StorageLocationPatchRequest } from '../models/storageLocationPatchRequest';
 // @ts-ignore
-import { StorageLocationRequest } from '../src/models/storageLocationRequest';
+import { StorageLocationRequest } from '../models/storageLocationRequest';
 // @ts-ignore
-import { StorageLocationResponse } from '../src/models/storageLocationResponse';
+import { StorageLocationResponse } from '../models/storageLocationResponse';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';

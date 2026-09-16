@@ -17,17 +17,17 @@ import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
 // @ts-ignore
-import { PriceBookCreateRequestDto } from '../src/models/priceBookCreateRequestDto';
+import { PriceBookCreateRequestDto } from '../models/priceBookCreateRequestDto';
 // @ts-ignore
-import { PriceBookDto } from '../src/models/priceBookDto';
+import { PriceBookDto } from '../models/priceBookDto';
 // @ts-ignore
-import { PriceBookRuleCreateRequestDto } from '../src/models/priceBookRuleCreateRequestDto';
+import { PriceBookRuleCreateRequestDto } from '../models/priceBookRuleCreateRequestDto';
 // @ts-ignore
-import { PriceBookRuleDto } from '../src/models/priceBookRuleDto';
+import { PriceBookRuleDto } from '../models/priceBookRuleDto';
 // @ts-ignore
-import { ResolvePriceRequestDto } from '../src/models/resolvePriceRequestDto';
+import { ResolvePriceRequestDto } from '../models/resolvePriceRequestDto';
 // @ts-ignore
-import { ResolvePriceResponseDto } from '../src/models/resolvePriceResponseDto';
+import { ResolvePriceResponseDto } from '../models/resolvePriceResponseDto';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';

@@ -17,17 +17,17 @@ import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
 // @ts-ignore
-import { ApiError } from '../src/models/apiError';
+import { ApiError } from '../models/apiError';
 // @ts-ignore
-import { ModeResponse } from '../src/models/modeResponse';
+import { ModeResponse } from '../models/modeResponse';
 // @ts-ignore
-import { TaxCalculationRequest } from '../src/models/taxCalculationRequest';
+import { TaxCalculationRequest } from '../models/taxCalculationRequest';
 // @ts-ignore
-import { TaxCalculationResponse } from '../src/models/taxCalculationResponse';
+import { TaxCalculationResponse } from '../models/taxCalculationResponse';
 // @ts-ignore
-import { TaxProviderTransactionResult } from '../src/models/taxProviderTransactionResult';
+import { TaxProviderTransactionResult } from '../models/taxProviderTransactionResult';
 // @ts-ignore
-import { TaxRateLookupResponse } from '../src/models/taxRateLookupResponse';
+import { TaxRateLookupResponse } from '../models/taxRateLookupResponse';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';

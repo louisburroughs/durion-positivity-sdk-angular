@@ -17,15 +17,15 @@ import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
 // @ts-ignore
-import { ApiError } from '../src/models/apiError';
+import { ApiError } from '../models/apiError';
 // @ts-ignore
-import { CreateVehicleRequest } from '../src/models/createVehicleRequest';
+import { CreateVehicleRequest } from '../models/createVehicleRequest';
 // @ts-ignore
-import { UpdateVehicleRequest } from '../src/models/updateVehicleRequest';
+import { UpdateVehicleRequest } from '../models/updateVehicleRequest';
 // @ts-ignore
-import { VehicleFactReplayResultDto } from '../src/models/vehicleFactReplayResultDto';
+import { VehicleFactReplayResultDto } from '../models/vehicleFactReplayResultDto';
 // @ts-ignore
-import { VehicleResponse } from '../src/models/vehicleResponse';
+import { VehicleResponse } from '../models/vehicleResponse';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';

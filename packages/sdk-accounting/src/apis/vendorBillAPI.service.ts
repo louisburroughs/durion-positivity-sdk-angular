@@ -17,19 +17,19 @@ import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
 // @ts-ignore
-import { CandidateSelectionRequest } from '../src/models/candidateSelectionRequest';
+import { CandidateSelectionRequest } from '../models/candidateSelectionRequest';
 // @ts-ignore
-import { ExceptionResolutionRequest } from '../src/models/exceptionResolutionRequest';
+import { ExceptionResolutionRequest } from '../models/exceptionResolutionRequest';
 // @ts-ignore
-import { GoodsReceivedEvent } from '../src/models/goodsReceivedEvent';
+import { GoodsReceivedEvent } from '../models/goodsReceivedEvent';
 // @ts-ignore
-import { PageVendorBillListRow } from '../src/models/pageVendorBillListRow';
+import { PageVendorBillListRow } from '../models/pageVendorBillListRow';
 // @ts-ignore
-import { VendorBillMatchCandidateResponse } from '../src/models/vendorBillMatchCandidateResponse';
+import { VendorBillMatchCandidateResponse } from '../models/vendorBillMatchCandidateResponse';
 // @ts-ignore
-import { VendorBillResponse } from '../src/models/vendorBillResponse';
+import { VendorBillResponse } from '../models/vendorBillResponse';
 // @ts-ignore
-import { VendorInvoiceReceivedEvent } from '../src/models/vendorInvoiceReceivedEvent';
+import { VendorInvoiceReceivedEvent } from '../models/vendorInvoiceReceivedEvent';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';

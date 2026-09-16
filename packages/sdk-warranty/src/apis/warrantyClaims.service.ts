@@ -17,27 +17,27 @@ import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
 // @ts-ignore
-import { ApiError } from '../src/models/apiError';
+import { ApiError } from '../models/apiError';
 // @ts-ignore
-import { CandidateLine } from '../src/models/candidateLine';
+import { CandidateLine } from '../models/candidateLine';
 // @ts-ignore
-import { ClaimActionRequest } from '../src/models/claimActionRequest';
+import { ClaimActionRequest } from '../models/claimActionRequest';
 // @ts-ignore
-import { ClaimCreateRequest } from '../src/models/claimCreateRequest';
+import { ClaimCreateRequest } from '../models/claimCreateRequest';
 // @ts-ignore
-import { ClaimDecisionRequest } from '../src/models/claimDecisionRequest';
+import { ClaimDecisionRequest } from '../models/claimDecisionRequest';
 // @ts-ignore
-import { ClaimLineRequest } from '../src/models/claimLineRequest';
+import { ClaimLineRequest } from '../models/claimLineRequest';
 // @ts-ignore
-import { ClaimNoteRequest } from '../src/models/claimNoteRequest';
+import { ClaimNoteRequest } from '../models/claimNoteRequest';
 // @ts-ignore
-import { ClaimPhotoRequest } from '../src/models/claimPhotoRequest';
+import { ClaimPhotoRequest } from '../models/claimPhotoRequest';
 // @ts-ignore
-import { ClaimResponse } from '../src/models/claimResponse';
+import { ClaimResponse } from '../models/claimResponse';
 // @ts-ignore
-import { ClaimUpdateRequest } from '../src/models/claimUpdateRequest';
+import { ClaimUpdateRequest } from '../models/claimUpdateRequest';
 // @ts-ignore
-import { PageClaimSummaryResponse } from '../src/models/pageClaimSummaryResponse';
+import { PageClaimSummaryResponse } from '../models/pageClaimSummaryResponse';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';

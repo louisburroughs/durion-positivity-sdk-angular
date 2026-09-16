@@ -17,25 +17,25 @@ import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
 // @ts-ignore
-import { ApiError } from '../src/models/apiError';
+import { ApiError } from '../models/apiError';
 // @ts-ignore
-import { ApprovePurchaseOrderRequest } from '../src/models/approvePurchaseOrderRequest';
+import { ApprovePurchaseOrderRequest } from '../models/approvePurchaseOrderRequest';
 // @ts-ignore
-import { CreatePurchaseOrderRequest } from '../src/models/createPurchaseOrderRequest';
+import { CreatePurchaseOrderRequest } from '../models/createPurchaseOrderRequest';
 // @ts-ignore
-import { ListPurchaseOrdersRequest } from '../src/models/listPurchaseOrdersRequest';
+import { ListPurchaseOrdersRequest } from '../models/listPurchaseOrdersRequest';
 // @ts-ignore
-import { PagePurchaseOrderResponse } from '../src/models/pagePurchaseOrderResponse';
+import { PagePurchaseOrderResponse } from '../models/pagePurchaseOrderResponse';
 // @ts-ignore
-import { Pageable } from '../src/models/pageable';
+import { Pageable } from '../models/pageable';
 // @ts-ignore
-import { PurchaseOrderResponse } from '../src/models/purchaseOrderResponse';
+import { PurchaseOrderResponse } from '../models/purchaseOrderResponse';
 // @ts-ignore
-import { ReceivePurchaseOrderRequest } from '../src/models/receivePurchaseOrderRequest';
+import { ReceivePurchaseOrderRequest } from '../models/receivePurchaseOrderRequest';
 // @ts-ignore
-import { ReceivePurchaseOrderResponse } from '../src/models/receivePurchaseOrderResponse';
+import { ReceivePurchaseOrderResponse } from '../models/receivePurchaseOrderResponse';
 // @ts-ignore
-import { RevisePurchaseOrderRequest } from '../src/models/revisePurchaseOrderRequest';
+import { RevisePurchaseOrderRequest } from '../models/revisePurchaseOrderRequest';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';

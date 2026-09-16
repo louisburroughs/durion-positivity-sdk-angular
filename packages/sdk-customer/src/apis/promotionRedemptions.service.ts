@@ -17,9 +17,9 @@ import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
 // @ts-ignore
-import { PromotionRedemptionResponse } from '../src/models/promotionRedemptionResponse';
+import { PromotionRedemptionResponse } from '../models/promotionRedemptionResponse';
 // @ts-ignore
-import { RecordRedemptionRequest } from '../src/models/recordRedemptionRequest';
+import { RecordRedemptionRequest } from '../models/recordRedemptionRequest';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';

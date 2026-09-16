@@ -17,9 +17,9 @@ import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
 // @ts-ignore
-import { InvoiceRevenueReconcileRequest } from '../src/models/invoiceRevenueReconcileRequest';
+import { InvoiceRevenueReconcileRequest } from '../models/invoiceRevenueReconcileRequest';
 // @ts-ignore
-import { InvoiceRevenueReconcileResponse } from '../src/models/invoiceRevenueReconcileResponse';
+import { InvoiceRevenueReconcileResponse } from '../models/invoiceRevenueReconcileResponse';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
