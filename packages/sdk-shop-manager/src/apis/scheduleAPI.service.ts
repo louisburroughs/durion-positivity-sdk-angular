@@ -19,6 +19,8 @@ import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 // @ts-ignore
 import { ApiError } from '../models/apiError';
 // @ts-ignore
+import { OpeningSearchResponse } from '../models/openingSearchResponse';
+// @ts-ignore
 import { ScheduleCapacityResponse } from '../models/scheduleCapacityResponse';
 // @ts-ignore
 import { ScheduleViewResponse } from '../models/scheduleViewResponse';
@@ -128,6 +130,161 @@ export class ScheduleAPIService extends BaseService {
         let localVarPath = `/v1/schedules/capacity`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<ScheduleCapacityResponse>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                params: localVarQueryParameters.toHttpParams(),
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Search duration-aware eligible openings for a job
+     * Finds the windows at one location in which a whole job fits, unbroken, in one eligible bay, with a technician rostered that day and free in the window, honouring the location\&#39;s check-in and cleanup buffers, and ranks them earliest start first with CERTIFIED openings before AWAITING ones at equal starts. Use this tool when a service advisor asks when the next slot for a job of a given length is; use getScheduleCapacity instead for per-day, per-bay occupancy of a calendar range rather than bookable windows. Preconditions: the location must be known to shop management with a recognised timezone and published operating hours, and every serviceId must be a catalog service known to shop management. Required inputs: locationId (UUID), serviceIds (one to ten catalog service UUIDs), durationMinutes (1 to 1440) and earliestStart (ISO-8601 instant); vehicleId and technicianId are optional, horizonDays defaults to 30 (the maximum) and limit defaults to 10 (maximum 50). Emits a SHOPMGR_SCHEDULE_OPENING_SEARCH audit event and changes no state; the search is advisory and the submit-time conflict evaluation on appointment creation remains authoritative, which is why every opening lists constraintsEvaluated. Skill never withholds an opening: a technician lacking a required skill makes the opening AWAITING, and nobody competent rostered in the horizon is reported once as staffingAdvisory alongside the openings rather than as a noOpeningReason, which names only NO_ELIGIBLE_BAY_AT_LOCATION or ALL_ELIGIBLE_BAYS_BOOKED. Returns 400 for a malformed or out-of-range value, 403 LOCATION_SCOPE_DENIED when the caller\&#39;s location scope does not cover locationId, 404 when the location or a service is unknown, and 422 OPENING_HORIZON_EXCEEDED, OPENING_LIMIT_EXCEEDED, OPENING_TOO_MANY_SERVICES or LOCATION_HOURS_UNKNOWN when a policy bound or a facility fact is not met.
+     * @endpoint get /v1/schedules/openings
+     * @param locationId Location ID
+     * @param serviceIds Catalog service ids the job consists of (1-10)
+     * @param durationMinutes Job duration in minutes (1-1440)
+     * @param earliestStart No opening starts before this instant (ISO-8601)
+     * @param vehicleId Vehicle whose GVWR class narrows bays and skill requirements
+     * @param technicianId Restrict openings to ones this technician (person id) can take
+     * @param horizonDays Facility-local days to search forward from earliestStart (1-30)
+     * @param limit Most openings to return (1-50)
+     * @param xCorrelationId Correlation ID for request tracing
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public searchOpenings(locationId: string, serviceIds: Array<string>, durationMinutes: number, earliestStart: string, vehicleId?: string, technicianId?: string, horizonDays?: number, limit?: number, xCorrelationId?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<OpeningSearchResponse>;
+    public searchOpenings(locationId: string, serviceIds: Array<string>, durationMinutes: number, earliestStart: string, vehicleId?: string, technicianId?: string, horizonDays?: number, limit?: number, xCorrelationId?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<OpeningSearchResponse>>;
+    public searchOpenings(locationId: string, serviceIds: Array<string>, durationMinutes: number, earliestStart: string, vehicleId?: string, technicianId?: string, horizonDays?: number, limit?: number, xCorrelationId?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<OpeningSearchResponse>>;
+    public searchOpenings(locationId: string, serviceIds: Array<string>, durationMinutes: number, earliestStart: string, vehicleId?: string, technicianId?: string, horizonDays?: number, limit?: number, xCorrelationId?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (locationId === null || locationId === undefined) {
+            throw new Error('Required parameter locationId was null or undefined when calling searchOpenings.');
+        }
+        if (serviceIds === null || serviceIds === undefined) {
+            throw new Error('Required parameter serviceIds was null or undefined when calling searchOpenings.');
+        }
+        if (durationMinutes === null || durationMinutes === undefined) {
+            throw new Error('Required parameter durationMinutes was null or undefined when calling searchOpenings.');
+        }
+        if (earliestStart === null || earliestStart === undefined) {
+            throw new Error('Required parameter earliestStart was null or undefined when calling searchOpenings.');
+        }
+
+        let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'locationId',
+            <any>locationId,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'serviceIds',
+            <any>serviceIds,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'durationMinutes',
+            <any>durationMinutes,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'earliestStart',
+            <any>earliestStart,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'vehicleId',
+            <any>vehicleId,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'technicianId',
+            <any>technicianId,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'horizonDays',
+            <any>horizonDays,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'limit',
+            <any>limit,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        let localVarHeaders = this.defaultHeaders;
+        if (xCorrelationId !== undefined && xCorrelationId !== null) {
+            localVarHeaders = localVarHeaders.set('X-Correlation-Id', String(xCorrelationId));
+        }
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/schedules/openings`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<OpeningSearchResponse>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 params: localVarQueryParameters.toHttpParams(),
