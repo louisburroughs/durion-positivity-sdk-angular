@@ -18,10 +18,6 @@ export interface MobileUnitResponse {
      */
     baseLocationId?: string;
     /**
-     * Identifiers of capabilities the mobile unit can perform
-     */
-    capabilityIds?: Array<string>;
-    /**
      * Timestamp when the mobile unit was created (ISO 8601)
      */
     createdAt?: string;
@@ -37,6 +33,10 @@ export interface MobileUnitResponse {
      * Free-text notes about the mobile unit
      */
     notes?: string;
+    /**
+     * Catalog operation codes this unit can perform off-site (CAP-325 D14), UPPER-DASH per ADR-0059 §3; empty for a unit that has not declared any.
+     */
+    serviceCapabilityCodes?: Array<string>;
     /**
      * Operational status of the mobile unit
      */

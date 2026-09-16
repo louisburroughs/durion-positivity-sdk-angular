@@ -19,10 +19,6 @@ export interface MobileUnitRequest {
      */
     baseLocationId?: string;
     /**
-     * Identifiers of capabilities the mobile unit can perform
-     */
-    capabilityIds?: Array<string>;
-    /**
      * Coverage rules defining where the mobile unit can operate
      */
     coverageRules?: Array<CoverageRuleRequest>;
@@ -34,6 +30,10 @@ export interface MobileUnitRequest {
      * Free-text notes about the mobile unit
      */
     notes?: string;
+    /**
+     * Catalog operation codes this unit can perform off-site (CAP-325 D14): each must be an active catalog operationCode (UPPER-DASH, ADR-0059 §3), matched case-insensitively; unknown or retired codes are rejected 422. Required, non-empty, for an ACTIVE unit.
+     */
+    serviceCapabilityCodes?: Array<string>;
     /**
      * Operational status of the mobile unit
      */
