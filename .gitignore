@@ -1,9 +1,16 @@
 # Dependencies
 node_modules/
+packages/*/node_modules/
 
 # Build output
 dist/
 build/
+packages/*/dist/
+
+# Packed tarballs. `npm run pack` writes these (dist/tarballs by default, the
+# repository root when --out-dir is omitted), and packages/sdk-supplier and the
+# root both had one committed by accident.
+*.tgz
 
 # Coverage reports
 coverage/
@@ -12,8 +19,10 @@ coverage/
 # TypeScript incremental compile info
 *.tsbuildinfo
 
-# TypeScript declaration output files (generated alongside .js by tsc)
-**/*.d.ts
+# Generator and build logs. scripts/generate-openapi.sh writes gen.log and
+# output.log at the root and a per-run log under logs/.
+*.log
+logs/
 
 # IDE / editor artifacts
 .idea/
@@ -25,13 +34,11 @@ coverage/
 .DS_Store
 Thumbs.db
 
-# npm/yarn/pnpm lock files for sub-packages (root lock file is tracked)
-packages/*/node_modules/
-packages/*/dist/
-
 # OpenAPI generator temporary artifacts
 .openapi-generator/
-.openapi-generator-ignore
+# ...but .openapi-generator-ignore is NOT an artifact - it is what stops the
+# generator overwriting hand-maintained files, so it must stay tracked.
+!.openapi-generator-ignore
 
 # Environment
 .env

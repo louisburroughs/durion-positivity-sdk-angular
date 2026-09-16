@@ -63,24 +63,35 @@ EOF
 	done
 }
 
-write_nested_model_shims() {
+# The generator is configured with modelPackage "src/models" (openapitools.json),
+# and the typescript-angular templates build a service's model imports as
+# "../<modelPackage>/<model>". The services themselves are written to
+# src/apis, so that comes out as "../src/models/<model>" - which from
+# src/apis/ resolves to src/src/models/, a directory the generator never
+# writes.
+#
+# This used to be papered over by write_nested_model_shims, which created a
+# src/src/models/<model>.ts re-exporting "../../models/<model>" for every
+# model in the package: 1236 files across 24 packages, rewritten on every
+# regeneration, existing only to make a wrong relative path resolve. Rewrite
+# the imports to the real path instead and the shim tree is not needed at all.
+fix_model_import_paths() {
 	local module_name="$1"
 	local package_dir="packages/sdk-${module_name}"
-	local nested_models_dir="${package_dir}/src/src/models"
-	local model_file
+	local apis_dir="${package_dir}/src/apis"
 
-	mkdir -p "${nested_models_dir}"
+	[[ -d "${apis_dir}" ]] || return 0
 
 	shopt -s nullglob
-	for model_file in "${package_dir}/src/models/"*.ts; do
-		local model_basename
-		model_basename="$(basename "${model_file}")"
-
-		cat > "${nested_models_dir}/${model_basename}" <<EOF
-export * from '../../models/${model_basename%.ts}';
-EOF
+	local api_file
+	for api_file in "${apis_dir}"/*.ts; do
+		sed -i "s|from '\.\./src/models/|from '../models/|g" "${api_file}"
 	done
 	shopt -u nullglob
+
+	# Left behind by an earlier generation; harmless but dead once the imports
+	# above point at src/models directly.
+	rm -rf "${package_dir}/src/src"
 }
 
 cleanup_legacy_null_models() {
@@ -91,20 +102,17 @@ cleanup_legacy_null_models() {
 	local model_file
 
 	shopt -s nullglob
-	for model_file in "${package_dir}/src/models"/*.ts "${package_dir}/src/src/models"/*.ts; do
+	for model_file in "${package_dir}/src/models"/*.ts; do
 		[[ -f "$model_file" ]] || continue
-		if grep -q "from '\.\./runtime'\|from '\.\./\.\./models/" "$model_file" 2>/dev/null; then
-			# nested shim files always re-export from ../../models/...; only delete if the
-			# referenced sibling no longer exists OR the file in src/models/ uses ../runtime
-			if grep -q "from '\.\./runtime'" "$model_file"; then
-				removed_basename="$(basename "$model_file" .ts)"
-				rm -f "$model_file"
-				rm -f "${package_dir}/src/src/models/${removed_basename}.ts"
-				if [[ -f "$models_index" ]]; then
-					sed -i "/export \* from '\.\/${removed_basename}'/d" "$models_index"
-				fi
-				echo "[generate] Removed legacy null model ${removed_basename} from sdk-${module_name}"
+		# A leftover from the typescript-fetch generation: those models import
+		# from '../runtime', which this generator never emits.
+		if grep -q "from '\.\./runtime'" "$model_file" 2>/dev/null; then
+			removed_basename="$(basename "$model_file" .ts)"
+			rm -f "$model_file"
+			if [[ -f "$models_index" ]]; then
+				sed -i "/export \* from '\.\/${removed_basename}'/d" "$models_index"
 			fi
+			echo "[generate] Removed legacy null model ${removed_basename} from sdk-${module_name}"
 		fi
 	done
 	shopt -u nullglob
@@ -348,7 +356,7 @@ if [[ -n "$module" ]]; then
 
 	patch_package_tsconfig "$module"
 	write_src_support_shims "$module"
-	write_nested_model_shims "$module"
+	fix_model_import_paths "$module"
 	if [[ "$module" == "inventory" ]]; then
 		cleanup_inventory_duplicate_exports
 	fi
@@ -373,7 +381,7 @@ else
 
 		patch_package_tsconfig "$m"
 		write_src_support_shims "$m"
-		write_nested_model_shims "$m"
+		fix_model_import_paths "$m"
 		if [[ "$m" == "inventory" ]]; then
 			cleanup_inventory_duplicate_exports
 		fi

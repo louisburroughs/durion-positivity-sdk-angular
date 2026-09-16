@@ -17,13 +17,13 @@ import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
 // @ts-ignore
-import { ApiError } from '../src/models/apiError';
+import { ApiError } from '../models/apiError';
 // @ts-ignore
-import { SettlementLineResponse } from '../src/models/settlementLineResponse';
+import { SettlementLineResponse } from '../models/settlementLineResponse';
 // @ts-ignore
-import { SettlementManualMatchRequest } from '../src/models/settlementManualMatchRequest';
+import { SettlementManualMatchRequest } from '../models/settlementManualMatchRequest';
 // @ts-ignore
-import { SettlementWriteOffRequest } from '../src/models/settlementWriteOffRequest';
+import { SettlementWriteOffRequest } from '../models/settlementWriteOffRequest';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';

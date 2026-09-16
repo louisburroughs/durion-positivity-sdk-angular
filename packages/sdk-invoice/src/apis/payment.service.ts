@@ -17,11 +17,11 @@ import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
 // @ts-ignore
-import { CaptureAmountRequest } from '../src/models/captureAmountRequest';
+import { CaptureAmountRequest } from '../models/captureAmountRequest';
 // @ts-ignore
-import { InitiatePaymentRequest } from '../src/models/initiatePaymentRequest';
+import { InitiatePaymentRequest } from '../models/initiatePaymentRequest';
 // @ts-ignore
-import { InitiatePaymentResponse } from '../src/models/initiatePaymentResponse';
+import { InitiatePaymentResponse } from '../models/initiatePaymentResponse';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';

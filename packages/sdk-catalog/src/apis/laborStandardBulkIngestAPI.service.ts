@@ -17,9 +17,9 @@ import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
 // @ts-ignore
-import { BulkIngestRequestServiceLaborStandardImportRequestDto } from '../src/models/bulkIngestRequestServiceLaborStandardImportRequestDto';
+import { BulkIngestRequestServiceLaborStandardImportRequestDto } from '../models/bulkIngestRequestServiceLaborStandardImportRequestDto';
 // @ts-ignore
-import { BulkIngestResponse } from '../src/models/bulkIngestResponse';
+import { BulkIngestResponse } from '../models/bulkIngestResponse';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';

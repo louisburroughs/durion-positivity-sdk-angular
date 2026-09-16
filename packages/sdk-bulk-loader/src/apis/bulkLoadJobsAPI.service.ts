@@ -17,13 +17,13 @@ import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
 // @ts-ignore
-import { ApiError } from '../src/models/apiError';
+import { ApiError } from '../models/apiError';
 // @ts-ignore
-import { BulkLoadJobCreateRequest } from '../src/models/bulkLoadJobCreateRequest';
+import { BulkLoadJobCreateRequest } from '../models/bulkLoadJobCreateRequest';
 // @ts-ignore
-import { BulkLoadJobResponse } from '../src/models/bulkLoadJobResponse';
+import { BulkLoadJobResponse } from '../models/bulkLoadJobResponse';
 // @ts-ignore
-import { PageBulkLoadJobResponse } from '../src/models/pageBulkLoadJobResponse';
+import { PageBulkLoadJobResponse } from '../models/pageBulkLoadJobResponse';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';

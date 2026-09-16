@@ -17,17 +17,17 @@ import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
 // @ts-ignore
-import { ApiError } from '../src/models/apiError';
+import { ApiError } from '../models/apiError';
 // @ts-ignore
-import { CreateTransferOrderRequest } from '../src/models/createTransferOrderRequest';
+import { CreateTransferOrderRequest } from '../models/createTransferOrderRequest';
 // @ts-ignore
-import { DispatchTransferOrderRequest } from '../src/models/dispatchTransferOrderRequest';
+import { DispatchTransferOrderRequest } from '../models/dispatchTransferOrderRequest';
 // @ts-ignore
-import { ReceiveTransferOrderRequest } from '../src/models/receiveTransferOrderRequest';
+import { ReceiveTransferOrderRequest } from '../models/receiveTransferOrderRequest';
 // @ts-ignore
-import { ShortCloseTransferOrderRequest } from '../src/models/shortCloseTransferOrderRequest';
+import { ShortCloseTransferOrderRequest } from '../models/shortCloseTransferOrderRequest';
 // @ts-ignore
-import { TransferOrderResponse } from '../src/models/transferOrderResponse';
+import { TransferOrderResponse } from '../models/transferOrderResponse';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';

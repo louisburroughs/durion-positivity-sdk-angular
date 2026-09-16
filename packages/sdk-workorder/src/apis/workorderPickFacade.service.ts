@@ -17,19 +17,19 @@ import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
 // @ts-ignore
-import { ApiError } from '../src/models/apiError';
+import { ApiError } from '../models/apiError';
 // @ts-ignore
-import { CompletePickTaskRequest } from '../src/models/completePickTaskRequest';
+import { CompletePickTaskRequest } from '../models/completePickTaskRequest';
 // @ts-ignore
-import { ConfirmPickLineRequest } from '../src/models/confirmPickLineRequest';
+import { ConfirmPickLineRequest } from '../models/confirmPickLineRequest';
 // @ts-ignore
-import { ResolveScanRequest } from '../src/models/resolveScanRequest';
+import { ResolveScanRequest } from '../models/resolveScanRequest';
 // @ts-ignore
-import { ResolveScanResponse } from '../src/models/resolveScanResponse';
+import { ResolveScanResponse } from '../models/resolveScanResponse';
 // @ts-ignore
-import { WorkorderPickListResponse } from '../src/models/workorderPickListResponse';
+import { WorkorderPickListResponse } from '../models/workorderPickListResponse';
 // @ts-ignore
-import { WorkorderPickTaskResponse } from '../src/models/workorderPickTaskResponse';
+import { WorkorderPickTaskResponse } from '../models/workorderPickTaskResponse';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';

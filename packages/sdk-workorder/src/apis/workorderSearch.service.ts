@@ -17,11 +17,11 @@ import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
 // @ts-ignore
-import { PageWorkorderSearchResult } from '../src/models/pageWorkorderSearchResult';
+import { PageWorkorderSearchResult } from '../models/pageWorkorderSearchResult';
 // @ts-ignore
-import { WorkorderNumberRef } from '../src/models/workorderNumberRef';
+import { WorkorderNumberRef } from '../models/workorderNumberRef';
 // @ts-ignore
-import { WorkorderNumberResolveRequest } from '../src/models/workorderNumberResolveRequest';
+import { WorkorderNumberResolveRequest } from '../models/workorderNumberResolveRequest';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';

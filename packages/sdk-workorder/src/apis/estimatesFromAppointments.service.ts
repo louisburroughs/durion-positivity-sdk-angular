@@ -17,11 +17,11 @@ import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
 // @ts-ignore
-import { ApiError } from '../src/models/apiError';
+import { ApiError } from '../models/apiError';
 // @ts-ignore
-import { CreateEstimateFromAppointmentRequest } from '../src/models/createEstimateFromAppointmentRequest';
+import { CreateEstimateFromAppointmentRequest } from '../models/createEstimateFromAppointmentRequest';
 // @ts-ignore
-import { CreateEstimateFromAppointmentResponse } from '../src/models/createEstimateFromAppointmentResponse';
+import { CreateEstimateFromAppointmentResponse } from '../models/createEstimateFromAppointmentResponse';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';

@@ -17,9 +17,9 @@ import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
 // @ts-ignore
-import { PersonDTO } from '../src/models/personDTO';
+import { PersonDTO } from '../models/personDTO';
 // @ts-ignore
-import { ServiceEntityDTO } from '../src/models/serviceEntityDTO';
+import { ServiceEntityDTO } from '../models/serviceEntityDTO';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';

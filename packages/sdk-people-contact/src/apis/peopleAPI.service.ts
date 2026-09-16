@@ -17,15 +17,15 @@ import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
 // @ts-ignore
-import { ApiError } from '../src/models/apiError';
+import { ApiError } from '../models/apiError';
 // @ts-ignore
-import { ContactPointDto } from '../src/models/contactPointDto';
+import { ContactPointDto } from '../models/contactPointDto';
 // @ts-ignore
-import { Person } from '../src/models/person';
+import { Person } from '../models/person';
 // @ts-ignore
-import { ResolvePersonRequest } from '../src/models/resolvePersonRequest';
+import { ResolvePersonRequest } from '../models/resolvePersonRequest';
 // @ts-ignore
-import { ResolvePersonResponse } from '../src/models/resolvePersonResponse';
+import { ResolvePersonResponse } from '../models/resolvePersonResponse';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';

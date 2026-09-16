@@ -17,9 +17,9 @@ import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
 // @ts-ignore
-import { ShopAuditEntryResponse } from '../src/models/shopAuditEntryResponse';
+import { ShopAuditEntryResponse } from '../models/shopAuditEntryResponse';
 // @ts-ignore
-import { ShopAuditFilter } from '../src/models/shopAuditFilter';
+import { ShopAuditFilter } from '../models/shopAuditFilter';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';

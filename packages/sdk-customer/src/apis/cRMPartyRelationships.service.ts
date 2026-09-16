@@ -17,11 +17,11 @@ import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
 // @ts-ignore
-import { CreatePartyRelationshipRequest } from '../src/models/createPartyRelationshipRequest';
+import { CreatePartyRelationshipRequest } from '../models/createPartyRelationshipRequest';
 // @ts-ignore
-import { CreatePartyRelationshipResponse } from '../src/models/createPartyRelationshipResponse';
+import { CreatePartyRelationshipResponse } from '../models/createPartyRelationshipResponse';
 // @ts-ignore
-import { GetCommercialAccountContactsResponse } from '../src/models/getCommercialAccountContactsResponse';
+import { GetCommercialAccountContactsResponse } from '../models/getCommercialAccountContactsResponse';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';

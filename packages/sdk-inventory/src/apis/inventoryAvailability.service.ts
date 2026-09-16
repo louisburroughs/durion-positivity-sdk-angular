@@ -17,15 +17,15 @@ import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
 // @ts-ignore
-import { ApiError } from '../src/models/apiError';
+import { ApiError } from '../models/apiError';
 // @ts-ignore
-import { AvailabilityView } from '../src/models/availabilityView';
+import { AvailabilityView } from '../models/availabilityView';
 // @ts-ignore
-import { InventoryAvailabilityResponse } from '../src/models/inventoryAvailabilityResponse';
+import { InventoryAvailabilityResponse } from '../models/inventoryAvailabilityResponse';
 // @ts-ignore
-import { LeadTimeView } from '../src/models/leadTimeView';
+import { LeadTimeView } from '../models/leadTimeView';
 // @ts-ignore
-import { LocationAvailabilityDto } from '../src/models/locationAvailabilityDto';
+import { LocationAvailabilityDto } from '../models/locationAvailabilityDto';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';

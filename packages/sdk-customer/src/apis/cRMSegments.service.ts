@@ -17,15 +17,15 @@ import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
 // @ts-ignore
-import { SegmentAttributeResponse } from '../src/models/segmentAttributeResponse';
+import { SegmentAttributeResponse } from '../models/segmentAttributeResponse';
 // @ts-ignore
-import { SegmentMembersRequest } from '../src/models/segmentMembersRequest';
+import { SegmentMembersRequest } from '../models/segmentMembersRequest';
 // @ts-ignore
-import { SegmentResolutionResponse } from '../src/models/segmentResolutionResponse';
+import { SegmentResolutionResponse } from '../models/segmentResolutionResponse';
 // @ts-ignore
-import { SegmentResponse } from '../src/models/segmentResponse';
+import { SegmentResponse } from '../models/segmentResponse';
 // @ts-ignore
-import { UpsertSegmentRequest } from '../src/models/upsertSegmentRequest';
+import { UpsertSegmentRequest } from '../models/upsertSegmentRequest';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';

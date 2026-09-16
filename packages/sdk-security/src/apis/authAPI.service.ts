@@ -17,21 +17,21 @@ import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
 // @ts-ignore
-import { ActivateAccountRequest } from '../src/models/activateAccountRequest';
+import { ActivateAccountRequest } from '../models/activateAccountRequest';
 // @ts-ignore
-import { ActivateWithStarterRequest } from '../src/models/activateWithStarterRequest';
+import { ActivateWithStarterRequest } from '../models/activateWithStarterRequest';
 // @ts-ignore
-import { ApiError } from '../src/models/apiError';
+import { ApiError } from '../models/apiError';
 // @ts-ignore
-import { LoginRequest } from '../src/models/loginRequest';
+import { LoginRequest } from '../models/loginRequest';
 // @ts-ignore
-import { SelfRegistrationRequest } from '../src/models/selfRegistrationRequest';
+import { SelfRegistrationRequest } from '../models/selfRegistrationRequest';
 // @ts-ignore
-import { SelfRegistrationResponse } from '../src/models/selfRegistrationResponse';
+import { SelfRegistrationResponse } from '../models/selfRegistrationResponse';
 // @ts-ignore
-import { TenantSearchResponse } from '../src/models/tenantSearchResponse';
+import { TenantSearchResponse } from '../models/tenantSearchResponse';
 // @ts-ignore
-import { TokenPairResponse } from '../src/models/tokenPairResponse';
+import { TokenPairResponse } from '../models/tokenPairResponse';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';

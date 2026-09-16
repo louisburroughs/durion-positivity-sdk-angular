@@ -17,21 +17,21 @@ import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
 // @ts-ignore
-import { ApiError } from '../src/models/apiError';
+import { ApiError } from '../models/apiError';
 // @ts-ignore
-import { AuditEventCreatedResponse } from '../src/models/auditEventCreatedResponse';
+import { AuditEventCreatedResponse } from '../models/auditEventCreatedResponse';
 // @ts-ignore
-import { AuditLogEventDto } from '../src/models/auditLogEventDto';
+import { AuditLogEventDto } from '../models/auditLogEventDto';
 // @ts-ignore
-import { AuditLogEventRequest } from '../src/models/auditLogEventRequest';
+import { AuditLogEventRequest } from '../models/auditLogEventRequest';
 // @ts-ignore
-import { PageAuditLogEventDto } from '../src/models/pageAuditLogEventDto';
+import { PageAuditLogEventDto } from '../models/pageAuditLogEventDto';
 // @ts-ignore
-import { PricingSnapshotCreatedResponse } from '../src/models/pricingSnapshotCreatedResponse';
+import { PricingSnapshotCreatedResponse } from '../models/pricingSnapshotCreatedResponse';
 // @ts-ignore
-import { PricingSnapshotDto } from '../src/models/pricingSnapshotDto';
+import { PricingSnapshotDto } from '../models/pricingSnapshotDto';
 // @ts-ignore
-import { PricingSnapshotRequest } from '../src/models/pricingSnapshotRequest';
+import { PricingSnapshotRequest } from '../models/pricingSnapshotRequest';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';

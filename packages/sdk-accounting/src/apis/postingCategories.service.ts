@@ -17,13 +17,13 @@ import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
 // @ts-ignore
-import { PostingCategoryCreateRequest } from '../src/models/postingCategoryCreateRequest';
+import { PostingCategoryCreateRequest } from '../models/postingCategoryCreateRequest';
 // @ts-ignore
-import { PostingCategoryListResponse } from '../src/models/postingCategoryListResponse';
+import { PostingCategoryListResponse } from '../models/postingCategoryListResponse';
 // @ts-ignore
-import { PostingCategoryResponse } from '../src/models/postingCategoryResponse';
+import { PostingCategoryResponse } from '../models/postingCategoryResponse';
 // @ts-ignore
-import { PostingCategoryUpdateRequest } from '../src/models/postingCategoryUpdateRequest';
+import { PostingCategoryUpdateRequest } from '../models/postingCategoryUpdateRequest';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';

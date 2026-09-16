@@ -17,25 +17,25 @@ import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
 // @ts-ignore
-import { ApiError } from '../src/models/apiError';
+import { ApiError } from '../models/apiError';
 // @ts-ignore
-import { LocationDescendantResponseDTO } from '../src/models/locationDescendantResponseDTO';
+import { LocationDescendantResponseDTO } from '../models/locationDescendantResponseDTO';
 // @ts-ignore
-import { LocationParentResponseDTO } from '../src/models/locationParentResponseDTO';
+import { LocationParentResponseDTO } from '../models/locationParentResponseDTO';
 // @ts-ignore
-import { LocationPatchRequest } from '../src/models/locationPatchRequest';
+import { LocationPatchRequest } from '../models/locationPatchRequest';
 // @ts-ignore
-import { LocationRequestDTO } from '../src/models/locationRequestDTO';
+import { LocationRequestDTO } from '../models/locationRequestDTO';
 // @ts-ignore
-import { LocationResponseDTO } from '../src/models/locationResponseDTO';
+import { LocationResponseDTO } from '../models/locationResponseDTO';
 // @ts-ignore
-import { LocationValidationResponseDTO } from '../src/models/locationValidationResponseDTO';
+import { LocationValidationResponseDTO } from '../models/locationValidationResponseDTO';
 // @ts-ignore
-import { PageLocationRef } from '../src/models/pageLocationRef';
+import { PageLocationRef } from '../models/pageLocationRef';
 // @ts-ignore
-import { PersonDTO } from '../src/models/personDTO';
+import { PersonDTO } from '../models/personDTO';
 // @ts-ignore
-import { ProblemDetail } from '../src/models/problemDetail';
+import { ProblemDetail } from '../models/problemDetail';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';

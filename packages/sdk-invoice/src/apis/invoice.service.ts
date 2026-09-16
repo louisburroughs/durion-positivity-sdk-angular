@@ -17,23 +17,23 @@ import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
 // @ts-ignore
-import { AdjustmentRequest } from '../src/models/adjustmentRequest';
+import { AdjustmentRequest } from '../models/adjustmentRequest';
 // @ts-ignore
-import { ApiError } from '../src/models/apiError';
+import { ApiError } from '../models/apiError';
 // @ts-ignore
-import { FinalizationRequest } from '../src/models/finalizationRequest';
+import { FinalizationRequest } from '../models/finalizationRequest';
 // @ts-ignore
-import { InvoiceCreationRequest } from '../src/models/invoiceCreationRequest';
+import { InvoiceCreationRequest } from '../models/invoiceCreationRequest';
 // @ts-ignore
-import { InvoiceDetailsResponse } from '../src/models/invoiceDetailsResponse';
+import { InvoiceDetailsResponse } from '../models/invoiceDetailsResponse';
 // @ts-ignore
-import { InvoiceGenerationResponse } from '../src/models/invoiceGenerationResponse';
+import { InvoiceGenerationResponse } from '../models/invoiceGenerationResponse';
 // @ts-ignore
-import { OrderInvoiceCreationRequest } from '../src/models/orderInvoiceCreationRequest';
+import { OrderInvoiceCreationRequest } from '../models/orderInvoiceCreationRequest';
 // @ts-ignore
-import { OrderInvoiceResponse } from '../src/models/orderInvoiceResponse';
+import { OrderInvoiceResponse } from '../models/orderInvoiceResponse';
 // @ts-ignore
-import { RevertRequest } from '../src/models/revertRequest';
+import { RevertRequest } from '../models/revertRequest';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';

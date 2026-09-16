@@ -17,15 +17,15 @@ import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
 // @ts-ignore
-import { ApiError } from '../src/models/apiError';
+import { ApiError } from '../models/apiError';
 // @ts-ignore
-import { PostingRuleSetCreateRequest } from '../src/models/postingRuleSetCreateRequest';
+import { PostingRuleSetCreateRequest } from '../models/postingRuleSetCreateRequest';
 // @ts-ignore
-import { PostingRuleSetListResponse } from '../src/models/postingRuleSetListResponse';
+import { PostingRuleSetListResponse } from '../models/postingRuleSetListResponse';
 // @ts-ignore
-import { PostingRuleSetResponse } from '../src/models/postingRuleSetResponse';
+import { PostingRuleSetResponse } from '../models/postingRuleSetResponse';
 // @ts-ignore
-import { PostingRuleVersionResponse } from '../src/models/postingRuleVersionResponse';
+import { PostingRuleVersionResponse } from '../models/postingRuleVersionResponse';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';

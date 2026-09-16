@@ -17,15 +17,15 @@ import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
 // @ts-ignore
-import { ApiError } from '../src/models/apiError';
+import { ApiError } from '../models/apiError';
 // @ts-ignore
-import { ExchangeAuditPayloadView } from '../src/models/exchangeAuditPayloadView';
+import { ExchangeAuditPayloadView } from '../models/exchangeAuditPayloadView';
 // @ts-ignore
-import { ExchangeAuditSummary } from '../src/models/exchangeAuditSummary';
+import { ExchangeAuditSummary } from '../models/exchangeAuditSummary';
 // @ts-ignore
-import { PagedResponseExchangeAuditAccessView } from '../src/models/pagedResponseExchangeAuditAccessView';
+import { PagedResponseExchangeAuditAccessView } from '../models/pagedResponseExchangeAuditAccessView';
 // @ts-ignore
-import { PagedResponseExchangeAuditSummary } from '../src/models/pagedResponseExchangeAuditSummary';
+import { PagedResponseExchangeAuditSummary } from '../models/pagedResponseExchangeAuditSummary';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';

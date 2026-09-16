@@ -17,9 +17,9 @@ import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
 // @ts-ignore
-import { RegistrationRequest } from '../src/models/registrationRequest';
+import { RegistrationRequest } from '../models/registrationRequest';
 // @ts-ignore
-import { RegistrationResponse } from '../src/models/registrationResponse';
+import { RegistrationResponse } from '../models/registrationResponse';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';

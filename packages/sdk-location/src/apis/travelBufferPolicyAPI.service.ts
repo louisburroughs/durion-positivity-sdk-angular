@@ -17,9 +17,9 @@ import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
 // @ts-ignore
-import { TravelBufferPolicyRequest } from '../src/models/travelBufferPolicyRequest';
+import { TravelBufferPolicyRequest } from '../models/travelBufferPolicyRequest';
 // @ts-ignore
-import { TravelBufferPolicyResponse } from '../src/models/travelBufferPolicyResponse';
+import { TravelBufferPolicyResponse } from '../models/travelBufferPolicyResponse';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';

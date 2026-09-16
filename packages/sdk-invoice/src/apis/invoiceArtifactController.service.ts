@@ -17,9 +17,9 @@ import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
 // @ts-ignore
-import { ArtifactDownloadToken } from '../src/models/artifactDownloadToken';
+import { ArtifactDownloadToken } from '../models/artifactDownloadToken';
 // @ts-ignore
-import { InvoiceArtifact } from '../src/models/invoiceArtifact';
+import { InvoiceArtifact } from '../models/invoiceArtifact';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';

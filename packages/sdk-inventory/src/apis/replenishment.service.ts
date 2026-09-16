@@ -17,21 +17,21 @@ import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
 // @ts-ignore
-import { ApiError } from '../src/models/apiError';
+import { ApiError } from '../models/apiError';
 // @ts-ignore
-import { CreateReplenishmentPolicyRequest } from '../src/models/createReplenishmentPolicyRequest';
+import { CreateReplenishmentPolicyRequest } from '../models/createReplenishmentPolicyRequest';
 // @ts-ignore
-import { ReplenishmentNeedResponse } from '../src/models/replenishmentNeedResponse';
+import { ReplenishmentNeedResponse } from '../models/replenishmentNeedResponse';
 // @ts-ignore
-import { ReplenishmentPolicyResponse } from '../src/models/replenishmentPolicyResponse';
+import { ReplenishmentPolicyResponse } from '../models/replenishmentPolicyResponse';
 // @ts-ignore
-import { ReplenishmentScanResultResponse } from '../src/models/replenishmentScanResultResponse';
+import { ReplenishmentScanResultResponse } from '../models/replenishmentScanResultResponse';
 // @ts-ignore
-import { ReplenishmentTaskResponse } from '../src/models/replenishmentTaskResponse';
+import { ReplenishmentTaskResponse } from '../models/replenishmentTaskResponse';
 // @ts-ignore
-import { SnoozeReplenishmentPolicyRequest } from '../src/models/snoozeReplenishmentPolicyRequest';
+import { SnoozeReplenishmentPolicyRequest } from '../models/snoozeReplenishmentPolicyRequest';
 // @ts-ignore
-import { UpdateReplenishmentPolicyRequest } from '../src/models/updateReplenishmentPolicyRequest';
+import { UpdateReplenishmentPolicyRequest } from '../models/updateReplenishmentPolicyRequest';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';

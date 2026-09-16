@@ -17,19 +17,19 @@ import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
 // @ts-ignore
-import { ApiError } from '../src/models/apiError';
+import { ApiError } from '../models/apiError';
 // @ts-ignore
-import { CreateReceivingSessionRequest } from '../src/models/createReceivingSessionRequest';
+import { CreateReceivingSessionRequest } from '../models/createReceivingSessionRequest';
 // @ts-ignore
-import { CrossDockRequest } from '../src/models/crossDockRequest';
+import { CrossDockRequest } from '../models/crossDockRequest';
 // @ts-ignore
-import { CrossDockResponse } from '../src/models/crossDockResponse';
+import { CrossDockResponse } from '../models/crossDockResponse';
 // @ts-ignore
-import { ReceiveItemsRequest } from '../src/models/receiveItemsRequest';
+import { ReceiveItemsRequest } from '../models/receiveItemsRequest';
 // @ts-ignore
-import { ReceiveItemsResponse } from '../src/models/receiveItemsResponse';
+import { ReceiveItemsResponse } from '../models/receiveItemsResponse';
 // @ts-ignore
-import { ReceivingSessionResponse } from '../src/models/receivingSessionResponse';
+import { ReceivingSessionResponse } from '../models/receivingSessionResponse';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';

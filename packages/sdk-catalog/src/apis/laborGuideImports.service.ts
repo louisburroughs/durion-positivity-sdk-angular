@@ -17,11 +17,11 @@ import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
 // @ts-ignore
-import { ApiError } from '../src/models/apiError';
+import { ApiError } from '../models/apiError';
 // @ts-ignore
-import { LaborGuideImportSummaryDto } from '../src/models/laborGuideImportSummaryDto';
+import { LaborGuideImportSummaryDto } from '../models/laborGuideImportSummaryDto';
 // @ts-ignore
-import { LaborGuideUnmappedOperationDto } from '../src/models/laborGuideUnmappedOperationDto';
+import { LaborGuideUnmappedOperationDto } from '../models/laborGuideUnmappedOperationDto';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';

@@ -17,9 +17,9 @@ import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
 // @ts-ignore
-import { BulkIngestRequestStorageLocationBulkIngestRecord } from '../src/models/bulkIngestRequestStorageLocationBulkIngestRecord';
+import { BulkIngestRequestStorageLocationBulkIngestRecord } from '../models/bulkIngestRequestStorageLocationBulkIngestRecord';
 // @ts-ignore
-import { BulkIngestResponse } from '../src/models/bulkIngestResponse';
+import { BulkIngestResponse } from '../models/bulkIngestResponse';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';

@@ -17,9 +17,9 @@ import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
 // @ts-ignore
-import { ExemptionCertificateRequest } from '../src/models/exemptionCertificateRequest';
+import { ExemptionCertificateRequest } from '../models/exemptionCertificateRequest';
 // @ts-ignore
-import { ExemptionCertificateResponse } from '../src/models/exemptionCertificateResponse';
+import { ExemptionCertificateResponse } from '../models/exemptionCertificateResponse';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';

@@ -17,21 +17,21 @@ import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
 // @ts-ignore
-import { ApiError } from '../src/models/apiError';
+import { ApiError } from '../models/apiError';
 // @ts-ignore
-import { CatalogVersionResponse } from '../src/models/catalogVersionResponse';
+import { CatalogVersionResponse } from '../models/catalogVersionResponse';
 // @ts-ignore
-import { Page } from '../src/models/page';
+import { Page } from '../models/page';
 // @ts-ignore
-import { PermissionDecodeRequest } from '../src/models/permissionDecodeRequest';
+import { PermissionDecodeRequest } from '../models/permissionDecodeRequest';
 // @ts-ignore
-import { PermissionDecodeResponse } from '../src/models/permissionDecodeResponse';
+import { PermissionDecodeResponse } from '../models/permissionDecodeResponse';
 // @ts-ignore
-import { PermissionDto } from '../src/models/permissionDto';
+import { PermissionDto } from '../models/permissionDto';
 // @ts-ignore
-import { PermissionRegistrationRequest } from '../src/models/permissionRegistrationRequest';
+import { PermissionRegistrationRequest } from '../models/permissionRegistrationRequest';
 // @ts-ignore
-import { PermissionRegistrationResponse } from '../src/models/permissionRegistrationResponse';
+import { PermissionRegistrationResponse } from '../models/permissionRegistrationResponse';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';

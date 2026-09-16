@@ -17,19 +17,19 @@ import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
 // @ts-ignore
-import { ApiError } from '../src/models/apiError';
+import { ApiError } from '../models/apiError';
 // @ts-ignore
-import { JournalEntryCreateRequest } from '../src/models/journalEntryCreateRequest';
+import { JournalEntryCreateRequest } from '../models/journalEntryCreateRequest';
 // @ts-ignore
-import { JournalEntryPostRequest } from '../src/models/journalEntryPostRequest';
+import { JournalEntryPostRequest } from '../models/journalEntryPostRequest';
 // @ts-ignore
-import { JournalEntryResponse } from '../src/models/journalEntryResponse';
+import { JournalEntryResponse } from '../models/journalEntryResponse';
 // @ts-ignore
-import { JournalEntryReversalRequest } from '../src/models/journalEntryReversalRequest';
+import { JournalEntryReversalRequest } from '../models/journalEntryReversalRequest';
 // @ts-ignore
-import { JournalEntryTraceabilityResponse } from '../src/models/journalEntryTraceabilityResponse';
+import { JournalEntryTraceabilityResponse } from '../models/journalEntryTraceabilityResponse';
 // @ts-ignore
-import { PagedResponseJournalEntryResponse } from '../src/models/pagedResponseJournalEntryResponse';
+import { PagedResponseJournalEntryResponse } from '../models/pagedResponseJournalEntryResponse';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';

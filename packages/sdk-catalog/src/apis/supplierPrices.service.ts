@@ -17,13 +17,13 @@ import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
 // @ts-ignore
-import { ApiError } from '../src/models/apiError';
+import { ApiError } from '../models/apiError';
 // @ts-ignore
-import { Page } from '../src/models/page';
+import { Page } from '../models/page';
 // @ts-ignore
-import { SupplierPriceEntryDto } from '../src/models/supplierPriceEntryDto';
+import { SupplierPriceEntryDto } from '../models/supplierPriceEntryDto';
 // @ts-ignore
-import { SupplierPriceImportStatusDto } from '../src/models/supplierPriceImportStatusDto';
+import { SupplierPriceImportStatusDto } from '../models/supplierPriceImportStatusDto';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';

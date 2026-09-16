@@ -17,37 +17,37 @@ import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
 // @ts-ignore
-import { AccountDrilldownResponse } from '../src/models/accountDrilldownResponse';
+import { AccountDrilldownResponse } from '../models/accountDrilldownResponse';
 // @ts-ignore
-import { AgedPayablesReport } from '../src/models/agedPayablesReport';
+import { AgedPayablesReport } from '../models/agedPayablesReport';
 // @ts-ignore
-import { AgedReceivablesReport } from '../src/models/agedReceivablesReport';
+import { AgedReceivablesReport } from '../models/agedReceivablesReport';
 // @ts-ignore
-import { ApiError } from '../src/models/apiError';
+import { ApiError } from '../models/apiError';
 // @ts-ignore
-import { BalanceSheetReport } from '../src/models/balanceSheetReport';
+import { BalanceSheetReport } from '../models/balanceSheetReport';
 // @ts-ignore
-import { GeneralLedgerReport } from '../src/models/generalLedgerReport';
+import { GeneralLedgerReport } from '../models/generalLedgerReport';
 // @ts-ignore
-import { IncomeStatementReport } from '../src/models/incomeStatementReport';
+import { IncomeStatementReport } from '../models/incomeStatementReport';
 // @ts-ignore
-import { JournalLineDrilldownResponse } from '../src/models/journalLineDrilldownResponse';
+import { JournalLineDrilldownResponse } from '../models/journalLineDrilldownResponse';
 // @ts-ignore
-import { PageReportExportResponse } from '../src/models/pageReportExportResponse';
+import { PageReportExportResponse } from '../models/pageReportExportResponse';
 // @ts-ignore
-import { ReportExportRequest } from '../src/models/reportExportRequest';
+import { ReportExportRequest } from '../models/reportExportRequest';
 // @ts-ignore
-import { ReportExportResponse } from '../src/models/reportExportResponse';
+import { ReportExportResponse } from '../models/reportExportResponse';
 // @ts-ignore
-import { TaxLiabilityReport } from '../src/models/taxLiabilityReport';
+import { TaxLiabilityReport } from '../models/taxLiabilityReport';
 // @ts-ignore
-import { TaxLiabilitySnapshotResponse } from '../src/models/taxLiabilitySnapshotResponse';
+import { TaxLiabilitySnapshotResponse } from '../models/taxLiabilitySnapshotResponse';
 // @ts-ignore
-import { TaxLiabilitySnapshotSummary } from '../src/models/taxLiabilitySnapshotSummary';
+import { TaxLiabilitySnapshotSummary } from '../models/taxLiabilitySnapshotSummary';
 // @ts-ignore
-import { TaxLiabilitySnapshotVerification } from '../src/models/taxLiabilitySnapshotVerification';
+import { TaxLiabilitySnapshotVerification } from '../models/taxLiabilitySnapshotVerification';
 // @ts-ignore
-import { TrialBalanceReport } from '../src/models/trialBalanceReport';
+import { TrialBalanceReport } from '../models/trialBalanceReport';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';

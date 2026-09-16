@@ -17,11 +17,11 @@ import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
 // @ts-ignore
-import { ApiError } from '../src/models/apiError';
+import { ApiError } from '../models/apiError';
 // @ts-ignore
-import { DeactivateLocationRequest } from '../src/models/deactivateLocationRequest';
+import { DeactivateLocationRequest } from '../models/deactivateLocationRequest';
 // @ts-ignore
-import { DeactivateLocationResponse } from '../src/models/deactivateLocationResponse';
+import { DeactivateLocationResponse } from '../models/deactivateLocationResponse';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';

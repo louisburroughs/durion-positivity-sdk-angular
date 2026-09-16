@@ -20,8 +20,8 @@ export class OrderPriceOverrideWorkflow {
     return (this.priceOverridesApi.rejectPriceOverride as (...a: unknown[]) => unknown)(...args);
   }
 
-  /** @operationId getPendingApprovals */
+  /** @operationId listPendingPriceOverrides */
   getPending(...args: unknown[]) {
-    return (this.priceOverridesApi.getPendingApprovals as (...a: unknown[]) => unknown)(...args);
+    return (this.priceOverridesApi.listPendingPriceOverrides as (...a: unknown[]) => unknown)(...args);
   }
 }

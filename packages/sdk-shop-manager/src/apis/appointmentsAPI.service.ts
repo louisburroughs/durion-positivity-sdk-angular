@@ -17,15 +17,15 @@ import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
 // @ts-ignore
-import { ApiError } from '../src/models/apiError';
+import { ApiError } from '../models/apiError';
 // @ts-ignore
-import { AppointmentCreateRequest } from '../src/models/appointmentCreateRequest';
+import { AppointmentCreateRequest } from '../models/appointmentCreateRequest';
 // @ts-ignore
-import { AppointmentResponse } from '../src/models/appointmentResponse';
+import { AppointmentResponse } from '../models/appointmentResponse';
 // @ts-ignore
-import { CancelAppointmentRequest } from '../src/models/cancelAppointmentRequest';
+import { CancelAppointmentRequest } from '../models/cancelAppointmentRequest';
 // @ts-ignore
-import { RescheduleAppointmentRequest } from '../src/models/rescheduleAppointmentRequest';
+import { RescheduleAppointmentRequest } from '../models/rescheduleAppointmentRequest';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';

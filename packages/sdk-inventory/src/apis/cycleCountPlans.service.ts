@@ -17,19 +17,19 @@ import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
 // @ts-ignore
-import { ApiError } from '../src/models/apiError';
+import { ApiError } from '../models/apiError';
 // @ts-ignore
-import { CreateCycleCountPlanRequest } from '../src/models/createCycleCountPlanRequest';
+import { CreateCycleCountPlanRequest } from '../models/createCycleCountPlanRequest';
 // @ts-ignore
-import { CycleCountPlanResponse } from '../src/models/cycleCountPlanResponse';
+import { CycleCountPlanResponse } from '../models/cycleCountPlanResponse';
 // @ts-ignore
-import { CycleCountTaskGenerationResponse } from '../src/models/cycleCountTaskGenerationResponse';
+import { CycleCountTaskGenerationResponse } from '../models/cycleCountTaskGenerationResponse';
 // @ts-ignore
-import { CycleCountTaskResponse } from '../src/models/cycleCountTaskResponse';
+import { CycleCountTaskResponse } from '../models/cycleCountTaskResponse';
 // @ts-ignore
-import { GenerateCycleCountTasksRequest } from '../src/models/generateCycleCountTasksRequest';
+import { GenerateCycleCountTasksRequest } from '../models/generateCycleCountTasksRequest';
 // @ts-ignore
-import { UpdateCycleCountPlanStatusRequest } from '../src/models/updateCycleCountPlanStatusRequest';
+import { UpdateCycleCountPlanStatusRequest } from '../models/updateCycleCountPlanStatusRequest';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';

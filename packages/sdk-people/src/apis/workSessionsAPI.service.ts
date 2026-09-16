@@ -17,15 +17,15 @@ import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
 // @ts-ignore
-import { ApiError } from '../src/models/apiError';
+import { ApiError } from '../models/apiError';
 // @ts-ignore
-import { BreakDto } from '../src/models/breakDto';
+import { BreakDto } from '../models/breakDto';
 // @ts-ignore
-import { WorkSessionDto } from '../src/models/workSessionDto';
+import { WorkSessionDto } from '../models/workSessionDto';
 // @ts-ignore
-import { WorkSessionRequest } from '../src/models/workSessionRequest';
+import { WorkSessionRequest } from '../models/workSessionRequest';
 // @ts-ignore
-import { WorkSessionSubmitRequest } from '../src/models/workSessionSubmitRequest';
+import { WorkSessionSubmitRequest } from '../models/workSessionSubmitRequest';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';

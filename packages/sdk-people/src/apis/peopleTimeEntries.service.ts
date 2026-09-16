@@ -17,13 +17,13 @@ import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
 // @ts-ignore
-import { ApiError } from '../src/models/apiError';
+import { ApiError } from '../models/apiError';
 // @ts-ignore
-import { TimeEntryAdjustment } from '../src/models/timeEntryAdjustment';
+import { TimeEntryAdjustment } from '../models/timeEntryAdjustment';
 // @ts-ignore
-import { TimeEntryAdjustmentRequest } from '../src/models/timeEntryAdjustmentRequest';
+import { TimeEntryAdjustmentRequest } from '../models/timeEntryAdjustmentRequest';
 // @ts-ignore
-import { TimeEntryAdjustmentResponse } from '../src/models/timeEntryAdjustmentResponse';
+import { TimeEntryAdjustmentResponse } from '../models/timeEntryAdjustmentResponse';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';

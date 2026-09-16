@@ -17,13 +17,13 @@ import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
 // @ts-ignore
-import { AddEligibilityRuleRequest } from '../src/models/addEligibilityRuleRequest';
+import { AddEligibilityRuleRequest } from '../models/addEligibilityRuleRequest';
 // @ts-ignore
-import { EligibilityContext } from '../src/models/eligibilityContext';
+import { EligibilityContext } from '../models/eligibilityContext';
 // @ts-ignore
-import { EligibilityDecisionResponse } from '../src/models/eligibilityDecisionResponse';
+import { EligibilityDecisionResponse } from '../models/eligibilityDecisionResponse';
 // @ts-ignore
-import { EligibilityRuleResponse } from '../src/models/eligibilityRuleResponse';
+import { EligibilityRuleResponse } from '../models/eligibilityRuleResponse';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';

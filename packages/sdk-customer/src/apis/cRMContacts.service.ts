@@ -17,11 +17,11 @@ import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
 // @ts-ignore
-import { GetContactsWithRolesResponse } from '../src/models/getContactsWithRolesResponse';
+import { GetContactsWithRolesResponse } from '../models/getContactsWithRolesResponse';
 // @ts-ignore
-import { UpdateContactRolesRequest } from '../src/models/updateContactRolesRequest';
+import { UpdateContactRolesRequest } from '../models/updateContactRolesRequest';
 // @ts-ignore
-import { UpdateContactRolesResponse } from '../src/models/updateContactRolesResponse';
+import { UpdateContactRolesResponse } from '../models/updateContactRolesResponse';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';

@@ -17,7 +17,7 @@ import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
 // @ts-ignore
-import { PageEstimateSummaryResponse } from '../src/models/pageEstimateSummaryResponse';
+import { PageEstimateSummaryResponse } from '../models/pageEstimateSummaryResponse';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';

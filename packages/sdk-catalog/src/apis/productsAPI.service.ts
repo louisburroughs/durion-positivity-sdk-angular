@@ -17,45 +17,45 @@ import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
 // @ts-ignore
-import { ApiError } from '../src/models/apiError';
+import { ApiError } from '../models/apiError';
 // @ts-ignore
-import { CatalogSearchResultDto } from '../src/models/catalogSearchResultDto';
+import { CatalogSearchResultDto } from '../models/catalogSearchResultDto';
 // @ts-ignore
-import { EffectiveLocationPriceResponseDto } from '../src/models/effectiveLocationPriceResponseDto';
+import { EffectiveLocationPriceResponseDto } from '../models/effectiveLocationPriceResponseDto';
 // @ts-ignore
-import { GuardrailPolicyUpsertRequestDto } from '../src/models/guardrailPolicyUpsertRequestDto';
+import { GuardrailPolicyUpsertRequestDto } from '../models/guardrailPolicyUpsertRequestDto';
 // @ts-ignore
-import { LocationPriceOverrideCreateRequestDto } from '../src/models/locationPriceOverrideCreateRequestDto';
+import { LocationPriceOverrideCreateRequestDto } from '../models/locationPriceOverrideCreateRequestDto';
 // @ts-ignore
-import { LocationPriceOverrideDecisionRequestDto } from '../src/models/locationPriceOverrideDecisionRequestDto';
+import { LocationPriceOverrideDecisionRequestDto } from '../models/locationPriceOverrideDecisionRequestDto';
 // @ts-ignore
-import { LocationPriceOverrideResponseDto } from '../src/models/locationPriceOverrideResponseDto';
+import { LocationPriceOverrideResponseDto } from '../models/locationPriceOverrideResponseDto';
 // @ts-ignore
-import { NonInventoryProductDto } from '../src/models/nonInventoryProductDto';
+import { NonInventoryProductDto } from '../models/nonInventoryProductDto';
 // @ts-ignore
-import { ProductCodeMatch } from '../src/models/productCodeMatch';
+import { ProductCodeMatch } from '../models/productCodeMatch';
 // @ts-ignore
-import { ProductCreateRequestDto } from '../src/models/productCreateRequestDto';
+import { ProductCreateRequestDto } from '../models/productCreateRequestDto';
 // @ts-ignore
-import { ProductDetailView } from '../src/models/productDetailView';
+import { ProductDetailView } from '../models/productDetailView';
 // @ts-ignore
-import { ProductDto } from '../src/models/productDto';
+import { ProductDto } from '../models/productDto';
 // @ts-ignore
-import { ProductFactReplayResultDto } from '../src/models/productFactReplayResultDto';
+import { ProductFactReplayResultDto } from '../models/productFactReplayResultDto';
 // @ts-ignore
-import { ProductLifecycleResponse } from '../src/models/productLifecycleResponse';
+import { ProductLifecycleResponse } from '../models/productLifecycleResponse';
 // @ts-ignore
-import { ProductLifecycleUpdateRequest } from '../src/models/productLifecycleUpdateRequest';
+import { ProductLifecycleUpdateRequest } from '../models/productLifecycleUpdateRequest';
 // @ts-ignore
-import { ProductReplacementRequest } from '../src/models/productReplacementRequest';
+import { ProductReplacementRequest } from '../models/productReplacementRequest';
 // @ts-ignore
-import { ProductTrackingLevelUpdateRequestDto } from '../src/models/productTrackingLevelUpdateRequestDto';
+import { ProductTrackingLevelUpdateRequestDto } from '../models/productTrackingLevelUpdateRequestDto';
 // @ts-ignore
-import { ProductUpdateRequestDto } from '../src/models/productUpdateRequestDto';
+import { ProductUpdateRequestDto } from '../models/productUpdateRequestDto';
 // @ts-ignore
-import { ReplacementOption } from '../src/models/replacementOption';
+import { ReplacementOption } from '../models/replacementOption';
 // @ts-ignore
-import { ServiceDto } from '../src/models/serviceDto';
+import { ServiceDto } from '../models/serviceDto';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';

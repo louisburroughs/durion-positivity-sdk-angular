@@ -17,19 +17,19 @@ import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
 // @ts-ignore
-import { ApiError } from '../src/models/apiError';
+import { ApiError } from '../models/apiError';
 // @ts-ignore
-import { ApprovalPersonDto } from '../src/models/approvalPersonDto';
+import { ApprovalPersonDto } from '../models/approvalPersonDto';
 // @ts-ignore
-import { RejectTimePeriodRequest } from '../src/models/rejectTimePeriodRequest';
+import { RejectTimePeriodRequest } from '../models/rejectTimePeriodRequest';
 // @ts-ignore
-import { TimePeriodApprovalDto } from '../src/models/timePeriodApprovalDto';
+import { TimePeriodApprovalDto } from '../models/timePeriodApprovalDto';
 // @ts-ignore
-import { TimePeriodDecisionResponse } from '../src/models/timePeriodDecisionResponse';
+import { TimePeriodDecisionResponse } from '../models/timePeriodDecisionResponse';
 // @ts-ignore
-import { TimePeriodDto } from '../src/models/timePeriodDto';
+import { TimePeriodDto } from '../models/timePeriodDto';
 // @ts-ignore
-import { TimekeepingEntryDto } from '../src/models/timekeepingEntryDto';
+import { TimekeepingEntryDto } from '../models/timekeepingEntryDto';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';

@@ -17,11 +17,11 @@ import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
 // @ts-ignore
-import { ApiError } from '../src/models/apiError';
+import { ApiError } from '../models/apiError';
 // @ts-ignore
-import { EndpointBindingRequest } from '../src/models/endpointBindingRequest';
+import { EndpointBindingRequest } from '../models/endpointBindingRequest';
 // @ts-ignore
-import { EndpointBindingView } from '../src/models/endpointBindingView';
+import { EndpointBindingView } from '../models/endpointBindingView';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';

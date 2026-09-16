@@ -17,13 +17,13 @@ import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
 // @ts-ignore
-import { ApiError } from '../src/models/apiError';
+import { ApiError } from '../models/apiError';
 // @ts-ignore
-import { DefaultGLMappingListResponse } from '../src/models/defaultGLMappingListResponse';
+import { DefaultGLMappingListResponse } from '../models/defaultGLMappingListResponse';
 // @ts-ignore
-import { DefaultGLMappingRequest } from '../src/models/defaultGLMappingRequest';
+import { DefaultGLMappingRequest } from '../models/defaultGLMappingRequest';
 // @ts-ignore
-import { DefaultGLMappingResponse } from '../src/models/defaultGLMappingResponse';
+import { DefaultGLMappingResponse } from '../models/defaultGLMappingResponse';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';

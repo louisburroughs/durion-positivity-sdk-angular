@@ -17,9 +17,9 @@ import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
 // @ts-ignore
-import { LaborTimeQuoteRequest } from '../src/models/laborTimeQuoteRequest';
+import { LaborTimeQuoteRequest } from '../models/laborTimeQuoteRequest';
 // @ts-ignore
-import { LaborTimeQuoteResponse } from '../src/models/laborTimeQuoteResponse';
+import { LaborTimeQuoteResponse } from '../models/laborTimeQuoteResponse';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';

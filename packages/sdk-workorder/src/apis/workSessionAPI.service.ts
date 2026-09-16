@@ -17,17 +17,17 @@ import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
 // @ts-ignore
-import { AddBreakSegmentRequest } from '../src/models/addBreakSegmentRequest';
+import { AddBreakSegmentRequest } from '../models/addBreakSegmentRequest';
 // @ts-ignore
-import { ApiError } from '../src/models/apiError';
+import { ApiError } from '../models/apiError';
 // @ts-ignore
-import { BreakSegmentResponse } from '../src/models/breakSegmentResponse';
+import { BreakSegmentResponse } from '../models/breakSegmentResponse';
 // @ts-ignore
-import { StartWorkSessionRequest } from '../src/models/startWorkSessionRequest';
+import { StartWorkSessionRequest } from '../models/startWorkSessionRequest';
 // @ts-ignore
-import { StopWorkSessionRequest } from '../src/models/stopWorkSessionRequest';
+import { StopWorkSessionRequest } from '../models/stopWorkSessionRequest';
 // @ts-ignore
-import { WorkSessionResponse } from '../src/models/workSessionResponse';
+import { WorkSessionResponse } from '../models/workSessionResponse';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';

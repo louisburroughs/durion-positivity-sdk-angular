@@ -17,9 +17,9 @@ import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
 // @ts-ignore
-import { ElevateRequest } from '../src/models/elevateRequest';
+import { ElevateRequest } from '../models/elevateRequest';
 // @ts-ignore
-import { ElevateResponse } from '../src/models/elevateResponse';
+import { ElevateResponse } from '../models/elevateResponse';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';

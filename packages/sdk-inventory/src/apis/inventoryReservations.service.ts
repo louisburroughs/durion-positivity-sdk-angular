@@ -17,13 +17,13 @@ import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
 // @ts-ignore
-import { ApiError } from '../src/models/apiError';
+import { ApiError } from '../models/apiError';
 // @ts-ignore
-import { CreateReservationRequest } from '../src/models/createReservationRequest';
+import { CreateReservationRequest } from '../models/createReservationRequest';
 // @ts-ignore
-import { PromoteAllocationRequest } from '../src/models/promoteAllocationRequest';
+import { PromoteAllocationRequest } from '../models/promoteAllocationRequest';
 // @ts-ignore
-import { ReservationResponse } from '../src/models/reservationResponse';
+import { ReservationResponse } from '../models/reservationResponse';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';

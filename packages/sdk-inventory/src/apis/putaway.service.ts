@@ -17,15 +17,15 @@ import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
 // @ts-ignore
-import { ApiError } from '../src/models/apiError';
+import { ApiError } from '../models/apiError';
 // @ts-ignore
-import { GeneratePutawayTasksRequest } from '../src/models/generatePutawayTasksRequest';
+import { GeneratePutawayTasksRequest } from '../models/generatePutawayTasksRequest';
 // @ts-ignore
-import { PutawayRuleRequest } from '../src/models/putawayRuleRequest';
+import { PutawayRuleRequest } from '../models/putawayRuleRequest';
 // @ts-ignore
-import { PutawayRuleResponse } from '../src/models/putawayRuleResponse';
+import { PutawayRuleResponse } from '../models/putawayRuleResponse';
 // @ts-ignore
-import { PutawayTaskResponse } from '../src/models/putawayTaskResponse';
+import { PutawayTaskResponse } from '../models/putawayTaskResponse';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';

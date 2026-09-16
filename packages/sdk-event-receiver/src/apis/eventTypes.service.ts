@@ -17,9 +17,9 @@ import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
 // @ts-ignore
-import { EventTypeRequest } from '../src/models/eventTypeRequest';
+import { EventTypeRequest } from '../models/eventTypeRequest';
 // @ts-ignore
-import { EventTypeResponse } from '../src/models/eventTypeResponse';
+import { EventTypeResponse } from '../models/eventTypeResponse';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';

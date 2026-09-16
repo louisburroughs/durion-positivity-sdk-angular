@@ -17,11 +17,11 @@ import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
 // @ts-ignore
-import { SubstitutionGroupCreateRequestDto } from '../src/models/substitutionGroupCreateRequestDto';
+import { SubstitutionGroupCreateRequestDto } from '../models/substitutionGroupCreateRequestDto';
 // @ts-ignore
-import { SubstitutionGroupDto } from '../src/models/substitutionGroupDto';
+import { SubstitutionGroupDto } from '../models/substitutionGroupDto';
 // @ts-ignore
-import { SubstitutionGroupMemberRequestDto } from '../src/models/substitutionGroupMemberRequestDto';
+import { SubstitutionGroupMemberRequestDto } from '../models/substitutionGroupMemberRequestDto';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';

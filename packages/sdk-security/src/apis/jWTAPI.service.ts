@@ -17,19 +17,19 @@ import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
 // @ts-ignore
-import { ApiError } from '../src/models/apiError';
+import { ApiError } from '../models/apiError';
 // @ts-ignore
-import { InternalTokenRequest } from '../src/models/internalTokenRequest';
+import { InternalTokenRequest } from '../models/internalTokenRequest';
 // @ts-ignore
-import { RefreshTokenRequest } from '../src/models/refreshTokenRequest';
+import { RefreshTokenRequest } from '../models/refreshTokenRequest';
 // @ts-ignore
-import { TokenPairRequest } from '../src/models/tokenPairRequest';
+import { TokenPairRequest } from '../models/tokenPairRequest';
 // @ts-ignore
-import { TokenPairResponse } from '../src/models/tokenPairResponse';
+import { TokenPairResponse } from '../models/tokenPairResponse';
 // @ts-ignore
-import { TokenResponse } from '../src/models/tokenResponse';
+import { TokenResponse } from '../models/tokenResponse';
 // @ts-ignore
-import { ValidateResponse } from '../src/models/validateResponse';
+import { ValidateResponse } from '../models/validateResponse';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';

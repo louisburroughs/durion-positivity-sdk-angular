@@ -17,11 +17,11 @@ import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
 // @ts-ignore
-import { ExportJobRequest } from '../src/models/exportJobRequest';
+import { ExportJobRequest } from '../models/exportJobRequest';
 // @ts-ignore
-import { ExportJobResponse } from '../src/models/exportJobResponse';
+import { ExportJobResponse } from '../models/exportJobResponse';
 // @ts-ignore
-import { PageExportJobResponse } from '../src/models/pageExportJobResponse';
+import { PageExportJobResponse } from '../models/pageExportJobResponse';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';

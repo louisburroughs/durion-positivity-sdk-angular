@@ -17,7 +17,7 @@ import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
 // @ts-ignore
-import { PricingSnapshotResponse } from '../src/models/pricingSnapshotResponse';
+import { PricingSnapshotResponse } from '../models/pricingSnapshotResponse';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';

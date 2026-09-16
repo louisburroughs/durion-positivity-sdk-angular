@@ -17,19 +17,19 @@ import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
 // @ts-ignore
-import { ApiError } from '../src/models/apiError';
+import { ApiError } from '../models/apiError';
 // @ts-ignore
-import { BeginCloseRequest } from '../src/models/beginCloseRequest';
+import { BeginCloseRequest } from '../models/beginCloseRequest';
 // @ts-ignore
-import { CashMovementRequest } from '../src/models/cashMovementRequest';
+import { CashMovementRequest } from '../models/cashMovementRequest';
 // @ts-ignore
-import { CashMovementResponse } from '../src/models/cashMovementResponse';
+import { CashMovementResponse } from '../models/cashMovementResponse';
 // @ts-ignore
-import { OpenSessionRequest } from '../src/models/openSessionRequest';
+import { OpenSessionRequest } from '../models/openSessionRequest';
 // @ts-ignore
-import { RegisterSessionResponse } from '../src/models/registerSessionResponse';
+import { RegisterSessionResponse } from '../models/registerSessionResponse';
 // @ts-ignore
-import { SessionReportResponse } from '../src/models/sessionReportResponse';
+import { SessionReportResponse } from '../models/sessionReportResponse';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
