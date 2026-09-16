@@ -7,32 +7,33 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { OverrideEntry } from './overrideEntry';
 
 
 /**
- * Response returned after a successful scheduling conflict override
+ * Result of a manager override of SOFT scheduling conflicts
  */
 export interface ConflictOverrideResponse {
     /**
-     * Appointment identifier whose conflict was overridden
+     * Appointment the conflicts belong to
      */
     appointmentId: string;
     /**
-     * User identifier of the manager who performed the override
+     * When the override was recorded and approved, UTC
      */
-    overriddenByUserId: string;
+    approvedAt: string;
     /**
-     * Unique override record identifier
+     * Manager who recorded the override; also the approver (single-actor approval)
      */
-    overrideId: string;
+    overriddenBy: string;
     /**
-     * Reason recorded for the override
+     * Justification as recorded
      */
     overrideReason: string;
     /**
-     * Instant the override was performed in UTC (ISO-8601)
+     * One entry per conflict accepted
      */
-    overrideTimestamp: string;
+    overrides: Array<OverrideEntry>;
 }
 
 function isOptionalConflictOverrideResponsePropertyOfType(
@@ -73,8 +74,8 @@ export function instanceOfConflictOverrideResponse(value: object): value is Conf
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createConflictOverrideResponsePropertyNames('appointmentId', 'overriddenByUserId', 'overrideId', 'overrideReason', 'overrideTimestamp', );
-    const optionalStringProperties = createConflictOverrideResponseOptionalProperties({ name: 'appointmentId', nullable: false }, { name: 'overriddenByUserId', nullable: false }, { name: 'overrideId', nullable: false }, { name: 'overrideReason', nullable: false }, { name: 'overrideTimestamp', nullable: false }, );
+    const requiredProperties = createConflictOverrideResponsePropertyNames('appointmentId', 'approvedAt', 'overriddenBy', 'overrideReason', 'overrides', );
+    const optionalStringProperties = createConflictOverrideResponseOptionalProperties({ name: 'appointmentId', nullable: false }, { name: 'approvedAt', nullable: false }, { name: 'overriddenBy', nullable: false }, { name: 'overrideReason', nullable: false }, );
     const optionalNumberProperties = createConflictOverrideResponseOptionalProperties();
     const optionalBooleanProperties = createConflictOverrideResponseOptionalProperties();
 

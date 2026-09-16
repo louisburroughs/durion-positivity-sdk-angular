@@ -34,21 +34,21 @@ export interface BayResponse {
      */
     locationId: string;
     /**
-     * Maximum number of vehicles that can be serviced concurrently in the bay
+     * Number of vehicles the bay physically accommodates at once. A bay is a single bookable resource regardless of this value; register separate bays for independently bookable stalls.
      */
     maxConcurrentVehicles?: number;
+    /**
+     * Heaviest GVWR class (1–8) the bay accepts; null when unconstrained (CAP-325 D13). Light = 1–3, Medium = 4–6, Heavy = 7–8.
+     */
+    maxDutyClass?: number;
     /**
      * Display name of the bay
      */
     name: string;
     /**
-     * Identifiers of service capabilities supported by the bay
+     * Catalog operation codes this bay type is the only one able to perform (CAP-325 D14). Empty for a general bay, which is eligible for every operation no specialty bay claims. Values are catalog operationCodes, UPPER-DASH per ADR-0059 §3.
      */
-    serviceCapabilityIds?: Array<string>;
-    /**
-     * Identifiers of skills required to operate the bay
-     */
-    skillRequirementIds?: Array<string>;
+    serviceCapabilityCodes?: Array<string>;
     /**
      * Operational status of the bay
      */
@@ -95,7 +95,7 @@ export function instanceOfBayResponse(value: object): value is BayResponse {
 
     const requiredProperties = createBayResponsePropertyNames('id', 'locationId', 'name', );
     const optionalStringProperties = createBayResponseOptionalProperties({ name: 'bayType', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'id', nullable: false }, { name: 'lastModifiedAt', nullable: false }, { name: 'locationId', nullable: false }, { name: 'name', nullable: false }, { name: 'status', nullable: false }, );
-    const optionalNumberProperties = createBayResponseOptionalProperties({ name: 'maxConcurrentVehicles', nullable: false }, );
+    const optionalNumberProperties = createBayResponseOptionalProperties({ name: 'maxConcurrentVehicles', nullable: false }, { name: 'maxDutyClass', nullable: false }, );
     const optionalBooleanProperties = createBayResponseOptionalProperties();
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

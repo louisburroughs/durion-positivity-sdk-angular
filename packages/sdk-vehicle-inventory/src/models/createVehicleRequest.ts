@@ -22,6 +22,10 @@ export interface CreateVehicleRequest {
      */
     description?: string;
     /**
+     * FHWA GVWR class 1-8 (CAP-327). Omit when undetermined. Setting it records the source as OPERATOR_SET; the duty category (LIGHT 1-3, MEDIUM 4-6, HEAVY 7-8) is derived from it on the response.
+     */
+    gvwrClass?: number;
+    /**
      * License plate value.
      */
     licensePlate?: string;
@@ -95,7 +99,7 @@ export function instanceOfCreateVehicleRequest(value: object): value is CreateVe
 
     const requiredProperties = createCreateVehicleRequestPropertyNames('accountId', 'vin', );
     const optionalStringProperties = createCreateVehicleRequestOptionalProperties({ name: 'accountId', nullable: false }, { name: 'description', nullable: false }, { name: 'licensePlate', nullable: false }, { name: 'licensePlateJurisdiction', nullable: false }, { name: 'make', nullable: false }, { name: 'model', nullable: false }, { name: 'trim', nullable: false }, { name: 'unitNumber', nullable: false }, { name: 'vin', nullable: false }, );
-    const optionalNumberProperties = createCreateVehicleRequestOptionalProperties({ name: 'year', nullable: false }, );
+    const optionalNumberProperties = createCreateVehicleRequestOptionalProperties({ name: 'gvwrClass', nullable: false }, { name: 'year', nullable: false }, );
     const optionalBooleanProperties = createCreateVehicleRequestOptionalProperties();
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

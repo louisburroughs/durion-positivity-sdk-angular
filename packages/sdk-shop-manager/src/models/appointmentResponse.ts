@@ -7,6 +7,7 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { AppointmentConflictView } from './appointmentConflictView';
 
 
 /**
@@ -33,6 +34,10 @@ export interface AppointmentResponse {
      * Cancellation reason code when the appointment has been cancelled
      */
     cancellationReason?: string;
+    /**
+     * SOFT scheduling conflicts recorded against this appointment (DECISION-SHOPMGMT-002), each overridable via POST /v1/appointments/{id}/conflict-override until overridden. Empty when the booking raised none. A HARD conflict never reaches here: it refuses the booking with 409.
+     */
+    conflicts?: Array<AppointmentConflictView>;
     /**
      * Timestamp the appointment was created in UTC (ISO-8601)
      */

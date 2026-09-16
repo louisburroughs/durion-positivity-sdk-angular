@@ -7,12 +7,14 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { TechnicianCredentialResponse } from './technicianCredentialResponse';
 
 
 /**
- * Location-scoped technician assignment enriched from the HR-synchronized mechanic roster
+ * A technician with an ACTIVE staffing assignment at the location, from the HR-synchronized mechanic roster
  */
 export interface LocationTechnicianRosterEntryResponse {
+    credentials?: Array<TechnicianCredentialResponse>;
     firstName?: string;
     hireDate?: string;
     lastName?: string;
@@ -20,9 +22,7 @@ export interface LocationTechnicianRosterEntryResponse {
     locationId?: string;
     mechanicId?: string;
     personId?: string;
-    skills?: Array<string>;
     status?: LocationTechnicianRosterEntryResponseStatusEnum;
-    technicianId?: string;
     terminationDate?: string;
 }
 export enum LocationTechnicianRosterEntryResponseStatusEnum {
@@ -72,7 +72,7 @@ export function instanceOfLocationTechnicianRosterEntryResponse(value: object): 
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createLocationTechnicianRosterEntryResponsePropertyNames();
-    const optionalStringProperties = createLocationTechnicianRosterEntryResponseOptionalProperties({ name: 'firstName', nullable: false }, { name: 'hireDate', nullable: false }, { name: 'lastName', nullable: false }, { name: 'lastSyncedAt', nullable: false }, { name: 'locationId', nullable: false }, { name: 'mechanicId', nullable: false }, { name: 'personId', nullable: false }, { name: 'status', nullable: false }, { name: 'technicianId', nullable: false }, { name: 'terminationDate', nullable: false }, );
+    const optionalStringProperties = createLocationTechnicianRosterEntryResponseOptionalProperties({ name: 'firstName', nullable: false }, { name: 'hireDate', nullable: false }, { name: 'lastName', nullable: false }, { name: 'lastSyncedAt', nullable: false }, { name: 'locationId', nullable: false }, { name: 'mechanicId', nullable: false }, { name: 'personId', nullable: false }, { name: 'status', nullable: false }, { name: 'terminationDate', nullable: false }, );
     const optionalNumberProperties = createLocationTechnicianRosterEntryResponseOptionalProperties();
     const optionalBooleanProperties = createLocationTechnicianRosterEntryResponseOptionalProperties();
 

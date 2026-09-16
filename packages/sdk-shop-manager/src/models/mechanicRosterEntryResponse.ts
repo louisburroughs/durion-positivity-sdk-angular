@@ -7,19 +7,20 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { TechnicianCredentialResponse } from './technicianCredentialResponse';
 
 
 /**
  * HR-synchronized mechanic roster entry
  */
 export interface MechanicRosterEntryResponse {
+    credentials?: Array<TechnicianCredentialResponse>;
     firstName?: string;
     hireDate?: string;
     lastName?: string;
     lastSyncedAt?: string;
     mechanicId?: string;
     personId?: string;
-    skills?: Array<string>;
     status?: MechanicRosterEntryResponseStatusEnum;
     terminationDate?: string;
 }

@@ -30,6 +30,18 @@ export interface VehicleResponse {
      */
     description: string;
     /**
+     * Duty category derived from gvwrClass: LIGHT (1-3), MEDIUM (4-6), HEAVY (7-8). Never stored; null when the class is undetermined.
+     */
+    dutyCategory?: VehicleResponseDutyCategoryEnum;
+    /**
+     * FHWA GVWR class 1-8 (CAP-327); null when undetermined.
+     */
+    gvwrClass?: number;
+    /**
+     * Where the current gvwrClass came from: OPERATOR_SET or DECODED. Null when undetermined.
+     */
+    gvwrClassSource?: VehicleResponseGvwrClassSourceEnum;
+    /**
      * Whether vehicle is active.
      */
     isActive: boolean;
@@ -94,6 +106,15 @@ export interface VehicleResponse {
      */
     year?: number;
 }
+export enum VehicleResponseDutyCategoryEnum {
+    Light = 'LIGHT',
+    Medium = 'MEDIUM',
+    Heavy = 'HEAVY'
+};
+export enum VehicleResponseGvwrClassSourceEnum {
+    OperatorSet = 'OPERATOR_SET',
+    Decoded = 'DECODED'
+};
 export enum VehicleResponseOdometerUnitEnum {
     Miles = 'MILES',
     Kilometers = 'KILOMETERS'
@@ -140,8 +161,8 @@ export function instanceOfVehicleResponse(value: object): value is VehicleRespon
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createVehicleResponsePropertyNames('accountId', 'createdAt', 'description', 'isActive', 'unitNumber', 'updatedAt', 'vehicleId', 'version', 'vin', 'vinNormalized', );
-    const optionalStringProperties = createVehicleResponseOptionalProperties({ name: 'accountId', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'description', nullable: false }, { name: 'licensePlate', nullable: false }, { name: 'licensePlateJurisdiction', nullable: false }, { name: 'make', nullable: false }, { name: 'model', nullable: false }, { name: 'odometerUnit', nullable: false }, { name: 'trim', nullable: false }, { name: 'unitNumber', nullable: false }, { name: 'updatedAt', nullable: false }, { name: 'updatedBy', nullable: false }, { name: 'vehicleId', nullable: false }, { name: 'vin', nullable: false }, { name: 'vinNormalized', nullable: false }, );
-    const optionalNumberProperties = createVehicleResponseOptionalProperties({ name: 'odometerValue', nullable: false }, { name: 'version', nullable: false }, { name: 'year', nullable: false }, );
+    const optionalStringProperties = createVehicleResponseOptionalProperties({ name: 'accountId', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'description', nullable: false }, { name: 'dutyCategory', nullable: false }, { name: 'gvwrClassSource', nullable: false }, { name: 'licensePlate', nullable: false }, { name: 'licensePlateJurisdiction', nullable: false }, { name: 'make', nullable: false }, { name: 'model', nullable: false }, { name: 'odometerUnit', nullable: false }, { name: 'trim', nullable: false }, { name: 'unitNumber', nullable: false }, { name: 'updatedAt', nullable: false }, { name: 'updatedBy', nullable: false }, { name: 'vehicleId', nullable: false }, { name: 'vin', nullable: false }, { name: 'vinNormalized', nullable: false }, );
+    const optionalNumberProperties = createVehicleResponseOptionalProperties({ name: 'gvwrClass', nullable: false }, { name: 'odometerValue', nullable: false }, { name: 'version', nullable: false }, { name: 'year', nullable: false }, );
     const optionalBooleanProperties = createVehicleResponseOptionalProperties({ name: 'isActive', nullable: false }, );
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

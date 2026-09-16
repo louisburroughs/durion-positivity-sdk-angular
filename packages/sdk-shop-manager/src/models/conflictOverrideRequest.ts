@@ -10,19 +10,15 @@
 
 
 /**
- * Request to bypass a scheduling conflict with manager permission
+ * Manager override of SOFT scheduling conflicts recorded against an appointment
  */
 export interface ConflictOverrideRequest {
     /**
-     * Appointment identifier whose conflict is being overridden
+     * Ids of the scheduling conflicts being accepted. Each must be recorded against the appointment in the path (400 otherwise), be SOFT (409 with the conflict envelope otherwise) and not already overridden (409 CONFLICT_ALREADY_OVERRIDDEN).
      */
-    appointmentId: string;
+    conflictIds: Array<string>;
     /**
-     * Optional JSON string describing the conflict being overridden
-     */
-    conflictDetails?: string;
-    /**
-     * Non-blank reason justifying the override
+     * Non-blank justification, recorded immutably with the acting manager
      */
     overrideReason: string;
 }
@@ -65,8 +61,8 @@ export function instanceOfConflictOverrideRequest(value: object): value is Confl
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createConflictOverrideRequestPropertyNames('appointmentId', 'overrideReason', );
-    const optionalStringProperties = createConflictOverrideRequestOptionalProperties({ name: 'appointmentId', nullable: false }, { name: 'conflictDetails', nullable: false }, { name: 'overrideReason', nullable: false }, );
+    const requiredProperties = createConflictOverrideRequestPropertyNames('conflictIds', 'overrideReason', );
+    const optionalStringProperties = createConflictOverrideRequestOptionalProperties({ name: 'overrideReason', nullable: false }, );
     const optionalNumberProperties = createConflictOverrideRequestOptionalProperties();
     const optionalBooleanProperties = createConflictOverrideRequestOptionalProperties();
 

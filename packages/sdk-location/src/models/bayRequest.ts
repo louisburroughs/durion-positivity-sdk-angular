@@ -20,21 +20,21 @@ export interface BayRequest {
     bayType: string;
     capacity: BayCapacityRequest;
     /**
-     * Maximum number of vehicles that can be serviced concurrently in the bay
+     * Number of vehicles the bay physically accommodates at once. A bay is a single bookable resource regardless of this value; register separate bays for independently bookable stalls.
      */
     maxConcurrentVehicles?: number;
+    /**
+     * Heaviest GVWR class (1–8) the bay accepts; omit for unconstrained (CAP-325 D13).
+     */
+    maxDutyClass?: number;
     /**
      * Display name of the bay
      */
     name: string;
     /**
-     * Identifiers of service capabilities supported by the bay
+     * Catalog operation codes this bay type is the only one able to perform (CAP-325 D14). Omit or send empty for a general bay. Each value must be an active catalog operationCode (UPPER-DASH, ADR-0059 §3); unknown codes are rejected 422.
      */
-    serviceCapabilityIds?: Array<string>;
-    /**
-     * Identifiers of skills required to operate the bay
-     */
-    skillRequirementIds?: Array<string>;
+    serviceCapabilityCodes?: Array<string>;
     /**
      * Operational status of the bay
      */
@@ -81,7 +81,7 @@ export function instanceOfBayRequest(value: object): value is BayRequest {
 
     const requiredProperties = createBayRequestPropertyNames('bayType', 'capacity', 'name', );
     const optionalStringProperties = createBayRequestOptionalProperties({ name: 'bayType', nullable: false }, { name: 'name', nullable: false }, { name: 'status', nullable: false }, );
-    const optionalNumberProperties = createBayRequestOptionalProperties({ name: 'maxConcurrentVehicles', nullable: false }, );
+    const optionalNumberProperties = createBayRequestOptionalProperties({ name: 'maxConcurrentVehicles', nullable: false }, { name: 'maxDutyClass', nullable: false }, );
     const optionalBooleanProperties = createBayRequestOptionalProperties();
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
