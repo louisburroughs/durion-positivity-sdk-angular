@@ -7,14 +7,14 @@ export class SecurityAuthWorkflow {
   private readonly authApi = inject(AuthAPIService);
   private readonly jwtApi = inject(JWTAPIService);
 
-  /** @operationId login */
+  /** @operationId loginUser */
   login(...args: unknown[]) {
-    return (this.authApi.login as (...a: unknown[]) => unknown)(...args);
+    return (this.authApi.loginUser as (...a: unknown[]) => unknown)(...args);
   }
 
-  /** @operationId refreshAccessToken */
+  /** @operationId refreshTokenPair */
   refresh(...args: unknown[]) {
-    return (this.jwtApi.refreshAccessToken as (...a: unknown[]) => unknown)(...args);
+    return (this.jwtApi.refreshTokenPair as (...a: unknown[]) => unknown)(...args);
   }
 
   /** @operationId validateToken */

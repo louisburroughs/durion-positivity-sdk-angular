@@ -5,9 +5,9 @@ import { AccountingEventsService } from '../apis/accountingEvents.service';
 export class AccountingEventWorkflow {
   private readonly accountingEventsApi = inject(AccountingEventsService);
 
-  /** @operationId retryEventProcessing */
+  /** @operationId retryAccountingEvent */
   retry(...args: unknown[]) {
-    return (this.accountingEventsApi.retryEventProcessing as (...a: unknown[]) => unknown)(...args);
+    return (this.accountingEventsApi.retryAccountingEvent as (...a: unknown[]) => unknown)(...args);
   }
 
   /** @operationId reprocessSuspendedEvent */
@@ -15,8 +15,8 @@ export class AccountingEventWorkflow {
     return (this.accountingEventsApi.reprocessSuspendedEvent as (...a: unknown[]) => unknown)(...args);
   }
 
-  /** @operationId submitEvent */
+  /** @operationId submitAccountingEvent */
   submit(...args: unknown[]) {
-    return (this.accountingEventsApi.submitEvent as (...a: unknown[]) => unknown)(...args);
+    return (this.accountingEventsApi.submitAccountingEvent as (...a: unknown[]) => unknown)(...args);
   }
 }

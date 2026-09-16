@@ -49,15 +49,15 @@ function buildWorkflow<T>(
 describe('sdk-008 SecurityAuthWorkflow', () => {
   it('delegates each method to the correct api', () => {
     const { instance, mocks } = buildWorkflow(SecurityAuthWorkflow, [
-      { token: AuthAPIService, methods: ['login'] },
-      { token: JWTAPIService, methods: ['refreshAccessToken', 'validateToken', 'revokeToken'] },
+      { token: AuthAPIService, methods: ['loginUser'] },
+      { token: JWTAPIService, methods: ['refreshTokenPair', 'validateToken', 'revokeToken'] },
     ]);
     (instance as any).login('a' as any);
     (instance as any).refresh('b' as any);
     (instance as any).validate('c' as any);
     (instance as any).revoke('d' as any);
-    expect(mocks.get(AuthAPIService)!['login']).toHaveBeenCalledWith('a');
-    expect(mocks.get(JWTAPIService)!['refreshAccessToken']).toHaveBeenCalledWith('b');
+    expect(mocks.get(AuthAPIService)!['loginUser']).toHaveBeenCalledWith('a');
+    expect(mocks.get(JWTAPIService)!['refreshTokenPair']).toHaveBeenCalledWith('b');
     expect(mocks.get(JWTAPIService)!['validateToken']).toHaveBeenCalledWith('c');
     expect(mocks.get(JWTAPIService)!['revokeToken']).toHaveBeenCalledWith('d');
   });
@@ -68,16 +68,16 @@ describe('sdk-008 AccountingEventWorkflow', () => {
     const { instance, mocks } = buildWorkflow(AccountingEventWorkflow, [
       {
         token: AccountingEventsService,
-        methods: ['retryEventProcessing', 'reprocessSuspendedEvent', 'submitEvent'],
+        methods: ['retryAccountingEvent', 'reprocessSuspendedEvent', 'submitAccountingEvent'],
       },
     ]);
     (instance as any).retry('id' as any);
     (instance as any).reprocess('id' as any);
     (instance as any).submit('payload' as any);
     const stub = mocks.get(AccountingEventsService)!;
-    expect(stub['retryEventProcessing']).toHaveBeenCalledWith('id');
+    expect(stub['retryAccountingEvent']).toHaveBeenCalledWith('id');
     expect(stub['reprocessSuspendedEvent']).toHaveBeenCalledWith('id');
-    expect(stub['submitEvent']).toHaveBeenCalledWith('payload');
+    expect(stub['submitAccountingEvent']).toHaveBeenCalledWith('payload');
   });
 });
 
@@ -90,7 +90,7 @@ describe('sdk-008 OrderPriceOverrideWorkflow', () => {
           'applyPriceOverride',
           'approvePriceOverride',
           'rejectPriceOverride',
-          'getPendingApprovals',
+          'listPendingPriceOverrides',
         ],
       },
     ]);
@@ -102,7 +102,7 @@ describe('sdk-008 OrderPriceOverrideWorkflow', () => {
     expect(stub['applyPriceOverride']).toHaveBeenCalledWith('s');
     expect(stub['approvePriceOverride']).toHaveBeenCalledWith('a');
     expect(stub['rejectPriceOverride']).toHaveBeenCalledWith('r');
-    expect(stub['getPendingApprovals']).toHaveBeenCalledWith('p');
+    expect(stub['listPendingPriceOverrides']).toHaveBeenCalledWith('p');
   });
 });
 
@@ -131,10 +131,10 @@ describe('sdk-008 WorkorderEstimateWorkflow', () => {
         token: EstimateAPIService,
         methods: [
           'createEstimate',
-          'submitForApproval',
+          'submitEstimateForApproval',
           'approveEstimate',
           'declineEstimate',
-          'promoteEstimateToWorkorder',
+          'promoteEstimate',
         ],
       },
     ]);
@@ -145,10 +145,10 @@ describe('sdk-008 WorkorderEstimateWorkflow', () => {
     (instance as any).promoteToWorkorder('p' as any);
     const stub = mocks.get(EstimateAPIService)!;
     expect(stub['createEstimate']).toHaveBeenCalledWith('c');
-    expect(stub['submitForApproval']).toHaveBeenCalledWith('s');
+    expect(stub['submitEstimateForApproval']).toHaveBeenCalledWith('s');
     expect(stub['approveEstimate']).toHaveBeenCalledWith('a');
     expect(stub['declineEstimate']).toHaveBeenCalledWith('d');
-    expect(stub['promoteEstimateToWorkorder']).toHaveBeenCalledWith('p');
+    expect(stub['promoteEstimate']).toHaveBeenCalledWith('p');
   });
 });
 
@@ -166,7 +166,7 @@ describe('sdk-008 InventoryProcureToReceiveWorkflow', () => {
       },
       {
         token: InventoryAvailabilityService,
-        methods: ['getInventoryAvailability'],
+        methods: ['getAvailabilityBySku'],
       },
     ]);
 
@@ -182,6 +182,6 @@ describe('sdk-008 InventoryProcureToReceiveWorkflow', () => {
     expect(mocks.get(ASNService)!['createAsn']).toHaveBeenCalledWith('asn');
     expect(mocks.get(ReceivingService)!['createReceivingSession']).toHaveBeenCalledWith('sess');
     expect(mocks.get(ReceivingService)!['receiveItemsIntoStaging']).toHaveBeenCalledWith('items');
-    expect(mocks.get(InventoryAvailabilityService)!['getInventoryAvailability']).toHaveBeenCalledWith('avail');
+    expect(mocks.get(InventoryAvailabilityService)!['getAvailabilityBySku']).toHaveBeenCalledWith('avail');
   });
 });

@@ -9,17 +9,11 @@
 #
 # What it proves: the regenerated clients lint, compile under ng-packagr and
 # pack into the tarballs the frontend installs from — the same steps the
-# api-artifacts-sync sdk-angular stage runs before it opens the pull request.
-#
-# `npm test` is deliberately not here yet. The suite is red on main: the
-# hand-written helpers under packages/*/src/workflows still call operation ids
-# the backend has since renamed (SecurityAuthWorkflow -> authApi.login and
-# jwtApi.refreshAccessToken, AccountingEventWorkflow -> submitEvent and
-# retryEventProcessing, OrderPriceOverrideWorkflow -> getPendingApprovals,
-# WorkorderEstimateWorkflow -> submitForApproval and
-# promoteEstimateToWorkorder, InventoryProcureToReceiveWorkflow ->
-# getInventoryAvailability). Add `npm test` to this job once those helpers are
-# realigned with the generated services.
+# api-artifacts-sync sdk-angular stage runs before it opens the pull request —
+# and that the hand-written helpers under packages/*/src/workflows still line
+# up with the operation ids the generated services expose. That last one is
+# what a regeneration silently breaks: a renamed operation leaves the helper
+# calling a method that no longer exists.
 name: PR Checks
 
 on:
@@ -36,7 +30,7 @@ concurrency:
 
 jobs:
   verify:
-    name: Lint, build and pack
+    name: Lint, test, build and pack
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
@@ -58,6 +52,9 @@ jobs:
 
       - name: Lint
         run: npm run lint
+
+      - name: Unit tests
+        run: npm test
 
       - name: Build and pack
         # --no-bump: a pull request validates the version it carries. Bumping

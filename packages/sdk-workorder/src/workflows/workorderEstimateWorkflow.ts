@@ -10,9 +10,9 @@ export class WorkorderEstimateWorkflow {
     return (this.estimateApi.createEstimate as (...a: unknown[]) => unknown)(...args);
   }
 
-  /** @operationId submitForApproval */
+  /** @operationId submitEstimateForApproval */
   submitForApproval(...args: unknown[]) {
-    return (this.estimateApi.submitForApproval as (...a: unknown[]) => unknown)(...args);
+    return (this.estimateApi.submitEstimateForApproval as (...a: unknown[]) => unknown)(...args);
   }
 
   /** @operationId approveEstimate */
@@ -25,8 +25,8 @@ export class WorkorderEstimateWorkflow {
     return (this.estimateApi.declineEstimate as (...a: unknown[]) => unknown)(...args);
   }
 
-  /** @operationId promoteEstimateToWorkorder */
+  /** @operationId promoteEstimate */
   promoteToWorkorder(...args: unknown[]) {
-    return (this.estimateApi.promoteEstimateToWorkorder as (...a: unknown[]) => unknown)(...args);
+    return (this.estimateApi.promoteEstimate as (...a: unknown[]) => unknown)(...args);
   }
 }

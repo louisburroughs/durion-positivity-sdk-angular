@@ -36,8 +36,8 @@ export class InventoryProcureToReceiveWorkflow {
     return (this.receivingApi.receiveItemsIntoStaging as (...a: unknown[]) => unknown)(...args);
   }
 
-  /** @operationId getInventoryAvailability */
+  /** @operationId getAvailabilityBySku */
   checkAvailability(...args: unknown[]) {
-    return (this.availabilityApi.getInventoryAvailability as (...a: unknown[]) => unknown)(...args);
+    return (this.availabilityApi.getAvailabilityBySku as (...a: unknown[]) => unknown)(...args);
   }
 }
