@@ -15,6 +15,7 @@ export * from './serviceLaborStandards.service';
 export * from './servicePackageBulkIngestAPI.service';
 export * from './servicePackageMemberBulkIngestAPI.service';
 export * from './servicePackages.service';
+export * from './serviceRequirements.service';
 export * from './substitutionGroupAPI.service';
 export * from './supplierArticleCodes.service';
 export * from './supplierPrices.service';

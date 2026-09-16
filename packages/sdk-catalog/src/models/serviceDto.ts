@@ -7,6 +7,7 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { RequiredSkillDto } from './requiredSkillDto';
 
 
 /**
@@ -37,6 +38,14 @@ export interface ServiceDto {
      * Durion operation code
      */
     operationCode?: string;
+    /**
+     * Skills the service requires per GVWR class range; empty with a non-null requirementsConfiguredAt declares the service unconstrained, null means not configured
+     */
+    requiredSkills?: Array<RequiredSkillDto>;
+    /**
+     * When the skill requirements were last declared (CAP-329); null means never configured, which consumers warn about rather than deny on
+     */
+    requirementsConfiguredAt?: string;
     /**
      * Short service description
      */
@@ -90,7 +99,7 @@ export function instanceOfServiceDto(value: object): value is ServiceDto {
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createServiceDtoPropertyNames();
-    const optionalStringProperties = createServiceDtoOptionalProperties({ name: 'id', nullable: false }, { name: 'longDescription', nullable: false }, { name: 'name', nullable: false }, { name: 'operationCategory', nullable: false }, { name: 'operationCode', nullable: false }, { name: 'shortDescription', nullable: false }, );
+    const optionalStringProperties = createServiceDtoOptionalProperties({ name: 'id', nullable: false }, { name: 'longDescription', nullable: false }, { name: 'name', nullable: false }, { name: 'operationCategory', nullable: false }, { name: 'operationCode', nullable: false }, { name: 'requirementsConfiguredAt', nullable: false }, { name: 'shortDescription', nullable: false }, );
     const optionalNumberProperties = createServiceDtoOptionalProperties({ name: 'defaultLaborHours', nullable: false }, );
     const optionalBooleanProperties = createServiceDtoOptionalProperties();
 
