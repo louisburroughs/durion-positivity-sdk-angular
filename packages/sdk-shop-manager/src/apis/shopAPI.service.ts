@@ -17,9 +17,11 @@ import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
 // @ts-ignore
-import { PersonDTO } from '../models/personDTO';
+import { ApiError } from '../models/apiError';
 // @ts-ignore
-import { ServiceEntityDTO } from '../models/serviceEntityDTO';
+import { ShopResponse } from '../models/shopResponse';
+// @ts-ignore
+import { ShopUpsertRequest } from '../models/shopUpsertRequest';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
@@ -38,24 +40,24 @@ export class ShopAPIService extends BaseService {
     }
 
     /**
-     * Get shop service details
-     * Retrieve the details of a shop service by service ID.
-     * @endpoint get /v1/shop-manager/{locationId}/services/{serviceId}/details
-     * @param locationId ID of the shop
-     * @param serviceId ID of the service
+     * Create or Replace a Location\&#39;s Shop Configuration
+     * Creates the shop record that makes a location schedulable, or replaces its configuration when one already exists. Use this tool to make a site bookable for the first time or to correct its name, address or scheduling timezone; use viewSchedule to read what is booked, which answers 404 for any location that has no shop record. Preconditions: none beyond the id — the shop carries the pos-location location id by convention, which is how every other read in this module resolves a request\&#39;s locationId, and this operation does not verify that the location exists. Required inputs: locationId (UUID) as a path parameter and a body with a non-blank name; address is optional, and timezone is optional but must be a valid IANA zone id when supplied, because the schedule view computes the day window in it and falls back to UTC when it is unset. Emits a SHOPMGR_SHOP_UPSERT audit event and writes only the shop row; no other records are touched and no fact is published. Idempotent on locationId, so a reseed converges rather than duplicating. Returns 400 when the name is blank or the timezone is not a zone id, and 403 when the caller lacks shop:schedule:edit.
+     * @endpoint put /v1/shops/{locationId}
+     * @param locationId
+     * @param shopUpsertRequest Scheduling configuration for the location: a non-blank name, an optional address and an optional IANA timezone the day window is computed in.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public getShopServiceDetails(locationId: string, serviceId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ServiceEntityDTO>;
-    public getShopServiceDetails(locationId: string, serviceId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ServiceEntityDTO>>;
-    public getShopServiceDetails(locationId: string, serviceId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ServiceEntityDTO>>;
-    public getShopServiceDetails(locationId: string, serviceId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public upsertShop(locationId: string, shopUpsertRequest: ShopUpsertRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ShopResponse>;
+    public upsertShop(locationId: string, shopUpsertRequest: ShopUpsertRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ShopResponse>>;
+    public upsertShop(locationId: string, shopUpsertRequest: ShopUpsertRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ShopResponse>>;
+    public upsertShop(locationId: string, shopUpsertRequest: ShopUpsertRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (locationId === null || locationId === undefined) {
-            throw new Error('Required parameter locationId was null or undefined when calling getShopServiceDetails.');
+            throw new Error('Required parameter locationId was null or undefined when calling upsertShop.');
         }
-        if (serviceId === null || serviceId === undefined) {
-            throw new Error('Required parameter serviceId was null or undefined when calling getShopServiceDetails.');
+        if (shopUpsertRequest === null || shopUpsertRequest === undefined) {
+            throw new Error('Required parameter shopUpsertRequest was null or undefined when calling upsertShop.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -75,69 +77,14 @@ export class ShopAPIService extends BaseService {
         const localVarTransferCache: boolean = options?.transferCache ?? true;
 
 
-        let responseType_: 'text' | 'json' | 'blob' = 'json';
-        if (localVarHttpHeaderAcceptSelected) {
-            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
-                responseType_ = 'text';
-            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
-                responseType_ = 'json';
-            } else {
-                responseType_ = 'blob';
-            }
-        }
-
-        let localVarPath = `/v1/shop-manager/${this.configuration.encodeParam({name: "locationId", value: locationId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/services/${this.configuration.encodeParam({name: "serviceId", value: serviceId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/details`;
-        const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<ServiceEntityDTO>('get', `${basePath}${localVarPath}`,
-            {
-                context: localVarHttpContext,
-                responseType: <any>responseType_,
-                ...(withCredentials ? { withCredentials } : {}),
-                headers: localVarHeaders,
-                observe: observe,
-                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * Get technician\&#39;s person details
-     * Retrieve the person details for a technician by technician ID.
-     * @endpoint get /v1/shop-manager/{locationId}/technicians/{personId}/person
-     * @param locationId ID of the shop
-     * @param personId ID of the technician
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     * @param options additional options
-     */
-    public getTechnicianPerson(locationId: string, personId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PersonDTO>;
-    public getTechnicianPerson(locationId: string, personId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PersonDTO>>;
-    public getTechnicianPerson(locationId: string, personId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PersonDTO>>;
-    public getTechnicianPerson(locationId: string, personId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
-        if (locationId === null || locationId === undefined) {
-            throw new Error('Required parameter locationId was null or undefined when calling getTechnicianPerson.');
-        }
-        if (personId === null || personId === undefined) {
-            throw new Error('Required parameter personId was null or undefined when calling getTechnicianPerson.');
-        }
-
-        let localVarHeaders = this.defaultHeaders;
-
-        // authentication (bearerAuth) required
-        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
-
-        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+        // to determine the Content-Type header
+        const consumes: string[] = [
             'application/json'
-        ]);
-        if (localVarHttpHeaderAcceptSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
         }
-
-        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
-
-        const localVarTransferCache: boolean = options?.transferCache ?? true;
-
 
         let responseType_: 'text' | 'json' | 'blob' = 'json';
         if (localVarHttpHeaderAcceptSelected) {
@@ -150,11 +97,12 @@ export class ShopAPIService extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/shop-manager/${this.configuration.encodeParam({name: "locationId", value: locationId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/technicians/${this.configuration.encodeParam({name: "personId", value: personId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/person`;
+        let localVarPath = `/v1/shops/${this.configuration.encodeParam({name: "locationId", value: locationId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<PersonDTO>('get', `${basePath}${localVarPath}`,
+        return this.httpClient.request<ShopResponse>('put', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
+                body: shopUpsertRequest,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,

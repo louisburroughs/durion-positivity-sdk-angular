@@ -36,6 +36,8 @@ export * from './shopDashboardResponse';
 export * from './shopDashboardUnit';
 export * from './shopDashboardVehicle';
 export * from './shopDashboardWorkorder';
+export * from './shopResponse';
+export * from './shopUpsertRequest';
 export * from './staffingAdvisory';
 export * from './suggestedAlternative';
 export * from './technicianCredentialResponse';
