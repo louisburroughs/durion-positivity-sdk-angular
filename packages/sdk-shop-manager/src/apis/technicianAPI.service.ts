@@ -105,11 +105,12 @@ export class TechnicianAPIService extends BaseService {
 
     /**
      * List technicians assigned to a location
-     * Returns the technicians assigned to one shop location, enriched with mechanic identity and skills from the eventually consistent HR read model. Use this tool when staffing or dispatching work at a single location; use listMechanics instead for the shop-wide roster, and getTechnicianPerson instead for one technician\&#39;s contact details. Preconditions: the location must exist as a shop, and both the technician assignments and their mechanic projection must have arrived over Kafka. Required inputs: locationId (UUID) as a path parameter, and there is no request body; optionally narrow with status and skillCode, both exact matches, where an omitted status defaults to ACTIVE, and page with page and size, since sort is accepted but ignored and the location roster is returned in a fixed order. Emits a SHOPMGR_LOCATION_TECHNICIAN_LIST audit event; no state changes occur, and the enrichment trails the People/HR authority by the event-propagation delay. A caller whose shop:technician:view grant is location-scoped must have locationId within reach (ADR-0061). Returns 404 when no shop exists for the location id, 403 FORBIDDEN when the caller lacks shop:technician:view, 403 LOCATION_SCOPE_DENIED when the caller\&#39;s location scope does not cover locationId, and an empty page rather than an error when no technician matches the filters.
+     * Returns the technicians assigned to one shop location on a date, enriched with mechanic identity and skills from the eventually consistent HR read model, plus a PLACEHOLDER shift window per technician. PLACEHOLDER: shiftStart, shiftEnd, shiftMinutes, shiftSource and shiftStatus are derived from the shop location\&#39;s operating hours for the requested date, not from the person\&#39;s own roster, so every technician at the location carries the same window and staggered shifts, part-time hours, overtime and PTO are invisible to it; shiftSource reads LOCATION_HOURS until the real per-person shift schedule (issue 71, blocked on issue 271) replaces it, so read that field rather than this prose to tell a placeholder window from a real one; an unknown timezone or unreadable hours give shiftStatus UNKNOWN with null bounds rather than a default window, and a dated holiday closure gives CLOSED. Use this tool when staffing or dispatching work at a single location; use listMechanics instead for the shop-wide roster, and getTechnicianPerson instead for one technician\&#39;s contact details. Preconditions: the location must exist as a shop, and both the technician assignments and their mechanic projection must have arrived over Kafka. Required inputs: locationId (UUID) as a path parameter, and there is no request body; optionally narrow with status and skillCode, both exact matches, where an omitted status defaults to ACTIVE, choose the roster date with date (yyyy-MM-dd), which defaults to today in the location\&#39;s own timezone, and page with page and size, since sort is accepted but ignored and the location roster is returned in a fixed order. Emits a SHOPMGR_LOCATION_TECHNICIAN_LIST audit event; no state changes occur, and the enrichment trails the People/HR authority by the event-propagation delay. A caller whose shop:technician:view grant is location-scoped must have locationId within reach (ADR-0061). Returns 400 when date is malformed, 404 when no shop exists for the location id, 403 FORBIDDEN when the caller lacks shop:technician:view, 403 LOCATION_SCOPE_DENIED when the caller\&#39;s location scope does not cover locationId, and an empty page rather than an error when no technician matches the filters.
      * @endpoint get /v1/shop-manager/{locationId}/technicians
      * @param locationId Shop location ID
      * @param status
      * @param skillCode
+     * @param date Roster date as a date-only yyyy-MM-dd string (ADR-0038). Defaults to today in the location\&#39;s own timezone. Also the day the PLACEHOLDER shift window is derived for, from the location\&#39;s operating hours (#2060).
      * @param page Zero-based page index (0..N)
      * @param size The size of the page to be returned
      * @param sort Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
@@ -117,10 +118,10 @@ export class TechnicianAPIService extends BaseService {
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public listLocationTechnicians(locationId: string, status?: 'ACTIVE' | 'INACTIVE' | 'ON_LEAVE', skillCode?: string, page?: number, size?: number, sort?: Array<string>, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PagedModelLocationTechnicianRosterEntryResponse>;
-    public listLocationTechnicians(locationId: string, status?: 'ACTIVE' | 'INACTIVE' | 'ON_LEAVE', skillCode?: string, page?: number, size?: number, sort?: Array<string>, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PagedModelLocationTechnicianRosterEntryResponse>>;
-    public listLocationTechnicians(locationId: string, status?: 'ACTIVE' | 'INACTIVE' | 'ON_LEAVE', skillCode?: string, page?: number, size?: number, sort?: Array<string>, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PagedModelLocationTechnicianRosterEntryResponse>>;
-    public listLocationTechnicians(locationId: string, status?: 'ACTIVE' | 'INACTIVE' | 'ON_LEAVE', skillCode?: string, page?: number, size?: number, sort?: Array<string>, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public listLocationTechnicians(locationId: string, status?: 'ACTIVE' | 'INACTIVE' | 'ON_LEAVE', skillCode?: string, date?: string, page?: number, size?: number, sort?: Array<string>, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PagedModelLocationTechnicianRosterEntryResponse>;
+    public listLocationTechnicians(locationId: string, status?: 'ACTIVE' | 'INACTIVE' | 'ON_LEAVE', skillCode?: string, date?: string, page?: number, size?: number, sort?: Array<string>, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PagedModelLocationTechnicianRosterEntryResponse>>;
+    public listLocationTechnicians(locationId: string, status?: 'ACTIVE' | 'INACTIVE' | 'ON_LEAVE', skillCode?: string, date?: string, page?: number, size?: number, sort?: Array<string>, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PagedModelLocationTechnicianRosterEntryResponse>>;
+    public listLocationTechnicians(locationId: string, status?: 'ACTIVE' | 'INACTIVE' | 'ON_LEAVE', skillCode?: string, date?: string, page?: number, size?: number, sort?: Array<string>, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (locationId === null || locationId === undefined) {
             throw new Error('Required parameter locationId was null or undefined when calling listLocationTechnicians.');
         }
@@ -140,6 +141,15 @@ export class TechnicianAPIService extends BaseService {
             localVarQueryParameters,
             'skillCode',
             <any>skillCode,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'date',
+            <any>date,
             QueryParamStyle.Form,
             true,
         );

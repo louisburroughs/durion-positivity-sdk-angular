@@ -22,6 +22,18 @@ export interface PeopleAvailabilityResponse {
      */
     availableOn?: string;
     /**
+     * When the open break started; non-null exactly when clockState is ON_BREAK
+     */
+    breakStartedAt?: string;
+    /**
+     * The person\'s current clock state: CLOCKED_IN (open work session, no open break), ON_BREAK (open session with an open break) or CLOCKED_OUT (no open session). Null when the caller may not see this person\'s clock state: it is shown for the caller\'s own row, and for every row when the caller holds people:timekeeping:view covering the location.
+     */
+    clockState?: PeopleAvailabilityResponseClockStateEnum;
+    /**
+     * When the open work session started; non-null exactly when workSessionId is
+     */
+    clockedInAt?: string;
+    /**
      * Date the assignment becomes effective
      */
     effectiveFrom?: string;
@@ -53,10 +65,19 @@ export interface PeopleAvailabilityResponse {
      * Assignment role at the location
      */
     role?: string;
+    /**
+     * The open work session; non-null exactly when clockState is CLOCKED_IN or ON_BREAK. The break endpoints are keyed by this id.
+     */
+    workSessionId?: string;
 }
 export enum PeopleAvailabilityResponseAssignmentStatusEnum {
     Active = 'ACTIVE',
     Ended = 'ENDED'
+};
+export enum PeopleAvailabilityResponseClockStateEnum {
+    ClockedIn = 'CLOCKED_IN',
+    OnBreak = 'ON_BREAK',
+    ClockedOut = 'CLOCKED_OUT'
 };
 
 
@@ -100,7 +121,7 @@ export function instanceOfPeopleAvailabilityResponse(value: object): value is Pe
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createPeopleAvailabilityResponsePropertyNames('assignmentStatus', 'locationId', 'personId', 'primary', );
-    const optionalStringProperties = createPeopleAvailabilityResponseOptionalProperties({ name: 'assignmentStatus', nullable: false }, { name: 'availableOn', nullable: false }, { name: 'effectiveFrom', nullable: false }, { name: 'effectiveTo', nullable: false }, { name: 'firstName', nullable: false }, { name: 'lastName', nullable: false }, { name: 'locationId', nullable: false }, { name: 'personId', nullable: false }, { name: 'role', nullable: false }, );
+    const optionalStringProperties = createPeopleAvailabilityResponseOptionalProperties({ name: 'assignmentStatus', nullable: false }, { name: 'availableOn', nullable: false }, { name: 'breakStartedAt', nullable: false }, { name: 'clockState', nullable: false }, { name: 'clockedInAt', nullable: false }, { name: 'effectiveFrom', nullable: false }, { name: 'effectiveTo', nullable: false }, { name: 'firstName', nullable: false }, { name: 'lastName', nullable: false }, { name: 'locationId', nullable: false }, { name: 'personId', nullable: false }, { name: 'role', nullable: false }, { name: 'workSessionId', nullable: false }, );
     const optionalNumberProperties = createPeopleAvailabilityResponseOptionalProperties();
     const optionalBooleanProperties = createPeopleAvailabilityResponseOptionalProperties({ name: 'primary', nullable: false }, );
 
