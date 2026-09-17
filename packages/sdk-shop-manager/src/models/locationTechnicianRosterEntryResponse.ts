@@ -22,9 +22,37 @@ export interface LocationTechnicianRosterEntryResponse {
     locationId?: string;
     mechanicId?: string;
     personId?: string;
+    /**
+     * PLACEHOLDER: end of the technician\'s shift window on the roster date, as a UTC instant. Derived from the shop location\'s operating hours (its close time in the location\'s timezone), not from the person\'s own schedule, so every technician at the location carries the same value. Null when shiftStatus is CLOSED or UNKNOWN.
+     */
+    shiftEnd?: string;
+    /**
+     * PLACEHOLDER: minutes between shiftStart and shiftEnd, for the board to subtract committed time from. Derived from the shop location\'s operating hours, not from the person\'s own schedule. Null whenever either bound is null; never negative.
+     */
+    shiftMinutes?: number;
+    /**
+     * PLACEHOLDER: where the shift window came from. LOCATION_HOURS means the window is the shop location\'s operating hours, the same for every technician there, and not the person\'s roster. A consumer must read this to tell a placeholder window from a real per-person one; PERSON_SCHEDULE is reserved for that (#71).
+     */
+    shiftSource: LocationTechnicianRosterEntryResponseShiftSourceEnum;
+    /**
+     * PLACEHOLDER: start of the technician\'s shift window on the roster date, as a UTC instant. Derived from the shop location\'s operating hours (its open time in the location\'s timezone), not from the person\'s own schedule, so every technician at the location carries the same value. Null when shiftStatus is CLOSED or UNKNOWN.
+     */
+    shiftStart?: string;
+    /**
+     * PLACEHOLDER: whether a shift window could be derived from the shop location\'s operating hours (not from the person\'s own schedule). DERIVED carries a window; CLOSED means a dated holiday closure covers the day; UNKNOWN means the location\'s timezone or hours are missing or unreadable, or the weekday has no entry — no default window is ever substituted.
+     */
+    shiftStatus: LocationTechnicianRosterEntryResponseShiftStatusEnum;
     status?: LocationTechnicianRosterEntryResponseStatusEnum;
     terminationDate?: string;
 }
+export enum LocationTechnicianRosterEntryResponseShiftSourceEnum {
+    LocationHours = 'LOCATION_HOURS'
+};
+export enum LocationTechnicianRosterEntryResponseShiftStatusEnum {
+    Derived = 'DERIVED',
+    Closed = 'CLOSED',
+    Unknown = 'UNKNOWN'
+};
 export enum LocationTechnicianRosterEntryResponseStatusEnum {
     Active = 'ACTIVE',
     Inactive = 'INACTIVE',
@@ -71,9 +99,9 @@ export function instanceOfLocationTechnicianRosterEntryResponse(value: object): 
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createLocationTechnicianRosterEntryResponsePropertyNames();
-    const optionalStringProperties = createLocationTechnicianRosterEntryResponseOptionalProperties({ name: 'firstName', nullable: false }, { name: 'hireDate', nullable: false }, { name: 'lastName', nullable: false }, { name: 'lastSyncedAt', nullable: false }, { name: 'locationId', nullable: false }, { name: 'mechanicId', nullable: false }, { name: 'personId', nullable: false }, { name: 'status', nullable: false }, { name: 'terminationDate', nullable: false }, );
-    const optionalNumberProperties = createLocationTechnicianRosterEntryResponseOptionalProperties();
+    const requiredProperties = createLocationTechnicianRosterEntryResponsePropertyNames('shiftSource', 'shiftStatus', );
+    const optionalStringProperties = createLocationTechnicianRosterEntryResponseOptionalProperties({ name: 'firstName', nullable: false }, { name: 'hireDate', nullable: false }, { name: 'lastName', nullable: false }, { name: 'lastSyncedAt', nullable: false }, { name: 'locationId', nullable: false }, { name: 'mechanicId', nullable: false }, { name: 'personId', nullable: false }, { name: 'shiftEnd', nullable: false }, { name: 'shiftSource', nullable: false }, { name: 'shiftStart', nullable: false }, { name: 'shiftStatus', nullable: false }, { name: 'status', nullable: false }, { name: 'terminationDate', nullable: false }, );
+    const optionalNumberProperties = createLocationTechnicianRosterEntryResponseOptionalProperties({ name: 'shiftMinutes', nullable: false }, );
     const optionalBooleanProperties = createLocationTechnicianRosterEntryResponseOptionalProperties();
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

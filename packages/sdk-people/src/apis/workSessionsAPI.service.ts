@@ -21,6 +21,8 @@ import { ApiError } from '../models/apiError';
 // @ts-ignore
 import { BreakDto } from '../models/breakDto';
 // @ts-ignore
+import { WorkSessionClockStateResponse } from '../models/workSessionClockStateResponse';
+// @ts-ignore
 import { WorkSessionDto } from '../models/workSessionDto';
 // @ts-ignore
 import { WorkSessionRequest } from '../models/workSessionRequest';
@@ -44,8 +46,77 @@ export class WorkSessionsAPIService extends BaseService {
     }
 
     /**
+     * Get A Person\&#39;s Current Work-Session (Clock) State
+     * Reads a person\&#39;s current clock state — CLOCKED_IN, ON_BREAK or CLOCKED_OUT — with the open session id, its start time and the open break\&#39;s start time when there is one. Derived on read from the open work session and break; nothing is created, closed or changed. Use this tool to render a clock-in/out toggle for one person, for example after a toggle press or on a self-service view; use listPeopleAvailability instead to read the clock state of everyone at a location in one call, which is what a dispatch board needs. Preconditions: the person must exist in the identity replica. Required inputs: none are mandatory; personId (UUID) as a query parameter defaults to the caller\&#39;s own linked person when omitted. Authorization: a person reads their own state with people:self:view; reading another person\&#39;s state needs people:timekeeping:view, and when that grant is location-scoped it must cover one of the person\&#39;s active assignment locations. Emits a PEOPLE_WORK_SESSION_CURRENT_GET audit event but changes no state. Returns 200 with clockState CLOCKED_OUT and null session fields when nothing is open — never 404 for that; 404 PERSON_NOT_FOUND when the person is unknown, 404 when personId is omitted and the caller has no linked person, 403 FORBIDDEN when the caller is neither the person nor a people:timekeeping:view holder, and 403 LOCATION_SCOPE_DENIED when the caller\&#39;s grant does not cover the person\&#39;s location.
+     * @endpoint get /v1/people/workSessions/current
+     * @param personId Person whose clock state to read. Defaults to the caller\&#39;s own linked person when omitted.
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public getCurrentWorkSession(personId?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<WorkSessionClockStateResponse>;
+    public getCurrentWorkSession(personId?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<WorkSessionClockStateResponse>>;
+    public getCurrentWorkSession(personId?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<WorkSessionClockStateResponse>>;
+    public getCurrentWorkSession(personId?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+
+        let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'personId',
+            <any>personId,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/people/workSessions/current`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<WorkSessionClockStateResponse>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                params: localVarQueryParameters.toHttpParams(),
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
      * Start A Work Session For Person
-     * Starts a new ACTIVE work session for a person, stamping the start time from the server clock and the actor from the security context. Use this tool when a person clocks in for the day; do not use startWorkSessionBreak, which pauses an already running session. Preconditions: the person must exist in the identity replica, and the person must have no session that is still open. Required inputs: personId (UUID) in the body; the body\&#39;s actor field is ignored, because the recorded actor is always the authenticated username. Emits a PEOPLE_WORK_SESSION_START event. Returns 404 when the person is unknown, and 409 when an active session already exists for the person, including under concurrent start races.
+     * Starts a new ACTIVE work session for a person, stamping the start time from the server clock and the actor from the security context. Use this tool when a person clocks in for the day; do not use startWorkSessionBreak, which pauses an already running session. Preconditions: the person must exist in the identity replica, and the person must have no session that is still open. Required inputs: personId (UUID) in the body; the body\&#39;s actor field is ignored, because the recorded actor is always the authenticated username. Authorization: the caller must be the person themself, or hold people:timekeeping:approve; when that grant is location-scoped it must cover one of the person\&#39;s active assignment locations (403 FORBIDDEN otherwise, 403 LOCATION_SCOPE_DENIED when only the scope fails). Emits a PEOPLE_WORK_SESSION_START event. Returns 404 when the person is unknown, and 409 when an active session already exists for the person, including under concurrent start races.
      * @endpoint post /v1/people/workSessions/start
      * @param workSessionRequest Identifies the person clocking in; the actor field is ignored in favour of the authenticated username.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -115,7 +186,7 @@ export class WorkSessionsAPIService extends BaseService {
 
     /**
      * Start A Break In Work Session
-     * Starts a break inside an active work session, stamping the start time from the server clock. Use this tool when a person pauses work; do not use stopWorkSession, which ends the whole session rather than pausing it. Preconditions: the session must exist and still be open, and no break may already be open on it. Required inputs: the work session id (UUID) as the path parameter; there is no request body. Emits a PEOPLE_WORK_SESSION_BREAK_START event. Returns 404 when no open session exists for the id, and 409 when a break is already open, including under concurrent break-start races.
+     * Starts a break inside an active work session, stamping the start time from the server clock. Use this tool when a person pauses work; do not use stopWorkSession, which ends the whole session rather than pausing it. Preconditions: the session must exist and still be open, and no break may already be open on it. Required inputs: the work session id (UUID) as the path parameter; there is no request body. Authorization: the caller must be the session\&#39;s person, or hold people:timekeeping:approve; when that grant is location-scoped it must cover one of the person\&#39;s active assignment locations (403 FORBIDDEN otherwise, 403 LOCATION_SCOPE_DENIED when only the scope fails). Emits a PEOPLE_WORK_SESSION_BREAK_START event. Returns 404 when no open session exists for the id, and 409 when a break is already open, including under concurrent break-start races.
      * @endpoint post /v1/people/workSessions/{id}/breaks/start
      * @param id Work session ID
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -175,7 +246,7 @@ export class WorkSessionsAPIService extends BaseService {
 
     /**
      * Stop An Active Work Session
-     * Stops a person\&#39;s open work session, setting status ENDED and closing any break still open at the same timestamp. Use this tool when a person clocks out; do not use submitWorkSession, which sends an already ENDED session for approval. Preconditions: the person must have an open session; sessions are keyed by person here, not by session id. Required inputs: personId (UUID) in the body; the body\&#39;s actor field is ignored in favour of the authenticated username. Emits a PEOPLE_WORK_SESSION_STOP event. Returns 404 when no active session exists for the person.
+     * Stops a person\&#39;s open work session, setting status ENDED and closing any break still open at the same timestamp. Use this tool when a person clocks out; do not use submitWorkSession, which sends an already ENDED session for approval. Preconditions: the person must have an open session; sessions are keyed by person here, not by session id. Required inputs: personId (UUID) in the body; the body\&#39;s actor field is ignored in favour of the authenticated username. Authorization: the caller must be the person themself, or hold people:timekeeping:approve; when that grant is location-scoped it must cover one of the person\&#39;s active assignment locations (403 FORBIDDEN otherwise, 403 LOCATION_SCOPE_DENIED when only the scope fails). Emits a PEOPLE_WORK_SESSION_STOP event. Returns 404 when no active session exists for the person.
      * @endpoint post /v1/people/workSessions/stop
      * @param workSessionRequest Identifies the person clocking out; the open session is found by person id, not session id.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -245,7 +316,7 @@ export class WorkSessionsAPIService extends BaseService {
 
     /**
      * Stop The Open Work Session Break
-     * Ends the open break on a work session, stamping the end time from the server clock. Use this tool when a person returns from a break; do not use stopWorkSession, which ends the session and auto-closes any open break itself. Preconditions: the session must have an open break with no recorded end time. Required inputs: the work session id (UUID) as the path parameter; there is no request body. Emits a PEOPLE_WORK_SESSION_BREAK_STOP event. Returns 409 when no open break exists for the session, including when the session id itself is unknown.
+     * Ends the open break on a work session, stamping the end time from the server clock. Use this tool when a person returns from a break; do not use stopWorkSession, which ends the session and auto-closes any open break itself. Preconditions: the session must have an open break with no recorded end time. Required inputs: the work session id (UUID) as the path parameter; there is no request body. Authorization: the caller must be the session\&#39;s person, or hold people:timekeeping:approve; when that grant is location-scoped it must cover one of the person\&#39;s active assignment locations (403 FORBIDDEN otherwise, 403 LOCATION_SCOPE_DENIED when only the scope fails). Emits a PEOPLE_WORK_SESSION_BREAK_STOP event. Returns 409 when no open break exists for the session, including when the session id itself is unknown.
      * @endpoint post /v1/people/workSessions/{id}/breaks/stop
      * @param id Work session ID
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -305,7 +376,7 @@ export class WorkSessionsAPIService extends BaseService {
 
     /**
      * Submit An Ended Work Session
-     * Submits an ENDED work session for approval, recording billable and break minute totals and marking the session SUBMITTED. Use this tool after stopWorkSession has ended the session; do not use approveTimeEntriesBatch, which decides time entries, not work sessions. Preconditions: the session must exist and be in ENDED status; ACTIVE or already SUBMITTED sessions are rejected. Required inputs: the work session id (UUID) path parameter and a body with billableMinutes and breakMinutes (both zero or greater) and submittedAt (ISO-8601 instant). Emits a PEOPLE_WORK_SESSION_SUBMIT event. Returns 404 when the session does not exist, and 409 when the session is not in ENDED status.
+     * Submits an ENDED work session for approval, recording billable and break minute totals and marking the session SUBMITTED. Use this tool after stopWorkSession has ended the session; do not use approveTimeEntriesBatch, which decides time entries, not work sessions. Preconditions: the session must exist and be in ENDED status; ACTIVE or already SUBMITTED sessions are rejected. Required inputs: the work session id (UUID) path parameter and a body with billableMinutes and breakMinutes (both zero or greater) and submittedAt (ISO-8601 instant). Authorization: the caller must be the session\&#39;s person, or hold people:timekeeping:approve; when that grant is location-scoped it must cover one of the person\&#39;s active assignment locations (403 FORBIDDEN otherwise, 403 LOCATION_SCOPE_DENIED when only the scope fails). Emits a PEOPLE_WORK_SESSION_SUBMIT event. Returns 404 when the session does not exist, and 409 when the session is not in ENDED status.
      * @endpoint post /v1/people/workSessions/{id}/submit
      * @param id Work session ID
      * @param workSessionSubmitRequest Billable and break minute totals plus the submission timestamp for the ended session.
