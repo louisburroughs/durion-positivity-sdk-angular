@@ -10,7 +10,7 @@
 
 
 /**
- * A suggested alternative appointment slot that avoids detected conflicts
+ * A suggested alternative accompanying a 409 conflict
  */
 export interface SuggestedAlternative {
     /**

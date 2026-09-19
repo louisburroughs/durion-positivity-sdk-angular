@@ -1,7 +1,10 @@
+export * from './apiError';
 export * from './bulkIngestRequestFitmentBulkIngestRecord';
 export * from './bulkIngestResponse';
 export * from './bulkIngestResult';
+export * from './conflict';
 export * from './createHintRequest';
+export * from './fieldError';
 export * from './filterProductsRequest';
 export * from './filterProductsResponse';
 export * from './fitmentBulkIngestRecord';
@@ -10,5 +13,6 @@ export * from './hintResponse';
 export * from './makeResponse';
 export * from './manufacturerResponse';
 export * from './modelResponse';
+export * from './suggestedAlternative';
 export * from './updateHintRequest';
 export * from './vehicleTypeResponse';

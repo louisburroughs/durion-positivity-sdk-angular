@@ -17,6 +17,8 @@ import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
 // @ts-ignore
+import { ApiError } from '../models/apiError';
+// @ts-ignore
 import { PagedResponseEmittedEventResponse } from '../models/pagedResponseEmittedEventResponse';
 
 // @ts-ignore
@@ -47,10 +49,10 @@ export class EventQueryService extends BaseService {
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public queryEventsByEntity(entityId: string, since?: string, page?: number, size?: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<PagedResponseEmittedEventResponse>;
-    public queryEventsByEntity(entityId: string, since?: string, page?: number, size?: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PagedResponseEmittedEventResponse>>;
-    public queryEventsByEntity(entityId: string, since?: string, page?: number, size?: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PagedResponseEmittedEventResponse>>;
-    public queryEventsByEntity(entityId: string, since?: string, page?: number, size?: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public queryEventsByEntity(entityId: string, since?: string, page?: number, size?: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*' | 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PagedResponseEmittedEventResponse>;
+    public queryEventsByEntity(entityId: string, since?: string, page?: number, size?: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*' | 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PagedResponseEmittedEventResponse>>;
+    public queryEventsByEntity(entityId: string, since?: string, page?: number, size?: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*' | 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PagedResponseEmittedEventResponse>>;
+    public queryEventsByEntity(entityId: string, since?: string, page?: number, size?: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: '*/*' | 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (entityId === null || entityId === undefined) {
             throw new Error('Required parameter entityId was null or undefined when calling queryEventsByEntity.');
         }
@@ -96,7 +98,8 @@ export class EventQueryService extends BaseService {
         let localVarHeaders = this.defaultHeaders;
 
         const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
-            '*/*'
+            '*/*',
+            'application/json'
         ]);
         if (localVarHttpHeaderAcceptSelected !== undefined) {
             localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);

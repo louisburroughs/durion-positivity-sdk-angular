@@ -1,4 +1,5 @@
 export * from './apiError';
+export * from './conflict';
 export * from './customerExemption';
 export * from './exemptionCertificateRequest';
 export * from './exemptionCertificateResponse';
@@ -6,6 +7,7 @@ export * from './fieldError';
 export * from './jurisdictionTax';
 export * from './lineItemTax';
 export * from './modeResponse';
+export * from './suggestedAlternative';
 export * from './taxAddress';
 export * from './taxCalculationRequest';
 export * from './taxCalculationResponse';

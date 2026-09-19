@@ -17,6 +17,8 @@ import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
 // @ts-ignore
+import { ApiError } from '../models/apiError';
+// @ts-ignore
 import { PutawayExecutionRequest } from '../models/putawayExecutionRequest';
 // @ts-ignore
 import { PutawayExecutionResponse } from '../models/putawayExecutionResponse';

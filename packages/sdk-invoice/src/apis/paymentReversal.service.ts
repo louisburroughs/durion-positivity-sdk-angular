@@ -17,6 +17,8 @@ import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
 // @ts-ignore
+import { ApiError } from '../models/apiError';
+// @ts-ignore
 import { InvoiceRefundResponse } from '../models/invoiceRefundResponse';
 // @ts-ignore
 import { RefundPaymentRequest } from '../models/refundPaymentRequest';
@@ -190,10 +192,10 @@ export class PaymentReversalService extends BaseService {
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public voidPayment(invoiceId: string, paymentId: string, voidPaymentRequest: VoidPaymentRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public voidPayment(invoiceId: string, paymentId: string, voidPaymentRequest: VoidPaymentRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public voidPayment(invoiceId: string, paymentId: string, voidPaymentRequest: VoidPaymentRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public voidPayment(invoiceId: string, paymentId: string, voidPaymentRequest: VoidPaymentRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public voidPayment(invoiceId: string, paymentId: string, voidPaymentRequest: VoidPaymentRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any>;
+    public voidPayment(invoiceId: string, paymentId: string, voidPaymentRequest: VoidPaymentRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
+    public voidPayment(invoiceId: string, paymentId: string, voidPaymentRequest: VoidPaymentRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
+    public voidPayment(invoiceId: string, paymentId: string, voidPaymentRequest: VoidPaymentRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (invoiceId === null || invoiceId === undefined) {
             throw new Error('Required parameter invoiceId was null or undefined when calling voidPayment.');
         }
@@ -210,6 +212,7 @@ export class PaymentReversalService extends BaseService {
         localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
 
         const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
         ]);
         if (localVarHttpHeaderAcceptSelected !== undefined) {
             localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);

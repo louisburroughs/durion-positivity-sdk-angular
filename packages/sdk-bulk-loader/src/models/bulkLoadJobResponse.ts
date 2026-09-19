@@ -22,7 +22,7 @@ export interface BulkLoadJobResponse {
      */
     createdAt: string;
     /**
-     * Detected or selected target domain for the load
+     * Detected or selected target domain for the load. RETIRED when the job\'s domain has since been removed from the loader; such a job can be listed but never run
      */
     domainType: BulkLoadJobResponseDomainTypeEnum;
     /**
@@ -94,13 +94,14 @@ export enum BulkLoadJobResponseDomainTypeEnum {
     SecurityRolePermission = 'SECURITY_ROLE_PERMISSION',
     SecurityUser = 'SECURITY_USER',
     UserPersonLink = 'USER_PERSON_LINK',
-    MechanicSkill = 'MECHANIC_SKILL',
+    PersonCredential = 'PERSON_CREDENTIAL',
     CatalogService = 'CATALOG_SERVICE',
     ServiceLaborStandard = 'SERVICE_LABOR_STANDARD',
     ServicePackage = 'SERVICE_PACKAGE',
     ServicePackageMember = 'SERVICE_PACKAGE_MEMBER',
     LaborRate = 'LABOR_RATE',
-    LaborRateAdjustment = 'LABOR_RATE_ADJUSTMENT'
+    LaborRateAdjustment = 'LABOR_RATE_ADJUSTMENT',
+    Retired = 'RETIRED'
 };
 export enum BulkLoadJobResponseStatusEnum {
     Created = 'CREATED',
