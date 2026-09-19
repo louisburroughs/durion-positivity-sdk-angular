@@ -12,7 +12,6 @@ export * from './conflict';
 export * from './conflictDetails';
 export * from './conflictOverrideRequest';
 export * from './conflictOverrideResponse';
-export * from './conflictResponse';
 export * from './createAssignmentRequest';
 export * from './dayCapacityView';
 export * from './fieldError';

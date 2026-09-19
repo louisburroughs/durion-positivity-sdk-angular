@@ -19,6 +19,8 @@ import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 // @ts-ignore
 import { AddWorkorderNoteRequest } from '../models/addWorkorderNoteRequest';
 // @ts-ignore
+import { ApiError } from '../models/apiError';
+// @ts-ignore
 import { WorkorderNoteResponse } from '../models/workorderNoteResponse';
 
 // @ts-ignore

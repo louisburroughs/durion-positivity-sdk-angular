@@ -17,6 +17,8 @@ import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
 // @ts-ignore
+import { ApiError } from '../models/apiError';
+// @ts-ignore
 import { CreateMsrpRequestDto } from '../models/createMsrpRequestDto';
 // @ts-ignore
 import { ProductMsrpDto } from '../models/productMsrpDto';

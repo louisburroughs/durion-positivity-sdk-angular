@@ -19,6 +19,8 @@ import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 // @ts-ignore
 import { APPaymentResponse } from '../models/aPPaymentResponse';
 // @ts-ignore
+import { ApiError } from '../models/apiError';
+// @ts-ignore
 import { ExecuteAPPaymentRequest } from '../models/executeAPPaymentRequest';
 // @ts-ignore
 import { PageVendorBillSummaryResponse } from '../models/pageVendorBillSummaryResponse';

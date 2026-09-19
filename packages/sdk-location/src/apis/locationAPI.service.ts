@@ -34,8 +34,6 @@ import { LocationValidationResponseDTO } from '../models/locationValidationRespo
 import { PageLocationRef } from '../models/pageLocationRef';
 // @ts-ignore
 import { PersonDTO } from '../models/personDTO';
-// @ts-ignore
-import { ProblemDetail } from '../models/problemDetail';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
@@ -55,7 +53,7 @@ export class LocationAPIService extends BaseService {
 
     /**
      * Add Typed Parent Relationship to Location
-     * Creates a typed parent-child edge between two existing locations, giving the child at most one parent per relationship type. Use this tool when building the location hierarchy; do not use listLocationChildren or listLocationDescendants, which only read the hierarchy. Preconditions: both locations must exist, the child must not already have a parent of that type, the pair must not already be linked in either direction, and the parent must not be a descendant of the child on the requested parentType because cycles are forbidden by ADR-0016. Cycle detection is per parentType: only edges of the requested parentType are walked, so an edge that would close a cycle on PHYSICAL is rejected while the same edge on FINANCIAL or REGION is legal. Required inputs: childId and parentId (UUIDs) as path parameters and a parentType query parameter, one of HOME_OFFICE, HEADQUARTERS, REGION, DISTRICT, PHYSICAL, ORGANIZATIONAL, FINANCIAL or SHIPPING. Emits a LOCATION_PARENT_ADD event and republishes the child\&#39;s location fact, which carries the new edge to replica consumers. Returns 400 when parentType is not a recognized value, and 409 CYCLE_DETECTED when childId equals parentId or when the edge would close a cycle on the requested parentType; duplicate and inverse relationships are rejected before the edge is written. Error responses carry an RFC 9457 ProblemDetail body (application/problem+json) whose detail holds the machine-readable code and whose correlationId matches the X-Correlation-Id response header.
+     * Creates a typed parent-child edge between two existing locations, giving the child at most one parent per relationship type. Use this tool when building the location hierarchy; do not use listLocationChildren or listLocationDescendants, which only read the hierarchy. Preconditions: both locations must exist, the child must not already have a parent of that type, the pair must not already be linked in either direction, and the parent must not be a descendant of the child on the requested parentType because cycles are forbidden by ADR-0016. Cycle detection is per parentType: only edges of the requested parentType are walked, so an edge that would close a cycle on PHYSICAL is rejected while the same edge on FINANCIAL or REGION is legal. Required inputs: childId and parentId (UUIDs) as path parameters and a parentType query parameter, one of HOME_OFFICE, HEADQUARTERS, REGION, DISTRICT, PHYSICAL, ORGANIZATIONAL, FINANCIAL or SHIPPING. Emits a LOCATION_PARENT_ADD event and republishes the child\&#39;s location fact, which carries the new edge to replica consumers. Returns 400 when parentType is not a recognized value, and 409 CYCLE_DETECTED when childId equals parentId or when the edge would close a cycle on the requested parentType; duplicate and inverse relationships are rejected before the edge is written. Error responses carry the ApiError envelope, whose code holds the machine-readable error and whose correlationId matches the X-Correlation-Id response header.
      * @endpoint post /v1/locations/{childId}/parents/{parentId}
      * @param childId ID of the child location
      * @param parentId ID of the parent location
@@ -64,10 +62,10 @@ export class LocationAPIService extends BaseService {
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public addLocationParent(childId: string, parentId: string, parentType: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<LocationParentResponseDTO>;
-    public addLocationParent(childId: string, parentId: string, parentType: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<LocationParentResponseDTO>>;
-    public addLocationParent(childId: string, parentId: string, parentType: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<LocationParentResponseDTO>>;
-    public addLocationParent(childId: string, parentId: string, parentType: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public addLocationParent(childId: string, parentId: string, parentType: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<LocationParentResponseDTO>;
+    public addLocationParent(childId: string, parentId: string, parentType: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<LocationParentResponseDTO>>;
+    public addLocationParent(childId: string, parentId: string, parentType: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<LocationParentResponseDTO>>;
+    public addLocationParent(childId: string, parentId: string, parentType: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (childId === null || childId === undefined) {
             throw new Error('Required parameter childId was null or undefined when calling addLocationParent.');
         }
@@ -95,8 +93,7 @@ export class LocationAPIService extends BaseService {
         localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
 
         const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
-            'application/json',
-            'application/problem+json'
+            'application/json'
         ]);
         if (localVarHttpHeaderAcceptSelected !== undefined) {
             localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);

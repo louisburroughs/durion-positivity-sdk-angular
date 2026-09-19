@@ -1,4 +1,5 @@
 export * from './apiError';
+export * from './conflict';
 export * from './emitEventRequest';
 export * from './emittedEventResponse';
 export * from './eventSummaryResponse';
@@ -6,3 +7,4 @@ export * from './eventTypeRequest';
 export * from './eventTypeResponse';
 export * from './fieldError';
 export * from './pagedResponseEmittedEventResponse';
+export * from './suggestedAlternative';

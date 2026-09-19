@@ -1,4 +1,5 @@
 export * from './apiError';
+export * from './conflict';
 export * from './contactPointDto';
 export * from './createUserLinkRequest';
 export * from './fieldError';
@@ -10,5 +11,6 @@ export * from './postalAddressDto';
 export * from './resolvePersonRequest';
 export * from './resolvePersonResponse';
 export * from './roleDto';
+export * from './suggestedAlternative';
 export * from './userPersonLinkResponse';
 export * from './userRoleDto';

@@ -10,7 +10,7 @@
 
 
 /**
- * A single detected scheduling conflict
+ * A single named conflict behind a 409 response
  */
 export interface Conflict {
     /**

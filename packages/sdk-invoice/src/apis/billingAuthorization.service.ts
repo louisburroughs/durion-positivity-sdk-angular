@@ -17,6 +17,8 @@ import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
 // @ts-ignore
+import { ApiError } from '../models/apiError';
+// @ts-ignore
 import { ElevateRequest } from '../models/elevateRequest';
 // @ts-ignore
 import { ElevateResponse } from '../models/elevateResponse';
@@ -39,7 +41,7 @@ export class BillingAuthorizationService extends BaseService {
 
     /**
      * Mint Manager-Approval Elevation Token
-     * Mints a short-lived elevation token scoped to one invoice after verifying that the named manager is an ACTIVE employee holding the invoice:finalize:override authority. Use this tool when an actor with invoice:finalize but not invoice:finalize:override needs a managerApprovalCode for finalizeInvoice or revertInvoice; do not use finalizeInvoice directly without a token when the invoice total exceeds the 500.00 service-advisor cap. Preconditions: the manager\&#39;s employee number must resolve to an ACTIVE person in the local employee replica and that person must hold invoice:finalize:override. Required inputs: managerEmployeeNumber and invoiceId (UUID); the token is bound to that invoice only and expires after five minutes by default (invoice.elevation.token-ttl-seconds). No events are emitted; the token is signed and stateless, and the grant is audit-logged with the approving manager\&#39;s person id. Returns 200 with the token and its expiry, and 401 with an empty body when the employee number is unknown or inactive or the person lacks the override authority.
+     * Mints a short-lived elevation token scoped to one invoice after verifying that the named manager is an ACTIVE employee holding the invoice:finalize:override authority. Use this tool when an actor with invoice:finalize but not invoice:finalize:override needs a managerApprovalCode for finalizeInvoice or revertInvoice; do not use finalizeInvoice directly without a token when the invoice total exceeds the 500.00 service-advisor cap. Preconditions: the manager\&#39;s employee number must resolve to an ACTIVE person in the local employee replica and that person must hold invoice:finalize:override. Required inputs: managerEmployeeNumber and invoiceId (UUID); the token is bound to that invoice only and expires after five minutes by default (invoice.elevation.token-ttl-seconds). No events are emitted; the token is signed and stateless, and the grant is audit-logged with the approving manager\&#39;s person id. Returns 200 with the token and its expiry, and 401 with an ELEVATION_DENIED ApiError when the employee number is unknown or inactive or the person lacks the override authority; the error is the same for every reason, so it does not reveal which check failed.
      * @endpoint post /v1/billing/auth/elevate
      * @param elevateRequest Manager identification and the invoice the elevation token will authorize.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.

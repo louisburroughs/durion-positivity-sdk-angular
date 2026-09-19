@@ -19,6 +19,8 @@ import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 // @ts-ignore
 import { AddEligibilityRuleRequest } from '../models/addEligibilityRuleRequest';
 // @ts-ignore
+import { ApiError } from '../models/apiError';
+// @ts-ignore
 import { EligibilityContext } from '../models/eligibilityContext';
 // @ts-ignore
 import { EligibilityDecisionResponse } from '../models/eligibilityDecisionResponse';
@@ -125,10 +127,10 @@ export class PromotionEligibilityRulesService extends BaseService {
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public deletePromotionEligibilityRule(promotionId: string, ruleId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public deletePromotionEligibilityRule(promotionId: string, ruleId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public deletePromotionEligibilityRule(promotionId: string, ruleId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public deletePromotionEligibilityRule(promotionId: string, ruleId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public deletePromotionEligibilityRule(promotionId: string, ruleId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any>;
+    public deletePromotionEligibilityRule(promotionId: string, ruleId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
+    public deletePromotionEligibilityRule(promotionId: string, ruleId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
+    public deletePromotionEligibilityRule(promotionId: string, ruleId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (promotionId === null || promotionId === undefined) {
             throw new Error('Required parameter promotionId was null or undefined when calling deletePromotionEligibilityRule.');
         }
@@ -142,6 +144,7 @@ export class PromotionEligibilityRulesService extends BaseService {
         localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
 
         const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
         ]);
         if (localVarHttpHeaderAcceptSelected !== undefined) {
             localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);

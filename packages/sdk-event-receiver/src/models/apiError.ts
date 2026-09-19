@@ -7,6 +7,8 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { Conflict } from './conflict';
+import { SuggestedAlternative } from './suggestedAlternative';
 import { FieldError } from './fieldError';
 
 
@@ -18,6 +20,10 @@ export interface ApiError {
      * Machine-readable error code
      */
     code: string;
+    /**
+     * Itemized conflicts behind a 409 whose cause is a set of named conflicts, such as SCHEDULING_CONFLICT (ADR-0017 §3). Present only on such a 409; absent otherwise
+     */
+    conflicts?: Array<Conflict>;
     /**
      * Unique correlation ID for distributed request tracing
      */
@@ -42,6 +48,10 @@ export interface ApiError {
      * HTTP status code
      */
     status: number;
+    /**
+     * Alternatives the caller may retry with, accompanying conflicts when the service can compute them. Optional even when conflicts is present
+     */
+    suggestedAlternatives?: Array<SuggestedAlternative>;
     /**
      * Support or admin investigation guidance, when applicable
      */

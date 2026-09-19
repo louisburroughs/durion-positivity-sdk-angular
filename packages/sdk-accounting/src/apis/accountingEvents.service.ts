@@ -21,6 +21,8 @@ import { AccountingEventResponse } from '../models/accountingEventResponse';
 // @ts-ignore
 import { AccountingEventSubmitRequest } from '../models/accountingEventSubmitRequest';
 // @ts-ignore
+import { ApiError } from '../models/apiError';
+// @ts-ignore
 import { EventEnvelopeContract } from '../models/eventEnvelopeContract';
 // @ts-ignore
 import { EventProcessingLogEntry } from '../models/eventProcessingLogEntry';

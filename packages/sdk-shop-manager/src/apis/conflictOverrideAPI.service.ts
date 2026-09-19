@@ -22,8 +22,6 @@ import { ApiError } from '../models/apiError';
 import { ConflictOverrideRequest } from '../models/conflictOverrideRequest';
 // @ts-ignore
 import { ConflictOverrideResponse } from '../models/conflictOverrideResponse';
-// @ts-ignore
-import { ConflictResponse } from '../models/conflictResponse';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
@@ -43,7 +41,7 @@ export class ConflictOverrideAPIService extends BaseService {
 
     /**
      * Override SOFT scheduling conflicts on an appointment
-     * Records a manager\&#39;s acceptance of one or more SOFT scheduling conflicts already recorded against the appointment (DECISION-SHOPMGMT-002), writing one immutable override row per conflict with the acting manager as both overrider and approver (DECISION-SHOPMGMT-007). Use this tool after a booking or reschedule answered with SOFT conflicts and the manager has decided to keep the appointment as booked; do not use it to force past a HARD conflict, which is never overridable, and do not use createAssignment with override&#x3D;true, which overrides staffing constraints rather than scheduling ones. Preconditions: the caller holds shop:conflict:override and the appointment\&#39;s location is in the caller\&#39;s scope; each conflictId is recorded against this appointment, is SOFT, and does not already carry an override. Required inputs: conflictIds (at least one) and a non-blank overrideReason. Emits a SHOPMGR_APPOINTMENT_CONFLICT_OVERRIDE_CREATE event. Returns 400 when a conflictId is not recorded against this appointment or the body is invalid, 403 when the caller lacks the authority or the location is out of scope, 404 when the appointment cannot be resolved, and 409 either with the scheduling-conflict envelope (a named conflict is HARD; nothing is written) or with code CONFLICT_ALREADY_OVERRIDDEN.
+     * Records a manager\&#39;s acceptance of one or more SOFT scheduling conflicts already recorded against the appointment (DECISION-SHOPMGMT-002), writing one immutable override row per conflict with the acting manager as both overrider and approver (DECISION-SHOPMGMT-007). Use this tool after a booking or reschedule answered with SOFT conflicts and the manager has decided to keep the appointment as booked; do not use it to force past a HARD conflict, which is never overridable, and do not use createAssignment with override&#x3D;true, which overrides staffing constraints rather than scheduling ones. Preconditions: the caller holds shop:conflict:override and the appointment\&#39;s location is in the caller\&#39;s scope; each conflictId is recorded against this appointment, is SOFT, and does not already carry an override. Required inputs: conflictIds (at least one) and a non-blank overrideReason. Emits a SHOPMGR_APPOINTMENT_CONFLICT_OVERRIDE_CREATE event. Returns 400 when a conflictId is not recorded against this appointment or the body is invalid, 403 when the caller lacks the authority or the location is out of scope, 404 when the appointment cannot be resolved, and 409 either with code SCHEDULING_CONFLICT and the HARD conflicts in conflicts[] (nothing is written) or with code CONFLICT_ALREADY_OVERRIDDEN.
      * @endpoint post /v1/appointments/{appointmentId}/conflict-override
      * @param appointmentId Appointment ID
      * @param conflictOverrideRequest The conflicts being accepted and the justification.
