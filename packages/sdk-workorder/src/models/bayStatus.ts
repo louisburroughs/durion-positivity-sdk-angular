@@ -16,7 +16,7 @@ export interface BayStatus {
     /**
      * Identifier of the workorder currently assigned to the bay, or null when idle
      */
-    assignedWorkorderId?: string;
+    assignedWorkorderId?: string | null;
     /**
      * Whether the bay is currently available
      */
@@ -74,7 +74,7 @@ export function instanceOfBayStatus(value: object): value is BayStatus {
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createBayStatusPropertyNames('available', 'bayId', 'status', );
-    const optionalStringProperties = createBayStatusOptionalProperties({ name: 'assignedWorkorderId', nullable: false }, { name: 'bayId', nullable: false }, { name: 'bayName', nullable: false }, { name: 'status', nullable: false }, );
+    const optionalStringProperties = createBayStatusOptionalProperties({ name: 'assignedWorkorderId', nullable: true }, { name: 'bayId', nullable: false }, { name: 'bayName', nullable: false }, { name: 'status', nullable: false }, );
     const optionalNumberProperties = createBayStatusOptionalProperties();
     const optionalBooleanProperties = createBayStatusOptionalProperties({ name: 'available', nullable: false }, );
 
