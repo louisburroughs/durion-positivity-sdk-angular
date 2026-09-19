@@ -18,9 +18,9 @@ export interface WorkorderSummary {
      */
     actualLaborHours?: number | null;
     /**
-     * Identifier of the assigned mechanic
+     * Identifier of the technician of record - the person who currently holds this workorder. Null when nobody holds it. Non-null means exactly that a current technician assignment exists, which is one half of the ASSIGNED status and not ASSIGNED itself, so an APPROVED workorder may carry one. Key assignTechnician vs reassignTechnician off this field, never off plannedMechanicIds.
      */
-    assignedMechanicId?: string;
+    assignedMechanicId?: string | null;
     /**
      * Identifier of the resource assigned to the workorder; read together with resourceType, which says whether it is a bay or a mobile unit
      */
@@ -37,6 +37,10 @@ export interface WorkorderSummary {
      * Estimated labor hours for the workorder
      */
     estimatedLaborHours?: number;
+    /**
+     * Mechanics planned onto this workorder by scheduling or a dispatch override. Display and conflict-detection only: it confers no technician of record and must not decide assign vs reassign. Empty when the job carries no plan.
+     */
+    plannedMechanicIds?: Array<string>;
     /**
      * Kind of resource assignedResourceId points at. Null exactly when assignedResourceId is null
      */
@@ -117,7 +121,7 @@ export function instanceOfWorkorderSummary(value: object): value is WorkorderSum
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createWorkorderSummaryPropertyNames('workorderId', );
-    const optionalStringProperties = createWorkorderSummaryOptionalProperties({ name: 'assignedMechanicId', nullable: false }, { name: 'assignedResourceId', nullable: false }, { name: 'customerName', nullable: true }, { name: 'resourceType', nullable: false }, { name: 'scheduledDate', nullable: false }, { name: 'status', nullable: false }, { name: 'vehicleDescription', nullable: false }, { name: 'workorderId', nullable: false }, { name: 'workorderNumber', nullable: false }, );
+    const optionalStringProperties = createWorkorderSummaryOptionalProperties({ name: 'assignedMechanicId', nullable: true }, { name: 'assignedResourceId', nullable: false }, { name: 'customerName', nullable: true }, { name: 'resourceType', nullable: false }, { name: 'scheduledDate', nullable: false }, { name: 'status', nullable: false }, { name: 'vehicleDescription', nullable: false }, { name: 'workorderId', nullable: false }, { name: 'workorderNumber', nullable: false }, );
     const optionalNumberProperties = createWorkorderSummaryOptionalProperties({ name: 'actualLaborHours', nullable: true }, { name: 'completedServiceCount', nullable: false }, { name: 'estimatedLaborHours', nullable: false }, { name: 'serviceCount', nullable: false }, );
     const optionalBooleanProperties = createWorkorderSummaryOptionalProperties();
 

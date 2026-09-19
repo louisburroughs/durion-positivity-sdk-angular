@@ -15,9 +15,9 @@ import { PtoEntry } from './ptoEntry';
  */
 export interface MechanicStatus {
     /**
-     * Identifier of the workorder the mechanic is currently assigned to
+     * Identifier of the workorder this mechanic currently holds as its technician of record. Null when they hold none. A mechanic only planned onto a job does not appear here.
      */
-    assignedWorkorderId?: string;
+    assignedWorkorderId?: string | null;
     /**
      * Expected return time when the mechanic is on break
      */
@@ -87,7 +87,7 @@ export function instanceOfMechanicStatus(value: object): value is MechanicStatus
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createMechanicStatusPropertyNames('personId', );
-    const optionalStringProperties = createMechanicStatusOptionalProperties({ name: 'assignedWorkorderId', nullable: false }, { name: 'breakExpectedReturn', nullable: false }, { name: 'currentStatus', nullable: false }, { name: 'firstName', nullable: false }, { name: 'lastName', nullable: false }, { name: 'personId', nullable: false }, );
+    const optionalStringProperties = createMechanicStatusOptionalProperties({ name: 'assignedWorkorderId', nullable: true }, { name: 'breakExpectedReturn', nullable: false }, { name: 'currentStatus', nullable: false }, { name: 'firstName', nullable: false }, { name: 'lastName', nullable: false }, { name: 'personId', nullable: false }, );
     const optionalNumberProperties = createMechanicStatusOptionalProperties();
     const optionalBooleanProperties = createMechanicStatusOptionalProperties({ name: 'onBreak', nullable: false }, );
 

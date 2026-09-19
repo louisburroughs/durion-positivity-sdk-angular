@@ -16,7 +16,7 @@ export interface MobileUnitStatus {
     /**
      * Identifier of the workorder currently assigned to the unit, or null when idle
      */
-    assignedWorkorderId?: string;
+    assignedWorkorderId?: string | null;
     /**
      * Whether the unit is currently available
      */
@@ -74,7 +74,7 @@ export function instanceOfMobileUnitStatus(value: object): value is MobileUnitSt
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createMobileUnitStatusPropertyNames('available', 'status', 'unitId', );
-    const optionalStringProperties = createMobileUnitStatusOptionalProperties({ name: 'assignedWorkorderId', nullable: false }, { name: 'status', nullable: false }, { name: 'unitId', nullable: false }, { name: 'unitName', nullable: false }, );
+    const optionalStringProperties = createMobileUnitStatusOptionalProperties({ name: 'assignedWorkorderId', nullable: true }, { name: 'status', nullable: false }, { name: 'unitId', nullable: false }, { name: 'unitName', nullable: false }, );
     const optionalNumberProperties = createMobileUnitStatusOptionalProperties();
     const optionalBooleanProperties = createMobileUnitStatusOptionalProperties({ name: 'available', nullable: false }, );
 
