@@ -7,7 +7,9 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { OperatingHoursResponse } from './operatingHoursResponse';
 import { LocationTypeDTO } from './locationTypeDTO';
+import { HolidayClosureResponse } from './holidayClosureResponse';
 
 
 /**
@@ -55,6 +57,10 @@ export interface LocationResponseDTO {
      */
     hasRepairCapability: boolean;
     /**
+     * Stored dated closures, in the location\'s own timezone; null when none have ever been published
+     */
+    holidayClosures?: Array<HolidayClosureResponse> | null;
+    /**
      * Unique identifier of the location
      */
     id: string;
@@ -66,6 +72,10 @@ export interface LocationResponseDTO {
      * Display name of the location
      */
     name: string;
+    /**
+     * Stored weekly operating hours, one entry per published day of the week, in the location\'s own timezone; null when hours have never been published
+     */
+    operatingHours?: Array<OperatingHoursResponse> | null;
     /**
      * Primary phone number for the location
      */
@@ -82,6 +92,10 @@ export interface LocationResponseDTO {
      * State or province of the location
      */
     state?: string;
+    /**
+     * IANA timezone identifier of the location; the zone every operating-hours and holiday closure entry below is expressed in, and the zone scheduling converts a booking into
+     */
+    timezone?: string | null;
     type?: LocationTypeDTO;
 }
 
@@ -124,7 +138,7 @@ export function instanceOfLocationResponseDTO(value: object): value is LocationR
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createLocationResponseDTOPropertyNames('active', 'activeBayCount', 'activeMobileUnitCount', 'hasRepairCapability', 'id', 'name', );
-    const optionalStringProperties = createLocationResponseDTOOptionalProperties({ name: 'addressLine1', nullable: false }, { name: 'addressLine2', nullable: false }, { name: 'city', nullable: false }, { name: 'code', nullable: false }, { name: 'country', nullable: false }, { name: 'geographicalLocationId', nullable: false }, { name: 'id', nullable: false }, { name: 'mailingAddress', nullable: false }, { name: 'name', nullable: false }, { name: 'phoneNumber', nullable: false }, { name: 'postalCode', nullable: false }, { name: 'responsiblePersonId', nullable: false }, { name: 'state', nullable: false }, );
+    const optionalStringProperties = createLocationResponseDTOOptionalProperties({ name: 'addressLine1', nullable: false }, { name: 'addressLine2', nullable: false }, { name: 'city', nullable: false }, { name: 'code', nullable: false }, { name: 'country', nullable: false }, { name: 'geographicalLocationId', nullable: false }, { name: 'id', nullable: false }, { name: 'mailingAddress', nullable: false }, { name: 'name', nullable: false }, { name: 'phoneNumber', nullable: false }, { name: 'postalCode', nullable: false }, { name: 'responsiblePersonId', nullable: false }, { name: 'state', nullable: false }, { name: 'timezone', nullable: true }, );
     const optionalNumberProperties = createLocationResponseDTOOptionalProperties({ name: 'activeBayCount', nullable: false }, { name: 'activeMobileUnitCount', nullable: false }, );
     const optionalBooleanProperties = createLocationResponseDTOOptionalProperties({ name: 'active', nullable: false }, { name: 'hasRepairCapability', nullable: false }, );
 
