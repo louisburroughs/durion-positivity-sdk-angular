@@ -1,6 +1,6 @@
 {
   "name": "@durion-sdk/invoice",
-  "version": "0.52.0-alpha",
+  "version": "0.53.0-alpha",
   "description": "OpenAPI client for @durion-sdk/invoice",
   "author": "OpenAPI-Generator Contributors",
   "repository": {
