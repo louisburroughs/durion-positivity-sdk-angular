@@ -157,7 +157,7 @@ export class PostalAddressAPIService extends BaseService {
 
     /**
      * Get an Organization\&#39;s Postal Address
-     * Returns the structured postal address on file for a CRM organization party; the organization id is an external pos-customer party reference stored verbatim. Use this tool when reading an organization\&#39;s mailing address; use getPersonPostalAddress instead for person parties. Preconditions: an address must already have been stored for the organization with putOrganizationPostalAddress. Required inputs: organizationId (the pos-customer commercial party UUID) as a path parameter; there is no request body. Emits a PEOPLE_CONTACT_ORG_ADDRESS_GET audit event; no state changes. Returns 404 when no address is on file for the organization.
+     * Returns the structured postal address on file for a CRM organization party; the organization id is an external pos-customer party reference stored verbatim. Use this tool when reading an organization\&#39;s mailing address; use getPersonPostalAddress instead for person parties. Preconditions: none; an address is present only once stored with putOrganizationPostalAddress. Required inputs: organizationId (the pos-customer commercial party UUID) as a path parameter; there is no request body. Emits a PEOPLE_CONTACT_ORG_ADDRESS_GET audit event; no state changes. Returns 200 with the address, or 204 with no body when no address is on file for the organization; an absent address is an ordinary answer, not an error.
      * @endpoint get /v1/organizations/{organizationId}/postal-address
      * @param organizationId Organization party id
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -217,7 +217,7 @@ export class PostalAddressAPIService extends BaseService {
 
     /**
      * Get a Person\&#39;s Postal Address
-     * Returns the single structured postal address on file for a person; pos-people-contact is the postal-address authority for person parties (FI-4). Use this tool when reading a person\&#39;s mailing address; use getOrganizationPostalAddress instead for CRM organization parties. Preconditions: an address must already have been stored for the person with putPersonPostalAddress. Required inputs: personId (UUID) as a path parameter; there is no request body. Emits a PEOPLE_CONTACT_PERSON_ADDRESS_GET audit event; no state changes. Returns 404 when no address is on file for the person.
+     * Returns the single structured postal address on file for a person; pos-people-contact is the postal-address authority for person parties (FI-4). Use this tool when reading a person\&#39;s mailing address; use getOrganizationPostalAddress instead for CRM organization parties. Preconditions: none; an address is present only once stored with putPersonPostalAddress. Required inputs: personId (UUID) as a path parameter; there is no request body. Emits a PEOPLE_CONTACT_PERSON_ADDRESS_GET audit event; no state changes. Returns 200 with the address, or 204 with no body when no address is on file for the person; an absent address is an ordinary answer, not an error.
      * @endpoint get /v1/people/{personId}/postal-address
      * @param personId Person id
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
